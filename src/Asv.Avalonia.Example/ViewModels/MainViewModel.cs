@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using R3;
-
-namespace Asv.Avalonia.Example.ViewModels;
+﻿namespace Asv.Avalonia.Example.ViewModels;
 
 public class MainViewModel : DisposableViewModel
 {
