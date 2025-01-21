@@ -1,4 +1,4 @@
-﻿namespace Asv.Avalonia;
+namespace Asv.Avalonia;
 
 /// <summary>
 /// Defines methods for configuring and building an application host,

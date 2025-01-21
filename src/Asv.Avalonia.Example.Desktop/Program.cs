@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.IO;
 using Asv.Cfg;
+using Asv.Common;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -31,12 +33,17 @@ sealed class Program
 #endif
             })
             .EnforceSingleInstance(options => options.EnableArgumentForwarding())
+            .UsePluginManager(options =>
+            {
+                options.WithApiPackage("Asv.Drones.Gui.Api", "1.0.0");
+                options.WithPluginPrefix("Asv.Drones.Gui.Plugin.");
+            })
             .SetArguments(args);
 
         using var host = builder.Build();
 
         // If this is not the first instance, host have sent the arguments to the first instance and we can exit
-        if (host.IsFirstInstance == false)
+        if (!host.IsFirstInstance)
         {
             return;
         }

@@ -53,4 +53,8 @@
     <ItemGroup>
       <AdditionalFiles Include="Pages\Document\DocumentPageView.axaml" />
     </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\MainView.axaml" />
+    </ItemGroup>
 </Project>
