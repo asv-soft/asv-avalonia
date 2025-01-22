@@ -28,6 +28,7 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="FuzzySharp" Version="2.0.2" />
         <PackageReference Include="MemoryPack" Version="1.21.3" />
         <PackageReference Include="R3Extensions.Avalonia" Version="$(R3Version)" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.12.10">

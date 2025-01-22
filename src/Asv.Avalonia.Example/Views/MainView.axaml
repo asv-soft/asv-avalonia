@@ -25,5 +25,15 @@
                IsFocused="{Binding IsSelected.Value, Mode=OneWayToSource}"
                avalonia:NavigationHelper.IsSelected="{Binding IsSelected.Value, Mode=TwoWay}"
                Text="{Binding User.Value, UpdateSourceTrigger=LostFocus}"/>
+      
+      <TextBox Focusable="True"
+               Text="{Binding SearchQueryValue, UpdateSourceTrigger=PropertyChanged}"
+               Watermark="Search..."
+               Width="200"
+               HorizontalAlignment="Center" />
+      <ListBox ItemsSource="{Binding ResultsList}"
+               DisplayMemberBinding="{Binding Name}"
+               Width="300"
+               Height="200"/>
   </StackPanel>
 </UserControl>
