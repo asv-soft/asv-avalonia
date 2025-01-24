@@ -1,4 +1,7 @@
 ﻿using System.IO.Compression;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
 using NuGet.Common;
 using NuGet.Frameworks;
 using NuGet.Packaging;
@@ -10,7 +13,16 @@ namespace Asv.Avalonia;
 
 public static class NugetHelper
 {
-    public static NuGetFramework DefaultFramework = NuGetFramework.ParseFolder("net8.0");
+    public static NuGetFramework DefaultFramework = NuGetFramework.ParseFrameworkName(
+        Assembly
+            .GetExecutingAssembly()
+            .GetCustomAttribute<TargetFrameworkAttribute>()
+            ?.FrameworkName
+            ?? new DirectoryInfo(
+                AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar)
+            ).Name,
+        new DefaultFrameworkNameProvider()
+    );
 
     public static async Task<IReadOnlyList<SourcePackageDependencyInfo>> ListAllDependencies(
         IEnumerable<SourceRepository> repositories,

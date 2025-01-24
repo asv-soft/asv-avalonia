@@ -1,4 +1,10 @@
-﻿namespace Asv.Avalonia.Example.ViewModels;
+﻿using System;
+using System.IO;
+using System.Reflection;
+using System.Runtime.InteropServices;
+using System.Runtime.Versioning;
+
+namespace Asv.Avalonia.Example.ViewModels;
 
 public class MainViewModel : DisposableViewModel
 {
