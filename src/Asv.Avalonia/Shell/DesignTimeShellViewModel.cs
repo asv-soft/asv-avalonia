@@ -3,9 +3,7 @@ namespace Asv.Avalonia;
 public class DesignTimeShellViewModel : ShellViewModel
 {
     public DesignTimeShellViewModel()
-        : base(NullContainerHost.Instance)
-    {
-    }
+        : base(NullContainerHost.Instance) { }
 
     protected override void InternalAddPageToMainTab(IPage export)
     {

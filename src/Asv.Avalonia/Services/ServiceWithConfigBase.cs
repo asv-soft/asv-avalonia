@@ -16,7 +16,9 @@ namespace Asv.Avalonia
             _config = cfg.Get<TConfig>();
         }
 
-        protected TConfigValue InternalGetConfig<TConfigValue>(Func<TConfig, TConfigValue> getProperty)
+        protected TConfigValue InternalGetConfig<TConfigValue>(
+            Func<TConfig, TConfigValue> getProperty
+        )
         {
             lock (_sync)
             {

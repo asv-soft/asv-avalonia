@@ -7,14 +7,14 @@ namespace Asv.Avalonia;
 public class NullLogService : ILogService
 {
     public static ILogService Instance { get; } = new NullLogService();
-    
+
     private readonly NullLoggerFactory _factory;
 
     private NullLogService()
     {
         _factory = NullLoggerFactory.Instance;
     }
-    
+
     public void Dispose()
     {
         _factory.Dispose();
@@ -31,7 +31,9 @@ public class NullLogService : ILogService
         _factory.AddProvider(provider);
     }
 
-    public ReadOnlyReactiveProperty<LogMessage?> OnMessage { get; } = new ReactiveProperty<LogMessage?>();
+    public ReadOnlyReactiveProperty<LogMessage?> OnMessage { get; } =
+        new ReactiveProperty<LogMessage?>();
+
     public void SaveMessage(LogMessage logMessage)
     {
         // nothing to do

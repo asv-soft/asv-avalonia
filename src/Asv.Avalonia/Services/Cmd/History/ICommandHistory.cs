@@ -10,11 +10,10 @@ public interface ICommandHistory : IDisposable
     ValueTask UndoAsync(CancellationToken cancel = default);
     ReactiveCommand Redo { get; }
     ValueTask RedoAsync(CancellationToken cancel = default);
-    ValueTask Execute(string commandId, IRoutable context, IPersistable? param = null, CancellationToken cancel = default);
+    ValueTask Execute(
+        string commandId,
+        IRoutable context,
+        IPersistable? param = null,
+        CancellationToken cancel = default
+    );
 }
-
-
-
-
-
-

@@ -21,12 +21,14 @@ public class NavigationHelper
 
     static NavigationHelper()
     {
-        IsSelectedProperty.Changed.ToObservable().Subscribe(args =>
-        {
-            if (args.Sender is Control control && args.NewValue.GetValueOrDefault())
+        IsSelectedProperty
+            .Changed.ToObservable()
+            .Subscribe(args =>
             {
-                control.Focus();
-            }
-        });
+                if (args.Sender is Control control && args.NewValue.GetValueOrDefault())
+                {
+                    control.Focus();
+                }
+            });
     }
 }

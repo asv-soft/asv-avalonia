@@ -3,7 +3,8 @@ using Avalonia.Styling;
 namespace Asv.Avalonia;
 
 public class ThemeItem(string id, string name, ThemeVariant theme)
-    : IThemeInfo, IEqualityComparer<ThemeItem>
+    : IThemeInfo,
+        IEqualityComparer<ThemeItem>
 {
     public string Id { get; } = id;
     public string Name { get; } = name;

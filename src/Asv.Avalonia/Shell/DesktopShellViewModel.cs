@@ -4,7 +4,10 @@ namespace Asv.Avalonia;
 
 public class DesktopShellViewModel : ShellViewModel
 {
-    public DesktopShellViewModel(IClassicDesktopStyleApplicationLifetime lifetime, IContainerHost containerHost)
+    public DesktopShellViewModel(
+        IClassicDesktopStyleApplicationLifetime lifetime,
+        IContainerHost containerHost
+    )
         : base(containerHost)
     {
         lifetime.MainWindow = new ShellWindow { DataContext = this };

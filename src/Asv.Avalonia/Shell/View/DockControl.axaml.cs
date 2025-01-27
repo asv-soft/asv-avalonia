@@ -15,38 +15,35 @@ public class DockControl : SelectingItemsControl
         AvaloniaProperty.RegisterAttached<DockControl, Control, int>("DockColumn", default);
 
     public static int GetDockColumn(Control control) => control.GetValue(DockColumnProperty);
-    public static void SetDockColumn(Control control, int value) => control.SetValue(DockColumnProperty, value);
-    
-    
 
-    public DockControl()
-    {
-       
-    }
+    public static void SetDockColumn(Control control, int value) =>
+        control.SetValue(DockColumnProperty, value);
+
+    public DockControl() { }
 
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        
+
         _grid = e.NameScope.Find<Grid>("PART_DockControlGrid") ?? throw new Exception();
         _grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
         UpdateTabs();
-        
     }
 
-    
-    protected override void LogicalChildrenCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    protected override void LogicalChildrenCollectionChanged(
+        object? sender,
+        NotifyCollectionChangedEventArgs e
+    )
     {
         base.LogicalChildrenCollectionChanged(sender, e);
         UpdateTabs();
     }
-    
+
     private void UpdateTabs()
     {
         if (_grid == null)
@@ -64,14 +61,19 @@ public class DockControl : SelectingItemsControl
         }
 
         // Группировка элементов по колонкам
-        var groupedItems = Items.Cast<object>()
-            .GroupBy(item => GetDockColumn(item as Control ?? throw new InvalidCastException("Items must be controls")));
+        var groupedItems = Items
+            .Cast<object>()
+            .GroupBy(item =>
+                GetDockColumn(
+                    item as Control ?? throw new InvalidCastException("Items must be controls")
+                )
+            );
 
         foreach (var group in groupedItems.OrderBy(g => g.Key))
         {
             // Создаем колонку
             _grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-            
+
             // Создаем TabControl для этой колонки
             var tabControl = new TabControl
             {
@@ -87,14 +89,10 @@ public class DockControl : SelectingItemsControl
             Grid.SetColumn(tabControl, group.Key);
         }
     }
-    
+
     private TabItem CreateTabItem(object content)
     {
-        return new TabItem
-        {
-            Content = content,
-            Header = (content as Control)?.Name ?? "Tab",
-        };
+        return new TabItem { Content = content, Header = (content as Control)?.Name ?? "Tab" };
     }
 
     /*protected override Size MeasureOverride(Size availableSize)
@@ -109,7 +107,8 @@ public class DockControl : SelectingItemsControl
         return finalSize;
     }*/
 
-    public static readonly StyledProperty<IDataTemplate?> ContentTemplateProperty = ContentControl.ContentTemplateProperty.AddOwner<TabControl>();
+    public static readonly StyledProperty<IDataTemplate?> ContentTemplateProperty =
+        ContentControl.ContentTemplateProperty.AddOwner<TabControl>();
     public IDataTemplate? ContentTemplate
     {
         get => GetValue(ContentTemplateProperty);

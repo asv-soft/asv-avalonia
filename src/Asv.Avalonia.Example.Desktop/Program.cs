@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example.Desktop;
 
@@ -18,13 +20,14 @@ sealed class Program
             builder
                 .WithJsonConfiguration("config.json", true, TimeSpan.FromMilliseconds(500))
                 .WithAppInfoFrom(typeof(App).Assembly)
-                .WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel)
-                .WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb)
+                .UseLogging(options =>
+                {
+                    options.WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel);
+                    options.WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb);
 #if DEBUG
-                .WithLogToConsole()
-#else
-
+                    options.WithLogToConsole();
 #endif
+                })
                 .EnforceSingleInstance()
                 .EnableArgumentForwarding()
                 .WithArguments(args);

@@ -11,6 +11,8 @@ namespace Asv.Avalonia;
 /// </summary>
 public interface IAppHostBuilder
 {
+    public Dictionary<Type, IBuilderOptions> Options { get; init; }
+
     /// <summary>
     /// Configures the application host builder with the specified configuration implementation.
     /// </summary>
@@ -93,60 +95,6 @@ public interface IAppHostBuilder
     /// <param name="avaloniaVersion">The version of Avalonia to be used by the application.</param>
     /// <returns>The current instance of the application host builder.</returns>
     IAppHostBuilder WithAvaloniaVersion(string avaloniaVersion);
-
-    /// <summary>
-    /// Configures the application host builder with the specified minimum log level.
-    /// </summary>
-    /// <param name="logLevel">The minimum log level to be used for logging.</param>
-    /// <returns>The current instance of the application host builder.</returns>
-    IAppHostBuilder WithLogMinimumLevel(LogLevel logLevel);
-
-    /// <summary>
-    /// Configures the application host builder with the specified minimum logging level.
-    /// </summary>
-    /// <param name="fromConfig">A function that extracts the minimum log level from a configuration object.</param>
-    /// <typeparam name="TConfig">The type of the configuration object. It will be loaded from the <see cref="IConfiguration"/>.</typeparam>
-    /// <returns>The current instance of the application host builder.</returns>
-    IAppHostBuilder WithLogMinimumLevel<TConfig>(Func<TConfig, LogLevel> fromConfig)
-        where TConfig : new();
-
-    /// <summary>
-    /// Configures the application host builder to use a JSON log file stored in the specified folder with a rolling file size limit.
-    /// </summary>
-    /// <typeparam name="TConfig">The type used for retrieving configuration values.</typeparam>
-    /// <param name="logFolder">A function that provides the folder path for log files based on the configuration.</param>
-    /// <param name="rollingSizeKb">A function that specifies the file size limit, in kilobytes, for rolling log files based on the configuration.</param>
-    /// <returns>The current instance of the application host builder.</returns>
-    IAppHostBuilder WithJsonLogFolder<TConfig>(
-        Func<TConfig, string> logFolder,
-        Func<TConfig, int> rollingSizeKb
-    )
-        where TConfig : new();
-
-    /// <summary>
-    /// Sets the folder for JSON log storage and configures the rolling log file size in kilobytes.
-    /// </summary>
-    /// <param name="logFolder">The path to the folder where log files will be stored.</param>
-    /// <param name="rollingSizeKb">A function that retrieves the rolling file size in kilobytes from the configuration.</param>
-    /// <typeparam name="TConfig">The type of the configuration class.</typeparam>
-    /// <returns>The current instance of the application host builder.</returns>
-    IAppHostBuilder WithJsonLogFolder<TConfig>(string logFolder, Func<TConfig, int> rollingSizeKb)
-        where TConfig : new();
-
-    /// <summary>
-    /// Configures the application host builder to use a JSON log folder with the specified directory path and file size rolling threshold.
-    /// </summary>
-    /// <param name="logFolder">The directory path where the JSON log files will be stored.</param>
-    /// <param name="rollingSizeKb">The maximum size of a log file in kilobytes before it rolls over to a new file.</param>
-    /// <returns>The current instance of the application host builder.</returns>
-    IAppHostBuilder WithJsonLogFolder(string logFolder, int rollingSizeKb);
-
-    /// <summary>
-    /// Enables or disables logging to the console for the application.
-    /// </summary>
-    /// <param name="enabled">A boolean value indicating whether logging to the console is enabled. Defaults to true.</param>
-    /// <returns>The current instance of the application host builder.</returns>
-    IAppHostBuilder WithLogToConsole(bool enabled = true);
 
     /// <summary>
     /// Sets the command-line arguments to be used by the application host.
