@@ -7,7 +7,7 @@ public static class AppBuilderLoggerExtensions
         BuilderLoggerOptions options
     )
     {
-        AppHostBuilder.Options.Add(typeof(BuilderLoggerOptions), options);
+        builder.Options.Add(typeof(BuilderLoggerOptions), options);
         return builder;
     }
 

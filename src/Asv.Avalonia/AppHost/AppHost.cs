@@ -58,6 +58,7 @@ public sealed class AppHost : IAppHost
         AppInfo appInfo,
         ILogService logs,
         AppArgs args,
+        IDictionary<Type, IBuilderOptions> builderOptions,
         string? mutexName,
         string? argsPipeName
     )
@@ -71,6 +72,7 @@ public sealed class AppHost : IAppHost
         AppPath = appPath;
         AppInfo = appInfo;
         Logs = logs;
+        BuilderOptions = builderOptions;
         var logger = logs.CreateLogger($"{nameof(AppHost)}[PID:{Environment.ProcessId}]");
         SetupExceptionHandlers(logger);
         if (mutexName != null)
@@ -105,6 +107,7 @@ public sealed class AppHost : IAppHost
     public IAppPath AppPath { get; }
     public IConfiguration Configuration { get; }
     public ILogService Logs { get; }
+    public IDictionary<Type, IBuilderOptions> BuilderOptions { get; }
 
     private void SetupExceptionHandlers(ILogger logger)
     {

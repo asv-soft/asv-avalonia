@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Composition;
 using R3;
 
 namespace Asv.Avalonia.Example.ViewModels;

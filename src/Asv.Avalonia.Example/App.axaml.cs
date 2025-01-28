@@ -3,14 +3,11 @@ using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
-using Asv.Avalonia.Example.ViewModels;
-using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
-using Avalonia.Styling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
@@ -21,6 +18,7 @@ public partial class App : Application, IContainerHost, IShellHost
     {
         var conventions = new ConventionBuilder();
         var containerCfg = new ContainerConfiguration();
+        AppHost.Instance.RegisterServices(containerCfg);
         if (Design.IsDesignMode)
         {
             containerCfg
@@ -41,7 +39,8 @@ public partial class App : Application, IContainerHost, IShellHost
                 .WithExport(AppHost.Instance.Logs)
                 .WithExport<ILoggerFactory>(AppHost.Instance.Logs)
                 .WithExport(AppHost.Instance.Args)
-                .WithExport(AppHost.Instance);
+                .WithExport(AppHost.Instance)
+                .WithExport(AppHost.Instance.BuilderOptions);
         }
 
         containerCfg

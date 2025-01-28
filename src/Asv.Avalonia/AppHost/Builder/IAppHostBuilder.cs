@@ -11,7 +11,7 @@ namespace Asv.Avalonia;
 /// </summary>
 public interface IAppHostBuilder
 {
-    public static Dictionary<Type, IBuilderOptions> Options;
+    public IDictionary<Type, IBuilderOptions> Options { get; }
 
     /// <summary>
     /// Configures the application host builder with the specified configuration implementation.

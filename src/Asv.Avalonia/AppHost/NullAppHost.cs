@@ -28,6 +28,7 @@ public class NullAppHost : IAppHost
     public IAppPath AppPath { get; }
     public IConfiguration Configuration { get; }
     public ILogService Logs { get; }
+    public IDictionary<Type, IBuilderOptions> BuilderOptions { get; }
 
     public void HandleApplicationCrash(Exception exception)
     {

@@ -9,7 +9,7 @@ namespace Asv.Avalonia;
 internal class AppHostBuilder : IAppHostBuilder
 {
     public Func<IConfiguration> GetConfiguration => _createConfigCallback;
-    public static Dictionary<Type, IBuilderOptions> Options;
+    public IDictionary<Type, IBuilderOptions> Options { get; }
 
     private const string ZeroVersion = "0.0.0";
     private Func<IConfiguration> _createConfigCallback;
@@ -75,6 +75,7 @@ internal class AppHostBuilder : IAppHostBuilder
             appInfo,
             logService,
             _args,
+            Options,
             _mutexName(appInfo),
             _namedPipe(appInfo)
         );

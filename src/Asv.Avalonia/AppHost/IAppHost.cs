@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using System.Composition.Hosting;
 using Asv.Cfg;
 using Microsoft.Extensions.Logging;
@@ -12,6 +13,7 @@ public interface IAppHost : IDisposable
     IAppPath AppPath { get; }
     IConfiguration Configuration { get; }
     ILogService Logs { get; }
+    IDictionary<Type, IBuilderOptions> BuilderOptions { get; }
     void HandleApplicationCrash(Exception exception);
     bool AllowOnlyOneInstance { get; }
     bool IsFirstInstance { get; }
