@@ -8,8 +8,8 @@ namespace Asv.Avalonia;
 
 internal class AppHostBuilder : IAppHostBuilder
 {
-    public Dictionary<Type, IBuilderOptions> Options { get; init; }
-    private readonly BuilderLoggerOptions _builderLoggerOptions;
+    public Func<IConfiguration> GetConfiguration => _createConfigCallback;
+    public static Dictionary<Type, IBuilderOptions> Options;
 
     private const string ZeroVersion = "0.0.0";
     private Func<IConfiguration> _createConfigCallback;
@@ -35,21 +35,6 @@ internal class AppHostBuilder : IAppHostBuilder
         _appFolder =
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
         _createConfigCallback = () => new JsonOneFileConfiguration("config.json", true, null);
-
-        Options.TryGetValue(typeof(BuilderLoggerOptions), out var builderLoggerOptions);
-        if (builderLoggerOptions is BuilderLoggerOptions options)
-        {
-            _builderLoggerOptions = options;
-        }
-        else
-        {
-            _builderLoggerOptions = new BuilderLoggerOptions(
-                LogLevel.Information,
-                Path.Combine(_appFolder, "logs"),
-                1024 * 10
-            );
-        }
-
         _mutexName = _ => null;
         _namedPipe = _ => null;
 
@@ -76,10 +61,12 @@ internal class AppHostBuilder : IAppHostBuilder
             AppFolder = _appFolder,
         };
 
-        var minLevel = _builderLoggerOptions.LogMinimumLevelCallBack(config);
-        var logFolder = _builderLoggerOptions.LogFolderCallback(config);
-        var rollingSize = _builderLoggerOptions.RollingSizeKbCallback(config);
-        var isLogToConsoleEnabled = _builderLoggerOptions.IsLogToConsoleEnabled;
+        Options.TryGetValue(typeof(BuilderLoggerOptions), out var builderLoggerOptions);
+        var options = builderLoggerOptions as BuilderLoggerOptions;
+        var minLevel = options?.LogMinimumLevelCallBack(config) ?? LogLevel.Information;
+        var logFolder = options?.LogFolderCallback(config) ?? Path.Combine(_appFolder, "logs");
+        var rollingSize = options?.RollingSizeKbCallback(config) ?? 1024 * 10;
+        var isLogToConsoleEnabled = options?.IsLogToConsoleEnabled ?? false;
         var logService = new LogService(logFolder, rollingSize, minLevel, isLogToConsoleEnabled);
 
         return new AppHost(
