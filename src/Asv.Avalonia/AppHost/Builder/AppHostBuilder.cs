@@ -1,15 +1,17 @@
-﻿using System.Reflection;
+﻿using System.Composition.Hosting;
+using System.Reflection;
 using Asv.Cfg;
 using Avalonia;
-using Microsoft.Extensions.Logging;
 using Type = System.Type;
 
 namespace Asv.Avalonia;
 
 internal class AppHostBuilder : IAppHostBuilder
 {
-    public Func<IConfiguration> GetConfiguration => _createConfigCallback;
     public IDictionary<Type, IBuilderOptions> Options { get; }
+    public IConfiguration Configuration { get; private set; }
+    public ContainerConfiguration Services { get; }
+    public ILogService LogService { get; set; }
 
     private const string ZeroVersion = "0.0.0";
     private Func<IConfiguration> _createConfigCallback;
@@ -27,6 +29,7 @@ internal class AppHostBuilder : IAppHostBuilder
     public AppHostBuilder()
     {
         Options = new Dictionary<Type, IBuilderOptions>();
+        Services = new ContainerConfiguration();
         _userDataFolder = (_, info) =>
             Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
@@ -35,6 +38,7 @@ internal class AppHostBuilder : IAppHostBuilder
         _appFolder =
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
         _createConfigCallback = () => new JsonOneFileConfiguration("config.json", true, null);
+        Configuration = _createConfigCallback();
         _mutexName = _ => null;
         _namedPipe = _ => null;
 
@@ -46,7 +50,6 @@ internal class AppHostBuilder : IAppHostBuilder
 
     internal IAppHost Create()
     {
-        var config = _createConfigCallback();
         var appInfo = new AppInfo
         {
             Name = _appName,
@@ -57,25 +60,17 @@ internal class AppHostBuilder : IAppHostBuilder
         };
         var appPath = new AppPath
         {
-            UserDataFolder = _userDataFolder(config, appInfo),
+            UserDataFolder = _userDataFolder(Configuration, appInfo),
             AppFolder = _appFolder,
         };
 
-        Options.TryGetValue(typeof(BuilderLoggerOptions), out var builderLoggerOptions);
-        var options = builderLoggerOptions as BuilderLoggerOptions;
-        var minLevel = options?.LogMinimumLevelCallBack(config) ?? LogLevel.Information;
-        var logFolder = options?.LogFolderCallback(config) ?? Path.Combine(_appFolder, "logs");
-        var rollingSize = options?.RollingSizeKbCallback(config) ?? 1024 * 10;
-        var isLogToConsoleEnabled = options?.IsLogToConsoleEnabled ?? false;
-        var logService = new LogService(logFolder, rollingSize, minLevel, isLogToConsoleEnabled);
-
         return new AppHost(
-            config,
+            Configuration,
             appPath,
             appInfo,
-            logService,
+            LogService,
             _args,
-            Options,
+            Services,
             _mutexName(appInfo),
             _namedPipe(appInfo)
         );
@@ -114,6 +109,7 @@ internal class AppHostBuilder : IAppHostBuilder
     public IAppHostBuilder WithConfiguration(IConfiguration configuration)
     {
         _createConfigCallback = () => configuration;
+        Configuration = _createConfigCallback();
         return this;
     }
 
@@ -125,6 +121,7 @@ internal class AppHostBuilder : IAppHostBuilder
     {
         _createConfigCallback = () =>
             new JsonOneFileConfiguration(fileName, createIfNotExist, flushToFileDelayMs);
+        Configuration = _createConfigCallback();
         return this;
     }
 
@@ -246,105 +243,3 @@ internal class AppHostBuilder : IAppHostBuilder
 
     #endregion
 }
-
-// using System;
-// using System.Collections.Generic;
-//
-// namespace MyFramework
-// {
-//     public interface IAppBuilder
-//     {
-//         IAppBuilder Use(Func<AppDelegate, AppDelegate> middleware);
-//         IAppBuilder ConfigureServices(Action<IServiceCollection> configureServices);
-//         IServiceProvider Build();
-//     }
-//
-//     public delegate void AppDelegate();
-//
-//     public class AppBuilder : IAppBuilder
-//     {
-//         private readonly List<Func<AppDelegate, AppDelegate>> _middlewares = new();
-//         private readonly IServiceCollection _services = new ServiceCollection();
-//
-//         public IAppBuilder Use(Func<AppDelegate, AppDelegate> middleware)
-//         {
-//             _middlewares.Add(middleware);
-//             return this;
-//         }
-//
-//         public IAppBuilder ConfigureServices(Action<IServiceCollection> configureServices)
-//         {
-//             configureServices(_services);
-//             return this;
-//         }
-//
-//         public IServiceProvider Build()
-//         {
-//             AppDelegate app = () => { /* Final app logic */ };
-//
-//             foreach (var middleware in _middlewares.AsReadOnly().Reverse())
-//             {
-//                 app = middleware(app);
-//             }
-//
-//             return _services.BuildServiceProvider();
-//         }
-//     }
-//
-//     public static class AppBuilderExtensions
-//     {
-//         public static IAppBuilder UseCustomMiddleware(this IAppBuilder builder)
-//         {
-//             return builder.Use(next =>
-//             {
-//                 return () =>
-//                 {
-//                     Console.WriteLine("Custom Middleware Logic Before");
-//                     next();
-//                     Console.WriteLine("Custom Middleware Logic After");
-//                 };
-//             });
-//         }
-//     }
-//
-//     public interface IServiceCollection
-//     {
-//         void AddService<TService, TImplementation>() where TImplementation : TService;
-//         IServiceProvider BuildServiceProvider();
-//     }
-//
-//     public class ServiceCollection : IServiceCollection
-//     {
-//         private readonly Dictionary<Type, Type> _services = new();
-//
-//         public void AddService<TService, TImplementation>() where TImplementation : TService
-//         {
-//             _services[typeof(TService)] = typeof(TImplementation);
-//         }
-//
-//         public IServiceProvider BuildServiceProvider()
-//         {
-//             return new ServiceProvider(_services);
-//         }
-//     }
-//
-//     public class ServiceProvider : IServiceProvider
-//     {
-//         private readonly Dictionary<Type, Type> _services;
-//
-//         public ServiceProvider(Dictionary<Type, Type> services)
-//         {
-//             _services = services;
-//         }
-//
-//         public object GetService(Type serviceType)
-//         {
-//             if (_services.TryGetValue(serviceType, out var implementationType))
-//             {
-//                 return Activator.CreateInstance(implementationType);
-//             }
-//
-//             throw new InvalidOperationException($"Service of type {serviceType} not registered.");
-//         }
-//     }
-// }

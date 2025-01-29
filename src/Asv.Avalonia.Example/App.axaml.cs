@@ -18,30 +18,9 @@ public partial class App : Application, IContainerHost, IShellHost
     {
         var conventions = new ConventionBuilder();
         var containerCfg = new ContainerConfiguration();
+
         AppHost.Instance.RegisterServices(containerCfg);
-        if (Design.IsDesignMode)
-        {
-            containerCfg
-                .WithExport(NullAppHost.Instance.AppInfo)
-                .WithExport(NullAppHost.Instance.AppPath)
-                .WithExport(NullAppHost.Instance.Configuration)
-                .WithExport(NullAppHost.Instance.Logs)
-                .WithExport<ILoggerFactory>(NullAppHost.Instance.Logs)
-                .WithExport(NullAppHost.Instance.Args)
-                .WithExport(NullAppHost.Instance);
-        }
-        else
-        {
-            containerCfg
-                .WithExport(AppHost.Instance.AppInfo)
-                .WithExport(AppHost.Instance.AppPath)
-                .WithExport(AppHost.Instance.Configuration)
-                .WithExport(AppHost.Instance.Logs)
-                .WithExport<ILoggerFactory>(AppHost.Instance.Logs)
-                .WithExport(AppHost.Instance.Args)
-                .WithExport(AppHost.Instance)
-                .WithExport(AppHost.Instance.BuilderOptions);
-        }
+        NullAppHost.Instance.RegisterServices(containerCfg);
 
         containerCfg
             .WithExport<IContainerHost>(this)

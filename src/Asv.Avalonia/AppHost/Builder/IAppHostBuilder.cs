@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Composition.Hosting;
+using System.Reflection;
 using Asv.Cfg;
 using Microsoft.Extensions.Logging;
 
@@ -12,6 +13,9 @@ namespace Asv.Avalonia;
 public interface IAppHostBuilder
 {
     public IDictionary<Type, IBuilderOptions> Options { get; }
+    public IConfiguration Configuration { get; }
+    public ContainerConfiguration Services { get; }
+    public ILogService LogService { get; set; }
 
     /// <summary>
     /// Configures the application host builder with the specified configuration implementation.

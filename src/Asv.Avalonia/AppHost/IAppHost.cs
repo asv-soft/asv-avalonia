@@ -12,8 +12,8 @@ public interface IAppHost : IDisposable
     IAppInfo AppInfo { get; }
     IAppPath AppPath { get; }
     IConfiguration Configuration { get; }
-    ILogService Logs { get; }
-    IDictionary<Type, IBuilderOptions> BuilderOptions { get; }
+    ContainerConfiguration Services { get; }
+    void RegisterServices(ContainerConfiguration containerCfg);
     void HandleApplicationCrash(Exception exception);
     bool AllowOnlyOneInstance { get; }
     bool IsFirstInstance { get; }

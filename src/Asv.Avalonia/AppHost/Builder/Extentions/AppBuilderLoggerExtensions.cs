@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia;
 
 public static class AppBuilderLoggerExtensions
@@ -7,7 +9,10 @@ public static class AppBuilderLoggerExtensions
         BuilderLoggerOptions options
     )
     {
-        builder.Options.Add(typeof(BuilderLoggerOptions), options);
+        var service = LogServiceBuilder.BuildFromOptions(builder.Configuration, options);
+        builder.Services.WithExport(service);
+        builder.Services.WithExport<ILoggerFactory>(service);
+        builder.LogService = service;
         return builder;
     }
 

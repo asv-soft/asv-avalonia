@@ -1,4 +1,7 @@
+using System.Composition.Hosting;
 using Asv.Cfg;
+using Avalonia.Controls;
+using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
@@ -20,15 +23,30 @@ public class NullAppHost : IAppHost
         };
         AppPath = new AppPath { UserDataFolder = ".", AppFolder = "." };
         Configuration = new InMemoryConfiguration();
-        Logs = NullLogService.Instance;
     }
 
     public ReadOnlyReactiveProperty<AppArgs> Args { get; }
     public IAppInfo AppInfo { get; }
     public IAppPath AppPath { get; }
     public IConfiguration Configuration { get; }
-    public ILogService Logs { get; }
-    public IDictionary<Type, IBuilderOptions> BuilderOptions { get; }
+    public ContainerConfiguration Services { get; }
+
+    public void RegisterServices(ContainerConfiguration containerCfg)
+    {
+        if (!Design.IsDesignMode)
+        {
+            return;
+        }
+
+        containerCfg
+            .WithExport(Instance.AppInfo)
+            .WithExport(Instance.AppPath)
+            .WithExport(Instance.Configuration)
+            .WithExport(NullLogService.Instance)
+            .WithExport<ILoggerFactory>(NullLogService.Instance)
+            .WithExport(Instance.Args)
+            .WithExport(Instance);
+    }
 
     public void HandleApplicationCrash(Exception exception)
     {
@@ -42,6 +60,5 @@ public class NullAppHost : IAppHost
     {
         Args.Dispose();
         Configuration.Dispose();
-        Logs.Dispose();
     }
 }

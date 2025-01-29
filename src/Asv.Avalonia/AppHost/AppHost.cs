@@ -1,6 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System.Composition.Hosting;
+using System.Composition.Hosting.Core;
+using System.Diagnostics;
 using System.IO.Pipes;
 using Asv.Cfg;
+using Avalonia.Controls;
+using Avalonia.Controls.Templates;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -58,7 +62,7 @@ public sealed class AppHost : IAppHost
         AppInfo appInfo,
         ILogService logs,
         AppArgs args,
-        IDictionary<Type, IBuilderOptions> builderOptions,
+        ContainerConfiguration services,
         string? mutexName,
         string? argsPipeName
     )
@@ -69,10 +73,10 @@ public sealed class AppHost : IAppHost
         ArgumentNullException.ThrowIfNull(logs);
         ArgumentNullException.ThrowIfNull(args);
         Configuration = config;
+        Services = services;
         AppPath = appPath;
         AppInfo = appInfo;
         Logs = logs;
-        BuilderOptions = builderOptions;
         var logger = logs.CreateLogger($"{nameof(AppHost)}[PID:{Environment.ProcessId}]");
         SetupExceptionHandlers(logger);
         if (mutexName != null)
@@ -107,7 +111,7 @@ public sealed class AppHost : IAppHost
     public IAppPath AppPath { get; }
     public IConfiguration Configuration { get; }
     public ILogService Logs { get; }
-    public IDictionary<Type, IBuilderOptions> BuilderOptions { get; }
+    public ContainerConfiguration Services { get; }
 
     private void SetupExceptionHandlers(ILogger logger)
     {
@@ -206,6 +210,24 @@ public sealed class AppHost : IAppHost
     }
 
     #region Handle exceptions
+
+    public void RegisterServices(ContainerConfiguration containerCfg)
+    {
+        if (Design.IsDesignMode)
+        {
+            return;
+        }
+
+        using var cont = Services.CreateContainer();
+        var proxy = new ProxyExportDescriptorProvider(cont);
+        containerCfg
+            .WithProvider(proxy)
+            .WithExport(Instance.AppInfo)
+            .WithExport(Instance.AppPath)
+            .WithExport(Instance.Configuration)
+            .WithExport(Instance.Args)
+            .WithExport(Instance);
+    }
 
     public void HandleApplicationCrash(Exception exception)
     {

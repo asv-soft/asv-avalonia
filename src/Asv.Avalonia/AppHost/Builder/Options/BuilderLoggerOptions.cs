@@ -8,7 +8,7 @@ public sealed class BuilderLoggerOptions : IBuilderOptions
     public Func<IConfiguration, LogLevel> LogMinimumLevelCallBack { get; set; } =
         _ => LogLevel.Information;
     public Func<IConfiguration, string?> LogFolderCallback { get; set; } = _ => null;
-    public Func<IConfiguration, int> RollingSizeKbCallback { get; set; } = _ => 0;
+    public Func<IConfiguration, int> RollingSizeKbCallback { get; set; } = _ => 1024 * 10;
     public bool IsLogToConsoleEnabled { get; set; }
 }
 
