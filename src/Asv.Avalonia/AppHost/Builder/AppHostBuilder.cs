@@ -8,10 +8,8 @@ namespace Asv.Avalonia;
 
 internal class AppHostBuilder : IAppHostBuilder
 {
-    public IDictionary<Type, IBuilderOptions> Options { get; }
     public IConfiguration Configuration { get; private set; }
     public ContainerConfiguration Services { get; }
-    public ILogService LogService { get; set; }
 
     private const string ZeroVersion = "0.0.0";
     private Func<IConfiguration> _createConfigCallback;
@@ -28,7 +26,6 @@ internal class AppHostBuilder : IAppHostBuilder
 
     public AppHostBuilder()
     {
-        Options = new Dictionary<Type, IBuilderOptions>();
         Services = new ContainerConfiguration();
         _userDataFolder = (_, info) =>
             Path.Combine(
@@ -68,7 +65,6 @@ internal class AppHostBuilder : IAppHostBuilder
             Configuration,
             appPath,
             appInfo,
-            LogService,
             _args,
             Services,
             _mutexName(appInfo),

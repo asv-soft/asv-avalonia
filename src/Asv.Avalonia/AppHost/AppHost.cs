@@ -60,7 +60,6 @@ public sealed class AppHost : IAppHost
         IConfiguration config,
         AppPath appPath,
         AppInfo appInfo,
-        ILogService logs,
         AppArgs args,
         ContainerConfiguration services,
         string? mutexName,
@@ -70,14 +69,18 @@ public sealed class AppHost : IAppHost
         ArgumentNullException.ThrowIfNull(config);
         ArgumentNullException.ThrowIfNull(appPath);
         ArgumentNullException.ThrowIfNull(appInfo);
-        ArgumentNullException.ThrowIfNull(logs);
         ArgumentNullException.ThrowIfNull(args);
-        Configuration = config;
+        ArgumentNullException.ThrowIfNull(services);
         Services = services;
-        AppPath = appPath;
-        AppInfo = appInfo;
-        Logs = logs;
-        var logger = logs.CreateLogger($"{nameof(AppHost)}[PID:{Environment.ProcessId}]");
+        using (var cont = services.CreateContainer())
+        {
+            Configuration = config;
+            AppPath = appPath;
+            AppInfo = appInfo;
+            Logs = cont.GetExport<LogService>();
+        }
+
+        var logger = Logs.CreateLogger($"{nameof(AppHost)}[PID:{Environment.ProcessId}]");
         SetupExceptionHandlers(logger);
         if (mutexName != null)
         {
@@ -209,8 +212,6 @@ public sealed class AppHost : IAppHost
         }
     }
 
-    #region Handle exceptions
-
     public void RegisterServices(ContainerConfiguration containerCfg)
     {
         if (Design.IsDesignMode)
@@ -228,6 +229,8 @@ public sealed class AppHost : IAppHost
             .WithExport(Instance.Args)
             .WithExport(Instance);
     }
+
+    #region Handle exceptions
 
     public void HandleApplicationCrash(Exception exception)
     {

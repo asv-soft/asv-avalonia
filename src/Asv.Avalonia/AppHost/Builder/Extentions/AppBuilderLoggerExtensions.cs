@@ -10,9 +10,8 @@ public static class AppBuilderLoggerExtensions
     )
     {
         var service = LogServiceBuilder.BuildFromOptions(builder.Configuration, options);
-        builder.Services.WithExport(service);
+        builder.Services.WithExport<ILogService>(service);
         builder.Services.WithExport<ILoggerFactory>(service);
-        builder.LogService = service;
         return builder;
     }
 
