@@ -1,4 +1,4 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 
 namespace Asv.Avalonia;
 
@@ -13,4 +13,8 @@ public static class DesignTime
     }
 
     public static ILogService Log => NullLogService.Instance;
+    public static IAppHost AppHost => NullAppHost.Instance;
+
+    public static IThemeService ThemeService => NullThemeService.Instance;
+    public static ICommandService CommandService => NullCommandService.Instance;
 }

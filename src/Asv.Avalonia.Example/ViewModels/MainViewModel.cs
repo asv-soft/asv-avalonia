@@ -1,22 +1,17 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
+using System.Collections.Generic;
+using R3;
 
 namespace Asv.Avalonia.Example.ViewModels;
 
-public class MainViewModel : DisposableViewModel
+public class Model : IDisposable
 {
-    public MainViewModel()
-        : base("shell")
-    {
-        History = new CommandHistory(Id);
-        Property1 = new HistoryProperty(History, "property1");
-        Property2 = new HistoryProperty(History, "property2");
-    }
+    public ReactiveProperty<double> Value1 { get; } = new(0);
+    public ReactiveProperty<double> Value2 { get; } = new(0);
 
-    public ICommandHistory History { get; }
-    public HistoryProperty Property2 { get; }
-    public HistoryProperty Property1 { get; }
+    public void Dispose()
+    {
+        Value1.Dispose();
+        Value2.Dispose();
+    }
 }

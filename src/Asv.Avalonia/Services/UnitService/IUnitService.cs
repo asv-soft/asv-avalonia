@@ -16,7 +16,7 @@ public static class WellKnownUnits
 
 public interface IUnitService
 {
-    IUnitItem? this[string id] { get; }
+    IUnit? this[string id] { get; }
     IUnit GetUnit(string unitId);
 }
 
@@ -54,8 +54,6 @@ public interface IUnitItem
 
 public class SimpleUnitItem : IUnitItem
 {
-    public SimpleUnitItem() { }
-
     public required IUnit Parent { get; set; }
     public required string Id { get; set; }
     public required string Name { get; set; }

@@ -1,3 +1,4 @@
+using System.Composition.Hosting;
 using Asv.Cfg;
 using Microsoft.Extensions.Logging;
 using R3;
