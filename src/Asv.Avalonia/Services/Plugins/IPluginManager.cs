@@ -25,6 +25,8 @@ public interface IPluginServerInfo
 public interface IPluginManager
 {
     IReadOnlyList<IPluginServerInfo> Servers { get; }
+    IEnumerable<ILocalPluginInfo> Installed { get; }
+    SemVersion ApiVersion { get; }
     void AddServer(PluginServer server);
     void RemoveServer(IPluginServerInfo server);
     Task<IReadOnlyList<IPluginSearchInfo>> Search(SearchQuery query, CancellationToken cancel);
@@ -47,7 +49,6 @@ public interface IPluginManager
     );
     void Uninstall(ILocalPluginInfo plugin);
     void CancelUninstall(ILocalPluginInfo pluginInfo);
-    IEnumerable<ILocalPluginInfo> Installed { get; }
     bool IsInstalled(string packageId, out ILocalPluginInfo? info);
 }
 

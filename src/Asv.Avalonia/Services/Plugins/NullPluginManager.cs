@@ -1,4 +1,6 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Common;
+
+namespace Asv.Avalonia;
 
 public class NullPluginManager : IPluginManager
 {
@@ -7,6 +9,8 @@ public class NullPluginManager : IPluginManager
     public IReadOnlyList<IPluginServerInfo> Sources { get; } = new List<IPluginServerInfo>();
 
     public IReadOnlyList<IPluginServerInfo> Servers { get; }
+
+    public SemVersion ApiVersion { get; }
 
     public void AddServer(PluginServer server) { }
 

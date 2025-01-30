@@ -10,6 +10,7 @@ public interface ILocalPluginInfo : IPluginSpecification
     string SourceUri { get; }
     string LocalFolder { get; }
     string Version { get; }
+    SemVersion ApiVersion { get; }
     bool IsUninstalled { get; }
     bool IsLoaded { get; }
     string LoadingError { get; }
@@ -27,6 +28,7 @@ public interface IPluginSearchInfo : IPluginSpecification
 
 public interface IPluginSpecification
 {
+    SemVersion ApiVersion { get; }
     string PackageId { get; }
     string? Title { get; }
     public string? Description { get; }

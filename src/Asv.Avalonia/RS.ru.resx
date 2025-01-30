@@ -1,0 +1,62 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="InstalledPluginsView_Search" xml:space="preserve">
+        <value>Поиск</value>
+    </data>
+    <data name="InstalledPluginsView_Uninstalled" xml:space="preserve">
+        <value>Удален</value>
+    </data>
+    <data name="InstalledPluginsView_LoadingError" xml:space="preserve">
+        <value>Ошибка загрузки</value>
+    </data>
+    <data name="InstalledPluginsView_Uninstall" xml:space="preserve">
+        <value>Удалить</value>
+    </data>
+    <data name="InstalledPluginsView_UninstalledMessage" xml:space="preserve">
+        <value>Этот плагин был отмечен для удаления. Он будет удален при следующей загрузке приложения.</value>
+    </data>
+    <data name="InstalledPluginsView_UninstalledMessageTitle" xml:space="preserve">
+        <value>Удален</value>
+    </data>
+    <data name="InstalledPluginsView_CancelUninstall" xml:space="preserve">
+        <value>Отменить</value>
+    </data>
+    <data name="InstalledPluginsView_Tab_Description" xml:space="preserve">
+        <value>Описание</value>
+    </data>
+    <data name="InstalledPluginsView_Tab_AdditionalInfo" xml:space="preserve">
+        <value>Дополнительно</value>
+    </data>
+    <data name="PluginsMarketView_ToggleSwitch_OnlyVerified" xml:space="preserve">
+        <value>Только проверенные</value>
+    </data>
+    <data name="PluginsMarketView_InfoBar_IsVerified_Message" xml:space="preserve">
+        <value>Этот плагин проверен разработчиками</value>
+    </data>
+    <data name="InstalledPluginsView_SelectedPluginIsNull" xml:space="preserve">
+        <value>Пожалуйста, выберите плагин</value>
+    </data>
+    <data name="PluginInstallerViewModel_InstallDialog_PrimaryButtonText" xml:space="preserve">
+        <value>Установить</value>
+    </data>
+    <data name="PluginInstallerViewModel_InstallDialog_SecondaryButtonText" xml:space="preserve">
+        <value>Закрыть</value>
+    </data>
+    <data name="PluginInstallerViewModel_InstallDialog_Title" xml:space="preserve">
+        <value>Установщик плагинов</value>
+    </data>
+    <data name="PluginInstallerViewModel_InstallPluginAsync_Success" xml:space="preserve">
+        <value>Плагин успешно установлен</value>
+    </data>
+</root>

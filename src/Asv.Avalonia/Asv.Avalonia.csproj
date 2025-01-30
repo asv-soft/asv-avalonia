@@ -28,10 +28,13 @@
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
+        <PackageReference Include="Material.Icons.Avalonia" Version="2.2.0" />
         <PackageReference Include="MemoryPack" Version="1.21.3" />
         <PackageReference Include="NuGet.Packaging" Version="6.12.1" />
         <PackageReference Include="NuGet.Protocol" Version="6.12.1" />
         <PackageReference Include="NuGet.Resolver" Version="6.12.1" />
+        <PackageReference Include="observablecollections" Version="3.3.3" />
         <PackageReference Include="R3Extensions.Avalonia" Version="$(R3Version)" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.12.10">
           <PrivateAssets>all</PrivateAssets>
@@ -51,6 +54,21 @@
       <Folder Include="Services\Navigation\" />
       <Folder Include="Services\Navligation\" />
       <Folder Include="Services\UnitService\Units\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="RS.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>RS.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="RS.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RS.resx</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
