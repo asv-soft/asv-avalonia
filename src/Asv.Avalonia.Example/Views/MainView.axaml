@@ -13,17 +13,9 @@
     <vm:MainViewModel />
   </Design.DataContext>
 
-  <StackPanel MinWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center">
-      <Button Command="{Binding History.Undo}">Undo</Button>
-      <Button Command="{Binding History.Redo}">Redo</Button>
-      <TextBox Focusable="True" DataContext="{Binding Property1}" 
-               IsFocused="{Binding IsSelected.Value, Mode=OneWayToSource}"
-               avalonia:NavigationHelper.IsSelected="{Binding IsSelected.Value, Mode=OneWay}"
-               Text="{Binding User.Value, UpdateSourceTrigger=LostFocus}"/>
-      
-      <TextBox Focusable="True" DataContext="{Binding Property2}" 
-               IsFocused="{Binding IsSelected.Value, Mode=OneWayToSource}"
-               avalonia:NavigationHelper.IsSelected="{Binding IsSelected.Value, Mode=TwoWay}"
-               Text="{Binding User.Value, UpdateSourceTrigger=LostFocus}"/>
-  </StackPanel>
+  <avalonia:InstalledPluginsView>
+      <avalonia:InstalledPluginsView.DataContext>
+          <vm:InstalledPluginsExampleViewModel/>
+      </avalonia:InstalledPluginsView.DataContext>
+  </avalonia:InstalledPluginsView>
 </UserControl>
