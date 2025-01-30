@@ -20,20 +20,14 @@ public class SettingsPage : Page
     public SettingsPage(IThemeService themeService, ICommandService svc)
         : base(PageId, svc)
     {
-        Theme = new ThemeProperty(themeService)
-        {
-            Parent = this,
-        };
+        Theme = new ThemeProperty(themeService) { Parent = this };
     }
 
     public ThemeProperty Theme { get; }
 
     public override IEnumerable<IRoutable> Children
     {
-        get
-        {
-            yield return Theme;
-        }
+        get { yield return Theme; }
     }
 
     public override IReadOnlyBindableReactiveProperty<string> Title => _title;

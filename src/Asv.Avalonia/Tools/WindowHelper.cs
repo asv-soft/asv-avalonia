@@ -23,7 +23,9 @@ namespace Asv.Avalonia
         static WindowHelper()
         {
             EnableDragProperty.Changed.ToObservable().Subscribe(OnChangedEnableDrag);
-            DoubleTappedWindowStateProperty.Changed.ToObservable().Subscribe(OnChangedDoubleClickWindowState);
+            DoubleTappedWindowStateProperty
+                .Changed.ToObservable()
+                .Subscribe(OnChangedDoubleClickWindowState);
         }
 
         #region IgnoreDragProperty

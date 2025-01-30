@@ -2,7 +2,6 @@ using R3;
 
 namespace Asv.Avalonia;
 
-
 public class NullCommandService : ICommandService
 {
     public static ICommandService Instance { get; } = new NullCommandService();
@@ -26,19 +25,25 @@ public class NullCommandHistory : ICommandHistory
 
     public IRoutable HistoryOwner { get; } = new DesignTimeShellViewModel();
     public ReactiveCommand Undo { get; } = new();
+
     public ValueTask UndoAsync(CancellationToken cancel = default)
     {
         return ValueTask.CompletedTask;
     }
 
     public ReactiveCommand Redo { get; } = new();
+
     public ValueTask RedoAsync(CancellationToken cancel = default)
     {
         return ValueTask.CompletedTask;
     }
 
-    public ValueTask Execute(string commandId, IRoutable context, IPersistable? param,
-        CancellationToken cancel = default)
+    public ValueTask Execute(
+        string commandId,
+        IRoutable context,
+        IPersistable? param,
+        CancellationToken cancel = default
+    )
     {
         return ValueTask.CompletedTask;
     }

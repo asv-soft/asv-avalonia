@@ -12,7 +12,10 @@ public class CommandService : ICommandService
     private readonly ImmutableDictionary<string, ICommandFactory> _commands;
 
     [ImportingConstructor]
-    public CommandService([ImportMany]IEnumerable<ICommandFactory> factories, ILoggerFactory loggerFactory)
+    public CommandService(
+        [ImportMany] IEnumerable<ICommandFactory> factories,
+        ILoggerFactory loggerFactory
+    )
     {
         _loggerFactory = loggerFactory;
         _commands = factories.ToImmutableDictionary(x => x.Info.CommandId);

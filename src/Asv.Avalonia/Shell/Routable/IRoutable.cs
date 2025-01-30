@@ -22,6 +22,7 @@ public abstract class AsyncRoutedEvent(IRoutable source, RoutingEventStrategy ro
     public IRoutable Source { get; } = source;
     public RoutingEventStrategy RoutingEventStrategy { get; } = routingEventStrategy;
     public bool IsHandled { get; set; }
+
     public virtual AsyncRoutedEvent Clone()
     {
         return (AsyncRoutedEvent)MemberwiseClone();

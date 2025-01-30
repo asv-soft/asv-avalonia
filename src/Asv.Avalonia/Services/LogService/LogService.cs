@@ -27,7 +27,8 @@ public class LogService : ILogService
             builder.SetMinimumLevel(minLevel);
             builder.AddZLoggerRollingFile(options =>
             {
-                options.FilePathSelector = (dt, index) => $"{logFolder}/{dt:yyyy-MM-dd}_{index}.logs";
+                options.FilePathSelector = (dt, index) =>
+                    $"{logFolder}/{dt:yyyy-MM-dd}_{index}.logs";
                 options.UseJsonFormatter();
                 options.RollingSizeKB = rollingSizeKb;
             });
@@ -94,11 +95,13 @@ public class LogService : ILogService
     {
         foreach (var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs"))
         {
-            using var fs = new FileStream(logFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-            var rdr = new JsonTextReader(new StreamReader(fs))
-            {
-                SupportMultipleContent = true,
-            };
+            using var fs = new FileStream(
+                logFilePath,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite
+            );
+            var rdr = new JsonTextReader(new StreamReader(fs)) { SupportMultipleContent = true };
             var serializer = new JsonSerializer();
 
             while (rdr.Read())

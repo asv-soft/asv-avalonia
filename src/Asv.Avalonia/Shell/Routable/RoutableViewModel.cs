@@ -9,15 +9,17 @@ public abstract class RoutableViewModel : DisposableViewModel, IRoutable
     protected RoutableViewModel(string id)
         : base(id)
     {
-        _sub1 = IsFocused.SubscribeAwait((x, _) =>
-        {
-            if (x)
+        _sub1 = IsFocused.SubscribeAwait(
+            (x, _) =>
             {
-                return Rise(new FocusedEvent(this));
-            }
+                if (x)
+                {
+                    return Rise(new FocusedEvent(this));
+                }
 
-            return ValueTask.CompletedTask;
-        });
+                return ValueTask.CompletedTask;
+            }
+        );
     }
 
     public IRoutable? Parent { get; set; }

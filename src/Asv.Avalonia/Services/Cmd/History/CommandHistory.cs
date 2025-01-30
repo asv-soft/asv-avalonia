@@ -25,6 +25,7 @@ public class CommandHistory : ICommandHistory
 
     public IRoutable HistoryOwner { get; }
     public ReactiveCommand Undo { get; }
+
     public async ValueTask UndoAsync(CancellationToken cancel = default)
     {
         if (_undoStack.TryPop(out var command))
@@ -44,6 +45,7 @@ public class CommandHistory : ICommandHistory
     }
 
     public ReactiveCommand Redo { get; }
+
     public async ValueTask RedoAsync(CancellationToken cancel = default)
     {
         if (_redoStack.TryPop(out var command))
@@ -66,7 +68,12 @@ public class CommandHistory : ICommandHistory
         return HistoryOwner.NavigateTo(path[1..]);
     }
 
-    public ValueTask Execute(string commandId, IRoutable context, IPersistable? param, CancellationToken cancel = default)
+    public ValueTask Execute(
+        string commandId,
+        IRoutable context,
+        IPersistable? param,
+        CancellationToken cancel = default
+    )
     {
         var cmd = _cmd.CreateCommand(commandId);
         if (cmd == null)

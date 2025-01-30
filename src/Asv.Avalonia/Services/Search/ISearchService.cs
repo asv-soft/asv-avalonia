@@ -1,6 +1,3 @@
 ﻿namespace Asv.Avalonia;
 
-public interface ISearchService
-{
-
-}
+public interface ISearchService { }

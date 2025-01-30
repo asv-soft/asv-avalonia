@@ -8,14 +8,15 @@ public class ExecuteCommandEvent(IRoutable source, string commandId, IPersistabl
 }
 
 public class FocusedEvent(IRoutable source)
-    : AsyncRoutedEvent(source, RoutingEventStrategy.Bubble)
-{
-    
-}
+    : AsyncRoutedEvent(source, RoutingEventStrategy.Bubble) { }
 
 public static class ExecuteCommandEventMixin
 {
-    public static ValueTask ExecuteCommand(this IRoutable src, string commandId, IPersistable? commandParameter)
+    public static ValueTask ExecuteCommand(
+        this IRoutable src,
+        string commandId,
+        IPersistable? commandParameter
+    )
     {
         return src.Rise(new ExecuteCommandEvent(src, commandId, commandParameter));
     }

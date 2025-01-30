@@ -24,8 +24,7 @@ public class ChangeThemeCommandFactory : ICommandFactory
     }
 }
 
-public class ChangeThemeCommand(IThemeService svc)
-    : IUndoRedoCommand
+public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
 {
     #region Static
 
@@ -44,6 +43,7 @@ public class ChangeThemeCommand(IThemeService svc)
     private PersistableChange<string>? _state;
 
     public ICommandInfo Info => StaticInfo;
+
     public IPersistable Save()
     {
         return _state ?? throw new InvalidOperationException();
@@ -57,7 +57,11 @@ public class ChangeThemeCommand(IThemeService svc)
         }
     }
 
-    public ValueTask Execute(IRoutable context, IPersistable? parameter = null, CancellationToken cancel = default)
+    public ValueTask Execute(
+        IRoutable context,
+        IPersistable? parameter = null,
+        CancellationToken cancel = default
+    )
     {
         if (parameter is Persistable<string> memento)
         {

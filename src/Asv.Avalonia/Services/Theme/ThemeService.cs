@@ -37,7 +37,7 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
         _themes =
         [
             new ThemeItem(DarkTheme, "Dark", ThemeVariant.Dark),
-            new ThemeItem(LightTheme, "Light", ThemeVariant.Light)
+            new ThemeItem(LightTheme, "Light", ThemeVariant.Light),
         ];
         _config = cfgSvc.Get<ThemeServiceConfig>();
         var theme = _themes.FirstOrDefault(x => x.Id == _config.Theme) ?? _themes[0];
@@ -65,4 +65,3 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
     public IEnumerable<IThemeInfo> Themes => _themes;
     public ReactiveProperty<IThemeInfo> CurrentTheme { get; }
 }
-

@@ -55,6 +55,7 @@ public class ThemeProperty : RoutableViewModel
     public BindableReactiveProperty<IThemeInfo> SelectedItem { get; }
 
     public override IEnumerable<IRoutable> Children => ImmutableArray<IRoutable>.Empty;
+
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
         return ValueTask.CompletedTask;
