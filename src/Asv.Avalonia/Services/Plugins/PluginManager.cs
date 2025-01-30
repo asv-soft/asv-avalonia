@@ -119,7 +119,7 @@ public class PluginManager : IPluginManager
             }
 
             _logger.LogWarning($"Replace clear text password for server {server.Name}");
-            server.PasswordHash = server.Password.EncryptAES(Salt);
+            server.PasswordHash = server.Password.EncryptAes(Salt);
             server.Password = null;
             needToSave = true;
         }
@@ -138,7 +138,7 @@ public class PluginManager : IPluginManager
                         server.Name,
                         server.SourceUri,
                         server.Username,
-                        server.PasswordHash?.DecryptAES(Salt)
+                        server.PasswordHash?.DecryptAes(Salt)
                     ),
                     false,
                     false
@@ -362,7 +362,7 @@ public class PluginManager : IPluginManager
                     {
                         Name = x.PackageSource.Name,
                         SourceUri = x.PackageSource.Source,
-                        PasswordHash = x.PackageSource.Credentials?.PasswordText.EncryptAES(Salt),
+                        PasswordHash = x.PackageSource.Credentials?.PasswordText.EncryptAes(Salt),
                         Username = x.PackageSource.Credentials?.Username,
                     })
                     .ToArray();
@@ -406,7 +406,7 @@ public class PluginManager : IPluginManager
                 {
                     Name = x.PackageSource.Name,
                     SourceUri = x.PackageSource.Source,
-                    PasswordHash = x.PackageSource.Credentials?.PasswordText.EncryptAES(Salt),
+                    PasswordHash = x.PackageSource.Credentials?.PasswordText.EncryptAes(Salt),
                     Username = x.PackageSource.Credentials?.Username,
                 })
                 .ToArray();
