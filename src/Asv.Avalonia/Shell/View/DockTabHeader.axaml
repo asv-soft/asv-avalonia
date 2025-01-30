@@ -1,0 +1,21 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Asv.Avalonia">
+    <Design.PreviewWith>
+        <controls:DockTabHeader />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|DockTabHeader">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                    <Button Content="X" ></Button>
+                </Grid>
+               
+                
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

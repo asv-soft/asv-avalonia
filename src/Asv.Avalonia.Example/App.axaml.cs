@@ -88,6 +88,9 @@ public partial class App : Application, IContainerHost, IShellHost
         {
             Shell.OpenPage(SettingsPage.PageId);
         }
+#if DEBUG
+        this.AttachDevTools();
+#endif
     }
 
     public CompositionHost Host { get; }

@@ -15,31 +15,40 @@ public abstract class ShellViewModel : RoutableViewModel, IShell
         : base(ShellId)
     {
         ArgumentNullException.ThrowIfNull(host);
-        
+
         _container = host.Host;
         Pages = _pages.ToNotifyCollectionChangedSlim();
         Back = new ReactiveCommand((_, c) => BackwardAsync(c));
         Forward = new ReactiveCommand((_, c) => ForwardAsync(c));
         GoHome = new ReactiveCommand((_, c) => BackwardAsync(c));
+        Open = new ReactiveCommand(async (_, c) =>
+        {
+            await OpenPage($"settings");
+        });
     }
 
     public ReactiveCommand Back { get; }
+
     public ValueTask BackwardAsync(CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
 
     public ReactiveCommand Forward { get; }
+
     public ValueTask ForwardAsync(CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
 
     public ReactiveCommand GoHome { get; }
+
     public ValueTask GoHomeAsync(CancellationToken cancel = default)
     {
         throw new NotImplementedException();
     }
+
+    public ReactiveCommand Open { get; }
 
     public ValueTask<IPage?> OpenPage(string pageId)
     {
@@ -79,7 +88,7 @@ public abstract class ShellViewModel : RoutableViewModel, IShell
         {
             // write to navigation history
         }
-        
+
         return ValueTask.CompletedTask;
     }
 }
