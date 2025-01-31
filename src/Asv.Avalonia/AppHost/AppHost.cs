@@ -19,11 +19,17 @@ public sealed class AppHost : IAppHost
 {
     #region Static
 
-    private static IAppHost _instance = null!;
+    private static IAppHost? _instance = null;
     public static IAppHost Instance
     {
         get
         {
+            if (Design.IsDesignMode)
+            {
+                _instance = NullAppHost.Instance;
+                return _instance;
+            }
+
             if (_instance == null)
             {
                 throw new InvalidOperationException(
@@ -31,7 +37,7 @@ public sealed class AppHost : IAppHost
                 );
             }
 
-            return _instance;
+            return _instance ?? NullAppHost.Instance;
         }
     }
 
@@ -40,11 +46,6 @@ public sealed class AppHost : IAppHost
         if (_instance != null)
         {
             throw new InvalidOperationException($"{nameof(AppHost)} already initialized.");
-        }
-
-        if (Design.IsDesignMode)
-        {
-            _instance = NullAppHost.Instance;
         }
 
         var builder = new AppHostBuilder();
