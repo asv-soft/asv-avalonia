@@ -18,7 +18,7 @@ sealed class Program
         using var host = AppHost.Initialize(builder =>
         {
             builder
-                .WithJsonConfiguration("config.json", true, TimeSpan.FromMilliseconds(500))
+                .UseJsonConfig("config.json", true, TimeSpan.FromMilliseconds(500))
                 .WithAppInfoFrom(typeof(App).Assembly)
                 .UseLogging(options =>
                 {

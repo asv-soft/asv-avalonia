@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public sealed class BuilderLoggerOptions : IBuilderOptions
+public sealed class BuilderLoggerOptions
 {
     public Func<IConfiguration, LogLevel> LogMinimumLevelCallBack { get; set; } =
         _ => LogLevel.Information;

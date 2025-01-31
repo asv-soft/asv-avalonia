@@ -11,8 +11,6 @@ public interface IAppHost : IDisposable
     ReadOnlyReactiveProperty<AppArgs> Args { get; }
     IAppInfo AppInfo { get; }
     IAppPath AppPath { get; }
-    IConfiguration Configuration { get; }
-    ContainerConfiguration Services { get; }
     void RegisterServices(ContainerConfiguration containerCfg);
     void HandleApplicationCrash(Exception exception);
     bool AllowOnlyOneInstance { get; }

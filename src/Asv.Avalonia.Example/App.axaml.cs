@@ -20,7 +20,6 @@ public partial class App : Application, IContainerHost, IShellHost
         var containerCfg = new ContainerConfiguration();
 
         AppHost.Instance.RegisterServices(containerCfg);
-        NullAppHost.Instance.RegisterServices(containerCfg);
 
         containerCfg
             .WithExport<IContainerHost>(this)

@@ -3,6 +3,7 @@ using Asv.Cfg;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using R3;
+using InMemoryConfiguration = Asv.Cfg.InMemoryConfiguration;
 
 namespace Asv.Avalonia;
 
@@ -22,30 +23,22 @@ public class NullAppHost : IAppHost
             AvaloniaVersion = "1.0.0",
         };
         AppPath = new AppPath { UserDataFolder = ".", AppFolder = "." };
-        Configuration = new InMemoryConfiguration();
     }
 
     public ReadOnlyReactiveProperty<AppArgs> Args { get; }
     public IAppInfo AppInfo { get; }
     public IAppPath AppPath { get; }
-    public IConfiguration Configuration { get; }
-    public ContainerConfiguration Services { get; }
 
     public void RegisterServices(ContainerConfiguration containerCfg)
     {
-        if (!Design.IsDesignMode)
-        {
-            return;
-        }
-
         containerCfg
-            .WithExport(Instance.AppInfo)
-            .WithExport(Instance.AppPath)
-            .WithExport(Instance.Configuration)
+            .WithExport(AppInfo)
+            .WithExport(AppPath)
             .WithExport(NullLogService.Instance)
             .WithExport<ILoggerFactory>(NullLogService.Instance)
-            .WithExport(Instance.Args)
-            .WithExport(Instance);
+            .WithExport(new InMemoryConfiguration())
+            .WithExport(Args)
+            .WithExport(this);
     }
 
     public void HandleApplicationCrash(Exception exception)
@@ -59,6 +52,5 @@ public class NullAppHost : IAppHost
     public void Dispose()
     {
         Args.Dispose();
-        Configuration.Dispose();
     }
 }

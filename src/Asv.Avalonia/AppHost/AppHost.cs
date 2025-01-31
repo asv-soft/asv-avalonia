@@ -1,10 +1,8 @@
 ﻿using System.Composition.Hosting;
-using System.Composition.Hosting.Core;
 using System.Diagnostics;
 using System.IO.Pipes;
 using Asv.Cfg;
 using Avalonia.Controls;
-using Avalonia.Controls.Templates;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -44,6 +42,11 @@ public sealed class AppHost : IAppHost
             throw new InvalidOperationException($"{nameof(AppHost)} already initialized.");
         }
 
+        if (Design.IsDesignMode)
+        {
+            _instance = NullAppHost.Instance;
+        }
+
         var builder = new AppHostBuilder();
         configure(builder);
         _instance = builder.Create();
@@ -55,32 +58,37 @@ public sealed class AppHost : IAppHost
     private readonly Mutex? _mutex;
     private readonly ReactiveProperty<AppArgs> _args = new();
     private readonly Subject<Exception> _errorHandler = new();
+    private readonly IAppCore _core;
 
-    internal AppHost(
-        IConfiguration config,
-        AppPath appPath,
-        AppInfo appInfo,
-        AppArgs args,
-        ContainerConfiguration services,
-        string? mutexName,
-        string? argsPipeName
-    )
+    internal AppHost(IAppCore core)
     {
-        ArgumentNullException.ThrowIfNull(config);
-        ArgumentNullException.ThrowIfNull(appPath);
-        ArgumentNullException.ThrowIfNull(appInfo);
-        ArgumentNullException.ThrowIfNull(args);
-        ArgumentNullException.ThrowIfNull(services);
-        Services = services;
-        using (var cont = services.CreateContainer())
-        {
-            Configuration = config;
-            AppPath = appPath;
-            AppInfo = appInfo;
-            Logs = cont.GetExport<LogService>();
-        }
+        ArgumentNullException.ThrowIfNull(core);
+        ArgumentNullException.ThrowIfNull(core.Configuration);
+        ArgumentNullException.ThrowIfNull(core.Args);
+        ArgumentNullException.ThrowIfNull(core.Services);
+        _core = core;
 
-        var logger = Logs.CreateLogger($"{nameof(AppHost)}[PID:{Environment.ProcessId}]");
+        AppInfo = new AppInfo
+        {
+            Name = _core.AppName,
+            Version = _core.AppVersion,
+            CompanyName = _core.CompanyName,
+            AvaloniaVersion = _core.AvaloniaVersion,
+            Title = _core.ProductTitle,
+        };
+
+        AppPath = new AppPath
+        {
+            UserDataFolder = _core.UserDataFolder(_core.Configuration, AppInfo),
+            AppFolder = _core.AppFolder,
+        };
+
+        var mutexName = _core.MutexName(AppInfo);
+        var namedPipe = _core.NamedPipe(AppInfo);
+
+        var logger = _core.LogService.CreateLogger(
+            $"{nameof(AppHost)}[PID:{Environment.ProcessId}]"
+        );
         SetupExceptionHandlers(logger);
         if (mutexName != null)
         {
@@ -88,7 +96,7 @@ public sealed class AppHost : IAppHost
             IsFirstInstance = isNewInstance;
         }
 
-        if (argsPipeName != null)
+        if (namedPipe != null)
         {
             if (_mutex == null)
             {
@@ -100,11 +108,11 @@ public sealed class AppHost : IAppHost
 
             if (IsFirstInstance)
             {
-                StartNamedPipeServer(argsPipeName, logger);
+                StartNamedPipeServer(namedPipe, logger);
             }
             else
             {
-                SendArgumentsToRunningInstance(args, argsPipeName, logger);
+                SendArgumentsToRunningInstance(_core.Args, namedPipe, logger);
             }
         }
     }
@@ -112,9 +120,6 @@ public sealed class AppHost : IAppHost
     public ReadOnlyReactiveProperty<AppArgs> Args => _args;
     public IAppInfo AppInfo { get; }
     public IAppPath AppPath { get; }
-    public IConfiguration Configuration { get; }
-    public ILogService Logs { get; }
-    public ContainerConfiguration Services { get; }
 
     private void SetupExceptionHandlers(ILogger logger)
     {
@@ -214,20 +219,17 @@ public sealed class AppHost : IAppHost
 
     public void RegisterServices(ContainerConfiguration containerCfg)
     {
-        if (Design.IsDesignMode)
-        {
-            return;
-        }
-
-        using var cont = Services.CreateContainer();
+        using var cont = _core.Services.CreateContainer();
         var proxy = new ProxyExportDescriptorProvider(cont);
         containerCfg
             .WithProvider(proxy)
-            .WithExport(Instance.AppInfo)
-            .WithExport(Instance.AppPath)
-            .WithExport(Instance.Configuration)
-            .WithExport(Instance.Args)
-            .WithExport(Instance);
+            .WithExport(AppInfo)
+            .WithExport(AppPath)
+            .WithExport(_core.Configuration)
+            .WithExport(Args)
+            .WithExport(_core.LogService)
+            .WithExport<ILoggerFactory>(_core.LogService)
+            .WithExport(this);
     }
 
     #region Handle exceptions
@@ -244,7 +246,7 @@ public sealed class AppHost : IAppHost
         _mutex?.Dispose();
         _args.Dispose();
         _errorHandler.Dispose();
-        Configuration.Dispose();
-        Logs.Dispose();
+        _core.Configuration.Dispose();
+        _core.LogService.Dispose();
     }
 }

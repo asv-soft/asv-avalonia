@@ -2,85 +2,48 @@
 using System.Reflection;
 using Asv.Cfg;
 using Avalonia;
-using Type = System.Type;
 
 namespace Asv.Avalonia;
 
 internal class AppHostBuilder : IAppHostBuilder
 {
-    public IConfiguration Configuration { get; private set; }
-    public ContainerConfiguration Services { get; }
-
-    private const string ZeroVersion = "0.0.0";
-    private Func<IConfiguration> _createConfigCallback;
-    private string _appName = string.Empty;
-    private string _appVersion = ZeroVersion;
-    private string _companyName = string.Empty;
-    private string _avaloniaVersion = ZeroVersion;
-    private AppArgs _args = new([]);
-    private Func<IConfiguration, IAppInfo, string> _userDataFolder;
-    private string _productTitle = string.Empty;
-    private readonly string _appFolder;
-    private Func<IAppInfo, string?> _mutexName;
-    private Func<IAppInfo, string?> _namedPipe;
+    public IAppCore Core { get; }
 
     public AppHostBuilder()
     {
-        Services = new ContainerConfiguration();
-        _userDataFolder = (_, info) =>
-            Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
-                info.Name
-            );
-        _appFolder =
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-        _createConfigCallback = () => new JsonOneFileConfiguration("config.json", true, null);
-        Configuration = _createConfigCallback();
-        _mutexName = _ => null;
-        _namedPipe = _ => null;
+        Core = new AppCore
+        {
+            UserDataFolder = (_, info) =>
+                Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                    info.Name
+                ),
+            AppFolder =
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
+            Configuration = new JsonOneFileConfiguration("config.json", true, null),
+            Services = new ContainerConfiguration(),
+        };
 
         WithAppInfoFrom(Assembly.GetExecutingAssembly());
         WithAvaloniaVersion(
-            typeof(AppBuilder).Assembly.GetName().Version?.ToString() ?? ZeroVersion
+            typeof(AppBuilder).Assembly.GetName().Version?.ToString() ?? Core.AppVersion
         );
     }
 
     internal IAppHost Create()
     {
-        var appInfo = new AppInfo
-        {
-            Name = _appName,
-            Version = _appVersion,
-            CompanyName = _companyName,
-            AvaloniaVersion = _avaloniaVersion,
-            Title = _productTitle,
-        };
-        var appPath = new AppPath
-        {
-            UserDataFolder = _userDataFolder(Configuration, appInfo),
-            AppFolder = _appFolder,
-        };
-
-        return new AppHost(
-            Configuration,
-            appPath,
-            appInfo,
-            _args,
-            Services,
-            _mutexName(appInfo),
-            _namedPipe(appInfo)
-        );
+        return new AppHost(Core);
     }
 
     public IAppHostBuilder WithArguments(string[] args)
     {
-        _args = new AppArgs(args);
+        Core.Args = new AppArgs(args);
         return this;
     }
 
     public IAppHostBuilder WithUserDataFolder(string userFolder)
     {
-        _userDataFolder = (_, _) => userFolder;
+        Core.UserDataFolder = (_, _) => userFolder;
         return this;
     }
 
@@ -88,36 +51,13 @@ internal class AppHostBuilder : IAppHostBuilder
 
     public IAppHostBuilder EnforceSingleInstance(string? mutexName = null)
     {
-        _mutexName = info => mutexName ?? info.Name;
+        Core.MutexName = info => mutexName ?? info.Name;
         return this;
     }
 
     public IAppHostBuilder EnableArgumentForwarding(string? namedPipeName = null)
     {
-        _namedPipe = info => namedPipeName ?? info.Name;
-        return this;
-    }
-
-    #endregion
-
-    #region Configuration
-
-    public IAppHostBuilder WithConfiguration(IConfiguration configuration)
-    {
-        _createConfigCallback = () => configuration;
-        Configuration = _createConfigCallback();
-        return this;
-    }
-
-    public IAppHostBuilder WithJsonConfiguration(
-        string fileName,
-        bool createIfNotExist,
-        TimeSpan? flushToFileDelayMs
-    )
-    {
-        _createConfigCallback = () =>
-            new JsonOneFileConfiguration(fileName, createIfNotExist, flushToFileDelayMs);
-        Configuration = _createConfigCallback();
+        Core.NamedPipe = info => namedPipeName ?? info.Name;
         return this;
     }
 
@@ -136,7 +76,7 @@ internal class AppHostBuilder : IAppHostBuilder
 
     public IAppHostBuilder WithProductTitle(string productTitle)
     {
-        _productTitle = productTitle;
+        Core.ProductTitle = productTitle;
         return this;
     }
 
@@ -148,12 +88,12 @@ internal class AppHostBuilder : IAppHostBuilder
             var titleAttribute = (AssemblyTitleAttribute)attributes[0];
             if (titleAttribute.Title.Length > 0)
             {
-                _productTitle = titleAttribute.Title;
+                Core.ProductTitle = titleAttribute.Title;
             }
         }
         else
         {
-            _productTitle = assembly.GetName().Name ?? string.Empty;
+            Core.ProductTitle = assembly.GetName().Name ?? string.Empty;
         }
 
         return this;
@@ -164,7 +104,7 @@ internal class AppHostBuilder : IAppHostBuilder
 
     public IAppHostBuilder WithAvaloniaVersion(string avaloniaVersion)
     {
-        _avaloniaVersion = avaloniaVersion;
+        Core.AvaloniaVersion = avaloniaVersion;
         return this;
     }
 
@@ -174,7 +114,7 @@ internal class AppHostBuilder : IAppHostBuilder
 
     public IAppHostBuilder WithProductName(string appName)
     {
-        _appName = appName;
+        Core.AppName = appName;
         return this;
     }
 
@@ -183,11 +123,11 @@ internal class AppHostBuilder : IAppHostBuilder
         var attributes = assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
         if (attributes.Length == 0)
         {
-            _appName = assembly.GetName().Name ?? string.Empty;
+            Core.AppName = assembly.GetName().Name ?? string.Empty;
         }
         else
         {
-            _appName = ((AssemblyProductAttribute)attributes[0]).Product;
+            Core.AppName = ((AssemblyProductAttribute)attributes[0]).Product;
         }
 
         return this;
@@ -199,7 +139,7 @@ internal class AppHostBuilder : IAppHostBuilder
 
     public IAppHostBuilder WithVersion(string version)
     {
-        _appVersion = version;
+        Core.AppVersion = version;
         return this;
     }
 
@@ -210,10 +150,14 @@ internal class AppHostBuilder : IAppHostBuilder
             false
         );
 
-        _appVersion =
-            attributes.Length == 0
-                ? ZeroVersion
-                : ((AssemblyInformationalVersionAttribute)attributes[0]).InformationalVersion;
+        if (attributes.Length == 0)
+        {
+            return this;
+        }
+
+        Core.AppVersion = (
+            (AssemblyInformationalVersionAttribute)attributes[0]
+        ).InformationalVersion;
         return this;
     }
 
@@ -223,14 +167,14 @@ internal class AppHostBuilder : IAppHostBuilder
 
     public IAppHostBuilder WithCompanyName(string companyName)
     {
-        _companyName = companyName;
+        Core.CompanyName = companyName;
         return this;
     }
 
     public IAppHostBuilder WithCompanyName(Assembly assembly)
     {
         var attributes = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-        _companyName =
+        Core.CompanyName =
             attributes.Length == 0
                 ? string.Empty
                 : ((AssemblyCompanyAttribute)attributes[0]).Company;

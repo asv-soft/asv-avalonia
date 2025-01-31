@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -9,9 +10,8 @@ public static class AppBuilderLoggerExtensions
         BuilderLoggerOptions options
     )
     {
-        var service = LogServiceBuilder.BuildFromOptions(builder.Configuration, options);
-        builder.Services.WithExport<ILogService>(service);
-        builder.Services.WithExport<ILoggerFactory>(service);
+        var service = LogServiceBuilder.BuildFromOptions(builder.Core.Configuration, options);
+        builder.Core.LogService = service;
         return builder;
     }
 

@@ -1,7 +1,7 @@
 ﻿using System.Composition.Hosting;
 using System.Reflection;
 using Asv.Cfg;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
 
@@ -12,20 +12,7 @@ namespace Asv.Avalonia;
 /// </summary>
 public interface IAppHostBuilder
 {
-    public IConfiguration Configuration { get; }
-    public ContainerConfiguration Services { get; }
-
-    /// <summary>
-    /// Configures the application host builder with the specified configuration implementation.
-    /// </summary>
-    /// <param name="configuration">The configuration instance to be used by the application.</param>
-    /// <returns>The current instance of the application host builder.</returns>
-    IAppHostBuilder WithConfiguration(IConfiguration configuration);
-    IAppHostBuilder WithJsonConfiguration(
-        string fileName,
-        bool createIfNotExist,
-        TimeSpan? flushToFileDelayMs
-    );
+    public IAppCore Core { get; }
 
     /// <summary>
     /// Configures the application host builder with application information extracted from the specified assembly.
