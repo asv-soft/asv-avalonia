@@ -1,5 +1,7 @@
-﻿using System.Reflection;
+﻿using System.Composition.Hosting;
+using System.Reflection;
 using Asv.Cfg;
+using Asv.Common;
 using Avalonia;
 using Microsoft.Extensions.Logging;
 
@@ -9,6 +11,7 @@ internal class AppHostBuilder : IAppHostBuilder
 {
     private const string ZeroVersion = "0.0.0";
     private Func<IConfiguration> _createConfigCallback;
+    private Func<IConfiguration, ILoggerFactory, IPluginManager?> _pluginManagerFactory;
     private string _appName = string.Empty;
     private string _appVersion = ZeroVersion;
     private string _companyName = string.Empty;
@@ -35,6 +38,7 @@ internal class AppHostBuilder : IAppHostBuilder
         _appFolder =
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
         _createConfigCallback = () => new JsonOneFileConfiguration("config.json", true, null);
+        _pluginManagerFactory = (_, _) => null;
         _setMinLevelCallback = _ => LogLevel.Information;
         _mutexName = _ => null;
         _namedPipe = _ => null;
@@ -69,6 +73,7 @@ internal class AppHostBuilder : IAppHostBuilder
         var logFolder = _logFolder(config);
         var rollingSize = _rollingSizeKb(config);
         var logService = new LogService(logFolder, rollingSize, minLevel, _logToConsole);
+        var pluginManager = _pluginManagerFactory(config, logService);
 
         return new AppHost(
             config,
@@ -297,4 +302,21 @@ internal class AppHostBuilder : IAppHostBuilder
     }
 
     #endregion
+
+    public IAppHostBuilder WithPluginsManager(string apiPackageName, SemVersion apiVersion)
+    {
+        _pluginManagerFactory = (cfg, loggerFactory) =>
+        {
+            var containerCfg = new ContainerConfiguration();
+            return new PluginManager(
+                containerCfg,
+                _appFolder,
+                apiPackageName,
+                apiVersion,
+                cfg,
+                loggerFactory
+            );
+        };
+        return this;
+    }
 }

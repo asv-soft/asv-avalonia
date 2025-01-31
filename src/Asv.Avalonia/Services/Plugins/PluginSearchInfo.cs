@@ -9,7 +9,8 @@ internal class PluginSearchInfo : IPluginSearchInfo
     public PluginSearchInfo(
         IPackageSearchMetadata packageSearchMetadata,
         SourceRepository repository,
-        SourcePackageDependencyInfo dependencyInfo
+        SourcePackageDependencyInfo dependencyInfo,
+        string apiPackageName
     )
     {
         Authors = packageSearchMetadata.Authors;
@@ -25,16 +26,17 @@ internal class PluginSearchInfo : IPluginSearchInfo
         DownloadCount = packageSearchMetadata.DownloadCount;
         Dependencies = dependencyInfo.Dependencies;
 
-        // TODO: make dependencies list and the api one
-        /*var apiPackage = dependencyInfo.Dependencies.FirstOrDefault(x => x.Id == NugetHelper.PluginApiPackageName);
+        var apiPackage = dependencyInfo.Dependencies.FirstOrDefault(x => x.Id == apiPackageName);
         if (apiPackage == null)
         {
-            throw new Exception($"Plugin {packageSearchMetadata.Identity.Id} does not contain API package as dependency");
+            throw new Exception(
+                $"Plugin {packageSearchMetadata.Identity.Id} does not contain API package as dependency"
+            );
         }
-        
-        ApiVersion = apiPackage.VersionRange.MinVersion?.ToNormalizedString() ?? throw new InvalidOperationException("Api version not found in plugin dependencies");
-        */
-        ApiVersion = new SemVersion(0);
+
+        ApiVersion =
+            apiPackage.VersionRange.MinVersion?.ToNormalizedString()
+            ?? throw new InvalidOperationException("Api version not found in plugin dependencies");
         IsVerified =
             Authors.Contains("https://github.com/asv-soft")
             && Source.SourceUri.Contains("https://nuget.pkg.github.com/asv-soft/index.json");

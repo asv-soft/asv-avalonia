@@ -35,6 +35,7 @@ public class PluginState
 
 public class PluginManagerConfig
 {
+    public string MainDependenceName { get; set; }
     public PluginServerConfig[]? Servers { get; set; }
 }
 
@@ -52,31 +53,33 @@ public class PluginManager : IPluginManager
     private readonly ILoggerFactory _loggerFactory;
     private readonly ILogger<PluginManager> _logger;
     private readonly LoggerAdapter _nugetLogger;
-    private const string Salt = "Asv.Drones.Gui";
     private readonly ReaderWriterLockSlim _repositoriesLock = new();
-    private readonly List<SourceRepository> _repositories = new();
+    private readonly List<SourceRepository> _repositories = [];
     private readonly PluginManagerConfig _localConfig;
     private readonly IConfiguration _globalConfig;
 
-    public const string PluginSearchTermStartWith = "Asv.Drones.Gui.Plugin.";
+    private const string Salt = "Asv.Avalonia";
+    public const string PluginSearchTermStartWith = "Asv.Avalonia.Plugin.";
     private const string PluginStateFileName = "__PLUGIN_STATE__";
 
     private readonly string _sharedPluginFolder;
     private readonly string _nugetFolder;
+    private readonly string _apiPackageName;
     private readonly SourceCacheContext _cache;
     private readonly List<AssemblyLoadContext> _pluginContexts = [];
 
     public PluginManager(
         ContainerConfiguration containerCfg,
         string localDirectory,
+        string apiPackageName,
+        SemVersion apiVersion,
         IConfiguration globalConfig,
         ILoggerFactory loggerFactory
     )
     {
+        _apiPackageName = apiPackageName;
         _loggerFactory = loggerFactory;
-        ApiVersion = SemVersion.Parse(
-            typeof(RS).Assembly.GetCustomAttribute<AssemblyFileVersionAttribute>()!.Version
-        );
+        ApiVersion = apiVersion;
 
         _logger = loggerFactory.CreateLogger<PluginManager>();
         _nugetLogger = new LoggerAdapter(_logger);
@@ -476,7 +479,14 @@ public class PluginManager : IPluginManager
                             continue;
                         }
 
-                        result.Add(new PluginSearchInfo(package, repository, dependencyInfo));
+                        result.Add(
+                            new PluginSearchInfo(
+                                package,
+                                repository,
+                                dependencyInfo,
+                                _apiPackageName
+                            )
+                        );
                     }
                     catch (Exception e)
                     {

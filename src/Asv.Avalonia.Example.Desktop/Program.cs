@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 
@@ -20,6 +21,7 @@ sealed class Program
                 .WithAppInfoFrom(typeof(App).Assembly)
                 .WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel)
                 .WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb)
+                .WithPluginsManager("Asv.Drones.Api", SemVersion.Parse("1.0.0"))
 #if DEBUG
                 .WithLogToConsole()
 #else

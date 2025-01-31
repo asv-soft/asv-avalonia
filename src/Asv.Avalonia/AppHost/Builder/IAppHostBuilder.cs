@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Asv.Cfg;
+using Asv.Common;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -178,4 +179,12 @@ public interface IAppHostBuilder
     /// <param name="namedPipeName"> Unique pipe name. </param>
     /// <returns>The current instance of the application host builder.</returns>
     IAppHostBuilder EnableArgumentForwarding(string? namedPipeName = null);
+
+    /// <summary>
+    /// Configures the application to use a plugin manager that references the specified API package.
+    /// </summary>
+    /// <param name="apiPackageName">The NuGet package name or identifier for the plugin API.</param>
+    /// <param name="apiVersion">The plugin API package version.</param>
+    /// <returns>The current instance of the <see cref="IAppHostBuilder"/>.</returns>
+    IAppHostBuilder WithPluginsManager(string apiPackageName, SemVersion apiVersion);
 }
