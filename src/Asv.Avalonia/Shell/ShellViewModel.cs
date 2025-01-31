@@ -1,80 +1,116 @@
 ﻿using System.Collections.Immutable;
 using System.Composition.Hosting;
+using Avalonia;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class ShellViewModel : RoutableViewModel, IShell
+public class ShellViewModel : RoutableViewModel, IShell
 {
-    private readonly CompositionHost _container;
+    
     private readonly ObservableList<IPage> _pages = new();
+    private readonly IContainerHost _container;
+    private readonly Stack<string[]> _backwardStack = new();
+    private readonly Stack<string[]> _forwardStack = new();
+    private readonly IDisposable _sub1;
+    private bool _internalNavigation;
+    private string[]? _lastPath = null;
+    private bool _internalChange;
+    private readonly ReactiveProperty<IRoutable> _selectedControl;
     public const string ShellId = "shell";
 
-    protected ShellViewModel(IContainerHost host)
+    protected ShellViewModel(IContainerHost ioc)
         : base(ShellId)
     {
-        ArgumentNullException.ThrowIfNull(host);
-
-        _container = host.Host;
+        ArgumentNullException.ThrowIfNull(ioc);
+        _container = ioc;
         Pages = _pages.ToNotifyCollectionChangedSlim();
         Back = new ReactiveCommand((_, c) => BackwardAsync(c));
         Forward = new ReactiveCommand((_, c) => ForwardAsync(c));
         GoHome = new ReactiveCommand((_, c) => BackwardAsync(c));
-        Open = new ReactiveCommand(async (_, c) =>
+        Status = new BindableReactiveProperty<ShellStatus>(ShellStatus.Normal);
+        Close = new ReactiveCommand((_, c) => CloseAsync(c));
+        _sub1 = SelectedPage.SubscribeAwait(async (x, _) =>
         {
-            await OpenPage($"settings");
+            if (x == null || _internalChange)
+            {
+                return;
+            }
+
+            var page = await NavigateTo(x.Id);
+            await Rise(new NavigationEvent(page));
         });
+        _selectedControl = new ReactiveProperty<IRoutable>(this);
+    }
+
+    protected virtual ValueTask CloseAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
     }
 
     public ReactiveCommand Back { get; }
-
-    public ValueTask BackwardAsync(CancellationToken cancel = default)
+    public async ValueTask BackwardAsync(CancellationToken cancel = default)
     {
-        throw new NotImplementedException();
+        if (_backwardStack.TryPop(out var path))
+        {
+            _forwardStack.Push(path);
+            _internalNavigation = true;
+            await this.NavigateTo(path);
+            _internalNavigation = false;
+            CheckBackwardForwardCanExecute();
+        }
+    }
+
+    private void CheckBackwardForwardCanExecute()
+    {
+        Back.ChangeCanExecute(_backwardStack.Count != 0);
+        Forward.ChangeCanExecute(_forwardStack.Count != 0);
     }
 
     public ReactiveCommand Forward { get; }
-
-    public ValueTask ForwardAsync(CancellationToken cancel = default)
+    public async ValueTask ForwardAsync(CancellationToken cancel = default)
     {
-        throw new NotImplementedException();
+        if (_forwardStack.TryPop(out var path))
+        {
+            _backwardStack.Push(path);
+            _internalNavigation = true;
+            await this.NavigateTo(path);
+            _internalNavigation = false;
+            CheckBackwardForwardCanExecute();
+        }
     }
 
     public ReactiveCommand GoHome { get; }
-
-    public ValueTask GoHomeAsync(CancellationToken cancel = default)
+    public async ValueTask GoHomeAsync(CancellationToken cancel = default)
     {
-        throw new NotImplementedException();
+        await NavigateTo(HomePageViewModel.PageId);
     }
-
-    public ReactiveCommand Open { get; }
-
-    public ValueTask<IPage?> OpenPage(string pageId)
-    {
-        if (_container.TryGetExport<IPage>(pageId, out var page))
-        {
-            page.Parent = this;
-            _pages.Add(page);
-            return ValueTask.FromResult<IPage?>(page);
-        }
-
-        return ValueTask.FromResult<IPage?>(null);
-    }
-
-    protected abstract void InternalAddPageToMainTab(IPage export);
 
     public NotifyCollectionChangedSynchronizedViewList<IPage> Pages { get; }
 
-    public override IEnumerable<IRoutable> Children
+    public ReadOnlyReactiveProperty<IRoutable> SelectedControl => _selectedControl;
+
+    public BindableReactiveProperty<ShellStatus> Status { get; }
+    public ReactiveCommand Close { get; }
+    public BindableReactiveProperty<IPage?> SelectedPage { get; } = new();
+
+    public override ValueTask<IRoutable> NavigateTo(string id)
     {
-        get
+        var page = _pages.FirstOrDefault(x => x.Id == id);
+        if (page == null)
         {
-            foreach (var page in _pages)
+            if (_container.TryGetExport<IPage>(id, out page))
             {
-                yield return page;
+                _pages.Add(page);
+                page.Parent = this;
             }
         }
+
+        _internalChange = true;
+        SelectedPage.Value = page;
+        _internalChange = false;
+        return ValueTask.FromResult<IRoutable>(page);
     }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
@@ -84,11 +120,44 @@ public abstract class ShellViewModel : RoutableViewModel, IShell
             // write command to log
         }
 
-        if (e is FocusedEvent focus)
+        if (e is NavigationEvent focus && _internalNavigation == false)
         {
-            // write to navigation history
+            if (_lastPath != null && _lastPath.Length > 0)
+            {
+                _backwardStack.Push(_lastPath);
+                _forwardStack.Clear();
+            }
+
+            _selectedControl.Value = focus.Source;
+            _lastPath = focus.Source.GetAllFrom(this).Skip(1).Select(x => x.Id).ToArray();
+            CheckBackwardForwardCanExecute();
         }
 
         return ValueTask.CompletedTask;
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _sub1.Dispose();
+            Back.Dispose();
+            Forward.Dispose();
+            GoHome.Dispose();
+            Pages.Dispose();
+            Status.Dispose();
+            Close.Dispose();
+            SelectedPage.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
 }
+
+public enum ShellStatus
+{
+    Normal,
+    Warning,
+    Error,
+}
+

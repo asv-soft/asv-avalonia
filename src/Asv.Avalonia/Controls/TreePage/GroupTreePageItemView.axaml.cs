@@ -4,10 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor(typeof(SettingsPage))]
-public partial class SettingsPageView : UserControl
+public partial class GroupTreePageItemView : UserControl
 {
-    public SettingsPageView()
+    public GroupTreePageItemView()
     {
         InitializeComponent();
     }

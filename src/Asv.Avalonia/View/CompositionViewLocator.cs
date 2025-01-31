@@ -20,7 +20,7 @@ public class CompositionViewLocator(CompositionHost container) : IDataTemplate
 
         while (viewModelType != null)
         {
-            var viewModelContract = data.GetType().FullName;
+            var viewModelContract = viewModelType.FullName;
             if (viewModelContract == null)
             {
                 break;
@@ -33,13 +33,13 @@ public class CompositionViewLocator(CompositionHost container) : IDataTemplate
             }
 
             // try default Avalonia behaviour: rename and try to find view
-            var type = Type.GetType(viewModelContract.Replace("ViewModel", "View"));
+            var type = Type.GetType(viewModelContract.Replace("ViewModel", "_view"));
             if (type != null)
             {
                 // ReSharper disable once NullableWarningSuppressionIsUsed
                 return (Control)Activator.CreateInstance(type)!;
             }
-
+            
             // try to find view for parent class
             viewModelType = viewModelType.BaseType;
         }

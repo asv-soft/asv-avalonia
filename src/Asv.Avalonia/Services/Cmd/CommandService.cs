@@ -1,5 +1,7 @@
 using System.Collections.Immutable;
 using System.Composition;
+using Avalonia.Input;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -33,4 +35,17 @@ public class CommandService : ICommandService
         var history = new CommandHistory(owner, this, _loggerFactory);
         return history;
     }
+
+    public bool CanExecuteCommand(string commandId, IRoutable context, out IRoutable? target)
+    {
+        if (_commands.TryGetValue(commandId, out var command))
+        {
+            return command.CanExecute(context, out target);
+        }
+        
+        target = null;
+        return false;
+    }
 }
+
+

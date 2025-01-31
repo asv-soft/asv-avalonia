@@ -1,0 +1,54 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        xmlns:system="clr-namespace:System;assembly=System.Runtime">
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <avalonia:MaterialIcon Kind="Window"/>
+            <!-- Add Controls for Previewer Here -->
+        </Border>
+    </Design.PreviewWith>
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <!--<SolidColorBrush x:Key='BackgroundBrush'>SpringGreen</SolidColorBrush>
+                    <SolidColorBrush x:Key='ForegroundBrush'>Black</SolidColorBrush>-->
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <!--<SolidColorBrush x:Key='BackgroundBrush'>DodgerBlue</SolidColorBrush>
+                    <SolidColorBrush x:Key='ForegroundBrush'>White</SolidColorBrush>-->
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+        <system:Double x:Key="FontSizeSmall">10</system:Double>
+        <system:Double x:Key="FontSizeNormal">12</system:Double>
+        <system:Double x:Key="FontSizeLarge">16</system:Double>
+    </Styles.Resources>
+    
+    <FluentTheme DensityStyle="Compact">
+        <FluentTheme.Palettes>
+            <!--<ColorPaletteResources x:Key="Light" Accent="#ff8961cc" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffeeceff" BaseMedium="#ffa987bc" BaseMediumHigh="#ff7b5890" BaseMediumLow="#ff9270a6" ChromeAltLow="#ff7b5890" ChromeBlackHigh="Black" ChromeBlackLow="#ffeeceff" ChromeBlackMedium="#ff7b5890" ChromeBlackMediumLow="#ffa987bc" ChromeDisabledHigh="#ffeeceff" ChromeDisabledLow="#ffa987bc" ChromeGray="#ff9270a6" ChromeHigh="#ffeeceff" ChromeLow="#fffeeaff" ChromeMedium="#fffbe4ff" ChromeMediumLow="#fffeeaff" ChromeWhite="White" ListLow="#fffbe4ff" ListMedium="#ffeeceff" RegionColor="#fffef6ff" />
+            <ColorPaletteResources x:Key="Dark"  Accent="#ff8961cc" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff64576b" BaseMedium="#ffb6aabc" BaseMediumHigh="#ffcbbfd0" BaseMediumLow="#ff8d8193" ChromeAltLow="#ffcbbfd0" ChromeBlackHigh="Black" ChromeBlackLow="#ffcbbfd0" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff64576b" ChromeDisabledLow="#ffb6aabc" ChromeGray="#ffa295a8" ChromeHigh="#ffa295a8" ChromeLow="#ff332041" ChromeMedium="#ff3f2e4b" ChromeMediumLow="#ff584960" ChromeWhite="White" ListLow="#ff3f2e4b" ListMedium="#ff64576b" RegionColor="#ff262738" />-->
+        </FluentTheme.Palettes>
+    </FluentTheme>
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    
+    <!--<FluentTheme DensityStyle="Compact" >
+        <FluentTheme.Palettes>
+            <ColorPaletteResources x:Key="Dark"
+                          Accent="#CC119EDA" 
+                          
+                          RegionColor="#1e1f22" 
+                          
+            />         
+        </FluentTheme.Palettes>
+    </FluentTheme>-->
+    <avalonia:MaterialIconStyles />
+    <StyleInclude Source="avares://Asv.Avalonia/Shell/View/DockControl.axaml"/>
+    <Style Selector="avalonia|MaterialIcon">
+        <Setter Property="Width" Value="{StaticResource  IconElementThemeWidth}"/>
+        <Setter Property="Height" Value="{StaticResource  IconElementThemeHeight}"/>
+        <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
+    </Style>
+</Styles>

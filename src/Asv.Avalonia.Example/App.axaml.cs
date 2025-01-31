@@ -1,16 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
-using Asv.Avalonia.Example.ViewModels;
-using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
-using Avalonia.Styling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
@@ -44,14 +42,15 @@ public partial class App : Application, IContainerHost, IShellHost
                 .WithExport(AppHost.Instance);
         }
 
-        containerCfg
+        containerCfg 
             .WithExport<IContainerHost>(this)
             .WithExport<IDataTemplateHost>(this)
             .WithExport<IShellHost>(this)
             .WithDefaultConventions(conventions);
 
-        containerCfg = containerCfg.WithAssemblies(DefaultAssemblies.Distinct());
-
+        containerCfg = containerCfg
+            .WithAssemblies(DefaultAssemblies.Distinct());
+        
         // TODO: load plugin manager before creating container
         Host = containerCfg.CreateContainer();
         DataTemplates.Add(new CompositionViewLocator(Host));
@@ -65,7 +64,7 @@ public partial class App : Application, IContainerHost, IShellHost
             yield return typeof(IAppHost).Assembly;
         }
     }
-
+    
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -75,7 +74,7 @@ public partial class App : Application, IContainerHost, IShellHost
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            Shell = new DesktopShellViewModel(desktop, this);
+            Shell = new DesktopShellViewModel(desktop, GetExport<ICommandService>(), this);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -85,13 +84,23 @@ public partial class App : Application, IContainerHost, IShellHost
         base.OnFrameworkInitializationCompleted();
         if (Design.IsDesignMode == false)
         {
-            Shell.OpenPage(SettingsPage.PageId);
+            Shell.NavigateTo(SettingsPageViewModel.PageId);
+            Shell.NavigateTo(HomePageViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();
 #endif
     }
 
+    public T GetExport<T>()
+    {
+        return Host.GetExport<T>();
+    }
+
     public CompositionHost Host { get; }
     public IShell Shell { get; private set; }
+    public bool TryGetExport<T>(string id, out T value)
+    {
+        return Host.TryGetExport(id, out value);
+    }
 }

@@ -17,6 +17,6 @@ public interface IShell : IRoutable
     ValueTask ForwardAsync(CancellationToken cancel = default);
     ReactiveCommand GoHome { get; }
     ValueTask GoHomeAsync(CancellationToken cancel = default);
-    ValueTask<IPage?> OpenPage(string pageId);
     NotifyCollectionChangedSynchronizedViewList<IPage> Pages { get; }
+    ReadOnlyReactiveProperty<IRoutable> SelectedControl { get; }
 }

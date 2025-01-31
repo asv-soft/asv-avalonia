@@ -2,22 +2,6 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class NullCommandService : ICommandService
-{
-    public static ICommandService Instance { get; } = new NullCommandService();
-    public IEnumerable<ICommandInfo> Commands => [];
-
-    public IAsyncCommand? CreateCommand(string commandId)
-    {
-        return null;
-    }
-
-    public ICommandHistory CreateHistory(IRoutable owner)
-    {
-        return NullCommandHistory.Instance;
-    }
-}
-
 public class NullCommandHistory : ICommandHistory
 {
     public static ICommandHistory Instance { get; } = new NullCommandHistory();

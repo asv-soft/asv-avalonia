@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Composition;
 using Material.Icons;
 
@@ -21,6 +22,12 @@ public class ChangeThemeCommandFactory : ICommandFactory
     public IAsyncCommand Create()
     {
         return new ChangeThemeCommand(_svc);
+    }
+
+    public bool CanExecute(IRoutable context, out IRoutable? target)
+    {
+        target = context;
+        return true;
     }
 }
 
@@ -65,6 +72,7 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
     {
         if (parameter is Persistable<string> memento)
         {
+            // execute with parameter
             var oldValue = svc.CurrentTheme.Value.Id;
             var theme = svc.Themes.FirstOrDefault(x => x.Id == memento.Value);
             if (theme != null)
@@ -73,6 +81,22 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
             }
 
             _state = new PersistableChange<string>(oldValue, memento.Value);
+        }
+        else
+        {
+            // execute without parameter
+            var oldValue = svc.CurrentTheme.Value.Id;
+            var temp = svc.Themes.ToList();
+            var index = temp.IndexOf(svc.CurrentTheme.Value);
+            index++;
+            if (index >= temp.Count)
+            {
+                index = 0;
+            }
+
+            var newValue = temp[index].Id;
+            svc.CurrentTheme.Value = temp[index];
+            _state = new PersistableChange<string>(oldValue, newValue);
         }
 
         return ValueTask.CompletedTask;
