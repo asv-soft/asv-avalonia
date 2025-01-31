@@ -14,10 +14,7 @@ internal class PluginSearchInfo : IPluginSearchInfo
     )
     {
         Authors = packageSearchMetadata.Authors;
-        Title = packageSearchMetadata.Identity.Id.Replace(
-            PluginManager.PluginSearchTermStartWith,
-            string.Empty
-        );
+        Title = packageSearchMetadata.Identity.Id;
         LastVersion = packageSearchMetadata.Identity.Version.ToString();
         Source = new SourceInfo(repository);
         PackageId = packageSearchMetadata.Identity.Id;

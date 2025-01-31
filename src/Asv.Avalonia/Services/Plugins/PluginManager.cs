@@ -59,7 +59,6 @@ public class PluginManager : IPluginManager
     private readonly IConfiguration _globalConfig;
 
     private const string Salt = "Asv.Avalonia";
-    public const string PluginSearchTermStartWith = "Asv.Avalonia.Plugin.";
     private const string PluginStateFileName = "__PLUGIN_STATE__";
 
     private readonly string _sharedPluginFolder;
@@ -448,12 +447,8 @@ public class PluginManager : IPluginManager
             {
                 var resource = await repository.GetResourceAsync<PackageSearchResource>(cancel);
                 var filter = new SearchFilter(query.IncludePrerelease);
-                var searchTerm =
-                    query.Name == null
-                        ? PluginSearchTermStartWith
-                        : PluginSearchTermStartWith + query.Name;
                 var packages = await resource.SearchAsync(
-                    searchTerm,
+                    query.Name,
                     filter,
                     query.Skip,
                     query.Take,

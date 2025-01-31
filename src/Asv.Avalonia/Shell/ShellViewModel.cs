@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Composition.Hosting;
+﻿using System.Composition.Hosting;
 using ObservableCollections;
 using R3;
 
@@ -8,7 +7,7 @@ namespace Asv.Avalonia;
 public abstract class ShellViewModel : RoutableViewModel, IShell
 {
     private readonly CompositionHost _container;
-    private readonly ObservableList<IPage> _pages = new();
+    private readonly ObservableList<IPage> _pages = [];
     public const string ShellId = "shell";
 
     protected ShellViewModel(IContainerHost host)
