@@ -60,6 +60,15 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to All versions.
+        /// </summary>
+        public static string InstalledPluginsView_AllVersions {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_AllVersions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string InstalledPluginsView_CancelUninstall {
@@ -101,6 +110,42 @@ namespace Asv.Avalonia {
         public static string InstalledPluginsView_Tab_AdditionalInfo {
             get {
                 return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Author: .
+        /// </summary>
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Author {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Author", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dependencies: .
+        /// </summary>
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Dependencies {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Dependencies", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloads: .
+        /// </summary>
+        public static string InstalledPluginsView_Tab_AdditionalInfo_DownloadCount {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_DownloadCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tags: .
+        /// </summary>
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Tags {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Tags", resourceCulture);
             }
         }
         
@@ -186,11 +231,38 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string PluginsMarketView_Cancel {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This plugin is verified by developers.
         /// </summary>
         public static string PluginsMarketView_InfoBar_IsVerified_Message {
             get {
                 return ResourceManager.GetString("PluginsMarketView_InfoBar_IsVerified_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Install.
+        /// </summary>
+        public static string PluginsMarketView_Install {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_Install", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select plugin.
+        /// </summary>
+        public static string PluginsMarketView_SelectedPluginIsNull {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_SelectedPluginIsNull", resourceCulture);
             }
         }
         

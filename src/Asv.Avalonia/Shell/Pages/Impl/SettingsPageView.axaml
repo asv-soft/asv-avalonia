@@ -9,11 +9,6 @@
     <Design.DataContext>
         <avalonia:SettingsPage/>
     </Design.DataContext>
-    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button Command="{Binding History.Undo}">Undo</Button>
-        <Button Command="{Binding History.Redo}">Redo</Button>
-        
-        <avalonia:ThemePropertyView DataContext="{Binding Theme}"/>    
-    </StackPanel>
+    <avalonia:PluginsMarketView DataContext=""/>
        
 </UserControl>

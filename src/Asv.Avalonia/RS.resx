@@ -66,4 +66,28 @@
     <data name="PluginInstallerViewModel_InstallPluginAsync_Success" xml:space="preserve">
         <value>Plugin installed successfully</value>
     </data>
+    <data name="PluginsMarketView_Install" xml:space="preserve">
+        <value>Install</value>
+    </data>
+    <data name="PluginsMarketView_SelectedPluginIsNull" xml:space="preserve">
+        <value>Please select plugin</value>
+    </data>
+    <data name="InstalledPluginsView_Tab_AdditionalInfo_Dependencies" xml:space="preserve">
+        <value>Dependencies: </value>
+    </data>
+    <data name="InstalledPluginsView_AllVersions" xml:space="preserve">
+        <value>All versions</value>
+    </data>
+    <data name="PluginsMarketView_Cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="InstalledPluginsView_Tab_AdditionalInfo_Author" xml:space="preserve">
+        <value>Author: </value>
+    </data>
+    <data name="InstalledPluginsView_Tab_AdditionalInfo_DownloadCount" xml:space="preserve">
+        <value>Downloads: </value>
+    </data>
+    <data name="InstalledPluginsView_Tab_AdditionalInfo_Tags" xml:space="preserve">
+        <value>Tags: </value>
+    </data>
 </root>
