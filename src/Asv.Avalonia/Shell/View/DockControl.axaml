@@ -2,25 +2,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:Asv.Avalonia">
     <Design.PreviewWith>
-        <Border Width="600" Height="300" Margin="20">
+        <Border Width="800" Height="1200" Margin="20">
             <controls:DockControl>
-                <controls:DockTab></controls:DockTab>
-                <controls:DockTab></controls:DockTab>
-                <controls:DockTab></controls:DockTab>
+                <controls:SettingsPageViewModel />
+                <controls:SettingsPageViewModel />
+                <controls:SettingsPageViewModel />
+                <controls:SettingsPageViewModel />
             </controls:DockControl>
         </Border>
     </Design.PreviewWith>
-
     <Style Selector="controls|DockControl">
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*">
-                    <Grid Grid.ColumnSpan="3" ColumnDefinitions="*,Auto,*"  Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
-                               x:Name="PART_DockSelectivePart">
-                        <TabControl Grid.Column="0"  x:Name="PART_LeftTabControl" />
-                        <GridSplitter Background="Aqua" ResizeDirection="Columns" Grid.Column="1"/>
-                        <TabControl Grid.Column="2" x:Name="PART_RightTabControl" />
+                    <Grid Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3"
+                          x:Name="PART_DockSelectivePart">
                     </Grid>
                     <Panel x:Name="PART_SelectorPanel" Grid.Row="0" Grid.RowSpan="3" Grid.ColumnSpan="3"
                            Grid.Column="0">
@@ -34,8 +31,6 @@
             </ControlTemplate>
         </Setter>
         <Style Selector="^/template/ Border#PART_TopSelector">
-            <!-- <Setter Property="Source" Value="avares://Dock.Avalonia/Assets/DockAnchorableTop.png" /> -->
-            <!-- <Setter Property="Margin" Value="0,0,0,40"/> -->
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Width" Value="300" />
             <Setter Property="Height" Value="100" />
@@ -68,14 +63,11 @@
         </Style>
 
         <Style Selector="^/template/ Border#PART_CenterSelector">
-            <!-- <Setter Property="Source" Value="avares://Dock.Avalonia/Assets/DockDocumentInside.png" /> -->
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="100" />
         </Style>
         <Style Selector="^/template/ Border#PART_TopSelector">
-            <!-- <Setter Property="Source" Value="avares://Dock.Avalonia/Assets/DockAnchorableTop.png" /> -->
-            <!-- <Setter Property="Margin" Value="0,0,0,40"/> -->
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Width" Value="300" />
             <Setter Property="Height" Value="100" />
@@ -108,7 +100,6 @@
         </Style>
 
         <Style Selector="^/template/ Border#PART_CenterSelector">
-            <!-- <Setter Property="Source" Value="avares://Dock.Avalonia/Assets/DockDocumentInside.png" /> -->
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="100" />

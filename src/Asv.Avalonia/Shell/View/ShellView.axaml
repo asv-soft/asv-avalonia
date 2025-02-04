@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             xmlns:global="clr-namespace:"
+             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.ShellView"
              x:DataType="avalonia:ShellViewModel">
@@ -47,37 +47,9 @@
         <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" MinWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Command="{Binding Back}">Back</Button>
             <Button Command="{Binding Forward}">Forward</Button>
-            <Button Command="{Binding Open}">Add</Button>
-            <!--<TextBox Focusable="True" DataContext="{Binding Property1}" 
-               IsFocused="{Binding IsSelected.Value, Mode=OneWayToSource}"
-               avalonia:NavigationHelper.IsSelected="{Binding IsSelected.Value, Mode=OneWay}"
-               Text="{Binding User.Value, UpdateSourceTrigger=LostFocus}"/>
-      
-      <TextBox Focusable="True" DataContext="{Binding Property2}" 
-               IsFocused="{Binding IsSelected.Value, Mode=OneWayToSource}"
-               avalonia:NavigationHelper.IsSelected="{Binding IsSelected.Value, Mode=TwoWay}"
-               Text="{Binding User.Value, UpdateSourceTrigger=LostFocus}"/>-->
+            <!-- <Button Command="{Binding }">Add</Button> -->
         </StackPanel>
-        <avalonia:DockControl  >
-            <avalonia:DockTab></avalonia:DockTab>
-            <avalonia:DockTab></avalonia:DockTab>
-            <avalonia:DockTab></avalonia:DockTab>
-        </avalonia:DockControl>
-        <!--<ItemsControl>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TabControl ItemsSource="{Binding Items}">
-                        <TabItem Header="Tab 1.1"></TabItem>
-                        <TabItem Header="Tab 1.2"></TabItem>
-                    </TabControl>        
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid ShowGridLines="True"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>-->
+        <!-- <avalonia:DockControl ItemsSource="{CompiledBinding Pages}" /> -->
         
         <DockPanel Background="{StaticResource SystemControlHighlightChromeAltLowBrush}" Dock="Top"
                    avalonia:WindowHelper.EnableDrag="True"
@@ -86,7 +58,7 @@
                 <avalonia1:MaterialIcon Kind="Menu"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Header="File"></MenuItem>
+                        <MenuItem Header="File" Command="{Binding }"></MenuItem>
                         <MenuItem Header="Edit"></MenuItem>
                         <MenuItem Header="_view"></MenuItem>
                         <MenuItem Header="Help"></MenuItem>
@@ -124,13 +96,13 @@
             <TextBlock Text="Status bar"/>
         </DockPanel>
         <Border BorderThickness="0, 1" BorderBrush="#1e1f22">
-            <TabControl ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage.Value}">
-                <TabControl.Styles>
+            <avalonia:DockControl MaxSplitAmount="2" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage.Value}">
+                <avalonia:DockControl.Styles>
                     <Style Selector="TabItem">
                         <Setter Property="IsSelected" Value="{Binding IsFocused, Mode=TwoWay}"/>
                     </Style>
-                </TabControl.Styles>
-                <TabControl.ItemTemplate>
+                </avalonia:DockControl.Styles>
+                <avalonia:DockControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
                             <avalonia1:MaterialIcon Kind="{Binding Icon.Value}"/>
@@ -140,8 +112,8 @@
                             </Button>
                         </StackPanel>
                     </DataTemplate>
-                </TabControl.ItemTemplate>
-            </TabControl>
+                </avalonia:DockControl.ItemTemplate>
+            </avalonia:DockControl>
         </Border>
     </DockPanel>
     </Border>

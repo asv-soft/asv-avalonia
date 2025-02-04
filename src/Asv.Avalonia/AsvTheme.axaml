@@ -10,6 +10,9 @@
     </Design.PreviewWith>
     <Styles.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/AdaptiveTabControlStrip/AdaptiveTabStripTabControl.axaml" />
+            </ResourceDictionary.MergedDictionaries>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
                     <!--<SolidColorBrush x:Key='BackgroundBrush'>SpringGreen</SolidColorBrush>

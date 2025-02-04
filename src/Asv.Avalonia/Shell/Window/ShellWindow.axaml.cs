@@ -9,8 +9,7 @@ public partial class ShellWindow : Window
     {
         InitializeComponent();
 #if DEBUG
-        this.AttachDevTools();
+       // this.AttachDevTools();
 #endif
     }
-    
 }
