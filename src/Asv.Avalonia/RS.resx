@@ -90,4 +90,46 @@
     <data name="InstalledPluginsView_Tab_AdditionalInfo_Tags" xml:space="preserve">
         <value>Tags: </value>
     </data>
+    <data name="SourceViewModel_SourceViewModel_NameIsRequired" xml:space="preserve">
+        <value>Name is required</value>
+    </data>
+    <data name="SourceViewModel_SourceViewModel_SourceUriIsRequired" xml:space="preserve">
+        <value>Server URI is required</value>
+    </data>
+    <data name="PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate" xml:space="preserve">
+        <value>Error to update plugin server list</value>
+    </data>
+    <data name="PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove" xml:space="preserve">
+        <value>Error to remove plugin server</value>
+    </data>
+    <data name="PluginsSourcesViewModel_AddImpl_Title" xml:space="preserve">
+        <value>Add new plugin source</value>
+    </data>
+    <data name="PluginsSourcesViewModel_AddImpl_Add" xml:space="preserve">
+        <value>Add</value>
+    </data>
+    <data name="PluginsSourcesViewModel_AddImpl_Cancel" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="PluginsSourcesViewModel_EditImpl_Title" xml:space="preserve">
+        <value>Edit plugin source</value>
+    </data>
+    <data name="PluginsSourcesViewModel_EditImpl_Save" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="PluginsSourcesViewModel_AddAction_Label" xml:space="preserve">
+        <value>Add</value>
+    </data>
+    <data name="SourcesView_Name" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="SourcesView_URL" xml:space="preserve">
+        <value>URL Address</value>
+    </data>
+    <data name="SourcesView_Username" xml:space="preserve">
+        <value>Username</value>
+    </data>
+    <data name="SourcesView_Password" xml:space="preserve">
+        <value>New password</value>
+    </data>
 </root>

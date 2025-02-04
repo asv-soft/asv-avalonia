@@ -274,5 +274,131 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("PluginsMarketView_ToggleSwitch_OnlyVerified", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string PluginsSourcesViewModel_AddAction_Label {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddAction_Label", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string PluginsSourcesViewModel_AddImpl_Add {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Add", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string PluginsSourcesViewModel_AddImpl_Cancel {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add new plugin source.
+        /// </summary>
+        public static string PluginsSourcesViewModel_AddImpl_Title {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string PluginsSourcesViewModel_EditImpl_Save {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_EditImpl_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit plugin source.
+        /// </summary>
+        public static string PluginsSourcesViewModel_EditImpl_Title {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_EditImpl_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error to remove plugin server.
+        /// </summary>
+        public static string PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Error to update plugin server list.
+        /// </summary>
+        public static string PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string SourcesView_Name {
+            get {
+                return ResourceManager.GetString("SourcesView_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string SourcesView_Password {
+            get {
+                return ResourceManager.GetString("SourcesView_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL Address.
+        /// </summary>
+        public static string SourcesView_URL {
+            get {
+                return ResourceManager.GetString("SourcesView_URL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string SourcesView_Username {
+            get {
+                return ResourceManager.GetString("SourcesView_Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name is required.
+        /// </summary>
+        public static string SourceViewModel_SourceViewModel_NameIsRequired {
+            get {
+                return ResourceManager.GetString("SourceViewModel_SourceViewModel_NameIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Server URI is required.
+        /// </summary>
+        public static string SourceViewModel_SourceViewModel_SourceUriIsRequired {
+            get {
+                return ResourceManager.GetString("SourceViewModel_SourceViewModel_SourceUriIsRequired", resourceCulture);
+            }
+        }
     }
 }

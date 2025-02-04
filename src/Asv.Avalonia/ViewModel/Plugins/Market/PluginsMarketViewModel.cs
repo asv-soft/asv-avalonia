@@ -67,8 +67,8 @@ public class PluginsMarketViewModel : DisposableViewModel
 
         PluginsView = _plugins.CreateView(x => x).ToNotifyCollectionChanged();
         Search = new CancellableCommandWithProgress(SearchImpl, "Search", log);
-        InstallManually = new ReactiveCommand<IProgress<double>>(p =>
-            Task.FromResult(InstallManuallyImpl(p, CancellationToken.None))
+        InstallManually = new ReactiveCommand<IProgress<double>>(_ =>
+            Task.FromResult(InstallManuallyImpl())
         );
     }
 
@@ -105,7 +105,7 @@ public class PluginsMarketViewModel : DisposableViewModel
         );
     }
 
-    private async Task InstallManuallyImpl(IProgress<double> progress, CancellationToken cancel)
+    private async Task InstallManuallyImpl()
     {
         var installer = new PluginInstaller(_cfg, _log, _manager);
         await installer.ShowInstallDialog($"{Id}.install_dialog");
