@@ -1,11 +1,14 @@
-﻿using Asv.Cfg;
+﻿using System.Composition;
+using Asv.Cfg;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class PluginsMarketViewModel : DisposableViewModel
+[ExportPage(PageId)]
+public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
 {
+    public const string PageId = "plugins_market";
     private readonly IPluginManager _manager;
     private readonly ILogService _log;
     private readonly ObservableList<PluginInfoViewModel> _plugins;
@@ -13,7 +16,12 @@ public class PluginsMarketViewModel : DisposableViewModel
     private string _previouslySelectedPluginId;
 
     public PluginsMarketViewModel()
-        : base(string.Empty)
+        : this(
+            DesignTime.CommandService,
+            DesignTime.PluginManager,
+            DesignTime.Log,
+            new JsonConfiguration("null")
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         _plugins = new ObservableList<PluginInfoViewModel>(
@@ -46,13 +54,14 @@ public class PluginsMarketViewModel : DisposableViewModel
         SelectedPlugin = new BindableReactiveProperty<PluginInfoViewModel?>(_plugins[0]);
     }
 
+    [ImportingConstructor]
     public PluginsMarketViewModel(
-        string id,
+        ICommandService cmd,
         IPluginManager manager,
         ILogService log,
         IConfiguration cfg
     )
-        : base(id)
+        : base(PageId, cmd)
     {
         ArgumentNullException.ThrowIfNull(log);
         _manager = manager ?? throw new ArgumentNullException(nameof(manager));
@@ -109,5 +118,15 @@ public class PluginsMarketViewModel : DisposableViewModel
     {
         var installer = new PluginInstaller(_cfg, _log, _manager);
         await installer.ShowInstallDialog($"{Id}.install_dialog");
+    }
+
+    public override ValueTask<IRoutable> Navigate(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void AfterLoadExtensions()
+    {
+        throw new NotImplementedException();
     }
 }

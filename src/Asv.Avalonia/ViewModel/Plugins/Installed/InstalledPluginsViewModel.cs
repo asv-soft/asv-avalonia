@@ -1,18 +1,19 @@
-﻿using ObservableCollections;
+﻿using System.Composition;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class InstalledPluginsViewModel : DisposableViewModel
+[ExportPage(PageId)]
+public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel>
 {
+    public const string PageId = "installed_plugins";
     private readonly ILogService _log;
     private readonly IPluginManager _manager;
     protected readonly ObservableList<ILocalPluginInfo> Plugins;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public InstalledPluginsViewModel()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        : base(string.Empty)
+        : this(DesignTime.CommandService, DesignTime.PluginManager, DesignTime.Log)
     {
         DesignTime.ThrowIfNotDesignMode();
         Plugins = new ObservableList<ILocalPluginInfo>();
@@ -22,8 +23,9 @@ public class InstalledPluginsViewModel : DisposableViewModel
         SelectedPlugin = new BindableReactiveProperty<InstalledPluginInfoViewModel>(PluginsView[0]);
     }
 
-    protected InstalledPluginsViewModel(string id, IPluginManager manager, ILogService log)
-        : base(id)
+    [ImportingConstructor]
+    public InstalledPluginsViewModel(ICommandService cmd, IPluginManager manager, ILogService log)
+        : base(PageId, cmd)
     {
         _log = log;
         _manager = manager;
@@ -37,7 +39,7 @@ public class InstalledPluginsViewModel : DisposableViewModel
 
         PluginsView = Plugins
             .CreateView(info => new InstalledPluginInfoViewModel(
-                $"id{id}.{info.Id}",
+                $"{PageId}[{info.Id}]",
                 manager,
                 info,
                 log
@@ -59,5 +61,15 @@ public class InstalledPluginsViewModel : DisposableViewModel
                 ? _manager.Installed.Where(item => item.IsVerified)
                 : _manager.Installed
         );
+    }
+
+    public override ValueTask<IRoutable> Navigate(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void AfterLoadExtensions()
+    {
+        throw new NotImplementedException();
     }
 }

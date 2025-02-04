@@ -21,6 +21,7 @@ public static class DesignTime
     public static IContainerHost ContainerHost => NullContainerHost.Instance;
     public static IThemeService ThemeService => NullThemeService.Instance;
     public static ICommandService CommandService => NullCommandService.Instance;
+    public static IPluginManager PluginManager => NullPluginManager.Instance;
 }
 
 public class NullShellHost : IShellHost

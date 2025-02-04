@@ -1,26 +1,27 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Composition;
 using FluentAvalonia.UI.Controls;
-using NuGet.Protocol.Core.Types;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class PluginsSourcesViewModel : DisposableViewModel
+[ExportPage(PageId)]
+public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
 {
+    public const string PageId = "plugins_sources";
     private readonly IPluginManager _mng;
     private readonly ILogService _log;
     private readonly ObservableList<IPluginServerInfo> _items = [];
-    private static int _sourceCounter;
 
     public PluginsSourcesViewModel()
-        : base(string.Empty)
+        : this(DesignTime.CommandService, DesignTime.PluginManager, DesignTime.Log)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public PluginsSourcesViewModel(string id, IPluginManager mng, ILogService log)
-        : base(id)
+    [ImportingConstructor]
+    public PluginsSourcesViewModel(ICommandService cmd, IPluginManager mng, ILogService log)
+        : base(PageId, cmd)
     {
         _mng = mng;
         _log = log;
@@ -55,7 +56,7 @@ public class PluginsSourcesViewModel : DisposableViewModel
         Edit = new ReactiveCommand<PluginSourceViewModel>(EditImpl);
 
         Items = _items.ToNotifyCollectionChanged(x => new PluginSourceViewModel(
-            $"{_sourceCounter++}",
+            $"Source[{x.SourceUri}]",
             x,
             this
         ));
@@ -78,7 +79,7 @@ public class PluginsSourcesViewModel : DisposableViewModel
             IsSecondaryButtonEnabled = true,
             CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
         };
-        using var viewModel = new SourceViewModel("new_source", _mng, _log, null);
+        using var viewModel = new SourceViewModel("NewSource", _mng, _log, null);
         viewModel.ApplyDialog(dialog);
         dialog.Content = viewModel;
         var result = await dialog.ShowAsync();
@@ -97,7 +98,7 @@ public class PluginsSourcesViewModel : DisposableViewModel
             IsSecondaryButtonEnabled = true,
             CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
         };
-        using var viewModel = new SourceViewModel($"source_{arg.Id}", _mng, _log, arg);
+        using var viewModel = new SourceViewModel($"Source[{arg.Id}]", _mng, _log, arg);
         viewModel.ApplyDialog(dialog);
         dialog.Content = viewModel;
         var result = await dialog.ShowAsync();
@@ -105,5 +106,15 @@ public class PluginsSourcesViewModel : DisposableViewModel
         {
             Update.Execute(Unit.Default);
         }
+    }
+
+    public override ValueTask<IRoutable> Navigate(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    protected override void AfterLoadExtensions()
+    {
+        throw new NotImplementedException();
     }
 }

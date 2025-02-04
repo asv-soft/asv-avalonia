@@ -2,6 +2,7 @@
 
 namespace Asv.Avalonia;
 
+[ExportViewFor(typeof(PluginsMarketViewModel))]
 public partial class PluginsMarketView : UserControl
 {
     public PluginsMarketView()
