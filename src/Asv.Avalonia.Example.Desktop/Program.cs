@@ -3,6 +3,8 @@ using System.Diagnostics;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Key = Avalonia.Remote.Protocol.Input.Key;
 
 namespace Asv.Avalonia.Example.Desktop;
 

@@ -1,14 +1,11 @@
 ﻿namespace Asv.Avalonia;
 
 public class ExecuteCommandEvent(IRoutable source, string commandId, IPersistable? commandParameter)
-    : AsyncRoutedEvent(source, RoutingEventStrategy.Bubble)
+    : AsyncRoutedEvent(source)
 {
     public string CommandId { get; } = commandId;
     public IPersistable? CommandParameter { get; } = commandParameter;
 }
-
-public class FocusedEvent(IRoutable source)
-    : AsyncRoutedEvent(source, RoutingEventStrategy.Bubble) { }
 
 public static class ExecuteCommandEventMixin
 {

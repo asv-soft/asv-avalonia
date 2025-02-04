@@ -16,4 +16,5 @@ public interface IThemeService
 {
     IEnumerable<IThemeInfo> Themes { get; }
     ReactiveProperty<IThemeInfo> CurrentTheme { get; }
+    ReactiveProperty<bool> IsCompact { get; }
 }

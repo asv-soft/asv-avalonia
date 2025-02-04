@@ -1,22 +1,7 @@
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
-
-public class NullCommandService : ICommandService
-{
-    public static ICommandService Instance { get; } = new NullCommandService();
-    public IEnumerable<ICommandInfo> Commands => [];
-
-    public IAsyncCommand? CreateCommand(string commandId)
-    {
-        return null;
-    }
-
-    public ICommandHistory CreateHistory(IRoutable owner)
-    {
-        return NullCommandHistory.Instance;
-    }
-}
 
 public class NullCommandHistory : ICommandHistory
 {
@@ -31,12 +16,18 @@ public class NullCommandHistory : ICommandHistory
         return ValueTask.CompletedTask;
     }
 
+    public IObservableCollection<HistoryItem> UndoStack { get; } =
+        new ObservableList<HistoryItem>();
+
     public ReactiveCommand Redo { get; } = new();
 
     public ValueTask RedoAsync(CancellationToken cancel = default)
     {
         return ValueTask.CompletedTask;
     }
+
+    public IObservableCollection<HistoryItem> RedoStack { get; } =
+        new ObservableList<HistoryItem>();
 
     public ValueTask Execute(
         string commandId,

@@ -28,7 +28,9 @@
 
     <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
         <PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
         <PackageReference Include="Material.Icons.Avalonia" Version="$(MaterialIconsAvaloniaVersion)"/>
         <PackageReference Include="MemoryPack" Version="1.21.3" />
@@ -60,10 +62,27 @@
         <DependentUpon>ShellTabWindow.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Shell\View\ShellView.axaml.cs">
-        <DependentUpon>MainView.axaml</DependentUpon>
+      <Compile Update="Controls\TreePage\TreePageView.axaml.cs">
+        <DependentUpon>TreePageView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Shell\Pages\Settings\Units\SettingsUnitsView.axaml.cs">
+        <DependentUpon>SettingsUnitsView.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="DebugWindow\DebugWindow.axaml.cs">
+        <DependentUpon>DebugWindow.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Shell\ShellView.axaml.cs">
+        <DependentUpon>ShellView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Avalonia.Controls.DataGrid">
+        <HintPath>C:\Users\voloshkevich\.nuget\packages\avalonia.controls.datagrid\11.2.3\lib\net8.0\Avalonia.Controls.DataGrid.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
     <ItemGroup>

@@ -73,7 +73,10 @@ public class HistoricalUnitProperty : RoutableViewModel, IStatePersistor
         }
     }
 
-    public override IEnumerable<IRoutable> Children => ArraySegment<IRoutable>.Empty;
+    public override ValueTask<IRoutable> Navigate(string id)
+    {
+        throw new NotImplementedException();
+    }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {

@@ -1,73 +1,169 @@
-﻿using System.Composition.Hosting;
+using System.Collections.Immutable;
+using System.Composition;
+using System.Composition.Hosting;
+using System.Diagnostics;
+using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class ShellViewModel : RoutableViewModel, IShell
+public class ShellViewModel : RoutableViewModel, IShell
 {
-    private readonly CompositionHost _container;
+    private readonly ObservableStack<string[]> _backwardStack = new();
+    private readonly ObservableStack<string[]> _forwardStack = new();
+    private readonly ReactiveProperty<IRoutable> _selectedControl;
+    private readonly ReactiveProperty<string[]> _selectedControlPath;
+
     private readonly ObservableList<IPage> _pages = [];
+    private readonly IContainerHost _container;
+    private readonly ICommandService _cmd;
     public const string ShellId = "shell";
 
-    protected ShellViewModel(IContainerHost host)
+    protected ShellViewModel(IContainerHost ioc)
         : base(ShellId)
     {
-        ArgumentNullException.ThrowIfNull(host);
+        ArgumentNullException.ThrowIfNull(ioc);
+        _container = ioc;
+        _cmd = ioc.GetExport<ICommandService>();
+        GoHome = new ReactiveCommand((_, c) => GoHomeAsync(c));
+        PagesView = _pages.ToNotifyCollectionChangedSlim();
+        Status = new BindableReactiveProperty<ShellStatus>(ShellStatus.Normal);
+        Close = new ReactiveCommand((_, c) => CloseAsync(c));
 
-        _container = host.Host;
-        Pages = _pages.ToNotifyCollectionChangedSlim();
-        Back = new ReactiveCommand((_, c) => BackwardAsync(c));
+        Backward = new ReactiveCommand((_, c) => BackwardAsync(c));
         Forward = new ReactiveCommand((_, c) => ForwardAsync(c));
-        GoHome = new ReactiveCommand((_, c) => BackwardAsync(c));
-    }
 
-    public ReactiveCommand Back { get; }
-
-    public ValueTask BackwardAsync(CancellationToken cancel = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ReactiveCommand Forward { get; }
-
-    public ValueTask ForwardAsync(CancellationToken cancel = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ReactiveCommand GoHome { get; }
-
-    public ValueTask GoHomeAsync(CancellationToken cancel = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ValueTask<IPage?> OpenPage(string pageId)
-    {
-        if (_container.TryGetExport<IPage>(pageId, out var page))
+        _selectedControl = new ReactiveProperty<IRoutable>(this);
+        _selectedControlPath = new ReactiveProperty<string[]>(GetPath(this));
+        _selectedControl.Subscribe(x => _selectedControlPath.Value = GetPath(x));
+        _selectedControlPath.Subscribe(x =>
         {
-            page.Parent = this;
-            _pages.Add(page);
-            return ValueTask.FromResult<IPage?>(page);
+            if (x is not { Length: > 0 })
+            {
+                return;
+            }
+
+            _backwardStack.Push(x);
+            _forwardStack.Clear();
+            CheckBackwardForwardCanExecute();
+        });
+        InputElement.GotFocusEvent.AddClassHandler<TopLevel>(GotFocus, handledEventsToo: true);
+        InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
+            OnKeyDownCustom,
+            handledEventsToo: true
+        );
+    }
+
+    private void GotFocus(TopLevel control, GotFocusEventArgs args)
+    {
+        if (args.Source is Control { DataContext: IRoutable routable })
+        {
+            routable.RiseGotFocusEvent();
+        }
+    }
+
+    private void OnKeyDownCustom(TopLevel source, KeyEventArgs keyEventArgs)
+    {
+        if (keyEventArgs.KeyModifiers == KeyModifiers.None)
+        {
+            // we don't want to handle key events without modifiers
+            return;
         }
 
-        return ValueTask.FromResult<IPage?>(null);
-    }
-
-    protected abstract void InternalAddPageToMainTab(IPage export);
-
-    public NotifyCollectionChangedSynchronizedViewList<IPage> Pages { get; }
-
-    public override IEnumerable<IRoutable> Children
-    {
-        get
+        var gesture = new KeyGesture(keyEventArgs.Key, keyEventArgs.KeyModifiers);
+        if (
+            _cmd.CanExecuteCommand(
+                gesture,
+                SelectedControl.CurrentValue,
+                out var command,
+                out var target
+            )
+        )
         {
-            foreach (var page in _pages)
+            if (target != null && command != null)
             {
-                yield return page;
+                target.ExecuteCommand(command.Info.Id, null);
+                keyEventArgs.Handled = true;
             }
         }
+    }
+
+    public ReadOnlyReactiveProperty<IRoutable> SelectedControl => _selectedControl;
+    public ReadOnlyReactiveProperty<string[]> SelectedControlPath => _selectedControlPath;
+
+    private string[] GetPath(IRoutable vm)
+    {
+        return vm.GetAllFrom(this).Skip(1).Select(x => x.Id).ToArray();
+    }
+
+    public ReactiveCommand Backward { get; }
+
+    public async ValueTask BackwardAsync(CancellationToken cancel = default)
+    {
+        if (_backwardStack.TryPop(out var path))
+        {
+            _forwardStack.Push(path);
+            await this.NavigateTo(path);
+            CheckBackwardForwardCanExecute();
+        }
+    }
+
+    private void CheckBackwardForwardCanExecute()
+    {
+        Backward.ChangeCanExecute(_backwardStack.Count != 0);
+        Forward.ChangeCanExecute(_forwardStack.Count != 0);
+    }
+
+    public IObservableCollection<string[]> ForwardStack => _forwardStack;
+    public ReactiveCommand Forward { get; }
+
+    public async ValueTask ForwardAsync(CancellationToken cancel = default)
+    {
+        if (_forwardStack.TryPop(out var path))
+        {
+            _backwardStack.Push(path);
+            await this.NavigateTo(path);
+            CheckBackwardForwardCanExecute();
+        }
+    }
+
+    public IObservableCollection<string[]> BackwardStack => _backwardStack;
+
+    protected virtual ValueTask CloseAsync(CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
+    public IReadOnlyObservableList<IPage> Pages => _pages;
+    public ReactiveCommand GoHome { get; }
+
+    public async ValueTask GoHomeAsync(CancellationToken cancel = default) =>
+        await Navigate(HomePageViewModel.PageId);
+
+    public BindableReactiveProperty<ShellStatus> Status { get; }
+    public ReactiveCommand Close { get; }
+    public BindableReactiveProperty<IPage?> SelectedPage { get; } = new();
+    public NotifyCollectionChangedSynchronizedViewList<IPage> PagesView { get; }
+
+    public override ValueTask<IRoutable> Navigate(string id)
+    {
+        var page = _pages.FirstOrDefault(x => x.Id == id);
+        if (page == null)
+        {
+            if (_container.TryGetExport<IPage>(id, out page))
+            {
+                _pages.Add(page);
+                page.Parent = this;
+                _selectedControl.Value = page;
+            }
+        }
+
+        SelectedPage.Value = page;
+        return ValueTask.FromResult<IRoutable>(page);
     }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
@@ -77,11 +173,37 @@ public abstract class ShellViewModel : RoutableViewModel, IShell
             // write command to log
         }
 
-        if (e is FocusedEvent focus)
+        if (e is GotFocusEvent gotFocus)
         {
-            // write to navigation history
+            _selectedControl.Value = gotFocus.Source;
         }
 
         return ValueTask.CompletedTask;
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            PagesView.Dispose();
+            Status.Dispose();
+            Close.Dispose();
+            SelectedPage.Dispose();
+            foreach (var page in _pages)
+            {
+                page.Dispose();
+            }
+
+            _pages.Clear();
+        }
+
+        base.Dispose(disposing);
+    }
+}
+
+public enum ShellStatus
+{
+    Normal,
+    Warning,
+    Error,
 }

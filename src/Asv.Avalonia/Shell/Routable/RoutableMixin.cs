@@ -1,7 +1,36 @@
 ﻿namespace Asv.Avalonia;
 
-public static class RoutableViewModelExtensions
+public static class RoutableMixin
 {
+    public static ValueTask RiseGotFocusEvent(this IRoutable src)
+    {
+        return src.Rise(new GotFocusEvent(src));
+    }
+
+    public static async ValueTask<IRoutable> NavigateTo(
+        this IRoutable src,
+        ArraySegment<string> path
+    )
+    {
+        while (true)
+        {
+            if (path.Count == 0)
+            {
+                return src;
+            }
+
+            var first = path[0];
+            var item = await src.Navigate(first);
+            src = item;
+            path = path[1..];
+        }
+    }
+
+    public static async ValueTask<IRoutable> NavigateTo(this IRoutable src, string[] path)
+    {
+        return await src.NavigateTo(new ArraySegment<string>(path));
+    }
+
     public static IRoutable GetRoot(this IRoutable src)
     {
         var root = src;

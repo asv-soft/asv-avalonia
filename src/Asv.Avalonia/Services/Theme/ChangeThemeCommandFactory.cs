@@ -1,4 +1,6 @@
+using System.Collections.Immutable;
 using System.Composition;
+using Avalonia.Input;
 using Material.Icons;
 
 namespace Asv.Avalonia;
@@ -22,6 +24,12 @@ public class ChangeThemeCommandFactory : ICommandFactory
     {
         return new ChangeThemeCommand(_svc);
     }
+
+    public bool CanExecute(IRoutable context, out IRoutable? target)
+    {
+        target = context;
+        return true;
+    }
 }
 
 public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
@@ -31,10 +39,11 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
     public const string Id = "theme.change";
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
-        CommandId = Id,
+        Id = Id,
         Name = "Change theme",
         Description = "Change application theme",
         Icon = MaterialIconKind.ThemeLightDark,
+        DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
         Order = 0,
     };
 
@@ -65,6 +74,7 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
     {
         if (parameter is Persistable<string> memento)
         {
+            // execute with parameter
             var oldValue = svc.CurrentTheme.Value.Id;
             var theme = svc.Themes.FirstOrDefault(x => x.Id == memento.Value);
             if (theme != null)
@@ -73,6 +83,22 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
             }
 
             _state = new PersistableChange<string>(oldValue, memento.Value);
+        }
+        else
+        {
+            // execute without parameter
+            var oldValue = svc.CurrentTheme.Value.Id;
+            var temp = svc.Themes.ToList();
+            var index = temp.IndexOf(svc.CurrentTheme.Value);
+            index++;
+            if (index >= temp.Count)
+            {
+                index = 0;
+            }
+
+            var newValue = temp[index].Id;
+            svc.CurrentTheme.Value = temp[index];
+            _state = new PersistableChange<string>(oldValue, newValue);
         }
 
         return ValueTask.CompletedTask;

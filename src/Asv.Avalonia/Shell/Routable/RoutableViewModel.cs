@@ -2,28 +2,9 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class RoutableViewModel : DisposableViewModel, IRoutable
+public abstract class RoutableViewModel(string id) : DisposableViewModel(id), IRoutable
 {
-    private readonly IDisposable _sub1;
-
-    protected RoutableViewModel(string id)
-        : base(id)
-    {
-        _sub1 = IsFocused.SubscribeAwait(
-            (x, _) =>
-            {
-                if (x)
-                {
-                    return Rise(new FocusedEvent(this));
-                }
-
-                return ValueTask.CompletedTask;
-            }
-        );
-    }
-
     public IRoutable? Parent { get; set; }
-    public abstract IEnumerable<IRoutable> Children { get; }
 
     public async ValueTask Rise(AsyncRoutedEvent e)
     {
@@ -38,61 +19,24 @@ public abstract class RoutableViewModel : DisposableViewModel, IRoutable
             return;
         }
 
-        switch (e.RoutingEventStrategy)
+        if (Parent is not null)
         {
-            case RoutingEventStrategy.Bubble when Parent is not null:
-                await Parent.Rise(e);
-                break;
-            case RoutingEventStrategy.Tunnel:
-            {
-                foreach (var child in Children)
-                {
-                    await child.Rise(e);
-                    if (e.IsHandled)
-                    {
-                        break;
-                    }
-                }
-
-                return;
-            }
-
-            case RoutingEventStrategy.Direct:
-                return;
-            default:
-                throw new ArgumentOutOfRangeException();
+            await Parent.Rise(e);
         }
     }
 
-    public virtual ValueTask<IRoutable> NavigateTo(ArraySegment<string> path)
+    public abstract ValueTask<IRoutable> Navigate(string id);
+
+    protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (path.Count == 0)
-        {
-            IsFocused.Value = true;
-            return ValueTask.FromResult<IRoutable>(this);
-        }
-
-        foreach (var child in Children)
-        {
-            if (child.Id == path[0])
-            {
-                return child.NavigateTo(path[1..]);
-            }
-        }
-
-        return ValueTask.FromResult<IRoutable>(this);
+        return ValueTask.CompletedTask;
     }
-
-    public ReactiveProperty<bool> IsFocused { get; } = new(false);
-
-    protected abstract ValueTask InternalCatchEvent(AsyncRoutedEvent e);
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            _sub1.Dispose();
-            IsFocused.Dispose();
+            Parent = null;
         }
 
         base.Dispose(disposing);
