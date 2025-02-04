@@ -1,3 +1,4 @@
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
@@ -15,12 +16,18 @@ public class NullCommandHistory : ICommandHistory
         return ValueTask.CompletedTask;
     }
 
+    public IObservableCollection<HistoryItem> UndoStack { get; } =
+        new ObservableList<HistoryItem>();
+
     public ReactiveCommand Redo { get; } = new();
 
     public ValueTask RedoAsync(CancellationToken cancel = default)
     {
         return ValueTask.CompletedTask;
     }
+
+    public IObservableCollection<HistoryItem> RedoStack { get; } =
+        new ObservableList<HistoryItem>();
 
     public ValueTask Execute(
         string commandId,

@@ -9,6 +9,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
     public abstract string Description { get; }
     public abstract string Symbol { get; }
     public abstract bool IsInternationalSystemUnit { get; }
+
     public virtual bool IsValid(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
@@ -61,7 +62,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         if (Units.Kilo.Any(x => input.EndsWith(x)))
         {
             decMul = 1_000;
-            input = input[..^1]; 
+            input = input[..^1];
         }
         else if (Units.Mega.Any(x => input.EndsWith(x)))
         {
@@ -74,7 +75,10 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
             input = input[..^1];
         }
 
-        if (double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) == false)
+        if (
+            double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result)
+            == false
+        )
         {
             return double.NaN;
         }

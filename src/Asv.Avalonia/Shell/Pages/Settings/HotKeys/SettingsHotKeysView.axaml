@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia"
+             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="avalonia:SettingsHotKeysViewModel"
+             x:Class="Asv.Avalonia.SettingsHotKeysView">
+    <Design.DataContext>
+        <avalonia:SettingsHotKeysViewModel/>
+    </Design.DataContext>
+    <DockPanel>
+        <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}">
+            
+        </TextBox>
+        <DataGrid Focusable="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
+            <DataGrid.Styles>
+                <Style Selector="DataGridRow DataGridCell Rectangle">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+                <Style Selector="DataGridRow DataGridCell.action Button">
+                    <Setter Property="IsVisible" Value="False"/>
+                </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+                <DataGridTemplateColumn CellStyleClasses="action">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <avalonia1:MaterialIcon Kind="{Binding Info.Icon}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Info.Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Description" Binding="{Binding Info.Description}" />
+                <DataGridTemplateColumn Header="Selected" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Info.DefaultHotKey}"></TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </DockPanel>
+</UserControl>

@@ -1,16 +1,20 @@
 using System.Globalization;
-using Avalonia.Data;
 using Avalonia.Data.Converters;
 
 namespace Asv.Avalonia;
 
-public class EnumToBooleanConverter : IValueConverter
+public class StringJoinConverter : IValueConverter
 {
-    public static EnumToBooleanConverter Instance { get; } = new();
+    public static StringJoinConverter Instance { get; } = new();
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return value?.Equals(parameter);
+        if (value is string[] arr)
+        {
+            return string.Join(parameter?.ToString() ?? ", ", arr);
+        }
+
+        return value;
     }
 
     public object? ConvertBack(
@@ -20,6 +24,6 @@ public class EnumToBooleanConverter : IValueConverter
         CultureInfo culture
     )
     {
-        return value?.Equals(true) == true ? parameter : BindingOperations.DoNothing;
+        throw new NotImplementedException();
     }
 }

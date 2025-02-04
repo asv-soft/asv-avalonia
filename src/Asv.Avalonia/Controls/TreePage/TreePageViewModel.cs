@@ -24,28 +24,34 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
         _breadCrumbSource = new ObservableList<BreadCrumbItem>();
         BreadCrumb = _breadCrumbSource.ToViewList();
         Tree = Nodes.ToObservableTree(x => x.Id, x => x.ParentId);
-        _sub2 = SelectedNode.SubscribeAwait(async (x, _) =>
-        {
-            if (x?.Base.NavigateTo == null || _internalNavigate)
+        _sub2 = SelectedNode.SubscribeAwait(
+            async (x, _) =>
             {
-                return;
-            }
+                if (x?.Base.NavigateTo == null || _internalNavigate)
+                {
+                    return;
+                }
 
-            _breadCrumbSource.Clear();
-            if (SelectedNode.Value != null)
-            {
-                _breadCrumbSource.AddRange(SelectedNode.Value.GetAllMenuFromRoot().Select((item, index) => new BreadCrumbItem(index == 0, item.Base)));
-            }
+                _breadCrumbSource.Clear();
+                if (SelectedNode.Value != null)
+                {
+                    _breadCrumbSource.AddRange(
+                        SelectedNode
+                            .Value.GetAllMenuFromRoot()
+                            .Select((item, index) => new BreadCrumbItem(index == 0, item.Base))
+                    );
+                }
 
-            await NavigateTo(x.Base.NavigateTo);
-        });
+                await Navigate(x.Base.NavigateTo);
+            }
+        );
     }
 
-    public override async ValueTask<IRoutable> NavigateTo(string id)
+    public override async ValueTask<IRoutable> Navigate(string id)
     {
         if (SelectedPage.Value != null && SelectedPage.Value.Id == id)
         {
-            return SelectedPage.Value;
+            await ValueTask.FromResult(SelectedPage.Value);
         }
 
         if (SelectedNode.Value?.Base.NavigateTo != id)
@@ -64,7 +70,6 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
         SelectedPage.Value?.Dispose();
         newPage.Parent = this;
         SelectedPage.Value = newPage;
-        await Rise(new NavigationEvent(newPage));
         return newPage;
     }
 
@@ -76,7 +81,10 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
     public ObservableTree<ITreePageNode, string> Tree { get; }
     public BindableReactiveProperty<IRoutable?> SelectedPage { get; }
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
-    public BindableReactiveProperty<ObservableTreeNode<ITreePageNode, string>?> SelectedNode { get; }
+    public BindableReactiveProperty<ObservableTreeNode<
+        ITreePageNode,
+        string
+    >?> SelectedNode { get; }
     public ObservableList<ITreePageNode> Nodes { get; }
     public BindableReactiveProperty<bool> IsCompactMode { get; } = new();
 
@@ -100,5 +108,3 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
         base.Dispose(disposing);
     }
 }
-
-

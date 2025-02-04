@@ -25,16 +25,18 @@ public abstract class RoutableViewModel(string id) : DisposableViewModel(id), IR
         }
     }
 
-    public abstract ValueTask<IRoutable> NavigateTo(string id);
+    public abstract ValueTask<IRoutable> Navigate(string id);
 
-    public BindableReactiveProperty<bool> IsFocused { get; } = new(false);
-    protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e) => ValueTask.CompletedTask;
+    protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        return ValueTask.CompletedTask;
+    }
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            IsFocused.Dispose();
+            Parent = null;
         }
 
         base.Dispose(disposing);

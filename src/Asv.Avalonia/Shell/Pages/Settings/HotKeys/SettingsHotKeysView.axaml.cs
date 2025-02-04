@@ -4,10 +4,10 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor(typeof(SettingsUnitsViewModel))]
-public partial class SettingsUnitsView : UserControl
+[ExportViewFor(typeof(SettingsHotKeysViewModel))]
+public partial class SettingsHotKeysView : UserControl
 {
-    public SettingsUnitsView()
+    public SettingsHotKeysView()
     {
         InitializeComponent();
     }

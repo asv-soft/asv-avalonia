@@ -4,10 +4,7 @@ using R3;
 namespace Asv.Avalonia;
 
 [ExportViewFor(typeof(SettingsPageViewModel))]
-public class SettingsPageView : TreePageView
-{
-    
-}
+public class SettingsPageView : TreePageView { }
 
 [ExportPage(PageId)]
 public class SettingsPageViewModel : TreePageViewModel<ISettingsPage>, ISettingsPage
@@ -34,8 +31,5 @@ public class SettingsPageViewModel : TreePageViewModel<ISettingsPage>, ISettings
 
     [ImportingConstructor]
     public SettingsPageViewModel(ICommandService svc, IContainerHost host)
-        : base(PageId, svc, host)
-    {
-        
-    }
+        : base(PageId, svc, host) { }
 }

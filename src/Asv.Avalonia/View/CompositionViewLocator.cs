@@ -39,7 +39,7 @@ public class CompositionViewLocator(CompositionHost container) : IDataTemplate
                 // ReSharper disable once NullableWarningSuppressionIsUsed
                 return (Control)Activator.CreateInstance(type)!;
             }
-            
+
             // try to find view for parent class
             viewModelType = viewModelType.BaseType;
         }

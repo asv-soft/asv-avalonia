@@ -5,6 +5,7 @@ namespace Asv.Avalonia;
 public class NullContainerHost : IContainerHost
 {
     public static IContainerHost Instance { get; } = new NullContainerHost();
+
     public T GetExport<T>()
     {
         return default!;

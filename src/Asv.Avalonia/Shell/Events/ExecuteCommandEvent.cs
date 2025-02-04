@@ -7,15 +7,13 @@ public class ExecuteCommandEvent(IRoutable source, string commandId, IPersistabl
     public IPersistable? CommandParameter { get; } = commandParameter;
 }
 
-public class NavigationEvent(IRoutable source)
-    : AsyncRoutedEvent(source)
-{
-
-}
-
 public static class ExecuteCommandEventMixin
 {
-    public static ValueTask ExecuteCommand(this IRoutable src, string commandId, IPersistable? commandParameter)
+    public static ValueTask ExecuteCommand(
+        this IRoutable src,
+        string commandId,
+        IPersistable? commandParameter
+    )
     {
         return src.Rise(new ExecuteCommandEvent(src, commandId, commandParameter));
     }

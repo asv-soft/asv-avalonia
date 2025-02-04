@@ -10,8 +10,4 @@ public interface ICommandFactory
 }
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class ExportCommandAttribute()
-    : ExportAttribute(typeof(ICommandFactory))
-{
- 
-}
+public class ExportCommandAttribute() : ExportAttribute(typeof(ICommandFactory)) { }

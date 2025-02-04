@@ -4,10 +4,12 @@ namespace Asv.Avalonia;
 
 public class MobileShellViewModel : ShellViewModel
 {
-    public MobileShellViewModel(ISingleViewApplicationLifetime lifetime, IContainerHost containerHost)
+    public MobileShellViewModel(
+        ISingleViewApplicationLifetime lifetime,
+        IContainerHost containerHost
+    )
         : base(containerHost)
     {
-        throw new System.NotImplementedException();
+        // do nothing
     }
-
 }

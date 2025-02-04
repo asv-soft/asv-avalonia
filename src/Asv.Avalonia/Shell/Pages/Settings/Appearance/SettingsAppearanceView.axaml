@@ -29,9 +29,9 @@
             </Grid.RowDefinitions>
             <avalonia1:MaterialIcon Grid.Column="0" Kind="Cog"/>
             <TextBlock VerticalAlignment="Center" Grid.Column="2" Text="Application theme"/>
-            <ComboBox Grid.Column="4" DataContext="{Binding Theme}"
-                      IsFocused="{Binding IsFocused.Value, Mode=OneWayToSource}"
-                      avalonia:NavigationHelper.IsSelected="{Binding IsFocused.Value, Mode=OneWay}"
+            <ComboBox Grid.Column="4" 
+                      
+                      DataContext="{Binding Theme}"
                       ItemsSource="{Binding Items}"
                       SelectedItem="{Binding SelectedItem.Value}">
                 <ComboBox.ItemTemplate>

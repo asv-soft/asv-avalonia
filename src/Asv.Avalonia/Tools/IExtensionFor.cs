@@ -8,5 +8,4 @@ public interface IExtensionFor<in T> : IDisposable
 }
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class ExportExtensionForAttribute<T>()
-    : ExportAttribute(typeof(IExtensionFor<T>));
+public class ExportExtensionForAttribute<T>() : ExportAttribute(typeof(IExtensionFor<T>));

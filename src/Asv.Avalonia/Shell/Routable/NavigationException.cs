@@ -2,17 +2,11 @@
 
 public class NavigationException : Exception
 {
-    public NavigationException()
-    {
-    }
+    public NavigationException() { }
 
     public NavigationException(string message)
-        : base(message)
-    {
-    }
+        : base(message) { }
 
-    public NavigationException(string message, Exception inner) 
-        : base(message, inner)
-    {
-    }
+    public NavigationException(string message, Exception inner)
+        : base(message, inner) { }
 }

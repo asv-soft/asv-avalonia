@@ -35,6 +35,7 @@ public class TreePageNode : ViewModelBase, ITreePageNode
     public BindableReactiveProperty<string> Name { get; }
     public BindableReactiveProperty<MaterialIconKind> Icon { get; }
     public BindableReactiveProperty<string?> Status { get; }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)

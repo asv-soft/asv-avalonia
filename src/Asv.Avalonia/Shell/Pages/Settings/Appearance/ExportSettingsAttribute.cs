@@ -6,7 +6,5 @@ namespace Asv.Avalonia;
 public class ExportSettingsAttribute : ExportAttribute
 {
     public ExportSettingsAttribute(string id)
-        : base(id, typeof(ISettingsSubPage))
-    {
-    }
+        : base(id, typeof(ISettingsSubPage)) { }
 }

@@ -6,8 +6,7 @@ namespace Asv.Avalonia;
 [ExportUnit]
 [Shared]
 [method: ImportingConstructor]
-public class Distance([ImportMany(Distance.Id)] IEnumerable<IUnitItem> items)
-    : UnitBase(items)
+public class Distance([ImportMany(Distance.Id)] IEnumerable<IUnitItem> items) : UnitBase(items)
 {
     public const string Id = "distance";
 
