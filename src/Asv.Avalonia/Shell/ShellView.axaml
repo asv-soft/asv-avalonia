@@ -90,19 +90,19 @@
             
         </DockPanel>
         <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
-            <TabControl ItemsSource="{Binding PagesView}" SelectedItem="{Binding SelectedPage.Value}">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="4">
-                            <avalonia1:MaterialIcon Width="16" Height="16" Kind="{Binding Icon.Value}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Title.Value}"/>
-                            <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0">
-                                <avalonia1:MaterialIcon Kind="Close"/>
-                            </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
-            </TabControl>
+            <avalonia:DockControl ItemsSource="{Binding PagesView}">
+                <!-- <avalonia:DockControl.ItemTemplate> -->
+                <!--     <DataTemplate> -->
+                <!--         <StackPanel Orientation="Horizontal" Spacing="4"> -->
+                <!--             <avalonia1:MaterialIcon Width="16" Height="16" Kind="{Binding Icon.Value}"/> -->
+                <!--             <TextBlock VerticalAlignment="Center" Text="{Binding Title.Value}"/> -->
+                <!--             <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0"> -->
+                <!--                 <avalonia1:MaterialIcon Kind="Close"/> -->
+                <!--             </Button> -->
+                <!--         </StackPanel> -->
+                <!--     </DataTemplate> -->
+                <!-- </avalonia:DockControl.ItemTemplate> -->
+            </avalonia:DockControl>
         </Border>
     </DockPanel>
     </Border>

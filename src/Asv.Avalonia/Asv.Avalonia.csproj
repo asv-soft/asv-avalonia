@@ -44,6 +44,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="System.Composition" Version="$(SystemCompositionVersion)" />
         <PackageReference Include="Asv.Common" Version="$(AsvCommonVersion)" />
         <PackageReference Include="Asv.Cfg" Version="$(AsvCommonVersion)" />
@@ -78,9 +79,15 @@
 
     <ItemGroup>
       <Reference Include="Avalonia.Controls.DataGrid">
-        <HintPath>C:\Users\voloshkevich\.nuget\packages\avalonia.controls.datagrid\11.2.3\lib\net8.0\Avalonia.Controls.DataGrid.dll</HintPath>
+        <HintPath>..\..\..\..\.nuget\packages\avalonia.controls.datagrid\11.2.3\lib\net8.0\Avalonia.Controls.DataGrid.dll</HintPath>
       </Reference>
     </ItemGroup>
+
+<!--    <ItemGroup>-->
+<!--      <Reference Include="Avalonia.Controls.DataGrid">-->
+<!--        <HintPath>C:\Users\voloshkevich\.nuget\packages\avalonia.controls.datagrid\11.2.3\lib\net8.0\</HintPath>-->
+<!--      </Reference>-->
+<!--    </ItemGroup>-->
 
    
 

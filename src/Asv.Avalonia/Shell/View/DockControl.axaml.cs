@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using Asv.Common;
 using Avalonia;
+using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
@@ -24,6 +25,15 @@ public class DockControl : SelectingItemsControl
     private Border? _leftSelector;
     private Border? _rightSelector;
     private Grid? _dropTargetGrid;
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == ItemCountProperty)
+        {
+            CreateTabs();
+        }
+    }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -280,9 +290,14 @@ public class DockControl : SelectingItemsControl
 
     private void CreateTabs()
     {
+        if(Items.Count == 0)
+        {
+            return;
+        }
+        
         if (_dropTargetGrid is null)
         {
-            throw new Exception();
+            throw new ElementNotEnabledException();
         }
 
         foreach (var content in Items)

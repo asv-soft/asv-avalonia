@@ -3,22 +3,31 @@
 namespace Asv.Avalonia;
 
 [ExportPage(PageId)]
-public class DocumentViewModel: PageViewModel<DocumentViewModel>
+public class DocumentViewModel : PageViewModel<DocumentViewModel>
 {
     public const string PageId = "document";
 
+    public DocumentViewModel()
+        : this(DesignTime.CommandService)
+    {
+        DesignTime.ThrowIfNotDesignMode();
+    }
+
     [ImportingConstructor]
-    public DocumentViewModel(string id, ICommandService cmd)
-        : base(id, cmd)
+    public DocumentViewModel(ICommandService cmd)
+        : base(PageId, cmd) { }
+
+    protected override void AfterLoadExtensions()
     {
     }
 
-    public override ValueTask<IRoutable> NavigateTo(string id)
+    public override ValueTask<IRoutable> Navigate(string id)
     {
         return ValueTask.FromResult<IRoutable>(this);
     }
 
-    protected override void AfterLoadExtensions()
+    public override IEnumerable<IRoutable> GetRoutableChildren()
     {
+        return [];
     }
 }
