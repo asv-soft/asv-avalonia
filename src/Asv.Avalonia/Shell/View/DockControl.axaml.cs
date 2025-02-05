@@ -7,6 +7,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using Avalonia.VisualTree;
 
 namespace Asv.Avalonia;
@@ -19,8 +20,9 @@ public class ShellItem
 
 public class DockControl : SelectingItemsControl
 {
+    private const int ColumnIncrement = 2;
     private readonly List<Border> _targetBorders = [];
-    private readonly List<ShellItem> _shellItems = [];
+    private List<ShellItem> _shellItems = [];
     private TabItem? _selectedTab;
     private Border? _leftSelector;
     private Border? _rightSelector;
@@ -222,64 +224,6 @@ public class DockControl : SelectingItemsControl
 
         _selectedTab = null;
     }
-
-    // private void WinOnPointerReleased(object? sender, PointerReleasedEventArgs e)
-    // {
-    //     if (_isWindowSelected == false)
-    //     {
-    //         return;
-    //     }
-    //
-    //     var position = e.GetCurrentPoint(this).Position;
-    //     foreach (var border in _targetBorders.Where(border => IsCursorWithinTargetBorder(position, border)))
-    //     {
-    //         MoveWindowTabBack(sender);
-    //     }
-    // }
-    //
-    // private void CheckWindowPosition(PixelPointEventArgs e)
-    // {
-    //     if (_isWindowSelected == false)
-    //     {
-    //         return;
-    //     }
-    //
-    //     foreach (var border in _targetBorders)
-    //     {
-    //         if (IsCursorWithinTargetBorder(new Point(e.Point.X, e.Point.Y), border))
-    //         {
-    //             border.Background = Brushes.LightBlue;
-    //             _windowCloseRequest = true;
-    //             _targetBorder = border;
-    //         }
-    //         else
-    //         {
-    //             border.Background = Brushes.Transparent;
-    //         }
-    //     }
-    // }
-
-    // private void MoveWindowTabBack(object? sender)
-    // {
-    //     // if (_isWindowSelected == false)
-    //     // {
-    //     //     return;
-    //     // }
-    //     var win = sender as DockWindow;
-    //     if (!_windowCloseRequest)
-    //     {
-    //         return;
-    //     }
-    //
-    //     {
-    //         var tab = CreateTabItem(win!);
-    //
-    //         AddTabItemToTabControl(tab, _targetBorder);
-    //         win!.CloseRequested = true;
-    //     }
-    //
-    //     _windowCloseRequest = false;
-    // }
     #endregion
 
     protected override void LogicalChildrenCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -290,11 +234,12 @@ public class DockControl : SelectingItemsControl
 
     private void CreateTabs()
     {
-        if(Items.Count == 0)
+        _shellItems.Clear();
+        if (Items.Count == 0)
         {
             return;
         }
-        
+
         if (_dropTargetGrid is null)
         {
             throw new ElementNotEnabledException();
@@ -336,9 +281,9 @@ public class DockControl : SelectingItemsControl
 
         _shellItems.OrderBy(_ => _.Column);
 
-        GenerateColumns(_dropTargetGrid, _shellItems.ToArray());
-
         var occupiedColumns = _shellItems.Select(item => item.Column).ToHashSet();
+
+        GenerateColumns(_dropTargetGrid, occupiedColumns);
 
         bool ColumnHasGridSplitter(int columnIndex)
         {
@@ -371,38 +316,37 @@ public class DockControl : SelectingItemsControl
         }
     }
 
-    private void GenerateColumns(Grid grid, ShellItem[] items)
+    private void GenerateColumns(Grid grid, HashSet<int> items)
     {
         grid.ColumnDefinitions.Clear();
         grid.Children.Clear();
-        for (var i = 0; i < items.Length; i++)
+
+        var sortedItems = items.ToArray();
+        int columnCount = sortedItems.Length;
+
+        for (var i = 0; i < columnCount; i++)
         {
+            // Добавляем колонку с контентом
             grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
 
-            if (i >= items.Length - 1)
+            // Вставляем GridSplitter только между соседними колонками (не вначале и не в конце)
+            if (i < columnCount - 1)
             {
-                continue;
+                grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+
+                var splitter = new GridSplitter()
+                {
+                    Background = Brushes.White,
+                    Width = 1,
+                    ResizeDirection = GridResizeDirection.Columns,
+                };
+
+                Grid.SetColumn(splitter, grid.ColumnDefinitions.Count - 1);
+                grid.Children.Add(splitter);
             }
-
-            if (items.All(c => c.Column == items[i].Column))
-            {
-                break;
-            }
-
-            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-
-            var splitter = new GridSplitter()
-            {
-                Background = Brushes.White,
-                Width = 1,
-                ResizeDirection = GridResizeDirection.Columns,
-            };
-
-            Grid.SetColumn(splitter, grid.ColumnDefinitions.Count - 1);
-            grid.Children.Add(splitter);
         }
     }
-
+    
     private AdaptiveTabStripTabControl? FindTabControlInColumn(Grid myGrid, int columnIndex)
     {
         foreach (var child in myGrid.Children)
@@ -420,7 +364,8 @@ public class DockControl : SelectingItemsControl
     {
         var header = new TabStripItem()
         {
-            Content = (content as IPage)?.Title.Value ?? "Tab",
+            Content = content,
+            ContentTemplate = TabControlStripItemTemplate,
         };
         header.PointerPressed += PressedHandler;
         header.PointerMoved += PointerMovedHandler;
@@ -450,6 +395,7 @@ public class DockControl : SelectingItemsControl
         return window!.Bounds.Contains(cursorPosition);
     }
 
+   
     private void AddTabItemToTabControl(TabItem tabItem, Border selectorBorder)
     {
         var updateItem = _shellItems.Find(shellItem => shellItem.TabControl == tabItem);
@@ -458,22 +404,20 @@ public class DockControl : SelectingItemsControl
             return;
         }
 
-        var maxColumnIndex = MaxSplitAmount * 2;
-
         if (selectorBorder == _leftSelector)
         {
-            updateItem.Column -= 2;
+            updateItem.Column -= ColumnIncrement;
 
-            if (_shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column)) >= 2)
+            if (_shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column)) >= ColumnIncrement)
             {
-                updateItem.Column -= 2;
+                updateItem.Column -= ColumnIncrement;
             }
 
             if (updateItem.Column < 0)
             {
                 foreach (var item in _shellItems)
                 {
-                    item.Column += 2;
+                    item.Column += ColumnIncrement;
                 }
 
                 updateItem.Column = 0;
@@ -481,32 +425,67 @@ public class DockControl : SelectingItemsControl
         }
         else if (selectorBorder == _rightSelector)
         {
-            updateItem.Column += 2;
+            updateItem.Column += ColumnIncrement;
 
-            if (_shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column)) >= 2)
+            if (_shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column)) >= ColumnIncrement)
             {
-                updateItem.Column += 2;
+                updateItem.Column += ColumnIncrement;
             }
         }
 
-        if (_shellItems.MinItem(shellItem => shellItem.Column).Column != 0)
-        {
-            foreach (var item in _shellItems)
-            {
-                item.Column -= 2;
-            }
-        }
-
-        if (_shellItems.MaxItem(shellItem => shellItem.Column).Column >= maxColumnIndex)
-        {
-            _shellItems.MaxItem(shellItem => shellItem.Column).Column -= 2;
-        }
-
+        SortShellItems();
         UpdateGrid();
     }
 
+    private void SortShellItems()
+    {
+        if (_shellItems.Count == 0)
+        {
+            return;
+        }
+        
+        var minItem = _shellItems.MinItem(shellItem => shellItem.Column);
+        if (minItem.Column != 0)
+        {
+            foreach (var item in _shellItems)
+            {
+                item.Column -= ColumnIncrement;
+            }
+        }
+        
+        var maxColumnIndex = MaxSplitAmount * ColumnIncrement;
+        var maxItem = _shellItems.MaxItem(shellItem => shellItem.Column);
+        if (maxItem.Column >= maxColumnIndex)
+        {
+            maxItem.Column -= ColumnIncrement;
+        }
+        
+        _shellItems = _shellItems.OrderBy(shellItem => shellItem.Column).ToList();
+       
+        for (int i = 1; i < _shellItems.Count; i++)
+        {
+            var currentItem = _shellItems[i];
+            var prevItem = _shellItems[i - 1];
+            if ((currentItem.Column - prevItem.Column) > (2 * ColumnIncrement))
+            {
+                currentItem.Column -= ColumnIncrement;
+            }
+        }
+    }
+
+
     #endregion
 
+    private static readonly StyledProperty<IDataTemplate?> TabControlStripItemTemplateProperty =
+        AvaloniaProperty.Register<DockControl, IDataTemplate?>(nameof(TabControlStripItemTemplate));
+
+    [InheritDataTypeFromItems("ItemsSource")]
+    public IDataTemplate? TabControlStripItemTemplate
+    {
+        get => GetValue(TabControlStripItemTemplateProperty);
+        set => SetValue(TabControlStripItemTemplateProperty, value);
+    }
+        
     public static readonly StyledProperty<int?> MaxSplitAmountProperty =
         AvaloniaProperty.Register<DockControl, int?>(nameof(MaxSplitAmount), 4);
 
