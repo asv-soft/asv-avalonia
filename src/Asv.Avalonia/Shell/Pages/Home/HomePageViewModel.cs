@@ -26,4 +26,9 @@ public class HomePageViewModel : PageViewModel<HomePageViewModel>
     {
         // do nothing
     }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
 }

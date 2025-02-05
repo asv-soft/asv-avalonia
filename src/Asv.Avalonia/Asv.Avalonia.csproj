@@ -32,6 +32,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
         <PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
+        <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
         <PackageReference Include="Material.Icons.Avalonia" Version="$(MaterialIconsAvaloniaVersion)"/>
         <PackageReference Include="MemoryPack" Version="1.21.3" />
         <PackageReference Include="NuGet.Packaging" Version="6.12.1" />

@@ -78,6 +78,11 @@ public class HistoricalUnitProperty : RoutableViewModel, IStatePersistor
         throw new NotImplementedException();
     }
 
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
+
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
         return ValueTask.CompletedTask;

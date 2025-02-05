@@ -8,6 +8,13 @@ public interface IShellHost
     IShell Shell { get; }
 }
 
+public enum ShellErrorState
+{
+    Normal,
+    Warning,
+    Error,
+}
+
 public interface IShell : IRoutable
 {
     ReactiveCommand GoHome { get; }
@@ -21,4 +28,7 @@ public interface IShell : IRoutable
     ReadOnlyReactiveProperty<IRoutable> SelectedControl { get; }
     ReadOnlyReactiveProperty<string[]> SelectedControlPath { get; }
     IReadOnlyObservableList<IPage> Pages { get; }
+    ValueTask<IPage> OpenNewPage(string id);
+    BindableReactiveProperty<ShellErrorState> ErrorState { get; }
+    BindableReactiveProperty<string> Title { get; }
 }

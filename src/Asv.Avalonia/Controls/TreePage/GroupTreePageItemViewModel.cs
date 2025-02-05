@@ -9,4 +9,9 @@ public class GroupTreePageItemViewModel : RoutableViewModel
     {
         return ValueTask.FromResult<IRoutable>(this);
     }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
 }

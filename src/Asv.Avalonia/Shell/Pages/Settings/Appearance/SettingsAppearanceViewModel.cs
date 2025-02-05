@@ -41,4 +41,9 @@ public class SettingsAppearanceViewModel : RoutableViewModel, ISettingsSubPage
 
         return ValueTask.FromResult<IRoutable>(this);
     }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        yield return Theme;
+    }
 }

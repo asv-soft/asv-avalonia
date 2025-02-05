@@ -12,11 +12,20 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         History = cmd.CreateHistory(this);
         Icon = new BindableReactiveProperty<MaterialIconKind>(MaterialIconKind.Window);
         Title = new BindableReactiveProperty<string>(id);
+        HasChanges = new BindableReactiveProperty<bool>(false);
+        TryClose = new ReactiveCommand(TryCloseAsync);
+    }
+
+    public ValueTask TryCloseAsync(Unit arg1, CancellationToken cancel)
+    {
+        return ValueTask.CompletedTask;
     }
 
     public BindableReactiveProperty<MaterialIconKind> Icon { get; }
     public BindableReactiveProperty<string> Title { get; }
     public ICommandHistory History { get; }
+    public BindableReactiveProperty<bool> HasChanges { get; }
+    public ReactiveCommand TryClose { get; }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
@@ -35,6 +44,7 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
             Icon.Dispose();
             Title.Dispose();
             History.Dispose();
+            HasChanges.Dispose();
         }
 
         base.Dispose(disposing);

@@ -6,27 +6,30 @@ using R3;
 namespace Asv.Avalonia;
 
 [ExportSettings(SubPageId)]
-public class SettingsHotKeysViewModel : RoutableViewModel, ISettingsSubPage
+public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
 {
     private readonly ObservableList<ICommandInfo> _observableList;
-    private readonly ISynchronizedView<ICommandInfo, CommandViewModel> _view;
+    private readonly ISynchronizedView<ICommandInfo, SettingsKeyMapItemViewModel> _view;
     private readonly IDisposable _sub1;
     public const string SubPageId = "settings.hotkeys";
 
-    public SettingsHotKeysViewModel()
+    public SettingsKeymapViewModel()
         : this(DesignTime.CommandService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public SettingsHotKeysViewModel(ICommandService svc)
+    public SettingsKeymapViewModel(ICommandService svc)
         : base(SubPageId)
     {
         SearchText = new BindableReactiveProperty<string>();
         _observableList = new ObservableList<ICommandInfo>(svc.Commands);
-        SelectedItem = new BindableReactiveProperty<CommandViewModel>();
-        _view = _observableList.CreateView(x => new CommandViewModel(x, svc) { Parent = this });
+        SelectedItem = new BindableReactiveProperty<SettingsKeyMapItemViewModel>();
+        _view = _observableList.CreateView(x => new SettingsKeyMapItemViewModel(x, svc)
+        {
+            Parent = this,
+        });
         Items = _view.ToNotifyCollectionChanged();
         _sub1 = SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
@@ -43,9 +46,9 @@ public class SettingsHotKeysViewModel : RoutableViewModel, ISettingsSubPage
             });
     }
 
-    public NotifyCollectionChangedSynchronizedViewList<CommandViewModel> Items { get; }
+    public NotifyCollectionChangedSynchronizedViewList<SettingsKeyMapItemViewModel> Items { get; }
     public BindableReactiveProperty<string> SearchText { get; }
-    public IBindableReactiveProperty<CommandViewModel> SelectedItem { get; }
+    public IBindableReactiveProperty<SettingsKeyMapItemViewModel> SelectedItem { get; }
 
     public override ValueTask<IRoutable> Navigate(string id)
     {
@@ -59,29 +62,13 @@ public class SettingsHotKeysViewModel : RoutableViewModel, ISettingsSubPage
         return ValueTask.FromResult<IRoutable>(this);
     }
 
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return _view;
+    }
+
     public ValueTask Init(ISettingsPage context)
     {
         return ValueTask.CompletedTask;
-    }
-}
-
-public class CommandViewModel : RoutableViewModel
-{
-    public CommandViewModel(ICommandInfo commandInfo, ICommandService svc)
-        : base(commandInfo.Id)
-    {
-        Info = commandInfo;
-    }
-
-    public ICommandInfo Info { get; }
-
-    public override ValueTask<IRoutable> Navigate(string id)
-    {
-        return ValueTask.FromResult<IRoutable>(this);
-    }
-
-    public bool Fitler(string text)
-    {
-        return Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase);
     }
 }

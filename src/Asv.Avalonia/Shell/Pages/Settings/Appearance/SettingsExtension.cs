@@ -18,8 +18,8 @@ public class SettingsExtension() : IExtensionFor<ISettingsPage>
         );
         _node2 = new TreePageNode(SettingsUnitsViewModel.PageId, SettingsUnitsViewModel.PageId);
         _node3 = new TreePageNode(
-            SettingsHotKeysViewModel.SubPageId,
-            SettingsHotKeysViewModel.SubPageId
+            SettingsKeymapViewModel.SubPageId,
+            SettingsKeymapViewModel.SubPageId
         );
         context.Nodes.Add(_node1);
         context.Nodes.Add(_node2);

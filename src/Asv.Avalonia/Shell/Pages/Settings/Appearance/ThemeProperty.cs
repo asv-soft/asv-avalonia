@@ -59,6 +59,11 @@ public class ThemeProperty : RoutableViewModel
         return ValueTask.FromResult<IRoutable>(this);
     }
 
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)

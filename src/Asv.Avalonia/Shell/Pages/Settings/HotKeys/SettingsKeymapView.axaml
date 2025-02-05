@@ -5,17 +5,19 @@
              xmlns:avalonia="clr-namespace:Asv.Avalonia"
              xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="avalonia:SettingsHotKeysViewModel"
-             x:Class="Asv.Avalonia.SettingsHotKeysView">
+             x:DataType="avalonia:SettingsKeymapViewModel"
+             x:Class="Asv.Avalonia.SettingsKeymapView">
     <Design.DataContext>
-        <avalonia:SettingsHotKeysViewModel/>
+        <avalonia:SettingsKeymapViewModel/>
     </Design.DataContext>
     <DockPanel>
         <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}">
             
         </TextBox>
+        
         <DataGrid Focusable="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Styles>
+                
                 <Style Selector="DataGridRow DataGridCell Rectangle">
                     <Setter Property="IsVisible" Value="False"/>
                 </Style>
@@ -33,7 +35,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Info.Name}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Description" Binding="{Binding Info.Description}" />
-                <DataGridTemplateColumn Header="Selected" >
+                <DataGridTemplateColumn Header="DefaultHotKey" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Info.DefaultHotKey}"></TextBlock>

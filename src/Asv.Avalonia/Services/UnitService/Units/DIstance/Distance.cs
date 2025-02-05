@@ -3,6 +3,8 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
+public interface ISourceInfo { }
+
 [ExportUnit]
 [Shared]
 [method: ImportingConstructor]

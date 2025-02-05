@@ -21,6 +21,11 @@ public class ShellViewModel : RoutableViewModel, IShell
     private readonly ObservableList<IPage> _pages = [];
     private readonly IContainerHost _container;
     private readonly ICommandService _cmd;
+    private readonly IDisposable _sub1;
+    private readonly IDisposable _sub2;
+    private readonly IDisposable _sub3;
+    private readonly IDisposable _sub4;
+
     public const string ShellId = "shell";
 
     protected ShellViewModel(IContainerHost ioc)
@@ -29,18 +34,22 @@ public class ShellViewModel : RoutableViewModel, IShell
         ArgumentNullException.ThrowIfNull(ioc);
         _container = ioc;
         _cmd = ioc.GetExport<ICommandService>();
+        _pages = new ObservableList<IPage>();
+
         GoHome = new ReactiveCommand((_, c) => GoHomeAsync(c));
         PagesView = _pages.ToNotifyCollectionChangedSlim();
-        Status = new BindableReactiveProperty<ShellStatus>(ShellStatus.Normal);
+        ErrorState = new BindableReactiveProperty<ShellErrorState>(ShellErrorState.Normal);
         Close = new ReactiveCommand((_, c) => CloseAsync(c));
 
         Backward = new ReactiveCommand((_, c) => BackwardAsync(c));
         Forward = new ReactiveCommand((_, c) => ForwardAsync(c));
+        Title = new BindableReactiveProperty<string>();
 
+        SelectedPage = new BindableReactiveProperty<IPage?>();
         _selectedControl = new ReactiveProperty<IRoutable>(this);
         _selectedControlPath = new ReactiveProperty<string[]>(GetPath(this));
-        _selectedControl.Subscribe(x => _selectedControlPath.Value = GetPath(x));
-        _selectedControlPath.Subscribe(x =>
+        _sub1 = _selectedControl.Subscribe(x => _selectedControlPath.Value = GetPath(x));
+        _sub2 = _selectedControlPath.Subscribe(x =>
         {
             if (x is not { Length: > 0 })
             {
@@ -51,8 +60,15 @@ public class ShellViewModel : RoutableViewModel, IShell
             _forwardStack.Clear();
             CheckBackwardForwardCanExecute();
         });
-        InputElement.GotFocusEvent.AddClassHandler<TopLevel>(GotFocus, handledEventsToo: true);
-        InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
+
+        // global event handlers for focus IRoutable controls
+        _sub3 = InputElement.GotFocusEvent.AddClassHandler<TopLevel>(
+            GotFocus,
+            handledEventsToo: true
+        );
+
+        // global event handlers for key events
+        _sub4 = InputElement.KeyDownEvent.AddClassHandler<TopLevel>(
             OnKeyDownCustom,
             handledEventsToo: true
         );
@@ -100,6 +116,13 @@ public class ShellViewModel : RoutableViewModel, IShell
         return vm.GetAllFrom(this).Skip(1).Select(x => x.Id).ToArray();
     }
 
+    #region Backward \ Forward \ Home
+
+    public ReactiveCommand GoHome { get; }
+
+    public async ValueTask GoHomeAsync(CancellationToken cancel = default) =>
+        await Navigate(HomePageViewModel.PageId);
+
     public ReactiveCommand Backward { get; }
 
     public async ValueTask BackwardAsync(CancellationToken cancel = default)
@@ -133,37 +156,64 @@ public class ShellViewModel : RoutableViewModel, IShell
 
     public IObservableCollection<string[]> BackwardStack => _backwardStack;
 
+    #endregion
+
+    #region Close
+    public ReactiveCommand Close { get; }
+
     protected virtual ValueTask CloseAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return ValueTask.CompletedTask;
     }
 
+    #endregion
+
+    #region SaveLayout
+
+    public virtual ValueTask SaveLayout()
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    #endregion
+
+    #region Pages
+
+    protected ObservableList<IPage> InternalPages => _pages;
     public IReadOnlyObservableList<IPage> Pages => _pages;
-    public ReactiveCommand GoHome { get; }
-
-    public async ValueTask GoHomeAsync(CancellationToken cancel = default) =>
-        await Navigate(HomePageViewModel.PageId);
-
-    public BindableReactiveProperty<ShellStatus> Status { get; }
-    public ReactiveCommand Close { get; }
-    public BindableReactiveProperty<IPage?> SelectedPage { get; } = new();
+    public BindableReactiveProperty<IPage?> SelectedPage { get; }
     public NotifyCollectionChangedSynchronizedViewList<IPage> PagesView { get; }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public ValueTask<IPage> OpenNewPage(string id)
+    {
+        if (_container.TryGetExport<IPage>(id, out var page))
+        {
+            _pages.Add(page);
+            page.Parent = this;
+            _selectedControl.Value = page;
+        }
+
+        return ValueTask.FromResult(page);
+    }
+
+    #endregion
+
+    #region Routable
+    public override async ValueTask<IRoutable> Navigate(string id)
     {
         var page = _pages.FirstOrDefault(x => x.Id == id);
         if (page == null)
         {
-            if (_container.TryGetExport<IPage>(id, out page))
-            {
-                _pages.Add(page);
-                page.Parent = this;
-                _selectedControl.Value = page;
-            }
+            page = await OpenNewPage(id);
         }
 
         SelectedPage.Value = page;
-        return ValueTask.FromResult<IRoutable>(page);
+        return page;
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return _pages;
     }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
@@ -181,14 +231,30 @@ public class ShellViewModel : RoutableViewModel, IShell
         return ValueTask.CompletedTask;
     }
 
+    #endregion
+    public BindableReactiveProperty<ShellErrorState> ErrorState { get; }
+    public BindableReactiveProperty<string> Title { get; }
+
+    #region Dispose
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            PagesView.Dispose();
-            Status.Dispose();
+            _sub1.Dispose();
+            _sub2.Dispose();
+            _sub3.Dispose();
+            _sub4.Dispose();
+            _selectedControl.Dispose();
+            _selectedControlPath.Dispose();
+            Title.Dispose();
+            Backward.Dispose();
+            Forward.Dispose();
+            GoHome.Dispose();
+            ErrorState.Dispose();
             Close.Dispose();
             SelectedPage.Dispose();
+            PagesView.Dispose();
             foreach (var page in _pages)
             {
                 page.Dispose();
@@ -199,11 +265,6 @@ public class ShellViewModel : RoutableViewModel, IShell
 
         base.Dispose(disposing);
     }
-}
 
-public enum ShellStatus
-{
-    Normal,
-    Warning,
-    Error,
+    #endregion
 }

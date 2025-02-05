@@ -31,17 +31,17 @@
         </Style>
     </UserControl.Styles>
   <Border BorderThickness="1"
-          BorderBrush="{StaticResource SystemControlHighlightChromeAltLowBrush}"
-          Classes.error="{Binding Status.Value, 
+          BorderBrush="{DynamicResource SystemAccentColorDark3}"
+          Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Error} }"
-          Classes.warning="{Binding Status.Value, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
+          Classes.warning="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Warning} }"
+              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }"
           
           >
     <DockPanel>
-        <DockPanel Background="{StaticResource SystemControlHighlightChromeAltLowBrush}" Dock="Top"
+        <DockPanel Background="{StaticResource SystemBaseHighColor}" Dock="Top"
                    avalonia:WindowHelper.EnableDrag="True"
                    avalonia:WindowHelper.DoubleTappedWindowState="True">
             <DropDownButton Background="Transparent">
@@ -60,7 +60,7 @@
                 <avalonia1:MaterialIcon Kind="DotsVertical"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Command="{Binding Close}" Header="Close"></MenuItem>
+                        <MenuItem Command="{Binding Close}" Header="Close"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -80,23 +80,23 @@
             
         </DockPanel>
         <DockPanel Dock="Bottom"
-                   Background="{StaticResource SystemControlHighlightChromeAltLowBrush}"
-                   Classes.error="{Binding Status.Value, 
+                   Background="{DynamicResource SystemControlHighlightChromeAltLowBrush}"
+                   Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Error} }"
-                   Classes.warning="{Binding Status.Value, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
+                   Classes.warning="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Warning} }">
+              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
             
         </DockPanel>
-        <Border BorderThickness="0, 1" BorderBrush="#1e1f22">
+        <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
             <TabControl ItemsSource="{Binding PagesView}" SelectedItem="{Binding SelectedPage.Value}">
                 <TabControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <avalonia1:MaterialIcon Kind="{Binding Icon.Value}"/>
-                            <TextBlock Text="{Binding Title.Value}"/>
-                            <Button Background="Transparent" Padding="0">
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <avalonia1:MaterialIcon Width="16" Height="16" Kind="{Binding Icon.Value}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Title.Value}"/>
+                            <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0">
                                 <avalonia1:MaterialIcon Kind="Close"/>
                             </Button>
                         </StackPanel>

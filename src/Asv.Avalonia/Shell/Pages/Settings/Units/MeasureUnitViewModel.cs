@@ -16,6 +16,11 @@ public class MeasureUnitViewModel : RoutableViewModel
         return new ValueTask<IRoutable>(this);
     }
 
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
+
     public IUnitItem SelectedItem
     {
         get => _selectedItem;

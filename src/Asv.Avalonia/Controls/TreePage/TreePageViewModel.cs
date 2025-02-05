@@ -73,6 +73,14 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
         return newPage;
     }
 
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        if (SelectedPage.CurrentValue != null)
+        {
+            yield return SelectedPage.CurrentValue;
+        }
+    }
+
     protected virtual ISettingsSubPage? CreateSubPage(string id)
     {
         return _container.TryGetExport<ISettingsSubPage>(id, out var page) ? page : null;

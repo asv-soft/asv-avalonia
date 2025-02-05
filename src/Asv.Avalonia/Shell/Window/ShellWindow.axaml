@@ -9,6 +9,10 @@
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
         ExtendClientAreaTitleBarHeightHint="-1"
-        Title="Asv.Avalonia.Example">
+        Title="{Binding Title.Value}"
+        PositionChanged="WindowBase_OnPositionChanged"
+        SizeChanged="Control_OnSizeChanged"
+        MinWidth="800"
+        MinHeight="600">
         <avalonia:ShellView />
 </Window>

@@ -10,14 +10,16 @@ public class DesignTimeShellViewModel : ShellViewModel
         : base(NullContainerHost.Instance)
     {
         int cnt = 0;
-        var all = Enum.GetValues<ShellStatus>().Length;
+        var all = Enum.GetValues<ShellErrorState>().Length;
         Observable
             .Timer(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(3))
             .Subscribe(_ =>
             {
                 cnt++;
-                Status.Value = Enum.GetValues<ShellStatus>()[cnt % all];
+                ErrorState.Value = Enum.GetValues<ShellErrorState>()[cnt % all];
             });
+        InternalPages.Add(new SettingsPageViewModel());
+        InternalPages.Add(new HomePageViewModel());
     }
 
     public override ValueTask<IRoutable> Navigate(string id)
