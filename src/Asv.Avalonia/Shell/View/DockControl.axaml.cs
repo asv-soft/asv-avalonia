@@ -91,9 +91,7 @@ public class DockControl : SelectingItemsControl
 
         foreach (var border in _targetBorders)
         {
-            border.Background = IsCursorWithinTargetBorder(pointerPosition, border)
-                ? Brushes.LightBlue
-                : Brushes.Transparent;
+            border.Background = TurnBorderIndicator(IsCursorWithinTargetBorder(pointerPosition, border));
         }
     }
 
@@ -120,9 +118,7 @@ public class DockControl : SelectingItemsControl
 
         foreach (var border in _targetBorders)
         {
-            border.Background = IsCursorWithinTargetBorder(pointerPosition, border)
-                ? Brushes.LightBlue
-                : Brushes.Transparent;
+            border.Background = TurnBorderIndicator(IsCursorWithinTargetBorder(pointerPosition, border));
             if (IsCursorWithinTargetBorder(pointerPosition, border))
             {
                 isBorderSelected = true;
@@ -146,11 +142,15 @@ public class DockControl : SelectingItemsControl
                 continue;
             }
 
-            item.BorderBrush = IsCursorWithinTabControl(pointerPosition, item)
-                ? Brushes.LightBlue
-                : Brushes.Transparent;
-            item.BorderThickness = new Thickness(IsCursorWithinTabControl(pointerPosition, item) ? 2 : 0);
+            item.BorderBrush = TurnBorderIndicator(IsCursorWithinTabControl(pointerPosition, item));
+
+            item.BorderThickness = new Thickness(IsCursorWithinTabControl(pointerPosition, item) ? 4 : 0);
         }
+    }
+
+    private IBrush TurnBorderIndicator(bool turnOn)
+    {
+        return turnOn ? BorderHighLightColor : Brushes.Transparent;
     }
 
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
@@ -224,6 +224,7 @@ public class DockControl : SelectingItemsControl
 
         _selectedTab = null;
     }
+
     #endregion
 
     protected override void LogicalChildrenCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -242,7 +243,7 @@ public class DockControl : SelectingItemsControl
 
         if (_dropTargetGrid is null)
         {
-            throw new ElementNotEnabledException();
+            throw new ArgumentNullException($"_dropTargetGrid in {nameof(DockControl)} is not found");
         }
 
         foreach (var content in Items)
@@ -269,6 +270,7 @@ public class DockControl : SelectingItemsControl
 
     private void UpdateGrid()
     {
+        SortShellItems();
         _dropTargetGrid!.Children.Clear();
         _dropTargetGrid.ColumnDefinitions.Clear();
         if (_shellItems.Min(_ => _.Column) != 0 && _shellItems.All(_ => _.Column == _shellItems[0].Column))
@@ -320,33 +322,32 @@ public class DockControl : SelectingItemsControl
     {
         grid.ColumnDefinitions.Clear();
         grid.Children.Clear();
-
+       
         var sortedItems = items.ToArray();
-        int columnCount = sortedItems.Length;
+        var columnCount = sortedItems.Length;
 
         for (var i = 0; i < columnCount; i++)
         {
-            // Добавляем колонку с контентом
             grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-
-            // Вставляем GridSplitter только между соседними колонками (не вначале и не в конце)
-            if (i < columnCount - 1)
+            if (i >= columnCount - 1)
             {
-                grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-
-                var splitter = new GridSplitter()
-                {
-                    Background = Brushes.White,
-                    Width = 1,
-                    ResizeDirection = GridResizeDirection.Columns,
-                };
-
-                Grid.SetColumn(splitter, grid.ColumnDefinitions.Count - 1);
-                grid.Children.Add(splitter);
+                continue;
             }
+
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+
+            var splitter = new GridSplitter()
+            {
+                Background = Brushes.White,
+                Width = 1,
+                ResizeDirection = GridResizeDirection.Columns,
+            };
+
+            Grid.SetColumn(splitter, grid.ColumnDefinitions.Count - 1);
+            grid.Children.Add(splitter);
         }
     }
-    
+
     private AdaptiveTabStripTabControl? FindTabControlInColumn(Grid myGrid, int columnIndex)
     {
         foreach (var child in myGrid.Children)
@@ -395,7 +396,6 @@ public class DockControl : SelectingItemsControl
         return window!.Bounds.Contains(cursorPosition);
     }
 
-   
     private void AddTabItemToTabControl(TabItem tabItem, Border selectorBorder)
     {
         var updateItem = _shellItems.Find(shellItem => shellItem.TabControl == tabItem);
@@ -433,7 +433,6 @@ public class DockControl : SelectingItemsControl
             }
         }
 
-        SortShellItems();
         UpdateGrid();
     }
 
@@ -443,7 +442,7 @@ public class DockControl : SelectingItemsControl
         {
             return;
         }
-        
+
         var minItem = _shellItems.MinItem(shellItem => shellItem.Column);
         if (minItem.Column != 0)
         {
@@ -452,31 +451,31 @@ public class DockControl : SelectingItemsControl
                 item.Column -= ColumnIncrement;
             }
         }
-        
+
         var maxColumnIndex = MaxSplitAmount * ColumnIncrement;
         var maxItem = _shellItems.MaxItem(shellItem => shellItem.Column);
         if (maxItem.Column >= maxColumnIndex)
         {
             maxItem.Column -= ColumnIncrement;
         }
-        
-        _shellItems = _shellItems.OrderBy(shellItem => shellItem.Column).ToList();
-       
-        for (int i = 1; i < _shellItems.Count; i++)
-        {
-            var currentItem = _shellItems[i];
-            var prevItem = _shellItems[i - 1];
-            if ((currentItem.Column - prevItem.Column) > (2 * ColumnIncrement))
-            {
-                currentItem.Column -= ColumnIncrement;
-            }
-        }
-    }
 
+        _shellItems = _shellItems.OrderBy(shellItem => shellItem.Column).ToList();
+
+        var gapPairs = _shellItems.Zip(_shellItems.Skip(1), (prev, curr) => new { prev, curr })
+            .Where(pair => pair.curr.Column - pair.prev.Column > 2)
+            .ToList();
+        foreach (var pair in gapPairs)
+        {
+            pair.curr.Column -= 2;
+        }
+
+    }
 
     #endregion
 
-    private static readonly StyledProperty<IDataTemplate?> TabControlStripItemTemplateProperty =
+    #region Properties
+
+    public static readonly StyledProperty<IDataTemplate?> TabControlStripItemTemplateProperty =
         AvaloniaProperty.Register<DockControl, IDataTemplate?>(nameof(TabControlStripItemTemplate));
 
     [InheritDataTypeFromItems("ItemsSource")]
@@ -485,22 +484,24 @@ public class DockControl : SelectingItemsControl
         get => GetValue(TabControlStripItemTemplateProperty);
         set => SetValue(TabControlStripItemTemplateProperty, value);
     }
-        
-    public static readonly StyledProperty<int?> MaxSplitAmountProperty =
-        AvaloniaProperty.Register<DockControl, int?>(nameof(MaxSplitAmount), 4);
 
-    public int? MaxSplitAmount
+    public static readonly StyledProperty<int> MaxSplitAmountProperty =
+        AvaloniaProperty.Register<DockControl, int>(nameof(MaxSplitAmount), 4);
+
+    public int MaxSplitAmount
     {
         get => GetValue(MaxSplitAmountProperty);
         set => SetValue(MaxSplitAmountProperty, value);
     }
 
-    public static readonly StyledProperty<IDataTemplate?> ContentTemplateProperty =
-        ContentControl.ContentTemplateProperty.AddOwner<TabControl>();
+    public static readonly StyledProperty<IBrush> BorderHighLightColorProperty =
+        AvaloniaProperty.Register<DockControl, IBrush>(nameof(BorderHighLightColor), Brushes.LightBlue);
 
-    public IDataTemplate? ContentTemplate
+    public IBrush BorderHighLightColor
     {
-        get => GetValue(ContentTemplateProperty);
-        set => SetValue(ContentTemplateProperty, value);
+        get => GetValue(BorderHighLightColorProperty);
+        set => SetValue(BorderHighLightColorProperty, value);
     }
+
+    #endregion
 }

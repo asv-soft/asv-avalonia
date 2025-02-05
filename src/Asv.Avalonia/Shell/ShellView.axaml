@@ -90,7 +90,7 @@
             
         </DockPanel>
         <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
-            <avalonia:DockControl ItemsSource="{CompiledBinding PagesView}">
+            <avalonia:DockControl MaxSplitAmount="3" BorderHighLightColor="{DynamicResource SystemAccentColor}" ItemsSource="{CompiledBinding PagesView}" SelectedItem="{Binding SelectedControl}">
                  <avalonia:DockControl.TabControlStripItemTemplate> 
                      <DataTemplate> 
                          <StackPanel Orientation="Horizontal" Spacing="4"> 
