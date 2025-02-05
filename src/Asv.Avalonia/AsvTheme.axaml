@@ -99,8 +99,8 @@
     <avalonia:MaterialIconStyles />
     <StyleInclude Source="avares://Asv.Avalonia/Shell/View/DockControl.axaml"/>
     <Style Selector="avalonia|MaterialIcon">
-        <Setter Property="Width" Value="{StaticResource  IconElementThemeWidth}"/>
-        <Setter Property="Height" Value="{StaticResource  IconElementThemeHeight}"/>
+        <Setter Property="Width" Value="{DynamicResource  IconElementThemeWidth}"/>
+        <Setter Property="Height" Value="{DynamicResource  IconElementThemeHeight}"/>
         <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
     </Style>
     

@@ -73,7 +73,10 @@ public partial class App : Application, IContainerHost, IShellHost
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            Shell = new DesktopShellViewModel(desktop, this);
+            desktop.MainWindow = new Window1();
+            desktop.MainWindow.Show();
+            
+            // Shell = new DesktopShellViewModel(desktop, this);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
@@ -81,11 +84,11 @@ public partial class App : Application, IContainerHost, IShellHost
         }
 
         base.OnFrameworkInitializationCompleted();
-        if (Design.IsDesignMode == false)
+        /*if (Design.IsDesignMode == false)
         {
             Shell.Navigate(SettingsPageViewModel.PageId);
             Shell.Navigate(HomePageViewModel.PageId);
-        }
+        }*/
     }
 
     public T GetExport<T>()
