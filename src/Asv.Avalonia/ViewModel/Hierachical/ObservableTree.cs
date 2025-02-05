@@ -15,7 +15,11 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
     private readonly IDisposable _sub1;
     private readonly IDisposable _sub2;
 
-    public ObservableTree(IReadOnlyObservableList<T> source, Func<T, TKey> keySelector, Func<T, TKey?> parentSelector)
+    public ObservableTree(
+        IReadOnlyObservableList<T> source,
+        Func<T, TKey> keySelector,
+        Func<T, TKey?> parentSelector
+    )
     {
         _source = source;
         _keySelector = keySelector;
@@ -52,7 +56,9 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
     {
         if (_parentSelector(item) == null)
         {
-            _itemSource.Add(new ObservableTreeNode<T, TKey>(item, _source, _keySelector, _parentSelector));
+            _itemSource.Add(
+                new ObservableTreeNode<T, TKey>(item, _source, _keySelector, _parentSelector)
+            );
         }
     }
 

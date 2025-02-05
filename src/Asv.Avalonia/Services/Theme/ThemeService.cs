@@ -42,7 +42,7 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
         [
             new ThemeItem(DarkTheme, "Dark", ThemeVariant.Dark),
             new ThemeItem(LightTheme, "Light", ThemeVariant.Light),
-            new ThemeItem(DefaultTheme, "System", ThemeVariant.Default)
+            new ThemeItem(DefaultTheme, "System", ThemeVariant.Default),
         ];
         _config = cfgSvc.Get<ThemeServiceConfig>();
 
@@ -56,7 +56,9 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
 
     private void SaveCompact(bool isCompactMode)
     {
-        var fluentTheme = Application.Current?.Styles.SelectMany(x => x.Children).FirstOrDefault(x => x is FluentTheme);
+        var fluentTheme = Application
+            .Current?.Styles.SelectMany(x => x.Children)
+            .FirstOrDefault(x => x is FluentTheme);
         if (fluentTheme is FluentTheme theme)
         {
             if (_config.IsCompact != isCompactMode)
@@ -104,4 +106,3 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
         base.Dispose(disposing);
     }
 }
-

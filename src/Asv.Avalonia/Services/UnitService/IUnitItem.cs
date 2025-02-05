@@ -14,7 +14,8 @@ public interface IUnitItem
     string Print(double value, string? format = null);
     string PrintFromSi(double value, string? format = null) => Print(FromSi(value));
     string PrintWithUnits(double value, string? format = null);
-    string PrintFromSiWithUnits(double value, string? format = null) => PrintWithUnits(FromSi(value));
+    string PrintFromSiWithUnits(double value, string? format = null) =>
+        PrintWithUnits(FromSi(value));
     double FromSi(double siValue);
     double ToSi(double value);
 }

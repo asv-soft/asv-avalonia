@@ -1,10 +1,10 @@
-using Avalonia;
+using System.Composition;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
 
 [ExportViewFor(typeof(HomePageViewModel))]
+[ExportMetadata("Source", "System")]
 public partial class HomePageView : UserControl
 {
     public HomePageView()

@@ -13,27 +13,26 @@ public class MaterialIconConverter : IValueConverter
     {
         if (value is MaterialIconKind kind)
         {
-            return new MaterialIcon
-            {
-                Kind = kind,
-            };
+            return new MaterialIcon { Kind = kind };
         }
 
         if (value is string str)
         {
             if (Enum.TryParse(str, true, out kind))
             {
-                return new MaterialIcon
-                {
-                    Kind = kind,
-                };
+                return new MaterialIcon { Kind = kind };
             }
         }
 
         return new MaterialIcon();
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         return value;
     }

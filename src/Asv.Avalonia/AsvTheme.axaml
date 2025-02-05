@@ -3,10 +3,37 @@
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:system="clr-namespace:System;assembly=System.Runtime">
     <Design.PreviewWith>
-        <Border Padding="20">
-            <avalonia:MaterialIcon Kind="Window"/>
-            <!-- Add Controls for Previewer Here -->
-        </Border>
+        <Grid ColumnDefinitions="*,*">
+            <ThemeVariantScope RequestedThemeVariant="Dark">
+                <Border Padding="30" Background="{DynamicResource SystemRegionBrush}">
+                    <StackPanel>
+                        <avalonia:MaterialIcon Kind="Window"/>
+                        <Button>Button</Button>
+                        <Button Theme="{StaticResource TransparentButton}">Button</Button>
+                        <TabControl Width="200" Height="200">
+                            <TabItem Header="Header 1"/>
+                            <TabItem Header="Header 2"/>
+                        </TabControl>
+                    </StackPanel>
+                </Border>    
+            </ThemeVariantScope>
+            <ThemeVariantScope Grid.Column="1" RequestedThemeVariant="Light">
+                <Border Padding="30" Background="{DynamicResource SystemRegionBrush}">
+                    <StackPanel>
+                        <avalonia:MaterialIcon Kind="Window"/>            
+                        <Button>Button</Button>   
+                        <TabControl Width="200" Height="200">
+                            <TabItem Header="Header 1"/>
+                            <TabItem Header="Header 2"/>
+                        </TabControl>
+                    </StackPanel>
+                    
+                </Border>
+            </ThemeVariantScope>
+        </Grid>
+        
+        
+        
     </Design.PreviewWith>
     <Styles.Resources>
         <ResourceDictionary>
@@ -15,28 +42,53 @@
             </ResourceDictionary.MergedDictionaries>
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
-                    <!--<SolidColorBrush x:Key='BackgroundBrush'>SpringGreen</SolidColorBrush>
-                    <SolidColorBrush x:Key='ForegroundBrush'>Black</SolidColorBrush>-->
+                    
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
-                    <!--<SolidColorBrush x:Key='BackgroundBrush'>DodgerBlue</SolidColorBrush>
-                    <SolidColorBrush x:Key='ForegroundBrush'>White</SolidColorBrush>-->
+                    
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
+        <!--Tab control-->
+        <ControlTheme x:Key="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
+            <Style Selector="^[TabStripPlacement=Top] /template/ Border#PART_SelectedPipe">
+                <Setter Property="HorizontalAlignment" Value="Stretch" />
+                <Setter Property="VerticalAlignment" Value="Top" />
+                <Setter Property="Margin" Value="0,1,0,0" />
+            </Style>
+        </ControlTheme>
+        
+        <!--Button-->
+        <ControlTheme x:Key="TransparentButton" BasedOn="{StaticResource {x:Type Button}}" TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
+        </ControlTheme>
+        
+        
+        <x:Double x:Key="TabItemHeaderFontSize">14</x:Double>
+        <!--<Thickness x:Key="TabItemHeaderMargin">8,0,8,0</Thickness>
+        <Thickness x:Key="TabItemMargin">8,0,8,0</Thickness>-->
+        <FontWeight x:Key="TabItemHeaderThemeFontWeight">SemiLight</FontWeight>
+        <x:Double x:Key="TabItemMinHeight">28</x:Double>
         <system:Double x:Key="FontSizeSmall">10</system:Double>
         <system:Double x:Key="FontSizeNormal">12</system:Double>
         <system:Double x:Key="FontSizeLarge">16</system:Double>
     </Styles.Resources>
     
-    <FluentTheme DensityStyle="Compact">
+    <FluentTheme>
         <FluentTheme.Palettes>
-            <!--<ColorPaletteResources x:Key="Light" Accent="#ff8961cc" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffeeceff" BaseMedium="#ffa987bc" BaseMediumHigh="#ff7b5890" BaseMediumLow="#ff9270a6" ChromeAltLow="#ff7b5890" ChromeBlackHigh="Black" ChromeBlackLow="#ffeeceff" ChromeBlackMedium="#ff7b5890" ChromeBlackMediumLow="#ffa987bc" ChromeDisabledHigh="#ffeeceff" ChromeDisabledLow="#ffa987bc" ChromeGray="#ff9270a6" ChromeHigh="#ffeeceff" ChromeLow="#fffeeaff" ChromeMedium="#fffbe4ff" ChromeMediumLow="#fffeeaff" ChromeWhite="White" ListLow="#fffbe4ff" ListMedium="#ffeeceff" RegionColor="#fffef6ff" />
-            <ColorPaletteResources x:Key="Dark"  Accent="#ff8961cc" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff64576b" BaseMedium="#ffb6aabc" BaseMediumHigh="#ffcbbfd0" BaseMediumLow="#ff8d8193" ChromeAltLow="#ffcbbfd0" ChromeBlackHigh="Black" ChromeBlackLow="#ffcbbfd0" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff64576b" ChromeDisabledLow="#ffb6aabc" ChromeGray="#ffa295a8" ChromeHigh="#ffa295a8" ChromeLow="#ff332041" ChromeMedium="#ff3f2e4b" ChromeMediumLow="#ff584960" ChromeWhite="White" ListLow="#ff3f2e4b" ListMedium="#ff64576b" RegionColor="#ff262738" />-->
-        </FluentTheme.Palettes>
+            <ColorPaletteResources x:Key="Light" Accent="#ff8961cc" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffeeceff" BaseMedium="#ffa987bc" BaseMediumHigh="#ff7b5890" BaseMediumLow="#ff9270a6" ChromeAltLow="#ff7b5890" ChromeBlackHigh="Black" ChromeBlackLow="#ffeeceff" ChromeBlackMedium="#ff7b5890" ChromeBlackMediumLow="#ffa987bc" ChromeDisabledHigh="#ffeeceff" ChromeDisabledLow="#ffa987bc" ChromeGray="#ff9270a6" ChromeHigh="#ffeeceff" ChromeLow="#fffeeaff" ChromeMedium="#fffbe4ff" ChromeMediumLow="#fffeeaff" ChromeWhite="White" ListLow="#fffbe4ff" ListMedium="#ffeeceff" RegionColor="#fffef6ff" />
+            <ColorPaletteResources x:Key="Dark"  Accent="#ff8961cc" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff64576b" BaseMedium="#ffb6aabc" BaseMediumHigh="#ffcbbfd0" BaseMediumLow="#ff8d8193" ChromeAltLow="#ffcbbfd0" ChromeBlackHigh="Black" ChromeBlackLow="#ffcbbfd0" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff64576b" ChromeDisabledLow="#ffb6aabc" ChromeGray="#ffa295a8" ChromeHigh="#ffa295a8" ChromeLow="#ff332041" ChromeMedium="#ff3f2e4b" ChromeMediumLow="#ff584960" ChromeWhite="White" ListLow="#ff3f2e4b" ListMedium="#ff64576b" RegionColor="#ff262738" />
+            <!--<ColorPaletteResources x:Key="Light" Accent="#ff0073cf" AltHigh="White" AltLow="White" AltMedium="White" AltMediumHigh="White" AltMediumLow="White" BaseHigh="Black" BaseLow="#ffcccccc" BaseMedium="#ff898989" BaseMediumHigh="#ff5d5d5d" BaseMediumLow="#ff737373" ChromeAltLow="#ff5d5d5d" ChromeBlackHigh="Black" ChromeBlackLow="#ffcccccc" ChromeBlackMedium="#ff5d5d5d" ChromeBlackMediumLow="#ff898989" ChromeDisabledHigh="#ffcccccc" ChromeDisabledLow="#ff898989" ChromeGray="#ff737373" ChromeHigh="#ffcccccc" ChromeLow="#ffececec" ChromeMedium="#ffe6e6e6" ChromeMediumLow="#ffececec" ChromeWhite="White" ListLow="#ffe6e6e6" ListMedium="#ffcccccc" RegionColor="White" />
+            <ColorPaletteResources x:Key="Dark" Accent="#ff0073cf" AltHigh="Black" AltLow="Black" AltMedium="Black" AltMediumHigh="Black" AltMediumLow="Black" BaseHigh="White" BaseLow="#ff333333" BaseMedium="#ff9a9a9a" BaseMediumHigh="#ffb4b4b4" BaseMediumLow="#ff676767" ChromeAltLow="#ffb4b4b4" ChromeBlackHigh="Black" ChromeBlackLow="#ffb4b4b4" ChromeBlackMedium="Black" ChromeBlackMediumLow="Black" ChromeDisabledHigh="#ff333333" ChromeDisabledLow="#ff9a9a9a" ChromeGray="Gray" ChromeHigh="Gray" ChromeLow="#ff151515" ChromeMedium="#ff1d1d1d" ChromeMediumLow="#ff2c2c2c" ChromeWhite="White" ListLow="#ff1d1d1d" ListMedium="#ff333333" RegionColor="#ff181717" />-->
+    </FluentTheme.Palettes>
+        
+        
     </FluentTheme>
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
-    
+    <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/>
     <!--<FluentTheme DensityStyle="Compact" >
         <FluentTheme.Palettes>
             <ColorPaletteResources x:Key="Dark"
@@ -54,4 +106,6 @@
         <Setter Property="Height" Value="{StaticResource  IconElementThemeHeight}"/>
         <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
     </Style>
+    
+    
 </Styles>

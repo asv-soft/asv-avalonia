@@ -14,7 +14,13 @@ public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
     private readonly IReadOnlyObservableList<T> _source;
     private readonly Func<T, TKey> _keySelector;
 
-    public ObservableTreeNode(T baseItem, IReadOnlyObservableList<T> source, Func<T, TKey> keySelector, Func<T, TKey?> parentSelector, ObservableTreeNode<T, TKey>? parentNode = null)
+    public ObservableTreeNode(
+        T baseItem,
+        IReadOnlyObservableList<T> source,
+        Func<T, TKey> keySelector,
+        Func<T, TKey?> parentSelector,
+        ObservableTreeNode<T, TKey>? parentNode = null
+    )
     {
         _source = source;
         _keySelector = keySelector;
@@ -36,6 +42,7 @@ public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
     public TKey Key { get; }
     public T Base { get; }
     public ObservableTreeNode<T, TKey>? ParentNode { get; }
+
     private void TryRemove(CollectionRemoveEvent<T> e)
     {
         var parent = _parentSelector(e.Value);
@@ -54,7 +61,9 @@ public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
         var parent = _parentSelector(item);
         if (parent != null && parent.Equals(Key))
         {
-            _itemSource.Add(new ObservableTreeNode<T, TKey>(item, _source, _keySelector, _parentSelector));
+            _itemSource.Add(
+                new ObservableTreeNode<T, TKey>(item, _source, _keySelector, _parentSelector)
+            );
         }
     }
 

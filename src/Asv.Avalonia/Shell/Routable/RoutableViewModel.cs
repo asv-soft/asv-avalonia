@@ -19,22 +19,53 @@ public abstract class RoutableViewModel(string id) : DisposableViewModel(id), IR
             return;
         }
 
-        if (Parent is not null)
+        switch (e.RoutingStrategy)
         {
-            await Parent.Rise(e);
+            case RoutingStrategy.Bubble:
+            {
+                if (Parent is not null)
+                {
+                    await Parent.Rise(e);
+                }
+
+                break;
+            }
+
+            case RoutingStrategy.Tunnel:
+            {
+                foreach (var child in GetRoutableChildren())
+                {
+                    await child.Rise(e);
+                    if (e.IsHandled)
+                    {
+                        return;
+                    }
+                }
+
+                break;
+            }
+
+            case RoutingStrategy.Direct:
+                // Do nothing here
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
         }
     }
 
-    public abstract ValueTask<IRoutable> NavigateTo(string id);
+    public abstract ValueTask<IRoutable> Navigate(string id);
+    public abstract IEnumerable<IRoutable> GetRoutableChildren();
 
-    public BindableReactiveProperty<bool> IsFocused { get; } = new(false);
-    protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e) => ValueTask.CompletedTask;
+    protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        return ValueTask.CompletedTask;
+    }
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            IsFocused.Dispose();
+            Parent = null;
         }
 
         base.Dispose(disposing);

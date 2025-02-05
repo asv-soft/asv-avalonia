@@ -14,7 +14,7 @@
         <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}">
             
         </TextBox>
-        <DataGrid ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}">
+        <DataGrid Focusable="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Styles>
                 <Style Selector="DataGridRow DataGridCell Rectangle">
                     <Setter Property="IsVisible" Value="False"/>
@@ -33,23 +33,46 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Base.Name}" />
                 <DataGridTextColumn IsReadOnly="True" Header="Description" Binding="{Binding Base.Description}" />
-                <DataGridTemplateColumn Header="Selected" >
+                <DataGridTemplateColumn Header="Selected" MinWidth="150" >
                     <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Run Text="{Binding Base.Current.CurrentValue.Name}"/>
+                                <Run Text=" [ "/>
+                                <Run Text="{Binding Base.Current.CurrentValue.Symbol}"/>
+                                <Run Text=" ]"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                    <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding Base.AvailableUnits.Values}" 
                                       SelectedItem="{Binding SelectedItem}" >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Spacing="8">
-                                            <TextBlock Text="{Binding Name}" />
-                                            <TextBlock Text="{Binding Symbol}" />
-                                        </StackPanel>
+                                        <TextBlock VerticalAlignment="Center">
+                                            <Run Text="{Binding Name}"/>
+                                            <Run Text=" [ "/>
+                                            <Run Text="{Binding Symbol}"/>
+                                            <Run Text=" ]"/>
+                                        </TextBlock>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                         </DataTemplate>
+                    </DataGridTemplateColumn.CellEditingTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="Default" MinWidth="150">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock HorizontalAlignment="Center" Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center">
+                                <Run Text="{Binding Base.Current.CurrentValue.Name}"/>
+                                <Run Text=" [ "/>
+                                <Run Text="{Binding Base.Current.CurrentValue.Symbol}"/>
+                                <Run Text=" ]"/>
+                            </TextBlock>
+                        </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
-                    
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>

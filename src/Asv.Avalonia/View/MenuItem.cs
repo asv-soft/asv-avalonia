@@ -19,9 +19,7 @@ namespace Asv.Avalonia
         private object? _commandParameter;
 
         public MenuItem(string id)
-            : base(id)
-        {
-        }
+            : base(id) { }
 
         public int Order
         {
@@ -83,8 +81,6 @@ namespace Asv.Avalonia
             set => SetField(ref _hotKey, value);
         }
 
-        protected override void Dispose(bool disposing)
-        {
-        }
+        protected override void Dispose(bool disposing) { }
     }
 }

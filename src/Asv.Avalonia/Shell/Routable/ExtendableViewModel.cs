@@ -11,15 +11,17 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
     where TSelfInterface : class
 {
     protected ExtendableViewModel(string id)
-        : base(id)
-    {
-    }
+        : base(id) { }
 
-    private TSelfInterface GetContext() => this as TSelfInterface ??
-                                           throw new Exception($"Class {GetType().FullName} must implement {nameof(TSelfInterface)}");
+    private TSelfInterface GetContext() =>
+        this as TSelfInterface
+        ?? throw new Exception(
+            $"Class {GetType().FullName} must implement {nameof(TSelfInterface)}"
+        );
 
     [ImportMany]
     public IEnumerable<Lazy<IExtensionFor<TSelfInterface>>>? Extensions { get; set; }
+
     [Import]
     public ILoggerFactory? LoggerFactory { get; set; }
 
@@ -41,7 +43,10 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
                     }
                     catch (Exception e)
                     {
-                        logger.ZLogError(e, $"Error while loading extension {extension.Value.GetType().FullName} for {GetType().FullName}");
+                        logger.ZLogError(
+                            e,
+                            $"Error while loading extension {extension.Value.GetType().FullName} for {GetType().FullName}"
+                        );
                     }
                 }
             }
@@ -50,7 +55,9 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
         }
         catch (Exception e)
         {
-            LoggerFactory?.CreateLogger(GetType()).ZLogError(e, $"Error while load extensions for {GetType().FullName}");
+            LoggerFactory
+                ?.CreateLogger(GetType())
+                .ZLogError(e, $"Error while load extensions for {GetType().FullName}");
         }
     }
 

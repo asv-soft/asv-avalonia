@@ -18,14 +18,20 @@ public class HistoricalUnitProperty : RoutableViewModel, IStatePersistor
     public BindableReactiveProperty<bool> IsSelected { get; } = new();
     public IUnit Unit => _unit;
 
-    public HistoricalUnitProperty(string id, ReactiveProperty<double> model, IUnit unit, string? format = null)
+    public HistoricalUnitProperty(
+        string id,
+        ReactiveProperty<double> model,
+        IUnit unit,
+        string? format = null
+    )
         : base(id)
     {
         _model = model;
         _unit = unit;
         _format = format;
         _internalChange = true;
-        _sub2 = User.EnableValidation(ValidateValue).SubscribeAwait(OnChangedByUser, AwaitOperation.Drop);
+        _sub2 = User.EnableValidation(ValidateValue)
+            .SubscribeAwait(OnChangedByUser, AwaitOperation.Drop);
         _internalChange = false;
         _sub3 = _model.Subscribe(OnChangeByModel);
         _sub4 = unit.Current.Subscribe(_ => OnChangeByModel(model.CurrentValue));
@@ -67,9 +73,14 @@ public class HistoricalUnitProperty : RoutableViewModel, IStatePersistor
         }
     }
 
-    public override ValueTask<IRoutable> NavigateTo(string id)
+    public override ValueTask<IRoutable> Navigate(string id)
     {
         throw new NotImplementedException();
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
     }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)

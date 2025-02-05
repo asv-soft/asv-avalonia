@@ -3,6 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             xmlns:global="clr-namespace:"
              xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.ShellView"
@@ -12,10 +13,6 @@
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
     <avalonia:DesignTimeShellViewModel />
   </Design.DataContext>
-    <UserControl.KeyBindings>
-        <KeyBinding Command="{Binding Back}" Gesture="Ctrl+OemMinus"/>
-        <KeyBinding Command="{Binding Forward}" Gesture="Ctrl+OemPlus"/>
-    </UserControl.KeyBindings>
     <UserControl.Styles>
         <Style Selector="Border.error">
             <Setter Property="BorderBrush" Value="Red"/>
@@ -34,31 +31,24 @@
         </Style>
     </UserControl.Styles>
   <Border BorderThickness="1"
-          BorderBrush="{StaticResource SystemControlHighlightChromeAltLowBrush}"
-          Classes.error="{Binding Status.Value, 
+          BorderBrush="{DynamicResource SystemAccentColorDark3}"
+          Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Error} }"
-          Classes.warning="{Binding Status.Value, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
+          Classes.warning="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Warning} }"
+              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }"
           
           >
     <DockPanel>
-        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="10" MinWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Button Command="{Binding Back}">Back</Button>
-            <Button Command="{Binding Forward}">Forward</Button>
-            <!-- <Button Command="{Binding }">Add</Button> -->
-        </StackPanel>
-        <!-- <avalonia:DockControl ItemsSource="{CompiledBinding Pages}" /> -->
-        
-        <DockPanel Background="{StaticResource SystemControlHighlightChromeAltLowBrush}" Dock="Top"
+        <DockPanel Background="{StaticResource SystemBaseHighColor}" Dock="Top"
                    avalonia:WindowHelper.EnableDrag="True"
                    avalonia:WindowHelper.DoubleTappedWindowState="True">
             <DropDownButton Background="Transparent">
                 <avalonia1:MaterialIcon Kind="Menu"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Header="File" Command="{Binding }"></MenuItem>
+                        <MenuItem Header="File"></MenuItem>
                         <MenuItem Header="Edit"></MenuItem>
                         <MenuItem Header="_view"></MenuItem>
                         <MenuItem Header="Help"></MenuItem>
@@ -70,7 +60,7 @@
                 <avalonia1:MaterialIcon Kind="DotsVertical"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Command="{Binding Close}" Header="Close"></MenuItem>
+                        <MenuItem Command="{Binding Close}" Header="Close"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -79,41 +69,40 @@
             </Button>
             
             <StackPanel Spacing="4" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Button Background="Transparent" Command="{Binding Back}"><avalonia1:MaterialIcon Kind="ArrowLeft"/></Button>
-                <Button Background="Transparent" Command="{Binding Forward}"><avalonia1:MaterialIcon Kind="ArrowRight"/></Button>
+                <Button Background="Transparent" Command="{Binding Backward}">
+                    <avalonia1:MaterialIcon Kind="ArrowLeft"/>
+                </Button>
+                <Button Background="Transparent" Command="{Binding Forward}">
+                    <avalonia1:MaterialIcon Kind="ArrowRight"/>
+                </Button>
                 <AutoCompleteBox VerticalAlignment="Center" Width="200"></AutoCompleteBox>
             </StackPanel>
             
         </DockPanel>
         <DockPanel Dock="Bottom"
-                   Background="{StaticResource SystemControlHighlightChromeAltLowBrush}"
-                   Classes.error="{Binding Status.Value, 
+                   Background="{DynamicResource SystemControlHighlightChromeAltLowBrush}"
+                   Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Error} }"
-                   Classes.warning="{Binding Status.Value, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
+                   Classes.warning="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellStatus.Warning} }">
-            <TextBlock Text="Status bar"/>
+              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
+            
         </DockPanel>
-        <Border BorderThickness="0, 1" BorderBrush="#1e1f22">
-            <avalonia:DockControl MaxSplitAmount="2" ItemsSource="{Binding Pages}" SelectedItem="{Binding SelectedPage.Value}">
-                <avalonia:DockControl.Styles>
-                    <Style Selector="TabItem">
-                        <Setter Property="IsSelected" Value="{Binding IsFocused, Mode=TwoWay}"/>
-                    </Style>
-                </avalonia:DockControl.Styles>
-                <avalonia:DockControl.ItemTemplate>
+        <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
+            <TabControl ItemsSource="{Binding PagesView}" SelectedItem="{Binding SelectedPage.Value}">
+                <TabControl.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <avalonia1:MaterialIcon Kind="{Binding Icon.Value}"/>
-                            <TextBlock Text="{Binding Title.Value}"/>
-                            <Button Background="Transparent" Padding="0">
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <avalonia1:MaterialIcon Width="16" Height="16" Kind="{Binding Icon.Value}"/>
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Title.Value}"/>
+                            <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0">
                                 <avalonia1:MaterialIcon Kind="Close"/>
                             </Button>
                         </StackPanel>
                     </DataTemplate>
-                </avalonia:DockControl.ItemTemplate>
-            </avalonia:DockControl>
+                </TabControl.ItemTemplate>
+            </TabControl>
         </Border>
     </DockPanel>
     </Border>

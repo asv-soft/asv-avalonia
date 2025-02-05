@@ -12,5 +12,6 @@ public interface IUnit : IDisposable
     ReadOnlyReactiveProperty<IUnitItem> Current { get; }
     IUnitItem InternationalSystemUnit { get; }
     public MaterialIconKind Icon { get; }
-    IUnitItem this[string unitItemId] => AvailableUnits.GetValueOrDefault(unitItemId) ?? InternationalSystemUnit;
+    IUnitItem this[string unitItemId] =>
+        AvailableUnits.GetValueOrDefault(unitItemId) ?? InternationalSystemUnit;
 }

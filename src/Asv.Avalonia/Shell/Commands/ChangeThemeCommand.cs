@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Composition;
+using Avalonia.Input;
 using Material.Icons;
 
 namespace Asv.Avalonia;
@@ -38,10 +39,11 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
     public const string Id = "theme.change";
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
-        CommandId = Id,
+        Id = Id,
         Name = "Change theme",
         Description = "Change application theme",
         Icon = MaterialIconKind.ThemeLightDark,
+        DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
         Order = 0,
     };
 

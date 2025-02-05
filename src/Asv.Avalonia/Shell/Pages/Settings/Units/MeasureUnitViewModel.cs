@@ -11,10 +11,14 @@ public class MeasureUnitViewModel : RoutableViewModel
         Base = item;
     }
 
-    public override ValueTask<IRoutable> NavigateTo(string id)
+    public override ValueTask<IRoutable> Navigate(string id)
     {
-        IsFocused.Value = true;
         return new ValueTask<IRoutable>(this);
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
     }
 
     public IUnitItem SelectedItem

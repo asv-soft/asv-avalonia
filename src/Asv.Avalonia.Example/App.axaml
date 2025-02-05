@@ -1,18 +1,10 @@
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="using:Asv.Avalonia.Example"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              x:Class="Asv.Avalonia.Example.App"
              RequestedThemeVariant="Dark">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
-
     <Application.DataTemplates>
-
     </Application.DataTemplates>
-    
     <Application.Styles>
         <StyleInclude Source="avares://Asv.Avalonia/AsvTheme.axaml"/>
-        
     </Application.Styles>
 </Application>

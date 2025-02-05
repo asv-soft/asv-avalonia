@@ -1,14 +1,32 @@
 using Microsoft.Extensions.Logging;
+using ObservableCollections;
 using R3;
 using ZLogger;
 
 namespace Asv.Avalonia;
 
+public class HistoryItem
+{
+    public IUndoRedoCommand Command { get; }
+    public string[] ContextPath { get; }
+
+    public HistoryItem(IUndoRedoCommand command, string[] contextPath)
+    {
+        Command = command;
+        ContextPath = contextPath;
+    }
+
+    public override string ToString()
+    {
+        return $"{Command.Info.Id}[{string.Join(">", ContextPath)}]";
+    }
+}
+
 public class CommandHistory : ICommandHistory
 {
     private readonly ICommandService _cmd;
-    private readonly Stack<(IUndoRedoCommand, string[])> _undoStack = new();
-    private readonly Stack<(IUndoRedoCommand, string[])> _redoStack = new();
+    private readonly ObservableStack<HistoryItem> _undoStack = new();
+    private readonly ObservableStack<HistoryItem> _redoStack = new();
     private readonly ILogger<CommandHistory> _logger;
 
     public CommandHistory(IRoutable historyOwner, ICommandService cmd, ILoggerFactory loggerFactory)
@@ -26,13 +44,18 @@ public class CommandHistory : ICommandHistory
     public IRoutable HistoryOwner { get; }
     public ReactiveCommand Undo { get; }
 
+    public IObservableCollection<HistoryItem> UndoStack => _undoStack;
+
     public async ValueTask UndoAsync(CancellationToken cancel = default)
     {
         if (_undoStack.TryPop(out var command))
         {
-            _logger.ZLogInformation($"Undo command {command.Item1.Info}");
-            var context = await GetContext(HistoryOwner, command.Item2);
-            await command.Item1.Undo(context, cancel);
+            var context = await GetContext(HistoryOwner, command.ContextPath);
+
+            _logger.ZLogInformation(
+                $"Undo command {command.Command.Info.Id} with {string.Join(">", command.ContextPath)} context"
+            );
+            await command.Command.Undo(context, cancel);
             _redoStack.Push(command);
             CheckUndoRedoCanExecute();
         }
@@ -50,12 +73,14 @@ public class CommandHistory : ICommandHistory
     {
         if (_redoStack.TryPop(out var command))
         {
-            var context = await GetContext(HistoryOwner, command.Item2);
-            await command.Item1.Redo(context, cancel);
+            var context = await GetContext(HistoryOwner, command.ContextPath);
+            await command.Command.Redo(context, cancel);
             _undoStack.Push(command);
             CheckUndoRedoCanExecute();
         }
     }
+
+    public IObservableCollection<HistoryItem> RedoStack => _redoStack;
 
     private ValueTask<IRoutable> GetContext(IRoutable owner, string[] path)
     {
@@ -84,7 +109,7 @@ public class CommandHistory : ICommandHistory
         if (cmd is IUndoRedoCommand undoable)
         {
             var contextPath = context.GetAllFrom(HistoryOwner).Select(x => x.Id).ToArray();
-            _undoStack.Push((undoable, contextPath));
+            _undoStack.Push(new HistoryItem(undoable, contextPath));
             _redoStack.Clear();
             CheckUndoRedoCanExecute();
         }

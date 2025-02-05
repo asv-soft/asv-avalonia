@@ -6,6 +6,7 @@ namespace Asv.Avalonia;
 public class HomePageViewModel : PageViewModel<HomePageViewModel>
 {
     public const string PageId = "home";
+
     public HomePageViewModel()
         : this(DesignTime.CommandService)
     {
@@ -14,12 +15,9 @@ public class HomePageViewModel : PageViewModel<HomePageViewModel>
 
     [ImportingConstructor]
     public HomePageViewModel(ICommandService cmd)
-        : base(PageId, cmd)
-    {
-        
-    }
+        : base(PageId, cmd) { }
 
-    public override ValueTask<IRoutable> NavigateTo(string id)
+    public override ValueTask<IRoutable> Navigate(string id)
     {
         return ValueTask.FromResult<IRoutable>(this);
     }
@@ -27,5 +25,10 @@ public class HomePageViewModel : PageViewModel<HomePageViewModel>
     protected override void AfterLoadExtensions()
     {
         // do nothing
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
     }
 }
