@@ -13,6 +13,7 @@ public class DocumentPageViewModel : PageViewModel<DocumentPageViewModel>
         : this(DesignTime.CommandService)
     {
         DesignTime.ThrowIfNotDesignMode();
+
         Title.OnNext(RS.DocumentPageViewModel_Title);
     }
 

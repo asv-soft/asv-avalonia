@@ -15,8 +15,8 @@ public class ClosePageCommand : ContextCommand<IPage>
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Close page",
-        Description = RS.OpenDebugCommand_CommandInfo_Description,
+        Name = RS.ClosePageCommand_CommandInfo_Name,
+        Description = RS.ClosePageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.CloseBold,
         DefaultHotKey = KeyGesture.Parse("Ctrl+Q"),
         Source = SystemModule.Instance,

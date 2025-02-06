@@ -27,11 +27,11 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
     }
 
-    public string? GetValidationErrorMessage(string? value)
+    public virtual ValidationResult ValidateValue(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return "Value is empty"; // TODO: Localize
+            return new UnitItemValueIsNullOrEmptyError();
         }
 
         value = value.Trim().Replace(',', '.');
@@ -41,44 +41,41 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
             value = value[..^1];
         }
 
-        if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) == false)
+        if (!double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
         {
-            return "Value is not a number"; // TODO: Localize
+            return new UnitItemValueIsNanError();
         }
 
-        return null;
+        return ValidationResult.Success;
     }
 
-    public double Parse(string? input)
+    public virtual double Parse(string? value)
     {
-        if (string.IsNullOrWhiteSpace(input))
+        if (string.IsNullOrWhiteSpace(value))
         {
             return double.NaN;
         }
 
-        input = input.Trim().Replace(',', '.');
+        value = value.Trim().Replace(',', '.');
 
         double decMul = 1;
-        if (Units.Kilo.Any(x => input.EndsWith(x)))
+        if (Units.Kilo.Any(x => value.EndsWith(x)))
         {
             decMul = 1_000;
-            input = input[..^1];
+            value = value[..^1];
         }
-        else if (Units.Mega.Any(x => input.EndsWith(x)))
+        else if (Units.Mega.Any(x => value.EndsWith(x)))
         {
             decMul = 1_000_000;
-            input = input[..^1];
+            value = value[..^1];
         }
-        else if (Units.Giga.Any(x => input.EndsWith(x)))
+        else if (Units.Giga.Any(x => value.EndsWith(x)))
         {
             decMul = 1_000_000_000;
-            input = input[..^1];
+            value = value[..^1];
         }
 
-        if (
-            double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result)
-            == false
-        )
+        if (!double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
         {
             return double.NaN;
         }
@@ -86,22 +83,22 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return result * decMul;
     }
 
-    public string Print(double value, string? format = null)
+    public virtual string Print(double value, string? format = null)
     {
         return value.ToString(format, CultureInfo.InvariantCulture);
     }
 
-    public string PrintWithUnits(double value, string? format = null)
+    public virtual string PrintWithUnits(double value, string? format = null)
     {
         return $"{value.ToString(format, CultureInfo.InvariantCulture)} {Symbol}";
     }
 
-    public double FromSi(double siValue)
+    public virtual double FromSi(double siValue)
     {
         return siValue * multiplier;
     }
 
-    public double ToSi(double value)
+    public virtual double ToSi(double value)
     {
         return value / multiplier;
     }

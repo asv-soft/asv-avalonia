@@ -41,7 +41,7 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
                 {
                     _view.AttachFilter(
                         new SynchronizedViewFilter<IUnit, MeasureUnitViewModel>(
-                            (_, model) => model.Fitler(x)
+                            (_, model) => model.Filter(x)
                         )
                     );
                 }
@@ -73,6 +73,11 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         return _view;
+    }
+
+    public new void Dispose()
+    {
+        _sub1.Dispose();
     }
 
     public IExportInfo Source => SystemModule.Instance;

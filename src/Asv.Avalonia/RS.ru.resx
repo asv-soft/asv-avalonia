@@ -53,15 +53,6 @@
     <data name="Distance_Description" xml:space="preserve">
         <value>Единица измерения расстояния</value>
     </data>
-    <data name="MeterDistanceUnit_Name" xml:space="preserve">
-        <value>Метр</value>
-    </data>
-    <data name="MeterDistanceUnit_Description" xml:space="preserve">
-        <value>Расстояние в метрах</value>
-    </data>
-    <data name="MeterDistanceUnit_Symbol" xml:space="preserve">
-        <value>м</value>
-    </data>
     <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
         <value>Сменить тему</value>
     </data>
@@ -130,5 +121,350 @@
     </data>
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Пример карты</value>
+    </data>
+    <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
+        <value>Морская миля</value>
+    </data>
+    <data name="NauticalMile_Distance_Description" xml:space="preserve">
+        <value>Расстояние в морских милях</value>
+    </data>
+    <data name="ChangeCurrentUnitItemCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сменить подтип единицы измерения</value>
+    </data>
+    <data name="ChangeCurrentUnitItemCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Сменить текущий подтип единицы измерения у конкретной единицы измерения</value>
+    </data>
+    <data name="Altitude_Name" xml:space="preserve">
+        <value>Высота</value>
+    </data>
+    <data name="Altitude_Description" xml:space="preserve">
+        <value>Единица измерения высоты</value>
+    </data>
+    <data name="Meter_Altitude_Description" xml:space="preserve">
+        <value>Высота в метрах</value>
+    </data>
+    <data name="Meter_UnitItem_Name" xml:space="preserve">
+        <value>Метр</value>
+    </data>
+    <data name="Meter_UnitItem_Symbol" xml:space="preserve">
+        <value>м</value>
+    </data>
+    <data name="Feet_UnitItem_Symbol" xml:space="preserve">
+        <value>фут</value>
+    </data>
+    <data name="Feet_UnitItem_Name" xml:space="preserve">
+        <value>Футы</value>
+    </data>
+    <data name="Feet_Altitude_Description" xml:space="preserve">
+        <value>Высота в футах</value>
+    </data>
+    <data name="AmplitudeModulation_Name" xml:space="preserve">
+        <value>Амплитудная модуляция</value>
+    </data>
+    <data name="AmplitudeModulation_Description" xml:space="preserve">
+        <value>Единица измерения амплитудной модуляции</value>
+    </data>
+    <data name="InParts_AmplitudeModulation_Description" xml:space="preserve">
+        <value>Амплитудная модуляция в частях</value>
+    </data>
+    <data name="Percent_AmplitudeModulation_Description" xml:space="preserve">
+        <value>Амплитудная модуляция в прцентах</value>
+    </data>
+    <data name="Bearing_Description" xml:space="preserve">
+        <value>Единица измерения несущей</value>
+    </data>
+    <data name="Bearing_Name" xml:space="preserve">
+        <value>Несущая</value>
+    </data>
+    <data name="Degree_UnitItem_Name" xml:space="preserve">
+        <value>Градусы</value>
+    </data>
+    <data name="Degree_Bearing_Description" xml:space="preserve">
+        <value>Несущая в процентах</value>
+    </data>
+    <data name="DM_UnitItem_Symbol" xml:space="preserve">
+        <value>[Г]°[М]'</value>
+    </data>
+    <data name="DM_Bearing_Description" xml:space="preserve">
+        <value>Несущая в градусах и минутах</value>
+    </data>
+    <data name="DdmGp_Name" xml:space="preserve">
+        <value>РГМ (Gp)</value>
+    </data>
+    <data name="DdmGp_Description" xml:space="preserve">
+        <value>Единицы измереня разницы в глубине модуляции</value>
+    </data>
+    <data name="InParts_UnitItem_Name" xml:space="preserve">
+        <value>В частях</value>
+    </data>
+    <data name="InParts_DdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в частях</value>
+    </data>
+    <data name="Percent_UnitItem_Name" xml:space="preserve">
+        <value>В процентах</value>
+    </data>
+    <data name="Percent_DdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в процентах</value>
+    </data>
+    <data name="Ddm_µA_Symbol" xml:space="preserve">
+        <value>мкА</value>
+    </data>
+    <data name="MicroAmp_UnitItem_Name" xml:space="preserve">
+        <value>Микроампер</value>
+    </data>
+    <data name="MicroAmp_DdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в микроамперах</value>
+    </data>
+    <data name="MicroAmpRu_UnitItem_Name" xml:space="preserve">
+        <value>Микроампер (Рус)</value>
+    </data>
+    <data name="MicroAmpRu_DdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в микроамперах (Рус)</value>
+    </data>
+    <data name="DdmLlz_Name" xml:space="preserve">
+        <value>РГМ (Llz)</value>
+    </data>
+    <data name="DdmLlz_Description" xml:space="preserve">
+        <value>Единицы измереня разницы в глубине модуляции</value>
+    </data>
+    <data name="InParts_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в частях</value>
+    </data>
+    <data name="Percent_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в процентах</value>
+    </data>
+    <data name="MicroAmp_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в микроамперах</value>
+    </data>
+    <data name="MicroAmpRu_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в микроамперах (Рус)</value>
+    </data>
+    <data name="DM_UnitItem_Name" xml:space="preserve">
+        <value>Градусы и минуты</value>
+    </data>
+    <data name="Angle_Description" xml:space="preserve">
+        <value>Единица измерения градусов</value>
+    </data>
+    <data name="Degree_Angle_Description" xml:space="preserve">
+        <value>Угол в градусах</value>
+    </data>
+    <data name="Angle_Name" xml:space="preserve">
+        <value>Угол</value>
+    </data>
+    <data name="Degree_UnitItem_Symbol" xml:space="preserve">
+        <value>[Г]°</value>
+    </data>
+    <data name="Ms_UnitItem_Name" xml:space="preserve">
+        <value>Минуты и секунды</value>
+    </data>
+    <data name="Ms_Angle_Description" xml:space="preserve">
+        <value>Угол в минутах и секундах</value>
+    </data>
+    <data name="Ms_UnitItem_Symbol" xml:space="preserve">
+        <value>[М]′[С]′′</value>
+    </data>
+    <data name="Dms_UnitItem_Symbol" xml:space="preserve">
+        <value>[Г]°[М]′[С]′'</value>
+    </data>
+    <data name="Dms_UnitItem_Name" xml:space="preserve">
+        <value>Градусы, минуты и секунды</value>
+    </data>
+    <data name="Dms_Angle_Description" xml:space="preserve">
+        <value>Угол в градусах, минутах и секундах</value>
+    </data>
+    <data name="FieldStrength_Name" xml:space="preserve">
+        <value>Напряженность поля</value>
+    </data>
+    <data name="FieldStrength_Description" xml:space="preserve">
+        <value>Единица измерения напряженности поля</value>
+    </data>
+    <data name="MicroVoltsPerMeter_UnitItem_Name" xml:space="preserve">
+        <value>Микровольт на метр</value>
+    </data>
+    <data name="MicroVoltsPerMeter_FieldStrength_Description" xml:space="preserve">
+        <value>Напряженность поля в микровольтах на метр</value>
+    </data>
+    <data name="FieldStrength_UnitItem_Symbol" xml:space="preserve">
+        <value>мкВ/м</value>
+    </data>
+    <data name="Power_Name" xml:space="preserve">
+        <value>Мощность</value>
+    </data>
+    <data name="Power_Description" xml:space="preserve">
+        <value>Единица измерения мощности</value>
+    </data>
+    <data name="Dbm_UnitItem_Name" xml:space="preserve">
+        <value>Децибел по отношению к 1 милливатт</value>
+    </data>
+    <data name="Dbm_UnitItem_Symbol" xml:space="preserve">
+        <value>дБм</value>
+    </data>
+    <data name="Dbm_Power_Description" xml:space="preserve">
+        <value>Мощность в децибеллах по отношению к 1 милливатту</value>
+    </data>
+    <data name="Frequency_Name" xml:space="preserve">
+        <value>Частота</value>
+    </data>
+    <data name="Frequency_Description" xml:space="preserve">
+        <value>Единица измерения частоты</value>
+    </data>
+    <data name="Hertz_UnitItem_Name" xml:space="preserve">
+        <value>Герцы</value>
+    </data>
+    <data name="Hertz_Frequency_Description" xml:space="preserve">
+        <value>Частота в герцах</value>
+    </data>
+    <data name="Hertz_UnitItem_Symbol" xml:space="preserve">
+        <value>Гц</value>
+    </data>
+    <data name="Gigahertz_UnitItem_Name" xml:space="preserve">
+        <value>Гигагерц</value>
+    </data>
+    <data name="Gigahertz_UnitItem_Symbol" xml:space="preserve">
+        <value>ГГц</value>
+    </data>
+    <data name="Gigahertz_Frequency_Description" xml:space="preserve">
+        <value>Часотота в гигагерцах</value>
+    </data>
+    <data name="Kilohertz_UnitItem_Name" xml:space="preserve">
+        <value>Килогерц</value>
+    </data>
+    <data name="Kilohertz_UnitItem_Symbol" xml:space="preserve">
+        <value>кГц</value>
+    </data>
+    <data name="Kilohertz_Frequency_Description" xml:space="preserve">
+        <value>Частота в килогерцах</value>
+    </data>
+    <data name="Megahertz_UnitItem_Name" xml:space="preserve">
+        <value>Мегагерц</value>
+    </data>
+    <data name="Megahertz_UnitItem_Symbol" xml:space="preserve">
+        <value>МГц</value>
+    </data>
+    <data name="Megahertz_Frequency_Description" xml:space="preserve">
+        <value>Частота в мегагерцах</value>
+    </data>
+    <data name="Latitude_Name" xml:space="preserve">
+        <value>Широта</value>
+    </data>
+    <data name="Latitude_Description" xml:space="preserve">
+        <value>Единица измерения широты</value>
+    </data>
+    <data name="Degree_Latitude_Description" xml:space="preserve">
+        <value>Широта в градусах</value>
+    </data>
+    <data name="Longitude_Name" xml:space="preserve">
+        <value>Долгота</value>
+    </data>
+    <data name="Longitude_Description" xml:space="preserve">
+        <value>Единица измерения долготы</value>
+    </data>
+    <data name="Degree_Longitude_Description" xml:space="preserve">
+        <value>Долгота в гадусах</value>
+    </data>
+    <data name="Dms_Latitude_Description" xml:space="preserve">
+        <value>Широта в градусах, минутах и секундах</value>
+    </data>
+    <data name="Dms_Longitude_Description" xml:space="preserve">
+        <value>Долгота в градусах, минутах и секундах</value>
+    </data>
+    <data name="Phase_Description" xml:space="preserve">
+        <value>Единица измерения фазы</value>
+    </data>
+    <data name="Phase_Name" xml:space="preserve">
+        <value>Фаза</value>
+    </data>
+    <data name="Degree_Phase_Description" xml:space="preserve">
+        <value>Фаза в градусах</value>
+    </data>
+    <data name="Radian_UnitItem_Name" xml:space="preserve">
+        <value>Радиан</value>
+    </data>
+    <data name="Radian_UnitItem_Symbol" xml:space="preserve">
+        <value>Рад</value>
+    </data>
+    <data name="Radian_Phase_Description" xml:space="preserve">
+        <value>Фаза в радианах</value>
+    </data>
+    <data name="Sdm_Name" xml:space="preserve">
+        <value>СГМ</value>
+    </data>
+    <data name="Sdm_Description" xml:space="preserve">
+        <value>Единицы измерения суммы глубины модуляции</value>
+    </data>
+    <data name="Percent_Sdm_Description" xml:space="preserve">
+        <value>СГМ в процентах</value>
+    </data>
+    <data name="Temperature_Name" xml:space="preserve">
+        <value>Температура</value>
+    </data>
+    <data name="Temperature_Description" xml:space="preserve">
+        <value>Единица измерения температуры</value>
+    </data>
+    <data name="Kelvin_UnitItem_Name" xml:space="preserve">
+        <value>Кельвин</value>
+    </data>
+    <data name="Kelvin_Temperature_Description" xml:space="preserve">
+        <value>Температура в кельвинах</value>
+    </data>
+    <data name="Celsius_UnitItem_Name" xml:space="preserve">
+        <value>Цельсий</value>
+    </data>
+    <data name="Celsius_Temperature_Description" xml:space="preserve">
+        <value>Температура в цельсиях</value>
+    </data>
+    <data name="Fahrenheit_UnitItem_Name" xml:space="preserve">
+        <value>Фаренгейт</value>
+    </data>
+    <data name="Fahrenheit_Temperature_Description" xml:space="preserve">
+        <value>Температура в фаренгейтах</value>
+    </data>
+    <data name="Velocity_Name" xml:space="preserve">
+        <value>Скорость</value>
+    </data>
+    <data name="Velocity_Description" xml:space="preserve">
+        <value>Единица измерения скорости</value>
+    </data>
+    <data name="MetersPerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Метры в секунду</value>
+    </data>
+    <data name="MetersPerSecond_Velocity_Description" xml:space="preserve">
+        <value>Скорость в метрах в секунду</value>
+    </data>
+    <data name="MetersPerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>м/с</value>
+    </data>
+    <data name="KilometersPerHour_UnitItem_Name" xml:space="preserve">
+        <value>Километры в час</value>
+    </data>
+    <data name="KilometersPerHour_Velocity_Description" xml:space="preserve">
+        <value>Скорость в километрах в час</value>
+    </data>
+    <data name="KilometersPerHour_UnitItem_Symbol" xml:space="preserve">
+        <value>км/ч</value>
+    </data>
+    <data name="MilesPerHour_UnitItem_Name" xml:space="preserve">
+        <value>Мили в час</value>
+    </data>
+    <data name="MilesPerHour_UnitItem_Symbol" xml:space="preserve">
+        <value>миль/ч</value>
+    </data>
+    <data name="MilesPerHour_Velocity_Description" xml:space="preserve">
+        <value>Скорость в милях в час</value>
+    </data>
+    <data name="ChangeDoublePropertyCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Измнить свойство типа дабл</value>
+    </data>
+    <data name="ChangeDoublePropertyCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда меняет значение свойства с типом дабл</value>
+    </data>
+    <data name="ClosePageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Закрыть страницу</value>
+    </data>
+    <data name="ClosePageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда закрывает текущую страницу</value>
+    </data>
+    <data name="Meter_Distance_Description" xml:space="preserve">
+        <value>Расстояние в метрах</value>
     </data>
 </root>
