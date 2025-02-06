@@ -8,31 +8,31 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.ShellView"
              x:DataType="avalonia:ShellViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <avalonia:DesignTimeShellViewModel />
-  </Design.DataContext>
+        <avalonia:DesignTimeShellViewModel />
+    </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="Border.error">
-            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderBrush" Value="Red" />
         </Style>
         <Style Selector="Border.warning">
-            <Setter Property="BorderBrush" Value="Orange"/>
+            <Setter Property="BorderBrush" Value="Orange" />
         </Style>
         <Style Selector="DockPanel.error">
-            <Setter Property="Background" Value="Red"/>
+            <Setter Property="Background" Value="Red" />
         </Style>
         <Style Selector="DockPanel.warning">
-            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="Background" Value="Orange" />
         </Style>
         <Style Selector="DropDownButton#WindowControlButton /template/ PathIcon">
             <Setter Property="IsVisible" Value="False" />
         </Style>
     </UserControl.Styles>
-  <Border BorderThickness="1"
-          BorderBrush="{DynamicResource SystemAccentColorDark3}"
-          Classes.error="{Binding ErrorState.Value, 
+    <Border BorderThickness="1"
+            BorderBrush="{DynamicResource SystemAccentColorDark3}"
+            Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
           Classes.warning="{Binding ErrorState.Value, 
@@ -84,7 +84,7 @@
                    Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
-                   Classes.warning="{Binding ErrorState.Value, 
+                       Classes.warning="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
             

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Windows.Input;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Automation;
@@ -6,9 +7,11 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -27,6 +30,15 @@ public class DockControl : SelectingItemsControl
     private Border? _leftSelector;
     private Border? _rightSelector;
     private Grid? _dropTargetGrid;
+
+    public DockControl()
+    {
+        UnSplitAllCommand = new ReactiveCommand((unit, token) =>
+        {
+            UnsplitAll();
+            return ValueTask.CompletedTask;
+        });
+    }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
@@ -192,7 +204,7 @@ public class DockControl : SelectingItemsControl
             }
 
             parent.Items.Remove(_selectedTab);
-            var win = new DockWindow()
+            var win = new Window()
             {
                 Content = _selectedTab.Content,
                 Title = (_selectedTab.Header as TabStripItem)?.Content?.ToString(),
@@ -268,7 +280,7 @@ public class DockControl : SelectingItemsControl
         UpdateGrid();
     }
 
-    private void UpdateGrid()
+    public void UpdateGrid()
     {
         SortShellItems();
         _dropTargetGrid!.Children.Clear();
@@ -305,7 +317,6 @@ public class DockControl : SelectingItemsControl
         foreach (var item in _shellItems)
         {
             var tabControl = FindTabControlInColumn(_dropTargetGrid, item.Column) ?? new AdaptiveTabStripTabControl();
-
             var oldParent = tabControl.Parent as Grid;
             oldParent?.Children.Remove(tabControl);
 
@@ -322,7 +333,7 @@ public class DockControl : SelectingItemsControl
     {
         grid.ColumnDefinitions.Clear();
         grid.Children.Clear();
-       
+
         var sortedItems = items.ToArray();
         var columnCount = sortedItems.Length;
 
@@ -359,6 +370,16 @@ public class DockControl : SelectingItemsControl
         }
 
         return null;
+    }
+
+    private void UnsplitAll()
+    {
+        foreach (var item in _shellItems)
+        {
+            item.Column = 0;
+        }
+
+        UpdateGrid();
     }
 
     private TabItem CreateTabItem(object content)
@@ -468,12 +489,20 @@ public class DockControl : SelectingItemsControl
         {
             pair.curr.Column -= 2;
         }
-
     }
 
     #endregion
 
     #region Properties
+
+    public static StyledProperty<ReactiveCommand> UnSplitAllCommandProperty =
+        AvaloniaProperty.Register<DockControl, ReactiveCommand>(nameof(UnSplitAllCommand));
+
+    public ReactiveCommand UnSplitAllCommand
+    {
+        get => GetValue(UnSplitAllCommandProperty);
+        set => SetValue(UnSplitAllCommandProperty, value);
+    }
 
     public static readonly StyledProperty<IDataTemplate?> TabControlStripItemTemplateProperty =
         AvaloniaProperty.Register<DockControl, IDataTemplate?>(nameof(TabControlStripItemTemplate));

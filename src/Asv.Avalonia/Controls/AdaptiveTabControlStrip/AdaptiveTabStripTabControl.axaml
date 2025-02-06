@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:avalonia="clr-namespace:Asv.Avalonia">
     <Design.PreviewWith>
-        <Border Width="400" Height="300">
+        <Border Width="100" Height="300">
             <avalonia:AdaptiveTabStripTabControl>
                 <TabItem Header="Arch">
                     <Border Background="AntiqueWhite" Height="100">
@@ -57,12 +57,15 @@
                                 <!-- <StackPanel Orientation="Horizontal"></StackPanel> -->
                             </ItemsPresenter>
                         </ScrollViewer>
-                        <ContentPresenter Name="PART_SelectedContentHost"
-                                          Margin="{TemplateBinding Padding}"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding SelectedContent}"
-                                          ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                        <ScrollViewer Margin="0,0,0,10" HorizontalScrollBarVisibility="Auto">
+                            <ContentPresenter Name="PART_SelectedContentHost"
+                                              MinWidth="100"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding SelectedContent}"
+                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}" />     
+                        </ScrollViewer>
                     </DockPanel>
                 </Border>
             </ControlTemplate>
