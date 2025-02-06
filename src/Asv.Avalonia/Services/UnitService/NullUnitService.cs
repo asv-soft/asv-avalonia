@@ -11,5 +11,5 @@ public class NullUnitService : UnitService
     #endregion
 
     private NullUnitService()
-        : base([new Distance([new MeterDistanceUnit()])]) { }
+        : base([new DistanceBase([new MeterDistanceUnit()])]) { }
 }

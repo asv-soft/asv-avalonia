@@ -231,6 +231,24 @@ namespace Asv.Avalonia {
             }
         }
         
+        public static string NauticalMileDistanceUnit_Name {
+            get {
+                return ResourceManager.GetString("NauticalMileDistanceUnit_Name", resourceCulture);
+            }
+        }
+        
+        public static string NauticalMileDistanceUnit_Description {
+            get {
+                return ResourceManager.GetString("NauticalMileDistanceUnit_Description", resourceCulture);
+            }
+        }
+        
+        public static string NauticalMileDistanceUnit_Symbol {
+            get {
+                return ResourceManager.GetString("NauticalMileDistanceUnit_Symbol", resourceCulture);
+            }
+        }
+        
         public static string ShellView_WindowControlButton_Close {
             get {
                 return ResourceManager.GetString("ShellView_WindowControlButton_Close", resourceCulture);

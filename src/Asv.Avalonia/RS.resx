@@ -111,6 +111,15 @@
     <data name="SettingsKeymapViewModel_Name" xml:space="preserve">
         <value>Hotkeys</value>
     </data>
+    <data name="NauticalMileDistanceUnit_Name" xml:space="preserve">
+        <value />
+    </data>
+    <data name="NauticalMileDistanceUnit_Description" xml:space="preserve">
+        <value />
+    </data>
+    <data name="NauticalMileDistanceUnit_Symbol" xml:space="preserve">
+        <value />
+    </data>
     <data name="ShellView_WindowControlButton_Close" xml:space="preserve">
         <value>Close</value>
     </data>
