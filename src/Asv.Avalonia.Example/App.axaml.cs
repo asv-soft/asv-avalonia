@@ -75,7 +75,7 @@ public partial class App : Application, IContainerHost, IShellHost
         {
             desktop.MainWindow = new Window1();
             desktop.MainWindow.Show();
-            
+
             // Shell = new DesktopShellViewModel(desktop, this);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)

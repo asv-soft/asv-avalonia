@@ -18,16 +18,26 @@ public static class BingMapsHelper
 {
     public static string LatLongToQuadKey(double latitude, double longitude, int zoom)
     {
-        int tileX, tileY;
+        int tileX,
+            tileY;
         LatLongToTileXY(latitude, longitude, zoom, out tileX, out tileY);
         return TileXYToQuadKey(tileX, tileY, zoom);
     }
 
-    public static void LatLongToTileXY(double latitude, double longitude, int zoom, out int tileX, out int tileY)
+    public static void LatLongToTileXY(
+        double latitude,
+        double longitude,
+        int zoom,
+        out int tileX,
+        out int tileY
+    )
     {
         double sinLatitude = Math.Sin(latitude * Math.PI / 180);
         double pixelX = ((longitude + 180.0) / 360.0) * 256 * (1 << zoom);
-        double pixelY = (0.5 - (Math.Log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI))) * 256 * (1 << zoom);
+        double pixelY =
+            (0.5 - (Math.Log((1 + sinLatitude) / (1 - sinLatitude)) / (4 * Math.PI)))
+            * 256
+            * (1 << zoom);
 
         tileX = (int)(pixelX / 256);
         tileY = (int)(pixelY / 256);
@@ -52,7 +62,7 @@ public static class BingMapsHelper
 
             quadKey[zoom - i] = digit;
         }
-        
+
         return new string(quadKey);
     }
 }
@@ -70,7 +80,8 @@ public class BingTileLoader
     public async Task<Bitmap?> LoadTileAsync(int tileX, int tileY, int zoom)
     {
         string quadKey = BingMapsHelper.TileXYToQuadKey(tileX, tileY, zoom);
-        string url = $"https://t0.ssl.ak.dynamic.tiles.virtualearth.net/comp/CompositionHandler/{quadKey}?mkt=en-US&it=A,G,L&key={_apiKey}";
+        string url =
+            $"https://t0.ssl.ak.dynamic.tiles.virtualearth.net/comp/CompositionHandler/{quadKey}?mkt=en-US&it=A,G,L&key={_apiKey}";
 
         try
         {
@@ -142,14 +153,24 @@ public class HybridTileCache : IDisposable
         return bitmap;
     }
 
-    private async Task<Bitmap?> LoadTileAsync(int tileX, int tileY, int zoom, string cacheKey, string filePath)
+    private async Task<Bitmap?> LoadTileAsync(
+        int tileX,
+        int tileY,
+        int zoom,
+        string cacheKey,
+        string filePath
+    )
     {
         string quadKey = BingMapsHelper.TileXYToQuadKey(tileX, tileY, zoom);
-        string url = $"https://t0.ssl.ak.dynamic.tiles.virtualearth.net/comp/CompositionHandler/{quadKey}?mkt=en-US&it=A,G,L&key={_apiKey}";
+        string url =
+            $"https://t0.ssl.ak.dynamic.tiles.virtualearth.net/comp/CompositionHandler/{quadKey}?mkt=en-US&it=A,G,L&key={_apiKey}";
 
         try
         {
-            using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+            using var response = await _httpClient.GetAsync(
+                url,
+                HttpCompletionOption.ResponseHeadersRead
+            );
             response.EnsureSuccessStatusCode();
 
             var contentLength = response.Content.Headers.ContentLength ?? 0;
@@ -161,7 +182,7 @@ public class HybridTileCache : IDisposable
             using var memoryOwner = _memoryPool.Rent((int)contentLength);
 
             using var stream = await response.Content.ReadAsStreamAsync();
-            int bytesRead = await stream.ReadAsync(memoryOwner.Memory);
+            int bytesRead = await stream.ReadAsync(memoryOwner.Memory[..(int)contentLength]);
 
             if (bytesRead < contentLength)
             {
@@ -170,14 +191,19 @@ public class HybridTileCache : IDisposable
             }
 
             // 5. Кешируем в памяти
-            _memoryCache.Set(cacheKey, memoryOwner, new MemoryCacheEntryOptions
-            {
-                SlidingExpiration = TimeSpan.FromMinutes(30),
-                Size = 1,
-            });
+            _memoryCache.Set(
+                cacheKey,
+                memoryOwner,
+                new MemoryCacheEntryOptions
+                {
+                    SlidingExpiration = TimeSpan.FromMinutes(30),
+                    Size = 1,
+                }
+            );
 
             // 6. Сохраняем на диск
-            await File.WriteAllBytesAsync(filePath, buffer.ToArray());
+            await using var file = File.OpenWrite(filePath);
+            await file.WriteAsync(memoryOwner.Memory[..(int)contentLength]);
 
             return CreateBitmapFromMemory(memoryOwner.Memory);
         }
@@ -212,7 +238,9 @@ public class MapCanvas2 : Control
 
     public MapCanvas2()
     {
-        _tileLoader = new BingTileLoader("Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg");
+        _tileLoader = new BingTileLoader(
+            "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
+        );
         PointerPressed += OnPointerPressed;
         PointerMoved += OnPointerMoved;
         PointerWheelChanged += OnPointerWheelChanged;
@@ -223,10 +251,19 @@ public class MapCanvas2 : Control
 
     private void CenterMap(double latitude, double longitude)
     {
-        BingMapsHelper.LatLongToTileXY(latitude, longitude, _zoom, out _centerTileX, out _centerTileY);
+        BingMapsHelper.LatLongToTileXY(
+            latitude,
+            longitude,
+            _zoom,
+            out _centerTileX,
+            out _centerTileY
+        );
 
         // Центрируем относительно окна
-        _offset = new Point(-(TileSize * _centerTileX) + (Bounds.Width / 2), -(TileSize * _centerTileY) + (Bounds.Height / 2));
+        _offset = new Point(
+            -(TileSize * _centerTileX) + (Bounds.Width / 2),
+            -(TileSize * _centerTileY) + (Bounds.Height / 2)
+        );
 
         LoadVisibleTiles();
     }
@@ -276,12 +313,21 @@ public class MapCanvas2 : Control
                 double px = (x * TileSize) + _offset.X;
                 double py = (y * TileSize) + _offset.Y;
 
-                if (px + TileSize < 0 || py + TileSize < 0 || px > Bounds.Width || py > Bounds.Height)
+                if (
+                    px + TileSize < 0
+                    || py + TileSize < 0
+                    || px > Bounds.Width
+                    || py > Bounds.Height
+                )
                 {
                     continue;
                 }
 
-                context.DrawImage(bitmap, new Rect(0, 0, TileSize, TileSize), new Rect(px, py, TileSize, TileSize));
+                context.DrawImage(
+                    bitmap,
+                    new Rect(0, 0, TileSize, TileSize),
+                    new Rect(px, py, TileSize, TileSize)
+                );
             }
         }
     }
@@ -307,7 +353,8 @@ public class MapCanvas2 : Control
 
     private void OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
     {
-        double oldCenterLat, oldCenterLon;
+        double oldCenterLat,
+            oldCenterLon;
         TileXYToLatLong(_centerTileX, _centerTileY, _zoom, out oldCenterLat, out oldCenterLon);
 
         if (e.Delta.Y > 0 && _zoom < 19)
@@ -336,7 +383,13 @@ public class MapCanvas2 : Control
         }
     }
 
-    private void TileXYToLatLong(int tileX, int tileY, int zoom, out double latitude, out double longitude)
+    private void TileXYToLatLong(
+        int tileX,
+        int tileY,
+        int zoom,
+        out double latitude,
+        out double longitude
+    )
     {
         double n = Math.PI - ((2.0 * Math.PI * tileY) / Math.Pow(2.0, zoom));
         latitude = (180.0 / Math.PI) * Math.Atan(Math.Sinh(n));

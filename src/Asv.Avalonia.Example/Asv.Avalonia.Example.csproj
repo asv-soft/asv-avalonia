@@ -46,6 +46,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Asv.Avalonia.Map\Asv.Avalonia.Map.csproj" />
       <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
     </ItemGroup>
 </Project>
