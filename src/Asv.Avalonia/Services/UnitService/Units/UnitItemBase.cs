@@ -31,7 +31,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return "Value is empty"; // TODO: Localize
+            return RS.UnitItemBase_Validation_ValueIsEmptyError;
         }
 
         value = value.Trim().Replace(',', '.');
@@ -41,9 +41,9 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
             value = value[..^1];
         }
 
-        if (double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _) == false)
+        if (!double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
         {
-            return "Value is not a number"; // TODO: Localize
+            return RS.UnitItemBase_Validation_ValueIsNaNError;
         }
 
         return null;
@@ -76,8 +76,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         }
 
         if (
-            double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result)
-            == false
+            !double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result)
         )
         {
             return double.NaN;
