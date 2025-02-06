@@ -303,7 +303,11 @@ internal class AppHostBuilder : IAppHostBuilder
 
     #endregion
 
-    public IAppHostBuilder WithPluginsManager(string apiPackageName, SemVersion apiVersion)
+    public IAppHostBuilder WithPluginsManager(
+        string apiPackageName,
+        string nugetPluginName,
+        SemVersion apiVersion
+    )
     {
         _pluginManagerFactory = (cfg, loggerFactory) =>
         {
@@ -312,6 +316,7 @@ internal class AppHostBuilder : IAppHostBuilder
                 containerCfg,
                 _appFolder,
                 apiPackageName,
+                nugetPluginName,
                 apiVersion,
                 cfg,
                 loggerFactory

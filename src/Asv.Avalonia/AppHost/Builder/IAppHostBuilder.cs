@@ -184,7 +184,12 @@ public interface IAppHostBuilder
     /// Configures the application to use a plugin manager that references the specified API package.
     /// </summary>
     /// <param name="apiPackageName">The NuGet package name or identifier for the plugin API.</param>
+    /// <param name="nugetPluginName">The string all dependent plugins start with.</param>
     /// <param name="apiVersion">The plugin API package version.</param>
     /// <returns>The current instance of the <see cref="IAppHostBuilder"/>.</returns>
-    IAppHostBuilder WithPluginsManager(string apiPackageName, SemVersion apiVersion);
+    IAppHostBuilder WithPluginsManager(
+        string apiPackageName,
+        string nugetPluginName,
+        SemVersion apiVersion
+    );
 }

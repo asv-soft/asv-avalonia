@@ -1,8 +1,8 @@
 ﻿using System.Collections.Immutable;
+using System.Composition;
 using System.Composition.Hosting;
 using System.Diagnostics;
 using System.IO.Compression;
-using System.Reflection;
 using System.Runtime.Loader;
 using Asv.Cfg;
 using Asv.Common;
@@ -48,6 +48,8 @@ public class PluginServerConfig
     public string? PasswordHash { get; set; }
 }
 
+[Export(typeof(IPluginManager))]
+[Shared]
 public class PluginManager : IPluginManager
 {
     private readonly ILoggerFactory _loggerFactory;
@@ -67,10 +69,12 @@ public class PluginManager : IPluginManager
     private readonly SourceCacheContext _cache;
     private readonly List<AssemblyLoadContext> _pluginContexts = [];
 
+    [ImportingConstructor]
     public PluginManager(
         ContainerConfiguration containerCfg,
         string localDirectory,
         string apiPackageName,
+        string nugetPluginName,
         SemVersion apiVersion,
         IConfiguration globalConfig,
         ILoggerFactory loggerFactory
@@ -253,7 +257,12 @@ public class PluginManager : IPluginManager
                     $"Load plugin {info.PackageId} {info.Version} {info.LocalFolder}"
                 );
                 _pluginContexts.Add(
-                    new PluginAssemblyLoadContext(info.LocalFolder, containerCfg, _loggerFactory)
+                    new PluginAssemblyLoadContext(
+                        info.LocalFolder,
+                        nugetPluginName,
+                        containerCfg,
+                        _loggerFactory
+                    )
                 );
                 SetPluginStateByFolder(
                     info.LocalFolder,

@@ -81,12 +81,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Avalonia.Controls.DataGrid">
-        <HintPath>C:\Users\voloshkevich\.nuget\packages\avalonia.controls.datagrid\11.2.3\lib\net8.0\Avalonia.Controls.DataGrid.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
-    <ItemGroup>
       <EmbeddedResource Update="RS.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>RS.Designer.cs</LastGenOutput>
@@ -100,7 +94,5 @@
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
     </ItemGroup>
-
-   
-
+    
 </Project>
