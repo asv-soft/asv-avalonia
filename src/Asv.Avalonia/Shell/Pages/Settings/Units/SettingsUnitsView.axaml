@@ -47,7 +47,7 @@
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
                             <ComboBox HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding Base.AvailableUnits.Values}" 
-                                      SelectedItem="{Binding SelectedItem}" >
+                                      SelectedItem="{Binding SelectedItem.Value}" >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock VerticalAlignment="Center">

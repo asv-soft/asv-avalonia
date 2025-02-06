@@ -278,5 +278,29 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("ShellView_Toolbar_Help", resourceCulture);
             }
         }
+        
+        public static string UnitItemBase_Validation_ValueIsEmptyError {
+            get {
+                return ResourceManager.GetString("UnitItemBase_Validation_ValueIsEmptyError", resourceCulture);
+            }
+        }
+        
+        public static string UnitItemBase_Validation_ValueIsNaNError {
+            get {
+                return ResourceManager.GetString("UnitItemBase_Validation_ValueIsNaNError", resourceCulture);
+            }
+        }
+        
+        public static string ChangeCurrentUnitItemCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ChangeCurrentUnitItemCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ChangeCurrentUnitItemCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ChangeCurrentUnitItemCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
     }
 }

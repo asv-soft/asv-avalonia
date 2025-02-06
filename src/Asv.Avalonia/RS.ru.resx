@@ -119,4 +119,25 @@
     <data name="ShellView_Toolbar_View" xml:space="preserve">
         <value>Вид</value>
     </data>
+    <data name="UnitItemBase_Validation_ValueIsEmptyError" xml:space="preserve">
+        <value>Значение пустое</value>
+    </data>
+    <data name="UnitItemBase_Validation_ValueIsNaNError" xml:space="preserve">
+        <value>Значение не число</value>
+    </data>
+    <data name="NauticalMileDistanceUnit_Name" xml:space="preserve">
+        <value>Морская миля</value>
+    </data>
+    <data name="NauticalMileDistanceUnit_Symbol" xml:space="preserve">
+        <value>NM</value>
+    </data>
+    <data name="NauticalMileDistanceUnit_Description" xml:space="preserve">
+        <value>Расстояние в морских милях</value>
+    </data>
+    <data name="ChangeCurrentUnitItemCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сменить подтип единицы измерения</value>
+    </data>
+    <data name="ChangeCurrentUnitItemCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Сменить текущий подтип единицы измерения у конкретной единицы измерения</value>
+    </data>
 </root>
