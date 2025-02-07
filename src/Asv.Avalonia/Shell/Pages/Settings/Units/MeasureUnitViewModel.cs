@@ -9,9 +9,7 @@ public class MeasureUnitViewModel : RoutableViewModel
     public MeasureUnitViewModel(IUnit item)
         : base(item.UnitId)
     {
-        SelectedItem = new BindableReactiveProperty<IUnitItem>(
-            item.Current.CurrentValue
-        );
+        SelectedItem = new BindableReactiveProperty<IUnitItem>(item.Current.CurrentValue);
         Base = item;
         _internalChange = true;
         _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);

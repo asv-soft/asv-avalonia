@@ -1,5 +1,3 @@
-using ObservableCollections;
-
 namespace Asv.Avalonia;
 
 public class NullUnitService : UnitService
@@ -11,5 +9,5 @@ public class NullUnitService : UnitService
     #endregion
 
     private NullUnitService()
-        : base([new DistanceBase([new MeterDistanceUnit()])]) { }
+        : base([new NullUnitBase([new NullUnitItemInternational(), new NullUnitItem()])]) { }
 }

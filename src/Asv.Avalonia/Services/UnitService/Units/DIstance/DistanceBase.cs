@@ -1,14 +1,16 @@
 using System.Composition;
+using Asv.Cfg;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface ISourceInfo { }
-
 [ExportUnit]
 [Shared]
 [method: ImportingConstructor]
-public class DistanceBase([ImportMany(DistanceBase.Id)] IEnumerable<IUnitItem> items) : UnitBase(items)
+public class DistanceBase(
+    [Import] IConfiguration cfgSvc,
+    [ImportMany(DistanceBase.Id)] IEnumerable<IUnitItem> items
+) : UnitBase(cfgSvc, items)
 {
     public const string Id = "distance";
 

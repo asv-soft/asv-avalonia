@@ -75,9 +75,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
             input = input[..^1];
         }
 
-        if (
-            !double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result)
-        )
+        if (!double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
         {
             return double.NaN;
         }
