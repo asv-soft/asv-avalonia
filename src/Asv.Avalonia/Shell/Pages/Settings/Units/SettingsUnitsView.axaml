@@ -66,9 +66,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center" Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center">
-                                <Run Text="{Binding Base.Current.CurrentValue.Name}"/>
+                                <Run Text="{Binding Base.InternationalSystemUnit.Name}"/>
                                 <Run Text=" [ "/>
-                                <Run Text="{Binding Base.Current.CurrentValue.Symbol}"/>
+                                <Run Text="{Binding Base.InternationalSystemUnit.Symbol}"/>
                                 <Run Text=" ]"/>
                             </TextBlock>
                         </DataTemplate>

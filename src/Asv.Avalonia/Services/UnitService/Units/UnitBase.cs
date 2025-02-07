@@ -1,15 +1,29 @@
 ﻿using System.Collections.Immutable;
+using System.Composition;
+using Asv.Cfg;
 using Material.Icons;
+using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
+public class UnitBaseConfig
+{
+    public IDictionary<string, string?> CurrentUnitItems { get; set; } =
+        new Dictionary<string, string?>();
+}
+
 public abstract class UnitBase : IUnit
 {
     private readonly ImmutableDictionary<string, IUnitItem> _items;
+    private readonly IConfiguration _cfgSvc;
+    private readonly UnitBaseConfig _config;
 
-    protected UnitBase(IEnumerable<IUnitItem> items)
+    protected UnitBase(IConfiguration cfgSvc, IEnumerable<IUnitItem> items)
     {
+        ArgumentNullException.ThrowIfNull(cfgSvc);
+        _cfgSvc = cfgSvc;
+        _config = cfgSvc.Get<UnitBaseConfig>();
         var builder = ImmutableDictionary.CreateBuilder<string, IUnitItem>();
         foreach (var item in items)
         {
@@ -28,20 +42,30 @@ public abstract class UnitBase : IUnit
 
         InternationalSystemUnit = defaultUnit[0].Value;
         Current = new ReactiveProperty<IUnitItem>(InternationalSystemUnit);
-    }
-
-    private void SetUnit(IUnitItem unit)
-    {
-        ArgumentNullException.ThrowIfNull(unit);
-
-        var hasUnit = _items.ContainsKey(unit.UnitItemId);
-
-        if (!hasUnit)
+        _config.CurrentUnitItems.TryGetValue(UnitId, out var currentUnitItemId);
+        if (currentUnitItemId is not null)
         {
-            throw new InvalidOperationException($"Unit with id: {unit.UnitItemId} was not found");
+            _items.TryGetValue(currentUnitItemId, out var current);
+
+            if (current is not null)
+            {
+                Current.Value = current;
+            }
         }
 
-        Current.OnNext(unit);
+        _sub1 = Current.Subscribe(SetUnitItem);
+    }
+
+    private void SetUnitItem(IUnitItem unitItem)
+    {
+        _config.CurrentUnitItems.TryGetValue(UnitId, out var currentUnitItemId);
+        if (currentUnitItemId == unitItem.UnitItemId)
+        {
+            return;
+        }
+
+        _config.CurrentUnitItems[UnitId] = unitItem.UnitItemId;
+        _cfgSvc.Set(_config);
     }
 
     public IReadOnlyDictionary<string, IUnitItem> AvailableUnits => _items;
@@ -54,8 +78,11 @@ public abstract class UnitBase : IUnit
 
     #region Dispose
 
+    private readonly IDisposable _sub1;
+
     public void Dispose()
     {
+        _sub1.Dispose();
         Current.Dispose();
     }
 
