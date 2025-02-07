@@ -2,23 +2,23 @@ using Asv.Common;
 
 namespace Asv.Avalonia.Map;
 
-public readonly struct TileKey(int x, int y, int zoom) : IEquatable<TileKey>
+public readonly struct TilePosition(int x, int y, int zoom) : IEquatable<TilePosition>
 {
     public int X => x;
     public int Y => y;
     public int Zoom => zoom;
 
-    public bool Equals(TileKey other) => X == other.X && Y == other.Y && Zoom == other.Zoom;
+    public bool Equals(TilePosition other) => X == other.X && Y == other.Y && Zoom == other.Zoom;
 
-    public override bool Equals(object? obj) => obj is TileKey other && Equals(other);
+    public override bool Equals(object? obj) => obj is TilePosition other && Equals(other);
 
     public override int GetHashCode() => HashCode.Combine(X, Y, Zoom);
 
-    public static bool operator ==(TileKey left, TileKey right) => left.Equals(right);
+    public static bool operator ==(TilePosition left, TilePosition right) => left.Equals(right);
 
-    public static bool operator !=(TileKey left, TileKey right) => !left.Equals(right);
+    public static bool operator !=(TilePosition left, TilePosition right) => !left.Equals(right);
 
-    public static TileKey FromGeoPoint(GeoPoint point, int tileSize, int zoom)
+    public static TilePosition FromGeoPoint(GeoPoint point, int tileSize, int zoom)
     {
         var sinLatitude = Math.Sin(point.Latitude * Math.PI / 180);
         var pixelX = ((point.Longitude + 180.0) / 360.0) * tileSize * (1 << zoom);
@@ -30,7 +30,7 @@ public readonly struct TileKey(int x, int y, int zoom) : IEquatable<TileKey>
         var tileX = (int)(pixelX / tileSize);
         var tileY = (int)(pixelY / tileSize);
 
-        return new TileKey(tileX, tileY, zoom);
+        return new TilePosition(tileX, tileY, zoom);
     }
 
     /// <summary>
@@ -70,6 +70,6 @@ public readonly struct TileKey(int x, int y, int zoom) : IEquatable<TileKey>
 
     public override string ToString()
     {
-        return $"{nameof(TileKey)}(x:{X}, y:{Y}, zoom:{Zoom}, q: {GetQuadKey()})";
+        return $"{nameof(TilePosition)}(x:{X}, y:{Y}, zoom:{Zoom}, q: {GetQuadKey()})";
     }
 }

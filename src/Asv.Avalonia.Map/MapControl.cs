@@ -1,4 +1,5 @@
-﻿using Asv.Common;
+﻿using System.Globalization;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -11,13 +12,13 @@ public partial class MapControl : Control
 {
     public const int TileSize = 256;
 
-    private readonly Dictionary<TileKey, Bitmap?> _tiles = new();
+    private readonly Dictionary<TilePosition, Bitmap?> _tiles = new();
     private Point _offset;
     private Point _lastMousePosition;
 
     public MapControl()
     {
-        Zoom = 1;
+        Zoom = 8;
         PointerPressed += OnPointerPressed;
         PointerMoved += OnPointerMoved;
         PointerWheelChanged += OnPointerWheelChanged;
@@ -33,37 +34,54 @@ public partial class MapControl : Control
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
+        var currentPosition = e.GetPosition(this);
+        CursorPosition = GetGeoPointFromCursor(currentPosition);
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
-            Point currentPosition = e.GetPosition(this);
             _offset += currentPosition - _lastMousePosition;
             _lastMousePosition = currentPosition;
-            RecalculateCenterOffset();
-            UpdateCenterTile();
+            _centerMap = GetGeoPointFromCursor(new Point(Bounds.Width / 2, Bounds.Height / 2));
             LoadVisibleTiles();
-            InvalidateVisual();
         }
     }
 
-    private int _centerTileX;
-    private int _centerTileY;
-
-    private void UpdateCenterTile()
+    private GeoPoint GetGeoPointFromCursor(Point cursorPosition)
     {
-        int newCenterX = (int)((-(_offset.X - (Bounds.Width / 2))) / TileSize);
-        int newCenterY = (int)((-(_offset.Y - (Bounds.Height / 2))) / TileSize);
+        // Получаем глобальные пиксельные координаты с учетом смещения
+        var globalPx = cursorPosition.X - _offset.X;
+        var globalPy = cursorPosition.Y - _offset.Y;
 
-        if (_centerTileX != newCenterX || _centerTileY != newCenterY)
-        {
-            _centerTileX = newCenterX;
-            _centerTileY = newCenterY;
-            LoadVisibleTiles();
-        }
+        // Рассчитываем размер всей карты в пикселях на текущем уровне Zoom
+        var mapSize = TileSize * (1 << Zoom); // 256 * 2^Zoom
+
+        // Обрабатываем переполнение по X (долгота)
+        if (globalPx < 0)
+            globalPx += mapSize;
+        if (globalPx >= mapSize)
+            globalPx -= mapSize;
+
+        if (globalPy < 0)
+            globalPy += mapSize;
+        if (globalPy >= mapSize)
+            globalPy -= mapSize;
+
+        // Нормализуем координаты (0-1)
+        var xNorm = (double)globalPx / mapSize;
+        var yNorm = (double)globalPy / mapSize;
+
+        // Преобразуем в долготу (lon), учитывая, что карта циклическая
+        var lon = xNorm * 360.0 - 180.0;
+
+        // Преобразуем в широту (lat) с использованием гиперболического синуса
+        var latRad = Math.Atan(Math.Sinh(Math.PI * (1 - 2 * yNorm)));
+        var lat = latRad * (180.0 / Math.PI);
+
+        return new GeoPoint(lat, lon, 0);
     }
 
     private void OnPointerWheelChanged(object? sender, PointerWheelEventArgs e)
     {
-        int newZoom = _zoom;
+        var newZoom = _zoom;
 
         if (e.Delta.Y > 0 && _zoom < 19)
         {
@@ -101,24 +119,48 @@ public partial class MapControl : Control
                 {
                     continue;
                 }
-
                 context.DrawImage(
                     bitmap,
                     new Rect(0, 0, TileSize, TileSize),
                     new Rect(px, py, TileSize, TileSize)
                 );
             }
+            else
+            {
+                context.DrawRectangle(
+                    Brushes.LightGray,
+                    null,
+                    new Rect(
+                        (key.X * TileSize) + _offset.X,
+                        (key.Y * TileSize) + _offset.Y,
+                        TileSize,
+                        TileSize
+                    )
+                );
+            }
         }
+        context.DrawText(
+            new FormattedText(
+                $"{CursorPosition}",
+                CultureInfo.CurrentUICulture,
+                FlowDirection.LeftToRight,
+                Typeface.Default,
+                12.0,
+                Brushes.Violet
+            ),
+            new Point(0, 0)
+        );
     }
 
-    private void RecalculateCenterOffset()
+    private void CenterMapChanged()
     {
         var tileSize = Provider.TileSize;
-        var key = TileKey.FromGeoPoint(CenterMap, tileSize, Zoom);
+        var key = TilePosition.FromGeoPoint(CenterMap, tileSize, Zoom);
         _offset = new Point(
             -(key.X * tileSize) + (Bounds.Width / 2),
             -(key.Y * tileSize) + (Bounds.Height / 2)
         );
+        LoadVisibleTiles();
     }
 
     private async void LoadVisibleTiles()
@@ -126,21 +168,21 @@ public partial class MapControl : Control
         var tileSize = Provider.TileSize;
         var provider = Provider;
         var zoom = Zoom;
-        int tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
-        int tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
+        var tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
+        var tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
 
-        var center = TileKey.FromGeoPoint(CenterMap, tileSize, Zoom);
+        var center = TilePosition.FromGeoPoint(CenterMap, tileSize, Zoom);
 
-        int startX = center.X - (tilesX / 2);
-        int startY = center.Y - (tilesY / 2);
+        var startX = center.X - (tilesX / 2);
+        var startY = center.Y - (tilesY / 2);
 
         var newTiles = new List<Task>();
 
-        for (int x = startX; x < startX + tilesX; x++)
+        for (var x = startX; x < startX + tilesX; x++)
         {
-            for (int y = startY; y < startY + tilesY; y++)
+            for (var y = startY; y < startY + tilesY; y++)
             {
-                var key = new TileKey(x, y, zoom);
+                var key = new TilePosition(x, y, zoom);
                 if (!_tiles.ContainsKey(key))
                 {
                     newTiles.Add(LoadTileAsync(key, provider));
@@ -152,11 +194,30 @@ public partial class MapControl : Control
         InvalidateVisual();
     }
 
-    private async Task LoadTileAsync(TileKey key, ITileProvider provider)
+    private async Task LoadTileAsync(TilePosition position, ITileProvider provider)
     {
-        var tile = await _cache.GetTileAsync(key, provider, CancellationToken.None);
-        _tiles[key] = tile;
+        var tile = await _cache.GetTileAsync(position, provider, CancellationToken.None);
+        _tiles[position] = tile;
     }
+
+    #region Cursor position
+
+    private GeoPoint _cursorPosition;
+
+    public static readonly DirectProperty<MapControl, GeoPoint> CursorPositionProperty =
+        AvaloniaProperty.RegisterDirect<MapControl, GeoPoint>(
+            nameof(CursorPosition),
+            o => o.CursorPosition,
+            (o, v) => o.CursorPosition = v
+        );
+
+    public GeoPoint CursorPosition
+    {
+        get => _cursorPosition;
+        set => SetAndRaise(CursorPositionProperty, ref _cursorPosition, value);
+    }
+
+    #endregion
 
     #region CenterMap
 
@@ -176,8 +237,7 @@ public partial class MapControl : Control
         {
             if (SetAndRaise(CenterMapProperty, ref _centerMap, value))
             {
-                RecalculateCenterOffset();
-                LoadVisibleTiles();
+                CenterMapChanged();
             }
         }
     }
@@ -242,7 +302,8 @@ public partial class MapControl : Control
         {
             if (SetAndRaise(ZoomProperty, ref _zoom, value))
             {
-                RecalculateCenterOffset();
+                _tiles.Clear();
+                CenterMapChanged();
                 LoadVisibleTiles();
             }
         }

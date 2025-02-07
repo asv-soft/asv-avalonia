@@ -11,9 +11,9 @@ public class BingTileProvider : ITileProvider
         _useHighRes = useHighRes;
     }
 
-    public string? GetTileUrl(TileKey key)
+    public string? GetTileUrl(TilePosition position)
     {
-        var quadKey = key.GetQuadKey();
+        var quadKey = position.GetQuadKey();
         return $"https://t0.ssl.ak.dynamic.tiles.virtualearth.net/comp/CompositionHandler/{quadKey}?mkt=en-US&it=A,G,L&dpi={(_useHighRes ? "d1" : "d0")}&key={_apiKey}";
     }
 

@@ -2,7 +2,7 @@
 
 public interface ITileProvider
 {
-    string? GetTileUrl(TileKey key);
+    string? GetTileUrl(TilePosition position);
     int TileSize { get; }
 }
 
@@ -10,7 +10,7 @@ public class EmptyTileProvider : ITileProvider
 {
     public static ITileProvider Instance { get; } = new EmptyTileProvider();
 
-    public string? GetTileUrl(TileKey key)
+    public string? GetTileUrl(TilePosition position)
     {
         return null;
     }
