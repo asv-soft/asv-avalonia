@@ -140,4 +140,19 @@
     <data name="ChangeCurrentUnitItemCommand_CommandInfo_Description" xml:space="preserve">
         <value>Сменить текущий подтип единицы измерения у конкретной единицы измерения</value>
     </data>
+    <data name="Altitude_Name" xml:space="preserve">
+        <value>Высота</value>
+    </data>
+    <data name="Altitude_Description" xml:space="preserve">
+        <value>Единица измерения высоты</value>
+    </data>
+    <data name="MeterAltitudeUnit_Description" xml:space="preserve">
+        <value>Высота в метрах</value>
+    </data>
+    <data name="MeterAltitudeUnit_Name" xml:space="preserve">
+        <value>Метр</value>
+    </data>
+    <data name="MeterAltitudeUnit_Symbol" xml:space="preserve">
+        <value>м</value>
+    </data>
 </root>

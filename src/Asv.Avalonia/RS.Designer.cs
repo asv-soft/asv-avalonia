@@ -302,5 +302,35 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("ChangeCurrentUnitItemCommand_CommandInfo_Description", resourceCulture);
             }
         }
+        
+        public static string Altitude_Name {
+            get {
+                return ResourceManager.GetString("Altitude_Name", resourceCulture);
+            }
+        }
+        
+        public static string Altitude_Description {
+            get {
+                return ResourceManager.GetString("Altitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string MeterAltitudeUnit_Name {
+            get {
+                return ResourceManager.GetString("MeterAltitudeUnit_Name", resourceCulture);
+            }
+        }
+        
+        public static string MeterAltitudeUnit_Description {
+            get {
+                return ResourceManager.GetString("MeterAltitudeUnit_Description", resourceCulture);
+            }
+        }
+        
+        public static string MeterAltitudeUnit_Symbol {
+            get {
+                return ResourceManager.GetString("MeterAltitudeUnit_Symbol", resourceCulture);
+            }
+        }
     }
 }

@@ -147,4 +147,19 @@
     <data name="ChangeCurrentUnitItemCommand_CommandInfo_Description" xml:space="preserve">
         <value>Change unit sub type of the unit</value>
     </data>
+    <data name="Altitude_Name" xml:space="preserve">
+        <value>Altitude</value>
+    </data>
+    <data name="Altitude_Description" xml:space="preserve">
+        <value>Altitude unit</value>
+    </data>
+    <data name="MeterAltitudeUnit_Name" xml:space="preserve">
+        <value>Meter</value>
+    </data>
+    <data name="MeterAltitudeUnit_Description" xml:space="preserve">
+        <value>Altitude in meters</value>
+    </data>
+    <data name="MeterAltitudeUnit_Symbol" xml:space="preserve">
+        <value>m</value>
+    </data>
 </root>
