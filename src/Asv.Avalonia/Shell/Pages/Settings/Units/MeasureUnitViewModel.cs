@@ -2,6 +2,8 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public record UnitDelegate(string unitId, string unitItemId);
+
 public class MeasureUnitViewModel : RoutableViewModel
 {
     private bool _internalChange;
@@ -25,8 +27,10 @@ public class MeasureUnitViewModel : RoutableViewModel
         }
 
         _internalChange = true;
-        var newValue = new Persistable<string>(userValue.UnitItemId);
-        await this.ExecuteCommand(ChangeCurrentUnitItemCommand.Id, newValue);
+        var newValue = new Persistable<UnitDelegate>(
+            new UnitDelegate(Base.UnitId, userValue.UnitItemId)
+        );
+        await this.ExecuteCommand(CompositeChangeCurrentUnitItemCommand.Id, newValue);
         _internalChange = false;
     }
 
