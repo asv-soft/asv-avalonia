@@ -20,6 +20,14 @@ public interface ILogService : ILoggerFactory
         SaveMessage(new LogMessage(DateTime.Now, LogLevel.Error, sender, message, ex?.Message));
     }
 
+    public void Error(string sender, Exception ex)
+    {
+        var message = ErrorHandler.HandleErrorResult(ex);
+        SaveMessage(
+            new LogMessage(DateTime.Now, LogLevel.Error, sender, message.Detail, ex.Message)
+        );
+    }
+
     public void Info(string sender, string message)
     {
         SaveMessage(new LogMessage(DateTime.Now, LogLevel.Information, sender, message, null));
