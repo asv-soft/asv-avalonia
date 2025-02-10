@@ -49,7 +49,23 @@ public partial class MapControl : Control
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
             _offset += currentPosition - _lastMousePosition;
-            Debug.WriteLine($"{_offset}");
+            var mapSize = TileSize * (1 << Zoom); // 256 * 2^Zoom
+            /*if (_offset.X < 0)
+            {
+                _offset = new Point(0, _offset.Y);   
+            }
+            if (_offset.Y < 0)
+            {
+                _offset = new Point(_offset.X, 0);   
+            }
+            if (_offset.X + Bounds.Width > mapSize)
+            {
+                _offset = new Point(Bounds.Width - mapSize, _offset.Y);   
+            }
+            if (_offset.Y + Bounds.Height > mapSize)
+            {
+                _offset = new Point(_offset.X, Bounds.Height - mapSize);   
+            }*/
             _lastMousePosition = currentPosition;
             _centerMap = GetGeoPointFromCursor(new Point(Bounds.Width / 2, Bounds.Height / 2));
             _renderSubject.OnNext(Unit.Default);
@@ -138,7 +154,7 @@ public partial class MapControl : Control
                 var key = new TilePosition(x, y, zoom);
                 if (x < 0 || y < 0)
                 {
-                    //Debug.WriteLine($"{x} {y}");
+                    Debug.WriteLine($"{x} {y}");
                 }
                 var px = (key.X * TileSize) + _offset.X;
                 var py = (key.Y * TileSize) + _offset.Y;

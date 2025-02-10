@@ -2,11 +2,39 @@ using Asv.Common;
 
 namespace Asv.Avalonia.Map;
 
-public readonly struct TilePosition(int x, int y, int zoom) : IEquatable<TilePosition>
+public readonly struct TilePosition : IEquatable<TilePosition>
 {
-    public int X => x;
-    public int Y => y;
-    public int Zoom => zoom;
+    private readonly int _x;
+    private readonly int _y;
+    private readonly int _zoom;
+
+    public TilePosition(int x, int y, int zoom)
+    {
+        _x = x;
+        var max = 1 << zoom;
+        if (_x < 0)
+        {
+            _x += max;
+        }
+        if (_x > max)
+        {
+            _x -= max;
+        }
+        _y = y;
+        if (_y < 0)
+        {
+            _y += max;
+        }
+        if (_y > max)
+        {
+            _y -= max;
+        }
+        _zoom = zoom;
+    }
+
+    public int X => _x;
+    public int Y => _y;
+    public int Zoom => _zoom;
 
     public bool Equals(TilePosition other) => X == other.X && Y == other.Y && Zoom == other.Zoom;
 
@@ -47,22 +75,22 @@ public readonly struct TilePosition(int x, int y, int zoom) : IEquatable<TilePos
 
     public string GetQuadKey()
     {
-        var quadKey = new char[zoom];
-        for (var i = zoom; i > 0; i--)
+        var quadKey = new char[_zoom];
+        for (var i = _zoom; i > 0; i--)
         {
             var digit = '0';
             var mask = 1 << (i - 1);
-            if ((x & mask) != 0)
+            if ((_x & mask) != 0)
             {
                 digit++;
             }
 
-            if ((y & mask) != 0)
+            if ((_y & mask) != 0)
             {
                 digit += (char)2;
             }
 
-            quadKey[zoom - i] = digit;
+            quadKey[_zoom - i] = digit;
         }
 
         return new string(quadKey);
