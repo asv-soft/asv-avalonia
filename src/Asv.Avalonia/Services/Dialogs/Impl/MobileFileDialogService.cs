@@ -1,6 +1,6 @@
 ﻿namespace Asv.Avalonia;
 
-public class MobileFileSimpleDialogService : IFileDialogService, ISimpleDialogService
+public class MobileDialogService : IDialogService, ISimpleDialogService
 {
     public bool IsImplementedShowOpenFileDialog { get; } = false;
     public bool IsImplementedShowSaveFileDialog { get; } = false;

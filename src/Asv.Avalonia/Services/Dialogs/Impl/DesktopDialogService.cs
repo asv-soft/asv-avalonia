@@ -1,4 +1,4 @@
-using System.Composition;
+﻿using System.Composition;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Input;
@@ -12,10 +12,10 @@ using R3;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(IFileDialogService))]
+[Export(typeof(IDialogService))]
 [Export(typeof(ISimpleDialogService))]
 [Shared]
-public sealed class DesktopDialogService : IFileDialogService, ISimpleDialogService
+public sealed class DesktopDialogService : IDialogService, ISimpleDialogService
 {
     private readonly IShellHost _host;
 

@@ -39,7 +39,7 @@ public abstract class ShellViewModel : RoutableViewModel, IShell
     private async ValueTask MessageAsync(CancellationToken cancel = default)
     {
         var mainWindow = ((IClassicDesktopStyleApplicationLifetime)Application.Current?.ApplicationLifetime!)?.MainWindow;
-        var fileDialogServiceImplementation = _container.GetExport<IFileDialogService>();
+        var fileDialogServiceImplementation = _container.GetExport<IDialogService>();
         var simpleDialogServiceImplementation = _container.GetExport<ISimpleDialogService>();
         await simpleDialogServiceImplementation.ShowUnitInputDialog("Test", "Test");
     }
