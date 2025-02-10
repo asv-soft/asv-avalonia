@@ -15,7 +15,7 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new ReactiveCommand(TryCloseAsync);
     }
-
+    
     public ValueTask TryCloseAsync(Unit arg1, CancellationToken cancel)
     {
         return ValueTask.CompletedTask;

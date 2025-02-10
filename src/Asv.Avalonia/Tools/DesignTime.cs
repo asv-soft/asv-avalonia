@@ -27,4 +27,5 @@ public class NullShellHost : IShellHost
 {
     public static IShellHost Instance { get; } = new NullShellHost();
     public IShell Shell => DesignTimeShellViewModel.Instance;
+    public TopLevel TopLevel { get; }
 }

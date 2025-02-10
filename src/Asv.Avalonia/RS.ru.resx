@@ -155,4 +155,19 @@
     <data name="MeterAltitudeUnit_Symbol" xml:space="preserve">
         <value>м</value>
     </data>
+    <data name="DialogButton_Yes" xml:space="preserve">
+        <value>Да</value>
+    </data>
+    <data name="DialogButton_No" xml:space="preserve">
+        <value>Нет</value>
+    </data>
+    <data name="DialogButton_Save" xml:space="preserve">
+        <value>Сохранить</value>
+    </data>
+    <data name="DialogButton_DontSave" xml:space="preserve">
+        <value>Не сохранять</value>
+    </data>
+    <data name="DialogButton_Ok" xml:space="preserve">
+        <value>Ок</value>
+    </data>
 </root>

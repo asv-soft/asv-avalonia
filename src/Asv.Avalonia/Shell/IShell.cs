@@ -1,4 +1,5 @@
-﻿using ObservableCollections;
+﻿using Avalonia.Controls;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
@@ -6,6 +7,7 @@ namespace Asv.Avalonia;
 public interface IShellHost
 {
     IShell Shell { get; }
+    TopLevel TopLevel { get; }
 }
 
 public enum ShellErrorState

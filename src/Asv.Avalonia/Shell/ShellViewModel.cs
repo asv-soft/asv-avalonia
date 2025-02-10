@@ -4,6 +4,7 @@ using System.Composition.Hosting;
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using ObservableCollections;
@@ -82,6 +83,13 @@ public class ShellViewModel : RoutableViewModel, IShell
         }
     }
 
+    private void Message()
+    {
+        var mainWindow = ((IClassicDesktopStyleApplicationLifetime)Application.Current?.ApplicationLifetime!)?.MainWindow;
+        var fileDialogServiceImplementation = _container.GetExport<IDialogService>();
+        fileDialogServiceImplementation.ShowYesNoDialog("Предупреждение", "Вы действительно хотите выйти?");
+    }
+
     private void OnKeyDownCustom(TopLevel source, KeyEventArgs keyEventArgs)
     {
         if (keyEventArgs.KeyModifiers == KeyModifiers.None)
@@ -113,6 +121,7 @@ public class ShellViewModel : RoutableViewModel, IShell
 
     private string[] GetPath(IRoutable vm)
     {
+        Message();
         return vm.GetAllFrom(this).Skip(1).Select(x => x.Id).ToArray();
     }
 
@@ -165,9 +174,7 @@ public class ShellViewModel : RoutableViewModel, IShell
     {
         return ValueTask.CompletedTask;
     }
-
     #endregion
-
     #region SaveLayout
 
     public virtual ValueTask SaveLayout()
