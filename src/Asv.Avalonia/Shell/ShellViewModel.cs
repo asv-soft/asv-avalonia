@@ -4,6 +4,7 @@ using System.Composition.Hosting;
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using ObservableCollections;
@@ -40,6 +41,7 @@ public class ShellViewModel : RoutableViewModel, IShell
         PagesView = _pages.ToNotifyCollectionChangedSlim();
         ErrorState = new BindableReactiveProperty<ShellErrorState>(ShellErrorState.Normal);
         Close = new ReactiveCommand((_, c) => CloseAsync(c));
+        Message = new ReactiveCommand((_, c) => MessageAsync(c));
 
         Backward = new ReactiveCommand((_, c) => BackwardAsync(c));
         Forward = new ReactiveCommand((_, c) => ForwardAsync(c));
@@ -115,6 +117,26 @@ public class ShellViewModel : RoutableViewModel, IShell
     {
         return vm.GetAllFrom(this).Skip(1).Select(x => x.Id).ToArray();
     }
+
+    #region Message Yes\No, Save, UnitInput
+    public ReactiveCommand Message { get; }
+
+    protected virtual ValueTask MessageAsync(CancellationToken cancellationToken)
+    {
+        var mainWindow = (
+            (IClassicDesktopStyleApplicationLifetime)Application.Current?.ApplicationLifetime!
+        )?.MainWindow;
+        var fileDialogServiceImplementation = _container.GetExport<IDialogService>();
+        fileDialogServiceImplementation.ShowYesNoDialog(
+            "Предупреждение",
+            "Вы действительно хотите выйти?"
+        );
+        fileDialogServiceImplementation.ShowSaveCancelDialog("Сохранение", "Сохранить?");
+        fileDialogServiceImplementation.ShowUnitInputDialog("Поиск", "Введите значение файла");
+        return ValueTask.CompletedTask;
+    }
+
+    #endregion
 
     #region Backward \ Forward \ Home
 

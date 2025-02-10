@@ -60,6 +60,7 @@
                 <avalonia1:MaterialIcon Kind="DotsVertical"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
+                        <MenuItem Command="{Binding Message}" Header="{x:Static avalonia:RS.ShellView_Toolbar_Help}"/>
                         <MenuItem Command="{Binding Close}" Header="{x:Static avalonia:RS.ShellView_WindowControlButton_Close}"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>

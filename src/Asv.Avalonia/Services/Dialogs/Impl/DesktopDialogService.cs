@@ -1,16 +1,30 @@
-﻿using System.Diagnostics;
+﻿using System.Composition;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 
 namespace Asv.Avalonia;
 
-public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
+[Export(typeof(IDialogService))]
+[Shared]
+public sealed class DesktopDialogService : IDialogService
 {
+    private readonly IShellHost _host;
+
+    [ImportingConstructor]
+    public DesktopDialogService(IShellHost host)
+    {
+        _host = host;
+    }
+
     public bool IsImplementedShowOpenFileDialog { get; } = true;
     public bool IsImplementedShowSaveFileDialog { get; } = true;
     public bool IsImplementedShowSelectFolderDialog { get; } = true;
     public bool IsImplementedShowObserveFolderDialog { get; } = true;
+    public bool IsImplementedShowYesNoDialogDialog { get; } = true;
+    public bool IsImplementedShowSaveCancelDialog { get; } = true;
+    public bool IsImplementedShowUnitInputDialog { get; } = true;
 
     public async Task<string?> ShowOpenFileDialog(
         string title,
@@ -50,10 +64,10 @@ public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
         if (!string.IsNullOrEmpty(initialDirectory))
         {
             options.SuggestedStartLocation =
-                await topLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
+                await _host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
         }
 
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
+        var files = await _host.TopLevel.StorageProvider.OpenFilePickerAsync(options);
 
         return files.Count == 1 ? files[0].Path.AbsolutePath : null;
     }
@@ -90,10 +104,10 @@ public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
         if (!string.IsNullOrEmpty(initialDirectory))
         {
             options.SuggestedStartLocation =
-                await topLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
+                await _host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
         }
 
-        var result = await topLevel.StorageProvider.SaveFilePickerAsync(options);
+        var result = await _host.TopLevel.StorageProvider.SaveFilePickerAsync(options);
         return result?.Path.AbsolutePath;
     }
 
@@ -104,10 +118,10 @@ public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
         if (!string.IsNullOrEmpty(oldPath))
         {
             options.SuggestedStartLocation =
-                await topLevel.StorageProvider.TryGetFolderFromPathAsync(oldPath);
+                await _host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(oldPath);
         }
 
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(options);
+        var folders = await _host.TopLevel.StorageProvider.OpenFolderPickerAsync(options);
 
         var folder = folders.FirstOrDefault()?.Path.AbsolutePath;
 
@@ -140,6 +154,49 @@ public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
         }
 
         return Task.CompletedTask;
+    }
+
+    public async Task<bool> ShowYesNoDialog(string title, string message)
+    {
+        var result = await CustomDialogInterface.ShowCustomDialog<object>(
+            _host.TopLevel as TopLevel,
+            title,
+            message,
+            false,
+            RS.DialogButton_Yes,
+            RS.DialogButton_Yes,
+            RS.DialogButton_No
+        );
+        return result != null && (string)result == RS.DialogButton_Yes;
+    }
+
+    public async Task<bool> ShowSaveCancelDialog(string title, string message)
+    {
+        var result = await CustomDialogInterface.ShowCustomDialog<object>(
+            _host.TopLevel as Window,
+            title,
+            message,
+            false,
+            RS.DialogButton_Save,
+            RS.DialogButton_Save,
+            RS.DialogButton_DontSave,
+            RS.ShellView_WindowControlButton_Close
+        );
+        return result != null && (string)result == RS.DialogButton_Save;
+    }
+
+    public async Task<string?> ShowUnitInputDialog(string title, string message)
+    {
+        var result = await CustomDialogInterface.ShowCustomDialog<object>(
+            _host.TopLevel as Window,
+            title,
+            message,
+            true,
+            RS.DialogButton_Ok,
+            RS.DialogButton_Ok,
+            RS.ShellView_WindowControlButton_Close
+        );
+        return result as string;
     }
 
     private static void OpenFolderInWindowsExplorer(string folderPath)

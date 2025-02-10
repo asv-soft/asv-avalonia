@@ -126,4 +126,19 @@
     <data name="ShellView_Toolbar_Help" xml:space="preserve">
         <value>Help</value>
     </data>
+    <data name="DialogButton_Yes" xml:space="preserve">
+        <value>Yes</value>
+    </data>
+    <data name="DialogButton_No" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="DialogButton_Save" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="DialogButton_DontSave" xml:space="preserve">
+        <value>Don't save</value>
+    </data>
+    <data name="DialogButton_Ok" xml:space="preserve">
+        <value>Ok</value>
+    </data>
 </root>

@@ -95,6 +95,7 @@ public partial class App : Application, IContainerHost, IShellHost
 
     public CompositionHost Host { get; }
     public IShell Shell { get; private set; }
+    public TopLevel TopLevel { get; set; }
 
     public bool TryGetExport<T>(string id, out T value)
     {
