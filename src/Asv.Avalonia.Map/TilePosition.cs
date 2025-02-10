@@ -61,43 +61,10 @@ public readonly struct TilePosition : IEquatable<TilePosition>
         return new TilePosition(tileX, tileY, zoom);
     }
 
-    /// <summary>
-    /// Преобразует координаты тайла обратно в географические координаты.
-    /// </summary>
-    public GeoPoint ToGeoPoint()
-    {
-        var n = Math.PI - ((2.0 * Math.PI * Y) / Math.Pow(2.0, Zoom));
-        var lat = (180.0 / Math.PI) * Math.Atan(Math.Sinh(n));
-        var lon = (X / Math.Pow(2.0, Zoom) * 360.0) - 180.0;
-
-        return new GeoPoint(lat, lon, 0);
-    }
-
-    public string GetQuadKey()
-    {
-        var quadKey = new char[_zoom];
-        for (var i = _zoom; i > 0; i--)
-        {
-            var digit = '0';
-            var mask = 1 << (i - 1);
-            if ((_x & mask) != 0)
-            {
-                digit++;
-            }
-
-            if ((_y & mask) != 0)
-            {
-                digit += (char)2;
-            }
-
-            quadKey[_zoom - i] = digit;
-        }
-
-        return new string(quadKey);
-    }
+    
 
     public override string ToString()
     {
-        return $"{nameof(TilePosition)}(x:{X}, y:{Y}, zoom:{Zoom}, q: {GetQuadKey()})";
+        return $"{nameof(TilePosition)}(x:{X}, y:{Y}, zoom:{Zoom})";
     }
 }

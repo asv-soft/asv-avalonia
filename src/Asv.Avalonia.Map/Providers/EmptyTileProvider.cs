@@ -1,12 +1,14 @@
 namespace Asv.Avalonia.Map;
 
-public class YandexTileProvider : ITileProvider
+public class EmptyTileProvider : ITileProvider
 {
+    public static ITileProvider Instance { get; } = new EmptyTileProvider();
+
     public IMapProjection Projection => WebMercatorProjection.Instance;
 
     public string? GetTileUrl(TilePosition position)
     {
-        return $"https://core-renderer-tiles.maps.yandex.net/tiles?l=map&x={position.X}&y={position.Y}&z={position.Zoom}";
+        return null;
     }
 
     public int TileSize => 256;

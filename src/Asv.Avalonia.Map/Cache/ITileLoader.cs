@@ -22,10 +22,10 @@ public class TileLoadedEventArgs(TilePosition position, Bitmap? tile)
     public Bitmap? Tile { get; } = tile;
 }
 
-public class OnlineTileLoader : DisposableOnceWithCancel, ITileLoader
+public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
 {
     private readonly ITileProvider _provider;
-    private readonly ILogger<OnlineTileLoader>? _logger;
+    private readonly ILogger<CacheTileLoader>? _logger;
     private readonly HttpClient _httpClient;
     private readonly string _cacheDirectory;
     private readonly Channel<TilePosition> _tileChannel;
@@ -35,15 +35,19 @@ public class OnlineTileLoader : DisposableOnceWithCancel, ITileLoader
     private readonly object _sync = new();
     private volatile Bitmap? _emptyBitmap;
 
-    public OnlineTileLoader(ILoggerFactory logger, ITileProvider provider)
+    public CacheTileLoader(ILoggerFactory logger, ITileProvider provider)
     {
         _provider = provider;
-        _logger = logger?.CreateLogger<OnlineTileLoader>();
+        _logger = logger?.CreateLogger<CacheTileLoader>();
         _onLoaded = new();
         _httpClient = new HttpClient();
         _inProgressHash = new();
         _cacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache", "tiles");
-        _cache = new(new MemoryCacheOptions { SizeLimit = 100_000_000 });
+        _cache = new(new MemoryCacheOptions
+        {
+            SizeLimit = 100_000_000,
+            TrackStatistics = true,
+        });
         // Создаем директорию кэша, если её нет
         if (!Directory.Exists(_cacheDirectory))
         {
@@ -80,7 +84,7 @@ public class OnlineTileLoader : DisposableOnceWithCancel, ITileLoader
                 var tilePath = GetTileCachePath(position, _provider);
                 if (File.Exists(tilePath))
                 {
-                    await using var stream = File.OpenRead(tilePath);
+                    await using var stream = File.Open(tilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                     var tile = new Bitmap(stream);
                     _cache.Set(
                         position,
@@ -88,7 +92,8 @@ public class OnlineTileLoader : DisposableOnceWithCancel, ITileLoader
                         new MemoryCacheEntryOptions
                         {
                             Size = tile.PixelSize.Width * tile.PixelSize.Height * 4,
-                        }
+                            
+                        }.RegisterPostEvictionCallback(RemoveTileCache)
                     );
                     _onLoaded.OnNext(new TileLoadedEventArgs(position, tile));
                     continue;
@@ -131,6 +136,14 @@ public class OnlineTileLoader : DisposableOnceWithCancel, ITileLoader
         }
     }
 
+    private void RemoveTileCache(object key, object? value, EvictionReason reason, object? state)
+    {
+        if (value is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
+    }
+
     public Bitmap GetEmptyBitmap(Color? backgroundColor = null)
     {
         if (_emptyBitmap != null)
@@ -154,47 +167,6 @@ public class OnlineTileLoader : DisposableOnceWithCancel, ITileLoader
             }
 
             return _emptyBitmap = btm;
-        }
-    }
-
-    public async Task<Bitmap?> GetTileAsync(TilePosition position, CancellationToken cancel)
-    {
-        string tilePath = GetTileCachePath(position, _provider);
-
-        // Проверяем, есть ли тайл в кэше
-        if (File.Exists(tilePath))
-        {
-            try
-            {
-                using var stream = File.OpenRead(tilePath);
-                return new Bitmap(stream);
-            }
-            catch (Exception ex)
-            {
-                _logger?.ZLogWarning(ex, $"Failed to read cached tile {position}: {ex.Message}");
-            }
-        }
-
-        // Если нет, загружаем с сервера
-        var url = _provider.GetTileUrl(position);
-        if (url == null)
-        {
-            return null;
-        }
-
-        try
-        {
-            var img = await _httpClient.GetByteArrayAsync(url, cancel).ConfigureAwait(false);
-
-            // Сохраняем в кэш
-            await File.WriteAllBytesAsync(tilePath, img, cancel);
-
-            return new Bitmap(new MemoryStream(img));
-        }
-        catch (Exception ex)
-        {
-            _logger?.ZLogError(ex, $"Failed to load tile {position}: {ex.Message}");
-            return null;
         }
     }
 
