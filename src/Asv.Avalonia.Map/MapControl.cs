@@ -1,28 +1,38 @@
-﻿using System.Globalization;
+﻿using System.Diagnostics;
+using System.Globalization;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using R3;
 
 namespace Asv.Avalonia.Map;
 
 public partial class MapControl : Control
 {
     public const int TileSize = 256;
-
-    private readonly Dictionary<TilePosition, Bitmap?> _tiles = new();
     private Point _offset;
     private Point _lastMousePosition;
+    private readonly Subject<Unit> _renderSubject = new();
+    private readonly IDisposable _sub1;
 
     public MapControl()
     {
         Zoom = 8;
+        _sub1 = Observable
+            .FromEventHandler<PointerPressedEventArgs>(
+                x => PointerPressed += x,
+                x => PointerPressed -= x
+            )
+            .Subscribe(e => OnPointerPressed(e.sender, e.e));
         PointerPressed += OnPointerPressed;
         PointerMoved += OnPointerMoved;
         PointerWheelChanged += OnPointerWheelChanged;
-        CenterMap = new GeoPoint(55.7558, 37.6173, 0);
+        //CenterMap = new GeoPoint(55.7558, 37.6173, 0);
+        _cache.OnLoaded.Subscribe(x => _renderSubject.OnNext(Unit.Default));
+        _renderSubject.ThrottleLastFrame(1).Subscribe(x => InvalidateVisual());
     }
 
     #region Events
@@ -39,9 +49,10 @@ public partial class MapControl : Control
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
             _offset += currentPosition - _lastMousePosition;
+            Debug.WriteLine($"{_offset}");
             _lastMousePosition = currentPosition;
             _centerMap = GetGeoPointFromCursor(new Point(Bounds.Width / 2, Bounds.Height / 2));
-            LoadVisibleTiles();
+            _renderSubject.OnNext(Unit.Default);
         }
     }
 
@@ -103,13 +114,35 @@ public partial class MapControl : Control
     public override void Render(DrawingContext context)
     {
         base.Render(context);
-        foreach (var (key, bitmap) in _tiles)
+        context.DrawRectangle(
+            Brushes.LightGray,
+            null,
+            new Rect(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height)
+        );
+
+        var tileSize = Provider.TileSize;
+
+        var tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
+        var tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
+
+        var zoom = Zoom;
+        var center = TilePosition.FromGeoPoint(CenterMap, tileSize, zoom);
+
+        var startX = center.X - (tilesX / 2);
+        var startY = center.Y - (tilesY / 2);
+
+        for (var x = startX; x < startX + tilesX; x++)
         {
-            if (bitmap != null)
+            for (var y = startY; y < startY + tilesY; y++)
             {
+                var key = new TilePosition(x, y, zoom);
+                if (x < 0 || y < 0)
+                {
+                    //Debug.WriteLine($"{x} {y}");
+                }
                 var px = (key.X * TileSize) + _offset.X;
                 var py = (key.Y * TileSize) + _offset.Y;
-
+                /*
                 if (
                     px + TileSize < 0
                     || py + TileSize < 0
@@ -119,29 +152,20 @@ public partial class MapControl : Control
                 {
                     continue;
                 }
+                */
+
+                var tile = _cache[key];
                 context.DrawImage(
-                    bitmap,
+                    tile,
                     new Rect(0, 0, TileSize, TileSize),
                     new Rect(px, py, TileSize, TileSize)
                 );
             }
-            else
-            {
-                context.DrawRectangle(
-                    Brushes.LightGray,
-                    null,
-                    new Rect(
-                        (key.X * TileSize) + _offset.X,
-                        (key.Y * TileSize) + _offset.Y,
-                        TileSize,
-                        TileSize
-                    )
-                );
-            }
         }
+
         context.DrawText(
             new FormattedText(
-                $"{CursorPosition}",
+                $"{CursorPosition} {_offset}",
                 CultureInfo.CurrentUICulture,
                 FlowDirection.LeftToRight,
                 Typeface.Default,
@@ -160,44 +184,7 @@ public partial class MapControl : Control
             -(key.X * tileSize) + (Bounds.Width / 2),
             -(key.Y * tileSize) + (Bounds.Height / 2)
         );
-        LoadVisibleTiles();
-    }
-
-    private async void LoadVisibleTiles()
-    {
-        var tileSize = Provider.TileSize;
-        var provider = Provider;
-        var zoom = Zoom;
-        var tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
-        var tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
-
-        var center = TilePosition.FromGeoPoint(CenterMap, tileSize, Zoom);
-
-        var startX = center.X - (tilesX / 2);
-        var startY = center.Y - (tilesY / 2);
-
-        var newTiles = new List<Task>();
-
-        for (var x = startX; x < startX + tilesX; x++)
-        {
-            for (var y = startY; y < startY + tilesY; y++)
-            {
-                var key = new TilePosition(x, y, zoom);
-                if (!_tiles.ContainsKey(key))
-                {
-                    newTiles.Add(LoadTileAsync(key, provider));
-                }
-            }
-        }
-
-        await Task.WhenAll(newTiles);
-        InvalidateVisual();
-    }
-
-    private async Task LoadTileAsync(TilePosition position, ITileProvider provider)
-    {
-        var tile = await _cache.GetTileAsync(position, provider, CancellationToken.None);
-        _tiles[position] = tile;
+        _renderSubject.OnNext(Unit.Default);
     }
 
     #region Cursor position
@@ -249,6 +236,10 @@ public partial class MapControl : Control
     private ITileProvider _provider = new BingTileProvider(
         "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
     );
+    private ITileLoader _cache = new OnlineTileLoader(
+        MapCore.LoggerFactory,
+        new BingTileProvider("Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg")
+    );
 
     public static readonly DirectProperty<MapControl, ITileProvider> ProviderProperty =
         AvaloniaProperty.RegisterDirect<MapControl, ITileProvider>(
@@ -260,26 +251,13 @@ public partial class MapControl : Control
     public ITileProvider Provider
     {
         get => _provider;
-        set => SetAndRaise(ProviderProperty, ref _provider, value);
-    }
-
-    #endregion
-
-    #region Cache
-
-    private ITileLoader _cache = new OnlineTileLoader(MapCore.LoggerFactory);
-
-    public static readonly DirectProperty<MapControl, ITileLoader> CacheProperty =
-        AvaloniaProperty.RegisterDirect<MapControl, ITileLoader>(
-            nameof(Cache),
-            o => o.Cache,
-            (o, v) => o.Cache = v
-        );
-
-    public ITileLoader Cache
-    {
-        get => _cache;
-        set => SetAndRaise(CacheProperty, ref _cache, value);
+        set
+        {
+            if (SetAndRaise(ProviderProperty, ref _provider, value))
+            {
+                _cache = new OnlineTileLoader(MapCore.LoggerFactory, _provider);
+            }
+        }
     }
 
     #endregion
@@ -302,9 +280,8 @@ public partial class MapControl : Control
         {
             if (SetAndRaise(ZoomProperty, ref _zoom, value))
             {
-                _tiles.Clear();
                 CenterMapChanged();
-                LoadVisibleTiles();
+                _renderSubject.OnNext(Unit.Default);
             }
         }
     }
