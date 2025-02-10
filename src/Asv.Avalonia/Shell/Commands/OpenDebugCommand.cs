@@ -43,6 +43,7 @@ public class OpenDebugCommand(ExportFactory<IDebugWindow> factory) : IAsyncComma
         Icon = MaterialIconKind.WindowOpenVariant,
         DefaultHotKey = KeyGesture.Parse("Ctrl+D"),
         Order = 0,
+        IsEditable = true,
     };
 
     public IPersistable Save()

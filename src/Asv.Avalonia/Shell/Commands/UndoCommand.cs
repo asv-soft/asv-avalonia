@@ -16,6 +16,7 @@ public class UndoCommand : IAsyncCommand
             Icon = MaterialIconKind.UndoVariant,
             DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
             Order = 0,
+            IsEditable = true,
         };
 
     public IPersistable Save()

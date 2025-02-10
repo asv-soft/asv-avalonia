@@ -43,6 +43,7 @@ public class ChangeLanguageCommand(ILocalizationService svc) : IUndoRedoCommand
         Icon = MaterialIconKind.Translate,
         DefaultHotKey = null,
         Order = 0,
+        IsEditable = false,
     };
 
     #endregion
