@@ -4,10 +4,11 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
-
-public partial class DockWindow : Window // this object represents the window with drag and drop feature
+/// <summary>
+/// this object represents the window with drag and drop feature
+/// </summary>
+public partial class DockWindow : Window 
 {
-
     public static readonly StyledProperty<bool> CloseRequestedProperty =
         AvaloniaProperty.Register<DockWindow, bool>(nameof(CloseRequested));
 

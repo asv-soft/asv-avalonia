@@ -1,13 +1,10 @@
 ﻿using System.Collections.Specialized;
-using System.Windows.Input;
 using Asv.Common;
 using Avalonia;
-using Avalonia.Automation;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
@@ -33,10 +30,9 @@ public class DockControl : SelectingItemsControl
 
     public DockControl()
     {
-        UnSplitAllCommand = new ReactiveCommand((unit, token) =>
+        UnSplitAllCommand = new ReactiveCommand(_ =>
         {
             UnsplitAll();
-            return ValueTask.CompletedTask;
         });
     }
 
@@ -84,7 +80,7 @@ public class DockControl : SelectingItemsControl
         }
 
         var source = e.Source as Visual;
-        var tab = source is TabItem item ? item : source?.FindAncestorOfType<TabItem>();
+        var tab = source as TabItem ?? source?.FindAncestorOfType<TabItem>();
         if (tab != null)
         {
             _selectedTab = tab;
@@ -220,6 +216,7 @@ public class DockControl : SelectingItemsControl
             if (IsCursorWithinTargetBorder(cursorPosition, targetBorder))
             {
                 AddTabItemToTabControl(_selectedTab, targetBorder);
+                _selectedTab = null;
                 break;
             }
 
@@ -241,11 +238,10 @@ public class DockControl : SelectingItemsControl
                 Title = (_selectedTab.Header as TabStripItem)?.Content?.ToString(),
             };
             _selectedTab = null;
+            UpdateGrid();
             win.Show();
             break;
         }
-
-        _selectedTab = null;
     }
 
     #endregion
@@ -291,10 +287,15 @@ public class DockControl : SelectingItemsControl
         UpdateGrid();
     }
 
-    public void UpdateGrid()
+    private void UpdateGrid()
     {
         SortShellItems();
-        _dropTargetGrid!.Children.Clear();
+        if (_dropTargetGrid is null)
+        {
+            return;
+        }
+
+        _dropTargetGrid.Children.Clear();
         _dropTargetGrid.ColumnDefinitions.Clear();
         if (_shellItems.Min(_ => _.Column) != 0 && _shellItems.All(_ => _.Column == _shellItems[0].Column))
         {
@@ -303,8 +304,6 @@ public class DockControl : SelectingItemsControl
                 item.Column = 0;
             }
         }
-
-        _shellItems.OrderBy(_ => _.Column);
 
         var occupiedColumns = _shellItems.Select(item => item.Column).ToHashSet();
 
@@ -345,8 +344,7 @@ public class DockControl : SelectingItemsControl
         grid.ColumnDefinitions.Clear();
         grid.Children.Clear();
 
-        var sortedItems = items.ToArray();
-        var columnCount = sortedItems.Length;
+        var columnCount = items.ToArray().Length;
 
         for (var i = 0; i < columnCount; i++)
         {

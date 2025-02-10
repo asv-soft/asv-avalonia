@@ -36,9 +36,6 @@
             </avalonia:AdaptiveTabStripTabControl>
         </Border>
     </Design.PreviewWith>
-
-    <!-- <Thickness x:Key="TabControlTopPlacementItemMargin">0 0 0 2</Thickness> -->
-
     <ControlTheme x:Key="{x:Type avalonia:AdaptiveTabStripTabControl}" TargetType="avalonia:AdaptiveTabStripTabControl">
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="{DynamicResource TabItemMargin}" />
@@ -52,9 +49,9 @@
                         HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                         VerticalAlignment="{TemplateBinding VerticalAlignment}">
                     <DockPanel>
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" DockPanel.Dock="Top" Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" DockPanel.Dock="Top"
+                                      Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsPresenter Name="PART_ItemsPresenter">
-                                <!-- <StackPanel Orientation="Horizontal"></StackPanel> -->
                             </ItemsPresenter>
                         </ScrollViewer>
                         <ScrollViewer Margin="0,0,0,10" HorizontalScrollBarVisibility="Auto">
@@ -64,13 +61,12 @@
                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                               Content="{TemplateBinding SelectedContent}"
-                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}" />     
+                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
                         </ScrollViewer>
                     </DockPanel>
                 </Border>
             </ControlTemplate>
         </Setter>
-
         <Style Selector="^[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
             <Setter Property="Orientation" Value="Vertical" />
         </Style>
@@ -78,7 +74,7 @@
             <Setter Property="Orientation" Value="Vertical" />
         </Style>
         <Style Selector="^[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
-            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Orientation" Value="Horizontal" />
             <Setter Property="Margin" Value="{DynamicResource TabControlTopPlacementItemMargin}" />
         </Style>
     </ControlTheme>
