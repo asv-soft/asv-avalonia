@@ -7,7 +7,7 @@
         x:Class="Asv.Avalonia.ShellWindow"
         x:DataType="avalonia:ShellViewModel"
         
-        Title="Asv.Avalonia.Example">
+        Title="Asv.Avalonia.Example" Topmost="False">
         <Window.KeyBindings>
                 
         </Window.KeyBindings>

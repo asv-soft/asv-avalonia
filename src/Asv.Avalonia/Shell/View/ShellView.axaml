@@ -16,6 +16,7 @@
         <StackPanel DockPanel.Dock="Top" MinWidth="100" HorizontalAlignment="Center" VerticalAlignment="Center">
             <Button Command="{Binding Back}">Back</Button>
             <Button Command="{Binding Forward}">Forward</Button>
+            <Button Command="{Binding Message}">Message</Button>
             <!--<TextBox Focusable="True" DataContext="{Binding Property1}" 
                IsFocused="{Binding IsSelected.Value, Mode=OneWayToSource}"
                avalonia:NavigationHelper.IsSelected="{Binding IsSelected.Value, Mode=OneWay}"

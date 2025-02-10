@@ -1,16 +1,37 @@
-﻿using System.Diagnostics;
+using System.Composition;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Input;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.Platform.Storage;
+using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
+[Export(typeof(IFileDialogService))]
+[Export(typeof(ISimpleDialogService))]
+[Shared]
+public sealed class DesktopDialogService : IFileDialogService, ISimpleDialogService
 {
+    private readonly IShellHost _host;
+
+    [ImportingConstructor]
+    public DesktopDialogService(IShellHost host)
+    {
+        _host = host;
+    }
+
     public bool IsImplementedShowOpenFileDialog { get; } = true;
     public bool IsImplementedShowSaveFileDialog { get; } = true;
     public bool IsImplementedShowSelectFolderDialog { get; } = true;
     public bool IsImplementedShowObserveFolderDialog { get; } = true;
+    public bool IsImplementedShowYesNoDialogDialog { get; } = true;
+    public bool IsImplementedShowSaveCancelDialog { get; } = true;
+    public bool IsImplementedShowUnitInputDialog { get; } = true;
 
     public async Task<string?> ShowOpenFileDialog(
         string title,
@@ -50,10 +71,10 @@ public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
         if (!string.IsNullOrEmpty(initialDirectory))
         {
             options.SuggestedStartLocation =
-                await topLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
+                await _host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
         }
 
-        var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
+        var files = await _host.TopLevel.StorageProvider.OpenFilePickerAsync(options);
 
         return files.Count == 1 ? files[0].Path.AbsolutePath : null;
     }
@@ -90,10 +111,10 @@ public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
         if (!string.IsNullOrEmpty(initialDirectory))
         {
             options.SuggestedStartLocation =
-                await topLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
+                await _host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(initialDirectory);
         }
 
-        var result = await topLevel.StorageProvider.SaveFilePickerAsync(options);
+        var result = await _host.TopLevel.StorageProvider.SaveFilePickerAsync(options);
         return result?.Path.AbsolutePath;
     }
 
@@ -104,14 +125,32 @@ public sealed class DesktopDialogService(TopLevel topLevel) : IDialogService
         if (!string.IsNullOrEmpty(oldPath))
         {
             options.SuggestedStartLocation =
-                await topLevel.StorageProvider.TryGetFolderFromPathAsync(oldPath);
+                await _host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(oldPath);
         }
 
-        var folders = await topLevel.StorageProvider.OpenFolderPickerAsync(options);
+        var folders = await _host.TopLevel.StorageProvider.OpenFolderPickerAsync(options);
 
         var folder = folders.FirstOrDefault()?.Path.AbsolutePath;
 
         return folder;
+    }
+
+    public async Task<bool> ShowYesNoDialog(string title, string message)
+    {
+        var result = await CustomDialogInterface.ShowCustomDialog(_host.TopLevel as Window, title, message, false, "Yes", "Yes", "No");
+        return result != null && (string)result == "Yes";
+    }
+
+    public async Task<bool> ShowSaveCancelDialog(string title, string message)
+    {
+        var result = await CustomDialogInterface.ShowCustomDialog(_host.TopLevel as Window, title, message, false, "Save", "Save", "Cancel");
+        return result != null && (string)result == "Save";
+    }
+
+    public async Task<string?> ShowUnitInputDialog(string title, string message)
+    {
+        var result = await CustomDialogInterface.ShowCustomDialog(_host.TopLevel as Window, title, message, true, "OK", "OK", "Cancel");
+        return result as string;
     }
 
     public Task ShowObserveFolderDialog(string title, string? defaultPath = null)

@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using Avalonia.Controls;
 using ObservableCollections;
 using R3;
 
@@ -7,6 +8,7 @@ namespace Asv.Avalonia;
 public interface IShellHost
 {
     IShell Shell { get; }
+    TopLevel TopLevel { get; }
 }
 
 public interface IShell : IRoutable

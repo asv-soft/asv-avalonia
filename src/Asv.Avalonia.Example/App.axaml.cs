@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Composition.Convention;
 using System.Composition.Hosting;
@@ -53,10 +54,12 @@ public partial class App : Application, IContainerHost, IShellHost
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             Shell = new DesktopShellViewModel(desktop, this);
+            TopLevel = TopLevel.GetTopLevel(desktop.MainWindow) ?? throw new Exception($"Can't find TopLevel");
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             Shell = new MobileShellViewModel(singleViewPlatform, this);
+            TopLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView) ?? throw new Exception($"Can't find TopLevel");
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -68,4 +71,5 @@ public partial class App : Application, IContainerHost, IShellHost
 
     public CompositionHost Host { get; }
     public IShell Shell { get; private set; }
+    public TopLevel TopLevel { get; set; }
 }
