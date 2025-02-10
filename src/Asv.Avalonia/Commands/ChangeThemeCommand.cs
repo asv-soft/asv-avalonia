@@ -45,6 +45,7 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
         Icon = MaterialIconKind.ThemeLightDark,
         DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
         Order = 0,
+        IsEditable = true,
     };
 
     #endregion

@@ -4,40 +4,69 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Asv.Avalonia"
              xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="450"
              x:DataType="avalonia:SettingsKeymapViewModel"
              x:Class="Asv.Avalonia.SettingsKeymapView">
     <Design.DataContext>
-        <avalonia:SettingsKeymapViewModel/>
+        <avalonia:SettingsKeymapViewModel />
     </Design.DataContext>
+    <UserControl.Resources>
+        <!-- Добавляем NullToBoolConverter локально -->
+        <avalonia:NullToBoolConverter x:Key="SelectedItemToBoolConverter"/>
+    </UserControl.Resources>
     <DockPanel>
         <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}">
-            
+
         </TextBox>
-        
-        <DataGrid Focusable="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
+        <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Content="Reset Hot Keys to default" Margin="10" Command="{Binding ResetHotKeysToDefaultCommand}"/> <!-- TODO:LOCALIZE -->
+        <DataGrid x:Name="HotKeyGrid" Focusable="False" ItemsSource="{Binding Items}"
+                  SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Styles>
                 <Style Selector="DataGridRow DataGridCell Rectangle">
-                    <Setter Property="IsVisible" Value="False"/>
+                    <Setter Property="IsVisible" Value="False" />
                 </Style>
                 <Style Selector="DataGridRow DataGridCell.action Button">
-                    <Setter Property="IsVisible" Value="False"/>
+                    <Setter Property="IsVisible" Value="False" />
                 </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
                 <DataGridTemplateColumn CellStyleClasses="action">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <avalonia1:MaterialIcon Kind="{Binding Info.Icon}"/>
+                            <avalonia1:MaterialIcon Kind="{Binding Info.Icon}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_Name}" Binding="{Binding Info.Name}" />
-                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_Description}" Binding="{Binding Info.Description}" />
-                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_DefaultHotKey}" >
+                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_Name}"
+                                    Binding="{Binding Info.Name}" />
+                <DataGridTextColumn IsReadOnly="True"
+                                    Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_Description}"
+                                    Binding="{Binding Info.Description}" />
+                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_DefaultHotKey}" Binding="{Binding Info.DefaultHotKey}"></DataGridTextColumn>
+                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_DefaultHotKey}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Info.DefaultHotKey}"></TextBlock>
+                            <Grid>
+                                <Grid ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding IsChangingHotKey.Value}">
+                                    <TextBlock Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               Text="{Binding NewHotKeyValue.Value}" />
+                                    <Button Grid.Column="1" Padding="4" Command="{Binding CancelChangeHotKeyCommand}">
+                                        <avalonia1:MaterialIcon Kind="Cancel"></avalonia1:MaterialIcon>
+                                    </Button>
+                                    <Button Grid.Column="2" IsEnabled="{Binding IsValid.Value}" Padding="4" Command="{Binding ConfirmChangeHotKeyCommand}">
+                                        <avalonia1:MaterialIcon Kind="Check"></avalonia1:MaterialIcon>
+                                    </Button>
+                                </Grid>
+                                <Grid ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding !IsChangingHotKey.Value}">
+                                    <TextBlock Grid.Column="0"   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                               Text="{Binding CurrentHotKeyValue.Value}" />
+                                   
+                                    <Button IsEnabled="{Binding #HotKeyGrid.SelectedItem, Converter={StaticResource SelectedItemToBoolConverter}}" IsVisible="{Binding Info.IsEditable}" Grid.Column="1" Padding="4" Command="{Binding ChangeHotKeyCommand}">
+                                        <avalonia1:MaterialIcon Kind="Pencil"></avalonia1:MaterialIcon>
+                                    </Button>
+                                </Grid>
+                            </Grid>
+
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

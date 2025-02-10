@@ -1,16 +1,15 @@
 using System.Collections.Immutable;
 using System.Composition;
 using Asv.Cfg;
-using Avalonia.Controls;
 using Avalonia.Input;
-using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
 public class CommandServiceConfig
 {
-    public Dictionary<string, string?> HotKeys { get; set; } = new();
+    public Dictionary<string, string?> DefaultHotKeys { get; set; } = new();
+    public Dictionary<string, string?> CustomHotKeys { get; set; } = new();
 }
 
 [Export(typeof(ICommandService))]
@@ -19,7 +18,7 @@ public class CommandService : ICommandService
 {
     private readonly IConfiguration _cfg;
     private readonly ILoggerFactory _loggerFactory;
-    private readonly ImmutableDictionary<string, ICommandFactory> _commands;
+    private readonly Dictionary<string, ICommandFactory> _commands;
     private ImmutableDictionary<string, KeyGesture> _commandsVsGesture;
     private ImmutableDictionary<KeyGesture, ICommandFactory> _gestureVsCommand;
     private readonly ILogger<CommandService> _logger;
@@ -34,8 +33,9 @@ public class CommandService : ICommandService
         _cfg = cfg;
         _loggerFactory = loggerFactory;
         _logger = loggerFactory.CreateLogger<CommandService>();
-        _commands = factories.ToImmutableDictionary(x => x.Info.Id);
-        ReloadHotKeys();
+        _commands = factories.ToDictionary(x => x.Info.Id);
+
+        ReloadHotKeys(_=> _= _cfg.Get<CommandServiceConfig>().CustomHotKeys);
     }
 
     private void ReloadHotKeys(Action<IDictionary<string, string?>>? modifyConfig = null)
@@ -46,26 +46,26 @@ public class CommandService : ICommandService
         // load default hot keys
         foreach (var value in _commands.Values)
         {
-            if (value.Info.DefaultHotKey == null)
+            if (value.Info.CustomHotKey == null)
             {
                 // skip commands without hot keys
                 continue;
             }
 
-            keyVsCommandBuilder.Add(value.Info.DefaultHotKey, value);
-            commandVsKeyBuilder.Add(value.Info.Id, value.Info.DefaultHotKey);
+            keyVsCommandBuilder.Add(value.Info.CustomHotKey, value);
+            commandVsKeyBuilder.Add(value.Info.Id, value.Info.CustomHotKey);
         }
 
         var config = _cfg.Get<CommandServiceConfig>();
         var configChanged = false;
         if (modifyConfig != null)
         {
-            modifyConfig(config.HotKeys);
+            modifyConfig(config.CustomHotKeys);
             configChanged = true;
         }
 
         // load custom hot keys from config
-        foreach (var (commandId, hotKey) in config.HotKeys)
+        foreach (var (commandId, hotKey) in config.CustomHotKeys)
         {
             if (string.IsNullOrWhiteSpace(hotKey))
             {
@@ -89,7 +89,7 @@ public class CommandService : ICommandService
                     hotKey,
                     commandId
                 );
-                config.HotKeys.Remove(commandId);
+                config.CustomHotKeys.Remove(commandId);
                 configChanged = true;
                 continue;
             }
@@ -100,7 +100,7 @@ public class CommandService : ICommandService
                     "Command {commandId} not found => remove it from config",
                     commandId
                 );
-                config.HotKeys.Remove(commandId);
+                config.CustomHotKeys.Remove(commandId);
                 configChanged = true;
                 continue;
             }
@@ -112,7 +112,7 @@ public class CommandService : ICommandService
                     hotKey,
                     commandId
                 );
-                config.HotKeys.Remove(commandId);
+                config.CustomHotKeys.Remove(commandId);
                 configChanged = true;
                 continue;
             }
