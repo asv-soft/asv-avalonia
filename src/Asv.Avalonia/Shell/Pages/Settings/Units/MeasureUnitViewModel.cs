@@ -30,7 +30,7 @@ public class MeasureUnitViewModel : RoutableViewModel
         var newValue = new Persistable<UnitDelegate>(
             new UnitDelegate(Base.UnitId, userValue.UnitItemId)
         );
-        await this.ExecuteCommand(CompositeChangeCurrentUnitItemCommand.Id, newValue);
+        await this.ExecuteCommand(ChangeCurrentUnitItemCommand.Id, newValue);
         _internalChange = false;
     }
 
