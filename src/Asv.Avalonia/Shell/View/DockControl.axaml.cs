@@ -77,6 +77,7 @@ public class DockControl : SelectingItemsControl
 
     private void PressedHandler(object? sender, PointerPressedEventArgs e)
     {
+
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
             return;
@@ -109,7 +110,14 @@ public class DockControl : SelectingItemsControl
 
     protected override void OnPointerMoved(PointerEventArgs e)
     {
+        base.OnPointerMoved(e);
+        
         if (_dropTargetGrid == null)
+        {
+            return;
+        }
+        
+        if (_selectedTab == null)
         {
             return;
         }
@@ -119,7 +127,7 @@ public class DockControl : SelectingItemsControl
             item.BorderBrush = Brushes.Transparent;
         }
 
-        base.OnPointerMoved(e);
+       
         var isBorderSelected = false;
         if (_selectedTab == null)
         {
@@ -184,33 +192,6 @@ public class DockControl : SelectingItemsControl
         }
 
         var cursorPosition = e.GetPosition(window);
-        foreach (var targetBorder in _targetBorders)
-        {
-            if (IsCursorWithinTargetBorder(cursorPosition, targetBorder))
-            {
-                AddTabItemToTabControl(_selectedTab, targetBorder);
-                break;
-            }
-
-            if (IsCursorWithinDockControl(cursorPosition))
-            {
-                continue;
-            }
-
-            var parent = _selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>();
-            if (parent is null)
-            {
-                return;
-            }
-
-            parent.Items.Remove(_selectedTab);
-            var win = new Window()
-            {
-                Content = _selectedTab.Content,
-                Title = (_selectedTab.Header as TabStripItem)?.Content?.ToString(),
-            };
-            win.Show();
-        }
 
         foreach (var child in _dropTargetGrid!.Children)
         {
@@ -231,6 +212,36 @@ public class DockControl : SelectingItemsControl
 
             _shellItems.Find(item => item.TabControl == _selectedTab)!.Column = Grid.GetColumn(tabControl);
             UpdateGrid();
+            break;
+        }
+
+        foreach (var targetBorder in _targetBorders)
+        {
+            if (IsCursorWithinTargetBorder(cursorPosition, targetBorder))
+            {
+                AddTabItemToTabControl(_selectedTab, targetBorder);
+                break;
+            }
+
+            if (IsCursorOutOfDockControl(cursorPosition))
+            {
+                continue;
+            }
+
+            var parent = _selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>();
+            if (parent is null)
+            {
+                return;
+            }
+
+            parent.Items.Remove(_selectedTab);
+            var win = new Window()
+            {
+                Content = _selectedTab.Content,
+                Title = (_selectedTab.Header as TabStripItem)?.Content?.ToString(),
+            };
+            _selectedTab = null;
+            win.Show();
             break;
         }
 
@@ -411,7 +422,7 @@ public class DockControl : SelectingItemsControl
         return targetPanel.Bounds.Contains(cursorPosition);
     }
 
-    private bool IsCursorWithinDockControl(Point cursorPosition)
+    private bool IsCursorOutOfDockControl(Point cursorPosition)
     {
         var window = this.GetVisualRoot() as Window;
         return window!.Bounds.Contains(cursorPosition);

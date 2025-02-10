@@ -34,9 +34,6 @@ public partial class DockWindow : Window // this object represents the window wi
         InitializeComponent();
         
         var dragArea = this.FindControl<Border>("DragArea");
-        dragArea!.PointerPressed += DragArea_PointerPressed;
-        dragArea.PointerMoved += DragArea_PointerMoved;
-        dragArea.PointerReleased += DragArea_PointerReleased;
     }
 
     private void InitializeComponent()
