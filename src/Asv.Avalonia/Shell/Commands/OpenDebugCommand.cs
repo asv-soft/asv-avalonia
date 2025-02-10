@@ -38,8 +38,8 @@ public class OpenDebugCommand(ExportFactory<IDebugWindow> factory) : IAsyncComma
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Open Debug Window",
-        Description = "Open Debug Window",
+        Name = RS.OpenDebugCommand_CommandInfo_Name,
+        Description = RS.OpenDebugCommand_CommandInfo_Description,
         Icon = MaterialIconKind.WindowOpenVariant,
         DefaultHotKey = KeyGesture.Parse("Ctrl+D"),
         Order = 0,

@@ -48,10 +48,10 @@
                 <avalonia1:MaterialIcon Kind="Menu"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Header="File"></MenuItem>
-                        <MenuItem Header="Edit"></MenuItem>
-                        <MenuItem Header="_view"></MenuItem>
-                        <MenuItem Header="Help"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_File}"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_Edit}"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_View}"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_Help}"></MenuItem>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -60,7 +60,7 @@
                 <avalonia1:MaterialIcon Kind="DotsVertical"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Command="{Binding Close}" Header="Close"/>
+                        <MenuItem Command="{Binding Close}" Header="{x:Static avalonia:RS.ShellView_WindowControlButton_Close}"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>

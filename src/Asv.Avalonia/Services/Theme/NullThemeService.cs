@@ -10,8 +10,8 @@ public class NullThemeService : IThemeService, IDisposable
 
     private readonly ImmutableArray<IThemeInfo> _themes =
     [
-        new ThemeItem(ThemeService.DarkTheme, "Dark", ThemeVariant.Dark),
-        new ThemeItem(ThemeService.LightTheme, "Light", ThemeVariant.Light),
+        new ThemeItem(ThemeService.DarkTheme, RS.ThemeService_Dark, ThemeVariant.Dark),
+        new ThemeItem(ThemeService.LightTheme, RS.ThemeService_Light, ThemeVariant.Light),
     ];
 
     private NullThemeService() { }
