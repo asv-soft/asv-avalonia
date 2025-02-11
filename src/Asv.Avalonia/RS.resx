@@ -168,4 +168,13 @@
     <data name="MeterAltitudeUnit_Symbol" xml:space="preserve">
         <value>m</value>
     </data>
+    <data name="FeetAltitudeUnit_Name" xml:space="preserve">
+        <value>Feet</value>
+    </data>
+    <data name="FeetAltitudeUnit_Description" xml:space="preserve">
+        <value>Altitude in feet</value>
+    </data>
+    <data name="FeetAltitudeUnit_Symbol" xml:space="preserve">
+        <value>ft</value>
+    </data>
 </root>

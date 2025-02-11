@@ -344,5 +344,23 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("MeterAltitudeUnit_Symbol", resourceCulture);
             }
         }
+        
+        public static string FeetAltitudeUnit_Name {
+            get {
+                return ResourceManager.GetString("FeetAltitudeUnit_Name", resourceCulture);
+            }
+        }
+        
+        public static string FeetAltitudeUnit_Description {
+            get {
+                return ResourceManager.GetString("FeetAltitudeUnit_Description", resourceCulture);
+            }
+        }
+        
+        public static string FeetAltitudeUnit_Symbol {
+            get {
+                return ResourceManager.GetString("FeetAltitudeUnit_Symbol", resourceCulture);
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ namespace Asv.Avalonia;
 
 public class UnitBaseConfig
 {
-    public IDictionary<string, string?> CurrentUnitItems { get; set; } =
+    public IDictionary<string, string?> CurrentUnitItems { get; set; } = // TODO: проблема с сохранением и восстановлением одного или более айтемов
         new Dictionary<string, string?>();
 }
 

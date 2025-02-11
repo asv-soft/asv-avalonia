@@ -89,7 +89,9 @@ public class ChangeCurrentUnitItemCommand(IUnitService svc) : IUndoRedoCommand
         else
         {
             // execute without parameter
-            return ValueTask.FromException(new InvalidOperationException("Unable to perform action. Pass valid parameter."));
+            return ValueTask.FromException(
+                new InvalidOperationException("Unable to perform action. Pass valid parameter.")
+            );
         }
 
         return ValueTask.CompletedTask;

@@ -161,4 +161,13 @@
     <data name="MeterAltitudeUnit_Symbol" xml:space="preserve">
         <value>м</value>
     </data>
+    <data name="FeetAltitudeUnit_Symbol" xml:space="preserve">
+        <value>фут</value>
+    </data>
+    <data name="FeetAltitudeUnit_Name" xml:space="preserve">
+        <value>Футы</value>
+    </data>
+    <data name="FeetAltitudeUnit_Description" xml:space="preserve">
+        <value>Высота в футах</value>
+    </data>
 </root>
