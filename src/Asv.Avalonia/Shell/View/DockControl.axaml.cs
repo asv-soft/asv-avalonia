@@ -107,12 +107,12 @@ public class DockControl : SelectingItemsControl
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
-        
+
         if (_dropTargetGrid == null)
         {
             return;
         }
-        
+
         if (_selectedTab == null)
         {
             return;
@@ -123,7 +123,6 @@ public class DockControl : SelectingItemsControl
             item.BorderBrush = Brushes.Transparent;
         }
 
-       
         var isBorderSelected = false;
         if (_selectedTab == null)
         {
@@ -189,7 +188,12 @@ public class DockControl : SelectingItemsControl
 
         var cursorPosition = e.GetPosition(window);
 
-        foreach (var child in _dropTargetGrid!.Children)
+        if (_dropTargetGrid is null)
+        {
+            return;
+        }
+
+        foreach (var child in _dropTargetGrid.Children)
         {
             if (child is not AdaptiveTabStripTabControl tabControl)
             {
@@ -206,7 +210,13 @@ public class DockControl : SelectingItemsControl
                 continue;
             }
 
-            _shellItems.Find(item => item.TabControl == _selectedTab)!.Column = Grid.GetColumn(tabControl);
+            var item = _shellItems.Find(item => item.TabControl == _selectedTab);
+            if (item is null)
+            {
+                return;
+            }
+            
+            item.Column = Grid.GetColumn(tabControl);
             UpdateGrid();
             break;
         }
@@ -422,8 +432,12 @@ public class DockControl : SelectingItemsControl
 
     private bool IsCursorOutOfDockControl(Point cursorPosition)
     {
-        var window = this.GetVisualRoot() as Window;
-        return window!.Bounds.Contains(cursorPosition);
+        if (this.GetVisualRoot() is not Window window)
+        {
+            throw new Exception($"{nameof(window)} is null");
+        }
+
+        return window.Bounds.Contains(cursorPosition);
     }
 
     private void AddTabItemToTabControl(TabItem tabItem, Border selectorBorder)

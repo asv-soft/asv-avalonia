@@ -4,8 +4,10 @@ using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
+
 /// <summary>
-/// this object represents the window with drag and drop feature
+/// This object represents the window with drag and drop feature.
+/// TODO: Has no use now.
 /// </summary>
 public partial class DockWindow : Window 
 {

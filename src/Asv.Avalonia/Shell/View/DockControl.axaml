@@ -45,7 +45,6 @@
             <Setter Property="Width" Value="300" />
             <Setter Property="Height" Value="100" />
             <Setter Property="VerticalAlignment" Value="Bottom" />
-
         </Style>
 
         <Style Selector="^/template/ Border#PART_LeftSelector">
@@ -53,16 +52,13 @@
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="300" />
             <Setter Property="HorizontalAlignment" Value="Left" />
-
         </Style>
 
         <Style Selector="^/template/ Border#PART_RightSelector">
-
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="300" />
             <Setter Property="HorizontalAlignment" Value="Right" />
-
         </Style>
 
         <Style Selector="^/template/ Border#PART_CenterSelector">
@@ -70,6 +66,7 @@
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="100" />
         </Style>
+        
         <Style Selector="^/template/ Border#PART_TopSelector">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Width" Value="300" />
@@ -82,7 +79,6 @@
             <Setter Property="Width" Value="300" />
             <Setter Property="Height" Value="100" />
             <Setter Property="VerticalAlignment" Value="Bottom" />
-
         </Style>
 
         <Style Selector="^/template/ Border#PART_LeftSelector">
@@ -90,16 +86,13 @@
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="300" />
             <Setter Property="HorizontalAlignment" Value="Left" />
-
         </Style>
 
         <Style Selector="^/template/ Border#PART_RightSelector">
-
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Width" Value="100" />
             <Setter Property="Height" Value="300" />
             <Setter Property="HorizontalAlignment" Value="Right" />
-
         </Style>
 
         <Style Selector="^/template/ Border#PART_CenterSelector">
