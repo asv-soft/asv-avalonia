@@ -5,7 +5,7 @@ public class BingTileProvider : ITileProvider
     private readonly string _apiKey;
     private readonly bool _useHighRes;
     public IMapProjection Projection => WebMercatorProjection.Instance;
-    
+
     public BingTileProvider(string apiKey, bool useHighRes = false)
     {
         _apiKey = apiKey;
@@ -17,7 +17,6 @@ public class BingTileProvider : ITileProvider
         var quadKey = GetQuadKey(position);
         return $"https://t0.ssl.ak.dynamic.tiles.virtualearth.net/comp/CompositionHandler/{quadKey}?mkt=en-US&it=A,G,L&dpi={(_useHighRes ? "d1" : "d0")}&key={_apiKey}";
     }
-
 
     private static string GetQuadKey(TilePosition position)
     {

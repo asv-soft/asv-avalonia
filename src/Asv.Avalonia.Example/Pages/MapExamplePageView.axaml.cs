@@ -1,16 +1,13 @@
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Example;
 
-public partial class Window1 : Window
+public partial class MapExamplePageView : UserControl
 {
-    public Window1()
+    public MapExamplePageView()
     {
         InitializeComponent();
-#if DEBUG
-        this.AttachDevTools();
-#endif
     }
 }

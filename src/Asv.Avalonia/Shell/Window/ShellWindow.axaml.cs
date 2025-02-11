@@ -23,7 +23,7 @@ public partial class ShellWindow : Window
         _logger = logger.CreateLogger<ShellWindow>();
         InitializeComponent();
 #if DEBUG
-        this.AttachDevTools();
+        // this.AttachDevTools();
 #endif
         _configuration = configuration;
         _savePosition = new Subject<Unit>();

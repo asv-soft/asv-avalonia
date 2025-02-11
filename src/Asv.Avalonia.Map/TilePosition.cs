@@ -61,8 +61,6 @@ public readonly struct TilePosition : IEquatable<TilePosition>
         return new TilePosition(tileX, tileY, zoom);
     }
 
-    
-
     public override string ToString()
     {
         return $"{nameof(TilePosition)}(x:{X}, y:{Y}, zoom:{Zoom})";

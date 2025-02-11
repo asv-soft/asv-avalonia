@@ -8,31 +8,31 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.ShellView"
              x:DataType="avalonia:ShellViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
          to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <avalonia:DesignTimeShellViewModel />
-  </Design.DataContext>
+        <avalonia:DesignTimeShellViewModel />
+    </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="Border.error">
-            <Setter Property="BorderBrush" Value="Red"/>
+            <Setter Property="BorderBrush" Value="Red" />
         </Style>
         <Style Selector="Border.warning">
-            <Setter Property="BorderBrush" Value="Orange"/>
+            <Setter Property="BorderBrush" Value="Orange" />
         </Style>
         <Style Selector="DockPanel.error">
-            <Setter Property="Background" Value="Red"/>
+            <Setter Property="Background" Value="Red" />
         </Style>
         <Style Selector="DockPanel.warning">
-            <Setter Property="Background" Value="Orange"/>
+            <Setter Property="Background" Value="Orange" />
         </Style>
         <Style Selector="DropDownButton#WindowControlButton /template/ PathIcon">
             <Setter Property="IsVisible" Value="False" />
         </Style>
     </UserControl.Styles>
-  <Border BorderThickness="1"
-          BorderBrush="{DynamicResource SystemAccentColorDark3}"
-          Classes.error="{Binding ErrorState.Value, 
+    <Border BorderThickness="1"
+            BorderBrush="{DynamicResource SystemAccentColorDark3}"
+            Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
           Classes.warning="{Binding ErrorState.Value, 
@@ -48,10 +48,10 @@
                 <avalonia1:MaterialIcon Kind="Menu"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Header="File"></MenuItem>
-                        <MenuItem Header="Edit"></MenuItem>
-                        <MenuItem Header="_view"></MenuItem>
-                        <MenuItem Header="Help"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_File}"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_Edit}"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_View}"></MenuItem>
+                        <MenuItem Header="{x:Static avalonia:RS.ShellView_Toolbar_Help}"></MenuItem>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -60,7 +60,7 @@
                 <avalonia1:MaterialIcon Kind="DotsVertical"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
-                        <MenuItem Command="{Binding Close}" Header="Close"/>
+                        <MenuItem Command="{Binding Close}" Header="{x:Static avalonia:RS.ShellView_WindowControlButton_Close}"/>
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
@@ -84,25 +84,25 @@
                    Classes.error="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
-                   Classes.warning="{Binding ErrorState.Value, 
+                       Classes.warning="{Binding ErrorState.Value, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
             
         </DockPanel>
         <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
-            <TabControl ItemsSource="{Binding PagesView}" SelectedItem="{Binding SelectedPage.Value}">
-                <TabControl.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal" Spacing="4">
-                            <avalonia1:MaterialIcon Width="16" Height="16" Kind="{Binding Icon.Value}"/>
-                            <TextBlock VerticalAlignment="Center" Text="{Binding Title.Value}"/>
-                            <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0">
-                                <avalonia1:MaterialIcon Kind="Close"/>
-                            </Button>
-                        </StackPanel>
-                    </DataTemplate>
-                </TabControl.ItemTemplate>
-            </TabControl>
+            <avalonia:DockControl MaxSplitAmount="3" BorderHighLightColor="{DynamicResource SystemAccentColor}" ItemsSource="{CompiledBinding PagesView}" SelectedItem="{Binding SelectedControl}">
+                 <avalonia:DockControl.TabControlStripItemTemplate> 
+                     <DataTemplate> 
+                         <StackPanel Orientation="Horizontal" Spacing="4"> 
+                             <avalonia1:MaterialIcon Width="16" Height="16" Kind="{Binding Icon.Value}"/> 
+                             <TextBlock VerticalAlignment="Center" Text="{Binding Title.Value}"/> 
+                             <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0"> 
+                                 <avalonia1:MaterialIcon Kind="Close"/> 
+                             </Button> 
+                         </StackPanel> 
+                     </DataTemplate>
+                 </avalonia:DockControl.TabControlStripItemTemplate> 
+            </avalonia:DockControl>
         </Border>
     </DockPanel>
     </Border>

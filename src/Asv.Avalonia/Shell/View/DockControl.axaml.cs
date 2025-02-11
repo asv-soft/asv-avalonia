@@ -1,39 +1,265 @@
 ﻿using System.Collections.Specialized;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
+using Avalonia.Input;
+using Avalonia.Media;
+using Avalonia.Metadata;
+using Avalonia.VisualTree;
+using R3;
 
 namespace Asv.Avalonia;
 
+public class ShellItem
+{
+    public TabItem TabControl { get; init; } = new();
+    public int Column { get; set; }
+}
+
 public class DockControl : SelectingItemsControl
 {
-    private Grid? _grid;
-    private readonly Dictionary<int, TabControl> _tabControls = new();
+    private const int ColumnIncrement = 2;
+    private readonly List<Border> _targetBorders = [];
+    private List<ShellItem> _shellItems = [];
+    private TabItem? _selectedTab;
+    private Border? _leftSelector;
+    private Border? _rightSelector;
+    private Grid? _dropTargetGrid;
 
-    public static readonly AttachedProperty<int> DockColumnProperty =
-        AvaloniaProperty.RegisterAttached<DockControl, Control, int>("DockColumn", default);
-
-    public static int GetDockColumn(Control control) => control.GetValue(DockColumnProperty);
-
-    public static void SetDockColumn(Control control, int value) =>
-        control.SetValue(DockColumnProperty, value);
-
-    public DockControl() { }
-
-    protected override void OnInitialized()
+    public DockControl()
     {
-        base.OnInitialized();
+        UnSplitAllCommand = new ReactiveCommand(_ =>
+        {
+            UnsplitAll();
+        });
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == ItemCountProperty)
+        {
+            CreateTabs();
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        _leftSelector = e.NameScope.Find<Border>("PART_LeftSelector");
+        _rightSelector = e.NameScope.Find<Border>("PART_RightSelector");
+        _dropTargetGrid = e.NameScope.Find<Grid>("PART_DockSelectivePart");
+        if (_dropTargetGrid is null)
+        {
+            throw new ApplicationException();
+        }
 
-        _grid = e.NameScope.Find<Grid>("PART_DockControlGrid") ?? throw new Exception();
-        _grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-        UpdateTabs();
+        if (_leftSelector != null)
+        {
+            _targetBorders.Add(_leftSelector);
+        }
+
+        if (_rightSelector != null)
+        {
+            _targetBorders.Add(_rightSelector);
+        }
+
+        CreateTabs();
     }
+
+    #region TabDockEvents
+
+    private void PressedHandler(object? sender, PointerPressedEventArgs e)
+    {
+        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        {
+            return;
+        }
+
+        var source = e.Source as Visual;
+        var tab = source as TabItem ?? source?.FindAncestorOfType<TabItem>();
+        if (tab != null)
+        {
+            _selectedTab = tab;
+        }
+
+        e.Pointer.Capture(this);
+    }
+
+    private void PointerMovedHandler(object? sender, PointerEventArgs e)
+    {
+        if (_selectedTab == null)
+        {
+            return;
+        }
+
+        var pointerPosition = e.GetPosition(this);
+
+        foreach (var border in _targetBorders)
+        {
+            border.Background = TurnBorderIndicator(
+                IsCursorWithinTargetBorder(pointerPosition, border)
+            );
+        }
+    }
+
+    protected override void OnPointerMoved(PointerEventArgs e)
+    {
+        base.OnPointerMoved(e);
+
+        if (_dropTargetGrid == null)
+        {
+            return;
+        }
+
+        if (_selectedTab == null)
+        {
+            return;
+        }
+
+        foreach (var item in _dropTargetGrid.Children.OfType<AdaptiveTabStripTabControl>())
+        {
+            item.BorderBrush = Brushes.Transparent;
+        }
+
+        var isBorderSelected = false;
+        if (_selectedTab == null)
+        {
+            return;
+        }
+
+        var pointerPosition = e.GetPosition(this);
+
+        foreach (var border in _targetBorders)
+        {
+            border.Background = TurnBorderIndicator(
+                IsCursorWithinTargetBorder(pointerPosition, border)
+            );
+            if (IsCursorWithinTargetBorder(pointerPosition, border))
+            {
+                isBorderSelected = true;
+            }
+        }
+
+        if (_dropTargetGrid == null)
+        {
+            return;
+        }
+
+        if (isBorderSelected)
+        {
+            return;
+        }
+
+        foreach (var item in _dropTargetGrid.Children.OfType<AdaptiveTabStripTabControl>())
+        {
+            if (_selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>() == item)
+            {
+                continue;
+            }
+
+            item.BorderBrush = TurnBorderIndicator(IsCursorWithinTabControl(pointerPosition, item));
+
+            item.BorderThickness = new Thickness(
+                IsCursorWithinTabControl(pointerPosition, item) ? 4 : 0
+            );
+        }
+    }
+
+    private IBrush TurnBorderIndicator(bool turnOn)
+    {
+        return turnOn ? BorderHighLightColor : Brushes.Transparent;
+    }
+
+    protected override void OnPointerReleased(PointerReleasedEventArgs e)
+    {
+        base.OnPointerReleased(e);
+        foreach (var border in _targetBorders)
+        {
+            border.Background = Brushes.Transparent;
+        }
+
+        if (_selectedTab == null)
+        {
+            return;
+        }
+
+        if (this.GetVisualRoot() is not Window window)
+        {
+            return;
+        }
+
+        var cursorPosition = e.GetPosition(window);
+
+        if (_dropTargetGrid is null)
+        {
+            return;
+        }
+
+        foreach (var child in _dropTargetGrid.Children)
+        {
+            if (child is not AdaptiveTabStripTabControl tabControl)
+            {
+                continue;
+            }
+
+            if (!IsCursorWithinTabControl(cursorPosition, tabControl))
+            {
+                continue;
+            }
+
+            if (_selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>() == tabControl)
+            {
+                continue;
+            }
+
+            var item = _shellItems.Find(item => item.TabControl == _selectedTab);
+            if (item is null)
+            {
+                return;
+            }
+
+            item.Column = Grid.GetColumn(tabControl);
+            UpdateGrid();
+            break;
+        }
+
+        foreach (var targetBorder in _targetBorders)
+        {
+            if (IsCursorWithinTargetBorder(cursorPosition, targetBorder))
+            {
+                AddTabItemToTabControl(_selectedTab, targetBorder);
+                _selectedTab = null;
+                break;
+            }
+
+            if (IsCursorOutOfDockControl(cursorPosition))
+            {
+                continue;
+            }
+
+            var parent = _selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>();
+            if (parent is null)
+            {
+                return;
+            }
+
+            parent.Items.Remove(_selectedTab);
+            var win = new Window()
+            {
+                Content = _selectedTab.Content,
+                Title = (_selectedTab.Header as TabStripItem)?.Content?.ToString(),
+            };
+            _selectedTab = null;
+            UpdateGrid();
+            win.Show();
+            break;
+        }
+    }
+
+    #endregion
 
     protected override void LogicalChildrenCollectionChanged(
         object? sender,
@@ -41,77 +267,319 @@ public class DockControl : SelectingItemsControl
     )
     {
         base.LogicalChildrenCollectionChanged(sender, e);
-        UpdateTabs();
+        CreateTabs();
     }
 
-    private void UpdateTabs()
+    private void CreateTabs()
     {
-        if (_grid == null)
+        _shellItems.Clear();
+        if (Items.Count == 0)
         {
             return;
         }
 
-        _grid.Children.Clear();
-        _tabControls.Clear();
-        _grid.ColumnDefinitions.Clear();
-
-        if (Items == null)
+        if (_dropTargetGrid is null)
         {
-            return;
-        }
-
-        // Группировка элементов по колонкам
-        var groupedItems = Items
-            .Cast<object>()
-            .GroupBy(item =>
-                GetDockColumn(
-                    item as Control ?? throw new InvalidCastException("Items must be controls")
-                )
+            throw new ArgumentNullException(
+                $"_dropTargetGrid in {nameof(DockControl)} is not found"
             );
+        }
 
-        foreach (var group in groupedItems.OrderBy(g => g.Key))
+        foreach (var content in Items)
         {
-            // Создаем колонку
-            _grid.ColumnDefinitions.Add(new ColumnDefinition(1, GridUnitType.Star));
-
-            // Создаем TabControl для этой колонки
-            var tabControl = new TabControl
+            if (content is null)
             {
-                ItemsSource = group.Select(CreateTabItem),
-                ItemTemplate = ItemTemplate,
-                ItemsPanel = ItemsPanel,
-                ContentTemplate = ContentTemplate,
+                continue;
+            }
+
+            var shellItem = new ShellItem() { TabControl = CreateTabItem(content) };
+            if (_shellItems.Contains(shellItem))
+            {
+                continue;
+            }
+
+            _shellItems.Add(shellItem);
+        }
+
+        UpdateGrid();
+    }
+
+    private void UpdateGrid()
+    {
+        SortShellItems();
+        if (_dropTargetGrid is null)
+        {
+            return;
+        }
+
+        _dropTargetGrid.Children.Clear();
+        _dropTargetGrid.ColumnDefinitions.Clear();
+        if (
+            _shellItems.Min(_ => _.Column) != 0
+            && _shellItems.All(_ => _.Column == _shellItems[0].Column)
+        )
+        {
+            foreach (var item in _shellItems)
+            {
+                item.Column = 0;
+            }
+        }
+
+        var occupiedColumns = _shellItems.Select(item => item.Column).ToHashSet();
+
+        GenerateColumns(_dropTargetGrid, occupiedColumns);
+
+        bool ColumnHasGridSplitter(int columnIndex)
+        {
+            return _dropTargetGrid
+                .Children.OfType<GridSplitter>()
+                .Any(splitter => Grid.GetColumn(splitter) == columnIndex);
+        }
+
+        for (var i = 0; i < _dropTargetGrid.ColumnDefinitions.Count; i++)
+        {
+            if (!occupiedColumns.Contains(i) && !ColumnHasGridSplitter(i))
+            {
+                _dropTargetGrid.ColumnDefinitions[i].Width = new GridLength(0, GridUnitType.Pixel);
+            }
+        }
+
+        foreach (var item in _shellItems)
+        {
+            var tabControl =
+                FindTabControlInColumn(_dropTargetGrid, item.Column)
+                ?? new AdaptiveTabStripTabControl();
+            var oldParent = tabControl.Parent as Grid;
+            oldParent?.Children.Remove(tabControl);
+
+            var parent = item.TabControl.FindAncestorOfType<AdaptiveTabStripTabControl>();
+            parent?.Items.Remove(item.TabControl);
+
+            tabControl.Items.Add(item.TabControl);
+            Grid.SetColumn(tabControl, item.Column);
+            _dropTargetGrid.Children.Add(tabControl);
+        }
+    }
+
+    private void GenerateColumns(Grid grid, HashSet<int> items)
+    {
+        grid.ColumnDefinitions.Clear();
+        grid.Children.Clear();
+
+        var columnCount = items.ToArray().Length;
+
+        for (var i = 0; i < columnCount; i++)
+        {
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
+            if (i >= columnCount - 1)
+            {
+                continue;
+            }
+
+            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
+
+            var splitter = new GridSplitter()
+            {
+                Background = Brushes.White,
+                Width = 1,
+                ResizeDirection = GridResizeDirection.Columns,
             };
 
-            _tabControls[group.Key] = tabControl;
-
-            _grid.Children.Add(tabControl);
-            Grid.SetColumn(tabControl, group.Key);
+            Grid.SetColumn(splitter, grid.ColumnDefinitions.Count - 1);
+            grid.Children.Add(splitter);
         }
+    }
+
+    private AdaptiveTabStripTabControl? FindTabControlInColumn(Grid myGrid, int columnIndex)
+    {
+        foreach (var child in myGrid.Children)
+        {
+            if (
+                child is AdaptiveTabStripTabControl tabControl
+                && Grid.GetColumn(tabControl) == columnIndex
+            )
+            {
+                return tabControl;
+            }
+        }
+
+        return null;
+    }
+
+    private void UnsplitAll()
+    {
+        foreach (var item in _shellItems)
+        {
+            item.Column = 0;
+        }
+
+        UpdateGrid();
     }
 
     private TabItem CreateTabItem(object content)
     {
-        return new TabItem { Content = content, Header = (content as Control)?.Name ?? "Tab" };
+        var header = new TabStripItem()
+        {
+            Content = content,
+            ContentTemplate = TabControlStripItemTemplate,
+        };
+        header.PointerPressed += PressedHandler;
+        header.PointerMoved += PointerMovedHandler;
+        var tab = new TabItem() { Content = content, Header = header };
+        return tab;
     }
 
-    /*protected override Size MeasureOverride(Size availableSize)
+    #region HelperMethods
+
+    private bool IsCursorWithinTargetBorder(Point cursorPosition, Border targetBorder)
     {
-        _grid.Measure(availableSize);
-        return _grid.DesiredSize;
+        return targetBorder.Bounds.Contains(cursorPosition);
     }
 
-    protected override Size ArrangeOverride(Size finalSize)
+    private bool IsCursorWithinTabControl(
+        Point cursorPosition,
+        AdaptiveTabStripTabControl targetPanel
+    )
     {
-        _grid.Arrange(new Rect(finalSize));
-        return finalSize;
-    }*/
-
-    public static readonly StyledProperty<IDataTemplate?> ContentTemplateProperty =
-        ContentControl.ContentTemplateProperty.AddOwner<TabControl>();
-    public IDataTemplate? ContentTemplate
-    {
-        get => GetValue(ContentTemplateProperty);
-        set => SetValue(ContentTemplateProperty, value);
+        return targetPanel.Bounds.Contains(cursorPosition);
     }
+
+    private bool IsCursorOutOfDockControl(Point cursorPosition)
+    {
+        if (this.GetVisualRoot() is not Window window)
+        {
+            throw new Exception($"{nameof(window)} is null");
+        }
+
+        return window.Bounds.Contains(cursorPosition);
+    }
+
+    private void AddTabItemToTabControl(TabItem tabItem, Border selectorBorder)
+    {
+        var updateItem = _shellItems.Find(shellItem => shellItem.TabControl == tabItem);
+        if (updateItem == null)
+        {
+            return;
+        }
+
+        if (selectorBorder == _leftSelector)
+        {
+            updateItem.Column -= ColumnIncrement;
+
+            if (
+                _shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column))
+                >= ColumnIncrement
+            )
+            {
+                updateItem.Column -= ColumnIncrement;
+            }
+
+            if (updateItem.Column < 0)
+            {
+                foreach (var item in _shellItems)
+                {
+                    item.Column += ColumnIncrement;
+                }
+
+                updateItem.Column = 0;
+            }
+        }
+        else if (selectorBorder == _rightSelector)
+        {
+            updateItem.Column += ColumnIncrement;
+
+            if (
+                _shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column))
+                >= ColumnIncrement
+            )
+            {
+                updateItem.Column += ColumnIncrement;
+            }
+        }
+
+        UpdateGrid();
+    }
+
+    private void SortShellItems()
+    {
+        if (_shellItems.Count == 0)
+        {
+            return;
+        }
+
+        var minItem = _shellItems.MinItem(shellItem => shellItem.Column);
+        if (minItem.Column != 0)
+        {
+            foreach (var item in _shellItems)
+            {
+                item.Column -= ColumnIncrement;
+            }
+        }
+
+        var maxColumnIndex = MaxSplitAmount * ColumnIncrement;
+        var maxItem = _shellItems.MaxItem(shellItem => shellItem.Column);
+        if (maxItem.Column >= maxColumnIndex)
+        {
+            maxItem.Column -= ColumnIncrement;
+        }
+
+        _shellItems = _shellItems.OrderBy(shellItem => shellItem.Column).ToList();
+
+        var gapPairs = _shellItems
+            .Zip(_shellItems.Skip(1), (prev, curr) => new { prev, curr })
+            .Where(pair => pair.curr.Column - pair.prev.Column > 2)
+            .ToList();
+        foreach (var pair in gapPairs)
+        {
+            pair.curr.Column -= 2;
+        }
+    }
+
+    #endregion
+
+    #region Properties
+
+    public static StyledProperty<ReactiveCommand> UnSplitAllCommandProperty =
+        AvaloniaProperty.Register<DockControl, ReactiveCommand>(nameof(UnSplitAllCommand));
+
+    public ReactiveCommand UnSplitAllCommand
+    {
+        get => GetValue(UnSplitAllCommandProperty);
+        set => SetValue(UnSplitAllCommandProperty, value);
+    }
+
+    public static readonly StyledProperty<IDataTemplate?> TabControlStripItemTemplateProperty =
+        AvaloniaProperty.Register<DockControl, IDataTemplate?>(nameof(TabControlStripItemTemplate));
+
+    [InheritDataTypeFromItems("ItemsSource")]
+    public IDataTemplate? TabControlStripItemTemplate
+    {
+        get => GetValue(TabControlStripItemTemplateProperty);
+        set => SetValue(TabControlStripItemTemplateProperty, value);
+    }
+
+    public static readonly StyledProperty<int> MaxSplitAmountProperty = AvaloniaProperty.Register<
+        DockControl,
+        int
+    >(nameof(MaxSplitAmount), 4);
+
+    public int MaxSplitAmount
+    {
+        get => GetValue(MaxSplitAmountProperty);
+        set => SetValue(MaxSplitAmountProperty, value);
+    }
+
+    public static readonly StyledProperty<IBrush> BorderHighLightColorProperty =
+        AvaloniaProperty.Register<DockControl, IBrush>(
+            nameof(BorderHighLightColor),
+            Brushes.LightBlue
+        );
+
+    public IBrush BorderHighLightColor
+    {
+        get => GetValue(BorderHighLightColorProperty);
+        set => SetValue(BorderHighLightColorProperty, value);
+    }
+
+    #endregion
 }

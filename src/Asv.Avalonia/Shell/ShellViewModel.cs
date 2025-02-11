@@ -1,11 +1,5 @@
-﻿using System.Collections.Immutable;
-using System.Composition;
-using System.Composition.Hosting;
-using System.Diagnostics;
-using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using ObservableCollections;
 using R3;
 

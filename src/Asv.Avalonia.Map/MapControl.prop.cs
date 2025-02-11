@@ -70,11 +70,16 @@ public partial class MapControl
         {
             if (SetAndRaise(ProviderProperty, ref _provider, value))
             {
-                _cache.Dispose();
-                _cache = new CacheTileLoader(MapCore.LoggerFactory, value);
-                RequestRenderLoop();
+                ProviderChanged(_provider);
             }
         }
+    }
+
+    private void ProviderChanged(ITileProvider provider)
+    {
+        _cache.Dispose();
+        _cache = new CacheTileLoader(MapCore.LoggerFactory, provider);
+        RequestRenderLoop();
     }
 
     #endregion
@@ -104,8 +109,37 @@ public partial class MapControl
 
     #endregion
 
-    public static readonly StyledProperty<IBrush> BackgroundProperty = 
-        AvaloniaProperty.Register<MapControl, IBrush>(nameof (Background), Brushes.CornflowerBlue);
+    #region IsDebug
+
+    private bool _isDebug;
+
+    public static readonly DirectProperty<MapControl, bool> IsDebugEnabledProperty =
+        AvaloniaProperty.RegisterDirect<MapControl, bool>(
+            nameof(IsDebug),
+            o => o.IsDebug,
+            (o, v) => o.IsDebug = v
+        );
+
+    public bool IsDebug
+    {
+        get => _isDebug;
+        set
+        {
+            if (SetAndRaise(IsDebugEnabledProperty, ref _isDebug, value))
+            {
+                RequestRenderLoop();
+            }
+        }
+    }
+
+    #endregion
+
+    #region Background
+
+    public static readonly StyledProperty<IBrush> BackgroundProperty = AvaloniaProperty.Register<
+        MapControl,
+        IBrush
+    >(nameof(Background), Brushes.CornflowerBlue);
 
     /// <summary>
     /// Gets or sets the brush used to draw the map background.
@@ -115,4 +149,6 @@ public partial class MapControl
         get => GetValue(BackgroundProperty);
         set => SetValue(BackgroundProperty, value);
     }
+
+    #endregion
 }

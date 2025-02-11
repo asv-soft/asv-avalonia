@@ -43,11 +43,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
         _httpClient = new HttpClient();
         _inProgressHash = new();
         _cacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache", "tiles");
-        _cache = new(new MemoryCacheOptions
-        {
-            SizeLimit = 100_000_000,
-            TrackStatistics = true,
-        });
+        _cache = new(new MemoryCacheOptions { SizeLimit = 100_000_000, TrackStatistics = true });
         // Создаем директорию кэша, если её нет
         if (!Directory.Exists(_cacheDirectory))
         {
@@ -84,7 +80,12 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                 var tilePath = GetTileCachePath(position, _provider);
                 if (File.Exists(tilePath))
                 {
-                    await using var stream = File.Open(tilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                    await using var stream = File.Open(
+                        tilePath,
+                        FileMode.Open,
+                        FileAccess.Read,
+                        FileShare.Read
+                    );
                     var tile = new Bitmap(stream);
                     _cache.Set(
                         position,
@@ -92,7 +93,6 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                         new MemoryCacheEntryOptions
                         {
                             Size = tile.PixelSize.Width * tile.PixelSize.Height * 4,
-                            
                         }.RegisterPostEvictionCallback(RemoveTileCache)
                     );
                     _onLoaded.OnNext(new TileLoadedEventArgs(position, tile));

@@ -1,28 +1,26 @@
-using System.Collections.Immutable;
 using System.Composition;
-using Avalonia.Input;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
 [Export(typeof(ICommandFactory))]
 [Shared]
-public class ChangeThemeCommandFactory : ICommandFactory
+public class ChangeLanguageCommandFactory : ICommandFactory
 {
-    private readonly IThemeService _svc;
+    private readonly ILocalizationService _svc;
 
     [ImportingConstructor]
-    public ChangeThemeCommandFactory(IThemeService svc)
+    public ChangeLanguageCommandFactory(ILocalizationService svc)
     {
         ArgumentNullException.ThrowIfNull(svc);
         _svc = svc;
     }
 
-    public ICommandInfo Info => ChangeThemeCommand.StaticInfo;
+    public ICommandInfo Info => ChangeLanguageCommand.StaticInfo;
 
     public IAsyncCommand Create()
     {
-        return new ChangeThemeCommand(_svc);
+        return new ChangeLanguageCommand(_svc);
     }
 
     public bool CanExecute(IRoutable context, out IRoutable? target)
@@ -32,18 +30,18 @@ public class ChangeThemeCommandFactory : ICommandFactory
     }
 }
 
-public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
+public class ChangeLanguageCommand(ILocalizationService svc) : IUndoRedoCommand
 {
     #region Static
 
-    public const string Id = "theme.change";
+    public const string Id = "language.change";
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = RS.ChangeThemeCommand_CommandInfo_Name,
-        Description = RS.ChangeThemeCommand_CommandInfo_Description,
-        Icon = MaterialIconKind.ThemeLightDark,
-        DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
+        Name = RS.ChangeLanguageCommand_CommandInfo_Name,
+        Description = RS.ChangeLanguageCommand_CommandInfo_Description,
+        Icon = MaterialIconKind.Translate,
+        DefaultHotKey = null,
         Order = 0,
     };
 
@@ -75,11 +73,11 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
         if (parameter is Persistable<string> memento)
         {
             // execute with parameter
-            var oldValue = svc.CurrentTheme.Value.Id;
-            var theme = svc.Themes.FirstOrDefault(x => x.Id == memento.Value);
-            if (theme != null)
+            var oldValue = svc.CurrentLanguage.Value.Id;
+            var language = svc.AvailableLanguages.FirstOrDefault(x => x.Id == memento.Value);
+            if (language is not null)
             {
-                svc.CurrentTheme.Value = theme;
+                svc.CurrentLanguage.Value = language;
             }
 
             _state = new PersistableChange<string>(oldValue, memento.Value);
@@ -87,9 +85,9 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
         else
         {
             // execute without parameter
-            var oldValue = svc.CurrentTheme.Value.Id;
-            var temp = svc.Themes.ToList();
-            var index = temp.IndexOf(svc.CurrentTheme.Value);
+            var oldValue = svc.CurrentLanguage.Value.Id;
+            var temp = svc.AvailableLanguages.ToList();
+            var index = temp.IndexOf(svc.CurrentLanguage.Value);
             index++;
             if (index >= temp.Count)
             {
@@ -97,7 +95,7 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
             }
 
             var newValue = temp[index].Id;
-            svc.CurrentTheme.Value = temp[index];
+            svc.CurrentLanguage.Value = temp[index];
             _state = new PersistableChange<string>(oldValue, newValue);
         }
 
@@ -106,13 +104,15 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
 
     public ValueTask Undo(IRoutable? context, CancellationToken cancel = default)
     {
-        if (_state != null)
+        if (_state is null)
         {
-            var theme = svc.Themes.FirstOrDefault(x => x.Id == _state.OldValue);
-            if (theme != null)
-            {
-                svc.CurrentTheme.Value = theme;
-            }
+            return ValueTask.CompletedTask;
+        }
+
+        var language = svc.AvailableLanguages.FirstOrDefault(x => x.Id == _state.OldValue);
+        if (language is not null)
+        {
+            svc.CurrentLanguage.Value = language;
         }
 
         return ValueTask.CompletedTask;
@@ -120,13 +120,15 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
 
     public ValueTask Redo(IRoutable context, CancellationToken cancel = default)
     {
-        if (_state != null)
+        if (_state is null)
         {
-            var theme = svc.Themes.FirstOrDefault(x => x.Id == _state.NewValue);
-            if (theme != null)
-            {
-                svc.CurrentTheme.Value = theme;
-            }
+            return ValueTask.CompletedTask;
+        }
+
+        var language = svc.AvailableLanguages.FirstOrDefault(x => x.Id == _state.NewValue);
+        if (language is not null)
+        {
+            svc.CurrentLanguage.Value = language;
         }
 
         return ValueTask.CompletedTask;

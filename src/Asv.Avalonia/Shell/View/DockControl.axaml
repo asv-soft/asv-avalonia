@@ -2,15 +2,103 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:Asv.Avalonia">
     <Design.PreviewWith>
-        <controls:DockControl />
+        <Border Width="800" Height="1200" Margin="20">
+            <controls:DockControl>
+                <controls:SettingsPageViewModel />
+                <controls:SettingsPageViewModel />
+                <controls:SettingsPageViewModel />
+                <controls:SettingsPageViewModel />
+            </controls:DockControl>
+        </Border>
     </Design.PreviewWith>
-
     <Style Selector="controls|DockControl">
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid x:Name="PART_DockControlGrid"/>
+                <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*">
+                    <ScrollViewer  Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Margin="0,0,0,10">
+                        <Grid
+                              x:Name="PART_DockSelectivePart">
+                        </Grid>
+                    </ScrollViewer>
+                    <Panel x:Name="PART_SelectorPanel" Grid.Row="0" Grid.RowSpan="3" Grid.ColumnSpan="3"
+                           Grid.Column="0">
+                        <Grid MinWidth="100" x:Name="PART_SelectorGrid" RowDefinitions="*,*,*"
+                              ColumnDefinitions="*,*,*">
+                            <Border x:Name="PART_LeftSelector" Grid.Row="1" Grid.Column="0" />
+                            <Border x:Name="PART_RightSelector" Grid.Row="1" Grid.Column="2" />
+                            <Border x:Name="PART_CenterSelector" Grid.Row="1" Grid.Column="1" />
+                        </Grid>
+                    </Panel>
+                </Grid>
             </ControlTemplate>
         </Setter>
+        <Style Selector="^/template/ Border#PART_TopSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="300" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_BottomSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="300" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_LeftSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_RightSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_CenterSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="100" />
+        </Style>
+        
+        <Style Selector="^/template/ Border#PART_TopSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="300" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_BottomSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="300" />
+            <Setter Property="Height" Value="100" />
+            <Setter Property="VerticalAlignment" Value="Bottom" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_LeftSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_RightSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="300" />
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+
+        <Style Selector="^/template/ Border#PART_CenterSelector">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Width" Value="100" />
+            <Setter Property="Height" Value="100" />
+        </Style>
     </Style>
 </Styles>

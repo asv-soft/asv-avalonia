@@ -19,17 +19,14 @@ public class WebMercatorProjection : BaseMapProjection
 {
     public static IMapProjection Instance { get; } = new WebMercatorProjection();
 
-    private WebMercatorProjection()
-    {
-        
-    }
-    
+    private WebMercatorProjection() { }
+
     public override GeoPoint PixelsToWgs84(Point pixel, int zoom, int tileSize)
     {
         var globalPx = pixel.X;
         var globalPy = pixel.Y;
         var mapSize = tileSize * (1 << zoom); // 256 * 2^Zoom
-        
+
         if (globalPx < 0)
             globalPx += mapSize;
         if (globalPx >= mapSize)

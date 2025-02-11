@@ -20,12 +20,12 @@ public class BreadCrumbItem(bool isFirst, ITreePageNode item)
 
 public class TreePageNode : ViewModelBase, ITreePageNode
 {
-    public TreePageNode(string id, string? navigateTo, string? parentId = null)
+    public TreePageNode(string id, string name, string? navigateTo, string? parentId = null)
         : base(id)
     {
         NavigateTo = navigateTo;
         ParentId = parentId;
-        Name = new BindableReactiveProperty<string>(id);
+        Name = new BindableReactiveProperty<string>(name);
         Icon = new BindableReactiveProperty<MaterialIconKind>(MaterialIconKind.Tree);
         Status = new BindableReactiveProperty<string?>(null);
     }

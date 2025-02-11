@@ -31,9 +31,9 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Base.Name}" />
-                <DataGridTextColumn IsReadOnly="True" Header="Description" Binding="{Binding Base.Description}" />
-                <DataGridTemplateColumn Header="Selected" MinWidth="150" >
+                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Name}" Binding="{Binding Base.Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Description}" Binding="{Binding Base.Description}" />
+                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Selected}" MinWidth="150" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -62,7 +62,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="Default" MinWidth="150">
+                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Default}" MinWidth="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center" Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center">

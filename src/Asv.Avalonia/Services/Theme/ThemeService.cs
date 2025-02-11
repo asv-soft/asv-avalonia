@@ -40,9 +40,9 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
         _logger = loggerFactory.CreateLogger<ThemeService>();
         _themes =
         [
-            new ThemeItem(DarkTheme, "Dark", ThemeVariant.Dark),
-            new ThemeItem(LightTheme, "Light", ThemeVariant.Light),
-            new ThemeItem(DefaultTheme, "System", ThemeVariant.Default),
+            new ThemeItem(DarkTheme, RS.ThemeService_Dark, ThemeVariant.Dark),
+            new ThemeItem(LightTheme, RS.ThemeService_Light, ThemeVariant.Light),
+            new ThemeItem(DefaultTheme, RS.ThemeService_System, ThemeVariant.Default),
         ];
         _config = cfgSvc.Get<ThemeServiceConfig>();
 
@@ -99,6 +99,7 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
         if (disposing)
         {
             _sub1.Dispose();
+            _sub2.Dispose();
             CurrentTheme.Dispose();
             IsCompact.Dispose();
         }
