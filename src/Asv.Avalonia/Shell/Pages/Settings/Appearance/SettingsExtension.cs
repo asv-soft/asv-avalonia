@@ -14,11 +14,17 @@ public class SettingsExtension() : IExtensionFor<ISettingsPage>
     {
         _node1 = new TreePageNode(
             SettingsAppearanceViewModel.PageId,
+            RS.SettingsAppearanceViewModel_Name,
             SettingsAppearanceViewModel.PageId
         );
-        _node2 = new TreePageNode(SettingsUnitsViewModel.PageId, SettingsUnitsViewModel.PageId);
+        _node2 = new TreePageNode(
+            SettingsUnitsViewModel.PageId,
+            RS.SettingsUnitsViewModel_Name,
+            SettingsUnitsViewModel.PageId
+        );
         _node3 = new TreePageNode(
             SettingsKeymapViewModel.SubPageId,
+            RS.SettingsKeymapViewModel_Name,
             SettingsKeymapViewModel.SubPageId
         );
         context.Nodes.Add(_node1);

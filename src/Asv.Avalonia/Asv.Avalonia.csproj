@@ -58,10 +58,23 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
+        <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="System.Composition" Version="$(SystemCompositionVersion)" />
         <PackageReference Include="Asv.Common" Version="$(AsvCommonVersion)" />
         <PackageReference Include="Asv.Cfg" Version="$(AsvCommonVersion)" />
         <PackageReference Include="ZLogger" Version="$(ZLoggerVersion)" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Update="RS.resx">
+            <Generator>PublicResXFileCodeGenerator</Generator>
+            <LastGenOutput>RS.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+        <Compile Update="RS.Designer.cs">
+            <DesignTime>True</DesignTime>
+            <AutoGen>True</AutoGen>
+            <DependentUpon>RS.resx</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -91,18 +104,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="RS.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>RS.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
+      <Reference Include="Avalonia.Controls.DataGrid">
+        <HintPath>..\..\..\..\.nuget\packages\avalonia.controls.datagrid\11.2.3\lib\net8.0\Avalonia.Controls.DataGrid.dll</HintPath>
+      </Reference>
     </ItemGroup>
-
     <ItemGroup>
-      <Compile Update="RS.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>RS.resx</DependentUpon>
-      </Compile>
+      <UpToDateCheckInput Remove="Shell\Pages\Document\DocumentPageView.axaml" />
     </ItemGroup>
-    
 </Project>

@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using R3;
 
 namespace Asv.Avalonia;
 
@@ -11,7 +10,7 @@ public class SettingsAppearanceViewModel : RoutableViewModel, ISettingsSubPage
     #region DesignTime
 
     public SettingsAppearanceViewModel()
-        : this(DesignTime.ThemeService)
+        : this(DesignTime.ThemeService, DesignTime.LocalizationService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -19,13 +18,18 @@ public class SettingsAppearanceViewModel : RoutableViewModel, ISettingsSubPage
     #endregion
 
     [ImportingConstructor]
-    public SettingsAppearanceViewModel(IThemeService themeService)
+    public SettingsAppearanceViewModel(
+        IThemeService themeService,
+        ILocalizationService localizationService
+    )
         : base(PageId)
     {
         Theme = new ThemeProperty(themeService) { Parent = this };
+        Language = new LanguageProperty(localizationService) { Parent = this };
     }
 
     public ThemeProperty Theme { get; }
+    public LanguageProperty Language { get; }
 
     public ValueTask Init(ISettingsPage context)
     {
@@ -37,6 +41,11 @@ public class SettingsAppearanceViewModel : RoutableViewModel, ISettingsSubPage
         if (id == Theme.Id)
         {
             return ValueTask.FromResult<IRoutable>(Theme);
+        }
+
+        if (id == Language.Id)
+        {
+            return ValueTask.FromResult<IRoutable>(Language);
         }
 
         return ValueTask.FromResult<IRoutable>(this);

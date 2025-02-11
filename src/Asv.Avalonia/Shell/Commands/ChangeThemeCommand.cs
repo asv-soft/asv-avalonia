@@ -40,8 +40,8 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Change theme",
-        Description = "Change application theme",
+        Name = RS.ChangeThemeCommand_CommandInfo_Name,
+        Description = RS.ChangeThemeCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ThemeLightDark,
         DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
         Order = 0,

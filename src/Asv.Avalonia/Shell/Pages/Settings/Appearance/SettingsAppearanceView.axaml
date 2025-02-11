@@ -13,10 +13,13 @@
     
     <StackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Spacing="8" Margin="8">
         <DockPanel>
-            <TextBlock FontSize="{StaticResource HubHeaderThemeFontSize}" Text="Common settings"/>
+            <TextBlock 
+                FontSize="{StaticResource HubHeaderThemeFontSize}" 
+                Text="{x:Static avalonia:RS.SettingsAppearanceView_HubHeader_CommonSettings}"
+            />
             <Separator/>
         </DockPanel>
-        <Grid Margin="20,0,0,0">
+        <Grid Margin="20,0,0, 0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="8" />
@@ -25,11 +28,14 @@
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                
+                <RowDefinition />
+                <RowDefinition Height="5"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <avalonia1:MaterialIcon Grid.Column="0" Kind="Cog"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Text="Application theme"/>
-            <ComboBox Grid.Column="4" 
+            
+            <avalonia1:MaterialIcon Grid.Column="0" Grid.Row="0" Kind="Cog"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Text="{x:Static avalonia:RS.SettingsAppearanceView_AppTheme_Title}"/>
+            <ComboBox Grid.Column="4" Grid.Row="0"
                       DataContext="{Binding Theme}"
                       ItemsSource="{Binding Items}"
                       SelectedItem="{Binding SelectedItem.Value}">
@@ -39,9 +45,19 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+            
+            <avalonia1:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="Translate"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="2" Text="{x:Static avalonia:RS.SettingsAppearanceView_AppLanguage_Title}"/>
+            <ComboBox Grid.Column="4" Grid.Row="2"
+                      DataContext="{Binding Language}"
+                      ItemsSource="{Binding Items}"
+                      SelectedItem="{Binding SelectedItem.Value}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
         </Grid>
-        
-        
-        
     </StackPanel>
 </UserControl>

@@ -1,11 +1,5 @@
-using System.Collections.Immutable;
-using System.Composition;
-using System.Composition.Hosting;
-using System.Diagnostics;
-using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using ObservableCollections;
 using R3;
 
@@ -18,7 +12,7 @@ public class ShellViewModel : RoutableViewModel, IShell
     private readonly ReactiveProperty<IRoutable> _selectedControl;
     private readonly ReactiveProperty<string[]> _selectedControlPath;
 
-    private readonly ObservableList<IPage> _pages = [];
+    private readonly ObservableList<IPage> _pages;
     private readonly IContainerHost _container;
     private readonly ICommandService _cmd;
     private readonly IDisposable _sub1;

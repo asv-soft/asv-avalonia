@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using Asv.Common;
+using System.IO;
+using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -16,27 +17,23 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        using var host = AppHost.Initialize(builder =>
-        {
-            builder
-                .WithJsonConfiguration("config.json", true, TimeSpan.FromMilliseconds(500))
-                .WithAppInfoFrom(typeof(App).Assembly)
-                .WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel)
-                .WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb)
-                .WithPluginsManager(
-                    "Asv.Drones.Api",
-                    "Asv.Drones.Api.Plugin.",
-                    SemVersion.Parse("1.0.0")
-                )
-#if DEBUG
-                .WithLogToConsole()
-#else
+        var builder = AppHost.CreateBuilder();
 
+        builder
+            .UseJsonConfig("config.json", true, TimeSpan.FromMilliseconds(500))
+            .SetAppInfoFrom(typeof(App).Assembly)
+            .UseLogging(options =>
+            {
+                options.WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel);
+                options.WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb);
+#if DEBUG
+                options.WithLogToConsole();
 #endif
-                .EnforceSingleInstance()
-                .EnableArgumentForwarding()
-                .WithArguments(args);
-        });
+            })
+            .EnforceSingleInstance(options => options.EnableArgumentForwarding())
+            .SetArguments(args);
+
+        using var host = builder.Build();
 
         // If this is not the first instance, host have sent the arguments to the first instance and we can exit
         if (host.IsFirstInstance == false)

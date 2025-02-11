@@ -1,6 +1,7 @@
-﻿using System.Diagnostics;
+﻿using System.Composition.Hosting;
+using System.Diagnostics;
 using System.IO.Pipes;
-using Asv.Cfg;
+using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -17,15 +18,21 @@ public sealed class AppHost : IAppHost
 {
     #region Static
 
-    private static IAppHost _instance = null!;
+    private static IAppHost? _instance = null;
     public static IAppHost Instance
     {
         get
         {
+            if (Design.IsDesignMode)
+            {
+                _instance = NullAppHost.Instance;
+                return _instance;
+            }
+
             if (_instance == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(AppHost)} not initialized. Please call {nameof(Initialize)} method first."
+                    $"{nameof(AppHost)} not initialized. Please create AppHost through first."
                 );
             }
 
@@ -33,45 +40,36 @@ public sealed class AppHost : IAppHost
         }
     }
 
-    public static IAppHost Initialize(Action<IAppHostBuilder> configure)
-    {
-        if (_instance != null)
-        {
-            throw new InvalidOperationException($"{nameof(AppHost)} already initialized.");
-        }
-
-        var builder = new AppHostBuilder();
-        configure(builder);
-        _instance = builder.Create();
-        return _instance;
-    }
-
     #endregion
 
     private readonly Mutex? _mutex;
     private readonly ReactiveProperty<AppArgs> _args = new();
     private readonly Subject<Exception> _errorHandler = new();
+    private readonly IAppCore _core;
 
-    internal AppHost(
-        IConfiguration config,
-        AppPath appPath,
-        AppInfo appInfo,
-        ILogService logs,
-        AppArgs args,
-        string? mutexName,
-        string? argsPipeName
-    )
+    internal AppHost(IAppCore core)
     {
-        ArgumentNullException.ThrowIfNull(config);
-        ArgumentNullException.ThrowIfNull(appPath);
-        ArgumentNullException.ThrowIfNull(appInfo);
-        ArgumentNullException.ThrowIfNull(logs);
-        ArgumentNullException.ThrowIfNull(args);
-        Configuration = config;
-        AppPath = appPath;
-        AppInfo = appInfo;
-        Logs = logs;
-        var logger = logs.CreateLogger($"{nameof(AppHost)}[PID:{Environment.ProcessId}]");
+        ArgumentNullException.ThrowIfNull(core);
+        ArgumentNullException.ThrowIfNull(core.Configuration);
+        ArgumentNullException.ThrowIfNull(core.Args);
+        ArgumentNullException.ThrowIfNull(core.Services);
+        ArgumentNullException.ThrowIfNull(core.AppInfo);
+        _core = core;
+
+        AppInfo = _core.AppInfo;
+
+        AppPath = new AppPath
+        {
+            UserDataFolder = _core.UserDataFolder(_core.Configuration, AppInfo),
+            AppFolder = _core.AppFolder,
+        };
+
+        var mutexName = _core.MutexName(AppInfo);
+        var namedPipe = _core.NamedPipe(AppInfo);
+
+        var logger = _core.LogService.CreateLogger(
+            $"{nameof(AppHost)}[PID:{Environment.ProcessId}]"
+        );
         SetupExceptionHandlers(logger);
         if (mutexName != null)
         {
@@ -79,7 +77,7 @@ public sealed class AppHost : IAppHost
             IsFirstInstance = isNewInstance;
         }
 
-        if (argsPipeName != null)
+        if (namedPipe != null)
         {
             if (_mutex == null)
             {
@@ -91,20 +89,25 @@ public sealed class AppHost : IAppHost
 
             if (IsFirstInstance)
             {
-                StartNamedPipeServer(argsPipeName, logger);
+                StartNamedPipeServer(namedPipe, logger);
             }
             else
             {
-                SendArgumentsToRunningInstance(args, argsPipeName, logger);
+                SendArgumentsToRunningInstance(_core.Args, namedPipe, logger);
             }
         }
+
+        if (_instance != null)
+        {
+            throw new InvalidOperationException($"{nameof(AppHost)} already initialized.");
+        }
+
+        _instance = this;
     }
 
     public ReadOnlyReactiveProperty<AppArgs> Args => _args;
     public IAppInfo AppInfo { get; }
     public IAppPath AppPath { get; }
-    public IConfiguration Configuration { get; }
-    public ILogService Logs { get; }
 
     private void SetupExceptionHandlers(ILogger logger)
     {
@@ -202,6 +205,31 @@ public sealed class AppHost : IAppHost
         }
     }
 
+    public void RegisterServices(ContainerConfiguration containerCfg)
+    {
+        using var cont = _core.Services.CreateContainer();
+        var proxy = new ProxyExportDescriptorProvider(cont);
+        containerCfg
+            .WithProvider(proxy)
+            .WithExport(AppInfo)
+            .WithExport(AppPath)
+            .WithExport(_core.Configuration)
+            .WithExport(Args)
+            .WithExport(_core.LogService)
+            .WithExport<ILoggerFactory>(_core.LogService)
+            .WithExport(this);
+    }
+
+    public static IAppHostBuilder CreateBuilder()
+    {
+        return new AppHostBuilder(false);
+    }
+
+    public static IAppHostBuilder CreateSlimBuilder()
+    {
+        return new AppHostBuilder(true);
+    }
+
     #region Handle exceptions
 
     public void HandleApplicationCrash(Exception exception)
@@ -216,7 +244,7 @@ public sealed class AppHost : IAppHost
         _mutex?.Dispose();
         _args.Dispose();
         _errorHandler.Dispose();
-        Configuration.Dispose();
-        Logs.Dispose();
+        _core.Configuration?.Dispose();
+        _core.LogService.Dispose();
     }
 }

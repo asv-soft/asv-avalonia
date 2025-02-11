@@ -1,37 +1,38 @@
-using System.Collections.Immutable;
 using System.Composition;
-using Avalonia.Controls;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class ThemeProperty : RoutableViewModel
+public class LanguageProperty : RoutableViewModel
 {
-    private readonly IThemeService _svc;
+    private readonly ILocalizationService _svc;
     private bool _internalChange;
-    private readonly IDisposable _sub1;
-    private readonly IDisposable _sub2;
-    public const string ViewModelId = "theme.current";
+    public const string ViewModelId = "language.current";
 
-    public ThemeProperty()
-        : this(DesignTime.ThemeService)
+    public IEnumerable<ILanguageInfo> Items => _svc.AvailableLanguages;
+    public BindableReactiveProperty<ILanguageInfo> SelectedItem { get; }
+
+    public LanguageProperty()
+        : this(DesignTime.LocalizationService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public ThemeProperty(IThemeService svc)
+    public LanguageProperty(ILocalizationService svc)
         : base(ViewModelId)
     {
         _svc = svc;
-        SelectedItem = new BindableReactiveProperty<IThemeInfo>(svc.CurrentTheme.CurrentValue);
+        SelectedItem = new BindableReactiveProperty<ILanguageInfo>(
+            svc.CurrentLanguage.CurrentValue
+        );
         _internalChange = true;
         _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);
-        _sub2 = svc.CurrentTheme.Subscribe(OnChangeByModel);
+        _sub2 = svc.CurrentLanguage.Subscribe(OnChangeByModel);
         _internalChange = false;
     }
 
-    private async ValueTask OnChangedByUser(IThemeInfo userValue, CancellationToken cancel)
+    private async ValueTask OnChangedByUser(ILanguageInfo userValue, CancellationToken cancel)
     {
         if (_internalChange)
         {
@@ -40,19 +41,16 @@ public class ThemeProperty : RoutableViewModel
 
         _internalChange = true;
         var newValue = new Persistable<string>(userValue.Id);
-        await this.ExecuteCommand(ChangeThemeCommand.Id, newValue);
+        await this.ExecuteCommand(ChangeLanguageCommand.Id, newValue);
         _internalChange = false;
     }
 
-    private void OnChangeByModel(IThemeInfo modelValue)
+    private void OnChangeByModel(ILanguageInfo modelValue)
     {
         _internalChange = true;
         SelectedItem.Value = modelValue;
         _internalChange = false;
     }
-
-    public IEnumerable<IThemeInfo> Items => _svc.Themes;
-    public BindableReactiveProperty<IThemeInfo> SelectedItem { get; }
 
     public override ValueTask<IRoutable> Navigate(string id)
     {
@@ -63,6 +61,11 @@ public class ThemeProperty : RoutableViewModel
     {
         return [];
     }
+
+    #region Dispose
+
+    private readonly IDisposable _sub1;
+    private readonly IDisposable _sub2;
 
     protected override void Dispose(bool disposing)
     {
@@ -75,4 +78,6 @@ public class ThemeProperty : RoutableViewModel
 
         base.Dispose(disposing);
     }
+
+    #endregion
 }

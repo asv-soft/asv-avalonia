@@ -11,8 +11,8 @@ public class UndoCommand : IAsyncCommand
         new CommandInfo
         {
             Id = Id,
-            Name = "Undo",
-            Description = "Undo the last action",
+            Name = RS.UndoCommand_CommandInfo_Name,
+            Description = RS.UndoCommand_CommandInfo_Description,
             Icon = MaterialIconKind.UndoVariant,
             DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
             Order = 0,

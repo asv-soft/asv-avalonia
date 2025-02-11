@@ -19,28 +19,8 @@ public partial class App : Application, IContainerHost, IShellHost
     {
         var conventions = new ConventionBuilder();
         var containerCfg = new ContainerConfiguration();
-        if (Design.IsDesignMode)
-        {
-            containerCfg
-                .WithExport(NullAppHost.Instance.AppInfo)
-                .WithExport(NullAppHost.Instance.AppPath)
-                .WithExport(NullAppHost.Instance.Configuration)
-                .WithExport(NullAppHost.Instance.Logs)
-                .WithExport<ILoggerFactory>(NullAppHost.Instance.Logs)
-                .WithExport(NullAppHost.Instance.Args)
-                .WithExport(NullAppHost.Instance);
-        }
-        else
-        {
-            containerCfg
-                .WithExport(AppHost.Instance.AppInfo)
-                .WithExport(AppHost.Instance.AppPath)
-                .WithExport(AppHost.Instance.Configuration)
-                .WithExport(AppHost.Instance.Logs)
-                .WithExport<ILoggerFactory>(AppHost.Instance.Logs)
-                .WithExport(AppHost.Instance.Args)
-                .WithExport(AppHost.Instance);
-        }
+
+        AppHost.Instance.RegisterServices(containerCfg);
 
         containerCfg
             .WithExport<IContainerHost>(this)
@@ -85,10 +65,12 @@ public partial class App : Application, IContainerHost, IShellHost
         {
             Shell.Navigate(SettingsPageViewModel.PageId);
             Shell.Navigate(HomePageViewModel.PageId);
-            Shell.Navigate(PluginsSourcesViewModel.PageId);
-            Shell.Navigate(PluginsMarketViewModel.PageId);
-            Shell.Navigate(InstalledPluginsViewModel.PageId);
+            Shell.Navigate(DocumentPageViewModel.PageId);
+            Shell.Navigate(MapExamplePageViewModel.PageId);
         }
+#if DEBUG
+        this.AttachDevTools();
+#endif
     }
 
     public T GetExport<T>()
