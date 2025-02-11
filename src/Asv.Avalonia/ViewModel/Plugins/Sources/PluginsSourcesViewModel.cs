@@ -110,11 +110,13 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
 
     public override ValueTask<IRoutable> Navigate(string id)
     {
-        throw new NotImplementedException();
+        return ValueTask.FromResult<IRoutable>(this);
     }
 
-    protected override void AfterLoadExtensions()
+    public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        throw new NotImplementedException();
+        return [];
     }
+
+    protected override void AfterLoadExtensions() { }
 }

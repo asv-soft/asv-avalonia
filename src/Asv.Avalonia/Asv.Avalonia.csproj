@@ -27,6 +27,16 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="..\Asv.Avalonia.DC\bin\Release\net8.0\Asv.Avalonia.DC.dll" Pack="true" PackagePath="Asv.Avalonia.DC.dll" />
+        <None Include="Asv.Avalonia.targets" Pack="true" PackagePath="tools\Asv.Avalonia.targets" />
+    </ItemGroup>
+    
+    
+    <Target Name="RunDependencyCollector" AfterTargets="Build" Condition="'$(IsPacking)' != 'true' AND '$(MSBuildProjectFile)' != 'Asv.Avalonia.csproj'">
+        <Exec Command="dotnet run --project $(SolutionDir)Asv.Avalonia.DC\Asv.Avalonia.DC.csproj $(SolutionDir)Asv.Avalonia.Example\Asv.Avalonia.Example.csproj" />
+    </Target>
+    
+    <ItemGroup>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />

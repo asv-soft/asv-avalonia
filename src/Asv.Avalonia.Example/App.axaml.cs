@@ -86,6 +86,8 @@ public partial class App : Application, IContainerHost, IShellHost
             Shell.Navigate(SettingsPageViewModel.PageId);
             Shell.Navigate(HomePageViewModel.PageId);
             Shell.Navigate(PluginsSourcesViewModel.PageId);
+            Shell.Navigate(PluginsMarketViewModel.PageId);
+            Shell.Navigate(InstalledPluginsViewModel.PageId);
         }
     }
 

@@ -13,6 +13,7 @@ public class PluginAssemblyLoadContext : AssemblyLoadContext
 
     public PluginAssemblyLoadContext(
         string pluginPath,
+        string nugetPluginName,
         ContainerConfiguration containerCfg,
         ILoggerFactory loggerFactory
     )
@@ -22,7 +23,7 @@ public class PluginAssemblyLoadContext : AssemblyLoadContext
         foreach (
             var file in Directory.EnumerateFiles(
                 pluginPath,
-                NugetHelper.NugetPluginName + "*.dll",
+                nugetPluginName + "*.dll",
                 SearchOption.AllDirectories
             )
         )

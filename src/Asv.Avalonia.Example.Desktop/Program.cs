@@ -23,7 +23,11 @@ sealed class Program
                 .WithAppInfoFrom(typeof(App).Assembly)
                 .WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel)
                 .WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb)
-                .WithPluginsManager("Asv.Drones.Api", SemVersion.Parse("1.0.0"))
+                .WithPluginsManager(
+                    "Asv.Drones.Api",
+                    "Asv.Drones.Api.Plugin.",
+                    SemVersion.Parse("1.0.0")
+                )
 #if DEBUG
                 .WithLogToConsole()
 #else

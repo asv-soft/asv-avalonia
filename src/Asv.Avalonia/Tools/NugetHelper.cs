@@ -1,6 +1,7 @@
 ﻿using System.IO.Compression;
 using System.Reflection;
 using System.Runtime.Versioning;
+using System.Text.Json;
 using NuGet.Common;
 using NuGet.Frameworks;
 using NuGet.Packaging;
@@ -13,8 +14,12 @@ namespace Asv.Avalonia;
 public static class NugetHelper
 {
     public const string NETCoreAppGroup = ".NETCoreApp";
+    private static readonly string DependenciesFilePath = Path.Combine(
+        AppDomain.CurrentDomain.BaseDirectory,
+        "dependencies.json"
+    );
 
-    public static readonly HashSet<string> IncludedPackages = LoadIncludedPackages();
+    public static readonly HashSet<string> IncludedPackages = LoadDependencies();
     public static readonly NuGetFramework DefaultFramework = NuGetFramework.ParseFrameworkName(
         Assembly
             .GetExecutingAssembly()
@@ -207,20 +212,20 @@ public static class NugetHelper
             .MaxBy(_ => _.TargetFramework.Version);
     }
 
-    private static HashSet<string> LoadIncludedPackages()
-    {
-        var currentDir = Directory.GetCurrentDirectory();
-        var srcDir = Path.Combine(currentDir, @"..\..\..\src");
-        var filePath = Path.Combine(srcDir, "IncludedPackages.txt");
+    #region IncludedPackages
 
-        if (!File.Exists(filePath))
+    private static HashSet<string> LoadDependencies()
+    {
+        if (!File.Exists(DependenciesFilePath))
         {
-            return new HashSet<string>(StringComparer.InvariantCultureIgnoreCase);
+            throw new FileNotFoundException(
+                $"Dependencies file {DependenciesFilePath} is not found."
+            );
         }
 
-        return new HashSet<string>(
-            File.ReadAllLines(filePath).Where(line => !string.IsNullOrWhiteSpace(line)),
-            StringComparer.InvariantCultureIgnoreCase
-        );
+        var json = File.ReadAllText(DependenciesFilePath);
+        return JsonSerializer.Deserialize<HashSet<string>>(json) ?? [];
     }
+
+    #endregion
 }
