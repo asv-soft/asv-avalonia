@@ -1,16 +1,23 @@
 ﻿// Dependency Collector util
 
+// Asv.Avalonia.DC [.csproj file] [output directory]
+// Example for if you use it from "bin" on windows:
+// .\Asv.Avalonia.DC.exe ..\..\..\..\Asv.Avalonia.Example.Desktop\Asv.Avalonia.Example.Desktop.csproj ..\..\..\..\Asv.Avalonia.Example.Desktop\bin\Debug\net8.0\
+
 using System.Text.Json;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis.MSBuild;
 
-if (args.Length == 0)
+switch (args.Length)
 {
-    Console.WriteLine("ERROR: .csproj path is not given ( args[0] ).");
-    return;
+    case 0
+    or 1:
+        Console.WriteLine("Usage: Asv.Avalonia.DC [.csproj file] [output directory]");
+        return;
 }
 
 var csprojPath = args[0];
+var dependenciesPath = Path.Combine(Path.GetFullPath(args[1]), "dependencies.json");
 
 Console.WriteLine(csprojPath);
 
@@ -30,14 +37,12 @@ if (!MSBuildLocator.IsRegistered)
 using var workspace = MSBuildWorkspace.Create();
 workspace.LoadMetadataForReferencedProjects = true;
 
-var project = workspace.OpenProjectAsync(csprojPath).Result;
+var project = workspace.OpenProjectAsync(Path.GetFullPath(csprojPath)).Result;
 
 var packageReferences = project
     .MetadataReferences.Select(metadata => Path.GetFileNameWithoutExtension(metadata.Display))
     .Where(refName => !string.IsNullOrEmpty(refName))
     .ToList();
-
-var dependenciesPath = Path.Combine(Path.GetDirectoryName(csprojPath)!, "dependencies.json");
 
 var json = JsonSerializer.Serialize(
     packageReferences,

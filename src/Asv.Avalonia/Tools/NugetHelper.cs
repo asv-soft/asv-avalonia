@@ -13,7 +13,7 @@ namespace Asv.Avalonia;
 
 public static class NugetHelper
 {
-    public const string NETCoreAppGroup = ".NETCoreApp";
+    public const string NetCoreAppGroup = ".NETCoreApp";
     private static readonly string DependenciesFilePath = Path.Combine(
         AppDomain.CurrentDomain.BaseDirectory,
         "dependencies.json"
@@ -212,8 +212,6 @@ public static class NugetHelper
             .MaxBy(_ => _.TargetFramework.Version);
     }
 
-    #region IncludedPackages
-
     private static HashSet<string> LoadDependencies()
     {
         if (!File.Exists(DependenciesFilePath))
@@ -226,6 +224,4 @@ public static class NugetHelper
         var json = File.ReadAllText(DependenciesFilePath);
         return JsonSerializer.Deserialize<HashSet<string>>(json) ?? [];
     }
-
-    #endregion
 }

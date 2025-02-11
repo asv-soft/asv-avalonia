@@ -620,7 +620,7 @@ public class PluginManager : IPluginManager
             var platform = NugetHelper.GetPlatform(packageArchiveReader);
             if (platform == null)
             {
-                throw new Exception($"Not found {NugetHelper.NETCoreAppGroup} platform in package");
+                throw new Exception($"Not found {NugetHelper.NetCoreAppGroup} platform in package");
             }
 
             foreach (var file in platform.Items)
@@ -696,7 +696,7 @@ public class PluginManager : IPluginManager
                 if (dependencyPlatform == null)
                 {
                     _logger.LogWarning(
-                        $"Not found  {NugetHelper.NETCoreAppGroup} platform in package {identity.Id}"
+                        $"Not found  {NugetHelper.NetCoreAppGroup} platform in package {identity.Id}"
                     );
                     continue;
                 }
@@ -779,7 +779,7 @@ public class PluginManager : IPluginManager
             var platform = NugetHelper.GetPlatform(packageReader);
             if (platform == null)
             {
-                throw new Exception($"Not found {NugetHelper.NETCoreAppGroup} platform in package");
+                throw new Exception($"Not found {NugetHelper.NetCoreAppGroup} platform in package");
             }
 
             foreach (var file in platform.Items)
@@ -848,7 +848,7 @@ public class PluginManager : IPluginManager
                 if (dependencyPlatform == null)
                 {
                     _logger.LogWarning(
-                        $"Not found  {NugetHelper.NETCoreAppGroup} platform in package {identity.Id}"
+                        $"Not found  {NugetHelper.NetCoreAppGroup} platform in package {identity.Id}"
                     );
                     continue;
                 }
