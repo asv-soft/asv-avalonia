@@ -17,6 +17,7 @@ public class UndoCommand : IAsyncCommand
             DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
             Order = 0,
             IsEditable = true,
+            Source = "Asv.Avalonia",
         };
 
     public IPersistable Save()

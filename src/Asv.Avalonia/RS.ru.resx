@@ -119,4 +119,10 @@
     <data name="ShellView_Toolbar_View" xml:space="preserve">
         <value>Вид</value>
     </data>
+    <data name="SettingsKeyMapView_Header_CustomHotKey" xml:space="preserve">
+        <value>Пользовательская горячая клавиша</value>
+    </data>
+    <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
+        <value>Сбросить всё по умолчанию</value>
+    </data>
 </root>

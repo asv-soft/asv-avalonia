@@ -44,6 +44,7 @@ public class ChangeLanguageCommand(ILocalizationService svc) : IUndoRedoCommand
         DefaultHotKey = null,
         Order = 0,
         IsEditable = false,
+        Source = "Asv.Avalonia",
     };
 
     #endregion

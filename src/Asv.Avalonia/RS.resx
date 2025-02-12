@@ -94,7 +94,7 @@
         <value>Description</value>
     </data>
     <data name="SettingsKeyMapView_Header_DefaultHotKey" xml:space="preserve">
-        <value>DefaultHotKey</value>
+        <value>Default hotKey</value>
     </data>
     <data name="HomePageVIewModel_Title" xml:space="preserve">
         <value>Home</value>
@@ -125,5 +125,11 @@
     </data>
     <data name="ShellView_Toolbar_Help" xml:space="preserve">
         <value>Help</value>
+    </data>
+    <data name="SettingsKeyMapView_Header_CustomHotKey" xml:space="preserve">
+        <value>Custom hotkey</value>
+    </data>
+    <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
+        <value>Reset all to default </value>
     </data>
 </root>

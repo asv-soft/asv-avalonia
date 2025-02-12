@@ -18,7 +18,7 @@
         <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}">
 
         </TextBox>
-        <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Content="Reset Hot Keys to default" Margin="10" Command="{Binding ResetHotKeysToDefaultCommand}"/> <!-- TODO:LOCALIZE -->
+        <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Content="{x:Static avalonia:RS.SettingsKeyMapView_Action_ResetCustomHotKeys}" Margin="10" Command="{Binding ResetHotKeysToDefaultCommand}"/>
         <DataGrid x:Name="HotKeyGrid" Focusable="False" ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Styles>
@@ -42,8 +42,7 @@
                 <DataGridTextColumn IsReadOnly="True"
                                     Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_Description}"
                                     Binding="{Binding Info.Description}" />
-                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_DefaultHotKey}" Binding="{Binding Info.DefaultHotKey}"></DataGridTextColumn>
-                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_DefaultHotKey}">
+                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_CustomHotKey}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid>
@@ -70,6 +69,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
+                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsKeyMapView_Header_DefaultHotKey}" Binding="{Binding Info.DefaultHotKey}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Source" Binding="{Binding Info.Source}"/>
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>

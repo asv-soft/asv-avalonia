@@ -13,9 +13,12 @@ public partial class SettingsKeymapView : UserControl
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        var rawGesture = string.Empty;
-        base.OnKeyDown(e);
         if (DataContext is not SettingsKeymapViewModel vm)
+        {
+            return;
+        }
+
+        if (vm.SelectedItem.Value is null)
         {
             return;
         }
@@ -25,13 +28,16 @@ public partial class SettingsKeymapView : UserControl
             return;
         }
 
-        if (vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 0 } && !IsModifierKey(e.Key))
+        var rawGesture = string.Empty;
+        base.OnKeyDown(e);
+
+        if ((vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 0 } && !IsModifierKey(e.Key)) || vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 2 })
         {
             return;
         }
 
         var keyValue = $"{e.Key}";
-        if (e.Key ==Key.LWin || e.Key ==Key.LWin)
+        if (e.Key == Key.LWin || e.Key == Key.LWin)
         {
             return;
         }
@@ -45,9 +51,13 @@ public partial class SettingsKeymapView : UserControl
                 Key.LeftShift or Key.RightShift => KeyModifiers.Shift.ToString(),
                 _ => keyValue
             };
+            rawGesture += $"{keyValue}+";
+        }
+        else
+        {
+            rawGesture += $"{keyValue}";
         }
 
-        rawGesture += $"{keyValue}+";
         vm.SelectedItem.Value.NewHotKeyValue.Value += rawGesture;
     }
 

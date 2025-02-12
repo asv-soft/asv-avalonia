@@ -10,7 +10,7 @@ public interface ICommandService
     IAsyncCommand? CreateCommand(string commandId);
     ICommandHistory CreateHistory(IRoutable owner);
     bool CanExecuteCommand(string commandId, IRoutable context, out IRoutable? target);
-    void ChangeHotKey(string commandId, KeyGesture? hotKey);
+    bool ChangeHotKey(string commandId, KeyGesture? hotKey);
     bool CanExecuteCommand(
         KeyGesture hotKey,
         IRoutable context,
