@@ -22,7 +22,7 @@ public static class AppBuilderPluginManagerExtensions
             builder.Core.Configuration,
             builder.Core.LogService
         );
-        builder.Core.Services.WithExport(pm);
+        builder.Core.Services.WithExport<IPluginManager>(pm);
         return builder;
     }
 
