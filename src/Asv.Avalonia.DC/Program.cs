@@ -17,7 +17,7 @@ switch (args.Length)
 }
 
 var csprojPath = args[0];
-var dependenciesPath = Path.Combine(Path.GetFullPath(args[1]), "dependencies.json");
+var dependenciesPath = Path.GetFullPath(args[1]);
 
 Console.WriteLine(csprojPath);
 
