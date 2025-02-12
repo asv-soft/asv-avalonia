@@ -132,4 +132,43 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Map Example</value>
     </data>
+    <data name="LogViewer_Title" xml:space="preserve">
+        <value>Log viewer</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_Title" xml:space="preserve">
+        <value>Log deletion</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_PrimaryButton" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_Content" xml:space="preserve">
+        <value>Are you sure you want to delete the log?</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_CloseButton" xml:space="preserve">
+        <value>Cancel</value>
+    </data>
+    <data name="LogViewerView_Categories" xml:space="preserve">
+        <value>Categories</value>
+    </data>
+    <data name="LogViewerView_Threads" xml:space="preserve">
+        <value>Threads</value>
+    </data>
+    <data name="LogViewerView_Levels" xml:space="preserve">
+        <value>Levels</value>
+    </data>
+    <data name="LogViewerView_SearchText_Watermark" xml:space="preserve">
+        <value>Search in messages</value>
+    </data>
+    <data name="LogViewerView_TextBlock_By_Title" xml:space="preserve">
+        <value>By:</value>
+    </data>
+    <data name="LogViewerView_TextBlock_TotalItemsCount" xml:space="preserve">
+        <value>Total: {0}</value>
+    </data>
+    <data name="LogViewerView_TextBlock_FilteredItemsCount" xml:space="preserve">
+        <value>Filtered: {0}</value>
+    </data>
+    <data name="LogViewerView_TextBlock_PageItemsCount" xml:space="preserve">
+        <value>On page: {0}</value>
+    </data>
 </root>

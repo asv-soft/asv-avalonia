@@ -53,11 +53,11 @@ public partial class App : Application, IContainerHost, IShellHost
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            Shell = GetExport<IShell>(DesktopShellViewModel.ShellId);
+            Shell = new DesktopShellViewModel(desktop, this);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            Shell = GetExport<IShell>(MobileShellViewModel.ShellId);
+            Shell = new MobileShellViewModel(this);
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -67,20 +67,21 @@ public partial class App : Application, IContainerHost, IShellHost
             Shell.Navigate(HomePageViewModel.PageId);
             Shell.Navigate(DocumentPageViewModel.PageId);
             Shell.Navigate(MapExamplePageViewModel.PageId);
+            Shell.Navigate(LogViewerViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();
 #endif
     }
 
-    public T GetExport<T>()
-    {
-        return Host.GetExport<T>();
-    }
-
     public T GetExport<T>(string contract)
     {
         return Host.GetExport<T>(contract);
+    }
+
+    public T GetExport<T>()
+    {
+        return Host.GetExport<T>();
     }
 
     public CompositionHost Host { get; }

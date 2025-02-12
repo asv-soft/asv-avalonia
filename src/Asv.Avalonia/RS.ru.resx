@@ -125,4 +125,43 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Пример карты</value>
     </data>
+    <data name="LogViewer_Title" xml:space="preserve">
+        <value>Просмотр лога</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_Title" xml:space="preserve">
+        <value>Удаление журнала</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_PrimaryButton" xml:space="preserve">
+        <value>Удалить</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_Content" xml:space="preserve">
+        <value>Вы уверены что хотите удалить журнал?</value>
+    </data>
+    <data name="LogViewerViewModel_ClearDialog_CloseButton" xml:space="preserve">
+        <value>Отмена</value>
+    </data>
+    <data name="LogViewerView_Categories" xml:space="preserve">
+        <value>Категории</value>
+    </data>
+    <data name="LogViewerView_Threads" xml:space="preserve">
+        <value>Потоки</value>
+    </data>
+    <data name="LogViewerView_Levels" xml:space="preserve">
+        <value>Уровни</value>
+    </data>
+    <data name="LogViewerView_SearchText_Watermark" xml:space="preserve">
+        <value>Поиск по сообщениям</value>
+    </data>
+    <data name="LogViewerView_TextBlock_By_Title" xml:space="preserve">
+        <value>По:</value>
+    </data>
+    <data name="LogViewerView_TextBlock_TotalItemsCount" xml:space="preserve">
+        <value>Всего: {0}</value>
+    </data>
+    <data name="LogViewerView_TextBlock_FilteredItemsCount" xml:space="preserve">
+        <value>Отфильтровано: {0}</value>
+    </data>
+    <data name="LogViewerView_TextBlock_PageItemsCount" xml:space="preserve">
+        <value>На странице: {0}</value>
+    </data>
 </root>
