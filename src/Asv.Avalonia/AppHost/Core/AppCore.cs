@@ -11,6 +11,7 @@ public class AppCore : IAppCore
     public AppArgs Args { get; set; } = null!;
     public IConfiguration Configuration { get; set; } = null!;
     public ILogService LogService { get; set; } = NullLogService.Instance;
+    public IPluginManager PluginManager { get; set; } = NullPluginManager.Instance;
     public Func<IAppInfo, string?> MutexName { get; set; } = _ => null;
     public Func<IAppInfo, string?> NamedPipe { get; set; } = _ => null;
 }

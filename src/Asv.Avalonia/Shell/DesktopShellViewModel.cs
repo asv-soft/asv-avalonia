@@ -26,9 +26,8 @@ public class DesktopShellViewModel : ShellViewModel
     protected override ValueTask CloseAsync(CancellationToken cancellationToken)
     {
         if (
-            Application.Current != null
-            && Application.Current.ApplicationLifetime
-                is IClassicDesktopStyleApplicationLifetime lifetime
+            Application.Current?.ApplicationLifetime
+            is IClassicDesktopStyleApplicationLifetime lifetime
         )
         {
             lifetime.Shutdown();

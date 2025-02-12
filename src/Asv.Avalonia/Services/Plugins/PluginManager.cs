@@ -48,8 +48,6 @@ public class PluginServerConfig
     public string? PasswordHash { get; set; }
 }
 
-[Export(typeof(IPluginManager))]
-[Shared]
 public class PluginManager : IPluginManager
 {
     private readonly ILoggerFactory _loggerFactory;
@@ -212,7 +210,7 @@ public class PluginManager : IPluginManager
             )
         )
         {
-            if (TryGetLocalPluginInfoByFolder(dir, out var info) == false)
+            if (!TryGetLocalPluginInfoByFolder(dir, out var info))
             {
                 _logger.LogWarning($"Error read plugin info from {dir}. Delete it");
                 Directory.Delete(dir, true);
