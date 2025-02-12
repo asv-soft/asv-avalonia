@@ -4,10 +4,11 @@ namespace Asv.Avalonia;
 
 public class DesignTimeShellViewModel : ShellViewModel
 {
+    public const string ShellId = "shell.design";
     public static DesignTimeShellViewModel Instance { get; } = new();
 
     public DesignTimeShellViewModel()
-        : base(NullContainerHost.Instance)
+        : base(NullContainerHost.Instance, ShellId)
     {
         int cnt = 0;
         var all = Enum.GetValues<ShellErrorState>().Length;

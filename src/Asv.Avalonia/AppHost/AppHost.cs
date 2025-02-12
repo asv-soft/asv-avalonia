@@ -54,6 +54,7 @@ public sealed class AppHost : IAppHost
         ArgumentNullException.ThrowIfNull(core.Args);
         ArgumentNullException.ThrowIfNull(core.Services);
         ArgumentNullException.ThrowIfNull(core.AppInfo);
+        ArgumentNullException.ThrowIfNull(core.LogService);
         _core = core;
 
         AppInfo = _core.AppInfo;

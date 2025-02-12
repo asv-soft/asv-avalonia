@@ -90,7 +90,7 @@ public class CommandHistory : ICommandHistory
             return ValueTask.FromResult(HistoryOwner);
         }
 
-        return HistoryOwner.NavigateTo(path[1..]);
+        return HistoryOwner.NavigateByPath(path[1..]);
     }
 
     public ValueTask Execute(
@@ -108,7 +108,7 @@ public class CommandHistory : ICommandHistory
 
         if (cmd is IUndoRedoCommand undoable)
         {
-            var contextPath = context.GetAllFrom(HistoryOwner).Select(x => x.Id).ToArray();
+            var contextPath = context.GetHierarchyFrom(HistoryOwner).Select(x => x.Id).ToArray();
             _undoStack.Push(new HistoryItem(undoable, contextPath));
             _redoStack.Clear();
             CheckUndoRedoCanExecute();

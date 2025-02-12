@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Material.Icons;
 using R3;
 
@@ -9,5 +10,6 @@ public interface IPage : IRoutable
     BindableReactiveProperty<string> Title { get; }
     ICommandHistory History { get; }
     BindableReactiveProperty<bool> HasChanges { get; }
-    ReactiveCommand TryClose { get; }
+    ICommand TryClose { get; }
+    ValueTask TryCloseAsync();
 }

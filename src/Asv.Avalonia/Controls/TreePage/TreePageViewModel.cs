@@ -18,12 +18,12 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
         : base(id, cmd)
     {
         _container = container;
-        Nodes = new ObservableList<ITreePageNode>();
-        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePageNode, string>?>();
+        Nodes = new ObservableList<ITreePage>();
+        TreeView = new TreePageMenu(Nodes);
+        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, string>?>();
         SelectedPage = new BindableReactiveProperty<IRoutable?>();
         _breadCrumbSource = new ObservableList<BreadCrumbItem>();
         BreadCrumb = _breadCrumbSource.ToViewList();
-        Tree = Nodes.ToObservableTree(x => x.Id, x => x.ParentId);
         _sub2 = SelectedNode.SubscribeAwait(
             async (x, _) =>
             {
@@ -57,7 +57,7 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
         if (SelectedNode.Value?.Base.NavigateTo != id)
         {
             _internalNavigate = true;
-            SelectedNode.Value = Tree.FindNode(x => x.Base.NavigateTo == id);
+            SelectedNode.Value = TreeView.FindNode(x => x.Base.NavigateTo == id);
             _internalNavigate = false;
         }
 
@@ -86,15 +86,17 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
         return _container.TryGetExport<ISettingsSubPage>(id, out var page) ? page : null;
     }
 
-    public ObservableTree<ITreePageNode, string> Tree { get; }
+    public ObservableTree<ITreePage, string> TreeView { get; }
     public BindableReactiveProperty<IRoutable?> SelectedPage { get; }
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
-    public BindableReactiveProperty<ObservableTreeNode<
-        ITreePageNode,
-        string
-    >?> SelectedNode { get; }
-    public ObservableList<ITreePageNode> Nodes { get; }
+    public BindableReactiveProperty<ObservableTreeNode<ITreePage, string>?> SelectedNode { get; }
+    public ObservableList<ITreePage> Nodes { get; }
     public BindableReactiveProperty<bool> IsCompactMode { get; } = new();
+
+    protected override TContext GetContext()
+    {
+        return this as TContext ?? throw new InvalidOperationException("Can't cast to context");
+    }
 
     protected override void AfterLoadExtensions()
     {
@@ -110,7 +112,7 @@ public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeT
             SelectedNode.Dispose();
             SelectedPage.Dispose();
             BreadCrumb.Dispose();
-            Tree.Dispose();
+            TreeView.Dispose();
         }
 
         base.Dispose(disposing);

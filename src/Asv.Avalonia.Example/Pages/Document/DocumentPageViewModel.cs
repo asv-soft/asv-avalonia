@@ -23,6 +23,11 @@ public class DocumentPageViewModel : PageViewModel<DocumentPageViewModel>
         Title.OnNext(RS.DocumentPageViewModel_Title);
     }
 
+    protected override DocumentPageViewModel GetContext()
+    {
+        return this;
+    }
+
     protected override void AfterLoadExtensions() { }
 
     public override ValueTask<IRoutable> Navigate(string id)

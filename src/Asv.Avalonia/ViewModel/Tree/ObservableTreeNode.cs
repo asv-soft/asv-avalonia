@@ -4,10 +4,15 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
+public class ObservableTreeNode<T, TKey>
+    : AsyncDisposableOnce,
+        IComparable<ObservableTreeNode<T, TKey>>,
+        IComparable
     where TKey : notnull
 {
     private readonly Func<T, TKey?> _parentSelector;
+    private readonly IComparer<T> _comparer;
+    private readonly CreateNodeDelegate<T, TKey> _createNodeFactory;
     private readonly ObservableList<ObservableTreeNode<T, TKey>> _itemSource;
     private readonly IDisposable _sub1;
     private readonly IDisposable _sub2;
@@ -19,12 +24,16 @@ public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
         IReadOnlyObservableList<T> source,
         Func<T, TKey> keySelector,
         Func<T, TKey?> parentSelector,
-        ObservableTreeNode<T, TKey>? parentNode = null
+        IComparer<T> comparer,
+        CreateNodeDelegate<T, TKey> createNodeFactory,
+        ObservableTreeNode<T, TKey>? parentNode
     )
     {
         _source = source;
         _keySelector = keySelector;
         _parentSelector = parentSelector;
+        _comparer = comparer;
+        _createNodeFactory = createNodeFactory;
         ParentNode = parentNode;
         _itemSource = new ObservableList<ObservableTreeNode<T, TKey>>();
         Items = _itemSource.ToNotifyCollectionChangedSlim();
@@ -35,7 +44,14 @@ public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
             TryAdd(item);
         }
 
-        _sub1 = source.ObserveAdd().Subscribe(x => TryAdd(x.Value));
+        _itemSource.Sort();
+        _sub1 = source
+            .ObserveAdd()
+            .Subscribe(x =>
+            {
+                TryAdd(x.Value);
+                _itemSource.Sort();
+            });
         _sub2 = source.ObserveRemove().Subscribe(TryRemove);
     }
 
@@ -62,7 +78,15 @@ public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
         if (parent != null && parent.Equals(Key))
         {
             _itemSource.Add(
-                new ObservableTreeNode<T, TKey>(item, _source, _keySelector, _parentSelector)
+                _createNodeFactory(
+                    item,
+                    _source,
+                    _keySelector,
+                    _parentSelector,
+                    _comparer,
+                    _createNodeFactory,
+                    this
+                )
             );
         }
     }
@@ -135,5 +159,71 @@ public class ObservableTreeNode<T, TKey> : AsyncDisposableOnce
         }
 
         return null;
+    }
+
+    public int CompareTo(ObservableTreeNode<T, TKey>? other)
+    {
+        if (other is null)
+        {
+            return 1;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return 0;
+        }
+
+        return _comparer.Compare(Base, other.Base);
+    }
+
+    public int CompareTo(object? obj)
+    {
+        if (obj is null)
+        {
+            return 1;
+        }
+
+        if (ReferenceEquals(this, obj))
+        {
+            return 0;
+        }
+
+        return obj is ObservableTreeNode<T, TKey> other
+            ? CompareTo(other)
+            : throw new ArgumentException(
+                $"Object must be of type {nameof(ObservableTreeNode<T, TKey>)}"
+            );
+    }
+
+    public static bool operator <(
+        ObservableTreeNode<T, TKey>? left,
+        ObservableTreeNode<T, TKey>? right
+    )
+    {
+        return Comparer<ObservableTreeNode<T, TKey>>.Default.Compare(left, right) < 0;
+    }
+
+    public static bool operator >(
+        ObservableTreeNode<T, TKey>? left,
+        ObservableTreeNode<T, TKey>? right
+    )
+    {
+        return Comparer<ObservableTreeNode<T, TKey>>.Default.Compare(left, right) > 0;
+    }
+
+    public static bool operator <=(
+        ObservableTreeNode<T, TKey>? left,
+        ObservableTreeNode<T, TKey>? right
+    )
+    {
+        return Comparer<ObservableTreeNode<T, TKey>>.Default.Compare(left, right) <= 0;
+    }
+
+    public static bool operator >=(
+        ObservableTreeNode<T, TKey>? left,
+        ObservableTreeNode<T, TKey>? right
+    )
+    {
+        return Comparer<ObservableTreeNode<T, TKey>>.Default.Compare(left, right) >= 0;
     }
 }

@@ -26,6 +26,11 @@ public class HomePageViewModel : PageViewModel<HomePageViewModel>
         return ValueTask.FromResult<IRoutable>(this);
     }
 
+    protected override HomePageViewModel GetContext()
+    {
+        return this;
+    }
+
     protected override void AfterLoadExtensions()
     {
         // do nothing

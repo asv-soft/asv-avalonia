@@ -6,6 +6,11 @@ public class NullContainerHost : IContainerHost
 {
     public static IContainerHost Instance { get; } = new NullContainerHost();
 
+    public T GetExport<T>(string contract)
+    {
+        throw new NotImplementedException();
+    }
+
     public T GetExport<T>()
     {
         return default!;

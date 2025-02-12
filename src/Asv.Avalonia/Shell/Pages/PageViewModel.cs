@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Material.Icons;
 using R3;
 
@@ -13,19 +14,25 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         Icon = new BindableReactiveProperty<MaterialIconKind>(MaterialIconKind.Window);
         Title = new BindableReactiveProperty<string>(id);
         HasChanges = new BindableReactiveProperty<bool>(false);
-        TryClose = new ReactiveCommand(TryCloseAsync);
+        TryClose = new AsyncReactiveCommand(ClosePageCommand.Id, this);
     }
 
-    public ValueTask TryCloseAsync(Unit arg1, CancellationToken cancel)
+    public async ValueTask TryCloseAsync()
     {
-        return ValueTask.CompletedTask;
+        var reasons = await this.RequestChildCloseApproval();
+        if (reasons.Count != 0)
+        {
+            // TODO: ask user to save changes
+        }
+
+        await this.RequestClose();
     }
 
     public BindableReactiveProperty<MaterialIconKind> Icon { get; }
     public BindableReactiveProperty<string> Title { get; }
     public ICommandHistory History { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
-    public ReactiveCommand TryClose { get; }
+    public ICommand TryClose { get; }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {

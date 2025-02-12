@@ -53,11 +53,11 @@ public partial class App : Application, IContainerHost, IShellHost
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            Shell = new DesktopShellViewModel(desktop, this);
+            Shell = GetExport<IShell>(DesktopShellViewModel.ShellId);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            Shell = new MobileShellViewModel(singleViewPlatform, this);
+            Shell = GetExport<IShell>(MobileShellViewModel.ShellId);
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -79,6 +79,11 @@ public partial class App : Application, IContainerHost, IShellHost
     public T GetExport<T>()
     {
         return Host.GetExport<T>();
+    }
+
+    public T GetExport<T>(string contract)
+    {
+        return Host.GetExport<T>(contract);
     }
 
     public CompositionHost Host { get; }

@@ -17,6 +17,7 @@ public enum ShellErrorState
 
 public interface IShell : IRoutable
 {
+    ObservableList<IMenuItem> MainMenu { get; }
     ReactiveCommand GoHome { get; }
     ValueTask GoHomeAsync(CancellationToken cancel = default);
     IObservableCollection<string[]> ForwardStack { get; }
@@ -28,6 +29,7 @@ public interface IShell : IRoutable
     ReadOnlyReactiveProperty<IRoutable> SelectedControl { get; }
     ReadOnlyReactiveProperty<string[]> SelectedControlPath { get; }
     IReadOnlyObservableList<IPage> Pages { get; }
+    BindableReactiveProperty<IPage?> SelectedPage { get; }
     ValueTask<IPage> OpenNewPage(string id);
     BindableReactiveProperty<ShellErrorState> ErrorState { get; }
     BindableReactiveProperty<string> Title { get; }

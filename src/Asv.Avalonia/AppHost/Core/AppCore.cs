@@ -1,9 +1,11 @@
+using System.Composition.Hosting;
 using Asv.Cfg;
 
 namespace Asv.Avalonia;
 
 public class AppCore : IAppCore
 {
+    public required ContainerConfiguration Services { get; set; }
     public required string AppFolder { get; set; }
     public required AppInfo AppInfo { get; set; }
     public required Func<IConfiguration, IAppInfo, string> UserDataFolder { get; set; } = null!;

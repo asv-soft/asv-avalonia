@@ -58,7 +58,7 @@ public class UndoCommandFactory : ICommandFactory
 
     public bool CanExecute(IRoutable context, out IRoutable? target)
     {
-        target = context.GetAllToRoot().FirstOrDefault(x => x is IPage);
+        target = context.GetAncestorsToRoot().FirstOrDefault(x => x is IPage);
         return target != null;
     }
 }

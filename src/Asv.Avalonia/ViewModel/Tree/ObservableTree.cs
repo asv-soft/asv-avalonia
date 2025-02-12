@@ -1,38 +1,68 @@
-﻿using System.Collections.ObjectModel;
-using Asv.Common;
+﻿using Asv.Common;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
+public delegate ObservableTreeNode<T, TKey> CreateNodeDelegate<T, TKey>(
+    T baseItem,
+    IReadOnlyObservableList<T> source,
+    Func<T, TKey> keySelector,
+    Func<T, TKey?> parentSelector,
+    IComparer<T> comparer,
+    CreateNodeDelegate<T, TKey> createNodeFactory,
+    ObservableTreeNode<T, TKey>? parentNode
+)
+    where TKey : notnull;
+
 public class ObservableTree<T, TKey> : AsyncDisposableOnce
     where TKey : notnull
 {
-    private readonly IReadOnlyObservableList<T> _source;
+    private readonly IReadOnlyObservableList<T> _flatList;
     private readonly Func<T, TKey> _keySelector;
     private readonly Func<T, TKey?> _parentSelector;
+    private readonly IComparer<T> _comparer;
+    private readonly CreateNodeDelegate<T, TKey> _createNodeFactory;
     private readonly ObservableList<ObservableTreeNode<T, TKey>> _itemSource;
     private readonly IDisposable _sub1;
     private readonly IDisposable _sub2;
 
     public ObservableTree(
-        IReadOnlyObservableList<T> source,
+        IReadOnlyObservableList<T> flatList,
         Func<T, TKey> keySelector,
-        Func<T, TKey?> parentSelector
+        Func<T, TKey?> parentSelector,
+        IComparer<T> comparer,
+        CreateNodeDelegate<T, TKey>? createNodeFactory = null
     )
     {
-        _source = source;
+        _flatList = flatList;
         _keySelector = keySelector;
         _parentSelector = parentSelector;
+        _comparer = comparer;
+        _createNodeFactory = createNodeFactory ?? DefaultNodeFactory;
         _itemSource = new ObservableList<ObservableTreeNode<T, TKey>>();
         Items = _itemSource.ToNotifyCollectionChangedSlim();
-        foreach (var item in source)
+        foreach (var item in flatList)
         {
             TryAdd(item);
         }
 
-        _sub1 = source.ObserveAdd().Subscribe(x => TryAdd(x.Value));
-        _sub2 = source.ObserveRemove().Subscribe(TryRemove);
+        _itemSource.Sort();
+        _sub1 = flatList.ObserveAdd().Subscribe(x => TryAdd(x.Value));
+        _sub2 = flatList.ObserveRemove().Subscribe(TryRemove);
+    }
+
+    private static ObservableTreeNode<T, TKey> DefaultNodeFactory(
+        T item,
+        IReadOnlyObservableList<T> list,
+        Func<T, TKey> key,
+        Func<T, TKey?> parent,
+        IComparer<T> comp,
+        CreateNodeDelegate<T, TKey> factory,
+        ObservableTreeNode<T, TKey>? parentNode
+    )
+    {
+        return new ObservableTreeNode<T, TKey>(item, list, key, parent, comp, factory, parentNode);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<ObservableTreeNode<T, TKey>> Items { get; }
@@ -57,8 +87,17 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
         if (_parentSelector(item) == null)
         {
             _itemSource.Add(
-                new ObservableTreeNode<T, TKey>(item, _source, _keySelector, _parentSelector)
+                _createNodeFactory(
+                    item,
+                    _flatList,
+                    _keySelector,
+                    _parentSelector,
+                    _comparer,
+                    _createNodeFactory,
+                    null
+                )
             );
+            _itemSource.Sort();
         }
     }
 

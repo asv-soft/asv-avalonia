@@ -35,6 +35,11 @@ public class MapExamplePageViewModel : PageViewModel<IMapContext>, IMapContext
         yield break;
     }
 
+    protected override IMapContext GetContext()
+    {
+        return this;
+    }
+
     protected override void AfterLoadExtensions()
     {
         // do nothing

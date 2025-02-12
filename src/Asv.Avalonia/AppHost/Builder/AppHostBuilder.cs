@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Composition.Hosting;
+using System.Reflection;
 using Asv.Cfg;
 
 namespace Asv.Avalonia;
@@ -25,6 +26,7 @@ internal class AppHostBuilder : IAppHostBuilder
         {
             Core = new AppCore
             {
+                Services = new ContainerConfiguration(),
                 AppFolder = _defaultAppFolder,
                 UserDataFolder = _defaultUserFolder,
                 AppInfo = new AppInfo
@@ -42,6 +44,7 @@ internal class AppHostBuilder : IAppHostBuilder
 
         Core = new AppCore
         {
+            Services = new ContainerConfiguration(),
             UserDataFolder = (_, info) =>
                 Path.Combine(
                     Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),

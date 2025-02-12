@@ -1,45 +1,30 @@
-using System.Collections.ObjectModel;
 using System.Windows.Input;
 using Avalonia.Input;
-using Material.Icons;
 
 namespace Asv.Avalonia
 {
-    public class MenuItem : ViewModelBase, IMenuItem
+    public class MenuItem : TitledViewModel, IMenuItem
     {
-        private int _order;
-        private MaterialIconKind _icon;
-        private string _header;
         private bool _isVisible = true;
         private bool _staysOpenOnClick;
         private bool _isEnabled = true;
-        private ReadOnlyObservableCollection<IMenuItem>? _items;
         private KeyGesture? _hotKey;
-        private ICommand _command;
+        private ICommand? _command;
         private object? _commandParameter;
 
-        public MenuItem(string id)
-            : base(id) { }
-
-        public int Order
+        public MenuItem(string id, string header, string? parentId = null)
+            : base(id)
         {
-            get => _order;
-            set => SetField(ref _order, value);
+            ParentId = parentId;
+            Order = 0;
+            Title = header;
         }
 
-        public MaterialIconKind Icon
-        {
-            get => _icon;
-            set => SetField(ref _icon, value);
-        }
+        public string? ParentId { get; }
 
-        public string Header
-        {
-            get => _header;
-            set => SetField(ref _header, value);
-        }
+        public int Order { get; set; }
 
-        public ICommand Command
+        public ICommand? Command
         {
             get => _command;
             set => SetField(ref _command, value);
@@ -69,18 +54,20 @@ namespace Asv.Avalonia
             set => SetField(ref _isEnabled, value);
         }
 
-        public virtual ReadOnlyObservableCollection<IMenuItem>? Items
-        {
-            get => _items;
-            set => SetField(ref _items, value);
-        }
-
         public KeyGesture? HotKey
         {
             get => _hotKey;
             set => SetField(ref _hotKey, value);
         }
 
-        protected override void Dispose(bool disposing) { }
+        public override ValueTask<IRoutable> Navigate(string id)
+        {
+            return ValueTask.FromResult<IRoutable>(this);
+        }
+
+        public override IEnumerable<IRoutable> GetRoutableChildren()
+        {
+            return [];
+        }
     }
 }

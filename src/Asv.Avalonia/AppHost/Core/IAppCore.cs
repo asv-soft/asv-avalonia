@@ -1,4 +1,3 @@
-using System.ComponentModel.DataAnnotations;
 using System.Composition.Hosting;
 using Asv.Cfg;
 
@@ -6,8 +5,8 @@ namespace Asv.Avalonia;
 
 public interface IAppCore
 {
-    public ContainerConfiguration Services => new();
-
+    // Required
+    public ContainerConfiguration Services { get; internal set; }
     public string AppFolder { get; internal set; }
     public AppInfo AppInfo { get; internal set; }
     public Func<IConfiguration, IAppInfo, string> UserDataFolder { get; internal set; }
