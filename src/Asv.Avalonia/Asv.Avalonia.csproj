@@ -76,6 +76,26 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>RS.resx</DependentUpon>
         </Compile>
+        <Compile Update="Shell\Pages\Plugins\Installed\InstalledPluginsView.axaml.cs">
+          <DependentUpon>InstalledPluginsView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Market\PluginsMarketView.axaml.cs">
+          <DependentUpon>PluginsMarketView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Sources\PluginsSourcesView.axaml.cs">
+          <DependentUpon>PluginsSourcesView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Sources\SourceView.axaml.cs">
+          <DependentUpon>SourceView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Market\PluginInstallerView.axaml.cs">
+          <DependentUpon>PluginInstallerView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
