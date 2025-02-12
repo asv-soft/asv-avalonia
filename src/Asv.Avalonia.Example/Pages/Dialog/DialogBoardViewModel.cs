@@ -21,7 +21,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     }
 
     [ImportingConstructor]
-    private DialogBoardViewModel(ICommandService cmd, IContainerHost container)
+    public DialogBoardViewModel(ICommandService cmd, IContainerHost container)
         : base(PageId, cmd)
     {
         _container = container;

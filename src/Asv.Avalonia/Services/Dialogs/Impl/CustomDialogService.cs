@@ -7,9 +7,9 @@ using Avalonia.Media;
 
 namespace Asv.Avalonia
 {
-    public static class CustomDialogInterface
+    public static class CustomDialogService
     {
-        public static async Task<T?> ShowCustomDialog<T>(
+        public static async Task<T?> ShowDialog<T>(
             TopLevel? parent,
             string title,
             string message,

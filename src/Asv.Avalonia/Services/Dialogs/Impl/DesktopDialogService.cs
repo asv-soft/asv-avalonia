@@ -158,7 +158,7 @@ public sealed class DesktopDialogService : IDialogService
 
     public async Task<bool> ShowYesNoDialog(string title, string message)
     {
-        var result = await CustomDialogInterface.ShowCustomDialog<object>(
+        var result = await CustomDialogService.ShowDialog<object>(
             _host.TopLevel as TopLevel,
             title,
             message,
@@ -172,29 +172,27 @@ public sealed class DesktopDialogService : IDialogService
 
     public async Task<bool> ShowSaveCancelDialog(string title, string message)
     {
-        var result = await CustomDialogInterface.ShowCustomDialog<object>(
-            _host.TopLevel as Window,
+        var result = await CustomDialogService.ShowDialog<object>(
+            _host.TopLevel as TopLevel,
             title,
             message,
             false,
             RS.DialogButton_Save,
             RS.DialogButton_Save,
-            RS.DialogButton_DontSave,
-            RS.ShellView_WindowControlButton_Close
+            RS.DialogButton_DontSave
         );
         return result != null && (string)result == RS.DialogButton_Save;
     }
 
     public async Task<string?> ShowUnitInputDialog(string title, string message)
     {
-        var result = await CustomDialogInterface.ShowCustomDialog<object>(
-            _host.TopLevel as Window,
+        var result = await CustomDialogService.ShowDialog<object>(
+            _host.TopLevel as TopLevel,
             title,
             message,
             true,
             RS.DialogButton_Ok,
-            RS.DialogButton_Ok,
-            RS.ShellView_WindowControlButton_Close
+            RS.DialogButton_Ok
         );
         return result as string;
     }
