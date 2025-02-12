@@ -4,6 +4,7 @@ using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
+using Asv.Avalonia.Example.Pages.Dialog;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -87,6 +88,7 @@ public partial class App : Application, IContainerHost, IShellHost
             Shell.Navigate(HomePageViewModel.PageId);
             Shell.Navigate(DocumentViewModel.PageId);
             Shell.Navigate(MapExamplePageViewModel.PageId);
+            Shell.Navigate(DialogBoardViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();
@@ -100,6 +102,7 @@ public partial class App : Application, IContainerHost, IShellHost
 
     public CompositionHost Host { get; }
     public IShell Shell { get; private set; }
+    public TopLevel TopLevel { get; set; }
 
     public bool TryGetExport<T>(string id, out T value)
     {
