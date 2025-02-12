@@ -226,6 +226,7 @@ public class ShellViewModel : RoutableViewModel, IShell
     }
 
     #endregion
+
     public BindableReactiveProperty<ShellErrorState> ErrorState { get; }
     public BindableReactiveProperty<string> Title { get; }
 

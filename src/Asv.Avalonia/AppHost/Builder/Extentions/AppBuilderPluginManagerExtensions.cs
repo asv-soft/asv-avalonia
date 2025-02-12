@@ -13,7 +13,7 @@ public static class AppBuilderPluginManagerExtensions
         BuilderPluginManagerOptions options
     )
     {
-        builder.Core.PluginManager = new PluginManager(
+        var pm = new PluginManager(
             builder.Core.Services,
             builder.Core.AppFolder,
             options.ApiPackageName,
@@ -22,6 +22,7 @@ public static class AppBuilderPluginManagerExtensions
             builder.Core.Configuration,
             builder.Core.LogService
         );
+        builder.Core.Services.WithExport(pm);
         return builder;
     }
 

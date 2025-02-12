@@ -217,7 +217,6 @@ public sealed class AppHost : IAppHost
             .WithExport(Args)
             .WithExport(_core.LogService)
             .WithExport<ILoggerFactory>(_core.LogService)
-            .WithExport(_core.PluginManager)
             .WithExport(this);
     }
 

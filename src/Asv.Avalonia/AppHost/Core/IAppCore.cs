@@ -15,7 +15,6 @@ public interface IAppCore
     public AppArgs Args { get; internal set; }
     public IConfiguration Configuration { get; internal set; }
     public ILogService LogService { get; internal set; }
-    public IPluginManager PluginManager { get; internal set; }
     public Func<IAppInfo, string?> MutexName { get; internal set; }
     public Func<IAppInfo, string?> NamedPipe { get; internal set; }
 }

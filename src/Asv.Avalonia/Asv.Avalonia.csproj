@@ -29,6 +29,7 @@
     <ItemGroup>
         <None Include="..\Asv.Avalonia.DC\bin\Release\net8.0\Asv.Avalonia.DC.dll" Pack="true" PackagePath="Asv.Avalonia.DC.dll" />
         <None Include="Asv.Avalonia.targets" Pack="true" PackagePath="tools\Asv.Avalonia.targets" />
+        <None Remove="Services.zip" />
     </ItemGroup>
     
     
