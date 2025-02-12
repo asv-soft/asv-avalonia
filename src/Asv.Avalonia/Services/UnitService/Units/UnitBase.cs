@@ -1,27 +1,15 @@
 ﻿using System.Collections.Immutable;
-using Asv.Cfg;
 using Material.Icons;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class UnitBaseConfig
-{
-    public IDictionary<string, string?> CurrentUnitItems { get; set; } = // TODO: проблема с сохранением и восстановлением одного или более айтемов
-        new Dictionary<string, string?>();
-}
-
 public abstract class UnitBase : IUnit
 {
     private readonly ImmutableDictionary<string, IUnitItem> _items;
-    private readonly IConfiguration _cfgSvc;
-    private readonly UnitBaseConfig _config;
 
-    protected UnitBase(IConfiguration cfgSvc, IEnumerable<IUnitItem> items)
+    protected UnitBase(IEnumerable<IUnitItem> items)
     {
-        ArgumentNullException.ThrowIfNull(cfgSvc);
-        _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<UnitBaseConfig>();
         var builder = ImmutableDictionary.CreateBuilder<string, IUnitItem>();
         foreach (var item in items)
         {
@@ -40,31 +28,11 @@ public abstract class UnitBase : IUnit
 
         InternationalSystemUnit = defaultUnit[0].Value;
         Current = new ReactiveProperty<IUnitItem>(InternationalSystemUnit);
-        _config.CurrentUnitItems.TryGetValue(UnitId, out var currentUnitItemId);
-        if (currentUnitItemId is not null)
-        {
-            _items.TryGetValue(currentUnitItemId, out var current);
-
-            if (current is not null)
-            {
-                Current.Value = current;
-            }
-        }
 
         _sub1 = Current.Subscribe(SetUnitItem);
     }
 
-    private void SetUnitItem(IUnitItem unitItem)
-    {
-        _config.CurrentUnitItems.TryGetValue(UnitId, out var currentUnitItemId);
-        if (currentUnitItemId == unitItem.UnitItemId)
-        {
-            return;
-        }
-
-        _config.CurrentUnitItems[UnitId] = unitItem.UnitItemId;
-        _cfgSvc.Set(_config);
-    }
+    protected abstract void SetUnitItem(IUnitItem unitItem);
 
     public IReadOnlyDictionary<string, IUnitItem> AvailableUnits => _items;
     public abstract MaterialIconKind Icon { get; }

@@ -1,6 +1,6 @@
 using System.Composition;
 
-namespace Asv.Avalonia.Altitude;
+namespace Asv.Avalonia;
 
 [ExportUnitItem(AltitudeBase.Id)]
 [Shared]

@@ -1,12 +1,15 @@
-using Asv.Cfg;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class NullUnitBase(IEnumerable<IUnitItem> items)
-    : UnitBase(new InMemoryConfiguration(), items)
+public class NullUnitBase(IEnumerable<IUnitItem> items) : UnitBase(items)
 {
     public const string Id = "null.unit";
+
+    protected override void SetUnitItem(IUnitItem unitItem)
+    {
+        throw new NotImplementedException();
+    }
 
     public override MaterialIconKind Icon => MaterialIconKind.Settings;
     public override string Name => "Null";
