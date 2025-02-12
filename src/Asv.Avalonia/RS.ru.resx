@@ -89,7 +89,7 @@
     <data name="SettingsKeyMapView_Header_DefaultHotKey" xml:space="preserve">
         <value>Горячая клавиша по умолчанию</value>
     </data>
-    <data name="HomePageViewModel_Title" xml:space="preserve">
+    <data name="HomePageVIewModel_Title" xml:space="preserve">
         <value>Дом</value>
     </data>
     <data name="SettingsPageViewModel_Title" xml:space="preserve">
@@ -119,10 +119,10 @@
     <data name="ShellView_Toolbar_View" xml:space="preserve">
         <value>Вид</value>
     </data>
-    <data name="DocumentPageViewModel_Title" xml:space="preserve">
-        <value>Документ</value>
+    <data name="SettingsKeyMapView_Header_CustomHotKey" xml:space="preserve">
+        <value>Пользовательская горячая клавиша</value>
     </data>
-    <data name="MapExamplePageViewModel_Title" xml:space="preserve">
-        <value>Пример карты</value>
+    <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
+        <value>Сбросить всё по умолчанию</value>
     </data>
 </root>

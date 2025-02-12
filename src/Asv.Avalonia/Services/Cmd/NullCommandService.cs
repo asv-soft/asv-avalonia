@@ -29,9 +29,10 @@ public class NullCommandService : ICommandService
         return false;
     }
 
-    public void ChangeHotKey(string commandId, KeyGesture? hotKey)
+    public bool ChangeHotKey(string commandId, KeyGesture? hotKey)
     {
         // do nothing
+        return true;
     }
 
     public bool CanExecuteCommand(

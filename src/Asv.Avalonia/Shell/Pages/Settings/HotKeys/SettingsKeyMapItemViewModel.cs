@@ -25,6 +25,7 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
             Info.CustomHotKey = null;
             svc.ChangeHotKey(Info.Id, Info.DefaultHotKey);
             IsReset.Value = false;
+            CurrentHotKeyValue.Value = Info.CustomHotKey;
         });
         CurrentHotKeyValue.Value = Info.CustomHotKey;
         NewHotKeyValue.Subscribe(_ =>
@@ -64,10 +65,9 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
             }
 
             Info.CustomHotKey = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
-            svc.ChangeHotKey(Info.Id, Info.CustomHotKey);
+            var res = svc.ChangeHotKey(Info.Id, Info.CustomHotKey);
+            CurrentHotKeyValue.Value = res ? Info.CustomHotKey : null;
             IsChangingHotKey.Value = false;
-
-            CurrentHotKeyValue.Value = Info.CustomHotKey;
         });
     }
 
@@ -83,9 +83,15 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
         return [];
     }
 
-    public bool Fitler(string text)
+    public bool Filter(string text)
     {
-        return Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase);
+        return (Info.CustomHotKey != null &&
+                Info.CustomHotKey.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)) ||
+               (Info.DefaultHotKey != null &&
+                Info.DefaultHotKey.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)) ||
+               Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+               Info.Source.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+               Info.Description.Contains(text, StringComparison.OrdinalIgnoreCase);
     }
 
     public ReactiveProperty<bool> IsReset { get; set; } = new(false);

@@ -54,7 +54,7 @@ public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
                 }
                 else
                 {
-                    _view.AttachFilter((_, model) => model.Fitler(x));
+                    _view.AttachFilter((_, model) => model.Filter(x));
                 }
             });
     }

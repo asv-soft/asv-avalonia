@@ -35,10 +35,10 @@ public class CommandService : ICommandService
         _logger = loggerFactory.CreateLogger<CommandService>();
         _commands = factories.ToDictionary(x => x.Info.Id);
 
-        ReloadHotKeys(_=> _= _cfg.Get<CommandServiceConfig>().CustomHotKeys);
+        ReloadHotKeys(_ => _ = _cfg.Get<CommandServiceConfig>().CustomHotKeys);
     }
 
-    private void ReloadHotKeys(Action<IDictionary<string, string?>>? modifyConfig = null)
+    private bool ReloadHotKeys(Action<IDictionary<string, string?>>? modifyConfig = null)
     {
         var keyVsCommandBuilder = ImmutableDictionary.CreateBuilder<KeyGesture, ICommandFactory>();
         var commandVsKeyBuilder = ImmutableDictionary.CreateBuilder<string, KeyGesture>();
@@ -48,8 +48,25 @@ public class CommandService : ICommandService
         {
             if (value.Info.CustomHotKey == null)
             {
-                // skip commands without hot keys
+                if (keyVsCommandBuilder.Any(_ => _.Key == value.Info.DefaultHotKey) && value.Info.IsEditable)
+                {
+                    _logger.LogError($"This key {value.Info.DefaultHotKey} is already set for another command => skip");
+                    return false;
+                }
+
+                if (value.Info.DefaultHotKey != null)
+                {
+                    keyVsCommandBuilder.Add(value.Info.DefaultHotKey, value);
+                    commandVsKeyBuilder.Add(value.Info.Id, value.Info.DefaultHotKey);
+                }
+
                 continue;
+            }
+
+            if (keyVsCommandBuilder.Any(_ => _.Key == value.Info.CustomHotKey) && value.Info.IsEditable)
+            {
+                _logger.LogError($"This key {value.Info.CustomHotKey} is already set for another command => skip");
+                return false;
             }
 
             keyVsCommandBuilder.Add(value.Info.CustomHotKey, value);
@@ -119,6 +136,7 @@ public class CommandService : ICommandService
 
             commandVsKeyBuilder[commandId] = keyGesture;
             keyVsCommandBuilder[keyGesture] = command;
+            command.Info.CustomHotKey = KeyGesture.Parse(hotKey);
         }
 
         _gestureVsCommand = keyVsCommandBuilder.ToImmutable();
@@ -128,6 +146,8 @@ public class CommandService : ICommandService
         {
             _cfg.Set(config);
         }
+
+        return true;
     }
 
     public IEnumerable<ICommandInfo> Commands => _commands.Values.Select(x => x.Info);
@@ -154,9 +174,9 @@ public class CommandService : ICommandService
         return false;
     }
 
-    public void ChangeHotKey(string commandId, KeyGesture? hotKey)
+    public bool ChangeHotKey(string commandId, KeyGesture? hotKey)
     {
-        ReloadHotKeys(config => config[commandId] = hotKey?.ToString());
+        return ReloadHotKeys(config => config[commandId] = hotKey?.ToString());
     }
 
     public bool CanExecuteCommand(
