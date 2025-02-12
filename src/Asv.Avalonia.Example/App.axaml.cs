@@ -9,7 +9,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -60,10 +59,18 @@ public partial class App : Application, IContainerHost, IShellHost
         else if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             Shell = _container.GetExport<IShell>(DesktopShellViewModel.ShellId);
+            if (desktop.MainWindow is TopLevel topLevel)
+            {
+                TopLevel = topLevel;
+            }
         }
         else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             Shell = _container.GetExport<IShell>(MobileShellViewModel.ShellId);
+            if (singleViewPlatform.MainView is TopLevel topLevel)
+            {
+                TopLevel = topLevel;
+            }
         }
         else
         {
@@ -77,6 +84,7 @@ public partial class App : Application, IContainerHost, IShellHost
             Shell.Navigate(HomePageViewModel.PageId);
             Shell.Navigate(DocumentPageViewModel.PageId);
             Shell.Navigate(MapExamplePageViewModel.PageId);
+            Shell.Navigate(DialogBoardViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();
@@ -102,5 +110,6 @@ public partial class App : Application, IContainerHost, IShellHost
     }
 
     public IShell Shell { get; set; }
+    public TopLevel TopLevel { get; private set; }
     public IExportInfo Source => SystemModule.Instance;
 }

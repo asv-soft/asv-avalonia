@@ -131,4 +131,19 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Пример карты</value>
     </data>
+    <data name="DialogButton_DontSave" xml:space="preserve">
+        <value>Не сохраняй</value>
+    </data>
+    <data name="DialogButton_No" xml:space="preserve">
+        <value>Нет</value>
+    </data>
+    <data name="DialogButton_Save" xml:space="preserve">
+        <value>Сохранить</value>
+    </data>
+    <data name="DialogButton_Yes" xml:space="preserve">
+        <value>Да</value>
+    </data>
+    <data name="DialogPageVIewModel_Title" xml:space="preserve">
+        <value>Диалоги</value>
+    </data>
 </root>

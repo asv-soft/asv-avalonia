@@ -1,4 +1,5 @@
-﻿using ObservableCollections;
+﻿using Avalonia.Controls;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
@@ -6,6 +7,7 @@ namespace Asv.Avalonia;
 public interface IShellHost
 {
     IShell Shell { get; }
+    TopLevel TopLevel { get; }
 }
 
 public class NullShellHost : IShellHost
@@ -15,6 +17,7 @@ public class NullShellHost : IShellHost
     private NullShellHost() { }
 
     public IShell Shell => DesignTimeShellViewModel.Instance;
+    public TopLevel TopLevel { get; } = null!; // TODO: сделать DesignTime вариант
 }
 
 public enum ShellErrorState

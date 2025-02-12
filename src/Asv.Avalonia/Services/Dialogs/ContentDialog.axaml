@@ -1,0 +1,28 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia"
+             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.ContentDialog"
+             x:DataType="avalonia:ContentDialog">
+    <Border Background="#00ffffff" BorderBrush="Gray" BorderThickness="2" CornerRadius="10" Padding="20">
+        <DockPanel>
+            <DockPanel LastChildFill="False" DockPanel.Dock="Top">
+                <TextBlock Text="{Binding Title}" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" Foreground="White" DockPanel.Dock="Left"/>
+                <Button Command="{Binding CloseCommand}" BorderBrush="Transparent" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Top" Background="Transparent" DockPanel.Dock="Right">
+                    <avalonia1:MaterialIcon Kind="Close"/>
+                </Button>
+            </DockPanel>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="20" DockPanel.Dock="Top">
+                <TextBlock Text="{Binding Message}" FontSize="14" Margin="0,20,0,20" HorizontalAlignment="Center"/>
+                <ContentControl Content="{Binding DialogContent}" Margin="0,0,0,20"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="10" DockPanel.Dock="Bottom">
+                <Button Content="{Binding PrimaryButtonText}" Command="{Binding PrimaryButtonCommand}" Foreground="White" Padding="10,5"/>
+                <Button Content="{Binding SecondaryButtonText}" Command="{Binding SecondaryButtonCommand}" Foreground="White" Padding="10,5"/>
+            </StackPanel>
+        </DockPanel>
+    </Border>
+</UserControl>

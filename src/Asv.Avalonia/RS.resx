@@ -138,4 +138,19 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Map Example</value>
     </data>
+    <data name="DialogPageVIewModel_Title" xml:space="preserve">
+        <value>Dialogs</value>
+    </data>
+    <data name="DialogButton_Yes" xml:space="preserve">
+        <value>Yes</value>
+    </data>
+    <data name="DialogButton_No" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="DialogButton_Save" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="DialogButton_DontSave" xml:space="preserve">
+        <value>Don't save</value>
+    </data>
 </root>
