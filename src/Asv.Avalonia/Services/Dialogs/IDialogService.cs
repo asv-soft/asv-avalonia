@@ -80,7 +80,7 @@ public interface IDialogService
     /// <param name="defaultPath">default path.</param>
     /// <returns>Folder path or null if dialog was canceled.</returns>
     Task ShowObserveFolderDialog(string title, string? defaultPath);
-    
+
     /// <summary>
     /// Shows a Yes/No dialog to the user.
     /// </summary>

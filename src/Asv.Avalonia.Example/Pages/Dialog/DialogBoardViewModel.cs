@@ -13,25 +13,28 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
 {
     private readonly IContainerHost _container;
     public const string PageId = "dialog";
-    public DialogBoardViewModel(IContainerHost container) : this(DesignTime.CommandService, container)
+
+    public DialogBoardViewModel(IContainerHost container)
+        : this(DesignTime.CommandService, container)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
-    
+
     [ImportingConstructor]
-    private DialogBoardViewModel(ICommandService cmd, IContainerHost container) : base(PageId, cmd)
+    private DialogBoardViewModel(ICommandService cmd, IContainerHost container)
+        : base(PageId, cmd)
     {
         _container = container;
         OpenFileMessage = new ReactiveCommand((_, c) => OpenFileAsync(c));
         SaveFileMessage = new ReactiveCommand((_, c) => SaveFileAsync(c));
         SelectFileMessage = new ReactiveCommand((_, c) => SelectFileAsync(c));
         ObserveFolderMessage = new ReactiveCommand((_, c) => ObserveFolderAsync(c));
-        YesNoMessage =  new ReactiveCommand((_, c) => YesNoMessageAsync(c));
+        YesNoMessage = new ReactiveCommand((_, c) => YesNoMessageAsync(c));
         SaveCancelMessage = new ReactiveCommand((_, c) => SaveCancelAsync(c));
         ShowUnitInputMessage = new ReactiveCommand((_, c) => ShowUnitInputAsync(c));
     }
 
-     #region Message
+    #region Message
 
     public ReactiveCommand OpenFileMessage { get; }
 

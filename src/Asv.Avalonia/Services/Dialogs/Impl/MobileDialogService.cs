@@ -38,7 +38,7 @@ public class MobileDialogService : IDialogService
     {
         throw new System.NotImplementedException();
     }
-    
+
     public Task<bool> ShowYesNoDialog(string title, string message)
     {
         throw new System.NotImplementedException();

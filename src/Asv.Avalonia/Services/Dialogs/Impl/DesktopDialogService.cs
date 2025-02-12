@@ -5,11 +5,13 @@ using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 
 namespace Asv.Avalonia;
+
 [Export(typeof(IDialogService))]
 [Shared]
 public sealed class DesktopDialogService : IDialogService
 {
     private readonly IShellHost _host;
+
     [ImportingConstructor]
     public DesktopDialogService(IShellHost host)
     {
@@ -153,7 +155,7 @@ public sealed class DesktopDialogService : IDialogService
 
         return Task.CompletedTask;
     }
-    
+
     public async Task<bool> ShowYesNoDialog(string title, string message)
     {
         var result = await CustomDialogInterface.ShowCustomDialog<object>(
