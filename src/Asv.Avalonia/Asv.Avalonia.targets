@@ -1,0 +1,5 @@
+﻿<Project>
+    <Target Name="RunDependencyCollector" AfterTargets="Build">
+        <Exec Command="dotnet exec $(MSBuildThisFileDirectory)Asv.Avalonia.DC.dll $(MSBuildProjectFullPath)" />
+    </Target>
+</Project>
