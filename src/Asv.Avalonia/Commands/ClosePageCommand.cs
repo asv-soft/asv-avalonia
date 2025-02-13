@@ -16,6 +16,8 @@ public class ClosePageCommand : IAsyncCommand
         Icon = MaterialIconKind.CloseBold,
         DefaultHotKey = KeyGesture.Parse("Alt+F4"),
         Order = 0,
+        IsEditable = true,
+        Source = AppHost.Instance.AppInfo.Name,
     };
 
     public IPersistable Save()

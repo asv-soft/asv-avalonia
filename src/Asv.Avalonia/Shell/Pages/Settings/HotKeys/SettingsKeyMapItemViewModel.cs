@@ -85,10 +85,8 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
 
     public bool Filter(string text)
     {
-        return (Info.CustomHotKey != null &&
-                Info.CustomHotKey.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)) ||
-               (Info.DefaultHotKey != null &&
-                Info.DefaultHotKey.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)) ||
+        return (Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
+               (Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
                Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase) ||
                Info.Source.Contains(text, StringComparison.OrdinalIgnoreCase) ||
                Info.Description.Contains(text, StringComparison.OrdinalIgnoreCase);

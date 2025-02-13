@@ -32,6 +32,8 @@ public class OpenSettingsCommand : IAsyncCommand
         Icon = MaterialIconKind.Cog,
         DefaultHotKey = KeyGesture.Parse("Ctrl+F1"),
         Order = 0,
+        IsEditable = true,
+        Source = AppHost.Instance.AppInfo.Name,
     };
 
     public IPersistable Save()
