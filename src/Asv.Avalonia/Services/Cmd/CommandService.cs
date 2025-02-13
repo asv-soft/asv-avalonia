@@ -19,7 +19,6 @@ public class CommandService : ICommandService
     private readonly IConfiguration _cfg;
     private readonly ILoggerFactory _loggerFactory;
     private readonly Dictionary<string, ICommandFactory> _commands;
-    private ImmutableDictionary<string, KeyGesture> _commandsVsGesture;
     private ImmutableDictionary<KeyGesture, ICommandFactory> _gestureVsCommand;
     private readonly ILogger<CommandService> _logger;
 
@@ -41,7 +40,6 @@ public class CommandService : ICommandService
     private bool ReloadHotKeys(Action<IDictionary<string, string?>>? modifyConfig = null)
     {
         var keyVsCommandBuilder = ImmutableDictionary.CreateBuilder<KeyGesture, ICommandFactory>();
-        var commandVsKeyBuilder = ImmutableDictionary.CreateBuilder<string, KeyGesture>();
         foreach (var value in _commands.Values)
         {
             if (value.Info.CustomHotKey == null)
@@ -55,7 +53,6 @@ public class CommandService : ICommandService
                 if (value.Info.DefaultHotKey != null)
                 {
                     keyVsCommandBuilder.Add(value.Info.DefaultHotKey, value);
-                    commandVsKeyBuilder.Add(value.Info.Id, value.Info.DefaultHotKey);
                 }
 
                 continue;
@@ -68,7 +65,6 @@ public class CommandService : ICommandService
             }
 
             keyVsCommandBuilder.Add(value.Info.CustomHotKey, value);
-            commandVsKeyBuilder.Add(value.Info.Id, value.Info.CustomHotKey);
         }
 
         var config = _cfg.Get<CommandServiceConfig>();
@@ -81,20 +77,13 @@ public class CommandService : ICommandService
         
         foreach (var (commandId, hotKey) in config.CustomHotKeys)
         {
-            if (string.IsNullOrWhiteSpace(hotKey))
-            {
-                if (keyVsCommandBuilder.Remove(commandVsKeyBuilder[commandId]))
-                {
-                    commandVsKeyBuilder.Remove(commandId);
-                }
-
-                continue;
-            }
-
-            KeyGesture keyGesture;
+            KeyGesture? keyGesture = null;
             try
             {
-                keyGesture = KeyGesture.Parse(hotKey);
+                if (hotKey != null)
+                {
+                    keyGesture = KeyGesture.Parse(hotKey);
+                }
             }
             catch (Exception)
             {
@@ -105,6 +94,11 @@ public class CommandService : ICommandService
                 );
                 config.CustomHotKeys.Remove(commandId);
                 configChanged = true;
+                continue;
+            }
+
+            if (keyGesture == null) // just to calm down analyzer
+            {
                 continue;
             }
 
@@ -130,9 +124,8 @@ public class CommandService : ICommandService
                 configChanged = true;
                 continue;
             }
-
-            command.Info.CustomHotKey = KeyGesture.Parse(hotKey);
-            commandVsKeyBuilder[commandId] = keyGesture;
+            
+            command.Info.CustomHotKey = keyGesture;
             if (command.Info.CustomHotKey == keyGesture)
             {
                 if (command.Info.DefaultHotKey != null)
@@ -145,8 +138,6 @@ public class CommandService : ICommandService
         }
 
         _gestureVsCommand = keyVsCommandBuilder.ToImmutable();
-        _commandsVsGesture = commandVsKeyBuilder.ToImmutable();
-
         if (configChanged)
         {
             _cfg.Set(config);

@@ -46,6 +46,7 @@ public partial class SettingsKeymapView : UserControl
         {
             keyValue = e.Key switch
             {
+                Key.LeftAlt or Key.LeftAlt => KeyModifiers.Alt.ToString(),
                 Key.RightCtrl or Key.LeftCtrl => KeyModifiers.Control.ToString(),
                 Key.LeftShift or Key.RightShift => KeyModifiers.Shift.ToString(),
                 _ => keyValue
