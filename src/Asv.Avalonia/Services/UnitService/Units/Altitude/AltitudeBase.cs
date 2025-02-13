@@ -20,8 +20,8 @@ public class AltitudeBase : UnitBase
     public override string Description => RS.Altitude_Description;
     public override string UnitId => Id;
 
-    private readonly AltitudeConfig _config;
-    private readonly IConfiguration _cfg;
+    private readonly AltitudeConfig? _config;
+    private readonly IConfiguration _cfgSvc;
 
     [ImportingConstructor]
     public AltitudeBase(
@@ -31,7 +31,7 @@ public class AltitudeBase : UnitBase
         : base(items)
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);
-        _cfg = cfgSvc;
+        _cfgSvc = cfgSvc;
         _config = cfgSvc.Get<AltitudeConfig>();
 
         if (_config.CurrentUnitItemId is null)
@@ -48,12 +48,17 @@ public class AltitudeBase : UnitBase
 
     protected override void SetUnitItem(IUnitItem unitItem)
     {
+        if (_config is null)
+        {
+            return;
+        }
+
         if (_config.CurrentUnitItemId == unitItem.UnitItemId)
         {
             return;
         }
 
         _config.CurrentUnitItemId = unitItem.UnitItemId;
-        _cfg.Set(_config);
+        _cfgSvc.Set(_config);
     }
 }

@@ -177,4 +177,19 @@
     <data name="FeetAltitudeUnit_Symbol" xml:space="preserve">
         <value>ft</value>
     </data>
+    <data name="AmplitudeModulation_Name" xml:space="preserve">
+        <value>Amplitude modulation</value>
+    </data>
+    <data name="AmplitudeModulation_Description" xml:space="preserve">
+        <value>Amlitude modulation unit</value>
+    </data>
+    <data name="InPartsAmplitudeModulation_Name" xml:space="preserve">
+        <value>In parts</value>
+    </data>
+    <data name="InPartsAmplitudeModulation_Description" xml:space="preserve">
+        <value>Amplitude modulation in parts</value>
+    </data>
+    <data name="InPartsAmplitudeModulation_Symbol" xml:space="preserve">
+        <value>1</value>
+    </data>
 </root>

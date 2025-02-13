@@ -362,5 +362,35 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("FeetAltitudeUnit_Symbol", resourceCulture);
             }
         }
+        
+        public static string AmplitudeModulation_Name {
+            get {
+                return ResourceManager.GetString("AmplitudeModulation_Name", resourceCulture);
+            }
+        }
+        
+        public static string AmplitudeModulation_Description {
+            get {
+                return ResourceManager.GetString("AmplitudeModulation_Description", resourceCulture);
+            }
+        }
+        
+        public static string InPartsAmplitudeModulation_Name {
+            get {
+                return ResourceManager.GetString("InPartsAmplitudeModulation_Name", resourceCulture);
+            }
+        }
+        
+        public static string InPartsAmplitudeModulation_Description {
+            get {
+                return ResourceManager.GetString("InPartsAmplitudeModulation_Description", resourceCulture);
+            }
+        }
+        
+        public static string InPartsAmplitudeModulation_Symbol {
+            get {
+                return ResourceManager.GetString("InPartsAmplitudeModulation_Symbol", resourceCulture);
+            }
+        }
     }
 }

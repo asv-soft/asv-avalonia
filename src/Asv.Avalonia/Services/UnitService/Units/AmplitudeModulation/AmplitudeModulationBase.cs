@@ -2,29 +2,29 @@ using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
-namespace Asv.Avalonia;
+namespace Asv.Avalonia.AmplitudeModulation;
 
-public class DistanceConfig
+public class AmplitudeModulationConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public class DistanceBase : UnitBase
+public class AmplitudeModulationBase : UnitBase
 {
-    public const string Id = "distance";
+    public const string Id = "amplitude.modulation";
 
-    public override MaterialIconKind Icon => MaterialIconKind.LocationDistance;
-    public override string Name => RS.Distance_Name;
-    public override string Description => RS.Distance_Description;
+    public override MaterialIconKind Icon => MaterialIconKind.Amplitude;
+    public override string Name => RS.AmplitudeModulation_Name;
+    public override string Description => RS.AmplitudeModulation_Description;
     public override string UnitId => Id;
 
-    private readonly DistanceConfig? _config;
+    private readonly AmplitudeModulationConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
     [ImportingConstructor]
-    public DistanceBase(
+    public AmplitudeModulationBase(
         [Import] IConfiguration cfgSvc,
         [ImportMany(Id)] IEnumerable<IUnitItem> items
     )
@@ -32,7 +32,8 @@ public class DistanceBase : UnitBase
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);
         _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<DistanceConfig>();
+        _config = cfgSvc.Get<AmplitudeModulationConfig>();
+
         if (_config.CurrentUnitItemId is null)
         {
             return;

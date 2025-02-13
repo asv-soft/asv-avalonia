@@ -170,4 +170,19 @@
     <data name="FeetAltitudeUnit_Description" xml:space="preserve">
         <value>Высота в футах</value>
     </data>
+    <data name="AmplitudeModulation_Name" xml:space="preserve">
+        <value>Амплитудная модуляция</value>
+    </data>
+    <data name="AmplitudeModulation_Description" xml:space="preserve">
+        <value>Единица измерения амплитудной модуляции</value>
+    </data>
+    <data name="InPartsAmplitudeModulation_Symbol" xml:space="preserve">
+        <value>1</value>
+    </data>
+    <data name="InPartsAmplitudeModulation_Name" xml:space="preserve">
+        <value>В частях</value>
+    </data>
+    <data name="InPartsAmplitudeModulation_Description" xml:space="preserve">
+        <value>Амплитудная модуляция в частях</value>
+    </data>
 </root>
