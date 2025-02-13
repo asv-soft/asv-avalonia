@@ -46,7 +46,6 @@ public partial class SettingsKeymapView : UserControl
         {
             keyValue = e.Key switch
             {
-                Key.RightAlt or Key.LeftAlt => KeyModifiers.Alt.ToString(),
                 Key.RightCtrl or Key.LeftCtrl => KeyModifiers.Control.ToString(),
                 Key.LeftShift or Key.RightShift => KeyModifiers.Shift.ToString(),
                 _ => keyValue
@@ -64,7 +63,6 @@ public partial class SettingsKeymapView : UserControl
     private bool IsModifierKey(Key key)
     {
         return key is Key.LeftShift or Key.RightShift
-            or Key.LeftCtrl or Key.RightCtrl
-            or Key.LeftAlt or Key.RightAlt;
+            or Key.LeftCtrl or Key.RightCtrl;
     }
 }

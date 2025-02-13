@@ -35,15 +35,13 @@ public class CommandService : ICommandService
         _logger = loggerFactory.CreateLogger<CommandService>();
         _commands = factories.ToDictionary(x => x.Info.Id);
 
-        ReloadHotKeys(_ => _ = _cfg.Get<CommandServiceConfig>().CustomHotKeys);
+        ReloadHotKeys();
     }
 
     private bool ReloadHotKeys(Action<IDictionary<string, string?>>? modifyConfig = null)
     {
         var keyVsCommandBuilder = ImmutableDictionary.CreateBuilder<KeyGesture, ICommandFactory>();
         var commandVsKeyBuilder = ImmutableDictionary.CreateBuilder<string, KeyGesture>();
-
-        // load default hot keys
         foreach (var value in _commands.Values)
         {
             if (value.Info.CustomHotKey == null)
@@ -80,8 +78,7 @@ public class CommandService : ICommandService
             modifyConfig(config.CustomHotKeys);
             configChanged = true;
         }
-
-        // load custom hot keys from config
+        
         foreach (var (commandId, hotKey) in config.CustomHotKeys)
         {
             if (string.IsNullOrWhiteSpace(hotKey))
@@ -99,7 +96,7 @@ public class CommandService : ICommandService
             {
                 keyGesture = KeyGesture.Parse(hotKey);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _logger.LogWarning(
                     "Invalid hot key {hotKey} for command {commandId} at config",
@@ -134,9 +131,17 @@ public class CommandService : ICommandService
                 continue;
             }
 
-            commandVsKeyBuilder[commandId] = keyGesture;
-            keyVsCommandBuilder[keyGesture] = command;
             command.Info.CustomHotKey = KeyGesture.Parse(hotKey);
+            commandVsKeyBuilder[commandId] = keyGesture;
+            if (command.Info.CustomHotKey == keyGesture)
+            {
+                if (command.Info.DefaultHotKey != null)
+                {
+                    keyVsCommandBuilder.Remove(command.Info.DefaultHotKey);
+                }
+                
+                keyVsCommandBuilder[keyGesture] = command;
+            }
         }
 
         _gestureVsCommand = keyVsCommandBuilder.ToImmutable();
