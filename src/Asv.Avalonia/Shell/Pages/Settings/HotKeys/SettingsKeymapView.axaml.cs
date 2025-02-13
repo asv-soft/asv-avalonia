@@ -64,6 +64,6 @@ public partial class SettingsKeymapView : UserControl
     private bool IsModifierKey(Key key)
     {
         return key is Key.LeftShift or Key.RightShift
-            or Key.LeftCtrl or Key.RightCtrl;
+            or Key.LeftCtrl or Key.RightCtrl or Key.LeftAlt or Key.LeftAlt;
     }
 }
