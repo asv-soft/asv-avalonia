@@ -19,7 +19,6 @@ public class CommandService : ICommandService
     private readonly IConfiguration _cfg;
     private readonly ILoggerFactory _loggerFactory;
     private readonly Dictionary<string, ICommandFactory> _commands;
-    private ImmutableDictionary<string, KeyGesture> _commandsVsGesture;
     private ImmutableDictionary<KeyGesture, ICommandFactory> _gestureVsCommand;
     private readonly ILogger<CommandService> _logger;
 
@@ -35,15 +34,12 @@ public class CommandService : ICommandService
         _logger = loggerFactory.CreateLogger<CommandService>();
         _commands = factories.ToDictionary(x => x.Info.Id);
 
-        ReloadHotKeys(_ => _ = _cfg.Get<CommandServiceConfig>().CustomHotKeys);
+        ReloadHotKeys();
     }
 
     private bool ReloadHotKeys(Action<IDictionary<string, string?>>? modifyConfig = null)
     {
         var keyVsCommandBuilder = ImmutableDictionary.CreateBuilder<KeyGesture, ICommandFactory>();
-        var commandVsKeyBuilder = ImmutableDictionary.CreateBuilder<string, KeyGesture>();
-
-        // load default hot keys
         foreach (var value in _commands.Values)
         {
             if (value.Info.CustomHotKey == null)
@@ -57,7 +53,6 @@ public class CommandService : ICommandService
                 if (value.Info.DefaultHotKey != null)
                 {
                     keyVsCommandBuilder.Add(value.Info.DefaultHotKey, value);
-                    commandVsKeyBuilder.Add(value.Info.Id, value.Info.DefaultHotKey);
                 }
 
                 continue;
@@ -70,7 +65,6 @@ public class CommandService : ICommandService
             }
 
             keyVsCommandBuilder.Add(value.Info.CustomHotKey, value);
-            commandVsKeyBuilder.Add(value.Info.Id, value.Info.CustomHotKey);
         }
 
         var config = _cfg.Get<CommandServiceConfig>();
@@ -80,26 +74,18 @@ public class CommandService : ICommandService
             modifyConfig(config.CustomHotKeys);
             configChanged = true;
         }
-
-        // load custom hot keys from config
+        
         foreach (var (commandId, hotKey) in config.CustomHotKeys)
         {
-            if (string.IsNullOrWhiteSpace(hotKey))
-            {
-                if (keyVsCommandBuilder.Remove(commandVsKeyBuilder[commandId]))
-                {
-                    commandVsKeyBuilder.Remove(commandId);
-                }
-
-                continue;
-            }
-
-            KeyGesture keyGesture;
+            KeyGesture? keyGesture = null;
             try
             {
-                keyGesture = KeyGesture.Parse(hotKey);
+                if (hotKey != null)
+                {
+                    keyGesture = KeyGesture.Parse(hotKey);
+                }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _logger.LogWarning(
                     "Invalid hot key {hotKey} for command {commandId} at config",
@@ -108,6 +94,11 @@ public class CommandService : ICommandService
                 );
                 config.CustomHotKeys.Remove(commandId);
                 configChanged = true;
+                continue;
+            }
+
+            if (keyGesture == null) // just to calm down analyzer
+            {
                 continue;
             }
 
@@ -133,15 +124,20 @@ public class CommandService : ICommandService
                 configChanged = true;
                 continue;
             }
-
-            commandVsKeyBuilder[commandId] = keyGesture;
-            keyVsCommandBuilder[keyGesture] = command;
-            command.Info.CustomHotKey = KeyGesture.Parse(hotKey);
+            
+            command.Info.CustomHotKey = keyGesture;
+            if (command.Info.CustomHotKey == keyGesture)
+            {
+                if (command.Info.DefaultHotKey != null)
+                {
+                    keyVsCommandBuilder.Remove(command.Info.DefaultHotKey);
+                }
+                
+                keyVsCommandBuilder[keyGesture] = command;
+            }
         }
 
         _gestureVsCommand = keyVsCommandBuilder.ToImmutable();
-        _commandsVsGesture = commandVsKeyBuilder.ToImmutable();
-
         if (configChanged)
         {
             _cfg.Set(config);

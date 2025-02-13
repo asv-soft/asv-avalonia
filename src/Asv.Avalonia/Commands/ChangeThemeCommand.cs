@@ -46,7 +46,7 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
         DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
         Order = 0,
         IsEditable = true,
-        Source = "Asv.Avalonia",
+        Source = AppHost.Instance.AppInfo.Name,
     };
 
     #endregion

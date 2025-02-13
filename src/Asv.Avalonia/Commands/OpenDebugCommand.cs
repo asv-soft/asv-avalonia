@@ -44,7 +44,7 @@ public class OpenDebugCommand(ExportFactory<IDebugWindow> factory) : IAsyncComma
         DefaultHotKey = KeyGesture.Parse("Ctrl+D"),
         Order = 0,
         IsEditable = true,
-        Source = "Asv.Avalonia",
+        Source = AppHost.Instance.AppInfo.Name,
     };
 
     public IPersistable Save()
