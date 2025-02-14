@@ -1,24 +1,37 @@
 using System.Globalization;
-using Avalonia;
+using Asv.Common;
 using Avalonia.Controls;
+using Avalonia.Markup.Xaml;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia.Map;
 
-internal static class MapCore
+public static class MapCore
 {
     public static ILoggerFactory LoggerFactory { get; } = NullLoggerFactory.Instance;
-    public static ITileCache FastCache { get; } 
 }
 
-public static class MapBuilder
+public class GeoPointExtension : MarkupExtension
 {
-    public static AppBuilder UseAsvMap(this AppBuilder builder)
+    private readonly double _lon;
+    private readonly double _lat;
+    public double Altitude { get; set; } = 0.0;
+
+    public GeoPointExtension(string latitude, string longitude)
     {
-        return builder.AfterSetup(_ =>
+        if (GeoPointLatitude.TryParse(latitude, out _lat) == false)
         {
-            
-        });
+            throw new InvalidOperationException($"Invalid latitude format: {latitude}");
+        }
+        if (GeoPointLongitude.TryParse(longitude, out _lon) == false)
+        {
+            throw new InvalidOperationException($"Invalid longitude format: {longitude}");
+        }
+    }
+
+    public override object ProvideValue(IServiceProvider serviceProvider)
+    {
+        return new GeoPoint(_lat, _lon, Altitude);
     }
 }
