@@ -410,5 +410,47 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("PercentAmplitudeModulation_Symbol", resourceCulture);
             }
         }
+        
+        public static string Bearing_Name {
+            get {
+                return ResourceManager.GetString("Bearing_Name", resourceCulture);
+            }
+        }
+        
+        public static string Bearing_Description {
+            get {
+                return ResourceManager.GetString("Bearing_Description", resourceCulture);
+            }
+        }
+        
+        public static string DegreeBearing_Name {
+            get {
+                return ResourceManager.GetString("DegreeBearing_Name", resourceCulture);
+            }
+        }
+        
+        public static string DegreeBearing_Description {
+            get {
+                return ResourceManager.GetString("DegreeBearing_Description", resourceCulture);
+            }
+        }
+        
+        public static string DMBearing_Symbol {
+            get {
+                return ResourceManager.GetString("DMBearing_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string DMBearing_Description {
+            get {
+                return ResourceManager.GetString("DMBearing_Description", resourceCulture);
+            }
+        }
+        
+        public static string DMBearing_Name {
+            get {
+                return ResourceManager.GetString("DMBearing_Name", resourceCulture);
+            }
+        }
     }
 }

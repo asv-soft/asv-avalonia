@@ -27,7 +27,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
     }
 
-    public string? GetValidationErrorMessage(string? value)
+    public virtual string? GetValidationErrorMessage(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
@@ -49,7 +49,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return null;
     }
 
-    public double Parse(string? input)
+    public virtual double Parse(string? input)
     {
         if (string.IsNullOrWhiteSpace(input))
         {
@@ -83,22 +83,22 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return result * decMul;
     }
 
-    public string Print(double value, string? format = null)
+    public virtual string Print(double value, string? format = null)
     {
         return value.ToString(format, CultureInfo.InvariantCulture);
     }
 
-    public string PrintWithUnits(double value, string? format = null)
+    public virtual string PrintWithUnits(double value, string? format = null)
     {
         return $"{value.ToString(format, CultureInfo.InvariantCulture)} {Symbol}";
     }
 
-    public double FromSi(double siValue)
+    public virtual double FromSi(double siValue)
     {
         return siValue * multiplier;
     }
 
-    public double ToSi(double value)
+    public virtual double ToSi(double value)
     {
         return value / multiplier;
     }

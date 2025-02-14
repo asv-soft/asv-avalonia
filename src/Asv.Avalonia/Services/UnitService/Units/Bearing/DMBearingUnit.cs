@@ -1,0 +1,77 @@
+using System.Composition;
+using Asv.Common;
+
+namespace Asv.Avalonia.Bearing;
+
+[ExportUnitItem(BearingBase.Id)]
+[Shared]
+[method: ImportingConstructor]
+public sealed class DMBearingUnit() : UnitItemBase(1)
+{
+    public const string Id = $"{BearingBase.Id}.dm";
+
+    public override string UnitItemId => Id;
+    public override string Name => RS.DMBearing_Name;
+    public override string Description => RS.DMBearing_Description;
+    public override string Symbol => RS.DMBearing_Symbol;
+    public override bool IsInternationalSystemUnit => false;
+
+    public override bool IsValid(string? value)
+    {
+        return value != null && AngleDm.IsValid(value);
+    }
+
+    public override double Parse(string? value)
+    {
+        return value != null && AngleDm.TryParse(value, out var result) ? result : double.NaN;
+    }
+
+    public override string? GetValidationErrorMessage(string? value)
+    {
+        return string.IsNullOrWhiteSpace(value)
+            ? RS.UnitItemBase_Validation_ValueIsEmptyError
+            : AngleDm.GetErrorMessage(value);
+    }
+
+    /// <summary>
+    /// Prints unit item.
+    /// </summary>
+    /// <param name="value">.</param>
+    /// <param name="format">Unused for this unit item.</param>
+    /// <returns>Unit item in string format.</returns>
+    public override string Print(double value, string? format = null)
+    {
+        return AngleDm.PrintDm(value);
+    }
+
+    /// <summary>
+    /// Prints unit item with units.
+    /// </summary>
+    /// <param name="value">.</param>
+    /// <param name="format">Unused for this unit item.</param>
+    /// <returns>Unit item in string format with its units.</returns>
+    public override string PrintWithUnits(double value, string? format = null)
+    {
+        return Print(value);
+    }
+
+    /// <summary>
+    /// Method is unusable for this unit item.
+    /// </summary>
+    /// <param name="siValue">.</param>
+    /// <returns>..</returns>
+    public override double FromSi(double siValue)
+    {
+        return siValue;
+    }
+
+    /// <summary>
+    /// Method is unusable for this unit item.
+    /// </summary>
+    /// <param name="value">.</param>
+    /// <returns>..</returns>
+    public override double ToSi(double value)
+    {
+        return value;
+    }
+}

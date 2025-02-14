@@ -201,4 +201,25 @@
     <data name="PercentAmplitudeModulation_Symbol" xml:space="preserve">
         <value>%</value>
     </data>
+    <data name="Bearing_Name" xml:space="preserve">
+        <value>Bearing</value>
+    </data>
+    <data name="Bearing_Description" xml:space="preserve">
+        <value>Bearing unit</value>
+    </data>
+    <data name="DegreeBearing_Name" xml:space="preserve">
+        <value>Degree</value>
+    </data>
+    <data name="DegreeBearing_Description" xml:space="preserve">
+        <value>Bearing in degrees</value>
+    </data>
+    <data name="DMBearing_Symbol" xml:space="preserve">
+        <value>[D]°[M]'</value>
+    </data>
+    <data name="DMBearing_Description" xml:space="preserve">
+        <value>Bearing in degrees and minutes</value>
+    </data>
+    <data name="DMBearing_Name" xml:space="preserve">
+        <value>Degrees and minutes</value>
+    </data>
 </root>
