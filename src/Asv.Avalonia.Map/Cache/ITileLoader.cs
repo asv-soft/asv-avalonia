@@ -1,4 +1,5 @@
-﻿using System.Threading.Channels;
+﻿using System.Diagnostics;
+using System.Threading.Channels;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Media;
@@ -32,6 +33,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
     private readonly MemoryCache _cache;
     private readonly Subject<TileLoadedEventArgs> _onLoaded;
     private readonly ConcurrentHashSet<TilePosition> _inProgressHash;
+    private readonly ConcurrentHashSet<string> _inProgressUrl;
     private readonly object _sync = new();
     private volatile Bitmap? _emptyBitmap;
 
@@ -42,6 +44,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
         _onLoaded = new();
         _httpClient = new HttpClient();
         _inProgressHash = new();
+        _inProgressUrl = new ConcurrentHashSet<string>();
         _cacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache", "tiles");
         _cache = new(new MemoryCacheOptions { SizeLimit = 100_000_000, TrackStatistics = true });
         // Создаем директорию кэша, если её нет
@@ -53,7 +56,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
         _tileChannel = Channel.CreateBounded<TilePosition>(
             new BoundedChannelOptions(50) { FullMode = BoundedChannelFullMode.DropOldest }
         );
-        for (var i = 0; i < 4; i++)
+        for (var i = 0; i < 10; i++)
         {
             Task.Run(ProcessQueue);
         }
@@ -80,13 +83,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                 var tilePath = GetTileCachePath(position, _provider);
                 if (File.Exists(tilePath))
                 {
-                    await using var stream = File.Open(
-                        tilePath,
-                        FileMode.Open,
-                        FileAccess.Read,
-                        FileShare.Read
-                    );
-                    var tile = new Bitmap(stream);
+                    var tile = new Bitmap(tilePath);
                     _cache.Set(
                         position,
                         tile,
@@ -107,13 +104,27 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                 }
                 else
                 {
+                    if (_inProgressUrl.Add(url) == false)
+                    {
+                        continue;
+                    }
                     var img = await _httpClient
                         .GetByteArrayAsync(url, DisposeCancel)
                         .ConfigureAwait(false);
-                    // Сохраняем в кэш
-                    await File.WriteAllBytesAsync(tilePath, img, DisposeCancel);
+
+                    if (File.Exists(tilePath) == false)
+                    {
+                        await File.WriteAllBytesAsync(tilePath, img, DisposeCancel)
+                            .ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        
+                    }
+                   
 
                     bitmap = new Bitmap(new MemoryStream(img));
+                    _inProgressUrl.Remove(url);
                 }
                 _cache.Set(
                     position,
@@ -127,10 +138,12 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 _logger?.LogError(ex, $"Failed to load tile {position}");
             }
             finally
             {
+                
                 _inProgressHash.Remove(position);
             }
         }
@@ -193,7 +206,15 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                 return cachedTile ?? GetEmptyBitmap();
             }
 
-            _tileChannel.Writer.TryWrite(position);
+            if (_inProgressHash.Contains(position) == false)
+            {
+                _tileChannel.Writer.TryWrite(position);    
+            }
+            else
+            {
+                
+            }
+            
             return GetEmptyBitmap();
         }
     }
