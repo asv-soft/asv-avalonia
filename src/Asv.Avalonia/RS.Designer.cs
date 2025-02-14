@@ -129,21 +129,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string MeterDistanceUnit_Name {
+        public static string MeterDistance_Description {
             get {
-                return ResourceManager.GetString("MeterDistanceUnit_Name", resourceCulture);
-            }
-        }
-        
-        public static string MeterDistanceUnit_Description {
-            get {
-                return ResourceManager.GetString("MeterDistanceUnit_Description", resourceCulture);
-            }
-        }
-        
-        public static string MeterDistanceUnit_Symbol {
-            get {
-                return ResourceManager.GetString("MeterDistanceUnit_Symbol", resourceCulture);
+                return ResourceManager.GetString("MeterDistance_Description", resourceCulture);
             }
         }
         
@@ -231,15 +219,15 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string NauticalMileDistanceUnit_Name {
+        public static string NauticalMile_UnitItem_Name {
             get {
-                return ResourceManager.GetString("NauticalMileDistanceUnit_Name", resourceCulture);
+                return ResourceManager.GetString("NauticalMile_UnitItem_Name", resourceCulture);
             }
         }
         
-        public static string NauticalMileDistanceUnit_Description {
+        public static string NauticalMile_Distance_Description {
             get {
-                return ResourceManager.GetString("NauticalMileDistanceUnit_Description", resourceCulture);
+                return ResourceManager.GetString("NauticalMile_Distance_Description", resourceCulture);
             }
         }
         
@@ -321,39 +309,39 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string MeterAltitudeUnit_Name {
+        public static string Meter_UnitItem_Name {
             get {
-                return ResourceManager.GetString("MeterAltitudeUnit_Name", resourceCulture);
+                return ResourceManager.GetString("Meter_UnitItem_Name", resourceCulture);
             }
         }
         
-        public static string MeterAltitudeUnit_Description {
+        public static string Meter_Altitude_Description {
             get {
-                return ResourceManager.GetString("MeterAltitudeUnit_Description", resourceCulture);
+                return ResourceManager.GetString("Meter_Altitude_Description", resourceCulture);
             }
         }
         
-        public static string MeterAltitudeUnit_Symbol {
+        public static string Meter_UnitItem_Symbol {
             get {
-                return ResourceManager.GetString("MeterAltitudeUnit_Symbol", resourceCulture);
+                return ResourceManager.GetString("Meter_UnitItem_Symbol", resourceCulture);
             }
         }
         
-        public static string FeetAltitudeUnit_Name {
+        public static string Feet_UnitItem_Name {
             get {
-                return ResourceManager.GetString("FeetAltitudeUnit_Name", resourceCulture);
+                return ResourceManager.GetString("Feet_UnitItem_Name", resourceCulture);
             }
         }
         
-        public static string FeetAltitudeUnit_Description {
+        public static string Feet_Altitude_Description {
             get {
-                return ResourceManager.GetString("FeetAltitudeUnit_Description", resourceCulture);
+                return ResourceManager.GetString("Feet_Altitude_Description", resourceCulture);
             }
         }
         
-        public static string FeetAltitudeUnit_Symbol {
+        public static string Feet_UnitItem_Symbol {
             get {
-                return ResourceManager.GetString("FeetAltitudeUnit_Symbol", resourceCulture);
+                return ResourceManager.GetString("Feet_UnitItem_Symbol", resourceCulture);
             }
         }
         
@@ -369,27 +357,15 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string InPartsAmplitudeModulation_Name {
+        public static string InParts_AmplitudeModulation_Description {
             get {
-                return ResourceManager.GetString("InPartsAmplitudeModulation_Name", resourceCulture);
+                return ResourceManager.GetString("InParts_AmplitudeModulation_Description", resourceCulture);
             }
         }
         
-        public static string InPartsAmplitudeModulation_Description {
+        public static string Percent_AmplitudeModulation_Description {
             get {
-                return ResourceManager.GetString("InPartsAmplitudeModulation_Description", resourceCulture);
-            }
-        }
-        
-        public static string PercentAmplitudeModulation_Name {
-            get {
-                return ResourceManager.GetString("PercentAmplitudeModulation_Name", resourceCulture);
-            }
-        }
-        
-        public static string PercentAmplitudeModulation_Description {
-            get {
-                return ResourceManager.GetString("PercentAmplitudeModulation_Description", resourceCulture);
+                return ResourceManager.GetString("Percent_AmplitudeModulation_Description", resourceCulture);
             }
         }
         
@@ -405,33 +381,33 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string DegreeBearing_Name {
+        public static string Degree_UnitItem_Name {
             get {
-                return ResourceManager.GetString("DegreeBearing_Name", resourceCulture);
+                return ResourceManager.GetString("Degree_UnitItem_Name", resourceCulture);
             }
         }
         
-        public static string DegreeBearing_Description {
+        public static string Degree_Bearing_Description {
             get {
-                return ResourceManager.GetString("DegreeBearing_Description", resourceCulture);
+                return ResourceManager.GetString("Degree_Bearing_Description", resourceCulture);
             }
         }
         
-        public static string DMBearing_Symbol {
+        public static string DM_UnitItem_Symbol {
             get {
-                return ResourceManager.GetString("DMBearing_Symbol", resourceCulture);
+                return ResourceManager.GetString("DM_UnitItem_Symbol", resourceCulture);
             }
         }
         
-        public static string DMBearing_Description {
+        public static string DM_Bearing_Description {
             get {
-                return ResourceManager.GetString("DMBearing_Description", resourceCulture);
+                return ResourceManager.GetString("DM_Bearing_Description", resourceCulture);
             }
         }
         
-        public static string DMBearing_Name {
+        public static string DM_UnitItem_Name {
             get {
-                return ResourceManager.GetString("DMBearing_Name", resourceCulture);
+                return ResourceManager.GetString("DM_UnitItem_Name", resourceCulture);
             }
         }
         
@@ -447,9 +423,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string InPartsDdmGp_Name {
+        public static string InParts_UnitItem_Name {
             get {
-                return ResourceManager.GetString("InPartsDdmGp_Name", resourceCulture);
+                return ResourceManager.GetString("InParts_UnitItem_Name", resourceCulture);
             }
         }
         
@@ -459,9 +435,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string PercentDdmGp_Name {
+        public static string Percent_UnitItem_Name {
             get {
-                return ResourceManager.GetString("PercentDdmGp_Name", resourceCulture);
+                return ResourceManager.GetString("Percent_UnitItem_Name", resourceCulture);
             }
         }
         
@@ -477,27 +453,63 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string MicroAmpDdmGp_Name {
+        public static string MicroAmp_UnitItem_Name {
             get {
-                return ResourceManager.GetString("MicroAmpDdmGp_Name", resourceCulture);
+                return ResourceManager.GetString("MicroAmp_UnitItem_Name", resourceCulture);
             }
         }
         
-        public static string MicroAmpDdmGp_Description {
+        public static string MicroAmp_DdmGp_Description {
             get {
-                return ResourceManager.GetString("MicroAmpDdmGp_Description", resourceCulture);
+                return ResourceManager.GetString("MicroAmp_DdmGp_Description", resourceCulture);
             }
         }
         
-        public static string MicroAmpRuDdmGp_Name {
+        public static string MicroAmpRu_UnitItem_Name {
             get {
-                return ResourceManager.GetString("MicroAmpRuDdmGp_Name", resourceCulture);
+                return ResourceManager.GetString("MicroAmpRu_UnitItem_Name", resourceCulture);
             }
         }
         
-        public static string MicroAmpRuDdmGp_Description {
+        public static string MicroAmpRu_DdmGp_Description {
             get {
-                return ResourceManager.GetString("MicroAmpRuDdmGp_Description", resourceCulture);
+                return ResourceManager.GetString("MicroAmpRu_DdmGp_Description", resourceCulture);
+            }
+        }
+        
+        public static string DdmLlz_Name {
+            get {
+                return ResourceManager.GetString("DdmLlz_Name", resourceCulture);
+            }
+        }
+        
+        public static string DdmLlz_Description {
+            get {
+                return ResourceManager.GetString("DdmLlz_Description", resourceCulture);
+            }
+        }
+        
+        public static string InParts_DdmLlz_Description {
+            get {
+                return ResourceManager.GetString("InParts_DdmLlz_Description", resourceCulture);
+            }
+        }
+        
+        public static string Percent_DdmLlz_Description {
+            get {
+                return ResourceManager.GetString("Percent_DdmLlz_Description", resourceCulture);
+            }
+        }
+        
+        public static string MicroAmp_DdmLlz_Description {
+            get {
+                return ResourceManager.GetString("MicroAmp_DdmLlz_Description", resourceCulture);
+            }
+        }
+        
+        public static string MicroAmpRu_DdmLlz_Description {
+            get {
+                return ResourceManager.GetString("MicroAmpRu_DdmLlz_Description", resourceCulture);
             }
         }
     }

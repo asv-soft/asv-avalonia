@@ -2,34 +2,34 @@ using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
-namespace Asv.Avalonia;
+namespace Asv.Avalonia.DdmLlz;
 
-public sealed class DdmGpConfig
+internal sealed class DdmLlzConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public sealed class DdmGpBase : UnitBase
+public sealed class DdmLlzBase : UnitBase
 {
-    public const string Id = "dbm.gp";
+    public const string Id = "dbm.llz";
 
     public override MaterialIconKind Icon => MaterialIconKind.Frequency;
-    public override string Name => RS.DdmGp_Name;
-    public override string Description => RS.DdmGp_Description;
+    public override string Name => RS.DdmLlz_Name;
+    public override string Description => RS.DdmLlz_Description;
     public override string UnitId => Id;
 
-    private readonly DdmGpConfig? _config;
+    private readonly DdmLlzConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
     [ImportingConstructor]
-    public DdmGpBase([Import] IConfiguration cfgSvc, [ImportMany(Id)] IEnumerable<IUnitItem> items)
+    public DdmLlzBase([Import] IConfiguration cfgSvc, [ImportMany(Id)] IEnumerable<IUnitItem> items)
         : base(items)
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);
         _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<DdmGpConfig>();
+        _config = cfgSvc.Get<DdmLlzConfig>();
         if (_config.CurrentUnitItemId is null)
         {
             return;

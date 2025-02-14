@@ -10,8 +10,8 @@ public sealed class MeterAltitudeUnit() : UnitItemBase(1.0)
     public const string Id = $"{AltitudeBase.Id}.meter";
 
     public override string UnitItemId => Id;
-    public override string Name => RS.MeterAltitudeUnit_Name;
-    public override string Description => RS.MeterAltitudeUnit_Description;
-    public override string Symbol => RS.MeterAltitudeUnit_Symbol;
+    public override string Name => RS.Meter_UnitItem_Name;
+    public override string Description => RS.Meter_Altitude_Description;
+    public override string Symbol => RS.Meter_UnitItem_Symbol;
     public override bool IsInternationalSystemUnit => true;
 }

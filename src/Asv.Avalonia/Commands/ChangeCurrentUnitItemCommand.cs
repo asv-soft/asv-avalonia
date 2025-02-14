@@ -10,8 +10,9 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
 {
     #region Static
 
-    public const string Id = "current.unit.change";
-    internal static readonly ICommandInfo StaticInfo = new CommandInfo
+    public const string Id = $"{BaseId}.settings.current.unit.change";
+
+    private static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
         Name = RS.ChangeCurrentUnitItemCommand_CommandInfo_Name,

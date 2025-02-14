@@ -11,9 +11,9 @@ public sealed class DMBearingUnit() : UnitItemBase(1)
     public const string Id = $"{BearingBase.Id}.dm";
 
     public override string UnitItemId => Id;
-    public override string Name => RS.DMBearing_Name;
-    public override string Description => RS.DMBearing_Description;
-    public override string Symbol => RS.DMBearing_Symbol;
+    public override string Name => RS.DM_UnitItem_Name;
+    public override string Description => RS.DM_Bearing_Description;
+    public override string Symbol => RS.DM_UnitItem_Symbol;
     public override bool IsInternationalSystemUnit => false;
 
     public override bool IsValid(string? value)

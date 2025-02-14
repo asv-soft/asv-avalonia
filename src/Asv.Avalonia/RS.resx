@@ -60,14 +60,8 @@
     <data name="Distance_Description" xml:space="preserve">
         <value>Distance unit</value>
     </data>
-    <data name="MeterDistanceUnit_Name" xml:space="preserve">
-        <value>Meter</value>
-    </data>
-    <data name="MeterDistanceUnit_Description" xml:space="preserve">
+    <data name="MeterDistance_Description" xml:space="preserve">
         <value>Distance in meters</value>
-    </data>
-    <data name="MeterDistanceUnit_Symbol" xml:space="preserve">
-        <value>m</value>
     </data>
     <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change theme</value>
@@ -111,10 +105,10 @@
     <data name="SettingsKeymapViewModel_Name" xml:space="preserve">
         <value>Hotkeys</value>
     </data>
-    <data name="NauticalMileDistanceUnit_Name" xml:space="preserve">
+    <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
         <value>Nautical Mile</value>
     </data>
-    <data name="NauticalMileDistanceUnit_Description" xml:space="preserve">
+    <data name="NauticalMile_Distance_Description" xml:space="preserve">
         <value>Distance in nautical miles</value>
     </data>
     <data name="ShellView_WindowControlButton_Close" xml:space="preserve">
@@ -156,22 +150,22 @@
     <data name="Altitude_Description" xml:space="preserve">
         <value>Altitude unit</value>
     </data>
-    <data name="MeterAltitudeUnit_Name" xml:space="preserve">
+    <data name="Meter_UnitItem_Name" xml:space="preserve">
         <value>Meter</value>
     </data>
-    <data name="MeterAltitudeUnit_Description" xml:space="preserve">
+    <data name="Meter_Altitude_Description" xml:space="preserve">
         <value>Altitude in meters</value>
     </data>
-    <data name="MeterAltitudeUnit_Symbol" xml:space="preserve">
+    <data name="Meter_UnitItem_Symbol" xml:space="preserve">
         <value>m</value>
     </data>
-    <data name="FeetAltitudeUnit_Name" xml:space="preserve">
+    <data name="Feet_UnitItem_Name" xml:space="preserve">
         <value>Feet</value>
     </data>
-    <data name="FeetAltitudeUnit_Description" xml:space="preserve">
+    <data name="Feet_Altitude_Description" xml:space="preserve">
         <value>Altitude in feet</value>
     </data>
-    <data name="FeetAltitudeUnit_Symbol" xml:space="preserve">
+    <data name="Feet_UnitItem_Symbol" xml:space="preserve">
         <value>ft</value>
     </data>
     <data name="AmplitudeModulation_Name" xml:space="preserve">
@@ -180,16 +174,10 @@
     <data name="AmplitudeModulation_Description" xml:space="preserve">
         <value>Amlitude modulation unit</value>
     </data>
-    <data name="InPartsAmplitudeModulation_Name" xml:space="preserve">
-        <value>In parts</value>
-    </data>
-    <data name="InPartsAmplitudeModulation_Description" xml:space="preserve">
+    <data name="InParts_AmplitudeModulation_Description" xml:space="preserve">
         <value>Amplitude modulation in parts</value>
     </data>
-    <data name="PercentAmplitudeModulation_Name" xml:space="preserve">
-        <value>In Percents</value>
-    </data>
-    <data name="PercentAmplitudeModulation_Description" xml:space="preserve">
+    <data name="Percent_AmplitudeModulation_Description" xml:space="preserve">
         <value>Amplitude modulation in percents</value>
     </data>
     <data name="Bearing_Name" xml:space="preserve">
@@ -198,19 +186,19 @@
     <data name="Bearing_Description" xml:space="preserve">
         <value>Bearing unit</value>
     </data>
-    <data name="DegreeBearing_Name" xml:space="preserve">
+    <data name="Degree_UnitItem_Name" xml:space="preserve">
         <value>Degree</value>
     </data>
-    <data name="DegreeBearing_Description" xml:space="preserve">
+    <data name="Degree_Bearing_Description" xml:space="preserve">
         <value>Bearing in degrees</value>
     </data>
-    <data name="DMBearing_Symbol" xml:space="preserve">
+    <data name="DM_UnitItem_Symbol" xml:space="preserve">
         <value>[D]°[M]'</value>
     </data>
-    <data name="DMBearing_Description" xml:space="preserve">
+    <data name="DM_Bearing_Description" xml:space="preserve">
         <value>Bearing in degrees and minutes</value>
     </data>
-    <data name="DMBearing_Name" xml:space="preserve">
+    <data name="DM_UnitItem_Name" xml:space="preserve">
         <value>Degrees and minutes</value>
     </data>
     <data name="DdmGp_Name" xml:space="preserve">
@@ -219,13 +207,13 @@
     <data name="DdmGp_Description" xml:space="preserve">
         <value>Difference depth of modulation measure units</value>
     </data>
-    <data name="InPartsDdmGp_Name" xml:space="preserve">
+    <data name="InParts_UnitItem_Name" xml:space="preserve">
         <value>In parts</value>
     </data>
     <data name="InPartsDdmGp_Description" xml:space="preserve">
         <value>DDM (Gp) in parts</value>
     </data>
-    <data name="PercentDdmGp_Name" xml:space="preserve">
+    <data name="Percent_UnitItem_Name" xml:space="preserve">
         <value>In Percents</value>
     </data>
     <data name="PercentDdmGp_Description" xml:space="preserve">
@@ -234,16 +222,34 @@
     <data name="Ddm_µA_Symbol" xml:space="preserve">
         <value>µA</value>
     </data>
-    <data name="MicroAmpDdmGp_Name" xml:space="preserve">
+    <data name="MicroAmp_UnitItem_Name" xml:space="preserve">
         <value>Microamp</value>
     </data>
-    <data name="MicroAmpDdmGp_Description" xml:space="preserve">
+    <data name="MicroAmp_DdmGp_Description" xml:space="preserve">
         <value>DDM (Gp) in microamp</value>
     </data>
-    <data name="MicroAmpRuDdmGp_Name" xml:space="preserve">
+    <data name="MicroAmpRu_UnitItem_Name" xml:space="preserve">
         <value>Microamp (Rus)</value>
     </data>
-    <data name="MicroAmpRuDdmGp_Description" xml:space="preserve">
+    <data name="MicroAmpRu_DdmGp_Description" xml:space="preserve">
         <value>DDM (Gp) in microamp (Rus)</value>
+    </data>
+    <data name="DdmLlz_Name" xml:space="preserve">
+        <value>DDM (Llz)</value>
+    </data>
+    <data name="DdmLlz_Description" xml:space="preserve">
+        <value>Difference depth of modulation measure units</value>
+    </data>
+    <data name="InParts_DdmLlz_Description" xml:space="preserve">
+        <value>DDM (Llz) in parts</value>
+    </data>
+    <data name="Percent_DdmLlz_Description" xml:space="preserve">
+        <value>DDM (Llz) in percents</value>
+    </data>
+    <data name="MicroAmp_DdmLlz_Description" xml:space="preserve">
+        <value>DDM (Llz) in microamp</value>
+    </data>
+    <data name="MicroAmpRu_DdmLlz_Description" xml:space="preserve">
+        <value>DDM (Llz) in microamp (Rus)</value>
     </data>
 </root>

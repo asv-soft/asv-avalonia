@@ -7,10 +7,10 @@ namespace Asv.Avalonia;
 [method: ImportingConstructor]
 public sealed class PercentDdmGpUnit() : UnitItemBase(0.01)
 {
-    public const string Id = $"{DdmGpBase.Id}.percents";
+    public const string Id = $"{DdmGpBase.Id}.percent";
 
     public override string UnitItemId => Id;
-    public override string Name => RS.PercentDdmGp_Name;
+    public override string Name => RS.Percent_UnitItem_Name;
     public override string Description => RS.PercentDdmGp_Description;
     public override string Symbol => "%";
     public override bool IsInternationalSystemUnit => false;

@@ -53,14 +53,8 @@
     <data name="Distance_Description" xml:space="preserve">
         <value>Единица измерения расстояния</value>
     </data>
-    <data name="MeterDistanceUnit_Name" xml:space="preserve">
-        <value>Метр</value>
-    </data>
-    <data name="MeterDistanceUnit_Description" xml:space="preserve">
+    <data name="MeterDistance_Description" xml:space="preserve">
         <value>Расстояние в метрах</value>
-    </data>
-    <data name="MeterDistanceUnit_Symbol" xml:space="preserve">
-        <value>м</value>
     </data>
     <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
         <value>Сменить тему</value>
@@ -131,10 +125,10 @@
     <data name="UnitItemBase_Validation_ValueIsNaNError" xml:space="preserve">
         <value>Значение не число</value>
     </data>
-    <data name="NauticalMileDistanceUnit_Name" xml:space="preserve">
+    <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
         <value>Морская миля</value>
     </data>
-    <data name="NauticalMileDistanceUnit_Description" xml:space="preserve">
+    <data name="NauticalMile_Distance_Description" xml:space="preserve">
         <value>Расстояние в морских милях</value>
     </data>
     <data name="ChangeCurrentUnitItemCommand_CommandInfo_Name" xml:space="preserve">
@@ -149,22 +143,22 @@
     <data name="Altitude_Description" xml:space="preserve">
         <value>Единица измерения высоты</value>
     </data>
-    <data name="MeterAltitudeUnit_Description" xml:space="preserve">
+    <data name="Meter_Altitude_Description" xml:space="preserve">
         <value>Высота в метрах</value>
     </data>
-    <data name="MeterAltitudeUnit_Name" xml:space="preserve">
+    <data name="Meter_UnitItem_Name" xml:space="preserve">
         <value>Метр</value>
     </data>
-    <data name="MeterAltitudeUnit_Symbol" xml:space="preserve">
+    <data name="Meter_UnitItem_Symbol" xml:space="preserve">
         <value>м</value>
     </data>
-    <data name="FeetAltitudeUnit_Symbol" xml:space="preserve">
+    <data name="Feet_UnitItem_Symbol" xml:space="preserve">
         <value>фут</value>
     </data>
-    <data name="FeetAltitudeUnit_Name" xml:space="preserve">
+    <data name="Feet_UnitItem_Name" xml:space="preserve">
         <value>Футы</value>
     </data>
-    <data name="FeetAltitudeUnit_Description" xml:space="preserve">
+    <data name="Feet_Altitude_Description" xml:space="preserve">
         <value>Высота в футах</value>
     </data>
     <data name="AmplitudeModulation_Name" xml:space="preserve">
@@ -173,16 +167,10 @@
     <data name="AmplitudeModulation_Description" xml:space="preserve">
         <value>Единица измерения амплитудной модуляции</value>
     </data>
-    <data name="InPartsAmplitudeModulation_Name" xml:space="preserve">
-        <value>В частях</value>
-    </data>
-    <data name="InPartsAmplitudeModulation_Description" xml:space="preserve">
+    <data name="InParts_AmplitudeModulation_Description" xml:space="preserve">
         <value>Амплитудная модуляция в частях</value>
     </data>
-    <data name="PercentAmplitudeModulation_Name" xml:space="preserve">
-        <value>В процентах</value>
-    </data>
-    <data name="PercentAmplitudeModulation_Description" xml:space="preserve">
+    <data name="Percent_AmplitudeModulation_Description" xml:space="preserve">
         <value>Амплитудная модуляция в прцентах</value>
     </data>
     <data name="Bearing_Description" xml:space="preserve">
@@ -191,20 +179,17 @@
     <data name="Bearing_Name" xml:space="preserve">
         <value>Несущая</value>
     </data>
-    <data name="DegreeBearing_Name" xml:space="preserve">
+    <data name="Degree_UnitItem_Name" xml:space="preserve">
         <value>Градусы</value>
     </data>
-    <data name="DegreeBearing_Description" xml:space="preserve">
+    <data name="Degree_Bearing_Description" xml:space="preserve">
         <value>Несущая в процентах</value>
     </data>
-    <data name="DMBearing_Symbol" xml:space="preserve">
+    <data name="DM_UnitItem_Symbol" xml:space="preserve">
         <value>[Г]°[М]'</value>
     </data>
-    <data name="DMBearing_Description" xml:space="preserve">
+    <data name="DM_Bearing_Description" xml:space="preserve">
         <value>Несущая в градусах и минутах</value>
-    </data>
-    <data name="DMBearing_Name" xml:space="preserve">
-        <value>Градусы и минуты</value>
     </data>
     <data name="DdmGp_Name" xml:space="preserve">
         <value>РГМ (Gp)</value>
@@ -212,13 +197,13 @@
     <data name="DdmGp_Description" xml:space="preserve">
         <value>Единицы измереня разницы в глубине модуляции</value>
     </data>
-    <data name="InPartsDdmGp_Name" xml:space="preserve">
+    <data name="InParts_UnitItem_Name" xml:space="preserve">
         <value>В частях</value>
     </data>
     <data name="InPartsDdmGp_Description" xml:space="preserve">
         <value>РГМ (Gp) в частях</value>
     </data>
-    <data name="PercentDdmGp_Name" xml:space="preserve">
+    <data name="Percent_UnitItem_Name" xml:space="preserve">
         <value>В процентах</value>
     </data>
     <data name="PercentDdmGp_Description" xml:space="preserve">
@@ -227,16 +212,37 @@
     <data name="Ddm_µA_Symbol" xml:space="preserve">
         <value>мкА</value>
     </data>
-    <data name="MicroAmpDdmGp_Name" xml:space="preserve">
+    <data name="MicroAmp_UnitItem_Name" xml:space="preserve">
         <value>Микроампер</value>
     </data>
-    <data name="MicroAmpDdmGp_Description" xml:space="preserve">
+    <data name="MicroAmp_DdmGp_Description" xml:space="preserve">
         <value>РГМ (Gp) в микроамперах</value>
     </data>
-    <data name="MicroAmpRuDdmGp_Name" xml:space="preserve">
+    <data name="MicroAmpRu_UnitItem_Name" xml:space="preserve">
         <value>Микроампер (Рус)</value>
     </data>
-    <data name="MicroAmpRuDdmGp_Description" xml:space="preserve">
+    <data name="MicroAmpRu_DdmGp_Description" xml:space="preserve">
         <value>РГМ (Gp) в микроамперах (Рус)</value>
+    </data>
+    <data name="DdmLlz_Name" xml:space="preserve">
+        <value>РГМ (Llz)</value>
+    </data>
+    <data name="DdmLlz_Description" xml:space="preserve">
+        <value>Единицы измереня разницы в глубине модуляции</value>
+    </data>
+    <data name="InParts_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в частях</value>
+    </data>
+    <data name="Percent_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в процентах</value>
+    </data>
+    <data name="MicroAmp_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в микроамперах</value>
+    </data>
+    <data name="MicroAmpRu_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) в микроамперах (Рус)</value>
+    </data>
+    <data name="DM_UnitItem_Name" xml:space="preserve">
+        <value>Градусы и минуты</value>
     </data>
 </root>
