@@ -132,4 +132,10 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Map Example</value>
     </data>
+    <data name="SettingsAppearanceView_AppTheme_Description" xml:space="preserve">
+        <value>Change current application theme</value>
+    </data>
+    <data name="SettingsAppearanceView_AppLanguage_Description" xml:space="preserve">
+        <value>Change current application language (application restart required)</value>
+    </data>
 </root>

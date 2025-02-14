@@ -125,4 +125,10 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Пример карты</value>
     </data>
+    <data name="SettingsAppearanceView_AppTheme_Description" xml:space="preserve">
+        <value>Смена текущей темы приложения</value>
+    </data>
+    <data name="SettingsAppearanceView_AppLanguage_Description" xml:space="preserve">
+        <value>Смена текущего языка приложения (требуется перезапуск приложения)</value>
+    </data>
 </root>
