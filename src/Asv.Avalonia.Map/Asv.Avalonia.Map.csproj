@@ -12,4 +12,9 @@
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
         <PackageReference Include="ZLogger" Version="$(ZLoggerVersion)" />
     </ItemGroup>
+    <ItemGroup>
+      <Compile Update="MapControl.axaml.prop.cs">
+        <DependentUpon>MapControl.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>

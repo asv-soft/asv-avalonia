@@ -1,0 +1,31 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Asv.Avalonia.Map">
+    <Design.PreviewWith>
+        <controls:MapControl Width="600" Height="600" IsDialogMode="True" DialogText="Select" CenterMap="{controls:GeoPoint 55.75, 37.61}" >
+            <Button Width="100" controls:MapControl.Location="{controls:GeoPoint 55.75, 37.61}"/>
+        </controls:MapControl>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MapControl">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <StackPanel IsVisible="{TemplateBinding IsDialogMode}" VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Horizontal">
+                        <Polygon Height="40" Width="40" Stretch="Fill" Points="0,0 10,0 10,10" Fill="{TemplateBinding DialogStroke}"/>
+                        <Border Height="40" HorizontalAlignment="Center" VerticalAlignment="Top" Background="{TemplateBinding DialogStroke}">
+                            <TextBlock VerticalAlignment="Center" FontSize="18" Text="{TemplateBinding DialogText}"/>
+                        </Border>
+                        <Polygon Height="40" Width="40" Stretch="Fill" Points="0,0 0,10 10,0" Fill="{TemplateBinding DialogStroke}"/>
+                    </StackPanel>
+                    <Border IsVisible="{TemplateBinding IsDialogMode}" BorderBrush="{TemplateBinding DialogStroke}" BorderThickness="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                    <ItemsPresenter  Name="PART_ItemsPresenter"
+                                     ItemsPanel="{TemplateBinding ItemsPanel}"
+                                     Margin="{TemplateBinding Padding}"/>    
+                </Panel>
+                
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

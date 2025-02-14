@@ -5,14 +5,14 @@ namespace Asv.Avalonia.Map;
 
 public interface IMapProjection
 {
-    GeoPoint PixelsToWgs84(Point pixel, int zoom, int tileSize);
-    Point Wgs84ToPixels(GeoPoint wgs, int zoom, int tileSize);
+    Common.GeoPoint PixelsToWgs84(Point pixel, int zoom, int tileSize);
+    Point Wgs84ToPixels(Common.GeoPoint wgs, int zoom, int tileSize);
 }
 
 public abstract class BaseMapProjection : IMapProjection
 {
-    public abstract GeoPoint PixelsToWgs84(Point pixel, int zoom, int tileSize);
-    public abstract Point Wgs84ToPixels(GeoPoint wgs, int zoom, int tileSize);
+    public abstract Common.GeoPoint PixelsToWgs84(Point pixel, int zoom, int tileSize);
+    public abstract Point Wgs84ToPixels(Common.GeoPoint wgs, int zoom, int tileSize);
 }
 
 public class WebMercatorProjection : BaseMapProjection
@@ -21,7 +21,7 @@ public class WebMercatorProjection : BaseMapProjection
 
     private WebMercatorProjection() { }
 
-    public override GeoPoint PixelsToWgs84(Point pixel, int zoom, int tileSize)
+    public override Common.GeoPoint PixelsToWgs84(Point pixel, int zoom, int tileSize)
     {
         var globalPx = pixel.X;
         var globalPy = pixel.Y;
@@ -41,10 +41,10 @@ public class WebMercatorProjection : BaseMapProjection
         var latRad = Math.PI * (1 - 2 * globalPy / mapSize);
         var lat = Math.Atan(Math.Sinh(latRad)) * 180.0 / Math.PI;
 
-        return new GeoPoint(lat, lon, 0);
+        return new Common.GeoPoint(lat, lon, 0);
     }
 
-    public override Point Wgs84ToPixels(GeoPoint wgs, int zoom, int tileSize)
+    public override Point Wgs84ToPixels(Common.GeoPoint wgs, int zoom, int tileSize)
     {
         var mapSize = tileSize * Math.Pow(2, zoom);
 

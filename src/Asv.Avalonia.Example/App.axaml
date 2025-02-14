@@ -6,5 +6,6 @@
     </Application.DataTemplates>
     <Application.Styles>
         <StyleInclude Source="avares://Asv.Avalonia/AsvTheme.axaml"/>
+        <StyleInclude Source="avares://Asv.Avalonia.Map/MapView.axaml"/>
     </Application.Styles>
 </Application>
