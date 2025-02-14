@@ -192,4 +192,13 @@
     <data name="InPartsAmplitudeModulation_Symbol" xml:space="preserve">
         <value>1</value>
     </data>
+    <data name="PercentAmplitudeModulation_Name" xml:space="preserve">
+        <value>In Percents</value>
+    </data>
+    <data name="PercentAmplitudeModulation_Description" xml:space="preserve">
+        <value>Amplitude modulation in percents</value>
+    </data>
+    <data name="PercentAmplitudeModulation_Symbol" xml:space="preserve">
+        <value>%</value>
+    </data>
 </root>

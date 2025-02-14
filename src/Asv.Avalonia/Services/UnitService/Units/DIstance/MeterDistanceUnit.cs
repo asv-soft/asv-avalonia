@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 [ExportUnitItem(DistanceBase.Id)]
 [Shared]
 [method: ImportingConstructor]
-public class MeterDistanceUnit() : UnitItemBase(1.0)
+public sealed class MeterDistanceUnit() : UnitItemBase(1.0)
 {
     public const string Id = $"{DistanceBase.Id}.meter";
 

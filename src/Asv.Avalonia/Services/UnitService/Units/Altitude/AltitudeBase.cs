@@ -4,14 +4,14 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class AltitudeConfig
+public sealed class AltitudeConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public class AltitudeBase : UnitBase
+public sealed class AltitudeBase : UnitBase
 {
     public const string Id = "altitude";
 

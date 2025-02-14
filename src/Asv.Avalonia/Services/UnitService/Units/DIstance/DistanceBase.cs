@@ -4,14 +4,14 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class DistanceConfig
+public sealed class DistanceConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public class DistanceBase : UnitBase
+public sealed class DistanceBase : UnitBase
 {
     public const string Id = "distance";
 

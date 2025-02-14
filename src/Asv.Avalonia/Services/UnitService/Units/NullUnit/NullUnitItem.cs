@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public class NullUnitItem() : UnitItemBase(2)
+public sealed class NullUnitItem() : UnitItemBase(2)
 {
     public override string UnitItemId => $"{NullUnitBase.Id}.item";
     public override string Name => "Null";

@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 [ExportUnitItem(DistanceBase.Id)]
 [Shared]
 [method: ImportingConstructor]
-public class NauticalMileDistanceUnit() : UnitItemBase(1852.0)
+public sealed class NauticalMileDistanceUnit() : UnitItemBase(1852.0)
 {
     public const string Id = $"{DistanceBase.Id}.nautical.mile";
 

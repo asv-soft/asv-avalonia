@@ -75,5 +75,10 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
         return _view;
     }
 
+    public new void Dispose()
+    {
+        _sub1.Dispose();
+    }
+
     public IExportInfo Source => SystemModule.Instance;
 }

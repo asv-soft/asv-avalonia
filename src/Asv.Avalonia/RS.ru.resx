@@ -185,4 +185,13 @@
     <data name="InPartsAmplitudeModulation_Description" xml:space="preserve">
         <value>Амплитудная модуляция в частях</value>
     </data>
+    <data name="PercentAmplitudeModulation_Name" xml:space="preserve">
+        <value>В процентах</value>
+    </data>
+    <data name="PercentAmplitudeModulation_Description" xml:space="preserve">
+        <value>Амплитудная модуляция в прцентах</value>
+    </data>
+    <data name="PercentAmplitudeModulation_Symbol" xml:space="preserve">
+        <value>%</value>
+    </data>
 </root>

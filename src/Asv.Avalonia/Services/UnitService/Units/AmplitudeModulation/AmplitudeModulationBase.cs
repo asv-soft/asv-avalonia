@@ -4,14 +4,14 @@ using Material.Icons;
 
 namespace Asv.Avalonia.AmplitudeModulation;
 
-public class AmplitudeModulationConfig
+public sealed class AmplitudeModulationConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public class AmplitudeModulationBase : UnitBase
+public sealed class AmplitudeModulationBase : UnitBase
 {
     public const string Id = "amplitude.modulation";
 

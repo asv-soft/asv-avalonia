@@ -392,5 +392,23 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("InPartsAmplitudeModulation_Symbol", resourceCulture);
             }
         }
+        
+        public static string PercentAmplitudeModulation_Name {
+            get {
+                return ResourceManager.GetString("PercentAmplitudeModulation_Name", resourceCulture);
+            }
+        }
+        
+        public static string PercentAmplitudeModulation_Description {
+            get {
+                return ResourceManager.GetString("PercentAmplitudeModulation_Description", resourceCulture);
+            }
+        }
+        
+        public static string PercentAmplitudeModulation_Symbol {
+            get {
+                return ResourceManager.GetString("PercentAmplitudeModulation_Symbol", resourceCulture);
+            }
+        }
     }
 }

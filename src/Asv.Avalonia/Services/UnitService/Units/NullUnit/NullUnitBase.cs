@@ -2,7 +2,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class NullUnitBase(IEnumerable<IUnitItem> items) : UnitBase(items)
+public sealed class NullUnitBase(IEnumerable<IUnitItem> items) : UnitBase(items)
 {
     public const string Id = "null.unit";
 
