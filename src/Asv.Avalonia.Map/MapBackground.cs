@@ -18,7 +18,7 @@ public class MapBackground : Control
 
     static MapBackground()
     {
-        AffectsRender<MapBackground>(BackgroundProperty);
+        AffectsRender<MapBackground>(BackgroundProperty, ZoomProperty, ProviderProperty, CenterMapProperty);
     }
 
     public MapBackground()
@@ -60,16 +60,19 @@ public class MapBackground : Control
             var renderSize = Bounds.Size;
             context.FillRectangle(background, new Rect(renderSize));
         }
-
+        var centerPixel = Provider.Projection.Wgs84ToPixels(CenterMap, Zoom, Provider.TileSize);
+        var offset = new Point(Bounds.Width / 2 - centerPixel.X, Bounds.Height / 2 - centerPixel.Y);
         var tileSize = Provider.TileSize;
         var zoom = Zoom;
         var tiles = 1 << zoom;
+        
+        
 
         var tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
         var tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
 
-        var startX = (int)-_offset.X / tileSize - 1;
-        var startY = (int)-_offset.Y / tileSize - 1;
+        var startX = (int)-offset.X / tileSize - 1;
+        var startY = (int)-offset.Y / tileSize - 1;
 
         for (var x = startX; x < startX + tilesX; x++)
         {
@@ -86,8 +89,8 @@ public class MapBackground : Control
                 }
                 var key = new TilePosition(x, y, zoom);
 
-                var px = (key.X * Provider.TileSize) + _offset.X;
-                var py = (key.Y * Provider.TileSize) + _offset.Y;
+                var px = (key.X * Provider.TileSize) + offset.X;
+                var py = (key.Y * Provider.TileSize) + offset.Y;
                 var tile = _cache[key];
                 context.DrawImage(
                     tile,
@@ -118,7 +121,7 @@ public class MapBackground : Control
 
         if (IsDebug)
         {
-            var center = Provider.Projection.Wgs84ToPixels(_centerMap, zoom, tileSize) + _offset;
+            var center = Provider.Projection.Wgs84ToPixels(_centerMap, zoom, tileSize) + offset;
             context.DrawLine(
                 new Pen(Brushes.Red, 2),
                 new Point(center.X - 25, center.Y),
@@ -136,32 +139,6 @@ public class MapBackground : Control
 
     #endregion
 
-
-    #region Offset
-
-    private Point _offset;
-
-    public static readonly DirectProperty<MapBackground, Point> OffsetProperty =
-        AvaloniaProperty.RegisterDirect<MapBackground, Point>(
-            nameof(Offset),
-            o => o.Offset,
-            (o, v) => o.Offset = v
-        );
-
-    public Point Offset
-    {
-        get => _offset;
-        set
-        {
-            if (SetAndRaise(OffsetProperty, ref _offset, value))
-            {
-                RequestRenderLoop();
-            }
-        }
-    }
-
-    #endregion
-
     #region CenterMap
 
     private GeoPoint _centerMap;
@@ -176,17 +153,7 @@ public class MapBackground : Control
     public GeoPoint CenterMap
     {
         get => _centerMap;
-        set
-        {
-            if (SetAndRaise(CenterMapProperty, ref _centerMap, value))
-            {
-                var centerPixel = Provider.Projection.Wgs84ToPixels(value, Zoom, Provider.TileSize);
-                Offset = new Point(
-                    Bounds.Width / 2 - centerPixel.X,
-                    Bounds.Height / 2 - centerPixel.Y
-                );
-            }
-        }
+        set => SetAndRaise(CenterMapProperty, ref _centerMap, value);
     }
 
     #endregion
@@ -238,14 +205,7 @@ public class MapBackground : Control
     public int Zoom
     {
         get => _zoom;
-        set
-        {
-            if (SetAndRaise(ZoomProperty, ref _zoom, value))
-            {
-                var center = Provider.Projection.Wgs84ToPixels(CenterMap, value, Provider.TileSize);
-                Offset = new Point(Bounds.Width / 2, Bounds.Height / 2) - center;
-            }
-        }
+        set => SetAndRaise(ZoomProperty, ref _zoom, value);
     }
 
     #endregion
@@ -264,13 +224,7 @@ public class MapBackground : Control
     public bool IsDebug
     {
         get => _isDebug;
-        set
-        {
-            if (SetAndRaise(IsDebugEnabledProperty, ref _isDebug, value))
-            {
-                RequestRenderLoop();
-            }
-        }
+        set => SetAndRaise(IsDebugEnabledProperty, ref _isDebug, value);
     }
 
     #endregion
