@@ -4,7 +4,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public sealed class BearingConfig
+internal sealed class BearingConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }

@@ -4,7 +4,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public sealed class DdmGpConfig
+internal sealed class DdmGpConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }

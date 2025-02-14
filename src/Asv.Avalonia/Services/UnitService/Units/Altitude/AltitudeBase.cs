@@ -4,7 +4,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public sealed class AltitudeConfig
+internal sealed class AltitudeConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }

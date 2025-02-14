@@ -245,4 +245,25 @@
     <data name="DM_UnitItem_Name" xml:space="preserve">
         <value>Градусы и минуты</value>
     </data>
+    <data name="Angle_Description" xml:space="preserve">
+        <value>Единица измерения градусов</value>
+    </data>
+    <data name="Degree_Angle_Description" xml:space="preserve">
+        <value>Угол в градусах</value>
+    </data>
+    <data name="Angle_Name" xml:space="preserve">
+        <value>Угол</value>
+    </data>
+    <data name="Degree_UnitItem_Symbol" xml:space="preserve">
+        <value>[Г]°</value>
+    </data>
+    <data name="Ms_UnitItem_Name" xml:space="preserve">
+        <value>Минуты и секунды</value>
+    </data>
+    <data name="Ms_Angle_Description" xml:space="preserve">
+        <value>Угол в минутах и секундах</value>
+    </data>
+    <data name="Ms_UnitItem_Symbol" xml:space="preserve">
+        <value>[М]′[С]′′</value>
+    </data>
 </root>

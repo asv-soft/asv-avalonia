@@ -1,6 +1,6 @@
 using System.Composition;
 
-namespace Asv.Avalonia.DdmLlz;
+namespace Asv.Avalonia;
 
 [ExportUnitItem(DdmLlzBase.Id)]
 [Shared]

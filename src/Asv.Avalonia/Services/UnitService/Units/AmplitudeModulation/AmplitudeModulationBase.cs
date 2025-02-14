@@ -4,7 +4,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public sealed class AmplitudeModulationConfig
+internal sealed class AmplitudeModulationConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }

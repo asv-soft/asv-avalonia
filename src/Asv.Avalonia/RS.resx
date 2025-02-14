@@ -252,4 +252,25 @@
     <data name="MicroAmpRu_DdmLlz_Description" xml:space="preserve">
         <value>DDM (Llz) in microamp (Rus)</value>
     </data>
+    <data name="Angle_Description" xml:space="preserve">
+        <value>Degree unit</value>
+    </data>
+    <data name="Degree_Angle_Description" xml:space="preserve">
+        <value>Angle in degrees</value>
+    </data>
+    <data name="Angle_Name" xml:space="preserve">
+        <value>Angle</value>
+    </data>
+    <data name="Degree_UnitItem_Symbol" xml:space="preserve">
+        <value>[D]°</value>
+    </data>
+    <data name="Ms_UnitItem_Name" xml:space="preserve">
+        <value>Minutes and seconds</value>
+    </data>
+    <data name="Ms_Angle_Description" xml:space="preserve">
+        <value>Angle in minutes and seconds</value>
+    </data>
+    <data name="Ms_UnitItem_Symbol" xml:space="preserve">
+        <value>[M]′[S]′′</value>
+    </data>
 </root>

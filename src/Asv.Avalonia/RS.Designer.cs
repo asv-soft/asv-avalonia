@@ -512,5 +512,47 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("MicroAmpRu_DdmLlz_Description", resourceCulture);
             }
         }
+        
+        public static string Angle_Description {
+            get {
+                return ResourceManager.GetString("Angle_Description", resourceCulture);
+            }
+        }
+        
+        public static string Degree_Angle_Description {
+            get {
+                return ResourceManager.GetString("Degree_Angle_Description", resourceCulture);
+            }
+        }
+        
+        public static string Angle_Name {
+            get {
+                return ResourceManager.GetString("Angle_Name", resourceCulture);
+            }
+        }
+        
+        public static string Degree_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Degree_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string Ms_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Ms_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Ms_Angle_Description {
+            get {
+                return ResourceManager.GetString("Ms_Angle_Description", resourceCulture);
+            }
+        }
+        
+        public static string Ms_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Ms_UnitItem_Symbol", resourceCulture);
+            }
+        }
     }
 }
