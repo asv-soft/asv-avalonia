@@ -10,5 +10,10 @@
     <Design.DataContext>
         <example:MapExamplePageViewModel/>
     </Design.DataContext>
-    <map:MapControl/>
+    <map:MapView CenterMap="{map:GeoPoint 53,53}"  >
+        <Button Width="100" Height="100" map:MapPanel.Location="{map:GeoPoint 53,53}">
+            Hello
+        </Button>
+    </map:MapView>
+    
 </UserControl>

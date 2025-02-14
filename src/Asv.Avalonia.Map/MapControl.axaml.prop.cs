@@ -2,13 +2,17 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Media;
-using Avalonia.Media.Imaging;
-using R3;
+using Avalonia.Reactive;
 
 namespace Asv.Avalonia.Map;
 
 public partial class MapControl
 {
+    static MapControl()
+    {
+        AffectsRender<Panel>(BackgroundProperty);
+    }
+
     #region Cursor position
 
     private GeoPoint _cursorPosition;
@@ -46,6 +50,11 @@ public partial class MapControl
         {
             if (SetAndRaise(CenterMapProperty, ref _centerMap, value))
             {
+                var centerPixel = Provider.Projection.Wgs84ToPixels(value, Zoom, Provider.TileSize);
+                _offset = new Point(
+                    Bounds.Width / 2 - centerPixel.X,
+                    Bounds.Height / 2 - centerPixel.Y
+                );
                 RequestRenderLoop();
             }
         }
@@ -55,7 +64,7 @@ public partial class MapControl
 
     #region Provider
 
-    private ITileProvider _provider;
+    private ITileProvider _provider = EmptyTileProvider.Instance;
     public static readonly DirectProperty<MapControl, ITileProvider> ProviderProperty =
         AvaloniaProperty.RegisterDirect<MapControl, ITileProvider>(
             nameof(Provider),
@@ -134,17 +143,96 @@ public partial class MapControl
 
     #endregion
 
+    #region DialogStroke
+
+    public static readonly StyledProperty<IBrush?> DialogStrokeProperty = AvaloniaProperty.Register<
+        MapControl,
+        IBrush?
+    >(nameof(DialogStroke), defaultValue: Brushes.Firebrick);
+
+    public IBrush? DialogStroke
+    {
+        get => GetValue(DialogStrokeProperty);
+        set => SetValue(DialogStrokeProperty, value);
+    }
+
+    #endregion
+
+    #region DialogTargetLocation
+
+    private GeoPoint? _dialogTargetLocation;
+
+    public static readonly DirectProperty<MapControl, GeoPoint?> GeoPointProperty =
+        AvaloniaProperty.RegisterDirect<MapControl, GeoPoint?>(
+            nameof(DialogTargetLocation),
+            o => o.DialogTargetLocation,
+            (o, v) => o.DialogTargetLocation = v
+        );
+
+    public GeoPoint? DialogTargetLocation
+    {
+        get => _dialogTargetLocation;
+        set => SetAndRaise(GeoPointProperty, ref _dialogTargetLocation, value);
+    }
+
+    #endregion
+
+    #region DialogText
+
+    private string? _dialogText;
+
+    public static readonly DirectProperty<MapControl, string?> DialogTextProperty =
+        AvaloniaProperty.RegisterDirect<MapControl, string?>(
+            nameof(DialogText),
+            o => o.DialogText,
+            (o, v) => o.DialogText = v
+        );
+
+    public string? DialogText
+    {
+        get => _dialogText;
+        set => SetAndRaise(DialogTextProperty, ref _dialogText, value);
+    }
+
+    #endregion
+
+    #region IsDialogMode
+
+    private bool _isDialogMode;
+
+    public static readonly DirectProperty<MapControl, bool> IsDialogModeProperty =
+        AvaloniaProperty.RegisterDirect<MapControl, bool>(
+            nameof(IsDialogMode),
+            o => o.IsDialogMode,
+            (o, v) => o.IsDialogMode = v
+        );
+
+    public bool IsDialogMode
+    {
+        get => _isDialogMode;
+        set => SetAndRaise(IsDialogModeProperty, ref _isDialogMode, value);
+    }
+
+    #endregion
+
+    #region Location
+
+    public static readonly AttachedProperty<GeoPoint?> LocationProperty =
+        AvaloniaProperty.RegisterAttached<MapControl, Control, GeoPoint?>("Location");
+
+    public static GeoPoint? GetLocation(Control element) => element.GetValue(LocationProperty);
+
+    public static void SetLocation(Control element, GeoPoint? value) =>
+        element.SetValue(LocationProperty, value);
+
+    #endregion
+
     #region Background
 
-    public static readonly StyledProperty<IBrush> BackgroundProperty = AvaloniaProperty.Register<
-        MapControl,
-        IBrush
-    >(nameof(Background), Brushes.CornflowerBlue);
+    public static readonly StyledProperty<IBrush?> BackgroundProperty =
+        Border.BackgroundProperty.AddOwner<Panel>();
 
-    /// <summary>
-    /// Gets or sets the brush used to draw the map background.
-    /// </summary>
-    public IBrush Background
+    public IBrush? Background
     {
         get => GetValue(BackgroundProperty);
         set => SetValue(BackgroundProperty, value);

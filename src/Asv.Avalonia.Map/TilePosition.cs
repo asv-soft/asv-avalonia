@@ -46,7 +46,7 @@ public readonly struct TilePosition : IEquatable<TilePosition>
 
     public static bool operator !=(TilePosition left, TilePosition right) => !left.Equals(right);
 
-    public static TilePosition FromGeoPoint(GeoPoint point, int tileSize, int zoom)
+    public static TilePosition FromGeoPoint(Common.GeoPoint point, int tileSize, int zoom)
     {
         var sinLatitude = Math.Sin(point.Latitude * Math.PI / 180);
         var pixelX = ((point.Longitude + 180.0) / 360.0) * tileSize * (1 << zoom);

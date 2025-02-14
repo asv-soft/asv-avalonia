@@ -1,0 +1,37 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Asv.Avalonia.Map">
+    <Design.PreviewWith>
+        <controls:MapView CenterMap="{controls:GeoPoint 53,53}" Width="1000" Height="1000" >
+            <Button Width="100" Height="100" controls:MapPanel.Location="{controls:GeoPoint 53.1,53}">
+                Hello
+            </Button>
+        </controls:MapView>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MapView">
+        <!-- Set Defaults -->
+        <Setter Property="ItemsPanel">
+            <ItemsPanelTemplate>
+               <controls:MapPanel 
+                   Provider="{TemplateBinding Provider}" 
+                   CenterMap="{TemplateBinding CenterMap}" 
+                   Zoom="{TemplateBinding Zoom}"/>
+            </ItemsPanelTemplate>
+        </Setter>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel>
+                    <controls:MapBackground 
+                        HorizontalAlignment="Stretch"
+                        Zoom="{TemplateBinding Zoom}" 
+                        CenterMap="{TemplateBinding CenterMap}" 
+                        Provider="{TemplateBinding Provider}"/>
+                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                     ItemsPanel="{TemplateBinding ItemsPanel}"
+                                     Margin="{TemplateBinding Padding}"/>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

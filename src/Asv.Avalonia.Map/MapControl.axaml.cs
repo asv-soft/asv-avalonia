@@ -4,14 +4,15 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
+using Avalonia.Metadata;
 using R3;
 
 namespace Asv.Avalonia.Map;
 
-public partial class MapControl : TemplatedControl
+public partial class MapControl : SelectingItemsControl
 {
-    public const int TileSize = 256;
     private Point _offset;
     private Point _lastMousePosition;
     private ITileLoader _cache;
@@ -29,33 +30,37 @@ public partial class MapControl : TemplatedControl
             .Subscribe(_ => InvalidateVisual())
             .AddTo(ref disposeBuilder);
 
-        Observable
-            .FromEventHandler<PointerPressedEventArgs>(
-                x => PointerPressed += x,
-                x => PointerPressed -= x
-            )
-            .Subscribe(OnPointerPressed)
-            .AddTo(ref disposeBuilder);
-
-        Observable
-            .FromEventHandler<PointerReleasedEventArgs>(
-                x => PointerReleased += x,
-                x => PointerReleased -= x
-            )
-            .Subscribe(OnPointerReleased)
-            .AddTo(ref disposeBuilder);
+        PointerPressed += OnPointerPressed;
+        PointerReleased += OnPointerReleased;
 
         _provider = new BingTileProvider(
             "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
         );
         _cache = new CacheTileLoader(MapCore.LoggerFactory, _provider);
+
         Disposable.Create(() => _cache?.Dispose());
 
         PointerMoved += OnPointerMoved;
         PointerWheelChanged += OnPointerWheelChanged;
-        _cache.OnLoaded.Subscribe(x => _renderRequestSubject.OnNext(Unit.Default));
+        LogicalChildren.CollectionChanged += (_, _) => _renderRequestSubject.OnNext(Unit.Default);
+        _cache
+            .OnLoaded.Subscribe(x => _renderRequestSubject.OnNext(Unit.Default))
+            .AddTo(ref disposeBuilder);
+
         _disposeIt = disposeBuilder.Build();
     }
+
+    /*protected override Control CreateContainerForItemOverride(object? item, int index, object? recycleKey)
+    {
+        return new MapControlItem();
+    }
+
+    protected override bool NeedsContainerOverride(object? item, int index, out object? recycleKey)
+    {
+        return NeedsContainer<MapControlItem>(item, out recycleKey);
+    }*/
+
+    #region Load
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
@@ -68,14 +73,16 @@ public partial class MapControl : TemplatedControl
         base.OnUnloaded(e);
     }
 
-    #region Events
+    #endregion
 
-    private void OnPointerPressed((object? sender, PointerPressedEventArgs e) args)
+    #region Pointer Events
+
+    private void OnPointerPressed(object? sender, PointerPressedEventArgs args)
     {
-        _lastMousePosition = args.e.GetPosition(this);
+        _lastMousePosition = args.GetPosition(this);
     }
 
-    private void OnPointerReleased((object? sender, PointerReleasedEventArgs e) args) { }
+    private void OnPointerReleased(object? sender, PointerReleasedEventArgs args) { }
 
     private void OnPointerMoved(object? sender, PointerEventArgs e)
     {
@@ -85,12 +92,13 @@ public partial class MapControl : TemplatedControl
             Zoom,
             Provider.TileSize
         );
+
         if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
-            _offset += currentPosition - _lastMousePosition;
+            var offset = _offset + currentPosition - _lastMousePosition;
             _lastMousePosition = currentPosition;
             CenterMap = Provider.Projection.PixelsToWgs84(
-                new Point(Bounds.Width / 2 - _offset.X, Bounds.Height / 2 - _offset.Y),
+                new Point(Bounds.Width / 2 - offset.X, Bounds.Height / 2 - offset.Y),
                 Zoom,
                 Provider.TileSize
             );
@@ -119,16 +127,50 @@ public partial class MapControl : TemplatedControl
 
     #endregion
 
+    [Content]
+    public Controls Children { get; } = new Controls();
 
+    #region Render
 
     public override void Render(DrawingContext context)
     {
+        RenderMapTiles(context);
         base.Render(context);
-        context.DrawRectangle(
-            Background,
-            null,
-            new Rect(Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height)
-        );
+    }
+
+    protected override Size ArrangeOverride(Size finalSize)
+    {
+        return base.ArrangeOverride(finalSize);
+    }
+
+    private void RenderChildren(DrawingContext context)
+    {
+        foreach (var child in LogicalChildren.OfType<Control>())
+        {
+            var location = GetLocation(child);
+            if (location == null)
+                continue;
+            var pixelPos =
+                Provider.Projection.Wgs84ToPixels(location.Value, Zoom, Provider.TileSize)
+                + _offset;
+            var rect = new Rect(
+                pixelPos.X - child.Bounds.Width / 2,
+                pixelPos.Y - child.Bounds.Height / 2,
+                child.Bounds.Width,
+                child.Bounds.Height
+            );
+            child.Render(context);
+        }
+    }
+
+    private void RenderMapTiles(DrawingContext context)
+    {
+        var background = Background;
+        if (background != null)
+        {
+            var renderSize = Bounds.Size;
+            context.FillRectangle(background, new Rect(renderSize));
+        }
 
         var tileSize = Provider.TileSize;
         var zoom = Zoom;
@@ -155,20 +197,20 @@ public partial class MapControl : TemplatedControl
                 }
                 var key = new TilePosition(x, y, zoom);
 
-                var px = (key.X * TileSize) + _offset.X;
-                var py = (key.Y * TileSize) + _offset.Y;
+                var px = (key.X * Provider.TileSize) + _offset.X;
+                var py = (key.Y * Provider.TileSize) + _offset.Y;
                 var tile = _cache[key];
                 context.DrawImage(
                     tile,
-                    new Rect(0, 0, TileSize, TileSize),
-                    new Rect(px, py, TileSize, TileSize)
+                    new Rect(0, 0, Provider.TileSize, Provider.TileSize),
+                    new Rect(px, py, Provider.TileSize, Provider.TileSize)
                 );
                 if (IsDebug)
                 {
                     context.DrawRectangle(
                         Brushes.Transparent,
                         new Pen(Brushes.Red),
-                        new Rect(px, py, TileSize, TileSize)
+                        new Rect(px, py, Provider.TileSize, Provider.TileSize)
                     );
                     context.DrawText(
                         new FormattedText(
@@ -199,19 +241,9 @@ public partial class MapControl : TemplatedControl
                 new Point(center.X, center.Y + 25)
             );
         }
-
-        context.DrawText(
-            new FormattedText(
-                $"{CursorPosition} {_offset}",
-                CultureInfo.CurrentUICulture,
-                FlowDirection.LeftToRight,
-                Typeface.Default,
-                12.0,
-                Brushes.Violet
-            ),
-            new Point(0, 0)
-        );
     }
 
-    private void RequestRenderLoop() => _renderRequestSubject?.OnNext(Unit.Default);
+    private void RequestRenderLoop() => _renderRequestSubject.OnNext(Unit.Default);
+
+    #endregion
 }
