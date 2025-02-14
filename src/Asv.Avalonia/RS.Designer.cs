@@ -243,12 +243,6 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string NauticalMileDistanceUnit_Symbol {
-            get {
-                return ResourceManager.GetString("NauticalMileDistanceUnit_Symbol", resourceCulture);
-            }
-        }
-        
         public static string ShellView_WindowControlButton_Close {
             get {
                 return ResourceManager.GetString("ShellView_WindowControlButton_Close", resourceCulture);
@@ -387,12 +381,6 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string InPartsAmplitudeModulation_Symbol {
-            get {
-                return ResourceManager.GetString("InPartsAmplitudeModulation_Symbol", resourceCulture);
-            }
-        }
-        
         public static string PercentAmplitudeModulation_Name {
             get {
                 return ResourceManager.GetString("PercentAmplitudeModulation_Name", resourceCulture);
@@ -402,12 +390,6 @@ namespace Asv.Avalonia {
         public static string PercentAmplitudeModulation_Description {
             get {
                 return ResourceManager.GetString("PercentAmplitudeModulation_Description", resourceCulture);
-            }
-        }
-        
-        public static string PercentAmplitudeModulation_Symbol {
-            get {
-                return ResourceManager.GetString("PercentAmplitudeModulation_Symbol", resourceCulture);
             }
         }
         
@@ -450,6 +432,72 @@ namespace Asv.Avalonia {
         public static string DMBearing_Name {
             get {
                 return ResourceManager.GetString("DMBearing_Name", resourceCulture);
+            }
+        }
+        
+        public static string DdmGp_Name {
+            get {
+                return ResourceManager.GetString("DdmGp_Name", resourceCulture);
+            }
+        }
+        
+        public static string DdmGp_Description {
+            get {
+                return ResourceManager.GetString("DdmGp_Description", resourceCulture);
+            }
+        }
+        
+        public static string InPartsDdmGp_Name {
+            get {
+                return ResourceManager.GetString("InPartsDdmGp_Name", resourceCulture);
+            }
+        }
+        
+        public static string InPartsDdmGp_Description {
+            get {
+                return ResourceManager.GetString("InPartsDdmGp_Description", resourceCulture);
+            }
+        }
+        
+        public static string PercentDdmGp_Name {
+            get {
+                return ResourceManager.GetString("PercentDdmGp_Name", resourceCulture);
+            }
+        }
+        
+        public static string PercentDdmGp_Description {
+            get {
+                return ResourceManager.GetString("PercentDdmGp_Description", resourceCulture);
+            }
+        }
+        
+        public static string Ddm_µA_Symbol {
+            get {
+                return ResourceManager.GetString("Ddm_µA_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string MicroAmpDdmGp_Name {
+            get {
+                return ResourceManager.GetString("MicroAmpDdmGp_Name", resourceCulture);
+            }
+        }
+        
+        public static string MicroAmpDdmGp_Description {
+            get {
+                return ResourceManager.GetString("MicroAmpDdmGp_Description", resourceCulture);
+            }
+        }
+        
+        public static string MicroAmpRuDdmGp_Name {
+            get {
+                return ResourceManager.GetString("MicroAmpRuDdmGp_Name", resourceCulture);
+            }
+        }
+        
+        public static string MicroAmpRuDdmGp_Description {
+            get {
+                return ResourceManager.GetString("MicroAmpRuDdmGp_Description", resourceCulture);
             }
         }
     }

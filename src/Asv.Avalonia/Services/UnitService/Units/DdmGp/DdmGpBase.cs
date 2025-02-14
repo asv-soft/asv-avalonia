@@ -4,35 +4,32 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public sealed class BearingConfig
+public sealed class DdmGpConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public sealed class BearingBase : UnitBase
+public sealed class DdmGpBase : UnitBase
 {
-    public const string Id = "bearing";
+    public const string Id = "dbmgp";
 
-    public override MaterialIconKind Icon => MaterialIconKind.Location;
-    public override string Name => RS.Bearing_Name;
-    public override string Description => RS.Bearing_Description;
+    public override MaterialIconKind Icon => MaterialIconKind.Frequency;
+    public override string Name => RS.DdmGp_Name;
+    public override string Description => RS.DdmGp_Description;
     public override string UnitId => Id;
 
-    private readonly BearingConfig? _config;
+    private readonly DdmGpConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
     [ImportingConstructor]
-    public BearingBase(
-        [Import] IConfiguration cfgSvc,
-        [ImportMany(Id)] IEnumerable<IUnitItem> items
-    )
+    public DdmGpBase([Import] IConfiguration cfgSvc, [ImportMany(Id)] IEnumerable<IUnitItem> items)
         : base(items)
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);
         _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<BearingConfig>();
+        _config = cfgSvc.Get<DdmGpConfig>();
         if (_config.CurrentUnitItemId is null)
         {
             return;

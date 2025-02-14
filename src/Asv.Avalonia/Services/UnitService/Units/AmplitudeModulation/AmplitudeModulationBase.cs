@@ -2,7 +2,7 @@ using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
-namespace Asv.Avalonia.AmplitudeModulation;
+namespace Asv.Avalonia;
 
 public sealed class AmplitudeModulationConfig
 {

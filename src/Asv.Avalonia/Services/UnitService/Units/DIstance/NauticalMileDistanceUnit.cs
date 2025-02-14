@@ -12,6 +12,6 @@ public sealed class NauticalMileDistanceUnit() : UnitItemBase(1852.0)
     public override string UnitItemId => Id;
     public override string Name => RS.NauticalMileDistanceUnit_Name;
     public override string Description => RS.NauticalMileDistanceUnit_Description;
-    public override string Symbol => RS.NauticalMileDistanceUnit_Symbol;
+    public override string Symbol => "NM";
     public override bool IsInternationalSystemUnit => false;
 }

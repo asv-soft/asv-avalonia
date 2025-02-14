@@ -1,6 +1,6 @@
 using System.Composition;
 
-namespace Asv.Avalonia.AmplitudeModulation;
+namespace Asv.Avalonia;
 
 [ExportUnitItem(AmplitudeModulationBase.Id)]
 [Shared]

@@ -134,9 +134,6 @@
     <data name="NauticalMileDistanceUnit_Name" xml:space="preserve">
         <value>Морская миля</value>
     </data>
-    <data name="NauticalMileDistanceUnit_Symbol" xml:space="preserve">
-        <value>NM</value>
-    </data>
     <data name="NauticalMileDistanceUnit_Description" xml:space="preserve">
         <value>Расстояние в морских милях</value>
     </data>
@@ -176,9 +173,6 @@
     <data name="AmplitudeModulation_Description" xml:space="preserve">
         <value>Единица измерения амплитудной модуляции</value>
     </data>
-    <data name="InPartsAmplitudeModulation_Symbol" xml:space="preserve">
-        <value>1</value>
-    </data>
     <data name="InPartsAmplitudeModulation_Name" xml:space="preserve">
         <value>В частях</value>
     </data>
@@ -190,9 +184,6 @@
     </data>
     <data name="PercentAmplitudeModulation_Description" xml:space="preserve">
         <value>Амплитудная модуляция в прцентах</value>
-    </data>
-    <data name="PercentAmplitudeModulation_Symbol" xml:space="preserve">
-        <value>%</value>
     </data>
     <data name="Bearing_Description" xml:space="preserve">
         <value>Единица измерения несущей</value>
@@ -214,5 +205,38 @@
     </data>
     <data name="DMBearing_Name" xml:space="preserve">
         <value>Градусы и минуты</value>
+    </data>
+    <data name="DdmGp_Name" xml:space="preserve">
+        <value>РГМ (Gp)</value>
+    </data>
+    <data name="DdmGp_Description" xml:space="preserve">
+        <value>Единицы измереня разницы в глубине модуляции</value>
+    </data>
+    <data name="InPartsDdmGp_Name" xml:space="preserve">
+        <value>В частях</value>
+    </data>
+    <data name="InPartsDdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в частях</value>
+    </data>
+    <data name="PercentDdmGp_Name" xml:space="preserve">
+        <value>В процентах</value>
+    </data>
+    <data name="PercentDdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в процентах</value>
+    </data>
+    <data name="Ddm_µA_Symbol" xml:space="preserve">
+        <value>мкА</value>
+    </data>
+    <data name="MicroAmpDdmGp_Name" xml:space="preserve">
+        <value>Микроампер</value>
+    </data>
+    <data name="MicroAmpDdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в микроамперах</value>
+    </data>
+    <data name="MicroAmpRuDdmGp_Name" xml:space="preserve">
+        <value>Микроампер (Рус)</value>
+    </data>
+    <data name="MicroAmpRuDdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) в микроамперах (Рус)</value>
     </data>
 </root>

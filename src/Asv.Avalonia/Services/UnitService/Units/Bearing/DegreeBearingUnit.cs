@@ -1,6 +1,6 @@
 using System.Composition;
 
-namespace Asv.Avalonia.Bearing;
+namespace Asv.Avalonia;
 
 [ExportUnitItem(BearingBase.Id)]
 [Shared]
