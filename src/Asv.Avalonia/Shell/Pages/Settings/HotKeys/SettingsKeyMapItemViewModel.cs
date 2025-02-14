@@ -12,18 +12,17 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
         Info = commandInfo;
         IsReset.Subscribe(reset =>
         {
-            if (!Info.IsEditable)
-            {
-                return;
-            }
-
             if (!reset)
             {
                 return;
             }
 
             Info.CustomHotKey = null;
-            svc.ChangeHotKey(Info.Id, Info.DefaultHotKey);
+            if (Info.DefaultHotKey != null)
+            {
+                svc.SetHotKey(Info.Id, Info.DefaultHotKey);
+            }
+
             IsReset.Value = false;
             CurrentHotKeyValue.Value = Info.CustomHotKey;
         });
@@ -65,8 +64,8 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
             }
 
             Info.CustomHotKey = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
-            var res = svc.ChangeHotKey(Info.Id, Info.CustomHotKey);
-            CurrentHotKeyValue.Value = res ? Info.CustomHotKey : null;
+            svc.SetHotKey(Info.Id, Info.CustomHotKey);
+            CurrentHotKeyValue.Value = svc.GetHostKey(Info.Id);
             IsChangingHotKey.Value = false;
         });
     }
@@ -88,7 +87,7 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
         return (Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
                (Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
                Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-               Info.Source.Contains(text, StringComparison.OrdinalIgnoreCase) ||
+               Info.Source.ModuleName.Contains(text, StringComparison.OrdinalIgnoreCase) ||
                Info.Description.Contains(text, StringComparison.OrdinalIgnoreCase);
     }
 

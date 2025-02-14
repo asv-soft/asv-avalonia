@@ -15,14 +15,15 @@ public class MapExamplePageViewModel : PageViewModel<IMapContext>, IMapContext
         : this(DesignTime.CommandService)
     {
         DesignTime.ThrowIfNotDesignMode();
-        Title.OnNext(RS.MapExamplePageViewModel_Title);
+        
+        // Title.OnNext(RS.MapExamplePageViewModel_Title);
     }
 
     [ImportingConstructor]
     public MapExamplePageViewModel(ICommandService cmd)
         : base(PageId, cmd)
     {
-        Title.OnNext(RS.MapExamplePageViewModel_Title);
+        // Title.OnNext(RS.MapExamplePageViewModel_Title);
     }
 
     public override ValueTask<IRoutable> Navigate(string id)
