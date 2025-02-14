@@ -40,4 +40,6 @@ public class HomePageViewModel : PageViewModel<HomePageViewModel>
     {
         return [];
     }
+
+    public override IExportInfo Source => SystemModule.Instance;
 }

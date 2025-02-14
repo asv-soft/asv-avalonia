@@ -53,8 +53,4 @@
     <ItemGroup>
       <AdditionalFiles Include="Pages\Document\DocumentPageView.axaml" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Pages\Map\" />
-    </ItemGroup>
 </Project>

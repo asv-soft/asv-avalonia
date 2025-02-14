@@ -44,4 +44,6 @@ public class MapExamplePageViewModel : PageViewModel<IMapContext>, IMapContext
     {
         // do nothing
     }
+
+    public override IExportInfo Source => SystemModule.Instance;
 }

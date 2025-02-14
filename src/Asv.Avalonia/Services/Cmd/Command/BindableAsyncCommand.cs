@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace Asv.Avalonia;
 
-public class AsyncReactiveCommand(string commandId, IRoutable owner) : ICommand
+public class BindableAsyncCommand(string commandId, IRoutable owner) : ICommand
 {
     public bool CanExecute(object? parameter)
     {
@@ -11,7 +11,7 @@ public class AsyncReactiveCommand(string commandId, IRoutable owner) : ICommand
 
     public void Execute(object? parameter)
     {
-        owner.ExecuteCommand(commandId, parameter as IPersistable);
+        owner.ExecuteCommand(commandId, parameter as IPersistable ?? Persistable.Empty);
     }
 
     public event EventHandler? CanExecuteChanged;

@@ -6,7 +6,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeTreePage
+public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeTreePage
     where TContext : class, IPage
 {
     private readonly IContainerHost _container;

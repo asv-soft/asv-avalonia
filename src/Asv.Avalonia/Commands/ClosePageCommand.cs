@@ -4,9 +4,13 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class ClosePageCommand : IAsyncCommand
+[ExportCommand]
+[Shared]
+public class ClosePageCommand : ContextCommand<IPage>
 {
-    public const string Id = "cmd.page.close";
+    #region Static
+
+    public const string Id = $"{BaseId}.page.close";
 
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
@@ -14,53 +18,21 @@ public class ClosePageCommand : IAsyncCommand
         Name = "Close page",
         Description = RS.OpenDebugCommand_CommandInfo_Description,
         Icon = MaterialIconKind.CloseBold,
-        DefaultHotKey = KeyGesture.Parse("Alt+F4"),
-        Order = 0,
-        IsEditable = true,
-        Source = AppHost.Instance.AppInfo.Name,
+        DefaultHotKey = KeyGesture.Parse("Ctrl+Q"),
+        Source = SystemModule.Instance,
     };
 
-    public IPersistable Save()
-    {
-        throw new NotImplementedException();
-    }
+    #endregion
 
-    public void Restore(IPersistable state)
-    {
-        throw new NotImplementedException();
-    }
+    public override ICommandInfo Info => StaticInfo;
 
-    public ICommandInfo Info => StaticInfo;
-
-    public ValueTask Execute(
-        IRoutable context,
-        IPersistable? parameter = null,
-        CancellationToken cancel = default
+    protected override async ValueTask<IPersistable?> InternalExecute(
+        IPage context,
+        IPersistable newValue,
+        CancellationToken cancel
     )
     {
-        if (context is IPage page)
-        {
-            return page.TryCloseAsync();
-        }
-
-        return ValueTask.CompletedTask;
-    }
-}
-
-[ExportCommand]
-[Shared]
-public class ClosePageCommandFactory : ICommandFactory
-{
-    public ICommandInfo Info => ClosePageCommand.StaticInfo;
-
-    public IAsyncCommand Create()
-    {
-        return new ClosePageCommand();
-    }
-
-    public bool CanExecute(IRoutable context, out IRoutable? target)
-    {
-        target = context.FindParentOfType<IShell>()?.SelectedPage.Value;
-        return target != null;
+        await context.TryCloseAsync();
+        return null;
     }
 }

@@ -85,4 +85,6 @@ public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
     {
         return ValueTask.CompletedTask;
     }
+
+    public IExportInfo Source => SystemModule.Instance;
 }

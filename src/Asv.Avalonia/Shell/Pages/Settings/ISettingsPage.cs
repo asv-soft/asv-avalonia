@@ -9,7 +9,7 @@ public interface ISettingsPage : IPage
     BindableReactiveProperty<bool> IsCompactMode { get; }
 }
 
-public interface ISettingsSubPage : IRoutable
+public interface ISettingsSubPage : IRoutable, IExportable
 {
     ValueTask Init(ISettingsPage context);
 }

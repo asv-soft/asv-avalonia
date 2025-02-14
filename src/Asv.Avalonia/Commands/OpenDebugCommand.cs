@@ -7,33 +7,12 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class OpenDebugCommandFactory : ICommandFactory
+[method: ImportingConstructor]
+public class OpenDebugWindowCommand(ExportFactory<IDebugWindow> factory) : NoContextCommand
 {
-    private readonly ExportFactory<IDebugWindow> _factory;
+    #region Static
 
-    [ImportingConstructor]
-    public OpenDebugCommandFactory(ExportFactory<IDebugWindow> factory)
-    {
-        _factory = factory;
-    }
-
-    public ICommandInfo Info => OpenDebugCommand.StaticInfo;
-
-    public IAsyncCommand Create()
-    {
-        return new OpenDebugCommand(_factory);
-    }
-
-    public bool CanExecute(IRoutable context, out IRoutable? target)
-    {
-        target = context;
-        return true;
-    }
-}
-
-public class OpenDebugCommand(ExportFactory<IDebugWindow> factory) : IAsyncCommand
-{
-    public const string Id = "cmd.open.debug";
+    public const string Id = $"{BaseId}.open.debug";
 
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
@@ -42,32 +21,20 @@ public class OpenDebugCommand(ExportFactory<IDebugWindow> factory) : IAsyncComma
         Description = RS.OpenDebugCommand_CommandInfo_Description,
         Icon = MaterialIconKind.WindowOpenVariant,
         DefaultHotKey = KeyGesture.Parse("Ctrl+D"),
-        Order = 0,
-        IsEditable = true,
-        Source = AppHost.Instance.AppInfo.Name,
+        Source = SystemModule.Instance,
     };
 
-    public IPersistable Save()
-    {
-        throw new NotImplementedException();
-    }
+    #endregion
 
-    public void Restore(IPersistable state)
-    {
-        throw new NotImplementedException();
-    }
+    public override ICommandInfo Info => StaticInfo;
 
-    public ICommandInfo Info => StaticInfo;
-
-    public ValueTask Execute(
-        IRoutable context,
-        IPersistable? parameter = null,
-        CancellationToken cancel = default
+    protected override ValueTask<IPersistable?> InternalExecute(
+        IPersistable newValue,
+        CancellationToken cancel
     )
     {
-        var wnd = new DebugWindow() { DataContext = factory.CreateExport().Value };
-        wnd.Topmost = true;
+        var wnd = new DebugWindow { DataContext = factory.CreateExport().Value, Topmost = true };
         wnd.Show();
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult<IPersistable?>(null);
     }
 }

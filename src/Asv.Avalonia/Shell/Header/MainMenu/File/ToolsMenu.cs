@@ -18,6 +18,6 @@ public class ToolsSettingsMenu : MenuItem
     public ToolsSettingsMenu()
         : base(MenuId, "Settings", ToolsMenu.MenuId) // TODO: Localize
     {
-        Command = new AsyncReactiveCommand(OpenSettingsCommand.Id, this);
+        Command = new BindableAsyncCommand(OpenSettingsCommand.Id, this);
     }
 }

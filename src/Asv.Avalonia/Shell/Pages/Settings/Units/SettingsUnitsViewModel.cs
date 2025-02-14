@@ -74,4 +74,6 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
     {
         return _view;
     }
+
+    public IExportInfo Source => SystemModule.Instance;
 }

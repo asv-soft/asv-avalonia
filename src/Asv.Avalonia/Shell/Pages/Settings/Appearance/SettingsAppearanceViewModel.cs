@@ -55,4 +55,6 @@ public class SettingsAppearanceViewModel : RoutableViewModel, ISettingsSubPage
     {
         yield return Theme;
     }
+
+    public IExportInfo Source => SystemModule.Instance;
 }

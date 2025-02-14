@@ -39,4 +39,6 @@ public class DocumentPageViewModel : PageViewModel<DocumentPageViewModel>
     {
         return [];
     }
+
+    public override IExportInfo Source => SystemModule.Instance;
 }

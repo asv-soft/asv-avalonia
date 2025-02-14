@@ -15,6 +15,8 @@ namespace Asv.Avalonia.Example;
 
 public partial class App : Application, IContainerHost, IShellHost
 {
+    private readonly CompositionHost _container;
+
     public App()
     {
         var conventions = new ConventionBuilder();
@@ -31,8 +33,8 @@ public partial class App : Application, IContainerHost, IShellHost
         containerCfg = containerCfg.WithAssemblies(DefaultAssemblies.Distinct());
 
         // TODO: load plugin manager before creating container
-        Host = containerCfg.CreateContainer();
-        DataTemplates.Add(new CompositionViewLocator(Host));
+        _container = containerCfg.CreateContainer();
+        DataTemplates.Add(new CompositionViewLocator(_container));
     }
 
     private IEnumerable<Assembly> DefaultAssemblies
@@ -51,13 +53,21 @@ public partial class App : Application, IContainerHost, IShellHost
 
     public override void OnFrameworkInitializationCompleted()
     {
-        if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+        if (Design.IsDesignMode)
         {
-            Shell = GetExport<IShell>(DesktopShellViewModel.ShellId);
+            Shell = DesignTimeShellViewModel.Instance;
         }
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        else if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            Shell = GetExport<IShell>(MobileShellViewModel.ShellId);
+            Shell = _container.GetExport<IShell>(DesktopShellViewModel.ShellId);
+        }
+        else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        {
+            Shell = _container.GetExport<IShell>(MobileShellViewModel.ShellId);
+        }
+        else
+        {
+            throw new Exception("Unknown platform");
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -74,20 +84,23 @@ public partial class App : Application, IContainerHost, IShellHost
     }
 
     public T GetExport<T>()
+        where T : IExportable
     {
-        return Host.GetExport<T>();
+        return _container.GetExport<T>();
     }
 
     public T GetExport<T>(string contract)
+        where T : IExportable
     {
-        return Host.GetExport<T>(contract);
+        return _container.GetExport<T>(contract);
     }
-
-    public CompositionHost Host { get; }
-    public IShell Shell { get; private set; }
 
     public bool TryGetExport<T>(string id, out T value)
+        where T : IExportable
     {
-        return Host.TryGetExport(id, out value);
+        return _container.TryGetExport(id, out value);
     }
+
+    public IShell Shell { get; set; }
+    public IExportInfo Source => SystemModule.Instance;
 }

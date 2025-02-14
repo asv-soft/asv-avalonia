@@ -1,6 +1,7 @@
 ﻿using System.Buffers;
 using MemoryPack;
 using Newtonsoft.Json;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -12,9 +13,39 @@ public interface IPersistable
     ValueTask Restore(JsonReader rdr);
 }
 
+public static class Persistable
+{
+    public static IPersistable Empty { get; } = default(EmptyPersistable);
+}
+
 [MemoryPackable]
 [method: MemoryPackConstructor]
-public partial class Persistable<T>(T value) : IPersistable
+public readonly partial struct EmptyPersistable : IPersistable
+{
+    public ValueTask Save(in IBufferWriter<byte> buffer)
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    public ValueTask Restore(in ReadOnlySequence<byte> buffer)
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    public ValueTask Save(JsonWriter wrt)
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    public ValueTask Restore(JsonReader rdr)
+    {
+        return ValueTask.CompletedTask;
+    }
+}
+
+[MemoryPackable]
+[method: MemoryPackConstructor]
+public partial struct Persistable<T>(T value) : IPersistable
 {
     public T Value { get; set; } = value;
 
@@ -50,6 +81,7 @@ public partial class Persistable<T>(T value) : IPersistable
     }
 }
 
+/*
 [MemoryPackable]
 [method: MemoryPackConstructor]
 public partial class PersistableChange<T>(T oldValue, T newValue) : IPersistable
@@ -95,4 +127,4 @@ public partial class PersistableChange<T>(T oldValue, T newValue) : IPersistable
         OldValue = (T)rdr.Value;
         return ValueTask.CompletedTask;
     }
-}
+}*/

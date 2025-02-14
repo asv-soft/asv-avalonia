@@ -3,7 +3,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class HistoricalUnitProperty : RoutableViewModel, IStatePersistor
+public class HistoricalUnitProperty : RoutableViewModel
 {
     private readonly ReactiveProperty<double> _model;
     private readonly IUnit _unit;

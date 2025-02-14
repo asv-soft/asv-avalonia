@@ -20,6 +20,7 @@ public partial class MapControl : TemplatedControl
 
     public MapControl()
     {
+        IsDebug = true;
         Zoom = 8;
         DisposableBuilder disposeBuilder = new();
         _renderRequestSubject.AddTo(ref disposeBuilder);

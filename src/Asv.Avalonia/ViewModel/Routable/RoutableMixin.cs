@@ -6,6 +6,11 @@
 /// </summary>
 public static class RoutableMixin
 {
+    public static string[] GetPathToRoot(this IRoutable src)
+    {
+        return src.GetHierarchyFromRoot().Select(x => x.Id).ToArray();
+    }
+
     /// <summary>
     /// Navigates through the specified path, resolving each step sequentially.
     /// </summary>
@@ -67,7 +72,7 @@ public static class RoutableMixin
     /// </summary>
     /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
     /// <returns>An enumerable collection of ancestors up to the root.</returns>
-    public static IEnumerable<IRoutable> GetAncestorsToRoot(this IRoutable src)
+    public static IEnumerable<IRoutable> GetAncestorsToRoot(this IRoutable? src)
     {
         var current = src;
         while (current is not null)
@@ -141,7 +146,7 @@ public static class RoutableMixin
     /// <typeparam name="T">The type of <see cref="IRoutable"/> to search for.</typeparam>
     /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
     /// <returns>The first matching parent of type <typeparamref name="T"/>, or <c>null</c> if none is found.</returns>
-    public static T? FindParentOfType<T>(this IRoutable src)
+    public static T? FindParentOfType<T>(this IRoutable? src)
         where T : IRoutable
     {
         var current = src;

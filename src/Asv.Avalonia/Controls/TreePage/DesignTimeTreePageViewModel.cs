@@ -43,4 +43,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage>
     {
         return new SettingsAppearanceViewModel();
     }
+
+    public override IExportInfo Source => SystemModule.Instance;
 }

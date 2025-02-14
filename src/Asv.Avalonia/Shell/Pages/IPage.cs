@@ -4,7 +4,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public interface IPage : IRoutable
+public interface IPage : IRoutable, IExportable
 {
     BindableReactiveProperty<MaterialIconKind> Icon { get; }
     BindableReactiveProperty<string> Title { get; }

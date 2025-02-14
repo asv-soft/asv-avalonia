@@ -79,10 +79,10 @@
             </Button>
             
             <StackPanel Spacing="4" HorizontalAlignment="Center" Orientation="Horizontal">
-                <Button Background="Transparent" Command="{Binding Backward}">
+                <Button Background="Transparent" Command="{Binding Navigation.Backward}">
                     <avalonia1:MaterialIcon Kind="ArrowLeft"/>
                 </Button>
-                <Button Background="Transparent" Command="{Binding Forward}">
+                <Button Background="Transparent" Command="{Binding Navigation.Forward}">
                     <avalonia1:MaterialIcon Kind="ArrowRight"/>
                 </Button>
                 <AutoCompleteBox VerticalAlignment="Center" Width="200"></AutoCompleteBox>
@@ -100,7 +100,11 @@
             
         </DockPanel>
         <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
-            <avalonia:DockControl MaxSplitAmount="3" BorderHighLightColor="{DynamicResource SystemAccentColor}" ItemsSource="{CompiledBinding PagesView}" SelectedItem="{Binding SelectedControl}">
+            <avalonia:DockControl 
+                MaxSplitAmount="3" 
+                BorderHighLightColor="{DynamicResource SystemAccentColor}" 
+                ItemsSource="{CompiledBinding PagesView}" 
+                SelectedItem="{Binding SelectedPage.Value, Mode=TwoWay}">
                  <avalonia:DockControl.TabControlStripItemTemplate> 
                      <DataTemplate> 
                          <StackPanel Orientation="Horizontal" Spacing="4"> 

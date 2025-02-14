@@ -5,38 +5,13 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(ICommandFactory))]
+[ExportCommand]
 [Shared]
-public class ChangeThemeCommandFactory : ICommandFactory
-{
-    private readonly IThemeService _svc;
-
-    [ImportingConstructor]
-    public ChangeThemeCommandFactory(IThemeService svc)
-    {
-        ArgumentNullException.ThrowIfNull(svc);
-        _svc = svc;
-    }
-
-    public ICommandInfo Info => ChangeThemeCommand.StaticInfo;
-
-    public IAsyncCommand Create()
-    {
-        return new ChangeThemeCommand(_svc);
-    }
-
-    public bool CanExecute(IRoutable context, out IRoutable? target)
-    {
-        target = context;
-        return true;
-    }
-}
-
-public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
+public class ChangeThemeCommand : NoContextCommand
 {
     #region Static
 
-    public const string Id = "theme.change";
+    public const string Id = $"{BaseId}.theme.change";
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
@@ -44,93 +19,50 @@ public class ChangeThemeCommand(IThemeService svc) : IUndoRedoCommand
         Description = RS.ChangeThemeCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ThemeLightDark,
         DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
-        Order = 0,
-        IsEditable = true,
-        Source = AppHost.Instance.AppInfo.Name,
+        Source = SystemModule.Instance,
     };
 
     #endregion
+    private readonly IThemeService _svc;
 
-    private PersistableChange<string>? _state;
-
-    public ICommandInfo Info => StaticInfo;
-
-    public IPersistable Save()
+    [ImportingConstructor]
+    public ChangeThemeCommand(IThemeService svc)
     {
-        return _state ?? throw new InvalidOperationException();
+        ArgumentNullException.ThrowIfNull(svc);
+        _svc = svc;
     }
 
-    public void Restore(IPersistable state)
-    {
-        if (state is PersistableChange<string> memento)
-        {
-            _state = memento;
-        }
-    }
+    public override ICommandInfo Info => StaticInfo;
 
-    public ValueTask Execute(
-        IRoutable context,
-        IPersistable? parameter = null,
-        CancellationToken cancel = default
+    protected override ValueTask<IPersistable?> InternalExecute(
+        IPersistable newValue,
+        CancellationToken cancel
     )
     {
-        if (parameter is Persistable<string> memento)
+        var oldValue = _svc.CurrentTheme.Value.Id;
+        if (newValue is Persistable<string> memento)
         {
             // execute with parameter
-            var oldValue = svc.CurrentTheme.Value.Id;
-            var theme = svc.Themes.FirstOrDefault(x => x.Id == memento.Value);
+            var theme = _svc.Themes.FirstOrDefault(x => x.Id == memento.Value);
             if (theme != null)
             {
-                svc.CurrentTheme.Value = theme;
+                _svc.CurrentTheme.Value = theme;
             }
-
-            _state = new PersistableChange<string>(oldValue, memento.Value);
         }
         else
         {
             // execute without parameter
-            var oldValue = svc.CurrentTheme.Value.Id;
-            var temp = svc.Themes.ToList();
-            var index = temp.IndexOf(svc.CurrentTheme.Value);
+            var temp = _svc.Themes.ToList();
+            var index = temp.IndexOf(_svc.CurrentTheme.Value);
             index++;
             if (index >= temp.Count)
             {
                 index = 0;
             }
 
-            var newValue = temp[index].Id;
-            svc.CurrentTheme.Value = temp[index];
-            _state = new PersistableChange<string>(oldValue, newValue);
+            _svc.CurrentTheme.Value = temp[index];
         }
 
-        return ValueTask.CompletedTask;
-    }
-
-    public ValueTask Undo(IRoutable? context, CancellationToken cancel = default)
-    {
-        if (_state != null)
-        {
-            var theme = svc.Themes.FirstOrDefault(x => x.Id == _state.OldValue);
-            if (theme != null)
-            {
-                svc.CurrentTheme.Value = theme;
-            }
-        }
-
-        return ValueTask.CompletedTask;
-    }
-
-    public ValueTask Redo(IRoutable context, CancellationToken cancel = default)
-    {
-        if (_state != null)
-        {
-            var theme = svc.Themes.FirstOrDefault(x => x.Id == _state.NewValue);
-            if (theme != null)
-            {
-                svc.CurrentTheme.Value = theme;
-            }
-        }
-
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult<IPersistable?>(new Persistable<string>(oldValue));
     }
 }

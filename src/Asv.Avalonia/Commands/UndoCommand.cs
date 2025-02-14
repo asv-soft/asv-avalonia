@@ -4,9 +4,14 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class UndoCommand : IAsyncCommand
+[ExportCommand]
+[Shared]
+public class UndoCommand : ContextCommand<IPage>
 {
-    public const string Id = "global.undo";
+    #region Static
+
+    public const string Id = $"{BaseId}.global.undo";
+
     public static ICommandInfo StaticInfo { get; } =
         new CommandInfo
         {
@@ -15,52 +20,19 @@ public class UndoCommand : IAsyncCommand
             Description = RS.UndoCommand_CommandInfo_Description,
             Icon = MaterialIconKind.UndoVariant,
             DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
-            Order = 0,
-            IsEditable = true,
-            Source = "Asv.Avalonia",
+            Source = SystemModule.Instance,
         };
 
-    public IPersistable Save()
-    {
-        throw new NotImplementedException();
-    }
+    #endregion
+    public override ICommandInfo Info => StaticInfo;
 
-    public void Restore(IPersistable state)
-    {
-        throw new NotImplementedException();
-    }
-
-    public ICommandInfo Info => StaticInfo;
-
-    public ValueTask Execute(
-        IRoutable context,
-        IPersistable? parameter = null,
-        CancellationToken cancel = default
+    protected override async ValueTask<IPersistable?> InternalExecute(
+        IPage context,
+        IPersistable newValue,
+        CancellationToken cancel
     )
     {
-        if (context is IPage page)
-        {
-            return page.History.UndoAsync(cancel);
-        }
-
-        return ValueTask.CompletedTask;
-    }
-}
-
-[ExportCommand]
-[Shared]
-public class UndoCommandFactory : ICommandFactory
-{
-    public ICommandInfo Info => UndoCommand.StaticInfo;
-
-    public IAsyncCommand Create()
-    {
-        return new UndoCommand();
-    }
-
-    public bool CanExecute(IRoutable context, out IRoutable? target)
-    {
-        target = context.GetAncestorsToRoot().FirstOrDefault(x => x is IPage);
-        return target != null;
+        await context.History.UndoAsync(cancel);
+        return null;
     }
 }

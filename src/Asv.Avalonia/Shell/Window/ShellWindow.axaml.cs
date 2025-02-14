@@ -9,7 +9,7 @@ using ZLogger;
 namespace Asv.Avalonia;
 
 [Export]
-public partial class ShellWindow : Window
+public partial class ShellWindow : Window, IExportable
 {
     private readonly IConfiguration? _configuration;
     private readonly Subject<Unit>? _savePosition;
@@ -148,4 +148,6 @@ public partial class ShellWindow : Window
 
         _savePosition?.OnNext(Unit.Default);
     }
+
+    public IExportInfo Source => SystemModule.Instance;
 }
