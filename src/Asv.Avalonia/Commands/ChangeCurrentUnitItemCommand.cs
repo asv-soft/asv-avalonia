@@ -4,34 +4,9 @@ using InvalidOperationException = System.InvalidOperationException;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(ICommandFactory))]
+[ExportCommand]
 [Shared]
-public class ChangeCurrentUnitItemCommandFactory : ICommandFactory
-{
-    private readonly IUnitService _svc;
-
-    [ImportingConstructor]
-    public ChangeCurrentUnitItemCommandFactory(IUnitService svc)
-    {
-        ArgumentNullException.ThrowIfNull(svc);
-        _svc = svc;
-    }
-
-    public ICommandInfo Info => ChangeCurrentUnitItemCommand.StaticInfo;
-
-    public IAsyncCommand Create()
-    {
-        return new ChangeCurrentUnitItemCommand(_svc);
-    }
-
-    public bool CanExecute(IRoutable context, out IRoutable? target)
-    {
-        target = context;
-        return true;
-    }
-}
-
-public class ChangeCurrentUnitItemCommand(IUnitService svc) : IUndoRedoCommand
+public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
 {
     #region Static
 
@@ -43,95 +18,44 @@ public class ChangeCurrentUnitItemCommand(IUnitService svc) : IUndoRedoCommand
         Description = RS.ChangeCurrentUnitItemCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Settings,
         DefaultHotKey = null,
-        Order = 0,
+        Source = SystemModule.Instance,
     };
 
     #endregion
 
-    private PersistableChange<UnitDelegate>? _state;
+    private readonly IUnitService _svc;
 
-    public ICommandInfo Info => StaticInfo;
-
-    public IPersistable Save()
+    [ImportingConstructor]
+    public ChangeCurrentUnitItemCommand(IUnitService svc)
     {
-        return _state ?? throw new InvalidOperationException();
+        ArgumentNullException.ThrowIfNull(svc);
+        _svc = svc;
     }
 
-    public void Restore(IPersistable state)
-    {
-        if (state is PersistableChange<UnitDelegate> memento)
-        {
-            _state = memento;
-        }
-    }
+    public override ICommandInfo Info => StaticInfo;
 
-    public ValueTask Execute(
-        IRoutable context,
-        IPersistable? parameter = null,
-        CancellationToken cancel = default
+    protected override ValueTask<IPersistable?> InternalExecute(
+        IPersistable newValue,
+        CancellationToken cancel
     )
     {
-        if (parameter is Persistable<UnitDelegate> memento)
+        if (newValue is not Persistable<UnitDelegate> memento)
         {
-            // execute with parameter
-            svc.Units.TryGetValue(memento.Value.unitId, out var unit);
-            ArgumentNullException.ThrowIfNull(unit);
-
-            var oldValue = new UnitDelegate(unit.UnitId, unit.Current.Value.UnitItemId);
-            unit.AvailableUnits.TryGetValue(memento.Value.unitItemId, out var unitItem);
-            if (unitItem is not null)
-            {
-                unit.Current.Value = unitItem;
-            }
-
-            _state = new PersistableChange<UnitDelegate>(oldValue, memento.Value);
-        }
-        else
-        {
-            // execute without parameter
-            return ValueTask.FromException(
-                new InvalidOperationException("Unable to perform action. Pass valid parameter.")
+            return ValueTask.FromException<IPersistable?>(
+                new InvalidOperationException("Unable to perform action. Pass a valid parameter.")
             );
         }
 
-        return ValueTask.CompletedTask;
-    }
-
-    public ValueTask Undo(IRoutable? context, CancellationToken cancel = default)
-    {
-        if (_state is null)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        svc.Units.TryGetValue(_state.OldValue.unitId, out var unit);
+        _svc.Units.TryGetValue(memento.Value.unitId, out var unit);
         ArgumentNullException.ThrowIfNull(unit);
 
-        unit.AvailableUnits.TryGetValue(_state.OldValue.unitItemId, out var unitItem);
+        var oldValue = new UnitDelegate(unit.UnitId, unit.Current.Value.UnitItemId);
+        unit.AvailableUnits.TryGetValue(memento.Value.unitItemId, out var unitItem);
         if (unitItem is not null)
         {
             unit.Current.Value = unitItem;
         }
 
-        return ValueTask.CompletedTask;
-    }
-
-    public ValueTask Redo(IRoutable context, CancellationToken cancel = default)
-    {
-        if (_state is null)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        svc.Units.TryGetValue(_state.OldValue.unitId, out var unit);
-        ArgumentNullException.ThrowIfNull(unit);
-
-        unit.AvailableUnits.TryGetValue(_state.NewValue.unitItemId, out var unitItem);
-        if (unitItem is not null)
-        {
-            unit.Current.Value = unitItem;
-        }
-
-        return ValueTask.CompletedTask;
+        return ValueTask.FromResult<IPersistable?>(new Persistable<UnitDelegate>(oldValue));
     }
 }
