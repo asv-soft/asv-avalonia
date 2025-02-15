@@ -602,5 +602,35 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("FieldStrength_UnitItem_Symbol", resourceCulture);
             }
         }
+        
+        public static string Power_Name {
+            get {
+                return ResourceManager.GetString("Power_Name", resourceCulture);
+            }
+        }
+        
+        public static string Power_Description {
+            get {
+                return ResourceManager.GetString("Power_Description", resourceCulture);
+            }
+        }
+        
+        public static string Dbm_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Dbm_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Dbm_Power_Description {
+            get {
+                return ResourceManager.GetString("Dbm_Power_Description", resourceCulture);
+            }
+        }
+        
+        public static string Dbm_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Dbm_UnitItem_Symbol", resourceCulture);
+            }
+        }
     }
 }

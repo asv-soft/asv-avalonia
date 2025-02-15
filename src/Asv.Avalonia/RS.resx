@@ -297,4 +297,19 @@
     <data name="FieldStrength_UnitItem_Symbol" xml:space="preserve">
         <value>µV/m</value>
     </data>
+    <data name="Power_Name" xml:space="preserve">
+        <value>Power</value>
+    </data>
+    <data name="Power_Description" xml:space="preserve">
+        <value>Power unit</value>
+    </data>
+    <data name="Dbm_UnitItem_Name" xml:space="preserve">
+        <value>Decibel to 1 milliwatt</value>
+    </data>
+    <data name="Dbm_Power_Description" xml:space="preserve">
+        <value>Power in decibels to 1 milliwatt</value>
+    </data>
+    <data name="Dbm_UnitItem_Symbol" xml:space="preserve">
+        <value>dBm</value>
+    </data>
 </root>

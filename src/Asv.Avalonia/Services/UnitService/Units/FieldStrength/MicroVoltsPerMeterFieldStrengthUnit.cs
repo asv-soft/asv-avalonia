@@ -5,7 +5,7 @@ namespace Asv.Avalonia.FieldStrength;
 [ExportUnitItem(FieldStrengthBase.Id)]
 [Shared]
 [method: ImportingConstructor]
-public class MicroVoltsPerMeterFieldStrengthUnit() : UnitItemBase(1)
+public sealed class MicroVoltsPerMeterFieldStrengthUnit() : UnitItemBase(1)
 {
     public const string Id = $"{FieldStrengthBase.Id}.mvpm";
 

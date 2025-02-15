@@ -2,37 +2,34 @@ using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
-namespace Asv.Avalonia.FieldStrength;
+namespace Asv.Avalonia.Power;
 
-internal sealed class FieldStrengthConfig
+internal sealed class PowerConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public sealed class FieldStrengthBase : UnitBase
+public sealed class PowerBase : UnitBase
 {
-    public const string Id = "field.strength";
+    public const string Id = "power";
 
-    public override MaterialIconKind Icon => MaterialIconKind.HighVoltage;
-    public override string Name => RS.FieldStrength_Name;
-    public override string Description => RS.FieldStrength_Description;
+    public override MaterialIconKind Icon => MaterialIconKind.LightningBolt;
+    public override string Name => RS.Power_Name;
+    public override string Description => RS.Power_Description;
     public override string UnitId => Id;
 
-    private readonly FieldStrengthConfig? _config;
+    private readonly PowerConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
     [ImportingConstructor]
-    public FieldStrengthBase(
-        [Import] IConfiguration cfgSvc,
-        [ImportMany(Id)] IEnumerable<IUnitItem> items
-    )
+    public PowerBase([Import] IConfiguration cfgSvc, [ImportMany(Id)] IEnumerable<IUnitItem> items)
         : base(items)
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);
         _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<FieldStrengthConfig>();
+        _config = cfgSvc.Get<PowerConfig>();
         if (_config.CurrentUnitItemId is null)
         {
             return;

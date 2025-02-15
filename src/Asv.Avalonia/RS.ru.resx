@@ -290,4 +290,19 @@
     <data name="FieldStrength_UnitItem_Symbol" xml:space="preserve">
         <value>мкВ/м</value>
     </data>
+    <data name="Power_Name" xml:space="preserve">
+        <value>Мощность</value>
+    </data>
+    <data name="Power_Description" xml:space="preserve">
+        <value>Единица измерения мощности</value>
+    </data>
+    <data name="Dbm_UnitItem_Name" xml:space="preserve">
+        <value>Децибел по отношению к 1 милливатт</value>
+    </data>
+    <data name="Dbm_UnitItem_Symbol" xml:space="preserve">
+        <value>дБм</value>
+    </data>
+    <data name="Dbm_Power_Description" xml:space="preserve">
+        <value>Мощность в децибеллах по отношению к 1 милливатту</value>
+    </data>
 </root>
