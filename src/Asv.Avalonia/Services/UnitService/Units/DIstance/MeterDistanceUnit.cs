@@ -11,7 +11,7 @@ public sealed class MeterDistanceUnit() : UnitItemBase(1.0)
 
     public override string UnitItemId => Id;
     public override string Name => RS.Meter_UnitItem_Name;
-    public override string Description => RS.MeterDistance_Description;
+    public override string Description => RS.Meter_Distance_Description;
     public override string Symbol => RS.Meter_UnitItem_Symbol;
     public override bool IsInternationalSystemUnit => true;
 }

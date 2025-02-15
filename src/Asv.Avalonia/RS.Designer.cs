@@ -129,9 +129,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string MeterDistance_Description {
+        public static string Meter_Distance_Description {
             get {
-                return ResourceManager.GetString("MeterDistance_Description", resourceCulture);
+                return ResourceManager.GetString("Meter_Distance_Description", resourceCulture);
             }
         }
         
@@ -429,9 +429,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string InPartsDdmGp_Description {
+        public static string InParts_DdmGp_Description {
             get {
-                return ResourceManager.GetString("InPartsDdmGp_Description", resourceCulture);
+                return ResourceManager.GetString("InParts_DdmGp_Description", resourceCulture);
             }
         }
         
@@ -441,9 +441,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string PercentDdmGp_Description {
+        public static string Percent_DdmGp_Description {
             get {
-                return ResourceManager.GetString("PercentDdmGp_Description", resourceCulture);
+                return ResourceManager.GetString("Percent_DdmGp_Description", resourceCulture);
             }
         }
         
@@ -570,6 +570,36 @@ namespace Asv.Avalonia {
         public static string Dms_UnitItem_Symbol {
             get {
                 return ResourceManager.GetString("Dms_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string FieldStrength_Name {
+            get {
+                return ResourceManager.GetString("FieldStrength_Name", resourceCulture);
+            }
+        }
+        
+        public static string FieldStrength_Description {
+            get {
+                return ResourceManager.GetString("FieldStrength_Description", resourceCulture);
+            }
+        }
+        
+        public static string MicroVoltsPerMeter_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("MicroVoltsPerMeter_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string MicroVoltsPerMeter_FieldStrength_Description {
+            get {
+                return ResourceManager.GetString("MicroVoltsPerMeter_FieldStrength_Description", resourceCulture);
+            }
+        }
+        
+        public static string FieldStrength_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("FieldStrength_UnitItem_Symbol", resourceCulture);
             }
         }
     }

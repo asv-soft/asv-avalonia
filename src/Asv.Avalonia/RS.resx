@@ -60,7 +60,7 @@
     <data name="Distance_Description" xml:space="preserve">
         <value>Distance unit</value>
     </data>
-    <data name="MeterDistance_Description" xml:space="preserve">
+    <data name="Meter_Distance_Description" xml:space="preserve">
         <value>Distance in meters</value>
     </data>
     <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
@@ -210,13 +210,13 @@
     <data name="InParts_UnitItem_Name" xml:space="preserve">
         <value>In parts</value>
     </data>
-    <data name="InPartsDdmGp_Description" xml:space="preserve">
+    <data name="InParts_DdmGp_Description" xml:space="preserve">
         <value>DDM (Gp) in parts</value>
     </data>
     <data name="Percent_UnitItem_Name" xml:space="preserve">
         <value>In Percents</value>
     </data>
-    <data name="PercentDdmGp_Description" xml:space="preserve">
+    <data name="Percent_DdmGp_Description" xml:space="preserve">
         <value>DDM (Gp) in percents</value>
     </data>
     <data name="Ddm_µA_Symbol" xml:space="preserve">
@@ -281,5 +281,20 @@
     </data>
     <data name="Dms_UnitItem_Symbol" xml:space="preserve">
         <value>D]°[M]′[S]′′</value>
+    </data>
+    <data name="FieldStrength_Name" xml:space="preserve">
+        <value>Field strength</value>
+    </data>
+    <data name="FieldStrength_Description" xml:space="preserve">
+        <value>Field strength unit</value>
+    </data>
+    <data name="MicroVoltsPerMeter_UnitItem_Name" xml:space="preserve">
+        <value>Microvolts per meter</value>
+    </data>
+    <data name="MicroVoltsPerMeter_FieldStrength_Description" xml:space="preserve">
+        <value>Field strength in microvolts per meter</value>
+    </data>
+    <data name="FieldStrength_UnitItem_Symbol" xml:space="preserve">
+        <value>µV/m</value>
     </data>
 </root>

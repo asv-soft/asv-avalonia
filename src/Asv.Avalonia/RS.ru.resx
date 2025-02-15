@@ -53,7 +53,7 @@
     <data name="Distance_Description" xml:space="preserve">
         <value>Единица измерения расстояния</value>
     </data>
-    <data name="MeterDistance_Description" xml:space="preserve">
+    <data name="Meter_Distance_Description" xml:space="preserve">
         <value>Расстояние в метрах</value>
     </data>
     <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
@@ -200,13 +200,13 @@
     <data name="InParts_UnitItem_Name" xml:space="preserve">
         <value>В частях</value>
     </data>
-    <data name="InPartsDdmGp_Description" xml:space="preserve">
+    <data name="InParts_DdmGp_Description" xml:space="preserve">
         <value>РГМ (Gp) в частях</value>
     </data>
     <data name="Percent_UnitItem_Name" xml:space="preserve">
         <value>В процентах</value>
     </data>
-    <data name="PercentDdmGp_Description" xml:space="preserve">
+    <data name="Percent_DdmGp_Description" xml:space="preserve">
         <value>РГМ (Gp) в процентах</value>
     </data>
     <data name="Ddm_µA_Symbol" xml:space="preserve">
@@ -274,5 +274,20 @@
     </data>
     <data name="Dms_Angle_Description" xml:space="preserve">
         <value>Угол в градусах, минутах и секундах</value>
+    </data>
+    <data name="FieldStrength_Name" xml:space="preserve">
+        <value>Напряженность поля</value>
+    </data>
+    <data name="FieldStrength_Description" xml:space="preserve">
+        <value>Единица измерения напряженности поля</value>
+    </data>
+    <data name="MicroVoltsPerMeter_UnitItem_Name" xml:space="preserve">
+        <value>Микровольт на метр</value>
+    </data>
+    <data name="MicroVoltsPerMeter_FieldStrength_Description" xml:space="preserve">
+        <value>Напряженность поля в микровольтах на метр</value>
+    </data>
+    <data name="FieldStrength_UnitItem_Symbol" xml:space="preserve">
+        <value>мкВ/м</value>
     </data>
 </root>
