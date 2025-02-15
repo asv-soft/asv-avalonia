@@ -554,5 +554,23 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("Ms_UnitItem_Symbol", resourceCulture);
             }
         }
+        
+        public static string Dms_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Dms_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Dms_Angle_Description {
+            get {
+                return ResourceManager.GetString("Dms_Angle_Description", resourceCulture);
+            }
+        }
+        
+        public static string Dms_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Dms_UnitItem_Symbol", resourceCulture);
+            }
+        }
     }
 }

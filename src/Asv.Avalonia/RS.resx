@@ -273,4 +273,13 @@
     <data name="Ms_UnitItem_Symbol" xml:space="preserve">
         <value>[M]′[S]′′</value>
     </data>
+    <data name="Dms_UnitItem_Name" xml:space="preserve">
+        <value>Degrees, minutes and seconds</value>
+    </data>
+    <data name="Dms_Angle_Description" xml:space="preserve">
+        <value>Angle in degrees, minutes and seconds</value>
+    </data>
+    <data name="Dms_UnitItem_Symbol" xml:space="preserve">
+        <value>D]°[M]′[S]′′</value>
+    </data>
 </root>

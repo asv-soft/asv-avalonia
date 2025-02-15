@@ -6,31 +6,31 @@ namespace Asv.Avalonia;
 [ExportUnitItem(AngleBase.Id)]
 [Shared]
 [method: ImportingConstructor]
-public sealed class MsAngleUnit() : UnitItemBase(1)
+public class DmsAngleUnit() : UnitItemBase(1)
 {
-    public const string Id = $"{AngleBase.Id}.ms";
+    public const string Id = $"{AngleBase.Id}.dms";
 
     public override string UnitItemId => Id;
-    public override string Name => RS.Ms_UnitItem_Name;
-    public override string Description => RS.Ms_Angle_Description;
-    public override string Symbol => RS.Ms_UnitItem_Symbol;
+    public override string Name => RS.Dms_UnitItem_Name;
+    public override string Description => RS.Dms_Angle_Description;
+    public override string Symbol => RS.Dms_UnitItem_Symbol;
     public override bool IsInternationalSystemUnit => false;
 
     public override double Parse(string? value)
     {
-        return value != null && AngleMs.TryParse(value, out var result) ? result : double.NaN;
+        return value != null && Angle.TryParse(value, out var result) ? result : double.NaN;
     }
 
     public override bool IsValid(string? value)
     {
-        return value != null && AngleMs.IsValid(value);
+        return value != null && Angle.IsValid(value);
     }
 
     public override string? GetValidationErrorMessage(string? value)
     {
         return string.IsNullOrWhiteSpace(value)
             ? RS.UnitItemBase_Validation_ValueIsEmptyError
-            : AngleMs.GetErrorMessage(value);
+            : Angle.GetErrorMessage(value);
     }
 
     /// <summary>
@@ -41,7 +41,7 @@ public sealed class MsAngleUnit() : UnitItemBase(1)
     /// <returns>Unit item in string format with its units.</returns>
     public override string Print(double value, string? format = null)
     {
-        return AngleMs.PrintMs(value);
+        return Angle.PrintDms(value);
     }
 
     /// <summary>

@@ -266,4 +266,13 @@
     <data name="Ms_UnitItem_Symbol" xml:space="preserve">
         <value>[М]′[С]′′</value>
     </data>
+    <data name="Dms_UnitItem_Symbol" xml:space="preserve">
+        <value>[Г]°[М]′[С]′'</value>
+    </data>
+    <data name="Dms_UnitItem_Name" xml:space="preserve">
+        <value>Градусы, минуты и секунды</value>
+    </data>
+    <data name="Dms_Angle_Description" xml:space="preserve">
+        <value>Угол в градусах, минутах и секундах</value>
+    </data>
 </root>
