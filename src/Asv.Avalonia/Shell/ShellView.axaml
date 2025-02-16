@@ -74,7 +74,7 @@
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
-            <Button Background="Transparent" DockPanel.Dock="Right">
+            <Button Background="Transparent" Command="{Binding Settings}"  DockPanel.Dock="Right">
                 <avalonia1:MaterialIcon Kind="Cog"/>
             </Button>
             

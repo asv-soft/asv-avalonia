@@ -26,7 +26,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         ErrorState = new BindableReactiveProperty<ShellErrorState>(ShellErrorState.Normal);
         Close = new ReactiveCommand((_, c) => CloseAsync(c));
         Title = new BindableReactiveProperty<string>();
-
+        Settings = new ReactiveCommand(_ => Navigate(SettingsPageViewModel.PageId));
         SelectedPage = new BindableReactiveProperty<IPage>();
         MainMenu = new ObservableList<IMenuItem>();
         MainMenuView = new MenuTree(MainMenu).DisposeItWith(Disposable);
@@ -43,6 +43,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
     #region Close
     public ReactiveCommand Close { get; }
+    public ReactiveCommand Settings { get; }
 
     protected virtual ValueTask CloseAsync(CancellationToken cancellationToken)
     {

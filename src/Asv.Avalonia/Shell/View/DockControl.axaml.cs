@@ -43,6 +43,15 @@ public class DockControl : SelectingItemsControl
         {
             CreateTabs();
         }
+
+        if (change.Property == SelectedItemProperty)
+        {
+            var control = change.NewValue as IPage;
+            if (_shellItems != null)
+            {
+                _shellItems.First(shellItem => shellItem.TabControl.Content == control).TabControl.IsSelected = true; 
+            }
+        }
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
