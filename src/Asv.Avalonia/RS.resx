@@ -96,7 +96,7 @@
     <data name="SettingsKeyMapView_Header_DefaultHotKey" xml:space="preserve">
         <value>Default hotKey</value>
     </data>
-    <data name="HomePageVIewModel_Title" xml:space="preserve">
+    <data name="HomePageViewModel_Title" xml:space="preserve">
         <value>Home</value>
     </data>
     <data name="SettingsPageViewModel_Title" xml:space="preserve">
@@ -131,5 +131,11 @@
     </data>
     <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
         <value>Reset all to default </value>
+    </data>
+    <data name="DocumentPageViewModel_Title" xml:space="preserve">
+        <value>Document</value>
+    </data>
+    <data name="MapExamplePageViewModel_Title" xml:space="preserve">
+        <value>Map Example</value>
     </data>
 </root>

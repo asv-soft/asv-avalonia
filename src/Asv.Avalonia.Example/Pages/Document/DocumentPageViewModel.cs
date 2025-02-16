@@ -13,15 +13,14 @@ public class DocumentPageViewModel : PageViewModel<DocumentPageViewModel>
         : this(DesignTime.CommandService)
     {
         DesignTime.ThrowIfNotDesignMode();
-        
-         // Title.OnNext(RS.DocumentPageViewModel_Title);
+        Title.OnNext(RS.DocumentPageViewModel_Title);
     }
 
     [ImportingConstructor]
     public DocumentPageViewModel(ICommandService cmd)
         : base(PageId, cmd)
     {
-         // Title.OnNext(RS.DocumentPageViewModel_Title);
+        Title.OnNext(RS.DocumentPageViewModel_Title);
     }
 
     protected override DocumentPageViewModel GetContext()
@@ -29,7 +28,9 @@ public class DocumentPageViewModel : PageViewModel<DocumentPageViewModel>
         return this;
     }
 
-    protected override void AfterLoadExtensions() { }
+    protected override void AfterLoadExtensions()
+    {
+    }
 
     public override ValueTask<IRoutable> Navigate(string id)
     {

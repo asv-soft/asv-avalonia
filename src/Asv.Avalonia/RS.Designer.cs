@@ -114,11 +114,29 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Document.
+        /// </summary>
+        public static string DocumentPageViewModel_Title {
+            get {
+                return ResourceManager.GetString("DocumentPageViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
-        public static string HomePageVIewModel_Title {
+        public static string HomePageViewModel_Title {
             get {
-                return ResourceManager.GetString("HomePageVIewModel_Title", resourceCulture);
+                return ResourceManager.GetString("HomePageViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Map Example.
+        /// </summary>
+        public static string MapExamplePageViewModel_Title {
+            get {
+                return ResourceManager.GetString("MapExamplePageViewModel_Title", resourceCulture);
             }
         }
         
