@@ -13,7 +13,8 @@ public class MapView : SelectingItemsControl
     public MapView()
     {
         Provider = new BingTileProvider(
-            "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg");
+            "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
+        );
 
         PointerPressed += OnPointerPressed;
         PointerReleased += OnPointerReleased;
