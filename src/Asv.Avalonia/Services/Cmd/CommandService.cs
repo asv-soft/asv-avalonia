@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using System.Composition;
-using System.Reactive.Disposables;
 using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Controls;
@@ -68,7 +67,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 return;
             }
 
-            if (_nav.SelectedControl.CurrentValue == null)
+            if (_nav.SelectedControl.CurrentValue is null)
             {
                 return;
             }
@@ -129,13 +128,12 @@ public class CommandService : AsyncDisposableOnce, ICommandService
     {
         var keyVsCommandBuilder = ImmutableDictionary.CreateBuilder<KeyGesture, IAsyncCommand>();
         var commandVsKeyBuilder = ImmutableDictionary.CreateBuilder<string, KeyGesture>();
-
-        // load default hot keys
+        
+        // define hotkeys according to loaded CommandInfo
         foreach (var value in _commands.Values)
         {
             if (value.Info.DefaultHotKey == null)
             {
-                // skip commands without hot keys
                 continue;
             }
 
@@ -150,8 +148,8 @@ public class CommandService : AsyncDisposableOnce, ICommandService
             modifyConfig(config.HotKeys);
             configChanged = true;
         }
-
-        // load custom hot keys from config
+        
+        // load hotkeys from config
         foreach (var (commandId, hotKey) in config.HotKeys)
         {
             if (string.IsNullOrWhiteSpace(hotKey))
@@ -164,12 +162,12 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 continue;
             }
 
-            KeyGesture keyGesture;
+            KeyGesture keyGesture; 
             try
             {
-                keyGesture = KeyGesture.Parse(hotKey);
+                keyGesture = KeyGesture.Parse(hotKey); // ensure a value from config is valid
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 _logger.LogWarning(
                     "Invalid hot key {hotKey} for command {commandId} at config",
@@ -192,10 +190,10 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 continue;
             }
 
-            if (command.Info.DefaultHotKey == keyGesture)
+            if (keyVsCommandBuilder.Keys.Any(c => c == keyGesture)) 
             {
                 _logger.LogWarning(
-                    "Hot key {hotKey} for command {commandId} is default => remove it from config",
+                    "Hot key {hotKey} already using by another command can't apply it for command {commandId} => remove it from config",
                     hotKey,
                     commandId
                 );
@@ -203,7 +201,8 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 configChanged = true;
                 continue;
             }
-
+            
+            command.Info.CustomHotKey = keyGesture; // set the custom value manualy
             commandVsKeyBuilder[commandId] = keyGesture;
             keyVsCommandBuilder[keyGesture] = command;
         }
