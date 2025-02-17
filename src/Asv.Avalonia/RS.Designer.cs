@@ -752,5 +752,41 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("Dms_Longitude_Description", resourceCulture);
             }
         }
+        
+        public static string Phase_Name {
+            get {
+                return ResourceManager.GetString("Phase_Name", resourceCulture);
+            }
+        }
+        
+        public static string Phase_Description {
+            get {
+                return ResourceManager.GetString("Phase_Description", resourceCulture);
+            }
+        }
+        
+        public static string Degree_Phase_Description {
+            get {
+                return ResourceManager.GetString("Degree_Phase_Description", resourceCulture);
+            }
+        }
+        
+        public static string Radian_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Radian_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Radian_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Radian_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string Radian_Phase_Description {
+            get {
+                return ResourceManager.GetString("Radian_Phase_Description", resourceCulture);
+            }
+        }
     }
 }

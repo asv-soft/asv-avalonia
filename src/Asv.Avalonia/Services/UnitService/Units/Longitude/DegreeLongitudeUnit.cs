@@ -4,9 +4,9 @@ namespace Asv.Avalonia;
 
 [ExportUnitItem(LongitudeBase.Id)]
 [Shared]
-public sealed class DegLongitudeUnit : LongitudeUnitItemBase
+public sealed class DegreeLongitudeUnit : LongitudeUnitItemBase
 {
-    public const string Id = $"{LongitudeBase.Id}.deg";
+    public const string Id = $"{LongitudeBase.Id}.degree";
 
     public override string UnitItemId => Id;
     public override string Name => RS.Degree_UnitItem_Name;

@@ -365,4 +365,22 @@
     <data name="Dms_Longitude_Description" xml:space="preserve">
         <value>Долгота в градусах, минутах и секундах</value>
     </data>
+    <data name="Phase_Description" xml:space="preserve">
+        <value>Единица измерения фазы</value>
+    </data>
+    <data name="Phase_Name" xml:space="preserve">
+        <value>Фаза</value>
+    </data>
+    <data name="Degree_Phase_Description" xml:space="preserve">
+        <value>Фаза в градусах</value>
+    </data>
+    <data name="Radian_UnitItem_Name" xml:space="preserve">
+        <value>Радиан</value>
+    </data>
+    <data name="Radian_UnitItem_Symbol" xml:space="preserve">
+        <value>Рад</value>
+    </data>
+    <data name="Radian_Phase_Description" xml:space="preserve">
+        <value>Фаза в радианах</value>
+    </data>
 </root>

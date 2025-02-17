@@ -372,4 +372,22 @@
     <data name="Dms_Longitude_Description" xml:space="preserve">
         <value>Longitude in degrees, minutes and seconds</value>
     </data>
+    <data name="Phase_Name" xml:space="preserve">
+        <value>Phase</value>
+    </data>
+    <data name="Phase_Description" xml:space="preserve">
+        <value>Phase unit</value>
+    </data>
+    <data name="Degree_Phase_Description" xml:space="preserve">
+        <value>Phase in degrees</value>
+    </data>
+    <data name="Radian_UnitItem_Name" xml:space="preserve">
+        <value>Radian</value>
+    </data>
+    <data name="Radian_UnitItem_Symbol" xml:space="preserve">
+        <value>Rad</value>
+    </data>
+    <data name="Radian_Phase_Description" xml:space="preserve">
+        <value>Phase in radian</value>
+    </data>
 </root>
