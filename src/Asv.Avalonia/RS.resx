@@ -399,4 +399,28 @@
     <data name="Percent_Sdm_Description" xml:space="preserve">
         <value>SDM in percents</value>
     </data>
+    <data name="Temperature_Name" xml:space="preserve">
+        <value>Temperature</value>
+    </data>
+    <data name="Temperature_Description" xml:space="preserve">
+        <value>Temperature unit</value>
+    </data>
+    <data name="Kelvin_UnitItem_Name" xml:space="preserve">
+        <value>Kelvin</value>
+    </data>
+    <data name="Kelvin_Temperature_Description" xml:space="preserve">
+        <value>Temperature in kelvin</value>
+    </data>
+    <data name="Celsius_UnitItem_Name" xml:space="preserve">
+        <value>Celsius</value>
+    </data>
+    <data name="Celsius_Temperature_Description" xml:space="preserve">
+        <value>Temperature in celsius</value>
+    </data>
+    <data name="Fahrenheit_UnitItem_Name" xml:space="preserve">
+        <value>Fahrenheit</value>
+    </data>
+    <data name="Fahrenheit_Temperature_Description" xml:space="preserve">
+        <value>Temperature in fahrenheit</value>
+    </data>
 </root>

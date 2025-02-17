@@ -13,7 +13,7 @@ public abstract class LongitudeUnitItemBase() : UnitItemBase(1)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return new UnitItemValueIsEmptyError();
+            return new UnitItemValueIsNullOrEmptyError();
         }
 
         var msg = GeoPointLongitude.GetErrorMessage(value);

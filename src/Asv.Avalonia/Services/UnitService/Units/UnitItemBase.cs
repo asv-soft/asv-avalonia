@@ -31,7 +31,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return new UnitItemValueIsEmptyError();
+            return new UnitItemValueIsNullOrEmptyError();
         }
 
         value = value.Trim().Replace(',', '.');

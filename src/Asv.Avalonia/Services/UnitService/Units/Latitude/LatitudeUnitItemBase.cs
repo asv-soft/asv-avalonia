@@ -13,7 +13,7 @@ public abstract class LatitudeUnitItemBase() : UnitItemBase(1)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return new UnitItemValueIsEmptyError();
+            return new UnitItemValueIsNullOrEmptyError();
         }
 
         var msg = GeoPointLatitude.GetErrorMessage(value);

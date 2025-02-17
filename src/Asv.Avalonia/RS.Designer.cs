@@ -806,5 +806,53 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("Percent_Sdm_Description", resourceCulture);
             }
         }
+        
+        public static string Temperature_Name {
+            get {
+                return ResourceManager.GetString("Temperature_Name", resourceCulture);
+            }
+        }
+        
+        public static string Temperature_Description {
+            get {
+                return ResourceManager.GetString("Temperature_Description", resourceCulture);
+            }
+        }
+        
+        public static string Kelvin_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Kelvin_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Kelvin_Temperature_Description {
+            get {
+                return ResourceManager.GetString("Kelvin_Temperature_Description", resourceCulture);
+            }
+        }
+        
+        public static string Celsius_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Celsius_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Celsius_Temperature_Description {
+            get {
+                return ResourceManager.GetString("Celsius_Temperature_Description", resourceCulture);
+            }
+        }
+        
+        public static string Fahrenheit_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Fahrenheit_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Fahrenheit_Temperature_Description {
+            get {
+                return ResourceManager.GetString("Fahrenheit_Temperature_Description", resourceCulture);
+            }
+        }
     }
 }

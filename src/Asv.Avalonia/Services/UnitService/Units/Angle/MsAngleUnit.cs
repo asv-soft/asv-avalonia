@@ -30,7 +30,7 @@ public sealed class MsAngleUnit() : UnitItemBase(1)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return new UnitItemValueIsEmptyError();
+            return new UnitItemValueIsNullOrEmptyError();
         }
 
         var msg = AngleMs.GetErrorMessage(value);

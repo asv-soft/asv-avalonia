@@ -30,7 +30,7 @@ public class DmsAngleUnit() : UnitItemBase(1)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return new UnitItemValueIsEmptyError();
+            return new UnitItemValueIsNullOrEmptyError();
         }
 
         var msg = Angle.GetErrorMessage(value);
