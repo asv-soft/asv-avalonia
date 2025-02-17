@@ -18,7 +18,12 @@ public class MapBackground : Control
 
     static MapBackground()
     {
-        AffectsRender<MapBackground>(BackgroundProperty, ZoomProperty, ProviderProperty, CenterMapProperty);
+        AffectsRender<MapBackground>(
+            BackgroundProperty,
+            ZoomProperty,
+            ProviderProperty,
+            CenterMapProperty
+        );
     }
 
     public MapBackground()
@@ -65,8 +70,6 @@ public class MapBackground : Control
         var tileSize = Provider.TileSize;
         var zoom = Zoom;
         var tiles = 1 << zoom;
-        
-        
 
         var tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
         var tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
