@@ -4,27 +4,27 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-internal sealed class FieldStrengthConfig
+internal sealed class FrequencyConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public sealed class FieldStrengthBase : UnitBase
+public sealed class FrequencyBase : UnitBase
 {
-    public const string Id = "field.strength";
+    public const string Id = "frequency";
 
-    public override MaterialIconKind Icon => MaterialIconKind.HighVoltage;
-    public override string Name => RS.FieldStrength_Name;
-    public override string Description => RS.FieldStrength_Description;
+    public override MaterialIconKind Icon => MaterialIconKind.Frequency;
+    public override string Name => RS.Frequency_Name;
+    public override string Description => RS.Frequency_Description;
     public override string UnitId => Id;
 
-    private readonly FieldStrengthConfig? _config;
+    private readonly FrequencyConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
     [ImportingConstructor]
-    public FieldStrengthBase(
+    public FrequencyBase(
         [Import] IConfiguration cfgSvc,
         [ImportMany(Id)] IEnumerable<IUnitItem> items
     )
@@ -32,7 +32,7 @@ public sealed class FieldStrengthBase : UnitBase
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);
         _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<FieldStrengthConfig>();
+        _config = cfgSvc.Get<FrequencyConfig>();
         if (_config.CurrentUnitItemId is null)
         {
             return;

@@ -312,4 +312,46 @@
     <data name="Dbm_UnitItem_Symbol" xml:space="preserve">
         <value>dBm</value>
     </data>
+    <data name="Frequency_Name" xml:space="preserve">
+        <value>Frequency</value>
+    </data>
+    <data name="Frequency_Description" xml:space="preserve">
+        <value>Frequency unit</value>
+    </data>
+    <data name="Hertz_UnitItem_Name" xml:space="preserve">
+        <value>Hertz</value>
+    </data>
+    <data name="Hertz_Frequency_Description" xml:space="preserve">
+        <value>Frequency in hertz</value>
+    </data>
+    <data name="Hertz_UnitItem_Symbol" xml:space="preserve">
+        <value>Hz</value>
+    </data>
+    <data name="Gigahertz_UnitItem_Name" xml:space="preserve">
+        <value>Gigahertz</value>
+    </data>
+    <data name="Gigahertz_Frequency_Description" xml:space="preserve">
+        <value>Frequency in gigahertz</value>
+    </data>
+    <data name="Gigahertz_UnitItem_Symbol" xml:space="preserve">
+        <value>GHz</value>
+    </data>
+    <data name="Kilohertz_UnitItem_Name" xml:space="preserve">
+        <value>Kilohertz</value>
+    </data>
+    <data name="Kilohertz_UnitItem_Symbol" xml:space="preserve">
+        <value>kHz</value>
+    </data>
+    <data name="Kilohertz_Frequency_Description" xml:space="preserve">
+        <value>Frequency in kilohertz</value>
+    </data>
+    <data name="Megahertz_UnitItem_Name" xml:space="preserve">
+        <value>Megahertz</value>
+    </data>
+    <data name="Megahertz_UnitItem_Symbol" xml:space="preserve">
+        <value>MHz</value>
+    </data>
+    <data name="Megahertz_Frequency_Description" xml:space="preserve">
+        <value>Frequency in megahertz</value>
+    </data>
 </root>

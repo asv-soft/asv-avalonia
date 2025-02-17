@@ -2,7 +2,7 @@ using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
-namespace Asv.Avalonia.Power;
+namespace Asv.Avalonia;
 
 internal sealed class PowerConfig
 {

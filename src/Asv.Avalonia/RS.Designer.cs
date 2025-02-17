@@ -632,5 +632,89 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("Dbm_UnitItem_Symbol", resourceCulture);
             }
         }
+        
+        public static string Frequency_Name {
+            get {
+                return ResourceManager.GetString("Frequency_Name", resourceCulture);
+            }
+        }
+        
+        public static string Frequency_Description {
+            get {
+                return ResourceManager.GetString("Frequency_Description", resourceCulture);
+            }
+        }
+        
+        public static string Hertz_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Hertz_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Hertz_Frequency_Description {
+            get {
+                return ResourceManager.GetString("Hertz_Frequency_Description", resourceCulture);
+            }
+        }
+        
+        public static string Hertz_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Hertz_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string Gigahertz_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Gigahertz_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Gigahertz_Frequency_Description {
+            get {
+                return ResourceManager.GetString("Gigahertz_Frequency_Description", resourceCulture);
+            }
+        }
+        
+        public static string Gigahertz_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Gigahertz_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string Kilohertz_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Kilohertz_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Kilohertz_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Kilohertz_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string Kilohertz_Frequency_Description {
+            get {
+                return ResourceManager.GetString("Kilohertz_Frequency_Description", resourceCulture);
+            }
+        }
+        
+        public static string Megahertz_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Megahertz_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        public static string Megahertz_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Megahertz_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        public static string Megahertz_Frequency_Description {
+            get {
+                return ResourceManager.GetString("Megahertz_Frequency_Description", resourceCulture);
+            }
+        }
     }
 }

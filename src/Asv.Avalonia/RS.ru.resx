@@ -305,4 +305,46 @@
     <data name="Dbm_Power_Description" xml:space="preserve">
         <value>Мощность в децибеллах по отношению к 1 милливатту</value>
     </data>
+    <data name="Frequency_Name" xml:space="preserve">
+        <value>Частота</value>
+    </data>
+    <data name="Frequency_Description" xml:space="preserve">
+        <value>Единица измерения частоты</value>
+    </data>
+    <data name="Hertz_UnitItem_Name" xml:space="preserve">
+        <value>Герцы</value>
+    </data>
+    <data name="Hertz_Frequency_Description" xml:space="preserve">
+        <value>Частота в герцах</value>
+    </data>
+    <data name="Hertz_UnitItem_Symbol" xml:space="preserve">
+        <value>Гц</value>
+    </data>
+    <data name="Gigahertz_UnitItem_Name" xml:space="preserve">
+        <value>Гигагерц</value>
+    </data>
+    <data name="Gigahertz_UnitItem_Symbol" xml:space="preserve">
+        <value>ГГц</value>
+    </data>
+    <data name="Gigahertz_Frequency_Description" xml:space="preserve">
+        <value>Часотота в гигагерцах</value>
+    </data>
+    <data name="Kilohertz_UnitItem_Name" xml:space="preserve">
+        <value>Килогерц</value>
+    </data>
+    <data name="Kilohertz_UnitItem_Symbol" xml:space="preserve">
+        <value>кГц</value>
+    </data>
+    <data name="Kilohertz_Frequency_Description" xml:space="preserve">
+        <value>Частота в килогерцах</value>
+    </data>
+    <data name="Megahertz_UnitItem_Name" xml:space="preserve">
+        <value>Мегагерц</value>
+    </data>
+    <data name="Megahertz_UnitItem_Symbol" xml:space="preserve">
+        <value>МГц</value>
+    </data>
+    <data name="Megahertz_Frequency_Description" xml:space="preserve">
+        <value>Частота в мегагерцах</value>
+    </data>
 </root>

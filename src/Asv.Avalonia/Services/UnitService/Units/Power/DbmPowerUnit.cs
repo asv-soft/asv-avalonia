@@ -1,6 +1,6 @@
 using System.Composition;
 
-namespace Asv.Avalonia.Power;
+namespace Asv.Avalonia;
 
 [ExportUnitItem(PowerBase.Id)]
 [Shared]

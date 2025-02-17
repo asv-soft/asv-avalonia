@@ -1,6 +1,6 @@
 using System.Composition;
 
-namespace Asv.Avalonia.FieldStrength;
+namespace Asv.Avalonia;
 
 [ExportUnitItem(FieldStrengthBase.Id)]
 [Shared]
