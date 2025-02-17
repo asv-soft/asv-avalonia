@@ -132,12 +132,6 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Map Example</value>
     </data>
-    <data name="UnitItemBase_Validation_ValueIsEmptyError" xml:space="preserve">
-        <value>Value is empty</value>
-    </data>
-    <data name="UnitItemBase_Validation_ValueIsNaNError" xml:space="preserve">
-        <value>Value is not a number</value>
-    </data>
     <data name="ChangeCurrentUnitItemCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change current unit item</value>
     </data>
@@ -353,5 +347,29 @@
     </data>
     <data name="Megahertz_Frequency_Description" xml:space="preserve">
         <value>Frequency in megahertz</value>
+    </data>
+    <data name="Latitude_Name" xml:space="preserve">
+        <value>Latitude</value>
+    </data>
+    <data name="Latitude_Description" xml:space="preserve">
+        <value>Latitude unit</value>
+    </data>
+    <data name="Degree_Latitude_Description" xml:space="preserve">
+        <value>Latitude in degrees</value>
+    </data>
+    <data name="Dms_Latitude_Description" xml:space="preserve">
+        <value>Latitude in degrees, minutes and seconds</value>
+    </data>
+    <data name="Longitude_Name" xml:space="preserve">
+        <value>Longitude</value>
+    </data>
+    <data name="Longitude_Description" xml:space="preserve">
+        <value>Longitude unit</value>
+    </data>
+    <data name="Degree_Longitude_Description" xml:space="preserve">
+        <value>Longitude in degrees</value>
+    </data>
+    <data name="Dms_Longitude_Description" xml:space="preserve">
+        <value>Longitude in degrees, minutes and seconds</value>
     </data>
 </root>

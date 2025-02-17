@@ -39,8 +39,8 @@ public class HistoricalUnitProperty : RoutableViewModel
 
     private Exception? ValidateValue(string? userValue)
     {
-        var errorMessage = _unit.Current.CurrentValue.GetValidationErrorMessage(userValue);
-        return errorMessage == null ? null : new Exception(errorMessage);
+        var result = _unit.Current.CurrentValue.ValidateValue(userValue);
+        return result.IsSuccess ? null : result.ValidationException;
     }
 
     private ValueTask OnChangedByUser(string? userValue, CancellationToken cancel)

@@ -26,11 +26,21 @@ public class DmsAngleUnit() : UnitItemBase(1)
         return value != null && Angle.IsValid(value);
     }
 
-    public override string? GetValidationErrorMessage(string? value)
+    public override ValidationResult ValidateValue(string? value)
     {
-        return string.IsNullOrWhiteSpace(value)
-            ? RS.UnitItemBase_Validation_ValueIsEmptyError
-            : Angle.GetErrorMessage(value);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return new UnitItemValueIsEmptyError();
+        }
+
+        var msg = Angle.GetErrorMessage(value);
+
+        if (msg is not null)
+        {
+            return new UnitException(msg);
+        }
+
+        return ValidationResult.Success;
     }
 
     /// <summary>

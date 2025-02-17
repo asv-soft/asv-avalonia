@@ -26,11 +26,21 @@ public sealed class MsAngleUnit() : UnitItemBase(1)
         return value != null && AngleMs.IsValid(value);
     }
 
-    public override string? GetValidationErrorMessage(string? value)
+    public override ValidationResult ValidateValue(string? value)
     {
-        return string.IsNullOrWhiteSpace(value)
-            ? RS.UnitItemBase_Validation_ValueIsEmptyError
-            : AngleMs.GetErrorMessage(value);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return new UnitItemValueIsEmptyError();
+        }
+
+        var msg = AngleMs.GetErrorMessage(value);
+
+        if (msg is not null)
+        {
+            return new UnitException(msg);
+        }
+
+        return ValidationResult.Success;
     }
 
     /// <summary>

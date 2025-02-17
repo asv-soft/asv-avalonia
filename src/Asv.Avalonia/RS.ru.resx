@@ -119,12 +119,6 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Пример карты</value>
     </data>
-    <data name="UnitItemBase_Validation_ValueIsEmptyError" xml:space="preserve">
-        <value>Значение пустое</value>
-    </data>
-    <data name="UnitItemBase_Validation_ValueIsNaNError" xml:space="preserve">
-        <value>Значение не число</value>
-    </data>
     <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
         <value>Морская миля</value>
     </data>
@@ -346,5 +340,29 @@
     </data>
     <data name="Megahertz_Frequency_Description" xml:space="preserve">
         <value>Частота в мегагерцах</value>
+    </data>
+    <data name="Latitude_Name" xml:space="preserve">
+        <value>Широта</value>
+    </data>
+    <data name="Latitude_Description" xml:space="preserve">
+        <value>Единица измерения широты</value>
+    </data>
+    <data name="Degree_Latitude_Description" xml:space="preserve">
+        <value>Широта в градусах</value>
+    </data>
+    <data name="Longitude_Name" xml:space="preserve">
+        <value>Долгота</value>
+    </data>
+    <data name="Longitude_Description" xml:space="preserve">
+        <value>Единица измерения долготы</value>
+    </data>
+    <data name="Degree_Longitude_Description" xml:space="preserve">
+        <value>Долгота в гадусах</value>
+    </data>
+    <data name="Dms_Latitude_Description" xml:space="preserve">
+        <value>Широта в градусах, минутах и секундах</value>
+    </data>
+    <data name="Dms_Longitude_Description" xml:space="preserve">
+        <value>Долгота в градусах, минутах и секундах</value>
     </data>
 </root>

@@ -26,11 +26,21 @@ public sealed class DMBearingUnit() : UnitItemBase(1)
         return value != null && AngleDm.TryParse(value, out var result) ? result : double.NaN;
     }
 
-    public override string? GetValidationErrorMessage(string? value)
+    public override ValidationResult ValidateValue(string? value)
     {
-        return string.IsNullOrWhiteSpace(value)
-            ? RS.UnitItemBase_Validation_ValueIsEmptyError
-            : AngleDm.GetErrorMessage(value);
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return new UnitItemValueIsEmptyError();
+        }
+
+        var msg = AngleDm.GetErrorMessage(value);
+
+        if (msg is not null)
+        {
+            return new UnitException(msg);
+        }
+
+        return ValidationResult.Success;
     }
 
     /// <summary>

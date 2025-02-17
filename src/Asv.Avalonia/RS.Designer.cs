@@ -273,18 +273,6 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string UnitItemBase_Validation_ValueIsEmptyError {
-            get {
-                return ResourceManager.GetString("UnitItemBase_Validation_ValueIsEmptyError", resourceCulture);
-            }
-        }
-        
-        public static string UnitItemBase_Validation_ValueIsNaNError {
-            get {
-                return ResourceManager.GetString("UnitItemBase_Validation_ValueIsNaNError", resourceCulture);
-            }
-        }
-        
         public static string ChangeCurrentUnitItemCommand_CommandInfo_Name {
             get {
                 return ResourceManager.GetString("ChangeCurrentUnitItemCommand_CommandInfo_Name", resourceCulture);
@@ -714,6 +702,54 @@ namespace Asv.Avalonia {
         public static string Megahertz_Frequency_Description {
             get {
                 return ResourceManager.GetString("Megahertz_Frequency_Description", resourceCulture);
+            }
+        }
+        
+        public static string Latitude_Name {
+            get {
+                return ResourceManager.GetString("Latitude_Name", resourceCulture);
+            }
+        }
+        
+        public static string Latitude_Description {
+            get {
+                return ResourceManager.GetString("Latitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string Degree_Latitude_Description {
+            get {
+                return ResourceManager.GetString("Degree_Latitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string Dms_Latitude_Description {
+            get {
+                return ResourceManager.GetString("Dms_Latitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string Longitude_Name {
+            get {
+                return ResourceManager.GetString("Longitude_Name", resourceCulture);
+            }
+        }
+        
+        public static string Longitude_Description {
+            get {
+                return ResourceManager.GetString("Longitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string Degree_Longitude_Description {
+            get {
+                return ResourceManager.GetString("Degree_Longitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string Dms_Longitude_Description {
+            get {
+                return ResourceManager.GetString("Dms_Longitude_Description", resourceCulture);
             }
         }
     }

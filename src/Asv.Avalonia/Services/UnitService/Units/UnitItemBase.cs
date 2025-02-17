@@ -27,11 +27,11 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _);
     }
 
-    public virtual string? GetValidationErrorMessage(string? value)
+    public virtual ValidationResult ValidateValue(string? value)
     {
         if (string.IsNullOrWhiteSpace(value))
         {
-            return RS.UnitItemBase_Validation_ValueIsEmptyError;
+            return new UnitItemValueIsEmptyError();
         }
 
         value = value.Trim().Replace(',', '.');
@@ -43,39 +43,39 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
 
         if (!double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out _))
         {
-            return RS.UnitItemBase_Validation_ValueIsNaNError;
+            return new UnitItemValueIsNanError();
         }
 
-        return null;
+        return ValidationResult.Success;
     }
 
-    public virtual double Parse(string? input)
+    public virtual double Parse(string? value)
     {
-        if (string.IsNullOrWhiteSpace(input))
+        if (string.IsNullOrWhiteSpace(value))
         {
             return double.NaN;
         }
 
-        input = input.Trim().Replace(',', '.');
+        value = value.Trim().Replace(',', '.');
 
         double decMul = 1;
-        if (Units.Kilo.Any(x => input.EndsWith(x)))
+        if (Units.Kilo.Any(x => value.EndsWith(x)))
         {
             decMul = 1_000;
-            input = input[..^1];
+            value = value[..^1];
         }
-        else if (Units.Mega.Any(x => input.EndsWith(x)))
+        else if (Units.Mega.Any(x => value.EndsWith(x)))
         {
             decMul = 1_000_000;
-            input = input[..^1];
+            value = value[..^1];
         }
-        else if (Units.Giga.Any(x => input.EndsWith(x)))
+        else if (Units.Giga.Any(x => value.EndsWith(x)))
         {
             decMul = 1_000_000_000;
-            input = input[..^1];
+            value = value[..^1];
         }
 
-        if (!double.TryParse(input, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
+        if (!double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result))
         {
             return double.NaN;
         }

@@ -8,8 +8,8 @@ public interface IUnitItem
     string Symbol { get; }
     bool IsInternationalSystemUnit { get; }
     bool IsValid(string? value);
-    string? GetValidationErrorMessage(string? value);
-    double Parse(string? input);
+    ValidationResult ValidateValue(string? value);
+    double Parse(string? value);
     double ParseToSi(string? value) => ToSi(Parse(value));
     string Print(double value, string? format = null);
     string PrintFromSi(double value, string? format = null) => Print(FromSi(value));
