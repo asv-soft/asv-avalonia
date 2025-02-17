@@ -416,4 +416,10 @@
     <data name="Fahrenheit_Temperature_Description" xml:space="preserve">
         <value>Температура в фаренгейтах</value>
     </data>
+    <data name="Velocity_Name" xml:space="preserve">
+        <value>Скорость</value>
+    </data>
+    <data name="Velocity_Description" xml:space="preserve">
+        <value>Единица измерения скорости</value>
+    </data>
 </root>

@@ -854,5 +854,17 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("Fahrenheit_Temperature_Description", resourceCulture);
             }
         }
+        
+        public static string Velocity_Name {
+            get {
+                return ResourceManager.GetString("Velocity_Name", resourceCulture);
+            }
+        }
+        
+        public static string Velocity_Description {
+            get {
+                return ResourceManager.GetString("Velocity_Description", resourceCulture);
+            }
+        }
     }
 }

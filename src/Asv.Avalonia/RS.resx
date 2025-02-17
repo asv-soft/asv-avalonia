@@ -423,4 +423,10 @@
     <data name="Fahrenheit_Temperature_Description" xml:space="preserve">
         <value>Temperature in fahrenheit</value>
     </data>
+    <data name="Velocity_Name" xml:space="preserve">
+        <value>Velocity</value>
+    </data>
+    <data name="Velocity_Description" xml:space="preserve">
+        <value>Velocity unit</value>
+    </data>
 </root>

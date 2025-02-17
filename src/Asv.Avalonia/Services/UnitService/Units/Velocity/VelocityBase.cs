@@ -4,27 +4,27 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-internal sealed class TemperatureConfig
+internal sealed class VelocityConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
 [ExportUnit]
 [Shared]
-public sealed class TemperatureBase : UnitBase
+public sealed class VelocityBase : UnitBase
 {
-    public const string Id = "temperature";
+    public const string Id = "velocity";
 
-    public override MaterialIconKind Icon => MaterialIconKind.Temperature;
-    public override string Name => RS.Temperature_Name;
-    public override string Description => RS.Temperature_Description;
+    public override MaterialIconKind Icon => MaterialIconKind.Velocity;
+    public override string Name => RS.Velocity_Name;
+    public override string Description => RS.Velocity_Description;
     public override string UnitId => Id;
 
-    private readonly TemperatureConfig? _config;
+    private readonly VelocityConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
     [ImportingConstructor]
-    public TemperatureBase(
+    public VelocityBase(
         [Import] IConfiguration cfgSvc,
         [ImportMany(Id)] IEnumerable<IUnitItem> items
     )
@@ -32,7 +32,7 @@ public sealed class TemperatureBase : UnitBase
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);
         _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<TemperatureConfig>();
+        _config = cfgSvc.Get<VelocityConfig>();
         if (_config.CurrentUnitItemId is null)
         {
             return;
