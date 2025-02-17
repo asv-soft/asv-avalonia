@@ -390,4 +390,13 @@
     <data name="Radian_Phase_Description" xml:space="preserve">
         <value>Phase in radian</value>
     </data>
+    <data name="Sdm_Name" xml:space="preserve">
+        <value>SDM</value>
+    </data>
+    <data name="Sdm_Description" xml:space="preserve">
+        <value>Sum depth of modulation measure units</value>
+    </data>
+    <data name="Percent_Sdm_Description" xml:space="preserve">
+        <value>SDM in percents</value>
+    </data>
 </root>

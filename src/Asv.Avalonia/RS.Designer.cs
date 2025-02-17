@@ -788,5 +788,23 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("Radian_Phase_Description", resourceCulture);
             }
         }
+        
+        public static string Sdm_Name {
+            get {
+                return ResourceManager.GetString("Sdm_Name", resourceCulture);
+            }
+        }
+        
+        public static string Sdm_Description {
+            get {
+                return ResourceManager.GetString("Sdm_Description", resourceCulture);
+            }
+        }
+        
+        public static string Percent_Sdm_Description {
+            get {
+                return ResourceManager.GetString("Percent_Sdm_Description", resourceCulture);
+            }
+        }
     }
 }

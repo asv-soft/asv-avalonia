@@ -383,4 +383,13 @@
     <data name="Radian_Phase_Description" xml:space="preserve">
         <value>Фаза в радианах</value>
     </data>
+    <data name="Sdm_Name" xml:space="preserve">
+        <value>СГМ</value>
+    </data>
+    <data name="Sdm_Description" xml:space="preserve">
+        <value>Единицы измерения суммы глубины модуляции</value>
+    </data>
+    <data name="Percent_Sdm_Description" xml:space="preserve">
+        <value>СГМ в процентах</value>
+    </data>
 </root>
