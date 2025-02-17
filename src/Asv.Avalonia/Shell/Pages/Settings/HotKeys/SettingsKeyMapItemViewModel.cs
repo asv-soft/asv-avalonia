@@ -65,7 +65,8 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
 
             Info.CustomHotKey = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
             svc.SetHotKey(Info.Id, Info.CustomHotKey);
-            CurrentHotKeyValue.Value = svc.GetHostKey(Info.Id);
+            CurrentHotKeyValue.Value = svc.GetHostKey(Info.Id) == Info.DefaultHotKey ? null : svc.GetHostKey(Info.Id);
+
             IsChangingHotKey.Value = false;
         });
     }

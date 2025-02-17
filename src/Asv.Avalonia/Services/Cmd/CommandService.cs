@@ -67,7 +67,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 return;
             }
 
-            if (_nav.SelectedControl.CurrentValue == null)
+            if (_nav.SelectedControl.CurrentValue is null)
             {
                 return;
             }
@@ -190,10 +190,10 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 continue;
             }
 
-            if (command.Info.DefaultHotKey == keyGesture) 
+            if (keyVsCommandBuilder.Keys.Any(c => c == keyGesture)) 
             {
                 _logger.LogWarning(
-                    "Hot key {hotKey} for command {commandId} is default => remove it from config",
+                    "Hot key {hotKey} already using by another command can't apply it for command {commandId} => remove it from config",
                     hotKey,
                     commandId
                 );
@@ -201,7 +201,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 configChanged = true;
                 continue;
             }
-
+            
             command.Info.CustomHotKey = keyGesture; // set the custom value manualy
             commandVsKeyBuilder[commandId] = keyGesture;
             keyVsCommandBuilder[keyGesture] = command;
