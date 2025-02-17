@@ -40,7 +40,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
     public CacheTileLoader(ILoggerFactory logger, ITileProvider provider)
     {
         _provider = provider;
-        _logger = logger?.CreateLogger<CacheTileLoader>();
+        _logger = logger.CreateLogger<CacheTileLoader>();
         _onLoaded = new();
         _httpClient = new HttpClient();
         _inProgressHash = new();
@@ -117,11 +117,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                         await File.WriteAllBytesAsync(tilePath, img, DisposeCancel)
                             .ConfigureAwait(false);
                     }
-                    else
-                    {
-                        
-                    }
-                   
+                    else { }
 
                     bitmap = new Bitmap(new MemoryStream(img));
                     _inProgressUrl.Remove(url);
@@ -143,7 +139,6 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
             }
             finally
             {
-                
                 _inProgressHash.Remove(position);
             }
         }
@@ -186,8 +181,8 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
     private string GetTileCachePath(TilePosition position, ITileProvider provider)
     {
         // Генерируем путь на основе провайдера, zoom, X и Y координат тайла
-        string providerName = provider.GetType().Name;
-        string tileFolder = Path.Combine(_cacheDirectory, providerName, position.Zoom.ToString());
+        var providerName = provider.GetType().Name;
+        var tileFolder = Path.Combine(_cacheDirectory, providerName, position.Zoom.ToString());
 
         if (!Directory.Exists(tileFolder))
         {
@@ -208,13 +203,10 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
 
             if (_inProgressHash.Contains(position) == false)
             {
-                _tileChannel.Writer.TryWrite(position);    
+                _tileChannel.Writer.TryWrite(position);
             }
-            else
-            {
-                
-            }
-            
+            else { }
+
             return GetEmptyBitmap();
         }
     }
