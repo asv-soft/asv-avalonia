@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             xmlns:global="clr-namespace:"
+             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.ShellView"
+             x:DataType="avalonia:ShellViewModel">
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <avalonia:DesignTimeShellViewModel />
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="Border.error">
+            <Setter Property="BorderBrush" Value="Red" />
+        </Style>
+        <Style Selector="Border.warning">
+            <Setter Property="BorderBrush" Value="Orange" />
+        </Style>
+        <Style Selector="DockPanel.error">
+            <Setter Property="Background" Value="Red" />
+        </Style>
+        <Style Selector="DockPanel.warning">
+            <Setter Property="Background" Value="Orange" />
+        </Style>
+        <Style Selector="DropDownButton#WindowControlButton /template/ PathIcon">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+    </UserControl.Styles>
+    <Border BorderThickness="1"
+            BorderBrush="{DynamicResource SystemAccentColorDark3}"
+            Classes.error="{Binding ErrorState.Value, 
+              Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
+          Classes.warning="{Binding ErrorState.Value, 
+              Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }"
+          
+          >
+    <DockPanel>
+        <DockPanel Background="{StaticResource SystemBaseHighColor}" Dock="Top"
+                   avalonia:WindowHelper.EnableDrag="True"
+                   avalonia:WindowHelper.DoubleTappedWindowState="True">
+            <DropDownButton Background="Transparent">
+                <avalonia1:MaterialIcon Kind="Menu"/>
+                <DropDownButton.Flyout>
+                    <MenuFlyout ItemsSource="{Binding MainMenuView.Items}">
+                        <MenuFlyout.ItemContainerTheme>
+                            <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
+                                          x:DataType="avalonia:MenuNode">
+                                <Setter Property="Icon" Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}" />
+                                <Setter Property="Header" Value="{Binding Base.Title}"/>
+                                <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                                <Setter Property="Command" Value="{Binding Base.Command}"/>
+                                <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}"/>
+                                <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+                                <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+                                <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+                                <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                            </ControlTheme>
+                        </MenuFlyout.ItemContainerTheme>
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            
+            <DropDownButton Name="WindowControlButton" Background="Transparent" DockPanel.Dock="Right">
+                <avalonia1:MaterialIcon Kind="DotsVertical"/>
+                <DropDownButton.Flyout>
+                    <MenuFlyout>
+                        <MenuItem Icon="{avalonia1:MaterialIconExt Kind=Close}" Command="{Binding Close}" Header="{x:Static avalonia:RS.ShellView_WindowControlButton_Close}"/>
+                    </MenuFlyout>
+                </DropDownButton.Flyout>
+            </DropDownButton>
+            <Button Background="Transparent" DockPanel.Dock="Right">
+                <avalonia1:MaterialIcon Kind="Cog"/>
+            </Button>
+            
+            <StackPanel Spacing="4" HorizontalAlignment="Center" Orientation="Horizontal">
+                <Button Background="Transparent" Command="{Binding Backward}">
+                    <avalonia1:MaterialIcon Kind="ArrowLeft"/>
+                </Button>
+                <Button Background="Transparent" Command="{Binding Forward}">
+                    <avalonia1:MaterialIcon Kind="ArrowRight"/>
+                </Button>
+                <AutoCompleteBox VerticalAlignment="Center" Width="200"></AutoCompleteBox>
+            </StackPanel>
+            
+        </DockPanel>
+        <DockPanel Dock="Bottom"
+                   Background="{DynamicResource SystemControlHighlightChromeAltLowBrush}"
+                   Classes.error="{Binding ErrorState.Value, 
+              Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
+                       Classes.warning="{Binding ErrorState.Value, 
+              Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
+              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
+            
+        </DockPanel>
+        <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
+            <avalonia:DockControl MaxSplitAmount="3" BorderHighLightColor="{DynamicResource SystemAccentColor}" ItemsSource="{CompiledBinding PagesView}" SelectedItem="{Binding SelectedControl}">
+                 <avalonia:DockControl.TabControlStripItemTemplate> 
+                     <DataTemplate> 
+                         <StackPanel Orientation="Horizontal" Spacing="4"> 
+                             <avalonia1:MaterialIcon Width="16" Height="16" Kind="{Binding Icon.Value}"/> 
+                             <TextBlock VerticalAlignment="Center" Text="{Binding Title.Value}"/> 
+                             <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0"> 
+                                 <avalonia1:MaterialIcon Kind="Close"/> 
+                             </Button> 
+                         </StackPanel> 
+                     </DataTemplate>
+                 </avalonia:DockControl.TabControlStripItemTemplate> 
+            </avalonia:DockControl>
+        </Border>
+    </DockPanel>
+    </Border>
+  
+</UserControl>

@@ -1,13 +1,49 @@
-using Asv.Avalonia.Example.ViewModels;
-using Asv.Avalonia.Example.Views;
+using System;
+using System.Collections.Generic;
+using System.Composition.Convention;
+using System.Composition.Hosting;
+using System.Linq;
+using System.Reflection;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
-public partial class App : Application
+public partial class App : Application, IContainerHost, IShellHost
 {
+    public App()
+    {
+        var conventions = new ConventionBuilder();
+        var containerCfg = new ContainerConfiguration();
+
+        AppHost.Instance.RegisterServices(containerCfg);
+
+        containerCfg
+            .WithExport<IContainerHost>(this)
+            .WithExport<IDataTemplateHost>(this)
+            .WithExport<IShellHost>(this)
+            .WithDefaultConventions(conventions);
+
+        containerCfg = containerCfg.WithAssemblies(DefaultAssemblies.Distinct());
+
+        // TODO: load plugin manager before creating container
+        Host = containerCfg.CreateContainer();
+        DataTemplates.Add(new CompositionViewLocator(Host));
+    }
+
+    private IEnumerable<Assembly> DefaultAssemblies
+    {
+        get
+        {
+            yield return GetType().Assembly;
+            yield return typeof(IAppHost).Assembly;
+        }
+    }
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -17,13 +53,44 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new MainWindow { DataContext = new MainViewModel() };
+            Shell = GetExport<IShell>(DesktopShellViewModel.ShellId);
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new MainView { DataContext = new MainViewModel() };
+            Shell = GetExport<IShell>(MobileShellViewModel.ShellId);
         }
 
         base.OnFrameworkInitializationCompleted();
+        if (Design.IsDesignMode == false)
+        {
+            Shell.Navigate(SettingsPageViewModel.PageId);
+            Shell.Navigate(HomePageViewModel.PageId);
+            Shell.Navigate(DocumentPageViewModel.PageId);
+            Shell.Navigate(MapExamplePageViewModel.PageId);
+            Shell.Navigate(InstalledPluginsViewModel.PageId);
+            Shell.Navigate(PluginsMarketViewModel.PageId);
+            Shell.Navigate(PluginsSourcesViewModel.PageId);
+        }
+#if DEBUG
+        this.AttachDevTools();
+#endif
+    }
+
+    public T GetExport<T>()
+    {
+        return Host.GetExport<T>();
+    }
+
+    public T GetExport<T>(string contract)
+    {
+        return Host.GetExport<T>(contract);
+    }
+
+    public CompositionHost Host { get; }
+    public IShell Shell { get; private set; }
+
+    public bool TryGetExport<T>(string id, out T value)
+    {
+        return Host.TryGetExport(id, out value);
     }
 }

@@ -1,7 +1,12 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
+using Asv.Cfg;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Input;
+using Key = Avalonia.Remote.Protocol.Input.Key;
 
 namespace Asv.Avalonia.Example.Desktop;
 
@@ -13,25 +18,31 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        using var host = AppHost.Initialize(builder =>
-        {
-            builder
-                .WithJsonConfiguration("config.json", true, TimeSpan.FromMilliseconds(500))
-                .WithAppInfoFrom(typeof(App).Assembly)
-                .WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel)
-                .WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb)
-#if DEBUG
-                .WithLogToConsole()
-#else
+        var builder = AppHost.CreateBuilder();
 
+        builder
+            .UseJsonConfig("config.json", true, TimeSpan.FromMilliseconds(500))
+            .SetAppInfoFrom(typeof(App).Assembly)
+            .UseLogging(options =>
+            {
+                options.WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel);
+                options.WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb);
+#if DEBUG
+                options.WithLogToConsole();
 #endif
-                .EnforceSingleInstance()
-                .EnableArgumentForwarding()
-                .WithArguments(args);
-        });
+            })
+            .EnforceSingleInstance(options => options.EnableArgumentForwarding())
+            .UsePluginManager(options =>
+            {
+                options.WithApiPackage("Asv.Drones.Gui.Api", "1.0.0");
+                options.WithPluginPrefix("Asv.Drones.Gui.Plugin.");
+            })
+            .SetArguments(args);
+
+        using var host = builder.Build();
 
         // If this is not the first instance, host have sent the arguments to the first instance and we can exit
-        if (host.IsFirstInstance == false)
+        if (!host.IsFirstInstance)
         {
             return;
         }
