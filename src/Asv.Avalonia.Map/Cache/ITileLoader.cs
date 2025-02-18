@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Immutable;
+using System.Diagnostics;
 using System.Threading.Channels;
 using Asv.Common;
 using Avalonia;
@@ -8,6 +9,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
+using BoundedChannelOptions = System.Threading.Channels.BoundedChannelOptions;
+using HttpClient = System.Net.Http.HttpClient;
 
 namespace Asv.Avalonia.Map;
 
@@ -23,55 +26,70 @@ public class TileLoadedEventArgs(TilePosition position, Bitmap? tile)
     public Bitmap? Tile { get; } = tile;
 }
 
+public class CacheTileLoaderConfig
+{
+    public int RequestQueueSize { get; set; } = 100;
+    public int RequestParallelThreads { get; set; } = Environment.ProcessorCount;
+    public int RequestTimeoutMs { get; set; } = 5000;
+
+    public override string ToString()
+    {
+        return $"queue size{}";
+    }
+}
+
 public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
 {
-    private readonly ITileProvider _provider;
-    private readonly ILogger<CacheTileLoader>? _logger;
+    private readonly ILogger<CacheTileLoader> _logger;
     private readonly HttpClient _httpClient;
-    private readonly string _cacheDirectory;
-    private readonly Channel<TilePosition> _tileChannel;
-    private readonly MemoryCache _cache;
+    private readonly Channel<TileKey> _requestChannel;
     private readonly Subject<TileLoadedEventArgs> _onLoaded;
-    private readonly ConcurrentHashSet<TilePosition> _inProgressHash;
-    private readonly ConcurrentHashSet<string> _inProgressUrl;
+    private readonly ConcurrentHashSet<TileKey> _localRequests;
+    private readonly ConcurrentHashSet<string> _remoteRequests;
     private readonly object _sync = new();
     private volatile Bitmap? _emptyBitmap;
+    private readonly ImmutableDictionary<string,ITileProvider> _providers;
+    private readonly ImmutableArray<ITileCache> _caches;
 
-    public CacheTileLoader(ILoggerFactory logger, ITileProvider provider)
+    public CacheTileLoader(ILoggerFactory logger, CacheTileLoaderConfig config, IEnumerable<ITileCache> caches, IEnumerable<ITileProvider> providers)
     {
-        _provider = provider;
         _logger = logger.CreateLogger<CacheTileLoader>();
+        _providers = providers.ToImmutableDictionary(x => x.Id);
+        _caches = [..caches];
         _onLoaded = new();
-        _httpClient = new HttpClient();
-        _inProgressHash = new();
-        _inProgressUrl = new ConcurrentHashSet<string>();
-        _cacheDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "cache", "tiles");
-        _cache = new(new MemoryCacheOptions { SizeLimit = 100_000_000, TrackStatistics = true });
-        // Создаем директорию кэша, если её нет
-        if (!Directory.Exists(_cacheDirectory))
+        _httpClient = new HttpClient
         {
-            Directory.CreateDirectory(_cacheDirectory);
-        }
+            Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMs),
+        };
+        _localRequests = new();
+        _remoteRequests = new ConcurrentHashSet<string>();
 
-        _tileChannel = Channel.CreateBounded<TilePosition>(
-            new BoundedChannelOptions(50) { FullMode = BoundedChannelFullMode.DropOldest }
+        _requestChannel = Channel.CreateBounded<TileKey>(
+            new BoundedChannelOptions(config.RequestQueueSize) { FullMode = BoundedChannelFullMode.DropOldest }
         );
-        for (var i = 0; i < 10; i++)
+        
+        for (var i = 0; i < config.RequestParallelThreads; i++)
         {
             Task.Run(ProcessQueue);
         }
+        _logger.ZLogInformation($"Run tile loaded with {config} ");
     }
 
     private async Task ProcessQueue()
     {
-        await foreach (var position in _tileChannel.Reader.ReadAllAsync(DisposeCancel))
+        await foreach (var position in _requestChannel.Reader.ReadAllAsync(DisposeCancel))
         {
             try
             {
-                if (_inProgressHash.Add(position) == false)
+                if (_localRequests.Add(position) == false)
                 {
                     // already in progress => skip
                     continue;
+                }
+
+                foreach (var cache in _caches)
+                {
+                    cache[position]
                 }
                 // try to get from cache
                 if (_cache.TryGetValue<Bitmap>(position, out var cachedTile))
@@ -104,7 +122,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                 }
                 else
                 {
-                    if (_inProgressUrl.Add(url) == false)
+                    if (_remoteRequests.Add(url) == false)
                     {
                         continue;
                     }
@@ -120,7 +138,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                     else { }
 
                     bitmap = new Bitmap(new MemoryStream(img));
-                    _inProgressUrl.Remove(url);
+                    _remoteRequests.Remove(url);
                 }
                 _cache.Set(
                     position,
@@ -139,7 +157,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
             }
             finally
             {
-                _inProgressHash.Remove(position);
+                _localRequests.Remove(position);
             }
         }
     }
@@ -201,9 +219,9 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                 return cachedTile ?? GetEmptyBitmap();
             }
 
-            if (_inProgressHash.Contains(position) == false)
+            if (_localRequests.Contains(position) == false)
             {
-                _tileChannel.Writer.TryWrite(position);
+                _requestChannel.Writer.TryWrite(position);
             }
             else { }
 
