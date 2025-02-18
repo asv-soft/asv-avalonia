@@ -16,7 +16,7 @@ public class FileSystemCache : TileCache
     private readonly ILogger<FileSystemCache> _logger;
     private readonly LockByKeyExecutor<TileKey> _lock = new();
     private readonly object _syncDir = new();
-    private const string Extention = "png";
+    private const string TileFileExtension = "png";
 
     public FileSystemCache(FileSystemCacheConfig config, ILoggerFactory factory)
         : base(config, factory)
@@ -78,7 +78,7 @@ public class FileSystemCache : TileCache
                 }
             }
         }
-        return Path.Combine(tileFolder, $"{key.X}_{key.Y}.{Extention}");
+        return Path.Combine(tileFolder, $"{key.X}_{key.Y}.{TileFileExtension}");
     }
 
     public override TileCacheStatistic GetStatistic()
