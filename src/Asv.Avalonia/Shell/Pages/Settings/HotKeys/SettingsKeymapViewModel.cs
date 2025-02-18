@@ -26,20 +26,9 @@ public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
         SearchText = new BindableReactiveProperty<string>();
         _observableList = new ObservableList<ICommandInfo>(svc.Commands);
         SelectedItem = new BindableReactiveProperty<SettingsKeyMapItemViewModel>();
-        ResetHotKeysToDefaultCommand = new ReactiveCommand(_ =>
-        {
-            if (Items == null)
-            {
-                return;
-            }
+        ResetHotKeysToDefaultCommand = new ReactiveCommand(ResetHotkeys).DisposeItWith(Disposable);
 
-            foreach (var item in Items)
-            {
-                item.IsReset.Value = true;
-            }
-        }).DisposeItWith(Disposable);
-
-    _view = _observableList.CreateView(x => new SettingsKeyMapItemViewModel(x, svc)
+        _view = _observableList.CreateView(x => new SettingsKeyMapItemViewModel(x, svc)
         {
             Parent = this,
         });
@@ -84,6 +73,14 @@ public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
     public ValueTask Init(ISettingsPage context)
     {
         return ValueTask.CompletedTask;
+    }
+
+    private void ResetHotkeys(Unit unit)
+    {
+        foreach (var item in Items)
+        {
+            item.IsReset.Value = true;
+        }
     }
 
     public IExportInfo Source => SystemModule.Instance;

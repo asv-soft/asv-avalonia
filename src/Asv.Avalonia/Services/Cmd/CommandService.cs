@@ -128,7 +128,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
     {
         var keyVsCommandBuilder = ImmutableDictionary.CreateBuilder<KeyGesture, IAsyncCommand>();
         var commandVsKeyBuilder = ImmutableDictionary.CreateBuilder<string, KeyGesture>();
-        
+
         // define hotkeys according to loaded CommandInfo
         foreach (var value in _commands.Values)
         {
@@ -148,7 +148,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
             modifyConfig(config.HotKeys);
             configChanged = true;
         }
-        
+
         // load hotkeys from config
         foreach (var (commandId, hotKey) in config.HotKeys)
         {
@@ -162,7 +162,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 continue;
             }
 
-            KeyGesture keyGesture; 
+            KeyGesture keyGesture;
             try
             {
                 keyGesture = KeyGesture.Parse(hotKey); // ensure a value from config is valid
@@ -190,10 +190,10 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 continue;
             }
 
-            if (keyVsCommandBuilder.Keys.Any(c => c == keyGesture)) 
+            if (keyVsCommandBuilder.Keys.Any(c => c == keyGesture))
             {
                 _logger.LogWarning(
-                    "Hot key {hotKey} already using by another command can't apply it for command {commandId} => remove it from config",
+                    "Hot key {hotKey} is used by another command. Can't apply it for command {commandId}",
                     hotKey,
                     commandId
                 );
@@ -201,17 +201,17 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 configChanged = true;
                 continue;
             }
-            
-            command.Info.CustomHotKey = keyGesture; // set the custom value manualy
-            
+
+            command.Info.CustomHotKey = keyGesture; // set the custom value manually
+
             if (command.Info.CustomHotKey == keyGesture)
             {
-                if (command.Info.DefaultHotKey != null)
+                if (command.Info.DefaultHotKey is not null)
                 {
                     keyVsCommandBuilder.Remove(command.Info.DefaultHotKey); // remove command with default key value
                 }
             }
-            
+
             commandVsKeyBuilder[commandId] = keyGesture;
             keyVsCommandBuilder[keyGesture] = command;
         }
@@ -263,7 +263,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
         );
     }
 
-    public KeyGesture? GetHostKey(string commandId)
+    public KeyGesture GetHostKey(string commandId)
     {
         if (_commandsVsGesture.TryGetValue(commandId, out var gesture))
         {

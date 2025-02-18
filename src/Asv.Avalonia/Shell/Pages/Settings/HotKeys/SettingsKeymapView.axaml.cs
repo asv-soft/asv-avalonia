@@ -31,7 +31,10 @@ public partial class SettingsKeymapView : UserControl
         var rawGesture = string.Empty;
         base.OnKeyDown(e);
 
-        if ((vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 0 } && !IsModifierKey(e.Key)) || vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 2 })
+        if (
+            (vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 0 } && !IsModifierKey(e.Key))
+            || vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 2 }
+        )
         {
             return;
         }
@@ -49,7 +52,7 @@ public partial class SettingsKeymapView : UserControl
                 Key.LeftAlt or Key.LeftAlt => KeyModifiers.Alt.ToString(),
                 Key.RightCtrl or Key.LeftCtrl => KeyModifiers.Control.ToString(),
                 Key.LeftShift or Key.RightShift => KeyModifiers.Shift.ToString(),
-                _ => keyValue
+                _ => keyValue,
             };
             rawGesture += $"{keyValue}+";
         }
@@ -63,7 +66,12 @@ public partial class SettingsKeymapView : UserControl
 
     private bool IsModifierKey(Key key)
     {
-        return key is Key.LeftShift or Key.RightShift
-            or Key.LeftCtrl or Key.RightCtrl or Key.LeftAlt or Key.LeftAlt;
+        return key
+            is Key.LeftShift
+                or Key.RightShift
+                or Key.LeftCtrl
+                or Key.RightCtrl
+                or Key.LeftAlt
+                or Key.LeftAlt;
     }
 }

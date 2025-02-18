@@ -27,28 +27,29 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
             CurrentHotKeyValue.Value = Info.CustomHotKey;
         });
         CurrentHotKeyValue.Value = Info.CustomHotKey;
-        NewHotKeyValue.Subscribe(_ =>
-        {
-            if (_ == null)
+        NewHotKeyValue
+            .Subscribe(_ =>
             {
-                return;
-            }
+                if (_ == null)
+                {
+                    return;
+                }
 
-            try
-            {
-                KeyGesture.Parse(_.TrimEnd('+'));
-                IsValid.Value = true;
-            }
-            catch (Exception)
-            {
-                IsValid.Value = false;
-            }
-        }).DisposeItWith(Disposable);
+                try
+                {
+                    KeyGesture.Parse(_.TrimEnd('+'));
+                    IsValid.Value = true;
+                }
+                catch (Exception)
+                {
+                    IsValid.Value = false;
+                }
+            })
+            .DisposeItWith(Disposable);
         ChangeHotKeyCommand = new ReactiveCommand(_ =>
         {
             NewHotKeyValue.Value = string.Empty;
-            PreviousHotKeyValue.Value =
-                Info.CustomHotKey ?? Info.DefaultHotKey;
+            PreviousHotKeyValue.Value = Info.CustomHotKey ?? Info.DefaultHotKey;
             IsChangingHotKey.Value = true;
         });
         CancelChangeHotKeyCommand = new ReactiveCommand(_ =>
@@ -65,7 +66,8 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
 
             Info.CustomHotKey = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
             svc.SetHotKey(Info.Id, Info.CustomHotKey);
-            CurrentHotKeyValue.Value = svc.GetHostKey(Info.Id) == Info.DefaultHotKey ? null : svc.GetHostKey(Info.Id);
+            CurrentHotKeyValue.Value =
+                svc.GetHostKey(Info.Id) == Info.DefaultHotKey ? null : svc.GetHostKey(Info.Id);
 
             IsChangingHotKey.Value = false;
         });
@@ -85,11 +87,17 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
 
     public bool Filter(string text)
     {
-        return (Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
-               (Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true) ||
-               Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-               Info.Source.ModuleName.Contains(text, StringComparison.OrdinalIgnoreCase) ||
-               Info.Description.Contains(text, StringComparison.OrdinalIgnoreCase);
+        return (
+                Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
+                == true
+            )
+            || (
+                Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
+                == true
+            )
+            || Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase)
+            || Info.Source.ModuleName.Contains(text, StringComparison.OrdinalIgnoreCase)
+            || Info.Description.Contains(text, StringComparison.OrdinalIgnoreCase);
     }
 
     public ReactiveProperty<bool> IsReset { get; set; } = new(false);
