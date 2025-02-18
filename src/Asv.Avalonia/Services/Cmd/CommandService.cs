@@ -203,6 +203,15 @@ public class CommandService : AsyncDisposableOnce, ICommandService
             }
             
             command.Info.CustomHotKey = keyGesture; // set the custom value manualy
+            
+            if (command.Info.CustomHotKey == keyGesture)
+            {
+                if (command.Info.DefaultHotKey != null)
+                {
+                    keyVsCommandBuilder.Remove(command.Info.DefaultHotKey); // remove command with default key value
+                }
+            }
+            
             commandVsKeyBuilder[commandId] = keyGesture;
             keyVsCommandBuilder[keyGesture] = command;
         }
