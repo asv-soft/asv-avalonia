@@ -17,37 +17,6 @@ using NuGet.Versioning;
 
 namespace Asv.Avalonia;
 
-public class PluginState
-{
-    public bool IsUninstalled { get; set; }
-    public bool IsLoaded { get; set; }
-    public string? LoadingError { get; set; }
-    public string? InstalledFromSourceUri { get; set; }
-
-    public void CopyFrom(PluginState state)
-    {
-        IsLoaded = state.IsLoaded;
-        LoadingError = state.LoadingError;
-        IsUninstalled = state.IsUninstalled;
-        InstalledFromSourceUri = state.InstalledFromSourceUri;
-    }
-}
-
-public class PluginManagerConfig
-{
-    public string MainDependenceName { get; set; }
-    public PluginServerConfig[]? Servers { get; set; }
-}
-
-public class PluginServerConfig
-{
-    public string Name { get; set; }
-    public string SourceUri { get; set; }
-    public string? Username { get; set; }
-    public string? Password { get; set; }
-    public string? PasswordHash { get; set; }
-}
-
 public class PluginManager : IPluginManager
 {
     private readonly ILoggerFactory _loggerFactory;
@@ -364,29 +333,25 @@ public class PluginManager : IPluginManager
             }
 
             _repositories.Add(repo);
-            if (saveToConfig)
+            if (!saveToConfig)
             {
-                _localConfig.Servers = _repositories
-                    .Select(x => new PluginServerConfig
-                    {
-                        Name = x.PackageSource.Name,
-                        SourceUri = x.PackageSource.Source,
-                        PasswordHash = x.PackageSource.Credentials?.PasswordText.EncryptAes(Salt),
-                        Username = x.PackageSource.Credentials?.Username,
-                    })
-                    .ToArray();
-                _globalConfig.Set(_localConfig);
+                return true;
             }
+
+            _localConfig.Servers = _repositories
+                .Select(x => new PluginServerConfig
+                {
+                    Name = x.PackageSource.Name,
+                    SourceUri = x.PackageSource.Source,
+                    PasswordHash = x.PackageSource.Credentials?.PasswordText.EncryptAes(Salt),
+                    Username = x.PackageSource.Credentials?.Username,
+                })
+                .ToArray();
+            _globalConfig.Set(_localConfig);
 
             return true;
         }
-        catch
-        {
-            if (throwExceptions)
-            {
-                throw;
-            }
-        }
+        catch when (!throwExceptions) { }
         finally
         {
             _repositoriesLock.ExitWriteLock();
@@ -1177,12 +1142,7 @@ public class PluginManager : IPluginManager
     {
         ArgumentNullException.ThrowIfNull(packageId);
         var pluginFolder = Path.Combine(_sharedPluginFolder, packageId);
-        if (!Directory.Exists(pluginFolder))
-        {
-            return false;
-        }
-
-        return SetPluginStateByFolder(pluginFolder, edit);
+        return Directory.Exists(pluginFolder) && SetPluginStateByFolder(pluginFolder, edit);
     }
 
     private bool SetPluginStateByFolder(string pluginFolder, Action<PluginState> edit)
@@ -1245,4 +1205,35 @@ public class PluginManager : IPluginManager
     }
 
     #endregion
+}
+
+public class PluginState
+{
+    public bool IsUninstalled { get; set; }
+    public bool IsLoaded { get; set; }
+    public string? LoadingError { get; set; }
+    public string? InstalledFromSourceUri { get; set; }
+
+    public void CopyFrom(PluginState state)
+    {
+        IsLoaded = state.IsLoaded;
+        LoadingError = state.LoadingError;
+        IsUninstalled = state.IsUninstalled;
+        InstalledFromSourceUri = state.InstalledFromSourceUri;
+    }
+}
+
+public class PluginManagerConfig
+{
+    public string MainDependenceName { get; set; }
+    public PluginServerConfig[]? Servers { get; set; }
+}
+
+public class PluginServerConfig
+{
+    public string Name { get; set; }
+    public string SourceUri { get; set; }
+    public string? Username { get; set; }
+    public string? Password { get; set; }
+    public string? PasswordHash { get; set; }
 }

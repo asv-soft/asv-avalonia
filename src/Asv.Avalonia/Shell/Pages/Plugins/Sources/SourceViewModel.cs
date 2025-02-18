@@ -41,12 +41,14 @@ public class SourceViewModel : DisposableViewModel
             return;
         }
 
-        Name = new BindableReactiveProperty<string>(_viewModel.Name).EnableValidation(x =>
+        Name = new BindableReactiveProperty<string>(_viewModel.Name.Value).EnableValidation(x =>
             !string.IsNullOrWhiteSpace(x)
                 ? new Exception(RS.SourceViewModel_SourceViewModel_NameIsRequired)
                 : null
         );
-        SourceUri = new BindableReactiveProperty<string>(_viewModel.SourceUri).EnableValidation(x =>
+        SourceUri = new BindableReactiveProperty<string>(
+            _viewModel.SourceUri.Value
+        ).EnableValidation(x =>
             !string.IsNullOrWhiteSpace(x)
                 ? new Exception(RS.SourceViewModel_SourceViewModel_SourceUriIsRequired)
                 : null

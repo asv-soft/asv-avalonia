@@ -22,6 +22,7 @@ public static class AppBuilderPluginManagerExtensions
             builder.Core.Configuration,
             builder.Core.LogService
         );
+        options.Servers.ForEach(s => pm.AddServer(s));
         builder.Core.Services.WithExport<IPluginManager>(pm);
         return builder;
     }

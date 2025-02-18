@@ -40,7 +40,7 @@ public class PluginInfoViewModel : DisposableViewModel
         IsInstalled = new BindableReactiveProperty<bool>(
             _manager.IsInstalled(pluginInfo.PackageId, out _localInfo)
         );
-        IsUninstalled = new BindableReactiveProperty<bool>();
+        IsUninstalled = new BindableReactiveProperty<bool>(true);
         if (_localInfo != null)
         {
             IsUninstalled.OnNext(_localInfo.IsUninstalled);
@@ -54,7 +54,7 @@ public class PluginInfoViewModel : DisposableViewModel
         LastVersion = $"{pluginInfo.LastVersion} (API: {pluginInfo.ApiVersion})";
         IsApiCompatible = pluginInfo.ApiVersion == manager.ApiVersion;
         LocalVersion =
-            (_localInfo != null) ? $"{_localInfo?.Version} (API: {_localInfo?.ApiVersion})" : null;
+            _localInfo != null ? $"{_localInfo?.Version} (API: {_localInfo?.ApiVersion})" : null;
         DownloadCount = pluginInfo.DownloadCount.ToString();
         Tags = pluginInfo.Tags;
         Dependencies = new List<string>();

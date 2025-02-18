@@ -42,7 +42,7 @@ sealed class Program
         using var host = builder.Build();
 
         // If this is not the first instance, host have sent the arguments to the first instance and we can exit
-        if (host.IsFirstInstance == false)
+        if (!host.IsFirstInstance)
         {
             return;
         }

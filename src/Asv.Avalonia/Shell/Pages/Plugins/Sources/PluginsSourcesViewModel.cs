@@ -1,5 +1,7 @@
 ﻿using System.Composition;
 using FluentAvalonia.UI.Controls;
+using NuGet.Configuration;
+using NuGet.Protocol.Core.Types;
 using ObservableCollections;
 using R3;
 
@@ -17,6 +19,23 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         : this(DesignTime.CommandService, DesignTime.PluginManager, DesignTime.Log)
     {
         DesignTime.ThrowIfNotDesignMode();
+        _items = new ObservableList<IPluginServerInfo>(
+            new[]
+            {
+                new SourceInfo(
+                    new SourceRepository(
+                        new PackageSource("https://test.com", "test", true),
+                        new[] { new PluginResourceProvider() }
+                    )
+                ),
+            }
+        );
+        Items = _items.ToNotifyCollectionChanged(x => new PluginSourceViewModel(
+            $"Source[{x.SourceUri}]",
+            x,
+            DesignTime.Log,
+            this
+        ));
     }
 
     [ImportingConstructor]
@@ -26,43 +45,37 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         _mng = mng;
         _log = log;
 
+        Items = _items.ToNotifyCollectionChanged(x => new PluginSourceViewModel(
+            $"Source[{x.SourceUri}]",
+            x,
+            log,
+            this
+        ));
+
         Update = new ReactiveCommand(_ =>
         {
             _items.Clear();
             _items.AddRange(mng.Servers);
         });
         Update.IgnoreOnErrorResume(ex =>
-            log.Error(Title, RS.PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate, ex)
+            log.Error(
+                Title.Value,
+                RS.PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate,
+                ex
+            )
         );
+        Update.Execute(Unit.Default);
 
-        Remove = new ReactiveCommand<PluginSourceViewModel>(x =>
-        {
-            mng.RemoveServer(x.Model);
-            Update.Execute(Unit.Default);
-        });
-        Update.IgnoreOnErrorResume(ex =>
-            log.Error(Title, RS.PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove, ex)
+        Add = new ReactiveCommand(AddImpl);
+        Add.IgnoreOnErrorResume(ex =>
+            log.Error(
+                Title.Value,
+                RS.PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate,
+                ex
+            )
         );
-
-        /*Actions = new ReadOnlyObservableCollection<IMenuItem>([
-            new MenuItem($"{Id}.action.add")
-            {
-                Header = RS.PluginsSourcesViewModel_AddAction_Label,
-                Icon = MaterialIconKind.WebPlus,
-                Command = ReactiveCommand.CreateFromTask(AddImpl).DisposeItWith(Disposable)
-            }
-        ]);*/
-
-        Edit = new ReactiveCommand<PluginSourceViewModel>(EditImpl);
-
-        Items = _items.ToNotifyCollectionChanged(x => new PluginSourceViewModel(
-            $"Source[{x.SourceUri}]",
-            x,
-            this
-        ));
     }
 
-    public string Title => "Servers";
     public NotifyCollectionChangedSynchronizedViewList<PluginSourceViewModel> Items { get; set; }
     public BindableReactiveProperty<PluginSourceViewModel> SelectedItem { get; set; }
     public ReactiveCommand Add { get; }
@@ -70,7 +83,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
     public ReactiveCommand<PluginSourceViewModel> Remove { get; }
     public ReactiveCommand<PluginSourceViewModel> Edit { get; }
 
-    private async Task AddImpl()
+    private async void AddImpl(Unit unit)
     {
         var dialog = new ContentDialog
         {
@@ -79,17 +92,20 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
             IsSecondaryButtonEnabled = true,
             CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
         };
+
         using var viewModel = new SourceViewModel("NewSource", _mng, _log, null);
         viewModel.ApplyDialog(dialog);
+
         dialog.Content = viewModel;
         var result = await dialog.ShowAsync();
+
         if (result == ContentDialogResult.Primary)
         {
             Update.Execute(Unit.Default);
         }
     }
 
-    private async void EditImpl(PluginSourceViewModel arg)
+    public async void EditImpl(PluginSourceViewModel arg)
     {
         var dialog = new ContentDialog
         {
@@ -106,6 +122,12 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         {
             Update.Execute(Unit.Default);
         }
+    }
+
+    public void RemoveImpl(PluginSourceViewModel arg)
+    {
+        _mng.RemoveServer(arg.Model);
+        Update.Execute(Unit.Default);
     }
 
     public override ValueTask<IRoutable> Navigate(string id)
