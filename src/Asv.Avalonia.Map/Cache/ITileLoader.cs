@@ -31,10 +31,11 @@ public class CacheTileLoaderConfig
     public int RequestQueueSize { get; set; } = 100;
     public int RequestParallelThreads { get; set; } = Environment.ProcessorCount;
     public int RequestTimeoutMs { get; set; } = 5000;
+    public string EmptyTileBrush { get; set; } = $"{Brushes.LightGreen}";
 
     public override string ToString()
     {
-        return $"queue size{}";
+        return $"Queue size: {RequestQueueSize}, Parallel: {RequestParallelThreads} thread, Timeout: {RequestTimeoutMs} ms";
     }
 }
 
@@ -48,14 +49,20 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
     private readonly ConcurrentHashSet<string> _remoteRequests;
     private readonly object _sync = new();
     private volatile Bitmap? _emptyBitmap;
-    private readonly ImmutableDictionary<string,ITileProvider> _providers;
+    private readonly ImmutableDictionary<string, ITileProvider> _providers;
     private readonly ImmutableArray<ITileCache> _caches;
+    private readonly IBrush _emptyTileBrush;
 
-    public CacheTileLoader(ILoggerFactory logger, CacheTileLoaderConfig config, IEnumerable<ITileCache> caches, IEnumerable<ITileProvider> providers)
+    public CacheTileLoader(
+        ILoggerFactory logger,
+        CacheTileLoaderConfig config,
+        IEnumerable<ITileCache> caches,
+        IEnumerable<ITileProvider> providers
+    )
     {
         _logger = logger.CreateLogger<CacheTileLoader>();
         _providers = providers.ToImmutableDictionary(x => x.Id);
-        _caches = [..caches];
+        _caches = [.. caches];
         _onLoaded = new();
         _httpClient = new HttpClient
         {
@@ -63,15 +70,20 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
         };
         _localRequests = new();
         _remoteRequests = new ConcurrentHashSet<string>();
-
         _requestChannel = Channel.CreateBounded<TileKey>(
-            new BoundedChannelOptions(config.RequestQueueSize) { FullMode = BoundedChannelFullMode.DropOldest }
+            new BoundedChannelOptions(config.RequestQueueSize)
+            {
+                FullMode = BoundedChannelFullMode.DropOldest,
+            }
         );
-        
+
         for (var i = 0; i < config.RequestParallelThreads; i++)
         {
             Task.Run(ProcessQueue);
         }
+
+        _emptyTileBrush = Brush.Parse(config.EmptyTileBrush);
+
         _logger.ZLogInformation($"Run tile loaded with {config} ");
     }
 
@@ -89,7 +101,12 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
 
                 foreach (var cache in _caches)
                 {
-                    cache[position]
+                    var tile = cache[position];
+                    if (tile != null)
+                    {
+                        _onLoaded.OnNext(new TileLoadedEventArgs(position, tile));
+                        break;
+                    }
                 }
                 // try to get from cache
                 if (_cache.TryGetValue<Bitmap>(position, out var cachedTile))
@@ -170,7 +187,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
         }
     }
 
-    public Bitmap GetEmptyBitmap(Color? backgroundColor = null)
+    public Bitmap GetEmptyBitmap()
     {
         if (_emptyBitmap != null)
         {
@@ -188,8 +205,10 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
             var btm = new RenderTargetBitmap(new PixelSize(_provider.TileSize, _provider.TileSize));
             using (var ctx = btm.CreateDrawingContext(true))
             {
-                var brush = new SolidColorBrush(backgroundColor ?? Colors.Transparent);
-                ctx.FillRectangle(brush, new Rect(0, 0, _provider.TileSize, _provider.TileSize));
+                ctx.FillRectangle(
+                    _emptyTileBrush,
+                    new Rect(0, 0, _provider.TileSize, _provider.TileSize)
+                );
             }
 
             return _emptyBitmap = btm;
