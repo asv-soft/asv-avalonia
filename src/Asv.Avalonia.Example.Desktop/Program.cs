@@ -55,6 +55,7 @@ sealed class Program
 
             Console.WriteLine(e);
             host.HandleApplicationCrash(e);
+            
         }
     }
 
@@ -68,5 +69,6 @@ sealed class Program
             .With(new AvaloniaNativePlatformOptions { OverlayPopups = true }) // Mac
             .WithInterFont()
             .LogToTrace()
-            .UseR3();
+            .UseR3()
+            .UseAsvMap();
 }
