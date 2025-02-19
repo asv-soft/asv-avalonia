@@ -16,13 +16,13 @@ namespace Asv.Avalonia.Map;
 
 public interface ITileLoader : IDisposable
 {
-    Bitmap this[TileKey position] { get; }
+    Bitmap this[TilePosition position] { get; }
     Observable<TileLoadedEventArgs> OnLoaded { get; }
 }
 
-public class TileLoadedEventArgs(TileKey position, Bitmap? tile)
+public class TileLoadedEventArgs(TilePosition position, Bitmap? tile)
 {
-    public TileKey Position { get; } = position;
+    public TilePosition Position { get; } = position;
     public Bitmap? Tile { get; } = tile;
 }
 
@@ -41,8 +41,6 @@ public class CacheTileLoaderConfig
 
 public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
 {
-    private readonly ITileCache? _fastCache;
-    private readonly ITileCache? _slowCache;
     private readonly ILogger<CacheTileLoader> _logger;
     private readonly HttpClient _httpClient;
     private readonly Channel<TileKey> _requestChannel;
@@ -52,20 +50,19 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
     private readonly object _sync = new();
     private volatile Bitmap? _emptyBitmap;
     private readonly ImmutableDictionary<string, ITileProvider> _providers;
+    private readonly ImmutableArray<ITileCache> _caches;
     private readonly IBrush _emptyTileBrush;
 
     public CacheTileLoader(
         ILoggerFactory logger,
         CacheTileLoaderConfig config,
-        IEnumerable<ITileProvider> providers,
-        ITileCache? fastCache,
-        ITileCache? slowCache
+        IEnumerable<ITileCache> caches,
+        IEnumerable<ITileProvider> providers
     )
     {
-        _fastCache = fastCache;
-        _slowCache = slowCache;
         _logger = logger.CreateLogger<CacheTileLoader>();
-        _providers = providers.ToImmutableDictionary(x => x.Info.Id);
+        _providers = providers.ToImmutableDictionary(x => x.Id);
+        _caches = [.. caches];
         _onLoaded = new();
         _httpClient = new HttpClient
         {
@@ -102,9 +99,8 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                     continue;
                 }
 
-                for (var index = 0; index < _caches.Length; index++)
+                foreach (var cache in _caches)
                 {
-                    var cache = _caches[index];
                     var tile = cache[position];
                     if (tile != null)
                     {
@@ -112,7 +108,6 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
                         break;
                     }
                 }
-
                 // try to get from cache
                 if (_cache.TryGetValue<Bitmap>(position, out var cachedTile))
                 {
@@ -234,10 +229,15 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
         return Path.Combine(tileFolder, $"{position.X}_{position.Y}.png");
     }
 
-    public Bitmap this[TileKey position]
+    public Bitmap this[TilePosition position]
     {
         get
         {
+            if (_cache.TryGetValue<Bitmap>(position, out var cachedTile))
+            {
+                return cachedTile ?? GetEmptyBitmap();
+            }
+
             if (_localRequests.Contains(position) == false)
             {
                 _requestChannel.Writer.TryWrite(position);
