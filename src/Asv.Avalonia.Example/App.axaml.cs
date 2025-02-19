@@ -77,6 +77,7 @@ public partial class App : Application, IContainerHost, IShellHost
             Shell.Navigate(HomePageViewModel.PageId);
             Shell.Navigate(DocumentPageViewModel.PageId);
             Shell.Navigate(MapExamplePageViewModel.PageId);
+            Shell.Navigate(FlightModePageViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();

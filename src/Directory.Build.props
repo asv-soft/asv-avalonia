@@ -8,5 +8,6 @@
     <ZLoggerVersion>2.5.5</ZLoggerVersion>
     <SystemCompositionVersion>9.0.0</SystemCompositionVersion>
     <MaterialIconsAvaloniaVersion>2.2.0</MaterialIconsAvaloniaVersion>
+    <MavlinkVersion>4.0.0-dev.3</MavlinkVersion>
   </PropertyGroup>
 </Project>

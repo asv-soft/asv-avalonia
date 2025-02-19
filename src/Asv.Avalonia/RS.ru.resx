@@ -131,4 +131,7 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Пример карты</value>
     </data>
+    <data name="FlightPageViewModel_Title" xml:space="preserve">
+        <value>Полет</value>
+    </data>
 </root>

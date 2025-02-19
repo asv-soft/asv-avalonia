@@ -138,4 +138,7 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Map Example</value>
     </data>
+    <data name="FlightPageViewModel_Title" xml:space="preserve">
+        <value>Flight</value>
+    </data>
 </root>
