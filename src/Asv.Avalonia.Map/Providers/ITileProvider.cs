@@ -1,8 +1,14 @@
 ﻿namespace Asv.Avalonia.Map;
 
+public class TileProviderInfo(string id, string name)
+{
+    public string Id { get; set; } = id;
+    public string Name { get; set; } = name;
+}
+
 public interface ITileProvider
 {
-    string Id { get; }
+    TileProviderInfo Info { get; }
     IMapProjection Projection { get; }
     string? GetTileUrl(TilePosition position);
     int TileSize { get; }
