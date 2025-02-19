@@ -22,6 +22,11 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         var reasons = await this.RequestChildCloseApproval();
         if (reasons.Count != 0)
         {
+            if (reasons.Any(r => r.Message == HomePageViewModel.PageId))
+            {
+                return;
+            }
+
             // TODO: ask user to save changes
         }
 
@@ -33,6 +38,11 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     public ICommandHistory History { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
     public ICommand TryClose { get; }
+
+    protected virtual bool HandleClose(IReadOnlyList<PageCloseRestriction> restrictions)
+    {
+        return true;
+    }
 
     protected override void Dispose(bool disposing)
     {

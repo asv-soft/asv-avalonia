@@ -42,5 +42,16 @@ public class HomePageViewModel : PageViewModel<HomePageViewModel>
         return [];
     }
 
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        if (e is PageCloseAttemptEvent attempt)
+        {
+            var restriction = new PageCloseRestriction(this, PageId);
+            attempt.AddRestriction(restriction);
+        }
+
+        return base.InternalCatchEvent(e);
+    }
+
     public override IExportInfo Source => SystemModule.Instance;
 }
