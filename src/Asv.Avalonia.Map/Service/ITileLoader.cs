@@ -65,7 +65,7 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
         _fastCache = fastCache;
         _slowCache = slowCache;
         _logger = logger.CreateLogger<CacheTileLoader>();
-        _providers = providers.ToImmutableDictionary(x => x.Info.Id);
+        _providers = providers.ToImmutableDictionary(x => x.Id);
         _onLoaded = new();
         _httpClient = new HttpClient
         {
@@ -238,6 +238,8 @@ public class CacheTileLoader : DisposableOnceWithCancel, ITileLoader
     {
         get
         {
+            _fast
+
             if (_localRequests.Contains(position) == false)
             {
                 _requestChannel.Writer.TryWrite(position);
