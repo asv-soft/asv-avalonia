@@ -27,6 +27,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Asv.Mavlink" Version="4.0.0-dev.3" />
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Diagnostics" Version="11.2.3" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
@@ -46,8 +47,8 @@
         </PackageReference>
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="System.Composition" Version="$(SystemCompositionVersion)" />
-        <PackageReference Include="Asv.Common" Version="$(AsvCommonVersion)" />
-        <PackageReference Include="Asv.Cfg" Version="$(AsvCommonVersion)" />
+        <PackageReference Include="Asv.Common" Version="3.1.1-dev.1" />
+        <PackageReference Include="Asv.Cfg" Version="3.1.1-dev.1" />
         <PackageReference Include="ZLogger" Version="$(ZLoggerVersion)" />
     </ItemGroup>
 

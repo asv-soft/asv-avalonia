@@ -15,9 +15,7 @@
         <avalonia:NullToBoolConverter x:Key="SelectedItemToBoolConverter"/>
     </UserControl.Resources>
     <DockPanel>
-        <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}">
-
-        </TextBox>
+        <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}"/>
         <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Content="{x:Static avalonia:RS.SettingsKeyMapView_Action_ResetCustomHotKeys}" Margin="10" Command="{Binding ResetHotKeysToDefaultCommand}"/>
         <DataGrid x:Name="HotKeyGrid" Focusable="False" ItemsSource="{Binding Items}"
                   SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
