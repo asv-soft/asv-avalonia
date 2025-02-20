@@ -12,6 +12,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     private readonly ObservableList<IPage> _pages;
     private readonly IContainerHost _container;
     private readonly ICommandService _cmd;
+    private readonly IMavlinkConnectionService _connectionService;
 
     protected ShellViewModel(IContainerHost ioc, string id)
         : base(id)
@@ -20,7 +21,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         _container = ioc;
         _cmd = ioc.GetExport<ICommandService>();
         Navigation = ioc.GetExport<INavigationService>();
-
+        _connectionService = ioc.GetExport<IMavlinkConnectionService>();
         _pages = new ObservableList<IPage>();
         PagesView = _pages.ToNotifyCollectionChangedSlim();
         ErrorState = new BindableReactiveProperty<ShellErrorState>(ShellErrorState.Normal);

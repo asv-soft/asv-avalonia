@@ -10,6 +10,7 @@ public class SettingsExtension() : IExtensionFor<ISettingsPage>
     private TreePage? _node1;
     private TreePage? _node2;
     private TreePage? _node3;
+    private TreePage? _node4;
 
     public void Extend(ISettingsPage context)
     {
@@ -31,9 +32,16 @@ public class SettingsExtension() : IExtensionFor<ISettingsPage>
             MaterialIconKind.KeyboardSettings,
             SettingsKeymapViewModel.SubPageId
         );
+        _node4 = new TreePage(
+            SettingsConnectionViewModel.SubPageId,
+            "Connection", // TODO: Localize
+            MaterialIconKind.Connection,
+            SettingsConnectionViewModel.SubPageId
+        );
         context.Nodes.Add(_node1);
         context.Nodes.Add(_node2);
         context.Nodes.Add(_node3);
+        context.Nodes.Add(_node4);
     }
 
     public void Dispose()
@@ -41,5 +49,6 @@ public class SettingsExtension() : IExtensionFor<ISettingsPage>
         _node1?.Dispose();
         _node2?.Dispose();
         _node3?.Dispose();
+        _node4?.Dispose();
     }
 }
