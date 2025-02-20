@@ -5,10 +5,9 @@ using R3;
 
 namespace Asv.Avalonia
 {
-    public partial class ContentDialog : UserControl
+    public partial class ContentDialog : ContentControl
     {
         private ContentControl _host;
-
         private TaskCompletionSource<DialogResult> _tcs;
         private DialogResult _result;
 
@@ -16,35 +15,26 @@ namespace Asv.Avalonia
         {
             InitializeComponent();
 
-            PrimaryButtonCommand = new ReactiveCommand(
-                (_, __) =>
-                {
-                    _result = DialogResult.True;
-                    CloseDialog(parentWindow);
-                    return ValueTask.CompletedTask;
-                }
-            );
-            SecondaryButtonCommand = new ReactiveCommand(
-                (_, __) =>
-                {
-                    _result = DialogResult.False;
-                    CloseDialog(parentWindow);
-                    return ValueTask.CompletedTask;
-                }
-            );
-            CloseCommand = new ReactiveCommand(
-                (_, __) =>
-                {
-                    _result = DialogResult.Null;
-                    CloseDialog(parentWindow);
-                    return ValueTask.CompletedTask;
-                }
-            );
+            PrimaryButtonCommand = new ReactiveCommand(_ =>
+            {
+                _result = DialogResult.Primary;
+                CloseDialog(parentWindow);
+            });
+            SecondaryButtonCommand = new ReactiveCommand(_ =>
+            {
+                _result = DialogResult.Secondary;
+                CloseDialog(parentWindow);
+            });
+            CloseCommand = new ReactiveCommand(_ =>
+            {
+                _result = DialogResult.Close;
+                CloseDialog(parentWindow);
+            });
         }
 
-        public static StyledProperty<Control> DialogContentProperty = AvaloniaProperty.Register<
+        public static StyledProperty<object?> DialogContentProperty = AvaloniaProperty.Register<
             ContentDialog,
-            Control
+            object?
         >(nameof(DialogContent));
         public static StyledProperty<string> TitleProperty = AvaloniaProperty.Register<
             ContentDialog,
@@ -77,7 +67,7 @@ namespace Asv.Avalonia
         public static readonly StyledProperty<ReactiveCommand> CloseCommandProperty =
             AvaloniaProperty.Register<ContentDialog, ReactiveCommand>(nameof(CloseCommand));
 
-        public Control DialogContent
+        public object? DialogContent
         {
             get => GetValue(DialogContentProperty);
             set => SetValue(DialogContentProperty, value);
@@ -122,63 +112,22 @@ namespace Asv.Avalonia
         public ReactiveCommand PrimaryButtonCommand
         {
             get => GetValue(PrimaryButtonCommandProperty);
-            set => SetValue(PrimaryButtonCommandProperty, value);
+            private set => SetValue(PrimaryButtonCommandProperty, value);
         }
 
         public ReactiveCommand SecondaryButtonCommand
         {
             get => GetValue(SecondaryButtonCommandProperty);
-            set => SetValue(SecondaryButtonCommandProperty, value);
+            private set => SetValue(SecondaryButtonCommandProperty, value);
         }
 
         public ReactiveCommand CloseCommand
         {
             get => GetValue(CloseCommandProperty);
-            set => SetValue(CloseCommandProperty, value);
-        }
-
-        public ContentDialog WithTitle(string title)
-        {
-            Title = title;
-            return this;
-        }
-
-        public ContentDialog WithMessage(string message)
-        {
-            Message = message;
-            return this;
-        }
-
-        public ContentDialog WithIsInputDialog(bool isInputDialog)
-        {
-            IsInputDialog = isInputDialog;
-            return this;
-        }
-
-        public ContentDialog WithPositiveButtonText(string positiveButtonText)
-        {
-            PrimaryButtonText = positiveButtonText;
-            return this;
-        }
-
-        public ContentDialog WithNegativeButtonText(string negativeButtonText)
-        {
-            SecondaryButtonText = negativeButtonText;
-            return this;
-        }
-
-        public ContentDialog WithDefaultButton(bool defaultButton)
-        {
-            DefaultButton = defaultButton;
-            return this;
+            private set => SetValue(CloseCommandProperty, value);
         }
 
         public async Task<DialogResult> ShowAsync(TopLevel parentWindow)
-        {
-            return await ShowDialog(parentWindow);
-        }
-
-        public async Task<DialogResult> ShowDialog(TopLevel parentWindow)
         {
             _tcs = new TaskCompletionSource<DialogResult>();
 
@@ -189,7 +138,7 @@ namespace Asv.Avalonia
                 throw new InvalidOperationException("Error: OverlayLayer is null");
             }
 
-            _host = new ContentControl { Content = this };
+            _host = this;
 
             ol.Children.Add(_host);
             IsVisible = true;
@@ -248,9 +197,10 @@ namespace Asv.Avalonia
 
         public enum DialogResult
         {
-            Null,
-            True,
-            False,
+            None,
+            Close,
+            Primary,
+            Secondary,
         }
     }
 }

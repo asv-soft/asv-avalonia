@@ -61,6 +61,10 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>RS.resx</DependentUpon>
         </Compile>
+        <Compile Update="Controls\ContentDialog\ContentDialog.axaml.cs">
+          <DependentUpon>ContentDialog.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

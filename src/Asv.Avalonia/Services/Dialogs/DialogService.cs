@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -194,14 +195,14 @@ public sealed class DialogService : IDialogService
             SecondaryButtonText = RS.DialogButton_No,
         };
 
+        dialogContent.PrimaryButtonCommand.Subscribe(_ =>
+        {
+            Console.WriteLine("122");
+        });
+
         var result = await dialogContent.ShowAsync(_host.TopLevel);
 
-        if (result == ContentDialog.DialogResult.True)
-        {
-            return true;
-        }
-
-        return false;
+        return result == ContentDialog.DialogResult.Primary;
     }
 
     public async Task<bool> ShowSaveCancelDialog(string title, string message)
@@ -217,12 +218,7 @@ public sealed class DialogService : IDialogService
 
         var result = await dialogContent.ShowAsync(_host.TopLevel);
 
-        if (result == ContentDialog.DialogResult.True)
-        {
-            return true;
-        }
-
-        return false;
+        return result == ContentDialog.DialogResult.Primary;
     }
 
     public async Task<string?> ShowInputDialog(string title, string message)
@@ -238,7 +234,7 @@ public sealed class DialogService : IDialogService
 
         var result = await dialogContent.ShowAsync(_host.TopLevel);
 
-        if (result == ContentDialog.DialogResult.True)
+        if (result == ContentDialog.DialogResult.Primary)
         {
             if (dialogContent.DialogContent is TextBox box)
             {
