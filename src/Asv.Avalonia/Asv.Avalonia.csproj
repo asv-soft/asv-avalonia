@@ -34,6 +34,10 @@
         <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
         <PackageReference Include="Material.Icons.Avalonia" Version="$(MaterialIconsAvaloniaVersion)"/>
         <PackageReference Include="MemoryPack" Version="1.21.3" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.2" />
         <PackageReference Include="ObservableCollections.R3" Version="$(R3CollectionVersion)" />
         <PackageReference Include="R3Extensions.Avalonia" Version="$(R3Version)" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.12.10">
@@ -100,5 +104,9 @@
 
     <ItemGroup>
       <UpToDateCheckInput Remove="Shell\Pages\Document\DocumentPageView.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="AppHost\AppHost2\Configuration\" />
     </ItemGroup>
 </Project>

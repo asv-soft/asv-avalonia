@@ -17,6 +17,18 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        using var app = AsvHost.Configure(builder =>
+        {
+            builder
+                .Configuration.builder.UseJsonConfig()
+                .UseSingleInstanceTracker(options => options.WithArgumentForwarding())
+                .UseAppInfo(options => options.CopyFrom(typeof(App).Assembly))
+                .UseLogging(options => { });
+        });
+
+        // If this is not the first instance, host have sent the arguments to the first instance and we can exit
+        app.ExitIfNotFirstInstance();
+
         var builder = AppHost.CreateBuilder();
 
         builder
@@ -48,13 +60,9 @@ sealed class Program
         }
         catch (Exception e)
         {
-            if (Debugger.IsAttached)
-            {
-                Debugger.Break();
-            }
-
             Console.WriteLine(e);
             host.HandleApplicationCrash(e);
+            app.HandleApplicationCrash(e);
         }
     }
 
