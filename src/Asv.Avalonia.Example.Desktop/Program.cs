@@ -5,6 +5,7 @@ using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Microsoft.Extensions.Configuration;
 using Key = Avalonia.Remote.Protocol.Input.Key;
 
 namespace Asv.Avalonia.Example.Desktop;
@@ -17,16 +18,13 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        using var app = AsvHost.Configure(builder =>
-        {
-            builder
-                .Configuration.builder.UseJsonConfig()
-                .UseSingleInstanceTracker(options => options.WithArgumentForwarding())
-                .UseAppInfo(options => options.CopyFrom(typeof(App).Assembly))
-                .UseLogging(options => { });
-        });
+         using var app = AsvHost
+             .CreateBuilder()
+             .UseAppInfo()
+             .UseSingleInstance(options => options.WithArgumentForwarding())
+             .Build();
 
-        // If this is not the first instance, host have sent the arguments to the first instance and we can exit
+       // If this is not the first instance, host have sent the arguments to the first instance and we can exit
         app.ExitIfNotFirstInstance();
 
         var builder = AppHost.CreateBuilder();

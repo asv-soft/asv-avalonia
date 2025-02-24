@@ -47,4 +47,10 @@
     <ItemGroup>
         <ProjectReference Include="..\Asv.Avalonia.Example\Asv.Avalonia.Example.csproj"/>
     </ItemGroup>
+
+    <ItemGroup>
+      <None Update="app_settings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
 </Project>
