@@ -18,4 +18,7 @@
         <DependentUpon>MapControl.axaml</DependentUpon>
       </Compile>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
+    </ItemGroup>
 </Project>

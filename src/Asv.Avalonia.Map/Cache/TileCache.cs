@@ -6,8 +6,14 @@ using ZLogger;
 
 namespace Asv.Avalonia.Map;
 
-public abstract class TileCacheConfig
+public class TileCacheConfig
 {
+    /// <summary>
+    /// Gets or sets the duration, in seconds, after which cached tiles are considered expired and eligible for removal.
+    /// A value of 0 or less disables automatic expiration of cached tiles.
+    /// </summary>
+    public double ExpirationAfterSec { get; set; } = 30 * 60;
+
     /// <summary>
     /// Gets or sets the interval, in seconds, at which cache statistics are printed to the log.
     /// A value of 0 or less disables the logging of statistics.

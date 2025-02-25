@@ -1,13 +1,10 @@
 namespace Asv.Avalonia.Map;
 
-
-
 public class BingTileProvider : ITileProvider
 {
     public const string Id = "BingTile";
     private static readonly TileProviderInfo StaticInfo = new(Id, "Bing map");
-    
-    
+
     private readonly string _apiKey;
     private readonly bool _useHighRes;
     public TileProviderInfo Info => StaticInfo;
