@@ -4,11 +4,15 @@ using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
+using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia.Example;
 
@@ -21,10 +25,19 @@ public partial class App : Application, IContainerHost, IShellHost
         var conventions = new ConventionBuilder();
         var containerCfg = new ContainerConfiguration();
 
-        AppHost.Instance.RegisterServices(containerCfg);
-
         containerCfg
             .WithExport<IContainerHost>(this)
+            .WithExport(
+                AppHost.Instance.Services.GetService<IConfiguration>()
+                    ?? throw new Exception("Configuration not found")
+            )
+            .WithExport(
+                AppHost.Instance.Services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance
+            )
+            .WithExport(
+                AppHost.Instance.Services.GetService<IAppPath>()
+                    ?? throw new Exception("AppPath not found")
+            )
             .WithExport<IDataTemplateHost>(this)
             .WithExport<IShellHost>(this)
             .WithDefaultConventions(conventions);
@@ -41,7 +54,7 @@ public partial class App : Application, IContainerHost, IShellHost
         get
         {
             yield return GetType().Assembly;
-            yield return typeof(IAppHost).Assembly;
+            yield return typeof(AppHost).Assembly;
         }
     }
 

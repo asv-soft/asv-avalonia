@@ -9,9 +9,4 @@ public interface IAppPath
     ///  The folder is created in the user's home directory and will not be deleted when the application is uninstalled or updated.
     /// </summary>
     string UserDataFolder { get; }
-
-    /// <summary>
-    /// Gets location of the application folder.
-    /// </summary>
-    string AppFolder { get; }
 }

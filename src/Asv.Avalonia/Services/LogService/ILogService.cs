@@ -3,7 +3,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public interface ILogService : ILoggerFactory
+public interface ILogService
 {
     ReadOnlyReactiveProperty<LogMessage?> OnMessage { get; }
     void SaveMessage(LogMessage logMessage);

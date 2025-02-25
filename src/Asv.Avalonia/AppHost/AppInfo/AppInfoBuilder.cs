@@ -1,35 +1,35 @@
-using System.Reflection;
+﻿using System.Reflection;
+using Avalonia;
 
 namespace Asv.Avalonia;
 
-public sealed class BuilderAppInfoOptions
+public class AppInfoBuilder
 {
-    public string Name { get; set; } = string.Empty;
-    public string Version { get; set; } = string.Empty;
-    public string CompanyName { get; set; } = string.Empty;
-    public string ProductTitle { get; set; } = string.Empty;
-    public string AvaloniaVersion { get; set; } = string.Empty;
-}
+    private readonly AppInfo _options = new();
 
-public static class BuilderAppInfoOptionsExtensions
-{
-    /// <summary>
-    /// Configures the application host builder with the specified product name.
-    /// </summary>
-    /// <param name="options">The app info options to add the appName to.</param>
-    /// <param name="appName">The product name to be used by the application.</param>
-    public static void WithProductName(this BuilderAppInfoOptions options, string appName)
+    internal AppInfoBuilder()
     {
-        ArgumentNullException.ThrowIfNull(appName);
-        options.Name = appName;
+        FillFromAssembly(typeof(AppBuilder).Assembly);
     }
 
     /// <summary>
     /// Configures the application host builder with the specified product name.
     /// </summary>
-    /// <param name="options">The app info options to add the info from the assembly to.</param>
+    /// <param name="appName">The product name to be used by the application.</param>
+    /// <returns> The application host builder.</returns>
+    public AppInfoBuilder WithProductName(string appName)
+    {
+        ArgumentNullException.ThrowIfNull(appName);
+        _options.Name = appName;
+        return this;
+    }
+
+    /// <summary>
+    /// Configures the application host builder with the specified product name.
+    /// </summary>
     /// <param name="assembly">The assembly from which to extract the product name <see cref="AssemblyProductAttribute"/>.</param>
-    public static void WithProductNameFrom(this BuilderAppInfoOptions options, Assembly assembly)
+    /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithProductNameFrom(Assembly assembly)
     {
         var attributes = assembly.GetCustomAttributes(typeof(AssemblyProductAttribute), false);
 
@@ -39,34 +39,36 @@ public static class BuilderAppInfoOptionsExtensions
             var nameAttribute = (AssemblyProductAttribute)attributes[0];
             if (nameAttribute.Product.Length != 0)
             {
-                options.Name = nameAttribute.Product;
-                return;
+                _options.Name = nameAttribute.Product;
+                return this;
             }
         }
 
         var name = assembly.GetName().Name;
         ArgumentNullException.ThrowIfNull(name);
-        options.Name = name;
+        _options.Name = name;
+        return this;
     }
 
     /// <summary>
     /// Configures the application host builder with the specified application version.
     /// </summary>
-    /// <param name="options">The app info options to add the version to.</param>
     /// <param name="version">The version of the application to be set in the host configuration.</param>
-    public static void WithVersion(this BuilderAppInfoOptions options, string version)
+    /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithVersion(string version)
     {
         ArgumentNullException.ThrowIfNull(version);
-        options.Version = version;
+        _options.Version = version;
+        return this;
     }
 
     /// <summary>
     /// Configures the application host builder with the version information
     /// retrieved from the specified assembly.
     /// </summary>
-    /// <param name="options">The app info options to add the info from the assembly to.</param>
     /// <param name="assembly">The assembly from which the version information will be retrieved <see cref="AssemblyVersionAttribute"/>.</param>
-    public static void WithVersionFrom(this BuilderAppInfoOptions options, Assembly assembly)
+    /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithVersionFrom(Assembly assembly)
     {
         var attributes = assembly.GetCustomAttributes(
             typeof(AssemblyInformationalVersionAttribute),
@@ -82,28 +84,29 @@ public static class BuilderAppInfoOptionsExtensions
         var nameAttribute = (AssemblyInformationalVersionAttribute)attributes[0];
         ArgumentException.ThrowIfNullOrEmpty(nameAttribute.InformationalVersion);
 
-        options.Version = nameAttribute.InformationalVersion;
+        _options.Version = nameAttribute.InformationalVersion;
+        return this;
     }
 
     /// <summary>
     /// Sets the company name for the application host builder.
     /// </summary>
-    /// <param name="options">The app info options to add the companyName to.</param>
     /// <param name="companyName">The name of the company to be associated with the application.</param>
     /// <returns>The current instance of the options.</returns>
-    public static void WithCompanyName(this BuilderAppInfoOptions options, string companyName)
+    public AppInfoBuilder WithCompanyName(string companyName)
     {
         ArgumentNullException.ThrowIfNull(companyName);
 
-        options.CompanyName = companyName;
+        _options.CompanyName = companyName;
+        return this;
     }
 
     /// <summary>
     /// Configures the application host builder with the company name obtained from the specified assembly's metadata.
     /// </summary>
-    /// <param name="options">The app info options to add the info from the assembly to.</param>
     /// <param name="assembly">The assembly from which to extract the company name <see cref="AssemblyCompanyAttribute"/>.</param>
-    public static void WithCompanyNameFrom(this BuilderAppInfoOptions options, Assembly assembly)
+    /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithCompanyNameFrom(Assembly assembly)
     {
         var attributes = assembly.GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
 
@@ -116,55 +119,53 @@ public static class BuilderAppInfoOptionsExtensions
         var nameAttribute = (AssemblyCompanyAttribute)attributes[0];
         ArgumentException.ThrowIfNullOrEmpty(nameAttribute.Company);
 
-        options.CompanyName = nameAttribute.Company;
+        _options.CompanyName = nameAttribute.Company;
+        return this;
     }
 
     /// <summary>
     /// Configures the application host builder with the specified Avalonia version.
     /// </summary>
-    /// <param name="options">The app info options to add the avaloniaVersion to.</param>
     /// <param name="avaloniaVersion">The version of Avalonia to be used by the application.</param>
-    public static void WithAvaloniaVersion(
-        this BuilderAppInfoOptions options,
-        string avaloniaVersion
-    )
+    /// /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithAvaloniaVersion(string avaloniaVersion)
     {
         ArgumentNullException.ThrowIfNull(avaloniaVersion);
-        options.AvaloniaVersion = avaloniaVersion;
+        _options.AvaloniaVersion = avaloniaVersion;
+        return this;
     }
 
     /// <summary>
     /// Configures the application host builder with the specified Avalonia version.
     /// </summary>
-    /// <param name="options">The app info options to add the info from the assembly to.</param>
     /// <param name="assembly">The assembly from which to extract the avalonia version <see cref="AssemblyProductAttribute"/>.</param>
-    public static void WithAvaloniaVersionFrom(
-        this BuilderAppInfoOptions options,
-        Assembly assembly
-    )
+    /// /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithAvaloniaVersionFrom(Assembly assembly)
     {
         var version = assembly.GetName().Version?.ToString();
         ArgumentException.ThrowIfNullOrEmpty(version);
-        options.AvaloniaVersion = version;
+        _options.AvaloniaVersion = version;
+        return this;
     }
 
     /// <summary>
     /// Configures the application host builder with the specified product title.
     /// </summary>
-    /// <param name="options">The AppHostBuilder to add the productTitle to.</param>
     /// <param name="productTitle">The title of the product to be set for the application host.</param>
-    public static void WithProductTitle(this BuilderAppInfoOptions options, string productTitle)
+    /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithProductTitle(string productTitle)
     {
         ArgumentNullException.ThrowIfNull(productTitle);
-        options.ProductTitle = productTitle;
+        _options.Title = productTitle;
+        return this;
     }
 
     /// <summary>
     /// Configures the application host builder with the specified product title.
     /// </summary>
-    /// <param name="options">The AppHostBuilder to add the info from the assembly to.</param>
     /// <param name="assembly">The assembly from which to extract the product title <see cref="AssemblyTitleAttribute"/>.</param>
-    public static void WithProductTitleFrom(this BuilderAppInfoOptions options, Assembly assembly)
+    /// <returns>The current instance of the options.</returns>
+    public AppInfoBuilder WithProductTitleFrom(Assembly assembly)
     {
         var attributes = assembly.GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
 
@@ -174,13 +175,28 @@ public static class BuilderAppInfoOptionsExtensions
             var titleAttribute = (AssemblyTitleAttribute)attributes[0];
             if (titleAttribute.Title.Length != 0)
             {
-                options.ProductTitle = titleAttribute.Title;
-                return;
+                _options.Title = titleAttribute.Title;
+                return this;
             }
         }
 
         var name = assembly.GetName().Name;
         ArgumentNullException.ThrowIfNull(name);
-        options.ProductTitle = name;
+        _options.Title = name;
+        return this;
+    }
+
+    public IAppInfo Build()
+    {
+        return _options;
+    }
+
+    public void FillFromAssembly(Assembly assembly)
+    {
+        WithProductNameFrom(assembly);
+        WithVersionFrom(assembly);
+        WithCompanyNameFrom(assembly);
+        WithProductTitleFrom(assembly);
+        WithAvaloniaVersionFrom(typeof(AppBuilder).Assembly);
     }
 }

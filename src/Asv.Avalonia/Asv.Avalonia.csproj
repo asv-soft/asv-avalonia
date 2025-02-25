@@ -106,8 +106,4 @@
     <ItemGroup>
       <UpToDateCheckInput Remove="Shell\Pages\Document\DocumentPageView.axaml" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="AppHost\AppHost2\Configuration\" />
-    </ItemGroup>
 </Project>

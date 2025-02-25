@@ -5,6 +5,11 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
+public class LogServiceConfig
+{
+    public string LogFolder { get; set; } = "logs";
+}
+
 public class LogService : ILogService
 {
     private readonly ILoggerFactory _factory;

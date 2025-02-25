@@ -3,6 +3,7 @@ using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using R3;
 
 namespace Asv.Avalonia.Example;
@@ -16,7 +17,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     private readonly ILogger<DialogBoardViewModel> _logger;
 
     public DialogBoardViewModel()
-        : this(DesignTime.CommandService, null!, NullLogService.Instance)
+        : this(DesignTime.CommandService, null!, NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         Title.OnNext(RS.DialogPageVIewModel_Title);
