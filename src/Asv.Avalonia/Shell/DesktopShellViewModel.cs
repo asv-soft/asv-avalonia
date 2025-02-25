@@ -34,14 +34,14 @@ public class DesktopShellViewModel : ShellViewModel
         }
 
         OpenFileCommand = new ReactiveCommand<string>(OpenFile);
-        
+
         // Устанавливаем окно как drop target
         DragDrop.SetAllowDrop(wnd, true);
         wnd.AddHandler(DragDrop.DropEvent, OnFileDrop);
         lifetime.MainWindow = wnd;
         lifetime.MainWindow.Show();
     }
-    
+
     #region Drop
 
     private ReactiveCommand<string> OpenFileCommand { get; }
@@ -69,7 +69,6 @@ public class DesktopShellViewModel : ShellViewModel
         }
     }
 
-
     protected override ValueTask CloseAsync(CancellationToken cancellationToken)
     {
         if (
@@ -83,7 +82,7 @@ public class DesktopShellViewModel : ShellViewModel
 
         return ValueTask.CompletedTask;
     }
-    
+
     private void OpenFile(string filePath)
     {
         // Передаем файл сервису обработки файлов
