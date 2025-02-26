@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Threading.Channels;
 using Asv.Cfg;
@@ -25,33 +24,29 @@ public class MapServiceConfig
     }
 }
 
-public class MapService : AsyncDisposableWithCancel, IMapService
+public class TileLoader : AsyncDisposableWithCancel, ITileLoader
 {
     private readonly MemoryTileCache _fastCache;
     private readonly FileSystemCache _slowCache;
     private readonly ConcurrentDictionary<int, Bitmap> _emptyBitmap;
     private readonly ConcurrentHashSet<TileKey> _localRequests;
     private readonly Channel<TileKey> _requestQueue;
-    private readonly ImmutableDictionary<string, ITileProvider> _providers;
-    private readonly Subject<TileLoadedEventArgs> _onLoaded;
+    private readonly Subject<TileKey> _onLoaded;
     private readonly HttpClient _httpClient;
     private readonly ConcurrentHashSet<string> _remoteRequests;
-    private readonly ILogger<MapService> _logger;
+    private readonly ILogger<TileLoader> _logger;
 
-    public MapService(
+    public TileLoader(
         ILoggerFactory loggerFactory,
-        IConfiguration configProvider,
-        IEnumerable<ITileProvider> providers
-    )
+        IConfiguration configProvider)
     {
-        _logger = loggerFactory.CreateLogger<MapService>();
+        _logger = loggerFactory.CreateLogger<TileLoader>();
         _fastCache = new MemoryTileCache(new MemoryTileCacheConfig(), loggerFactory);
         _slowCache = new FileSystemCache(new FileSystemCacheConfig(), loggerFactory);
         _localRequests = new ConcurrentHashSet<TileKey>();
         _emptyBitmap = new ConcurrentDictionary<int, Bitmap>();
         var config = configProvider.Get<MapServiceConfig>();
         EmptyTileBrush = new ReactiveProperty<IBrush>(Brush.Parse(config.EmptyTileBrush));
-        _providers = providers.ToImmutableDictionary(x => x.Info.Id);
         _onLoaded = new();
         _httpClient = new HttpClient
         {
@@ -82,24 +77,21 @@ public class MapService : AsyncDisposableWithCancel, IMapService
                     // already in progress => skip
                     continue;
                 }
+                if (_fastCache[key] != null) continue;
+                
                 var tile = _slowCache[key];
                 if (tile != null)
                 {
                     _fastCache[key] = tile;
-                    _onLoaded.OnNext(new TileLoadedEventArgs(key, tile));
-                    break;
+                    _onLoaded.OnNext(key);
+                    continue;
                 }
 
-                if (_providers.TryGetValue(key.Provider, out var provider) == false)
-                {
-                    throw new Exception($"Provider {key.Provider} not found");
-                }
-
-                var url = provider.GetTileUrl(key);
+                var url = key.Provider.GetTileUrl(key);
                 if (string.IsNullOrWhiteSpace(url))
                 {
                     tile = _emptyBitmap.GetOrAdd(
-                        provider.TileSize,
+                        key.Provider.TileSize,
                         CreateEmptyBitmap,
                         EmptyTileBrush.Value
                     );
@@ -110,14 +102,21 @@ public class MapService : AsyncDisposableWithCancel, IMapService
                     {
                         continue;
                     }
-                    var img = await _httpClient
-                        .GetByteArrayAsync(url, DisposeCancel)
-                        .ConfigureAwait(false);
-                    tile = new Bitmap(new MemoryStream(img));
+                    try
+                    {
+                        var img = await _httpClient
+                            .GetByteArrayAsync(url, DisposeCancel)
+                            .ConfigureAwait(false);
+                        tile = new Bitmap(new MemoryStream(img));
+                    }
+                    finally
+                    {
+                        _remoteRequests.Remove(url);
+                    }
                 }
                 _slowCache[key] = tile;
                 _fastCache[key] = tile;
-                _onLoaded.OnNext(new TileLoadedEventArgs(key, tile));
+                _onLoaded.OnNext(key);
             }
             catch (Exception ex)
             {
@@ -130,9 +129,7 @@ public class MapService : AsyncDisposableWithCancel, IMapService
             }
         }
     }
-
-    public IEnumerable<ITileProvider> Providers => _providers.Values;
-
+    
     public Bitmap this[TileKey key]
     {
         get
@@ -146,15 +143,11 @@ public class MapService : AsyncDisposableWithCancel, IMapService
             {
                 _requestQueue.Writer.TryWrite(key);
             }
-            if (_providers.TryGetValue(key.Provider, out var provider))
-            {
-                return _emptyBitmap.GetOrAdd(
-                    provider.TileSize,
-                    CreateEmptyBitmap,
-                    EmptyTileBrush.Value
-                );
-            }
-            throw new Exception("Provider not found");
+            return _emptyBitmap.GetOrAdd(
+                key.Provider.TileSize,
+                CreateEmptyBitmap,
+                EmptyTileBrush.Value
+            );
         }
     }
 
@@ -165,8 +158,54 @@ public class MapService : AsyncDisposableWithCancel, IMapService
         ctx.FillRectangle(brush, new Rect(0, 0, size, size));
         return btm;
     }
-
     public ReactiveProperty<IBrush> EmptyTileBrush { get; }
+    public Observable<TileKey> OnLoaded => _onLoaded;
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _fastCache.Dispose();
+            _slowCache.Dispose();
+            _localRequests.Dispose();
+            _onLoaded.Dispose();
+            _httpClient.Dispose();
+            _remoteRequests.Dispose();
+            EmptyTileBrush.Dispose();
+            
+            foreach (var value in _emptyBitmap.Values)
+            {
+                value.Dispose();
+            }
+        }
 
-    public Observable<TileLoadedEventArgs> OnLoaded => _onLoaded;
+        base.Dispose(disposing);
+    }
+
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        await _fastCache.DisposeAsync();
+        await _slowCache.DisposeAsync();
+        await CastAndDispose(_localRequests);
+        await CastAndDispose(_onLoaded);
+        await CastAndDispose(_httpClient);
+        await CastAndDispose(_remoteRequests);
+        await CastAndDispose(EmptyTileBrush);
+
+        foreach (var value in _emptyBitmap.Values)
+        {
+            await CastAndDispose(value);
+        }
+        
+        await base.DisposeAsyncCore();
+
+        return;
+
+        static async ValueTask CastAndDispose(IDisposable resource)
+        {
+            if (resource is IAsyncDisposable resourceAsyncDisposable)
+                await resourceAsyncDisposable.DisposeAsync();
+            else
+                resource.Dispose();
+        }
+    }
 }

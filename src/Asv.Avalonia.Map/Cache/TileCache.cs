@@ -64,7 +64,7 @@ public abstract class TileCache : AsyncDisposableOnce, ITileCache
     {
         ArgumentNullException.ThrowIfNull(config);
         ArgumentNullException.ThrowIfNull(factory);
-        var logger = factory.CreateLogger<CacheTileLoader>();
+        var logger = factory.CreateLogger<TileCache>();
         if (config.PrintStatisticsToLogPeriodSec > 0)
         {
             _timer = Observable

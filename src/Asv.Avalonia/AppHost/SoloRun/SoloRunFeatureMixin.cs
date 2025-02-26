@@ -29,7 +29,7 @@ public static class SoloRunFeatureMixin
 
     public static ISoloRunFeature GetSoloRunFeature(this AppHost host)
     {
-        return host.Services.GetRequiredService<ISoloRunFeature>();
+        return host.GetService<ISoloRunFeature>();
     }
 
     public static AppHost ExitIfNotFirstInstance(this AppHost host)

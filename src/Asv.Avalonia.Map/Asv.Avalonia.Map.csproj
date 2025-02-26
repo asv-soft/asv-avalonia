@@ -14,11 +14,6 @@
         <PackageReference Include="ZLogger" Version="$(ZLoggerVersion)" />
     </ItemGroup>
     <ItemGroup>
-      <Compile Update="MapControl.axaml.prop.cs">
-        <DependentUpon>MapControl.axaml</DependentUpon>
-      </Compile>
-    </ItemGroup>
-    <ItemGroup>
       <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
     </ItemGroup>
 </Project>

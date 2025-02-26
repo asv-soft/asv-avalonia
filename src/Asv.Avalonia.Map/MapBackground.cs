@@ -11,10 +11,9 @@ namespace Asv.Avalonia.Map;
 
 public class MapBackground : Control
 {
-    private ITileLoader? _cache;
     private readonly Subject<Unit> _renderRequestSubject = new();
     private readonly IDisposable _disposeIt;
-
+    private readonly ITileLoader _tileLoader;
     static MapBackground()
     {
         AffectsRender<MapBackground>(
@@ -28,21 +27,24 @@ public class MapBackground : Control
     public MapBackground()
     {
         IsDebug = true;
+        _tileLoader = AppHost.Instance.GetService<ITileLoader>();
         DisposableBuilder disposeBuilder = new();
         _renderRequestSubject.AddTo(ref disposeBuilder);
         _renderRequestSubject
             .ThrottleLastFrame(1)
             .Subscribe(_ => InvalidateVisual())
             .AddTo(ref disposeBuilder);
+        _tileLoader.OnLoaded
+            .Subscribe(_=> RequestRenderLoop())
+            .AddTo(ref disposeBuilder);
 
         Provider = new BingTileProvider(
             "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
         );
-        Disposable.Create(() => _cache?.Dispose());
-
         _disposeIt = disposeBuilder.Build();
 
         Zoom = 8;
+        
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
@@ -56,7 +58,6 @@ public class MapBackground : Control
     public override void Render(DrawingContext context)
     {
         base.Render(context);
-        Debug.Assert(_cache != null, "_cache != null");
 
         var background = Background;
         if (background != null)
@@ -89,11 +90,11 @@ public class MapBackground : Control
                 {
                     continue;
                 }
-                var key = new TilePosition(x, y, zoom);
+                var key = new TileKey(x, y, zoom, Provider);
 
                 var px = (key.X * Provider.TileSize) + offset.X;
                 var py = (key.Y * Provider.TileSize) + offset.Y;
-                var tile = _cache[key];
+                var tile = _tileLoader[key];
                 context.DrawImage(
                     tile,
                     new Rect(0, 0, Provider.TileSize, Provider.TileSize),
@@ -174,37 +175,23 @@ public class MapBackground : Control
     public ITileProvider Provider
     {
         get => _provider;
-        set
-        {
-            if (SetAndRaise(ProviderProperty, ref _provider, value))
-            {
-                ProviderChanged(_provider);
-            }
-        }
-    }
-
-    private void ProviderChanged(ITileProvider provider)
-    {
-        _cache?.Dispose();
-        _cache = new CacheTileLoader(MapCore.LoggerFactory, provider ?? EmptyTileProvider.Instance);
-        _cache.OnLoaded.Subscribe(x => _renderRequestSubject.OnNext(Unit.Default));
-        RequestRenderLoop();
+        set => SetAndRaise(ProviderProperty, ref _provider, value);
     }
 
     #endregion
 
     #region Zoom
 
-    private int _zoom;
+    private ushort _zoom;
 
-    public static readonly DirectProperty<MapBackground, int> ZoomProperty =
-        AvaloniaProperty.RegisterDirect<MapBackground, int>(
+    public static readonly DirectProperty<MapBackground, ushort> ZoomProperty =
+        AvaloniaProperty.RegisterDirect<MapBackground, ushort>(
             nameof(Zoom),
             o => o.Zoom,
             (o, v) => o.Zoom = v
         );
 
-    public int Zoom
+    public ushort Zoom
     {
         get => _zoom;
         set => SetAndRaise(ZoomProperty, ref _zoom, value);
@@ -215,6 +202,7 @@ public class MapBackground : Control
     #region IsDebug
 
     private bool _isDebug;
+    
 
     public static readonly DirectProperty<MapBackground, bool> IsDebugEnabledProperty =
         AvaloniaProperty.RegisterDirect<MapBackground, bool>(

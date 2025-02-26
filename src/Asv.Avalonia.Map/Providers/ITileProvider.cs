@@ -10,6 +10,6 @@ public interface ITileProvider
 {
     TileProviderInfo Info { get; }
     IMapProjection Projection { get; }
-    string? GetTileUrl(TilePosition position);
+    string? GetTileUrl(TileKey key);
     int TileSize { get; }
 }

@@ -16,13 +16,13 @@ public class BingTileProvider : ITileProvider
         _useHighRes = useHighRes;
     }
 
-    public string? GetTileUrl(TilePosition position)
+    public string? GetTileUrl(TileKey position)
     {
         var quadKey = GetQuadKey(position);
         return $"https://t0.ssl.ak.dynamic.tiles.virtualearth.net/comp/CompositionHandler/{quadKey}?mkt=en-US&it=A,G,L&dpi={(_useHighRes ? "d1" : "d0")}&key={_apiKey}";
     }
 
-    private static string GetQuadKey(TilePosition position)
+    private static string GetQuadKey(TileKey position)
     {
         var quadKey = new char[position.Zoom];
         for (var i = position.Zoom; i > 0; i--)

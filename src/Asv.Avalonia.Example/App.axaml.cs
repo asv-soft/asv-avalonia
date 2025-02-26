@@ -28,14 +28,14 @@ public partial class App : Application, IContainerHost, IShellHost
         containerCfg
             .WithExport<IContainerHost>(this)
             .WithExport(
-                AppHost.Instance.Services.GetService<IConfiguration>()
+                AppHost.Instance.GetService<IConfiguration>()
                     ?? throw new Exception("Configuration not found")
             )
             .WithExport(
-                AppHost.Instance.Services.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance
+                AppHost.Instance.GetService<ILoggerFactory>() ?? NullLoggerFactory.Instance
             )
             .WithExport(
-                AppHost.Instance.Services.GetService<IAppPath>()
+                AppHost.Instance.GetService<IAppPath>()
                     ?? throw new Exception("AppPath not found")
             )
             .WithExport<IDataTemplateHost>(this)

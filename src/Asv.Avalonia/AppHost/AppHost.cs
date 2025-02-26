@@ -9,6 +9,9 @@ namespace Asv.Avalonia;
 
 public class AppHost : AsyncDisposableWithCancel
 {
+    private readonly ServiceProvider _services;
+    private readonly IConfiguration _config;
+
     #region Static
 
     private static AppHost? _instance;
@@ -58,18 +61,20 @@ public class AppHost : AsyncDisposableWithCancel
     internal AppHost(ServiceProvider serviceProvider, IConfiguration config)
     {
         _instance = this;
-        Services = serviceProvider;
-        Configuration = config;
+        _services = serviceProvider;
+        _config = config;
     }
 
-    public IServiceProvider Services { get; }
-    public IConfiguration Configuration { get; }
-
+    public T GetService<T>() 
+        where T : notnull
+    {
+        return _services.GetRequiredService<T>();
+    }
+    
     public void HandleApplicationCrash(Exception e)
     {
-        Services
-            .GetService<ILoggerFactory>()
-            ?.CreateLogger<AppHost>()
+        GetService<ILoggerFactory>()
+            .CreateLogger<AppHost>()
             .ZLogCritical(e, $"Application crashed: {e.Message}");
     }
 }

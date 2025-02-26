@@ -9,15 +9,14 @@ public static class MapMixin
 {
     public static AppHostBuilder UseAsvMap(this AppHostBuilder builder)
     {
-        builder.Services.AddSingleton<IMapService>();
+        builder.Services.AddSingleton<ITileLoader, TileLoader>();
         return builder;
     }
 }
 
-public interface IMapService
+public interface ITileLoader
 {
-    IEnumerable<ITileProvider> Providers { get; }
     Bitmap this[TileKey key] { get; }
-    Observable<TileLoadedEventArgs> OnLoaded { get; }
+    Observable<TileKey> OnLoaded { get; }
     ReactiveProperty<IBrush> EmptyTileBrush { get; }
 }

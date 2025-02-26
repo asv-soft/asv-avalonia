@@ -65,7 +65,7 @@ public class FileSystemCache : TileCache
 
     private string GetTileCachePath(TileKey key)
     {
-        var providerName = key.Provider;
+        var providerName = key.Provider.Info.Id;
         var tileFolder = Path.Combine(_cacheDirectory, providerName, key.Zoom.ToString());
         if (Directory.Exists(tileFolder) == false)
         {
