@@ -8,14 +8,14 @@
              x:Class="Asv.Avalonia.SourceView"
              x:DataType="gui:SourceViewModel">
     <StackPanel Spacing="8">
-        <TextBox Name="Name" Watermark="{x:Static gui:RS.SourcesView_Name}" Text="{CompiledBinding Name.Value}">
+        <TextBox Name="Name" Watermark="{x:Static gui:RS.SourcesView_Name}" Text="{CompiledBinding Name.Value, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InnerLeftContent>
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="8 0">
                     <avalonia:MaterialIcon Kind="Text" />
                 </StackPanel>
             </TextBox.InnerLeftContent>
         </TextBox>
-        <TextBox Name="SourceUri" Watermark="{x:Static gui:RS.SourcesView_URL}" Text="{CompiledBinding SourceUri.Value}">
+        <TextBox Name="SourceUri" Watermark="{x:Static gui:RS.SourcesView_URL}" Text="{CompiledBinding SourceUri.Value, UpdateSourceTrigger=PropertyChanged}">
             <TextBox.InnerLeftContent>
                 <StackPanel Orientation="Horizontal" Spacing="8" Margin="8 0">
                     <avalonia:MaterialIcon Kind="Globe" />

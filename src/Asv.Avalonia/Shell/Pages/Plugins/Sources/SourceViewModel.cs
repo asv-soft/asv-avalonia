@@ -1,28 +1,38 @@
-﻿using FluentAvalonia.UI.Controls;
-using R3;
+﻿using R3;
+using Exception = System.Exception;
 
 namespace Asv.Avalonia;
 
-public class SourceViewModel : DisposableViewModel
+public class SourceViewModel : RoutableViewModel
 {
     private readonly IPluginManager _mng;
-    private readonly ILogService _log;
     private readonly PluginSourceViewModel? _viewModel;
+    private EventHandler? _canExecuteChangedHandler;
 
     public SourceViewModel()
         : base(string.Empty)
     {
         DesignTime.ThrowIfNotDesignMode();
-        Name = new BindableReactiveProperty<string>("Github").EnableValidation(x =>
-            !string.IsNullOrWhiteSpace(x)
-                ? new Exception(RS.SourceViewModel_SourceViewModel_NameIsRequired)
-                : null
-        );
-        SourceUri = new BindableReactiveProperty<string>("https://github.com").EnableValidation(x =>
-            !string.IsNullOrWhiteSpace(x)
-                ? new Exception(RS.SourceViewModel_SourceViewModel_SourceUriIsRequired)
-                : null
-        );
+        Name = new BindableReactiveProperty<string>("Github").EnableValidation();
+        SourceUri = new BindableReactiveProperty<string>("https://github.com").EnableValidation();
+        _sub1 = Name.Subscribe(x =>
+        {
+            if (string.IsNullOrWhiteSpace(x))
+            {
+                Name.OnErrorResume(
+                    new Exception(RS.SourceViewModel_SourceViewModel_NameIsRequired)
+                );
+            }
+        });
+        _sub2 = SourceUri.Subscribe(x =>
+        {
+            if (string.IsNullOrWhiteSpace(x))
+            {
+                SourceUri.OnErrorResume(
+                    new Exception(RS.SourceViewModel_SourceViewModel_SourceUriIsRequired)
+                );
+            }
+        });
     }
 
     public SourceViewModel(
@@ -34,38 +44,60 @@ public class SourceViewModel : DisposableViewModel
         : base(id)
     {
         _mng = mng;
-        _log = log;
         _viewModel = viewModel;
-        if (_viewModel == null)
-        {
-            return;
-        }
 
-        Name = new BindableReactiveProperty<string>(_viewModel.Name.Value).EnableValidation(x =>
-            !string.IsNullOrWhiteSpace(x)
-                ? new Exception(RS.SourceViewModel_SourceViewModel_NameIsRequired)
-                : null
-        );
+        Name = new BindableReactiveProperty<string>(
+            _viewModel?.Name.Value ?? string.Empty
+        ).EnableValidation();
         SourceUri = new BindableReactiveProperty<string>(
-            _viewModel.SourceUri.Value
-        ).EnableValidation(x =>
-            !string.IsNullOrWhiteSpace(x)
-                ? new Exception(RS.SourceViewModel_SourceViewModel_SourceUriIsRequired)
-                : null
-        );
-        Username = new BindableReactiveProperty<string?>(_viewModel.Model.Username);
+            _viewModel?.SourceUri.Value ?? string.Empty
+        ).EnableValidation();
+        Username = new BindableReactiveProperty<string?>(_viewModel?.Model.Username);
         Password = new BindableReactiveProperty<string>();
 
-        var isValid = Observable.Create<bool>(x =>
+        IsValid = Observable
+            .Create<bool>(x =>
+            {
+                var hasError = Name.HasErrors || SourceUri.HasErrors;
+                x.OnNext(!hasError);
+                return x;
+            })
+            .DistinctUntilChanged();
+
+        ApplyCommand = new ReactiveCommand((_, _) => Update(), configureAwait: false);
+
+        _sub1 = Name.Subscribe(x =>
         {
-            x.OnNext(!Name.HasErrors || !SourceUri.HasErrors);
-            return x;
+            if (string.IsNullOrWhiteSpace(x))
+            {
+                Name.OnErrorResume(
+                    new Exception(RS.SourceViewModel_SourceViewModel_NameIsRequired)
+                );
+            }
+
+            ApplyCommand.ChangeCanExecute(!Name.HasErrors && !SourceUri.HasErrors);
+        });
+        _sub2 = SourceUri.Subscribe(x =>
+        {
+            if (string.IsNullOrWhiteSpace(x))
+            {
+                SourceUri.OnErrorResume(
+                    new Exception(RS.SourceViewModel_SourceViewModel_SourceUriIsRequired)
+                );
+            }
+
+            ApplyCommand.ChangeCanExecute(!Name.HasErrors && !SourceUri.HasErrors);
         });
 
-        ApplyCommand = new ReactiveCommand(isValid, false);
-        ApplyCommand.Subscribe(_ => Update());
+        if (_viewModel is not null)
+        {
+            Name = _viewModel.Name;
+            SourceUri = _viewModel.SourceUri;
+            Username.OnNext(_viewModel.Model.Username);
+        }
     }
 
+    public Observable<bool> IsValid { get; }
     public BindableReactiveProperty<string> Name { get; set; }
     public BindableReactiveProperty<string> SourceUri { get; set; }
     public BindableReactiveProperty<string?> Username { get; set; }
@@ -75,10 +107,16 @@ public class SourceViewModel : DisposableViewModel
     public void ApplyDialog(ContentDialog dialog)
     {
         ArgumentNullException.ThrowIfNull(dialog);
+        _canExecuteChangedHandler += (object? sender, EventArgs e) =>
+        {
+            dialog.IsPrimaryButtonEnabled = ApplyCommand.CanExecute();
+        };
+        ApplyCommand.CanExecuteChanged += _canExecuteChangedHandler;
+
         dialog.PrimaryButtonCommand = ApplyCommand;
     }
 
-    private void Update()
+    private ValueTask Update()
     {
         if (_viewModel == null)
         {
@@ -93,5 +131,42 @@ public class SourceViewModel : DisposableViewModel
                 new PluginServer(Name.Value, SourceUri.Value, Username.Value, Password.Value)
             );
         }
+
+        return ValueTask.CompletedTask;
     }
+
+    public override ValueTask<IRoutable> Navigate(string id)
+    {
+        return ValueTask.FromResult<IRoutable>(this);
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
+
+    #region Dispose
+
+    private readonly IDisposable _sub1;
+    private readonly IDisposable _sub2;
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _sub1.Dispose();
+            _sub2.Dispose();
+            _viewModel?.Dispose();
+            Name.Dispose();
+            SourceUri.Dispose();
+            Username.Dispose();
+            Password.Dispose();
+            ApplyCommand.Dispose();
+            ApplyCommand.CanExecuteChanged -= _canExecuteChangedHandler;
+        }
+
+        base.Dispose(disposing);
+    }
+
+    #endregion
 }
