@@ -20,19 +20,19 @@ public class MainActivity : AvaloniaMainActivity<App>
 {
     protected override AppBuilder CustomizeAppBuilder(AppBuilder builder)
     {
-        using var host = AppHost.Initialize(appHostBuilder =>
+        var builder = AppHost.CreateBuilder();
+
+        builder.UseJsonConfig("config.json", true, TimeSpan.FromMilliseconds(500));
+        builder.SetAppInfoFrom(typeof(App).Assembly);
+        builder.UseLogging(options =>
         {
-            appHostBuilder
-                .WithJsonConfiguration("config.json", true, TimeSpan.FromMilliseconds(500))
-                .WithAppInfoFrom(typeof(App).Assembly)
-                .WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel)
-                .WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb)
-#if DEBUG
-                .WithLogToConsole();
-#else
-            ;
-#endif
+            options.WithLogMinimumLevel<AppHostConfig>(cfg => cfg.LogMinLevel);
+            options.WithJsonLogFolder<AppHostConfig>("logs", cfg => cfg.RollingSizeKb);
+            options.WithLogToConsole();
         });
+        builder.SetArguments(args);
+
+        using var host = builder.Build();
 
         // this is required to use the AndroidHttpClientHandler in main thread
         StrictMode.SetThreadPolicy(new StrictMode.ThreadPolicy.Builder().PermitAll().Build());
