@@ -3,11 +3,10 @@ using Exception = System.Exception;
 
 namespace Asv.Avalonia;
 
-public class SourceViewModel : RoutableViewModel
+public class SourceViewModel : RoutableViewModelWithValidation
 {
     private readonly IPluginManager _mng;
     private readonly PluginSourceViewModel? _viewModel;
-    private EventHandler? _canExecuteChangedHandler;
 
     public SourceViewModel()
         : base(string.Empty)
@@ -33,6 +32,8 @@ public class SourceViewModel : RoutableViewModel
                 );
             }
         });
+
+        SubscribeToErrorsChanged();
     }
 
     public SourceViewModel(
@@ -55,15 +56,6 @@ public class SourceViewModel : RoutableViewModel
         Username = new BindableReactiveProperty<string?>(_viewModel?.Model.Username);
         Password = new BindableReactiveProperty<string>();
 
-        IsValid = Observable
-            .Create<bool>(x =>
-            {
-                var hasError = Name.HasErrors || SourceUri.HasErrors;
-                x.OnNext(!hasError);
-                return x;
-            })
-            .DistinctUntilChanged();
-
         ApplyCommand = new ReactiveCommand((_, _) => Update(), configureAwait: false);
 
         _sub1 = Name.Subscribe(x =>
@@ -74,8 +66,6 @@ public class SourceViewModel : RoutableViewModel
                     new Exception(RS.SourceViewModel_SourceViewModel_NameIsRequired)
                 );
             }
-
-            ApplyCommand.ChangeCanExecute(!Name.HasErrors && !SourceUri.HasErrors);
         });
         _sub2 = SourceUri.Subscribe(x =>
         {
@@ -85,8 +75,6 @@ public class SourceViewModel : RoutableViewModel
                     new Exception(RS.SourceViewModel_SourceViewModel_SourceUriIsRequired)
                 );
             }
-
-            ApplyCommand.ChangeCanExecute(!Name.HasErrors && !SourceUri.HasErrors);
         });
 
         if (_viewModel is not null)
@@ -95,9 +83,10 @@ public class SourceViewModel : RoutableViewModel
             SourceUri = _viewModel.SourceUri;
             Username.OnNext(_viewModel.Model.Username);
         }
+
+        SubscribeToErrorsChanged();
     }
 
-    public Observable<bool> IsValid { get; }
     public BindableReactiveProperty<string> Name { get; set; }
     public BindableReactiveProperty<string> SourceUri { get; set; }
     public BindableReactiveProperty<string?> Username { get; set; }
@@ -107,11 +96,10 @@ public class SourceViewModel : RoutableViewModel
     public void ApplyDialog(ContentDialog dialog)
     {
         ArgumentNullException.ThrowIfNull(dialog);
-        _canExecuteChangedHandler += (object? sender, EventArgs e) =>
+        IsValid.Subscribe(x =>
         {
-            dialog.IsPrimaryButtonEnabled = ApplyCommand.CanExecute();
-        };
-        ApplyCommand.CanExecuteChanged += _canExecuteChangedHandler;
+            dialog.IsPrimaryButtonEnabled = x.IsSuccess;
+        });
 
         dialog.PrimaryButtonCommand = ApplyCommand;
     }
@@ -162,7 +150,6 @@ public class SourceViewModel : RoutableViewModel
             Username.Dispose();
             Password.Dispose();
             ApplyCommand.Dispose();
-            ApplyCommand.CanExecuteChanged -= _canExecuteChangedHandler;
         }
 
         base.Dispose(disposing);
