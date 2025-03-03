@@ -8,12 +8,13 @@ public static class DesignTime
 
     public static void ThrowIfNotDesignMode()
     {
-        if (Design.IsDesignMode == false)
+        if (!Design.IsDesignMode)
         {
             throw new InvalidOperationException("This method is for design mode only");
         }
     }
 
+    public static ILogService Log => NullLogService.Instance;
     public static IShellHost ShellHost => NullShellHost.Instance;
     public static INavigationService Navigation => NullNavigationService.Instance;
     public static IUnitService UnitService => NullUnitService.Instance;
@@ -21,4 +22,5 @@ public static class DesignTime
     public static IThemeService ThemeService => NullThemeService.Instance;
     public static ILocalizationService LocalizationService => NullLocalizationService.Instance;
     public static ICommandService CommandService => NullCommandService.Instance;
+    public static IPluginManager PluginManager => NullPluginManager.Instance;
 }

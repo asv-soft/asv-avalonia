@@ -45,6 +45,12 @@ namespace Asv.Avalonia {
             }
         }
         
+        public static string InstalledPluginsView_Search {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Search", resourceCulture);
+            }
+        }
+        
         public static string ChangeLanguageCommand_CommandInfo_Name {
             get {
                 return ResourceManager.GetString("ChangeLanguageCommand_CommandInfo_Name", resourceCulture);
@@ -54,6 +60,12 @@ namespace Asv.Avalonia {
         public static string ChangeLanguageCommand_CommandInfo_Description {
             get {
                 return ResourceManager.GetString("ChangeLanguageCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Uninstalled {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Uninstalled", resourceCulture);
             }
         }
         
@@ -69,9 +81,27 @@ namespace Asv.Avalonia {
             }
         }
         
+        public static string InstalledPluginsView_LoadingError {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_LoadingError", resourceCulture);
+            }
+        }
+        
         public static string ThemeService_Light {
             get {
                 return ResourceManager.GetString("ThemeService_Light", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Uninstall {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Uninstall", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_UninstalledMessageTitle {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_UninstalledMessageTitle", resourceCulture);
             }
         }
         
@@ -87,9 +117,21 @@ namespace Asv.Avalonia {
             }
         }
         
+        public static string InstalledPluginsView_UninstalledMessage {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_UninstalledMessage", resourceCulture);
+            }
+        }
+        
         public static string SettingsAppearanceView_HubHeader_CommonSettings {
             get {
                 return ResourceManager.GetString("SettingsAppearanceView_HubHeader_CommonSettings", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_CancelUninstall {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_CancelUninstall", resourceCulture);
             }
         }
         
@@ -102,6 +144,18 @@ namespace Asv.Avalonia {
         public static string SettingsUnitsView_Header_Description {
             get {
                 return ResourceManager.GetString("SettingsUnitsView_Header_Description", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Tab_Description {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_Description", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Tab_AdditionalInfo {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo", resourceCulture);
             }
         }
         
@@ -135,9 +189,21 @@ namespace Asv.Avalonia {
             }
         }
         
+        public static string PluginsMarketView_ToggleSwitch_OnlyVerified {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_ToggleSwitch_OnlyVerified", resourceCulture);
+            }
+        }
+        
         public static string ChangeThemeCommand_CommandInfo_Description {
             get {
                 return ResourceManager.GetString("ChangeThemeCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string PluginsMarketView_InfoBar_IsVerified_Message {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_InfoBar_IsVerified_Message", resourceCulture);
             }
         }
         
@@ -147,9 +213,21 @@ namespace Asv.Avalonia {
             }
         }
         
+        public static string InstalledPluginsView_SelectedPluginIsNull {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_SelectedPluginIsNull", resourceCulture);
+            }
+        }
+        
         public static string OpenDebugCommand_CommandInfo_Description {
             get {
                 return ResourceManager.GetString("OpenDebugCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string PluginInstallerViewModel_InstallDialog_Title {
+            get {
+                return ResourceManager.GetString("PluginInstallerViewModel_InstallDialog_Title", resourceCulture);
             }
         }
         
@@ -228,6 +306,18 @@ namespace Asv.Avalonia {
         public static string ShellView_WindowControlButton_Close {
             get {
                 return ResourceManager.GetString("ShellView_WindowControlButton_Close", resourceCulture);
+            }
+        }
+        
+        public static string PluginInstallerViewModel_InstallDialog_SecondaryButtonText {
+            get {
+                return ResourceManager.GetString("PluginInstallerViewModel_InstallDialog_SecondaryButtonText", resourceCulture);
+            }
+        }
+        
+        public static string PluginInstallerViewModel_InstallDialog_PrimaryButtonText {
+            get {
+                return ResourceManager.GetString("PluginInstallerViewModel_InstallDialog_PrimaryButtonText", resourceCulture);
             }
         }
         
@@ -603,6 +693,12 @@ namespace Asv.Avalonia {
             }
         }
         
+        public static string PluginInstallerViewModel_InstallPluginAsync_Success {
+            get {
+                return ResourceManager.GetString("PluginInstallerViewModel_InstallPluginAsync_Success", resourceCulture);
+            }
+        }
+        
         public static string Power_Description {
             get {
                 return ResourceManager.GetString("Power_Description", resourceCulture);
@@ -957,9 +1053,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string DialogPageVIewModel_Title {
+        public static string DialogPageViewModel_Title {
             get {
-                return ResourceManager.GetString("DialogPageVIewModel_Title", resourceCulture);
+                return ResourceManager.GetString("DialogPageViewModel_Title", resourceCulture);
             }
         }
         
@@ -1008,6 +1104,138 @@ namespace Asv.Avalonia {
         public static string LanguageProperty_RestartDialog_Message {
             get {
                 return ResourceManager.GetString("LanguageProperty_RestartDialog_Message", resourceCulture);
+            }
+        }
+        
+        public static string PluginsMarketView_Install {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_Install", resourceCulture);
+            }
+        }
+        
+        public static string PluginsMarketView_SelectedPluginIsNull {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_SelectedPluginIsNull", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Dependencies {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Dependencies", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_AllVersions {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_AllVersions", resourceCulture);
+            }
+        }
+        
+        public static string PluginsMarketView_Cancel {
+            get {
+                return ResourceManager.GetString("PluginsMarketView_Cancel", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Author {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Author", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Tab_AdditionalInfo_DownloadCount {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_DownloadCount", resourceCulture);
+            }
+        }
+        
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Tags {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Tags", resourceCulture);
+            }
+        }
+        
+        public static string SourceViewModel_SourceViewModel_NameIsRequired {
+            get {
+                return ResourceManager.GetString("SourceViewModel_SourceViewModel_NameIsRequired", resourceCulture);
+            }
+        }
+        
+        public static string SourceViewModel_SourceViewModel_SourceUriIsRequired {
+            get {
+                return ResourceManager.GetString("SourceViewModel_SourceViewModel_SourceUriIsRequired", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_AddImpl_Title {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Title", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_AddImpl_Add {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Add", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_AddImpl_Cancel {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Cancel", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_EditImpl_Title {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_EditImpl_Title", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_EditImpl_Save {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_EditImpl_Save", resourceCulture);
+            }
+        }
+        
+        public static string PluginsSourcesViewModel_AddAction_Label {
+            get {
+                return ResourceManager.GetString("PluginsSourcesViewModel_AddAction_Label", resourceCulture);
+            }
+        }
+        
+        public static string SourcesView_Name {
+            get {
+                return ResourceManager.GetString("SourcesView_Name", resourceCulture);
+            }
+        }
+        
+        public static string SourcesView_URL {
+            get {
+                return ResourceManager.GetString("SourcesView_URL", resourceCulture);
+            }
+        }
+        
+        public static string SourcesView_Username {
+            get {
+                return ResourceManager.GetString("SourcesView_Username", resourceCulture);
+            }
+        }
+        
+        public static string SourcesView_Password {
+            get {
+                return ResourceManager.GetString("SourcesView_Password", resourceCulture);
             }
         }
         

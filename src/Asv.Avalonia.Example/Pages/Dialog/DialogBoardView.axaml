@@ -11,7 +11,7 @@
         <DockPanel>
             <TextBlock 
                 FontSize="{StaticResource HubHeaderThemeFontSize}" 
-                Text="{x:Static avalonia1:RS.DialogPageVIewModel_Title}"
+                Text="{x:Static avalonia1:RS.DialogPageViewModel_Title}"
             />
             <Separator/>
         </DockPanel>

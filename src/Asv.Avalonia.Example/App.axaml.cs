@@ -32,17 +32,21 @@ public partial class App : Application, IContainerHost, IShellHost
                 .WithExport<IConfiguration>(new InMemoryConfiguration())
                 .WithExport(NullLoggerFactory.Instance)
                 .WithExport(NullAppPath.Instance)
+                .WithExport(NullPluginManager.Instance)
                 .WithExport<IDataTemplateHost>(this)
                 .WithExport<IShellHost>(this)
                 .WithDefaultConventions(conventions);
         }
         else
         {
+            var pluginManager = AppHost.Instance.GetService<IPluginManager>();
             containerCfg
                 .WithExport<IContainerHost>(this)
                 .WithExport(AppHost.Instance.GetService<IConfiguration>())
                 .WithExport(AppHost.Instance.GetService<ILoggerFactory>())
                 .WithExport(AppHost.Instance.GetService<IAppPath>())
+                .WithExport(pluginManager)
+                .WithAssemblies(pluginManager.PluginsAssemblies)
                 .WithExport<IDataTemplateHost>(this)
                 .WithExport<IShellHost>(this)
                 .WithDefaultConventions(conventions);
@@ -105,6 +109,12 @@ public partial class App : Application, IContainerHost, IShellHost
             Shell.Navigate(MapExamplePageViewModel.PageId);
             Shell.Navigate(DialogBoardViewModel.PageId);
             Shell.Navigate(TestUnitsPageViewModel.PageId);
+            Shell.Navigate(PluginsSourcesViewModel.PageId);
+            Shell.Navigate(PluginsMarketViewModel.PageId);
+            Shell.Navigate(InstalledPluginsViewModel.PageId);
+            Shell.Navigate(InstalledPluginsViewModel.PageId);
+            Shell.Navigate(PluginsMarketViewModel.PageId);
+            Shell.Navigate(PluginsSourcesViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();

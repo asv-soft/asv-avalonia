@@ -20,7 +20,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
         : this(DesignTime.CommandService, null!, NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
-        Title.OnNext(RS.DialogPageVIewModel_Title);
+        Title.OnNext(RS.DialogPageViewModel_Title);
     }
 
     [ImportingConstructor]
@@ -31,7 +31,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     )
         : base(PageId, cmd)
     {
-        Title.OnNext(RS.DialogPageVIewModel_Title);
+        Title.OnNext(RS.DialogPageViewModel_Title);
         _dialogService = service;
         _logger = logFactory.CreateLogger<DialogBoardViewModel>();
 

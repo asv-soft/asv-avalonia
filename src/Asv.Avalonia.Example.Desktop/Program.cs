@@ -1,14 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
 using Asv.Avalonia.Map;
-using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using Key = Avalonia.Remote.Protocol.Input.Key;
 
 namespace Asv.Avalonia.Example.Desktop;
 
@@ -31,6 +24,11 @@ sealed class Program
             .UseSoloRun(opt => opt.WithArgumentForwarding())
             .UseLogService(opt => opt.WithRelativeFolder("logs"))
             .UseAsvMap()
+            .UsePluginManager(options =>
+            {
+                options.WithApiPackage("Asv.Drones.Gui.Api", "1.0.0");
+                options.WithPluginPrefix("Asv.Drones.Gui.Plugin.");
+            })
             .Build()
             .ExitIfNotFirstInstance();
 

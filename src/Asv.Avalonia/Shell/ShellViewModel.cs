@@ -1,4 +1,4 @@
-﻿using Asv.Common;
+using Asv.Common;
 using ObservableCollections;
 using R3;
 

@@ -59,4 +59,8 @@
       <Folder Include="Pages\Settings\" />
       <Folder Include="Services\" />
     </ItemGroup>
+
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Views\MainView.axaml" />
+    </ItemGroup>
 </Project>
