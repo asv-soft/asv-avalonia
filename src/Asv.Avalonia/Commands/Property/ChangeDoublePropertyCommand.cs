@@ -1,17 +1,11 @@
 using System.Composition;
 using Material.Icons;
-using R3;
 
 namespace Asv.Avalonia;
 
-public interface IModelProperty : IRoutable
-{
-    ReactiveProperty<double> ModelValue { get; }
-}
-
 [ExportCommand]
 [Shared]
-public class ChangeDoublePropertyCommand : ContextCommand<IModelProperty>
+public class ChangeDoublePropertyCommand : ContextCommand<IModelProperty<double>>
 {
     #region Static
 
@@ -32,14 +26,14 @@ public class ChangeDoublePropertyCommand : ContextCommand<IModelProperty>
     #endregion
 
     protected override ValueTask<IPersistable?> InternalExecute(
-        IModelProperty context,
+        IModelProperty<double> context,
         IPersistable newValue,
         CancellationToken cancel
     )
     {
         if (newValue is not Persistable<double> value)
         {
-            throw new Exception("Invalid value type. Persistable must be double");
+            throw new InvalidCastException("Invalid value type. Persistable must be double");
         }
 
         var oldValue = new Persistable<double>(context.ModelValue.Value);
