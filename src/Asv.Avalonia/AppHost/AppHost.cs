@@ -1,31 +1,54 @@
-﻿using System.Diagnostics;
-using System.IO.Pipes;
-using Asv.Cfg;
+﻿using System.Composition.Hosting;
+using Asv.Common;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using R3;
 using ZLogger;
 
 namespace Asv.Avalonia;
 
-public class AppHostConfig
+public class AppHost : AsyncDisposableWithCancel
 {
-    public int RollingSizeKb { get; set; } = 1024 * 10;
-    public LogLevel LogMinLevel { get; set; } = LogLevel.Information;
-}
+    private readonly ServiceProvider _services;
+    private readonly IConfiguration _config;
 
-public sealed class AppHost : IAppHost
-{
     #region Static
 
-    private static IAppHost _instance = null!;
-    public static IAppHost Instance
+    private static AppHost? _instance;
+
+    public static AppHostBuilder CreateBuilder()
+    {
+        return CreateBuilder(configurationBuilder =>
+        {
+            configurationBuilder
+                .AddJsonFile("app_settings.json", optional: true, reloadOnChange: false)
+                .AddEnvironmentVariables()
+                .AddCommandLine(Environment.GetCommandLineArgs());
+        });
+    }
+
+    public static AppHostBuilder CreateBuilder(Action<IConfigurationBuilder> configurationBuilder)
+    {
+        if (_instance != null)
+        {
+            throw new InvalidOperationException(
+                $"{nameof(AppHost)} already configured. Only one instance allowed."
+            );
+        }
+
+        var builder = new ConfigurationBuilder();
+        configurationBuilder(builder);
+        return new AppHostBuilder(builder.Build());
+    }
+
+    public static AppHost Instance
     {
         get
         {
             if (_instance == null)
             {
                 throw new InvalidOperationException(
-                    $"{nameof(AppHost)} not initialized. Please call {nameof(Initialize)} method first."
+                    $"{nameof(AppHost)} not initialized. Please call {nameof(AppHost)}.{nameof(CreateBuilder)}().{nameof(AppHostBuilder.Build)}() through first."
                 );
             }
 
@@ -33,190 +56,25 @@ public sealed class AppHost : IAppHost
         }
     }
 
-    public static IAppHost Initialize(Action<IAppHostBuilder> configure)
-    {
-        if (_instance != null)
-        {
-            throw new InvalidOperationException($"{nameof(AppHost)} already initialized.");
-        }
-
-        var builder = new AppHostBuilder();
-        configure(builder);
-        _instance = builder.Create();
-        return _instance;
-    }
-
     #endregion
 
-    private readonly Mutex? _mutex;
-    private readonly ReactiveProperty<AppArgs> _args = new();
-    private readonly Subject<Exception> _errorHandler = new();
-
-    internal AppHost(
-        IConfiguration config,
-        AppPath appPath,
-        AppInfo appInfo,
-        ILogService logs,
-        AppArgs args,
-        string? mutexName,
-        string? argsPipeName
-    )
+    internal AppHost(ServiceProvider serviceProvider, IConfiguration config)
     {
-        ArgumentNullException.ThrowIfNull(config);
-        ArgumentNullException.ThrowIfNull(appPath);
-        ArgumentNullException.ThrowIfNull(appInfo);
-        ArgumentNullException.ThrowIfNull(logs);
-        ArgumentNullException.ThrowIfNull(args);
-        Configuration = config;
-        AppPath = appPath;
-        AppInfo = appInfo;
-        Logs = logs;
-        var logger = logs.CreateLogger($"{nameof(AppHost)}[PID:{Environment.ProcessId}]");
-        SetupExceptionHandlers(logger);
-        if (mutexName != null)
-        {
-            _mutex = new Mutex(true, mutexName, out var isNewInstance);
-            IsFirstInstance = isNewInstance;
-        }
-
-        if (argsPipeName != null)
-        {
-            if (_mutex == null)
-            {
-                logger.LogError("Named pipe can be used only with single instance mode.");
-                throw new InvalidOperationException(
-                    "Named pipe can be used only with single instance mode."
-                );
-            }
-
-            if (IsFirstInstance)
-            {
-                StartNamedPipeServer(argsPipeName, logger);
-            }
-            else
-            {
-                SendArgumentsToRunningInstance(args, argsPipeName, logger);
-            }
-        }
+        _instance = this;
+        _services = serviceProvider;
+        _config = config;
     }
 
-    public ReadOnlyReactiveProperty<AppArgs> Args => _args;
-    public IAppInfo AppInfo { get; }
-    public IAppPath AppPath { get; }
-    public IConfiguration Configuration { get; }
-    public ILogService Logs { get; }
-
-    private void SetupExceptionHandlers(ILogger logger)
+    public T GetService<T>()
+        where T : notnull
     {
-        _errorHandler.Subscribe(ex =>
-        {
-            logger.ZLogCritical(ex, $"Unhandled exception: {ex.Message}");
-            Debug.Fail($"Unhandled exception: {ex.Message}");
-        });
-        ObservableSystem.RegisterUnhandledExceptionHandler(ex =>
-        {
-            logger.ZLogCritical(ex, $"R3 unobserved exception: {ex.Message}");
-            Debug.Fail($"R3 unobserved exception: {ex.Message}");
-        });
-        TaskScheduler.UnobservedTaskException += (sender, args) =>
-        {
-            logger.ZLogCritical(
-                args.Exception,
-                $"Task scheduler unobserved task exception from '{sender}': {args.Exception.Message}"
-            );
-            Debug.Fail($"R3 unobserved exception: {args.Exception.Message}");
-            args.SetObserved();
-        };
-
-        AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
-        {
-            logger.ZLogCritical(
-                $"Unhandled AppDomain exception. Sender '{sender}'. Args: {eventArgs.ExceptionObject}"
-            );
-            Debug.Fail($"R3 unobserved exception: {eventArgs.ExceptionObject}");
-        };
+        return _services.GetRequiredService<T>();
     }
 
-    public bool AllowOnlyOneInstance => _mutex != null;
-    public bool IsFirstInstance { get; } = true;
-
-    private void StartNamedPipeServer(string pipeName, ILogger logger)
+    public void HandleApplicationCrash(Exception e)
     {
-        new Thread(start: () =>
-        {
-            while (true)
-            {
-                try
-                {
-                    using var server = new NamedPipeServerStream(pipeName, PipeDirection.In);
-                    server.WaitForConnection();
-
-                    using var reader = new StreamReader(server);
-                    var args = reader.ReadLine();
-
-                    if (args != null)
-                    {
-                        logger.ZLogInformation(
-                            $"Received arguments from the named pipe {pipeName}."
-                        );
-                        var appArgs = AppArgs.DeserializeFromString(args);
-                        _args.OnNext(appArgs);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "Named pipe server error.");
-                }
-            }
-
-            // ReSharper disable once FunctionNeverReturns
-        })
-        {
-            IsBackground = true,
-        }.Start();
-    }
-
-    private static void SendArgumentsToRunningInstance(
-        AppArgs args,
-        string pipeName,
-        ILogger logger
-    )
-    {
-        try
-        {
-            logger.ZLogInformation(
-                $"Sending arguments to the running instance through the named pipe {pipeName}."
-            );
-            using var client = new NamedPipeClientStream(".", pipeName, PipeDirection.Out);
-            client.Connect(1000);
-            using var writer = new StreamWriter(client);
-            writer.WriteLine(args.SerializeToString());
-            writer.Flush();
-        }
-        catch (Exception ex)
-        {
-            logger.ZLogError(
-                ex,
-                $"Failed to send arguments to the running instance through the named pipe {pipeName}."
-            );
-        }
-    }
-
-    #region Handle exceptions
-
-    public void HandleApplicationCrash(Exception exception)
-    {
-        _errorHandler.OnNext(exception);
-    }
-
-    #endregion
-
-    public void Dispose()
-    {
-        _mutex?.Dispose();
-        _args.Dispose();
-        _errorHandler.Dispose();
-        Configuration.Dispose();
-        Logs.Dispose();
+        GetService<ILoggerFactory>()
+            .CreateLogger<AppHost>()
+            .ZLogCritical(e, $"Application crashed: {e.Message}");
     }
 }

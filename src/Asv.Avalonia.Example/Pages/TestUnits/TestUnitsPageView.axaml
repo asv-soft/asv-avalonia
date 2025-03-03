@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:testUnits="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.TestUnitsPageView"
+             x:DataType="testUnits:TestUnitsPageViewModel">
+    <Design.DataContext>
+        <testUnits:TestUnitsPageViewModel/>
+    </Design.DataContext>
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Left" VerticalAlignment="Top" HorizontalAlignment="Left">
+            <Grid RowDefinitions="*" ColumnDefinitions="*,*">
+                <TextBlock Grid.Column="0" VerticalAlignment="Center" Text="Speed: " />
+                <TextBox Grid.Column="1" VerticalAlignment="Center" Text="{Binding Speed.ViewValue.Value, Mode=TwoWay}" />
+            </Grid>
+        </StackPanel>
+    </DockPanel>
+    
+</UserControl>

@@ -1,0 +1,33 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.SerialPortView"
+             x:DataType="example:SerialPortViewModel">
+    <Design.DataContext>
+        <example:SerialPortViewModel/>
+    </Design.DataContext>
+    <Panel>
+        <StackPanel Spacing="10" Margin="10">
+            <TextBlock Text="Port title" />
+            <TextBox Text="{Binding Title.Value}" />
+            <TextBlock Text="Port Name" />
+            <ComboBox Margin="0,0" SelectedItem="{Binding SelectedPortInput.Value}"  ItemsSource="{Binding Ports}"/>
+            <TextBlock Text="Bound Rate" />
+            <ComboBox SelectedItem="{Binding SelectedBoundRateInput.Value}"
+                      ItemsSource="{Binding BoundRates.CurrentValue}"  />
+            <TextBlock Text="Write BufferSize"/>
+            <TextBox Text="{Binding  WriteBufferSizeInput.Value}"/>
+            <TextBlock Text="Parity"/>
+            <ComboBox SelectedItem="{Binding ParityInput.Value}" ItemsSource="{Binding ParityValues.Value}"/>
+            <TextBlock Text="Write Timeout (MilliSeconds)"/>
+            <TextBox Text="{Binding WriteTimeOutInput.Value}"/>
+            <TextBlock Text="Data Bits"/>
+            <TextBox Text="{Binding DataBitsInput.Value}"/>
+            <TextBlock Text="Stop Bits"/>
+            <ComboBox SelectedItem="{Binding StopBitsInput.Value}" ItemsSource="{Binding StopBitsArr.Value}"/>
+        </StackPanel>
+    </Panel>
+</UserControl>

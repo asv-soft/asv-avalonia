@@ -3,8 +3,11 @@
     <Nullable>enable</Nullable>
     <AvaloniaVersion>11.2.3</AvaloniaVersion>
     <R3Version>1.2.9</R3Version>
-    <AsvCommonVersion>3.1.0</AsvCommonVersion>
+    <R3CollectionVersion>3.3.3</R3CollectionVersion>
+    <AsvCommonVersion>3.1.1-dev.1</AsvCommonVersion>
     <ZLoggerVersion>2.5.5</ZLoggerVersion>
     <SystemCompositionVersion>9.0.0</SystemCompositionVersion>
+    <MicrosoftExtensionsVersion>9.0.2</MicrosoftExtensionsVersion>
+    <MaterialIconsAvaloniaVersion>2.2.0</MaterialIconsAvaloniaVersion>
   </PropertyGroup>
 </Project>

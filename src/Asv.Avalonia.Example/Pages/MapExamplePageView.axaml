@@ -1,0 +1,34 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:map="clr-namespace:Asv.Avalonia.Map;assembly=Asv.Avalonia.Map"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="example:MapExamplePageViewModel"
+             x:Class="Asv.Avalonia.Example.MapExamplePageView">
+    <Design.DataContext>
+        <example:MapExamplePageViewModel/>
+    </Design.DataContext>
+    <Panel>
+        <map:MapView x:Name="MAP" CenterMap="{map:GeoPoint 53,53}" >
+            <map:MapViewItem Location="{map:GeoPoint 53,53}"
+                             CenterX="{map:HorizontalOffset Center}"
+                             CenterY="{map:VerticalOffset Bottom}">
+                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker" />
+            </map:MapViewItem>
+            <map:MapViewItem Location="{map:GeoPoint 53,53.4}"
+                             CenterX="{map:HorizontalOffset Center}"
+                             CenterY="{map:VerticalOffset Bottom}">
+                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker" />
+            </map:MapViewItem>
+        
+        </map:MapView>
+        <TextBlock HorizontalAlignment="Right" Text="{ReflectionBinding SelectedItem, ElementName=MAP}"/>
+        <TextBlock HorizontalAlignment="Left" Text="{ReflectionBinding SelectedItems.Count, ElementName=MAP}"/>
+        
+    </Panel>
+    
+    
+</UserControl>

@@ -1,0 +1,144 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.SettingsConnectionView"
+             x:DataType="example:SettingsConnectionViewModel">
+    <Design.DataContext>
+        <example:SettingsConnectionViewModel />
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" HorizontalAlignment="Right" Margin="10" ColumnDefinitions="Auto,5,Auto,5,Auto">
+            <!-- TODO: Localize -->
+            <Button Grid.Column="0" Content="Add TCP" Command="{Binding AddTcpPortCommand}"  />
+            <Button Grid.Column="2" Content="Add UDP" Command="{Binding AddUdpPortCommand}" />
+            <Button Grid.Column="4" Content="Add Serial" Command="{Binding AddSerialPortCommand}" />
+        </Grid>
+        <DataGrid ItemsSource="{CompiledBinding Items}" SelectedItem="{Binding SelectedItem}" Grid.Row="1">
+            <DataGrid.Styles>
+                <Style Selector="DataGridColumn" >
+                    <Setter Property="Width" Value="*"></Setter>
+                </Style>
+                <Style Selector="DataGridRow DataGridCell Rectangle">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+                <Style Selector="DataGridRow DataGridCell.action Button">
+                    <Setter Property="IsVisible" Value="False" />
+                </Style>
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{CompiledBinding Name.Value}" />
+                <DataGridTextColumn Header="Connection string" Binding="{CompiledBinding ConnectionString.Value}" />
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,5,Auto">
+                                <TextBlock Grid.Column="0" Text="RX" />
+                                <avalonia1:MaterialIcon Grid.Column="2" Kind="ArrowBottomBold" Foreground="Chartreuse" />
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{CompiledBinding RxPacketsAmount.Value}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,5,Auto">
+                                <TextBlock VerticalAlignment="Center" Grid.Column="0" Text="TX" />
+                                <avalonia1:MaterialIcon Grid.Column="2" Kind="ArrowUpBold" Foreground="Chartreuse" />
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{CompiledBinding TxPacketsAmount.Value}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,5,Auto">
+                                <TextBlock Grid.Column="0" Text="RX Errors" />
+                                <avalonia1:MaterialIcon Grid.Column="2" Kind="Error" Foreground="Red" />
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{CompiledBinding RxPacketsErrorsAmount.Value}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,5,Auto">
+                                <TextBlock Grid.Column="0" Text="TX Errors" />
+                                <avalonia1:MaterialIcon Grid.Column="2" Kind="Error" Foreground="Red" />
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{CompiledBinding TxPacketsErrorsAmount.Value}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,5,Auto">
+                                <TextBlock Grid.Column="0" Text="Status" />
+                            </Grid>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.HeaderTemplate>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{CompiledBinding Status.Value}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn Header="On/Off">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ToggleSwitch IsChecked="{CompiledBinding IsEnabled.Value}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button>
+                                <avalonia1:MaterialIcon Kind="Pencil" />
+                                <!--   TODO: IsVisible = true only when current item selected -->
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding RemovePort}">
+                                <avalonia1:MaterialIcon Kind="Trash" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
