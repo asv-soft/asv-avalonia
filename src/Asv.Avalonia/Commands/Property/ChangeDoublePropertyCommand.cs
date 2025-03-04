@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class ChangeDoublePropertyCommand : ContextCommand<IModelProperty<double>>
+public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<double?>>
 {
     #region Static
 
@@ -26,7 +26,7 @@ public class ChangeDoublePropertyCommand : ContextCommand<IModelProperty<double>
     #endregion
 
     protected override ValueTask<IPersistable?> InternalExecute(
-        IModelProperty<double> context,
+        IHistoricalProperty<double?> context,
         IPersistable newValue,
         CancellationToken cancel
     )
@@ -36,7 +36,7 @@ public class ChangeDoublePropertyCommand : ContextCommand<IModelProperty<double>
             throw new InvalidCastException("Invalid value type. Persistable must be double");
         }
 
-        var oldValue = new Persistable<double>(context.ModelValue.Value);
+        var oldValue = new Persistable<double?>(context.ModelValue.Value);
         context.ModelValue.OnNext(value.Value);
         return ValueTask.FromResult<IPersistable?>(oldValue);
     }

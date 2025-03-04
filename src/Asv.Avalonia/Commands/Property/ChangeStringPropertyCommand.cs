@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class ChangeStringPropertyCommand : ContextCommand<IModelProperty<string?>>
+public class ChangeStringPropertyCommand : ContextCommand<IHistoricalProperty<string?>>
 {
     #region Static
 
@@ -26,7 +26,7 @@ public class ChangeStringPropertyCommand : ContextCommand<IModelProperty<string?
     #endregion
 
     protected override ValueTask<IPersistable?> InternalExecute(
-        IModelProperty<string?> context,
+        IHistoricalProperty<string?> context,
         IPersistable newValue,
         CancellationToken cancel
     )

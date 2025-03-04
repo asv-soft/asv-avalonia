@@ -2,13 +2,12 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class HistoricalStringProperty : RoutableViewModel
+public class HistoricalStringProperty : RoutableViewModel, IHistoricalProperty<string?>
 {
     private readonly ReactiveProperty<string?> _modelValue;
     private readonly IList<Func<ValidationResult>> _validationRules = [];
 
     private bool _internalChange;
-    private bool _userChange;
 
     public ReactiveProperty<string?> ModelValue => _modelValue;
     public BindableReactiveProperty<string?> ViewValue { get; } = new();
@@ -52,28 +51,15 @@ public class HistoricalStringProperty : RoutableViewModel
             return;
         }
 
-        _userChange = true;
         var newValue = new Persistable<string?>(userValue);
-        _modelValue.OnNext(userValue);
         await this.ExecuteCommand(ChangeStringPropertyCommand.Id, newValue);
-        _userChange = false;
     }
 
     private void OnChangeByModel(string? modelValue)
     {
-        if (_userChange)
-        {
-            return;
-        }
-
         _internalChange = true;
         ViewValue.OnNext(modelValue);
         _internalChange = false;
-    }
-
-    public override ValueTask<IRoutable> Navigate(string id)
-    {
-        return ValueTask.FromResult<IRoutable>(this);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

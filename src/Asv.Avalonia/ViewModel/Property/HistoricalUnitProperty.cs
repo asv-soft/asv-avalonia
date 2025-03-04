@@ -2,23 +2,22 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class HistoricalUnitProperty : RoutableViewModel
+public class HistoricalUnitProperty : RoutableViewModel, IHistoricalProperty<double?>
 {
-    private readonly ReactiveProperty<double> _modelValue;
+    private readonly ReactiveProperty<double?> _modelValue;
     private readonly IUnit _unit;
     private readonly string? _format;
 
     private bool _internalChange;
-    private bool _userChange;
 
-    public ReactiveProperty<double> ModelValue => _modelValue;
+    public ReactiveProperty<double?> ModelValue => _modelValue;
     public BindableReactiveProperty<string?> ViewValue { get; } = new();
     public BindableReactiveProperty<bool> IsSelected { get; } = new();
     public IUnit Unit => _unit;
 
     public HistoricalUnitProperty(
         string id,
-        ReactiveProperty<double> modelValue,
+        ReactiveProperty<double?> modelValue,
         IUnit unit,
         string? format = null
     )
@@ -49,29 +48,20 @@ public class HistoricalUnitProperty : RoutableViewModel
             return;
         }
 
-        _userChange = true;
         var value = _unit.Current.CurrentValue.ParseToSi(userValue);
         var newValue = new Persistable<double>(value);
-        _modelValue.OnNext(value);
         await this.ExecuteCommand(ChangeDoublePropertyCommand.Id, newValue);
-        _userChange = false;
     }
 
-    private void OnChangeByModel(double modelValue)
+    private void OnChangeByModel(double? modelValue)
     {
-        if (_userChange)
-        {
-            return;
-        }
-
         _internalChange = true;
-        ViewValue.OnNext(_unit.Current.CurrentValue.PrintFromSi(modelValue, _format));
+        ViewValue.OnNext(
+            modelValue is null
+                ? string.Empty
+                : _unit.Current.CurrentValue.PrintFromSi(modelValue.Value, _format)
+        );
         _internalChange = false;
-    }
-
-    public override ValueTask<IRoutable> Navigate(string id)
-    {
-        return ValueTask.FromResult<IRoutable>(this);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
@@ -86,12 +76,12 @@ public class HistoricalUnitProperty : RoutableViewModel
 
     public IPersistable Save()
     {
-        return new Persistable<double>(ModelValue.Value);
+        return new Persistable<double?>(ModelValue.Value);
     }
 
     public void Restore(IPersistable state)
     {
-        if (state is Persistable<double> value)
+        if (state is Persistable<double?> value)
         {
             ModelValue.OnNext(value.Value);
         }
