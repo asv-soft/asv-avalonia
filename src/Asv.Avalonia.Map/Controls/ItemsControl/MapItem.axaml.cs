@@ -12,18 +12,18 @@ using R3;
 namespace Asv.Avalonia.Map;
 
 [PseudoClasses(":pressed", ":selected", ":pointerover")]
-public class MapViewItem : ContentControl, ISelectable
+public class MapItem : ContentControl, ISelectable
 {
-    static MapViewItem()
+    static MapItem()
     {
-        SelectableMixin.Attach<MapViewItem>(IsSelectedProperty);
-        PressedMixin.Attach<MapViewItem>();
-        CenterYProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapViewItem));
-        CenterYProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapViewItem));
-        BoundsProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapViewItem));
+        SelectableMixin.Attach<MapItem>(IsSelectedProperty);
+        PressedMixin.Attach<MapItem>();
+        CenterYProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapItem));
+        CenterYProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapItem));
+        BoundsProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapItem));
     }
 
-    private static void RecalculateRotation(MapViewItem? sender)
+    private static void RecalculateRotation(MapItem? sender)
     {
         if (sender == null)
             return;
@@ -32,12 +32,12 @@ public class MapViewItem : ContentControl, ISelectable
         sender.RotationCenterY = sender.CenterY.CalculateOffset(sender.Bounds.Height);
     }
 
-    public MapViewItem() { }
+    public MapItem() { }
 
     #region CenterY
 
     public static readonly StyledProperty<VerticalOffset> CenterYProperty =
-        AvaloniaProperty.Register<MapViewItem, VerticalOffset>(nameof(CenterY));
+        AvaloniaProperty.Register<MapItem, VerticalOffset>(nameof(CenterY));
 
     public VerticalOffset CenterY
     {
@@ -50,7 +50,7 @@ public class MapViewItem : ContentControl, ISelectable
     #region CenterX
 
     public static readonly StyledProperty<HorizontalOffset> CenterXProperty =
-        AvaloniaProperty.Register<MapViewItem, HorizontalOffset>(nameof(CenterX));
+        AvaloniaProperty.Register<MapItem, HorizontalOffset>(nameof(CenterX));
 
     public HorizontalOffset CenterX
     {
@@ -63,7 +63,7 @@ public class MapViewItem : ContentControl, ISelectable
     #region Location
 
     public static readonly StyledProperty<GeoPoint> LocationProperty = AvaloniaProperty.Register<
-        MapViewItem,
+        MapItem,
         GeoPoint
     >(nameof(Location));
 
@@ -79,8 +79,8 @@ public class MapViewItem : ContentControl, ISelectable
 
     private double _rotationCenterX;
 
-    public static readonly DirectProperty<MapViewItem, double> RotationCenterXProperty =
-        AvaloniaProperty.RegisterDirect<MapViewItem, double>(
+    public static readonly DirectProperty<MapItem, double> RotationCenterXProperty =
+        AvaloniaProperty.RegisterDirect<MapItem, double>(
             nameof(RotationCenterX),
             o => o.RotationCenterX,
             (o, v) => o.RotationCenterX = v
@@ -98,8 +98,8 @@ public class MapViewItem : ContentControl, ISelectable
 
     private double _rotationCenterY;
 
-    public static readonly DirectProperty<MapViewItem, double> RotationCenterYProperty =
-        AvaloniaProperty.RegisterDirect<MapViewItem, double>(
+    public static readonly DirectProperty<MapItem, double> RotationCenterYProperty =
+        AvaloniaProperty.RegisterDirect<MapItem, double>(
             nameof(RotationCenterY),
             o => o.RotationCenterY,
             (o, v) => o.RotationCenterY = v
@@ -116,7 +116,7 @@ public class MapViewItem : ContentControl, ISelectable
     #region Rotation
 
     public static readonly StyledProperty<double> RotationProperty = AvaloniaProperty.Register<
-        MapViewItem,
+        MapItem,
         double
     >(nameof(Rotation));
 
@@ -124,6 +124,21 @@ public class MapViewItem : ContentControl, ISelectable
     {
         get => GetValue(RotationProperty);
         set => SetValue(RotationProperty, value);
+    }
+
+    #endregion
+
+    #region IsReadOnly
+
+    public static readonly StyledProperty<bool> IsReadOnlyProperty = AvaloniaProperty.Register<
+        MapItem,
+        bool
+    >(nameof(IsReadOnly));
+
+    public bool IsReadOnly
+    {
+        get => GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, value);
     }
 
     #endregion
@@ -161,7 +176,7 @@ public class MapViewItem : ContentControl, ISelectable
     #region IsSelected
 
     public static readonly StyledProperty<bool> IsSelectedProperty = AvaloniaProperty.Register<
-        MapViewItem,
+        MapItem,
         bool
     >(nameof(IsSelected));
 

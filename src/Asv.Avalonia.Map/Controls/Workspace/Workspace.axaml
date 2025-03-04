@@ -1,0 +1,71 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Asv.Avalonia.Map">
+    <Design.PreviewWith>
+        <Panel Width="1000" Height="500">
+            <controls:MapItemsControl CenterMap="{controls:GeoPoint 53,53}"/>
+            <controls:Workspace >
+                <controls:WorkspaceItem Header="HEADER1" Position="Right">
+                    <StackPanel>
+                        <TextBlock Text="AAAA"/>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                </controls:WorkspaceItem>
+                <controls:WorkspaceItem Header="HEADER2" Position="Right">
+                    <StackPanel>
+                        <TextBlock Text="AAAA"/>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                </controls:WorkspaceItem>
+                <controls:WorkspaceItem Header="HEADER2" Position="Left">
+                    <StackPanel>
+                        <TextBlock Text="AAAA"/>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                </controls:WorkspaceItem>
+                <controls:WorkspaceItem Header="HEADER3" Position="Bottom">
+                    <StackPanel>
+                        <TextBlock Text="AAAA"/>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                </controls:WorkspaceItem>
+                <controls:WorkspaceItem Header="HEADER3" Position="Bottom">
+                    <StackPanel>
+                        <TextBlock Text="AAAA"/>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                </controls:WorkspaceItem>
+            </controls:Workspace>
+        </Panel>
+        
+        
+    </Design.PreviewWith>
+    <Style Selector="controls|Workspace">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ShowGridLines="True" ColumnDefinitions="*,5,3*,5,*" RowDefinitions="Auto,3*,5,*" Name="MainGrid">
+                    <ScrollViewer Margin="8,8,0,8" Grid.Row="0" Grid.Column="0" Grid.RowSpan="4" Background="{x:Null}">
+                        <StackPanel x:Name="PART_LeftPanel" Spacing="8" />
+                    </ScrollViewer>
+                    <ScrollViewer Margin="0,8,8,8" Grid.Row="0" Grid.Column="4" Grid.RowSpan="4" Background="{x:Null}">
+                        <StackPanel x:Name="PART_RightPanel" Spacing="8" />
+                    </ScrollViewer>
+                    <TabControl Grid.Row="3" Grid.Column="2" x:Name="PART_BottomTab">
+                        <TabControl.Styles>
+                            <Style Selector="controls|WorkspaceItem /template/ ContentPresenter#PART_Header">
+                                <Setter Property="IsVisible" Value="False"/>
+                            </Style>
+                        </TabControl.Styles>
+                    </TabControl>
+                    <GridSplitter Width="5" Grid.Row="0" Grid.RowSpan="4" Grid.Column="1" Background="Transparent"
+                                  IsHitTestVisible="True" ResizeBehavior="PreviousAndNext" />
+                    <GridSplitter Width="5" Grid.Row="0" Grid.RowSpan="4" Grid.Column="3" Background="Transparent"
+                                  IsHitTestVisible="True" Opacity="1" ResizeBehavior="PreviousAndNext" />
+                    <GridSplitter HorizontalAlignment="Stretch" Height="5" Grid.Row="2" Grid.ColumnSpan="3" Grid.Column="1"
+                                  Background="Transparent" IsHitTestVisible="True" ResizeBehavior="PreviousAndNext" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

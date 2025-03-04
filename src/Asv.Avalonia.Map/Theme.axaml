@@ -4,24 +4,27 @@
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
     <Design.PreviewWith>
         <Border Padding="20" Width="500" Height="300">
-            <map:MapView CenterMap="{map:GeoPoint 53,53}" >
-                <map:MapViewItem Location="{map:GeoPoint 53,53}"
+            <map:MapItemsControl CenterMap="{map:GeoPoint 53,53}" >
+                <map:MapItem Location="{map:GeoPoint 53,53}"
                                       Rotation="45"
                                       CenterX="{map:HorizontalOffset Center}"
                                       CenterY="{map:VerticalOffset Center}">
                     <avalonia:MaterialIcon Foreground="BlueViolet" Width="40" Height="40" Kind="Navigation" />
-                </map:MapViewItem>
-                <map:MapViewItem Location="{map:GeoPoint 53,53.4}"
+                </map:MapItem>
+                <map:MapItem Location="{map:GeoPoint 53,53.4}"
                                       CenterX="{map:HorizontalOffset Center}"
                                       CenterY="{map:VerticalOffset Bottom}">
                     <avalonia:MaterialIcon  Width="40" Height="40" Kind="MapMarker" />
-                </map:MapViewItem>
+                </map:MapItem>
         
-            </map:MapView>
+            </map:MapItemsControl>
         </Border>
     </Design.PreviewWith>
     
-    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/MapView/MapViewItem.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/MapView/MapView.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/ItemsControl/MapItem.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/ItemsControl/MapItemsControl.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/Workspace/Workspace.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/Workspace/WorkspaceItem.axaml"/>
+    
     
 </Styles>

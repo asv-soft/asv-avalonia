@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
 using System.Threading.Tasks;
+using Asv.Avalonia.Map;
+using Asv.Common;
+using Material.Icons;
 
 namespace Asv.Avalonia.Example;
 
@@ -24,6 +27,14 @@ public class MapExamplePageViewModel : PageViewModel<IMapContext>, IMapContext
         : base(PageId, cmd)
     {
         Title.OnNext(RS.MapExamplePageViewModel_Title);
+        Anchors = new MapViewModel("asdasd");
+        Anchors.Anchors.Add(
+            new MapAnchor("1")
+            {
+                Icon = MaterialIconKind.Navigation,
+                Location = new GeoPoint(53, 53, 0),
+            }
+        );
     }
 
     public override ValueTask<IRoutable> Navigate(string id)
@@ -47,4 +58,5 @@ public class MapExamplePageViewModel : PageViewModel<IMapContext>, IMapContext
     }
 
     public override IExportInfo Source => SystemModule.Instance;
+    public MapViewModel Anchors { get; }
 }
