@@ -3,7 +3,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Map;
 
-public class HorizontalOffsetExtension(MapOffsetXEnum offsetType) : MarkupExtension
+public class HorizontalOffsetExtension(HorizontalOffsetEnum offsetType) : MarkupExtension
 {
     public double Offset { get; set; } = 0.0;
 
@@ -13,18 +13,18 @@ public class HorizontalOffsetExtension(MapOffsetXEnum offsetType) : MarkupExtens
     }
 }
 
-public readonly struct HorizontalOffset(MapOffsetXEnum offsetType, double offset)
+public readonly struct HorizontalOffset(HorizontalOffsetEnum offsetType, double offset)
 {
-    public MapOffsetXEnum OffsetType => offsetType;
+    public HorizontalOffsetEnum OffsetType => offsetType;
     public double Offset => offset;
 
     public double CalculateOffset(double boundsWidth)
     {
         return OffsetType switch
         {
-            MapOffsetXEnum.Left => Offset,
-            MapOffsetXEnum.Center => boundsWidth / 2 - Offset,
-            MapOffsetXEnum.Right => boundsWidth - Offset,
+            HorizontalOffsetEnum.Left => Offset,
+            HorizontalOffsetEnum.Center => boundsWidth / 2 - Offset,
+            HorizontalOffsetEnum.Right => boundsWidth - Offset,
             _ => throw new ArgumentOutOfRangeException(),
         };
     }
@@ -33,7 +33,7 @@ public readonly struct HorizontalOffset(MapOffsetXEnum offsetType, double offset
 /// <summary>
 /// Enumeration for X-axis offset values.
 /// </summary>
-public enum MapOffsetXEnum
+public enum HorizontalOffsetEnum
 {
     /// <summary>
     /// Enumeration for X-axis offset values.

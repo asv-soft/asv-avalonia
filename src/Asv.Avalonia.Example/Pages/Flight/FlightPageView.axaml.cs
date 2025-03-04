@@ -2,11 +2,11 @@
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Asv.Avalonia.Map;
+namespace Asv.Avalonia.Example;
 
-public partial class MapView : UserControl
+public partial class FlightPageView : UserControl
 {
-    public MapView()
+    public FlightPageView()
     {
         InitializeComponent();
     }

@@ -11,24 +11,14 @@
     <Design.DataContext>
         <example:MapExamplePageViewModel/>
     </Design.DataContext>
-    <Panel>
-        <map:MapView x:Name="MAP" CenterMap="{map:GeoPoint 53,53}" >
-            <map:MapViewItem Location="{map:GeoPoint 53,53}"
-                             CenterX="{map:HorizontalOffset Center}"
-                             CenterY="{map:VerticalOffset Bottom}">
-                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker" />
-            </map:MapViewItem>
-            <map:MapViewItem Location="{map:GeoPoint 53,53.4}"
-                             CenterX="{map:HorizontalOffset Center}"
-                             CenterY="{map:VerticalOffset Bottom}">
-                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker" />
-            </map:MapViewItem>
+        <Panel>
+            <map:MapItemsControl CenterMap="{map:GeoPoint 53,53}"/>
+            <map:Workspace Background="Black" >
+                <map:WorkspaceItem Position="Left" >
+                    <TextBox Text="asdads"/>
+                </map:WorkspaceItem>
+            </map:Workspace>
+            
         
-        </map:MapView>
-        <TextBlock HorizontalAlignment="Right" Text="{ReflectionBinding SelectedItem, ElementName=MAP}"/>
-        <TextBlock HorizontalAlignment="Left" Text="{ReflectionBinding SelectedItems.Count, ElementName=MAP}"/>
-        
-    </Panel>
-    
-    
+        </Panel>
 </UserControl>

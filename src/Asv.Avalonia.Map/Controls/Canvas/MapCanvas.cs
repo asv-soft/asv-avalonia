@@ -6,15 +6,15 @@ using R3;
 
 namespace Asv.Avalonia.Map;
 
-public class MapPanel : Panel
+public class MapCanvas : Panel
 {
-    static MapPanel()
+    static MapCanvas()
     {
-        AffectsParentArrange<MapPanel>(LocationProperty);
-        AffectsArrange<MapPanel>(ProviderProperty, ZoomProperty, CenterMapProperty);
+        AffectsParentArrange<MapCanvas>(LocationProperty);
+        AffectsArrange<MapCanvas>(ProviderProperty, ZoomProperty, CenterMapProperty);
     }
 
-    public MapPanel()
+    public MapCanvas()
     {
         Provider = new BingTileProvider(
             "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
@@ -73,7 +73,7 @@ public class MapPanel : Panel
     #region Rotation
 
     public static readonly AttachedProperty<double> RotationProperty =
-        AvaloniaProperty.RegisterAttached<MapPanel, Control, double>("Rotation");
+        AvaloniaProperty.RegisterAttached<MapCanvas, Control, double>("Rotation");
 
     public static void SetRotation(Control obj, double value) =>
         obj.SetValue(RotationProperty, value);
@@ -85,7 +85,7 @@ public class MapPanel : Panel
     #region CenterY
 
     public static readonly AttachedProperty<VerticalOffset> CenterYProperty =
-        AvaloniaProperty.RegisterAttached<MapPanel, Control, VerticalOffset>("CenterY");
+        AvaloniaProperty.RegisterAttached<MapCanvas, Control, VerticalOffset>("CenterY");
 
     public static void SetCenterY(Control obj, VerticalOffset value) =>
         obj.SetValue(CenterYProperty, value);
@@ -97,7 +97,7 @@ public class MapPanel : Panel
     #region CenterX
 
     public static readonly AttachedProperty<HorizontalOffset> CenterXProperty =
-        AvaloniaProperty.RegisterAttached<MapPanel, Control, HorizontalOffset>("CenterX");
+        AvaloniaProperty.RegisterAttached<MapCanvas, Control, HorizontalOffset>("CenterX");
 
     public static void SetCenterX(Control obj, HorizontalOffset value) =>
         obj.SetValue(CenterXProperty, value);
@@ -109,7 +109,7 @@ public class MapPanel : Panel
     #region Location
 
     public static readonly AttachedProperty<GeoPoint?> LocationProperty =
-        AvaloniaProperty.RegisterAttached<MapPanel, Control, GeoPoint?>("Location");
+        AvaloniaProperty.RegisterAttached<MapCanvas, Control, GeoPoint?>("Location");
 
     public static GeoPoint? GetLocation(Control element) => element.GetValue(LocationProperty);
 
@@ -121,7 +121,7 @@ public class MapPanel : Panel
     #region CenterMap
 
     public static readonly StyledProperty<GeoPoint> CenterMapProperty = AvaloniaProperty.Register<
-        MapPanel,
+        MapCanvas,
         GeoPoint
     >(nameof(CenterMap));
 
@@ -136,7 +136,7 @@ public class MapPanel : Panel
     #region Provider
 
     public static readonly StyledProperty<ITileProvider?> ProviderProperty =
-        AvaloniaProperty.Register<MapPanel, ITileProvider?>(
+        AvaloniaProperty.Register<MapCanvas, ITileProvider?>(
             nameof(Provider),
             coerce: (o, provider) => provider ?? EmptyTileProvider.Instance
         );
@@ -152,7 +152,7 @@ public class MapPanel : Panel
     #region Zoom
 
     public static readonly StyledProperty<int> ZoomProperty = AvaloniaProperty.Register<
-        MapPanel,
+        MapCanvas,
         int
     >(nameof(Zoom));
 

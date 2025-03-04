@@ -5,20 +5,20 @@
         xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia">
     <Design.PreviewWith>
         <WrapPanel Width="200" Height="100">
-            <controls:MapViewItem Rotation="0" IsSelected="True" CenterY="{controls:VerticalOffset Bottom, 3}" >
+            <controls:MapItem Rotation="0" IsSelected="True" CenterY="{controls:VerticalOffset Bottom, 3}" >
                 <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker"  />
-            </controls:MapViewItem>    
-            <controls:MapViewItem Rotation="0" CenterY="{controls:VerticalOffset Bottom, 3}" >
+            </controls:MapItem>    
+            <controls:MapItem Rotation="0" CenterY="{controls:VerticalOffset Bottom, 3}" >
                 <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker"  />
-            </controls:MapViewItem>
-            <controls:MapViewItem Rotation="45" CenterX="{controls:HorizontalOffset Center}" CenterY="{controls:VerticalOffset Center}" >
+            </controls:MapItem>
+            <controls:MapItem Rotation="45" CenterX="{controls:HorizontalOffset Center}" CenterY="{controls:VerticalOffset Center}" >
                 <avalonia:MaterialIcon Width="40" Height="40" Kind="Navigation"  />
-            </controls:MapViewItem>
+            </controls:MapItem>
         </WrapPanel>
         
     </Design.PreviewWith>
     
-    <Style Selector="controls|MapViewItem">
+    <Style Selector="controls|MapItem">
         <Style Selector="^ Path">
             <Setter Property="StrokeThickness" Value="0.5"/>
             <Setter Property="Stroke" Value="BlueViolet"/>
@@ -42,9 +42,9 @@
             <Setter Property="StrokeThickness" Value="2"/>
         </Style>
         <!-- Set Defaults -->
-        <Setter Property="controls:MapPanel.Location" Value="{Binding Location, RelativeSource={RelativeSource Self}}"/>
-        <Setter Property="controls:MapPanel.CenterX" Value="{Binding CenterX, RelativeSource={RelativeSource Self}}"/>
-        <Setter Property="controls:MapPanel.CenterY" Value="{Binding CenterY, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="controls:MapCanvas.Location" Value="{Binding Location, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="controls:MapCanvas.CenterX" Value="{Binding CenterX, RelativeSource={RelativeSource Self}}"/>
+        <Setter Property="controls:MapCanvas.CenterY" Value="{Binding CenterY, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>

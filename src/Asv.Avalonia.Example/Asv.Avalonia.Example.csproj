@@ -56,7 +56,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\FlightMode\" />
       <Folder Include="Pages\Settings\" />
       <Folder Include="Services\" />
     </ItemGroup>

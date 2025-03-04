@@ -4,15 +4,15 @@ namespace Asv.Avalonia.Map;
 
 public class VerticalOffsetExtension : MarkupExtension
 {
-    private readonly MapOffsetYEnum _offsetType;
+    private readonly VerticalOffsetEnum _offsetType;
     private readonly double _offset;
 
-    public VerticalOffsetExtension(MapOffsetYEnum offsetType)
+    public VerticalOffsetExtension(VerticalOffsetEnum offsetType)
     {
         _offsetType = offsetType;
     }
 
-    public VerticalOffsetExtension(MapOffsetYEnum offsetType, double offset)
+    public VerticalOffsetExtension(VerticalOffsetEnum offsetType, double offset)
     {
         _offsetType = offsetType;
         _offset = offset;
@@ -24,18 +24,18 @@ public class VerticalOffsetExtension : MarkupExtension
     }
 }
 
-public readonly struct VerticalOffset(MapOffsetYEnum offsetType, double offset)
+public readonly struct VerticalOffset(VerticalOffsetEnum offsetType, double offset)
 {
-    public MapOffsetYEnum OffsetType => offsetType;
+    public VerticalOffsetEnum OffsetType => offsetType;
     public double Offset => offset;
 
     public double CalculateOffset(double boundsHeight)
     {
         return OffsetType switch
         {
-            MapOffsetYEnum.Top => Offset,
-            MapOffsetYEnum.Center => boundsHeight / 2 - Offset,
-            MapOffsetYEnum.Bottom => boundsHeight - Offset,
+            VerticalOffsetEnum.Top => Offset,
+            VerticalOffsetEnum.Center => boundsHeight / 2 - Offset,
+            VerticalOffsetEnum.Bottom => boundsHeight - Offset,
             _ => throw new ArgumentOutOfRangeException(),
         };
     }
@@ -44,7 +44,7 @@ public readonly struct VerticalOffset(MapOffsetYEnum offsetType, double offset)
 /// <summary>
 /// Represents the possible vertical offset positions for an
 /// </summary>
-public enum MapOffsetYEnum
+public enum VerticalOffsetEnum
 {
     /// <summary>
     /// Enum member representing the vertical offset position from the center of the target element.

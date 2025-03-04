@@ -2,13 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:map="clr-namespace:Asv.Avalonia.Map"
+             xmlns:map="clr-namespace:Asv.Avalonia.Map;assembly=Asv.Avalonia.Map"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Map.MapView"
-             x:DataType="map:MapViewModel">
+             x:Class="Asv.Avalonia.Example.FlightPageView"
+             x:DataType="example:FlightPageViewModel">
     <Design.DataContext>
-        <map:MapViewModel/>
+        <example:FlightPageViewModel/>
     </Design.DataContext>
     <Panel>
         <map:MapItemsControl CenterMap="{map:GeoPoint 53, 53}" SelectionMode="Multiple" 
@@ -34,7 +35,4 @@
             
         </map:Workspace>
     </Panel>
-    
-    
-    
 </UserControl>
