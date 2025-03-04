@@ -500,4 +500,10 @@
     <data name="AddSerialPortCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, которая добавляет последовательный порт</value>
     </data>
+    <data name="ChangeStringPropertyCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Изменить свойство типа стринг</value>
+    </data>
+    <data name="ChangeStringPropertyCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда меняет значение свойства с типом строка</value>
+    </data>
 </root>

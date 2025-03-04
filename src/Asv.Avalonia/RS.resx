@@ -507,4 +507,10 @@
     <data name="AddSerialPortCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that adds a serial port</value>
     </data>
+    <data name="ChangeStringPropertyCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Change string property</value>
+    </data>
+    <data name="ChangeStringPropertyCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command changes the value of a property with the string type</value>
+    </data>
 </root>

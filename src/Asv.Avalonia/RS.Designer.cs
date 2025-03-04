@@ -1022,5 +1022,17 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("AddSerialPortCommand_CommandInfo_Description", resourceCulture);
             }
         }
+        
+        public static string ChangeStringPropertyCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ChangeStringPropertyCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ChangeStringPropertyCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ChangeStringPropertyCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
     }
 }
