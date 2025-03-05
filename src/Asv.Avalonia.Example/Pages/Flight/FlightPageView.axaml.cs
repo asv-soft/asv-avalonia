@@ -4,6 +4,7 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Example;
 
+[ExportViewFor(typeof(FlightPageViewModel))]
 public partial class FlightPageView : UserControl
 {
     public FlightPageView()

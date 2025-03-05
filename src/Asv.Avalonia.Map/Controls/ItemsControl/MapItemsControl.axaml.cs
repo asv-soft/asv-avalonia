@@ -3,11 +3,14 @@ using System.Text.RegularExpressions;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
+using Avalonia.Controls.Templates;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
+using Avalonia.Metadata;
 
 namespace Asv.Avalonia.Map;
 
@@ -33,6 +36,20 @@ public class MapItemsControl : SelectingItemsControl
         SelectionMode = SelectionMode.Multiple;
         SelectionChanged += OnSelectionChanged;
     }
+
+    #region ItemTemplate Property
+
+    public static readonly StyledProperty<IDataTemplate?> AnnotationTemplateProperty =
+        AvaloniaProperty.Register<MapItemsControl, IDataTemplate?>(nameof(AnnotationTemplate));
+
+    [InheritDataTypeFromItems(nameof(ItemsSource))]
+    public IDataTemplate? AnnotationTemplate
+    {
+        get => GetValue(AnnotationTemplateProperty);
+        set => SetValue(AnnotationTemplateProperty, value);
+    }
+
+    #endregion
 
     #region Selection
 

@@ -7,9 +7,7 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Asv.Cfg" Version="3.1.1-dev.1" />
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
-        <PackageReference Include="Asv.Common" Version="3.1.1-dev.1" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
         <PackageReference Include="ZLogger" Version="$(ZLoggerVersion)" />
     </ItemGroup>

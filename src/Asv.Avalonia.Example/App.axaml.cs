@@ -109,12 +109,6 @@ public partial class App : Application, IContainerHost, IShellHost
             Shell.Navigate(MapExamplePageViewModel.PageId);
             Shell.Navigate(DialogBoardViewModel.PageId);
             Shell.Navigate(TestUnitsPageViewModel.PageId);
-            Shell.Navigate(PluginsSourcesViewModel.PageId);
-            Shell.Navigate(PluginsMarketViewModel.PageId);
-            Shell.Navigate(InstalledPluginsViewModel.PageId);
-            Shell.Navigate(InstalledPluginsViewModel.PageId);
-            Shell.Navigate(PluginsMarketViewModel.PageId);
-            Shell.Navigate(PluginsSourcesViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();

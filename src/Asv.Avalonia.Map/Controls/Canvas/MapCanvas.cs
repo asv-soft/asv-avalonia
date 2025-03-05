@@ -39,7 +39,6 @@ public class MapCanvas : Panel
         {
             ArrangeChild(child, finalSize);
         }
-
         return finalSize;
     }
 

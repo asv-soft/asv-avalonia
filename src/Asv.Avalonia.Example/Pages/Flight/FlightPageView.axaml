@@ -15,6 +15,18 @@
         <map:MapItemsControl CenterMap="{map:GeoPoint 53, 53}" SelectionMode="Multiple" 
                              ItemsSource="{Binding AnchorsView}" 
                              SelectedItem="{Binding SelectedAnchor.Value}">
+            <map:MapItemsControl.AnnotationTemplate>
+                <DataTemplate>
+                    <Border BorderThickness="1" BorderBrush="White" x:Name="PART_Annotation" IsVisible="{Binding !!Title.Length}" Padding="3" CornerRadius="3" Background="#4a148c" >
+                        <TextBlock Text="{ReflectionBinding Title}"/>
+                    </Border>
+                </DataTemplate>
+            </map:MapItemsControl.AnnotationTemplate>
+            <map:MapItemsControl.Styles>
+                <Style Selector="Border.active">
+                    <Setter Property="BorderThickness" Value="5"/>
+                </Style>
+            </map:MapItemsControl.Styles>
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
                     <avalonia:MaterialIcon Width="40" Height="40" Foreground="{Binding Foreground}" Kind="{Binding Icon}"  />

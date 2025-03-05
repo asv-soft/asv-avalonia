@@ -7,6 +7,7 @@
         <Panel Width="1000" Height="250">
             <controls:MapItemsControl CenterMap="{controls:GeoPoint 53,53}" >
                 <controls:MapItem Location="{controls:GeoPoint 53,53}"
+                                  AnnotationText="asdasdasd"
                                       Rotation="45"
                                       CenterX="{controls:HorizontalOffset Center}"
                                       CenterY="{controls:VerticalOffset Center}">
@@ -14,6 +15,7 @@
                 </controls:MapItem>
                 <controls:MapItem Location="{controls:GeoPoint 53,53.4}"
                                   IsReadOnly="True"
+                                  AnnotationText="asdasdasd"
                                       CenterX="{controls:HorizontalOffset Center}"
                                       CenterY="{controls:VerticalOffset Bottom}">
                     <avalonia:MaterialIcon x:Name="PART_Icon" Width="40" Height="40" Kind="MapMarker" />
@@ -27,11 +29,16 @@
     </Design.PreviewWith>
     
     <Style Selector="controls|MapItemsControl">
-        
+        <Setter Property="AnnotationTemplate">
+            <DataTemplate x:DataType="controls:MapItem">
+                <TextBlock Text="{Binding Location}"></TextBlock>
+            </DataTemplate>
+        </Setter>
         <!-- Set Defaults -->
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>
                <controls:MapCanvas 
+                   x:Name="PART_MapCanvas"
                    Provider="{TemplateBinding Provider}" 
                    CenterMap="{TemplateBinding CenterMap}" 
                    Zoom="{TemplateBinding Zoom}"/>
@@ -46,6 +53,7 @@
                         Zoom="{TemplateBinding Zoom}" 
                         CenterMap="{TemplateBinding CenterMap}" 
                         Provider="{TemplateBinding Provider}"/>
+                    <controls:AnnotationLayer x:Name="PART_AnnotationLayer" ItemTemplate="{TemplateBinding AnnotationTemplate}" Source="{TemplateBinding}" />
                     <ItemsPresenter Name="PART_ItemsPresenter"
                                     ItemsPanel="{TemplateBinding ItemsPanel}"
                                     Margin="{TemplateBinding Padding}"/>

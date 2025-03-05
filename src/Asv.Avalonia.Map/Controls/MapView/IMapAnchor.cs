@@ -16,6 +16,7 @@ public interface IMapAnchor : IRoutable
     bool IsReadOnly { get; }
     bool IsSelected { get; }
     bool IsVisible { get; }
+    public string Title { get; }
 }
 
 public class MapAnchor : RoutableViewModel, IMapAnchor
@@ -29,9 +30,13 @@ public class MapAnchor : RoutableViewModel, IMapAnchor
     private bool _isReadOnly;
     private bool _isSelected;
     private bool _isVisible = true;
+    private string _title;
 
     public MapAnchor(string id)
-        : base(id) { }
+        : base(id)
+    {
+        Title = id;
+    }
 
     public double Azimuth
     {
@@ -85,6 +90,12 @@ public class MapAnchor : RoutableViewModel, IMapAnchor
     {
         get => _isVisible;
         set => SetField(ref _isVisible, value);
+    }
+
+    public string Title
+    {
+        get => _title;
+        set => SetField(ref _title, value);
     }
 
     public override ValueTask<IRoutable> Navigate(string id)
