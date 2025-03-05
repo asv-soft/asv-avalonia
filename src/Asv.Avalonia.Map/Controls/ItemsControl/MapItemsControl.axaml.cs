@@ -1,15 +1,11 @@
 ﻿using System.Collections;
-using System.Text.RegularExpressions;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Media;
-using Avalonia.Media.Immutable;
 using Avalonia.Metadata;
 
 namespace Asv.Avalonia.Map;

@@ -51,25 +51,31 @@ public class FlightPageViewModel : PageViewModel<IFlightModeContext>, IFlightMod
         WidgetsView = Widgets.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);
 
-        var drone = new MapAnchor("1")
+        for (int i = 0; i < 10; i++)
         {
-            Icon = MaterialIconKind.Navigation,
-            Location = new GeoPoint(53, 53, 100),
-        };
-        var drone2 = new MapAnchor("1")
-        {
-            Icon = MaterialIconKind.Navigation,
-            Location = new GeoPoint(53, 53, 100),
-        };
-        Anchors.Add(drone);
-        Anchors.Add(drone2);
+            var drone = new MapAnchor($"{i} Anchor")
+            {
+                Icon = MaterialIconKind.Navigation,
+                Location = new GeoPoint(
+                    53 + Random.Shared.NextDouble(),
+                    53 + Random.Shared.NextDouble(),
+                    100
+                ),
+                Azimuth = Random.Shared.NextDouble() * 360,
+            };
+            Anchors.Add(drone);
+        }
+
         var azimuth = 0;
         TimeProvider.System.CreateTimer(
             x =>
             {
-                drone.Azimuth = (azimuth++ * 10) % 360;
-                drone.Title = $"{drone.Azimuth} deg";
-                drone.Location = drone.Location.RadialPoint(100, drone.Azimuth);
+                foreach (var anchor in Anchors.Cast<MapAnchor>())
+                {
+                    anchor.Azimuth = (azimuth++ * 10) % 360;
+                    anchor.Title = $"{anchor.Azimuth} deg";
+                    anchor.Location = anchor.Location.RadialPoint(100, anchor.Azimuth);
+                }
             },
             null,
             TimeSpan.FromSeconds(1),

@@ -23,8 +23,17 @@ public class AnnotationLayer : Canvas
     }
 
     private readonly List<MapAnnotation> _annotations = new();
+    private Subject<Unit> _renderRequestSubject = new();
 
-    public AnnotationLayer() { }
+    public AnnotationLayer()
+    {
+        DisposableBuilder disposeBuilder = new();
+        _renderRequestSubject.AddTo(ref disposeBuilder);
+        _renderRequestSubject
+            .ThrottleLastFrame(1)
+            .Subscribe(_ => UpdateAnnotationsFromChildren())
+            .AddTo(ref disposeBuilder);
+    }
 
     #region ItemTemplate
 
@@ -81,7 +90,7 @@ public class AnnotationLayer : Canvas
 
     protected override Size ArrangeOverride(Size finalSize)
     {
-        UpdateAnnotationsFromChildren();
+        _renderRequestSubject.OnNext(Unit.Default);
         return base.ArrangeOverride(finalSize);
     }
 
@@ -140,21 +149,6 @@ public class AnnotationLayer : Canvas
         }
 
         ArrangeAnnotations(Bounds.Size);
-    }
-
-    private void OnLocationChanged(Control t, GeoPoint? oldLocation, GeoPoint? newLocation)
-    {
-        var target = t as MapItem;
-        var annotation = _annotations.FirstOrDefault(a => a.Target == target);
-        if (annotation != null && newLocation.HasValue)
-        {
-            annotation.AnchorPoint = newLocation.Value;
-            ArrangeAnnotations(Bounds.Size);
-        }
-        else
-        {
-            UpdateAnnotationsFromChildren(); // Полное обновление, если аннотация ещё не создана
-        }
     }
 
     protected override void OnPointerPressed(PointerPressedEventArgs e)
@@ -225,11 +219,16 @@ public class AnnotationLayer : Canvas
         if (Source == null || _annotations.Count == 0)
             return;
 
-        const int maxIterations = 100;
+        const int baseMaxIterations = 100;
         const double repulsionStrength = 1000.0;
         const double attractionStrength = 0.1;
         const double damping = 0.9;
         const double minDistance = 50.0;
+        const double maxVelocity = 10.0; // Ограничение скорости для предотвращения скачков
+        const double stabilizationThreshold = 0.1; // Порог стабилизации (в пикселях)
+
+        // Адаптивное количество итераций: уменьшаем при большом числе аннотаций
+        int maxIterations = Math.Min(baseMaxIterations, 1000 / Math.Max(1, _annotations.Count));
 
         for (int iteration = 0; iteration < maxIterations; iteration++)
         {
@@ -241,19 +240,23 @@ public class AnnotationLayer : Canvas
                 var anchorPos = ConvertToScreen(item.AnchorPoint);
                 var velocity = new Point(0, 0);
 
-                // Притяжение к предпочтительной радиальной позиции (от центра наружу)
+                // Притяжение к предпочтительной радиальной позиции
                 var preferredDirection = (currentPos - anchorPos).Normalize();
                 var preferredPos = anchorPos + preferredDirection * minDistance;
                 velocity += (preferredPos - currentPos) * attractionStrength;
 
-                // Отталкивание от других аннотаций
-                foreach (var other in _annotations.Where(x => x != item))
+                // Отталкивание от других аннотаций с оптимизацией
+                foreach (var other in _annotations)
                 {
-                    var delta = currentPos - other.ScreenPosition;
-                    var distance = delta.Length();
+                    if (other == item)
+                        continue;
 
-                    if (distance < minDistance)
+                    var delta = currentPos - other.ScreenPosition;
+                    var distanceSquared = delta.LengthSquared(); // Быстрее, чем Length
+
+                    if (distanceSquared < minDistance * minDistance) // Проверяем квадрат расстояния
                     {
+                        var distance = Math.Sqrt(distanceSquared);
                         var repulsion =
                             delta.Normalize() * (repulsionStrength / Math.Max(distance, 1.0));
                         velocity += repulsion;
@@ -261,12 +264,28 @@ public class AnnotationLayer : Canvas
                     }
                 }
 
+                // Ограничиваем скорость, чтобы избежать чрезмерных скачков
+                var velocityMagnitude = velocity.Length();
+                if (velocityMagnitude > maxVelocity)
+                {
+                    velocity = velocity.Normalize() * maxVelocity;
+                }
+
                 // Обновляем позицию
-                currentPos += velocity * damping;
-                item.ScreenPosition = new Point(
-                    Math.Clamp(currentPos.X, 0, finalSize.Width - item.Annotation.Bounds.Width),
-                    Math.Clamp(currentPos.Y, 0, finalSize.Height - item.Annotation.Bounds.Height)
+                var newPos = currentPos + velocity * damping;
+                newPos = new Point(
+                    Math.Clamp(newPos.X, 0, finalSize.Width - item.Annotation.Bounds.Width),
+                    Math.Clamp(newPos.Y, 0, finalSize.Height - item.Annotation.Bounds.Height)
                 );
+
+                // Проверяем, достаточно ли малая разница для стабилизации
+                var movement = (newPos - currentPos).Length();
+                if (movement > stabilizationThreshold)
+                {
+                    stabilized = false;
+                }
+
+                item.ScreenPosition = newPos;
             }
 
             if (stabilized)

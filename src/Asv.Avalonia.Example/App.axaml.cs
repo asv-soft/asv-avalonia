@@ -103,12 +103,20 @@ public partial class App : Application, IContainerHost, IShellHost
         base.OnFrameworkInitializationCompleted();
         if (Design.IsDesignMode == false)
         {
+            Shell.Navigate(FlightPageViewModel.PageId);
             Shell.Navigate(SettingsPageViewModel.PageId);
             Shell.Navigate(HomePageViewModel.PageId);
             Shell.Navigate(DocumentPageViewModel.PageId);
             Shell.Navigate(MapExamplePageViewModel.PageId);
             Shell.Navigate(DialogBoardViewModel.PageId);
             Shell.Navigate(TestUnitsPageViewModel.PageId);
+
+            Shell.Navigate(PluginsSourcesViewModel.PageId);
+            Shell.Navigate(PluginsMarketViewModel.PageId);
+            Shell.Navigate(InstalledPluginsViewModel.PageId);
+            Shell.Navigate(InstalledPluginsViewModel.PageId);
+            Shell.Navigate(PluginsMarketViewModel.PageId);
+            Shell.Navigate(PluginsSourcesViewModel.PageId);
         }
 #if DEBUG
         this.AttachDevTools();
