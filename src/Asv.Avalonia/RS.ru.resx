@@ -611,6 +611,69 @@
     <data name="AddSerialPortCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, которая добавляет последовательный порт</value>
     </data>
+    <data name="Unit_Terabyte_Abbreviation" xml:space="preserve">
+        <value>ТБ</value>
+    </data>
+    <data name="Unit_Megabyte_Abbreviation" xml:space="preserve">
+        <value>МБ</value>
+    </data>
+    <data name="Unit_Kilobyte_Abbreviation" xml:space="preserve">
+        <value>КБ</value>
+    </data>
+    <data name="Unit_Gigabyte_Abbreviation" xml:space="preserve">
+        <value>ГБ</value>
+    </data>
+    <data name="Unit_Byte_Abbreviation" xml:space="preserve">
+        <value>байт</value>
+    </data>
+    <data name="FileBrowserViewModel_DownloadDialog_PrimaryButtonText" xml:space="preserve">
+        <value>Отменить</value>
+    </data>
+    <data name="FileBrowserViewModel_DownloadDialog_SecondaryButtonText" xml:space="preserve">
+        <value>Скачать</value>
+    </data>
+    <data name="FileBrowserViewModel_DownloadDialog_Title" xml:space="preserve">
+        <value>Загрузка</value>
+    </data>
+    <data name="FileBrowserViewModel_UploadDialog_PrimaryButtonText" xml:space="preserve">
+        <value>Отменить</value>
+    </data>
+    <data name="FileBrowserViewModel_UploadDialog_Title" xml:space="preserve">
+        <value>Выгрузка</value>
+    </data>
+    <data name="FileBrowserView_CommitRename_Button_Tooltip" xml:space="preserve">
+        <value>Сохранить</value>
+    </data>
+    <data name="FileBrowserView_CompareSelectedItems_Button_Tooltip" xml:space="preserve">
+        <value>Сравнить выделенные элементы</value>
+    </data>
+    <data name="FileBrowserView_CRC32_Button_Tooltip" xml:space="preserve">
+        <value>Вычислить CRC32</value>
+    </data>
+    <data name="FileBrowserView_Delete_Button_Tooltip" xml:space="preserve">
+        <value>Удалить</value>
+    </data>
+    <data name="FileBrowserView_Download_button_Tooltip" xml:space="preserve">
+        <value>Скачать файл</value>
+    </data>
+    <data name="FileBrowserView_FindFile_Button_Tooltip" xml:space="preserve">
+        <value>Поиск файла</value>
+    </data>
+    <data name="FileBrowserView_NewFolder_Button_Tooltip" xml:space="preserve">
+        <value>Новая папка</value>
+    </data>
+    <data name="FileBrowserView_Refresh_Button_Tooltip" xml:space="preserve">
+        <value>Обновить</value>
+    </data>
+    <data name="FileBrowserView_Rename_Button_Tooltip" xml:space="preserve">
+        <value>Переименовать</value>
+    </data>
+    <data name="FileBrowserView_Search_Watermark" xml:space="preserve">
+        <value>Найти</value>
+    </data>
+    <data name="FileBrowserView_Upload_button_Tooltip" xml:space="preserve">
+        <value>Поместить файл</value>
+    </data>
     <data name="ChangeStringPropertyCommand_CommandInfo_Name" xml:space="preserve">
         <value>Изменить свойство типа стринг</value>
     </data>
