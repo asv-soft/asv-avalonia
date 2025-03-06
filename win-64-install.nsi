@@ -7,7 +7,6 @@
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 
 !include "MUI.nsh"
-!include "nsDialogs.nsh"
 
 !define MUI_ABORTWARNING
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
@@ -15,7 +14,6 @@
 ; Wizard pages
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_DIRECTORY
-Page custom ShortcutPage ShortcutPageLeave
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_INSTFILES
@@ -26,25 +24,6 @@ OutFile "AsvAvaloniaExampleInstaller.exe"
 InstallDir "$PROGRAMFILES\Asv\Asv-Avalonia-Example"
 ShowInstDetails show
 ShowUnInstDetails show
-
-Var SHORTCUT_CHECKBOX
-
-Function ShortcutPage
-  nsDialogs::Create 1018
-  Pop $0
-
-  ${NSD_CreateCheckbox} 10u 10u 100% 12u "Create Desktop Shortcut"
-  Pop $SHORTCUT_CHECKBOX
-  ${NSD_Check} $SHORTCUT_CHECKBOX
-
-  nsDialogs::Show
-FunctionEnd
-
-Function ShortcutPageLeave
-  ${NSD_GetState} $SHORTCUT_CHECKBOX $0
-  StrCmp $0 0 0 +2
-  StrCpy $SHORTCUT_CHECKBOX "yes"
-FunctionEnd
 
 ; Following lists the files you want to include, go through this list carefully!
 Section "MainSection" SEC01
