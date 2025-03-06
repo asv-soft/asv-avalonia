@@ -66,12 +66,13 @@ jobs:
       
       - name: Sign Installer
         run: |
-          signtool sign /f certificate.pfx /p "${{ secrets.WINDOWS_SIGNING_PASSWORD }}" /tr http://timestamp.digicert.com /td SHA256 /fd SHA256 AsvAvaloniaExampleInstaller.exe
-
-      - name: Sign Installer
-        run: |
           "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" sign /f certificate.pfx /p "${{ secrets.WINDOWS_SIGNING_PASSWORD }}" /tr http://timestamp.digicert.com /td SHA256 /fd SHA256 AsvAvaloniaExampleInstaller.exe
-      
+
+      - name: Verify Signature
+        run: |
+          "C:\Program Files (x86)\Windows Kits\10\bin\x64\signtool.exe" verify /pa AsvAvaloniaExampleInstaller.exe
+    
+    
       - name: List output files
         run: Get-ChildItem -Path ./publish/app -Force
         
