@@ -1,0 +1,284 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:behaviors="https://github.com/avaloniaui"
+             xmlns:gui="clr-namespace:Asv.Avalonia.Example"
+             xmlns:api="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:CompileBindings="True"
+             x:Class="Asv.Avalonia.Example.FileBrowserView"
+             x:DataType="gui:FileBrowserViewModel">
+    <Design.DataContext>
+        <gui:FileBrowserViewModel />
+    </Design.DataContext>
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="FolderBrush" Color="{StaticResource SystemAccentColorDark2}" />
+        <SolidColorBrush x:Key="FileBrush" Color="{StaticResource SystemAccentColorLight2}" />
+        <SolidColorBrush x:Key="DeleteBrush" Color="{StaticResource SystemAccentColor}" />
+        <x:Double x:Key="IconSize">15</x:Double>
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style Selector="TreeViewItem" x:DataType="gui:FileSystemItemViewModel">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded.Value, Mode=TwoWay}" />
+            <Setter Property="IsSelected" Value="{Binding IsSelected.Value, Mode=TwoWay}" />
+        </Style>
+        <Style Selector="avalonia|MaterialIcon.folder">
+            <Setter Property="Kind" Value="FolderOutline" />
+            <Setter Property="Foreground" Value="{StaticResource FolderBrush}" />
+        </Style>
+        <Style Selector="avalonia|MaterialIcon.folder.selected">
+            <Setter Property="Kind" Value="Folder" />
+            <Setter Property="Foreground" Value="{StaticResource FolderBrush}" />
+        </Style>
+        <Style Selector="avalonia|MaterialIcon.folder.expanded">
+            <Setter Property="Kind" Value="FolderOpenOutline" />
+            <Setter Property="Foreground" Value="{StaticResource FolderBrush}" />
+        </Style>
+        <Style Selector="avalonia|MaterialIcon.file">
+            <Setter Property="Kind" Value="FileMarkerOutline" />
+            <Setter Property="Foreground" Value="{StaticResource FileBrush}" />
+        </Style>
+        <Style Selector="avalonia|MaterialIcon.file.selected" x:DataType="gui:FileSystemItemViewModel">
+            <Setter Property="Kind" Value="FileMarker" />
+        </Style>
+    </UserControl.Styles>
+    <Panel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*" MinWidth="300"/>
+            </Grid.ColumnDefinitions>
+            
+            <Border Grid.Column="0"
+                    Padding="8">
+                <DockPanel>
+                    <StackPanel KeyboardNavigation.TabNavigation="None"
+                                DockPanel.Dock="Top" 
+                                Spacing="4">
+                        <StackPanel Spacing="4"
+                                    Orientation="Horizontal">
+                            <Button Command="{Binding CreateLocalFolderCommand}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_NewFolder_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="FolderPlusOutline" Foreground="{StaticResource FolderBrush}" />
+                            </Button>
+                            <Button Command="{Binding SetInEditModeCommand}"
+                                    CommandParameter="{Binding LocalSelectedItem.Value}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_Rename_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="Pencil" Foreground="{StaticResource SystemAccentColorLight2}" />
+                            </Button>
+                            <Button Command="{Binding CalculateLocalCrc32Command}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_CRC32_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="KeyOutline" Foreground="{StaticResource SystemAccentColorLight2}"/>
+                            </Button>
+                            <Button Command="{Binding RemoveLocalItemCommand}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_Delete_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="Trash" Foreground="{StaticResource DeleteBrush}" />
+                            </Button>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 4">
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding LocalSearchText.Value}"
+                                     Watermark="{x:Static api:RS.FileBrowserView_Search_Watermark}" 
+                                     Margin="0 0 8 0">
+                                <TextBox.InnerRightContent>
+                                    <Button Command="{Binding ClearLocalSearchBoxCommand}"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent">
+                                        <avalonia:MaterialIcon Kind="Close"
+                                                               Foreground="{StaticResource DeleteBrush}"/>
+                                    </Button>
+                                </TextBox.InnerRightContent>
+                            </TextBox>
+                            <Button Grid.Column="1"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Center"
+                                    Command="{Binding RefreshLocalCommand}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_Refresh_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="Refresh" Foreground="{StaticResource SystemAccentColorLight2}" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                    <ScrollViewer VerticalAlignment="Top">
+                        <TreeView DockPanel.Dock="Bottom"
+                                  GotFocus="TreeView_GotFocus"
+                                  TabIndex="1"
+                                  IsTabStop="True"
+                                  SelectionMode="Toggle"
+                                  SelectedItem="{Binding LocalSelectedItem.Value, Mode=TwoWay}"
+                                  ItemsSource="{Binding LocalItems}" >
+                            <TreeView.ItemTemplate>
+                                <TreeDataTemplate ItemsSource="{Binding Children}">
+                                    <Grid ColumnDefinitions="Auto, *, Auto">
+                                        <avalonia:MaterialIcon Grid.Column="0"
+                                            Margin="0,0,8,0"
+                                            Classes.folder="{Binding IsDirectory}"
+                                            Classes.file="{Binding IsFile}"
+                                            Classes.expanded="{Binding IsExpanded.Value}"
+                                            Classes.selected="{Binding IsSelected.Value}"
+                                            Width="{StaticResource IconSize}" 
+                                            Height="{StaticResource IconSize}" />
+                                        <TextBlock Grid.Column="1"
+                                                   VerticalAlignment="Center"
+                                                   IsVisible="{Binding !IsInEditMode.Value}"
+                                                   Text="{Binding Name}"/>
+                                        <Grid Grid.Column="1" ColumnDefinitions="*, Auto">
+                                            <TextBox Grid.Column="0"
+                                                     VerticalAlignment="Center"
+                                                     IsVisible="{Binding IsInEditMode.Value}"
+                                                     Text="{Binding EditedName.Value}">
+                                                <behaviors:Interaction.Behaviors>
+                                                    <gui:EnterKeyBehavior Command="{Binding EndEditCommand}"/>
+                                                </behaviors:Interaction.Behaviors>
+                                            </TextBox>
+                                            <Button Grid.Column="1"
+                                                    Margin="8 0 0 0"
+                                                    VerticalAlignment="Stretch"
+                                                    HorizontalAlignment="Center"
+                                                    IsVisible="{Binding IsInEditMode.Value}"
+                                                    Command="{Binding EndEditCommand}"
+                                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_CommitRename_Button_Tooltip}">
+                                                <avalonia:MaterialIcon Kind="ContentSave" Foreground="{StaticResource SystemAccentColorLight2}" />
+                                            </Button>
+                                        </Grid>
+                                        <UniformGrid Grid.Column="2" Columns="2" HorizontalAlignment="Right" Margin="0 0 8 0">
+                                            <TextBlock VerticalAlignment="Center"
+                                                       Text="{Binding Crc32Hex.Value}"
+                                                       Foreground="{Binding Crc32Color.Value}"
+                                                       HorizontalAlignment="Right" 
+                                                       Padding="0 0 8 0"/>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       Text="{Binding Size}"
+                                                       IsVisible="{Binding !IsDirectory}"
+                                                       HorizontalAlignment="Right"/>
+                                        </UniformGrid>
+                                    </Grid>
+                                </TreeDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+            <GridSplitter KeyboardNavigation.TabNavigation="None" 
+                          IsTabStop="False"
+                          Grid.Column="1" />
+        
+            <StackPanel KeyboardNavigation.TabNavigation="None"
+                        IsTabStop="False"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Center" 
+                        Grid.Column="1"
+                        Margin="2"
+                        Spacing="8">
+                <Button Height="50" 
+                        ToolTip.Tip="{x:Static api:RS.FileBrowserView_Upload_button_Tooltip}"
+                        Content="{avalonia:MaterialIconExt Kind=TransferRight}" 
+                        Theme="{DynamicResource TransparentButton}"
+                        Command="{Binding UploadCommand}"/>
+                <Button Height="50" 
+                        ToolTip.Tip="{x:Static api:RS.FileBrowserView_Download_button_Tooltip}"
+                        Content="{avalonia:MaterialIconExt Kind=TransferLeft}" 
+                        Theme="{DynamicResource TransparentButton}"
+                        Command="{Binding DownloadCommand}"/>
+                
+            </StackPanel>
+        
+            <Border Grid.Column="2"
+                    Padding="8">
+                <DockPanel>
+                    <StackPanel KeyboardNavigation.TabNavigation="None"
+                                DockPanel.Dock="Top" 
+                                Spacing="4">
+                        <StackPanel Spacing="4"
+                                    Orientation="Horizontal">
+                            <Button Command="{Binding CreateRemoteFolderCommand}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_NewFolder_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="FolderPlusOutline" Foreground="{StaticResource FolderBrush}" />
+                            </Button>
+                            <Button Command="{Binding CompareSelectedItemsCommand}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_CompareSelectedItems_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="SwapHorizontalCircleOutline" Foreground="{StaticResource SystemAccentColorLight2}"/>
+                            </Button>
+                            <Button Command="{Binding FindFileOnLocalCommand}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_FindFile_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="FileFindOutline" Foreground="{StaticResource SystemAccentColorLight2}"/>
+                            </Button>
+                            <Button Command="{Binding CalculateRemoteCrc32Command}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_CRC32_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="KeyOutline" Foreground="{StaticResource SystemAccentColorLight2}"/>
+                            </Button>
+                            <Button Command="{Binding RemoveRemoteItemCommand}"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_Delete_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="Trash" Foreground="{StaticResource DeleteBrush}" />
+                            </Button>
+                        </StackPanel>
+                        <Grid ColumnDefinitions="*, Auto" Margin="0 0 0 4">
+                            <TextBox Grid.Column="0"
+                                     Text="{Binding RemoteSearchText.Value}"
+                                     Watermark="{x:Static api:RS.FileBrowserView_Search_Watermark}" 
+                                     Margin="0 0 8 0">
+                                <TextBox.InnerRightContent>
+                                    <Button Command="{Binding ClearRemoteSearchBoxCommand}"
+                                            Background="Transparent"
+                                            BorderBrush="Transparent">
+                                        <avalonia:MaterialIcon Kind="Close"
+                                                               Foreground="{StaticResource DeleteBrush}"/>
+                                    </Button>
+                                </TextBox.InnerRightContent>
+                            </TextBox>
+                            <Button Grid.Column="1"
+                                    Command="{Binding RefreshRemoteCommand}"
+                                    VerticalAlignment="Stretch"
+                                    HorizontalAlignment="Center"
+                                    ToolTip.Tip="{x:Static api:RS.FileBrowserView_Refresh_Button_Tooltip}">
+                                <avalonia:MaterialIcon Kind="Refresh" Foreground="{StaticResource SystemAccentColorLight2}" />
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                    <ScrollViewer VerticalAlignment="Top">
+                        <TreeView DockPanel.Dock="Bottom"
+                                  GotFocus="TreeView_GotFocus"
+                                  IsTabStop="True"
+                                  TabIndex="0"
+                                  SelectionMode="Toggle"
+                                  SelectedItem="{Binding RemoteSelectedItem.Value, Mode=TwoWay}"
+                                  ItemsSource="{Binding RemoteItems}">
+                            <TreeView.ItemTemplate>
+                                <TreeDataTemplate ItemsSource="{Binding Children}">
+                                    <Grid ColumnDefinitions="Auto, *, Auto">
+                                        <avalonia:MaterialIcon Grid.Column="0"
+                                                               Margin="0,0,8,0"
+                                                               Classes.folder="{Binding IsDirectory}"
+                                                               Classes.file="{Binding IsFile}"
+                                                               Classes.expanded="{Binding IsExpanded.Value}"
+                                                               Classes.selected="{Binding IsSelected.Value}"
+                                                               Width="{StaticResource IconSize}" 
+                                                               Height="{StaticResource IconSize}" />
+                                        <TextBlock Grid.Column="1"
+                                                   VerticalAlignment="Center"
+                                                   Text="{Binding Name}"
+                                                   Margin="0,0,8,0" />
+                                        <UniformGrid Grid.Column="2" Columns="2" HorizontalAlignment="Right" Margin="0 0 8 0">
+                                            <TextBlock VerticalAlignment="Center"
+                                                       Text="{Binding Crc32Hex.Value}"
+                                                       Foreground="{Binding Crc32Color.Value}"
+                                                       HorizontalAlignment="Right" 
+                                                       Padding="0 0 8 0"/>
+                                            <TextBlock VerticalAlignment="Center"
+                                                       Text="{Binding Size}"
+                                                       IsVisible="{Binding !IsDirectory}"
+                                                       HorizontalAlignment="Right"/>
+                                        </UniformGrid>
+                                    </Grid>
+                                </TreeDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </ScrollViewer>
+                </DockPanel>
+            </Border>
+        </Grid>
+    </Panel>
+</UserControl>
