@@ -160,7 +160,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="AppHost\Builder\Extentions\" />
         <PackageReference Include="MemoryPack" Version="1.21.4" />
         <PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
         <PackageReference Include="Material.Icons.Avalonia" Version="2.2.0" />
@@ -205,9 +204,5 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="AppHost\Builder\Extentions\" />
     </ItemGroup>
 </Project>
