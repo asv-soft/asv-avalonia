@@ -30,8 +30,8 @@ public class HomePageItem : HeadlinedViewModel, IHomePageItem
         Info.SetRoutableParent(this, true).DisposeItWith(Disposable);
     }
 
-    public ObservableList<IActionViewModel> Actions { get; } = new();
-    public ObservableList<IHeadlinedViewModel> Info { get; } = new();
+    public ObservableList<IActionViewModel> Actions { get; } = [];
+    public ObservableList<IHeadlinedViewModel> Info { get; } = [];
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {

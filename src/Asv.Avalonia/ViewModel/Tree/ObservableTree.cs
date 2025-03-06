@@ -27,6 +27,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
     private readonly ObservableList<ObservableTreeNode<T, TKey>> _itemSource;
     private readonly IDisposable _sub1;
     private readonly IDisposable _sub2;
+    private readonly IDisposable _sub3;
 
     public ObservableTree(
         IReadOnlyObservableList<T> flatList,
@@ -53,6 +54,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
         _itemSource.Sort();
         _sub1 = flatList.ObserveAdd().Subscribe(x => TryAdd(x.Value));
         _sub2 = flatList.ObserveRemove().Subscribe(TryRemove);
+        _sub3 = flatList.ObserveClear().Subscribe(_ => _itemSource.Clear());
     }
 
     private static ObservableTreeNode<T, TKey> DefaultNodeFactory(
@@ -110,6 +112,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
         {
             _sub1.Dispose();
             _sub2.Dispose();
+            _sub3.Dispose();
             foreach (var observableTreeNode in _itemSource)
             {
                 observableTreeNode.Dispose();
