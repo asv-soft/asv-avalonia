@@ -31,6 +31,13 @@ Section "MainSection" SEC01
   File /r "./publish/app\\*.*"
 SectionEnd
 
+Section "Create Shortcuts"
+  ; Create a shortcut on the desktop
+  CreateShortcut "$DESKTOP\Asv Avalonia Example.lnk" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" "" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" 0
+  ; Create a shortcut in the Start menu
+  CreateShortcut "$SMPROGRAMS\Asv Avalonia Example\Asv Avalonia Example.lnk" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" "" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" 0
+SectionEnd
+
 Section -Post
   ;Following lines will make uninstaller work - do not change anything, unless you really want to.
   WriteUninstaller "$INSTDIR\uninst.exe"
@@ -58,6 +65,11 @@ Section Uninstall
   
   ; Remove the installation directory
   RMDir /r "$INSTDIR"
+  
+  ; Remove the shortcuts
+    Delete "$DESKTOP\Asv Avalonia Example.lnk"
+    Delete "$SMPROGRAMS\Asv Avalonia Example\Asv Avalonia Example.lnk"
+    RMDir "$SMPROGRAMS\Asv Avalonia Example"
 
   DeleteRegKey ${PRODUCT_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}"
   SetAutoClose true
