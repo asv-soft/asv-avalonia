@@ -57,8 +57,10 @@ jobs:
         run: makensis ./win-64-install.nsi
         
       - name: Decode certificate
-        run: echo "${{ secrets.WINDOWS_SIGNING_CERTIFICATE }}" | base64 -d > certificate.pfx
-
+        shell: pwsh
+        run: |
+          [System.IO.File]::WriteAllBytes("certificate.pfx", [Convert]::FromBase64String("${{ secrets.WINDOWS_SIGNING_CERTIFICATE }}"))
+      
       - name: Sign Installer
         run: |
           signtool sign /f certificate.pfx /p "${{ secrets.WINDOWS_SIGNING_PASSWORD }}" /tr http://timestamp.digicert.com /td SHA256 /fd SHA256 AsvAvaloniaExampleInstaller.exe
