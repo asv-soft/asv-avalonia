@@ -113,7 +113,7 @@ public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
         );
     }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         return ValueTask.FromResult<IRoutable>(this);
     }

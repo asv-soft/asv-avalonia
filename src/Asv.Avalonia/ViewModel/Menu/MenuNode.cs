@@ -2,16 +2,16 @@
 
 namespace Asv.Avalonia;
 
-public class MenuNode : ObservableTreeNode<IMenuItem, string>
+public class MenuNode : ObservableTreeNode<IMenuItem, NavigationId>
 {
     public MenuNode(
         IMenuItem baseItem,
         IReadOnlyObservableList<IMenuItem> source,
-        Func<IMenuItem, string> keySelector,
-        Func<IMenuItem, string?> parentSelector,
+        Func<IMenuItem, NavigationId> keySelector,
+        Func<IMenuItem, NavigationId> parentSelector,
         IComparer<IMenuItem> comparer,
-        CreateNodeDelegate<IMenuItem, string> factory,
-        ObservableTreeNode<IMenuItem, string>? parentNode = null
+        CreateNodeDelegate<IMenuItem, NavigationId> factory,
+        ObservableTreeNode<IMenuItem, NavigationId>? parentNode = null
     )
         : base(baseItem, source, keySelector, parentSelector, comparer, factory, parentNode) { }
 }

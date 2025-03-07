@@ -85,7 +85,7 @@ public class DockControl : SelectingItemsControl
             _selectedTab = tab;
         }
 
-        e.Pointer.Capture(this);
+        //e.Pointer.Capture(this);
     }
 
     private void PointerMovedHandler(object? sender, PointerEventArgs e)

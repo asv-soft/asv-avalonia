@@ -66,52 +66,64 @@ public partial class ShellWindow : Window, IExportable
 
         _internalChange = true;
 
-        var shellViewConfig = _configuration.Get<ShellWindowConfig>();
-        _logger.ZLogTrace($"Load {nameof(ShellWindow)} layout: {shellViewConfig}");
-
-        if (shellViewConfig.IsMaximized)
+        try
         {
-            WindowState = WindowState.Maximized;
-            return;
-        }
+            var shellViewConfig = _configuration.Get<ShellWindowConfig>();
+            _logger.ZLogTrace($"Load {nameof(ShellWindow)} layout: {shellViewConfig}");
 
-        var totalWidth = 0;
-        var totalHeight = 0;
-
-        foreach (var scr in Screens.All)
-        {
-            totalWidth += scr.Bounds.Width;
-            totalHeight += scr.Bounds.Height;
-        }
-
-        if (shellViewConfig.PositionX > totalWidth || shellViewConfig.PositionY > totalHeight)
-        {
-            Position = new PixelPoint(0, 0);
-        }
-        else
-        {
-            Position = new PixelPoint(shellViewConfig.PositionX, shellViewConfig.PositionY);
-        }
-
-        if (shellViewConfig.Height > totalHeight || shellViewConfig.Width > totalWidth)
-        {
-            if (Screens.Primary != null)
+            if (shellViewConfig.IsMaximized)
             {
-                var scrBounds = Screens.Primary.Bounds;
-
-                Height = scrBounds.Height * 0.9;
-                Width = scrBounds.Width * 0.9;
+                WindowState = WindowState.Maximized;
+                return;
             }
 
-            Position = new PixelPoint(0, 0);
-        }
-        else
-        {
-            Height = shellViewConfig.Height;
-            Width = shellViewConfig.Width;
-        }
+            var totalWidth = 0;
+            var totalHeight = 0;
 
-        _internalChange = false;
+            foreach (var scr in Screens.All)
+            {
+                totalWidth += scr.Bounds.Width;
+                totalHeight += scr.Bounds.Height;
+            }
+
+            if (shellViewConfig.PositionX > totalWidth || shellViewConfig.PositionY > totalHeight)
+            {
+                Position = new PixelPoint(0, 0);
+            }
+            else
+            {
+                Position = new PixelPoint(shellViewConfig.PositionX, shellViewConfig.PositionY);
+            }
+
+            if (shellViewConfig.Height > totalHeight || shellViewConfig.Width > totalWidth)
+            {
+                if (Screens.Primary != null)
+                {
+                    var scrBounds = Screens.Primary.Bounds;
+
+                    Height = scrBounds.Height * 0.9;
+                    Width = scrBounds.Width * 0.9;
+                }
+
+                Position = new PixelPoint(0, 0);
+            }
+            else
+            {
+                Height = shellViewConfig.Height;
+                Width = shellViewConfig.Width;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.ZLogError(
+                e,
+                $"Error while loading layout for {nameof(ShellWindow)}: {e.Message}"
+            );
+        }
+        finally
+        {
+            _internalChange = false;
+        }
     }
 
     private void SaveLayout()

@@ -113,7 +113,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 backup
             );
             _onCommand.OnNext(new CommandEventArgs(context, factory, snapShot));
-            _logger.ZLogTrace($"Execute command {backup}: context: {context}, param: {param}");
+            _logger.ZLogTrace($"Execute command '{backup}'(context: {context}, param: {param})");
             return;
         }
 

@@ -25,5 +25,10 @@ public class NullContainerHost : IContainerHost
         return false;
     }
 
+    public void SatisfyImports(object objectWithLooseImports)
+    {
+        // Do nothing
+    }
+
     public IExportInfo Source => SystemModule.Instance;
 }

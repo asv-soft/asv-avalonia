@@ -17,19 +17,19 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
     public DebugWindowViewModel(INavigationService nav, IShellHost host)
         : base(ModelId)
     {
-        SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty([]);
+        SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty();
         _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x));
         Pages = _pageView.ToNotifyCollectionChanged();
         BackwardStack = nav.BackwardStack.ToNotifyCollectionChanged();
         ForwardStack = nav.ForwardStack.ToNotifyCollectionChanged();
     }
 
-    public NotifyCollectionChangedSynchronizedViewList<string[]> ForwardStack { get; }
+    public NotifyCollectionChangedSynchronizedViewList<NavigationPath> ForwardStack { get; }
 
-    public NotifyCollectionChangedSynchronizedViewList<string[]> BackwardStack { get; }
+    public NotifyCollectionChangedSynchronizedViewList<NavigationPath> BackwardStack { get; }
 
     public NotifyCollectionChangedSynchronizedViewList<DebugPageViewModel> Pages { get; }
-    public IReadOnlyBindableReactiveProperty<string[]> SelectedControlPath { get; }
+    public IReadOnlyBindableReactiveProperty<NavigationPath> SelectedControlPath { get; }
 
     protected override void Dispose(bool disposing)
     {

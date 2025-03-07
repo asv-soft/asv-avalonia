@@ -12,12 +12,12 @@ namespace Asv.Avalonia
         public MenuItem(string id, string header, string? parentId = null)
             : base(id)
         {
-            ParentId = parentId;
+            ParentId = parentId == null ? NavigationId.Empty : new NavigationId(parentId);
             Order = 0;
             Header = header;
         }
 
-        public string? ParentId { get; }
+        public NavigationId ParentId { get; }
 
         public bool StaysOpenOnClick
         {

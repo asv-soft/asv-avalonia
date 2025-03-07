@@ -8,19 +8,20 @@ public delegate ObservableTreeNode<T, TKey> CreateNodeDelegate<T, TKey>(
     T baseItem,
     IReadOnlyObservableList<T> source,
     Func<T, TKey> keySelector,
-    Func<T, TKey?> parentSelector,
+    Func<T, TKey> parentSelector,
     IComparer<T> comparer,
     CreateNodeDelegate<T, TKey> createNodeFactory,
     ObservableTreeNode<T, TKey>? parentNode
 )
-    where TKey : notnull;
+    where TKey : IEquatable<TKey>;
 
 public class ObservableTree<T, TKey> : AsyncDisposableOnce
-    where TKey : notnull
+    where TKey : IEquatable<TKey>
 {
     private readonly IReadOnlyObservableList<T> _flatList;
+    private readonly TKey _rootKey;
     private readonly Func<T, TKey> _keySelector;
-    private readonly Func<T, TKey?> _parentSelector;
+    private readonly Func<T, TKey> _parentSelector;
     private readonly IComparer<T> _comparer;
     private readonly CreateNodeDelegate<T, TKey> _createNodeFactory;
     private readonly ObservableList<ObservableTreeNode<T, TKey>> _itemSource;
@@ -29,13 +30,15 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
 
     public ObservableTree(
         IReadOnlyObservableList<T> flatList,
+        TKey rootKey,
         Func<T, TKey> keySelector,
-        Func<T, TKey?> parentSelector,
+        Func<T, TKey> parentSelector,
         IComparer<T> comparer,
         CreateNodeDelegate<T, TKey>? createNodeFactory = null
     )
     {
         _flatList = flatList;
+        _rootKey = rootKey;
         _keySelector = keySelector;
         _parentSelector = parentSelector;
         _comparer = comparer;
@@ -56,7 +59,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
         T item,
         IReadOnlyObservableList<T> list,
         Func<T, TKey> key,
-        Func<T, TKey?> parent,
+        Func<T, TKey> parent,
         IComparer<T> comp,
         CreateNodeDelegate<T, TKey> factory,
         ObservableTreeNode<T, TKey>? parentNode
@@ -71,7 +74,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
     {
         var parent = _parentSelector(e.Value);
         var key = _keySelector(e.Value);
-        if (parent == null)
+        if (parent.Equals(null))
         {
             var node = _itemSource.FirstOrDefault(x => x.Key.Equals(key));
             if (node != null)
@@ -84,7 +87,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
 
     private void TryAdd(T item)
     {
-        if (_parentSelector(item) == null)
+        if (_parentSelector(item).Equals(_rootKey))
         {
             _itemSource.Add(
                 _createNodeFactory(

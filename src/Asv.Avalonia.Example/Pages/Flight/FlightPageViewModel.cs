@@ -48,14 +48,16 @@ public class FlightPageViewModel : PageViewModel<IFlightMode>, IFlightMode
         Title.Value = "Flight";
         Icon.Value = PageIcon;
         Anchors = [];
+        Anchors.SetRoutableParent(this, true).DisposeItWith(Disposable);
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         Widgets = [];
+        Widgets.SetRoutableParent(this, true).DisposeItWith(Disposable);
         WidgetsView = Widgets.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);
 
         for (int i = 0; i < 10; i++)
         {
-            var drone = new MapAnchor($"{i} Anchor")
+            var drone = new MapAnchor($"anchor_{i}")
             {
                 Icon = MaterialIconKind.Navigation,
                 Location = new GeoPoint(
@@ -95,7 +97,7 @@ public class FlightPageViewModel : PageViewModel<IFlightMode>, IFlightMode
 
     public BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var anchor = AnchorsView.FirstOrDefault(x => x.Id == id);
         if (anchor != null)

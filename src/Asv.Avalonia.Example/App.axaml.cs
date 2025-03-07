@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Composition;
 using System.Composition.Convention;
 using System.Composition.Hosting;
 using System.Linq;
@@ -127,6 +128,11 @@ public partial class App : Application, IContainerHost, IShellHost
         where T : IExportable
     {
         return _container.TryGetExport(id, out value);
+    }
+
+    public void SatisfyImports(object value)
+    {
+        _container.SatisfyImports(value);
     }
 
     public IShell Shell

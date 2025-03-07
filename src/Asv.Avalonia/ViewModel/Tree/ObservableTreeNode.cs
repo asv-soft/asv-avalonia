@@ -8,7 +8,7 @@ public class ObservableTreeNode<T, TKey>
     : AsyncDisposableOnce,
         IComparable<ObservableTreeNode<T, TKey>>,
         IComparable
-    where TKey : notnull
+    where TKey : IEquatable<TKey>
 {
     private readonly Func<T, TKey?> _parentSelector;
     private readonly IComparer<T> _comparer;
@@ -23,7 +23,7 @@ public class ObservableTreeNode<T, TKey>
         T baseItem,
         IReadOnlyObservableList<T> source,
         Func<T, TKey> keySelector,
-        Func<T, TKey?> parentSelector,
+        Func<T, TKey> parentSelector,
         IComparer<T> comparer,
         CreateNodeDelegate<T, TKey> createNodeFactory,
         ObservableTreeNode<T, TKey>? parentNode

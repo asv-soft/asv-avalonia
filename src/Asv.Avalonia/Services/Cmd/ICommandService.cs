@@ -22,13 +22,13 @@ public interface ICommandService : IExportable
 
 public sealed class CommandSnapshot(
     string commandId,
-    string[] contextPath,
+    NavigationPath contextPath,
     IPersistable newValue,
     IPersistable? oldValue
 )
 {
     public string CommandId { get; set; } = commandId;
-    public string[] ContextPath { get; set; } = contextPath;
+    public NavigationPath ContextPath { get; set; } = contextPath;
     public IPersistable NewValue { get; set; } = newValue;
     public IPersistable? OldValue { get; set; } = oldValue;
 }

@@ -11,7 +11,8 @@ public sealed class NullNavigationService : INavigationService
 
     public IShell Shell => DesignTimeShellViewModel.Instance;
 
-    public IObservableCollection<string[]> BackwardStack { get; } = new ObservableStack<string[]>();
+    public IObservableCollection<NavigationPath> BackwardStack { get; } =
+        new ObservableStack<NavigationPath>();
 
     public ValueTask BackwardAsync()
     {
@@ -19,7 +20,8 @@ public sealed class NullNavigationService : INavigationService
     }
 
     public ReactiveCommand Backward { get; } = new();
-    public IObservableCollection<string[]> ForwardStack { get; } = new ObservableList<string[]>();
+    public IObservableCollection<NavigationPath> ForwardStack { get; } =
+        new ObservableList<NavigationPath>();
 
     public ValueTask ForwardAsync()
     {
@@ -29,10 +31,10 @@ public sealed class NullNavigationService : INavigationService
     public ReactiveCommand Forward { get; } = new();
     public ReadOnlyReactiveProperty<IRoutable?> SelectedControl { get; } =
         new ReactiveProperty<IRoutable?>();
-    public ReadOnlyReactiveProperty<string[]> SelectedControlPath { get; } =
-        new ReactiveProperty<string[]>();
+    public ReadOnlyReactiveProperty<NavigationPath> SelectedControlPath { get; } =
+        new ReactiveProperty<NavigationPath>();
 
-    public ValueTask<IRoutable> GoTo(string[] path)
+    public ValueTask<IRoutable> GoTo(NavigationPath path)
     {
         return ValueTask.FromResult<IRoutable>(Shell);
     }

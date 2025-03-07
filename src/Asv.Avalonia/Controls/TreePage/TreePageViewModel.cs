@@ -14,13 +14,13 @@ public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDe
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
 
-    public TreePageViewModel(string id, ICommandService cmd, IContainerHost container)
+    public TreePageViewModel(NavigationId id, ICommandService cmd, IContainerHost container)
         : base(id, cmd)
     {
         _container = container;
         Nodes = new ObservableList<ITreePage>();
         TreeView = new TreePageMenu(Nodes);
-        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, string>?>();
+        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?>();
         SelectedPage = new BindableReactiveProperty<IRoutable?>();
         _breadCrumbSource = new ObservableList<BreadCrumbItem>();
         BreadCrumb = _breadCrumbSource.ToViewList();
@@ -47,7 +47,7 @@ public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDe
         );
     }
 
-    public override async ValueTask<IRoutable> Navigate(string id)
+    public override async ValueTask<IRoutable> Navigate(NavigationId id)
     {
         if (SelectedPage.Value != null && SelectedPage.Value.Id == id)
         {
@@ -81,15 +81,24 @@ public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDe
         }
     }
 
-    protected virtual ISettingsSubPage? CreateSubPage(string id)
+    protected virtual ISettingsSubPage? CreateSubPage(NavigationId id)
     {
-        return _container.TryGetExport<ISettingsSubPage>(id, out var page) ? page : null;
+        if (_container.TryGetExport<ISettingsSubPage>(id.Id, out var page))
+        {
+            page.InitArgs(id.Args);
+            return page;
+        }
+
+        return null;
     }
 
-    public ObservableTree<ITreePage, string> TreeView { get; }
+    public ObservableTree<ITreePage, NavigationId> TreeView { get; }
     public BindableReactiveProperty<IRoutable?> SelectedPage { get; }
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
-    public BindableReactiveProperty<ObservableTreeNode<ITreePage, string>?> SelectedNode { get; }
+    public BindableReactiveProperty<ObservableTreeNode<
+        ITreePage,
+        NavigationId
+    >?> SelectedNode { get; }
     public ObservableList<ITreePage> Nodes { get; }
     public BindableReactiveProperty<bool> IsCompactMode { get; } = new();
 

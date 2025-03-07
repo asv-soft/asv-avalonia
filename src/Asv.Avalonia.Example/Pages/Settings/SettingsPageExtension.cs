@@ -15,7 +15,8 @@ public class SettingsPageExtension() : IExtensionFor<ISettingsPage>
             SettingsConnectionViewModel.SubPageId,
             "Connection",
             MaterialIconKind.Connection,
-            SettingsConnectionViewModel.SubPageId
+            SettingsConnectionViewModel.SubPageId,
+            NavigationId.Empty
         );
         context.Nodes.Add(_node4);
     }

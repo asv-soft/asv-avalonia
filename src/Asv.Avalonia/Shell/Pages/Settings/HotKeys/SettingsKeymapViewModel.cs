@@ -28,11 +28,11 @@ public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
         SelectedItem = new BindableReactiveProperty<SettingsKeyMapItemViewModel>();
         ResetHotKeysToDefaultCommand = new ReactiveCommand(ResetHotkeys).DisposeItWith(Disposable);
 
-        _view = _observableList.CreateView(x => new SettingsKeyMapItemViewModel(x, svc)
-        {
-            Parent = this,
-        });
-        Items = _view.ToNotifyCollectionChanged();
+        _view = _observableList
+            .CreateView(x => new SettingsKeyMapItemViewModel(x, svc))
+            .DisposeItWith(Disposable);
+        _view.SetRoutableParentForView(this, true).DisposeItWith(Disposable);
+        Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
         _sub1 = SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
             .Subscribe(x =>
@@ -45,7 +45,8 @@ public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
                 {
                     _view.AttachFilter((_, model) => model.Filter(x));
                 }
-            });
+            })
+            .DisposeItWith(Disposable);
     }
 
     public ReactiveCommand ResetHotKeysToDefaultCommand { get; set; }
@@ -53,7 +54,7 @@ public class SettingsKeymapViewModel : RoutableViewModel, ISettingsSubPage
     public BindableReactiveProperty<string> SearchText { get; }
     public IBindableReactiveProperty<SettingsKeyMapItemViewModel> SelectedItem { get; }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var item = _view.FirstOrDefault(x => x.Id == id);
         if (item != null)

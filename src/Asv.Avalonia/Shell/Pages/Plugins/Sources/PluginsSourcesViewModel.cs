@@ -146,7 +146,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         _update.Execute(Unit.Default);
     }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var item = _view.FirstOrDefault(x => x.Id == id);
         if (item != null)

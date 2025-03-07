@@ -10,49 +10,77 @@ namespace Asv.Avalonia;
 /// </summary>
 public static class RoutableMixin
 {
-    public static IDisposable SetRoutableParentForView<T, TView>(
-        this ISynchronizedView<T, TView> src,
+    public static IDisposable SetRoutableParentForView<TModel, TView>(
+        this ISynchronizedView<TModel, TView> src,
         IRoutable parent,
-        bool disposeWhenRemoveView
+        bool disposeRemovedView
     )
         where TView : class, IRoutable
     {
-        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.View.Parent = parent);
+        var sub1 = src.ObserveAdd()
+            .Subscribe(x =>
+            {
+                x.Value.View.Parent = parent;
+            });
+        var sub2 = src.ObserveRemove()
+            .Subscribe(x =>
+            {
+                x.Value.View.Parent = null;
+                if (disposeRemovedView)
+                {
+                    x.Value.View.Dispose();
+                }
+            });
+        return new CompositeDisposable(sub1, sub2);
+    }
+
+    public static IDisposable SetRoutableParent<T>(
+        this IObservableCollection<T> src,
+        IRoutable parent,
+        bool disposeWhenRemoveView
+    )
+        where T : class, IRoutable
+    {
+        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.Parent = parent);
         IDisposable sub2;
         if (disposeWhenRemoveView)
         {
             sub2 = src.ObserveRemove()
                 .Subscribe(x =>
                 {
-                    x.Value.View.Parent = null;
-                    x.Value.View.Dispose();
+                    x.Value.Parent = null;
+                    x.Value.Dispose();
                 });
         }
         else
         {
-            sub2 = src.ObserveRemove().Subscribe(x => x.Value.View.Parent = null);
+            sub2 = src.ObserveRemove().Subscribe(x => x.Value.Parent = null);
         }
 
         return new CompositeDisposable(sub1, sub2);
     }
 
-    public static IDisposable ObserveRoutableParent<T>(
-        this IObservableCollection<T> src,
-        IRoutable parent
-    )
-        where T : class, IRoutable
+    public static NavigationPath GetPathToRoot(this IRoutable src)
     {
-        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.Parent = parent);
-        var sub2 = src.ObserveRemove().Subscribe(x => x.Value.Parent = null);
-        return new CompositeDisposable(sub1, sub2);
+        return new NavigationPath(src.GetHierarchyFromRoot().Select(x => x.Id));
     }
 
-    public static string[] GetPathToRoot(this IRoutable src)
+    public static async ValueTask<IRoutable> NavigateByPath(this IRoutable src, NavigationPath path)
     {
-        return src.GetHierarchyFromRoot().Select(x => x.Id).ToArray();
+        var index = 0;
+        while (true)
+        {
+            if (path.Count <= index)
+            {
+                return src;
+            }
+
+            src = await src.Navigate(path[index]);
+            index++;
+        }
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Navigates through the specified path, resolving each step sequentially.
     /// </summary>
     /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
@@ -62,7 +90,7 @@ public static class RoutableMixin
     /// </returns>
     public static async ValueTask<IRoutable> NavigateByPath(
         this IRoutable src,
-        ArraySegment<string> path
+        ArraySegment<NavigationId> path
     )
     {
         while (true)
@@ -87,10 +115,10 @@ public static class RoutableMixin
     /// <returns>
     /// A <see cref="ValueTask{TResult}"/> resolving to the final <see cref="IRoutable"/> reached in the path.
     /// </returns>
-    public static async ValueTask<IRoutable> NavigateByPath(this IRoutable src, string[] path)
+    public static async ValueTask<IRoutable> NavigateByPath(this IRoutable src, NavigationId[] path)
     {
-        return await src.NavigateByPath(new ArraySegment<string>(path));
-    }
+        return await src.NavigateByPath(new ArraySegment<NavigationId>(path));
+    }*/
 
     /// <summary>
     /// Retrieves the root <see cref="IRoutable"/> element in the hierarchy.

@@ -2,7 +2,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class RoutableViewModel(string id) : DisposableViewModel(id), IRoutable
+public abstract class RoutableViewModel(NavigationId id) : DisposableViewModel(id), IRoutable
 {
     public IRoutable? Parent { get; set; }
 
@@ -53,7 +53,7 @@ public abstract class RoutableViewModel(string id) : DisposableViewModel(id), IR
         }
     }
 
-    public virtual ValueTask<IRoutable> Navigate(string id)
+    public virtual ValueTask<IRoutable> Navigate(NavigationId id)
     {
         return ValueTask.FromResult(GetRoutableChildren().FirstOrDefault(x => x.Id == id) ?? this);
     }

@@ -30,7 +30,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         SelectedPage = new BindableReactiveProperty<IPage>();
         MainMenu = new ObservableList<IMenuItem>();
         MainMenuView = new MenuTree(MainMenu).DisposeItWith(Disposable);
-        MainMenu.ObserveRoutableParent(this).DisposeItWith(Disposable);
+        MainMenu.SetRoutableParent(this, true).DisposeItWith(Disposable);
     }
 
     #region MainMenu
@@ -69,15 +69,17 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     #endregion
 
     #region Routable
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var page = _pages.FirstOrDefault(x => x.Id == id);
         if (page == null)
         {
-            if (_container.TryGetExport<IPage>(id, out page))
+            if (_container.TryGetExport<IPage>(id.Id, out page))
             {
-                _pages.Add(page);
                 page.Parent = this;
+                page.InitArgs(id.Args);
+                _pages.Add(page);
+
                 SelectedPage.Value = page;
             }
 
@@ -89,34 +91,32 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         return base.Navigate(id);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        return _pages;
-    }
+    public override IEnumerable<IRoutable> GetRoutableChildren() => _pages;
 
     protected override async ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e is ExecuteCommandEvent cmd)
+        switch (e)
         {
-            await _cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandParameter);
-        }
-
-        if (e is RestartApplicationEvent)
-        {
-            Environment.Exit(0);
-        }
-
-        if (e is PageCloseRequestedEvent close)
-        {
-            _logger.ZLogInformation($"Close page [{close.Page.Id}]");
-
-            // TODO: save page layout
-            _pages.Remove(close.Page);
-            close.Page.Parent = null;
-            close.Page.Dispose();
-            if (_pages.Count == 0)
+            case ExecuteCommandEvent cmd:
+                await _cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandParameter);
+                break;
+            case RestartApplicationEvent:
+                Environment.Exit(0);
+                break;
+            case PageCloseRequestedEvent close:
             {
-                await Navigation.GoHomeAsync();
+                _logger.ZLogInformation($"Close page [{close.Page.Id}]");
+
+                // TODO: save page layout
+                _pages.Remove(close.Page);
+                close.Page.Parent = null;
+                close.Page.Dispose();
+                if (_pages.Count == 0)
+                {
+                    await Navigation.GoHomeAsync();
+                }
+
+                break;
             }
         }
     }

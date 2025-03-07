@@ -170,6 +170,7 @@ public class AnnotationLayer : Canvas
                 //hitAnnotation.Target.IsSelected = true;
                 Source.Selection.Clear();
                 Source.Selection.Select(Source.IndexFromContainer(hitAnnotation.Target));
+                hitAnnotation.Target.Focus();
                 UpdateVisuals(); // Перерисовываем для отображения изменения
                 e.Handled = true;
             }

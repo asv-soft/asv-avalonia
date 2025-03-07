@@ -8,10 +8,11 @@ namespace Asv.Avalonia;
 [ExportPage(PageId)]
 public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 {
+    private IAppInfo _appInfo;
     public const string PageId = "home";
 
     public HomePageViewModel()
-        : this(NullCommandService.Instance, NullAppInfo.Instance)
+        : this(NullCommandService.Instance, NullAppInfo.Instance, NullContainerHost.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         var items = Enum.GetValues<MaterialIconKind>();
@@ -84,7 +85,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
     }
 
     [ImportingConstructor]
-    public HomePageViewModel(ICommandService cmd, IAppInfo appInfo)
+    public HomePageViewModel(ICommandService cmd, IAppInfo appInfo, IContainerHost container)
         : base(PageId, cmd)
     {
         AppInfo = appInfo;
@@ -92,32 +93,35 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         Title.Value = "Home";
 
         Tools = [];
-        Tools.ObserveRoutableParent(this).DisposeItWith(Disposable);
+        Tools.SetRoutableParent(this, true).DisposeItWith(Disposable);
         ToolsView = Tools.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
 
         Items = [];
-        Items.ObserveRoutableParent(this).DisposeItWith(Disposable);
-        ItemsList = Items.CreateView(x => new HomePageItemViewModel(x)).DisposeItWith(Disposable);
+
+        ItemsList = Items
+            .CreateView(x => new HomePageItemDecorator(x, container))
+            .DisposeItWith(Disposable);
+
         ItemsList.SetRoutableParentForView(this, true).DisposeItWith(Disposable);
 
         ItemsView = ItemsList.ToNotifyCollectionChanged().DisposeItWith(Disposable);
     }
 
-    public IAppInfo AppInfo { get; }
-    public NotifyCollectionChangedSynchronizedViewList<HomePageItemViewModel> ItemsView { get; }
+    public IAppInfo AppInfo
+    {
+        get => _appInfo;
+        set => SetField(ref _appInfo, value);
+    }
 
-    public ISynchronizedView<IHomePageItem, HomePageItemViewModel> ItemsList { get; }
+    public NotifyCollectionChangedSynchronizedViewList<HomePageItemDecorator> ItemsView { get; }
+
+    public ISynchronizedView<IHomePageItem, HomePageItemDecorator> ItemsList { get; }
 
     public ObservableList<IHomePageItem> Items { get; }
 
     public NotifyCollectionChangedSynchronizedViewList<IActionViewModel> ToolsView { get; }
 
     public ObservableList<IActionViewModel> Tools { get; }
-
-    public override ValueTask<IRoutable> Navigate(string id)
-    {
-        return new ValueTask<IRoutable>(this);
-    }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
@@ -126,7 +130,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
             yield return model;
         }
 
-        foreach (var model in ItemsView)
+        foreach (var model in Items)
         {
             yield return model;
         }

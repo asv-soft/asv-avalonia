@@ -1,6 +1,7 @@
 ﻿namespace Asv.Avalonia;
 
-public abstract class OpenPageCommandBase(string pageId) : ContextCommand<IShell>
+public abstract class OpenPageCommandBase(string pageId, INavigationService nav)
+    : ContextCommand<IShell>
 {
     protected override async ValueTask<IPersistable?> InternalExecute(
         IShell context,
@@ -8,7 +9,15 @@ public abstract class OpenPageCommandBase(string pageId) : ContextCommand<IShell
         CancellationToken cancel
     )
     {
-        await context.Navigate(pageId);
+        if (newValue is Persistable<string> args)
+        {
+            await nav.GoTo(new NavigationPath(new NavigationId(pageId, args.Value)));
+        }
+        else
+        {
+            await nav.GoTo(new NavigationPath(new NavigationId(pageId)));
+        }
+
         return null;
     }
 }

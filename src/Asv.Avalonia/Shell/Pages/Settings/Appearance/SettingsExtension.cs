@@ -17,19 +17,22 @@ public class SettingsExtension() : IExtensionFor<ISettingsPage>
             SettingsAppearanceViewModel.PageId,
             RS.SettingsAppearanceViewModel_Name,
             MaterialIconKind.ThemeLightDark,
-            SettingsAppearanceViewModel.PageId
+            SettingsAppearanceViewModel.PageId,
+            NavigationId.Empty
         );
         _node2 = new TreePage(
             SettingsUnitsViewModel.PageId,
             RS.SettingsUnitsViewModel_Name,
             MaterialIconKind.TemperatureCelsius,
-            SettingsUnitsViewModel.PageId
+            SettingsUnitsViewModel.PageId,
+            NavigationId.Empty
         );
         _node3 = new TreePage(
             SettingsKeymapViewModel.SubPageId,
             RS.SettingsKeymapViewModel_Name,
             MaterialIconKind.KeyboardSettings,
-            SettingsKeymapViewModel.SubPageId
+            SettingsKeymapViewModel.SubPageId,
+            NavigationId.Empty
         );
 
         context.Nodes.Add(_node1);

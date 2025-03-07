@@ -49,7 +49,7 @@ public class PluginSourceViewModel : RoutableViewModel
     public ReactiveCommand<PluginSourceViewModel> Remove { get; }
     public Observable<bool> IsEnabled { get; set; }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         return ValueTask.FromResult<IRoutable>(this);
     }

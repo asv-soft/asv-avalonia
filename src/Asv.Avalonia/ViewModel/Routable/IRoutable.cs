@@ -30,7 +30,7 @@ public interface IRoutable : IViewModel
     /// A <see cref="ValueTask{TResult}"/> that represents the asynchronous operation,
     /// returning the found <see cref="IRoutable"/>.
     /// </returns>
-    ValueTask<IRoutable> Navigate(string id);
+    ValueTask<IRoutable> Navigate(NavigationId id);
 
     /// <summary>
     /// Retrieves all direct child elements of the current <see cref="IRoutable"/>.

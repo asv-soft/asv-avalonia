@@ -6,11 +6,12 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [method: ImportingConstructor]
-public class OpenSettingsCommand() : OpenPageCommandBase(SettingsPageViewModel.PageId)
+public class OpenSettingsCommand(INavigationService nav)
+    : OpenPageCommandBase(SettingsPageViewModel.PageId, nav)
 {
     #region Static
 
-    public const string Id = $"{BaseId}.open.settings";
+    public const string Id = $"{BaseId}.open.{SettingsPageViewModel.PageId}";
 
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {

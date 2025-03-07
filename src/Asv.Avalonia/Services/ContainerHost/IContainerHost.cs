@@ -10,4 +10,6 @@ public interface IContainerHost : IExportable
         where T : IExportable;
     bool TryGetExport<T>(string id, out T value)
         where T : IExportable;
+
+    void SatisfyImports(object objectWithLooseImports);
 }

@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace Asv.Avalonia;
 
@@ -13,7 +14,9 @@ public interface IViewModel : IDisposable, INotifyPropertyChanged
     /// Gets the unique identifier of the view model.
     /// This can be used to differentiate instances within the application.
     /// </summary>
-    string Id { get; }
+    NavigationId Id { get; }
+
+    void InitArgs(string? args);
 
     /// <summary>
     /// Gets a value indicating whether the view model has been disposed.

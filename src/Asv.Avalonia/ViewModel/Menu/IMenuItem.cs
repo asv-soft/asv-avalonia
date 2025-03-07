@@ -5,9 +5,9 @@ using Material.Icons;
 
 namespace Asv.Avalonia
 {
-    public interface IMenuItem : IActionViewModel, IRoutable
+    public interface IMenuItem : IActionViewModel
     {
-        string? ParentId { get; }
+        NavigationId ParentId { get; }
         bool StaysOpenOnClick { get; }
         public bool IsEnabled { get; }
         public KeyGesture? HotKey { get; }

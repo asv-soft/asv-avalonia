@@ -29,6 +29,6 @@ public class MenuComparer : IComparer<IMenuItem>
             return orderComparison;
         }
 
-        return string.Compare(x.Id, y.Id, StringComparison.InvariantCultureIgnoreCase);
+        return x.Id.CompareTo(y.Id);
     }
 }

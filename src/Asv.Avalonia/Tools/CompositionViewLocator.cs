@@ -32,14 +32,14 @@ public class CompositionViewLocator(CompositionHost container) : IDataTemplate
                 return control;
             }
 
-            // try default Avalonia behaviour: rename and try to find view
+            /*// try default Avalonia behaviour: rename and try to find view
             var type = Type.GetType(viewModelContract.Replace("ViewModel", "View"));
             if (type != null)
             {
                 // ReSharper disable once NullableWarningSuppressionIsUsed
                 var ctrl = Activator.CreateInstance(type) as Control;
                 return ctrl ?? new TextBlock { Text = data.GetType().FullName };
-            }
+            }*/
 
             // try to find view for parent class
             viewModelType = viewModelType.BaseType;

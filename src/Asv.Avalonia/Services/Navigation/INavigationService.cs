@@ -6,15 +6,15 @@ namespace Asv.Avalonia;
 
 public interface INavigationService : IExportable
 {
-    IObservableCollection<string[]> BackwardStack { get; }
+    IObservableCollection<NavigationPath> BackwardStack { get; }
     ValueTask BackwardAsync();
     ReactiveCommand Backward { get; }
-    IObservableCollection<string[]> ForwardStack { get; }
+    IObservableCollection<NavigationPath> ForwardStack { get; }
     ValueTask ForwardAsync();
     ReactiveCommand Forward { get; }
     ReadOnlyReactiveProperty<IRoutable?> SelectedControl { get; }
-    ReadOnlyReactiveProperty<string[]> SelectedControlPath { get; }
-    ValueTask<IRoutable> GoTo(string[] path);
+    ReadOnlyReactiveProperty<NavigationPath> SelectedControlPath { get; }
+    ValueTask<IRoutable> GoTo(NavigationPath path);
     ValueTask GoHomeAsync();
     ReactiveCommand GoHome { get; }
 }

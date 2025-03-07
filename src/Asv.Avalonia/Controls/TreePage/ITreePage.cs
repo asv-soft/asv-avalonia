@@ -6,10 +6,9 @@ namespace Asv.Avalonia;
 
 public interface ITreePage : IHeadlinedViewModel
 {
-    string? ParentId { get; }
+    NavigationId ParentId { get; }
     string? Status { get; }
-    string? NavigateTo { get; }
-    int Order { get; }
+    NavigationId NavigateTo { get; }
 }
 
 public class TreePage : HeadlinedViewModel, ITreePage
@@ -17,11 +16,11 @@ public class TreePage : HeadlinedViewModel, ITreePage
     private string? _status;
 
     public TreePage(
-        string id,
+        NavigationId id,
         string title,
         MaterialIconKind? icon,
-        string? navigateTo,
-        string? parentId = null
+        NavigationId navigateTo,
+        NavigationId parentId
     )
         : base(id)
     {
@@ -31,9 +30,8 @@ public class TreePage : HeadlinedViewModel, ITreePage
         Icon = icon;
     }
 
-    public string? NavigateTo { get; }
-    public int Order { get; } = 0;
-    public string? ParentId { get; }
+    public NavigationId NavigateTo { get; }
+    public NavigationId ParentId { get; }
 
     public string? Status
     {
@@ -47,11 +45,12 @@ public class TreePage : HeadlinedViewModel, ITreePage
     }
 }
 
-public class TreePageMenu : ObservableTree<ITreePage, string>
+public class TreePageMenu : ObservableTree<ITreePage, NavigationId>
 {
     public TreePageMenu(IReadOnlyObservableList<ITreePage> flatList)
         : base(
             flatList,
+            NavigationId.Empty,
             x => x.Id,
             x => x.ParentId,
             TreePageComparer.Instance,
@@ -60,16 +59,16 @@ public class TreePageMenu : ObservableTree<ITreePage, string>
         ) { }
 }
 
-public class TreePageMenuNode : ObservableTreeNode<ITreePage, string>
+public class TreePageMenuNode : ObservableTreeNode<ITreePage, NavigationId>
 {
     public TreePageMenuNode(
         ITreePage baseItem,
         IReadOnlyObservableList<ITreePage> source,
-        Func<ITreePage, string> keySelector,
-        Func<ITreePage, string?> parentSelector,
+        Func<ITreePage, NavigationId> keySelector,
+        Func<ITreePage, NavigationId> parentSelector,
         IComparer<ITreePage> comparer,
-        CreateNodeDelegate<ITreePage, string> createNodeFactory,
-        ObservableTreeNode<ITreePage, string>? parentNode
+        CreateNodeDelegate<ITreePage, NavigationId> createNodeFactory,
+        ObservableTreeNode<ITreePage, NavigationId>? parentNode
     )
         : base(
             baseItem,
@@ -111,6 +110,6 @@ public class TreePageComparer : IComparer<ITreePage>
             return orderComparison;
         }
 
-        return string.Compare(x.Id, y.Id, StringComparison.InvariantCultureIgnoreCase);
+        return x.Id.CompareTo(y.Id);
     }
 }

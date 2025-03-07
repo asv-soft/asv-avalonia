@@ -59,7 +59,7 @@ public class MapViewModel : RoutableViewModel, IMap
 
     public BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var anchor = AnchorsView.FirstOrDefault(x => x.Id == id);
         if (anchor != null)

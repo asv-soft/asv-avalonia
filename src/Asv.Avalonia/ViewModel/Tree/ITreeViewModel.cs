@@ -4,7 +4,7 @@ namespace Asv.Avalonia;
 
 public interface ITreeViewModel : IViewModel
 {
-    string ParentId { get; }
+    NavigationId ParentId { get; }
     int Order { get; }
 }
 
@@ -38,6 +38,6 @@ public class TreeNodeComparer<T> : IComparer<T>
             return orderComparison;
         }
 
-        return string.Compare(x.Id, y.Id, StringComparison.InvariantCultureIgnoreCase);
+        return x.Id.CompareTo(y.Id);
     }
 }

@@ -19,7 +19,7 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
     /// Initializes a new instance of the <see cref="ExtendableViewModel{TSelfInterface}"/> class.
     /// </summary>
     /// <param name="id">A unique identifier for the view model.</param>
-    protected ExtendableViewModel(string id)
+    protected ExtendableViewModel(NavigationId id)
         : base(id) { }
 
     /// <summary>
@@ -73,6 +73,7 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
                     try
                     {
                         extension.Value.Extend(context);
+                        logger.ZLogTrace($"Applying extension {extension} to {GetType().Name}");
                     }
                     catch (Exception e)
                     {

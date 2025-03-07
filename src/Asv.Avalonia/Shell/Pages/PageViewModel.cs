@@ -1,31 +1,42 @@
 using System.Windows.Input;
 using Material.Icons;
+using Microsoft.Extensions.Logging;
 using R3;
+using ZLogger;
 
 namespace Asv.Avalonia;
 
 public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, IPage
     where TContext : class, IPage
 {
-    protected PageViewModel(string id, ICommandService cmd)
+    protected PageViewModel(NavigationId id, ICommandService cmd)
         : base(id)
     {
         History = cmd.CreateHistory(this);
         Icon = new BindableReactiveProperty<MaterialIconKind>(MaterialIconKind.Window);
-        Title = new BindableReactiveProperty<string>(id);
+        Title = new BindableReactiveProperty<string>(id.ToString());
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
     }
 
     public async ValueTask TryCloseAsync()
     {
-        var reasons = await this.RequestChildCloseApproval();
-        if (reasons.Count != 0)
+        try
         {
-            // TODO: ask user to save changes
-        }
+            var reasons = await this.RequestChildCloseApproval();
+            if (reasons.Count != 0)
+            {
+                // TODO: ask user to save changes
+            }
 
-        await this.RequestClose();
+            await this.RequestClose();
+        }
+        catch (Exception e)
+        {
+            LoggerFactory
+                ?.CreateLogger<PageViewModel<TContext>>()
+                .ZLogError(e, $"Error on close page {Title.Value}[{Id}]: {e.Message}");
+        }
     }
 
     public BindableReactiveProperty<MaterialIconKind> Icon { get; }

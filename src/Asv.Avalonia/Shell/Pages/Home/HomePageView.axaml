@@ -72,7 +72,7 @@
                         <avalonia:MaterialIcon Kind="ArrowBack"/>
                         <TextBlock VerticalAlignment="Center" Text="Device not selected"/>
                     </StackPanel>
-                    <DockPanel IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}"  DataContext="{Binding SelectedItem, ElementName=PART_DeviceList}" x:DataType="avalonia1:HomePageItemViewModel"  >
+                    <DockPanel IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}"  DataContext="{Binding SelectedItem, ElementName=PART_DeviceList}" x:DataType="avalonia1:HomePageItemDecorator"  >
                         <Grid DockPanel.Dock="Top" RowDefinitions="25, 4, *" ColumnDefinitions="40, 8, *">
                             <avalonia:MaterialIcon Classes="big accent" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Kind="{Binding HomePageItem.Icon}" />
                             <TextBlock Classes="h3" Grid.Row="0" Grid.Column="2" Text="{Binding HomePageItem.Header}" VerticalAlignment="Bottom" />
@@ -114,7 +114,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button HorizontalAlignment="Stretch" Margin="4" >
+                                    <Button HorizontalAlignment="Stretch" Margin="4" Command="{Binding Command}" CommandParameter="{Binding CommandParameter}" >
                                         <Grid RowDefinitions="25, 2, *" ColumnDefinitions="40, 8, *">
                                             <avalonia:MaterialIcon Classes="big accent" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Kind="{Binding Icon}" />
                                             <TextBlock Classes="h3" Grid.Row="0" Grid.Column="2" Text="{Binding Header}" VerticalAlignment="Bottom" />

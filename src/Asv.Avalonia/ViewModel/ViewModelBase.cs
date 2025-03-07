@@ -8,19 +8,29 @@ namespace Asv.Avalonia;
 /// property change notifications and a proper disposal mechanism.
 /// This class is designed to be inherited by other view models.
 /// </summary>
-public abstract class ViewModelBase(string id) : IViewModel
+public abstract class ViewModelBase(NavigationId id) : IViewModel
 {
     private volatile int _isDisposed;
 
-    /// <summary>
-    /// Gets the unique identifier of the view model instance.
-    /// </summary>
-    public string Id { get; } = id;
+    public NavigationId Id { get; private set; } = id;
 
     public override string ToString()
     {
-        return $"{GetType().Name}[{Id}]";
+        return $"{this.GetType().Name}[{Id}]";
     }
+
+    public void InitArgs(string? args)
+    {
+        if (args == Id.Args)
+        {
+            return;
+        }
+
+        Id = Id.ChangeArgs(args);
+        InternalInitArgs(args);
+    }
+
+    protected virtual void InternalInitArgs(string? args) { }
 
     #region Dispose
 

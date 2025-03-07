@@ -152,8 +152,4 @@
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="AppHost\Builder\Extentions\" />
-    </ItemGroup>
 </Project>

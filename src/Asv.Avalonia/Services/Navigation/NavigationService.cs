@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using System.Diagnostics;
 using Asv.Cfg;
 using Asv.Common;
 using Avalonia;
@@ -15,7 +16,7 @@ namespace Asv.Avalonia;
 
 public class NavigationServiceConfig
 {
-    public HashSet<string> Pages { get; set; } = [];
+    public HashSet<NavigationId> Pages { get; set; } = [];
 }
 
 [Export(typeof(INavigationService))]
@@ -27,9 +28,9 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
     private readonly IConfiguration _cfgSvc;
     private readonly IDisposable _disposeIt;
     private readonly ReactiveProperty<IRoutable?> _selectedControl;
-    private readonly ReactiveProperty<string[]> _selectedControlPath;
-    private readonly ObservableStack<string[]> _backwardStack = new();
-    private readonly ObservableStack<string[]> _forwardStack = new();
+    private readonly ReactiveProperty<NavigationPath> _selectedControlPath;
+    private readonly ObservableStack<NavigationPath> _backwardStack = new();
+    private readonly ObservableStack<NavigationPath> _forwardStack = new();
     private readonly NavigationServiceConfig _cfg;
     private readonly ILogger<NavigationService> _logger;
     private IDisposable? _sub2;
@@ -54,7 +55,8 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         var dispose = Disposable.CreateBuilder();
         _cfg = _cfgSvc.Get<NavigationServiceConfig>();
         _selectedControl = new ReactiveProperty<IRoutable?>().AddTo(ref dispose);
-        _selectedControlPath = new ReactiveProperty<string[]>([]).AddTo(ref dispose);
+        _selectedControlPath = new ReactiveProperty<NavigationPath>().AddTo(ref dispose);
+        _selectedControlPath.Subscribe(PushNavigation).AddTo(ref dispose);
 
         // global event handlers for focus IRoutable controls
         InputElement
@@ -68,6 +70,13 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         _disposeIt = dispose.Build();
     }
 
+    private void PushNavigation(NavigationPath navigationPath)
+    {
+        _logger.ZLogTrace($"Push navigation history: {navigationPath}");
+        _backwardStack.Push(navigationPath);
+        _forwardStack.Clear();
+    }
+
     private async ValueTask LoadLayout(IShell shell, CancellationToken cancellationToken)
     {
         try
@@ -75,7 +84,12 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
             _logger.ZLogInformation($"Try to load layout: {string.Join(",", _cfg.Pages)}");
             foreach (var page in _cfg.Pages)
             {
-                await GoTo([page]);
+                if (page == default)
+                {
+                    continue;
+                }
+
+                await GoTo(new NavigationPath(page));
             }
 
             // load page before subscribe to changes
@@ -95,6 +109,33 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         }
     }
 
+    private void FocusControlChanged(IRoutable? routable)
+    {
+        if (routable == null)
+        {
+            _logger.ZLogWarning($"Selected control {routable} is null");
+            return;
+        }
+
+        var path = routable.GetPathToRoot();
+        if (path == default || path.Count == 0)
+        {
+            _logger.ZLogWarning($"Selected control {routable} has empty path");
+            return;
+        }
+
+        if (path[0] != _host.Shell.Id)
+        {
+            _logger.ZLogWarning(
+                $"Selected control {routable} has invalid path: {string.Join(",", path)}"
+            );
+            return;
+        }
+
+        _selectedControl.Value = routable;
+        _selectedControlPath.Value = path;
+    }
+
     private void SaveLayout()
     {
         var pages = _host.Shell.Pages.Select(x => x.Id).ToHashSet();
@@ -103,22 +144,31 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         _cfgSvc.Set(_cfg);
     }
 
-    public ValueTask<IRoutable> GoTo(string[] path)
+    public async ValueTask<IRoutable> GoTo(NavigationPath path)
     {
-        if (path.Length == 0)
+        try
         {
-            _logger.LogError("Error navigating to empty path");
-            return NavException.AsyncEmptyPathException();
-        }
+            if (path.Count == 0)
+            {
+                _logger.LogError("Error navigating to empty path");
+                await NavException.AsyncEmptyPathException();
+            }
 
-        _logger.ZLogInformation($"Navigate to '{string.Join(",", path)}'");
-        return _host.Shell.NavigateByPath(path[0] == _host.Shell.Id ? path[1..] : path);
+            _logger.ZLogInformation($"Navigate to '{string.Join(",", path)}'");
+            return await _host.Shell.NavigateByPath(path[0] == _host.Shell.Id ? path[1..] : path);
+        }
+        catch (Exception e)
+        {
+            _logger.ZLogError(e, $"Error on GoTo {path}: {e.Message}");
+            throw;
+        }
     }
 
     #region Focus
 
     private void GotFocusHandler(TopLevel top, GotFocusEventArgs args)
     {
+        Debug.WriteLine($"GotFocusHandler: {args.Source}");
         if (args.Source is not Control source)
         {
             return;
@@ -129,7 +179,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         {
             if (control.DataContext is IRoutable routable)
             {
-                SelectedControlChanged(routable);
+                FocusControlChanged(routable);
                 break;
             }
 
@@ -138,19 +188,8 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         }
     }
 
-    private void SelectedControlChanged(IRoutable? routable)
-    {
-        _selectedControl.Value = routable;
-        if (routable == null)
-        {
-            return;
-        }
-
-        _selectedControlPath.Value = routable.GetPathToRoot();
-    }
-
     public ReadOnlyReactiveProperty<IRoutable?> SelectedControl => _selectedControl;
-    public ReadOnlyReactiveProperty<string[]> SelectedControlPath => _selectedControlPath;
+    public ReadOnlyReactiveProperty<NavigationPath> SelectedControlPath => _selectedControlPath;
 
     #endregion
 
@@ -158,7 +197,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
     public ReactiveCommand Forward { get; }
 
-    public IObservableCollection<string[]> ForwardStack => _forwardStack;
+    public IObservableCollection<NavigationPath> ForwardStack => _forwardStack;
 
     public async ValueTask ForwardAsync()
     {
@@ -170,7 +209,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         }
     }
 
-    public IObservableCollection<string[]> BackwardStack => _backwardStack;
+    public IObservableCollection<NavigationPath> BackwardStack => _backwardStack;
 
     public async ValueTask BackwardAsync()
     {
@@ -228,7 +267,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
     public async ValueTask GoHomeAsync()
     {
-        await GoTo([HomePageViewModel.PageId]);
+        await GoTo(new NavigationPath(HomePageViewModel.PageId));
     }
 
     public ReactiveCommand GoHome { get; }

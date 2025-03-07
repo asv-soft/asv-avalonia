@@ -58,7 +58,7 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
         return ValueTask.CompletedTask;
     }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var item = _view.FirstOrDefault(x => x.Id == id);
         if (item != null)

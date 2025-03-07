@@ -5,7 +5,8 @@ namespace Asv.Avalonia.Example.Commands;
 
 [ExportCommand]
 [method: ImportingConstructor]
-public class OpenFlightModeCommand() : OpenPageCommandBase(FlightPageViewModel.PageId)
+public class OpenFlightModeCommand(INavigationService nav)
+    : OpenPageCommandBase(FlightPageViewModel.PageId, nav)
 {
     #region Static
 

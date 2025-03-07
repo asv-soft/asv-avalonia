@@ -21,6 +21,7 @@ public class DesignTimeShellViewModel : ShellViewModel
                 ErrorState.Value = Enum.GetValues<ShellErrorState>()[cnt % all];
             });
         InternalPages.Add(new SettingsPageViewModel());
-        InternalPages.Add(new PluginsMarketViewModel());
+
+        //InternalPages.Add(new PluginsMarketViewModel());
     }
 }

@@ -11,8 +11,8 @@ public interface IMapAnchor : IRoutable
     GeoPoint Location { get; }
     MaterialIconKind Icon { get; }
     IBrush Foreground { get; }
-    HorizontalOffsetEnum CenterX { get; }
-    VerticalOffsetEnum CenterY { get; }
+    HorizontalOffset CenterX { get; }
+    VerticalOffset CenterY { get; }
     bool IsReadOnly { get; }
     bool IsSelected { get; }
     bool IsVisible { get; }
@@ -25,8 +25,8 @@ public class MapAnchor : RoutableViewModel, IMapAnchor
     private GeoPoint _location;
     private double _azimuth;
     private IBrush _foreground = Brushes.NavajoWhite;
-    private HorizontalOffsetEnum _centerX;
-    private VerticalOffsetEnum _centerY;
+    private HorizontalOffset _centerX;
+    private VerticalOffset _centerY;
     private bool _isReadOnly;
     private bool _isSelected;
     private bool _isVisible = true;
@@ -62,13 +62,13 @@ public class MapAnchor : RoutableViewModel, IMapAnchor
         set => SetField(ref _foreground, value);
     }
 
-    public HorizontalOffsetEnum CenterX
+    public HorizontalOffset CenterX
     {
         get => _centerX;
         set => SetField(ref _centerX, value);
     }
 
-    public VerticalOffsetEnum CenterY
+    public VerticalOffset CenterY
     {
         get => _centerY;
         set => SetField(ref _centerY, value);
@@ -98,7 +98,7 @@ public class MapAnchor : RoutableViewModel, IMapAnchor
         set => SetField(ref _title, value);
     }
 
-    public override ValueTask<IRoutable> Navigate(string id)
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
         return ValueTask.FromResult<IRoutable>(this);
     }
