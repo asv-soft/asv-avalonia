@@ -5,6 +5,7 @@
              xmlns:map="clr-namespace:Asv.Avalonia.Map;assembly=Asv.Avalonia.Map"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Example.FlightPageView"
              x:DataType="example:FlightPageViewModel">
@@ -43,8 +44,8 @@
                 </ControlTheme>
             </ItemsControl.ItemContainerTheme>
         </map:MapItemsControl>
-        <map:Workspace ItemsSource="{Binding WidgetsView}">
+        <avalonia1:Workspace ItemsSource="{Binding WidgetsView}">
             
-        </map:Workspace>
+        </avalonia1:Workspace>
     </Panel>
 </UserControl>

@@ -105,6 +105,10 @@
           <DependentUpon>PluginInstallerView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Controls\GeoPoint\GeoPointEditor.axaml.cs">
+          <DependentUpon>GeoPointEditor.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -151,5 +155,10 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Controls\Workspace\Workspace.axaml" />
+      <AdditionalFiles Include="Controls\Workspace\WorkspaceItem.axaml" />
     </ItemGroup>
 </Project>

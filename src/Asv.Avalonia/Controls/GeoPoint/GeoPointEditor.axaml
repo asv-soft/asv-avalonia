@@ -1,0 +1,53 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Asv.Avalonia"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Design.PreviewWith>
+        <controls:GeoPointEditor Width="250" />
+    </Design.PreviewWith>
+
+    <Style Selector="controls|GeoPointEditor">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ColumnDefinitions="3*,4,2*" RowDefinitions="*,4,*">
+                    <TextBox Grid.Row="0" Grid.Column="0" HorizontalContentAlignment="Right" Text="55.123456" >
+                        <TextBox.InnerLeftContent>
+                            <TextBlock VerticalAlignment="Center" Margin="4,0" Classes="h3" Foreground="{DynamicResource TextFillColorDisabledBrush}" Text="Lat"/>
+                        </TextBox.InnerLeftContent>
+                    </TextBox>  
+                    <TextBox Grid.Row="2" Grid.Column="0" HorizontalContentAlignment="Right" Text="55.123456" >
+                        <TextBox.InnerLeftContent>
+                            <TextBlock VerticalAlignment="Center" Margin="4,0" Classes="h3" Foreground="{DynamicResource TextFillColorDisabledBrush}" Text="Lon"/>
+                        </TextBox.InnerLeftContent>
+                    </TextBox> 
+                    <TextBox Grid.Row="0" Grid.Column="2" HorizontalContentAlignment="Right" Text="55.123456" >
+                        <TextBox.InnerLeftContent>
+                            <TextBlock VerticalAlignment="Center" Margin="4,0" Classes="h3" Foreground="{DynamicResource TextFillColorDisabledBrush}" Text="Alt"/>
+                        </TextBox.InnerLeftContent>
+                    </TextBox>
+                    
+                    <!--<Grid Grid.Column="2" ColumnDefinitions="*,4,*,4,*" RowDefinitions="*,4,*,4,*">
+                        <Button Grid.Column="2"  Theme="{StaticResource TransparentButton}">
+                            <avalonia:MaterialIcon Kind="ArrowUp"/>
+                        </Button>
+                        <Button Grid.Column="4" Grid.Row="2"  Theme="{StaticResource TransparentButton}">
+                            <avalonia:MaterialIcon Kind="ArrowRight"/>
+                        </Button>
+                        <Button Grid.Row="4" Grid.Column="2" Theme="{StaticResource TransparentButton}">
+                            <avalonia:MaterialIcon Kind="ArrowDown"/>
+                        </Button>
+                        <Button Grid.Column="0" Grid.Row="2"  Theme="{StaticResource TransparentButton}">
+                            <avalonia:MaterialIcon Kind="ArrowLeft"/>
+                        </Button>
+                        <ComboBox Grid.Column="2" Grid.Row="2" >
+                            <avalonia:MaterialIcon Kind="ArrowBottomLeft"/>
+                        </ComboBox>
+                    </Grid>-->
+                    
+                    
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

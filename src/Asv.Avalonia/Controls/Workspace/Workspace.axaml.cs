@@ -1,12 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Specialized;
-using Avalonia;
+﻿using System.Collections.Specialized;
 using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 
-namespace Asv.Avalonia.Map;
+namespace Asv.Avalonia;
 
 public enum WorkspaceDock
 {
@@ -55,48 +53,73 @@ public class Workspace : ItemsControl
             foreach (var item in e.OldItems)
             {
                 if (item == null)
+                {
                     continue;
+                }
+
                 var container = item as WorkspaceItem ?? ContainerFromItem(item) as WorkspaceItem;
                 if (container == null)
+                {
                     continue;
+                }
+
                 _leftPanel?.Children.Remove(container);
                 _rightPanel?.Children.Remove(container);
                 _bottomPanel?.Remove(container);
             }
         }
+
         RecalculatePosition();
     }
 
     private void RecalculatePosition()
     {
         if (_leftPanel == null || _rightPanel == null || _bottomPanel == null)
+        {
             return;
+        }
+
         foreach (var item in ItemsView)
         {
             if (item == null)
+            {
                 continue;
+            }
+
             var container = item as WorkspaceItem ?? ContainerFromItem(item) as WorkspaceItem;
             if (container == null)
+            {
                 continue;
+            }
+
             switch (container.Position)
             {
                 case WorkspaceDock.Left:
                     if (_leftPanel.Children.Contains(container))
+                    {
                         continue;
+                    }
+
                     _rightPanel.Children.Remove(container);
                     _bottomPanel.Remove(container);
                     _leftPanel.Children.Add(container);
                     break;
                 case WorkspaceDock.Right:
                     if (_rightPanel.Children.Contains(container))
+                    {
                         continue;
+                    }
+
                     _leftPanel.Children.Remove(container);
                     _bottomPanel.Remove(container);
                     _rightPanel.Children.Add(container);
                     break;
                 case WorkspaceDock.Bottom:
                     if (_bottomPanel.Contains(container))
+                    {
                         continue;
+                    }
+
                     _leftPanel.Children.Remove(container);
                     _rightPanel.Children.Remove(container);
                     _bottomPanel.Add(container);

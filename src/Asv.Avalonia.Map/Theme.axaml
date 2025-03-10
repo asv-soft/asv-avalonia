@@ -23,8 +23,7 @@
     
     <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/ItemsControl/MapItem.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/ItemsControl/MapItemsControl.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/Workspace/Workspace.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia.Map/Controls/Workspace/WorkspaceItem.axaml"/>
+    
     
     
 </Styles>

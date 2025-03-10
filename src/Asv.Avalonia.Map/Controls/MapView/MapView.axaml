@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:map="clr-namespace:Asv.Avalonia.Map"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Map.MapView"
              x:DataType="map:MapViewModel">
@@ -30,9 +31,9 @@
                 </ControlTheme>
             </ItemsControl.ItemContainerTheme>
         </map:MapItemsControl>
-        <map:Workspace ItemsSource="{Binding WidgetsView}">
+        <avalonia1:Workspace ItemsSource="{Binding WidgetsView}">
             
-        </map:Workspace>
+        </avalonia1:Workspace>
     </Panel>
     
     

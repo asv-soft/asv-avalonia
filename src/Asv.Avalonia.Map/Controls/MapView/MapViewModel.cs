@@ -81,6 +81,12 @@ public class MapViewModel : RoutableViewModel, IMap
 
     protected override void Dispose(bool disposing)
     {
-        throw new NotImplementedException();
+        if (disposing)
+        {
+            WidgetsView.Dispose();
+            AnchorsView.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 }

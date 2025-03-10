@@ -23,9 +23,5 @@
         <DependentUpon>MapViewItem.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-      <Compile Update="Controls\Workspace\Workspace.axaml.cs">
-        <DependentUpon>Workspace.axaml</DependentUpon>
-        <SubType>Code</SubType>
-      </Compile>
     </ItemGroup>
 </Project>

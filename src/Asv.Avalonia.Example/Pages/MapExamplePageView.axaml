@@ -5,6 +5,8 @@
              xmlns:map="clr-namespace:Asv.Avalonia.Map;assembly=Asv.Avalonia.Map"
              xmlns:example="clr-namespace:Asv.Avalonia.Example"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             xmlns:map1="clr-namespace:Asv.Avalonia.Map;assembly=Asv.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:DataType="example:MapExamplePageViewModel"
              x:Class="Asv.Avalonia.Example.MapExamplePageView">
@@ -13,11 +15,11 @@
     </Design.DataContext>
         <Panel>
             <map:MapItemsControl CenterMap="{map:GeoPoint 53,53}"/>
-            <map:Workspace Background="Black" >
-                <map:WorkspaceItem Position="Left" >
+            <avalonia1:Workspace Background="Black" >
+                <avalonia1:WorkspaceItem Position="Left" >
                     <TextBox Text="asdads"/>
-                </map:WorkspaceItem>
-            </map:Workspace>
+                </avalonia1:WorkspaceItem>
+            </avalonia1:Workspace>
             
         
         </Panel>

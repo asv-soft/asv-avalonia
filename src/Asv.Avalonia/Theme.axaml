@@ -76,9 +76,9 @@
         
         <system:Double x:Key="FontSizeSmall">12</system:Double>
         <system:Double x:Key="FontSizeNormal">14</system:Double>
+        <system:Double x:Key="H1FontSize">20</system:Double>
+        <system:Double x:Key="H2FontSize">18</system:Double>
         <system:Double x:Key="H3FontSize">16</system:Double>
-        <system:Double x:Key="H1FontSize">18</system:Double>
-        <system:Double x:Key="H2FontSize">20</system:Double>
         
         <system:Double x:Key="IconBigSize">40</system:Double>
         <system:Double x:Key="IconMediumSize">30</system:Double>
@@ -98,7 +98,8 @@
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Shell/View/DockControl.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/Textbox/IpAddressTextBoxStyles.axaml"/>
-    
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/Workspace.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/WorkspaceItem.axaml"/>
     
     <!-- <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/> -->
     <!--<FluentTheme DensityStyle="Compact" >
@@ -111,6 +112,8 @@
             />         
         </FluentTheme.Palettes>
     </FluentTheme>-->
+    
+    
     <!--MaterialIcon-->
     <Style Selector="avalonia|MaterialIcon">
         
