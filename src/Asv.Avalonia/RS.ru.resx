@@ -88,6 +88,9 @@
     <data name="UndoCommand_CommandInfo_Name" xml:space="preserve">
         <value>Отменить</value>
     </data>
+    <data name="RedoCommand_Name" xml:space="preserve">
+        <value>Вернуть</value>
+    </data>
     <data name="InstalledPluginsView_Tab_Description" xml:space="preserve">
         <value>Описание</value></data>
     <data name="UndoCommand_CommandInfo_Description" xml:space="preserve">

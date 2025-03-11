@@ -113,6 +113,9 @@
     <data name="UndoCommand_CommandInfo_Name" xml:space="preserve">
         <value>Undo</value>
     </data>
+    <data name="RedoCommand_Name" xml:space="preserve">
+        <value>Redo</value>
+    </data>
     <data name="UndoCommand_CommandInfo_Description" xml:space="preserve">
         <value>Undo the last action</value>
     </data>
