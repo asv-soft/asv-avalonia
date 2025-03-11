@@ -57,7 +57,7 @@
         <PackageReference Include="NuGet.Protocol" Version="6.12.1" />
         <PackageReference Include="NuGet.Resolver" Version="6.12.1" />
         <PackageReference Include="ObservableCollections" Version="$(R3CollectionVersion)" />
-        <PackageReference Include="R3Extensions.Avalonia" Version="$(R3Version)" />
+        <PackageReference Include="R3Extensions.Avalonia" Version="1.3.0" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.12.10">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

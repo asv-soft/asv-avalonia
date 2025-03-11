@@ -18,7 +18,6 @@ public class SettingsConnectionItemViewModel : DisposableViewModel
         ConnectionString.Value = portInfo.GetConnectionId() ?? portInfo.Id;
         RemovePort = new ReactiveCommand(_ => service.RemovePort(portInfo));
         IsEnabled = new BindableReactiveProperty<bool>(portInfo.IsEnabled.CurrentValue);
-
         service
             .Router.OnRxMessage.ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
@@ -30,8 +29,20 @@ public class SettingsConnectionItemViewModel : DisposableViewModel
                 TxPacketsErrorsAmount.Value = portInfo.Statistic.TxError;
                 IsEnabled.Value = portInfo.IsEnabled.CurrentValue;
                 Status.Value = portInfo.Status.CurrentValue;
+                Port.Value = portInfo;
             })
             .DisposeItWith(Disposable);
+        service.Router.PortAdded.Subscribe(_ =>
+        {
+            ConnectionString.Value = portInfo.Id;
+            RxPacketsAmount.Value = portInfo.Statistic.RxMessages;
+            TxPacketsAmount.Value = portInfo.Statistic.TxMessages;
+            RxPacketsErrorsAmount.Value = portInfo.Statistic.RxError;
+            TxPacketsErrorsAmount.Value = portInfo.Statistic.TxError;
+            IsEnabled.Value = portInfo.IsEnabled.CurrentValue;
+            Status.Value = portInfo.Status.CurrentValue;
+            Port.Value = portInfo;
+        });
 
         IsEnabled
             .Subscribe(b =>
@@ -49,6 +60,7 @@ public class SettingsConnectionItemViewModel : DisposableViewModel
     }
 
     public BindableReactiveProperty<string> Name { get; set; } = new();
+    public BindableReactiveProperty<IProtocolPort> Port { get; set; } = new();
     public BindableReactiveProperty<string> ConnectionString { get; init; } = new();
     public BindableReactiveProperty<uint> RxPacketsAmount { get; set; } = new();
     public BindableReactiveProperty<uint> RxPacketsErrorsAmount { get; set; } = new();
