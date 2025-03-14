@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Threading.Tasks;
-using Asv.Cfg;
 using Asv.IO;
+using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -22,108 +22,88 @@ public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
             x.Value,
             _connectionService
         ));
+
     private readonly IMavlinkConnectionService _connectionService;
-    private IConfiguration _cfg;
-    public BindableReactiveProperty<SettingsConnectionItemViewModel> SelectedItem { get; set; }
+    public BindableReactiveProperty<SettingsConnectionItemViewModel> SelectedItem { get; set; } = new();
     public const string SubPageId = "settings.connection";
     public NotifyCollectionChangedSynchronizedViewList<SettingsConnectionItemViewModel> Items { get; set; }
 
     [ImportingConstructor]
     public SettingsConnectionViewModel(
-        IConfiguration cfg,
         IMavlinkConnectionService connectionService,
         ILoggerFactory logFactory
     )
         : base(SubPageId)
     {
-        _cfg = cfg;
         _connectionService = connectionService;
 
         Items = Connections.ToNotifyCollectionChanged();
-        connectionService.Router.PortAdded.Subscribe(_ => UpdateView());
-        connectionService.Router.PortRemoved.Subscribe(_ => UpdateView());
         AddSerialPortCommand = new ReactiveCommand(
             async (_, __) =>
             {
-                var serial = new SerialPortViewModel(
-                    "serial.dialog",
-                    connectionService,
-                    logFactory
-                );
-                var dialog = new ContentDialog()
-                {
-                    PrimaryButtonText = "Create",
-                    SecondaryButtonText = "Cancel",
-                    IsPrimaryButtonEnabled = serial.IsValid.CurrentValue,
-                    IsSecondaryButtonEnabled = true,
-                    Content = serial,
-                    PrimaryButtonCommand = new ReactiveCommand(_ => serial.AddSerialPort()),
-                };
-                serial.IsValid.Subscribe(enabled =>
-                {
-                    dialog.IsPrimaryButtonEnabled = enabled;
-                });
-
-                await dialog.ShowAsync();
+                var serial = new SerialPortViewModel("serial.dialog", connectionService, logFactory, this);
+                await serial.ApplyAddDialog();
             }
         );
         AddUdpPortCommand = new ReactiveCommand(
-            async (_, ct) =>
+            async (_, __) =>
             {
-                var udp = new UdpPortViewModel("serial.dialog", connectionService, logFactory);
-                var dialog = new ContentDialog()
-                {
-                    PrimaryButtonText = "Create",
-                    SecondaryButtonText = "Cancel",
-                    IsPrimaryButtonEnabled = udp.IsInputValid.CurrentValue,
-                    IsSecondaryButtonEnabled = true,
-                    Content = udp,
-                    PrimaryButtonCommand = new ReactiveCommand(_ =>
-                    {
-                        udp.AddUdpPort();
-                    }),
-                };
-
-                udp.IsInputValid.Subscribe(enabled =>
-                {
-                    dialog.IsPrimaryButtonEnabled = enabled;
-                });
-
-                await dialog.ShowAsync();
+                var udp = new UdpPortViewModel("udp.dialog", connectionService, logFactory, this);
+                await udp.ApplyDialog();
             }
         );
         AddTcpPortCommand = new ReactiveCommand(
-            async (_, ct) =>
+            async (_, __) =>
             {
-                var tcp = new TcpPortViewModel("serial.dialog", connectionService, logFactory);
-                var dialog = new ContentDialog()
-                {
-                    PrimaryButtonText = "Create",
-                    SecondaryButtonText = "Cancel",
-                    IsPrimaryButtonEnabled = tcp.IsValid.CurrentValue,
-                    IsSecondaryButtonEnabled = true,
-                    Content = tcp,
-                    PrimaryButtonCommand = new ReactiveCommand(_ =>
-                    {
-                        tcp.AddTcpPort();
-                    }),
-                };
-
-                tcp.IsValid.Subscribe(enabled =>
-                {
-                    dialog.IsPrimaryButtonEnabled = enabled;
-                });
-
-                await dialog.ShowAsync();
+                var tcp = new TcpPortViewModel("tcp.dialog", connectionService, logFactory, this);
+                await tcp.ApplyAddDialog();
             }
         );
+        EditPortCommand = new ReactiveCommand(async (_,__) =>
+        {
+            if (SelectedItem != null)
+            {
+                switch (SelectedItem.CurrentValue.Port.CurrentValue)
+                {
+                    case SerialProtocolPort serialProtocolPort:
+                    {
+                        var dialog = new SerialPortViewModel(serialProtocolPort,
+                            SelectedItem.CurrentValue.Name.CurrentValue, connectionService, this);
+                        await dialog.ApplyEditDialog();
+                        break;
+                    }
+
+                    case UdpProtocolPort udpProtocolPort:
+                    {
+                        var dialog = new UdpPortViewModel(udpProtocolPort, SelectedItem.CurrentValue.Name.CurrentValue,
+                            connectionService, this);
+                        await dialog.ApplyEditDialog();
+                        break;
+                    }
+
+                    case TcpClientProtocolPort or TcpServerProtocolPort:
+                    {
+                        var dialog = new TcpPortViewModel(SelectedItem.CurrentValue.Port.CurrentValue,
+                            SelectedItem.CurrentValue.Name.CurrentValue, connectionService, this);
+                        await dialog.ApplyEditDialog();
+                        break;
+                    }
+                }
+            }
+        });
     }
 
-    private void UpdateView() { }
+    public SettingsConnectionViewModel() : base(String.Empty)
+    {
+        if (Design.IsDesignMode)
+        {
+        }
+    }
 
     public ReactiveCommand AddSerialPortCommand { get; set; }
     public ReactiveCommand AddUdpPortCommand { get; set; }
     public ReactiveCommand AddTcpPortCommand { get; set; }
+    public ReactiveCommand EditPortCommand { get; set; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
@@ -134,6 +114,6 @@ public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
 
     public ValueTask Init(ISettingsPage context)
     {
-        throw new NotImplementedException();
+        return ValueTask.CompletedTask;
     }
 }
