@@ -116,7 +116,8 @@ public class CommandService : AsyncDisposableOnce, ICommandService
             _logger.ZLogTrace($"Execute command '{backup}'(context: {context}, param: {param})");
             return;
         }
-
+        
+        _logger.ZLogError($"Command '{factory.Info.Id}' cannot be executed in the context of '{context.GetType().Name}'");
         throw new CommandCannotExecuteException(factory.Info, context);
     }
 

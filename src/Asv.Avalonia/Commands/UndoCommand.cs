@@ -6,33 +6,34 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class UndoCommand : ContextCommand<IPage>
+public class UndoCommand : ContextCommand<IShell>
 {
-    #region Static
-
     public const string Id = $"{BaseId}.global.undo";
 
-    public static ICommandInfo StaticInfo { get; } =
-        new CommandInfo
-        {
-            Id = Id,
-            Name = RS.UndoCommand_CommandInfo_Name,
-            Description = RS.UndoCommand_CommandInfo_Description,
-            Icon = MaterialIconKind.UndoVariant,
-            DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
-            Source = SystemModule.Instance,
-        };
+    public static ICommandInfo StaticInfo { get; } = new CommandInfo
+    {
+        Id = Id,
+        Name = RS.UndoCommand_CommandInfo_Name,
+        Description = RS.UndoCommand_CommandInfo_Description,
+        Icon = MaterialIconKind.UndoVariant,
+        DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
+        Source = SystemModule.Instance,
+    };
 
-    #endregion
     public override ICommandInfo Info => StaticInfo;
 
     protected override async ValueTask<IPersistable?> InternalExecute(
-        IPage context,
+        IShell context,
         IPersistable newValue,
         CancellationToken cancel
     )
     {
-        await context.History.UndoAsync(cancel);
+        var selectedPage = context.SelectedPage.Value;
+        if (selectedPage != null)
+        {
+            await selectedPage.History.UndoAsync(cancel);
+        }
+        
         return null;
     }
 }

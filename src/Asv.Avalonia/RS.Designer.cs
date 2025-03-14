@@ -1527,6 +1527,24 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Redo the last action.
+        /// </summary>
+        public static string RedoCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("RedoCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Redo.
+        /// </summary>
+        public static string RedoCommand_Name {
+            get {
+                return ResourceManager.GetString("RedoCommand_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command that restarts the application.
         /// </summary>
         public static string RestartApplicationCommand_Info_Description {

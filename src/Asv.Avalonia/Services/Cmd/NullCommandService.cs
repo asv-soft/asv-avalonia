@@ -9,7 +9,7 @@ public class NullCommandService : ICommandService
     private NullCommandService()
     {
         DesignTime.ThrowIfNotDesignMode();
-        Commands = [ChangeThemeCommand.StaticInfo, UndoCommand.StaticInfo];
+        Commands = [ChangeThemeCommand.StaticInfo, UndoCommand.StaticInfo, RedoCommand.StaticInfo];
     }
 
     public static ICommandService Instance { get; } = new NullCommandService();
