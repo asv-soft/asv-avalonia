@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Net;
 using System.Threading.Tasks;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
@@ -11,16 +11,17 @@ using ZLogger;
 
 namespace Asv.Avalonia.Example;
 
-public partial class TcpPortViewModel : ViewModelBaseWithValidation
+public class TcpPortViewModel : ViewModelBaseWithValidation
 {
     private IDisposable _sub1;
     private IDisposable _sub2;
     private IDisposable _sub3;
     private IRoutable _parent;
     private ILogger _log;
-    private static readonly Regex IpRegex = IpRegexCtor();
     private readonly IProtocolPort _oldPort;
     private IMavlinkConnectionService _connectionService;
+    private const string DefaultIpAddressConst = "172.16.0.1";
+    private const string DefaultPortConst = "7341";
 
     [ImportingConstructor]
     public TcpPortViewModel(
@@ -35,8 +36,8 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
         CreationNumber =
             connectionService.Connections.Count(_ => _.Value.TypeInfo.Scheme == "tcp") + 1;
         Title = new BindableReactiveProperty<string>($"New TCP {CreationNumber}").EnableValidation();
-        PortInput = new BindableReactiveProperty<string>().EnableValidation();
-        IpAddressInput = new BindableReactiveProperty<string>("0.0.0.0").EnableValidation();
+        PortInput = new BindableReactiveProperty<string>(DefaultPortConst).EnableValidation();
+        IpAddressInput = new BindableReactiveProperty<string>(DefaultIpAddressConst).EnableValidation();
         _log = logFactory.CreateLogger<TcpPortViewModel>();
         SubscribeToValidation();
     }
@@ -78,7 +79,7 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
         });
         _sub2 = IpAddressInput.Subscribe(i =>
         {
-            if (!IpRegex.IsMatch(i))
+            if (!IPEndPoint.TryParse(i, out _))
             {
                 IpAddressInput.OnErrorResume(new Exception("Invalid IP address"));
             }
@@ -151,8 +152,9 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
             return default;
         }
 
-        var connection = (IsTcpIpServer.CurrentValue ? "tcps" : "tcp") + $"://{IpAddressInput.CurrentValue}:{PortInput.CurrentValue}"
-                         + (IsTcpIpServer.CurrentValue ? "?srv=true" : string.Empty);
+        var connection =
+            (IsTcpIpServer.CurrentValue ? "tcps" : "tcp") + $"://{IpAddressInput.CurrentValue}:{PortInput.CurrentValue}"
+                                                          + (IsTcpIpServer.CurrentValue ? "?srv=true" : string.Empty);
         return
             new Persistable<KeyValuePair<string, string>>(
                 new KeyValuePair<string, string>(Title.CurrentValue, connection));
@@ -161,11 +163,9 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
     private int CreationNumber { get; set; }
     public BindableReactiveProperty<string> Title { get; set; }
     public BindableReactiveProperty<string> IpAddressInput { get; set; }
+    public static string[] PresetIpValues => [DefaultIpAddressConst, "127.0.0.1"];
     public BindableReactiveProperty<string> PortInput { get; set; }
     public BindableReactiveProperty<bool> IsTcpIpServer { get; set; } = new(false);
-
-    [GeneratedRegex(@"^(\d{0,3}\.?){0,4}$")]
-    private static partial Regex IpRegexCtor();
 
     protected override void Dispose(bool disposing)
     {

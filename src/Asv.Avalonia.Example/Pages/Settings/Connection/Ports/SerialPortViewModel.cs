@@ -55,14 +55,14 @@ public class SerialPortViewModel : ViewModelBaseWithValidation
         _service = service;
         var currentIndex =
             service.Connections.Count(pair => pair.Value.TypeInfo.Scheme == "serial") + 1;
-        Title = new BindableReactiveProperty<string>().EnableValidation();
-        WriteBufferSizeInput = new BindableReactiveProperty<string>().EnableValidation();
+        Title = new BindableReactiveProperty<string>($"New Serial {currentIndex}").EnableValidation();
+        WriteBufferSizeInput = new BindableReactiveProperty<string>(WriteBufferSizeConst.ToString()).EnableValidation();
         SelectedPortInput = new BindableReactiveProperty<string>().EnableValidation();
-        SelectedBaudRateInput = new BindableReactiveProperty<string>().EnableValidation();
+        SelectedBaudRateInput = new BindableReactiveProperty<string>(BoundRateConst.ToString()).EnableValidation();
         ParityInput = new BindableReactiveProperty<Parity?>(Parity.None).EnableValidation();
-        WriteTimeOutInput = new BindableReactiveProperty<string>().EnableValidation();
+        WriteTimeOutInput = new BindableReactiveProperty<string>(WriteTimeoutConst.ToString()).EnableValidation();
         StopBitsInput = new BindableReactiveProperty<StopBits?>(StopBits.None).EnableValidation();
-        DataBitsInput = new BindableReactiveProperty<string>().EnableValidation();
+        DataBitsInput = new BindableReactiveProperty<string>(DataBitsConst.ToString()).EnableValidation();
         Ports = _myCache.ToNotifyCollectionChanged();
         _titleSub = Title.Subscribe(t =>
         {
@@ -346,12 +346,11 @@ public class SerialPortViewModel : ViewModelBaseWithValidation
 
     public BindableReactiveProperty<string> Title { get; set; }
     public BindableReactiveProperty<string> SelectedBaudRateInput { get; set; }
-    public BindableReactiveProperty<string> SelectedPortInput { get; set; } = new();
+    public BindableReactiveProperty<string> SelectedPortInput { get; set; }
     public BindableReactiveProperty<Array> ParityValues => new(Enum.GetValues<Parity>());
     public BindableReactiveProperty<Parity?> ParityInput { get; set; }
 
-    public BindableReactiveProperty<string> WriteTimeOutInput { get; set; } =
-        new(WriteTimeoutConst.ToString());
+    public BindableReactiveProperty<string> WriteTimeOutInput { get; set; } 
 
     public BindableReactiveProperty<string> WriteBufferSizeInput { get; set; }
     public BindableReactiveProperty<Array> DataBitsValues => new(new[] { 5, 6, 7, 8 });

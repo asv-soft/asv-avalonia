@@ -140,6 +140,7 @@
     <ItemGroup>
       <UpToDateCheckInput Remove="Shell\Pages\Document\DocumentPageView.axaml" />
       <UpToDateCheckInput Remove="Shell\Pages\Impl\SettingsPageView.axaml" />
+      <UpToDateCheckInput Remove="Controls\Textbox\IpAddressTextBoxStyles.axaml" />
     </ItemGroup>
 
     <ItemGroup>

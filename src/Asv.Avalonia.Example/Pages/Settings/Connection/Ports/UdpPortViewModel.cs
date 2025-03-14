@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Net;
 using System.Threading.Tasks;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
@@ -11,7 +11,7 @@ using ZLogger;
 
 namespace Asv.Avalonia.Example;
 
-public partial class UdpPortViewModel : ViewModelBaseWithValidation
+public class UdpPortViewModel : ViewModelBaseWithValidation
 {
     #region Subs
 
@@ -22,13 +22,15 @@ public partial class UdpPortViewModel : ViewModelBaseWithValidation
     private IDisposable _sub5;
 
     #endregion
-
-    private static readonly Regex IpRegex = IpRegexCtor();
+    
     private readonly IRoutable _parent;
     private readonly ILogger _log;
     private readonly IProtocolPort _oldPort;
     private readonly IMavlinkConnectionService _connectionService;
-    
+
+    private const string DefaultIpAddressConst = "172.16.0.1";
+    private const string DefaultPortConst = "7341";
+
     [ImportingConstructor]
     public UdpPortViewModel(
         string id,
@@ -44,17 +46,17 @@ public partial class UdpPortViewModel : ViewModelBaseWithValidation
         var currentIndex =
             connectionService.Connections.Count(pair => pair.Value.TypeInfo.Scheme == "udp") + 1;
         TitleInput = new BindableReactiveProperty<string>($"New UDP {currentIndex}").EnableValidation();
-        LocalIpAddressInput = new BindableReactiveProperty<string>("127.0.0.1").EnableValidation();
-        LocalPortInput = new BindableReactiveProperty<string>("7341").EnableValidation();
-        RemotePortInput = new BindableReactiveProperty<string>("0").EnableValidation();
-        RemoteIpAddressInput = new BindableReactiveProperty<string>("0.0.0.0").EnableValidation();
+        LocalIpAddressInput = new BindableReactiveProperty<string>(DefaultIpAddressConst).EnableValidation();
+        LocalPortInput = new BindableReactiveProperty<string>(DefaultPortConst).EnableValidation();
+        RemotePortInput = new BindableReactiveProperty<string>(DefaultPortConst).EnableValidation();
+        RemoteIpAddressInput = new BindableReactiveProperty<string>(DefaultIpAddressConst).EnableValidation();
         IsRemoteInput = new BindableReactiveProperty<bool>();
 
         SubscribeToValidation();
     }
-    
-      public UdpPortViewModel(
-          UdpProtocolPort oldPort, string name,  IMavlinkConnectionService service,  IRoutable parent
+
+    public UdpPortViewModel(
+        UdpProtocolPort oldPort, string name, IMavlinkConnectionService service, IRoutable parent
     )
         : base("dialog.udpEdit")
     {
@@ -78,7 +80,7 @@ public partial class UdpPortViewModel : ViewModelBaseWithValidation
             RemotePortInput.Value = remote.Port.ToString();
             RemoteIpAddressInput.Value = remote.Address.ToString();
         }
-        
+
         SubscribeToValidation();
     }
 
@@ -93,7 +95,7 @@ public partial class UdpPortViewModel : ViewModelBaseWithValidation
         });
         _sub2 = LocalIpAddressInput.Subscribe(t =>
         {
-            if (!IpRegex.IsMatch(t))
+            if (!IPEndPoint.TryParse(t, out _))
             {
                 LocalIpAddressInput.OnErrorResume(new Exception("Wrong IP address value"));
             }
@@ -105,7 +107,7 @@ public partial class UdpPortViewModel : ViewModelBaseWithValidation
                 return;
             }
 
-            if (!IpRegex.IsMatch(t))
+            if (!IPEndPoint.TryParse(t, out _))
             {
                 RemoteIpAddressInput.OnErrorResume(new Exception("Wrong IP address value"));
             }
@@ -167,7 +169,7 @@ public partial class UdpPortViewModel : ViewModelBaseWithValidation
 
         await dialog.ShowAsync();
     }
-    
+
     public async Task ApplyEditDialog()
     {
         var dialog = new ContentDialog
@@ -211,15 +213,13 @@ public partial class UdpPortViewModel : ViewModelBaseWithValidation
     }
 
     public BindableReactiveProperty<string> TitleInput { get; set; }
-    public BindableReactiveProperty<string> LocalIpAddressInput { get; set; } 
-    public BindableReactiveProperty<string> LocalPortInput { get; set; } 
+    public BindableReactiveProperty<string> LocalIpAddressInput { get; set; }
+    public BindableReactiveProperty<string> LocalPortInput { get; set; }
     public BindableReactiveProperty<bool> IsRemoteInput { get; set; }
-    public BindableReactiveProperty<string> RemoteIpAddressInput { get; set; } 
+    public static string[] PresetIpValues => [DefaultIpAddressConst, "127.0.0.1"];
+    public BindableReactiveProperty<string> RemoteIpAddressInput { get; set; }
     public BindableReactiveProperty<string> RemotePortInput { get; set; }
 
-    [GeneratedRegex(@"^(\d{0,3}\.?){0,4}$")]
-    private static partial Regex IpRegexCtor();
-    
     protected override void Dispose(bool disposing)
     {
         if (disposing)

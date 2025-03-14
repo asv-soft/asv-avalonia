@@ -24,7 +24,7 @@ public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
         ));
 
     private readonly IMavlinkConnectionService _connectionService;
-    public BindableReactiveProperty<SettingsConnectionItemViewModel> SelectedItem { get; set; }
+    public BindableReactiveProperty<SettingsConnectionItemViewModel> SelectedItem { get; set; } = new();
     public const string SubPageId = "settings.connection";
     public NotifyCollectionChangedSynchronizedViewList<SettingsConnectionItemViewModel> Items { get; set; }
 

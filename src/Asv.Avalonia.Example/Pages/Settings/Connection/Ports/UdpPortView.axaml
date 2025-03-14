@@ -13,14 +13,14 @@
             <TextBlock Text="Title" />
             <TextBox Text="{Binding TitleInput.Value, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Local IP address" />
-            <textbox1:IpAddressTextBox IpAddressValue="{Binding LocalIpAddressInput.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged} " />
+            <AutoCompleteBox ItemsSource="{Binding PresetIpValues}" Text="{Binding LocalIpAddressInput.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged} " />
             <TextBlock Text="Local port" />
             <MaskedTextBox Text="{Binding LocalPortInput.Value, UpdateSourceTrigger=PropertyChanged}" />
             <ToggleSwitch OnContent="" OffContent="" Content="Remote"
                           IsChecked="{Binding IsRemoteInput.Value, UpdateSourceTrigger=PropertyChanged}" />
             <StackPanel Spacing="10" IsVisible="{Binding IsRemoteInput.Value, UpdateSourceTrigger=PropertyChanged}">
                 <TextBlock Text="Remote IP address" />
-                <textbox1:IpAddressTextBox IpAddressValue="{Binding RemoteIpAddressInput.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged} " />
+                <AutoCompleteBox ItemsSource="{Binding PresetIpValues}" Text="{Binding RemoteIpAddressInput.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged} " />
                 <TextBlock Text="Remote port" />
                 <TextBox Text="{Binding RemotePortInput.Value, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
