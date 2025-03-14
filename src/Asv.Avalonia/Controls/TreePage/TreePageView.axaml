@@ -61,13 +61,6 @@
                                Foreground="{StaticResource SystemChromeLowColor}" />
         <ContentControl Grid.Column="2" Grid.Row="1" Content="{Binding SelectedPage.Value}" />
         <DockPanel Grid.Column="2" Grid.Row="0">
-            <Button Background="Transparent" DockPanel.Dock="Right" Command="{Binding History.Redo}">
-                <avalonia1:MaterialIcon Kind="Redo"/>
-            </Button>
-            <Button Background="Transparent" DockPanel.Dock="Right" Command="{Binding History.Undo}">
-                <avalonia1:MaterialIcon Kind="Undo"/>
-            </Button>
-           
             <ItemsControl ItemsSource="{Binding BreadCrumb}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
