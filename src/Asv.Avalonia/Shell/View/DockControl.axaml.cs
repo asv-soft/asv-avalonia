@@ -30,18 +30,21 @@ public class DockControl : SelectingItemsControl
 
     public DockControl()
     {
-        UnSplitAllCommand = new ReactiveCommand(_ =>
-        {
-            UnsplitAll();
-        });
+        UnSplitAllCommand = new ReactiveCommand(_ => { UnsplitAll(); });
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+
         if (change.Property == ItemCountProperty)
         {
             CreateTabs();
+        }
+
+        if (change.Property == SelectedItemProperty)
+        {
+            _shellItems.First(_ => _.TabControl.Content == change.NewValue).TabControl.IsSelected = true;
         }
     }
 
@@ -85,7 +88,7 @@ public class DockControl : SelectingItemsControl
             _selectedTab = tab;
         }
 
-        //e.Pointer.Capture(this);
+        e.Pointer.Capture(this);
     }
 
     private void PointerMovedHandler(object? sender, PointerEventArgs e)
@@ -243,12 +246,34 @@ public class DockControl : SelectingItemsControl
     )
     {
         base.LogicalChildrenCollectionChanged(sender, e);
-        CreateTabs();
+        if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            if (e.OldItems != null)
+            {
+                foreach (var removedItem in e.OldItems)
+                {
+                    var shellItem = _shellItems.FirstOrDefault(item => item.TabControl.Content == removedItem);
+                    if (shellItem != null)
+                    {
+                        _shellItems.Remove(shellItem);
+                    }
+                }
+            }
+            
+            UpdateGrid();
+        }
+        else
+        {
+            UpdateGrid();
+        }
     }
 
     private void CreateTabs()
     {
+        var existingItems = _shellItems.ToDictionary(item => item.TabControl.Content, item => item.Column);
+        
         _shellItems.Clear();
+
         if (Items.Count == 0)
         {
             return;
@@ -256,71 +281,43 @@ public class DockControl : SelectingItemsControl
 
         if (_dropTargetGrid is null)
         {
-            throw new ArgumentNullException(
-                $"_dropTargetGrid in {nameof(DockControl)} is not found"
-            );
+            throw new ArgumentNullException($"_dropTargetGrid in {nameof(DockControl)} is not found");
         }
-
+        
         foreach (var content in Items)
         {
             if (content is null)
             {
                 continue;
             }
+            
+            var column = existingItems.TryGetValue(content, out var existingColumn) ? existingColumn : 0;
 
-            var shellItem = new ShellItem() { TabControl = CreateTabItem(content) };
-            if (_shellItems.Contains(shellItem))
+            var shellItem = new ShellItem()
             {
-                continue;
-            }
+                TabControl = CreateTabItem(content),
+                Column = column,
+            };
 
             _shellItems.Add(shellItem);
         }
-
+        
         UpdateGrid();
     }
 
     private void UpdateGrid()
     {
         SortShellItems();
-
+        
         _dropTargetGrid.Children.Clear();
         _dropTargetGrid.ColumnDefinitions.Clear();
-        if (
-            _shellItems.Min(item => item.Column) != 0
-            && _shellItems.All(item => item.Column == _shellItems[0].Column)
-        )
-        {
-            foreach (var item in _shellItems)
-            {
-                item.Column = 0;
-            }
-        }
 
         var occupiedColumns = _shellItems.Select(item => item.Column).ToHashSet();
-
         GenerateColumns(_dropTargetGrid, occupiedColumns);
-
-        bool ColumnHasGridSplitter(int columnIndex)
-        {
-            return _dropTargetGrid
-                .Children.OfType<GridSplitter>()
-                .Any(splitter => Grid.GetColumn(splitter) == columnIndex);
-        }
-
-        for (var i = 0; i < _dropTargetGrid.ColumnDefinitions.Count; i++)
-        {
-            if (!occupiedColumns.Contains(i) && !ColumnHasGridSplitter(i))
-            {
-                _dropTargetGrid.ColumnDefinitions[i].Width = new GridLength(0, GridUnitType.Pixel);
-            }
-        }
 
         foreach (var item in _shellItems)
         {
-            var tabControl =
-                FindTabControlInColumn(_dropTargetGrid, item.Column)
-                ?? new AdaptiveTabStripTabControl();
+            var tabControl = FindTabControlInColumn(_dropTargetGrid, item.Column) ?? new AdaptiveTabStripTabControl();
             var oldParent = tabControl.Parent as Grid;
             oldParent?.Children.Remove(tabControl);
 

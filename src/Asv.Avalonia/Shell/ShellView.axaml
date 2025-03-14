@@ -83,6 +83,13 @@
                     </MenuFlyout>
                 </DropDownButton.Flyout>
             </DropDownButton>
+            <Button Background="Transparent" DockPanel.Dock="Right" DataContext="{Binding ElementName=DockControl}" Command="{Binding UnSplitAllCommand}">
+                <avalonia1:MaterialIcon Kind="ArrowLeftBox"/>
+                <ToolTip.Tip>
+                    <TextBlock Text="Un split all tabs"/>
+                </ToolTip.Tip>
+            </Button>
+
             <Button Background="Transparent" DockPanel.Dock="Right">
                 <avalonia1:MaterialIcon Kind="Cog"/>
             </Button>
@@ -110,6 +117,7 @@
         </DockPanel>
         <Border BorderThickness="0, 1, 0, 0" BorderBrush="{DynamicResource SystemControlHighlightChromeAltLowBrush}">
             <avalonia:DockControl 
+                x:Name="DockControl"
                 MaxSplitAmount="3" 
                 BorderHighLightColor="{DynamicResource SystemAccentColor}" 
                 ItemsSource="{CompiledBinding PagesView}" 
