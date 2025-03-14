@@ -42,7 +42,7 @@ public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
             async (_, __) =>
             {
                 var serial = new SerialPortViewModel("serial.dialog", connectionService, logFactory, this);
-                await serial.ApplyDialog();
+                await serial.ApplyAddDialog();
             }
         );
         AddUdpPortCommand = new ReactiveCommand(
@@ -56,19 +56,39 @@ public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
             async (_, __) =>
             {
                 var tcp = new TcpPortViewModel("tcp.dialog", connectionService, logFactory, this);
-                await tcp.ApplyDialog();
+                await tcp.ApplyAddDialog();
             }
         );
-        EditPortCommand = new ReactiveCommand(async (_, __) =>
+        EditPortCommand = new ReactiveCommand(async (_,__) =>
         {
-            if (SelectedItem is null)
+            if (SelectedItem != null)
             {
-                return;
-            }
-            
-            IProtocolPort? config;
-            switch (SelectedItem.CurrentValue.Port.CurrentValue.Config.Scheme)
-            {
+                switch (SelectedItem.CurrentValue.Port.CurrentValue)
+                {
+                    case SerialProtocolPort serialProtocolPort:
+                    {
+                        var dialog = new SerialPortViewModel(serialProtocolPort,
+                            SelectedItem.CurrentValue.Name.CurrentValue, connectionService, this);
+                        await dialog.ApplyEditDialog();
+                        break;
+                    }
+
+                    case UdpProtocolPort udpProtocolPort:
+                    {
+                        var dialog = new UdpPortViewModel(udpProtocolPort, SelectedItem.CurrentValue.Name.CurrentValue,
+                            connectionService, this);
+                        await dialog.ApplyEditDialog();
+                        break;
+                    }
+
+                    case TcpClientProtocolPort or TcpServerProtocolPort:
+                    {
+                        var dialog = new TcpPortViewModel(SelectedItem.CurrentValue.Port.CurrentValue,
+                            SelectedItem.CurrentValue.Name.CurrentValue, connectionService, this);
+                        await dialog.ApplyEditDialog();
+                        break;
+                    }
+                }
             }
         });
     }
@@ -83,7 +103,6 @@ public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
     public ReactiveCommand AddSerialPortCommand { get; set; }
     public ReactiveCommand AddUdpPortCommand { get; set; }
     public ReactiveCommand AddTcpPortCommand { get; set; }
-
     public ReactiveCommand EditPortCommand { get; set; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

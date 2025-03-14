@@ -4,6 +4,7 @@ using System.Composition;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -12,12 +13,14 @@ namespace Asv.Avalonia.Example;
 
 public partial class TcpPortViewModel : ViewModelBaseWithValidation
 {
-    private readonly IDisposable _sub1;
-    private readonly IDisposable _sub2;
-    private readonly IDisposable _sub3;
-    private readonly IRoutable _parent;
-    private readonly ILogger _log;
+    private IDisposable _sub1;
+    private IDisposable _sub2;
+    private IDisposable _sub3;
+    private IRoutable _parent;
+    private ILogger _log;
     private static readonly Regex IpRegex = IpRegexCtor();
+    private readonly IProtocolPort _oldPort;
+    private IMavlinkConnectionService _connectionService;
 
     [ImportingConstructor]
     public TcpPortViewModel(
@@ -35,6 +38,37 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
         PortInput = new BindableReactiveProperty<string>().EnableValidation();
         IpAddressInput = new BindableReactiveProperty<string>("0.0.0.0").EnableValidation();
         _log = logFactory.CreateLogger<TcpPortViewModel>();
+        SubscribeToValidation();
+    }
+
+    public TcpPortViewModel(IProtocolPort oldport, string name, IMavlinkConnectionService connectionService,
+        IRoutable parent) : base("dialog.TcpEdit")
+    {
+        _connectionService = connectionService;
+        _oldPort = oldport;
+        _parent = parent;
+
+        switch (oldport)
+        {
+            case TcpClientProtocolPort client:
+                Title = new BindableReactiveProperty<string>(name).EnableValidation();
+                PortInput = new BindableReactiveProperty<string>(client.Config.Port.ToString()!);
+                IpAddressInput = new BindableReactiveProperty<string>(client.Config.Host!);
+                IsTcpIpServer = new BindableReactiveProperty<bool>();
+                break;
+            case TcpServerProtocolPort server:
+                Title = new BindableReactiveProperty<string>(name).EnableValidation();
+                PortInput = new BindableReactiveProperty<string>(server.Config.Port.ToString()!);
+                IpAddressInput = new BindableReactiveProperty<string>(server.Config.Host!);
+                IsTcpIpServer = new BindableReactiveProperty<bool>(true);
+                break;
+        }
+
+        SubscribeToValidation();
+    }
+
+    private void SubscribeToValidation()
+    {
         _sub1 = Title.Subscribe(t =>
         {
             if (string.IsNullOrWhiteSpace(t))
@@ -66,7 +100,7 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
         SubscribeToErrorsChanged();
     }
 
-    public async Task ApplyDialog()
+    public async Task ApplyAddDialog()
     {
         var dialog = new ContentDialog()
         {
@@ -87,6 +121,28 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
         await dialog.ShowAsync();
     }
 
+    public async Task ApplyEditDialog()
+    {
+        var dialog = new ContentDialog()
+        {
+            PrimaryButtonText = "Apply",
+            SecondaryButtonText = "Cancel",
+            IsPrimaryButtonEnabled = IsValid.CurrentValue.IsSuccess,
+            IsSecondaryButtonEnabled = true,
+            Content = this,
+            PrimaryButtonCommand = new ReactiveCommand(_ =>
+            {
+                _connectionService.RemovePort(_oldPort, false);
+                var persistable = PersistInputValueTcp();
+                var cmd = new InternalContextCommand(AddConnectionPortHistoryCommand.Id, _parent, persistable);
+                cmd.Execute(persistable);
+            }),
+        };
+        IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled.IsSuccess);
+
+        await dialog.ShowAsync();
+    }
+
     private Persistable<KeyValuePair<string, string>> PersistInputValueTcp()
     {
         if (!IsValid.CurrentValue.IsSuccess)
@@ -94,8 +150,8 @@ public partial class TcpPortViewModel : ViewModelBaseWithValidation
             _log.ZLogError($"Unable To create TCP connection. Input is not valid");
             return default;
         }
-        
-        var connection = $"tcp://{IpAddressInput.CurrentValue}:{PortInput.CurrentValue}"
+
+        var connection = (IsTcpIpServer.CurrentValue ? "tcps" : "tcp") + $"://{IpAddressInput.CurrentValue}:{PortInput.CurrentValue}"
                          + (IsTcpIpServer.CurrentValue ? "?srv=true" : string.Empty);
         return
             new Persistable<KeyValuePair<string, string>>(

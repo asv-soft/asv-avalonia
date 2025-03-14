@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.IO;
 using Avalonia.Controls;
 using DotNext.Collections.Generic;
 using Microsoft.Extensions.Logging;
@@ -38,6 +39,7 @@ public class SerialPortViewModel : ViewModelBaseWithValidation
     private const int BoundRateConst = 115200;
     private const int DataBitsConst = 8;
     private readonly ObservableList<string> _myCache = [];
+    private readonly IProtocolPort _oldPort;
 
     [ImportingConstructor]
     public SerialPortViewModel(
@@ -53,14 +55,14 @@ public class SerialPortViewModel : ViewModelBaseWithValidation
         _service = service;
         var currentIndex =
             service.Connections.Count(pair => pair.Value.TypeInfo.Scheme == "serial") + 1;
-        Title = new BindableReactiveProperty<string>($"New Serial {currentIndex}").EnableValidation();
-        WriteBufferSizeInput = new BindableReactiveProperty<string>(WriteBufferSizeConst.ToString()).EnableValidation();
+        Title = new BindableReactiveProperty<string>().EnableValidation();
+        WriteBufferSizeInput = new BindableReactiveProperty<string>().EnableValidation();
         SelectedPortInput = new BindableReactiveProperty<string>().EnableValidation();
-        SelectedBaudRateInput = new BindableReactiveProperty<string>(BoundRateConst.ToString()).EnableValidation();
+        SelectedBaudRateInput = new BindableReactiveProperty<string>().EnableValidation();
         ParityInput = new BindableReactiveProperty<Parity?>(Parity.None).EnableValidation();
-        WriteTimeOutInput = new BindableReactiveProperty<string>(WriteTimeoutConst.ToString()).EnableValidation();
+        WriteTimeOutInput = new BindableReactiveProperty<string>().EnableValidation();
         StopBitsInput = new BindableReactiveProperty<StopBits?>(StopBits.None).EnableValidation();
-        DataBitsInput = new BindableReactiveProperty<string>(DataBitsConst.ToString()).EnableValidation();
+        DataBitsInput = new BindableReactiveProperty<string>().EnableValidation();
         Ports = _myCache.ToNotifyCollectionChanged();
         _titleSub = Title.Subscribe(t =>
         {
@@ -132,6 +134,101 @@ public class SerialPortViewModel : ViewModelBaseWithValidation
         SubscribeToErrorsChanged();
     }
 
+    public SerialPortViewModel(SerialProtocolPort oldPort, string name,  IMavlinkConnectionService service,  IRoutable parent)
+        : base("dialog.serialEdit")
+    {
+        _oldPort = oldPort;
+        _service = service;
+        _parent = parent;
+        if (oldPort.Config is not SerialProtocolPortConfig config)
+        {
+            return;
+        }
+        
+        Title = new BindableReactiveProperty<string>(name).EnableValidation();
+       
+            SelectedBaudRateInput =
+                new BindableReactiveProperty<string>(config.BoundRate.ToString()).EnableValidation();
+        SelectedPortInput =
+            new BindableReactiveProperty<string>(config.PortName ?? string.Empty).EnableValidation();
+        ParityInput = new BindableReactiveProperty<Parity?>(config.Parity).EnableValidation();
+        DataBitsInput = new BindableReactiveProperty<string>(config.DataBits.ToString()).EnableValidation();
+        StopBitsInput = new BindableReactiveProperty<StopBits?>(config.StopBits).EnableValidation();
+        WriteTimeOutInput =
+            new BindableReactiveProperty<string>(config.WriteTimeout.ToString()).EnableValidation();
+        WriteBufferSizeInput =
+            new BindableReactiveProperty<string>(config.WriteBufferSize.ToString()).EnableValidation();
+         Ports = _myCache.ToNotifyCollectionChanged();
+        _titleSub = Title.Subscribe(t =>
+        {
+            if (string.IsNullOrWhiteSpace(t))
+            {
+                Title.OnErrorResume(
+                    new Exception("Name is required")
+                );
+            }
+        });
+        _bufferSizeSub = WriteBufferSizeInput.Subscribe(b =>
+        {
+            if (!int.TryParse(b, out _))
+            {
+                WriteBufferSizeInput.OnErrorResume(new Exception("Invalid size of buffer"));
+            }
+        });
+        _selectedPortSub = SelectedPortInput.Subscribe(p =>
+        {
+            if (string.IsNullOrWhiteSpace(p))
+            {
+                SelectedPortInput.OnErrorResume(new Exception("Port is required"));
+            }
+        });
+        _boundRateSub = SelectedBaudRateInput.Subscribe(b =>
+        {
+            if (!int.TryParse(b, out _))
+            {
+                SelectedBaudRateInput.OnErrorResume(new Exception("Invalid baud rate"));
+            }
+        });
+        _paritySub = ParityInput.Subscribe(p =>
+        {
+            if (p is null)
+            {
+                ParityInput.OnErrorResume(new Exception("Invalid parity"));
+            }
+        });
+        _timeoutSub = WriteTimeOutInput.Subscribe(t =>
+        {
+            if (!int.TryParse(t, out _))
+            {
+                WriteTimeOutInput.OnErrorResume(new Exception("Invalid timeout value"));
+            }
+        });
+        _dataBitsSub = DataBitsInput.Subscribe(d =>
+        {
+            if (!int.TryParse(d, out var bits))
+            {
+                DataBitsInput.OnErrorResume(new Exception("Invalid data bits value"));
+            }
+
+            if (bits is > 8 or < 5)
+            {
+                DataBitsInput.OnErrorResume(new Exception("Data bits should be digit value from 5 to 8"));
+            }
+        });
+        _stopBitsSub = StopBitsInput.Subscribe(s =>
+        {
+            if (s is null)
+            {
+                StopBitsInput.OnErrorResume(new Exception("Invalid value of stop bits"));
+            }
+        });
+
+        Observable
+            .Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
+            .Subscribe(_ => UpdateSerialPorts());
+        SubscribeToErrorsChanged();
+    }
+    
     public SerialPortViewModel()
         : base(string.Empty)
     {
@@ -140,7 +237,7 @@ public class SerialPortViewModel : ViewModelBaseWithValidation
         }
     }
 
-    public async Task ApplyDialog()
+    public async Task ApplyAddDialog()
     {
         var dialog = new ContentDialog()
         {
@@ -151,6 +248,27 @@ public class SerialPortViewModel : ViewModelBaseWithValidation
             Content = this,
             PrimaryButtonCommand = new ReactiveCommand(_ =>
             {
+                var persist = PersistInputValueSerial();
+                var cmd = new InternalContextCommand(AddConnectionPortHistoryCommand.Id, _parent, persist);
+                cmd.Execute(persist);
+            }),
+        };
+        IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled.IsSuccess);
+        await dialog.ShowAsync();
+    }
+
+    public async Task ApplyEditDialog()
+    {
+        var dialog = new ContentDialog()
+        {
+            PrimaryButtonText = "Apply",
+            SecondaryButtonText = "Cancel",
+            IsPrimaryButtonEnabled = IsValid.CurrentValue.IsSuccess,
+            IsSecondaryButtonEnabled = true,
+            Content = this,
+            PrimaryButtonCommand = new ReactiveCommand(_ =>
+            {
+                _service!.RemovePort(_oldPort, false);
                 var persist = PersistInputValueSerial();
                 var cmd = new InternalContextCommand(AddConnectionPortHistoryCommand.Id, _parent, persist);
                 cmd.Execute(persist);

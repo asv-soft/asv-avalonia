@@ -28,6 +28,17 @@ public class IpAddressTextBox : ItemsControl
         Octet2.TextChanged += OnTextChanged;
         Octet3.TextChanged += OnTextChanged;
         Octet4.TextChanged += OnTextChanged;
+        
+        var parts = IpAddressValue.Split('.');
+        if (parts.Length == 0)
+        {
+            return;
+        }
+
+        Octet1.Text = parts[0];
+        Octet2.Text = parts[1];
+        Octet3.Text = parts[2];
+        Octet4.Text = parts[3];
     }
 
     private void OnTextChanged(object sender, TextChangedEventArgs e)

@@ -13,7 +13,7 @@ public class AddConnectionPortHistoryCommand : NoContextCommand
 {
     #region Static
 
-    public const string Id = $"{BaseId}.addPort.serial";
+    public const string Id = $"{BaseId}.addPort";
 
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
