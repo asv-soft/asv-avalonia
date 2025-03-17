@@ -2,6 +2,7 @@
 using Asv.Avalonia.Map;
 using Avalonia;
 using Avalonia.Controls;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia.Example.Desktop;
 
@@ -13,8 +14,10 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        using var app = AppHost
-            .CreateBuilder()
+        var builder = AppHost.CreateBuilder(args);
+
+        builder
+            .UseAvalonia(BuildAvaloniaApp)
             .UseLogToConsoleOnDebug()
             .UseAppPath(opt => opt.WithRelativeFolder("data"))
             .UseJsonUserConfig(opt =>
@@ -28,20 +31,10 @@ sealed class Program
             {
                 options.WithApiPackage("Asv.Drones.Gui.Api", "1.0.0");
                 options.WithPluginPrefix("Asv.Drones.Gui.Plugin.");
-            })
-            .Build()
-            .ExitIfNotFirstInstance();
+            });
 
-        try
-        {
-            BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            app.HandleApplicationCrash(e);
-        }
+        using var host = builder.Build();
+        host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.

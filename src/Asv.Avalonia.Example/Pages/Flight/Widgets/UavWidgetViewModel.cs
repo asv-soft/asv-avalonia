@@ -1,16 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Asv.Avalonia.Map;
 using Asv.Common;
 using Asv.IO;
 using R3;
 
 namespace Asv.Avalonia.Example;
-
-public interface IUavFlightWidget : IMapWidget
-{
-    IClientDevice Device { get; }
-}
 
 public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>, IUavFlightWidget
 {

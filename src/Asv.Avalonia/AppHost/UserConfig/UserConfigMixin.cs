@@ -1,13 +1,14 @@
 ﻿using System.IO.Abstractions;
 using Asv.Cfg;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
 public static class UserConfigMixin
 {
-    public static AppHostBuilder UseJsonUserConfig(
-        this AppHostBuilder builder,
+    public static IHostApplicationBuilder UseJsonUserConfig(
+        this IHostApplicationBuilder builder,
         Action<UserJsonConfigurationBuilder>? configure = null
     )
     {
@@ -16,7 +17,7 @@ public static class UserConfigMixin
         var options = builder
             .Services.AddSingleton<IConfiguration, UserJsonConfiguration>()
             .AddOptions<UserConfigurationConfig>()
-            .Bind(builder.AppConfig);
+            .Bind(builder.Configuration);
         config.Build(options);
         return builder;
     }

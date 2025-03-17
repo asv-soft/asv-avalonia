@@ -1,13 +1,14 @@
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using R3;
 
 namespace Asv.Avalonia.Map;
 
 public static class MapMixin
 {
-    public static AppHostBuilder UseAsvMap(this AppHostBuilder builder)
+    public static IHostApplicationBuilder UseAsvMap(this IHostApplicationBuilder builder)
     {
         builder.Services.AddSingleton<ITileLoader, TileLoader>();
         return builder;

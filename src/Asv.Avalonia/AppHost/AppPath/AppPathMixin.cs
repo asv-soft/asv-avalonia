@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
 public static class AppPathMixin
 {
-    public static AppHostBuilder UseAppPath(
-        this AppHostBuilder builder,
+    public static IHostApplicationBuilder UseAppPath(
+        this IHostApplicationBuilder builder,
         Action<AppPathBuilder>? configure = null
     )
     {
@@ -14,7 +15,7 @@ public static class AppPathMixin
         var options = builder
             .Services.AddSingleton<IAppPath, AppPath>()
             .AddOptions<AppPathConfig>()
-            .Bind(builder.AppConfig.GetSection(AppPathConfig.Section));
+            .Bind(builder.Configuration.GetSection(AppPathConfig.Section));
         pathBuilder.Build(options);
         return builder;
     }

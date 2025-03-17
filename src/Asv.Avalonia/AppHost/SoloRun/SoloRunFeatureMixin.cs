@@ -1,19 +1,20 @@
 ﻿using System.Runtime.CompilerServices;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
 public static class SoloRunFeatureMixin
 {
-    public static AppHostBuilder UseSoloRun(
-        this AppHostBuilder builder,
+    public static IHostApplicationBuilder UseSoloRun(
+        this IHostApplicationBuilder builder,
         Action<SoloRunFeatureBuilder>? configure = null
     )
     {
         var options = builder
             .Services.AddSingleton<ISoloRunFeature, SoloRunFeature>()
             .AddOptions<SoloRunFeatureConfig>()
-            .Bind(builder.AppConfig.GetSection(SoloRunFeatureConfig.Section))
+            .Bind(builder.Configuration.GetSection(SoloRunFeatureConfig.Section))
             .PostConfigure<IAppInfo>(
                 (config, info) =>
                 {

@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asv.Avalonia.DC", "Asv.Aval
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asv.Avalonia.Map", "Asv.Avalonia.Map\Asv.Avalonia.Map.csproj", "{A520D70B-5A72-4AF3-AC39-2C74DBA6E977}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asv.Avalonia.Plugins", "Asv.Avalonia.Plugins\Asv.Avalonia.Plugins.csproj", "{F4E3CF4F-F062-4EA6-816C-358536D81181}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Asv.Avalonia.IO", "Asv.Avalonia.IO\Asv.Avalonia.IO.csproj", "{6CFB98AB-2E6B-4C11-A1BB-C11EF9A80BF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +65,14 @@ Global
 		{A12DF215-AB31-4151-98E7-16308D025A93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A12DF215-AB31-4151-98E7-16308D025A93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A12DF215-AB31-4151-98E7-16308D025A93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4E3CF4F-F062-4EA6-816C-358536D81181}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4E3CF4F-F062-4EA6-816C-358536D81181}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4E3CF4F-F062-4EA6-816C-358536D81181}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4E3CF4F-F062-4EA6-816C-358536D81181}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CFB98AB-2E6B-4C11-A1BB-C11EF9A80BF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CFB98AB-2E6B-4C11-A1BB-C11EF9A80BF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CFB98AB-2E6B-4C11-A1BB-C11EF9A80BF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CFB98AB-2E6B-4C11-A1BB-C11EF9A80BF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

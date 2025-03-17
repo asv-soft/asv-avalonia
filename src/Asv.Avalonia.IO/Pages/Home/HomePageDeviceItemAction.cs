@@ -1,21 +1,20 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Asv.Common;
 using Asv.IO;
 using R3;
 
-namespace Asv.Avalonia.Example;
+namespace Asv.Avalonia.IO;
 
-public abstract class HomePageDeviceAction : AsyncDisposableOnce, IExtensionFor<IHomePageItem>
+public abstract class HomePageDeviceItemAction : AsyncDisposableOnce, IExtensionFor<IHomePageItem>
 {
     private IDisposable? _sub1;
     private IActionViewModel? _action;
     private IClientDevice? _device;
-    private HomePageDevice? _context;
+    private HomePageDeviceItem? _context;
 
     public void Extend(IHomePageItem context, CompositeDisposable contextDispose)
     {
-        if (context is HomePageDevice item)
+        if (context is HomePageDeviceItem item)
         {
             _context = item;
             _device = item.Device;
@@ -48,7 +47,7 @@ public abstract class HomePageDeviceAction : AsyncDisposableOnce, IExtensionFor<
 
     protected abstract IActionViewModel? TryCreateAction(
         IClientDevice device,
-        HomePageDevice context
+        HomePageDeviceItem context
     );
 
     protected override void Dispose(bool disposing)

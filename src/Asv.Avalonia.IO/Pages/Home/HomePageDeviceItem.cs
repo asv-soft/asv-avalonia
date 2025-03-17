@@ -1,20 +1,18 @@
-using System.Collections.Generic;
-using System.Composition;
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
 using R3;
 
-namespace Asv.Avalonia.Example;
+namespace Asv.Avalonia.IO;
 
-public class HomePageDevice : HomePageItem
+public class HomePageDeviceItem : HomePageItem
 {
-    public HomePageDevice(IClientDevice device)
+    public HomePageDeviceItem(IClientDevice device, IDeviceManager deviceManager)
         : base(NavigationId.NormalizeTypeId(device.Id.AsString()))
     {
         Device = device;
-        Icon = DeviceIconMixin.GetIcon(device.Id);
-        IconBrush = DeviceIconMixin.GetIconBrush(device.Id);
+        Icon = deviceManager.GetIcon(device.Id);
+        IconBrush = deviceManager.GetDeviceBrush(device.Id);
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         Info.Add(
             new HeadlinedViewModel("id")

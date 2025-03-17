@@ -6,6 +6,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using R3;
 
@@ -31,8 +32,12 @@ public class MapBackground : Control
     {
         IsDebug = true;
         _tileLoader = Design.IsDesignMode
-            ? new TileLoader(NullLoggerFactory.Instance, new InMemoryConfiguration())
-            : AppHost.Instance.GetService<ITileLoader>();
+            ? new TileLoader(
+                NullLoggerFactory.Instance,
+                new InMemoryConfiguration(),
+                new DefaultMeterFactory()
+            )
+            : AppHost.Instance.Services.GetRequiredService<ITileLoader>();
 
         DisposableBuilder disposeBuilder = new();
         _renderRequestSubject.AddTo(ref disposeBuilder);

@@ -2,6 +2,7 @@
 using System.Composition;
 using System.Diagnostics;
 using System.Linq;
+using Asv.Avalonia.IO;
 using Asv.Cfg;
 using Asv.IO;
 using Asv.Mavlink;
@@ -25,7 +26,7 @@ public class MavParamsPageViewModel : DevicePage<IMavParamsPageViewModel>, IMavP
     }
 
     [ImportingConstructor]
-    public MavParamsPageViewModel(IMavlinkConnectionService devices, ICommandService cmd)
+    public MavParamsPageViewModel(IDeviceManager devices, ICommandService cmd)
         : base(PageId, devices, cmd)
     {
         Title.Value = "Params";

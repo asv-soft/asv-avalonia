@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using IConfiguration = Asv.Cfg.IConfiguration;
 
@@ -13,18 +14,18 @@ public static class PluginManagerMixin
     /// <param name="builder">The AppHostBuilder to add the service to.</param>
     /// <param name="configure">Action to set up the service.</param>
     /// <returns>A reference to this instance after the operation has completed.</returns>
-    public static AppHostBuilder UsePluginManager(
-        this AppHostBuilder builder,
+    public static IHostApplicationBuilder UsePluginManager(
+        this IHostApplicationBuilder builder,
         Action<PluginManagerBuilder>? configure = null
     )
     {
         var options = builder
             .Services.AddOptions<BuilderPluginManagerConfig>()
-            .Bind(builder.AppConfig.GetSection(BuilderPluginManagerConfig.Section));
+            .Bind(builder.Configuration.GetSection(BuilderPluginManagerConfig.Section));
 
         builder.Services.AddSingleton<IPluginManager>(provider =>
         {
-            var cfg = builder.AppConfig.Get<BuilderPluginManagerConfig>();
+            var cfg = builder.Configuration.Get<BuilderPluginManagerConfig>();
             var appPath = provider.GetService<IAppPath>();
             var loggerFactory = provider.GetService<ILoggerFactory>();
             var cfgSvc = provider.GetRequiredService<IConfiguration>();

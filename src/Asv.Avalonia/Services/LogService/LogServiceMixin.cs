@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ZLogger;
@@ -7,8 +8,8 @@ namespace Asv.Avalonia;
 
 public static class LogServiceMixin
 {
-    public static AppHostBuilder UseLogService(
-        this AppHostBuilder builder,
+    public static IHostApplicationBuilder UseLogService(
+        this IHostApplicationBuilder builder,
         Action<LogServiceBuilder>? configure = null
     )
     {
@@ -18,7 +19,7 @@ public static class LogServiceMixin
         var options = builder
             .Services.AddSingleton<ILogService, LogService>()
             .AddOptions<LogServiceConfig>()
-            .Bind(builder.AppConfig);
+            .Bind(builder.Configuration);
         loggingBuilder.Build(builder, options);
         return builder;
     }
@@ -43,19 +44,14 @@ public class LogServiceBuilder
         return this;
     }
 
-    internal void Build(AppHostBuilder builder, OptionsBuilder<LogServiceConfig> opt)
+    internal void Build(IHostApplicationBuilder builder, OptionsBuilder<LogServiceConfig> opt)
     {
-        builder.SetupLogging(configure =>
-        {
-            configure.AddZLoggerRollingFile(options =>
-            {
-                options.FilePathSelector = (dt, index) =>
-                    $"{_folderName}/{dt:yyyy-MM-dd}_{index}.logs";
-                options.UseJsonFormatter();
-                options.RollingSizeKB = _rollingSizeKb;
-            });
-        });
-
         opt.Configure(cfg => cfg.LogFolder = _folderName);
+        builder.Logging.AddZLoggerRollingFile(options =>
+        {
+            options.FilePathSelector = (dt, index) => $"{_folderName}/{dt:yyyy-MM-dd}_{index}.logs";
+            options.UseJsonFormatter();
+            options.RollingSizeKB = _rollingSizeKb;
+        });
     }
 }

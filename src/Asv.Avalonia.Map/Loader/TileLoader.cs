@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Threading.Channels;
 using Asv.Cfg;
 using Asv.Common;
@@ -35,12 +36,19 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     private readonly HttpClient _httpClient;
     private readonly ConcurrentHashSet<string> _remoteRequests;
     private readonly ILogger<TileLoader> _logger;
+    private readonly Counter<int> _meterReq;
+    private readonly Counter<int> _meterQueue;
+    private readonly Counter<int> _meterHttp;
 
-    public TileLoader(ILoggerFactory loggerFactory, IConfiguration configProvider)
+    public TileLoader(
+        ILoggerFactory loggerFactory,
+        IConfiguration configProvider,
+        IMeterFactory meterFactory
+    )
     {
         _logger = loggerFactory.CreateLogger<TileLoader>();
-        _fastCache = new MemoryTileCache(new MemoryTileCacheConfig(), loggerFactory);
-        _slowCache = new FileSystemCache(new FileSystemCacheConfig(), loggerFactory);
+        _fastCache = new MemoryTileCache(new MemoryTileCacheConfig(), loggerFactory, meterFactory);
+        _slowCache = new FileSystemCache(new FileSystemCacheConfig(), loggerFactory, meterFactory);
         _localRequests = new ConcurrentHashSet<TileKey>();
         _emptyBitmap = new ConcurrentDictionary<int, Bitmap>();
         var config = configProvider.Get<MapServiceConfig>();
@@ -62,12 +70,18 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         {
             Task.Run(ProcessQueue);
         }
+
+        var meter = meterFactory.Create(Metric.BaseName);
+        _meterReq = meter.CreateCounter<int>("loader_get");
+        _meterQueue = meter.CreateCounter<int>("loader_queue_requests");
+        _meterHttp = meter.CreateCounter<int>("loader_http_requests");
     }
 
     private async Task ProcessQueue()
     {
         await foreach (var key in _requestQueue.Reader.ReadAllAsync(DisposeCancel))
         {
+            _meterQueue.Add(1);
             try
             {
                 if (_localRequests.Add(key) == false)
@@ -103,6 +117,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                     }
                     try
                     {
+                        _meterHttp.Add(1);
                         var img = await _httpClient
                             .GetByteArrayAsync(url, DisposeCancel)
                             .ConfigureAwait(false);
@@ -133,6 +148,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     {
         get
         {
+            _meterReq.Add(1);
             var bitmap = _fastCache[key];
             if (bitmap != null)
             {

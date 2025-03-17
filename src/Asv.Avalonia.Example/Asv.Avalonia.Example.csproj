@@ -29,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asv.Mavlink" Version="4.0.0-dev.4" />
+        <PackageReference Include="Asv.Mavlink" Version="$(AsvMavlinkVersion)" />
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>
@@ -47,12 +47,17 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Asv.Avalonia.IO\Asv.Avalonia.IO.csproj" />
       <ProjectReference Include="..\Asv.Avalonia.Map\Asv.Avalonia.Map.csproj" />
       <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <UpToDateCheckInput Remove="Pages\Home\HomePageView.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\Home\" />
     </ItemGroup>
 
    
