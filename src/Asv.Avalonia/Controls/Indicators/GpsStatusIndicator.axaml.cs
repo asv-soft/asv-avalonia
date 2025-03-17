@@ -77,10 +77,10 @@ public enum DopStatusEnum
 }
 
 [PseudoClasses(
-    IndicatorPseudoClasses.Critical,
-    IndicatorPseudoClasses.Warning,
-    IndicatorPseudoClasses.Normal,
-    IndicatorPseudoClasses.Unknown
+    PseudoClassesHelper.Critical,
+    PseudoClassesHelper.Warning,
+    PseudoClassesHelper.Normal,
+    PseudoClassesHelper.Unknown
 )]
 public class GpsStatusIndicator : IndicatorBase
 {
@@ -134,19 +134,19 @@ public class GpsStatusIndicator : IndicatorBase
         var dopStatus = indicator.DopStatus;
 
         indicator.PseudoClasses.Set(
-            IndicatorPseudoClasses.Unknown,
+            PseudoClassesHelper.Unknown,
             dopStatus == DopStatusEnum.Unknown
         );
         indicator.PseudoClasses.Set(
-            IndicatorPseudoClasses.Critical,
+            PseudoClassesHelper.Critical,
             dopStatus is DopStatusEnum.Fair or DopStatusEnum.Poor
         );
         indicator.PseudoClasses.Set(
-            IndicatorPseudoClasses.Warning,
+            PseudoClassesHelper.Warning,
             dopStatus == DopStatusEnum.Moderate
         );
         indicator.PseudoClasses.Set(
-            IndicatorPseudoClasses.Normal,
+            PseudoClassesHelper.Normal,
             dopStatus is DopStatusEnum.Ideal or DopStatusEnum.Excellent or DopStatusEnum.Good
         );
 

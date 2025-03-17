@@ -6,10 +6,10 @@ using Material.Icons;
 namespace Asv.Avalonia;
 
 [PseudoClasses(
-    IndicatorPseudoClasses.Critical,
-    IndicatorPseudoClasses.Warning,
-    IndicatorPseudoClasses.Normal,
-    IndicatorPseudoClasses.Unknown
+    PseudoClassesHelper.Critical,
+    PseudoClassesHelper.Warning,
+    PseudoClassesHelper.Normal,
+    PseudoClassesHelper.Unknown
 )]
 public class BatteryIndicator : IndicatorBase
 {
@@ -77,16 +77,16 @@ public class BatteryIndicator : IndicatorBase
         {
             var value = Value;
             PseudoClasses.Set(
-                IndicatorPseudoClasses.Unknown,
+                PseudoClassesHelper.Unknown,
                 value == null || double.IsFinite(value.Value) == false || value > MaxValue
             );
-            PseudoClasses.Set(IndicatorPseudoClasses.Critical, value <= CriticalValue);
+            PseudoClasses.Set(PseudoClassesHelper.Critical, value <= CriticalValue);
             PseudoClasses.Set(
-                IndicatorPseudoClasses.Warning,
+                PseudoClassesHelper.Warning,
                 value > CriticalValue & value <= WarningValue
             );
             PseudoClasses.Set(
-                IndicatorPseudoClasses.Normal,
+                PseudoClassesHelper.Normal,
                 value > WarningValue & value <= MaxValue
             );
             if (MaxValue == 0 || double.IsFinite(MaxValue) == false) { }

@@ -20,7 +20,7 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 {
     public ContentDialog()
     {
-        PseudoClasses.Add(ContentDialogPseudoClasses.s_pcHidden);
+        PseudoClasses.Add(PseudoClassesHelper.Hidden);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -261,8 +261,8 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
         // Make the dialog visible
         IsVisible = true;
-        PseudoClasses.Set(ContentDialogPseudoClasses.s_pcHidden, false);
-        PseudoClasses.Set(ContentDialogPseudoClasses.s_pcOpen, true);
+        PseudoClasses.Set(PseudoClassesHelper.Hidden, false);
+        PseudoClasses.Set(PseudoClassesHelper.Open, true);
 
         // Delay further initializing until after the dialog has loaded. We sub here and unsub in DialogLoaded
         // because ContentDialog can be declared in Xaml prior to showing, and we don't want Loaded to trigger
@@ -425,8 +425,8 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
         // adorner to hide, then continue forward.
         Focus();
 
-        PseudoClasses.Set(ContentDialogPseudoClasses.s_pcHidden, true);
-        PseudoClasses.Set(ContentDialogPseudoClasses.s_pcOpen, false);
+        PseudoClasses.Set(PseudoClassesHelper.Hidden, true);
+        PseudoClasses.Set(PseudoClassesHelper.Open, false);
 
         // Let the close animation finish (now 0.167s in new WinUI update...)
         // We'll wait just a touch longer to be sure
@@ -650,9 +650,9 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
                     break;
                 }
 
-                _primaryButton.Classes.Add(ContentDialogPseudoClasses.s_cAccent);
-                _secondaryButton?.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
-                _closeButton?.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
+                _primaryButton.Classes.Add(PseudoClassesHelper.Accent);
+                _secondaryButton?.Classes.Remove(PseudoClassesHelper.Accent);
+                _closeButton?.Classes.Remove(PseudoClassesHelper.Accent);
 
                 _primaryButton.Focus();
                 break;
@@ -663,9 +663,9 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
                     break;
                 }
 
-                _secondaryButton?.Classes.Add(ContentDialogPseudoClasses.s_cAccent);
-                _primaryButton.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
-                _closeButton?.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
+                _secondaryButton?.Classes.Add(PseudoClassesHelper.Accent);
+                _primaryButton.Classes.Remove(PseudoClassesHelper.Accent);
+                _closeButton?.Classes.Remove(PseudoClassesHelper.Accent);
 
                 _secondaryButton?.Focus();
                 break;
@@ -676,17 +676,17 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
                     break;
                 }
 
-                _closeButton?.Classes.Add(ContentDialogPseudoClasses.s_cAccent);
-                _primaryButton.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
-                _secondaryButton?.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
+                _closeButton?.Classes.Add(PseudoClassesHelper.Accent);
+                _primaryButton.Classes.Remove(PseudoClassesHelper.Accent);
+                _secondaryButton?.Classes.Remove(PseudoClassesHelper.Accent);
                 _closeButton?.Focus();
 
                 break;
 
             default:
-                _closeButton?.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
-                _primaryButton.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
-                _secondaryButton?.Classes.Remove(ContentDialogPseudoClasses.s_cAccent);
+                _closeButton?.Classes.Remove(PseudoClassesHelper.Accent);
+                _primaryButton.Classes.Remove(PseudoClassesHelper.Accent);
+                _secondaryButton?.Classes.Remove(PseudoClassesHelper.Accent);
 
                 // If no default button is set, try to find a suitable first focus item. If none exist, focus the
                 // ContentDialog itself to pull focus away from the main visual tree so weird things don't happen
