@@ -6,6 +6,7 @@ using System.Composition.Hosting;
 using System.Linq;
 using System.Reflection;
 using Asv.Cfg;
+using Asv.Mavlink;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;

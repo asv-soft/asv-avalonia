@@ -1,7 +1,9 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Asv.Common;
 using Asv.Mavlink;
 using Avalonia;
 using Avalonia.Controls;
@@ -11,7 +13,7 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-public class FileSystemItemViewModel : ViewModelBaseWithValidation
+public class FileSystemItemViewModel : ObservableTree<IFtpEntry, string>
 {
     public const string ViewModelId = "files.browser.item";
 
@@ -68,7 +70,7 @@ public class FileSystemItemViewModel : ViewModelBaseWithValidation
     }
 
     public FileSystemItemViewModel(
-        ReactiveNode<IFtpEntry> node,
+        ObservableTreeNode<IFtpEntry, string> node,
         FileSystemItemViewModel? parent = null
     )
         : base(ViewModelId)
@@ -81,16 +83,16 @@ public class FileSystemItemViewModel : ViewModelBaseWithValidation
         Crc32Color = new BindableReactiveProperty<SolidColorBrush>();
 
         Parent = parent;
-        node.Children.ForEach(n => Children.Add(new FileSystemItemViewModel(n, this)));
-        Name = node.Item.Value.Name;
+        node.Items.ForEach(n => Children.Add(new FileSystemItemViewModel(n, this)));
+        Name = node.Base.Name;
         EditedName = new BindableReactiveProperty<string>(Name);
-        Path = node.Item.Value.Path;
-        IsDirectory = node.Item.Value.Type is FtpEntryType.Directory;
-        IsFile = node.Item.Value.Type is FtpEntryType.File;
+        Path = node.Base.Path;
+        IsDirectory = node.Base.Type is FtpEntryType.Directory;
+        IsFile = node.Base.Type is FtpEntryType.File;
 
         if (IsFile)
         {
-            Size = FileBrowserViewModel.ConvertBytesToReadableSize(((FtpFile)node.Item.Value).Size);
+            Size = FileBrowserViewModel.ConvertBytesToReadableSize(((FtpFile)node.Base).Size);
         }
 
         _sub1 = IsSelected.Where(b => !b).Subscribe(_ => IsInEditMode.OnNext(false));
@@ -194,3 +196,4 @@ public class FileSystemItemViewModel : ViewModelBaseWithValidation
 
     #endregion
 }
+*/
