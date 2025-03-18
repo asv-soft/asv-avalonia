@@ -99,7 +99,6 @@
     <avalonia:MaterialIconStyles />
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Shell/View/DockControl.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Textbox/IpAddressTextBoxStyles.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/Workspace.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/WorkspaceItem.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/BatteryIndicator.axaml"/>

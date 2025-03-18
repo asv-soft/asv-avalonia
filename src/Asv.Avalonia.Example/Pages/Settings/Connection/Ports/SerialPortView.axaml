@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:example="clr-namespace:Asv.Avalonia.Example"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="650"
              x:Class="Asv.Avalonia.Example.SerialPortView"
              x:DataType="example:SerialPortViewModel">
     <Design.DataContext>
@@ -12,22 +12,22 @@
     <Panel>
         <StackPanel Spacing="10" Margin="10">
             <TextBlock Text="Port title" />
-            <TextBox Text="{Binding Title.Value}" />
+            <TextBox Text="{Binding Title.Value,UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Port Name" />
-            <ComboBox Margin="0,0" SelectedItem="{Binding SelectedPortInput.Value}"  ItemsSource="{Binding Ports}"/>
-            <TextBlock Text="Bound Rate" />
-            <ComboBox SelectedItem="{Binding SelectedBoundRateInput.Value}"
-                      ItemsSource="{Binding BoundRates.CurrentValue}"  />
-            <TextBlock Text="Write BufferSize"/>
-            <TextBox Text="{Binding  WriteBufferSizeInput.Value}"/>
+            <AutoCompleteBox Margin="0,0" SelectedItem="{Binding SelectedPortInput.Value, UpdateSourceTrigger=PropertyChanged}"  ItemsSource="{Binding Ports}"/>
+            <TextBlock Text="Baud Rate (Bits/Second)"/>
+            <AutoCompleteBox SelectedItem="{Binding SelectedBaudRateInput.Value, UpdateSourceTrigger=PropertyChanged}"
+                             ItemsSource="{Binding BaudRates.CurrentValue}"  />
+            <TextBlock Text="Write BufferSize (Bytes)"/>
+            <TextBox Text="{Binding  WriteBufferSizeInput.Value,UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Parity"/>
-            <ComboBox SelectedItem="{Binding ParityInput.Value}" ItemsSource="{Binding ParityValues.Value}"/>
+            <ComboBox HorizontalAlignment="Stretch" SelectedItem="{Binding ParityInput.Value, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding ParityValues.Value, UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Write Timeout (MilliSeconds)"/>
-            <TextBox Text="{Binding WriteTimeOutInput.Value}"/>
-            <TextBlock Text="Data Bits"/>
-            <TextBox Text="{Binding DataBitsInput.Value}"/>
+            <AutoCompleteBox Text="{Binding WriteTimeOutInput.Value,UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Data Bits (from 5 to 8)"/>
+            <AutoCompleteBox ItemsSource="{Binding DataBitsValues.CurrentValue}" SelectedItem="{Binding DataBitsInput.Value}"/>
             <TextBlock Text="Stop Bits"/>
-            <ComboBox SelectedItem="{Binding StopBitsInput.Value}" ItemsSource="{Binding StopBitsArr.Value}"/>
+            <ComboBox HorizontalAlignment="Stretch" SelectedItem="{Binding StopBitsInput.Value, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding StopBitsArr.Value}"/>
         </StackPanel>
     </Panel>
 </UserControl>

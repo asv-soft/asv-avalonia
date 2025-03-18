@@ -104,20 +104,30 @@ public class MavlinkConnectionService : AsyncDisposableOnce, IMavlinkConnectionS
         UpdateConfig();
     }
 
-    public async Task RemovePort(IProtocolPort port)
+    public async Task RemovePort(IProtocolPort port, bool withDialog = true)
     {
-        var res = await _dialog.ShowYesNoDialog(
-            $"{port.TypeInfo.Name} delete requested",
-            "Delete that connection?"
-        ); //TODO: localization
-        if (res)
+        if (withDialog)
+        {
+            var res = await _dialog.ShowYesNoDialog(
+                $"{port.TypeInfo.Name} delete requested",
+                "Delete that connection?"
+            ); //TODO: localization     
+            if (res)
+            {
+                var remove = Connections.First(valuePair => valuePair.Value == port);
+                Config.Items.Remove(remove.Key);
+                Connections.Remove(remove.Key);
+                Router.RemovePort(port);
+            }
+        }
+        else
         {
             var remove = Connections.First(valuePair => valuePair.Value == port);
             Config.Items.Remove(remove.Key);
             Connections.Remove(remove.Key);
             Router.RemovePort(port);
         }
-
+        
         _logger.ZLogInformation($"Removed port {port.Id}");
         UpdateConfig();
     }

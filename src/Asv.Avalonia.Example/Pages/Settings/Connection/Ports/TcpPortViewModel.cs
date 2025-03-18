@@ -2,84 +2,189 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
-using System.Text.RegularExpressions;
+using System.Net;
 using System.Threading.Tasks;
+using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
-using Exception = System.Exception;
+using ZLogger;
 
 namespace Asv.Avalonia.Example;
 
-// TODO: add validation
-public partial class TcpPortViewModel : DialogViewModelBase
+public class TcpPortViewModel : DialogViewModelBase
 {
-    private ILogger _log;
+    private IDisposable _sub1;
+    private IDisposable _sub2;
+    private IDisposable _sub3;
+    private readonly IRoutable _parent;
+    private readonly ILogger _log;
+    private readonly IProtocolPort _oldPort;
     private readonly IMavlinkConnectionService _connectionService;
-    private static readonly Regex IpRegex = IpRegexCtor();
+    private readonly INavigationService _navigation;
+    private const string DefaultIpAddressConst = "172.16.0.1";
+    private const string DefaultPortConst = "7341";
 
     [ImportingConstructor]
     public TcpPortViewModel(
         string id,
         IMavlinkConnectionService connectionService,
-        ILoggerFactory logFactory
+        ILoggerFactory logFactory,
+        IRoutable parent,
+        INavigationService navigation
     )
         : base(id)
     {
-        _connectionService = connectionService;
-        IsValid.Value = false;
+        _navigation = navigation;
+        _parent = parent;
         CreationNumber =
             connectionService.Connections.Count(_ => _.Value.TypeInfo.Scheme == "tcp") + 1;
-        Title = new BindableReactiveProperty<string>($"New TCP {CreationNumber}");
+        Title = new BindableReactiveProperty<string>($"New TCP {CreationNumber}").EnableValidation();
+        PortInput = new BindableReactiveProperty<string>(DefaultPortConst).EnableValidation();
+        IpAddressInput = new BindableReactiveProperty<string>(DefaultIpAddressConst).EnableValidation();
         _log = logFactory.CreateLogger<TcpPortViewModel>();
-
-        _sub1 = PortInput.EnableValidation(
-            value =>
-            {
-                if (!(int.TryParse(value, out var result) && result is <= ushort.MaxValue and >= 0))
-                {
-                    return ValueTask.FromResult<ValidationResult>(
-                        new Exception("Invalid port number")
-                    );
-                }
-
-                return ValidationResult.Success;
-            },
-            this,
-            true
-        );
-
-        _sub2 = IpAddressInput.EnableValidation(
-            value =>
-            {
-                if (!IpRegex.IsMatch(value))
-                {
-                    return ValueTask.FromResult<ValidationResult>(
-                        new Exception("Invalid ip address")
-                    );
-                }
-
-                return ValidationResult.Success;
-            },
-            this,
-            true
-        );
+        SubscribeToValidation();
     }
 
-    public void AddTcpPort()
+    public TcpPortViewModel(
+        IProtocolPort oldport,
+        string name,
+        IMavlinkConnectionService connectionService,
+        INavigationService navigation,
+        IRoutable parent)
+        : base("dialog.TcpEdit")
     {
-        if (IsValid.CurrentValue)
+        _connectionService = connectionService;
+        _navigation = navigation;
+        _oldPort = oldport;
+        _parent = parent;
+
+        switch (oldport)
         {
-            var connectionString =
-                $"tcp://{IpAddressInput.CurrentValue}:{PortInput.CurrentValue}"
-                + (IsTcpIpServer.CurrentValue ? "?srv=true" : string.Empty);
-            _connectionService.AddConnection(Title.CurrentValue, connectionString);
+            case TcpClientProtocolPort client:
+                Title = new BindableReactiveProperty<string>(name);
+                PortInput = new BindableReactiveProperty<string>(client.Config.Port.ToString()!);
+                IpAddressInput = new BindableReactiveProperty<string>(client.Config.Host!);
+                IsTcpIpServer = new BindableReactiveProperty<bool>();
+                break;
+            case TcpServerProtocolPort server:
+                Title = new BindableReactiveProperty<string>(name);
+                PortInput = new BindableReactiveProperty<string>(server.Config.Port.ToString()!);
+                IpAddressInput = new BindableReactiveProperty<string>(server.Config.Host!);
+                IsTcpIpServer = new BindableReactiveProperty<bool>(true);
+                break;
         }
+
+        SubscribeToValidation();
+    }
+
+    private void SubscribeToValidation()
+    {
+        _sub1 = Title.EnableValidation(
+            t =>
+            {
+                if (string.IsNullOrWhiteSpace(t))
+                {
+                    return ValueTask.FromResult<ValidationResult>(new Exception("Title must be not empty"));
+                }
+                
+                return ValidationResult.Success;
+            },
+            this,
+            true);
+        _sub2 = IpAddressInput.EnableValidation(
+            i =>
+        {
+            if (!IPEndPoint.TryParse(i, out _))
+            {
+                return ValueTask.FromResult<ValidationResult>(new Exception("Invalid IP address"));
+            }
+
+            return ValidationResult.Success;
+        }, this, true);
+        _sub3 = PortInput.EnableValidation(
+            p =>
+        {
+            if (int.TryParse(p, out var port))
+            {
+                if (port is > ushort.MaxValue or < ushort.MinValue)
+                {
+                    return ValueTask.FromResult<ValidationResult>(new Exception("Port value out of bounds"));
+                }
+            }
+            else
+            {
+                return ValueTask.FromResult<ValidationResult>(new Exception("Invalid port value"));
+            }
+
+            return ValidationResult.Success;
+        }, this, true);
+    }
+
+    public void ApplyAddDialog()
+    {
+        var dialog = new ContentDialog(_navigation)
+        {
+            PrimaryButtonText = "Create",
+            SecondaryButtonText = "Cancel",
+            IsPrimaryButtonEnabled = IsValid.CurrentValue,
+            IsSecondaryButtonEnabled = true,
+            Content = this,
+            PrimaryButtonCommand = new ReactiveCommand(_ =>
+            {
+                var persistable = new Persistable<KeyValuePair<string, string>>(PersistInputValueTcp());
+                var cmd = new InternalContextCommand(AddConnectionPortHistoryCommand.Id, _parent, persistable);
+                Task.Run(() => cmd.Execute(persistable));
+            }),
+        };
+        IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
+
+         dialog.ShowAsync();
+    }
+
+    public void ApplyEditDialog()
+    {
+        var dialog = new ContentDialog(_navigation)
+        {
+            PrimaryButtonText = "Apply",
+            SecondaryButtonText = "Cancel",
+            IsPrimaryButtonEnabled = IsValid.CurrentValue,
+            IsSecondaryButtonEnabled = true,
+            Content = this,
+            PrimaryButtonCommand = new ReactiveCommand(_ =>
+            {
+                _connectionService.RemovePort(_oldPort, false);
+                var persistable = new Persistable<EditConnectionPersistable>(new EditConnectionPersistable()
+                {
+                    NewValue = PersistInputValueTcp(),
+                    Port = _oldPort,
+                }); 
+                var cmd = new InternalContextCommand(AddConnectionPortHistoryCommand.Id, _parent, persistable);
+                cmd.Execute(persistable);
+            }),
+        };
+        IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
+        dialog.ShowAsync();
+    }
+
+    private KeyValuePair<string, string> PersistInputValueTcp()
+    {
+        if (!IsValid.CurrentValue)
+        {
+            _log.ZLogError($"Unable To create TCP connection. Input is not valid");
+            return default;
+        }
+
+        var connection =
+            (IsTcpIpServer.CurrentValue ? "tcps" : "tcp") + $"://{IpAddressInput.CurrentValue}:{PortInput.CurrentValue}"
+                                                          + (IsTcpIpServer.CurrentValue ? "?srv=true" : string.Empty);
+        return new KeyValuePair<string, string>(Title.CurrentValue, connection);
     }
 
     private int CreationNumber { get; set; }
     public BindableReactiveProperty<string> Title { get; set; }
-    public BindableReactiveProperty<string> IpAddressInput { get; set; } = new(string.Empty);
-    public BindableReactiveProperty<string> PortInput { get; set; } = new(string.Empty);
+    public BindableReactiveProperty<string> IpAddressInput { get; set; }
+    public static string[] PresetIpValues => [DefaultIpAddressConst, "127.0.0.1"];
+    public BindableReactiveProperty<string> PortInput { get; set; }
     public BindableReactiveProperty<bool> IsTcpIpServer { get; set; } = new(false);
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
@@ -87,24 +192,15 @@ public partial class TcpPortViewModel : DialogViewModelBase
         return [];
     }
 
-    [GeneratedRegex(@"^(\d{0,3}\.?){0,4}$")]
-    private static partial Regex IpRegexCtor();
-
-    #region Dispose
-
-    private readonly IDisposable _sub1;
-    private readonly IDisposable _sub2;
-
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             _sub1.Dispose();
             _sub2.Dispose();
+            _sub3.Dispose();
         }
 
         base.Dispose(disposing);
     }
-
-    #endregion
 }

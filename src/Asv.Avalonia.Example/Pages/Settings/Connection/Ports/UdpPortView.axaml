@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Asv.Avalonia.Example"
-             xmlns:textbox1="clr-namespace:Asv.Avalonia.Textbox;assembly=Asv.Avalonia"
+             xmlns:textbox1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Example.UdpPortView"
              x:DataType="avalonia:UdpPortViewModel">
@@ -11,18 +11,18 @@
         <!-- TODO: LOCALIZE -->
         <StackPanel Spacing="10" Margin="10">
             <TextBlock Text="Title" />
-            <TextBox Text="{Binding TitleInput.Value}" />
+            <TextBox Text="{Binding TitleInput.Value, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock Text="Local IP address" />
-            <textbox1:IpAddressTextBox IpAddressValue="{Binding LocalIpAddressInput.Value, Mode=TwoWay} " />
+            <AutoCompleteBox ItemsSource="{Binding PresetIpValues}" Text="{Binding LocalIpAddressInput.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged} " />
             <TextBlock Text="Local port" />
-            <MaskedTextBox Text="{Binding LocalPortInput.Value}" />
+            <MaskedTextBox Text="{Binding LocalPortInput.Value, UpdateSourceTrigger=PropertyChanged}" />
             <ToggleSwitch OnContent="" OffContent="" Content="Remote"
-                          IsChecked="{Binding IsRemoteInput.Value}" />
-            <StackPanel Spacing="10" IsVisible="{Binding IsRemoteInput.Value}">
+                          IsChecked="{Binding IsRemoteInput.Value, UpdateSourceTrigger=PropertyChanged}" />
+            <StackPanel Spacing="10" IsVisible="{Binding IsRemoteInput.Value, UpdateSourceTrigger=PropertyChanged}">
                 <TextBlock Text="Remote IP address" />
-                <textbox1:IpAddressTextBox IpAddressValue="{Binding RemoteIpAddressInput.Value, Mode=TwoWay} " />
+                <AutoCompleteBox ItemsSource="{Binding PresetIpValues}" Text="{Binding RemoteIpAddressInput.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged} " />
                 <TextBlock Text="Remote port" />
-                <TextBox Text="{Binding RemotePortInput.Value}" />
+                <TextBox Text="{Binding RemotePortInput.Value, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
         </StackPanel>
     </Panel>

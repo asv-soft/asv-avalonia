@@ -17,7 +17,7 @@ public interface IMavlinkConnectionService : IExportable
     public ObservableDictionary<string, IProtocolPort> Connections { get; set; }
     public void DisablePort(IProtocolPort port);
     public void EnablePort(IProtocolPort port);
-    public Task RemovePort(IProtocolPort port);
+    public Task RemovePort(IProtocolPort port, bool withDialog = true);
     public void AddConnection(string name, string connectionString, bool isEnabled = true);
     public ValueTask EditPort(IProtocolPort port);
 }

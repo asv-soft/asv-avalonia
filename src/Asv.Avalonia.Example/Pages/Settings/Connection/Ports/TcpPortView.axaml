@@ -2,9 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             xmlns:textbox="clr-namespace:Asv.Avalonia.Textbox"
-             xmlns:textbox1="clr-namespace:Asv.Avalonia.Textbox;assembly=Asv.Avalonia"
+             xmlns:textbox1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              xmlns:example="clr-namespace:Asv.Avalonia.Example"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Example.TcpPortView"
@@ -14,7 +12,7 @@
         <TextBlock Text="Title" />
         <TextBox Text="{Binding Title.Value}" />
         <TextBlock Text="Ip Address" />
-        <textbox1:IpAddressTextBox IpAddressValue="{Binding IpAddressInput.Value, Mode=TwoWay}" />
+        <AutoCompleteBox ItemsSource="{Binding PresetIpValues}" Text="{Binding IpAddressInput.Value, Mode=TwoWay}" />
         <TextBlock Text="Port"/>
         <TextBox Text="{CompiledBinding PortInput.Value,Mode= TwoWay}" />
         <TextBlock Text="Is TCP\IP server"/>
