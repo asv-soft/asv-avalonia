@@ -5,6 +5,8 @@ namespace Asv.Avalonia
 {
     public class VersionConverter : IValueConverter
     {
+        private string _versionPart = string.Empty;
+
         public object? Convert(
             object? value,
             Type targetType,
@@ -28,7 +30,12 @@ namespace Asv.Avalonia
             CultureInfo culture
         )
         {
-            return null;
+            if (value is string version)
+            {
+                return version + _versionPart;
+            }
+
+            return value;
         }
     }
 }
