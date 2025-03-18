@@ -1,8 +1,4 @@
-using System.ComponentModel;
 using Asv.Common;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;

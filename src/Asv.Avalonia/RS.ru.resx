@@ -88,10 +88,16 @@
     <data name="UndoCommand_CommandInfo_Name" xml:space="preserve">
         <value>Отменить</value>
     </data>
+    <data name="RedoCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Повторить</value>
+    </data>
     <data name="InstalledPluginsView_Tab_Description" xml:space="preserve">
         <value>Описание</value></data>
     <data name="UndoCommand_CommandInfo_Description" xml:space="preserve">
         <value>Отменить последнее действие</value>
+    </data>
+    <data name="RedoCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Повторить последнее действие</value>
     </data>
     <data name="SettingsKeyMapView_Header_Name" xml:space="preserve">
         <value>Имя</value>

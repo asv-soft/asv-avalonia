@@ -6,10 +6,10 @@ using Material.Icons;
 namespace Asv.Avalonia;
 
 [PseudoClasses(
-    IndicatorPseudoClasses.Critical,
-    IndicatorPseudoClasses.Warning,
-    IndicatorPseudoClasses.Normal,
-    IndicatorPseudoClasses.Unknown
+    PseudoClassesHelper.Critical,
+    PseudoClassesHelper.Warning,
+    PseudoClassesHelper.Normal,
+    PseudoClassesHelper.Unknown
 )]
 public class ConnectionQuality : IndicatorBase
 {
@@ -82,17 +82,17 @@ public class ConnectionQuality : IndicatorBase
         {
             var value = Value;
             PseudoClasses.Set(
-                IndicatorPseudoClasses.Unknown,
-                value == null || double.IsFinite(value.Value) == false || value > MaxValue
+                PseudoClassesHelper.Unknown,
+                value is null || !double.IsFinite(value.Value) || value > MaxValue
             );
-            PseudoClasses.Set(IndicatorPseudoClasses.Critical, value <= CriticalValue);
+            PseudoClasses.Set(PseudoClassesHelper.Critical, value <= CriticalValue);
             PseudoClasses.Set(
-                IndicatorPseudoClasses.Warning,
-                value > CriticalValue & value <= WarningValue
+                PseudoClassesHelper.Warning,
+                value > CriticalValue && value <= WarningValue
             );
             PseudoClasses.Set(
-                IndicatorPseudoClasses.Normal,
-                value > WarningValue & value <= MaxValue
+                PseudoClassesHelper.Normal,
+                value > WarningValue && value <= MaxValue
             );
             IconKind = GetIcon(Value / MaxValue);
         }

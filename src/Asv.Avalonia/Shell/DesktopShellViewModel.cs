@@ -144,6 +144,6 @@ public class DesktopShellViewModel : ShellViewModel
 
     private void OpenFile(string filePath)
     {
-        // Передаем файл сервису обработки файлов
+        // TODO: Pass the file to the file processing service
     }
 }

@@ -158,27 +158,27 @@ public readonly partial struct NavigationId : IEquatable<NavigationId>, ICompara
     /// </returns>
     public int CompareTo(NavigationId other)
     {
-        // Сначала сравниваем Id
+        // First, compare the Id
         int idComparison = StringComparer.InvariantCultureIgnoreCase.Compare(Id, other.Id);
         if (idComparison != 0)
         {
             return idComparison;
         }
 
-        // Если Id равны, сравниваем Args
+        // If the Ids are equal, compare Args
         if (Args == null && other.Args == null)
         {
-            return 0; // Оба null — равны
+            return 0; // Both null — equal
         }
 
         if (Args == null)
         {
-            return -1; // null меньше не-null
+            return -1; // null is less than non-null
         }
 
         if (other.Args == null)
         {
-            return 1; // не-null больше null
+            return 1; // non-null is greater than null
         }
 
         return StringComparer.InvariantCultureIgnoreCase.Compare(Args, other.Args);

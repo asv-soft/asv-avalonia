@@ -38,7 +38,7 @@ public struct NavigationPath : IEquatable<NavigationPath>
         }
         else
         {
-            _overflowIds = new NavigationId[_count + InlineCapacity]; // Дополнительная ёмкость для роста
+            _overflowIds = new NavigationId[_count + InlineCapacity]; // Additional capacity for growth
             ids.CopyTo(_overflowIds);
         }
     }
@@ -61,7 +61,7 @@ public struct NavigationPath : IEquatable<NavigationPath>
         _count = 0;
         _overflowIds = null;
 
-        // Проверяем, можем ли получить длину напрямую для оптимизации
+        // Check if we can get the length directly for the optimization
         if (ids.TryGetNonEnumeratedCount(out int count))
         {
             _count = count;
@@ -85,7 +85,7 @@ public struct NavigationPath : IEquatable<NavigationPath>
         }
         else
         {
-            // Если длина неизвестна, собираем в промежуточный список
+            // If the length is unknown, put in the temporary list
             var tempList = new List<NavigationId>();
             foreach (var id in ids)
             {
@@ -165,7 +165,7 @@ public struct NavigationPath : IEquatable<NavigationPath>
     {
         if (_overflowIds is null)
         {
-            _overflowIds = new NavigationId[InlineCapacity * 2]; // Удваиваем начальную ёмкость
+            _overflowIds = new NavigationId[InlineCapacity * 2]; // Double the initial capacity
             ((ReadOnlySpan<NavigationId>)_inlineIds).CopyTo(_overflowIds);
         }
         else if (_count == _overflowIds.Length)
@@ -326,7 +326,7 @@ public struct NavigationPath : IEquatable<NavigationPath>
         {
             try
             {
-                ids[i] = segments[i]; // Используем неявное преобразование string -> NavigationId
+                ids[i] = segments[i]; // Use implicit conversion from string -> NavigationId
             }
             catch (ArgumentException ex)
             {

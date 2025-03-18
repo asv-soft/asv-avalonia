@@ -22,7 +22,7 @@ public class WorkspacePanel : Panel
 
     public WorkspacePanel()
     {
-        // Создаем основной Grid
+        // Create the main Grid
         _mainGrid = new Grid { Name = "MainGrid", ShowGridLines = false };
         _mainGrid.ColumnDefinitions =
         [
@@ -40,7 +40,7 @@ public class WorkspacePanel : Panel
             new RowDefinition(new GridLength(1, GridUnitType.Star)),
         ];
 
-        // Левый ScrollViewer с StackPanel
+        // Left ScrollViewer with the StackPanel
         _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = 8 };
         var leftScrollViewer = new ScrollViewer
         {
@@ -52,7 +52,7 @@ public class WorkspacePanel : Panel
         Grid.SetColumn(leftScrollViewer, 0);
         Grid.SetRowSpan(leftScrollViewer, 4);
 
-        // Правый ScrollViewer с StackPanel
+        // Right ScrollViewer with the StackPanel
         _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = 8 };
         var rightScrollViewer = new ScrollViewer
         {
@@ -64,7 +64,7 @@ public class WorkspacePanel : Panel
         Grid.SetColumn(rightScrollViewer, 4);
         Grid.SetRowSpan(rightScrollViewer, 4);
 
-        // Нижний TabControl
+        // Bottom TabControl
         _bottomTab = new TabControl
         {
             Name = "PART_BottomTab",
@@ -75,7 +75,7 @@ public class WorkspacePanel : Panel
         Grid.SetColumn(_bottomTab, 2);
         _bottomTab.ItemsSource = _bottomPanel = new AvaloniaList<Control>();
 
-        // Вертикальный GridSplitter между столбцами 0 и 2
+        // Vertical GridSplitter between columns 0 and 2
         var verticalSplitter1 = new GridSplitter
         {
             Width = 5,
@@ -87,7 +87,7 @@ public class WorkspacePanel : Panel
         Grid.SetRowSpan(verticalSplitter1, 4);
         Grid.SetColumn(verticalSplitter1, 1);
 
-        // Вертикальный GridSplitter между столбцами 2 и 4
+        // Vertical GridSplitter between columns 2 and 4
         var verticalSplitter2 = new GridSplitter
         {
             Width = 5,
@@ -100,7 +100,7 @@ public class WorkspacePanel : Panel
         Grid.SetRowSpan(verticalSplitter2, 4);
         Grid.SetColumn(verticalSplitter2, 3);
 
-        // Горизонтальный GridSplitter в строке 2
+        // Horizontal GridSplitter in row 2
         var horizontalSplitter = new GridSplitter
         {
             Height = 5,
@@ -113,7 +113,7 @@ public class WorkspacePanel : Panel
         Grid.SetColumn(horizontalSplitter, 1);
         Grid.SetColumnSpan(horizontalSplitter, 3);
 
-        // Добавляем все элементы в Grid
+        // Add all elements to the Grid
         _mainGrid.Children.Add(leftScrollViewer);
         _mainGrid.Children.Add(rightScrollViewer);
         _mainGrid.Children.Add(_bottomTab);
@@ -121,7 +121,7 @@ public class WorkspacePanel : Panel
         _mainGrid.Children.Add(verticalSplitter2);
         _mainGrid.Children.Add(horizontalSplitter);
 
-        // Добавляем Grid как единственный дочерний элемент панели
+        // Add the Grid as the only child element of the panel
         LogicalChildren.Add(_mainGrid);
         VisualChildren.Add(_mainGrid);
     }
@@ -139,22 +139,14 @@ public class WorkspacePanel : Panel
         switch (e.Action)
         {
             case NotifyCollectionChangedAction.Add:
-                RefreshChildren();
-                break;
-
             case NotifyCollectionChangedAction.Move:
-                RefreshChildren();
-                break;
-
             case NotifyCollectionChangedAction.Remove:
-                RefreshChildren();
-                break;
-
             case NotifyCollectionChangedAction.Replace:
                 RefreshChildren();
                 break;
 
             case NotifyCollectionChangedAction.Reset:
+            default:
                 throw new NotSupportedException();
         }
     }

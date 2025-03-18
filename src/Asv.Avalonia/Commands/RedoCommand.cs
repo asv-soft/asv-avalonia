@@ -6,18 +6,18 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class UndoCommand : ContextCommand<IShell>
+public class RedoCommand : ContextCommand<IShell>
 {
-    public const string Id = $"{BaseId}.global.undo";
+    public const string Id = $"{BaseId}.global.redo";
 
     public static ICommandInfo StaticInfo { get; } =
         new CommandInfo
         {
             Id = Id,
-            Name = RS.UndoCommand_CommandInfo_Name,
-            Description = RS.UndoCommand_CommandInfo_Description,
-            Icon = MaterialIconKind.UndoVariant,
-            DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
+            Name = RS.RedoCommand_CommandInfo_Name,
+            Description = RS.RedoCommand_CommandInfo_Description,
+            Icon = MaterialIconKind.RedoVariant,
+            DefaultHotKey = KeyGesture.Parse("Ctrl+Y"),
             Source = SystemModule.Instance,
         };
 
@@ -30,9 +30,9 @@ public class UndoCommand : ContextCommand<IShell>
     )
     {
         var selectedPage = context.SelectedPage.CurrentValue;
-        if (selectedPage?.History.Undo.CanExecute() == true)
+        if (selectedPage?.History.Redo.CanExecute() == true)
         {
-            await selectedPage.History.UndoAsync(cancel);
+            await selectedPage.History.RedoAsync(cancel);
         }
 
         return null;

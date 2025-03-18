@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
-using ZLogger;
 
 namespace Asv.Avalonia;
 
@@ -28,6 +27,7 @@ public class CommandHistory : ICommandHistory
         HistoryOwner = historyOwner;
         Undo = new ReactiveCommand((_, token) => UndoAsync(token)).AddTo(ref dispose);
         Redo = new ReactiveCommand((_, token) => RedoAsync(token)).AddTo(ref dispose);
+        CheckUndoRedoCanExecute();
     }
 
     private void TryAddToHistory(CommandEventArgs cmd)

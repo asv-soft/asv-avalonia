@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 
 public delegate void TypedEventHandler<TSender, TResult>(TSender sender, TResult args);
 
-[PseudoClasses(ContentDialogPseudoClasses.s_pcHidden, ContentDialogPseudoClasses.s_pcOpen)]
+[PseudoClasses(PseudoClassesHelper.Hidden, PseudoClassesHelper.Open)]
 [PseudoClasses(s_pcPrimary, s_pcSecondary, s_pcClose)]
 [PseudoClasses(s_pcFullSize)]
 [TemplatePart(s_tpPrimaryButton, typeof(Button))]

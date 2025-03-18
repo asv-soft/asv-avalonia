@@ -20,7 +20,7 @@ public class NullShellHost : IShellHost
 
     public IShell Shell => DesignTimeShellViewModel.Instance;
     public Observable<IShell> OnShellLoaded { get; } = new Subject<IShell>();
-    public TopLevel TopLevel { get; } = null!; // TODO: сделать DesignTime вариант
+    public TopLevel TopLevel { get; } = null!; // TODO: Create a DesignTime version
 }
 
 public enum ShellErrorState

@@ -10,10 +10,13 @@
     <Design.DataContext>
         <avalonia1:HomePageViewModel/>
     </Design.DataContext>
+    <UserControl.Resources>
+        <avalonia1:VersionConverter x:Key="VersionConverter"/>
+    </UserControl.Resources>
     <DockPanel Margin="40,40,40,0">
         <TextBlock FontWeight="Thin" FontSize="60" DockPanel.Dock="Top" >
             <Run Text="{Binding AppInfo.Name}"/>
-            <Run FontSize="35" Foreground="{DynamicResource  ButtonForegroundDisabled}" Text="{Binding AppInfo.Version}"/>
+            <Run FontSize="35" Foreground="{DynamicResource  ButtonForegroundDisabled}" Text="{Binding AppInfo.Version, Converter={StaticResource VersionConverter}}"/>
         </TextBlock>
         <TextBlock Margin="0,-5,0,10" FontWeight="ExtraLight" FontSize="26" Foreground="{DynamicResource  ButtonForegroundDisabled}" DockPanel.Dock="Top" 
                    Text="{Binding AppInfo.Description}"/>
