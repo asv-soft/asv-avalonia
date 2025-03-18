@@ -6,6 +6,7 @@ namespace Asv.Avalonia.Example;
 
 public interface IBrowserItem : IHeadlinedViewModel
 {
+    string Path { get; }
     NavigationId ParentId { get; }
     FileSize? Size { get; }
     bool HasChildren { get; }

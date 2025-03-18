@@ -7,25 +7,30 @@ namespace Asv.Avalonia.Example;
 
 public class BrowserItem : HeadlinedViewModel, IBrowserItem
 {
+    private string _path = string.Empty;
     private NavigationId _parentId = NavigationId.Empty;
     private FileSize? _size;
     private bool _hasChildren;
-    private BindableReactiveProperty<bool> _isExpanded;
-    private BindableReactiveProperty<bool> _isSelected;
-    private BindableReactiveProperty<bool> _isInEditMode;
-    private string _editedName;
+    private BindableReactiveProperty<bool> _isExpanded = new(false);
+    private BindableReactiveProperty<bool> _isSelected = new(false);
+    private BindableReactiveProperty<bool> _isInEditMode = new(false);
+    private string _editedName = null!;
     private string? _crc32Hex;
-    private SolidColorBrush _crc32Color;
+    private SolidColorBrush _crc32Color = null!;
     private FtpEntryType _ftpEntryType;
 
-    public BrowserItem(NavigationId id, NavigationId parentId)
+    public BrowserItem(NavigationId id, NavigationId parentId, string path)
         : base(id)
     {
         ParentId = parentId;
+        Path = path;
         Order = 0;
-        IsExpanded = new BindableReactiveProperty<bool>(false);
-        IsSelected = new BindableReactiveProperty<bool>(false);
-        IsInEditMode = new BindableReactiveProperty<bool>(false);
+    }
+
+    public string Path
+    {
+        get => _path;
+        set => SetField(ref _path, value);
     }
 
     public NavigationId ParentId
