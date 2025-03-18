@@ -8,12 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Asv.Avalonia.DC\Asv.Avalonia.DC.csproj" />
       <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
         <PackageReference Include="Asv.IO" Version="$(AsvCommonVersion)" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Pages\Settings\" />
     </ItemGroup>
 
 </Project>

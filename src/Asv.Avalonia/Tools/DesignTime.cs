@@ -22,5 +22,4 @@ public static class DesignTime
     public static IThemeService ThemeService => NullThemeService.Instance;
     public static ILocalizationService LocalizationService => NullLocalizationService.Instance;
     public static ICommandService CommandService => NullCommandService.Instance;
-    public static IPluginManager PluginManager => NullPluginManager.Instance;
 }

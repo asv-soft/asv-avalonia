@@ -28,7 +28,7 @@ namespace Asv.Avalonia
             CultureInfo culture
         )
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

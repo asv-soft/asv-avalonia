@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Composition.Convention;
 using System.Composition.Hosting;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Reflection;
+using Asv.Avalonia.IO;
+using Asv.Avalonia.Plugins;
 using Asv.Cfg;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -15,6 +19,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using R3;
+using Class1 = Asv.Avalonia.Example.Api.Class1;
 
 namespace Asv.Avalonia.Example;
 
@@ -38,6 +43,8 @@ public partial class App : Application, IContainerHost, IShellHost
                 .WithExport(NullAppPath.Instance)
                 .WithExport(NullPluginManager.Instance)
                 .WithExport(NullAppInfo.Instance)
+                .WithExport<IMeterFactory>(new DefaultMeterFactory())
+                .WithExport(TimeProvider.System)
                 .WithExport<IDataTemplateHost>(this)
                 .WithExport<IShellHost>(this)
                 .WithDefaultConventions(conventions);
@@ -51,6 +58,8 @@ public partial class App : Application, IContainerHost, IShellHost
                 .WithExport(AppHost.Instance.GetService<ILoggerFactory>())
                 .WithExport(AppHost.Instance.GetService<IAppPath>())
                 .WithExport(AppHost.Instance.GetService<IAppInfo>())
+                .WithExport(AppHost.Instance.GetService<IMeterFactory>())
+                .WithExport(TimeProvider.System)
                 .WithExport(pluginManager)
                 .WithAssemblies(pluginManager.PluginsAssemblies)
                 .WithExport<IDataTemplateHost>(this)
@@ -71,6 +80,9 @@ public partial class App : Application, IContainerHost, IShellHost
         {
             yield return GetType().Assembly;
             yield return typeof(AppHost).Assembly;
+            yield return typeof(DeviceManager).Assembly;
+            yield return typeof(Class1).Assembly;
+            yield return typeof(IPluginManager).Assembly;
         }
     }
 

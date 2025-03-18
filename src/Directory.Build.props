@@ -10,5 +10,6 @@
     <SystemCompositionVersion>9.0.0</SystemCompositionVersion>
     <MicrosoftExtensionsVersion>9.0.2</MicrosoftExtensionsVersion>
     <MaterialIconsAvaloniaVersion>2.2.0</MaterialIconsAvaloniaVersion>
+    <NugetVersion>6.12.1</NugetVersion>
   </PropertyGroup>
 </Project>

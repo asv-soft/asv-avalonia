@@ -71,7 +71,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             Task.Run(ProcessQueue);
         }
 
-        var meter = meterFactory.Create(Metric.BaseName);
+        var meter = meterFactory.Create(MapMetric.BaseName);
         _meterReq = meter.CreateCounter<int>("loader_get");
         _meterQueue = meter.CreateCounter<int>("loader_queue_requests");
         _meterHttp = meter.CreateCounter<int>("loader_http_requests");

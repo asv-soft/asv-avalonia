@@ -81,10 +81,10 @@ public class AppInfoBuilder
             throw new ArgumentNullException(nameof(attributes));
         }
 
-        var nameAttribute = (AssemblyInformationalVersionAttribute)attributes[0];
-        ArgumentException.ThrowIfNullOrEmpty(nameAttribute.InformationalVersion);
+        var versionAttribute = (AssemblyInformationalVersionAttribute)attributes[0];
+        ArgumentException.ThrowIfNullOrEmpty(versionAttribute.InformationalVersion);
 
-        _options.Version = nameAttribute.InformationalVersion;
+        _options.Version = versionAttribute.InformationalVersion;
         return this;
     }
 

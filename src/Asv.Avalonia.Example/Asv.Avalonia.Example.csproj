@@ -29,13 +29,12 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asv.Mavlink" Version="$(AsvMavlinkVersion)" />
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
-        <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.1" />
+
         <PackageReference Include="Roslynator.Analyzers" Version="4.12.10">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -47,17 +46,21 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Asv.Avalonia.IO\Asv.Avalonia.IO.csproj" />
-      <ProjectReference Include="..\Asv.Avalonia.Map\Asv.Avalonia.Map.csproj" />
-      <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
+      <ProjectReference Include="..\Asv.Avalonia.Example.Api\Asv.Avalonia.Example.Api.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Pages\Home\HomePageView.axaml" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\Ports\SerialPortView.axaml" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\Ports\TcpPortView.axaml" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\Ports\UdpPortView.axaml" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\SettingsConnectionView.axaml" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Home\" />
+      <AdditionalFiles Include="Pages\Settings\Connection\Ports\SerialPortView.axaml" />
+      <AdditionalFiles Include="Pages\Settings\Connection\Ports\TcpPortView.axaml" />
+      <AdditionalFiles Include="Pages\Settings\Connection\Ports\UdpPortView.axaml" />
+      <AdditionalFiles Include="Pages\Settings\Connection\SettingsConnectionView.axaml" />
     </ItemGroup>
 
    
