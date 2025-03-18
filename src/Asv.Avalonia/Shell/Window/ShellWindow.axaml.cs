@@ -24,10 +24,11 @@ public partial class ShellWindow : Window, IExportable
             if (x.Sender is ShellWindow window)
             {
                 window._savePosition?.OnNext(Unit.Default);
+                window.UpdateWindowStateUI();
             }
         });
     }
-
+    
     [ImportingConstructor]
     public ShellWindow(IConfiguration configuration, ILoggerFactory logger)
     {
@@ -154,6 +155,14 @@ public partial class ShellWindow : Window, IExportable
         _configuration.Set(shellViewConfig);
     }
 
+    private void UpdateWindowStateUI()
+    {
+        if (DataContext is DesktopShellViewModel vm)
+        {
+            vm.UpdateWindowStateUI(WindowState);
+        }
+    }
+    
     private void WindowBase_OnPositionChanged(object? sender, PixelPointEventArgs e)
     {
         if (_internalChange)
