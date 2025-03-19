@@ -1,8 +1,4 @@
-﻿using System.Collections.Specialized;
-using Avalonia.Collections;
-using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
-using Avalonia.Controls.Primitives;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 
 namespace Asv.Avalonia;
@@ -14,7 +10,7 @@ public enum WorkspaceDock
     Bottom,
 }
 
-public class Workspace : ItemsControl
+public partial class Workspace : ItemsControl
 {
     static Workspace() { }
 

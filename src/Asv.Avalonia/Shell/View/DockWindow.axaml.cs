@@ -11,26 +11,6 @@ namespace Asv.Avalonia;
 /// </summary>
 public partial class DockWindow : Window
 {
-    public static readonly StyledProperty<bool> CloseRequestedProperty = AvaloniaProperty.Register<
-        DockWindow,
-        bool
-    >(nameof(CloseRequested));
-
-    public bool CloseRequested
-    {
-        get => GetValue(CloseRequestedProperty);
-        set => SetValue(CloseRequestedProperty, value);
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-        if (change.Property == CloseRequestedProperty)
-        {
-            Close();
-        }
-    }
-
     private Point _startDragPosition;
     private PixelPoint _startWindowPosition;
 
@@ -69,5 +49,14 @@ public partial class DockWindow : Window
     private void DragArea_PointerReleased(object sender, PointerReleasedEventArgs e)
     {
         e.Pointer.Capture(null);
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == CloseRequestedProperty)
+        {
+            Close();
+        }
     }
 }

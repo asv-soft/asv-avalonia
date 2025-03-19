@@ -18,7 +18,7 @@ public class ShellItem
     public int Column { get; set; }
 }
 
-public class DockControl : SelectingItemsControl
+public partial class DockControl : SelectingItemsControl
 {
     private const int ColumnIncrement = 2;
     private readonly List<Border> _targetBorders = [];
@@ -505,52 +505,6 @@ public class DockControl : SelectingItemsControl
         {
             pair.curr.Column -= 2;
         }
-    }
-
-    #endregion
-
-    #region Properties
-
-    public static StyledProperty<ReactiveCommand> UnSplitAllCommandProperty =
-        AvaloniaProperty.Register<DockControl, ReactiveCommand>(nameof(UnSplitAllCommand));
-
-    public ReactiveCommand UnSplitAllCommand
-    {
-        get => GetValue(UnSplitAllCommandProperty);
-        set => SetValue(UnSplitAllCommandProperty, value);
-    }
-
-    public static readonly StyledProperty<IDataTemplate?> TabControlStripItemTemplateProperty =
-        AvaloniaProperty.Register<DockControl, IDataTemplate?>(nameof(TabControlStripItemTemplate));
-
-    [InheritDataTypeFromItems("ItemsSource")]
-    public IDataTemplate? TabControlStripItemTemplate
-    {
-        get => GetValue(TabControlStripItemTemplateProperty);
-        set => SetValue(TabControlStripItemTemplateProperty, value);
-    }
-
-    public static readonly StyledProperty<int> MaxSplitAmountProperty = AvaloniaProperty.Register<
-        DockControl,
-        int
-    >(nameof(MaxSplitAmount), 4);
-
-    public int MaxSplitAmount
-    {
-        get => GetValue(MaxSplitAmountProperty);
-        set => SetValue(MaxSplitAmountProperty, value);
-    }
-
-    public static readonly StyledProperty<IBrush> BorderHighLightColorProperty =
-        AvaloniaProperty.Register<DockControl, IBrush>(
-            nameof(BorderHighLightColor),
-            Brushes.LightBlue
-        );
-
-    public IBrush BorderHighLightColor
-    {
-        get => GetValue(BorderHighLightColorProperty);
-        set => SetValue(BorderHighLightColorProperty, value);
     }
 
     #endregion
