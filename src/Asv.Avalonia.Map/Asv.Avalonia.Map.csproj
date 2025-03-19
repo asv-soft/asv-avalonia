@@ -23,5 +23,11 @@
         <DependentUpon>MapViewItem.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Controls\ItemsControl\MapItem.properties.cs">
+        <DependentUpon>MapItem.axaml</DependentUpon>
+      </Compile>
+      <Compile Update="Controls\ItemsControl\MapItemsControl.properties.cs">
+        <DependentUpon>MapItemsControl.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>

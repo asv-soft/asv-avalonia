@@ -49,7 +49,7 @@ public partial class ShellWindow : Window, IExportable
         _savePosition?.Dispose();
         _sub1?.Dispose();
     }
-
+    
     protected override void OnOpened(EventArgs e)
     {
         base.OnOpened(e);

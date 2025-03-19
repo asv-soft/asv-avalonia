@@ -117,6 +117,24 @@
           <DependentUpon>DialogTextView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Controls\GeoPoint\GeoPointEditor.properties.cs">
+          <DependentUpon>GeoPointEditor.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\Indicators\ConnectionQuality.properties.cs">
+          <DependentUpon>ConnectionQuality.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\TelemBox\TelemBox.properties.cs">
+          <DependentUpon>TelemBox.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\Workspace\WorkspaceItem.properties.cs">
+          <DependentUpon>WorkspaceItem.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\Indicators\BatteryIndicator.properties.cs">
+          <DependentUpon>BatteryIndicator.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Controls\Indicators\GpsStatusIndicator.properties.cs">
+          <DependentUpon>GpsStatusIndicator.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
