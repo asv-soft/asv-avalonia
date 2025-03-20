@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using Asv.Avalonia.IO;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
@@ -10,20 +9,20 @@ namespace Asv.Avalonia.Example;
 
 [ExportExtensionFor<IFlightMode>]
 [method: ImportingConstructor]
-public class FlightUavAnchorsExtension(IDeviceManager conn) : IExtensionFor<IFlightMode>
+public class FlightUavAnchorsExtension(IMavlinkConnectionService conn) : IExtensionFor<IFlightMode>
 {
     public void Extend(IFlightMode context, CompositeDisposable contextDispose)
     {
-        conn.Explorer.Devices.PopulateTo(context.Anchors, TryCreateAnchor, RemoveAnchor)
+        conn.DevicesExplorer.Devices.PopulateTo(context.Anchors, TryCreateAnchor, RemoveAnchor)
             .DisposeItWith(contextDispose);
-        conn.Explorer.Devices.PopulateTo(context.Widgets, TryCreateWidget, RemoveWidget)
+        conn.DevicesExplorer.Devices.PopulateTo(context.Widgets, TryCreateWidget, RemoveWidget)
             .DisposeItWith(contextDispose);
     }
 
     private UavWidgetViewModel? TryCreateWidget(KeyValuePair<DeviceId, IClientDevice> device)
     {
         var pos = device.Value.GetMicroservice<IPositionClientEx>();
-        return pos != null ? new UavWidgetViewModel(device.Value) : null;
+        return pos != null ? new UavWidgetViewModel(conn, device.Value) : null;
     }
 
     private bool RemoveWidget(KeyValuePair<DeviceId, IClientDevice> model, UavWidgetViewModel vm)
