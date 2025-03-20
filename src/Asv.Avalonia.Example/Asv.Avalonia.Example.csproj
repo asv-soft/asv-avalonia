@@ -55,5 +55,15 @@
       <UpToDateCheckInput Remove="Pages\Home\HomePageView.axaml" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Pages\Flight\Widgets\RttItems\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Pages\Flight\Widgets\Attitude\Style\AttitudeIndicator.cs">
+        <DependentUpon>AttitudeIndicator.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
    
 </Project>

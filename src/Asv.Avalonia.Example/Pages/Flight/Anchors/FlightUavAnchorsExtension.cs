@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
-using System.Diagnostics;
-using Asv.Avalonia.Map;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
-using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.Example;
@@ -26,7 +22,7 @@ public class FlightUavAnchorsExtension(IMavlinkConnectionService conn) : IExtens
     private UavWidgetViewModel? TryCreateWidget(KeyValuePair<DeviceId, IClientDevice> device)
     {
         var pos = device.Value.GetMicroservice<IPositionClientEx>();
-        return pos != null ? new UavWidgetViewModel(device.Value) : null;
+        return pos != null ? new UavWidgetViewModel(conn, device.Value) : null;
     }
 
     private bool RemoveWidget(KeyValuePair<DeviceId, IClientDevice> model, UavWidgetViewModel vm)

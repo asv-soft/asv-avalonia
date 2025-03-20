@@ -2,35 +2,63 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:map="clr-namespace:Asv.Avalonia.Map;assembly=Asv.Avalonia.Map"
              xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="300"
-             x:Class="Asv.Avalonia.Example.UavWidgetView">
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="500"
+             x:Class="Asv.Avalonia.Example.UavWidgetView"
+             x:DataType="example:UavWidgetViewModel">
     <StackPanel>
-        <map:Attitude CornerRadius="{StaticResource ControlCornerRadius}" HorizontalAlignment="Stretch" MaxWidth="200" />
+        <Button Content="AutoMode" Command="{Binding GoTo}"/>
+        <Button Content="Rtl" Command="{Binding Rtl}"/>
+        <Button Content="TakeOff" Command="{Binding TakeOff}"/>
+        <Border Name="ClipAttitude" ClipToBounds="True" Margin="3" BorderThickness="1" BorderBrush="{DynamicResource NavyMainBrush}" CornerRadius="10" >
+            <example:AttitudeIndicator Margin="5" Name="Attitude" Height="{Binding #Attitude.Bounds.Width}" VerticalAlignment="Top"
+                                       HorizontalAlignment="Stretch" CornerRadius="{StaticResource ControlCornerRadius}"
+                                       MaxWidth="300"
+                                       Altitude="{Binding Altitude.CurrentValue}"
+                                       RollAngle="{Binding Roll.CurrentValue }"
+                                       PitchAngle="{Binding Pitch.CurrentValue }"
+                                       Velocity="{Binding Velocity.CurrentValue}"
+                                       Heading="{Binding Heading.CurrentValue}"
+                                       HomeAzimuth="{Binding HomeAzimuth.CurrentValue}"
+                                       IsArmed="{Binding IsArmed.CurrentValue}"
+                                       StatusText="{Binding StatusText.CurrentValue}"
+                                       ArmedTime="{Binding ArmedTime.CurrentValue}"
+                                       RightStatusText="{Binding StatusText.CurrentValue}"
+                                       VibrationX="{Binding VibrationX.CurrentValue}"
+                                       VibrationY="{Binding VibrationY.CurrentValue}"
+                                       VibrationZ="{Binding VibrationZ.CurrentValue}"
+                                       Clipping0="{Binding Clipping0.CurrentValue}"
+                                       Clipping1="{Binding Clipping1.CurrentValue}"
+                                       Clipping2="{Binding Clipping2.CurrentValue}" />     
+        </Border>
+        <Viewbox>
+            <!-- mission widget      -->
+        </Viewbox>
+       
         <WrapPanel>
-            <Viewbox Width="100" >
+            <Viewbox Width="100">
                 <avalonia:TelemBox
                     Margin="4"
                     Width="150"
                     MainBrush="{DynamicResource NavyMainBrush}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
                     Title="Battery"
-                    Units="20 min"
+                    Units="Time"
                     IsBusy="True"
                     Icon="Battery10"
                     CornerRadius="4">
                     <avalonia:TelemBox.CustomContent>
                         <Grid ColumnDefinitions="2*,*" RowDefinitions="*,*">
-                            <TextBlock Grid.RowSpan="2" TextAlignment="Right" FontSize="30" Text="100 %" />    
-                            <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15" Text="20 A" />
-                            <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15" Text="10 V" />
+                            <TextBlock Grid.RowSpan="2" TextAlignment="Right" FontSize="30" Text="{Binding BatteryCharge.CurrentValue}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15" Text="{Binding BatteryAmperage.CurrentValue}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15" Text="{Binding BatteryVoltage.CurrentValue}" />
                         </Grid>
-                        
+
                     </avalonia:TelemBox.CustomContent>
-                </avalonia:TelemBox> 
+                </avalonia:TelemBox>
             </Viewbox>
-            <Viewbox Width="100" >
+            <Viewbox Width="100">
                 <avalonia:TelemBox
                     Margin="4"
                     Width="150"
@@ -43,18 +71,18 @@
                     CornerRadius="4">
                     <avalonia:TelemBox.CustomContent>
                         <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
-                            <TextBlock Grid.RowSpan="2" VerticalAlignment="Center" TextAlignment="Center" FontSize="30" Text="30" />    
+                            <TextBlock Grid.RowSpan="2" VerticalAlignment="Center" TextAlignment="Center" FontSize="30"
+                                       Text="30" />
                             <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15" Text="7 HDOP" />
                             <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15" Text="5 VDOP" />
                         </Grid>
-                        
                     </avalonia:TelemBox.CustomContent>
-                </avalonia:TelemBox> 
+                </avalonia:TelemBox>
             </Viewbox>
-              
+
         </WrapPanel>
-        
-        
+
+
     </StackPanel>
-    
+
 </UserControl>
