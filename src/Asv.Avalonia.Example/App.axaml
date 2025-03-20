@@ -5,6 +5,7 @@
     <Application.DataTemplates>
     </Application.DataTemplates>
     <Application.Styles>
+        <StyleInclude Source="avares://Asv.Avalonia.Example/Pages/Flight/Widgets/Attitude/Style/AttitudeIndicator.axaml" />
         <StyleInclude Source="avares://Asv.Avalonia/Theme.axaml"/>
         <StyleInclude Source="avares://Asv.Avalonia.Map/Theme.axaml"/>
     </Application.Styles>
