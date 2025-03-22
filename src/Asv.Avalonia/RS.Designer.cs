@@ -240,24 +240,6 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Change application&apos;s theme.
-        /// </summary>
-        public static string ChangeThemeCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("ChangeThemeCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Change theme.
-        /// </summary>
-        public static string ChangeThemeCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("ChangeThemeCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Command closes current page.
         /// </summary>
         public static string ClosePageCommand_CommandInfo_Description {
@@ -447,15 +429,6 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dialogs.
-        /// </summary>
-        public static string DialogPageViewModel_Title {
-            get {
-                return ResourceManager.GetString("DialogPageViewModel_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Distance unit.
         /// </summary>
         public static string Distance_Description {
@@ -542,15 +515,6 @@ namespace Asv.Avalonia {
         public static string Dms_UnitItem_Symbol {
             get {
                 return ResourceManager.GetString("Dms_UnitItem_Symbol", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Document.
-        /// </summary>
-        public static string DocumentPageViewModel_Title {
-            get {
-                return ResourceManager.GetString("DocumentPageViewModel_Title", resourceCulture);
             }
         }
         
@@ -1001,15 +965,6 @@ namespace Asv.Avalonia {
         public static string Longitude_Name {
             get {
                 return ResourceManager.GetString("Longitude_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Map Example.
-        /// </summary>
-        public static string MapExamplePageViewModel_Title {
-            get {
-                return ResourceManager.GetString("MapExamplePageViewModel_Title", resourceCulture);
             }
         }
         
