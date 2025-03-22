@@ -66,14 +66,6 @@
     <data name="Distance_Description" xml:space="preserve">
         <value>Distance unit</value>
     </data>
-    <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Change theme</value>
-    </data>
-    
-    <data name="ChangeThemeCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Change application's theme</value>
-    </data>
-  
     <data name="OpenDebugCommand_CommandInfo_Name" xml:space="preserve">
         <value>Open Debug Window</value>
     </data>
@@ -154,12 +146,6 @@
     </data>
     <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
         <value>Reset all to default </value>
-    </data>
-    <data name="DocumentPageViewModel_Title" xml:space="preserve">
-        <value>Document</value>
-    </data>
-    <data name="MapExamplePageViewModel_Title" xml:space="preserve">
-        <value>Map Example</value>
     </data>
     <data name="ChangeCurrentUnitItemCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change current unit item</value>
@@ -501,9 +487,6 @@
     <data name="Meter_Distance_Description" xml:space="preserve">
         <value>Distance in meters</value>
     </data>
-    <data name="DialogPageViewModel_Title" xml:space="preserve">
-        <value>Dialogs</value>
-    </data>
     <data name="DialogButton_Yes" xml:space="preserve">
         <value>Yes</value>
     </data>
@@ -546,5 +529,11 @@
     </data>
     <data name="ToolsMenu_Settings" xml:space="preserve">
         <value>Settings</value>
+    </data>
+    <data name="ChangeThemeCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Change application's theme</value>
+    </data>
+    <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Change theme</value>
     </data>
 </root>

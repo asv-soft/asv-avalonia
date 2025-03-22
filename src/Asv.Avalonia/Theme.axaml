@@ -101,6 +101,9 @@
                     <Color x:Key="AsvBackgroundInfo4Color">#38403c</Color>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+            
+            <Thickness x:Key="ButtonPadding">11,5,11,6</Thickness>
+            
         </ResourceDictionary>
         <!-- Status theme brushes -->
         <SolidColorBrush x:Key="AsvForegroundErrorBrush" Color="{DynamicResource AsvForegroundErrorColor}"/>

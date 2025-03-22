@@ -1,0 +1,74 @@
+﻿<root>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="DialogPageViewModel_Title" xml:space="preserve">
+        <value>Диалоги</value>
+    </data>
+    <data name="DocumentPageViewModel_Title" xml:space="preserve">
+        <value>Документ</value>
+    </data>
+    <data name="MapExamplePageViewModel_Title" xml:space="preserve">
+        <value>Пример карты</value>
+    </data>
+    <data name="ParametersEditorParameterView_PinToggleButton_ToolTip" xml:space="preserve">
+        <value>Включить/ выключить закрепление этого параметра</value>
+    </data>
+    <data name="ParametersEditorParameterView_UpdateButton_ToolTip" xml:space="preserve">
+        <value>Обновить этот парметр из БПЛА</value>
+    </data>
+    <data name="ParametersEditorParameterView_UpdateButton" xml:space="preserve">
+        <value>Обновить</value>
+    </data>
+    <data name="ParametersEditorParameterView_WriteButton_ToolTip" xml:space="preserve">
+        <value>Записать этот парметр в БПЛА</value>
+    </data>
+    <data name="ParametersEditorParameterView_WriteButton" xml:space="preserve">
+        <value>Записать</value>
+    </data>
+    <data name="ParametersEditorParameterView_RebootRequired" xml:space="preserve">
+        <value>Требуется перезагрузка</value>
+    </data>
+    <data name="ParametersEditorPageView_StarsToggleButton_ToolTip" xml:space="preserve">
+        <value>Показать только избранные параметры</value>
+    </data>
+    <data name="ParametersEditorPageView_UpdateButton_ToolTip" xml:space="preserve">
+        <value>Обновить все параметры</value>
+    </data>
+    <data name="ParametersEditorPageView_PinsOffButton_ToolTip" xml:space="preserve">
+        <value>Убрать все прикреплённые параметры</value>
+    </data>
+    <data name="ParametersEditorPageViewModel_Search" xml:space="preserve">
+        <value>Найти</value>
+    </data>
+    <data name="ParametersEditorPageViewModel_Total" xml:space="preserve">
+        <value>Всего: {0}</value>
+    </data>
+    <data name="ParametersEditorPageView_StarButton_ToolTip" xml:space="preserve">
+        <value>Добавить параметр в избранные</value>
+    </data>
+    <data name="ParamPageViewModel_DataLossDialog_Content" xml:space="preserve">
+        <value>Вы пытаетесь открыть другой пункт меню, но в текущем у вас есть несохраненные изменения. Хотите сохранить их?</value>
+    </data>
+    <data name="ParamPageViewModel_DataLossDialog_Title" xml:space="preserve">
+        <value>Предупреждение о возможной потере данных</value>
+    </data>
+    <data name="ParamPageViewModel_DataLossDialog_PrimaryButtonText" xml:space="preserve">
+        <value>Сохранить</value>
+    </data>
+    <data name="ParamPageViewModel_DataLossDialog_SecondaryButtonText" xml:space="preserve">
+        <value>Не сохранять</value>
+    </data>
+    <data name="ParamPageViewModel_DataLossDialog_CloseButtonText" xml:space="preserve">
+        <value>Отмена</value>
+    </data>
+</root>

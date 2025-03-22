@@ -2,19 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              xmlns:example="clr-namespace:Asv.Avalonia.Example"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Example.DialogBoardView"
              x:DataType="example:DialogBoardViewModel">
     <StackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Spacing="8" Margin="8">
-        <DockPanel>
-            <TextBlock 
-                FontSize="{StaticResource HubHeaderThemeFontSize}" 
-                Text="{x:Static avalonia1:RS.DialogPageViewModel_Title}"
-            />
-            <Separator/>
-        </DockPanel>
         <StackPanel Orientation="Vertical" Spacing="8" Margin="0,20,0,0">
             <Button Command="{Binding OpenFileMessage}"  Padding="0" Content="Open file dialog"/>
             <Button Command="{Binding SaveFileMessage}"  Padding="0" Content="Save file dialog"/>

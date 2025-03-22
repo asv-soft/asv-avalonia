@@ -60,12 +60,6 @@
     <data name="Distance_Description" xml:space="preserve">
         <value>Единица измерения расстояния</value>
     </data>
-    <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Сменить тему</value>
-    </data>
-    <data name="ChangeThemeCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Смена темы приложения</value>
-    </data>
     <data name="OpenDebugCommand_CommandInfo_Name" xml:space="preserve">
         <value>Открыть окно отладки</value>
     </data>
@@ -145,12 +139,6 @@
     </data>
     <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
         <value>Сбросить всё по умолчанию</value>
-    </data>
-    <data name="DocumentPageViewModel_Title" xml:space="preserve">
-        <value>Документ</value>
-    </data>
-    <data name="MapExamplePageViewModel_Title" xml:space="preserve">
-        <value>Пример карты</value>
     </data>
     <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
         <value>Морская миля</value>
@@ -510,9 +498,6 @@
     <data name="DialogButton_Yes" xml:space="preserve">
         <value>Да</value>
     </data>
-    <data name="DialogPageViewModel_Title" xml:space="preserve">
-        <value>Диалоги</value>
-    </data>
     <data name="RestartApplicationCommand_Info_Name" xml:space="preserve">
         <value>Перезапустить приложение</value>
     </data>
@@ -524,26 +509,6 @@
     </data>
     <data name="LanguageProperty_RestartDialog_Message" xml:space="preserve">
         <value>Чтобы изменения вступили в силу, требуется перезапустить приложение</value>
-    </data>
-   
-    <data name="SourceViewModel_SourceViewModel_NameIsRequired" xml:space="preserve">
-        <value>Имя не должно быть пустым</value>
-    </data>
-    <data name="SourceViewModel_SourceViewModel_SourceUriIsRequired" xml:space="preserve">
-        <value>URI сервера не может быть пустым</value>
-    </data>
-    
-    <data name="SourcesView_Name" xml:space="preserve">
-        <value>Имя</value>
-    </data>
-    <data name="SourcesView_Password" xml:space="preserve">
-        <value>Новый пароль</value>
-    </data>
-    <data name="SourcesView_URL" xml:space="preserve">
-        <value>Адрес URL</value>
-    </data>
-    <data name="SourcesView_Username" xml:space="preserve">
-        <value>Имя пользователя</value>
     </data>
     <data name="AddSerialPortCommand_CommandInfo_Name" xml:space="preserve">
         <value>Добавить последовательный порт</value>
@@ -562,5 +527,11 @@
     </data>
     <data name="ToolsMenu_Settings" xml:space="preserve">
         <value>Настройки</value>
+    </data>
+    <data name="ChangeThemeCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Сменить тему приложения</value>
+    </data>
+    <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сменить тему</value>
     </data>
 </root>
