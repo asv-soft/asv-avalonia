@@ -8,7 +8,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="FluentAvaloniaUI" Version="2.2.0" />
         <PackageReference Include="NuGet.Packaging" Version="$(NugetVersion)" />
         <PackageReference Include="NuGet.Protocol" Version="$(NugetVersion)" />
         <PackageReference Include="NuGet.Resolver" Version="$(NugetVersion)" />

@@ -3,13 +3,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:core="clr-namespace:Asv.Avalonia"
+             xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
+             xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:CompileBindings="True"
-             x:DataType="core:PluginsMarketViewModel"
-             x:Class="Asv.Avalonia.PluginsMarketView">
+             x:DataType="plugins:PluginsMarketViewModel"
+             x:Class="Asv.Avalonia.Plugins.PluginsMarketView">
     <Design.DataContext>
-        <core:PluginsMarketViewModel />
+        <plugins:PluginsMarketViewModel />
     </Design.DataContext>
     <Grid
         ColumnDefinitions="2*,5,3*"
@@ -20,7 +21,7 @@
                               Command="{Binding Search.Command}"
                               OnContent=""
                               OffContent=""/>
-                <TextBlock Text="{x:Static core:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Static plugins:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
             </StackPanel>
             <Button
                 DockPanel.Dock="Right"
@@ -38,7 +39,7 @@
             </Button>
 
 
-            <TextBox Watermark="{x:Static core:RS.InstalledPluginsView_Search}"
+            <TextBox Watermark="{x:Static plugins:RS.InstalledPluginsView_Search}"
                      Background="Transparent"
                      CornerRadius="0"
                      BorderThickness="0"
@@ -123,10 +124,10 @@
                         <Panel Grid.Row="2" Grid.Column="0" IsVisible="{Binding !IsInstalled.Value}">
                             <Button Classes="accent" Width="100" IsVisible="{Binding !Install.IsExecuting}"
                                     Command="{Binding Install.Command}"
-                                    Content="{x:Static core:RS.PluginsMarketView_Install}" />
+                                    Content="{x:Static plugins:RS.PluginsMarketView_Install}" />
                             <Button Classes="accent" Width="100" IsVisible="{Binding Install.IsExecuting}"
                                     Command="{Binding Install.Cancel}"
-                                    Content="{x:Static core:RS.PluginsMarketView_Cancel}" />
+                                    Content="{x:Static plugins:RS.PluginsMarketView_Cancel}" />
                             <ProgressBar IsIndeterminate="True" 
                                          Margin="85 40 0 0"
                                          IsVisible="{Binding Install.IsExecuting}" />
@@ -139,13 +140,13 @@
                         </StackPanel>
                         <Button Grid.Row="2" Grid.Column="0" Width="100" IsVisible="{Binding IsInstalled.Value}" IsEnabled="{Binding !IsUninstalled.Value}"
                                 Command="{Binding Uninstall.Command}"
-                                Content="{x:Static core:RS.InstalledPluginsView_Uninstall}" />
+                                Content="{x:Static plugins:RS.InstalledPluginsView_Uninstall}" />
                         <TextBlock Grid.Row="2" Grid.Column="1" IsVisible="{Binding IsInstalled.Value}"
                                    Theme="{DynamicResource BodyStrongTextBlockStyle}" Text="{Binding LocalVersion}"
                                    VerticalAlignment="Center" />
                         
                         <ComboBox Grid.Row="2" Grid.Column="2" ItemsSource="{Binding PluginVersionsView}"
-                                  PlaceholderText="{x:Static core:RS.InstalledPluginsView_AllVersions}"
+                                  PlaceholderText="{x:Static plugins:RS.InstalledPluginsView_AllVersions}"
                                   VerticalAlignment="Center"
                                   SelectedItem="{Binding SelectedVersion.Value}">
                             <ComboBox.ItemTemplate>
@@ -156,47 +157,47 @@
                         </ComboBox>
                     </Grid>
                     
-                    <core:InfoBar IsVisible="{Binding IsUninstalled.Value}" DockPanel.Dock="Top"
-                                      Title="{x:Static core:RS.InstalledPluginsView_UninstalledMessageTitle}"
+                    <avalonia1:InfoBar IsVisible="{Binding IsUninstalled.Value}" DockPanel.Dock="Top"
+                                      Title="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessageTitle}"
                                       IsOpen="True" IsIconVisible="True" Severity="Warning" IsClosable="False"
-                                      Message="{x:Static core:RS.InstalledPluginsView_UninstalledMessage}">
-                        <core:InfoBar.ActionButton>
+                                      Message="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessage}">
+                        <avalonia1:InfoBar.ActionButton>
                             <Button Command="{Binding CancelUninstall.Command}"
-                                    Content="{x:Static core:RS.InstalledPluginsView_CancelUninstall}" />
-                        </core:InfoBar.ActionButton>
-                    </core:InfoBar>
+                                    Content="{x:Static plugins:RS.InstalledPluginsView_CancelUninstall}" />
+                        </avalonia1:InfoBar.ActionButton>
+                    </avalonia1:InfoBar>
                     <Border IsVisible="{Binding IsVerified.Value}" DockPanel.Dock="Top" Padding="0,10,0,10">
                         <StackPanel Orientation="Horizontal">
                             <avalonia:MaterialIcon VerticalAlignment="Center" Height="15" Kind="Verified" Margin="5 0"
                                                    IsVisible="{Binding IsVerified.Value}"
                                                    Foreground="{DynamicResource SystemAccentColorLight1}" />
-                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource BodyTextBlockStyle}" Text="{x:Static core:RS.PluginsMarketView_InfoBar_IsVerified_Message}"/>
+                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource BodyTextBlockStyle}" Text="{x:Static plugins:RS.PluginsMarketView_InfoBar_IsVerified_Message}"/>
                         </StackPanel>    
                     </Border>
                     
                     <TabControl>
-                        <TabItem FontSize="18" Header="{x:Static core:RS.InstalledPluginsView_Tab_Description}">
+                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsView_Tab_Description}">
                             <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" />
                         </TabItem>
-                        <TabItem FontSize="18" Header="{x:Static core:RS.InstalledPluginsView_Tab_AdditionalInfo}">
+                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo}">
                             <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static core:RS.InstalledPluginsView_Tab_AdditionalInfo_Author}"
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo_Author}"
                                            FontWeight="Bold"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Author}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static core:RS.InstalledPluginsView_Tab_AdditionalInfo_DownloadCount}"
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo_DownloadCount}"
                                            FontWeight="Bold"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding DownloadCount}"/>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static core:RS.InstalledPluginsView_Tab_AdditionalInfo_Tags}"
+                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo_Tags}"
                                            FontWeight="Bold"/>
                                 <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Tags}"/>
                             </StackPanel>
                                 <StackPanel>
-                                    <TextBlock Text="{x:Static core:RS.InstalledPluginsView_Tab_AdditionalInfo_Dependencies}"
+                                    <TextBlock Text="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo_Dependencies}"
                                                FontWeight="Bold"/>
                                     <ItemsControl ItemsSource="{Binding Dependencies}" Margin="10 0 0 0"/>
                                 </StackPanel>
@@ -210,7 +211,7 @@
                 <avalonia:MaterialIcon Width="25" Height="25" Kind="ArrowLeft"
                                        Foreground="{DynamicResource ButtonForegroundDisabled}" />
                 <TextBlock Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center"
-                           FontSize="15" TextWrapping="WrapWithOverflow" MaxWidth="400" Text="{x:Static core:RS.PluginsMarketView_SelectedPluginIsNull}" />
+                           FontSize="15" TextWrapping="WrapWithOverflow" MaxWidth="400" Text="{x:Static plugins:RS.PluginsMarketView_SelectedPluginIsNull}" />
             </StackPanel>
 
         </Panel>

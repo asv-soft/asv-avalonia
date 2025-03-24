@@ -41,6 +41,7 @@ public class FileSystemCache : TileCache
             _logger.ZLogInformation($"Create map cache directory: {_cacheDirectory}");
             Directory.CreateDirectory(_cacheDirectory);
         }
+
         DirectoryHelper.GetDirectorySize(_cacheDirectory, ref _fileCount, ref _dirSizeInBytes);
 
         var meter = meterFactory.Create(MapMetric.BaseName);
@@ -84,6 +85,7 @@ public class FileSystemCache : TileCache
             _fileCount++;
             var info = GetTileCachePath(key);
             _dirSizeInBytes += info.Length;
+
             // TODO: Check capacity and remove old files
         }
     }
@@ -119,6 +121,7 @@ public class FileSystemCache : TileCache
                 }
             }
         }
+
         return Path.Combine(tileFolder, $"{key.X}_{key.Y}.{TileFileExtension}");
     }
 

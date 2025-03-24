@@ -3,7 +3,6 @@
 // Asv.Avalonia.DC [.csproj file] [output directory]
 // Example for if you use it from "bin" on windows:
 // .\Asv.Avalonia.DC.exe ..\..\..\..\Asv.Avalonia.Example.Desktop\Asv.Avalonia.Example.Desktop.csproj ..\..\..\..\Asv.Avalonia.Example.Desktop\bin\Debug\net8.0\dependencies.json
-
 using System.Text.Json;
 using Microsoft.Build.Locator;
 using Microsoft.CodeAnalysis.MSBuild;

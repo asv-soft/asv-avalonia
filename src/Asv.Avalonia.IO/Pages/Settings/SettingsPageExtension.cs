@@ -3,7 +3,7 @@ using Asv.Common;
 using Material.Icons;
 using R3;
 
-namespace Asv.Avalonia.Example;
+namespace Asv.Avalonia.IO;
 
 [ExportExtensionFor<ISettingsPage>]
 [method: ImportingConstructor]
