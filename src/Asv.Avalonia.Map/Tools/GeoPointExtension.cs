@@ -22,6 +22,7 @@ public class GeoPointExtension : MarkupExtension
         {
             throw new InvalidOperationException($"Invalid latitude format: {latitude}");
         }
+
         if (GeoPointLongitude.TryParse(longitude, out _longitude) == false)
         {
             throw new InvalidOperationException($"Invalid longitude format: {longitude}");

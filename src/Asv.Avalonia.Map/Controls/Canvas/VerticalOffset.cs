@@ -35,7 +35,7 @@ public readonly struct VerticalOffset(VerticalOffsetEnum offsetType, double offs
         return OffsetType switch
         {
             VerticalOffsetEnum.Top => Offset,
-            VerticalOffsetEnum.Center => boundsHeight / 2 - Offset,
+            VerticalOffsetEnum.Center => (boundsHeight / 2) - Offset,
             VerticalOffsetEnum.Bottom => boundsHeight - Offset,
             _ => throw new ArgumentOutOfRangeException(),
         };

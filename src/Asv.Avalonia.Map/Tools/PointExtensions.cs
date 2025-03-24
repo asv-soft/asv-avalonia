@@ -8,19 +8,19 @@ public static class PointExtensions
     /// Calculates the length of the vector.
     /// </summary>
     /// <remarks>The distance from the origin to the point.</remarks>
-    /// <param name="point"></param>
-    /// <returns></returns>
+    /// <param name="point">.</param>
+    /// <returns>..</returns>
     public static double Length(this Point point)
     {
-        return Math.Sqrt(point.X * point.X + point.Y * point.Y);
+        return Math.Sqrt((point.X * point.X) + (point.Y * point.Y));
     }
 
     /// <summary>
     /// Normalizes the vector.
     /// </summary>
     /// <remarks>Scales vector to the unit length.</remarks>
-    /// <param name="point"></param>
-    /// <returns></returns>
+    /// <param name="point">.</param>
+    /// <returns>..</returns>
     public static Point Normalize(this Point point)
     {
         var length = point.Length();
@@ -28,6 +28,7 @@ public static class PointExtensions
         {
             return new Point(0, 0);
         }
+
         return new Point(point.X / length, point.Y / length);
     }
 
@@ -38,11 +39,11 @@ public static class PointExtensions
     /// Is Optional!
     /// Is faster than Length if the square root is not needed.
     /// </remarks>
-    /// <param name="point"></param>
-    /// <returns></returns>
+    /// <param name="point">The point representing the vector.</param>
+    /// <returns>..</returns>
     // Optionally: calculate the squared length (faster than Length if the square root is not needed)
     public static double LengthSquared(this Point point)
     {
-        return point.X * point.X + point.Y * point.Y;
+        return (point.X * point.X) + (point.Y * point.Y);
     }
 }

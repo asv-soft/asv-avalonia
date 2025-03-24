@@ -72,9 +72,11 @@ public class PolygonLayer : Control
                 {
                     coll.CollectionChanged += PolygonCollectionChanged;
                 }
+
                 _renderRequestSubject.OnNext(Unit.Default);
             }
         }
+
         if (e.OldItems != null)
         {
             foreach (var item in e.OldItems)
@@ -89,6 +91,7 @@ public class PolygonLayer : Control
                 {
                     coll.CollectionChanged -= PolygonCollectionChanged;
                 }
+
                 _renderRequestSubject.OnNext(Unit.Default);
             }
         }
@@ -132,6 +135,7 @@ public class PolygonLayer : Control
         {
             return;
         }
+
         var tileSize = Source.Provider.TileSize;
         var halfWidth = Source.Bounds.Width * 0.5;
         var halfHeight = Source.Bounds.Height * 0.5;
@@ -147,10 +151,12 @@ public class PolygonLayer : Control
             {
                 continue;
             }
+
             if (child.Polygon is not { Count: > 1 })
             {
                 continue;
             }
+
             var geometry = new StreamGeometry();
 
             var polygon = child.Polygon;
@@ -169,6 +175,7 @@ public class PolygonLayer : Control
                     ctx.LineTo(start);
                 }
             }
+
             context.DrawGeometry(child.Fill, child.Pen, geometry);
         }
     }

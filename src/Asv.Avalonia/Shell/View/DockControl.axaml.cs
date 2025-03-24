@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Metadata;
 using Avalonia.VisualTree;
@@ -30,18 +31,27 @@ public class DockControl : SelectingItemsControl
 
     public DockControl()
     {
-        UnSplitAllCommand = new ReactiveCommand(_ =>
-        {
-            UnsplitAll();
-        });
+        UnSplitAllCommand = new ReactiveCommand(_ => UnsplitAll());
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        UnSplitAllCommand.Dispose();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+
         if (change.Property == ItemCountProperty)
         {
             CreateTabs();
+        }
+
+        if (change.Property == SelectedItemProperty)
+        {
+            _shellItems.First(_ => _.TabControl.Content == change.NewValue).TabControl.IsSelected =
+                true;
         }
     }
 
@@ -85,7 +95,7 @@ public class DockControl : SelectingItemsControl
             _selectedTab = tab;
         }
 
-        //e.Pointer.Capture(this);
+        e.Pointer.Capture(this);
     }
 
     private void PointerMovedHandler(object? sender, PointerEventArgs e)
@@ -243,12 +253,37 @@ public class DockControl : SelectingItemsControl
     )
     {
         base.LogicalChildrenCollectionChanged(sender, e);
-        CreateTabs();
+        if (e.Action == NotifyCollectionChangedAction.Remove)
+        {
+            if (e.OldItems != null)
+            {
+                foreach (var removedItem in e.OldItems)
+                {
+                    var shellItem = _shellItems.FirstOrDefault(item =>
+                        item.TabControl.Content == removedItem
+                    );
+                    if (shellItem != null)
+                    {
+                        _shellItems.Remove(shellItem);
+                    }
+                }
+            }
+        }
+
+        UpdateGrid();
     }
 
     private void CreateTabs()
     {
+#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+        var existingItems = _shellItems.ToDictionary(
+            key => key.TabControl.Content,
+            value => value.Column
+        );
+#pragma warning restore CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+        _shellItems.ForEach(_ => _.TabControl.Loaded -= OnTabLoaded);
         _shellItems.Clear();
+
         if (Items.Count == 0)
         {
             return;
@@ -268,11 +303,9 @@ public class DockControl : SelectingItemsControl
                 continue;
             }
 
-            var shellItem = new ShellItem() { TabControl = CreateTabItem(content) };
-            if (_shellItems.Contains(shellItem))
-            {
-                continue;
-            }
+            var column = existingItems.GetValueOrDefault(content, 0);
+
+            var shellItem = new ShellItem { TabControl = CreateTabItem(content), Column = column };
 
             _shellItems.Add(shellItem);
         }
@@ -286,35 +319,9 @@ public class DockControl : SelectingItemsControl
 
         _dropTargetGrid.Children.Clear();
         _dropTargetGrid.ColumnDefinitions.Clear();
-        if (
-            _shellItems.Min(item => item.Column) != 0
-            && _shellItems.All(item => item.Column == _shellItems[0].Column)
-        )
-        {
-            foreach (var item in _shellItems)
-            {
-                item.Column = 0;
-            }
-        }
 
         var occupiedColumns = _shellItems.Select(item => item.Column).ToHashSet();
-
         GenerateColumns(_dropTargetGrid, occupiedColumns);
-
-        bool ColumnHasGridSplitter(int columnIndex)
-        {
-            return _dropTargetGrid
-                .Children.OfType<GridSplitter>()
-                .Any(splitter => Grid.GetColumn(splitter) == columnIndex);
-        }
-
-        for (var i = 0; i < _dropTargetGrid.ColumnDefinitions.Count; i++)
-        {
-            if (!occupiedColumns.Contains(i) && !ColumnHasGridSplitter(i))
-            {
-                _dropTargetGrid.ColumnDefinitions[i].Width = new GridLength(0, GridUnitType.Pixel);
-            }
-        }
 
         foreach (var item in _shellItems)
         {
@@ -395,10 +402,37 @@ public class DockControl : SelectingItemsControl
             Content = content,
             ContentTemplate = TabControlStripItemTemplate,
         };
+        SubscribeToEvents(header);
+        var tab = new TabItem() { Content = content, Header = header };
+        tab.Loaded += OnTabLoaded;
+        return tab;
+    }
+
+    private void SubscribeToEvents(TabStripItem header)
+    {
         header.PointerPressed += PressedHandler;
         header.PointerMoved += PointerMovedHandler;
-        var tab = new TabItem() { Content = content, Header = header };
-        return tab;
+    }
+
+    private void OnTabUnloaded(object? sender, RoutedEventArgs e)
+    {
+        if (sender is TabItem { Header: TabStripItem header } tabItem)
+        {
+            header.PointerPressed -= PressedHandler;
+            header.PointerMoved -= PointerMovedHandler;
+            tabItem.Loaded += OnTabLoaded;
+            tabItem.Unloaded -= OnTabUnloaded;
+        }
+    }
+
+    private void OnTabLoaded(object? sender, RoutedEventArgs e)
+    {
+        if (sender is TabItem { Header: TabStripItem header } tabItem)
+        {
+            SubscribeToEvents(header);
+            tabItem.Unloaded += OnTabUnloaded;
+            tabItem.Loaded -= OnTabLoaded;
+        }
     }
 
     #region HelperMethods
@@ -503,7 +537,7 @@ public class DockControl : SelectingItemsControl
             .ToList();
         foreach (var pair in gapPairs)
         {
-            pair.curr.Column -= 2;
+            pair.curr.Column -= ColumnIncrement;
         }
     }
 

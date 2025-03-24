@@ -173,6 +173,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             ErrorState.Dispose();
             Close.Dispose();
             SelectedPage.Dispose();
+            WindowSateIconKind.Dispose();
+            WindowStateHeader.Dispose();
             PagesView.Dispose();
             foreach (var page in _pages)
             {

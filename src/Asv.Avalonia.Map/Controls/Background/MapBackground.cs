@@ -73,8 +73,12 @@ public class MapBackground : Control
             var renderSize = Bounds.Size;
             context.FillRectangle(background, new Rect(renderSize));
         }
+
         var centerPixel = Provider.Projection.Wgs84ToPixels(CenterMap, Zoom, Provider.TileSize);
-        var offset = new Point(Bounds.Width / 2 - centerPixel.X, Bounds.Height / 2 - centerPixel.Y);
+        var offset = new Point(
+            (Bounds.Width / 2) - centerPixel.X,
+            (Bounds.Height / 2) - centerPixel.Y
+        );
         var tileSize = Provider.TileSize;
         var zoom = Zoom;
         var tiles = 1 << zoom;
@@ -82,8 +86,8 @@ public class MapBackground : Control
         var tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
         var tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
 
-        var startX = (int)-offset.X / tileSize - 1;
-        var startY = (int)-offset.Y / tileSize - 1;
+        var startX = ((int)-offset.X / tileSize) - 1;
+        var startY = ((int)-offset.Y / tileSize) - 1;
 
         for (var x = startX; x < startX + tilesX; x++)
         {
@@ -98,6 +102,7 @@ public class MapBackground : Control
                 {
                     continue;
                 }
+
                 var key = new TileKey(x, y, zoom, Provider);
 
                 var px = (key.X * Provider.TileSize) + offset.X;

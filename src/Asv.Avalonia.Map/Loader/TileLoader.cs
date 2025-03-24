@@ -89,8 +89,11 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                     // already in progress => skip
                     continue;
                 }
+
                 if (_fastCache[key] != null)
+                {
                     continue;
+                }
 
                 var tile = _slowCache[key];
                 if (tile != null)
@@ -115,6 +118,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                     {
                         continue;
                     }
+
                     try
                     {
                         _meterHttp.Add(1);
@@ -128,6 +132,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                         _remoteRequests.Remove(url);
                     }
                 }
+
                 _slowCache[key] = tile;
                 _fastCache[key] = tile;
                 _onLoaded.OnNext(key);
@@ -154,10 +159,12 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             {
                 return bitmap;
             }
+
             if (_localRequests.Contains(key) == false)
             {
                 _requestQueue.Writer.TryWrite(key);
             }
+
             return _emptyBitmap.GetOrAdd(
                 key.Provider.TileSize,
                 CreateEmptyBitmap,
@@ -220,9 +227,13 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         static async ValueTask CastAndDispose(IDisposable resource)
         {
             if (resource is IAsyncDisposable resourceAsyncDisposable)
+            {
                 await resourceAsyncDisposable.DisposeAsync();
+            }
             else
+            {
                 resource.Dispose();
+            }
         }
     }
 }

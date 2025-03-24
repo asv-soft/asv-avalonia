@@ -111,7 +111,7 @@ public class MavlinkConnectionService : AsyncDisposableOnce, IMavlinkConnectionS
             var res = await _dialog.ShowYesNoDialog(
                 $"{port.TypeInfo.Name} delete requested",
                 "Delete that connection?"
-            ); //TODO: localization     
+            ); //TODO: localization
             if (res)
             {
                 var remove = Connections.First(valuePair => valuePair.Value == port);
@@ -127,7 +127,7 @@ public class MavlinkConnectionService : AsyncDisposableOnce, IMavlinkConnectionS
             Connections.Remove(remove.Key);
             Router.RemovePort(port);
         }
-        
+
         _logger.ZLogInformation($"Removed port {port.Id}");
         UpdateConfig();
     }

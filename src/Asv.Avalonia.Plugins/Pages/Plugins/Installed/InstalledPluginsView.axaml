@@ -4,14 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:gui="clr-namespace:Asv.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:controls="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
-             xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:CompileBindings="False"
-             x:DataType="plugins:InstalledPluginsViewModel"
-             x:Class="Asv.Avalonia.Plugins.InstalledPluginsView">
+             x:DataType="gui:InstalledPluginsViewModel"
+             x:Class="Asv.Avalonia.InstalledPluginsView">
     <Design.DataContext>
-        <plugins:InstalledPluginsViewModel />
+        <gui:InstalledPluginsViewModel />
     </Design.DataContext>
 
     <Grid
@@ -23,7 +21,7 @@
                           Command="{Binding Search}"
                           OnContent=""
                           OffContent=""/>
-            <TextBlock Text="{x:Static plugins:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Static gui:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
             </StackPanel>
             <Button
                 DockPanel.Dock="Right"
@@ -39,7 +37,7 @@
                 Command="{Binding Search}">
                 <avalonia:MaterialIcon Kind="Refresh" />
             </Button>
-            <TextBox Watermark="{x:Static plugins:RS.InstalledPluginsView_Search}"
+            <TextBox Watermark="{x:Static gui:RS.InstalledPluginsView_Search}"
                      Background="Transparent"
                      CornerRadius="0"
                      BorderThickness="0"
@@ -92,7 +90,7 @@
                                     Background="{DynamicResource SystemFillColorCautionBackgroundBrush}">
                                 <TextBlock FontStyle="Italic" VerticalAlignment="Center"
                                            Theme="{DynamicResource CaptionTextBlockStyle}"
-                                           Text="{x:Static plugins:RS.InstalledPluginsView_Uninstalled}" />
+                                           Text="{x:Static gui:RS.InstalledPluginsView_Uninstalled}" />
                             </Border>
                             <avalonia:MaterialIcon Height="15" Kind="Verified" Margin="5 0"
                                                    IsVisible="{Binding IsVerified.Value}"
@@ -102,7 +100,7 @@
                                     Background="{DynamicResource SystemFillColorCriticalBackgroundBrush}">
                                 <TextBlock FontStyle="Italic" VerticalAlignment="Center"
                                            Theme="{DynamicResource CaptionTextBlockStyle}"
-                                           Text="{x:Static plugins:RS.InstalledPluginsView_LoadingError}" />
+                                           Text="{x:Static gui:RS.InstalledPluginsView_LoadingError}" />
                             </Border>
 
                         </StackPanel>
@@ -128,20 +126,20 @@
                                    Text="{Binding LocalVersion}" VerticalAlignment="Center" />
                         <Button IsEnabled="{Binding !IsUninstalled.Value}" Grid.Row="2" Grid.Column="0" Width="100"
                                 Command="{Binding Uninstall}"
-                                Content="{x:Static plugins:RS.InstalledPluginsView_Uninstall}" />
+                                Content="{x:Static gui:RS.InstalledPluginsView_Uninstall}" />
                         <TextBlock Grid.Row="2" Grid.Column="1" Theme="{DynamicResource BodyStrongTextBlockStyle}"
                                    Text="{Binding LocalVersion}" VerticalAlignment="Center" />
                     </Grid>
-                    <controls:InfoBar IsVisible="{Binding IsUninstalled.Value}" DockPanel.Dock="Top"
-                                      Title="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessageTitle}"
+                    <gui:InfoBar IsVisible="{Binding IsUninstalled.Value}" DockPanel.Dock="Top"
+                                      Title="{x:Static gui:RS.InstalledPluginsView_UninstalledMessageTitle}"
                                       IsOpen="True" IsIconVisible="True" Severity="Warning" IsClosable="False"
-                                      Message="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessage}">
-                        <controls:InfoBar.ActionButton>
+                                      Message="{x:Static gui:RS.InstalledPluginsView_UninstalledMessage}">
+                        <gui:InfoBar.ActionButton>
                             <Button Command="{Binding CancelUninstall}"
-                                    Content="{x:Static plugins:RS.InstalledPluginsView_CancelUninstall}" />
-                        </controls:InfoBar.ActionButton>
-                    </controls:InfoBar>
-                    <controls:InfoBar
+                                    Content="{x:Static gui:RS.InstalledPluginsView_CancelUninstall}" />
+                        </gui:InfoBar.ActionButton>
+                    </gui:InfoBar>
+                    <gui:InfoBar
                         IsVisible="{Binding LoadingError.Value, Converter={x:Static ObjectConverters.IsNotNull}}"
                         DockPanel.Dock="Top" Title="Loading error" IsOpen="True" IsIconVisible="True" Severity="Error"
                         IsClosable="False"
@@ -151,14 +149,14 @@
                             <avalonia:MaterialIcon VerticalAlignment="Center" Height="15" Kind="Verified" Margin="5 0"
                                                    IsVisible="{Binding IsVerified.Value}"
                                                    Foreground="{DynamicResource SystemAccentColorLight1}" />
-                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource BodyTextBlockStyle}" Text="{x:Static plugins:RS.PluginsMarketView_InfoBar_IsVerified_Message}"/>
+                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource BodyTextBlockStyle}" Text="{x:Static gui:RS.PluginsMarketView_InfoBar_IsVerified_Message}"/>
                         </StackPanel>    
                     </Border>
                     <TabControl>
-                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsView_Tab_Description}">
+                        <TabItem FontSize="18" Header="{x:Static gui:RS.InstalledPluginsView_Tab_Description}">
                                 <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" />
                         </TabItem>
-                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo}" />
+                        <TabItem FontSize="18" Header="{x:Static gui:RS.InstalledPluginsView_Tab_AdditionalInfo}" />
                     </TabControl>
                 </DockPanel>
             </Panel>
@@ -168,7 +166,7 @@
                                        Foreground="{DynamicResource ButtonForegroundDisabled}" />
                 <TextBlock Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center"
                            FontSize="15" TextWrapping="WrapWithOverflow" MaxWidth="400"
-                           Text="{x:Static plugins:RS.InstalledPluginsView_SelectedPluginIsNull}" />
+                           Text="{x:Static gui:RS.InstalledPluginsView_SelectedPluginIsNull}" />
             </StackPanel>
         </Panel>
     </Grid>

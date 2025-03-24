@@ -30,7 +30,7 @@ public class MapCanvas : Panel
             child.Measure(availableSize);
         }
 
-        return new Size();
+        return default;
     }
 
     protected override Size ArrangeOverride(Size finalSize)
@@ -39,6 +39,7 @@ public class MapCanvas : Panel
         {
             ArrangeChild(child, finalSize);
         }
+
         return finalSize;
     }
 
@@ -49,7 +50,9 @@ public class MapCanvas : Panel
         var offsetV = GetCenterY(child);
 
         if (Provider == null || point == null)
+        {
             return;
+        }
 
         var tileSize = Provider.TileSize;
         var halfWidth = Bounds.Width * 0.5;

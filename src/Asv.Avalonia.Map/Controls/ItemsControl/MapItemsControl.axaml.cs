@@ -230,10 +230,11 @@ public class MapItemsControl : SelectingItemsControl
 
         UpdateCursorLocation(offset, position);
 
-        if (Math.Sqrt(delta.X * delta.X + delta.Y * delta.Y) < 5)
+        if (Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)) < 5)
         {
             return;
         }
+
         _selectedContainer = null;
         switch (DragState)
         {
@@ -253,6 +254,7 @@ public class MapItemsControl : SelectingItemsControl
             default:
                 break;
         }
+
         _lastMousePosition = position;
     }
 
@@ -277,6 +279,7 @@ public class MapItemsControl : SelectingItemsControl
             Selection.Select(IndexFromContainer(_selectedContainer));
             Selection.EndBatchUpdate();
         }
+
         DragState = DragState.None;
         Cursor = Cursor.Default;
         InvalidateVisual();
@@ -294,10 +297,15 @@ public class MapItemsControl : SelectingItemsControl
         foreach (var item in Items)
         {
             if (item == null)
+            {
                 continue;
+            }
+
             var control = ContainerFromItem(item) as MapItem;
             if (control == null)
+            {
                 return;
+            }
 
             if (rect.Intersects(control.Bounds))
             {
@@ -306,6 +314,7 @@ public class MapItemsControl : SelectingItemsControl
                 Selection.Select(index);
             }
         }
+
         Selection.EndBatchUpdate();
     }
 
@@ -335,6 +344,7 @@ public class MapItemsControl : SelectingItemsControl
             {
                 continue;
             }
+
             if (ContainerFromItem(item) is MapItem ctrl)
             {
                 if (ctrl.IsReadOnly)
@@ -372,6 +382,7 @@ public class MapItemsControl : SelectingItemsControl
                     ?? ContainerFromItem(Selection.SelectedItem) as MapItem
                 )?.Location ?? CenterMap;
         }
+
         if (e.Delta.Y > 0 && _zoom < 19)
         {
             newZoom++;
@@ -380,6 +391,7 @@ public class MapItemsControl : SelectingItemsControl
         {
             newZoom--;
         }
+
         if (newZoom != _zoom)
         {
             Zoom = newZoom;

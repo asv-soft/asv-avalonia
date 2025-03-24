@@ -40,6 +40,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/ContentDialog/ContentDialogStyles.axaml"/>
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/InfoBar/InfoBarStyles.axaml"/>
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/AdaptiveTabControlStrip/AdaptiveTabStripTabControl.axaml" />
             </ResourceDictionary.MergedDictionaries>
             <avalonia1:MaterialIconConverter x:Key="MaterialIconConverter" />

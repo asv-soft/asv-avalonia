@@ -25,7 +25,7 @@ public readonly struct HorizontalOffset(HorizontalOffsetEnum offsetType, double 
         return OffsetType switch
         {
             HorizontalOffsetEnum.Left => Offset,
-            HorizontalOffsetEnum.Center => boundsWidth / 2 - Offset,
+            HorizontalOffsetEnum.Center => (boundsWidth / 2) - Offset,
             HorizontalOffsetEnum.Right => boundsWidth - Offset,
             _ => throw new ArgumentOutOfRangeException(),
         };

@@ -44,8 +44,6 @@
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Avalonia.Controls.TreeDataGrid" Version="11.1.1" />
         <PackageReference Include="Material.Icons.Avalonia" Version="$(MaterialIconsAvaloniaVersion)"/>
-        
-        <PackageReference Include="Material.Icons.Avalonia" Version="2.2.0" />
         <PackageReference Include="MemoryPack" Version="1.21.3" />
         
        
@@ -81,6 +79,26 @@
             <DependentUpon>RS.resx</DependentUpon>
         </Compile>
         <Compile Update="Controls\ContentDialog\ContentDialog.cs">
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Installed\InstalledPluginsView.axaml.cs">
+          <DependentUpon>InstalledPluginsView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Market\PluginsMarketView.axaml.cs">
+          <DependentUpon>PluginsMarketView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Sources\PluginsSourcesView.axaml.cs">
+          <DependentUpon>PluginsSourcesView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Sources\SourceView.axaml.cs">
+          <DependentUpon>SourceView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Shell\Pages\Plugins\Market\PluginInstallerView.axaml.cs">
+          <DependentUpon>PluginInstallerView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
         <Compile Update="Controls\GeoPoint\GeoPointEditor.axaml.cs">

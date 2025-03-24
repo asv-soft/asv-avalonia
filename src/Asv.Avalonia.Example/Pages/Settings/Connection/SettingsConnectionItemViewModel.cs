@@ -7,7 +7,6 @@ namespace Asv.Avalonia.Example;
 
 public class SettingsConnectionItemViewModel : DisposableViewModel
 {
-
     public SettingsConnectionItemViewModel(
         string name,
         IProtocolPort portInfo,
@@ -27,7 +26,7 @@ public class SettingsConnectionItemViewModel : DisposableViewModel
         IsEnabled.Value = portInfo.IsEnabled.CurrentValue;
         Status.Value = portInfo.Status.CurrentValue;
         Port.Value = portInfo;
-        
+
         service
             .Router.OnRxMessage.ThrottleFirst(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>

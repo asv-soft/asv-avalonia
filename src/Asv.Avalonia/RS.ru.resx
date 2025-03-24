@@ -557,4 +557,10 @@
     <data name="ChangeStringPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда меняет значение свойства с типом строка</value>
     </data>
+    <data name="ToolsMenu_Name" xml:space="preserve">
+        <value>Инструменты</value>
+    </data>
+    <data name="ToolsMenu_Settings" xml:space="preserve">
+        <value>Настройки</value>
+    </data>
 </root>

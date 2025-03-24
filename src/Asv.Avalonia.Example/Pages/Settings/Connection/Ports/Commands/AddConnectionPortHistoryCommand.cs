@@ -37,24 +37,34 @@ public class AddConnectionPortHistoryCommand : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    public override ValueTask<IPersistable?> Execute(IRoutable context, IPersistable newValue,
-        CancellationToken cancel = default)
+    public override ValueTask<IPersistable?> Execute(
+        IRoutable context,
+        IPersistable newValue,
+        CancellationToken cancel = default
+    )
     {
         if (newValue is Persistable<KeyValuePair<string, string>> keyPair)
         {
             _connectionService.AddConnection(keyPair.Value.Key, keyPair.Value.Value);
-            return ValueTask.FromResult<IPersistable?>(new Persistable<string>(keyPair.Value.Value));
+            return ValueTask.FromResult<IPersistable?>(
+                new Persistable<string>(keyPair.Value.Value)
+            );
         }
 
         return default;
     }
 
-    protected override ValueTask<IPersistable?> InternalExecute(IPersistable newValue, CancellationToken cancel)
+    protected override ValueTask<IPersistable?> InternalExecute(
+        IPersistable newValue,
+        CancellationToken cancel
+    )
     {
         if (newValue is Persistable<KeyValuePair<string, string>> keyPair)
         {
             _connectionService.AddConnection(keyPair.Value.Key, keyPair.Value.Value);
-            return ValueTask.FromResult<IPersistable?>(new Persistable<string>(keyPair.Value.Value));
+            return ValueTask.FromResult<IPersistable?>(
+                new Persistable<string>(keyPair.Value.Value)
+            );
         }
 
         return default;

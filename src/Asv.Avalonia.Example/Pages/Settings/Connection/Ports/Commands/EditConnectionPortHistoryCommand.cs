@@ -15,7 +15,7 @@ public class EditConnectionPortHistoryCommand : NoContextCommand
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name ="Edit Port Command",
+        Name = "Edit Port Command",
         Description = "Command that allows to edit existing connection",
         Icon = MaterialIconKind.Update,
         DefaultHotKey = null,
@@ -34,25 +34,38 @@ public class EditConnectionPortHistoryCommand : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    public override ValueTask<IPersistable?> Execute(IRoutable context, IPersistable newValue,
-        CancellationToken cancel = default)
+    public override ValueTask<IPersistable?> Execute(
+        IRoutable context,
+        IPersistable newValue,
+        CancellationToken cancel = default
+    )
     {
         if (newValue is Persistable<EditConnectionPersistable> persistable)
         {
             _connectionService.RemovePort(persistable.Value.Port);
-            _connectionService.AddConnection(persistable.Value.NewValue.Value, persistable.Value.NewValue.Key);
-            return ValueTask.FromResult<IPersistable?>(new Persistable<string>(persistable.Value.NewValue.Value));
+            _connectionService.AddConnection(
+                persistable.Value.NewValue.Value,
+                persistable.Value.NewValue.Key
+            );
+            return ValueTask.FromResult<IPersistable?>(
+                new Persistable<string>(persistable.Value.NewValue.Value)
+            );
         }
 
         return default;
     }
 
-    protected override ValueTask<IPersistable?> InternalExecute(IPersistable newValue, CancellationToken cancel)
+    protected override ValueTask<IPersistable?> InternalExecute(
+        IPersistable newValue,
+        CancellationToken cancel
+    )
     {
         if (newValue is Persistable<KeyValuePair<string, string>> keyPair)
         {
             _connectionService.AddConnection(keyPair.Value.Key, keyPair.Value.Value);
-            return ValueTask.FromResult<IPersistable?>(new Persistable<string>(keyPair.Value.Value));
+            return ValueTask.FromResult<IPersistable?>(
+                new Persistable<string>(keyPair.Value.Value)
+            );
         }
 
         return default;

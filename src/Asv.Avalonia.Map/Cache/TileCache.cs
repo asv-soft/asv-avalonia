@@ -45,6 +45,7 @@ public class TileCacheConfig
         {
             yield return $"scan every {PrintStatisticsToLogPeriodSec:F1} sec";
         }
+
         yield return $"scan every {ExpirationScanFrequencySec:F1} sec";
         yield return $"max size {SizeLimitKb:N} kb";
         yield return $"compaction {CompactionPercentage:P0}";
@@ -93,9 +94,13 @@ public abstract class TileCache : AsyncDisposableOnce, ITileCache
     protected override async ValueTask DisposeAsyncCore()
     {
         if (_timer is IAsyncDisposable timerAsyncDisposable)
+        {
             await timerAsyncDisposable.DisposeAsync();
-        else if (_timer != null)
-            _timer.Dispose();
+        }
+        else
+        {
+            _timer?.Dispose();
+        }
 
         await base.DisposeAsyncCore();
     }

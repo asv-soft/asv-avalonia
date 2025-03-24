@@ -5,6 +5,7 @@ using System.IO.Ports;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Common;
 using Asv.IO;
 using Avalonia.Controls;
 using DotNext.Collections.Generic;
@@ -17,19 +18,6 @@ namespace Asv.Avalonia.Example;
 
 public class SerialPortViewModel : DialogViewModelBase
 {
-    #region Subs
-
-    private IDisposable _titleSub;
-    private IDisposable _bufferSizeSub;
-    private IDisposable _selectedPortSub;
-    private IDisposable _boundRateSub;
-    private IDisposable _paritySub;
-    private IDisposable _timeoutSub;
-    private IDisposable _stopBitsSub;
-    private IDisposable _dataBitsSub;
-
-    #endregion
-
     private readonly IMavlinkConnectionService? _service;
     private readonly INavigationService _navigation;
     private readonly IRoutable _parent;
@@ -59,7 +47,9 @@ public class SerialPortViewModel : DialogViewModelBase
         var currentIndex =
             service.Connections.Count(pair => pair.Value.TypeInfo.Scheme == "serial") + 1;
         Title = new BindableReactiveProperty<string>($"New Serial {currentIndex}");
-        WriteBufferSizeInput = new BindableReactiveProperty<string>(WriteBufferSizeConst.ToString());
+        WriteBufferSizeInput = new BindableReactiveProperty<string>(
+            WriteBufferSizeConst.ToString()
+        );
         SelectedPortInput = new BindableReactiveProperty<string>();
         SelectedBaudRateInput = new BindableReactiveProperty<string>(BoundRateConst.ToString());
         ParityInput = new BindableReactiveProperty<Parity?>(Parity.None);
@@ -67,7 +57,7 @@ public class SerialPortViewModel : DialogViewModelBase
         StopBitsInput = new BindableReactiveProperty<StopBits?>(StopBits.None);
         DataBitsInput = new BindableReactiveProperty<string>(DataBitsConst.ToString());
         Ports = _myCache.ToNotifyCollectionChanged();
-        
+
         Observable
             .Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
             .Subscribe(_ => UpdateSerialPorts());
@@ -79,7 +69,8 @@ public class SerialPortViewModel : DialogViewModelBase
         string name,
         IMavlinkConnectionService service,
         IRoutable parent,
-        INavigationService navigation) 
+        INavigationService navigation
+    )
         : base("dialog.serialEdit")
     {
         _navigation = navigation;
@@ -92,22 +83,20 @@ public class SerialPortViewModel : DialogViewModelBase
             return;
         }
 
-        Title = new BindableReactiveProperty<string>(name).EnableValidation();
+        Title = new BindableReactiveProperty<string>(name);
 
-        SelectedBaudRateInput =
-            new BindableReactiveProperty<string>(config.BoundRate.ToString()).EnableValidation();
-        SelectedPortInput =
-            new BindableReactiveProperty<string>(config.PortName ?? string.Empty).EnableValidation();
-        ParityInput = new BindableReactiveProperty<Parity?>(config.Parity).EnableValidation();
-        DataBitsInput = new BindableReactiveProperty<string>(config.DataBits.ToString()).EnableValidation();
-        StopBitsInput = new BindableReactiveProperty<StopBits?>(config.StopBits).EnableValidation();
-        WriteTimeOutInput =
-            new BindableReactiveProperty<string>(config.WriteTimeout.ToString()).EnableValidation();
-        WriteBufferSizeInput =
-            new BindableReactiveProperty<string>(config.WriteBufferSize.ToString()).EnableValidation();
+        SelectedBaudRateInput = new BindableReactiveProperty<string>(config.BoundRate.ToString());
+        SelectedPortInput = new BindableReactiveProperty<string>(config.PortName ?? string.Empty);
+        ParityInput = new BindableReactiveProperty<Parity?>(config.Parity);
+        DataBitsInput = new BindableReactiveProperty<string>(config.DataBits.ToString());
+        StopBitsInput = new BindableReactiveProperty<StopBits?>(config.StopBits);
+        WriteTimeOutInput = new BindableReactiveProperty<string>(config.WriteTimeout.ToString());
+        WriteBufferSizeInput = new BindableReactiveProperty<string>(
+            config.WriteBufferSize.ToString()
+        );
         Ports = _myCache.ToNotifyCollectionChanged();
-        
-        Observable
+
+        _sub1 = Observable
             .Timer(TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(1))
             .Subscribe(_ => UpdateSerialPorts());
         SubscribeToValidation();
@@ -116,53 +105,90 @@ public class SerialPortViewModel : DialogViewModelBase
     private void SubscribeToValidation()
     {
         _titleSub = Title.EnableValidation(
-            t => string.IsNullOrWhiteSpace(t) ? ValueTask.FromResult<ValidationResult>(new Exception("Name is required")) : ValidationResult.Success, 
-            this, 
-            true);
+            t =>
+                string.IsNullOrWhiteSpace(t)
+                    ? ValueTask.FromResult<ValidationResult>(new Exception("Name is required"))
+                    : ValidationResult.Success,
+            this,
+            true
+        );
         _bufferSizeSub = WriteBufferSizeInput.EnableValidation(
-            b => !int.TryParse(b, out _) ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid size of buffer")) : ValidationResult.Success, 
-            this, 
-            true);
+            b =>
+                !int.TryParse(b, out _)
+                    ? ValueTask.FromResult<ValidationResult>(
+                        new Exception("Invalid size of buffer")
+                    )
+                    : ValidationResult.Success,
+            this,
+            true
+        );
         _selectedPortSub = SelectedPortInput.EnableValidation(
-            p => string.IsNullOrWhiteSpace(p) ? ValueTask.FromResult<ValidationResult>(new Exception("Port is required")) : ValidationResult.Success,
+            p =>
+                string.IsNullOrWhiteSpace(p)
+                    ? ValueTask.FromResult<ValidationResult>(new Exception("Port is required"))
+                    : ValidationResult.Success,
             this,
-            true);
+            true
+        );
         _boundRateSub = SelectedBaudRateInput.EnableValidation(
-            b => !int.TryParse(b, out _) ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid baud rate")) : ValidationResult.Success,
+            b =>
+                !int.TryParse(b, out _)
+                    ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid baud rate"))
+                    : ValidationResult.Success,
             this,
-            true);
+            true
+        );
         _paritySub = ParityInput.EnableValidation(
-            p => p is null ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid parity")) : ValidationResult.Success,
+            p =>
+                p is null
+                    ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid parity"))
+                    : ValidationResult.Success,
             this,
-            true);
+            true
+        );
         _timeoutSub = WriteTimeOutInput.EnableValidation(
-            t => !int.TryParse(t, out _) ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid timeout value")) : ValidationResult.Success, 
+            t =>
+                !int.TryParse(t, out _)
+                    ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid timeout value"))
+                    : ValidationResult.Success,
             this,
-            true);
+            true
+        );
         _dataBitsSub = DataBitsInput.EnableValidation(
             d =>
-        {
-            if (!int.TryParse(d, out var bits))
             {
-                return ValueTask.FromResult<ValidationResult>(new Exception("Invalid data bits value"));
-            }
+                if (!int.TryParse(d, out var bits))
+                {
+                    return ValueTask.FromResult<ValidationResult>(
+                        new Exception("Invalid data bits value")
+                    );
+                }
 
-            return bits is > 8 or < 5 ? ValueTask.FromResult<ValidationResult>(new Exception("Data bits should be digit value from 5 to 8")) : ValidationResult.Success;
-        },
+                return bits is > 8 or < 5
+                    ? ValueTask.FromResult<ValidationResult>(
+                        new Exception("Data bits should be digit value from 5 to 8")
+                    )
+                    : ValidationResult.Success;
+            },
             this,
-            true);
+            true
+        );
         _stopBitsSub = StopBitsInput.EnableValidation(
-            s => s is null ? ValueTask.FromResult<ValidationResult>(new Exception("Invalid value of stop bits")) : ValidationResult.Success, 
+            s =>
+                s is null
+                    ? ValueTask.FromResult<ValidationResult>(
+                        new Exception("Invalid value of stop bits")
+                    )
+                    : ValidationResult.Success,
             this,
-            true);
+            true
+        );
     }
 
     public SerialPortViewModel()
         : base(string.Empty)
     {
-        if (Design.IsDesignMode)
-        {
-        }
+        if (Design.IsDesignMode) { }
     }
 
     public void ApplyAddDialog()
@@ -176,12 +202,18 @@ public class SerialPortViewModel : DialogViewModelBase
             Content = this,
             PrimaryButtonCommand = new ReactiveCommand(_ =>
             {
-                var persist = new Persistable<KeyValuePair<string,string>>(PersistInputValueSerial());
-                var cmd = new InternalContextCommand(AddConnectionPortHistoryCommand.Id, _parent, persist);
+                var persist = new Persistable<KeyValuePair<string, string>>(
+                    PersistInputValueSerial()
+                );
+                var cmd = new InternalContextCommand(
+                    AddConnectionPortHistoryCommand.Id,
+                    _parent,
+                    persist
+                );
                 Task.Run(() => cmd.Execute(persist));
-            }),
+            }).DisposeItWith(Disposable),
         };
-        IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
+        _sub2 = IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
         dialog.ShowAsync();
     }
 
@@ -196,16 +228,22 @@ public class SerialPortViewModel : DialogViewModelBase
             Content = this,
             PrimaryButtonCommand = new ReactiveCommand(_ =>
             {
-                var persist = new Persistable<EditConnectionPersistable>(new EditConnectionPersistable()
-                {
-                    NewValue = PersistInputValueSerial(),
-                    Port = _oldPort,
-                });
-                var cmd = new InternalContextCommand(EditConnectionPortHistoryCommand.Id, _parent, persist);
+                var persist = new Persistable<EditConnectionPersistable>(
+                    new EditConnectionPersistable()
+                    {
+                        NewValue = PersistInputValueSerial(),
+                        Port = _oldPort,
+                    }
+                );
+                var cmd = new InternalContextCommand(
+                    EditConnectionPortHistoryCommand.Id,
+                    _parent,
+                    persist
+                );
                 cmd.Execute(persist);
-            }),
+            }).DisposeItWith(Disposable),
         };
-        IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
+        _sub3 = IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
         dialog.ShowAsync();
     }
 
@@ -275,18 +313,18 @@ public class SerialPortViewModel : DialogViewModelBase
     public BindableReactiveProperty<Array> BaudRates { get; } =
         new(new[] { 9600, 14400, 19200, 38400, 56000, 57600, 115200, 128000, 256000 });
 
-    public BindableReactiveProperty<string> Title { get; set; }
-    public BindableReactiveProperty<string> SelectedBaudRateInput { get; set; }
-    public BindableReactiveProperty<string> SelectedPortInput { get; set; }
+    public BindableReactiveProperty<string> Title { get; }
+    public BindableReactiveProperty<string> SelectedBaudRateInput { get; }
+    public BindableReactiveProperty<string> SelectedPortInput { get; }
     public BindableReactiveProperty<Array> ParityValues => new(Enum.GetValues<Parity>());
-    public BindableReactiveProperty<Parity?> ParityInput { get; set; }
+    public BindableReactiveProperty<Parity?> ParityInput { get; }
 
-    public BindableReactiveProperty<string> WriteTimeOutInput { get; set; }
+    public BindableReactiveProperty<string> WriteTimeOutInput { get; }
 
-    public BindableReactiveProperty<string> WriteBufferSizeInput { get; set; }
+    public BindableReactiveProperty<string> WriteBufferSizeInput { get; }
     public BindableReactiveProperty<Array> DataBitsValues => new(new[] { 5, 6, 7, 8 });
-    public BindableReactiveProperty<string> DataBitsInput { get; set; }
-    public BindableReactiveProperty<StopBits?> StopBitsInput { get; set; }
+    public BindableReactiveProperty<string> DataBitsInput { get; }
+    public BindableReactiveProperty<StopBits?> StopBitsInput { get; }
 
     public BindableReactiveProperty<Array> StopBitsArr => new(Enum.GetValues<StopBits>());
 
@@ -294,6 +332,20 @@ public class SerialPortViewModel : DialogViewModelBase
     {
         return [];
     }
+
+    #region Dispose
+
+    private readonly IDisposable _sub1;
+    private IDisposable _sub2;
+    private IDisposable _sub3;
+    private IDisposable _titleSub;
+    private IDisposable _bufferSizeSub;
+    private IDisposable _selectedPortSub;
+    private IDisposable _boundRateSub;
+    private IDisposable _paritySub;
+    private IDisposable _timeoutSub;
+    private IDisposable _stopBitsSub;
+    private IDisposable _dataBitsSub;
 
     protected override void Dispose(bool disposing)
     {
@@ -307,8 +359,26 @@ public class SerialPortViewModel : DialogViewModelBase
             _stopBitsSub.Dispose();
             _dataBitsSub.Dispose();
             _timeoutSub.Dispose();
+            Title.Dispose();
+            WriteBufferSizeInput.Dispose();
+            SelectedPortInput.Dispose();
+            SelectedBaudRateInput.Dispose();
+            ParityInput.Dispose();
+            WriteTimeOutInput.Dispose();
+            StopBitsInput.Dispose();
+            DataBitsInput.Dispose();
+            Ports.Dispose();
+            ParityValues.Dispose();
+            StopBitsInput.Dispose();
+            StopBitsArr.Dispose();
+            _myCache.Clear();
+            _sub1.Dispose();
+            _sub2.Dispose();
+            _sub3.Dispose();
         }
 
         base.Dispose(disposing);
     }
+
+    #endregion
 }

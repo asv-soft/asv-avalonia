@@ -541,4 +541,10 @@
     <data name="ChangeStringPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command changes the value of a property with the string type</value>
     </data>
+    <data name="ToolsMenu_Name" xml:space="preserve">
+        <value>Tools</value>
+    </data>
+    <data name="ToolsMenu_Settings" xml:space="preserve">
+        <value>Settings</value>
+    </data>
 </root>

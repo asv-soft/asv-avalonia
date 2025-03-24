@@ -4,12 +4,7 @@ using Avalonia.Collections;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Mixins;
-using Avalonia.Controls.Primitives;
-using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.LogicalTree;
 using Avalonia.Media;
-using R3;
 
 namespace Asv.Avalonia.Map;
 
@@ -28,7 +23,9 @@ public class MapItem : ContentControl, ISelectable
     private static void RecalculateRotation(MapItem? sender)
     {
         if (sender == null)
+        {
             return;
+        }
 
         sender.RotationCenterX = sender.CenterX.CalculateOffset(sender.Bounds.Width);
         sender.RotationCenterY = sender.CenterY.CalculateOffset(sender.Bounds.Height);

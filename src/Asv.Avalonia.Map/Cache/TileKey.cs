@@ -10,19 +10,23 @@ public class TileKey : IEquatable<TileKey>
         {
             X += max;
         }
+
         if (X > max)
         {
             X -= max;
         }
+
         Y = y;
         if (Y < 0)
         {
             Y += max;
         }
+
         if (Y > max)
         {
             Y -= max;
         }
+
         Zoom = zoom;
         Provider = provider;
     }
@@ -35,7 +39,10 @@ public class TileKey : IEquatable<TileKey>
     public bool Equals(TileKey? other)
     {
         if (ReferenceEquals(null, other))
+        {
             return false;
+        }
+
         return X == other.X
             && Y == other.Y
             && Zoom == other.Zoom

@@ -144,10 +144,12 @@ public class AnnotationLayer : Canvas
                 {
                     continue;
                 }
+
                 container.PropertyChanged += ContainerOnPropertyChanged;
                 _renderRequestSubject.OnNext(Unit.Default);
             }
         }
+
         if (e.OldItems != null)
         {
             foreach (var item in e.OldItems)
@@ -157,6 +159,7 @@ public class AnnotationLayer : Canvas
                 {
                     continue;
                 }
+
                 container.PropertyChanged -= ContainerOnPropertyChanged;
                 _renderRequestSubject.OnNext(Unit.Default);
             }
@@ -174,23 +177,28 @@ public class AnnotationLayer : Canvas
     private void UpdateAnnotationsFromChildren()
     {
         if (Source == null || ItemTemplate == null)
+        {
             return;
+        }
+
         _annotations.RemoveAll(a =>
         {
-            if (Source.GetRealizedContainers().Contains(a.Target) == false)
+            if (Source.GetRealizedContainers().Contains(a.Target))
             {
-                a.Dispose();
-                return true;
+                return false;
             }
-            ;
-            return false;
+
+            a.Dispose();
+            return true;
         });
 
         foreach (var sourceItem in Source.GetRealizedContainers())
         {
-            var child = sourceItem as MapItem;
-            if (child == null)
+            if (sourceItem is not MapItem child)
+            {
                 continue;
+            }
+
             var location = child.Location;
 
             var existingAnnotation = _annotations.FirstOrDefault(a => a.Target == child);
@@ -198,7 +206,10 @@ public class AnnotationLayer : Canvas
             {
                 var content = ItemTemplate.Build(child.DataContext ?? child);
                 if (content == null)
+                {
                     continue;
+                }
+
                 content.DataContext = child.DataContext ?? child;
 
                 var annotation = content;
@@ -231,27 +242,34 @@ public class AnnotationLayer : Canvas
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         if (Source == null)
+        {
             return;
+        }
+
         base.OnPointerPressed(e);
 
-        if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
+        if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
-            var position = e.GetPosition(this);
-            var hitAnnotation = _annotations.FirstOrDefault(a =>
-                a.Annotation.Bounds.Contains(position) || a.Target.Bounds.Contains(position)
-            );
-
-            if (hitAnnotation != null)
-            {
-                // Toggle the IsSelected state of the Target
-                //hitAnnotation.Target.IsSelected = true;
-                Source.Selection.Clear();
-                Source.Selection.Select(Source.IndexFromContainer(hitAnnotation.Target));
-                hitAnnotation.Target.Focus();
-                UpdateVisuals(); // Redraw to display the change
-                e.Handled = true;
-            }
+            return;
         }
+
+        var position = e.GetPosition(this);
+        var hitAnnotation = _annotations.FirstOrDefault(a =>
+            a.Annotation.Bounds.Contains(position) || a.Target.Bounds.Contains(position)
+        );
+
+        if (hitAnnotation == null)
+        {
+            return;
+        }
+
+        // Toggle the IsSelected state of the Target
+        // hitAnnotation.Target.IsSelected = true;
+        Source.Selection.Clear();
+        Source.Selection.Select(Source.IndexFromContainer(hitAnnotation.Target));
+        hitAnnotation.Target.Focus();
+        UpdateVisuals(); // Redraw to display the change
+        e.Handled = true;
     }
 
     private Point GetInitialDirection(int index)
@@ -264,15 +282,18 @@ public class AnnotationLayer : Canvas
     private Point ConvertToScreen(GeoPoint geoPoint)
     {
         if (Source == null)
+        {
             return new Point(0, 0);
+        }
 
         var tileSize = Source.Provider.TileSize;
         var projection = Source.Provider.Projection;
         var centerPixel = projection.Wgs84ToPixels(Source.CenterMap, Source.Zoom, tileSize);
         var offset = new Point(
-            Source.Bounds.Width * 0.5 - centerPixel.X,
-            Source.Bounds.Height * 0.5 - centerPixel.Y
+            (Source.Bounds.Width * 0.5) - centerPixel.X,
+            (Source.Bounds.Height * 0.5) - centerPixel.Y
         );
+
         return projection.Wgs84ToPixels(geoPoint, Source.Zoom, tileSize) + offset;
     }
 
@@ -283,8 +304,8 @@ public class AnnotationLayer : Canvas
             // Center the TextBlock relative to the ScreenPosition
             var textWidth = item.Annotation.Bounds.Width;
             var textHeight = item.Annotation.Bounds.Height;
-            SetLeft(item.Annotation, item.ScreenPosition.X - textWidth / 2);
-            SetTop(item.Annotation, item.ScreenPosition.Y - textHeight / 2);
+            SetLeft(item.Annotation, item.ScreenPosition.X - (textWidth / 2));
+            SetTop(item.Annotation, item.ScreenPosition.Y - (textHeight / 2));
 
             var anchorPos = ConvertToScreen(item.AnchorPoint);
             item.Connector.StartPoint = anchorPos;
@@ -295,7 +316,10 @@ public class AnnotationLayer : Canvas
     public void ArrangeAnnotations(Size finalSize)
     {
         if (Source == null || _annotations.Count == 0)
+        {
             return;
+        }
+
         Debug.WriteLine("ArrangeAnnotations");
         const int baseMaxIterations = 100;
         const double repulsionStrength = 1000.0;
@@ -320,26 +344,30 @@ public class AnnotationLayer : Canvas
 
                 // Attraction to the preferred radial position
                 var preferredDirection = (currentPos - anchorPos).Normalize();
-                var preferredPos = anchorPos + preferredDirection * minDistance;
+                var preferredPos = anchorPos + (preferredDirection * minDistance);
                 velocity += (preferredPos - currentPos) * attractionStrength;
 
                 // Repulsion from other annotations with optimization
                 foreach (var other in _annotations)
                 {
                     if (other == item)
+                    {
                         continue;
+                    }
 
                     var delta = currentPos - other.ScreenPosition;
                     var distanceSquared = delta.LengthSquared(); // Faster than Length
 
-                    if (distanceSquared < minDistance * minDistance) // Check squared distance
+                    if (!(distanceSquared < minDistance * minDistance))
                     {
-                        var distance = Math.Sqrt(distanceSquared);
-                        var repulsion =
-                            delta.Normalize() * (repulsionStrength / Math.Max(distance, 1.0));
-                        velocity += repulsion;
-                        stabilized = false;
+                        continue; // Check squared distance
                     }
+
+                    var distance = Math.Sqrt(distanceSquared);
+                    var repulsion =
+                        delta.Normalize() * (repulsionStrength / Math.Max(distance, 1.0));
+                    velocity += repulsion;
+                    stabilized = false;
                 }
 
                 // Limit velocity to avoid excessive jumps
@@ -350,7 +378,7 @@ public class AnnotationLayer : Canvas
                 }
 
                 // Update position
-                var newPos = currentPos + velocity * damping;
+                var newPos = currentPos + (velocity * damping);
                 newPos = new Point(
                     Math.Clamp(newPos.X, 0, finalSize.Width - item.Annotation.Bounds.Width),
                     Math.Clamp(newPos.Y, 0, finalSize.Height - item.Annotation.Bounds.Height)
@@ -367,7 +395,9 @@ public class AnnotationLayer : Canvas
             }
 
             if (stabilized)
+            {
                 break;
+            }
         }
 
         UpdateVisuals();

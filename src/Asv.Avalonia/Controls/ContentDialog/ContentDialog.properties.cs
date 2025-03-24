@@ -6,8 +6,6 @@ using Avalonia.Controls.Templates;
 
 namespace Asv.Avalonia;
 
-public delegate void TypedEventHandler<TSender, TResult>(TSender sender, TResult args);
-
 [PseudoClasses(PseudoClassesHelper.Hidden, PseudoClassesHelper.Open)]
 [PseudoClasses(s_pcPrimary, s_pcSecondary, s_pcClose)]
 [PseudoClasses(s_pcFullSize)]
@@ -250,22 +248,22 @@ public partial class ContentDialog
     /// <summary>
     /// Occurs before the dialog is opened.
     /// </summary>
-    public event TypedEventHandler<ContentDialog, EventArgs> Opening;
+    public event TypedEventHandler<ContentDialog, EventArgs>? Opening;
 
     /// <summary>
     /// Occurs after the dialog is opened.
     /// </summary>
-    public event TypedEventHandler<ContentDialog, EventArgs> Opened;
+    public event TypedEventHandler<ContentDialog, EventArgs>? Opened;
 
     /// <summary>
     /// Occurs after the dialog starts to close, but before it is closed and before the Closed event occurs.
     /// </summary>
-    public event TypedEventHandler<ContentDialog, ContentDialogClosingEventArgs> Closing;
+    public event TypedEventHandler<ContentDialog, ContentDialogClosingEventArgs>? Closing;
 
     /// <summary>
     /// Occurs after the dialog is closed.
     /// </summary>
-    public event TypedEventHandler<ContentDialog, ContentDialogClosedEventArgs> Closed;
+    public event TypedEventHandler<ContentDialog, ContentDialogClosedEventArgs>? Closed;
 
     /// <summary>
     /// Occurs after the primary button has been tapped.
@@ -273,7 +271,7 @@ public partial class ContentDialog
     public event TypedEventHandler<
         ContentDialog,
         ContentDialogButtonClickEventArgs
-    > PrimaryButtonClick;
+    >? PrimaryButtonClick;
 
     /// <summary>
     /// Occurs after the secondary button has been tapped.
@@ -281,7 +279,7 @@ public partial class ContentDialog
     public event TypedEventHandler<
         ContentDialog,
         ContentDialogButtonClickEventArgs
-    > SecondaryButtonClick;
+    >? SecondaryButtonClick;
 
     /// <summary>
     /// Occurs after the close button has been tapped.
@@ -289,7 +287,7 @@ public partial class ContentDialog
     public event TypedEventHandler<
         ContentDialog,
         ContentDialogButtonClickEventArgs
-    > CloseButtonClick;
+    >? CloseButtonClick;
 
     private const string s_tpPrimaryButton = "PrimaryButton";
     private const string s_tpSecondaryButton = "SecondaryButton";

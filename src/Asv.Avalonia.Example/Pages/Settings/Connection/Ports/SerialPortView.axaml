@@ -25,7 +25,7 @@
             <TextBlock Text="Write Timeout (MilliSeconds)"/>
             <AutoCompleteBox Text="{Binding WriteTimeOutInput.Value,UpdateSourceTrigger=PropertyChanged}"/>
             <TextBlock Text="Data Bits (from 5 to 8)"/>
-            <AutoCompleteBox ItemsSource="{Binding DataBitsValues.CurrentValue}" SelectedItem="{Binding DataBitsInput.Value}"/>
+            <AutoCompleteBox ItemsSource="{Binding DataBitsValues.Value}" SelectedItem="{Binding DataBitsInput.Value}"/>
             <TextBlock Text="Stop Bits"/>
             <ComboBox HorizontalAlignment="Stretch" SelectedItem="{Binding StopBitsInput.Value, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding StopBitsArr.Value}"/>
         </StackPanel>

@@ -21,6 +21,7 @@ public class EditUndoMenu : MenuItem
         : base(MenuId, RS.UndoCommand_CommandInfo_Name, EditMenu.MenuId)
     {
         Command = new BindableAsyncCommand(UndoCommand.Id, this);
+        Order = 0;
     }
 }
 
@@ -34,5 +35,6 @@ public class EditRedoMenu : MenuItem
         : base(MenuId, RS.RedoCommand_CommandInfo_Name, EditMenu.MenuId)
     {
         Command = new BindableAsyncCommand(RedoCommand.Id, this);
+        Order = 1;
     }
 }

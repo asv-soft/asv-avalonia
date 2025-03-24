@@ -6,17 +6,16 @@ public class ToolsMenu : MenuItem
     public const string MenuId = "shell.menu.tools";
 
     public ToolsMenu()
-        : base(MenuId, "Tools") // TODO: Localize
-    { }
+        : base(MenuId, RS.ToolsMenu_Name) { }
 }
 
 [ExportMainMenu]
 public class ToolsSettingsMenu : MenuItem
 {
-    public const string MenuId = "shell.menu.tools.settings";
+    public const string MenuId = $"{ToolsMenu.MenuId}.settings";
 
     public ToolsSettingsMenu()
-        : base(MenuId, "Settings", ToolsMenu.MenuId) // TODO: Localize
+        : base(MenuId, RS.ToolsMenu_Settings, ToolsMenu.MenuId)
     {
         Command = new BindableAsyncCommand(OpenSettingsCommand.Id, this);
     }

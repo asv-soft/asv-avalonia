@@ -1,0 +1,31 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.TestInfoBoxPageView"
+             x:DataType="example:TestInfoBoxPageViewModel">
+    <Design.DataContext>
+        <example:TestInfoBoxPageViewModel/>
+    </Design.DataContext>
+    <DockPanel>
+        <avalonia:InfoBar IsVisible="{Binding IsVisible.Value}" DockPanel.Dock="Top"
+                     Title="Test"
+                     IsOpen="True" IsIconVisible="True" Severity="Warning" IsClosable="False"
+                     Message="Something is not right">
+            <avalonia:InfoBar.ActionButton>
+                <Button Command="{Binding HideInfoBox}"
+                        Content="Hide info box" />
+            </avalonia:InfoBar.ActionButton>
+        </avalonia:InfoBar>
+        <DockPanel DockPanel.Dock="Right">
+            <Button 
+                DockPanel.Dock="Right" 
+                Content="Show info box"
+                Command="{CompiledBinding ShowInfoBox}">
+            </Button>
+        </DockPanel>
+    </DockPanel>
+</UserControl>

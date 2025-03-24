@@ -28,17 +28,27 @@ public class WebMercatorProjection : BaseMapProjection
         var mapSize = tileSize * (1 << zoom); // 256 * 2^Zoom
 
         if (globalPx < 0)
+        {
             globalPx += mapSize;
+        }
+
         if (globalPx >= mapSize)
+        {
             globalPx -= mapSize;
+        }
 
         if (globalPy < 0)
+        {
             globalPy += mapSize;
-        if (globalPy >= mapSize)
-            globalPy -= mapSize;
+        }
 
-        var lon = globalPx / mapSize * 360.0 - 180.0;
-        var latRad = Math.PI * (1 - 2 * globalPy / mapSize);
+        if (globalPy >= mapSize)
+        {
+            globalPy -= mapSize;
+        }
+
+        var lon = (globalPx / mapSize * 360.0) - 180.0;
+        var latRad = Math.PI * (1 - (2 * globalPy / mapSize));
         var lat = Math.Atan(Math.Sinh(latRad)) * 180.0 / Math.PI;
 
         return new Common.GeoPoint(lat, lon, 0);
@@ -50,7 +60,7 @@ public class WebMercatorProjection : BaseMapProjection
 
         var x = (wgs.Longitude + 180.0) / 360.0 * mapSize;
         var sinLat = Math.Sin(wgs.Latitude * Math.PI / 180.0);
-        var y = (0.5 - Math.Log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI)) * mapSize;
+        var y = (0.5 - (Math.Log((1 + sinLat) / (1 - sinLat)) / (4 * Math.PI))) * mapSize;
 
         return new Point(x, y);
     }
