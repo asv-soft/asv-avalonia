@@ -2,7 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:io="clr-namespace:Asv.Avalonia.IO"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.IO.SettingsConnectionView">
-    Welcome to Avalonia!
+             x:Class="Asv.Avalonia.IO.SettingsConnectionView"
+             x:DataType="io:SettingsConnectionViewModel">
+    <Design.DataContext>
+        <io:SettingsConnectionViewModel/>
+    </Design.DataContext>
+    
 </UserControl>

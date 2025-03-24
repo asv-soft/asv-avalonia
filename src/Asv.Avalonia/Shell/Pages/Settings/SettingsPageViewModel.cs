@@ -5,7 +5,7 @@ using R3;
 namespace Asv.Avalonia;
 
 [ExportPage(PageId)]
-public class SettingsPageViewModel : TreePageViewModel<ISettingsPage>, ISettingsPage
+public class SettingsPageViewModel : TreePageViewModel<ISettingsPage, ISettingsSubPage>, ISettingsPage
 {
     public const string PageId = "settings";
     public const MaterialIconKind PageIcon = MaterialIconKind.Settings;

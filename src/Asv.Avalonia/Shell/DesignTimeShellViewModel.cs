@@ -22,6 +22,9 @@ public class DesignTimeShellViewModel : ShellViewModel
             });
         InternalPages.Add(new SettingsPageViewModel());
 
-        //InternalPages.Add(new PluginsMarketViewModel());
+        var file = new FileMenu();
+        MainMenu.Add(file);
+        MainMenu.Add(new MenuItem("open","Open", file.Id.Id));
+        MainMenu.Add(new EditMenu());
     }
 }

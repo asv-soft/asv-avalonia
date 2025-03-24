@@ -1,9 +1,11 @@
 ﻿using System.Composition;
+using Asv.Common;
+using ObservableCollections;
 
 namespace Asv.Avalonia;
 
 [ExportSettings(PageId)]
-public class SettingsAppearanceViewModel : RoutableViewModel, ISettingsSubPage
+public class SettingsAppearanceViewModel : SettingsSubPage
 {
     public const string PageId = "appearance";
 
@@ -25,23 +27,28 @@ public class SettingsAppearanceViewModel : RoutableViewModel, ISettingsSubPage
     )
         : base(PageId)
     {
-        Theme = new ThemeProperty(themeService) { Parent = this };
-        Language = new LanguageProperty(localizationService, dialogService) { Parent = this };
+        Theme = new ThemeProperty(themeService)
+        {
+            Parent = this,
+        }.DisposeItWith(Disposable);
+        Language = new LanguageProperty(localizationService, dialogService)
+        {
+            Parent = this,
+        }.DisposeItWith(Disposable);
     }
 
     public ThemeProperty Theme { get; }
     public LanguageProperty Language { get; }
 
-    public ValueTask Init(ISettingsPage context)
-    {
-        return ValueTask.CompletedTask;
-    }
-
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return Theme;
         yield return Language;
+        foreach (var child in base.GetRoutableChildren())
+        {
+            yield return child;
+        }
     }
 
-    public IExportInfo Source => SystemModule.Instance;
+    public override IExportInfo Source => SystemModule.Instance;
 }

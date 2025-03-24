@@ -1,50 +1,59 @@
 ﻿using System.Collections.Immutable;
 using System.Composition;
 using System.Composition.Hosting;
+using Asv.Common;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDesignTimeTreePage
-    where TContext : class, IPage
+public abstract class TreePageViewModel<TContext, TSubPage> : PageViewModel<TContext>, IDesignTimeTreePage
+    where TContext : class, IPage 
+    where TSubPage : ITreeSubpage<TContext>
 {
     private readonly IContainerHost _container;
-    private readonly IDisposable _sub2;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
+    private MenuTree? _pageMenu;
 
     public TreePageViewModel(NavigationId id, ICommandService cmd, IContainerHost container)
         : base(id, cmd)
     {
         _container = container;
-        Nodes = new ObservableList<ITreePage>();
-        TreeView = new TreePageMenu(Nodes);
-        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?>();
-        SelectedPage = new BindableReactiveProperty<IRoutable?>();
-        _breadCrumbSource = new ObservableList<BreadCrumbItem>();
-        BreadCrumb = _breadCrumbSource.ToViewList();
-        _sub2 = SelectedNode.SubscribeAwait(
-            async (x, _) =>
-            {
-                if (x?.Base.NavigateTo == null || _internalNavigate)
-                {
-                    return;
-                }
+        IsCompactMode = new BindableReactiveProperty<bool>()
+            .DisposeItWith(Disposable);
+        Nodes = [];
+        Nodes.SetRoutableParent(this, true);
+        TreeView = new TreePageMenu(Nodes)
+            .DisposeItWith(Disposable);
+        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?>()
+            .DisposeItWith(Disposable);
+        SelectedPage = new BindableReactiveProperty<ITreeSubpage?>()
+            .DisposeItWith(Disposable);
+        _breadCrumbSource = [];
+        BreadCrumb = _breadCrumbSource.ToViewList()
+            .DisposeItWith(Disposable);
+        SelectedNode.SubscribeAwait(SelectedNodeChanged).DisposeItWith(Disposable);
+    }
 
-                _breadCrumbSource.Clear();
-                if (SelectedNode.Value != null)
-                {
-                    _breadCrumbSource.AddRange(
-                        SelectedNode
-                            .Value.GetAllMenuFromRoot()
-                            .Select((item, index) => new BreadCrumbItem(index == 0, item.Base))
-                    );
-                }
+    private async ValueTask SelectedNodeChanged(ObservableTreeNode<ITreePage, NavigationId>? node, CancellationToken cancel)
+    {
+        if (node?.Base.NavigateTo == null || _internalNavigate)
+        {
+            return;
+        }
 
-                await Navigate(x.Base.NavigateTo);
-            }
-        );
+        _breadCrumbSource.Clear();
+        if (SelectedNode.Value != null)
+        {
+            _breadCrumbSource.AddRange(
+                SelectedNode
+                    .Value.GetAllMenuFromRoot()
+                    .Select((item, index) => new BreadCrumbItem(index == 0, item.Base))
+            );
+        }
+
+        await Navigate(node.Base.NavigateTo);
     }
 
     public override async ValueTask<IRoutable> Navigate(NavigationId id)
@@ -61,16 +70,29 @@ public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDe
             _internalNavigate = false;
         }
 
-        var newPage = CreateSubPage(id);
+        var newPage = await CreateSubPage(id);
         if (newPage == null)
         {
             return this;
         }
 
+        if (PageMenu != null)
+        {
+            await PageMenu.DisposeAsync();
+        }
+        
+        PageMenu = new MenuTree(newPage.Menu).DisposeItWith(Disposable);
+        
         SelectedPage.Value?.Dispose();
         newPage.Parent = this;
         SelectedPage.Value = newPage;
         return newPage;
+    }
+
+    public MenuTree? PageMenu
+    {
+        get => _pageMenu;
+        set => SetField(ref _pageMenu, value);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
@@ -81,11 +103,12 @@ public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDe
         }
     }
 
-    protected virtual ISettingsSubPage? CreateSubPage(NavigationId id)
+    protected virtual async ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
     {
-        if (_container.TryGetExport<ISettingsSubPage>(id.Id, out var page))
+        if (_container.TryGetExport<TSubPage>(id.Id, out var page))
         {
             page.InitArgs(id.Args);
+            await page.Init(GetContext());
             return page;
         }
 
@@ -93,14 +116,14 @@ public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDe
     }
 
     public ObservableTree<ITreePage, NavigationId> TreeView { get; }
-    public BindableReactiveProperty<IRoutable?> SelectedPage { get; }
+    public BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
     public BindableReactiveProperty<ObservableTreeNode<
         ITreePage,
         NavigationId
     >?> SelectedNode { get; }
     public ObservableList<ITreePage> Nodes { get; }
-    public BindableReactiveProperty<bool> IsCompactMode { get; } = new();
+    public BindableReactiveProperty<bool> IsCompactMode { get; }
 
     protected override TContext GetContext()
     {
@@ -116,12 +139,7 @@ public abstract class TreePageViewModel<TContext> : PageViewModel<TContext>, IDe
     {
         if (disposing)
         {
-            _sub2.Dispose();
-            IsCompactMode.Dispose();
-            SelectedNode.Dispose();
-            SelectedPage.Dispose();
-            BreadCrumb.Dispose();
-            TreeView.Dispose();
+            SelectedPage.Value?.Dispose();
         }
 
         base.Dispose(disposing);

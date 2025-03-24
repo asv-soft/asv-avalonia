@@ -10,7 +10,7 @@ using R3;
 namespace Asv.Avalonia.Example;
 
 [ExportSettings(SubPageId)]
-public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
+public class SettingsConnectionViewModel : SettingsSubPage
 {
     public const string SubPageId = "settings.connection";
 
@@ -140,12 +140,7 @@ public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
         return [];
     }
 
-    public IExportInfo Source => SystemModule.Instance;
-
-    public ValueTask Init(ISettingsPage context)
-    {
-        return ValueTask.CompletedTask;
-    }
+    public override IExportInfo Source => SystemModule.Instance;
 
     protected override void Dispose(bool disposing)
     {

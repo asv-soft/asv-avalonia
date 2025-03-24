@@ -6,12 +6,9 @@ using R3;
 namespace Asv.Avalonia;
 
 [ExportSettings(PageId)]
-public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
+public class SettingsUnitsViewModel : SettingsSubPage
 {
     public const string PageId = "units";
-
-    private readonly ObservableList<IUnit> _observableList;
-    private readonly IDisposable _sub1;
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
 
     public SettingsUnitsViewModel()
@@ -24,12 +21,12 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
     public SettingsUnitsViewModel(IUnitService unit)
         : base(PageId)
     {
-        _observableList = new ObservableList<IUnit>(unit.Units.Values);
-        _view = _observableList.CreateView(x => new MeasureUnitViewModel(x) { Parent = this });
-        Items = _view.ToNotifyCollectionChanged();
-        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>();
-        SearchText = new BindableReactiveProperty<string>();
-        _sub1 = SearchText
+        var observableList = new ObservableList<IUnit>(unit.Units.Values);
+        _view = observableList.CreateView(x => new MeasureUnitViewModel(x) { Parent = this });
+        Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
+        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(Disposable);
+        SearchText = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
             .Subscribe(x =>
             {
@@ -45,18 +42,13 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
                         )
                     );
                 }
-            });
+            }).DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
 
     public BindableReactiveProperty<MeasureUnitViewModel> SelectedItem { get; }
     public BindableReactiveProperty<string> SearchText { get; }
-
-    public ValueTask Init(ISettingsPage context)
-    {
-        return ValueTask.CompletedTask;
-    }
 
     public override ValueTask<IRoutable> Navigate(NavigationId id)
     {
@@ -72,13 +64,16 @@ public class SettingsUnitsViewModel : RoutableViewModel, ISettingsSubPage
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        return _view;
-    }
+        foreach (var child in base.GetRoutableChildren())
+        {
+            yield return child;
+        }
 
-    public new void Dispose()
-    {
-        _sub1.Dispose();
+        foreach (var model in _view)
+        {
+            yield return model;
+        }
     }
-
-    public IExportInfo Source => SystemModule.Instance;
+    
+    public override IExportInfo Source => SystemModule.Instance;
 }

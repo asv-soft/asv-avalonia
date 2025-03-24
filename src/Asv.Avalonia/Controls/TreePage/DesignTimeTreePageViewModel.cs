@@ -9,11 +9,12 @@ public interface IDesignTimeTreePage : IPage
     BindableReactiveProperty<bool> IsCompactMode { get; }
     ObservableTree<ITreePage, NavigationId> TreeView { get; }
     BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?> SelectedNode { get; }
-    BindableReactiveProperty<IRoutable?> SelectedPage { get; }
+    BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
+    MenuTree? PageMenu { get; }
 }
 
-public class DesignTimeTreePageViewModel : TreePageViewModel<IPage>
+public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage<IPage>>
 {
     public DesignTimeTreePageViewModel()
         : base(DesignTime.Id, DesignTime.CommandService, DesignTime.ContainerHost)
@@ -49,9 +50,15 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage>
         Init();
     }
 
-    protected override ISettingsSubPage? CreateSubPage(NavigationId id)
+    protected override ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
     {
-        return new SettingsAppearanceViewModel();
+        var set = new SettingsAppearanceViewModel();
+        set.Menu.Add(new MenuItem("cmd0", "Command"));
+        set.Menu.Add(new MenuItem("cmd01", "Command1"));
+        set.Menu.Add(new MenuItem("cmd02", "Command2"));
+        set.Menu.Add(new MenuItem("cmd03", "Command3"));
+        return ValueTask.FromResult<ITreeSubpage?>(set);
+        
     }
 
     public override IExportInfo Source => SystemModule.Instance;

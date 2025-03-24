@@ -1,3 +1,4 @@
+using Asv.Common;
 using ObservableCollections;
 using R3;
 
@@ -9,7 +10,23 @@ public interface ISettingsPage : IPage
     BindableReactiveProperty<bool> IsCompactMode { get; }
 }
 
-public interface ISettingsSubPage : IRoutable, IExportable
+public interface ISettingsSubPage : ITreeSubpage<ISettingsPage>
 {
-    ValueTask Init(ISettingsPage context);
+    
+}
+
+public abstract class SettingsSubPage : RoutableViewModel, ISettingsSubPage
+{
+    protected SettingsSubPage(NavigationId id) 
+        : base(id)
+    {
+        Menu.SetRoutableParent(this, true).DisposeItWith(Disposable);
+    }
+
+    public virtual ValueTask Init(ISettingsPage context) => ValueTask.CompletedTask;
+
+    public override IEnumerable<IRoutable> GetRoutableChildren() => Menu;
+
+    public abstract IExportInfo Source { get; }
+    public ObservableList<IMenuItem> Menu { get; } = [];
 }

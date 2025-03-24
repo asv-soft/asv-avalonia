@@ -1,50 +1,76 @@
-﻿using Asv.IO;
+﻿using Asv.Common;
+using Asv.IO;
 using ObservableCollections;
+using R3;
 
 namespace Asv.Avalonia.IO;
 
-public class SettingsConnectionViewModel : RoutableViewModel, ISettingsSubPage
+public class SettingsConnectionViewModel : SettingsSubPage
 {
-    private readonly ObservableList<PortViewModel> _portSource;
+    private readonly ObservableList<IProtocolPort> _source;
+    private readonly ISynchronizedView<IProtocolPort,PortViewModel> _sourceSyncView;
 
     public const string SubPageId = "settings.connection";
 
     public SettingsConnectionViewModel()
+        : this(NullDeviceManager.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
+        var source = new ObservableList<PortViewModel>
+        {
+            new PortViewModel(),
+            new PortViewModel(),
+            new PortViewModel()
+        };
+        View = source
+            .ToNotifyCollectionChangedSlim()
+            .DisposeItWith(Disposable);
     }
 
     public SettingsConnectionViewModel(IDeviceManager deviceManager)
         : base(SubPageId)
     {
-        _portSource = new ObservableList<PortViewModel>();
+        _source = [];
+        _sourceSyncView = _source
+            .CreateView(x => new PortViewModel(x))
+            .DisposeItWith(Disposable);
+        _sourceSyncView
+            .DisposeRemovedViewItems()
+            .DisposeItWith(Disposable);
+        View = _sourceSyncView
+            .ToNotifyCollectionChanged();
+        
+        foreach (var port in deviceManager.Router.Ports)
+        {
+            _source.Add(port);
+        }
+
+        deviceManager.Router.PortAdded
+            .Subscribe(x => _source.Add(x))
+            .DisposeItWith(Disposable);
+        
+        deviceManager.Router.PortRemoved
+            .Subscribe(x => _source.Remove(x))
+            .DisposeItWith(Disposable);
+        
+        Menu.Add(new MenuItem("add.serial","Add Serial"));
+        Menu.Add(new MenuItem("add.tcp","Add TCP"));
+        Menu.Add(new MenuItem("add.udp","Add UDP"));
     }
 
+    public NotifyCollectionChangedSynchronizedViewList<PortViewModel> View { get; }
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        throw new NotImplementedException();
+        foreach (var child in base.GetRoutableChildren())
+        {
+            yield return child;
+        }
+
+        foreach (var model in View)
+        {
+            yield return model;
+        }
     }
 
-    public IExportInfo Source => IoModule.Instance;
-
-    public ValueTask Init(ISettingsPage context)
-    {
-        return ValueTask.CompletedTask;
-    }
-}
-
-public class PortViewModel : RoutableViewModel
-{
-    public const string Id = "port";
-
-    public PortViewModel(IProtocolPort port)
-        : base(Id)
-    {
-        InitArgs(port.Id);
-    }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        return [];
-    }
+    public override IExportInfo Source => IoModule.Instance;
 }
