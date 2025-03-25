@@ -3,11 +3,43 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:io="clr-namespace:Asv.Avalonia.IO"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.IO.SettingsConnectionView"
              x:DataType="io:SettingsConnectionViewModel">
     <Design.DataContext>
         <io:SettingsConnectionViewModel/>
     </Design.DataContext>
+    <Grid ColumnDefinitions="*,5,*">
+        <ListBox ItemsSource="{Binding View}">
+            <ListBox.Styles>
+                <Style Selector="ListBoxItem Grid.error avalonia|MaterialIcon#PortIcon">
+                    <Setter Property="Foreground" Value="{StaticResource AsvForegroundErrorBrush}" />
+                </Style>
+            </ListBox.Styles>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*"
+                          Classes.error="{Binding IsError}">
+                        <avalonia:MaterialIcon x:Name="PortIcon" Margin="4" HorizontalAlignment="Left" Grid.RowSpan="2" Width="40"
+                                               Height="40" Kind="{Binding Icon}" />
+                        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
+                            <TextBlock VerticalAlignment="Center" Classes="h2"
+                                       Margin="0,0,4,0" Text="1{Binding Name}" />
+                            
+                           
+                        </StackPanel>
+                        <Border Grid.Row="1" Grid.Column="1" 
+                                BorderThickness="1" 
+                                BorderBrush="{StaticResource SystemControlHighlightAccentBrush}">
+                            <TextBlock Classes="description"
+                                       Text="1{Binding Author}" />    
+                        </Border>
+                        
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
     
 </UserControl>

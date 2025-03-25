@@ -10,4 +10,5 @@ public interface IDeviceManagerExtension
     void Configure(IDeviceExplorerBuilder builder);
     bool TryGetIcon(DeviceId id, out MaterialIconKind? icon);
     bool TryGetDeviceBrush(DeviceId id, out IBrush? brush);
+    bool TryGetIcon(PortTypeInfo port, out MaterialIconKind? icon);
 }

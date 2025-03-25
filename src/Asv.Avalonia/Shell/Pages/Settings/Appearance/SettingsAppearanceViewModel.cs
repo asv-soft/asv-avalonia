@@ -27,10 +27,7 @@ public class SettingsAppearanceViewModel : SettingsSubPage
     )
         : base(PageId)
     {
-        Theme = new ThemeProperty(themeService)
-        {
-            Parent = this,
-        }.DisposeItWith(Disposable);
+        Theme = new ThemeProperty(themeService) { Parent = this }.DisposeItWith(Disposable);
         Language = new LanguageProperty(localizationService, dialogService)
         {
             Parent = this,

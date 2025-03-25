@@ -7,7 +7,7 @@ namespace Asv.Avalonia.IO;
 public class NullDeviceManager : IDeviceManager
 {
     public static IDeviceManager Instance { get; } = new NullDeviceManager();
-    
+
     private NullDeviceManager()
     {
         var factory = Protocol.Create(builder =>
@@ -16,11 +16,9 @@ public class NullDeviceManager : IDeviceManager
         });
 
         Router = factory.CreateRouter("DesignTime");
-        Explorer = DeviceExplorer.Create(Router, builder =>
-        {
-            
-        });
+        Explorer = DeviceExplorer.Create(Router, builder => { });
     }
+
     public MaterialIconKind? GetIcon(DeviceId id)
     {
         return MaterialIconKind.Navigation;
@@ -33,4 +31,9 @@ public class NullDeviceManager : IDeviceManager
 
     public IProtocolRouter Router { get; }
     public IDeviceExplorer Explorer { get; }
+
+    public MaterialIconKind? GetIcon(PortTypeInfo portTypeInfo)
+    {
+        return MaterialIconKind.Connection;
+    }
 }

@@ -7,8 +7,10 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class TreePageViewModel<TContext, TSubPage> : PageViewModel<TContext>, IDesignTimeTreePage
-    where TContext : class, IPage 
+public abstract class TreePageViewModel<TContext, TSubPage>
+    : PageViewModel<TContext>,
+        IDesignTimeTreePage
+    where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
 {
     private readonly IContainerHost _container;
@@ -20,23 +22,24 @@ public abstract class TreePageViewModel<TContext, TSubPage> : PageViewModel<TCon
         : base(id, cmd)
     {
         _container = container;
-        IsCompactMode = new BindableReactiveProperty<bool>()
-            .DisposeItWith(Disposable);
+        IsCompactMode = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         Nodes = [];
         Nodes.SetRoutableParent(this, true);
-        TreeView = new TreePageMenu(Nodes)
-            .DisposeItWith(Disposable);
-        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?>()
-            .DisposeItWith(Disposable);
-        SelectedPage = new BindableReactiveProperty<ITreeSubpage?>()
-            .DisposeItWith(Disposable);
+        TreeView = new TreePageMenu(Nodes).DisposeItWith(Disposable);
+        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<
+            ITreePage,
+            NavigationId
+        >?>().DisposeItWith(Disposable);
+        SelectedPage = new BindableReactiveProperty<ITreeSubpage?>().DisposeItWith(Disposable);
         _breadCrumbSource = [];
-        BreadCrumb = _breadCrumbSource.ToViewList()
-            .DisposeItWith(Disposable);
+        BreadCrumb = _breadCrumbSource.ToViewList().DisposeItWith(Disposable);
         SelectedNode.SubscribeAwait(SelectedNodeChanged).DisposeItWith(Disposable);
     }
 
-    private async ValueTask SelectedNodeChanged(ObservableTreeNode<ITreePage, NavigationId>? node, CancellationToken cancel)
+    private async ValueTask SelectedNodeChanged(
+        ObservableTreeNode<ITreePage, NavigationId>? node,
+        CancellationToken cancel
+    )
     {
         if (node?.Base.NavigateTo == null || _internalNavigate)
         {
@@ -80,9 +83,9 @@ public abstract class TreePageViewModel<TContext, TSubPage> : PageViewModel<TCon
         {
             await PageMenu.DisposeAsync();
         }
-        
+
         PageMenu = new MenuTree(newPage.Menu).DisposeItWith(Disposable);
-        
+
         SelectedPage.Value?.Dispose();
         newPage.Parent = this;
         SelectedPage.Value = newPage;

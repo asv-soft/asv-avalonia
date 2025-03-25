@@ -24,7 +24,7 @@ public class DesignTimeShellViewModel : ShellViewModel
 
         var file = new FileMenu();
         MainMenu.Add(file);
-        MainMenu.Add(new MenuItem("open","Open", file.Id.Id));
+        MainMenu.Add(new MenuItem("open", "Open", file.Id.Id));
         MainMenu.Add(new EditMenu());
     }
 }

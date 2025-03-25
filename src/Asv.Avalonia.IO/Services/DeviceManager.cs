@@ -91,4 +91,17 @@ public class DeviceManager : IDeviceManager
 
     public IProtocolRouter Router { get; }
     public IDeviceExplorer Explorer { get; }
+
+    public MaterialIconKind? GetIcon(PortTypeInfo portTypeInfo)
+    {
+        foreach (var extension in _extensions)
+        {
+            if (extension.TryGetIcon(portTypeInfo, out var icon))
+            {
+                return icon;
+            }
+        }
+
+        return MaterialIconKind.Connection;
+    }
 }

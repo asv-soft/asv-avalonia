@@ -10,14 +10,11 @@ public interface ISettingsPage : IPage
     BindableReactiveProperty<bool> IsCompactMode { get; }
 }
 
-public interface ISettingsSubPage : ITreeSubpage<ISettingsPage>
-{
-    
-}
+public interface ISettingsSubPage : ITreeSubpage<ISettingsPage> { }
 
 public abstract class SettingsSubPage : RoutableViewModel, ISettingsSubPage
 {
-    protected SettingsSubPage(NavigationId id) 
+    protected SettingsSubPage(NavigationId id)
         : base(id)
     {
         Menu.SetRoutableParent(this, true).DisposeItWith(Disposable);

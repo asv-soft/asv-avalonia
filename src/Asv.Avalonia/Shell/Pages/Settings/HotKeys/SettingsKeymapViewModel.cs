@@ -21,21 +21,18 @@ public class SettingsKeymapViewModel : SettingsSubPage
     public SettingsKeymapViewModel(ICommandService svc)
         : base(SubPageId)
     {
-        SearchText = new BindableReactiveProperty<string>()
-            .DisposeItWith(Disposable);
+        SearchText = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         var observableList = new ObservableList<ICommandInfo>(svc.Commands);
-        SelectedItem = new BindableReactiveProperty<SettingsKeyMapItemViewModel>()
-            .DisposeItWith(Disposable);
-        ResetHotKeysToDefaultCommand = new ReactiveCommand(ResetHotkeys)
-            .DisposeItWith(Disposable);
+        SelectedItem = new BindableReactiveProperty<SettingsKeyMapItemViewModel>().DisposeItWith(
+            Disposable
+        );
+        ResetHotKeysToDefaultCommand = new ReactiveCommand(ResetHotkeys).DisposeItWith(Disposable);
 
         _view = observableList
             .CreateView(x => new SettingsKeyMapItemViewModel(x, svc))
             .DisposeItWith(Disposable);
-        _view.SetRoutableParentForView(this, true)
-            .DisposeItWith(Disposable);
-        Items = _view.ToNotifyCollectionChanged()
-            .DisposeItWith(Disposable);
+        _view.SetRoutableParentForView(this, true).DisposeItWith(Disposable);
+        Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
         SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
             .Subscribe(x =>
@@ -48,7 +45,8 @@ public class SettingsKeymapViewModel : SettingsSubPage
                 {
                     _view.AttachFilter((_, model) => model.Filter(x));
                 }
-            }).DisposeItWith(Disposable);
+            })
+            .DisposeItWith(Disposable);
     }
 
     public ReactiveCommand ResetHotKeysToDefaultCommand { get; set; }

@@ -58,7 +58,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
         set.Menu.Add(new MenuItem("cmd02", "Command2"));
         set.Menu.Add(new MenuItem("cmd03", "Command3"));
         return ValueTask.FromResult<ITreeSubpage?>(set);
-        
     }
 
     public override IExportInfo Source => SystemModule.Instance;

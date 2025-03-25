@@ -1,0 +1,46 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:Asv.Avalonia"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Design.PreviewWith>
+        <StackPanel Spacing="4" Orientation="Horizontal">
+            <controls:Tag Key="key1" Value="value1" Icon="Tag" />
+            <controls:Tag Key="key2" Value="value2" Icon="Tags" />
+            <controls:Tag Key="key3" Value="value3" Icon="Tag" />    
+        </StackPanel>
+        
+    </Design.PreviewWith>
+
+    <Style Selector="controls|Tag">
+        <Setter Property="Foreground" Value="{StaticResource AsvForegroundInfo3Brush}"/>
+        <Setter Property="Background" Value="{StaticResource AsvBackgroundInfo3Brush}"/>
+        <Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}"/>
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="MainBorder"
+                        Height="30"
+                        BorderThickness="3"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        BorderBrush="{TemplateBinding Foreground}"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}">
+                    <StackPanel Margin="4" Orientation="Horizontal" Spacing="4">
+                        <avalonia:MaterialIcon 
+                            Width="15" Height="15" 
+                            IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" 
+                             
+                            Foreground="{TemplateBinding Foreground}" Kind="{TemplateBinding Icon}"/>
+                        <TextBlock  VerticalAlignment="Center" >
+                            <Run FontWeight="Bold" Text="{TemplateBinding Key}"/>
+                            <Run Text=":"/>
+                            <Run Text="{TemplateBinding Value}"/>
+                        </TextBlock>
+                    </StackPanel>
+                        
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

@@ -24,7 +24,9 @@ public class SettingsUnitsViewModel : SettingsSubPage
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList.CreateView(x => new MeasureUnitViewModel(x) { Parent = this });
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
-        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(Disposable);
+        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(
+            Disposable
+        );
         SearchText = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
@@ -42,7 +44,8 @@ public class SettingsUnitsViewModel : SettingsSubPage
                         )
                     );
                 }
-            }).DisposeItWith(Disposable);
+            })
+            .DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
@@ -74,6 +77,6 @@ public class SettingsUnitsViewModel : SettingsSubPage
             yield return model;
         }
     }
-    
+
     public override IExportInfo Source => SystemModule.Instance;
 }

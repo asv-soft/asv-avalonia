@@ -44,15 +44,88 @@
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/AdaptiveTabControlStrip/AdaptiveTabStripTabControl.axaml" />
             </ResourceDictionary.MergedDictionaries>
             <avalonia1:MaterialIconConverter x:Key="MaterialIconConverter" />
+            
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Light">
+                    <!-- Status theme colors -->
+                    
+                    <Color x:Key="AsvForegroundErrorColor">#cc5058</Color>
+                    <Color x:Key="AsvBackgroundErrorColor">#3d353a</Color>
+                    
+                    <Color x:Key="AsvForegroundWarningColor">#e48f4d</Color>
+                    <Color x:Key="AsvBackgroundWarningColor">#423b3c</Color>
+                    
+                    <Color x:Key="AsvForegroundSuccessColor">#21c088</Color>
+                    <Color x:Key="AsvBackgroundSuccessColor">#37453d</Color>
+                    
+                    
+                    <Color x:Key="AsvForegroundUnknownColor">Gray</Color>
+                    
+                    <Color x:Key="AsvForegroundInfoColor">#607ceb</Color>
+                    <Color x:Key="AsvBackgroundInfoColor">#313945</Color>
+                    
+                    <Color x:Key="AsvForegroundInfo2Color">#9a5cd2</Color>
+                    <Color x:Key="AsvBackgroundInfo2Color">#383442</Color>
+                    
+                    <Color x:Key="AsvForegroundInfo3Color">#21bfc0</Color>
+                    <Color x:Key="AsvBackgroundInfo3Color">#364240</Color>
+                    
+                    <Color x:Key="AsvForegroundInfo4Color">#9dc443</Color>
+                    <Color x:Key="AsvBackgroundInfo4Color">#38403c</Color>
                     
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Dark">
+                    <!-- Status theme colors -->
+                    <Color x:Key="AsvForegroundErrorColor">#cc5058</Color>
+                    <Color x:Key="AsvBackgroundErrorColor">#3d353a</Color>
                     
+                    <Color x:Key="AsvForegroundWarningColor">#e48f4d</Color>
+                    <Color x:Key="AsvBackgroundWarningColor">#423b3c</Color>
+                    
+                    <Color x:Key="AsvForegroundSuccessColor">#21c088</Color>
+                    <Color x:Key="AsvBackgroundSuccessColor">#37453d</Color>
+                    
+                    
+                    <Color x:Key="AsvForegroundUnknownColor">Gray</Color>
+                    
+                    <Color x:Key="AsvForegroundInfoColor">#607ceb</Color>
+                    <Color x:Key="AsvBackgroundInfoColor">#313945</Color>
+                    
+                    <Color x:Key="AsvForegroundInfo2Color">#9a5cd2</Color>
+                    <Color x:Key="AsvBackgroundInfo2Color">#383442</Color>
+                    
+                    <Color x:Key="AsvForegroundInfo3Color">#21bfc0</Color>
+                    <Color x:Key="AsvBackgroundInfo3Color">#364240</Color>
+                    
+                    <Color x:Key="AsvForegroundInfo4Color">#9dc443</Color>
+                    <Color x:Key="AsvBackgroundInfo4Color">#38403c</Color>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
         </ResourceDictionary>
+        <!-- Status theme brushes -->
+        <SolidColorBrush x:Key="AsvForegroundErrorBrush" Color="{DynamicResource AsvForegroundErrorColor}"/>
+        <SolidColorBrush x:Key="AsvBackgroundErrorBrush" Color="{DynamicResource AsvBackgroundErrorColor}"/>
+        
+        <SolidColorBrush x:Key="AsvForegroundWarningBrush" Color="{DynamicResource AsvForegroundWarningColor}"/>
+        <SolidColorBrush x:Key="AsvBackgroundWarningBrush" Color="{DynamicResource AsvBackgroundWarningColor}"/>
+        
+        <SolidColorBrush x:Key="AsvForegroundSuccessBrush" Color="{DynamicResource AsvForegroundSuccessColor}"/>
+        <SolidColorBrush x:Key="AsvBackgroundSuccessBrush" Color="{DynamicResource AsvBackgroundSuccessColor}"/>
+        
+        <SolidColorBrush x:Key="AsvForegroundUnknownBrush" Color="{DynamicResource AsvForegroundUnknownColor}"/>
+        
+        <SolidColorBrush x:Key="AsvForegroundInfoBrush" Color="{DynamicResource AsvForegroundInfoColor}"/>
+        <SolidColorBrush x:Key="AsvBackgroundInfoBrush" Color="{DynamicResource AsvBackgroundInfoColor}"/>
+        
+        <SolidColorBrush x:Key="AsvForegroundInfo2Brush" Color="{DynamicResource AsvForegroundInfo2Color}"/>
+        <SolidColorBrush x:Key="AsvBackgroundInfo2Brush" Color="{DynamicResource AsvBackgroundInfo2Color}"/>
+        
+        <SolidColorBrush x:Key="AsvForegroundInfo3Brush" Color="{DynamicResource AsvForegroundInfo3Color}"/>
+        <SolidColorBrush x:Key="AsvBackgroundInfo3Brush" Color="{DynamicResource AsvBackgroundInfo3Color}"/>
+        
+        <SolidColorBrush x:Key="AsvForegroundInfo4Brush" Color="{DynamicResource AsvForegroundInfo4Color}"/>
+        <SolidColorBrush x:Key="AsvBackgroundInfo4Brush" Color="{DynamicResource AsvBackgroundInfo4Color}"/>
+        
         <!--Tab control-->
         <ControlTheme x:Key="{x:Type TabItem}" BasedOn="{StaticResource {x:Type TabItem}}" TargetType="TabItem">
             <Style Selector="^[TabStripPlacement=Top] /template/ Border#PART_SelectedPipe">
@@ -77,15 +150,15 @@
         <FontWeight x:Key="TabItemHeaderThemeFontWeight">SemiLight</FontWeight>
         <x:Double x:Key="TabItemMinHeight">28</x:Double>
         
-        <system:Double x:Key="FontSizeSmall">12</system:Double>
-        <system:Double x:Key="FontSizeNormal">14</system:Double>
-        <system:Double x:Key="H1FontSize">20</system:Double>
-        <system:Double x:Key="H2FontSize">18</system:Double>
-        <system:Double x:Key="H3FontSize">16</system:Double>
+        <system:Double x:Key="AsvFontSizeSmall">12</system:Double>
+        <system:Double x:Key="AsvFontSizeNormal">14</system:Double>
+        <system:Double x:Key="AsvH1FontSize">20</system:Double>
+        <system:Double x:Key="AsvH2FontSize">18</system:Double>
+        <system:Double x:Key="AsvH3FontSize">16</system:Double>
         
-        <system:Double x:Key="IconBigSize">40</system:Double>
-        <system:Double x:Key="IconMediumSize">30</system:Double>
-        <system:Double x:Key="IconSmallSize">20</system:Double>
+        <system:Double x:Key="AsvIconBigSize">40</system:Double>
+        <system:Double x:Key="AsvIconMediumSize">30</system:Double>
+        <system:Double x:Key="AsvIconSmallSize">20</system:Double>
         
     </Styles.Resources>
     
@@ -107,6 +180,7 @@
     <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/GpsStatusIndicator.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/TelemBox.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/GeoPoint/GeoPointEditor.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Tags/Tag.axaml"/>
     
     <!-- <StyleInclude Source="avares://Avalonia.Controls.TreeDataGrid/Themes/Fluent.axaml"/> -->
     <!--<FluentTheme DensityStyle="Compact" >
@@ -128,16 +202,16 @@
             <Setter Property="Foreground" Value="{DynamicResource  SystemAccentColorLight1}"/>
         </Style>
         <Style Selector="^.big">
-            <Setter Property="Width" Value="{StaticResource  IconBigSize}"/>
-            <Setter Property="Height" Value="{DynamicResource  IconBigSize}"/>
+            <Setter Property="Width" Value="{StaticResource  AsvIconBigSize}"/>
+            <Setter Property="Height" Value="{DynamicResource  AsvIconBigSize}"/>
         </Style>
         <Style Selector="^.medium">
-            <Setter Property="Width" Value="{StaticResource  IconMediumSize}"/>
-            <Setter Property="Height" Value="{DynamicResource  IconMediumSize}"/>
+            <Setter Property="Width" Value="{StaticResource  AsvIconMediumSize}"/>
+            <Setter Property="Height" Value="{DynamicResource  AsvIconMediumSize}"/>
         </Style>
         <Style Selector="^.small">
-            <Setter Property="Width" Value="{StaticResource  IconSmallSize}"/>
-            <Setter Property="Height" Value="{DynamicResource  IconSmallSize}"/>
+            <Setter Property="Width" Value="{StaticResource  AsvIconSmallSize}"/>
+            <Setter Property="Height" Value="{DynamicResource  AsvIconSmallSize}"/>
         </Style>
         <Setter Property="Width" Value="{DynamicResource  IconElementThemeWidth}"/>
         <Setter Property="Height" Value="{DynamicResource  IconElementThemeHeight}"/>
@@ -148,22 +222,22 @@
     <!--Header-->
     <Style Selector="TextBlock">
         <Style Selector="^.h1">
-            <Setter Property="FontSize" Value="{DynamicResource  H1FontSize}"/>
+            <Setter Property="FontSize" Value="{DynamicResource  AsvH1FontSize}"/>
             <Setter Property="FontWeight" Value="Thin"/>
             <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
         </Style>
         <Style Selector="^.h2">
-            <Setter Property="FontSize" Value="{DynamicResource  H2FontSize}"/>
+            <Setter Property="FontSize" Value="{DynamicResource  AsvH2FontSize}"/>
             <Setter Property="FontWeight" Value="Thin"/>
             <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
         </Style>
         <Style Selector="^.h3">
-            <Setter Property="FontSize" Value="{DynamicResource  H3FontSize}"/>
+            <Setter Property="FontSize" Value="{DynamicResource  AsvH3FontSize}"/>
             <Setter Property="FontWeight" Value="Thin"/>
             <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
         </Style>
         <Style Selector="^.description">
-            <Setter Property="FontSize" Value="{DynamicResource  FontSizeSmall}"/>
+            <Setter Property="FontSize" Value="{DynamicResource  AsvFontSizeSmall}"/>
             <Setter Property="FontWeight" Value="Normal"/>
             <Setter Property="Foreground" Value="{DynamicResource   TextControlForegroundDisabled}"/>
         </Style>
