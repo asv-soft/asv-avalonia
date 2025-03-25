@@ -5,7 +5,7 @@ public abstract class ContextCommand<TContext> : AsyncCommand
 {
     public override bool CanExecute(
         IRoutable context,
-        IPersistable parameter,
+        ICommandParameter parameter,
         out IRoutable targetContext
     )
     {
@@ -20,9 +20,9 @@ public abstract class ContextCommand<TContext> : AsyncCommand
         return false;
     }
 
-    public override ValueTask<IPersistable?> Execute(
+    public override ValueTask<ICommandParameter?> Execute(
         IRoutable context,
-        IPersistable newValue,
+        ICommandParameter newValue,
         CancellationToken cancel = default
     )
     {
@@ -34,9 +34,9 @@ public abstract class ContextCommand<TContext> : AsyncCommand
         throw new CommandNotSupportedContextException(Info, context, typeof(TContext));
     }
 
-    protected abstract ValueTask<IPersistable?> InternalExecute(
+    protected abstract ValueTask<ICommandParameter?> InternalExecute(
         TContext context,
-        IPersistable newValue,
+        ICommandParameter newValue,
         CancellationToken cancel
     );
 }

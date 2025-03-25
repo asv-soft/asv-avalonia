@@ -34,12 +34,12 @@ public class ChangeLanguageCommand : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override ValueTask<IPersistable?> InternalExecute(
-        IPersistable newValue,
+    protected override ValueTask<ICommandParameter?> InternalExecute(
+        ICommandParameter newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is Persistable<string> themeName)
+        if (newValue is StringCommandParameter themeName)
         {
             // execute with parameter
             var oldValue = _svc.CurrentLanguage.Value.Id;
@@ -49,7 +49,7 @@ public class ChangeLanguageCommand : NoContextCommand
                 _svc.CurrentLanguage.Value = language;
             }
 
-            return ValueTask.FromResult<IPersistable?>(new Persistable<string>(oldValue));
+            return ValueTask.FromResult<ICommandParameter?>(new StringCommandParameter(oldValue));
         }
         else
         {
@@ -64,7 +64,7 @@ public class ChangeLanguageCommand : NoContextCommand
             }
 
             _svc.CurrentLanguage.Value = temp[index];
-            return ValueTask.FromResult<IPersistable?>(new Persistable<string>(oldValue));
+            return ValueTask.FromResult<ICommandParameter?>(new StringCommandParameter(oldValue));
         }
     }
 }

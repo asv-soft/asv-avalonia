@@ -1,30 +1,45 @@
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.IO;
 
-public class PortViewModel : RoutableViewModel
+public class PortViewModel : RoutableViewModel, IPortViewModel
 {
     private MaterialIconKind? _icon;
-    public const string ViewModelId = "port";
 
     public PortViewModel()
-        : base(ViewModelId)
+        : this("designTime")
     {
         DesignTime.ThrowIfNotDesignMode();
         InitArgs(Guid.NewGuid().ToString());
         Icon = MaterialIconKind.Connection;
+        TagsSource.Add(new TagViewModel("ip") { Key = "ip", Value = "127.0.0.1" });
+        TagsSource.Add(new TagViewModel("port") { Key = "port", Value = "7341" });
     }
 
-    public PortViewModel(IProtocolPort port, IDeviceManager deviceManager)
-        : base(ViewModelId)
+    public PortViewModel(NavigationId id)
+        : base(id)
     {
-        InitArgs(port.Id);
-        Icon = deviceManager.GetIcon(port.TypeInfo);
-        port.Status.Subscribe(UpdateStatus).DisposeItWith(Disposable);
+        Name = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        TagsView = TagsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
+
+    public virtual void Init(IProtocolPort protocolPort)
+    {
+        InitArgs(protocolPort.Id);
+        if (protocolPort.Config.Name != null)
+        {
+            Name.Value = protocolPort.Config.Name;
+        }
+    }
+
+    public BindableReactiveProperty<string> Name { get; }
+
+    protected readonly ObservableList<TagViewModel> TagsSource = [];
+    public NotifyCollectionChangedSynchronizedViewList<TagViewModel> TagsView { get; }
 
     private void UpdateStatus(ProtocolPortStatus status)
     {
@@ -60,4 +75,6 @@ public class PortViewModel : RoutableViewModel
     {
         return [];
     }
+
+    public IExportInfo Source => IoModule.Instance;
 }

@@ -68,7 +68,7 @@ public class HistoricalUnitProperty : RoutableViewModel, IHistoricalProperty<dou
         }
 
         var value = _unit.Current.CurrentValue.ParseToSi(userValue);
-        var newValue = new Persistable<double>(value);
+        var newValue = new DoubleCommandParameter(value);
         await this.ExecuteCommand(ChangeDoublePropertyCommand.Id, newValue);
     }
 

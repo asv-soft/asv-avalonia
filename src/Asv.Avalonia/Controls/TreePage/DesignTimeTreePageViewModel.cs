@@ -11,7 +11,6 @@ public interface IDesignTimeTreePage : IPage
     BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?> SelectedNode { get; }
     BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
-    MenuTree? PageMenu { get; }
 }
 
 public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage<IPage>>

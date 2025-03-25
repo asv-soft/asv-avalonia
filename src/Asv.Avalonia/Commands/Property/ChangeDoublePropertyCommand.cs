@@ -25,19 +25,19 @@ public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<do
 
     #endregion
 
-    protected override ValueTask<IPersistable?> InternalExecute(
+    protected override ValueTask<ICommandParameter?> InternalExecute(
         IHistoricalProperty<double> context,
-        IPersistable newValue,
+        ICommandParameter newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is not Persistable<double> value)
+        if (newValue is not DoubleCommandParameter value)
         {
             throw new InvalidCastException("Invalid value type. Persistable must be double");
         }
 
-        var oldValue = new Persistable<double>(context.ModelValue.Value);
+        var oldValue = new DoubleCommandParameter(context.ModelValue.Value);
         context.ModelValue.OnNext(value.Value);
-        return ValueTask.FromResult<IPersistable?>(oldValue);
+        return ValueTask.FromResult<ICommandParameter?>(oldValue);
     }
 }

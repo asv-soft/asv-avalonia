@@ -23,9 +23,9 @@ public class RedoCommand : ContextCommand<IShell>
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override async ValueTask<IPersistable?> InternalExecute(
+    protected override async ValueTask<ICommandParameter?> InternalExecute(
         IShell context,
-        IPersistable newValue,
+        ICommandParameter newValue,
         CancellationToken cancel
     )
     {

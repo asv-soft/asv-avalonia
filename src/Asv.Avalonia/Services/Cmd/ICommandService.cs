@@ -10,7 +10,7 @@ public interface ICommandService : IExportable
     ValueTask Execute(
         string commandId,
         IRoutable context,
-        IPersistable param,
+        ICommandParameter param,
         CancellationToken cancel = default
     );
     void SetHotKey(string commandId, KeyGesture hotKey);
@@ -23,14 +23,14 @@ public interface ICommandService : IExportable
 public sealed class CommandSnapshot(
     string commandId,
     NavigationPath contextPath,
-    IPersistable newValue,
-    IPersistable? oldValue
+    ICommandParameter newValue,
+    ICommandParameter? oldValue
 )
 {
     public string CommandId { get; set; } = commandId;
     public NavigationPath ContextPath { get; set; } = contextPath;
-    public IPersistable NewValue { get; set; } = newValue;
-    public IPersistable? OldValue { get; set; } = oldValue;
+    public ICommandParameter NewValue { get; set; } = newValue;
+    public ICommandParameter? OldValue { get; set; } = oldValue;
 }
 
 public class CommandEventArgs(IRoutable context, IAsyncCommand command, CommandSnapshot snapshot)

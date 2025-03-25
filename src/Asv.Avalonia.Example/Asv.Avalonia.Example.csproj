@@ -56,12 +56,5 @@
       <UpToDateCheckInput Remove="Pages\Settings\Connection\SettingsConnectionView.axaml" />
     </ItemGroup>
 
-    <ItemGroup>
-      <AdditionalFiles Include="Pages\Settings\Connection\Ports\SerialPortView.axaml" />
-      <AdditionalFiles Include="Pages\Settings\Connection\Ports\TcpPortView.axaml" />
-      <AdditionalFiles Include="Pages\Settings\Connection\Ports\UdpPortView.axaml" />
-      <AdditionalFiles Include="Pages\Settings\Connection\SettingsConnectionView.axaml" />
-    </ItemGroup>
-
    
 </Project>

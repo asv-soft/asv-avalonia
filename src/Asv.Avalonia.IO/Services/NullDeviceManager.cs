@@ -31,9 +31,4 @@ public class NullDeviceManager : IDeviceManager
 
     public IProtocolRouter Router { get; }
     public IDeviceExplorer Explorer { get; }
-
-    public MaterialIconKind? GetIcon(PortTypeInfo portTypeInfo)
-    {
-        return MaterialIconKind.Connection;
-    }
 }

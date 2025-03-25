@@ -55,34 +55,54 @@
         <GridSplitter Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
                       Background="Transparent" Width="10" HorizontalAlignment="Stretch" />
         <Rectangle Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
-                   Fill="{StaticResource SystemChromeLowColor}" Width="1" VerticalAlignment="Stretch" />
+                   Fill="{StaticResource SystemChromeLowColor}" Width="0.5" VerticalAlignment="Stretch" />
         <avalonia1:MaterialIcon IsVisible="{Binding !IsCompactMode}" Grid.Row="0" Grid.RowSpan="2" Width="15"
                                Height="15" Grid.Column="1" Kind="UnfoldMoreVertical"
                                Foreground="{StaticResource SystemChromeLowColor}" />
         <ContentControl Grid.Column="2" Grid.Row="1" Content="{Binding SelectedPage.Value}" />
         <DockPanel Grid.Column="2" Grid.Row="0">
-            <DropDownButton DataContext="{Binding PageMenu}" Background="Transparent" DockPanel.Dock="Right">
-                <avalonia1:MaterialIcon Kind="Menu"/>
-                <DropDownButton.Flyout>
-                    <MenuFlyout ItemsSource="{Binding Items}">
-                        <MenuFlyout.ItemContainerTheme>
-                            <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
-                                          x:DataType="avalonia:MenuNode">
-                                <Setter Property="Icon" Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}" />
-                                <Setter Property="Header" Value="{Binding Base.Header}"/>
-                                <Setter Property="ItemsSource" Value="{Binding Items}"/>
-                                <Setter Property="Command" Value="{Binding Base.Command}"/>
-                                <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}"/>
-                                <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
-                                <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
-                                <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
-                                <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
-                            </ControlTheme>
-                        </MenuFlyout.ItemContainerTheme>
-                    </MenuFlyout>
-                </DropDownButton.Flyout>
-            </DropDownButton>
-            <!--<Menu VerticalAlignment="Center" DockPanel.Dock="Right" DataContext="{Binding PageMenu}" ItemsSource="{Binding Items}">
+            <ItemsControl ItemsSource="{Binding SelectedPage.Value.MenuView.Items}" DockPanel.Dock="Right">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Button 
+                            Command="{Binding Base.Command}"
+                            CommandParameter="{Binding Base.CommandParameter}"
+                            IsEnabled="{Binding Base.IsEnabled}"
+                            IsVisible="{Binding Base.IsVisible}">
+                            <StackPanel Orientation="Horizontal" Spacing="4">
+                                <avalonia1:MaterialIcon Kind="{Binding Base.Icon}"/>
+                                <TextBlock Text="{Binding Base.Header}"/>    
+                            </StackPanel>
+                            
+                            <Button.Flyout>
+                                <MenuFlyout ItemsSource="{Binding Items, Mode=TwoWay}">
+                                    <MenuFlyout.ItemContainerTheme>
+                                        <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
+                                                      x:DataType="avalonia:MenuNode">
+                                            <Setter Property="Icon" Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}" />
+                                            <Setter Property="Header" Value="{Binding Base.Header}"/>
+                                            <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                                            <Setter Property="Command" Value="{Binding Base.Command}"/>
+                                            <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}"/>
+                                            <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+                                            <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+                                            <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+                                            <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                                        </ControlTheme>
+                                    </MenuFlyout.ItemContainerTheme>
+                                </MenuFlyout>
+                            </Button.Flyout>
+                        </Button>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            
+            <!--<Menu VerticalAlignment="Center" DockPanel.Dock="Right" ItemsSource="{Binding SelectedPage.Value.MenuView.Items}" >
                 <Menu.ItemContainerTheme>
                     <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
                                   x:DataType="avalonia:MenuNode">

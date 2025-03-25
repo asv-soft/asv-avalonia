@@ -25,7 +25,7 @@
                 <ColumnDefinition Width="8" />
                 <ColumnDefinition SharedSizeGroup="TitleGroup" Width="Auto" />
                 <ColumnDefinition Width="8" />
-                <ColumnDefinition />
+                <ColumnDefinition MinWidth="300" SharedSizeGroup="ValueGroup" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />

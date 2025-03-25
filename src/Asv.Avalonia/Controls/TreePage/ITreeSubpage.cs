@@ -4,6 +4,7 @@ namespace Asv.Avalonia;
 
 public interface ITreeSubpage : IRoutable, IExportable
 {
+    MenuTree MenuView { get; }
     ObservableList<IMenuItem> Menu { get; }
 }
 

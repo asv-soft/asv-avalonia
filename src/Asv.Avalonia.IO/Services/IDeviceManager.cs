@@ -10,5 +10,4 @@ public interface IDeviceManager
     IBrush? GetDeviceBrush(DeviceId id);
     IProtocolRouter Router { get; }
     IDeviceExplorer Explorer { get; }
-    MaterialIconKind? GetIcon(PortTypeInfo portTypeInfo);
 }

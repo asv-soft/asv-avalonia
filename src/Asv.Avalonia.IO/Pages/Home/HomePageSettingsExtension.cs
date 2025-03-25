@@ -1,7 +1,7 @@
 ﻿using Asv.Common;
 using R3;
 
-namespace Asv.Avalonia.Example;
+namespace Asv.Avalonia.IO;
 
 [ExportExtensionFor<IHomePage>]
 public class HomePageSettingsExtension : IExtensionFor<IHomePage>

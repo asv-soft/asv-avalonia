@@ -3,40 +3,88 @@
         xmlns:controls="using:Asv.Avalonia"
         xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
     <Design.PreviewWith>
-        <StackPanel Spacing="4" Orientation="Horizontal">
-            <controls:Tag Key="key1" Value="value1" Icon="Tag" />
-            <controls:Tag Key="key2" Value="value2" Icon="Tags" />
-            <controls:Tag Key="key3" Value="value3" Icon="Tag" />    
+        <StackPanel Spacing="4">
+            <StackPanel Spacing="4" Orientation="Horizontal">
+                <controls:Tag Key="key1" Value="value1" Icon="Tag" />
+                <controls:Tag Key="key2" Value="value2" Icon="Navi" />
+                <controls:Tag Key="key3" Value="value3" Icon="Tag" />    
+                <controls:Tag Value="only value" Icon="Tag" />
+                <controls:Tag Value="without icon"  />
+                <controls:Tag Value="without icon" Icon="{x:Null}" />
+            </StackPanel>
+            <StackPanel Spacing="4" Orientation="Horizontal">
+                <controls:Tag Classes="error" Key="class" Value="error" />
+                <controls:Tag Classes="warning" Key="class" Value="warning" />
+                <controls:Tag Classes="success" Key="class" Value="success" />
+                <controls:Tag Classes="unknown" Key="class" Value="unknown" />
+                <controls:Tag Classes="info" Key="class" Value="info" />
+                <controls:Tag Classes="info2" Key="class" Value="info2" />
+                <controls:Tag Classes="info3" Key="class" Value="info3" />
+                <controls:Tag Classes="info4" Key="class" Value="info4" />
+            </StackPanel>
         </StackPanel>
         
+        
     </Design.PreviewWith>
-
+    
     <Style Selector="controls|Tag">
         <Setter Property="Foreground" Value="{StaticResource AsvForegroundInfo3Brush}"/>
         <Setter Property="Background" Value="{StaticResource AsvBackgroundInfo3Brush}"/>
         <Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}"/>
-        <!-- Set Defaults -->
+        <Setter Property="BorderThickness" Value="1"/>
+        
+        <Style Selector="^.error">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundErrorBrush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundErrorBrush}"/>
+        </Style>
+        <Style Selector="^.warning">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundWarningBrush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundWarningBrush}"/>
+        </Style>
+        <Style Selector="^.success">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundSuccessBrush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundSuccessBrush}"/>
+        </Style>
+        <Style Selector="^.unknown">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundUnknownBrush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundSuccessBrush}"/>
+        </Style>
+        <Style Selector="^.info">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundInfoBrush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundInfoBrush}"/>
+        </Style>
+        <Style Selector="^.info2">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundInfo2Brush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundInfo2Brush}"/>
+        </Style>
+        <Style Selector="^.info3">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundInfo3Brush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundInfo3Brush}"/>
+        </Style>
+        <Style Selector="^.info3">
+            <Setter Property="Foreground" Value="{StaticResource AsvForegroundInfo4Brush}"/>
+            <Setter Property="Background" Value="{StaticResource AsvBackgroundInfo4Brush}"/>
+        </Style>
+            <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
                 <Border x:Name="MainBorder"
-                        Height="30"
-                        BorderThickness="3"
+                        Height="22"
+                        BorderThickness="{TemplateBinding BorderThickness}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
                         BorderBrush="{TemplateBinding Foreground}"
                         Background="{TemplateBinding Background}"
                         CornerRadius="{TemplateBinding CornerRadius}">
-                    <StackPanel Margin="4" Orientation="Horizontal" Spacing="4">
+                    <StackPanel Margin="2" Orientation="Horizontal" Spacing="2">
                         <avalonia:MaterialIcon 
-                            Width="15" Height="15" 
+                            Width="12" Height="12" 
                             IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" 
                              
                             Foreground="{TemplateBinding Foreground}" Kind="{TemplateBinding Icon}"/>
-                        <TextBlock  VerticalAlignment="Center" >
-                            <Run FontWeight="Bold" Text="{TemplateBinding Key}"/>
-                            <Run Text=":"/>
-                            <Run Text="{TemplateBinding Value}"/>
-                        </TextBlock>
+                        <TextBlock FontSize="12" VerticalAlignment="Center" FontWeight="Bold" Text="{TemplateBinding Key}" />
+                        <TextBlock FontSize="12" IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}" VerticalAlignment="Center" Text=":" />
+                        <TextBlock FontSize="12" VerticalAlignment="Center" Text="{TemplateBinding Value}" />
                     </StackPanel>
                         
                 </Border>

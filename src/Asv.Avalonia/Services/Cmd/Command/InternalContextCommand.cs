@@ -2,7 +2,7 @@
 
 namespace Asv.Avalonia;
 
-public class InternalContextCommand(string commandId, IRoutable owner, IPersistable newValue)
+public class InternalContextCommand(string commandId, IRoutable owner, ICommandParameter newValue)
     : ICommand
 {
     public bool CanExecute(object? parameter)

@@ -16,7 +16,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     private readonly IContainerHost _container;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
-    private MenuTree? _pageMenu;
 
     public TreePageViewModel(NavigationId id, ICommandService cmd, IContainerHost container)
         : base(id, cmd)
@@ -79,23 +78,10 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             return this;
         }
 
-        if (PageMenu != null)
-        {
-            await PageMenu.DisposeAsync();
-        }
-
-        PageMenu = new MenuTree(newPage.Menu).DisposeItWith(Disposable);
-
         SelectedPage.Value?.Dispose();
         newPage.Parent = this;
         SelectedPage.Value = newPage;
         return newPage;
-    }
-
-    public MenuTree? PageMenu
-    {
-        get => _pageMenu;
-        set => SetField(ref _pageMenu, value);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

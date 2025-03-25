@@ -6,13 +6,13 @@ public abstract class AsyncCommand : IAsyncCommand
     public abstract ICommandInfo Info { get; }
     public abstract bool CanExecute(
         IRoutable context,
-        IPersistable parameter,
+        ICommandParameter parameter,
         out IRoutable targetContext
     );
 
-    public abstract ValueTask<IPersistable?> Execute(
+    public abstract ValueTask<ICommandParameter?> Execute(
         IRoutable context,
-        IPersistable newValue,
+        ICommandParameter newValue,
         CancellationToken cancel = default
     );
     public IExportInfo Source => Info.Source;

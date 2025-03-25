@@ -23,7 +23,7 @@ public class NullCommandService : ICommandService
     public ValueTask Execute(
         string commandId,
         IRoutable context,
-        IPersistable param,
+        ICommandParameter param,
         CancellationToken cancel = default
     )
     {

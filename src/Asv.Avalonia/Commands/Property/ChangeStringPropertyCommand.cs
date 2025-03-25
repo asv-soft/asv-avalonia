@@ -25,19 +25,19 @@ public class ChangeStringPropertyCommand : ContextCommand<IHistoricalProperty<st
 
     #endregion
 
-    protected override ValueTask<IPersistable?> InternalExecute(
+    protected override ValueTask<ICommandParameter?> InternalExecute(
         IHistoricalProperty<string?> context,
-        IPersistable newValue,
+        ICommandParameter newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is not Persistable<string?> value)
+        if (newValue is not StringCommandParameter value)
         {
             throw new InvalidCastException("Invalid value type. Persistable must be a string");
         }
 
-        var oldValue = new Persistable<string?>(context.ModelValue.Value);
+        var oldValue = new StringCommandParameter(context.ModelValue.Value ?? string.Empty);
         context.ModelValue.OnNext(value.Value);
-        return ValueTask.FromResult<IPersistable?>(oldValue);
+        return ValueTask.FromResult<ICommandParameter?>(oldValue);
     }
 }
