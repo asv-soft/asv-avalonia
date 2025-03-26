@@ -1,6 +1,4 @@
-﻿using System.Composition;
-using Asv.IO;
-using Material.Icons;
+﻿using Asv.IO;
 using R3;
 
 namespace Asv.Avalonia.IO;

@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Composition;
-using System.Diagnostics;
 using Asv.Avalonia.IO;
-using Asv.Avalonia.Map;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
-using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.Example;

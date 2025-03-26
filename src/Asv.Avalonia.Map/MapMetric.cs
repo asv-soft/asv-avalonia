@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.Metrics;
-
-namespace Asv.Avalonia.Map;
+﻿namespace Asv.Avalonia.Map;
 
 public static class MapMetric
 {

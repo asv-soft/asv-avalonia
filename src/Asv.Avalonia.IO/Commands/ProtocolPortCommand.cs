@@ -1,6 +1,5 @@
 ﻿using System.Composition;
 using Asv.IO;
-using Avalonia.Input;
 using Material.Icons;
 
 namespace Asv.Avalonia.IO;

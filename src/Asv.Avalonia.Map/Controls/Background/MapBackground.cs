@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using Asv.Cfg;
 using Asv.Common;
 using Avalonia;

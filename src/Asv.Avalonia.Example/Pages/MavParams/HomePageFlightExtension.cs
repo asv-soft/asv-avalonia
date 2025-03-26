@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Avalonia.IO;
+﻿using Asv.Avalonia.IO;
 using Asv.IO;
 using Asv.Mavlink;
 using Material.Icons;

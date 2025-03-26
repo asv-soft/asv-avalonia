@@ -3,8 +3,6 @@ using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.Map;
 using Avalonia;
 using Avalonia.Controls;
-using Microsoft.Extensions.Diagnostics.Metrics;
-using Microsoft.Extensions.Hosting;
 using PluginManagerMixin = Asv.Avalonia.Plugins.PluginManagerMixin;
 
 namespace Asv.Avalonia.Example.Desktop;

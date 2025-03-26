@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Composition;
 using Avalonia.Input;
 using Material.Icons;

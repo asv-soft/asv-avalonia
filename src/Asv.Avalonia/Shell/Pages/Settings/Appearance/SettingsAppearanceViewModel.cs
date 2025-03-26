@@ -1,6 +1,5 @@
 ﻿using System.Composition;
 using Asv.Common;
-using ObservableCollections;
 
 namespace Asv.Avalonia;
 

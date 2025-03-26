@@ -1,5 +1,4 @@
 using System.Composition;
-using Avalonia;
 using Avalonia.Input;
 using Material.Icons;
 

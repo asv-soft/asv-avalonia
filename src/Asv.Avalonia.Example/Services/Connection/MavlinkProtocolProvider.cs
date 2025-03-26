@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Composition;
 using Asv.Avalonia.IO;
-using Asv.Avalonia.Map;
 using Asv.Cfg;
 using Asv.IO;
 using Asv.Mavlink;
