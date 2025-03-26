@@ -11,4 +11,6 @@ public interface IPortViewModel : IRoutable, IExportable
     void Init(IProtocolPort protocolPort);
     NotifyCollectionChangedSynchronizedViewList<TagViewModel> TagsView { get; }
     MaterialIconKind? Icon { get; }
+    BindableReactiveProperty<bool> IsEnabled { get; }
+    ReactiveCommand RemovePortCommand { get; }
 }

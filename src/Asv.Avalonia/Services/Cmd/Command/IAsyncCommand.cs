@@ -19,7 +19,7 @@ public interface IAsyncCommand : IExportable
     /// <param name="parameter">The input parameter that may affect execution.</param>
     /// <param name="targetContext">If the command can be executed, this parameter should be set to the target context where the command will be executed.</param>
     /// <returns><c>true</c> if the command can be executed; otherwise, <c>false</c>.</returns>
-    bool CanExecute(IRoutable context, ICommandParameter parameter, out IRoutable targetContext);
+    bool CanExecute(IRoutable context, ICommandArg parameter, out IRoutable targetContext);
 
     /// <summary>
     /// Executes the command asynchronously.
@@ -29,13 +29,13 @@ public interface IAsyncCommand : IExportable
     /// <param name="cancel">A cancellation token to cancel the operation if needed.</param>
     /// <returns>
     /// A <see cref="ValueTask{TResult}"/> representing the asynchronous operation.
-    /// If the command supports undo functionality, it should return a non-null <see cref="ICommandParameter"/> value,
+    /// If the command supports undo functionality, it should return a non-null <see cref="ICommandArg"/> value,
     /// which represents the previous state before execution. This value will be used to revert the operation
     /// when an undo action is triggered.
     /// </returns>
-    ValueTask<ICommandParameter?> Execute(
+    ValueTask<ICommandArg?> Execute(
         IRoutable targetContext,
-        ICommandParameter newValue,
+        ICommandArg newValue,
         CancellationToken cancel = default
     );
 }

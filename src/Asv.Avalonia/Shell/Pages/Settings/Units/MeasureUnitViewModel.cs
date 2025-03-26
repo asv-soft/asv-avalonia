@@ -25,7 +25,7 @@ public class MeasureUnitViewModel : RoutableViewModel
         }
 
         _internalChange = true;
-        var newValue = new CommandParameterAction(
+        var newValue = new ActionCommandArg(
             Base.UnitId,
             userValue.UnitItemId,
             CommandParameterActionType.Change

@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 
 namespace Asv.Avalonia;
 
-public class EmptyCommandParameter : ICommandParameter
+public class EmptyCommandArg : ICommandArg
 {
     public ValueTask Save(in IBufferWriter<byte> buffer)
     {

@@ -28,13 +28,13 @@ public class OpenDebugWindowCommand(ExportFactory<IDebugWindow> factory) : NoCon
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override ValueTask<ICommandParameter?> InternalExecute(
-        ICommandParameter newValue,
+    protected override ValueTask<ICommandArg?> InternalExecute(
+        ICommandArg newValue,
         CancellationToken cancel
     )
     {
         var wnd = new DebugWindow { DataContext = factory.CreateExport().Value, Topmost = true };
         wnd.Show();
-        return ValueTask.FromResult<ICommandParameter?>(null);
+        return ValueTask.FromResult<ICommandArg?>(null);
     }
 }

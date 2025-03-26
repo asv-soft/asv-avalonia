@@ -13,4 +13,11 @@
         <PackageReference Include="Asv.IO" Version="$(AsvCommonVersion)" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Update="Pages\Settings\Connections\TcpClientPort\TcpClientPortView.axaml.cs">
+        <DependentUpon>TcpClientPortView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
 </Project>

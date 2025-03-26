@@ -24,12 +24,27 @@ public class ProtocolPortCommand(IDeviceManager manager) : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override ValueTask<ICommandParameter?> InternalExecute(
-        ICommandParameter newValue,
+    public static ICommandArg CreateAddArg(ProtocolPortConfig config)
+    {
+        return CommandArg.FromAddAction(config.AsUri().ToString());
+    }
+
+    public static ICommandArg CreateRemoveArg(IProtocolPort port)
+    {
+        return CommandArg.FromRemoveAction(port.Id);
+    }
+
+    public static ICommandArg CreateChangeArg(IProtocolPort port, ProtocolPortConfig newConfig)
+    {
+        return CommandArg.FromChangeAction(port.Id, newConfig.AsUri().ToString());
+    }
+
+    protected override ValueTask<ICommandArg?> InternalExecute(
+        ICommandArg newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is CommandParameterAction action)
+        if (newValue is ActionCommandArg action)
         {
             return action.Action switch
             {
@@ -39,22 +54,17 @@ public class ProtocolPortCommand(IDeviceManager manager) : NoContextCommand
                 _ => throw new ArgumentOutOfRangeException(),
             };
         }
-        return ValueTask.FromResult<ICommandParameter?>(null);
+        return ValueTask.FromResult<ICommandArg?>(null);
     }
 
-    private ValueTask<ICommandParameter?> Change(CommandParameterAction action)
+    private ValueTask<ICommandArg?> Change(ActionCommandArg action)
     {
-        CommandParameterAction? rollback = null;
+        ICommandArg? rollback = null;
         var portToDelete = manager.Router.Ports.FirstOrDefault(x => x.Id == action.Id);
         if (portToDelete != null)
         {
-            var oldConfig = portToDelete.Config.AsUri();
+            rollback = CreateChangeArg(portToDelete, portToDelete.Config);
             manager.Router.RemovePort(portToDelete);
-            rollback = new CommandParameterAction(
-                action.Id,
-                oldConfig.ToString(),
-                CommandParameterActionType.Change
-            );
         }
         if (string.IsNullOrWhiteSpace(action.Value))
         {
@@ -62,10 +72,10 @@ public class ProtocolPortCommand(IDeviceManager manager) : NoContextCommand
         }
         var newConfig = new ProtocolPortConfig(new Uri(action.Value));
         manager.Router.AddPort(newConfig.AsUri());
-        return ValueTask.FromResult<ICommandParameter?>(rollback);
+        return ValueTask.FromResult(rollback);
     }
 
-    private ValueTask<ICommandParameter?> AddPort(CommandParameterAction action)
+    private ValueTask<ICommandArg?> AddPort(ActionCommandArg action)
     {
         if (string.IsNullOrWhiteSpace(action.Value))
         {
@@ -77,29 +87,20 @@ public class ProtocolPortCommand(IDeviceManager manager) : NoContextCommand
             config.Name = $"New {config.Scheme} port {manager.Router.Ports.Length + 1}";
         }
         var newPort = manager.Router.AddPort(config.AsUri());
-        var rollback = new CommandParameterAction(
-            newPort.Id,
-            null,
-            CommandParameterActionType.Remove
-        );
-        return new ValueTask<ICommandParameter?>(rollback);
+        return new ValueTask<ICommandArg?>(CreateRemoveArg(newPort));
     }
 
-    private ValueTask<ICommandParameter?> Remove(CommandParameterAction action)
+    private ValueTask<ICommandArg?> Remove(ActionCommandArg action)
     {
         var portToDelete = manager.Router.Ports.FirstOrDefault(x => x.Id == action.Id);
         if (portToDelete != null)
         {
-            var config = portToDelete.Config.AsUri();
-            var rollback = new CommandParameterAction(
-                null,
-                config.ToString(),
-                CommandParameterActionType.Add
-            );
+            var rollback = CreateAddArg(portToDelete.Config);
+            portToDelete.Disable();
             manager.Router.RemovePort(portToDelete);
-            return new ValueTask<ICommandParameter?>(rollback);
+            return new ValueTask<ICommandArg?>(rollback);
         }
 
-        return ValueTask.FromResult<ICommandParameter?>(null);
+        return ValueTask.FromResult<ICommandArg?>(null);
     }
 }

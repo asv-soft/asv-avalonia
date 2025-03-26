@@ -21,7 +21,7 @@ public static class DeviceIconMixin
         new ImmutableSolidColorBrush(Color.Parse("#00BFA5")),
     };
 
-    public static MaterialIconKind GetIcon(DeviceId deviceId)
+    public static MaterialIconKind? GetIcon(DeviceId deviceId)
     {
         switch (deviceId.DeviceClass)
         {
@@ -32,7 +32,7 @@ public static class DeviceIconMixin
             case GbsClientDevice.DeviceClass:
                 return MaterialIconKind.RouterWireless;
             default:
-                return MaterialIconKind.Memory;
+                return null;
         }
     }
 

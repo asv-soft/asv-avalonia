@@ -24,7 +24,7 @@ public class UavAnchor : MapAnchor<UavAnchor>
         InitArgs(deviceId.AsString());
         IsReadOnly = true;
         IsVisible = true;
-        Icon = DeviceIconMixin.GetIcon(deviceId);
+        Icon = DeviceIconMixin.GetIcon(deviceId) ?? MaterialIconKind.Memory;
         Foreground = DeviceIconMixin.GetIconBrush(deviceId);
         CenterX = DeviceIconMixin.GetIconCenterX(deviceId);
         CenterY = DeviceIconMixin.GetIconCenterY(deviceId);

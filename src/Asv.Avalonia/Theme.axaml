@@ -194,6 +194,16 @@
         </FluentTheme.Palettes>
     </FluentTheme>-->
     
+    <!--Button-->
+    
+    <Style Selector="Button.danger">
+        <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundWarningBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundWarningBrush}" />
+        </Style>
+
+       
+    </Style>
     
     <!--MaterialIcon-->
     <Style Selector="avalonia|MaterialIcon">

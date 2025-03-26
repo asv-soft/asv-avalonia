@@ -70,7 +70,7 @@ public class HistoricalStringProperty : RoutableViewModel, IHistoricalProperty<s
             return;
         }
 
-        var newValue = new StringCommandParameter(userValue ?? string.Empty);
+        var newValue = new StringCommandArg(userValue ?? string.Empty);
         await this.ExecuteCommand(ChangeStringPropertyCommand.Id, newValue);
     }
 

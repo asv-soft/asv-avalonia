@@ -128,7 +128,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         switch (e)
         {
             case ExecuteCommandEvent cmd:
-                await _cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandParameter);
+                await _cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandArg);
                 break;
             case RestartApplicationEvent:
                 Environment.Exit(0);

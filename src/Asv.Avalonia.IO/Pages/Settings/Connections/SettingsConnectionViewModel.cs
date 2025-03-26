@@ -56,7 +56,6 @@ public class SettingsConnectionViewModel
         }
 
         deviceManager.Router.PortAdded.Subscribe(x => source.Add(x)).DisposeItWith(Disposable);
-
         deviceManager.Router.PortRemoved.Subscribe(x => source.Remove(x)).DisposeItWith(Disposable);
     }
 

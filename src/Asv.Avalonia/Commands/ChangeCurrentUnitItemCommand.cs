@@ -35,21 +35,21 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override ValueTask<ICommandParameter?> InternalExecute(
-        ICommandParameter newValue,
+    protected override ValueTask<ICommandArg?> InternalExecute(
+        ICommandArg newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is not CommandParameterAction memento)
+        if (newValue is not ActionCommandArg memento)
         {
-            return ValueTask.FromException<ICommandParameter?>(
+            return ValueTask.FromException<ICommandArg?>(
                 new InvalidOperationException("Unable to perform action. Pass a valid parameter.")
             );
         }
 
         if (memento.Id == null || memento.Value == null)
         {
-            return ValueTask.FromException<ICommandParameter?>(
+            return ValueTask.FromException<ICommandArg?>(
                 new InvalidOperationException("Unable to perform action. Pass a valid parameter.")
             );
         }
@@ -63,8 +63,8 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
             unit.Current.Value = unitItem;
         }
 
-        return ValueTask.FromResult<ICommandParameter?>(
-            new CommandParameterAction(
+        return ValueTask.FromResult<ICommandArg?>(
+            new ActionCommandArg(
                 unit.UnitId,
                 unit.Current.Value.UnitItemId,
                 CommandParameterActionType.Change

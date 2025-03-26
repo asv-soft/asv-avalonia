@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Diagnostics;
+using Asv.Avalonia.IO;
 using Asv.Avalonia.Map;
 using Asv.Common;
 using Asv.IO;
@@ -13,13 +14,13 @@ namespace Asv.Avalonia.Example;
 
 [ExportExtensionFor<IFlightMode>]
 [method: ImportingConstructor]
-public class FlightUavAnchorsExtension(IMavlinkConnectionService conn) : IExtensionFor<IFlightMode>
+public class FlightUavAnchorsExtension(IDeviceManager conn) : IExtensionFor<IFlightMode>
 {
     public void Extend(IFlightMode context, CompositeDisposable contextDispose)
     {
-        conn.DevicesExplorer.Devices.PopulateTo(context.Anchors, TryCreateAnchor, RemoveAnchor)
+        conn.Explorer.Devices.PopulateTo(context.Anchors, TryCreateAnchor, RemoveAnchor)
             .DisposeItWith(contextDispose);
-        conn.DevicesExplorer.Devices.PopulateTo(context.Widgets, TryCreateWidget, RemoveWidget)
+        conn.Explorer.Devices.PopulateTo(context.Widgets, TryCreateWidget, RemoveWidget)
             .DisposeItWith(contextDispose);
     }
 

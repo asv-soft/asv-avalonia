@@ -37,7 +37,7 @@ public class ThemeProperty : RoutableViewModel
         }
 
         _internalChange = true;
-        var newValue = new StringCommandParameter(userValue.Id);
+        var newValue = new StringCommandArg(userValue.Id);
         await this.ExecuteCommand(ChangeThemeCommand.Id, newValue);
         _internalChange = false;
     }

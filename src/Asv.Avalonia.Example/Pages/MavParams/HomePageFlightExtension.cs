@@ -25,7 +25,7 @@ public class HomePageParamsDeviceItemAction : HomePageDeviceItemAction
             Header = "Params editor",
             Description = "Edit mavlink device parameters",
             Command = new BindableAsyncCommand(OpenMavParamsCommand.Id, context),
-            CommandParameter = new StringCommandParameter(device.Id.AsString()),
+            CommandParameter = new StringCommandArg(device.Id.AsString()),
         };
     }
 }

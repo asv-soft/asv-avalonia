@@ -34,12 +34,12 @@ public class ChangeLanguageCommand : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override ValueTask<ICommandParameter?> InternalExecute(
-        ICommandParameter newValue,
+    protected override ValueTask<ICommandArg?> InternalExecute(
+        ICommandArg newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is StringCommandParameter themeName)
+        if (newValue is StringCommandArg themeName)
         {
             // execute with parameter
             var oldValue = _svc.CurrentLanguage.Value.Id;
@@ -49,7 +49,7 @@ public class ChangeLanguageCommand : NoContextCommand
                 _svc.CurrentLanguage.Value = language;
             }
 
-            return ValueTask.FromResult<ICommandParameter?>(new StringCommandParameter(oldValue));
+            return ValueTask.FromResult<ICommandArg?>(new StringCommandArg(oldValue));
         }
         else
         {
@@ -64,7 +64,7 @@ public class ChangeLanguageCommand : NoContextCommand
             }
 
             _svc.CurrentLanguage.Value = temp[index];
-            return ValueTask.FromResult<ICommandParameter?>(new StringCommandParameter(oldValue));
+            return ValueTask.FromResult<ICommandArg?>(new StringCommandArg(oldValue));
         }
     }
 }

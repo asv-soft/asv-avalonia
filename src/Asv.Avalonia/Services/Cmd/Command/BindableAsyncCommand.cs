@@ -11,7 +11,7 @@ public class BindableAsyncCommand(string commandId, IRoutable owner) : ICommand
 
     public void Execute(object? parameter)
     {
-        owner.ExecuteCommand(commandId, parameter as ICommandParameter ?? CommandParameter.Empty);
+        owner.ExecuteCommand(commandId, parameter as ICommandArg ?? CommandArg.Empty);
     }
 
     public event EventHandler? CanExecuteChanged;

@@ -34,13 +34,13 @@ public class ChangeThemeCommand : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override ValueTask<ICommandParameter?> InternalExecute(
-        ICommandParameter newValue,
+    protected override ValueTask<ICommandArg?> InternalExecute(
+        ICommandArg newValue,
         CancellationToken cancel
     )
     {
         var oldValue = _svc.CurrentTheme.Value.Id;
-        if (newValue is StringCommandParameter memento)
+        if (newValue is StringCommandArg memento)
         {
             // execute with parameter
             var theme = _svc.Themes.FirstOrDefault(x => x.Id == memento.Value);
@@ -63,6 +63,6 @@ public class ChangeThemeCommand : NoContextCommand
             _svc.CurrentTheme.Value = temp[index];
         }
 
-        return ValueTask.FromResult<ICommandParameter?>(new StringCommandParameter(oldValue));
+        return ValueTask.FromResult<ICommandArg?>(new StringCommandArg(oldValue));
     }
 }

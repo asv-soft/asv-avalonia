@@ -3,13 +3,13 @@
 public abstract class OpenPageCommandBase(string pageId, INavigationService nav)
     : ContextCommand<IShell>
 {
-    protected override async ValueTask<ICommandParameter?> InternalExecute(
+    protected override async ValueTask<ICommandArg?> InternalExecute(
         IShell context,
-        ICommandParameter newValue,
+        ICommandArg newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is StringCommandParameter args)
+        if (newValue is StringCommandArg args)
         {
             await nav.GoTo(new NavigationPath(new NavigationId(pageId, args.Value)));
         }

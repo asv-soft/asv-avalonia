@@ -1,19 +1,32 @@
-﻿using System.Collections.Immutable;
+﻿using System.Collections;
+using System.Collections.Immutable;
 using System.Composition;
 using System.Diagnostics.Metrics;
+using Asv.Cfg;
+using Asv.Common;
 using Asv.IO;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
+using R3;
 
 namespace Asv.Avalonia.IO;
 
+public class DeviceManagerConfig
+{
+    public string[] Connections { get; set; } = ["tcp://172.16.0.1:7341#name=GBS"];
+}
+
 [Export(typeof(IDeviceManager))]
 [Shared]
-public class DeviceManager : IDeviceManager
+public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
 {
+    private readonly IConfiguration _cfgSvc;
     private readonly ImmutableArray<IDeviceManagerExtension> _extensions;
+    private readonly IDisposable _sub1;
+    private readonly IDisposable _sub2;
+    private readonly DeviceManagerConfig _config;
 
     private static readonly ImmutableSolidColorBrush[] DeviceColors =
     [
@@ -28,12 +41,19 @@ public class DeviceManager : IDeviceManager
 
     [ImportingConstructor]
     public DeviceManager(
+        IConfiguration cfgSvc,
         ILoggerFactory loggerFactory,
         IMeterFactory meterFactory,
         TimeProvider timeProvider,
         [ImportMany] IEnumerable<IDeviceManagerExtension> extensions
     )
     {
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(meterFactory);
+        ArgumentNullException.ThrowIfNull(timeProvider);
+        ArgumentNullException.ThrowIfNull(extensions);
+        ArgumentNullException.ThrowIfNull(cfgSvc);
+        _cfgSvc = cfgSvc;
         _extensions = [.. extensions];
         var factory = Protocol.Create(builder =>
         {
@@ -61,6 +81,21 @@ public class DeviceManager : IDeviceManager
                 }
             }
         );
+
+        _config = cfgSvc.Get<DeviceManagerConfig>();
+        foreach (var cs in _config.Connections)
+        {
+            Router.AddPort(cs);
+        }
+
+        _sub1 = Router.PortAdded.Subscribe(_ => SaveConfig());
+        _sub2 = Router.PortRemoved.Subscribe(_ => SaveConfig());
+    }
+
+    private void SaveConfig()
+    {
+        _config.Connections = Router.Ports.Select(x => x.Config.AsUri().ToString()).ToArray();
+        _cfgSvc.Set(_config);
     }
 
     public MaterialIconKind? GetIcon(DeviceId id)
@@ -91,4 +126,30 @@ public class DeviceManager : IDeviceManager
 
     public IProtocolRouter Router { get; }
     public IDeviceExplorer Explorer { get; }
+
+    public void Dispose()
+    {
+        _sub1.Dispose();
+        _sub2.Dispose();
+        Router.Dispose();
+        Explorer.Dispose();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await CastAndDispose(_sub1);
+        await CastAndDispose(_sub2);
+        await Router.DisposeAsync();
+        await Explorer.DisposeAsync();
+
+        return;
+
+        static async ValueTask CastAndDispose(IDisposable resource)
+        {
+            if (resource is IAsyncDisposable resourceAsyncDisposable)
+                await resourceAsyncDisposable.DisposeAsync();
+            else
+                resource.Dispose();
+        }
+    }
 }

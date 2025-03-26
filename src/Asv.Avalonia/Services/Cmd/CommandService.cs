@@ -82,7 +82,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
             // TODO: check if we need to request params through the QuickPick dialog
             await _nav.SelectedControl.CurrentValue.ExecuteCommand(
                 command.Info.Id,
-                CommandParameter.Empty
+                CommandArg.Empty
             );
         }
         catch (Exception e)
@@ -97,7 +97,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
     private async ValueTask InternalExecute(
         IAsyncCommand factory,
         IRoutable context,
-        ICommandParameter param,
+        ICommandArg param,
         CancellationToken cancel
     )
     {
@@ -237,7 +237,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
     public ValueTask Execute(
         string commandId,
         IRoutable context,
-        ICommandParameter param,
+        ICommandArg param,
         CancellationToken cancel = default
     )
     {

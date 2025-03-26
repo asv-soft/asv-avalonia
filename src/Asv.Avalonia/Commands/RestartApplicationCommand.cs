@@ -25,14 +25,14 @@ public class RestartApplicationCommand : ContextCommand<IRoutable>
 
     public override ICommandInfo Info => StaticInfo;
 
-    protected override async ValueTask<ICommandParameter?> InternalExecute(
+    protected override async ValueTask<ICommandArg?> InternalExecute(
         IRoutable context,
-        ICommandParameter newValue,
+        ICommandArg newValue,
         CancellationToken cancel
     )
     {
         var isForce = false;
-        if (newValue is BoolCommandParameter b)
+        if (newValue is BoolCommandArg b)
         {
             isForce = b.Value;
         }
