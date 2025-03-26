@@ -9,7 +9,7 @@ namespace Asv.Avalonia.Example;
 
 [ExportExtensionFor<IFlightMode>]
 [method: ImportingConstructor]
-public class FlightUavAnchorsExtension(IMavlinkConnectionService conn) : IExtensionFor<IFlightMode>
+public class FlightUavAnchorsExtension(IMavlinkConnectionService conn, INavigationService navigationService,IUnitService unitService, [ImportMany] IEnumerable<IRttItem> rttItems) : IExtensionFor<IFlightMode>
 {
     public void Extend(IFlightMode context, CompositeDisposable contextDispose)
     {
@@ -22,7 +22,7 @@ public class FlightUavAnchorsExtension(IMavlinkConnectionService conn) : IExtens
     private UavWidgetViewModel? TryCreateWidget(KeyValuePair<DeviceId, IClientDevice> device)
     {
         var pos = device.Value.GetMicroservice<IPositionClientEx>();
-        return pos != null ? new UavWidgetViewModel(conn, device.Value) : null;
+        return pos != null ? new UavWidgetViewModel(conn, device.Value, navigationService,unitService) : null;
     }
 
     private bool RemoveWidget(KeyValuePair<DeviceId, IClientDevice> model, UavWidgetViewModel vm)

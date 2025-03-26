@@ -1,0 +1,21 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.SetAltitudeDialog"
+             x:DataType="example:SetAltitudeDialogViewModel">
+    <Design.DataContext>
+        <example:SetAltitudeDialogViewModel />
+    </Design.DataContext>
+    <Panel>
+        <StackPanel Spacing="10" Margin="10">
+            <TextBlock Text="Altitude" />
+            <Grid ColumnDefinitions="*, Auto">
+                <TextBox Grid.Column="0" Focusable="True" Name="AltitudeTextBox" Text="{Binding Altitude.Value}"/>
+                <TextBlock VerticalAlignment="Center" Margin="8 0" Grid.Column="1" Text="m" />
+            </Grid>
+        </StackPanel>
+    </Panel>
+</UserControl>
