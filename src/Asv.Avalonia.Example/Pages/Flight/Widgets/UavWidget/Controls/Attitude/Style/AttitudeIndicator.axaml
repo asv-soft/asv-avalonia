@@ -37,12 +37,17 @@
                                 </TransformGroup>
                             </Rectangle.RenderTransform>
                         </Rectangle>
-                        <Rectangle Canvas.Top="500" Canvas.Left="-210" Width="1420" Height="1420">
+                        <Rectangle Canvas.Top="500" Canvas.Left="-210" Width="2000" Height="2000">
                             <Rectangle.Fill>
-                                <LinearGradientBrush EndPoint="0,1420" StartPoint="0,0">
-                                    <GradientStop Color="#4c8c4a" Offset="0" />
-                                    <GradientStop Color="#003300" Offset="0.3" />
-                                </LinearGradientBrush>
+                                <LinearGradientBrush StartPoint="50%,0%"
+                                                     EndPoint="50%,100%" Opacity="0.2">
+                                    <LinearGradientBrush.GradientStops>
+                                        <GradientStop Offset="0" Color="#4679ba"/>
+                                        <GradientStop Offset="0.5" Color="#a2acc5"/>
+                                        <GradientStop Offset="0.7" Color="#081b5d"/>
+                                        <GradientStop Offset="1" Color="#2e4469"/>
+                                    </LinearGradientBrush.GradientStops>
+                                </LinearGradientBrush>     
                             </Rectangle.Fill>
                             <Rectangle.RenderTransform>
                                 <TransformGroup>
@@ -174,7 +179,7 @@
 
                         <!-- Velocity -->
                         <Rectangle ToolTip.Tip="Velocity" Canvas.Top="301"
-                                   Canvas.Left="-3" Fill="#e0e0e0" Opacity="0.3" StrokeThickness="0"
+                                   Canvas.Left="-3"  Opacity="0.3" StrokeThickness="0"
                                    HorizontalAlignment="Stretch" Width="111" Height="398" />
                         <ItemsControl ToolTip.Tip="Velocity"
                                       x:Name="Velocity" Canvas.Left="0" Canvas.Top="300" Width="110" Height="400"
@@ -197,38 +202,43 @@
                                           HorizontalAlignment="Stretch">
                                         <TextBlock Grid.Column="0" Foreground="White" Text="{CompiledBinding Title}"
                                                    Margin="0,-25,0,0" TextAlignment="Right" Width="85" FontSize="35" />
-                                        <Line Grid.Column="1" StartPoint="0,0" EndPoint="20,0" Stroke="#e0e0e0"
+                                        <Line Grid.Column="1" StartPoint="0,0" EndPoint="20,0" Stroke="LightGreen"
                                               StrokeThickness="5" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Path ToolTip.Tip="Velocity"
-                              Opacity="0.7" Canvas.Top="470" Canvas.Left="-1"
-                              Fill="#000a12" StrokeThickness="3" Stroke="#eceff1">
-                            <Path.Data>
-                                <PathGeometry>
-                                    <PathFigure StartPoint="2,5" IsClosed="True">
-                                        <LineSegment Point="2,55" />
-                                        <LineSegment Point="90,55" />
-                                        <LineSegment Point="105,30" />
-                                        <LineSegment Point="90,5" />
-                                    </PathFigure>
-                                </PathGeometry>
-                            </Path.Data>
-                        </Path>
-                        <TextBlock ToolTip.Tip="Velocity" Canvas.Left="-1"
+                        <Border Canvas.Top="450" Canvas.Left="-1" Width="110" Height="90" 
+                                BorderBrush="White" 
+                                BorderThickness="3" 
+                                CornerRadius="5"
+                                Background="Black">
+                            <Path ToolTip.Tip="Velocity"
+                                  HorizontalAlignment="Left" Width="20" Height="30" Stretch="Fill" Fill="White" Stroke="White" StrokeThickness="3"
+                                  Opacity="0.7" >
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="0,0">
+                                            <LineSegment Point="1,1"/>
+                                            <LineSegment Point="0,2"/>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>     
+                        </Border>
+                       
+                        <TextBlock ToolTip.Tip="Velocity" Canvas.Left="0"
                                    Canvas.Top="470" Margin="0,0,0,0" Foreground="White"
                                    Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Velocity}"
                                    TextAlignment="Right" FontSize="40" Width="87" FontWeight="DemiBold" />
                         <Border ToolTip.Tip="Velocity"
-                                BorderBrush="#e0e0e0" Canvas.Top="300" Canvas.Left="-3" BorderThickness="5"
+                                 Canvas.Top="300" Canvas.Left="-3" BorderThickness="5"
                                 CornerRadius="3" Width="113" Height="400" />
 
 
                         <!-- Altitude -->
                         <Rectangle ToolTip.Tip="Altitude" Canvas.Top="301"
-                                   Canvas.Right="-3" Fill="#e0e0e0" Opacity="0.3" StrokeThickness="0"
+                                   Canvas.Right="-3" Opacity="0.3" StrokeThickness="0"
                                    HorizontalAlignment="Stretch" Width="111" Height="398" />
                         <ItemsControl ToolTip.Tip="Altitude"
                                       x:Name="Altitude" Canvas.Right="0" Canvas.Top="300" Width="110" Height="400"
@@ -252,33 +262,37 @@
                                           HorizontalAlignment="Stretch">
                                         <TextBlock Grid.Column="1" Foreground="White" Text="{CompiledBinding Title}"
                                                    Margin="0,-25,0,0" TextAlignment="Left" Width="85" FontSize="35" />
-                                        <Line Grid.Column="0" StartPoint="0,0" EndPoint="20,0" Stroke="#e0e0e0"
+                                        <Line Grid.Column="0" StartPoint="0,0" EndPoint="20,0" Stroke="LightGreen"
                                               StrokeThickness="5" />
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Path ToolTip.Tip="Altitude"
-                              Opacity="0.7" Canvas.Right="-1" Canvas.Top="470"
-                              Fill="#000a12" StrokeThickness="3" Stroke="#eceff1">
-                            <Path.Data>
-                                <PathGeometry>
-                                    <PathFigure StartPoint="105,5" IsClosed="True">
-                                        <LineSegment Point="105,55" />
-                                        <LineSegment Point="15,55" />
-                                        <LineSegment Point="0,30" />
-                                        <LineSegment Point="15,5" />
-                                    </PathFigure>
-                                </PathGeometry>
-                            </Path.Data>
-                        </Path>
+                        <Border Canvas.Top="450" Canvas.Left="890" Width="110" Height="90" 
+                                BorderBrush="White" 
+                                BorderThickness="3" 
+                                CornerRadius="5"
+                                Background="Black">
+                            <Path ToolTip.Tip="Velocity"
+                                  HorizontalAlignment="Left" Width="20" Height="30" Stretch="Fill" Fill="White" Stroke="White" StrokeThickness="3"
+                                  Opacity="0.7" >
+                                <Path.Data>
+                                    <PathGeometry>
+                                        <PathFigure StartPoint="0,0">
+                                            <LineSegment Point="1,1"/>
+                                            <LineSegment Point="0,2"/>
+                                        </PathFigure>
+                                    </PathGeometry>
+                                </Path.Data>
+                            </Path>     
+                        </Border>
                         <!-- <Polygon/> -->
                         <TextBlock ToolTip.Tip="Altitude" Canvas.Right="-1"
                                    Canvas.Top="470" Margin="0,0,0,0" Foreground="White" FontWeight="DemiBold"
                                    Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Altitude}"
                                    VerticalAlignment="Center" TextAlignment="Left" FontSize="40" Width="87" />
                         <Border ToolTip.Tip="Altitude"
-                                BorderBrush="#e0e0e0" Canvas.Right="-3" Canvas.Top="300" BorderThickness="5"
+                                Canvas.Right="-3" Canvas.Top="300" BorderThickness="5"
                                 CornerRadius="3" Width="113" Height="400" />
 
                         <!-- Сompass -->
@@ -341,13 +355,13 @@
 
                         <!-- Vibration -->
 
-                        <Border ToolTip.Tip="Vibration"
+                        <Border IsVisible="False" ToolTip.Tip="Vibration"
                                 BorderBrush="#e0e0e0" BorderThickness="5" CornerRadius="3" Canvas.Top="105"
                                 Canvas.Left="-3" Height="185" Width="170" />
-                        <Border ToolTip.Tip="Vibration" Background="White"
+                        <Border IsVisible="False" ToolTip.Tip="Vibration" Background="White"
                                 Opacity="0.3" CornerRadius="3" Canvas.Top="105" Canvas.Left="-3" Height="185"
                                 Width="170" />
-                        <Grid ToolTip.Tip="Vibration" Canvas.Top="110"
+                        <Grid IsVisible="False" ToolTip.Tip="Vibration" Canvas.Top="110"
                               Canvas.Left="10" Height="175" ColumnDefinitions="*, 10, *, 10, *"
                               RowDefinitions="40, *, 2, *, 2, *, 40">
                             <TextBlock Grid.Row="0" Grid.Column="0" FontSize="25" HorizontalAlignment="Center"

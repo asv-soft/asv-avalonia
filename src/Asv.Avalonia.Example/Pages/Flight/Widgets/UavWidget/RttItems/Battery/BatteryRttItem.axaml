@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.BatteryRttItem"
+             x:DataType="example:BatteryRttItemViewModel">
+    <Viewbox Width="100">
+        <avalonia:TelemBox
+            Margin="4"
+            Width="150"
+            MainBrush="{Binding BatteryStatusBrush.Value}"
+            SecondaryBrush="{DynamicResource NavySecondaryBrush}"
+            Title="Battery"
+            Units="Time"
+            IsBusy="True"
+            Icon="Battery10"
+            CornerRadius="4">
+            <avalonia:TelemBox.CustomContent>
+                <Grid ColumnDefinitions="2*,*" RowDefinitions="*,*">
+                    <TextBlock Grid.RowSpan="2" TextAlignment="Right" FontSize="30"
+                               Text="{Binding BatteryCharge.Value}" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15"
+                               Text="{Binding BatteryAmperage.Value}" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15"
+                               Text="{Binding BatteryVoltage.Value}" />
+                </Grid>
+
+            </avalonia:TelemBox.CustomContent>
+        </avalonia:TelemBox>
+    </Viewbox>
+</UserControl>

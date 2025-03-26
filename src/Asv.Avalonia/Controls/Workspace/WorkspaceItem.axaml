@@ -37,13 +37,14 @@
                     Padding="{TemplateBinding Padding}"
                     HeaderTemplate="{TemplateBinding HeaderTemplate}"
                     Header="{TemplateBinding Header}">
-                    <ContentPresenter Name="PART_ContentPresenter"
-                                      Grid.Row="1"
-                                      ContentTemplate="{TemplateBinding ContentTemplate}"
-                                      Content="{TemplateBinding Content}"
-                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                      RenderTransformOrigin="0,0"/>    
+                    <Viewbox  Grid.Row="1">
+                        <ContentPresenter Name="PART_ContentPresenter"
+                                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                                          Content="{TemplateBinding Content}"
+                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          RenderTransformOrigin="0,0"/>       
+                    </Viewbox>
                 </Expander>
             </ControlTemplate>
         </Setter>

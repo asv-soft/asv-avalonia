@@ -78,6 +78,38 @@
       <Compile Update="Pages\Flight\Widgets\Attitude\Style\AttitudeIndicator.cs">
         <DependentUpon>AttitudeIndicator.axaml</DependentUpon>
       </Compile>
+      <Compile Update="Pages\Flight\Widgets\UavWidget\UavWidgetView.axaml.cs">
+        <DependentUpon>UavWidgetView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\Attitude\Style\AttitudeIndicator.axaml" />
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\RouteIndicator\RouteIndicator.axaml" />
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Dialogs\SetAltitudeDialog.axaml" />
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\RttItems\Battery\BatteryRttItem.axaml" />
+
+      <ProjectReference Include="..\Asv.Avalonia.Example.Api\Asv.Avalonia.Example.Api.csproj" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\Ports\SerialPortView.axaml" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\Ports\TcpPortView.axaml" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\Ports\UdpPortView.axaml" />
+      <UpToDateCheckInput Remove="Pages\Settings\Connection\SettingsConnectionView.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\Flight\Widgets\RttItems\" />
+      <Compile Update="Pages\Flight\Widgets\UavWidget\UavWidgetView.axaml.cs">
+        <DependentUpon>UavWidgetView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\Attitude\Style\AttitudeIndicator.axaml" />
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\RouteIndicator\RouteIndicator.axaml" />
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Dialogs\SetAltitudeDialog.axaml" />
+      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\RttItems\Battery\BatteryRttItem.axaml" />
     </ItemGroup>
 
    

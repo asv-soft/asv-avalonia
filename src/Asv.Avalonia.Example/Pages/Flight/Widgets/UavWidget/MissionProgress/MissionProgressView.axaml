@@ -1,0 +1,65 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.MissionProgressView"
+             x:DataType="example:MissionProgressViewModel">
+    <Design.DataContext>
+        <example:MissionProgressViewModel />
+    </Design.DataContext>
+    <DockPanel LastChildFill="True">
+        <StackPanel Spacing="10" Orientation="Vertical" Margin="0 5 0 0" DockPanel.Dock="Top" IsVisible="{Binding  !IsDownloaded.Value}">
+            <TextBlock Text="Downloading Mission"/>
+            <ProgressBar Value="{Binding DownloadProgress.Value}" Minimum="0" Maximum="100" Width="100"/> 
+        </StackPanel>
+        <StackPanel Margin="0 5 0 0" DockPanel.Dock="Top" IsVisible="{Binding  IsDownloaded.Value}">
+            <example:RouteIndicator Progress="{Binding PathProgress.Value}" StatusText="{Binding MissionFlightTime.Value}"  
+                                    Title="Mission Progress" 
+                                    SubStatusText="before complete"/>
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Spacing="5">
+                <Viewbox Width="100">
+                    <avalonia:TelemBox
+                        Margin="4"
+                        Width="150"
+                        HorizontalAlignment="Left"
+                        MainBrush="{DynamicResource NavyMainBrush}"
+                        SecondaryBrush="{DynamicResource NavySecondaryBrush}"
+                        Title="Mission Distance"
+                        Units="{Binding DistanceUnitItem.Value.Symbol}"
+                        IsBusy="True"
+                        Icon="MapMarkerDistance"
+                        CornerRadius="4">
+                        <avalonia:TelemBox.CustomContent>
+                            <TextBlock  VerticalAlignment="Center" TextAlignment="Center"
+                                        FontSize="30"
+                                        Text="{Binding MissionDistance.Value}" />
+                        </avalonia:TelemBox.CustomContent>
+                    </avalonia:TelemBox>     
+                </Viewbox>
+               <Viewbox Width="100">
+                   <avalonia:TelemBox
+                       Margin="4"
+                       Width="150"
+                       HorizontalAlignment="Left"
+                       MainBrush="{DynamicResource NavyMainBrush}"
+                       SecondaryBrush="{DynamicResource NavySecondaryBrush}"
+                       Title="Total Distance"
+                       Units="{Binding DistanceUnitItem.Value.Symbol}"
+                       IsBusy="True"
+                       Icon="LocationDistance"
+                       CornerRadius="4">
+                       <avalonia:TelemBox.CustomContent>
+                           <TextBlock  VerticalAlignment="Center" TextAlignment="Center"
+                                       FontSize="30"
+                                       Text="{Binding TotalDistance.Value}" />
+                       </avalonia:TelemBox.CustomContent>
+                   </avalonia:TelemBox>        
+               </Viewbox>
+            </StackPanel>
+            
+        </StackPanel>
+    </DockPanel>
+</UserControl>
