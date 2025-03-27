@@ -547,4 +547,25 @@
     <data name="ToolsMenu_Settings" xml:space="preserve">
         <value>Settings</value>
     </data>
+    <data name="PacketViewerView_CheckAll" xml:space="preserve">
+        <value>Check/Uncheck All</value>
+    </data>
+    <data name="PacketViewerView_PlayPause" xml:space="preserve">
+        <value>Play/Pause</value>
+    </data>
+    <data name="PacketViewerView_ClearAll" xml:space="preserve">
+        <value>Clear all packets</value>
+    </data>
+    <data name="PacketViewerView_Save" xml:space="preserve">
+       <value>Save as CSV</value>
+    </data>
+    <data name="PacketViewerViewDockPanelText" xml:space="preserve">
+        <value>Packet Viewer</value>
+    </data>
+    <data name="PacketViewer_Expander_MessageSources" xml:space="preserve">
+      <value>Message sources</value>
+    </data>
+    <data name="PacketViewer_Expander_MessageTypes" xml:space="preserve">
+        <value>Message types</value>
+    </data>
 </root>
