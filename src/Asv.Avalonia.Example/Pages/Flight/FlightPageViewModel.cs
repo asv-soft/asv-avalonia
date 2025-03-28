@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Asv.Avalonia.Map;
 using Asv.Common;
-using Asv.Mavlink;
 using Material.Icons;
 using ObservableCollections;
 using R3;
@@ -46,6 +44,7 @@ public class FlightPageViewModel : PageViewModel<IFlightMode>, IFlightMode
     public FlightPageViewModel(ICommandService cmd)
         : base(PageId, cmd)
     {
+        // TODO:Localize
         Title.Value = "Flight";
         Icon.Value = PageIcon;
         Anchors = [];

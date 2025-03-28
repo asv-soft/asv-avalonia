@@ -1,126 +1,125 @@
 using System;
 using System.Collections.Generic;
-using System.Composition;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
-using Asv.Avalonia.Map;
+using Asv.Avalonia.IO;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
 using Avalonia.Media;
 using Avalonia.Threading;
-using ObservableCollections;
 using R3;
 using Observable = R3.Observable;
 
 namespace Asv.Avalonia.Example;
 
-public interface IUavFlightWidget : IMapWidget
-{
-    IClientDevice Device { get; }
-}
-
 public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>, IUavFlightWidget
 {
     private WorkspaceDock _position;
 
-    private readonly INavigationService _navigationService;
-
-    private readonly PositionClientEx? _devicePosition;
     private readonly GnssClientEx? _deviceGnss;
-    private readonly ControlClient? _controlClient;
-    public const string WidgetId = "widget-uav";
+    private const string WidgetId = "widget-uav";
 
-    private static readonly Color _greenColor = Color.Parse("#21c088");
-    private static readonly Color _orangeColor = Color.Parse("#e48f4d");
-    private static readonly Color _redColor = Color.Parse("#cc5058");
-    private static readonly Color _yellowColor = Color.Parse("#dfc34a");
+    private static readonly Color GreenColor = Color.Parse("#21c088");
+    private static readonly Color OrangeColor = Color.Parse("#e48f4d");
+    private static readonly Color RedColor = Color.Parse("#cc5058");
+    private static readonly Color YellowColor = Color.Parse("#dfc34a");
 
     public UavWidgetViewModel()
-        : base(WidgetId)
+        : base(SystemModule.Name)
     {
         DesignTime.ThrowIfNotDesignMode();
         InitArgs("1");
-        AltitudeStatus.Value.Color = _greenColor;
-        BatteryStatusBrush.Value.Color = _greenColor;
-        GnssStatusBrush.Value.Color = _greenColor;
-       
+        AltitudeStatus.Value.Color = GreenColor;
+        BatteryStatusBrush.Value.Color = GreenColor;
+        GnssStatusBrush.Value.Color = GreenColor;
         HomeAzimuth.Value = -115;
     }
 
-    public UavWidgetViewModel(IMavlinkConnectionService service, IClientDevice device,
-        [Import] INavigationService navigation, [Import] IUnitService unitService)
+    public UavWidgetViewModel(IDeviceManager service, IClientDevice device, INavigationService navigation,
+        IUnitService unitService)
         : base(WidgetId)
     {
         ArgumentNullException.ThrowIfNull(device);
-        _navigationService = navigation;
         Device = device;
         Position = WorkspaceDock.Left;
         Icon = DeviceIconMixin.GetIcon(device.Id);
         IconBrush = DeviceIconMixin.GetIconBrush(device.Id);
-        AltitudeUnit.Value = unitService.Units.First(_ => _.Value.UnitId == AltitudeBase.Id).Value.Current.Value;
-        VelocityUnit.Value = unitService.Units.First(_ => _.Value.UnitId == VelocityBase.Id).Value.Current.Value;
-        AngleUnit.Value = unitService.Units.First(_ => _.Value.UnitId == AngleBase.Id).Value.Current.Value;
-        BearingUnit.Value = unitService.Units.First(_ => _.Value.UnitId == BearingBase.Id).Value.Current.Value;
+
+        AltitudeUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == AltitudeBase.Id).Value.Current.Value;
+        VelocityUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == VelocityBase.Id).Value.Current.Value;
+        AngleUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == AngleBase.Id).Value.Current.Value;
+        BearingUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == BearingBase.Id).Value.Current.Value;
+        CapacityUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == CapacityBase.Id).Value.Current.Value;
+
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         InitArgs(device.Id.AsString());
         device.WaitUntilConnectAndInit(1000, TimeProvider.System);
-        MissionProgress.Value = new MissionProgressViewModel("missionPorgress", device, unitService);
-        _devicePosition = device.GetMicroservice<PositionClientEx>();
+        MissionProgress.Value = new MissionProgressViewModel("missionProgress", device, unitService);
+        var devicePosition = device.GetMicroservice<PositionClientEx>();
         _deviceGnss = device.GetMicroservice<GnssClientEx>();
-        _controlClient = device.GetMicroservice<ControlClient>();
+        var controlClient = device.GetMicroservice<ControlClient>();
         var missionClient = device.GetMicroservice<MissionClientEx>();
         var telemetryClient = device.GetMicroservice<TelemetryClientEx>();
-        ModeClient? modeClient = null;
-        if (device is ArduCopterClientDevice)
+        var heartbeatClient = device.GetMicroservice<HeartbeatClient>();
+        if (controlClient == null || missionClient == null || telemetryClient == null || devicePosition == null ||
+            heartbeatClient == null ||
+            _deviceGnss == null)
         {
-            modeClient = device.GetMicroservice<ArduCopterModeClient>();
-        }
-        else if (device is ArduPlaneClientDevice)
-        {
-            modeClient = device.GetMicroservice<ArduPlaneModeClient>();
+            throw new ArgumentException($"Unable to get one or more services from {Device.Id}");
         }
 
-        GoTo = new ReactiveCommand(_ => _controlClient!.SetAutoMode(CancellationToken.None));
-        TakeOff = new ReactiveCommand(async (_, ct) =>
+        ModeClient? modeClient = device switch
         {
-            if (_controlClient != null)
+            ArduCopterClientDevice => device.GetMicroservice<ArduCopterModeClient>(),
+            ArduPlaneClientDevice => device.GetMicroservice<ArduPlaneModeClient>(),
+            _ => null
+        };
+
+        GoTo = new ReactiveCommand(_ => controlClient.SetAutoMode(CancellationToken.None));
+        TakeOff = new ReactiveCommand(async (_, _) =>
+        {
+            var dialog = new SetAltitudeDialogViewModel(navigation);
+            var altitude = await dialog.ApplyDialog();
+            if (altitude is not null)
             {
-                var dialog = new SetAltitudeDialogViewModel(navigation);
-                var altitude = await dialog.ApplyDialog();
-                if (altitude is not null) 
-                {
-                    var persist =
-                        new Persistable<KeyValuePair<DeviceId, double>>(
-                            new KeyValuePair<DeviceId, double>(Device.Id, altitude.Value));
-                    await this.ExecuteCommand(TakeOffCommand.Id, persist);
-                }
+                await this.ExecuteCommand(
+                    TakeOffCommand.Id,
+                    new ActionCommandArg(
+                        Device.Id.AsString(),
+                        altitude.Value.ToString(CultureInfo.InvariantCulture),
+                        CommandParameterActionType.Change));
             }
         });
         Rtl = new ReactiveCommand(_ =>
         {
-            _controlClient!.SetGuidedMode(CancellationToken.None);
-            _controlClient.DoRtl(CancellationToken.None);
-        });
+            controlClient.SetGuidedMode(CancellationToken.None);
+            controlClient.DoRtl(CancellationToken.None);
+        }).DisposeItWith(Disposable);
         Land = new ReactiveCommand(_ =>
         {
-            _controlClient!.SetGuidedMode(CancellationToken.None);
-            _controlClient.DoLand();
-        });
-        Guided = new ReactiveCommand(_ => _controlClient!.SetGuidedMode(CancellationToken.None));
+            controlClient.SetGuidedMode(CancellationToken.None);
+            controlClient.DoLand();
+        }).DisposeItWith(Disposable);
+        Guided = new ReactiveCommand(_ => controlClient.SetGuidedMode(CancellationToken.None));
         StartMission = new ReactiveCommand(_ =>
         {
-            _controlClient!.SetAutoMode();
-            missionClient!.Base.MissionSetCurrent(0);
+            controlClient.SetAutoMode();
+            missionClient.Base.MissionSetCurrent(0);
+        }).DisposeItWith(Disposable);
+
+        heartbeatClient.LinkQuality.Subscribe(_ =>
+        {
+            Dispatcher.UIThread.InvokeAsync(() => { LinkQuality.Value = $"{(int)_ * 100} %"; });
+        });
+        heartbeatClient.Link.State.Subscribe(state =>
+        {
+            Dispatcher.UIThread.InvokeAsync(() => LinkState.Value = LinkQualityStatus(state));
         });
 
         service.Router.OnRxMessage.ThrottleFirst(TimeSpan.FromMicroseconds(100)).Subscribe(_ =>
         {
-            if (_deviceGnss == null || _devicePosition == null || telemetryClient == null)
-            {
-                return;
-            }
-
             Dispatcher.UIThread.InvokeAsync(() =>
             {
                 if (modeClient is not null)
@@ -128,65 +127,63 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                     CurrentFlightMode.Value = modeClient.CurrentMode.CurrentValue.Name;
                 }
 
-                Azimuth.Value = AngleUnit.Value.PrintFromSi(Heading.Value);
-                AltitudeMsl.Value = AltitudeUnit.Value.PrintFromSi(_devicePosition.Base.GlobalPosition.CurrentValue!.Alt);
-                AltitudeAgl.Value = AltitudeUnit.Value.PrintFromSi(_devicePosition.Base.GlobalPosition.CurrentValue!.RelativeAlt);
-                Roll.Value = _devicePosition.Roll.CurrentValue;
-                Pitch.Value = _devicePosition.Pitch.CurrentValue;
-                Heading.Value = _devicePosition.Yaw.CurrentValue;
-                VerticalSpeed.Value = _devicePosition.Base.Attitude.CurrentValue!.Pitch;
+                Azimuth.Value = AngleUnit.Value.Print(Heading.Value, "N2");
+                AltitudeMsl.Value = devicePosition.Base.GlobalPosition.CurrentValue is null
+                    ? Avalonia.RS.Not_Available
+                    : AltitudeUnit.Value.Print(devicePosition.Base.GlobalPosition.CurrentValue.Alt / 1000);
+                AltitudeAgl.Value = devicePosition.Base.GlobalPosition.CurrentValue is null
+                    ? Avalonia.RS.Not_Available
+                    : AltitudeUnit.Value.Print(devicePosition.Base.GlobalPosition.CurrentValue.RelativeAlt / 1000);
+                Roll.Value = devicePosition.Roll.CurrentValue;
+                Pitch.Value = devicePosition.Pitch.CurrentValue;
+                Heading.Value = devicePosition.Yaw.CurrentValue;
                 Velocity.Value = VelocityUnit.Value.PrintFromSi(_deviceGnss.Main.GroundVelocity.CurrentValue);
                 SateliteCount.Value = _deviceGnss.Main.Info.CurrentValue.SatellitesVisible;
-                VdopCount.Value = $"{_deviceGnss.Main.Info.CurrentValue.Vdop!.Value} VDOP";
-                HdopCount.Value = $"{_deviceGnss.Main.Info.CurrentValue.Hdop!.Value} HDOP";
+                VdopCount.Value = _deviceGnss.Main.Info.CurrentValue.Vdop is null
+                    ? Avalonia.RS.Not_Available
+                    : $"{_deviceGnss.Main.Info.CurrentValue.Vdop!.Value} VDOP";
+                HdopCount.Value = _deviceGnss.Main.Info.CurrentValue.Hdop is null
+                    ? Avalonia.RS.Not_Available
+                    : $"{_deviceGnss.Main.Info.CurrentValue.Hdop!.Value} HDOP";
                 RtkMode.Value = $"{GpsFixTypeToString(_deviceGnss.Main.Info.CurrentValue.FixType)}";
                 GnssStatus();
-
-                if (IsArmed.Value != _devicePosition.IsArmed.CurrentValue)
+                if (devicePosition.Base.GlobalPosition.CurrentValue != null)
                 {
-                    UpdateStatusText(_devicePosition.IsArmed.CurrentValue
+                    SpeedAltitudeCheck(
+                        devicePosition.Base.GlobalPosition.CurrentValue.RelativeAlt / 1000,
+                        (int)_deviceGnss.Main.GroundVelocity.CurrentValue);
+                }
+
+                if (IsArmed.Value != devicePosition.IsArmed.CurrentValue)
+                {
+                    UpdateStatusText(devicePosition.IsArmed.CurrentValue
                         ? "Armed"
                         : "Disarmed");
                 }
 
-                IsArmed.Value = _devicePosition.IsArmed.CurrentValue;
+                IsArmed.Value = devicePosition.IsArmed.CurrentValue;
+                BatteryConsumed.Value = telemetryClient.BatteryCurrent.CurrentValue == 0
+                    ? Avalonia.RS.Not_Available
+                    : $"{CapacityUnit.CurrentValue.Print(telemetryClient.BatteryCurrent.CurrentValue * devicePosition.ArmedTime.CurrentValue.TotalHours, "N2")}{CapacityUnit.CurrentValue.Symbol}";
+
                 BatteryCharge.Value = $"{(int)telemetryClient.BatteryCharge.CurrentValue * 100} %";
                 BatteryAmperage.Value = $"{(int)telemetryClient.BatteryCurrent.CurrentValue} A";
                 BatteryVoltage.Value = $"{(int)telemetryClient.BatteryVoltage.CurrentValue} V";
-                BatteryTime.Value = $"{telemetryClient.BatteryVoltage.CurrentValue} min";
+
+                // BatteryTime.Value = $"{telemetryClient.BatteryVoltage.CurrentValue} min";
                 BatteryStatus((int)(telemetryClient.BatteryCharge.CurrentValue * 100));
             });
         });
-    }
-
-    private static double GetHomeAzimuthPosition(double? value, double headingValue)
-    {
-        if (value == null)
-        {
-            return -100;
-        }
-
-        var distance = (headingValue - value.Value) % 360;
-        if (distance < -180)
-        {
-            distance += 360;
-        }
-        else if (distance > 179)
-        {
-            distance -= 360;
-        }
-
-        return distance;
     }
 
     private void BatteryStatus(int procent)
     {
         BatteryStatusBrush.Value.Color = procent switch
         {
-            > 70 => _greenColor,
-            > 50 => _yellowColor,
-            > 40 => _orangeColor,
-            < 30 => _redColor,
+            > 70 => GreenColor,
+            > 50 => YellowColor,
+            > 40 => OrangeColor,
+            < 30 => RedColor,
             _ => BatteryStatusBrush.Value.Color
         };
     }
@@ -196,58 +193,66 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         if (gs > 10 && alt < 40)
         {
             StatusText.Value = "Pull Up";
-            AltitudeStatus.Value.Color = _yellowColor;
+            AltitudeStatus.Value.Color = YellowColor;
         }
         else
         {
             StatusText.Value = string.Empty;
-            AltitudeStatus.Value.Color = _greenColor;
+            AltitudeStatus.Value.Color = GreenColor;
         }
     }
 
     private void GnssStatus()
     {
-        if (_deviceGnss!.Main.Info.CurrentValue.FixType == Mavlink.Common.GpsFixType.GpsFixTypeRtkFloat ||
-            _deviceGnss!.Main.Info.CurrentValue.SatellitesVisible > 15 ||
-            _deviceGnss!.Main.Info.CurrentValue.SatellitesVisible < 20)
+        if (_deviceGnss is null)
         {
-            GnssStatusBrush.Value.Color = _orangeColor;
+            return;
         }
-        else if ((_deviceGnss!.Main.Info.CurrentValue.FixType != Mavlink.Common.GpsFixType.GpsFixTypeRtkFloat &&
-                  _deviceGnss!.Main.Info.CurrentValue.FixType != Mavlink.Common.GpsFixType.GpsFixTypeRtkFixed) ||
-                 _deviceGnss!.Main.Info.CurrentValue.SatellitesVisible < 10)
+
+        if (_deviceGnss.Main.Info.CurrentValue.FixType == Mavlink.Common.GpsFixType.GpsFixTypeRtkFloat ||
+            _deviceGnss.Main.Info.CurrentValue.SatellitesVisible > 15 ||
+            _deviceGnss.Main.Info.CurrentValue.SatellitesVisible < 20)
         {
-            GnssStatusBrush.Value.Color = _redColor;
+            GnssStatusBrush.Value.Color = OrangeColor;
+        }
+        else if ((_deviceGnss.Main.Info.CurrentValue.FixType != Mavlink.Common.GpsFixType.GpsFixTypeRtkFloat &&
+                  _deviceGnss.Main.Info.CurrentValue.FixType != Mavlink.Common.GpsFixType.GpsFixTypeRtkFixed) ||
+                 _deviceGnss.Main.Info.CurrentValue.SatellitesVisible < 10)
+        {
+            GnssStatusBrush.Value.Color = RedColor;
         }
         else
         {
-            GnssStatusBrush.Value.Color = _greenColor;
+            GnssStatusBrush.Value.Color = GreenColor;
         }
+    }
+
+    private string LinkQualityStatus(LinkState state)
+    {
+        LinkQualityStatusBrush.Value.Color = state switch
+        {
+            Common.LinkState.Connected => GreenColor,
+            Common.LinkState.Downgrade => OrangeColor,
+            Common.LinkState.Disconnected => RedColor,
+            _ => LinkQualityStatusBrush.Value.Color
+        };
+        return state.ToString();
     }
 
     private string GpsFixTypeToString(Mavlink.Common.GpsFixType type)
     {
-        switch (type)
+        return type switch
         {
-            case Mavlink.Common.GpsFixType.GpsFixType2dFix:
-                return "2D position Fix";
-            case Mavlink.Common.GpsFixType.GpsFixTypeRtkFloat:
-                return "RTK Float";
-            case Mavlink.Common.GpsFixType.GpsFixTypeRtkFixed:
-                return "Rtk Fixed";
-            case Mavlink.Common.GpsFixType.GpsFixTypeDgps:
-                return "DGPS/SBAS";
-            case Mavlink.Common.GpsFixType.GpsFixTypePpp:
-                return "PPP 3D position";
-            case Mavlink.Common.GpsFixType.GpsFixType3dFix:
-                return "3D position Fix";
-            case Mavlink.Common.GpsFixType.GpsFixTypeStatic:
-                return "Static Fix";
-            case Mavlink.Common.GpsFixType.GpsFixTypeNoGps:
-                return "No GPS connected";
-        }
-
-        return string.Empty;
+            Mavlink.Common.GpsFixType.GpsFixType2dFix => "2D position Fix",
+            Mavlink.Common.GpsFixType.GpsFixTypeRtkFloat => "RTK Float",
+            Mavlink.Common.GpsFixType.GpsFixTypeRtkFixed => "Rtk Fixed",
+            Mavlink.Common.GpsFixType.GpsFixTypeDgps => "DGPS/SBAS",
+            Mavlink.Common.GpsFixType.GpsFixTypePpp => "PPP 3D position",
+            Mavlink.Common.GpsFixType.GpsFixType3dFix => "3D position Fix",
+            Mavlink.Common.GpsFixType.GpsFixTypeStatic => "Static Fix",
+            Mavlink.Common.GpsFixType.GpsFixTypeNoGps => "No GPS connected",
+            _ => string.Empty
+        };
     }
 
     private void UpdateStatusText(string text)
@@ -272,29 +277,25 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         // do nothing
     }
 
-    public NotifyCollectionChangedSynchronizedViewList<IRttItem> RttItemsList { get; set; }
-    public Observable<List<IRttItem>> RttItems;
-
     public ReactiveCommand GoTo { get; set; }
     public ReactiveCommand TakeOff { get; set; }
     public ReactiveCommand Rtl { get; set; }
     public ReactiveCommand Land { get; set; }
     public ReactiveCommand Guided { get; set; }
     public ReactiveCommand StartMission { get; set; }
-    
-    public BindableReactiveProperty<MissionProgressViewModel> MissionProgress { get; set; } = new();
 
-    public BindableReactiveProperty<bool> IsBusy { get; set; } = new();
+    public BindableReactiveProperty<MissionProgressViewModel> MissionProgress { get; set; } = new();
 
     #region BatteryRtt
 
-    public BindableReactiveProperty<string> BatteryTime { get; set; } = new();
+    // public BindableReactiveProperty<string> BatteryTime { get; set; } = new();
+    public BindableReactiveProperty<string> BatteryConsumed { get; set; } = new();
     public BindableReactiveProperty<string> BatteryAmperage { get; set; } = new();
     public BindableReactiveProperty<string> BatteryCharge { get; set; } = new();
     public BindableReactiveProperty<string> BatteryVoltage { get; set; } = new();
 
     public BindableReactiveProperty<SolidColorBrush> BatteryStatusBrush { get; set; } =
-        new(new SolidColorBrush(_greenColor));
+        new(new SolidColorBrush(GreenColor));
 
     #endregion
 
@@ -306,9 +307,15 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     public BindableReactiveProperty<string> RtkMode { get; set; } = new();
 
     public BindableReactiveProperty<SolidColorBrush> GnssStatusBrush { get; set; } =
-        new(new SolidColorBrush(_greenColor));
+        new(new SolidColorBrush(GreenColor));
 
     #endregion
+
+    public BindableReactiveProperty<string> LinkState { get; set; } = new();
+    public BindableReactiveProperty<string> LinkQuality { get; set; } = new();
+
+    public BindableReactiveProperty<SolidColorBrush> LinkQualityStatusBrush { get; set; } =
+        new(new SolidColorBrush(GreenColor));
 
     public BindableReactiveProperty<string> CurrentFlightMode { get; set; } = new();
     public BindableReactiveProperty<float> VibrationX { get; set; } = new();
@@ -330,7 +337,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     public BindableReactiveProperty<string> Velocity { get; set; } = new();
 
     public BindableReactiveProperty<SolidColorBrush> AltitudeStatus { get; set; } =
-        new(new SolidColorBrush(_greenColor));
+        new(new SolidColorBrush(GreenColor));
 
     public BindableReactiveProperty<string> AltitudeAgl { get; set; } = new();
     public BindableReactiveProperty<string> AltitudeMsl { get; set; } = new();
@@ -353,10 +360,9 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     public BindableReactiveProperty<IUnitItem> AltitudeUnit { get; set; } = new();
     public BindableReactiveProperty<IUnitItem> BearingUnit { get; set; } = new();
     public BindableReactiveProperty<IUnitItem> AngleUnit { get; set; } = new();
-
+    public BindableReactiveProperty<IUnitItem> CapacityUnit { get; set; } = new();
 
     public IClientDevice Device { get; }
-
 
     public WorkspaceDock Position
     {

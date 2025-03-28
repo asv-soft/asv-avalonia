@@ -8,12 +8,13 @@
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="1000"
              x:Class="Asv.Avalonia.Example.UavWidgetView"
              x:DataType="example:UavWidgetViewModel">
-    <StackPanel>
-        <Grid RowDefinitions="*" ColumnDefinitions="Auto,*">
-            <Viewbox Grid.Column="0" Grid.Row="0" MinWidth="150" HorizontalAlignment="Left">
+    <!-- // TODO:Localize -->
+    <Grid RowDefinitions="*,*,*" ColumnDefinitions="Auto,Auto">
+            <Viewbox Grid.Column="0" Grid.Row="0" MinWidth="150" HorizontalAlignment="Stretch">
                 <example:AttitudeIndicator MinWidth="200" Margin="5" Name="Attitude"
                                            Height="{Binding #Attitude.Bounds.Width}" VerticalAlignment="Top"
                                            HorizontalAlignment="Stretch"
+                                           StatusText="{Binding StatusText.Value}"
                                            CornerRadius="{StaticResource ControlCornerRadius}"
                                            Altitude="{Binding AltitudeAgl.Value}"
                                            HomeAzimuthPosition="{Binding HomeAzimuth.Value}"
@@ -76,8 +77,7 @@
                     </StackPanel>
                 </Button>
             </WrapPanel>
-        </Grid>
-        <WrapPanel MinWidth="200" MaxWidth="300"  HorizontalAlignment="Left">
+        <WrapPanel Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" MinWidth="200" MaxWidth="300" HorizontalAlignment="Left">
             <Viewbox Width="150">
                 <avalonia:TelemBox
                     Margin="4"
@@ -88,8 +88,24 @@
                     Icon="FlightMode"
                     CornerRadius="4">
                     <avalonia:TelemBox.CustomContent>
-                            <TextBlock TextAlignment="Center" FontSize="24"
-                                       Text="{Binding CurrentFlightMode.Value}" />
+                        <TextBlock TextAlignment="Center" FontSize="24"
+                                   Text="{Binding CurrentFlightMode.Value}" />
+
+                    </avalonia:TelemBox.CustomContent>
+                </avalonia:TelemBox>
+            </Viewbox>
+             <Viewbox Width="150">
+                <avalonia:TelemBox
+                    Margin="4"
+                    Width="200"
+                    MainBrush="{DynamicResource NavyMainBrush}"
+                    SecondaryBrush="{DynamicResource NavySecondaryBrush}"
+                    Title="Mode"
+                    Icon="FlightMode"
+                    CornerRadius="4">
+                    <avalonia:TelemBox.CustomContent>
+                        <TextBlock TextAlignment="Center" FontSize="24"
+                                   Text="{Binding CurrentFlightMode.Value}" />
 
                     </avalonia:TelemBox.CustomContent>
                 </avalonia:TelemBox>
@@ -165,16 +181,17 @@
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
                     Title="Battery"
                     Units="Time"
-                    IsBusy="True"
+                    IsBusy="False"
                     Icon="Battery10"
                     CornerRadius="4">
                     <avalonia:TelemBox.CustomContent>
-                        <Grid ColumnDefinitions="2*,*" RowDefinitions="*,*">
-                            <TextBlock Grid.RowSpan="2" TextAlignment="Right" FontSize="24"
+                        <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*">
+                            <TextBlock TextAlignment="Right" FontSize="15" Text="{Binding BatteryConsumed.Value}" />
+                            <TextBlock Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" TextAlignment="Right" FontSize="24"
                                        Text="{Binding BatteryCharge.Value}" />
-                            <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15"
+                            <TextBlock Grid.Row="0" Grid.Column="2" TextAlignment="Center" FontSize="15"
                                        Text="{Binding BatteryAmperage.Value}" />
-                            <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15"
+                            <TextBlock Grid.Row="1" Grid.Column="2" TextAlignment="Center" FontSize="15"
                                        Text="{Binding BatteryVoltage.Value}" />
                         </Grid>
 
@@ -189,7 +206,7 @@
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
                     Title="GNSS"
                     Units="{Binding RtkMode.Value}"
-                    IsBusy="True"
+                    IsBusy="False"
                     Icon="GpsFixed"
                     CornerRadius="4">
                     <avalonia:TelemBox.CustomContent>
@@ -205,8 +222,25 @@
                     </avalonia:TelemBox.CustomContent>
                 </avalonia:TelemBox>
             </Viewbox>
+            <Viewbox Width="150">
+                <avalonia:TelemBox
+                    Margin="4"
+                    Width="200"
+                    MainBrush="{Binding LinkQualityStatusBrush.Value}"
+                    SecondaryBrush="{DynamicResource NavySecondaryBrush}"
+                    Title="Link"
+                    Units="{Binding LinkState.Value}"
+                    IsBusy="False"
+                    Icon="Wifi"
+                    CornerRadius="4">
+                    <avalonia:TelemBox.CustomContent>
+                            <TextBlock VerticalAlignment="Center" TextAlignment="Center"
+                                       FontSize="24"
+                                       Text="{Binding LinkQuality.Value}" />
+                    </avalonia:TelemBox.CustomContent>
+                </avalonia:TelemBox>
+            </Viewbox>
         </WrapPanel>
-        <example:MissionProgressView DataContext="{Binding MissionProgress.Value}" Grid.Row="2" Grid.Column="0"
-                                     Grid.ColumnSpan="2" />
-    </StackPanel>
+        <example:MissionProgressView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" DataContext="{Binding MissionProgress.Value}" />
+        </Grid>
 </UserControl>

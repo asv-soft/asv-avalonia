@@ -9,6 +9,7 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
+// TODO:Localize
 [ExportPage(PageId)]
 public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
 {
@@ -22,7 +23,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
         : this(DesignTime.CommandService, null!, NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
-        Title.OnNext(RS.DialogPageViewModel_Title);
+        Title.OnNext(Asv.Avalonia.RS.DialogPageViewModel_Title);
     }
 
     [ImportingConstructor]
@@ -33,7 +34,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     )
         : base(PageId, cmd)
     {
-        Title.OnNext(RS.DialogPageViewModel_Title);
+        Title.OnNext(Asv.Avalonia.RS.DialogPageViewModel_Title);
         _dialogService = service;
         _logger = logFactory.CreateLogger<DialogBoardViewModel>();
 
