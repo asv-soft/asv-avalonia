@@ -23,10 +23,10 @@ public class BurstDownloadDialogViewModel : DialogViewModelBase
     [Range(1, MavlinkFtpHelper.MaxDataSize)]
     public BindableReactiveProperty<decimal?> PacketSize { get; set; }
 
-    public async ValueTask<bool> ApplyDialog()
-    {
-        var process = true;
+    public bool CanDownload { get; set; } = false;
 
+    public async Task ApplyDialog()
+    {
         var dialog = new ContentDialog(_navigation)
         {
             Title = "Burst Download", //TODO: localization
@@ -36,18 +36,18 @@ public class BurstDownloadDialogViewModel : DialogViewModelBase
             IsSecondaryButtonEnabled = true,
             Content = this,
             PrimaryButtonCommand = new ReactiveCommand(_ =>
+            {
                 _ftp.BurstDownloadPacketSize = decimal.ToByte(
                     PacketSize.Value ?? MavlinkFtpHelper.MaxDataSize
-                )
-            ),
-            SecondaryButtonCommand = new ReactiveCommand(_ => process = false),
+                );
+                CanDownload = true;
+            }),
+            SecondaryButtonCommand = new ReactiveCommand(_ => CanDownload = false),
         };
 
         _sub1 = IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
 
         await dialog.ShowAsync();
-
-        return process;
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

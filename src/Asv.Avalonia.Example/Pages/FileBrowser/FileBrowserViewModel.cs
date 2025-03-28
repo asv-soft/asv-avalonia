@@ -328,9 +328,9 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
         }
 
         var res = new BurstDownloadDialogViewModel("burst.dialog", _svc, _navigation);
-        var process = await res.ApplyDialog();
+        await res.ApplyDialog();
 
-        if (process)
+        if (res.CanDownload)
         {
             MemoryStream stream = new();
             var progress = new Progress<double>();
