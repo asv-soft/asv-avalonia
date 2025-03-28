@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using Asv.Avalonia.IO;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
@@ -9,20 +10,20 @@ namespace Asv.Avalonia.Example;
 
 [ExportExtensionFor<IFlightMode>]
 [method: ImportingConstructor]
-public class FlightUavAnchorsExtension(IMavlinkConnectionService conn, INavigationService navigationService,IUnitService unitService, [ImportMany] IEnumerable<IRttItem> rttItems) : IExtensionFor<IFlightMode>
+public class FlightUavAnchorsExtension(IDeviceManager conn, INavigationService navigationService,IUnitService unitService) : IExtensionFor<IFlightMode>
 {
     public void Extend(IFlightMode context, CompositeDisposable contextDispose)
     {
-        conn.DevicesExplorer.Devices.PopulateTo(context.Anchors, TryCreateAnchor, RemoveAnchor)
+        conn.Explorer.Devices.PopulateTo(context.Anchors, TryCreateAnchor, RemoveAnchor)
             .DisposeItWith(contextDispose);
-        conn.DevicesExplorer.Devices.PopulateTo(context.Widgets, TryCreateWidget, RemoveWidget)
+        conn.Explorer.Devices.PopulateTo(context.Widgets, TryCreateWidget, RemoveWidget)
             .DisposeItWith(contextDispose);
     }
 
     private UavWidgetViewModel? TryCreateWidget(KeyValuePair<DeviceId, IClientDevice> device)
     {
         var pos = device.Value.GetMicroservice<IPositionClientEx>();
-        return pos != null ? new UavWidgetViewModel(conn, device.Value, navigationService,unitService) : null;
+        return pos != null ? new UavWidgetViewModel(conn, device.Value, navigationService, unitService) : null;
     }
 
     private bool RemoveWidget(KeyValuePair<DeviceId, IClientDevice> model, UavWidgetViewModel vm)

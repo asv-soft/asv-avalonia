@@ -1086,6 +1086,15 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        public static string Not_Available {
+            get {
+                return ResourceManager.GetString("Not_Available", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Debug Window.
         /// </summary>
         public static string OpenDebugCommand_CommandInfo_Description {

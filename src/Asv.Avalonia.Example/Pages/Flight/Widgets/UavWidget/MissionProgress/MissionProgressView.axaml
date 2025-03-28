@@ -10,6 +10,7 @@
     <Design.DataContext>
         <example:MissionProgressViewModel />
     </Design.DataContext>
+    <!-- // TODO:Localize -->
     <DockPanel LastChildFill="True">
         <StackPanel Spacing="10" Orientation="Vertical" Margin="0 5 0 0" DockPanel.Dock="Top" IsVisible="{Binding  !IsDownloaded.Value}">
             <TextBlock Text="Downloading Mission"/>
@@ -18,6 +19,7 @@
         <StackPanel Margin="0 5 0 0" DockPanel.Dock="Top" IsVisible="{Binding  IsDownloaded.Value}">
             <example:RouteIndicator Progress="{Binding PathProgress.Value}" StatusText="{Binding MissionFlightTime.Value}"  
                                     Title="Mission Progress" 
+                                    FontSize="24"
                                     SubStatusText="before complete"/>
             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Spacing="5">
                 <Viewbox Width="100">
@@ -29,7 +31,7 @@
                         SecondaryBrush="{DynamicResource NavySecondaryBrush}"
                         Title="Mission Distance"
                         Units="{Binding DistanceUnitItem.Value.Symbol}"
-                        IsBusy="True"
+                        IsBusy="False"
                         Icon="MapMarkerDistance"
                         CornerRadius="4">
                         <avalonia:TelemBox.CustomContent>
@@ -48,7 +50,7 @@
                        SecondaryBrush="{DynamicResource NavySecondaryBrush}"
                        Title="Total Distance"
                        Units="{Binding DistanceUnitItem.Value.Symbol}"
-                       IsBusy="True"
+                       IsBusy="False"
                        Icon="LocationDistance"
                        CornerRadius="4">
                        <avalonia:TelemBox.CustomContent>
@@ -58,6 +60,44 @@
                        </avalonia:TelemBox.CustomContent>
                    </avalonia:TelemBox>        
                </Viewbox>
+                <Viewbox Width="100">
+                    <avalonia:TelemBox
+                        Margin="4"
+                        Width="150"
+                        HorizontalAlignment="Left"
+                        MainBrush="{DynamicResource NavyMainBrush}"
+                        SecondaryBrush="{DynamicResource NavySecondaryBrush}"
+                        Title="Home"
+                        Units="{Binding DistanceUnitItem.Value.Symbol}"
+                        IsBusy="False"
+                        Icon="Home"
+                        CornerRadius="4">
+                        <avalonia:TelemBox.CustomContent>
+                            <TextBlock  VerticalAlignment="Center" TextAlignment="Center"
+                                        FontSize="30"
+                                        Text="{Binding HomeDistance.Value}" />
+                        </avalonia:TelemBox.CustomContent>
+                    </avalonia:TelemBox>        
+                </Viewbox>
+                <Viewbox Width="100">
+                    <avalonia:TelemBox
+                        Margin="4"
+                        Width="150"
+                        HorizontalAlignment="Left"
+                        MainBrush="{DynamicResource NavyMainBrush}"
+                        SecondaryBrush="{DynamicResource NavySecondaryBrush}"
+                        Title="Target"
+                        Units="{Binding DistanceUnitItem.Value.Symbol}"
+                        IsBusy="False"
+                        Icon="Target"
+                        CornerRadius="4">
+                        <avalonia:TelemBox.CustomContent>
+                            <TextBlock  VerticalAlignment="Center" TextAlignment="Center"
+                                        FontSize="30"
+                                        Text="{Binding TargetDistance.Value}" />
+                        </avalonia:TelemBox.CustomContent>
+                    </avalonia:TelemBox>        
+                </Viewbox>
             </StackPanel>
             
         </StackPanel>
