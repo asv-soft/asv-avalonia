@@ -21,8 +21,8 @@
     <UserControl.Styles>
         <Style Selector="TreeViewItem" x:DataType="gui:BrowserNode">
             <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="IsExpanded" Value="{Binding Base.IsExpanded.Value, Mode=TwoWay}" />
-            <Setter Property="IsSelected" Value="{Binding Base.IsSelected.Value, Mode=TwoWay}" />
+            <Setter Property="IsExpanded" Value="{Binding Base.IsExpanded}" />
+            <Setter Property="IsSelected" Value="{Binding Base.IsSelected}" />
         </Style>
         <Style Selector="avalonia|MaterialIcon.folder">
             <Setter Property="Kind" Value="FolderOutline" />
@@ -110,8 +110,8 @@
                                                                Margin="0,0,8,0"
                                                                Classes.folder="{Binding Base.HasChildren}"
                                                                Classes.file="{Binding !Base.HasChildren}"
-                                                               Classes.expanded="{Binding Base.IsExpanded.Value}"
-                                                               Classes.selected="{Binding Base.IsSelected.Value}"
+                                                               Classes.expanded="{Binding Base.IsExpanded}"
+                                                               Classes.selected="{Binding Base.IsSelected}"
                                                                Width="{StaticResource IconSize}" 
                                                                Height="{StaticResource IconSize}"/>
                                         <TextBlock Grid.Column="1" 
@@ -228,8 +228,8 @@
                                                                Margin="0,0,8,0"
                                                                Classes.folder="{Binding Base.HasChildren}"
                                                                Classes.file="{Binding !Base.HasChildren}"
-                                                               Classes.expanded="{Binding Base.IsExpanded.Value}"
-                                                               Classes.selected="{Binding Base.IsSelected.Value}"
+                                                               Classes.expanded="{Binding Base.IsExpanded}"
+                                                               Classes.selected="{Binding Base.IsSelected}"
                                                                Width="{StaticResource IconSize}" 
                                                                Height="{StaticResource IconSize}"/>
                                         <TextBlock Grid.Column="1" 

@@ -1,0 +1,27 @@
+﻿using System.Composition;
+
+namespace Asv.Avalonia.Example;
+
+[ExportCommand]
+[method: ImportingConstructor]
+public class OpenFileBrowserCommand(INavigationService nav)
+    : OpenPageCommandBase(FileBrowserViewModel.PageId, nav)
+{
+    #region Static
+
+    public const string Id = $"{BaseId}.open.{FileBrowserViewModel.PageId}";
+
+    public static readonly ICommandInfo StaticInfo = new CommandInfo
+    {
+        Id = Id,
+        Name = "File browser",
+        Description = "Open FTP file browser",
+        Icon = FileBrowserViewModel.PageIcon,
+        Source = SystemModule.Instance,
+        DefaultHotKey = null,
+    };
+
+    #endregion
+
+    public override ICommandInfo Info => StaticInfo;
+}

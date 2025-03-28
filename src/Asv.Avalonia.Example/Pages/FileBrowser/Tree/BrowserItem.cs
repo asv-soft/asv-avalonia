@@ -1,7 +1,5 @@
-﻿using System;
-using Asv.Mavlink;
+﻿using Asv.Mavlink;
 using Avalonia.Media;
-using R3;
 
 namespace Asv.Avalonia.Example;
 
@@ -11,10 +9,10 @@ public class BrowserItem : HeadlinedViewModel, IBrowserItem
     private NavigationId _parentId = NavigationId.Empty;
     private FileSize? _size;
     private bool _hasChildren;
-    private BindableReactiveProperty<bool> _isExpanded = new(false);
-    private BindableReactiveProperty<bool> _isSelected = new(false);
-    private BindableReactiveProperty<bool> _isInEditMode = new(false);
-    private string _editedName = null!;
+    private bool _isExpanded;
+    private bool _isSelected;
+    private bool _isInEditMode;
+    private string _editedName = string.Empty;
     private string? _crc32Hex;
     private SolidColorBrush _crc32Color = null!;
     private FtpEntryType _ftpEntryType;
@@ -51,19 +49,19 @@ public class BrowserItem : HeadlinedViewModel, IBrowserItem
         set => SetField(ref _hasChildren, value);
     }
 
-    public BindableReactiveProperty<bool> IsExpanded
+    public bool IsExpanded
     {
         get => _isExpanded;
         set => SetField(ref _isExpanded, value);
     }
 
-    public BindableReactiveProperty<bool> IsSelected
+    public bool IsSelected
     {
         get => _isSelected;
         set => SetField(ref _isSelected, value);
     }
 
-    public BindableReactiveProperty<bool> IsInEditMode
+    public bool IsInEditMode
     {
         get => _isInEditMode;
         set => SetField(ref _isInEditMode, value);
@@ -91,17 +89,5 @@ public class BrowserItem : HeadlinedViewModel, IBrowserItem
     {
         get => _ftpEntryType;
         set => SetField(ref _ftpEntryType, value);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            IsExpanded.Dispose();
-            IsSelected.Dispose();
-            IsInEditMode.Dispose();
-        }
-
-        base.Dispose(disposing);
     }
 }

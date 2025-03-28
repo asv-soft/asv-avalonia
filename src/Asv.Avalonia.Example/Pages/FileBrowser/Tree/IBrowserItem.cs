@@ -10,13 +10,13 @@ public interface IBrowserItem : IHeadlinedViewModel
     NavigationId ParentId { get; }
     FileSize? Size { get; }
     bool HasChildren { get; }
-    BindableReactiveProperty<bool> IsExpanded { get; }
-    BindableReactiveProperty<bool> IsSelected { get; }
-    BindableReactiveProperty<bool> IsInEditMode { get; }
-    string EditedName { get; set; }
-    string? Crc32Hex { get; set; }
-    SolidColorBrush Crc32Color { get; set; }
-    FtpEntryType FtpEntryType { get; set; }
+    bool IsExpanded { get; }
+    bool IsSelected { get; }
+    bool IsInEditMode { get; }
+    string EditedName { get; }
+    string? Crc32Hex { get; }
+    SolidColorBrush Crc32Color { get; }
+    FtpEntryType FtpEntryType { get; }
 }
 
 public readonly struct FileSize(long size)
@@ -25,23 +25,34 @@ public readonly struct FileSize(long size)
 
     public override string ToString()
     {
-        string[] sizes =
-        [
-            RS.Unit_Byte_Abbreviation,
-            RS.Unit_Kilobyte_Abbreviation,
-            RS.Unit_Megabyte_Abbreviation,
-            RS.Unit_Gigabyte_Abbreviation,
-            RS.Unit_Terabyte_Abbreviation,
-        ];
-        double len = size;
-        var order = 0;
-        while (len >= 1024 && order < sizes.Length - 1)
+        string unit;
+        double value;
+
+        switch (size)
         {
-            order++;
-            len /= 1024;
+            case < 1024:
+                unit = RS.Unit_Byte_Abbreviation;
+                value = size;
+                break;
+            case < 1024L * 1024:
+                unit = RS.Unit_Kilobyte_Abbreviation;
+                value = size / 1024d;
+                break;
+            case < 1024L * 1024 * 1024:
+                unit = RS.Unit_Megabyte_Abbreviation;
+                value = size / (1024d * 1024);
+                break;
+            case < 1024L * 1024 * 1024 * 1024:
+                unit = RS.Unit_Gigabyte_Abbreviation;
+                value = size / (1024d * 1024 * 1024);
+                break;
+            default:
+                unit = RS.Unit_Terabyte_Abbreviation;
+                value = size / (1024d * 1024 * 1024 * 1024);
+                break;
         }
 
-        return $"{len:0.##} {sizes[order]}";
+        return $"{value:0.##} {unit}";
     }
 
     public int CompareTo(FileSize other)

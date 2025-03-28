@@ -1,8 +1,10 @@
-﻿using Asv.Mavlink;
+﻿using System.ComponentModel.DataAnnotations;
+using Asv.Mavlink;
 
 namespace Asv.Avalonia.Example;
 
 public interface IFtpService : IExportable
 {
-    public IFtpClient? Client { get; set; }
+    [Range(1, MavlinkFtpHelper.MaxDataSize)]
+    public byte BurstDownloadPacketSize { get; set; }
 }

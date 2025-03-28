@@ -1,28 +1,31 @@
-﻿using Asv.IO;
+﻿using System.Composition;
+using Asv.Avalonia.IO;
+using Asv.IO;
 using Asv.Mavlink;
 
 namespace Asv.Avalonia.Example;
 
 [ExportExtensionFor<IHomePageItem>]
-public class HomePageFileBrowserExtension : HomePageDeviceAction
+[method: ImportingConstructor]
+public class HomePageFileBrowserExtension(IFtpService ftp) : HomePageDeviceItemAction
 {
     protected override IActionViewModel? TryCreateAction(
         IClientDevice device,
-        HomePageDevice context
+        HomePageDeviceItem context
     )
     {
-        if (device.GetMicroservice<IFtpClient>() == null)
+        if (device.GetMicroservice<IParamsClientEx>() == null)
         {
             return null;
         }
 
-        return new ActionViewModel("ftp")
+        return new ActionViewModel("browser")
         {
             Header = OpenFileBrowserCommand.StaticInfo.Name,
             Description = OpenFileBrowserCommand.StaticInfo.Description,
             Icon = OpenFileBrowserCommand.StaticInfo.Icon,
             Command = new BindableAsyncCommand(OpenFileBrowserCommand.Id, context),
-            CommandParameter = new Persistable<IClientDevice>(device),
+            CommandParameter = new StringCommandArg(device.Id.AsString()),
         };
     }
 }

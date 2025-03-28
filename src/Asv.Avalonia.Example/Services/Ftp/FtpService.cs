@@ -1,5 +1,4 @@
 ﻿using System.Composition;
-using Asv.Mavlink;
 
 namespace Asv.Avalonia.Example;
 
@@ -7,6 +6,6 @@ namespace Asv.Avalonia.Example;
 [Shared]
 public class FtpService : IFtpService
 {
-    public IFtpClient? Client { get; set; }
+    public byte BurstDownloadPacketSize { get; set; }
     public IExportInfo Source => SystemModule.Instance;
 }

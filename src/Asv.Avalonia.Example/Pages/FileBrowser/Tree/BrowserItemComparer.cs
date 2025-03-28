@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Asv.Avalonia.Example;
 
@@ -24,10 +23,10 @@ public sealed class BrowserItemComparer : IComparer<IBrowserItem>
             return 1;
         }
 
-        var pathComparison = string.CompareOrdinal(((IViewModel)x).Id.Id, ((IViewModel)y).Id.Id);
-        if (pathComparison != 0)
+        var idComparison = x.Id.CompareTo(y.Id);
+        if (idComparison != 0)
         {
-            return pathComparison;
+            return idComparison;
         }
 
         var parentPathComparison = string.CompareOrdinal(x.ParentId.Id, y.ParentId.Id);
