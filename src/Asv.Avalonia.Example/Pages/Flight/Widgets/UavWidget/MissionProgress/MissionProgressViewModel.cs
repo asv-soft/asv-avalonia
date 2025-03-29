@@ -208,7 +208,7 @@ public class MissionProgressViewModel : DisposableViewModel
             }
 
             _totalMissionDistance = _missionClient?.AllMissionsDistance.CurrentValue ?? 0;
-            TotalDistance.Value = DistanceUnitItem.Value.Print(_totalMissionDistance * 1000, "#.##");
+            TotalDistance.Value = DistanceUnitItem.Value.Print(_totalMissionDistance * 1000, "N2");
             _passedDistance += _distanceBeforeMission;
             IsDownloaded.Value = true;
             

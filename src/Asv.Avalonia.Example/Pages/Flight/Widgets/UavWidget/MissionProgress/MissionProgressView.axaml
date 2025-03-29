@@ -10,17 +10,16 @@
     <Design.DataContext>
         <example:MissionProgressViewModel />
     </Design.DataContext>
-    <!-- // TODO:Localize -->
     <DockPanel LastChildFill="True">
         <StackPanel Spacing="10" Orientation="Vertical" Margin="0 5 0 0" DockPanel.Dock="Top" IsVisible="{Binding  !IsDownloaded.Value}">
-            <TextBlock Text="Downloading Mission"/>
+            <TextBlock Text="{x:Static example:RS.MissionProgressView_DownLoadingMission}"/>
             <ProgressBar Value="{Binding DownloadProgress.Value}" Minimum="0" Maximum="100" Width="100"/> 
         </StackPanel>
         <StackPanel Margin="0 5 0 0" DockPanel.Dock="Top" IsVisible="{Binding  IsDownloaded.Value}">
             <example:RouteIndicator Progress="{Binding PathProgress.Value}" StatusText="{Binding MissionFlightTime.Value}"  
-                                    Title="Mission Progress" 
+                                    Title="{x:Static example:RS.MissionProgressView_Title}" 
                                     FontSize="24"
-                                    SubStatusText="before complete"/>
+                                    SubStatusText="{x:Static example:RS.MissionProgressView_SubStatusText}"/>
             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" Spacing="5">
                 <Viewbox Width="100">
                     <avalonia:TelemBox
@@ -29,7 +28,7 @@
                         HorizontalAlignment="Left"
                         MainBrush="{DynamicResource NavyMainBrush}"
                         SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                        Title="Mission Distance"
+                        Title="{x:Static example:RS.MissionProgressView_MIssionDistanceRTT}"
                         Units="{Binding DistanceUnitItem.Value.Symbol}"
                         IsBusy="False"
                         Icon="MapMarkerDistance"
@@ -48,7 +47,7 @@
                        HorizontalAlignment="Left"
                        MainBrush="{DynamicResource NavyMainBrush}"
                        SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                       Title="Total Distance"
+                       Title="{x:Static example:RS.MissionProgressView_TotalDistanceRTT}"
                        Units="{Binding DistanceUnitItem.Value.Symbol}"
                        IsBusy="False"
                        Icon="LocationDistance"
@@ -67,7 +66,7 @@
                         HorizontalAlignment="Left"
                         MainBrush="{DynamicResource NavyMainBrush}"
                         SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                        Title="Home"
+                        Title="{x:Static example:RS.MissionProgressView_HomeDistance}"
                         Units="{Binding DistanceUnitItem.Value.Symbol}"
                         IsBusy="False"
                         Icon="Home"
@@ -86,7 +85,7 @@
                         HorizontalAlignment="Left"
                         MainBrush="{DynamicResource NavyMainBrush}"
                         SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                        Title="Target"
+                        Title="{x:Static example:RS.MissionProgressView_TargetDistance}"
                         Units="{Binding DistanceUnitItem.Value.Symbol}"
                         IsBusy="False"
                         Icon="Target"

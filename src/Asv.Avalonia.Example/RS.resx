@@ -81,4 +81,79 @@
     <data name="MavParamsPageViewModel_DeviceName_Unknown" xml:space="preserve">
         <value>Unknown</value>
     </data>
+    <data name="Not_Available" xml:space="preserve">
+        <value>N/A</value>
+    </data>
+    <data name="MissionProgressView_Title" xml:space="preserve">
+        <value>Mission progress</value>
+    </data>
+    <data name="MissionProgressView_SubStatusText" xml:space="preserve">
+        <value>before complete</value>
+    </data>
+    <data name="MissionProgressView_MIssionDistanceRTT" xml:space="preserve">
+        <value>Mission</value>
+    </data>
+    <data name="MissionProgressView_TotalDistanceRTT" xml:space="preserve">
+        <value>Total</value>
+    </data>
+    <data name="MissionProgressView_HomeDistance" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="MissionProgressView_TargetDistance" xml:space="preserve">
+        <value>Target</value>
+    </data>
+    <data name="MissionProgressView_DownLoadingMission" xml:space="preserve">
+        <value>Downloading mission</value>
+    </data>
+    <data name="UavAction_AutoMode" xml:space="preserve">
+        <value>Auto mode</value>
+    </data>
+    <data name="UavAction_GuidedMode" xml:space="preserve">
+        <value>Guided mode</value>
+    </data>
+    <data name="UavAction_TakeOff" xml:space="preserve">
+        <value>TakeOff</value>
+    </data>
+    <data name="UavAction_Rtl" xml:space="preserve">
+        <value>RTL</value>
+    </data>
+    <data name="UavAction_Land" xml:space="preserve">
+        <value>Land</value>
+    </data>
+    <data name="UavAction_StartMission" xml:space="preserve">
+        <value>Start Mission</value>
+    </data>
+    <data name="UavRttItem_Mode" xml:space="preserve">
+        <value>Mode</value>
+    </data>
+    <data name="UavRttItem_Altitude" xml:space="preserve">
+        <value>Altitude</value>
+    </data>
+    <data name="UavRttItem_Velocity" xml:space="preserve">
+        <value>Velocity</value>
+    </data>
+    <data name="UavRttItem_Azimuth" xml:space="preserve">
+        <value>Azimuth</value>
+    </data>
+    <data name="UavRttItem_Battery" xml:space="preserve">
+        <value>Battery</value>
+    </data>
+    <data name="UavRttItem_GNSS" xml:space="preserve">
+        <value>GNSS</value>
+    </data>
+    <data name="UavRttItem_Link" xml:space="preserve">
+        <value>Link</value>
+    </data>
+    <data name="UavWidgetViewModel_StatusText_Armed" xml:space="preserve">
+        <value>Armed</value>
+    </data>
+    <data name="UavWidgetViewModel_StatusText_PullUp" xml:space="preserve">
+        <value>Pull Up</value>
+    </data>
+    <data name="UavWidgetViewModel_StatusText_DisArmed" xml:space="preserve">
+        <value>Disarmed</value>
+    </data>
+    <data name="FlightPageViewModel_Title" xml:space="preserve">
+        <value>Flight</value>
+    </data>
 </root>

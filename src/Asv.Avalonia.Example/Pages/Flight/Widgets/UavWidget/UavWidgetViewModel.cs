@@ -150,8 +150,8 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                 if (IsArmed.Value != devicePosition.IsArmed.CurrentValue)
                 {
                     UpdateStatusText(devicePosition.IsArmed.CurrentValue
-                        ? "Armed"
-                        : "Disarmed");
+                        ? RS.UavWidgetViewModel_StatusText_Armed
+                        : RS.UavWidgetViewModel_StatusText_DisArmed);
                 }
 
                 IsArmed.Value = devicePosition.IsArmed.CurrentValue;
@@ -185,7 +185,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     {
         if (gs > 10 && alt < 40)
         {
-            StatusText.Value = "Pull Up";
+            StatusText.Value = RS.UavWidgetViewModel_StatusText_PullUp;
             AltitudeStatus.Value.Color = YellowColor;
         }
         else
