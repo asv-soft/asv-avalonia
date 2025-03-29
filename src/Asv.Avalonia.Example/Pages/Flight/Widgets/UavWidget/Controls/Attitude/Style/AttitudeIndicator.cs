@@ -45,7 +45,10 @@ public class AttitudeIndicator : TemplatedControl
 
     public static readonly DirectProperty<AttitudeIndicator, Color> brushVibrationXProperty =
         AvaloniaProperty.RegisterDirect<AttitudeIndicator, Color>(
-            nameof(BrushVibrationX), o => o.BrushVibrationX, (o, v) => o.BrushVibrationX = v);
+            nameof(BrushVibrationX),
+            o => o.BrushVibrationX,
+            (o, v) => o.BrushVibrationX = v
+        );
 
     public Color BrushVibrationX
     {
@@ -57,7 +60,10 @@ public class AttitudeIndicator : TemplatedControl
 
     public static readonly DirectProperty<AttitudeIndicator, Color> brushVibrationYProperty =
         AvaloniaProperty.RegisterDirect<AttitudeIndicator, Color>(
-            nameof(BrushVibrationY), o => o.BrushVibrationY, (o, v) => o.BrushVibrationY = v);
+            nameof(BrushVibrationY),
+            o => o.BrushVibrationY,
+            (o, v) => o.BrushVibrationY = v
+        );
 
     public Color BrushVibrationY
     {
@@ -69,7 +75,10 @@ public class AttitudeIndicator : TemplatedControl
 
     public static readonly DirectProperty<AttitudeIndicator, Color> brushVibrationZProperty =
         AvaloniaProperty.RegisterDirect<AttitudeIndicator, Color>(
-            nameof(BrushVibrationZ), o => o.BrushVibrationZ, (o, v) => o.BrushVibrationZ = v);
+            nameof(BrushVibrationZ),
+            o => o.BrushVibrationZ,
+            (o, v) => o.BrushVibrationZ = v
+        );
 
     public Color BrushVibrationZ
     {
@@ -77,9 +86,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetAndRaise(brushVibrationZProperty, ref _brushVibrationZ, value);
     }
 
-    public static readonly StyledProperty<float> VibrationXProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, float>(
-            nameof(VibrationX), defaultValue: -1);
+    public static readonly StyledProperty<float> VibrationXProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        float
+    >(nameof(VibrationX), defaultValue: -1);
 
     public float VibrationX
     {
@@ -87,9 +97,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(VibrationXProperty, value);
     }
 
-    public static readonly StyledProperty<float> VibrationYProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, float>(
-            nameof(VibrationY), defaultValue: -1);
+    public static readonly StyledProperty<float> VibrationYProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        float
+    >(nameof(VibrationY), defaultValue: -1);
 
     public float VibrationY
     {
@@ -97,9 +108,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(VibrationYProperty, value);
     }
 
-    public static readonly StyledProperty<float> VibrationZProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, float>(
-            nameof(VibrationZ), defaultValue: -1);
+    public static readonly StyledProperty<float> VibrationZProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        float
+    >(nameof(VibrationZ), defaultValue: -1);
 
     public float VibrationZ
     {
@@ -107,9 +119,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(VibrationZProperty, value);
     }
 
-    public static readonly StyledProperty<uint> Clipping0Property =
-        AvaloniaProperty.Register<AttitudeIndicator, uint>(
-            nameof(Clipping0));
+    public static readonly StyledProperty<uint> Clipping0Property = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        uint
+    >(nameof(Clipping0));
 
     public uint Clipping0
     {
@@ -117,9 +130,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(Clipping0Property, value);
     }
 
-    public static readonly StyledProperty<uint> Clipping1Property =
-        AvaloniaProperty.Register<AttitudeIndicator, uint>(
-            nameof(Clipping1));
+    public static readonly StyledProperty<uint> Clipping1Property = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        uint
+    >(nameof(Clipping1));
 
     public uint Clipping1
     {
@@ -127,9 +141,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(Clipping1Property, value);
     }
 
-    public static readonly StyledProperty<uint> Clipping2Property =
-        AvaloniaProperty.Register<AttitudeIndicator, uint>(
-            nameof(Clipping2));
+    public static readonly StyledProperty<uint> Clipping2Property = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        uint
+    >(nameof(Clipping2));
 
     public uint Clipping2
     {
@@ -137,8 +152,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(Clipping2Property, value);
     }
 
-    public static readonly StyledProperty<double> RollAngleProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, double>(nameof(RollAngle), default(double));
+    public static readonly StyledProperty<double> RollAngleProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        double
+    >(nameof(RollAngle), default(double));
 
     public double RollAngle
     {
@@ -146,8 +163,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(RollAngleProperty, value);
     }
 
-    public static readonly StyledProperty<double> PitchAngleProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, double>(nameof(PitchAngle), default(double));
+    public static readonly StyledProperty<double> PitchAngleProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        double
+    >(nameof(PitchAngle), default(double));
 
     public double PitchAngle
     {
@@ -155,8 +174,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(PitchAngleProperty, value);
     }
 
-    public static readonly StyledProperty<double> VelocityProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, double>(nameof(Velocity), default(double));
+    public static readonly StyledProperty<double> VelocityProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        double
+    >(nameof(Velocity), default(double));
 
     public double Velocity
     {
@@ -164,8 +185,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(VelocityProperty, value);
     }
 
-    public static readonly StyledProperty<double> AltitudeProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, double>(nameof(Altitude), default(double));
+    public static readonly StyledProperty<double> AltitudeProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        double
+    >(nameof(Altitude), default(double));
 
     public double Altitude
     {
@@ -173,8 +196,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(AltitudeProperty, value);
     }
 
-    public static readonly StyledProperty<double> HeadingProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, double>(nameof(Heading), default(double));
+    public static readonly StyledProperty<double> HeadingProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        double
+    >(nameof(Heading), default(double));
 
     public double Heading
     {
@@ -182,8 +207,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(HeadingProperty, value);
     }
 
-    public static readonly StyledProperty<double?> HomeAzimuthProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, double?>(nameof(HomeAzimuth), default(double?));
+    public static readonly StyledProperty<double?> HomeAzimuthProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        double?
+    >(nameof(HomeAzimuth), default(double?));
 
     public double? HomeAzimuth
     {
@@ -191,8 +218,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetValue(HomeAzimuthProperty, value);
     }
 
-    public static readonly StyledProperty<bool> IsArmedProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, bool>(nameof(IsArmed), default(bool));
+    public static readonly StyledProperty<bool> IsArmedProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        bool
+    >(nameof(IsArmed), default(bool));
 
     public bool IsArmed
     {
@@ -201,8 +230,11 @@ public class AttitudeIndicator : TemplatedControl
     }
 
     public static readonly DirectProperty<AttitudeIndicator, string> StatusTextProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(nameof(StatusText), _ => _.StatusText,
-            (_, value) => _.StatusText = value);
+        AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(
+            nameof(StatusText),
+            _ => _.StatusText,
+            (_, value) => _.StatusText = value
+        );
 
     public string StatusText
     {
@@ -211,8 +243,11 @@ public class AttitudeIndicator : TemplatedControl
     }
 
     public static readonly DirectProperty<AttitudeIndicator, string> RightStatusTextProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(nameof(RightStatusText), _ => _.RightStatusText,
-            (_, value) => _.RightStatusText = value);
+        AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(
+            nameof(RightStatusText),
+            _ => _.RightStatusText,
+            (_, value) => _.RightStatusText = value
+        );
 
     public string RightStatusText
     {
@@ -220,8 +255,10 @@ public class AttitudeIndicator : TemplatedControl
         set => SetAndRaise(RightStatusTextProperty, ref _rightStatusText, value);
     }
 
-    public static readonly StyledProperty<TimeSpan> ArmedTimeProperty =
-        AvaloniaProperty.Register<AttitudeIndicator, TimeSpan>(nameof(ArmedTime), default(TimeSpan));
+    public static readonly StyledProperty<TimeSpan> ArmedTimeProperty = AvaloniaProperty.Register<
+        AttitudeIndicator,
+        TimeSpan
+    >(nameof(ArmedTime), default(TimeSpan));
 
     public TimeSpan ArmedTime
     {
@@ -232,8 +269,11 @@ public class AttitudeIndicator : TemplatedControl
     #region Internal direct property
 
     public static readonly DirectProperty<AttitudeIndicator, double> InternalWidthProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(nameof(InternalWidth), _ => _.InternalWidth,
-            (_, value) => _.InternalWidth = value);
+        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
+            nameof(InternalWidth),
+            _ => _.InternalWidth,
+            (_, value) => _.InternalWidth = value
+        );
 
     public double InternalWidth
     {
@@ -242,8 +282,11 @@ public class AttitudeIndicator : TemplatedControl
     }
 
     public static readonly DirectProperty<AttitudeIndicator, double> InternalHeightProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(nameof(InternalHeight), _ => _.InternalHeight,
-            (_, value) => _.InternalHeight = value);
+        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
+            nameof(InternalHeight),
+            _ => _.InternalHeight,
+            (_, value) => _.InternalHeight = value
+        );
 
     public double InternalHeight
     {
@@ -252,8 +295,11 @@ public class AttitudeIndicator : TemplatedControl
     }
 
     public static readonly DirectProperty<AttitudeIndicator, double> PitchTranslateXProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(nameof(PitchTranslateX), _ => _.PitchTranslateX,
-            (_, value) => _.PitchTranslateX = value);
+        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
+            nameof(PitchTranslateX),
+            _ => _.PitchTranslateX,
+            (_, value) => _.PitchTranslateX = value
+        );
 
     private double PitchTranslateX
     {
@@ -262,8 +308,11 @@ public class AttitudeIndicator : TemplatedControl
     }
 
     public static readonly DirectProperty<AttitudeIndicator, double> PitchTranslateYProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(nameof(PitchTranslateY), _ => _.PitchTranslateY,
-            (_, value) => _.PitchTranslateY = value);
+        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
+            nameof(PitchTranslateY),
+            _ => _.PitchTranslateY,
+            (_, value) => _.PitchTranslateY = value
+        );
 
     public double PitchTranslateY
     {
@@ -271,9 +320,14 @@ public class AttitudeIndicator : TemplatedControl
         set => SetAndRaise(PitchTranslateYProperty, ref _pitchTranslateY, value);
     }
 
-    public static readonly DirectProperty<AttitudeIndicator, IEnumerable<RollItem>> RollItemsProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, IEnumerable<RollItem>>(nameof(RollItems),
-            _ => _.RollItems, (_, value) => _.RollItems = value);
+    public static readonly DirectProperty<
+        AttitudeIndicator,
+        IEnumerable<RollItem>
+    > RollItemsProperty = AvaloniaProperty.RegisterDirect<AttitudeIndicator, IEnumerable<RollItem>>(
+        nameof(RollItems),
+        _ => _.RollItems,
+        (_, value) => _.RollItems = value
+    );
 
     public IEnumerable<RollItem> RollItems
     {
@@ -281,9 +335,13 @@ public class AttitudeIndicator : TemplatedControl
         set => SetAndRaise(RollItemsProperty, ref _rollItems, value);
     }
 
-    public static readonly DirectProperty<AttitudeIndicator, IEnumerable<PitchItem>> PitchItemsProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, IEnumerable<PitchItem>>(nameof(PitchItems),
-            _ => _.PitchItems, (_, value) => _.PitchItems = value);
+    public static readonly DirectProperty<
+        AttitudeIndicator,
+        IEnumerable<PitchItem>
+    > PitchItemsProperty = AvaloniaProperty.RegisterDirect<
+        AttitudeIndicator,
+        IEnumerable<PitchItem>
+    >(nameof(PitchItems), _ => _.PitchItems, (_, value) => _.PitchItems = value);
 
     public IEnumerable<PitchItem> PitchItems
     {
@@ -291,9 +349,13 @@ public class AttitudeIndicator : TemplatedControl
         set => SetAndRaise(PitchItemsProperty, ref _pitchItems, value);
     }
 
-    public static readonly DirectProperty<AttitudeIndicator, IEnumerable<ScaleItem>> VelocityItemsProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, IEnumerable<ScaleItem>>(nameof(VelocityItems),
-            _ => _.VelocityItems, (_, value) => _.VelocityItems = value);
+    public static readonly DirectProperty<
+        AttitudeIndicator,
+        IEnumerable<ScaleItem>
+    > VelocityItemsProperty = AvaloniaProperty.RegisterDirect<
+        AttitudeIndicator,
+        IEnumerable<ScaleItem>
+    >(nameof(VelocityItems), _ => _.VelocityItems, (_, value) => _.VelocityItems = value);
 
     public IEnumerable<ScaleItem> VelocityItems
     {
@@ -301,9 +363,13 @@ public class AttitudeIndicator : TemplatedControl
         set => SetAndRaise(VelocityItemsProperty, ref _velocityItems, value);
     }
 
-    public static readonly DirectProperty<AttitudeIndicator, IEnumerable<ScaleItem>> AltitudeItemsProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, IEnumerable<ScaleItem>>(nameof(AltitudeItems),
-            _ => _.AltitudeItems, (_, value) => _.AltitudeItems = value);
+    public static readonly DirectProperty<
+        AttitudeIndicator,
+        IEnumerable<ScaleItem>
+    > AltitudeItemsProperty = AvaloniaProperty.RegisterDirect<
+        AttitudeIndicator,
+        IEnumerable<ScaleItem>
+    >(nameof(AltitudeItems), _ => _.AltitudeItems, (_, value) => _.AltitudeItems = value);
 
     public IEnumerable<ScaleItem> AltitudeItems
     {
@@ -311,9 +377,13 @@ public class AttitudeIndicator : TemplatedControl
         set => SetAndRaise(AltitudeItemsProperty, ref _altitudeItems, value);
     }
 
-    public static readonly DirectProperty<AttitudeIndicator, IEnumerable<ScaleItem>> HeadingItemsProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, IEnumerable<ScaleItem>>(nameof(HeadingItems),
-            _ => _.HeadingItems, (_, value) => _.HeadingItems = value);
+    public static readonly DirectProperty<
+        AttitudeIndicator,
+        IEnumerable<ScaleItem>
+    > HeadingItemsProperty = AvaloniaProperty.RegisterDirect<
+        AttitudeIndicator,
+        IEnumerable<ScaleItem>
+    >(nameof(HeadingItems), _ => _.HeadingItems, (_, value) => _.HeadingItems = value);
 
     public IEnumerable<ScaleItem> HeadingItems
     {
@@ -322,9 +392,11 @@ public class AttitudeIndicator : TemplatedControl
     }
 
     public static readonly DirectProperty<AttitudeIndicator, double> HomeAzimuthPositionProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(nameof(HomeAzimuthPosition),
-            _ => _.HomeAzimuthPosition, (_, value) => _.HomeAzimuthPosition = value);
-
+        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
+            nameof(HomeAzimuthPosition),
+            _ => _.HomeAzimuthPosition,
+            (_, value) => _.HomeAzimuthPosition = value
+        );
 
     public double HomeAzimuthPosition
     {
@@ -340,8 +412,12 @@ public class AttitudeIndicator : TemplatedControl
         if (Design.IsDesignMode)
         {
             var status = new[] { "Armed", "Disarmed" };
-            Observable.Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), TimeProvider.System)
-                .Subscribe(_ => { StatusText = status[1 % 2]; });
+            Observable
+                .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1), TimeProvider.System)
+                .Subscribe(_ =>
+                {
+                    StatusText = status[1 % 2];
+                });
             StatusText = status[1];
         }
 
@@ -349,64 +425,126 @@ public class AttitudeIndicator : TemplatedControl
         Scale = smallerSide / 100;
 
         RollItems = new AvaloniaList<RollItem>(
-            new RollItem(0), new RollItem(10), new RollItem(20), new RollItem(30), new RollItem(45),
-            new RollItem(60), new RollItem(300), new RollItem(315), new RollItem(330), new RollItem(340),
-            new RollItem(350));
+            new RollItem(0),
+            new RollItem(10),
+            new RollItem(20),
+            new RollItem(30),
+            new RollItem(45),
+            new RollItem(60),
+            new RollItem(300),
+            new RollItem(315),
+            new RollItem(330),
+            new RollItem(340),
+            new RollItem(350)
+        );
 
         PitchItems = new AvaloniaList<PitchItem>(
             new PitchItem(135, Scale, false),
-            new PitchItem(130, Scale), new PitchItem(125, Scale, false), 
+            new PitchItem(130, Scale),
+            new PitchItem(125, Scale, false),
             new PitchItem(120, Scale),
             new PitchItem(115, Scale, false),
-            new PitchItem(110, Scale), new PitchItem(105, Scale, false),
+            new PitchItem(110, Scale),
+            new PitchItem(105, Scale, false),
             new PitchItem(100, Scale),
             new PitchItem(95, Scale, false),
-            new PitchItem(90, Scale), new PitchItem(85, Scale, false),
+            new PitchItem(90, Scale),
+            new PitchItem(85, Scale, false),
             new PitchItem(80, Scale),
             new PitchItem(75, Scale, false),
-            new PitchItem(70, Scale), new PitchItem(65, Scale, false),
+            new PitchItem(70, Scale),
+            new PitchItem(65, Scale, false),
             new PitchItem(60, Scale),
-            new PitchItem(55, Scale, false), new PitchItem(50, Scale), new PitchItem(45, Scale, false),
+            new PitchItem(55, Scale, false),
+            new PitchItem(50, Scale),
+            new PitchItem(45, Scale, false),
             new PitchItem(40, Scale),
-            new PitchItem(35, Scale, false), new PitchItem(30, Scale), new PitchItem(25, Scale, false),
+            new PitchItem(35, Scale, false),
+            new PitchItem(30, Scale),
+            new PitchItem(25, Scale, false),
             new PitchItem(20, Scale),
-            new PitchItem(15, Scale, false), new PitchItem(10, Scale), new PitchItem(5, Scale, false),
+            new PitchItem(15, Scale, false),
+            new PitchItem(10, Scale),
+            new PitchItem(5, Scale, false),
             new PitchItem(0, Scale),
-            new PitchItem(-5, Scale, false), new PitchItem(-10, Scale), new PitchItem(-15, Scale, false),
+            new PitchItem(-5, Scale, false),
+            new PitchItem(-10, Scale),
+            new PitchItem(-15, Scale, false),
             new PitchItem(-20, Scale),
-            new PitchItem(-25, Scale, false), new PitchItem(-30, Scale), new PitchItem(-35, Scale, false),
+            new PitchItem(-25, Scale, false),
+            new PitchItem(-30, Scale),
+            new PitchItem(-35, Scale, false),
             new PitchItem(-40, Scale),
-            new PitchItem(-45, Scale, false), new PitchItem(-50, Scale), new PitchItem(-55, Scale, false),
+            new PitchItem(-45, Scale, false),
+            new PitchItem(-50, Scale),
+            new PitchItem(-55, Scale, false),
             new PitchItem(-60, Scale),
-            new PitchItem(-65, Scale, false), new PitchItem(-70, Scale), new PitchItem(-75, Scale, false),
+            new PitchItem(-65, Scale, false),
+            new PitchItem(-70, Scale),
+            new PitchItem(-75, Scale, false),
             new PitchItem(-80, Scale),
-            new PitchItem(-85, Scale, false), new PitchItem(-90, Scale), new PitchItem(-95, Scale, false),
+            new PitchItem(-85, Scale, false),
+            new PitchItem(-90, Scale),
+            new PitchItem(-95, Scale, false),
             new PitchItem(-100, Scale),
-            new PitchItem(-105, Scale, false), new PitchItem(-110, Scale), new PitchItem(-115, Scale, false),
+            new PitchItem(-105, Scale, false),
+            new PitchItem(-110, Scale),
+            new PitchItem(-115, Scale, false),
             new PitchItem(-120, Scale),
-            new PitchItem(-125, Scale, false), new PitchItem(-130, Scale), new PitchItem(-135, Scale, false)
+            new PitchItem(-125, Scale, false),
+            new PitchItem(-130, Scale),
+            new PitchItem(-135, Scale, false)
         );
 
         var velocityControlLength = smallerSide * VelocityControlLengthPrc;
         var velocityItemLength = velocityControlLength / (VelocityItemCount - 1);
-        VelocityItems = new AvaloniaList<ScaleItem>(Enumerable.Range(0, VelocityItemCount).Select(_ =>
-            new ScaleItem(0, VelocityValueRange, _, VelocityItemCount, velocityControlLength + velocityItemLength,
-                velocityControlLength, showNegative: false)));
+        VelocityItems = new AvaloniaList<ScaleItem>(
+            Enumerable
+                .Range(0, VelocityItemCount)
+                .Select(_ => new ScaleItem(
+                    0,
+                    VelocityValueRange,
+                    _,
+                    VelocityItemCount,
+                    velocityControlLength + velocityItemLength,
+                    velocityControlLength,
+                    showNegative: false
+                ))
+        );
 
         var altitudeControlLength = smallerSide * AltitudeControlLengthPrc;
         var altitudeItemLength = altitudeControlLength / (AltitudeItemCount - 1);
-        AltitudeItems = new AvaloniaList<ScaleItem>(Enumerable.Range(0, AltitudeItemCount).Select(_ =>
-            new ScaleItem(0, AltitudeValueRange, _, AltitudeItemCount, altitudeControlLength + altitudeItemLength,
-                altitudeControlLength)));
+        AltitudeItems = new AvaloniaList<ScaleItem>(
+            Enumerable
+                .Range(0, AltitudeItemCount)
+                .Select(_ => new ScaleItem(
+                    0,
+                    AltitudeValueRange,
+                    _,
+                    AltitudeItemCount,
+                    altitudeControlLength + altitudeItemLength,
+                    altitudeControlLength
+                ))
+        );
 
         var headingControlLength = smallerSide * HeadingControlLengthPrc;
         var headingItemLength = headingControlLength / (HeadingItemCount - 1);
-        HeadingItems = new AvaloniaList<ScaleItem>(Enumerable.Range(0, HeadingItemCount).Select(_ =>
-            new HeadingScaleItem(0, HeadingValueRange, _, HeadingItemCount,
-                headingControlLength + headingItemLength, headingControlLength)));
+        HeadingItems = new AvaloniaList<ScaleItem>(
+            Enumerable
+                .Range(0, HeadingItemCount)
+                .Select(_ => new HeadingScaleItem(
+                    0,
+                    HeadingValueRange,
+                    _,
+                    HeadingItemCount,
+                    headingControlLength + headingItemLength,
+                    headingControlLength
+                ))
+        );
 
-        var headingItemStep = (headingControlLength + headingItemLength) /
-                              (HeadingItemCount % 2 != 0 ? HeadingItemCount - 1 : HeadingItemCount);
+        var headingItemStep =
+            (headingControlLength + headingItemLength)
+            / (HeadingItemCount % 2 != 0 ? HeadingItemCount - 1 : HeadingItemCount);
         _headingPositionStep = -1 * headingItemStep / HeadingValueRange;
         _headingCenterPosition = headingControlLength / 2;
     }
@@ -525,7 +663,7 @@ public class AttitudeIndicator : TemplatedControl
         {
             return;
         }
-        
+
         var pitch = indicator.PitchAngle;
         UpdateRollAngle(source);
         foreach (var item in indicator.PitchItems)
@@ -540,11 +678,13 @@ public class AttitudeIndicator : TemplatedControl
         {
             return;
         }
-        
+
         var roll = indicator.RollAngle;
         var pitch = indicator.PitchAngle;
-        indicator.PitchTranslateX = -pitch * indicator.Scale * Math.Cos((roll - 90.0) * Math.PI / 180.0);
-        indicator.PitchTranslateY = pitch * indicator.Scale * Math.Sin((90 - roll) * Math.PI / 180.0);
+        indicator.PitchTranslateX =
+            -pitch * indicator.Scale * Math.Cos((roll - 90.0) * Math.PI / 180.0);
+        indicator.PitchTranslateY =
+            pitch * indicator.Scale * Math.Sin((90 - roll) * Math.PI / 180.0);
     }
 
     private static void UpdateVelocityItems(AvaloniaObject source)
@@ -553,7 +693,7 @@ public class AttitudeIndicator : TemplatedControl
         {
             return;
         }
-        
+
         var velocity = indicator.Velocity;
         foreach (var item in indicator.VelocityItems)
         {
@@ -567,7 +707,7 @@ public class AttitudeIndicator : TemplatedControl
         {
             return;
         }
-        
+
         var altitude = indicator.Altitude;
         foreach (var item in indicator.AltitudeItems)
         {
@@ -581,14 +721,17 @@ public class AttitudeIndicator : TemplatedControl
         {
             return;
         }
-        
+
         var heading = indicator.Heading;
         foreach (var item in indicator.HeadingItems)
         {
             item.UpdateValue(heading);
         }
 
-        indicator.HomeAzimuthPosition = GetHomeAzimuthPosition(indicator.HomeAzimuth, indicator.Heading);
+        indicator.HomeAzimuthPosition = GetHomeAzimuthPosition(
+            indicator.HomeAzimuth,
+            indicator.Heading
+        );
     }
 
     private static void UpdateHomeAzimuthPosition(AvaloniaObject source)
@@ -597,8 +740,11 @@ public class AttitudeIndicator : TemplatedControl
         {
             return;
         }
-        
-        indicator.HomeAzimuthPosition = GetHomeAzimuthPosition(indicator.HomeAzimuth, indicator.Heading);
+
+        indicator.HomeAzimuthPosition = GetHomeAzimuthPosition(
+            indicator.HomeAzimuth,
+            indicator.Heading
+        );
     }
 
     private static double GetHomeAzimuthPosition(double? value, double headingValue)
@@ -635,8 +781,17 @@ public class ScaleItem : AvaloniaObject
     private double _position;
     private bool _isVisible;
 
-    public ScaleItem(double value, double valueRange, int index, int itemCount, double fullLength, double length,
-        bool isInverse = false, bool showNegative = true, string? fixedTitle = null)
+    public ScaleItem(
+        double value,
+        double valueRange,
+        int index,
+        int itemCount,
+        double fullLength,
+        double length,
+        bool isInverse = false,
+        bool showNegative = true,
+        string? fixedTitle = null
+    )
     {
         _valueRange = valueRange;
         _showNegative = showNegative;
@@ -696,8 +851,11 @@ public class ScaleItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<ScaleItem, bool> IsVisibleProperty =
-        AvaloniaProperty.RegisterDirect<ScaleItem, bool>(nameof(IsVisible), _ => _.IsVisible,
-            (_, value) => _.IsVisible = value);
+        AvaloniaProperty.RegisterDirect<ScaleItem, bool>(
+            nameof(IsVisible),
+            _ => _.IsVisible,
+            (_, value) => _.IsVisible = value
+        );
 
     public bool IsVisible
     {
@@ -706,8 +864,11 @@ public class ScaleItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<ScaleItem, string> TitleProperty =
-        AvaloniaProperty.RegisterDirect<ScaleItem, string>(nameof(Title), _ => _.Title!,
-            (_, value) => _.Title = value);
+        AvaloniaProperty.RegisterDirect<ScaleItem, string>(
+            nameof(Title),
+            _ => _.Title!,
+            (_, value) => _.Title = value
+        );
 
     public string? Title
     {
@@ -716,8 +877,11 @@ public class ScaleItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<ScaleItem, double> ValueProperty =
-        AvaloniaProperty.RegisterDirect<ScaleItem, double>(nameof(Value), _ => _.Value,
-            (_, value) => _.Value = value);
+        AvaloniaProperty.RegisterDirect<ScaleItem, double>(
+            nameof(Value),
+            _ => _.Value,
+            (_, value) => _.Value = value
+        );
 
     public double Value
     {
@@ -726,8 +890,11 @@ public class ScaleItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<ScaleItem, double> PositionProperty =
-        AvaloniaProperty.RegisterDirect<ScaleItem, double>(nameof(Position), _ => _.Position,
-            (_, value) => _.Position = value);
+        AvaloniaProperty.RegisterDirect<ScaleItem, double>(
+            nameof(Position),
+            _ => _.Position,
+            (_, value) => _.Position = value
+        );
 
     public double Position
     {
@@ -738,10 +905,15 @@ public class ScaleItem : AvaloniaObject
 
 public class HeadingScaleItem : ScaleItem
 {
-    public HeadingScaleItem(double value, double valueRange, int index, int itemCount, double fullLength,
-        double length) : base(value, valueRange, index, itemCount, fullLength, length, true)
-    {
-    }
+    public HeadingScaleItem(
+        double value,
+        double valueRange,
+        int index,
+        int itemCount,
+        double fullLength,
+        double length
+    )
+        : base(value, valueRange, index, itemCount, fullLength, length, true) { }
 
     protected override string? GetTitle(double value)
     {
@@ -757,7 +929,7 @@ public class HeadingScaleItem : ScaleItem
             270 => "W",
             315 => "NW",
             360 => "N",
-            _ => v.ToString("F0")
+            _ => v.ToString("F0"),
         };
     }
 }
@@ -767,12 +939,16 @@ public class RollItem : AvaloniaObject
     public RollItem(int angle)
     {
         Value = angle;
-        Title = Math.Abs(angle) > 180 ? (360 - Math.Abs(angle)).ToString() : Math.Abs(angle).ToString();
+        Title =
+            Math.Abs(angle) > 180 ? (360 - Math.Abs(angle)).ToString() : Math.Abs(angle).ToString();
     }
 
     public static readonly DirectProperty<RollItem, string> TitleProperty =
-        AvaloniaProperty.RegisterDirect<RollItem, string>(nameof(Title), _ => _.Title,
-            (_, value) => _.Title = value);
+        AvaloniaProperty.RegisterDirect<RollItem, string>(
+            nameof(Title),
+            _ => _.Title,
+            (_, value) => _.Title = value
+        );
 
     private string _title;
     private double _value;
@@ -784,8 +960,11 @@ public class RollItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<RollItem, double> ValueProperty =
-        AvaloniaProperty.RegisterDirect<RollItem, double>(nameof(Value), _ => _.Value,
-            (_, value) => _.Value = value);
+        AvaloniaProperty.RegisterDirect<RollItem, double>(
+            nameof(Value),
+            _ => _.Value,
+            (_, value) => _.Value = value
+        );
 
     public double Value
     {
@@ -803,7 +982,12 @@ public class PitchItem : AvaloniaObject
     private Point _stopLine;
     private bool _isVisible;
 
-    public PitchItem(int pitch, double scale, bool titleIsVisible = true, double controlHeight = 284)
+    public PitchItem(
+        int pitch,
+        double scale,
+        bool titleIsVisible = true,
+        double controlHeight = 284
+    )
     {
         _pitch = pitch;
         Value = (controlHeight / 2 - pitch) * scale;
@@ -824,8 +1008,11 @@ public class PitchItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<PitchItem, string> TitleProperty =
-        AvaloniaProperty.RegisterDirect<PitchItem, string>(nameof(Title), _ => _.Title,
-            (_, value) => _.Title = value);
+        AvaloniaProperty.RegisterDirect<PitchItem, string>(
+            nameof(Title),
+            _ => _.Title,
+            (_, value) => _.Title = value
+        );
 
     public string Title
     {
@@ -834,8 +1021,11 @@ public class PitchItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<PitchItem, double> ValueProperty =
-        AvaloniaProperty.RegisterDirect<PitchItem, double>(nameof(Value), _ => _.Value,
-            (_, value) => _.Value = value);
+        AvaloniaProperty.RegisterDirect<PitchItem, double>(
+            nameof(Value),
+            _ => _.Value,
+            (_, value) => _.Value = value
+        );
 
     public double Value
     {
@@ -844,9 +1034,11 @@ public class PitchItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<PitchItem, bool> IsVisibleProperty =
-        AvaloniaProperty.RegisterDirect<PitchItem, bool>(nameof(IsVisible), _ => _.IsVisible,
-            (_, value) => _.IsVisible = value);
-
+        AvaloniaProperty.RegisterDirect<PitchItem, bool>(
+            nameof(IsVisible),
+            _ => _.IsVisible,
+            (_, value) => _.IsVisible = value
+        );
 
     public bool IsVisible
     {
@@ -855,8 +1047,11 @@ public class PitchItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<PitchItem, Point> StartLineProperty =
-        AvaloniaProperty.RegisterDirect<PitchItem, Point>(nameof(StartLine), _ => _.StartLine,
-            (_, value) => _.StartLine = value);
+        AvaloniaProperty.RegisterDirect<PitchItem, Point>(
+            nameof(StartLine),
+            _ => _.StartLine,
+            (_, value) => _.StartLine = value
+        );
 
     public Point StartLine
     {
@@ -865,8 +1060,11 @@ public class PitchItem : AvaloniaObject
     }
 
     public static readonly DirectProperty<PitchItem, Point> StopLineProperty =
-        AvaloniaProperty.RegisterDirect<PitchItem, Point>(nameof(StopLine), _ => _.StopLine,
-            (_, value) => _.StopLine = value);
+        AvaloniaProperty.RegisterDirect<PitchItem, Point>(
+            nameof(StopLine),
+            _ => _.StopLine,
+            (_, value) => _.StopLine = value
+        );
 
     public Point StopLine
     {

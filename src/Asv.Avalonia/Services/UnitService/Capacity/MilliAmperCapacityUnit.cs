@@ -1,6 +1,7 @@
 ﻿using System.Composition;
 
 namespace Asv.Avalonia;
+
 [ExportUnitItem(CapacityBase.Id)]
 [Shared]
 [method: ImportingConstructor]

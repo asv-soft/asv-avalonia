@@ -5,9 +5,10 @@ using Material.Icons;
 
 namespace Asv.Avalonia.Example;
 
-public class MissionAnchor: MapAnchor<MissionAnchor>
+public class MissionAnchor : MapAnchor<MissionAnchor>
 {
-    public MissionAnchor(int index, GeoPoint current, GeoPoint next) : base($"wayPoint{index}")
+    public MissionAnchor(int index, GeoPoint current, GeoPoint next)
+        : base($"wayPoint{index}")
     {
         Location = current;
         Title = string.Empty;

@@ -66,9 +66,11 @@ public abstract class IndicatorBase : TemplatedControl
         get => GetValue(IconKindProperty);
         set => SetValue(IconKindProperty, value);
     }
-    
-    public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<IndicatorBase, string>(
-        nameof(Title));
+
+    public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<
+        IndicatorBase,
+        string
+    >(nameof(Title));
 
     public string Title
     {
