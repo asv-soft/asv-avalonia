@@ -536,4 +536,7 @@
     <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change theme</value>
     </data>
+    <data name="Not_Available" xml:space="preserve">
+        <value>N/A</value>
+    </data>
 </root>

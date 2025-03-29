@@ -78,11 +78,92 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Flight.
+        /// </summary>
+        public static string FlightPageViewModel_Title {
+            get {
+                return ResourceManager.GetString("FlightPageViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Example.
         /// </summary>
         public static string MapExamplePageViewModel_Title {
             get {
                 return ResourceManager.GetString("MapExamplePageViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading mission.
+        /// </summary>
+        public static string MissionProgressView_DownLoadingMission {
+            get {
+                return ResourceManager.GetString("MissionProgressView_DownLoadingMission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string MissionProgressView_HomeDistance {
+            get {
+                return ResourceManager.GetString("MissionProgressView_HomeDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mission.
+        /// </summary>
+        public static string MissionProgressView_MIssionDistanceRTT {
+            get {
+                return ResourceManager.GetString("MissionProgressView_MIssionDistanceRTT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to before complete.
+        /// </summary>
+        public static string MissionProgressView_SubStatusText {
+            get {
+                return ResourceManager.GetString("MissionProgressView_SubStatusText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Target.
+        /// </summary>
+        public static string MissionProgressView_TargetDistance {
+            get {
+                return ResourceManager.GetString("MissionProgressView_TargetDistance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mission progress.
+        /// </summary>
+        public static string MissionProgressView_Title {
+            get {
+                return ResourceManager.GetString("MissionProgressView_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        public static string MissionProgressView_TotalDistanceRTT {
+            get {
+                return ResourceManager.GetString("MissionProgressView_TotalDistanceRTT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to N/A.
+        /// </summary>
+        public static string Not_Available {
+            get {
+                return ResourceManager.GetString("Not_Available", resourceCulture);
             }
         }
         
@@ -236,6 +317,150 @@ namespace Asv.Avalonia.Example {
         public static string ParamPageViewModel_DataLossDialog_Title {
             get {
                 return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Auto mode.
+        /// </summary>
+        public static string UavAction_AutoMode {
+            get {
+                return ResourceManager.GetString("UavAction_AutoMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Guided mode.
+        /// </summary>
+        public static string UavAction_GuidedMode {
+            get {
+                return ResourceManager.GetString("UavAction_GuidedMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Land.
+        /// </summary>
+        public static string UavAction_Land {
+            get {
+                return ResourceManager.GetString("UavAction_Land", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RTL.
+        /// </summary>
+        public static string UavAction_Rtl {
+            get {
+                return ResourceManager.GetString("UavAction_Rtl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start Mission.
+        /// </summary>
+        public static string UavAction_StartMission {
+            get {
+                return ResourceManager.GetString("UavAction_StartMission", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TakeOff.
+        /// </summary>
+        public static string UavAction_TakeOff {
+            get {
+                return ResourceManager.GetString("UavAction_TakeOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Altitude.
+        /// </summary>
+        public static string UavRttItem_Altitude {
+            get {
+                return ResourceManager.GetString("UavRttItem_Altitude", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Azimuth.
+        /// </summary>
+        public static string UavRttItem_Azimuth {
+            get {
+                return ResourceManager.GetString("UavRttItem_Azimuth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Battery.
+        /// </summary>
+        public static string UavRttItem_Battery {
+            get {
+                return ResourceManager.GetString("UavRttItem_Battery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GNSS.
+        /// </summary>
+        public static string UavRttItem_GNSS {
+            get {
+                return ResourceManager.GetString("UavRttItem_GNSS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Link.
+        /// </summary>
+        public static string UavRttItem_Link {
+            get {
+                return ResourceManager.GetString("UavRttItem_Link", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode.
+        /// </summary>
+        public static string UavRttItem_Mode {
+            get {
+                return ResourceManager.GetString("UavRttItem_Mode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Velocity.
+        /// </summary>
+        public static string UavRttItem_Velocity {
+            get {
+                return ResourceManager.GetString("UavRttItem_Velocity", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Armed.
+        /// </summary>
+        public static string UavWidgetViewModel_StatusText_Armed {
+            get {
+                return ResourceManager.GetString("UavWidgetViewModel_StatusText_Armed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disarmed.
+        /// </summary>
+        public static string UavWidgetViewModel_StatusText_DisArmed {
+            get {
+                return ResourceManager.GetString("UavWidgetViewModel_StatusText_DisArmed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pull Up.
+        /// </summary>
+        public static string UavWidgetViewModel_StatusText_PullUp {
+            get {
+                return ResourceManager.GetString("UavWidgetViewModel_StatusText_PullUp", resourceCulture);
             }
         }
     }
