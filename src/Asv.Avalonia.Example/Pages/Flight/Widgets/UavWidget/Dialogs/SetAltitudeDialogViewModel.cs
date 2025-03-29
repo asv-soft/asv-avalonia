@@ -29,11 +29,11 @@ public class SetAltitudeDialogViewModel : DialogViewModelBase
                     return ValidationResult.Success;
                 }
 
-                return ValueTask.FromResult<ValidationResult>(
-                    new Exception("Invalid Altitude"));
+                return ValueTask.FromResult<ValidationResult>(new Exception("Invalid Altitude"));
             },
             this,
-            true);
+            true
+        );
     }
 
     public async Task<double?> ApplyDialog()

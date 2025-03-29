@@ -20,7 +20,8 @@ public class CapacityBase : UnitBase
     [ImportingConstructor]
     public CapacityBase(
         [Import] IConfiguration cfgSvc,
-        [ImportMany(Id)] IEnumerable<IUnitItem> items) 
+        [ImportMany(Id)] IEnumerable<IUnitItem> items
+    )
         : base(items)
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);

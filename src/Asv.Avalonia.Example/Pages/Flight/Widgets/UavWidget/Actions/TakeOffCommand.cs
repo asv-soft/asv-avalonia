@@ -31,7 +31,7 @@ public class TakeOffCommand : NoContextCommand
     #endregion
 
     private IDeviceManager _deviceManager;
-    
+
     [ImportingConstructor]
     public TakeOffCommand(IDeviceManager connectionService)
     {
@@ -40,22 +40,34 @@ public class TakeOffCommand : NoContextCommand
 
     public override ICommandInfo Info => StaticInfo;
 
-    public override ValueTask<ICommandArg?> Execute(IRoutable context, ICommandArg newValue, CancellationToken cancel)
+    public override ValueTask<ICommandArg?> Execute(
+        IRoutable context,
+        ICommandArg newValue,
+        CancellationToken cancel
+    )
     {
-        return InternalExecute(newValue, cancel);     
+        return InternalExecute(newValue, cancel);
     }
 
-    protected override ValueTask<ICommandArg?> InternalExecute(ICommandArg newValue, CancellationToken cancel)
+    protected override ValueTask<ICommandArg?> InternalExecute(
+        ICommandArg newValue,
+        CancellationToken cancel
+    )
     {
-        if (newValue is ActionCommandArg keyValuePair && double.TryParse(keyValuePair.Value, out var altitude))
+        if (
+            newValue is ActionCommandArg keyValuePair
+            && double.TryParse(keyValuePair.Value, out var altitude)
+        )
         {
-            var device = _deviceManager.Explorer.Devices.First(_ => _.Value.Id.AsString() == keyValuePair.Id).Value;
+            var device = _deviceManager
+                .Explorer.Devices.First(_ => _.Value.Id.AsString() == keyValuePair.Id)
+                .Value;
             device.WaitUntilConnectAndInit(100, TimeProvider.System);
             var controlClient = device.GetMicroservice<ControlClient>();
             controlClient?.SetGuidedMode(cancel);
             controlClient?.TakeOff(altitude, cancel);
         }
-        
-        return default;    
+
+        return default;
     }
 }

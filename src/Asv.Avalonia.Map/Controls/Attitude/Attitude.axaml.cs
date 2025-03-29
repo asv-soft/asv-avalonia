@@ -3,6 +3,4 @@ using Avalonia.Controls.Primitives;
 
 namespace Asv.Avalonia.Map;
 
-public class Attitude : TemplatedControl
-{
-}
+public class Attitude : TemplatedControl { }

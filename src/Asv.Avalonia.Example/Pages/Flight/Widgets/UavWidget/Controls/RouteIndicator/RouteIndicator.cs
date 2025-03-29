@@ -5,11 +5,12 @@ using Avalonia.Controls.Metadata;
 
 namespace Asv.Avalonia.Example;
 
-[PseudoClasses(ProgressDisabledPseudoclass,ProgressCompletedPseudoclass)]
+[PseudoClasses(ProgressDisabledPseudoclass, ProgressCompletedPseudoclass)]
 public class RouteIndicator : IndicatorBase
 {
     public const string ProgressDisabledPseudoclass = ":progress-disabled";
     public const string ProgressCompletedPseudoclass = ":progress-completed";
+
     /*public RouteIndicator()
     {
         if (Design.IsDesignMode)
@@ -23,12 +24,16 @@ public class RouteIndicator : IndicatorBase
                 });
         }
     }*/
-    
-    
+
+
     private double _internalBorderWidth;
 
-    public static readonly DirectProperty<RouteIndicator, double> InternalBorderWidthProperty = AvaloniaProperty.RegisterDirect<RouteIndicator, double>(
-        nameof(InternalBorderWidth), o => o.InternalBorderWidth, (o, v) => o.InternalBorderWidth = v);
+    public static readonly DirectProperty<RouteIndicator, double> InternalBorderWidthProperty =
+        AvaloniaProperty.RegisterDirect<RouteIndicator, double>(
+            nameof(InternalBorderWidth),
+            o => o.InternalBorderWidth,
+            (o, v) => o.InternalBorderWidth = v
+        );
 
     public double InternalBorderWidth
     {
@@ -38,17 +43,23 @@ public class RouteIndicator : IndicatorBase
 
     private double _internalBorderLeft;
 
-    public static readonly DirectProperty<RouteIndicator, double> InternalBorderLeftProperty = AvaloniaProperty.RegisterDirect<RouteIndicator, double>(
-        nameof(InternalBorderLeft), o => o.InternalBorderLeft, (o, v) => o.InternalBorderLeft = v);
+    public static readonly DirectProperty<RouteIndicator, double> InternalBorderLeftProperty =
+        AvaloniaProperty.RegisterDirect<RouteIndicator, double>(
+            nameof(InternalBorderLeft),
+            o => o.InternalBorderLeft,
+            (o, v) => o.InternalBorderLeft = v
+        );
 
     public double InternalBorderLeft
     {
         get => _internalBorderLeft;
         set => SetAndRaise(InternalBorderLeftProperty, ref _internalBorderLeft, value);
     }
-    
-    public static readonly StyledProperty<double> ProgressProperty = AvaloniaProperty.Register<RouteIndicator, double>(
-        nameof(Progress));
+
+    public static readonly StyledProperty<double> ProgressProperty = AvaloniaProperty.Register<
+        RouteIndicator,
+        double
+    >(nameof(Progress));
 
     public double Progress
     {
@@ -58,8 +69,12 @@ public class RouteIndicator : IndicatorBase
 
     private double _internalIndicatorLeft;
 
-    public static readonly DirectProperty<RouteIndicator, double> InternalIndicatorLeftProperty = AvaloniaProperty.RegisterDirect<RouteIndicator, double>(
-        nameof(InternalIndicatorLeft), o => o.InternalIndicatorLeft, (o, v) => o.InternalIndicatorLeft = v);
+    public static readonly DirectProperty<RouteIndicator, double> InternalIndicatorLeftProperty =
+        AvaloniaProperty.RegisterDirect<RouteIndicator, double>(
+            nameof(InternalIndicatorLeft),
+            o => o.InternalIndicatorLeft,
+            (o, v) => o.InternalIndicatorLeft = v
+        );
 
     public double InternalIndicatorLeft
     {
@@ -69,8 +84,12 @@ public class RouteIndicator : IndicatorBase
 
     private string _internalProgressText;
 
-    public static readonly DirectProperty<RouteIndicator, string> InternalProgressTextProperty = AvaloniaProperty.RegisterDirect<RouteIndicator, string>(
-        nameof(InternalProgressText), o => o.InternalProgressText, (o, v) => o.InternalProgressText = v);
+    public static readonly DirectProperty<RouteIndicator, string> InternalProgressTextProperty =
+        AvaloniaProperty.RegisterDirect<RouteIndicator, string>(
+            nameof(InternalProgressText),
+            o => o.InternalProgressText,
+            (o, v) => o.InternalProgressText = v
+        );
 
     public string InternalProgressText
     {
@@ -78,8 +97,10 @@ public class RouteIndicator : IndicatorBase
         set => SetAndRaise(InternalProgressTextProperty, ref _internalProgressText, value);
     }
 
-    public static readonly StyledProperty<string> StatusTextProperty = AvaloniaProperty.Register<RouteIndicator, string>(
-        nameof(StatusText));
+    public static readonly StyledProperty<string> StatusTextProperty = AvaloniaProperty.Register<
+        RouteIndicator,
+        string
+    >(nameof(StatusText));
 
     public string StatusText
     {
@@ -87,22 +108,24 @@ public class RouteIndicator : IndicatorBase
         set => SetValue(StatusTextProperty, value);
     }
 
-    public static readonly StyledProperty<string> SubStatusTextProperty = AvaloniaProperty.Register<RouteIndicator, string>(
-        nameof(SubStatusText));
+    public static readonly StyledProperty<string> SubStatusTextProperty = AvaloniaProperty.Register<
+        RouteIndicator,
+        string
+    >(nameof(SubStatusText));
 
     public string SubStatusText
     {
         get => GetValue(SubStatusTextProperty);
         set => SetValue(SubStatusTextProperty, value);
     }
-    
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
         if (change.Property == ProgressProperty)
         {
             var progress = (double)change.NewValue!;
-            
+
             if (double.IsNaN(progress))
             {
                 InternalProgressText = string.Empty;
@@ -112,23 +135,22 @@ public class RouteIndicator : IndicatorBase
 
             PseudoClasses.Remove(ProgressDisabledPseudoclass);
             PseudoClasses.Set(ProgressCompletedPseudoclass, Math.Abs(Progress - 1.0) < 0.01);
-            
+
             InternalProgressText = $"{progress * 100.0:F0} %";
 
             if (progress <= 0.0)
             {
                 progress = 0.0000001;
             }
-            
+
             if (progress >= 1.0)
             {
                 progress = 0.9999999;
             }
-            
+
             InternalIndicatorLeft = 20 + (progress * 690.0);
             InternalBorderLeft = progress * 690.0;
             InternalBorderWidth = 800.0 - InternalBorderLeft;
-
         }
     }
 }

@@ -22,25 +22,31 @@ public class MissionProgressViewModel : DisposableViewModel
     private readonly MissionClientEx? _missionClient;
     private readonly GnssClientEx? _gnssClientEx;
     private ObservableList<MissionItem>? _items = [];
-    private CancellationTokenSource _cts = new ();
+    private CancellationTokenSource _cts = new();
     private double _totalMissionDistance;
     private double _passedDistance;
     private double _distanceBeforeMission;
     private bool _isOnMission;
 
     public MissionProgressViewModel()
-        : base(string.Empty)
-    {
-    }
-    
+        : base(string.Empty) { }
+
     [ImportingConstructor]
-    public MissionProgressViewModel(NavigationId id, IClientDevice device, IUnitService unitService,
-        IFlightMode flightContext, ILoggerFactory loggerFactory) : base(id)
+    public MissionProgressViewModel(
+        NavigationId id,
+        IClientDevice device,
+        IUnitService unitService,
+        IFlightMode flightContext,
+        ILoggerFactory loggerFactory
+    )
+        : base(id)
     {
         _log = loggerFactory.CreateLogger<MissionProgressViewModel>();
         _device = device;
         _flightContext = flightContext;
-        DistanceUnitItem.Value = unitService.Units.Values.First(_ => _.UnitId == DistanceBase.Id).Current.Value;
+        DistanceUnitItem.Value = unitService
+            .Units.Values.First(_ => _.UnitId == DistanceBase.Id)
+            .Current.Value;
         _missionClient = device.GetMicroservice<MissionClientEx>();
         _gnssClientEx = device.GetMicroservice<GnssClientEx>();
         _positionClient = device.GetMicroservice<PositionClientEx>();
@@ -55,9 +61,9 @@ public class MissionProgressViewModel : DisposableViewModel
         {
             return;
         }
-       
+
         Task.Run(async () => await InitiateMissionPoints(_cts.Token));
-        
+
         mode.CurrentMode.Subscribe(m =>
         {
             if (m == ArduCopterMode.Auto || m == ArduPlaneMode.Auto)
@@ -77,32 +83,38 @@ public class MissionProgressViewModel : DisposableViewModel
                 ReachedIndex.Value = 0;
             }
         });
-        PathProgress.Subscribe(p =>
-        {
-            switch (p)
+        PathProgress
+            .Subscribe(p =>
             {
-                case > 1:
-                    PathProgress.Value = 1;
-                    return;
-                case < 0:
-                    PathProgress.Value = 0;
-                    return;
-                default:
-                    PathProgress.Value = p;
-                    break;
-            }
-        }).DisposeItWith(Disposable);
-
-        _positionClient.HomeDistance.Subscribe(d => HomeDistance.Value = DistanceUnitItem.Value.Print(d, "N2"))
+                switch (p)
+                {
+                    case > 1:
+                        PathProgress.Value = 1;
+                        return;
+                    case < 0:
+                        PathProgress.Value = 0;
+                        return;
+                    default:
+                        PathProgress.Value = p;
+                        break;
+                }
+            })
             .DisposeItWith(Disposable);
-        _positionClient.TargetDistance.Subscribe(d =>
-        {
-            TargetDistance.Value = d is double.NaN
-                ? RS.Not_Available
-                : DistanceUnitItem.Value.Print(d, "N2");
-        }).DisposeItWith(Disposable);
 
-        _missionClient.AllMissionsDistance.Subscribe(d =>
+        _positionClient
+            .HomeDistance.Subscribe(d => HomeDistance.Value = DistanceUnitItem.Value.Print(d, "N2"))
+            .DisposeItWith(Disposable);
+        _positionClient
+            .TargetDistance.Subscribe(d =>
+            {
+                TargetDistance.Value = d is double.NaN
+                    ? RS.Not_Available
+                    : DistanceUnitItem.Value.Print(d, "N2");
+            })
+            .DisposeItWith(Disposable);
+
+        _missionClient
+            .AllMissionsDistance.Subscribe(d =>
             {
                 if (_items is null)
                 {
@@ -111,21 +123,21 @@ public class MissionProgressViewModel : DisposableViewModel
 
                 var missionDistance = d * 1000;
                 var totalDistance = missionDistance;
-                MissionDistance.Value =
-                    DistanceUnitItem.Value.Print(totalDistance, "N2");
+                MissionDistance.Value = DistanceUnitItem.Value.Print(totalDistance, "N2");
                 var start = _items.FirstOrDefault();
-                var stop = _items.LastOrDefault(
-                    _ => _.Command.Value != MavCmd.MavCmdNavReturnToLaunch);
+                var stop = _items.LastOrDefault(_ =>
+                    _.Command.Value != MavCmd.MavCmdNavReturnToLaunch
+                );
                 if (start != null && stop != null)
                 {
-                    totalDistance +=
-                        GeoMath.Distance(
-                            start.Location.Value,
-                            _positionClient?.Home.CurrentValue);
-                    totalDistance +=
-                        GeoMath.Distance(
-                            stop.Location.Value,
-                            _positionClient?.Home.CurrentValue);
+                    totalDistance += GeoMath.Distance(
+                        start.Location.Value,
+                        _positionClient?.Home.CurrentValue
+                    );
+                    totalDistance += GeoMath.Distance(
+                        stop.Location.Value,
+                        _positionClient?.Home.CurrentValue
+                    );
                 }
 
                 if (totalDistance < 1)
@@ -158,13 +170,17 @@ public class MissionProgressViewModel : DisposableViewModel
 
             for (var i = 1; i < items.Count; i++)
             {
-                _passedDistance += GeoMath.Distance(items[i - 1].Location.Value, items[i].Location.Value);
+                _passedDistance += GeoMath.Distance(
+                    items[i - 1].Location.Value,
+                    items[i].Location.Value
+                );
             }
         });
 
         _missionClient.Reached.Subscribe(i => ReachedIndex.Value = i);
         _missionClient.Current.Subscribe(i => CurrentIndex.Value = i);
-        Observable.Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
+        Observable
+            .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
             .Subscribe(_ => CalculateMissionProgress())
             .DisposeItWith(Disposable);
     }
@@ -196,14 +212,23 @@ public class MissionProgressViewModel : DisposableViewModel
 
             if (_missionClient.MissionItems != null)
             {
-                _items = new ObservableList<MissionItem>(_missionClient?.MissionItems.Where(_ => _.Command.Value
-                    is MavCmd.MavCmdNavWaypoint
-                    or MavCmd.MavCmdNavReturnToLaunch
-                    or MavCmd.MavCmdNavSplineWaypoint)!);
+                _items = new ObservableList<MissionItem>(
+                    _missionClient?.MissionItems.Where(_ =>
+                        _.Command.Value
+                            is MavCmd.MavCmdNavWaypoint
+                                or MavCmd.MavCmdNavReturnToLaunch
+                                or MavCmd.MavCmdNavSplineWaypoint
+                    )!
+                );
                 for (var i = 1; i < _items.Count; i++)
                 {
-                    _flightContext.Anchors.Add(new MissionAnchor(i - 1, _items[i - 1].Location.Value,
-                        _items[i].Location.Value));
+                    _flightContext.Anchors.Add(
+                        new MissionAnchor(
+                            i - 1,
+                            _items[i - 1].Location.Value,
+                            _items[i].Location.Value
+                        )
+                    );
                 }
             }
 
@@ -211,12 +236,12 @@ public class MissionProgressViewModel : DisposableViewModel
             TotalDistance.Value = DistanceUnitItem.Value.Print(_totalMissionDistance * 1000, "N2");
             _passedDistance += _distanceBeforeMission;
             IsDownloaded.Value = true;
-            
+
             if (_items is null)
             {
                 return;
             }
-            
+
             for (var i = 0; i < _items.Count; i++)
             {
                 if (i == 0 && _device is ArduPlaneClientDevice)
@@ -226,7 +251,10 @@ public class MissionProgressViewModel : DisposableViewModel
 
                 var item = _items[i];
 
-                if (item.Command.Value == MavCmd.MavCmdNavWaypoint && item.Location.Value.Altitude <= homeAlt)
+                if (
+                    item.Command.Value == MavCmd.MavCmdNavWaypoint
+                    && item.Location.Value.Altitude <= homeAlt
+                )
                 {
                     //TODO: Notify user on alt lower than start value
                 }
@@ -237,7 +265,7 @@ public class MissionProgressViewModel : DisposableViewModel
             _log.LogError($"Mission {e.Message}");
         }
     }
-    
+
     private void CalculateMissionProgress()
     {
         if (_positionClient is null || _missionClient is null || _gnssClientEx is null)
@@ -245,8 +273,10 @@ public class MissionProgressViewModel : DisposableViewModel
             return;
         }
 
-        var toTargetDistance =
-            GeoMath.Distance(_positionClient.Target.CurrentValue, _positionClient.Current.CurrentValue);
+        var toTargetDistance = GeoMath.Distance(
+            _positionClient.Target.CurrentValue,
+            _positionClient.Current.CurrentValue
+        );
         var missionDistance = _totalMissionDistance * 1000;
         var distance = Math.Abs(missionDistance - _passedDistance + toTargetDistance);
         var time = distance / _gnssClientEx.Main.GroundVelocity.CurrentValue;
@@ -279,8 +309,10 @@ public class MissionProgressViewModel : DisposableViewModel
             case ArduCopterClientDevice:
                 if (_isOnMission && ReachedIndex.Value > 0)
                 {
-                    return Math.Abs((missionDistance - distance - _distanceBeforeMission) /
-                                    (missionDistance - _distanceBeforeMission));
+                    return Math.Abs(
+                        (missionDistance - distance - _distanceBeforeMission)
+                            / (missionDistance - _distanceBeforeMission)
+                    );
                 }
 
                 if (CurrentIndex.Value == _missionClient?.MissionItems.Count)
@@ -310,7 +342,7 @@ public class MissionProgressViewModel : DisposableViewModel
     public BindableReactiveProperty<IUnitItem> DistanceUnitItem { get; set; } = new();
 
     public BindableReactiveProperty<double> DownloadProgress { get; set; } = new();
-    
+
     public BindableReactiveProperty<string> MissionDistance { get; set; } = new(RS.Not_Available);
 
     public BindableReactiveProperty<string> TotalDistance { get; set; } = new(RS.Not_Available);
