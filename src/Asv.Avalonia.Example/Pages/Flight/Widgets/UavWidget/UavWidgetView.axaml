@@ -8,7 +8,6 @@
              mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="1000"
              x:Class="Asv.Avalonia.Example.UavWidgetView"
              x:DataType="example:UavWidgetViewModel">
-    <!-- // TODO:Localize -->
     <Grid RowDefinitions="*,*,*" ColumnDefinitions="Auto,Auto">
             <Viewbox Grid.Column="0" Grid.Row="0" MinWidth="150" HorizontalAlignment="Stretch">
                 <example:AttitudeIndicator MinWidth="200" Margin="5" Name="Attitude"
@@ -38,42 +37,42 @@
                         Command="{Binding GoTo}">
                     <StackPanel Spacing="5" Orientation="Horizontal">
                         <avalonia1:MaterialIcon Kind="Automatic" />
-                        <TextBlock Text="Auto Mode"></TextBlock>
+                        <TextBlock Text="{x:Static example:RS.UavAction_AutoMode}"/>
                     </StackPanel>
                 </Button>
                 <Button HorizontalContentAlignment="Center"
                         Command="{Binding Guided}">
                     <StackPanel Spacing="5" Orientation="Horizontal">
                         <avalonia1:MaterialIcon Kind="Controller" />
-                        <TextBlock Text="Guided"></TextBlock>
+                        <TextBlock Text="{x:Static example:RS.UavAction_GuidedMode}"/>
                     </StackPanel>
                 </Button>
                 <Button HorizontalContentAlignment="Center"
                         Command="{Binding TakeOff}">
                     <StackPanel Spacing="5" Orientation="Horizontal">
                         <avalonia1:MaterialIcon Kind="AeroplaneTakeoff" />
-                        <TextBlock Text="Take Off" />
+                        <TextBlock Text="{x:Static example:RS.UavAction_TakeOff}" />
                     </StackPanel>
                 </Button>
                 <Button HorizontalContentAlignment="Center"
                         Command="{Binding Rtl}">
                     <StackPanel Spacing="5" Orientation="Horizontal">
                         <avalonia1:MaterialIcon Kind="Home" />
-                        <TextBlock Text="RTL" />
+                        <TextBlock Text="{x:Static example:RS.UavAction_Rtl}" />
                     </StackPanel>
                 </Button>
                 <Button HorizontalContentAlignment="Center"
                         Command="{Binding Land}">
                     <StackPanel Spacing="5" Orientation="Horizontal">
                         <avalonia1:MaterialIcon Kind="FlightLand" />
-                        <TextBlock Text="Land" />
+                        <TextBlock Text="{x:Static example:RS.UavAction_Land}" />
                     </StackPanel>
                 </Button>
                 <Button HorizontalContentAlignment="Center"
                         Command="{Binding StartMission}">
                     <StackPanel Spacing="5" Orientation="Horizontal">
                         <avalonia1:MaterialIcon Kind="MapMarkerPath" />
-                        <TextBlock Text="Start Mission" />
+                        <TextBlock Text="{x:Static example:RS.UavAction_StartMission}" />
                     </StackPanel>
                 </Button>
             </WrapPanel>
@@ -84,23 +83,7 @@
                     Width="200"
                     MainBrush="{DynamicResource NavyMainBrush}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="Mode"
-                    Icon="FlightMode"
-                    CornerRadius="4">
-                    <avalonia:TelemBox.CustomContent>
-                        <TextBlock TextAlignment="Center" FontSize="24"
-                                   Text="{Binding CurrentFlightMode.Value}" />
-
-                    </avalonia:TelemBox.CustomContent>
-                </avalonia:TelemBox>
-            </Viewbox>
-             <Viewbox Width="150">
-                <avalonia:TelemBox
-                    Margin="4"
-                    Width="200"
-                    MainBrush="{DynamicResource NavyMainBrush}"
-                    SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="Mode"
+                    Title="{x:Static example:RS.UavRttItem_Mode}"
                     Icon="FlightMode"
                     CornerRadius="4">
                     <avalonia:TelemBox.CustomContent>
@@ -116,7 +99,7 @@
                     Width="200"
                     MainBrush="{Binding AltitudeStatus.Value}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="Altitude"
+                    Title="{x:Static example:RS.UavRttItem_Altitude}"
                     Units="{Binding AltitudeUnit.Value.Symbol}"
                     Icon="Altimeter"
                     CornerRadius="4">
@@ -138,8 +121,8 @@
                     Width="200"
                     MainBrush="{StaticResource NavyMainBrush}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="Velocity"
-                    Units="m/s"
+                    Title="{x:Static example:RS.UavRttItem_Velocity}"
+                    Units="{Binding VelocityUnit.Value.Symbol}"
                     Icon="Speedometer"
                     CornerRadius="4">
                     <avalonia:TelemBox.CustomContent>
@@ -159,7 +142,7 @@
                     Width="200"
                     MainBrush="{StaticResource NavyMainBrush}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="Azimuth"
+                    Title="{x:Static example:RS.UavRttItem_Azimuth}"
                     Units="{Binding AngleUnit.Value.Symbol}"
                     IsBusy="False"
                     Icon="SunAzimuth"
@@ -179,8 +162,7 @@
                     Width="200"
                     MainBrush="{Binding BatteryStatusBrush.Value}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="Battery"
-                    Units="Time"
+                    Title="{x:Static example:RS.UavRttItem_Battery}"
                     IsBusy="False"
                     Icon="Battery10"
                     CornerRadius="4">
@@ -204,7 +186,7 @@
                     Width="200"
                     MainBrush="{Binding GnssStatusBrush.Value}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="GNSS"
+                    Title="{x:Static example:RS.UavRttItem_GNSS}"
                     Units="{Binding RtkMode.Value}"
                     IsBusy="False"
                     Icon="GpsFixed"
@@ -228,7 +210,7 @@
                     Width="200"
                     MainBrush="{Binding LinkQualityStatusBrush.Value}"
                     SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                    Title="Link"
+                    Title="{x:Static example:RS.UavRttItem_Link}"
                     Units="{Binding LinkState.Value}"
                     IsBusy="False"
                     Icon="Wifi"

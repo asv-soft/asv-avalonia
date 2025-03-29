@@ -44,8 +44,7 @@ public class FlightPageViewModel : PageViewModel<IFlightMode>, IFlightMode
     public FlightPageViewModel(ICommandService cmd)
         : base(PageId, cmd)
     {
-        // TODO:Localize
-        Title.Value = "Flight";
+        Title.Value = RS.FlightPageViewModel_Title;
         Icon.Value = PageIcon;
         Anchors = [];
         Anchors.SetRoutableParent(this, true).DisposeItWith(Disposable);
