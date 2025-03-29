@@ -9,6 +9,7 @@ using Asv.IO;
 using Asv.Mavlink;
 using Avalonia.Media;
 using Avalonia.Threading;
+using Microsoft.Extensions.Logging;
 using R3;
 using Observable = R3.Observable;
 
@@ -37,8 +38,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         HomeAzimuth.Value = -115;
     }
 
-    public UavWidgetViewModel(IDeviceManager service, IClientDevice device, INavigationService navigation,
-        IUnitService unitService)
+    public UavWidgetViewModel(IDeviceManager service, IClientDevice device, INavigationService navigation, IUnitService unitService, IFlightMode flightContext, ILoggerFactory loggerFactory)
         : base(WidgetId)
     {
         ArgumentNullException.ThrowIfNull(device);
@@ -46,7 +46,6 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         Position = WorkspaceDock.Left;
         Icon = DeviceIconMixin.GetIcon(device.Id);
         IconBrush = DeviceIconMixin.GetIconBrush(device.Id);
-
         AltitudeUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == AltitudeBase.Id).Value.Current.Value;
         VelocityUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == VelocityBase.Id).Value.Current.Value;
         AngleUnit.Value = unitService.Units.First(pair => pair.Value.UnitId == AngleBase.Id).Value.Current.Value;
@@ -56,7 +55,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         InitArgs(device.Id.AsString());
         device.WaitUntilConnectAndInit(1000, TimeProvider.System);
-        MissionProgress.Value = new MissionProgressViewModel("missionProgress", device, unitService);
+        MissionProgress.Value = new MissionProgressViewModel("missionProgress", device, unitService, flightContext, loggerFactory);
         var devicePosition = device.GetMicroservice<PositionClientEx>();
         _deviceGnss = device.GetMicroservice<GnssClientEx>();
         var controlClient = device.GetMicroservice<ControlClient>();
@@ -77,7 +76,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             _ => null
         };
 
-        GoTo = new ReactiveCommand(_ => controlClient.SetAutoMode(CancellationToken.None));
+        GoTo = new ReactiveCommand(_ => controlClient.SetAutoMode(CancellationToken.None)).DisposeItWith(Disposable);
         TakeOff = new ReactiveCommand(async (_, _) =>
         {
             var dialog = new SetAltitudeDialogViewModel(navigation);
@@ -91,7 +90,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                         altitude.Value.ToString(CultureInfo.InvariantCulture),
                         CommandParameterActionType.Change));
             }
-        });
+        }).DisposeItWith(Disposable);
         Rtl = new ReactiveCommand(_ =>
         {
             controlClient.SetGuidedMode(CancellationToken.None);
@@ -102,21 +101,15 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             controlClient.SetGuidedMode(CancellationToken.None);
             controlClient.DoLand();
         }).DisposeItWith(Disposable);
-        Guided = new ReactiveCommand(_ => controlClient.SetGuidedMode(CancellationToken.None));
+        Guided = new ReactiveCommand(_ => controlClient.SetGuidedMode(CancellationToken.None)).DisposeItWith(Disposable);
         StartMission = new ReactiveCommand(_ =>
         {
             controlClient.SetAutoMode();
             missionClient.Base.MissionSetCurrent(0);
         }).DisposeItWith(Disposable);
 
-        heartbeatClient.LinkQuality.Subscribe(_ =>
-        {
-            Dispatcher.UIThread.InvokeAsync(() => { LinkQuality.Value = $"{(int)_ * 100} %"; });
-        });
-        heartbeatClient.Link.State.Subscribe(state =>
-        {
-            Dispatcher.UIThread.InvokeAsync(() => LinkState.Value = LinkQualityStatus(state));
-        });
+        heartbeatClient.LinkQuality.Subscribe(_ => Dispatcher.UIThread.InvokeAsync(() => LinkQuality.Value = $"{(int)_ * 100} %")).DisposeItWith(Disposable);
+        heartbeatClient.Link.State.Subscribe(state => Dispatcher.UIThread.InvokeAsync(() => LinkState.Value = LinkQualityStatus(state))).DisposeItWith(Disposable);
 
         service.Router.OnRxMessage.ThrottleFirst(TimeSpan.FromMicroseconds(100)).Subscribe(_ =>
         {
@@ -129,10 +122,10 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
 
                 Azimuth.Value = AngleUnit.Value.Print(Heading.Value, "N2");
                 AltitudeMsl.Value = devicePosition.Base.GlobalPosition.CurrentValue is null
-                    ? Avalonia.RS.Not_Available
+                    ? RS.Not_Available
                     : AltitudeUnit.Value.Print(devicePosition.Base.GlobalPosition.CurrentValue.Alt / 1000);
                 AltitudeAgl.Value = devicePosition.Base.GlobalPosition.CurrentValue is null
-                    ? Avalonia.RS.Not_Available
+                    ? RS.Not_Available
                     : AltitudeUnit.Value.Print(devicePosition.Base.GlobalPosition.CurrentValue.RelativeAlt / 1000);
                 Roll.Value = devicePosition.Roll.CurrentValue;
                 Pitch.Value = devicePosition.Pitch.CurrentValue;
@@ -140,10 +133,10 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                 Velocity.Value = VelocityUnit.Value.PrintFromSi(_deviceGnss.Main.GroundVelocity.CurrentValue);
                 SateliteCount.Value = _deviceGnss.Main.Info.CurrentValue.SatellitesVisible;
                 VdopCount.Value = _deviceGnss.Main.Info.CurrentValue.Vdop is null
-                    ? Avalonia.RS.Not_Available
+                    ? RS.Not_Available
                     : $"{_deviceGnss.Main.Info.CurrentValue.Vdop!.Value} VDOP";
                 HdopCount.Value = _deviceGnss.Main.Info.CurrentValue.Hdop is null
-                    ? Avalonia.RS.Not_Available
+                    ? RS.Not_Available
                     : $"{_deviceGnss.Main.Info.CurrentValue.Hdop!.Value} HDOP";
                 RtkMode.Value = $"{GpsFixTypeToString(_deviceGnss.Main.Info.CurrentValue.FixType)}";
                 GnssStatus();
@@ -163,7 +156,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
 
                 IsArmed.Value = devicePosition.IsArmed.CurrentValue;
                 BatteryConsumed.Value = telemetryClient.BatteryCurrent.CurrentValue == 0
-                    ? Avalonia.RS.Not_Available
+                    ? RS.Not_Available
                     : $"{CapacityUnit.CurrentValue.Print(telemetryClient.BatteryCurrent.CurrentValue * devicePosition.ArmedTime.CurrentValue.TotalHours, "N2")}{CapacityUnit.CurrentValue.Symbol}";
 
                 BatteryCharge.Value = $"{(int)telemetryClient.BatteryCharge.CurrentValue * 100} %";
@@ -173,7 +166,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                 // BatteryTime.Value = $"{telemetryClient.BatteryVoltage.CurrentValue} min";
                 BatteryStatus((int)(telemetryClient.BatteryCharge.CurrentValue * 100));
             });
-        });
+        }).DisposeItWith(Disposable);
     }
 
     private void BatteryStatus(int procent)
@@ -288,7 +281,6 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
 
     #region BatteryRtt
 
-    // public BindableReactiveProperty<string> BatteryTime { get; set; } = new();
     public BindableReactiveProperty<string> BatteryConsumed { get; set; } = new();
     public BindableReactiveProperty<string> BatteryAmperage { get; set; } = new();
     public BindableReactiveProperty<string> BatteryCharge { get; set; } = new();
@@ -319,49 +311,30 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
 
     public BindableReactiveProperty<string> CurrentFlightMode { get; set; } = new();
     public BindableReactiveProperty<float> VibrationX { get; set; } = new();
-
     public BindableReactiveProperty<float> VibrationY { get; set; } = new();
-
     public BindableReactiveProperty<float> VibrationZ { get; set; } = new();
-
     public BindableReactiveProperty<uint> Clipping0 { get; set; } = new();
-
     public BindableReactiveProperty<uint> Clipping1 { get; set; } = new();
-
     public BindableReactiveProperty<uint> Clipping2 { get; set; } = new();
-
     public BindableReactiveProperty<double> Roll { get; set; } = new();
-
     public BindableReactiveProperty<double> Pitch { get; set; } = new();
-
     public BindableReactiveProperty<string> Velocity { get; set; } = new();
-
     public BindableReactiveProperty<SolidColorBrush> AltitudeStatus { get; set; } =
         new(new SolidColorBrush(GreenColor));
-
     public BindableReactiveProperty<string> AltitudeAgl { get; set; } = new();
     public BindableReactiveProperty<string> AltitudeMsl { get; set; } = new();
-
     public BindableReactiveProperty<double> Heading { get; set; } = new();
-    public BindableReactiveProperty<double> VerticalSpeed { get; set; } = new();
-
     public BindableReactiveProperty<int> HomeAzimuth { get; set; } = new();
     public BindableReactiveProperty<string> Azimuth { get; set; } = new();
-
     public BindableReactiveProperty<string> StatusText { get; set; } = new();
-
-    public BindableReactiveProperty<string> MissionDistance { get; set; } = new();
-
     public BindableReactiveProperty<bool> IsArmed { get; set; } = new();
-
     public BindableReactiveProperty<TimeSpan> ArmedTime { get; set; } = new();
-
     public BindableReactiveProperty<IUnitItem> VelocityUnit { get; set; } = new();
     public BindableReactiveProperty<IUnitItem> AltitudeUnit { get; set; } = new();
     public BindableReactiveProperty<IUnitItem> BearingUnit { get; set; } = new();
     public BindableReactiveProperty<IUnitItem> AngleUnit { get; set; } = new();
     public BindableReactiveProperty<IUnitItem> CapacityUnit { get; set; } = new();
-
+    
     public IClientDevice Device { get; }
 
     public WorkspaceDock Position

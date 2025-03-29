@@ -6,4 +6,5 @@ namespace Asv.Avalonia.Example;
 public interface IUavFlightWidget : IMapWidget
 {
     IClientDevice Device { get; }
+   
 }
