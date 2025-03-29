@@ -1,7 +1,7 @@
 ﻿using System.Composition;
 using Avalonia.Input;
 
-namespace Asv.Avalonia.Example.Commands;
+namespace Asv.Avalonia.Example;
 
 [ExportCommand]
 [method: ImportingConstructor]
