@@ -8,23 +8,8 @@ namespace Asv.Avalonia.Example;
 [PseudoClasses(ProgressDisabledPseudoclass, ProgressCompletedPseudoclass)]
 public class RouteIndicator : IndicatorBase
 {
-    public const string ProgressDisabledPseudoclass = ":progress-disabled";
-    public const string ProgressCompletedPseudoclass = ":progress-completed";
-
-    /*public RouteIndicator()
-    {
-        if (Design.IsDesignMode)
-        {
-            Observable.Timer(TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100))
-                .ObserveOn(RxApp.MainThreadScheduler)
-                .Subscribe(_ =>
-                {
-                    Progress += 0.01;
-                    if (Progress >= 1.0) Progress = 0.0;
-                });
-        }
-    }*/
-
+    public const string ProgressDisabledPseudoclass = ":progress-disabled"; // TODO: To the common class
+    public const string ProgressCompletedPseudoclass = ":progress-completed"; // TODO: To the common class
 
     private double _internalBorderWidth;
 

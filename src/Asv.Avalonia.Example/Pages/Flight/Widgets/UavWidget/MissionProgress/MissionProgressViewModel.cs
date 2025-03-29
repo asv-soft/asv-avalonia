@@ -65,24 +65,25 @@ public class MissionProgressViewModel : DisposableViewModel
         Task.Run(async () => await InitiateMissionPoints(_cts.Token));
 
         mode.CurrentMode.Subscribe(m =>
-        {
-            if (m == ArduCopterMode.Auto || m == ArduPlaneMode.Auto)
             {
-                if (_isOnMission)
+                if (m == ArduCopterMode.Auto || m == ArduPlaneMode.Auto)
                 {
+                    if (_isOnMission)
+                    {
+                        return;
+                    }
+
+                    _isOnMission = true;
                     return;
                 }
 
-                _isOnMission = true;
-                return;
-            }
-
-            if (m == ArduCopterMode.Rtl || m == ArduPlaneMode.Rtl)
-            {
-                _isOnMission = false;
-                ReachedIndex.Value = 0;
-            }
-        });
+                if (m == ArduCopterMode.Rtl || m == ArduPlaneMode.Rtl)
+                {
+                    _isOnMission = false;
+                    ReachedIndex.Value = 0;
+                }
+            })
+            .DisposeItWith(Disposable);
         PathProgress
             .Subscribe(p =>
             {
@@ -149,36 +150,38 @@ public class MissionProgressViewModel : DisposableViewModel
             })
             .DisposeItWith(Disposable);
 
-        CurrentIndex.Subscribe(c =>
-        {
-            if (_items is null)
+        CurrentIndex
+            .Subscribe(c =>
             {
-                return;
-            }
+                if (_items is null)
+                {
+                    return;
+                }
 
-            if (_items.Count == 0)
-            {
-                return;
-            }
+                if (_items.Count == 0)
+                {
+                    return;
+                }
 
-            _passedDistance = 0;
-            var items = _items.Where(item => item.Index <= c).ToList();
-            if (items.Count < 2)
-            {
-                return;
-            }
+                _passedDistance = 0;
+                var items = _items.Where(item => item.Index <= c).ToList();
+                if (items.Count < 2)
+                {
+                    return;
+                }
 
-            for (var i = 1; i < items.Count; i++)
-            {
-                _passedDistance += GeoMath.Distance(
-                    items[i - 1].Location.Value,
-                    items[i].Location.Value
-                );
-            }
-        });
+                for (var i = 1; i < items.Count; i++)
+                {
+                    _passedDistance += GeoMath.Distance(
+                        items[i - 1].Location.Value,
+                        items[i].Location.Value
+                    );
+                }
+            })
+            .DisposeItWith(Disposable);
 
-        _missionClient.Reached.Subscribe(i => ReachedIndex.Value = i);
-        _missionClient.Current.Subscribe(i => CurrentIndex.Value = i);
+        _missionClient.Reached.Subscribe(i => ReachedIndex.Value = i).DisposeItWith(Disposable);
+        _missionClient.Current.Subscribe(i => CurrentIndex.Value = i).DisposeItWith(Disposable);
         Observable
             .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
             .Subscribe(_ => CalculateMissionProgress())
@@ -210,7 +213,7 @@ public class MissionProgressViewModel : DisposableViewModel
                 homeAlt = _positionClient.Home.CurrentValue.Value.Altitude;
             }
 
-            if (_missionClient.MissionItems != null)
+            if (_missionClient.MissionItems.Count > 0)
             {
                 _items = new ObservableList<MissionItem>(
                     _missionClient?.MissionItems.Where(_ =>
@@ -256,13 +259,13 @@ public class MissionProgressViewModel : DisposableViewModel
                     && item.Location.Value.Altitude <= homeAlt
                 )
                 {
-                    //TODO: Notify user on alt lower than start value
+                    // TODO: Notify user on alt lower than start value
                 }
             }
         }
         catch (Exception e)
         {
-            _log.LogError($"Mission {e.Message}");
+            _log.LogError(e, "Mission download failed");
         }
     }
 
@@ -302,7 +305,7 @@ public class MissionProgressViewModel : DisposableViewModel
         return $"{minute} min";
     }
 
-    private double CalculatePathProgressValue(double missionDistance, double distance) //TDOD: extend logic for plane clients
+    private double CalculatePathProgressValue(double missionDistance, double distance) // TDOD: extend logic for plane clients
     {
         switch (_device)
         {
@@ -331,33 +334,48 @@ public class MissionProgressViewModel : DisposableViewModel
         }
     }
 
-    protected override void Dispose(bool disposing)
-    {
-        _cts.Cancel();
-        base.Dispose(disposing);
-    }
+    public BindableReactiveProperty<string> MissionFlightTime { get; } = new("- min");
 
-    public BindableReactiveProperty<string> MissionFlightTime { get; set; } = new($"- min");
+    public BindableReactiveProperty<IUnitItem> DistanceUnitItem { get; } = new();
 
-    public BindableReactiveProperty<IUnitItem> DistanceUnitItem { get; set; } = new();
+    public BindableReactiveProperty<double> DownloadProgress { get; } = new();
 
-    public BindableReactiveProperty<double> DownloadProgress { get; set; } = new();
+    public BindableReactiveProperty<string> MissionDistance { get; } = new(RS.Not_Available);
 
-    public BindableReactiveProperty<string> MissionDistance { get; set; } = new(RS.Not_Available);
+    public BindableReactiveProperty<string> TotalDistance { get; } = new(RS.Not_Available);
+    public BindableReactiveProperty<string> HomeDistance { get; } = new(RS.Not_Available);
+    public BindableReactiveProperty<string> TargetDistance { get; } = new(RS.Not_Available);
 
-    public BindableReactiveProperty<string> TotalDistance { get; set; } = new(RS.Not_Available);
-    public BindableReactiveProperty<string> HomeDistance { get; set; } = new(RS.Not_Available);
-    public BindableReactiveProperty<string> TargetDistance { get; set; } = new(RS.Not_Available);
-
-    public BindableReactiveProperty<bool> IsDownloaded { get; set; } = new(false);
+    public BindableReactiveProperty<bool> IsDownloaded { get; } = new(false);
 
     /// <summary>
     /// Gets or sets represents progress of the mission.
     /// Changes from 0 to 1
     /// </summary>
-    public BindableReactiveProperty<double> PathProgress { get; set; } = new(0);
+    public BindableReactiveProperty<double> PathProgress { get; } = new(0);
 
-    public ReactiveProperty<ushort> CurrentIndex { get; set; } = new();
+    public ReactiveProperty<ushort> CurrentIndex { get; } = new();
 
-    public ReactiveProperty<ushort> ReachedIndex { get; set; } = new();
+    public ReactiveProperty<ushort> ReachedIndex { get; } = new();
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _cts.Cancel();
+            MissionFlightTime.Dispose();
+            DistanceUnitItem.Dispose();
+            DownloadProgress.Dispose();
+            MissionDistance.Dispose();
+            TotalDistance.Dispose();
+            HomeDistance.Dispose();
+            TargetDistance.Dispose();
+            IsDownloaded.Dispose();
+            PathProgress.Dispose();
+            CurrentIndex.Dispose();
+            ReachedIndex.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
 }
