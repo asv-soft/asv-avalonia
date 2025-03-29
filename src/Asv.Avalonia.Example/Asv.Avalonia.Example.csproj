@@ -71,10 +71,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Flight\Widgets\RttItems\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Compile Update="Pages\Flight\Widgets\Attitude\Style\AttitudeIndicator.cs">
         <DependentUpon>AttitudeIndicator.axaml</DependentUpon>
       </Compile>
@@ -88,7 +84,6 @@
       <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\Attitude\Style\AttitudeIndicator.axaml" />
       <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\RouteIndicator\RouteIndicator.axaml" />
       <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Dialogs\SetAltitudeDialog.axaml" />
-      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\RttItems\Battery\BatteryRttItem.axaml" />
 
       <ProjectReference Include="..\Asv.Avalonia.Example.Api\Asv.Avalonia.Example.Api.csproj" />
       <UpToDateCheckInput Remove="Pages\Settings\Connection\Ports\SerialPortView.axaml" />
@@ -103,13 +98,6 @@
         <DependentUpon>UavWidgetView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\Attitude\Style\AttitudeIndicator.axaml" />
-      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\RouteIndicator\RouteIndicator.axaml" />
-      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Dialogs\SetAltitudeDialog.axaml" />
-      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\RttItems\Battery\BatteryRttItem.axaml" />
     </ItemGroup>
 
    
