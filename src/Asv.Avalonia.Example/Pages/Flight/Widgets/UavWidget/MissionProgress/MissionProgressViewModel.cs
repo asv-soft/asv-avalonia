@@ -22,6 +22,7 @@ public class MissionProgressViewModel : DisposableViewModel
     private readonly MissionClientEx? _missionClient;
     private readonly GnssClientEx? _gnssClientEx;
     private ObservableList<MissionItem>? _items = [];
+    private CancellationTokenSource _cts = new ();
     private double _totalMissionDistance;
     private double _passedDistance;
     private double _distanceBeforeMission;
@@ -54,8 +55,9 @@ public class MissionProgressViewModel : DisposableViewModel
         {
             return;
         }
-
-        Task.Run(async () => await InitiateMissionPoints(new CancellationToken()));
+       
+        Task.Run(async () => await InitiateMissionPoints(_cts.Token));
+        
         mode.CurrentMode.Subscribe(m =>
         {
             if (m == ArduCopterMode.Auto || m == ArduPlaneMode.Auto)
@@ -295,6 +297,12 @@ public class MissionProgressViewModel : DisposableViewModel
             default:
                 return Math.Abs((missionDistance - distance) / missionDistance);
         }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        _cts.Cancel();
+        base.Dispose(disposing);
     }
 
     public BindableReactiveProperty<string> MissionFlightTime { get; set; } = new($"- min");
