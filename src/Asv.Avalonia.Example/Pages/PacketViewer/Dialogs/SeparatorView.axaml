@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:packetViewer="clr-namespace:Asv.Avalonia.Example.PacketViewer.Dialogs"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" Width="400" Height="200"
+             x:CompileBindings="True"
+             x:DataType="packetViewer:SeparatorViewModel"
+             x:Class="Asv.Avalonia.Example.PacketViewer.Dialogs.SeparatorView">
+    <Design.DataContext>
+        <packetViewer:SeparatorViewModel />
+    </Design.DataContext>
+    <Panel>
+        <StackPanel Spacing="10" Margin="10">
+            <TextBlock Text="Путь к файлу" FontSize="18" FontWeight="Bold"/>
+            <TextBox Text="{CompiledBinding FilePath.Value, Mode=TwoWay}" 
+                     Watermark="C:/Path/To/File.csv"/>
+            <TextBlock Text="Разделитель:" FontSize="16"/>
+            <RadioButton Content="{x:Static example:RS.PacketViewerViewModel_SeparatorDialog_Semicolon}"
+                         IsChecked="{CompiledBinding IsSemicolon.Value, Mode=TwoWay}" />
+            <RadioButton Content="{x:Static example:RS.PacketViewerViewModel_SeparatorDialog_Coma}"
+                         IsChecked="{CompiledBinding IsComa.Value, Mode=TwoWay}" />
+            <RadioButton Content="{x:Static example:RS.PacketViewerViewModel_SeparatorDialog_Tab}"
+                         IsChecked="{CompiledBinding IsTab.Value, Mode=TwoWay}" />
+        </StackPanel>
+    </Panel>
+</UserControl>
