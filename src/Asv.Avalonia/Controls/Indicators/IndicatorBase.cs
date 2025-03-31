@@ -55,6 +55,8 @@ public abstract class IndicatorBase : TemplatedControl
 
     #endregion
 
+    public const string ProgressDisabledPseudoclass = ":progress-disabled";
+    public const string ProgressCompletedPseudoclass = ":progress-completed";
     public static readonly StyledProperty<MaterialIconKind> IconKindProperty =
         AvaloniaProperty.Register<IndicatorBase, MaterialIconKind>(
             nameof(IconKind),

@@ -54,20 +54,15 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         Icon = DeviceIconMixin.GetIcon(device.Id);
         IconBrush = DeviceIconMixin.GetIconBrush(device.Id);
         AltitudeUnit.Value = unitService
-            .Units.First(pair => pair.Value.UnitId == AltitudeBase.Id)
-            .Value.Current.Value;
+            .Units[AltitudeBase.Id].Current.Value;
         VelocityUnit.Value = unitService
-            .Units.First(pair => pair.Value.UnitId == VelocityBase.Id)
-            .Value.Current.Value;
+            .Units[VelocityBase.Id].Current.Value;
         AngleUnit.Value = unitService
-            .Units.First(pair => pair.Value.UnitId == AngleBase.Id)
-            .Value.Current.Value;
+            .Units[AngleBase.Id].Current.Value;
         BearingUnit.Value = unitService
-            .Units.First(pair => pair.Value.UnitId == BearingBase.Id)
-            .Value.Current.Value;
+            .Units[BearingBase.Id].Current.Value;
         CapacityUnit.Value = unitService
-            .Units.First(pair => pair.Value.UnitId == CapacityBase.Id)
-            .Value.Current.Value;
+            .Units[CapacityBase.Id].Current.Value;
 
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         InitArgs(device.Id.AsString());
@@ -216,8 +211,6 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                         $"{(int)telemetryClient.BatteryCharge.CurrentValue * 100} %";
                     BatteryAmperage.Value = $"{(int)telemetryClient.BatteryCurrent.CurrentValue} A";
                     BatteryVoltage.Value = $"{(int)telemetryClient.BatteryVoltage.CurrentValue} V";
-
-                    // BatteryTime.Value = $"{telemetryClient.BatteryVoltage.CurrentValue} min";
                     BatteryStatus((int)(telemetryClient.BatteryCharge.CurrentValue * 100));
                 });
             })

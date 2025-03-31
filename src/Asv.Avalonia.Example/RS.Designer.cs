@@ -129,9 +129,9 @@ namespace Asv.Avalonia.Example {
         /// <summary>
         ///   Looks up a localized string similar to Mission.
         /// </summary>
-        public static string MissionProgressView_MIssionDistanceRTT {
+        public static string MissionProgressView_MissionDistanceRTT {
             get {
-                return ResourceManager.GetString("MissionProgressView_MIssionDistanceRTT", resourceCulture);
+                return ResourceManager.GetString("MissionProgressView_MissionDistanceRTT", resourceCulture);
             }
         }
         

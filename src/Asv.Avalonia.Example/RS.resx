@@ -90,7 +90,7 @@
     <data name="MissionProgressView_SubStatusText" xml:space="preserve">
         <value>before complete</value>
     </data>
-    <data name="MissionProgressView_MIssionDistanceRTT" xml:space="preserve">
+    <data name="MissionProgressView_MissionDistanceRTT" xml:space="preserve">
         <value>Mission</value>
     </data>
     <data name="MissionProgressView_TotalDistanceRTT" xml:space="preserve">

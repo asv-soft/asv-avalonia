@@ -45,8 +45,7 @@ public class MissionProgressViewModel : DisposableViewModel
         _device = device;
         _flightContext = flightContext;
         DistanceUnitItem.Value = unitService
-            .Units.Values.First(_ => _.UnitId == DistanceBase.Id)
-            .Current.Value;
+            .Units[DistanceBase.Id].Current.Value;
         _missionClient = device.GetMicroservice<MissionClientEx>();
         _gnssClientEx = device.GetMicroservice<GnssClientEx>();
         _positionClient = device.GetMicroservice<PositionClientEx>();

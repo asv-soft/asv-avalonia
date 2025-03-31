@@ -80,7 +80,7 @@
     <data name="MissionProgressView_HomeDistance" xml:space="preserve">
         <value>Стартовая точка</value>
     </data>
-    <data name="MissionProgressView_MIssionDistanceRTT" xml:space="preserve">
+    <data name="MissionProgressView_MissionDistanceRTT" xml:space="preserve">
         <value>Миссия</value>
     </data>
     <data name="MissionProgressView_SubStatusText" xml:space="preserve">

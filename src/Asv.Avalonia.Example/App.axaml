@@ -7,7 +7,7 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Pages/Flight/Widgets/UavWidget/Controls/RouteIndicator/RouteIndicator.axaml"/>
+                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Pages/Flight/Widgets/UavWidget/Controls/RouteIndicator/RouteIndicatorStyles.axaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

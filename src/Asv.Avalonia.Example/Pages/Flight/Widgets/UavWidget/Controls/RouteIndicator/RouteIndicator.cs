@@ -8,9 +8,6 @@ namespace Asv.Avalonia.Example;
 [PseudoClasses(ProgressDisabledPseudoclass, ProgressCompletedPseudoclass)]
 public class RouteIndicator : IndicatorBase
 {
-    public const string ProgressDisabledPseudoclass = ":progress-disabled"; // TODO: To the common class
-    public const string ProgressCompletedPseudoclass = ":progress-completed"; // TODO: To the common class
-
     private double _internalBorderWidth;
 
     public static readonly DirectProperty<RouteIndicator, double> InternalBorderWidthProperty =

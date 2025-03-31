@@ -28,7 +28,7 @@
                         HorizontalAlignment="Left"
                         MainBrush="{DynamicResource NavyMainBrush}"
                         SecondaryBrush="{DynamicResource NavySecondaryBrush}"
-                        Title="{x:Static example:RS.MissionProgressView_MIssionDistanceRTT}"
+                        Title="{x:Static example:RS.MissionProgressView_MissionDistanceRTT}"
                         Units="{Binding DistanceUnitItem.Value.Symbol}"
                         IsBusy="False"
                         Icon="MapMarkerDistance"
