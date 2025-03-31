@@ -99,6 +99,78 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 2D position Fix.
+        /// </summary>
+        public static string GpsFixType_GpsFixType2dFix {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixType2dFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 3D position Fix.
+        /// </summary>
+        public static string GpsFixType_GpsFixType3dFix {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixType3dFix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DGPS/SBAS.
+        /// </summary>
+        public static string GpsFixType_GpsFixTypeDgps {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixTypeDgps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No GPS connected.
+        /// </summary>
+        public static string GpsFixType_GpsFixTypeNoGps {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixTypeNoGps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PPP 3D position.
+        /// </summary>
+        public static string GpsFixType_GpsFixTypePpp {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixTypePpp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rtk Fixed.
+        /// </summary>
+        public static string GpsFixType_GpsFixTypeRtkFixed {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixTypeRtkFixed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RTK Float.
+        /// </summary>
+        public static string GpsFixType_GpsFixTypeRtkFloat {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixTypeRtkFloat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Static Fix.
+        /// </summary>
+        public static string GpsFixType_GpsFixTypeStatic {
+            get {
+                return ResourceManager.GetString("GpsFixType_GpsFixTypeStatic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Example.
         /// </summary>
         public static string MapExamplePageViewModel_Title {
@@ -277,11 +349,29 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set an Auto mode. Use it to continue mission after interrupt.
+        /// </summary>
+        public static string UavAction_AutoMode_Description {
+            get {
+                return ResourceManager.GetString("UavAction_AutoMode_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Guided mode.
         /// </summary>
         public static string UavAction_GuidedMode {
             get {
                 return ResourceManager.GetString("UavAction_GuidedMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set a Guided mode.
+        /// </summary>
+        public static string UavAction_GuidedMode_Description {
+            get {
+                return ResourceManager.GetString("UavAction_GuidedMode_Description", resourceCulture);
             }
         }
         
@@ -295,11 +385,29 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Immediately Land.
+        /// </summary>
+        public static string UavAction_Land_Description {
+            get {
+                return ResourceManager.GetString("UavAction_Land_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to RTL.
         /// </summary>
         public static string UavAction_Rtl {
             get {
                 return ResourceManager.GetString("UavAction_Rtl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Return to launch.
+        /// </summary>
+        public static string UavAction_Rtl_Description {
+            get {
+                return ResourceManager.GetString("UavAction_Rtl_Description", resourceCulture);
             }
         }
         
@@ -313,11 +421,29 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Begins uploaded mission.
+        /// </summary>
+        public static string UavAction_StartMission_Description {
+            get {
+                return ResourceManager.GetString("UavAction_StartMission_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to TakeOff.
         /// </summary>
         public static string UavAction_TakeOff {
             get {
                 return ResourceManager.GetString("UavAction_TakeOff", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start takeoff.
+        /// </summary>
+        public static string UavAction_TakeOff_Description {
+            get {
+                return ResourceManager.GetString("UavAction_TakeOff_Description", resourceCulture);
             }
         }
         

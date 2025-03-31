@@ -108,7 +108,7 @@
         <value>Посадка</value>
     </data>
     <data name="UavAction_Rtl" xml:space="preserve">
-        <value>Возврат на точку запуска</value>
+        <value>Домой</value>
     </data>
     <data name="UavAction_StartMission" xml:space="preserve">
         <value>Начать миссию</value>
@@ -148,5 +148,44 @@
     </data>
     <data name="FlightPageViewModel_Title" xml:space="preserve">
         <value>Полет</value>
+    </data>
+    <data name="UavAction_TakeOff_Description" xml:space="preserve">
+        <value>Начать взлёт</value>
+    </data>
+    <data name="UavAction_Rtl_Description" xml:space="preserve">
+        <value>Возврат на точку запуска</value>
+    </data>
+    <data name="UavAction_AutoMode_Description" xml:space="preserve">
+        <value>Автоматический режим. Используйте для продолжения миссии после прерывания</value>
+    </data>
+    <data name="UavAction_Land_Description" xml:space="preserve">
+        <value>Незамедлительная посадка</value>
+    </data>
+    <data name="UavAction_GuidedMode_Description" xml:space="preserve">
+        <value>Устанавливает ручной режим</value>
+    </data>
+    <data name="GpsFixType_GpsFixType2dFix" xml:space="preserve">
+        <value>2Д позиция Фикс</value>
+    </data>
+    <data name="GpsFixType_GpsFixType3dFix" xml:space="preserve">
+        <value>3Д позиция Фикс</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeDgps" xml:space="preserve">
+        <value>DGRS/SBAS</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeNoGps" xml:space="preserve">
+        <value>Нет подключения</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypePpp" xml:space="preserve">
+        <value>PPP 3Д позиция</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeRtkFixed" xml:space="preserve">
+        <value>RTK фиксированный</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeRtkFloat" xml:space="preserve">
+        <value>RTK свободный</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeStatic" xml:space="preserve">
+        <value>Статичный</value>
     </data>
 </root>

@@ -1,30 +1,29 @@
-﻿using System.Composition;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Asv.IO;
 using Asv.Mavlink;
 using Material.Icons;
 
 namespace Asv.Avalonia.Example;
-[ExportCommand]
-[Shared]
-public class RTLCommand : ContextCommand<UavWidgetViewModel>
+
+public class GuidedModeCommand : ContextCommand<UavWidgetViewModel>
 {
     #region Static
 
-    public const string Id = $"{BaseId}.rtl";
+    public const string Id = $"{BaseId}.guided";
 
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = RS.UavAction_Rtl,
-        Description = RS.UavAction_Rtl_Description,
-        Icon = MaterialIconKind.Home,
+        Name = RS.UavAction_GuidedMode,
+        Description = RS.UavAction_GuidedMode_Description,
+        Icon = MaterialIconKind.Controller,
         DefaultHotKey = null,
         Source = SystemModule.Instance,
     };
 
     #endregion
+
     public override ICommandInfo Info => StaticInfo;
 
     public override ValueTask<ICommandArg?> Execute(IRoutable context, ICommandArg newValue, CancellationToken cancel = default)
@@ -40,13 +39,7 @@ public class RTLCommand : ContextCommand<UavWidgetViewModel>
     protected override ValueTask<ICommandArg?> InternalExecute(UavWidgetViewModel context, ICommandArg newValue, CancellationToken cancel)
     {
         var control = context.Device.GetMicroservice<ControlClient>();
-        if (control is null)
-        {
-            return default;
-        }
-
-        control.EnsureGuidedMode(cancel: cancel);
-        control.DoRtl(cancel);
+        control?.SetAutoMode(cancel);
         return ValueTask.FromResult<ICommandArg?>(newValue);
     }
 }

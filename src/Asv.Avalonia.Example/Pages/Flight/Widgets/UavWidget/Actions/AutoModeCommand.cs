@@ -8,23 +8,24 @@ using Material.Icons;
 namespace Asv.Avalonia.Example;
 [ExportCommand]
 [Shared]
-public class RTLCommand : ContextCommand<UavWidgetViewModel>
+public class AutoModeCommand: ContextCommand<UavWidgetViewModel>
 {
     #region Static
 
-    public const string Id = $"{BaseId}.rtl";
+    public const string Id = $"{BaseId}.auto";
 
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = RS.UavAction_Rtl,
-        Description = RS.UavAction_Rtl_Description,
-        Icon = MaterialIconKind.Home,
+        Name = RS.UavAction_AutoMode,
+        Description = RS.UavAction_AutoMode_Description,
+        Icon = MaterialIconKind.Automatic,
         DefaultHotKey = null,
         Source = SystemModule.Instance,
     };
 
     #endregion
+
     public override ICommandInfo Info => StaticInfo;
 
     public override ValueTask<ICommandArg?> Execute(IRoutable context, ICommandArg newValue, CancellationToken cancel = default)
@@ -40,13 +41,7 @@ public class RTLCommand : ContextCommand<UavWidgetViewModel>
     protected override ValueTask<ICommandArg?> InternalExecute(UavWidgetViewModel context, ICommandArg newValue, CancellationToken cancel)
     {
         var control = context.Device.GetMicroservice<ControlClient>();
-        if (control is null)
-        {
-            return default;
-        }
-
-        control.EnsureGuidedMode(cancel: cancel);
-        control.DoRtl(cancel);
+        control?.SetAutoMode(cancel);
         return ValueTask.FromResult<ICommandArg?>(newValue);
     }
 }

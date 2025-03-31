@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using Asv.Avalonia.IO;
 using Asv.Common;
@@ -31,6 +32,7 @@ public class FlightUavAnchorsExtension(
 
     private UavWidgetViewModel? TryCreateWidget(KeyValuePair<DeviceId, IClientDevice> device)
     {
+        device.Value.WaitUntilConnectAndInit(1000, TimeProvider.System);
         var pos = device.Value.GetMicroservice<IPositionClientEx>();
         return pos != null
             ? new UavWidgetViewModel(
