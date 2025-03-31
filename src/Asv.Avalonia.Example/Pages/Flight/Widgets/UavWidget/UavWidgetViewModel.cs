@@ -107,11 +107,11 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             {
                 var dialog = new SetAltitudeDialogViewModel(navigation);
                 var altitude = await dialog.ApplyDialog();
-                if (altitude is not null)
+                if (altitude !=0)
                 {
                     await this.ExecuteCommand(
                         TakeOffCommand.Id,
-                        new DoubleCommandArg(altitude.Value)
+                        new DoubleCommandArg(altitude)
                     );
                 }
             }
