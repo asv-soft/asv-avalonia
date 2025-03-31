@@ -36,9 +36,9 @@ public class SetAltitudeDialogViewModel : DialogViewModelBase
         );
     }
 
-    public async Task<double?> ApplyDialog()
+    public async Task<double> ApplyDialog()
     {
-        double? altitude;
+        double altitude;
         var dialog = new ContentDialog(_navigation)
         {
             PrimaryButtonText = "Take Off",
@@ -56,10 +56,10 @@ public class SetAltitudeDialogViewModel : DialogViewModelBase
         }
         else
         {
-            altitude = null;
+            altitude = 0;
         }
 
-        return await Task.FromResult(altitude);
+        return altitude;
     }
 
     public BindableReactiveProperty<string> Altitude { get; } = new();
