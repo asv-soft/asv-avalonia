@@ -136,7 +136,8 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        if (_sub1 != null) await CastAndDispose(_sub1);
+        if (_sub1 != null)
+            await CastAndDispose(_sub1);
         await Router.DisposeAsync();
         await Explorer.DisposeAsync();
 
