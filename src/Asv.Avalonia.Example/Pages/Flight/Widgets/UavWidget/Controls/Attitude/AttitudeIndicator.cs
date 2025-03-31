@@ -10,8 +10,7 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-#pragma warning disable SA1407
-public class AttitudeIndicator : TemplatedControl
+public partial class AttitudeIndicator : TemplatedControl
 {
     private const int VelocityItemCount = 6;
     private const int VelocityValueRange = 5;
@@ -40,373 +39,7 @@ public class AttitudeIndicator : TemplatedControl
     private string _rightStatusText;
 
     public double Scale { get; }
-
-    private Color _brushVibrationX;
-
-    public static readonly DirectProperty<AttitudeIndicator, Color> brushVibrationXProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, Color>(
-            nameof(BrushVibrationX),
-            o => o.BrushVibrationX,
-            (o, v) => o.BrushVibrationX = v
-        );
-
-    public Color BrushVibrationX
-    {
-        get => _brushVibrationX;
-        set => SetAndRaise(brushVibrationXProperty, ref _brushVibrationX, value);
-    }
-
-    private Color _brushVibrationY;
-
-    public static readonly DirectProperty<AttitudeIndicator, Color> brushVibrationYProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, Color>(
-            nameof(BrushVibrationY),
-            o => o.BrushVibrationY,
-            (o, v) => o.BrushVibrationY = v
-        );
-
-    public Color BrushVibrationY
-    {
-        get => _brushVibrationY;
-        set => SetAndRaise(brushVibrationYProperty, ref _brushVibrationY, value);
-    }
-
-    private Color _brushVibrationZ;
-
-    public static readonly DirectProperty<AttitudeIndicator, Color> brushVibrationZProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, Color>(
-            nameof(BrushVibrationZ),
-            o => o.BrushVibrationZ,
-            (o, v) => o.BrushVibrationZ = v
-        );
-
-    public Color BrushVibrationZ
-    {
-        get => _brushVibrationZ;
-        set => SetAndRaise(brushVibrationZProperty, ref _brushVibrationZ, value);
-    }
-
-    public static readonly StyledProperty<float> VibrationXProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        float
-    >(nameof(VibrationX), defaultValue: -1);
-
-    public float VibrationX
-    {
-        get => GetValue(VibrationXProperty);
-        set => SetValue(VibrationXProperty, value);
-    }
-
-    public static readonly StyledProperty<float> VibrationYProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        float
-    >(nameof(VibrationY), defaultValue: -1);
-
-    public float VibrationY
-    {
-        get => GetValue(VibrationYProperty);
-        set => SetValue(VibrationYProperty, value);
-    }
-
-    public static readonly StyledProperty<float> VibrationZProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        float
-    >(nameof(VibrationZ), defaultValue: -1);
-
-    public float VibrationZ
-    {
-        get => GetValue(VibrationZProperty);
-        set => SetValue(VibrationZProperty, value);
-    }
-
-    public static readonly StyledProperty<uint> Clipping0Property = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        uint
-    >(nameof(Clipping0));
-
-    public uint Clipping0
-    {
-        get => GetValue(Clipping0Property);
-        set => SetValue(Clipping0Property, value);
-    }
-
-    public static readonly StyledProperty<uint> Clipping1Property = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        uint
-    >(nameof(Clipping1));
-
-    public uint Clipping1
-    {
-        get => GetValue(Clipping1Property);
-        set => SetValue(Clipping1Property, value);
-    }
-
-    public static readonly StyledProperty<uint> Clipping2Property = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        uint
-    >(nameof(Clipping2));
-
-    public uint Clipping2
-    {
-        get => GetValue(Clipping2Property);
-        set => SetValue(Clipping2Property, value);
-    }
-
-    public static readonly StyledProperty<double> RollAngleProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        double
-    >(nameof(RollAngle), default(double));
-
-    public double RollAngle
-    {
-        get => GetValue(RollAngleProperty);
-        set => SetValue(RollAngleProperty, value);
-    }
-
-    public static readonly StyledProperty<double> PitchAngleProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        double
-    >(nameof(PitchAngle), default(double));
-
-    public double PitchAngle
-    {
-        get => GetValue(PitchAngleProperty);
-        set => SetValue(PitchAngleProperty, value);
-    }
-
-    public static readonly StyledProperty<double> VelocityProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        double
-    >(nameof(Velocity), default(double));
-
-    public double Velocity
-    {
-        get => GetValue(VelocityProperty);
-        set => SetValue(VelocityProperty, value);
-    }
-
-    public static readonly StyledProperty<double> AltitudeProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        double
-    >(nameof(Altitude), default(double));
-
-    public double Altitude
-    {
-        get => GetValue(AltitudeProperty);
-        set => SetValue(AltitudeProperty, value);
-    }
-
-    public static readonly StyledProperty<double> HeadingProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        double
-    >(nameof(Heading), default(double));
-
-    public double Heading
-    {
-        get => GetValue(HeadingProperty);
-        set => SetValue(HeadingProperty, value);
-    }
-
-    public static readonly StyledProperty<double?> HomeAzimuthProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        double?
-    >(nameof(HomeAzimuth), default(double?));
-
-    public double? HomeAzimuth
-    {
-        get => GetValue(HomeAzimuthProperty);
-        set => SetValue(HomeAzimuthProperty, value);
-    }
-
-    public static readonly StyledProperty<bool> IsArmedProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        bool
-    >(nameof(IsArmed), default(bool));
-
-    public bool IsArmed
-    {
-        get => GetValue(IsArmedProperty);
-        set => SetValue(IsArmedProperty, value);
-    }
-
-    public static readonly DirectProperty<AttitudeIndicator, string> StatusTextProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(
-            nameof(StatusText),
-            _ => _.StatusText,
-            (_, value) => _.StatusText = value
-        );
-
-    public string StatusText
-    {
-        get => _statusText;
-        set => SetAndRaise(StatusTextProperty, ref _statusText, value);
-    }
-
-    public static readonly DirectProperty<AttitudeIndicator, string> RightStatusTextProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, string>(
-            nameof(RightStatusText),
-            _ => _.RightStatusText,
-            (_, value) => _.RightStatusText = value
-        );
-
-    public string RightStatusText
-    {
-        get => _rightStatusText;
-        set => SetAndRaise(RightStatusTextProperty, ref _rightStatusText, value);
-    }
-
-    public static readonly StyledProperty<TimeSpan> ArmedTimeProperty = AvaloniaProperty.Register<
-        AttitudeIndicator,
-        TimeSpan
-    >(nameof(ArmedTime), default(TimeSpan));
-
-    public TimeSpan ArmedTime
-    {
-        get => GetValue(ArmedTimeProperty);
-        set => SetValue(ArmedTimeProperty, value);
-    }
-
-    #region Internal direct property
-
-    public static readonly DirectProperty<AttitudeIndicator, double> InternalWidthProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
-            nameof(InternalWidth),
-            _ => _.InternalWidth,
-            (_, value) => _.InternalWidth = value
-        );
-
-    public double InternalWidth
-    {
-        get => _internalWidth;
-        set => SetAndRaise(InternalWidthProperty, ref _internalWidth, value);
-    }
-
-    public static readonly DirectProperty<AttitudeIndicator, double> InternalHeightProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
-            nameof(InternalHeight),
-            _ => _.InternalHeight,
-            (_, value) => _.InternalHeight = value
-        );
-
-    public double InternalHeight
-    {
-        get => _internalHeight;
-        set => SetAndRaise(InternalHeightProperty, ref _internalHeight, value);
-    }
-
-    public static readonly DirectProperty<AttitudeIndicator, double> PitchTranslateXProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
-            nameof(PitchTranslateX),
-            _ => _.PitchTranslateX,
-            (_, value) => _.PitchTranslateX = value
-        );
-
-    private double PitchTranslateX
-    {
-        get => _pitchTranslateX;
-        set => SetAndRaise(PitchTranslateXProperty, ref _pitchTranslateX, value);
-    }
-
-    public static readonly DirectProperty<AttitudeIndicator, double> PitchTranslateYProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
-            nameof(PitchTranslateY),
-            _ => _.PitchTranslateY,
-            (_, value) => _.PitchTranslateY = value
-        );
-
-    public double PitchTranslateY
-    {
-        get => _pitchTranslateY;
-        set => SetAndRaise(PitchTranslateYProperty, ref _pitchTranslateY, value);
-    }
-
-    public static readonly DirectProperty<
-        AttitudeIndicator,
-        IEnumerable<RollItem>
-    > RollItemsProperty = AvaloniaProperty.RegisterDirect<AttitudeIndicator, IEnumerable<RollItem>>(
-        nameof(RollItems),
-        _ => _.RollItems,
-        (_, value) => _.RollItems = value
-    );
-
-    public IEnumerable<RollItem> RollItems
-    {
-        get => _rollItems;
-        set => SetAndRaise(RollItemsProperty, ref _rollItems, value);
-    }
-
-    public static readonly DirectProperty<
-        AttitudeIndicator,
-        IEnumerable<PitchItem>
-    > PitchItemsProperty = AvaloniaProperty.RegisterDirect<
-        AttitudeIndicator,
-        IEnumerable<PitchItem>
-    >(nameof(PitchItems), _ => _.PitchItems, (_, value) => _.PitchItems = value);
-
-    public IEnumerable<PitchItem> PitchItems
-    {
-        get => _pitchItems;
-        set => SetAndRaise(PitchItemsProperty, ref _pitchItems, value);
-    }
-
-    public static readonly DirectProperty<
-        AttitudeIndicator,
-        IEnumerable<ScaleItem>
-    > VelocityItemsProperty = AvaloniaProperty.RegisterDirect<
-        AttitudeIndicator,
-        IEnumerable<ScaleItem>
-    >(nameof(VelocityItems), _ => _.VelocityItems, (_, value) => _.VelocityItems = value);
-
-    public IEnumerable<ScaleItem> VelocityItems
-    {
-        get => _velocityItems;
-        set => SetAndRaise(VelocityItemsProperty, ref _velocityItems, value);
-    }
-
-    public static readonly DirectProperty<
-        AttitudeIndicator,
-        IEnumerable<ScaleItem>
-    > AltitudeItemsProperty = AvaloniaProperty.RegisterDirect<
-        AttitudeIndicator,
-        IEnumerable<ScaleItem>
-    >(nameof(AltitudeItems), _ => _.AltitudeItems, (_, value) => _.AltitudeItems = value);
-
-    public IEnumerable<ScaleItem> AltitudeItems
-    {
-        get => _altitudeItems;
-        set => SetAndRaise(AltitudeItemsProperty, ref _altitudeItems, value);
-    }
-
-    public static readonly DirectProperty<
-        AttitudeIndicator,
-        IEnumerable<ScaleItem>
-    > HeadingItemsProperty = AvaloniaProperty.RegisterDirect<
-        AttitudeIndicator,
-        IEnumerable<ScaleItem>
-    >(nameof(HeadingItems), _ => _.HeadingItems, (_, value) => _.HeadingItems = value);
-
-    public IEnumerable<ScaleItem> HeadingItems
-    {
-        get => _headingItems;
-        set => SetAndRaise(HeadingItemsProperty, ref _headingItems, value);
-    }
-
-    public static readonly DirectProperty<AttitudeIndicator, double> HomeAzimuthPositionProperty =
-        AvaloniaProperty.RegisterDirect<AttitudeIndicator, double>(
-            nameof(HomeAzimuthPosition),
-            _ => _.HomeAzimuthPosition,
-            (_, value) => _.HomeAzimuthPosition = value
-        );
-
-    public double HomeAzimuthPosition
-    {
-        get => _homeAzimuthPosition;
-        set => SetAndRaise(HomeAzimuthPositionProperty, ref _homeAzimuthPosition, value);
-    }
-
-    #endregion
-
-
+    
     public AttitudeIndicator()
     {
         if (Design.IsDesignMode)
@@ -764,7 +397,7 @@ public class AttitudeIndicator : TemplatedControl
             distance -= 360;
         }
 
-        return _headingCenterPosition + distance * _headingPositionStep;
+        return _headingCenterPosition + (distance * _headingPositionStep);
     }
 }
 
@@ -801,16 +434,15 @@ public class ScaleItem : AvaloniaObject
 
         if (!isInverse)
         {
-#pragma warning disable SA1407
-            _startPosition = (length - fullLength) / 2.0 + step * index;
+            _startPosition = ((length - fullLength) / 2.0) + (step * index);
         }
         else
         {
-            _startPosition = (length - fullLength) / 2.0 + step * (itemCount - index);
+            _startPosition = ((length - fullLength) / 2.0) + (step * (itemCount - index));
             _positionStep *= -1;
         }
 
-        var centerIndex = itemCount % 2 == 0 ? itemCount / 2 : itemCount / 2 + 1;
+        var centerIndex = itemCount % 2 == 0 ? itemCount / 2 : (itemCount / 2) + 1;
 
         var indexOffset = index - centerIndex;
         _valueOffset = -1 * valueRange * indexOffset;
@@ -842,12 +474,12 @@ public class ScaleItem : AvaloniaObject
 
     private double GetValue(double value)
     {
-        return Math.Round(value) - Math.Round(value) % _valueRange + _valueOffset;
+        return Math.Round(value) - (Math.Round(value) % _valueRange) + _valueOffset;
     }
 
     private double GetPosition(double value)
     {
-        return _startPosition + _positionStep * (Math.Round(value) % _valueRange);
+        return _startPosition + (_positionStep * (Math.Round(value) % _valueRange));
     }
 
     public static readonly DirectProperty<ScaleItem, bool> IsVisibleProperty =
@@ -990,7 +622,7 @@ public class PitchItem : AvaloniaObject
     )
     {
         _pitch = pitch;
-        Value = (controlHeight / 2 - pitch) * scale;
+        Value = ((controlHeight / 2) - pitch) * scale;
         if (titleIsVisible)
         {
             Title = pitch.ToString();

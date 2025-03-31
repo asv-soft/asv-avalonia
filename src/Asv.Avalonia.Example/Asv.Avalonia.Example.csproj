@@ -80,7 +80,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\Attitude\Style\AttitudeIndicator.axaml" />
       <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\RouteIndicator\RouteIndicator.axaml" />
       <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Dialogs\SetAltitudeDialog.axaml" />
 
@@ -92,7 +91,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Flight\Widgets\RttItems\" />
       <Compile Update="Pages\Flight\Widgets\UavWidget\UavWidgetView.axaml.cs">
         <DependentUpon>UavWidgetView.axaml</DependentUpon>
         <SubType>Code</SubType>

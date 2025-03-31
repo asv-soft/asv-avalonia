@@ -12,7 +12,7 @@ namespace Asv.Avalonia.Example;
 
 [ExportCommand]
 [Shared]
-public class TakeOffCommand : NoContextCommand
+public class TakeOffCommand : ContextCommand<UavWidgetViewModel>
 {
     #region Static
 
@@ -46,26 +46,24 @@ public class TakeOffCommand : NoContextCommand
         CancellationToken cancel
     )
     {
-        return InternalExecute(newValue, cancel);
+        if (context is UavWidgetViewModel uav)
+        {
+            return InternalExecute(uav, newValue, cancel);      
+        }
+
+        return default;
     }
 
-    protected override ValueTask<ICommandArg?> InternalExecute(
-        ICommandArg newValue,
-        CancellationToken cancel
-    )
+    protected override ValueTask<ICommandArg?> InternalExecute(UavWidgetViewModel context, ICommandArg newValue,
+        CancellationToken cancel)
     {
-        if (
-            newValue is ActionCommandArg keyValuePair
-            && double.TryParse(keyValuePair.Value, out var altitude)
-        )
+        if (newValue is DoubleCommandArg value)
         {
-            var device = _deviceManager
-                .Explorer.Devices.First(_ => _.Value.Id.AsString() == keyValuePair.Id)
-                .Value;
+            var device = context.Device;
             device.WaitUntilConnectAndInit(100, TimeProvider.System);
             var controlClient = device.GetMicroservice<ControlClient>();
             controlClient?.SetGuidedMode(cancel);
-            controlClient?.TakeOff(altitude, cancel);
+            controlClient?.TakeOff(value.Value, cancel);
         }
 
         return default;

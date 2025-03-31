@@ -116,11 +116,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                 {
                     await this.ExecuteCommand(
                         TakeOffCommand.Id,
-                        new ActionCommandArg(
-                            Device.Id.AsString(),
-                            altitude.Value.ToString(CultureInfo.InvariantCulture),
-                            CommandParameterActionType.Change
-                        )
+                        new DoubleCommandArg(altitude.Value)
                     );
                 }
             }

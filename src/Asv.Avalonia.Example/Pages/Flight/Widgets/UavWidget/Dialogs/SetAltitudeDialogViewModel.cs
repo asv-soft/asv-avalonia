@@ -38,7 +38,6 @@ public class SetAltitudeDialogViewModel : DialogViewModelBase
 
     public async Task<double?> ApplyDialog()
     {
-        var confirm = false;
         double? altitude;
         var dialog = new ContentDialog(_navigation)
         {
@@ -47,12 +46,10 @@ public class SetAltitudeDialogViewModel : DialogViewModelBase
             IsPrimaryButtonEnabled = IsValid.CurrentValue,
             IsSecondaryButtonEnabled = true,
             Content = this,
-            PrimaryButtonCommand = new ReactiveCommand(_ => confirm = true),
-            SecondaryButtonCommand = new ReactiveCommand(_ => confirm = false),
         };
         _sub2 = IsValid.Subscribe(enabled => dialog.IsPrimaryButtonEnabled = enabled);
-        await dialog.ShowAsync();
-        if (confirm)
+        var result = await dialog.ShowAsync();
+        if (result == ContentDialogResult.Primary)
         {
             TryParse(Altitude.Value, out var alt);
             altitude = alt;
@@ -65,7 +62,7 @@ public class SetAltitudeDialogViewModel : DialogViewModelBase
         return await Task.FromResult(altitude);
     }
 
-    public BindableReactiveProperty<string> Altitude { get; set; } = new("0.0");
+    public BindableReactiveProperty<string> Altitude { get; } = new();
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
@@ -74,8 +71,12 @@ public class SetAltitudeDialogViewModel : DialogViewModelBase
 
     protected override void Dispose(bool disposing)
     {
-        _sub1.Dispose();
-        _sub2.Dispose();
+        if (disposing)
+        {
+            _sub1.Dispose();
+            _sub2.Dispose();
+        }
+
         base.Dispose(disposing);
     }
 }

@@ -12,7 +12,7 @@
         </ResourceDictionary>
     </Application.Resources>
     <Application.Styles>
-        <StyleInclude Source="avares://Asv.Avalonia.Example/Pages/Flight/Widgets/UavWidget/Controls/Attitude/Style/AttitudeIndicator.axaml" />
+        <StyleInclude Source="avares://Asv.Avalonia.Example/Pages/Flight/Widgets/UavWidget/Controls/Attitude/AttitudeIndicatorStyles.axaml" />
         <StyleInclude Source="avares://Asv.Avalonia/Theme.axaml"/>
         <StyleInclude Source="avares://Asv.Avalonia.Map/Theme.axaml"/>
     </Application.Styles>
