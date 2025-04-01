@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Asv.Avalonia.IO;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
@@ -40,7 +39,6 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     }
 
     public UavWidgetViewModel(
-        IDeviceManager service,
         IClientDevice device,
         INavigationService navigation,
         IUnitService unitService,
@@ -74,6 +72,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             flightContext,
             loggerFactory
         );
+        MissionProgress.Value.Parent = this;
         var positionClientEx = device.GetMicroservice<PositionClientEx>() ??
                                throw new ArgumentException(
                                    $"Unable to load {nameof(PositionClientEx)} from {device.Id}");
@@ -161,10 +160,10 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         IsArmed = positionClientEx.IsArmed.DistinctUntilChanged().Select(b => b).ToBindableReactiveProperty();
         BatteryAmperage = telemetryClient.BatteryCurrent.Select(d => $"{(int)d} A")
             .ToBindableReactiveProperty<string>();
-        BatteryVoltage = telemetryClient.BatteryVoltage.Select(d => $"{(int)d} A").ToBindableReactiveProperty<string>();
-        BatteryCharge = telemetryClient.BatteryCharge.Select(d => $"{(int)d * 100} %")
+        BatteryVoltage = telemetryClient.BatteryVoltage.Select(d => $"{(int)d} V").ToBindableReactiveProperty<string>();
+        BatteryCharge = telemetryClient.BatteryCharge.Select(d => $"{(int)(d * 100)} %")
             .ToBindableReactiveProperty<string>();
-        BatteryCharge.Subscribe(_ =>
+        BatteryAmperage.Subscribe(_ =>
         {
             BatteryConsumed.Value =
                 telemetryClient.BatteryCurrent.CurrentValue == 0
@@ -182,11 +181,11 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             .DisposeItWith(Disposable);
     }
 
-    private void BatteryStatus(int procent)
+    private void BatteryStatus(int percent)
     {
         Dispatcher.UIThread.InvokeAsync(() =>
         {
-            BatteryStatusBrush.Value.Color = procent switch
+            BatteryStatusBrush.Value.Color = percent switch
             {
                 > 70 => GreenColor,
                 > 50 => YellowColor,
@@ -280,7 +279,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        return [];
+        return [MissionProgress.Value];
     }
 
     protected override void AfterLoadExtensions()

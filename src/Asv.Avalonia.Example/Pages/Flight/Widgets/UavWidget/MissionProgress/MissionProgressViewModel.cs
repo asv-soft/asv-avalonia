@@ -14,7 +14,7 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-public class MissionProgressViewModel : DisposableViewModel
+public class MissionProgressViewModel : RoutableViewModel
 {
     private readonly ILogger _log;
     private readonly IClientDevice _device;
@@ -29,8 +29,15 @@ public class MissionProgressViewModel : DisposableViewModel
     private bool _isOnMission;
 
     public MissionProgressViewModel()
-        : base(string.Empty)
+        : base(SystemModule.Name)
     {
+        DesignTime.ThrowIfNotDesignMode();
+        InitArgs("1");
+        IsDownloaded.Value = true;
+        MissionDistance.Value = "1500,00";
+        TotalDistance.Value = "1700,00";
+        HomeDistance.Value = "100,00";
+        TargetDistance.Value = "100,00";
     }
 
     [ImportingConstructor]
@@ -58,7 +65,7 @@ public class MissionProgressViewModel : DisposableViewModel
                               $"Unable to get {nameof(PositionClientEx)} service from {device.Id}");
         var mode = device.GetMicroservice<ModeClient>() ?? throw new ArgumentException(
             $"Unable to get {nameof(ModeClient)} service from {device.Id}");
-        
+        UpdateMission = new BindableAsyncCommand(UpdateMissionCommand.Id, this);
         Task.Run(async () => await InitiateMissionPoints(_cts.Token));
         _missionClient.MissionItems.CollectionChanged += (in NotifyCollectionChangedEventArgs<MissionItem> args) =>
         {
@@ -68,7 +75,7 @@ public class MissionProgressViewModel : DisposableViewModel
                     or MavCmd.MavCmdNavReturnToLaunch
                     or MavCmd.MavCmdNavSplineWaypoint
                     or MavCmd.MavCmdMissionStart).ToList();
-        };  
+        };
         
         mode.CurrentMode.Subscribe(m =>
             {
@@ -193,8 +200,9 @@ public class MissionProgressViewModel : DisposableViewModel
             .DisposeItWith(Disposable);
     }
 
-    private async Task InitiateMissionPoints(CancellationToken cancel)
+    internal async Task InitiateMissionPoints(CancellationToken cancel)
     {
+        IsDownloaded.Value = false;
         await DownloadMissionsImpl(cancel);
     }
 
@@ -208,7 +216,7 @@ public class MissionProgressViewModel : DisposableViewModel
             {
                 homeAlt = _positionClient.Home.CurrentValue.Value.Altitude;
             }
-            
+
             if (_missionClient.MissionItems.Count > 0)
             {
                 for (var i = 1; i < _items.Count; i++)
@@ -222,8 +230,10 @@ public class MissionProgressViewModel : DisposableViewModel
                     );
                 }
             }
-            
-            TotalDistance.Value = DistanceUnitItem.Value.Current.Value.Print(_missionClient.AllMissionsDistance.CurrentValue * 1000, "N2");
+
+            TotalDistance.Value =
+                DistanceUnitItem.Value.Current.Value.Print(_missionClient.AllMissionsDistance.CurrentValue * 1000,
+                    "N2");
             _passedDistance += _distanceBeforeMission;
             IsDownloaded.Value = true;
 
@@ -287,7 +297,8 @@ public class MissionProgressViewModel : DisposableViewModel
         return $"{minute} min";
     }
 
-    private double CalculatePathProgressValue(double missionDistance, double distance) // TODO: extend logic for plane clients
+    private double
+        CalculatePathProgressValue(double missionDistance, double distance) // TODO: extend logic for plane clients
     {
         switch (_device)
         {
@@ -306,18 +317,14 @@ public class MissionProgressViewModel : DisposableViewModel
         }
     }
 
+    public BindableAsyncCommand UpdateMission { get; set; }
     public BindableReactiveProperty<string> MissionFlightTime { get; } = new("- min");
-
     public BindableReactiveProperty<IUnit> DistanceUnitItem { get; } = new();
-
     public BindableReactiveProperty<double> DownloadProgress { get; } = new();
-
     public BindableReactiveProperty<string> MissionDistance { get; } = new(RS.Not_Available);
-
     public BindableReactiveProperty<string> TotalDistance { get; } = new(RS.Not_Available);
     public BindableReactiveProperty<string> HomeDistance { get; } = new(RS.Not_Available);
     public BindableReactiveProperty<string> TargetDistance { get; } = new(RS.Not_Available);
-
     public BindableReactiveProperty<bool> IsDownloaded { get; } = new(false);
 
     /// <summary>
@@ -329,6 +336,11 @@ public class MissionProgressViewModel : DisposableViewModel
     public ReactiveProperty<ushort> CurrentIndex { get; } = new();
 
     public ReactiveProperty<ushort> ReachedIndex { get; } = new();
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
 
     protected override void Dispose(bool disposing)
     {
@@ -350,4 +362,5 @@ public class MissionProgressViewModel : DisposableViewModel
 
         base.Dispose(disposing);
     }
+    
 }

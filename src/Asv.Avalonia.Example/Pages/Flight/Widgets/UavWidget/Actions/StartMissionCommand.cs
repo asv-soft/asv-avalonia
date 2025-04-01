@@ -1,16 +1,18 @@
-﻿using System.Threading;
+﻿using System.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 using Asv.IO;
 using Asv.Mavlink;
 using Material.Icons;
 
 namespace Asv.Avalonia.Example;
-
+[ExportCommand]
+[Shared]
 public class StartMissionCommand: ContextCommand<UavWidgetViewModel>
 {
     #region Static
 
-    public const string Id = $"{BaseId}.startMission";
+    public const string Id = $"{BaseId}.start";
 
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
