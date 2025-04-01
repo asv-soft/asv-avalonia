@@ -69,7 +69,6 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             "missionProgress",
             device,
             unitService,
-            flightContext,
             loggerFactory
         );
         MissionProgress.Value.Parent = this;

@@ -80,7 +80,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Controls\RouteIndicator\RouteIndicator.axaml" />
       <AdditionalFiles Include="Pages\Flight\Widgets\UavWidget\Dialogs\SetAltitudeDialog.axaml" />
 
       <ProjectReference Include="..\Asv.Avalonia.Example.Api\Asv.Avalonia.Example.Api.csproj" />

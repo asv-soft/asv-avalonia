@@ -18,7 +18,7 @@ public class MissionProgressViewModel : RoutableViewModel
 {
     private readonly ILogger _log;
     private readonly IClientDevice _device;
-    private readonly IFlightMode _flightContext;
+ 
     private readonly PositionClientEx _positionClient;
     private readonly MissionClientEx _missionClient;
     private readonly GnssClientEx _gnssClientEx;
@@ -45,14 +45,12 @@ public class MissionProgressViewModel : RoutableViewModel
         NavigationId id,
         IClientDevice device,
         IUnitService unitService,
-        IFlightMode flightContext,
         ILoggerFactory loggerFactory
     )
         : base(id)
     {
         _log = loggerFactory.CreateLogger<MissionProgressViewModel>();
         _device = device;
-        _flightContext = flightContext;
         DistanceUnitItem.Value = unitService.Units[DistanceBase.Id];
         _missionClient = device.GetMicroservice<MissionClientEx>() ??
                          throw new ArgumentException(
@@ -216,21 +214,7 @@ public class MissionProgressViewModel : RoutableViewModel
             {
                 homeAlt = _positionClient.Home.CurrentValue.Value.Altitude;
             }
-
-            if (_missionClient.MissionItems.Count > 0)
-            {
-                for (var i = 1; i < _items.Count; i++)
-                {
-                    _flightContext.Anchors.Add(
-                        new MissionAnchor(
-                            i,
-                            _items[i].Location.Value,
-                            _items[i - 1].Location.Value
-                        )
-                    );
-                }
-            }
-
+            
             TotalDistance.Value =
                 DistanceUnitItem.Value.Current.Value.Print(_missionClient.AllMissionsDistance.CurrentValue * 1000,
                     "N2");
@@ -362,5 +346,4 @@ public class MissionProgressViewModel : RoutableViewModel
 
         base.Dispose(disposing);
     }
-    
 }
