@@ -540,4 +540,13 @@
     <data name="Not_Available" xml:space="preserve">
         <value>Н/А</value>
     </data>
+    <data name="Capacity_UnitItem_Symbol" xml:space="preserve">
+        <value>мА*ч</value>
+    </data>
+    <data name="Capacity_UnitItem_Name" xml:space="preserve">
+        <value>Ёмкость</value>
+    </data>
+    <data name="Capacity_UnitItem_Description" xml:space="preserve">
+        <value>Ёмкость батареи</value>
+    </data>
 </root>

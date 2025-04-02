@@ -11,7 +11,6 @@
             <indicators:RouteIndicator Width="400" Progress="NaN" Title="NaN progress" StatusText="6 MIN" SubStatusText="BEFORE COMPLETE" />
         </StackPanel>
     </Design.PreviewWith>
-    <!-- // TODO:Localize -->
     <ControlTheme x:Key="{x:Type indicators:RouteIndicator}" TargetType="indicators:RouteIndicator">
         <!-- Set Defaults -->
         <Setter Property="BorderThickness" Value="1"/>

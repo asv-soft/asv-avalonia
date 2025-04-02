@@ -56,7 +56,7 @@ public class CapacityBase : UnitBase
     }
 
     public override MaterialIconKind Icon => MaterialIconKind.Battery;
-    public override string Name => "Capacity";
-    public override string Description => "Capacity_Description"; // TODO:Localize
+    public override string Name => RS.Capacity_UnitItem_Name;
+    public override string Description => RS.Capacity_UnitItem_Description;
     public override string UnitId => Id;
 }

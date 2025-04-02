@@ -150,6 +150,33 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Capacity of battery.
+        /// </summary>
+        public static string Capacity_UnitItem_Description {
+            get {
+                return ResourceManager.GetString("Capacity_UnitItem_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capacity.
+        /// </summary>
+        public static string Capacity_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Capacity_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to mAh.
+        /// </summary>
+        public static string Capacity_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Capacity_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Temperature in celsius.
         /// </summary>
         public static string Celsius_Temperature_Description {
@@ -443,6 +470,15 @@ namespace Asv.Avalonia {
         public static string DialogButton_Yes {
             get {
                 return ResourceManager.GetString("DialogButton_Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string DialogPageViewModel_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_Title", resourceCulture);
             }
         }
         

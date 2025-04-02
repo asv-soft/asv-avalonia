@@ -188,4 +188,7 @@
     <data name="GpsFixType_GpsFixTypeStatic" xml:space="preserve">
         <value>Статичный</value>
     </data>
+    <data name="UavAction_StartMission_Description" xml:space="preserve">
+        <value>Запуск ранее загруженной миссии</value>
+    </data>
 </root>
