@@ -64,18 +64,8 @@ public class MissionProgressViewModel : RoutableViewModel
         var mode = device.GetMicroservice<ModeClient>() ?? throw new ArgumentException(
             $"Unable to get {nameof(ModeClient)} service from {device.Id}");
         UpdateMission = new BindableAsyncCommand(UpdateMissionCommand.Id, this);
-        MissionDistance = _missionClient.AllMissionsDistance.Select(d => DistanceUnitItem.Value.Current.Value.Print(d))
-            .ToBindableReactiveProperty<string>();
         Task.Run(async () => await InitiateMissionPoints(_cts.Token));
-        _missionClient.MissionItems.CollectionChanged += (in NotifyCollectionChangedEventArgs<MissionItem> _) =>
-        {
-            _items = _missionClient.MissionItems.Where(item =>
-                item.Command.Value
-                    is MavCmd.MavCmdNavWaypoint
-                    or MavCmd.MavCmdNavReturnToLaunch
-                    or MavCmd.MavCmdNavSplineWaypoint
-                    or MavCmd.MavCmdMissionStart).ToList();
-        };
+        _missionClient.MissionItems.CollectionChanged += MissionItemsOnCollectionChanged;
         
         mode.CurrentMode.Subscribe(m =>
             {
@@ -200,6 +190,16 @@ public class MissionProgressViewModel : RoutableViewModel
             .DisposeItWith(Disposable);
     }
 
+    private void MissionItemsOnCollectionChanged(in NotifyCollectionChangedEventArgs<MissionItem> e)
+    {
+        _items = _missionClient.MissionItems.Where(item =>
+            item.Command.Value
+                is MavCmd.MavCmdNavWaypoint
+                or MavCmd.MavCmdNavReturnToLaunch
+                or MavCmd.MavCmdNavSplineWaypoint
+                or MavCmd.MavCmdMissionStart).ToList();
+    }
+
     internal async Task InitiateMissionPoints(CancellationToken cancel)
     {
         IsDownloaded.Value = false;
@@ -217,6 +217,7 @@ public class MissionProgressViewModel : RoutableViewModel
                 homeAlt = _positionClient.Home.CurrentValue.Value.Altitude;
             }
             
+            MissionDistance.Value = DistanceUnitItem.Value.Current.Value.Print(_missionClient.AllMissionsDistance.CurrentValue * 1000, "N2");
             TotalDistance.Value =
                 DistanceUnitItem.Value.Current.Value.Print(_missionClient.AllMissionsDistance.CurrentValue * 1000,
                     "N2");
@@ -344,6 +345,7 @@ public class MissionProgressViewModel : RoutableViewModel
             PathProgress.Dispose();
             CurrentIndex.Dispose();
             ReachedIndex.Dispose();
+            _missionClient.MissionItems.CollectionChanged -= MissionItemsOnCollectionChanged;
         }
 
         base.Dispose(disposing);
