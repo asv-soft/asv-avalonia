@@ -69,5 +69,9 @@
       </Compile>
     </ItemGroup>
 
+    <ItemGroup>
+      <UpToDateCheckInput Remove="Pages\PacketViewer\Dialogs\SeparatorViewDialog.axaml" />
+    </ItemGroup>
+
    
 </Project>

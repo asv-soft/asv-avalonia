@@ -87,6 +87,132 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Message sources.
+        /// </summary>
+        public static string PacketViewer_Expander_MessageSources {
+            get {
+                return ResourceManager.GetString("PacketViewer_Expander_MessageSources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Message types.
+        /// </summary>
+        public static string PacketViewer_Expander_MessageTypes {
+            get {
+                return ResourceManager.GetString("PacketViewer_Expander_MessageTypes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open packet viewer.
+        /// </summary>
+        public static string PacketViewer_Open {
+            get {
+                return ResourceManager.GetString("PacketViewer_Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check/Uncheck All.
+        /// </summary>
+        public static string PacketViewerView_CheckAll {
+            get {
+                return ResourceManager.GetString("PacketViewerView_CheckAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear all packets.
+        /// </summary>
+        public static string PacketViewerView_ClearAll {
+            get {
+                return ResourceManager.GetString("PacketViewerView_ClearAll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Play/Pause.
+        /// </summary>
+        public static string PacketViewerView_PlayPause {
+            get {
+                return ResourceManager.GetString("PacketViewerView_PlayPause", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save as CSV.
+        /// </summary>
+        public static string PacketViewerView_Save {
+            get {
+                return ResourceManager.GetString("PacketViewerView_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Packet Viewer.
+        /// </summary>
+        public static string PacketViewerViewDockPanelText {
+            get {
+                return ResourceManager.GetString("PacketViewerViewDockPanelText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Coma [ , ].
+        /// </summary>
+        public static string PacketViewerViewModel_SeparatorDialog_Coma {
+            get {
+                return ResourceManager.GetString("PacketViewerViewModel_SeparatorDialog_Coma", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select.
+        /// </summary>
+        public static string PacketViewerViewModel_SeparatorDialog_DialogPrimaryButton {
+            get {
+                return ResourceManager.GetString("PacketViewerViewModel_SeparatorDialog_DialogPrimaryButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string PacketViewerViewModel_SeparatorDialog_DialogSecondaryButton {
+            get {
+                return ResourceManager.GetString("PacketViewerViewModel_SeparatorDialog_DialogSecondaryButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Semicolon [ ; ].
+        /// </summary>
+        public static string PacketViewerViewModel_SeparatorDialog_Semicolon {
+            get {
+                return ResourceManager.GetString("PacketViewerViewModel_SeparatorDialog_Semicolon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Horizontal tabulation [ Tab ].
+        /// </summary>
+        public static string PacketViewerViewModel_SeparatorDialog_Tab {
+            get {
+                return ResourceManager.GetString("PacketViewerViewModel_SeparatorDialog_Tab", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select the separator.
+        /// </summary>
+        public static string PacketViewerViewModel_SeparatorDialog_Title {
+            get {
+                return ResourceManager.GetString("PacketViewerViewModel_SeparatorDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remove all pinned parameters.
         /// </summary>
         public static string ParametersEditorPageView_PinsOffButton_ToolTip {
@@ -236,6 +362,24 @@ namespace Asv.Avalonia.Example {
         public static string ParamPageViewModel_DataLossDialog_Title {
             get {
                 return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Enter the path.
+        /// </summary>
+        public static string Separator_Path {
+            get {
+                return ResourceManager.GetString("Separator_Path", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save packet.
+        /// </summary>
+        public static string Separator_Title {
+            get {
+                return ResourceManager.GetString("Separator_Title", resourceCulture);
             }
         }
     }
