@@ -64,8 +64,10 @@ public class MissionProgressViewModel : RoutableViewModel
         var mode = device.GetMicroservice<ModeClient>() ?? throw new ArgumentException(
             $"Unable to get {nameof(ModeClient)} service from {device.Id}");
         UpdateMission = new BindableAsyncCommand(UpdateMissionCommand.Id, this);
+        MissionDistance = _missionClient.AllMissionsDistance.Select(d => DistanceUnitItem.Value.Current.Value.Print(d))
+            .ToBindableReactiveProperty<string>();
         Task.Run(async () => await InitiateMissionPoints(_cts.Token));
-        _missionClient.MissionItems.CollectionChanged += (in NotifyCollectionChangedEventArgs<MissionItem> args) =>
+        _missionClient.MissionItems.CollectionChanged += (in NotifyCollectionChangedEventArgs<MissionItem> _) =>
         {
             _items = _missionClient.MissionItems.Where(item =>
                 item.Command.Value
