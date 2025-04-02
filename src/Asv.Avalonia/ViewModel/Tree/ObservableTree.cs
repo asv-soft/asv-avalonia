@@ -44,7 +44,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
         _parentSelector = parentSelector;
         _comparer = comparer;
         _createNodeFactory = createNodeFactory ?? DefaultNodeFactory;
-        _itemSource = new ObservableList<ObservableTreeNode<T, TKey>>();
+        _itemSource = [];
         Items = _itemSource.ToNotifyCollectionChangedSlim();
         foreach (var item in flatList)
         {
@@ -76,7 +76,7 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
     {
         var parent = _parentSelector(e.Value);
         var key = _keySelector(e.Value);
-        if (parent.Equals(null))
+        if (parent.Equals(_rootKey))
         {
             var node = _itemSource.FirstOrDefault(x => x.Key.Equals(key));
             if (node != null)
@@ -126,16 +126,10 @@ public class ObservableTree<T, TKey> : AsyncDisposableOnce
 
     public ObservableTreeNode<T, TKey>? FindNode(Func<ObservableTreeNode<T, TKey>, bool> filter)
     {
-        foreach (var node in _itemSource)
-        {
-            var child = node.FindNode(filter);
-            if (child != null)
-            {
-                return child;
-            }
-        }
-
-        return null;
+        return _itemSource
+            .Select(node => node.FindNode(filter))
+            .OfType<ObservableTreeNode<T, TKey>>()
+            .FirstOrDefault();
     }
 
     public ObservableTreeNode<T, TKey>? GetNode(TKey nodeId)

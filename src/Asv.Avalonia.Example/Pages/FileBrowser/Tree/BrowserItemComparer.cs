@@ -10,6 +10,16 @@ public sealed class BrowserItemComparer : IComparer<IBrowserItem>
 
     public int Compare(IBrowserItem? x, IBrowserItem? y)
     {
+        if (x is DirectoryItem && y is not DirectoryItem)
+        {
+            return -1;
+        }
+
+        if (y is DirectoryItem && x is not DirectoryItem)
+        {
+            return 1;
+        }
+
         switch (x)
         {
             case null when y == null:
@@ -29,7 +39,7 @@ public sealed class BrowserItemComparer : IComparer<IBrowserItem>
             return idComparison;
         }
 
-        var parentPathComparison = string.CompareOrdinal(x.ParentId.Id, y.ParentId.Id);
+        var parentPathComparison = string.CompareOrdinal(x.ParentPath, y.ParentPath);
         if (parentPathComparison != 0)
         {
             return parentPathComparison;

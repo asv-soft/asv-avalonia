@@ -4,8 +4,8 @@ namespace Asv.Avalonia.Example;
 
 public class DirectoryItem : BrowserItem
 {
-    public DirectoryItem(NavigationId id, NavigationId parentId, string path, string? name)
-        : base(id, parentId, path)
+    public DirectoryItem(NavigationId id, string? parentPath, string path, string? name)
+        : base(id, parentPath, path)
     {
         HasChildren = true;
         Header = name;

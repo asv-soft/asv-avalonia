@@ -81,14 +81,14 @@
                                          Watermark="Local"
                                          Text="{Binding LocalSearchText.Value}"
                                          Margin="0 0 8 0">
-                                    <TextBox.InnerRightContent>
+                                    <!--<TextBox.InnerRightContent>
                                         <Button Command="{Binding ClearLocalSearchBoxCommand}"
                                                 Background="Transparent"
                                                 BorderBrush="Transparent">
                                             <avalonia:MaterialIcon Kind="Close"
                                                                    Foreground="{StaticResource DeleteBrush}"/>
                                         </Button>
-                                    </TextBox.InnerRightContent>
+                                    </TextBox.InnerRightContent>-->
                                 </TextBox>
                                 <Button Grid.Column="1"
                                         VerticalAlignment="Stretch"
@@ -199,14 +199,14 @@
                                          Watermark="Remote"
                                          Text="{Binding RemoteSearchText.Value}"
                                          Margin="0 0 8 0">
-                                    <TextBox.InnerRightContent>
+                                    <!--<TextBox.InnerRightContent>
                                         <Button Command="{Binding ClearRemoteSearchBoxCommand}"
                                                 Background="Transparent"
                                                 BorderBrush="Transparent">
                                             <avalonia:MaterialIcon Kind="Close"
                                                                    Foreground="{StaticResource DeleteBrush}"/>
                                         </Button>
-                                    </TextBox.InnerRightContent>
+                                    </TextBox.InnerRightContent>-->
                                 </TextBox>
                                 <Button Grid.Column="1"
                                         VerticalAlignment="Stretch"

@@ -7,7 +7,7 @@ namespace Asv.Avalonia.Example;
 public interface IBrowserItem : IHeadlinedViewModel
 {
     string Path { get; }
-    NavigationId ParentId { get; }
+    string? ParentPath { get; }
     FileSize? Size { get; }
     bool HasChildren { get; }
     bool IsExpanded { get; }

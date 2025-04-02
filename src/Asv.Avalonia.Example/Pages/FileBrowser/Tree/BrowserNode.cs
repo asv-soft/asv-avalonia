@@ -7,13 +7,13 @@ namespace Asv.Avalonia.Example;
 public class BrowserNode(
     IBrowserItem baseItem,
     IReadOnlyObservableList<IBrowserItem> source,
-    Func<IBrowserItem, NavigationId> keySelector,
-    Func<IBrowserItem, NavigationId> parentSelector,
+    Func<IBrowserItem, string> keySelector,
+    Func<IBrowserItem, string> parentSelector,
     IComparer<IBrowserItem> comparer,
-    CreateNodeDelegate<IBrowserItem, NavigationId> factory,
-    ObservableTreeNode<IBrowserItem, NavigationId>? parentNode = null
+    CreateNodeDelegate<IBrowserItem, string> factory,
+    ObservableTreeNode<IBrowserItem, string>? parentNode = null
 )
-    : ObservableTreeNode<IBrowserItem, NavigationId>(
+    : ObservableTreeNode<IBrowserItem, string>(
         baseItem,
         source,
         keySelector,

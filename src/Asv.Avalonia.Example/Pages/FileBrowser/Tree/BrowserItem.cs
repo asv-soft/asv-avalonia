@@ -6,7 +6,7 @@ namespace Asv.Avalonia.Example;
 public class BrowserItem : HeadlinedViewModel, IBrowserItem
 {
     private string _path = string.Empty;
-    private NavigationId _parentId = NavigationId.Empty;
+    private string? _parentPath;
     private FileSize? _size;
     private bool _hasChildren;
     private bool _isExpanded;
@@ -17,10 +17,10 @@ public class BrowserItem : HeadlinedViewModel, IBrowserItem
     private SolidColorBrush _crc32Color = null!;
     private FtpEntryType _ftpEntryType;
 
-    public BrowserItem(NavigationId id, NavigationId parentId, string path)
+    public BrowserItem(NavigationId id, string? parentPath, string path)
         : base(id)
     {
-        ParentId = parentId;
+        ParentPath = parentPath;
         Path = path;
         Order = 0;
     }
@@ -31,10 +31,10 @@ public class BrowserItem : HeadlinedViewModel, IBrowserItem
         set => SetField(ref _path, value);
     }
 
-    public NavigationId ParentId
+    public string? ParentPath
     {
-        get => _parentId;
-        set => SetField(ref _parentId, value);
+        get => _parentPath;
+        set => SetField(ref _parentPath, value);
     }
 
     public FileSize? Size

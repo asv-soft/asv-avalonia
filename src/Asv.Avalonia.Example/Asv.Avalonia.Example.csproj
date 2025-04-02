@@ -29,7 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asv.Mavlink" Version="4.0.0-dev.6" />
+        <PackageReference Include="Asv.Mavlink" Version="4.0.0-dev.10" />
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>

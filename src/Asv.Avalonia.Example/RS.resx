@@ -78,4 +78,40 @@
     <data name="ParamPageViewModel_DataLossDialog_CloseButtonText" xml:space="preserve">
         <value>Cancel</value>
     </data>
+    <data name="Unit_Byte_Abbreviation" xml:space="preserve">
+        <value>byte</value>
+    </data>
+    <data name="Unit_Kilobyte_Abbreviation" xml:space="preserve">
+        <value>KB</value>
+    </data>
+    <data name="Unit_Megabyte_Abbreviation" xml:space="preserve">
+        <value>MB</value>
+    </data>
+    <data name="Unit_Gigabyte_Abbreviation" xml:space="preserve">
+        <value>GB</value>
+    </data>
+    <data name="Unit_Terabyte_Abbreviation" xml:space="preserve">
+        <value>TB</value>
+    </data>
+    <data name="FileBrowserViewModel_UploadingDialog_Title" xml:space="preserve">
+        <value>Uploading</value>
+    </data>
+    <data name="FileBrowserViewModel_UploadingDialog_Message" xml:space="preserve">
+        <value>Do you want to upload file '{0}' to device?</value>
+    </data>
+    <data name="FileBrowserViewModel_DownloadDialog_Title" xml:space="preserve">
+        <value>Download</value>
+    </data>
+    <data name="FileBrowserViewModel_DownloadDialog_Message" xml:space="preserve">
+        <value>Do you want to download file '{0}'?</value>
+    </data>
+    <data name="FileBrowserViewModel_FileDownloadedSuccessfully" xml:space="preserve">
+        <value>File downloaded successfully: {0}</value>
+    </data>
+    <data name="FileBrowserViewModel_RemoveDialog_Title" xml:space="preserve">
+        <value>Remove</value>
+    </data>
+    <data name="FileBrowserViewModel_RemoveDialog_Message" xml:space="preserve">
+        <value>Do you want to remove the item?</value>
+    </data>
 </root>

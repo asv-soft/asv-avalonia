@@ -32,13 +32,17 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         TagsView = TagsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         _hasValidationError = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         _hasChanges = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        SaveChangesCommand = new ReactiveCommand(x=>Task.Factory.StartNew(SaveChanges,null, TaskCreationOptions.LongRunning)).DisposeItWith(Disposable);
+        SaveChangesCommand = new ReactiveCommand(x =>
+            Task.Factory.StartNew(SaveChanges, null, TaskCreationOptions.LongRunning)
+        ).DisposeItWith(Disposable);
         _hasValidationError
             .Subscribe(x => SaveChangesCommand.ChangeCanExecute(!x))
             .DisposeItWith(Disposable);
         CancelChangesCommand = new ReactiveCommand(CancelChanges).DisposeItWith(Disposable);
         IsEnabled = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        IsEnabled.SubscribeAwait(ChangeEnabled, AwaitOperation.Drop, false).DisposeItWith(Disposable);
+        IsEnabled
+            .SubscribeAwait(ChangeEnabled, AwaitOperation.Drop, false)
+            .DisposeItWith(Disposable);
         AddToValidation(Name = new BindableReactiveProperty<string>(), ValidateName);
 
         RemovePortCommand = new ReactiveCommand(RemovePort).DisposeItWith(Disposable);
