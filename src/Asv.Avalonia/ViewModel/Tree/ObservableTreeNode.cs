@@ -10,7 +10,7 @@ public class ObservableTreeNode<T, TKey>
         IComparable
     where TKey : IEquatable<TKey>
 {
-    private readonly Func<T, TKey?> _parentSelector;
+    private readonly Func<T, TKey> _parentSelector;
     private readonly IComparer<T> _comparer;
     private readonly CreateNodeDelegate<T, TKey> _createNodeFactory;
     private readonly ObservableList<ObservableTreeNode<T, TKey>> _itemSource;
@@ -62,9 +62,9 @@ public class ObservableTreeNode<T, TKey>
     private void TryRemove(CollectionRemoveEvent<T> e)
     {
         var parent = _parentSelector(e.Value);
-        if (parent != null && parent.Equals(Key))
+        if (parent.Equals(Key))
         {
-            var node = _itemSource.FirstOrDefault(x => x.Key.Equals(e.Value));
+            var node = _itemSource.FirstOrDefault(x => x.Key.Equals(_keySelector(e.Value)));
             if (node != null)
             {
                 _itemSource.Remove(node);
@@ -75,7 +75,7 @@ public class ObservableTreeNode<T, TKey>
     private void TryAdd(T item)
     {
         var parent = _parentSelector(item);
-        if (parent != null && parent.Equals(Key))
+        if (parent.Equals(Key))
         {
             _itemSource.Add(
                 _createNodeFactory(

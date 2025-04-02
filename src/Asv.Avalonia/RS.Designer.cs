@@ -609,6 +609,150 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string FileBrowserView_CommitRename_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_CommitRename_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compare selected items.
+        /// </summary>
+        public static string FileBrowserView_CompareSelectedItems_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_CompareSelectedItems_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Calculate CRC32.
+        /// </summary>
+        public static string FileBrowserView_CRC32_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_CRC32_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string FileBrowserView_Delete_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_Delete_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download file.
+        /// </summary>
+        public static string FileBrowserView_Download_button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_Download_button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search for the file.
+        /// </summary>
+        public static string FileBrowserView_FindFile_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_FindFile_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New folder.
+        /// </summary>
+        public static string FileBrowserView_NewFolder_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_NewFolder_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Refresh.
+        /// </summary>
+        public static string FileBrowserView_Refresh_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_Refresh_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        public static string FileBrowserView_Rename_Button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_Rename_Button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search.
+        /// </summary>
+        public static string FileBrowserView_Search_Watermark {
+            get {
+                return ResourceManager.GetString("FileBrowserView_Search_Watermark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload file.
+        /// </summary>
+        public static string FileBrowserView_Upload_button_Tooltip {
+            get {
+                return ResourceManager.GetString("FileBrowserView_Upload_button_Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string FileBrowserViewModel_DownloadDialog_PrimaryButtonText {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_DownloadDialog_PrimaryButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string FileBrowserViewModel_DownloadDialog_SecondaryButtonText {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_DownloadDialog_SecondaryButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string FileBrowserViewModel_DownloadDialog_Title {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_DownloadDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string FileBrowserViewModel_UploadDialog_PrimaryButtonText {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_UploadDialog_PrimaryButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload.
+        /// </summary>
+        public static string FileBrowserViewModel_UploadDialog_Title {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_UploadDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Frequency unit.
         /// </summary>
         public static string Frequency_Description {
@@ -1559,6 +1703,51 @@ namespace Asv.Avalonia {
         public static string UndoCommand_CommandInfo_Name {
             get {
                 return ResourceManager.GetString("UndoCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to byte.
+        /// </summary>
+        public static string Unit_Byte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Byte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GB.
+        /// </summary>
+        public static string Unit_Gigabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Gigabyte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to KB.
+        /// </summary>
+        public static string Unit_Kilobyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Kilobyte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MB.
+        /// </summary>
+        public static string Unit_Megabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Megabyte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TB.
+        /// </summary>
+        public static string Unit_Terabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Terabyte_Abbreviation", resourceCulture);
             }
         }
         

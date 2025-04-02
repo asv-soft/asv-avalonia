@@ -1,5 +1,4 @@
-﻿using Asv.Avalonia.Example.Commands;
-using Asv.Common;
+﻿using Asv.Common;
 using R3;
 
 namespace Asv.Avalonia.Example;

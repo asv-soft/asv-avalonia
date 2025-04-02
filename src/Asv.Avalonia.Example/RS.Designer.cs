@@ -78,6 +78,69 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to download file &apos;{0}&apos;?.
+        /// </summary>
+        public static string FileBrowserViewModel_DownloadDialog_Message {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_DownloadDialog_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download.
+        /// </summary>
+        public static string FileBrowserViewModel_DownloadDialog_Title {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_DownloadDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File downloaded successfully: {0}.
+        /// </summary>
+        public static string FileBrowserViewModel_FileDownloadedSuccessfully {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_FileDownloadedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to remove the item?.
+        /// </summary>
+        public static string FileBrowserViewModel_RemoveDialog_Message {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_RemoveDialog_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove.
+        /// </summary>
+        public static string FileBrowserViewModel_RemoveDialog_Title {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_RemoveDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to upload file &apos;{0}&apos; to device?.
+        /// </summary>
+        public static string FileBrowserViewModel_UploadingDialog_Message {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_UploadingDialog_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploading.
+        /// </summary>
+        public static string FileBrowserViewModel_UploadingDialog_Title {
+            get {
+                return ResourceManager.GetString("FileBrowserViewModel_UploadingDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Map Example.
         /// </summary>
         public static string MapExamplePageViewModel_Title {
@@ -236,6 +299,51 @@ namespace Asv.Avalonia.Example {
         public static string ParamPageViewModel_DataLossDialog_Title {
             get {
                 return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to byte.
+        /// </summary>
+        public static string Unit_Byte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Byte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GB.
+        /// </summary>
+        public static string Unit_Gigabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Gigabyte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to KB.
+        /// </summary>
+        public static string Unit_Kilobyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Kilobyte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MB.
+        /// </summary>
+        public static string Unit_Megabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Megabyte_Abbreviation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TB.
+        /// </summary>
+        public static string Unit_Terabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Terabyte_Abbreviation", resourceCulture);
             }
         }
     }

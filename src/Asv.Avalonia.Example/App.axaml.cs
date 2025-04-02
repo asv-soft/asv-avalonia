@@ -10,6 +10,7 @@ using Asv.Avalonia.IO;
 using Asv.Avalonia.Plugins;
 using Asv.Cfg;
 using Asv.Common;
+using Asv.Mavlink;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
