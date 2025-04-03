@@ -195,7 +195,7 @@
                         <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
                             <TextBlock Grid.RowSpan="2" VerticalAlignment="Center" TextAlignment="Right"
                                        FontSize="24"
-                                       Text="{Binding SateliteCount.Value}" />
+                                       Text="{Binding SatelliteCount.Value}" />
                             <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15"
                                        Text="{Binding HdopCount.Value}" />
                             <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15"

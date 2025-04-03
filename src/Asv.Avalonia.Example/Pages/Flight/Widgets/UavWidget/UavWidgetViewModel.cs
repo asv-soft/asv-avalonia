@@ -143,7 +143,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
                 );
             }
         }).DisposeItWith(Disposable);
-        SateliteCount = _gnssClient.Main.Info.Select(info => info.SatellitesVisible).ToBindableReactiveProperty();
+        SatelliteCount = _gnssClient.Main.Info.Select(info => info.SatellitesVisible).ToBindableReactiveProperty();
         VdopCount = _gnssClient.Main.Info
             .Select(info =>
                 info.Vdop is null ? RS.Not_Available : $"{info.Vdop.Value} VDOP")
@@ -153,7 +153,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             .ToBindableReactiveProperty<string>();
         RtkMode = _gnssClient.Main.Info.Select(gpsInfo => GpsFixTypeToString(gpsInfo.FixType))
             .ToBindableReactiveProperty<string>();
-        SateliteCount.Subscribe(_ => GnssStatus()).DisposeItWith(Disposable);
+        SatelliteCount.Subscribe(_ => GnssStatus()).DisposeItWith(Disposable);
         RtkMode.Subscribe(_ => GnssStatus()).DisposeItWith(Disposable);
         IsArmed = positionClientEx.IsArmed.DistinctUntilChanged().Select(b => b).ToBindableReactiveProperty();
         BatteryAmperage = telemetryClient.BatteryCurrent.Select(d => $"{(int)d} A")
@@ -308,7 +308,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
 
     #region Gnss
 
-    public BindableReactiveProperty<int> SateliteCount { get; } = new();
+    public BindableReactiveProperty<int> SatelliteCount { get; } = new();
     public BindableReactiveProperty<string> HdopCount { get; } = new();
     public BindableReactiveProperty<string> VdopCount { get; } = new();
     public BindableReactiveProperty<string> RtkMode { get; } = new();
@@ -395,7 +395,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
             LinkQuality.Dispose();
             LinkQualityStatusBrush.Dispose();
             GnssStatusBrush.Dispose();
-            SateliteCount.Dispose();
+            SatelliteCount.Dispose();
             VdopCount.Dispose();
             HdopCount.Dispose();
             RtkMode.Dispose();
