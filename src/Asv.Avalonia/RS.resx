@@ -536,4 +536,19 @@
     <data name="ChangeThemeCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change theme</value>
     </data>
+    <data name="Not_Available" xml:space="preserve">
+        <value>N/A</value>
+    </data>
+    <data name="DialogPageViewModel_Title" xml:space="preserve">
+        <value />
+    </data>
+    <data name="Capacity_UnitItem_Name" xml:space="preserve">
+        <value>Capacity</value>
+    </data>
+    <data name="Capacity_UnitItem_Description" xml:space="preserve">
+        <value>Capacity of battery</value>
+    </data>
+    <data name="Capacity_UnitItem_Symbol" xml:space="preserve">
+        <value>mAh</value>
+    </data>
 </root>

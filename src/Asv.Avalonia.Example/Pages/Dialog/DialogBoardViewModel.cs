@@ -9,6 +9,7 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
+// TODO:Localize
 [ExportPage(PageId)]
 public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
 {

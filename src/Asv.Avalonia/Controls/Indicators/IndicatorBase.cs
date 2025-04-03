@@ -55,6 +55,8 @@ public abstract class IndicatorBase : TemplatedControl
 
     #endregion
 
+    public const string ProgressDisabledPseudoclass = ":progress-disabled";
+    public const string ProgressCompletedPseudoclass = ":progress-completed";
     public static readonly StyledProperty<MaterialIconKind> IconKindProperty =
         AvaloniaProperty.Register<IndicatorBase, MaterialIconKind>(
             nameof(IconKind),
@@ -65,5 +67,16 @@ public abstract class IndicatorBase : TemplatedControl
     {
         get => GetValue(IconKindProperty);
         set => SetValue(IconKindProperty, value);
+    }
+
+    public static readonly StyledProperty<string> TitleProperty = AvaloniaProperty.Register<
+        IndicatorBase,
+        string
+    >(nameof(Title));
+
+    public string Title
+    {
+        get => GetValue(TitleProperty);
+        set => SetValue(TitleProperty, value);
     }
 }

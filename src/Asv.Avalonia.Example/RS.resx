@@ -1,9 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -13,10 +14,14 @@
         <value>1.3</value>
     </resheader>
     <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
     <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
     <data name="DialogPageViewModel_Title" xml:space="preserve">
         <value>Dialogs</value>
@@ -81,4 +86,122 @@
     <data name="MavParamsPageViewModel_DeviceName_Unknown" xml:space="preserve">
         <value>Unknown</value>
     </data>
+    <data name="Not_Available" xml:space="preserve">
+        <value>N/A</value>
+    </data>
+    <data name="MissionProgressView_Title" xml:space="preserve">
+        <value>Mission progress</value>
+    </data>
+    <data name="MissionProgressView_SubStatusText" xml:space="preserve">
+        <value>before complete</value>
+    </data>
+    <data name="MissionProgressView_MissionDistanceRTT" xml:space="preserve">
+        <value>Mission</value>
+    </data>
+    <data name="MissionProgressView_TotalDistanceRTT" xml:space="preserve">
+        <value>Total</value>
+    </data>
+    <data name="MissionProgressView_HomeDistance" xml:space="preserve">
+        <value>Home</value>
+    </data>
+    <data name="MissionProgressView_TargetDistance" xml:space="preserve">
+        <value>Target</value>
+    </data>
+    <data name="MissionProgressView_DownLoadingMission" xml:space="preserve">
+        <value>Downloading mission</value>
+    </data>
+    <data name="UavAction_AutoMode" xml:space="preserve">
+        <value>Auto mode</value>
+    </data>
+    <data name="UavAction_GuidedMode" xml:space="preserve">
+        <value>Guided mode</value>
+    </data>
+    <data name="UavAction_TakeOff" xml:space="preserve">
+        <value>TakeOff</value>
+    </data>
+    <data name="UavAction_Rtl" xml:space="preserve">
+        <value>RTL</value>
+    </data>
+    <data name="UavAction_Land" xml:space="preserve">
+        <value>Land</value>
+    </data>
+    <data name="UavAction_StartMission" xml:space="preserve">
+        <value>Start Mission</value>
+    </data>
+    <data name="UavAction_StartMission_Description" xml:space="preserve">
+        <value>Begins uploaded mission</value>
+    </data>
+    <data name="UavRttItem_Mode" xml:space="preserve">
+        <value>Mode</value>
+    </data>
+    <data name="UavRttItem_Altitude" xml:space="preserve">
+        <value>Altitude</value>
+    </data>
+    <data name="UavRttItem_Velocity" xml:space="preserve">
+        <value>Velocity</value>
+    </data>
+    <data name="UavRttItem_Azimuth" xml:space="preserve">
+        <value>Azimuth</value>
+    </data>
+    <data name="UavRttItem_Battery" xml:space="preserve">
+        <value>Battery</value>
+    </data>
+    <data name="UavRttItem_GNSS" xml:space="preserve">
+        <value>GNSS</value>
+    </data>
+    <data name="UavRttItem_Link" xml:space="preserve">
+        <value>Link</value>
+    </data>
+    <data name="UavWidgetViewModel_StatusText_Armed" xml:space="preserve">
+        <value>Armed</value>
+    </data>
+    <data name="UavWidgetViewModel_StatusText_PullUp" xml:space="preserve">
+        <value>Pull Up</value>
+    </data>
+    <data name="UavWidgetViewModel_StatusText_DisArmed" xml:space="preserve">
+        <value>Disarmed</value>
+    </data>
+    <data name="FlightPageViewModel_Title" xml:space="preserve">
+        <value>Flight</value>
+    </data>
+    <data name="UavAction_TakeOff_Description" xml:space="preserve">
+        <value>Start takeoff</value>
+    </data>
+    <data name="UavAction_Rtl_Description" xml:space="preserve">
+        <value>Return to launch</value>
+    </data>
+    <data name="UavAction_Land_Description" xml:space="preserve">
+        <value>Immediately Land</value>
+    </data>
+    <data name="UavAction_AutoMode_Description" xml:space="preserve">
+        <value>Set an Auto mode. Use it to continue mission after interrupt</value>
+    </data>
+    <data name="UavAction_GuidedMode_Description" xml:space="preserve">
+        <value>Set a Guided mode</value>
+    </data>
+    <data name="GpsFixType_GpsFixType2dFix" xml:space="preserve">
+        <value>2D position Fix</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeRtkFloat" xml:space="preserve">
+        <value>RTK Float</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeRtkFixed" xml:space="preserve">
+        <value>Rtk Fixed</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeDgps" xml:space="preserve">
+        <value>DGPS/SBAS</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypePpp" xml:space="preserve">
+        <value>PPP 3D position</value>
+    </data>
+    <data name="GpsFixType_GpsFixType3dFix" xml:space="preserve">
+        <value>3D position Fix</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeStatic" xml:space="preserve">
+        <value>Static Fix</value>
+    </data>
+    <data name="GpsFixType_GpsFixTypeNoGps" xml:space="preserve">
+        <value>No GPS connected</value>
+    </data>
+
 </root>

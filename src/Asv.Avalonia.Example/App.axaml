@@ -4,7 +4,15 @@
              RequestedThemeVariant="Dark">
     <Application.DataTemplates>
     </Application.DataTemplates>
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Pages/Flight/Widgets/UavWidget/Controls/RouteIndicator/RouteIndicatorStyles.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
     <Application.Styles>
+        <StyleInclude Source="avares://Asv.Avalonia.Example/Pages/Flight/Widgets/UavWidget/Controls/Attitude/AttitudeIndicatorStyles.axaml" />
         <StyleInclude Source="avares://Asv.Avalonia/Theme.axaml"/>
         <StyleInclude Source="avares://Asv.Avalonia.Map/Theme.axaml"/>
     </Application.Styles>

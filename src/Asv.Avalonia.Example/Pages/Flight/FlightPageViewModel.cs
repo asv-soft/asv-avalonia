@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Asv.Avalonia.Map;
 using Asv.Common;
-using Asv.Mavlink;
 using Material.Icons;
 using ObservableCollections;
 using R3;
@@ -46,7 +44,7 @@ public class FlightPageViewModel : PageViewModel<IFlightMode>, IFlightMode
     public FlightPageViewModel(ICommandService cmd)
         : base(PageId, cmd)
     {
-        Title.Value = "Flight";
+        Title.Value = RS.FlightPageViewModel_Title;
         Icon.Value = PageIcon;
         Anchors = [];
         Anchors.SetRoutableParent(this, true).DisposeItWith(Disposable);
