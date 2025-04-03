@@ -28,16 +28,6 @@ public class LandCommand : ContextCommand<UavWidgetViewModel>
 
     public override ICommandInfo Info => StaticInfo;
 
-    public override ValueTask<ICommandArg?> Execute(IRoutable context, ICommandArg newValue, CancellationToken cancel = default)
-    {
-        if (context is UavWidgetViewModel uav)
-        {
-            return InternalExecute(uav, newValue, cancel);
-        }
-
-        return default;
-    }
-
     protected override ValueTask<ICommandArg?> InternalExecute(UavWidgetViewModel context, ICommandArg newValue, CancellationToken cancel)
     {
         var control = context.Device.GetMicroservice<ControlClient>();
