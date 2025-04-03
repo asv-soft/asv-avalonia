@@ -26,16 +26,6 @@ public class UpdateMissionCommand : ContextCommand<MissionProgressViewModel>
 
     public override ICommandInfo Info => StaticInfo;
 
-    public override ValueTask<ICommandArg?> Execute(IRoutable context, ICommandArg newValue, CancellationToken cancel = default)
-    {
-        if (context is MissionProgressViewModel missionProgressViewModel)
-        {
-            return InternalExecute(missionProgressViewModel, newValue, cancel);
-        }
-
-        return default;
-    }
-
     protected override async ValueTask<ICommandArg?> InternalExecute(MissionProgressViewModel context, ICommandArg newValue, CancellationToken cancel)
     {
         await context.InitiateMissionPoints(cancel);

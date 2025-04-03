@@ -42,7 +42,6 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         IClientDevice device,
         INavigationService navigation,
         IUnitService unitService,
-        IFlightMode flightContext,
         ILoggerFactory loggerFactory
     )
         : base(WidgetId)
@@ -278,7 +277,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        return [MissionProgress.Value];
+        return [];
     }
 
     protected override void AfterLoadExtensions()

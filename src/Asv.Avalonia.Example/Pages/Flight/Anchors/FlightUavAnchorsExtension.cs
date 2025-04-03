@@ -20,11 +20,8 @@ public class FlightUavAnchorsExtension(
     ILoggerFactory loggerFactory
 ) : IExtensionFor<IFlightMode>
 {
-    private IFlightMode _context;
-
     public void Extend(IFlightMode context, CompositeDisposable contextDispose)
     {
-        _context = context;
         conn.Explorer.Devices.PopulateTo(context.Anchors, TryCreateAnchor, RemoveAnchor)
             .DisposeItWith(contextDispose);
         conn.Explorer.Devices.PopulateTo(context.Widgets, TryCreateWidget, RemoveWidget)
@@ -39,7 +36,6 @@ public class FlightUavAnchorsExtension(
                 device.Value,
                 navigationService,
                 unitService,
-                _context,
                 loggerFactory
             )
             : null;
