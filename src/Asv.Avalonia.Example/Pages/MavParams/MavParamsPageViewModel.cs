@@ -198,7 +198,7 @@ public class MavParamsPageViewModel
 
         AllParams = _view.ToNotifyCollectionChanged();
 
-        UpdateParams = new ReactiveCommand(async (_, _) => await UpdateParamsImpl(paramsIfc));
+        UpdateParams = new ReactiveCommand(_ => UpdateParamsImpl(paramsIfc));
 
         StopUpdateParams = new ReactiveCommand(_ =>
         {
@@ -221,47 +221,46 @@ public class MavParamsPageViewModel
         });
     }
 
-    private async ValueTask UpdateParamsImpl(IParamsClientEx paramsIfc)
+    private void UpdateParamsImpl(IParamsClientEx paramsIfc)
     {
         SelectedItem.Value = null;
         IsRefreshing.Value = true;
         _cancellationTokenSource = new CancellationTokenSource();
         var viewed = _viewedParamsList.Select(item => item.GetConfig()).ToArray();
         _viewedParamsList.Clear();
-        try
-        {
-            await paramsIfc.ReadAll(
+
+        paramsIfc
+            .ReadAll(
                 new Progress<double>(i => Progress.Value = i),
                 cancel: _cancellationTokenSource.Token
-            );
-        }
-        catch (TaskCanceledException)
-        {
-            _log.LogInformation("User canceled updating params");
-        }
-        catch (Exception ex)
-        {
-            _log.LogError(ex, "Error to read all params items");
-        }
-        finally
-        {
-            foreach (var item in viewed)
+            )
+            .SafeFireAndForget(ex =>
             {
-                var existItem = _view.FirstOrDefault(currentItem =>
-                    currentItem.Name == item.Name && currentItem.IsPinned.Value
-                );
-                if (existItem is null)
+                if (ex is TaskCanceledException)
                 {
-                    continue;
+                    _log.LogInformation("User canceled updating params");
+                    return;
                 }
 
-                existItem.SetConfig(item);
-                _viewedParamsList.Add(existItem);
+                _log.LogError(ex, "Error to read all params items");
+            });
+
+        foreach (var item in viewed)
+        {
+            var existItem = _view.FirstOrDefault(currentItem =>
+                currentItem.Name == item.Name && currentItem.IsPinned.Value
+            );
+            if (existItem is null)
+            {
+                continue;
             }
 
-            IsRefreshing.Value = false;
-            _cancellationTokenSource.Dispose();
+            existItem.SetConfig(item);
+            _viewedParamsList.Add(existItem);
         }
+
+        IsRefreshing.Value = false;
+        _cancellationTokenSource.Dispose();
     }
 
     protected override void AfterDeviceInitialized(IClientDevice device)
