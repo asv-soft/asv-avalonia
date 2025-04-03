@@ -170,4 +170,28 @@ public static class ObservableMixin
     }
 
     #endregion
+
+    #region RemoveAll
+
+    public static void RemoveAll<T>(this ObservableList<T> src)
+    {
+        src.RemoveRange(0, src.Count);
+    }
+
+    public static void RemoveAll<TKey, TValue>(this ObservableList<KeyValuePair<TKey, TValue>> src)
+    {
+        src.RemoveRange(0, src.Count);
+    }
+
+    public static void PopAll<T>(this ObservableStack<T> src)
+    {
+        src.PopRange(src.Count);
+    }
+
+    public static void DequeueAll<T>(this ObservableQueue<T> src)
+    {
+        src.DequeueRange(src.Count);
+    }
+
+    #endregion
 }

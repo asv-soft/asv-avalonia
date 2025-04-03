@@ -40,6 +40,7 @@ public class MavParamsPageViewModel
     private CancellationTokenSource _cancellationTokenSource;
     private ISynchronizedView<KeyValuePair<string, ParamItem>, ParamItemViewModel> _view;
     private readonly ObservableList<ParamItemViewModel> _viewedParamsList; // TODO: Separate viewModels for this collection and all params
+    private readonly ObservableList<KeyValuePair<string, ParamItem>> _params;
     private readonly Subject<bool> _canClearSearchText = new();
     private readonly ParamsConfig _config;
 
@@ -89,6 +90,7 @@ public class MavParamsPageViewModel
         _cfg = cfg;
         _config = _cfg.Get<ParamsConfig>();
         _nav = nav;
+        _params = [];
         _viewedParamsList = [];
         ViewedParams = _viewedParamsList.ToNotifyCollectionChangedSlim();
 
@@ -131,6 +133,46 @@ public class MavParamsPageViewModel
     {
         Total = paramsIfc.RemoteCount.ToReadOnlyBindableReactiveProperty();
 
+        // if (paramsIfc.Items.Count > 0)
+        // {
+        //     _params.RemoveAll();
+        //     _params.AddRange(paramsIfc.Items);
+        // }
+        //
+        // _sub3 = paramsIfc.Items.OnAddOrRemove<
+        //     KeyValuePair<string, ParamItem>,
+        //     KeyValuePair<string, ParamItem>
+        // >(
+        //     addItem =>
+        //     {
+        //         Task.Run(() =>
+        //         {
+        //             _params.Add(addItem);
+        //
+        //             // _params.Sort(ParamsKvpComparer.Instance);
+        //         }).SafeFireAndForget();
+        //     },
+        //     removeItem =>
+        //     {
+        //         Task.Run(() =>
+        //         {
+        //             _params.Remove(removeItem);
+        //
+        //             // _params.Sort(ParamsKvpComparer.Instance);
+        //         }).SafeFireAndForget();
+        //     }
+        // );
+        // _sub4 = paramsIfc
+        //     .Items.ObserveReplace()
+        //     .Subscribe(eve =>
+        //     {
+        //         _params.Remove(eve.OldValue);
+        //         _params.Add(eve.NewValue);
+        //
+        //         // _params.Sort(ParamsKvpComparer.Instance);
+        //     });
+        // _sub5 = paramsIfc.Items.ObserveClear().Subscribe(_ => _params.Clear());
+        // _sub6 = paramsIfc.Items.ObserveReverse().Subscribe(_ => _params.Reverse());
         _view = paramsIfc.Items.CreateView(kvp => new ParamItemViewModel(
             kvp.Key,
             kvp.Value,
@@ -139,6 +181,8 @@ public class MavParamsPageViewModel
         ));
         _sub7 = _view.DisposeMany();
         _sub8 = _view.SetRoutableParentForView(this);
+
+        Progress.Subscribe(_ => Console.WriteLine(@$"Progresssssss %: {_}"));
 
         _sub9 = SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
@@ -250,6 +294,7 @@ public class MavParamsPageViewModel
             var existItem = _view.FirstOrDefault(currentItem =>
                 currentItem.Name == item.Name && currentItem.IsPinned.Value
             );
+
             if (existItem is null)
             {
                 continue;
@@ -375,6 +420,10 @@ public class MavParamsPageViewModel
 
     private readonly IDisposable _sub1;
     private readonly IDisposable _sub2;
+    private IDisposable _sub3;
+    private IDisposable _sub4;
+    private IDisposable _sub5;
+    private IDisposable _sub6;
     private IDisposable _sub7;
     private IDisposable _sub8;
     private IDisposable _sub9;
@@ -390,6 +439,10 @@ public class MavParamsPageViewModel
 
             _sub1.Dispose();
             _sub2.Dispose();
+            _sub3.Dispose();
+            _sub4.Dispose();
+            _sub5.Dispose();
+            _sub6.Dispose();
             _sub7.Dispose();
             _sub8.Dispose();
             _sub9.Dispose();
