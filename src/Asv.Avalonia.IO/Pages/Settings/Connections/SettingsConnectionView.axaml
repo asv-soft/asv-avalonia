@@ -58,7 +58,14 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <ToggleSwitch Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center" IsChecked="{Binding IsEnabled.Value}"/>
+                        <ToggleSwitch Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center" IsChecked="{Binding IsEnabled.Value}">
+                            <ToggleSwitch.OffContent>
+                                <TextBlock Text="{x:Static io:RS.PortView_Switch_Off}"/>
+                            </ToggleSwitch.OffContent>
+                            <ToggleSwitch.OnContent>
+                                <TextBlock Text="{x:Static io:RS.PortView_Switch_On}"/>
+                            </ToggleSwitch.OnContent>
+                        </ToggleSwitch>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -70,7 +77,6 @@
                     <DockPanel DockPanel.Dock="Top" >
                         <avalonia:MaterialIcon DockPanel.Dock="Left" Margin="4" 
                                                HorizontalAlignment="Left" 
-
                                                Width="30"
                                                Height="30" 
                                                Kind="{Binding Icon}" />
@@ -79,9 +85,7 @@
                         </Button>
                         <TextBlock FontSize="30" VerticalAlignment="Center" 
                                    Margin="0,0,4,0" Text="{Binding Name.Value}" />
-                        
                     </DockPanel>
-                    
                     <ContentControl Margin="0,8,0,0" Content="{Binding}"/>
                 </DockPanel>
                 <StackPanel IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}"

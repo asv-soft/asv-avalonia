@@ -8,7 +8,7 @@ public class SettingsConnectionSerialExtension : IExtensionFor<ISettingsConnecti
 {
     public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
     {
-        var menu = new MenuItem(SerialProtocolPort.Scheme, $"Add {SerialProtocolPort.Info.Name}");
+        var menu = new MenuItem(SerialProtocolPort.Scheme, $"{RS.SettingsConnectionTcpClientExtension_AddSerial_ButtonContent}");
         menu.Icon = SerialPortViewModel.DefaultIcon;
         menu.Command = new BindableAsyncCommand(ProtocolPortCommand.Id, menu);
         var defaultConfig = SerialProtocolPortConfig.CreateDefault();

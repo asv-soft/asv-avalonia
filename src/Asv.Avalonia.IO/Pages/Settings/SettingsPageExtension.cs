@@ -14,7 +14,7 @@ public class SettingsPageExtension() : IExtensionFor<ISettingsPage>
         context.Nodes.Add(
             new TreePage(
                 SettingsConnectionViewModel.SubPageId,
-                "Connection",
+                RS.SettingsPageExtension_SettingsPageTitle_Connection,
                 MaterialIconKind.Connection,
                 SettingsConnectionViewModel.SubPageId,
                 NavigationId.Empty

@@ -31,7 +31,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         TagsView = TagsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         _hasValidationError = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         _hasChanges = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        SaveChangesCommand = new ReactiveCommand(x =>
+        SaveChangesCommand = new ReactiveCommand(_ =>
             Task.Factory.StartNew(SaveChanges, null, TaskCreationOptions.LongRunning)
         ).DisposeItWith(Disposable);
         _hasValidationError
@@ -193,12 +193,12 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
     {
         if (string.IsNullOrWhiteSpace(arg))
         {
-            return new Exception("Port name is required");
+            return new Exception(RS.PortViewModel_ValidateName_Exception_PortNameRequired);
         }
 
         if (arg.Length > 50)
         {
-            return new Exception("Port name is too long. Max length is 50 characters");
+            return new Exception(RS.PortViewModel_ValidateName_Exception_PortNameTooLong);
         }
 
         return null;

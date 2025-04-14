@@ -603,7 +603,7 @@
         <value>N/A</value>
     </data>
     <data name="DialogPageViewModel_Title" xml:space="preserve">
-        <value />
+        <value>Dialogs</value>
     </data>
     <data name="Capacity_UnitItem_Name" xml:space="preserve">
         <value>Capacity</value>
