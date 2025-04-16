@@ -31,7 +31,7 @@ public class UavAnchor : MapAnchor<UavAnchor>
         dev.Name.Subscribe(x => Title = x ?? string.Empty).DisposeItWith(Disposable);
         pos.Current.Subscribe(x => Location = x).DisposeItWith(Disposable);
         pos.Yaw.Subscribe(x => Azimuth = x).DisposeItWith(Disposable);
-        Polygon.Add(new GeoPoint(0, 0, 0));
+        Polygon.Add(pos.Home.CurrentValue ?? GeoPoint.Zero);
         Polygon.Add(pos.Current.CurrentValue);
     }
 }

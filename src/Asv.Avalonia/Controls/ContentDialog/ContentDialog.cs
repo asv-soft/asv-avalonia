@@ -538,29 +538,14 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
             if (Equals(sender, _primaryButton))
             {
-                if (PrimaryButtonCommand?.CanExecute(PrimaryButtonCommandParameter) ?? false)
-                {
-                    PrimaryButtonCommand.Execute(PrimaryButtonCommandParameter);
-                }
-
                 _result = ContentDialogResult.Primary;
             }
             else if (Equals(sender, _secondaryButton))
             {
-                if (SecondaryButtonCommand?.CanExecute(SecondaryButtonCommandParameter) ?? false)
-                {
-                    SecondaryButtonCommand.Execute(SecondaryButtonCommandParameter);
-                }
-
                 _result = ContentDialogResult.Secondary;
             }
             else if (Equals(sender, _closeButton))
             {
-                if (CloseButtonCommand?.CanExecute(CloseButtonCommandParameter) ?? false)
-                {
-                    CloseButtonCommand.Execute(CloseButtonCommandParameter);
-                }
-
                 _result = ContentDialogResult.None;
             }
 

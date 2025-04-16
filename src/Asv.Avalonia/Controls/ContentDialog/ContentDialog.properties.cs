@@ -14,17 +14,14 @@ namespace Asv.Avalonia;
 [TemplatePart(s_tpCloseButton, typeof(Button))]
 public partial class ContentDialog
 {
-    /// <summary>
-    /// Defines the <see cref="CloseButtonCommand"/> property.
-    /// </summary>
-    public static readonly StyledProperty<ICommand?> CloseButtonCommandProperty =
-        AvaloniaProperty.Register<ContentDialog, ICommand?>(nameof(CloseButtonCommand));
+    private const string s_tpPrimaryButton = "PrimaryButton";
+    private const string s_tpSecondaryButton = "SecondaryButton";
+    private const string s_tpCloseButton = "CloseButton";
 
-    /// <summary>
-    /// Defines the <see cref="CloseButtonCommandParameter"/> property.
-    /// </summary>
-    public static readonly StyledProperty<object> CloseButtonCommandParameterProperty =
-        AvaloniaProperty.Register<ContentDialog, object>(nameof(CloseButtonCommandParameter));
+    private const string s_pcPrimary = ":primary";
+    private const string s_pcSecondary = ":secondary";
+    private const string s_pcClose = ":close";
+    private const string s_pcFullSize = ":fullsize";
 
     /// <summary>
     /// Defines the <see cref="CloseButtonText"/> property.
@@ -51,34 +48,10 @@ public partial class ContentDialog
         AvaloniaProperty.Register<ContentDialog, bool>(nameof(IsSecondaryButtonEnabled), true);
 
     /// <summary>
-    /// Defines the <see cref="PrimaryButtonCommand"/> property.
-    /// </summary>
-    public static readonly StyledProperty<ICommand?> PrimaryButtonCommandProperty =
-        AvaloniaProperty.Register<ContentDialog, ICommand?>(nameof(PrimaryButtonCommand));
-
-    /// <summary>
-    /// Defines the <see cref="PrimaryButtonCommandParameter"/> property.
-    /// </summary>
-    public static readonly StyledProperty<object> PrimaryButtonCommandParameterProperty =
-        AvaloniaProperty.Register<ContentDialog, object>(nameof(PrimaryButtonCommandParameter));
-
-    /// <summary>
     /// Defines the <see cref="PrimaryButtonText"/> property.
     /// </summary>
     public static readonly StyledProperty<string> PrimaryButtonTextProperty =
         AvaloniaProperty.Register<ContentDialog, string>(nameof(PrimaryButtonText));
-
-    /// <summary>
-    /// Defines the <see cref="SecondaryButtonCommand"/> property.
-    /// </summary>
-    public static readonly StyledProperty<ICommand?> SecondaryButtonCommandProperty =
-        AvaloniaProperty.Register<ContentDialog, ICommand?>(nameof(SecondaryButtonCommand));
-
-    /// <summary>
-    /// Defines the <see cref="SecondaryButtonCommandParameter"/> property.
-    /// </summary>
-    public static readonly StyledProperty<object> SecondaryButtonCommandParameterProperty =
-        AvaloniaProperty.Register<ContentDialog, object>(nameof(SecondaryButtonCommandParameter));
 
     /// <summary>
     /// Defines the <see cref="SecondaryButtonText"/> property.
@@ -107,24 +80,6 @@ public partial class ContentDialog
         ContentDialog,
         bool
     >(nameof(FullSizeDesired));
-
-    /// <summary>
-    /// Gets or sets the command to invoke when the close button is tapped.
-    /// </summary>
-    public ICommand? CloseButtonCommand
-    {
-        get => GetValue(CloseButtonCommandProperty);
-        set => SetValue(CloseButtonCommandProperty, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the parameter to pass to the command for the close button.
-    /// </summary>
-    public object CloseButtonCommandParameter
-    {
-        get => GetValue(CloseButtonCommandParameterProperty);
-        set => SetValue(CloseButtonCommandParameterProperty, value);
-    }
 
     /// <summary>
     /// Gets or sets the text to display on the close button.
@@ -163,48 +118,12 @@ public partial class ContentDialog
     }
 
     /// <summary>
-    /// Gets or sets the command to invoke when the primary button is tapped.
-    /// </summary>
-    public ICommand? PrimaryButtonCommand
-    {
-        get => GetValue(PrimaryButtonCommandProperty);
-        set => SetValue(PrimaryButtonCommandProperty, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the parameter to pass to the command for the primary button.
-    /// </summary>
-    public object PrimaryButtonCommandParameter
-    {
-        get => GetValue(PrimaryButtonCommandParameterProperty);
-        set => SetValue(PrimaryButtonCommandParameterProperty, value);
-    }
-
-    /// <summary>
     /// Gets or sets the text to display on the primary button.
     /// </summary>
     public string PrimaryButtonText
     {
         get => GetValue(PrimaryButtonTextProperty);
         set => SetValue(PrimaryButtonTextProperty, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the command to invoke when the secondary button is tapped.
-    /// </summary>
-    public ICommand? SecondaryButtonCommand
-    {
-        get => GetValue(SecondaryButtonCommandProperty);
-        set => SetValue(SecondaryButtonCommandProperty, value);
-    }
-
-    /// <summary>
-    /// Gets or sets the parameter to pass to the command for the secondary button.
-    /// </summary>
-    public object SecondaryButtonCommandParameter
-    {
-        get => GetValue(SecondaryButtonCommandParameterProperty);
-        set => SetValue(SecondaryButtonCommandParameterProperty, value);
     }
 
     /// <summary>
@@ -288,13 +207,4 @@ public partial class ContentDialog
         ContentDialog,
         ContentDialogButtonClickEventArgs
     >? CloseButtonClick;
-
-    private const string s_tpPrimaryButton = "PrimaryButton";
-    private const string s_tpSecondaryButton = "SecondaryButton";
-    private const string s_tpCloseButton = "CloseButton";
-
-    private const string s_pcPrimary = ":primary";
-    private const string s_pcSecondary = ":secondary";
-    private const string s_pcClose = ":close";
-    private const string s_pcFullSize = ":fullsize";
 }

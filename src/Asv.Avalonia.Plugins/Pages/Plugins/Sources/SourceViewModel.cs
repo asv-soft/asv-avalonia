@@ -55,8 +55,6 @@ public class SourceViewModel : DialogViewModelBase
         Username = new BindableReactiveProperty<string?>(_viewModel?.Model.Username);
         Password = new BindableReactiveProperty<string>();
 
-        ApplyCommand = new ReactiveCommand((_, _) => Update(), configureAwait: false);
-
         _sub1 = Name.EnableValidation(
             value =>
             {
@@ -104,7 +102,6 @@ public class SourceViewModel : DialogViewModelBase
         {
             dialog.IsPrimaryButtonEnabled = b;
         });
-        dialog.PrimaryButtonCommand = ApplyCommand;
     }
 
     private ValueTask Update()

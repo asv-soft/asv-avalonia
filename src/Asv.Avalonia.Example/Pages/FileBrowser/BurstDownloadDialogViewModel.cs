@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Asv.Common;
 using Asv.Mavlink;
 using R3;
 
@@ -15,9 +16,7 @@ public class BurstDownloadDialogViewModel(string id) : DialogViewModelBase(id)
 
     public void ApplyDialog(ContentDialog dialog)
     {
-        dialog.PrimaryButtonCommand = IsValid.ToReactiveCommand(_ =>
-            DialogResult = PacketSize.Value ?? MavlinkFtpHelper.MaxDataSize
-        );
+        IsValid.Subscribe(x => dialog.IsPrimaryButtonEnabled = x).DisposeItWith(Disposable);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
