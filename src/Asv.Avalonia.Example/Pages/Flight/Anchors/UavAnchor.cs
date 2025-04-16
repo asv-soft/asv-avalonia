@@ -1,4 +1,5 @@
-﻿using Asv.Avalonia.Map;
+﻿using System;
+using Asv.Avalonia.Map;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
@@ -9,6 +10,7 @@ namespace Asv.Avalonia.Example;
 
 public class UavAnchor : MapAnchor<UavAnchor>
 {
+    private const uint CurrentUavPositionChangeThrottleMs = 200;
     public DeviceId DeviceId { get; }
 
     public UavAnchor()
@@ -31,7 +33,29 @@ public class UavAnchor : MapAnchor<UavAnchor>
         dev.Name.Subscribe(x => Title = x ?? string.Empty).DisposeItWith(Disposable);
         pos.Current.Subscribe(x => Location = x).DisposeItWith(Disposable);
         pos.Yaw.Subscribe(x => Azimuth = x).DisposeItWith(Disposable);
-        Polygon.Add(new GeoPoint(0, 0, 0));
-        Polygon.Add(pos.Current.CurrentValue);
+
+        var currentUavLocation = pos.Current.CurrentValue;
+        var currentHomeLocation = pos.Home.CurrentValue ?? GeoPoint.Zero;
+        pos.GetHomePosition().SafeFireAndForget();
+        pos.Home.Subscribe(x =>
+            {
+                Polygon.Remove(currentHomeLocation);
+                if (x is null)
+                {
+                    return;
+                }
+
+                Polygon.Add(x.Value);
+                currentHomeLocation = x.Value;
+            })
+            .DisposeItWith(Disposable);
+        pos.Current.ThrottleLast(TimeSpan.FromMilliseconds(CurrentUavPositionChangeThrottleMs))
+            .Subscribe(x =>
+            {
+                Polygon.Remove(currentUavLocation);
+                Polygon.Add(x);
+                currentUavLocation = x;
+            })
+            .DisposeItWith(Disposable);
     }
 }
