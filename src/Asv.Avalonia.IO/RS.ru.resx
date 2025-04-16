@@ -14,7 +14,7 @@
     <data name="SettingsConnectionTcpClientExtension_AddTcp_ButtonContent" xml:space="preserve">
         <value>Добавить TCP порт</value>
     </data>
-    <data name="TcpClientPortView_CommonSettings" xml:space="preserve">
+    <data name="SerialClientPortView_CommonSettings" xml:space="preserve">
         <value>Общие Настройки</value>
     </data>
     <data name="PortViewModel_ValidateName_Exception_PortNameTooLong" xml:space="preserve">
@@ -47,7 +47,7 @@
     <data name="SerialPortView_Text_Title" xml:space="preserve">
         <value>Название</value>
     </data>
-    <data name="SerialPortView_Text_Baud_Rate" xml:space="preserve">
+    <data name="SerialPortView_Text_BaudRate" xml:space="preserve">
         <value>Частота бод</value>
     </data>
     <data name="PortView_Switch_Off" xml:space="preserve">
@@ -56,7 +56,7 @@
     <data name="PortView_Switch_On" xml:space="preserve">
         <value>Вкл</value>
     </data>
-    <data name="SettingsConnectionTcpClientExtension_AddSerial_ButtonContent" xml:space="preserve">
+    <data name="SettingsConnectionClientSerialExtension_MenuItem_Header" xml:space="preserve">
         <value>Добавить Последовательный порт</value>
     </data>
 </root>

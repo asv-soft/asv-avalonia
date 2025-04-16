@@ -114,11 +114,20 @@ namespace Asv.Avalonia.IO {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Common Settings.
+        /// </summary>
+        public static string SerialClientPortView_CommonSettings {
+            get {
+                return ResourceManager.GetString("SerialClientPortView_CommonSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Baud rate.
         /// </summary>
-        public static string SerialPortView_Text_Baud_Rate {
+        public static string SerialPortView_Text_BaudRate {
             get {
-                return ResourceManager.GetString("SerialPortView_Text_Baud_Rate", resourceCulture);
+                return ResourceManager.GetString("SerialPortView_Text_BaudRate", resourceCulture);
             }
         }
         
@@ -143,9 +152,9 @@ namespace Asv.Avalonia.IO {
         /// <summary>
         ///   Looks up a localized string similar to Add Serial port.
         /// </summary>
-        public static string SettingsConnectionTcpClientExtension_AddSerial_ButtonContent {
+        public static string SettingsConnectionClientSerialExtension_MenuItem_Header {
             get {
-                return ResourceManager.GetString("SettingsConnectionTcpClientExtension_AddSerial_ButtonContent", resourceCulture);
+                return ResourceManager.GetString("SettingsConnectionClientSerialExtension_MenuItem_Header", resourceCulture);
             }
         }
         
@@ -164,15 +173,6 @@ namespace Asv.Avalonia.IO {
         public static string SettingsPageExtension_SettingsPageTitle_Connection {
             get {
                 return ResourceManager.GetString("SettingsPageExtension_SettingsPageTitle_Connection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Common Settings.
-        /// </summary>
-        public static string TcpClientPortView_CommonSettings {
-            get {
-                return ResourceManager.GetString("TcpClientPortView_CommonSettings", resourceCulture);
             }
         }
         

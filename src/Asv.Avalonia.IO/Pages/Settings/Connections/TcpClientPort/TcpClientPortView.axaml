@@ -12,7 +12,7 @@
     </Design.DataContext>
     <DockPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Margin="8">
         <DockPanel DockPanel.Dock="Top">
-            <TextBlock Classes="h2" Text="{x:Static io:RS.TcpClientPortView_CommonSettings}"/>
+            <TextBlock Classes="h2" Text="{x:Static io:RS.SerialClientPortView_CommonSettings}"/>
             <Separator/>
         </DockPanel>
         <Grid IsVisible="{Binding HasChanges.Value}" DockPanel.Dock="Bottom" HorizontalAlignment="Left" ColumnDefinitions="*,8,*">

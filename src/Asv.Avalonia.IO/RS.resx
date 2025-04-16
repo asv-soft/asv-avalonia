@@ -21,7 +21,7 @@
     <data name="SettingsConnectionTcpClientExtension_AddTcp_ButtonContent" xml:space="preserve">
         <value>Add TCP port</value>
     </data>
-    <data name="TcpClientPortView_CommonSettings" xml:space="preserve">
+    <data name="SerialClientPortView_CommonSettings" xml:space="preserve">
         <value>Common Settings</value>
     </data>
     <data name="PortViewModel_ValidateName_Exception_PortNameRequired" xml:space="preserve">
@@ -54,7 +54,7 @@
     <data name="SerialPortView_Text_Path" xml:space="preserve">
         <value>Port</value>
     </data>
-    <data name="SerialPortView_Text_Baud_Rate" xml:space="preserve">
+    <data name="SerialPortView_Text_BaudRate" xml:space="preserve">
         <value>Baud rate</value>
     </data>
     <data name="PortView_Switch_On" xml:space="preserve">
@@ -63,7 +63,7 @@
     <data name="PortView_Switch_Off" xml:space="preserve">
         <value>Off</value>
     </data>
-    <data name="SettingsConnectionTcpClientExtension_AddSerial_ButtonContent" xml:space="preserve">
+    <data name="SettingsConnectionClientSerialExtension_MenuItem_Header" xml:space="preserve">
         <value>Add Serial port</value>
     </data>
 </root>

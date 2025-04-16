@@ -12,7 +12,7 @@
     </Design.DataContext>
     <DockPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Margin="8">
         <DockPanel DockPanel.Dock="Top">
-            <TextBlock Classes="h2" Text="{x:Static io:RS.TcpClientPortView_CommonSettings}"/>
+            <TextBlock Classes="h2" Text="{x:Static io:RS.SerialClientPortView_CommonSettings}"/>
             <Separator/>
         </DockPanel>
         <Grid IsVisible="{Binding HasChanges.Value}" DockPanel.Dock="Bottom" HorizontalAlignment="Left" ColumnDefinitions="*,8,*">
@@ -57,7 +57,7 @@
             <AutoCompleteBox Grid.Row="2" Grid.Column="4" ItemsSource="{Binding PortNames}" Text="{Binding PortName.Value}"/>
             
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="4" Kind="Speedometer"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="4" Text="{x:Static io:RS.SerialPortView_Text_Baud_Rate}"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="4" Text="{x:Static io:RS.SerialPortView_Text_BaudRate}"/>
             <AutoCompleteBox Grid.Row="4" Grid.Column="4" ItemsSource="{Binding BaudRates}" Text="{Binding BaudRate.Value}"/>
             
             
