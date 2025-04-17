@@ -16,11 +16,14 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     public const string PageId = "dialog";
     public const MaterialIconKind PageIcon = MaterialIconKind.Dialogue;
 
-    private readonly IDialogService _dialogService;
+    private readonly YesOrNoDialogPrefab _yesNoDialog;
+    private readonly SaveCancelDialogPrefab _saveCancelDialog;
+    private readonly InputDialogPrefab _inputDialog;
+
     private readonly ILogger<DialogBoardViewModel> _logger;
 
     public DialogBoardViewModel()
-        : this(DesignTime.CommandService, null!, NullLoggerFactory.Instance)
+        : this(DesignTime.CommandService, NullLoggerFactory.Instance, null!)
     {
         DesignTime.ThrowIfNotDesignMode();
         Title.OnNext(RS.DialogPageViewModel_Title);
@@ -29,15 +32,17 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     [ImportingConstructor]
     public DialogBoardViewModel(
         ICommandService cmd,
-        IDialogService service,
-        ILoggerFactory logFactory
+        ILoggerFactory logFactory,
+        IDialogService dialogService
     )
         : base(PageId, cmd)
     {
         Title.OnNext(RS.DialogPageViewModel_Title);
-        _dialogService = service;
         _logger = logFactory.CreateLogger<DialogBoardViewModel>();
 
+        _yesNoDialog = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
+        _saveCancelDialog = dialogService.GetDialogPrefab<SaveCancelDialogPrefab>();
+        _inputDialog = dialogService.GetDialogPrefab<InputDialogPrefab>();
         OpenFileMessage = new ReactiveCommand(OpenFileAsync);
         SaveFileMessage = new ReactiveCommand(SaveFileAsync);
         SelectFileMessage = new ReactiveCommand(SelectFileAsync);
@@ -47,65 +52,64 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
         ShowUnitInputMessage = new ReactiveCommand(ShowUnitInputAsync);
     }
 
-    #region Message
-
     public ReactiveCommand OpenFileMessage { get; }
-
-    public ValueTask OpenFileAsync(Unit unit, CancellationToken cancellationToken)
-    {
-        return ValueTask.CompletedTask;
-    }
-
     public ReactiveCommand SaveFileMessage { get; }
-
-    public ValueTask SaveFileAsync(Unit unit, CancellationToken cancellationToken)
-    {
-        return ValueTask.CompletedTask;
-    }
-
     public ReactiveCommand SelectFileMessage { get; }
-
-    public ValueTask SelectFileAsync(Unit unit, CancellationToken cancellationToken)
-    {
-        return ValueTask.CompletedTask;
-    }
-
     public ReactiveCommand ObserveFolderMessage { get; }
+    public ReactiveCommand YesNoMessage { get; }
+    public ReactiveCommand SaveCancelMessage { get; }
+    public ReactiveCommand ShowUnitInputMessage { get; }
 
-    public ValueTask ObserveFolderAsync(Unit unit, CancellationToken cancellationToken)
+    private ValueTask OpenFileAsync(Unit unit, CancellationToken cancellationToken)
     {
         return ValueTask.CompletedTask;
     }
 
-    public ReactiveCommand YesNoMessage { get; }
-
-    public async ValueTask YesNoMessageAsync(Unit unit, CancellationToken cancellationToken)
+    private ValueTask SaveFileAsync(Unit unit, CancellationToken cancellationToken)
     {
-        var res = await _dialogService.ShowYesNoDialog(
-            "Предупреждение",
-            "Вы действительно хотите выйти?"
-        );
+        return ValueTask.CompletedTask;
+    }
+
+    private ValueTask SelectFileAsync(Unit unit, CancellationToken cancellationToken)
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    private ValueTask ObserveFolderAsync(Unit unit, CancellationToken cancellationToken)
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    private async ValueTask YesNoMessageAsync(Unit unit, CancellationToken cancellationToken)
+    {
+        var payload = new YesOrNoDialogPayload
+        {
+            Title = "Предупреждение",
+            Message = "Вы действительно хотите выйти?",
+        };
+        var res = await _yesNoDialog.ShowDialogAsync(payload);
 
         _logger.LogInformation($"YesNo result = {res}");
     }
 
-    public ReactiveCommand SaveCancelMessage { get; }
-
-    public async ValueTask SaveCancelAsync(Unit unit, CancellationToken cancellationToken)
+    private async ValueTask SaveCancelAsync(Unit unit, CancellationToken cancellationToken)
     {
-        var res = await _dialogService.ShowSaveCancelDialog("Сохранение", "Сохранить?");
+        var payload = new SaveCancelDialogPayload { Title = "Сохранение", Message = "Сохранить?" };
+
+        var res = await _saveCancelDialog.ShowDialogAsync(payload);
         _logger.LogInformation($"SaveCancel result = {res}");
     }
 
-    public ReactiveCommand ShowUnitInputMessage { get; }
-
-    public async ValueTask ShowUnitInputAsync(Unit unit, CancellationToken cancellationToken)
+    private async ValueTask ShowUnitInputAsync(Unit unit, CancellationToken cancellationToken)
     {
-        var res = await _dialogService.ShowInputDialog("Поиск", "Введите значение файла");
+        var payload = new InputDialogPayload
+        {
+            Title = "Поиск",
+            Message = "Введите значение файла",
+        };
+        var res = await _inputDialog.ShowDialogAsync(payload);
         _logger.LogInformation($"UnitInput result = {res}");
     }
-
-    #endregion
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {

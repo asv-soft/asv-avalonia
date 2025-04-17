@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 public class LanguageProperty : RoutableViewModel
 {
     private readonly ILocalizationService _svc;
-    private readonly IDialogService _dialogService;
+    private readonly YesOrNoDialogPrefab _dialog;
     private bool _internalChange;
     public const string ViewModelId = "language.current";
 
@@ -20,11 +20,11 @@ public class LanguageProperty : RoutableViewModel
     }
 
     [ImportingConstructor]
-    public LanguageProperty(ILocalizationService svc, IDialogService dialogService)
+    public LanguageProperty(ILocalizationService svc, IDialogService dialog)
         : base(ViewModelId)
     {
         _svc = svc;
-        _dialogService = dialogService;
+        _dialog = dialog.GetDialogPrefab<YesOrNoDialogPrefab>();
         SelectedItem = new BindableReactiveProperty<ILanguageInfo>(
             svc.CurrentLanguage.CurrentValue
         );
@@ -46,17 +46,17 @@ public class LanguageProperty : RoutableViewModel
         await this.ExecuteCommand(ChangeLanguageCommand.Id, newValue);
         _internalChange = false;
 
-        if (_dialogService.IsImplementedShowYesNoDialogDialog)
+        var dialogPayload = new YesOrNoDialogPayload
         {
-            var isReloadReady = await _dialogService.ShowYesNoDialog(
-                RS.LanguageProperty_RestartDialog_Title,
-                RS.LanguageProperty_RestartDialog_Message
-            );
+            Title = RS.LanguageProperty_RestartDialog_Title,
+            Message = RS.LanguageProperty_RestartDialog_Message,
+        };
 
-            if (isReloadReady)
-            {
-                await this.ExecuteCommand(RestartApplicationCommand.Id);
-            }
+        var isReloadReady = await _dialog.ShowDialogAsync(dialogPayload);
+
+        if (isReloadReady)
+        {
+            await this.ExecuteCommand(RestartApplicationCommand.Id);
         }
     }
 
