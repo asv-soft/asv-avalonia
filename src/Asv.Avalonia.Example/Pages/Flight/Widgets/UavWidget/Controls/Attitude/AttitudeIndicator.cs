@@ -328,7 +328,17 @@ public partial class AttitudeIndicator : TemplatedControl
             return;
         }
 
-        var altitude = indicator.Altitude;
+        double altitude;
+        if (indicator.Altitude is null)
+        {
+            altitude = double.NaN;
+        }
+        else
+        {
+            var isParsed = double.TryParse(indicator.Altitude, out altitude);
+            altitude = !isParsed ? double.NaN : altitude;
+        }
+
         foreach (var item in indicator.AltitudeItems)
         {
             item.UpdateValue(altitude);

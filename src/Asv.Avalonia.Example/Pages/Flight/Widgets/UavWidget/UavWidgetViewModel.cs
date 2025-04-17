@@ -29,6 +29,8 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     private static readonly Color RedColor = Color.Parse("#cc5058");
     private static readonly Color YellowColor = Color.Parse("#dfc34a");
 
+    private readonly ReactiveProperty<double> _altitudeAgl;
+
     public UavWidgetViewModel()
         : base(SystemModule.Name)
     {
@@ -45,7 +47,8 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         RtkMode.Value = "RTK Fixed";
         Velocity.Value = "12";
         AltitudeMsl.Value = "1200m";
-        AltitudeAgl.Value = "200m";
+
+        // AltitudeAgl.ViewValue.Value = "200m";
         CurrentFlightMode.Value = "Auto";
         LinkQuality.Value = "100%";
         LinkState.Value = "Connected";
@@ -133,13 +136,25 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         TakeOff = new ReactiveCommand(
             async (_, _) =>
             {
-                using var dialog = new SetAltitudeDialogViewModel(navigation, unitService);
-                var result = await dialog.ApplyDialog();
+                using var vm = new SetAltitudeDialogViewModel(AltitudeUnit.Value);
+                var dialog = new ContentDialog(vm, navigation)
+                {
+                    PrimaryButtonText =
+                        RS.SetAltitudeDialogViewModel_ApplyDialog_PrimaryButton_TakeOff,
+                    SecondaryButtonText =
+                        RS.SetAltitudeDialogViewModel_ApplyDialog_SecondaryButton_Cancel,
+                    IsSecondaryButtonEnabled = true,
+                };
+
+                var result = await dialog.ShowAsync();
+
                 if (result == ContentDialogResult.Primary)
                 {
                     await this.ExecuteCommand(
                         TakeOffCommand.Id,
-                        new DoubleCommandArg(dialog.AltitudeResult.Value)
+                        new DoubleCommandArg(
+                            AltitudeUnit.Value.Current.Value.ParseToSi(vm.Altitude.Value)
+                        )
                     );
                 }
             }
@@ -163,15 +178,17 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         CurrentFlightMode = modeClient
             .CurrentMode.Select(mode => mode.Name)
             .ToBindableReactiveProperty<string>();
-        AltitudeAgl = positionClientEx
-            .Base.GlobalPosition.Select(payload =>
-                payload?.RelativeAlt is not null
-                    ? AltitudeUnit.Value.Current.Value.Print(
-                        Math.Truncate(payload.RelativeAlt / 1000d)
-                    )
-                    : RS.Not_Available
+        _altitudeAgl = new ReactiveProperty<double>();
+        positionClientEx
+            .Base.GlobalPosition.Subscribe(pld =>
+                _altitudeAgl.Value = Math.Truncate((pld?.RelativeAlt ?? double.NaN) / 1000d)
             )
-            .ToBindableReactiveProperty<string>();
+            .DisposeItWith(Disposable);
+        AltitudeAgl = new HistoricalUnitProperty(
+            $"{WidgetId}.{nameof(AltitudeAgl)}",
+            _altitudeAgl,
+            AltitudeUnit.Value
+        );
         AltitudeMsl = positionClientEx
             .Base.GlobalPosition.Select(payload =>
                 payload?.Alt is not null
@@ -446,7 +463,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     public BindableReactiveProperty<double> Roll { get; } = new();
     public BindableReactiveProperty<double> Pitch { get; } = new();
     public BindableReactiveProperty<string> Velocity { get; } = new();
-    public BindableReactiveProperty<string> AltitudeAgl { get; } = new();
+    public HistoricalUnitProperty AltitudeAgl { get; }
     public BindableReactiveProperty<string> AltitudeMsl { get; } = new();
     public BindableReactiveProperty<double> Heading { get; } = new();
     public BindableReactiveProperty<int> HomeAzimuth { get; } = new();
@@ -474,6 +491,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     {
         if (disposing)
         {
+            _altitudeAgl.Dispose();
             Roll.Dispose();
             Pitch.Dispose();
             IsArmed.Dispose();

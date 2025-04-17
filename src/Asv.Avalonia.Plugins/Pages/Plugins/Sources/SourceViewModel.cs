@@ -92,9 +92,8 @@ public class SourceViewModel : DialogViewModelBase
     public BindableReactiveProperty<string> SourceUri { get; set; }
     public BindableReactiveProperty<string?> Username { get; set; }
     public BindableReactiveProperty<string> Password { get; set; }
-    private ReactiveCommand ApplyCommand { get; }
 
-    public void ApplyDialog(ContentDialog dialog)
+    public override void ApplyDialog(ContentDialog dialog)
     {
         ArgumentNullException.ThrowIfNull(dialog);
 
@@ -140,7 +139,6 @@ public class SourceViewModel : DialogViewModelBase
             SourceUri.Dispose();
             Username.Dispose();
             Password.Dispose();
-            ApplyCommand.Dispose();
         }
 
         base.Dispose(disposing);

@@ -32,9 +32,10 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
     private readonly INavigationService _navigation;
 
-    public ContentDialog(INavigationService navigationService)
+    public ContentDialog(DialogViewModelBase content, INavigationService navigationService)
     {
         _navigation = navigationService;
+        Content = content;
         PseudoClasses.Add(PseudoClassesHelper.Hidden);
     }
 
@@ -184,6 +185,11 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
     private async Task<ContentDialogResult> ShowAsyncCoreForTopLevel(TopLevel? topLevel)
     {
+        if (Content is not DialogViewModelBase)
+        {
+            throw new Exception($"Content type is not {nameof(DialogViewModelBase)}");
+        }
+
         _tcs = new TaskCompletionSource<ContentDialogResult>();
 
         OnOpening();

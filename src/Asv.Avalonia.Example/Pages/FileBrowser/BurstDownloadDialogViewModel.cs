@@ -9,12 +9,12 @@ namespace Asv.Avalonia.Example;
 public class BurstDownloadDialogViewModel(string id) : DialogViewModelBase(id)
 {
     [Range(1, MavlinkFtpHelper.MaxDataSize)]
-    public BindableReactiveProperty<byte?> PacketSize { get; set; } =
+    public BindableReactiveProperty<byte?> PacketSize { get; } =
         new BindableReactiveProperty<byte?>(MavlinkFtpHelper.MaxDataSize).EnableValidation();
 
     public byte DialogResult { get; set; }
 
-    public void ApplyDialog(ContentDialog dialog)
+    public override void ApplyDialog(ContentDialog dialog)
     {
         IsValid.Subscribe(x => dialog.IsPrimaryButtonEnabled = x).DisposeItWith(Disposable);
     }

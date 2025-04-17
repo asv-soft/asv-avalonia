@@ -14,18 +14,16 @@ public class PluginInstaller(
     public async Task ShowInstallDialog(IProgress<double> progress, CancellationToken cancel)
     {
         var log = loggerFactory.CreateLogger<PluginInstaller>();
-        var dialog = new ContentDialog(navigationService)
+        using var viewModel = new PluginInstallerViewModel(cfg, loggerFactory, manager);
+        var dialog = new ContentDialog(viewModel, navigationService)
         {
             Title = RS.PluginInstallerViewModel_InstallDialog_Title,
             CloseButtonText = RS.PluginInstallerViewModel_InstallDialog_SecondaryButtonText,
             PrimaryButtonText = RS.PluginInstallerViewModel_InstallDialog_PrimaryButtonText,
         };
 
-        using var viewModel = new PluginInstallerViewModel(cfg, loggerFactory, manager);
-
         viewModel.ApplyDialog(dialog);
 
-        dialog.Content = viewModel;
         var res = await dialog.ShowAsync();
 
         if (res == ContentDialogResult.Primary)

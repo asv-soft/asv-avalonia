@@ -449,14 +449,13 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
         }
 
         using var viewModel = new BurstDownloadDialogViewModel("burst.dialog");
-        var dialog = new ContentDialog(_navigation)
+        var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.FileBrowserViewModel_BurstDownloadDialog_Title,
             PrimaryButtonText = RS.FileBrowserViewModel_BurstDownloadDialog_PrimaryButtonText,
             SecondaryButtonText = RS.FileBrowserViewModel_BurstDownloadDialog_SecondaryButtonText,
             IsPrimaryButtonEnabled = viewModel.IsValid.Value,
             IsSecondaryButtonEnabled = true,
-            Content = viewModel,
         };
         viewModel.ApplyDialog(dialog);
         var result = await dialog.ShowAsync();

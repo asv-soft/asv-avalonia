@@ -68,7 +68,7 @@ public class PluginInstallerViewModel : DialogViewModelBase
         _logger.LogInformation("Plugin installed successfully");
     }
 
-    public void ApplyDialog(ContentDialog dialog)
+    public override void ApplyDialog(ContentDialog dialog)
     {
         ArgumentNullException.ThrowIfNull(dialog);
 

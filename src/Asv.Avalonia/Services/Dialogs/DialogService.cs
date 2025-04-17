@@ -190,10 +190,9 @@ public sealed class DialogService : IDialogService
     {
         using var vm = new DialogItemTextViewModel { Message = message };
 
-        var dialogContent = new ContentDialog(_navigation)
+        var dialogContent = new ContentDialog(vm, _navigation)
         {
             Title = title,
-            Content = vm,
             PrimaryButtonText = RS.DialogButton_Yes,
             SecondaryButtonText = RS.DialogButton_No,
             DefaultButton = ContentDialogButton.Primary,
@@ -207,7 +206,7 @@ public sealed class DialogService : IDialogService
     public async Task<bool> ShowSaveCancelDialog(string title, string message)
     {
         using var vm = new DialogItemTextViewModel { Message = message };
-        var dialogContent = new ContentDialog(_navigation)
+        var dialogContent = new ContentDialog(vm, _navigation)
         {
             Title = title,
             Content = vm,
@@ -224,7 +223,7 @@ public sealed class DialogService : IDialogService
     public async Task<string?> ShowInputDialog(string title, string message)
     {
         using var vm = new DialogItemTextBoxViewModel { Message = message };
-        var dialogContent = new ContentDialog(_navigation)
+        var dialogContent = new ContentDialog(vm, _navigation)
         {
             Title = title,
             Content = vm,

@@ -1,14 +1,20 @@
+using Asv.Common;
 using R3;
 
 namespace Asv.Avalonia;
 
 public abstract class DialogViewModelBase(NavigationId id) : RoutableViewModel(id)
 {
-    public ReactiveProperty<bool> IsValid { get; } = new(true);
-
     private readonly HashSet<IBindableReactiveProperty> _validationData = new(
         EqualityComparer<IBindableReactiveProperty>.Default
     );
+
+    public ReactiveProperty<bool> IsValid { get; } = new(true);
+
+    public virtual void ApplyDialog(ContentDialog dialog)
+    {
+        return;
+    }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {

@@ -18,7 +18,7 @@
                                            HorizontalAlignment="Stretch"
                                            StatusText="{Binding StatusText.Value}"
                                            CornerRadius="{StaticResource ControlCornerRadius}"
-                                           Altitude="{Binding AltitudeAgl.Value}"
+                                           Altitude="{Binding AltitudeAgl.ViewValue.Value}"
                                            HomeAzimuthPosition="{Binding HomeAzimuth.Value}"
                                            RollAngle="{Binding Roll.Value}"
                                            PitchAngle="{Binding Pitch.Value}"
@@ -109,7 +109,7 @@
                     <avalonia:TelemBox.CustomContent>
                         <Grid ColumnDefinitions="2*,*" RowDefinitions="*,*">
                             <TextBlock Grid.RowSpan="2" TextAlignment="Right" FontSize="24"
-                                       Text="{Binding AltitudeAgl.Value}" />
+                                       Text="{Binding AltitudeAgl.ViewValue.Value}" />
                             <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15"
                                        Text="MSL" />
                             <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15"
