@@ -30,12 +30,26 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     private static readonly Color YellowColor = Color.Parse("#dfc34a");
 
     private readonly ReactiveProperty<double> _altitudeAgl;
+    private readonly ReactiveProperty<double> _altitudeMsl;
 
     public UavWidgetViewModel()
         : base(SystemModule.Name)
     {
         DesignTime.ThrowIfNotDesignMode();
         InitArgs("1");
+        _altitudeAgl = new ReactiveProperty<double>(1200.0);
+        _altitudeMsl = new ReactiveProperty<double>(200.0);
+        AltitudeAgl = new HistoricalUnitProperty(
+            $"{WidgetId}.{nameof(AltitudeAgl)}",
+            _altitudeAgl,
+            AltitudeUnit.Value
+        );
+        AltitudeMsl = new HistoricalUnitProperty(
+            $"{WidgetId}.{nameof(AltitudeMsl)}",
+            _altitudeMsl,
+            AltitudeUnit.Value
+        );
+
         AltitudeStatusBrush.Color = GreenColor;
         BatteryStatusBrush.Color = RedColor;
         BatteryConsumed.Value = "0.04mAh";
@@ -46,9 +60,6 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         SatelliteCount.Value = 10;
         RtkMode.Value = "RTK Fixed";
         Velocity.Value = "12";
-        AltitudeMsl.Value = "1200m";
-
-        // AltitudeAgl.ViewValue.Value = "200m";
         CurrentFlightMode.Value = "Auto";
         LinkQuality.Value = "100%";
         LinkState.Value = "Connected";
@@ -164,10 +175,22 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         Guided = new BindableAsyncCommand(GuidedModeCommand.Id, this);
         AutoMode = new BindableAsyncCommand(AutoModeCommand.Id, this);
         StartMission = new BindableAsyncCommand(StartMissionCommand.Id, this);
+
+        _altitudeAgl = new ReactiveProperty<double>();
+        _altitudeMsl = new ReactiveProperty<double>();
+        AltitudeAgl = new HistoricalUnitProperty(
+            $"{WidgetId}.{nameof(AltitudeAgl)}",
+            _altitudeAgl,
+            AltitudeUnit.Value
+        );
+        AltitudeMsl = new HistoricalUnitProperty(
+            $"{WidgetId}.{nameof(AltitudeMsl)}",
+            _altitudeMsl,
+            AltitudeUnit.Value
+        );
         LinkQuality = heartbeatClient
             .LinkQuality.Select(x => $"{(int)x * 100} %")
             .ToBindableReactiveProperty<string>();
-
         LinkState = heartbeatClient
             .Link.State.Select(state =>
             {
@@ -178,24 +201,16 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         CurrentFlightMode = modeClient
             .CurrentMode.Select(mode => mode.Name)
             .ToBindableReactiveProperty<string>();
-        _altitudeAgl = new ReactiveProperty<double>();
         positionClientEx
             .Base.GlobalPosition.Subscribe(pld =>
                 _altitudeAgl.Value = Math.Truncate((pld?.RelativeAlt ?? double.NaN) / 1000d)
             )
             .DisposeItWith(Disposable);
-        AltitudeAgl = new HistoricalUnitProperty(
-            $"{WidgetId}.{nameof(AltitudeAgl)}",
-            _altitudeAgl,
-            AltitudeUnit.Value
-        );
-        AltitudeMsl = positionClientEx
-            .Base.GlobalPosition.Select(payload =>
-                payload?.Alt is not null
-                    ? AltitudeUnit.Value.Current.Value.Print(Math.Truncate(payload.Alt / 1000d))
-                    : RS.Not_Available
+        positionClientEx
+            .Base.GlobalPosition.Subscribe(pld =>
+                _altitudeMsl.Value = Math.Truncate((pld?.Alt ?? double.NaN) / 1000d)
             )
-            .ToBindableReactiveProperty<string>();
+            .DisposeItWith(Disposable);
         Roll = positionClientEx.Roll.ToBindableReactiveProperty();
         Pitch = positionClientEx.Roll.ToBindableReactiveProperty();
         Heading = positionClientEx.Yaw.ToBindableReactiveProperty();
@@ -464,7 +479,7 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
     public BindableReactiveProperty<double> Pitch { get; } = new();
     public BindableReactiveProperty<string> Velocity { get; } = new();
     public HistoricalUnitProperty AltitudeAgl { get; }
-    public BindableReactiveProperty<string> AltitudeMsl { get; } = new();
+    public HistoricalUnitProperty AltitudeMsl { get; }
     public BindableReactiveProperty<double> Heading { get; } = new();
     public BindableReactiveProperty<int> HomeAzimuth { get; } = new();
     public BindableReactiveProperty<string> Azimuth { get; } = new();

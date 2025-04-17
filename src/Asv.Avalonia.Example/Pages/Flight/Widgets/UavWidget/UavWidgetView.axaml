@@ -113,7 +113,7 @@
                             <TextBlock Grid.Row="0" Grid.Column="1" TextAlignment="Center" FontSize="15"
                                        Text="MSL" />
                             <TextBlock Grid.Row="1" Grid.Column="1" TextAlignment="Center" FontSize="15"
-                                       Text="{Binding AltitudeMsl.Value}" />
+                                       Text="{Binding AltitudeMsl.ViewValue.Value}" />
                         </Grid>
                     </avalonia:TelemBox.CustomContent>
                 </avalonia:TelemBox>
