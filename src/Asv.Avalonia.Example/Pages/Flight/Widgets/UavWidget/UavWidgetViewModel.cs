@@ -121,17 +121,17 @@ public class UavWidgetViewModel : ExtendableHeadlinedViewModel<IUavFlightWidget>
         _gnssClient =
             device.GetMicroservice<GnssClientEx>()
             ?? throw new ArgumentException(
-                $"Unable to load {nameof(PositionClientEx)} from {device.Id}"
+                $"Unable to load {nameof(GnssClientEx)} from {device.Id}"
             );
         var telemetryClient =
             device.GetMicroservice<TelemetryClientEx>()
             ?? throw new ArgumentException(
-                $"Unable to load {nameof(PositionClientEx)} from {device.Id}"
+                $"Unable to load {nameof(TelemetryClientEx)} from {device.Id}"
             );
         var heartbeatClient =
             device.GetMicroservice<HeartbeatClient>()
             ?? throw new ArgumentException(
-                $"Unable to load {nameof(PositionClientEx)} from {device.Id}"
+                $"Unable to load {nameof(HeartbeatClient)} from {device.Id}"
             );
         IModeClient? modeClientRaw = device switch
         {
