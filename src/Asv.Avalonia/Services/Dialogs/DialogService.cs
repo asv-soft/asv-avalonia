@@ -24,20 +24,33 @@ public sealed class DialogService : IDialogService
         _units = builder.ToImmutable();
     }
 
-    public IReadOnlyDictionary<string, ICustomDialog> Dialogs => _units;
-
     public T GetDialogPrefab<T>()
         where T : class, ICustomDialog
     {
         _units.TryGetValue(typeof(T).Name, out var dialogRaw);
         if (dialogRaw is null)
         {
-            throw new Exception($"Dialog with type-\'|{nameof(T)}\' not found");
+            throw new Exception($"Dialog with type \'{typeof(T).Name}\' not found");
         }
 
         var dialog =
             dialogRaw as T
-            ?? throw new InvalidCastException($"Unable to cast dialog to {nameof(T)}");
+            ?? throw new InvalidCastException($"Unable to cast dialog to {typeof(T).Name}");
         return dialog;
+    }
+
+    public bool TryGetDialogPrefab<T>(out T? dialog)
+        where T : class, ICustomDialog
+    {
+        try
+        {
+            dialog = GetDialogPrefab<T>();
+            return true;
+        }
+        catch (Exception)
+        {
+            dialog = null;
+            return false;
+        }
     }
 }
