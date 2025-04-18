@@ -492,7 +492,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Dialogs.
         /// </summary>
         public static string DialogPageViewModel_Title {
             get {

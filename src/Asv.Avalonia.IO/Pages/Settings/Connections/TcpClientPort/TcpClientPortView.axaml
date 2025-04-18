@@ -12,20 +12,20 @@
     </Design.DataContext>
     <DockPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Margin="8">
         <DockPanel DockPanel.Dock="Top">
-            <TextBlock Classes="h2" Text="Общие настройки"/>
+            <TextBlock Classes="h2" Text="{x:Static io:RS.SerialClientPortView_CommonSettings}"/>
             <Separator/>
         </DockPanel>
         <Grid IsVisible="{Binding HasChanges.Value}" DockPanel.Dock="Bottom" HorizontalAlignment="Left" ColumnDefinitions="*,8,*">
             <Button Width="150" HorizontalAlignment="Stretch" Grid.Column="0" Command="{Binding SaveChangesCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="4">
                     <avalonia:MaterialIcon Foreground="{DynamicResource AsvForegroundSuccessBrush}" Kind="Tick"/>
-                    <TextBlock VerticalAlignment="Center" Text="Save"/>
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static io:RS.PortView_ButtonContent_Save}"/>
                 </StackPanel>
             </Button>
             <Button  Width="150" HorizontalAlignment="Stretch" Grid.Column="2"  Command="{Binding CancelChangesCommand}">
                 <StackPanel Orientation="Horizontal" Spacing="4">
                     <avalonia:MaterialIcon Foreground="{DynamicResource AsvForegroundWarningBrush}" Kind="Cancel"/>
-                    <TextBlock VerticalAlignment="Center" Text="Cancel"/>
+                    <TextBlock VerticalAlignment="Center" Text="{x:Static io:RS.PortView_ButtonContent_Cancel}"/>
                 </StackPanel>
             </Button>    
         </Grid>
@@ -49,11 +49,11 @@
             </Grid.RowDefinitions>
             
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="0" Kind="TagTextOutline"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Text="Title"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Text="{x:Static io:RS.TcpClientPortView_Text_Title}"/>
             <TextBox Grid.Column="4" Grid.Row="0" Text="{Binding Name.Value}"/>
             
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="Link"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="2" Text="Host"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="2" Text="{x:Static io:RS.TcpClientPortView_Text_Host}"/>
             <AutoCompleteBox ValueMemberBinding="{Binding Key}" Grid.Row="2" Grid.Column="4" ItemsSource="{Binding Config.HostHistory}" Text="{Binding Host.Value}">
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
@@ -66,7 +66,8 @@
             </AutoCompleteBox>
             
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="4" Kind="Counter"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="4" Text="Port"/>
+            
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="4" Text="{x:Static io:RS.TcpClientPortView_Text_Port}"/>
             <AutoCompleteBox ValueMemberBinding="{Binding Key}" Grid.Row="4" Grid.Column="4" ItemsSource="{Binding Config.PortHistory}" Text="{Binding PortNumber.Value}">
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>

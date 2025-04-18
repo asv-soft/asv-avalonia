@@ -10,7 +10,7 @@ public class SettingsConnectionTcpClientExtension : IExtensionFor<ISettingsConne
     {
         var menu = new MenuItem(
             TcpClientProtocolPort.Scheme,
-            $"Add {TcpClientProtocolPort.Info.Name}"
+            $"{RS.SettingsConnectionTcpClientExtension_AddTcp_ButtonContent}"
         );
         menu.Icon = TcpClientPortViewModel.DefaultIcon;
         menu.Command = new BindableAsyncCommand(ProtocolPortCommand.Id, menu);
