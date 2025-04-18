@@ -603,7 +603,7 @@
         <value>N/A</value>
     </data>
     <data name="DialogPageViewModel_Title" xml:space="preserve">
-        <value />
+        <value>Dialogs</value>
     </data>
     <data name="Capacity_UnitItem_Name" xml:space="preserve">
         <value>Capacity</value>
@@ -619,5 +619,65 @@
     </data>
     <data name="ChangeBoolPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command changes the value of a property with the bool type</value>
+    </data>
+    <data name="AmperageMilliAmpereUnit_Name" xml:space="preserve">
+        <value>Мilliamps</value>
+    </data>
+    <data name="AmperageMilliAmpereUnit_Description" xml:space="preserve">
+        <value>Current stregth value in milliamps</value>
+    </data>
+    <data name="AmperageMilliAmpereUnit_Symbol" xml:space="preserve">
+        <value>mA</value>
+    </data>
+    <data name="AmperageAmpereUnit_Name" xml:space="preserve">
+        <value>Amperes</value>
+    </data>
+    <data name="AmperageAmpereUnit_Description" xml:space="preserve">
+        <value>Current stregth value in amperes</value>
+    </data>
+    <data name="AmperageAmpereUnit_Symbol" xml:space="preserve">
+        <value>A</value>
+    </data>
+    <data name="VoltageVoltUnit_Name" xml:space="preserve">
+        <value>Volts</value>
+    </data>
+    <data name="VoltageVoltUnit_Description" xml:space="preserve">
+        <value>Voltage value in volts</value>
+    </data>
+    <data name="VoltageVoltUnit_Symbol" xml:space="preserve">
+        <value>V</value>
+    </data>
+    <data name="VoltageMilliVoltUnit_Name" xml:space="preserve">
+        <value>MIlliVolts</value>
+    </data>
+    <data name="VoltageMilliVoltUnit_Description" xml:space="preserve">
+        <value>Voltage in millivolts</value>
+    </data>
+    <data name="VoltageMilliVoltUnit_Symbol" xml:space="preserve">
+        <value>mV</value>
+    </data>
+    <data name="VoltageItemBase_Name" xml:space="preserve">
+        <value>Voltage</value>
+    </data>
+    <data name="VoltageItemBase_Description" xml:space="preserve">
+        <value>Voltage unit</value>
+    </data>
+    <data name="AmperageBase_Name" xml:space="preserve">
+        <value>Current strength (Amperage)</value>
+    </data>
+    <data name="AmperageBase_Description" xml:space="preserve">
+        <value>Current strength unit</value>
+    </data>
+    <data name="ProgressBase_Name" xml:space="preserve">
+        <value>Progress</value>
+    </data>
+    <data name="ProgressBase_Description" xml:space="preserve">
+        <value>Progress unit</value>
+    </data>
+    <data name="ProgressPercentUnit_Name" xml:space="preserve">
+        <value>Percent</value>
+    </data>
+    <data name="ProgressPercentUnit_Description" xml:space="preserve">
+        <value>Progress value in percentage</value>
     </data>
 </root>

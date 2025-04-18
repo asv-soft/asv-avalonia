@@ -618,4 +618,64 @@
     <data name="ChangeBoolPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда меняет значение свойства с типом бул</value>
     </data>
+    <data name="AmperageMilliAmpereUnit_Name" xml:space="preserve">
+        <value>Миллиамперы</value>
+    </data>
+    <data name="AmperageMilliAmpereUnit_Symbol" xml:space="preserve">
+        <value>мА</value>
+    </data>
+    <data name="AmperageMilliAmpereUnit_Description" xml:space="preserve">
+        <value>Сила тока в миллиамперах</value>
+    </data>
+    <data name="AmperageAmpereUnit_Symbol" xml:space="preserve">
+        <value>А</value>
+    </data>
+    <data name="AmperageAmpereUnit_Name" xml:space="preserve">
+        <value>Амперы</value>
+    </data>
+    <data name="AmperageAmpereUnit_Description" xml:space="preserve">
+        <value>Сила тока в амперах</value>
+    </data>
+    <data name="VoltageVoltUnit_Description" xml:space="preserve">
+        <value>Напряжение в вольтах</value>
+    </data>
+    <data name="VoltageVoltUnit_Name" xml:space="preserve">
+        <value>Вольты</value>
+    </data>
+    <data name="VoltageVoltUnit_Symbol" xml:space="preserve">
+        <value>В</value>
+    </data>
+    <data name="VoltageMilliVoltUnit_Description" xml:space="preserve">
+        <value>Напряжение в милливольтах</value>
+    </data>
+    <data name="VoltageMilliVoltUnit_Name" xml:space="preserve">
+        <value>Милливольты</value>
+    </data>
+    <data name="VoltageMilliVoltUnit_Symbol" xml:space="preserve">
+        <value>мВ</value>
+    </data>
+    <data name="VoltageItemBase_Name" xml:space="preserve">
+        <value>Напряжение</value>
+    </data>
+    <data name="VoltageItemBase_Description" xml:space="preserve">
+        <value>Единица измерения напряжения</value>
+    </data>
+    <data name="AmperageBase_Name" xml:space="preserve">
+        <value>Сила тока</value>
+    </data>
+    <data name="AmperageBase_Description" xml:space="preserve">
+        <value>Единица измеренеия силы тока</value>
+    </data>
+    <data name="ProgressBase_Description" xml:space="preserve">
+        <value>Единица измерения прогресса</value>
+    </data>
+    <data name="ProgressBase_Name" xml:space="preserve">
+        <value>Прогресс</value>
+    </data>
+    <data name="ProgressPercentUnit_Description" xml:space="preserve">
+        <value>Значение прогресса в процентах</value>
+    </data>
+    <data name="ProgressPercentUnit_Name" xml:space="preserve">
+        <value>Проценты</value>
+    </data>
 </root>

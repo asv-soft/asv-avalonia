@@ -96,6 +96,78 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current stregth value in amperes.
+        /// </summary>
+        public static string AmperageAmpereUnit_Description {
+            get {
+                return ResourceManager.GetString("AmperageAmpereUnit_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amperes.
+        /// </summary>
+        public static string AmperageAmpereUnit_Name {
+            get {
+                return ResourceManager.GetString("AmperageAmpereUnit_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A.
+        /// </summary>
+        public static string AmperageAmpereUnit_Symbol {
+            get {
+                return ResourceManager.GetString("AmperageAmpereUnit_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current strength unit.
+        /// </summary>
+        public static string AmperageBase_Description {
+            get {
+                return ResourceManager.GetString("AmperageBase_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current strength (Amperage).
+        /// </summary>
+        public static string AmperageBase_Name {
+            get {
+                return ResourceManager.GetString("AmperageBase_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current stregth value in milliamps.
+        /// </summary>
+        public static string AmperageMilliAmpereUnit_Description {
+            get {
+                return ResourceManager.GetString("AmperageMilliAmpereUnit_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Мilliamps.
+        /// </summary>
+        public static string AmperageMilliAmpereUnit_Name {
+            get {
+                return ResourceManager.GetString("AmperageMilliAmpereUnit_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to mA.
+        /// </summary>
+        public static string AmperageMilliAmpereUnit_Symbol {
+            get {
+                return ResourceManager.GetString("AmperageMilliAmpereUnit_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Amlitude modulation unit.
         /// </summary>
         public static string AmplitudeModulation_Description {
@@ -492,7 +564,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Dialogs.
         /// </summary>
         public static string DialogPageViewModel_Title {
             get {
@@ -1392,6 +1464,42 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Progress unit.
+        /// </summary>
+        public static string ProgressBase_Description {
+            get {
+                return ResourceManager.GetString("ProgressBase_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress.
+        /// </summary>
+        public static string ProgressBase_Name {
+            get {
+                return ResourceManager.GetString("ProgressBase_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress value in percentage.
+        /// </summary>
+        public static string ProgressPercentUnit_Description {
+            get {
+                return ResourceManager.GetString("ProgressPercentUnit_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Percent.
+        /// </summary>
+        public static string ProgressPercentUnit_Name {
+            get {
+                return ResourceManager.GetString("ProgressPercentUnit_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phase in radian.
         /// </summary>
         public static string Radian_Phase_Description {
@@ -1829,6 +1937,78 @@ namespace Asv.Avalonia {
         public static string Velocity_Name {
             get {
                 return ResourceManager.GetString("Velocity_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voltage unit.
+        /// </summary>
+        public static string VoltageItemBase_Description {
+            get {
+                return ResourceManager.GetString("VoltageItemBase_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voltage.
+        /// </summary>
+        public static string VoltageItemBase_Name {
+            get {
+                return ResourceManager.GetString("VoltageItemBase_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voltage in millivolts.
+        /// </summary>
+        public static string VoltageMilliVoltUnit_Description {
+            get {
+                return ResourceManager.GetString("VoltageMilliVoltUnit_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MIlliVolts.
+        /// </summary>
+        public static string VoltageMilliVoltUnit_Name {
+            get {
+                return ResourceManager.GetString("VoltageMilliVoltUnit_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to mV.
+        /// </summary>
+        public static string VoltageMilliVoltUnit_Symbol {
+            get {
+                return ResourceManager.GetString("VoltageMilliVoltUnit_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Voltage value in volts.
+        /// </summary>
+        public static string VoltageVoltUnit_Description {
+            get {
+                return ResourceManager.GetString("VoltageVoltUnit_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Volts.
+        /// </summary>
+        public static string VoltageVoltUnit_Name {
+            get {
+                return ResourceManager.GetString("VoltageVoltUnit_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to V.
+        /// </summary>
+        public static string VoltageVoltUnit_Symbol {
+            get {
+                return ResourceManager.GetString("VoltageVoltUnit_Symbol", resourceCulture);
             }
         }
     }
