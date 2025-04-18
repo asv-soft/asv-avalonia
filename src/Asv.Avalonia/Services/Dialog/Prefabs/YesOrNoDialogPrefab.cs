@@ -8,12 +8,12 @@ namespace Asv.Avalonia;
 public sealed class YesOrNoDialogPayload
 {
     /// <summary>
-    /// Gets the title of the dialog.
+    /// Gets or inits the title of the dialog.
     /// </summary>
     public required string Title { get; init; }
 
     /// <summary>
-    /// Gets the message displayed in the dialog.
+    /// Gets or inits the message displayed in the dialog.
     /// </summary>
     public required string Message { get; init; }
 }
