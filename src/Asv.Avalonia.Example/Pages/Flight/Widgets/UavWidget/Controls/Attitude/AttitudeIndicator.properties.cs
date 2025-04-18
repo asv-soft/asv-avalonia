@@ -163,12 +163,12 @@ public partial class AttitudeIndicator
         set => SetValue(VelocityProperty, value);
     }
 
-    public static readonly StyledProperty<double> AltitudeProperty = AvaloniaProperty.Register<
+    public static readonly StyledProperty<string?> AltitudeProperty = AvaloniaProperty.Register<
         AttitudeIndicator,
-        double
+        string?
     >(nameof(Altitude));
 
-    public double Altitude
+    public string? Altitude
     {
         get => GetValue(AltitudeProperty);
         set => SetValue(AltitudeProperty, value);

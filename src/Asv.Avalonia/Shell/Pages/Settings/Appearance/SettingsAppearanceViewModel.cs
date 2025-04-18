@@ -22,12 +22,12 @@ public class SettingsAppearanceViewModel : SettingsSubPage
     public SettingsAppearanceViewModel(
         IThemeService themeService,
         ILocalizationService localizationService,
-        IDialogService dialogService
+        IDialogService dialog
     )
         : base(PageId)
     {
         Theme = new ThemeProperty(themeService) { Parent = this }.DisposeItWith(Disposable);
-        Language = new LanguageProperty(localizationService, dialogService)
+        Language = new LanguageProperty(localizationService, dialog)
         {
             Parent = this,
         }.DisposeItWith(Disposable);

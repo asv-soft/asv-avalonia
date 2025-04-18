@@ -22,7 +22,7 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
     public const string PageId = "files.browser";
     public const MaterialIconKind PageIcon = MaterialIconKind.FolderEye;
 
-    private readonly IDialogService _dialogs;
+    private readonly YesOrNoDialogPrefab _yesNoDialog;
     private readonly ILogger<FileBrowserViewModel> _log;
     private readonly INavigationService _navigation;
     private readonly string _localRootPath;
@@ -63,7 +63,7 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
     public FileBrowserViewModel(
         ICommandService cmd,
         IDeviceManager devices,
-        IDialogService dialogs,
+        IDialogService dialogService,
         IAppPath appPath,
         ILoggerFactory log,
         INavigationService navigation
@@ -71,7 +71,7 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
         : base(PageId, devices, cmd)
     {
         _localRootPath = appPath.UserDataFolder;
-        _dialogs = dialogs;
+        _yesNoDialog = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
         _log = log.CreateLogger<FileBrowserViewModel>();
         _navigation = navigation;
 
@@ -333,10 +333,16 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
             return;
         }
 
-        var res = await _dialogs.ShowYesNoDialog(
-            RS.FileBrowserViewModel_UploadingDialog_Title,
-            string.Format(RS.FileBrowserViewModel_UploadingDialog_Message, item.Base.Header)
-        );
+        var payload = new YesOrNoDialogPayload
+        {
+            Title = RS.FileBrowserViewModel_UploadingDialog_Title,
+            Message = string.Format(
+                RS.FileBrowserViewModel_UploadingDialog_Message,
+                item.Base.Header
+            ),
+        };
+
+        var res = await _yesNoDialog.ShowDialogAsync(payload);
 
         if (res)
         {
@@ -400,10 +406,16 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
             path = Path.Combine(path, RemoteSelectedItem.Value!.Base.Header!);
         }
 
-        var res = await _dialogs.ShowYesNoDialog(
-            RS.FileBrowserViewModel_DownloadDialog_Title,
-            string.Format(RS.FileBrowserViewModel_DownloadDialog_Message, item.Base.Header)
-        );
+        var payload = new YesOrNoDialogPayload
+        {
+            Title = RS.FileBrowserViewModel_DownloadDialog_Title,
+            Message = string.Format(
+                RS.FileBrowserViewModel_DownloadDialog_Message,
+                item.Base.Header
+            ),
+        };
+
+        var res = await _yesNoDialog.ShowDialogAsync(payload);
 
         if (res)
         {
@@ -449,14 +461,13 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
         }
 
         using var viewModel = new BurstDownloadDialogViewModel("burst.dialog");
-        var dialog = new ContentDialog(_navigation)
+        var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.FileBrowserViewModel_BurstDownloadDialog_Title,
             PrimaryButtonText = RS.FileBrowserViewModel_BurstDownloadDialog_PrimaryButtonText,
             SecondaryButtonText = RS.FileBrowserViewModel_BurstDownloadDialog_SecondaryButtonText,
             IsPrimaryButtonEnabled = viewModel.IsValid.Value,
             IsSecondaryButtonEnabled = true,
-            Content = viewModel,
         };
         viewModel.ApplyDialog(dialog);
         var result = await dialog.ShowAsync();
@@ -484,10 +495,13 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
 
     private async Task RemoveLocalItemImpl()
     {
-        var res = await _dialogs.ShowYesNoDialog(
-            RS.FileBrowserViewModel_RemoveDialog_Title,
-            RS.FileBrowserViewModel_RemoveDialog_Message
-        );
+        var payload = new YesOrNoDialogPayload
+        {
+            Title = RS.FileBrowserViewModel_RemoveDialog_Title,
+            Message = RS.FileBrowserViewModel_RemoveDialog_Message,
+        };
+
+        var res = await _yesNoDialog.ShowDialogAsync(payload);
         if (!res)
         {
             return;
@@ -506,10 +520,13 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
 
     private async Task RemoveRemoteItemImpl(CancellationToken ct)
     {
-        var res = await _dialogs.ShowYesNoDialog(
-            RS.FileBrowserViewModel_RemoveDialog_Title,
-            RS.FileBrowserViewModel_RemoveDialog_Message
-        );
+        var payload = new YesOrNoDialogPayload
+        {
+            Title = RS.FileBrowserViewModel_RemoveDialog_Title,
+            Message = RS.FileBrowserViewModel_RemoveDialog_Message,
+        };
+
+        var res = await _yesNoDialog.ShowDialogAsync(payload);
         if (!res)
         {
             return;
@@ -857,8 +874,8 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
             LocalItemsView.Dispose();
             RemoteItemsView.Dispose();
 
-            _localItems.RemoveRange(0, _localItems.Count);
-            _remoteItems.RemoveRange(0, _remoteItems.Count);
+            _localItems.RemoveAll();
+            _remoteItems.RemoveAll();
         }
 
         base.Dispose(disposing);

@@ -58,24 +58,17 @@ public class PluginInstallerViewModel : DialogViewModelBase
 
     public BindableReactiveProperty<string> NugetPackageFilePath { get; set; }
 
-    private async Task InstallPluginAsync(IProgress<double> progress, CancellationToken cancel)
+    internal async Task InstallPluginAsync(IProgress<double> progress, CancellationToken cancel)
     {
-        try
-        {
-            await _manager.InstallManually(
-                NugetPackageFilePath.Value,
-                new Progress<ProgressMessage>(m => progress.Report(m.Progress)),
-                cancel
-            );
-            _logger.LogInformation(RS.PluginInstallerViewModel_InstallPluginAsync_Success);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e.Message);
-        }
+        await _manager.InstallManually(
+            NugetPackageFilePath.Value,
+            new Progress<ProgressMessage>(m => progress.Report(m.Progress)),
+            cancel
+        );
+        _logger.LogInformation("Plugin installed successfully");
     }
 
-    public void ApplyDialog(ContentDialog dialog)
+    public override void ApplyDialog(ContentDialog dialog)
     {
         ArgumentNullException.ThrowIfNull(dialog);
 
@@ -83,10 +76,6 @@ public class PluginInstallerViewModel : DialogViewModelBase
         {
             dialog.IsPrimaryButtonEnabled = isValid;
         });
-
-        dialog.PrimaryButtonCommand = new ReactiveCommand<IProgress<double>>(
-            async (p, ct) => await InstallPluginAsync(p, ct)
-        );
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

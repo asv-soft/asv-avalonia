@@ -97,7 +97,8 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
 
     private async ValueTask AddImpl(Unit unit, CancellationToken token)
     {
-        var dialog = new ContentDialog(_navigation)
+        using var viewModel = new SourceViewModel(_mng, _loggerFactory, null);
+        var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.PluginsSourcesViewModel_AddImpl_Title,
             PrimaryButtonText = RS.PluginsSourcesViewModel_AddImpl_Add,
@@ -105,9 +106,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
             CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
         };
 
-        using var viewModel = new SourceViewModel(_mng, _loggerFactory, null);
         viewModel.ApplyDialog(dialog);
-        dialog.Content = viewModel;
 
         var result = await dialog.ShowAsync();
 
@@ -124,7 +123,8 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
             return;
         }
 
-        var dialog = new ContentDialog(_navigation)
+        using var viewModel = new SourceViewModel(_mng, _loggerFactory, arg);
+        var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.PluginsSourcesViewModel_EditImpl_Title,
             PrimaryButtonText = RS.PluginsSourcesViewModel_EditImpl_Save,
@@ -132,9 +132,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
             CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
         };
 
-        using var viewModel = new SourceViewModel(_mng, _loggerFactory, arg);
         viewModel.ApplyDialog(dialog);
-        dialog.Content = viewModel;
 
         var result = await dialog.ShowAsync();
         if (result == ContentDialogResult.Primary)

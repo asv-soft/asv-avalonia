@@ -59,8 +59,8 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
         SelectedPlugin = new BindableReactiveProperty<InstalledPluginInfoViewModel>();
         OnlyVerified = new BindableReactiveProperty<bool>(false);
 
-        InstallManually = new ReactiveCommand<IProgress<double>>(_ =>
-            Task.FromResult(InstallManuallyImpl())
+        InstallManually = new ReactiveCommand<IProgress<double>>(
+            async (p, ct) => await InstallManuallyImpl(p, ct)
         );
         PluginsView = Plugins
             .CreateView(info => new InstalledPluginInfoViewModel(
@@ -89,10 +89,10 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
         );
     }
 
-    private async Task InstallManuallyImpl()
+    private async Task InstallManuallyImpl(IProgress<double> progress, CancellationToken cancel)
     {
         var installer = new PluginInstaller(_cfg, _loggerFactory, _manager, _navigation);
-        await installer.ShowInstallDialog();
+        await installer.ShowInstallDialog(progress, cancel);
     }
 
     public override ValueTask<IRoutable> Navigate(NavigationId id)

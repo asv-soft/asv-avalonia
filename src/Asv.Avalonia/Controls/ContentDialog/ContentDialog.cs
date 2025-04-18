@@ -32,9 +32,10 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
     private readonly INavigationService _navigation;
 
-    public ContentDialog(INavigationService navigationService)
+    public ContentDialog(DialogViewModelBase content, INavigationService navigationService)
     {
         _navigation = navigationService;
+        Content = content;
         PseudoClasses.Add(PseudoClassesHelper.Hidden);
     }
 
@@ -184,6 +185,11 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
     private async Task<ContentDialogResult> ShowAsyncCoreForTopLevel(TopLevel? topLevel)
     {
+        if (Content is not DialogViewModelBase)
+        {
+            throw new Exception($"Content type is not {nameof(DialogViewModelBase)}");
+        }
+
         _tcs = new TaskCompletionSource<ContentDialogResult>();
 
         OnOpening();
@@ -538,29 +544,14 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
             if (Equals(sender, _primaryButton))
             {
-                if (PrimaryButtonCommand?.CanExecute(PrimaryButtonCommandParameter) ?? false)
-                {
-                    PrimaryButtonCommand.Execute(PrimaryButtonCommandParameter);
-                }
-
                 _result = ContentDialogResult.Primary;
             }
             else if (Equals(sender, _secondaryButton))
             {
-                if (SecondaryButtonCommand?.CanExecute(SecondaryButtonCommandParameter) ?? false)
-                {
-                    SecondaryButtonCommand.Execute(SecondaryButtonCommandParameter);
-                }
-
                 _result = ContentDialogResult.Secondary;
             }
             else if (Equals(sender, _closeButton))
             {
-                if (CloseButtonCommand?.CanExecute(CloseButtonCommandParameter) ?? false)
-                {
-                    CloseButtonCommand.Execute(CloseButtonCommandParameter);
-                }
-
                 _result = ContentDialogResult.None;
             }
 
