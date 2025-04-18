@@ -24,9 +24,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList.CreateView(x => new MeasureUnitViewModel(x) { Parent = this });
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
-        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(
-            Disposable
-        );
+        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(Disposable);
         SearchText = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))

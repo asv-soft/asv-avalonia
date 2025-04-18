@@ -56,7 +56,41 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
 
         _svc.Units.TryGetValue(memento.Id, out var unit);
         ArgumentNullException.ThrowIfNull(unit);
+        var oldValue = unit;
+        unit.AvailableUnits.TryGetValue(memento.Value, out var unitItem);
+        if (unitItem is not null)
+        {
+            unit.Current.Value = unitItem;
+        }
 
+        return ValueTask.FromResult<ICommandArg?>(
+            new ActionCommandArg(
+                oldValue.UnitId,
+                oldValue.Current.Value.UnitItemId,
+                CommandParameterActionType.Change
+            )
+        );
+    }
+
+    public override ValueTask<ICommandArg?> Execute(IRoutable context, ICommandArg newValue, CancellationToken cancel = default)
+    {
+        if (newValue is not ActionCommandArg memento)
+        {
+            return ValueTask.FromException<ICommandArg?>(
+                new InvalidOperationException("Unable to perform action. Pass a valid parameter.")
+            );
+        }
+
+        if (memento.Id == null || memento.Value == null)
+        {
+            return ValueTask.FromException<ICommandArg?>(
+                new InvalidOperationException("Unable to perform action. Pass a valid parameter.")
+            );
+        }
+
+        _svc.Units.TryGetValue(memento.Id, out var unit);
+        ArgumentNullException.ThrowIfNull(unit);
+        var oldValue = unit.Current.Value.UnitItemId;
         unit.AvailableUnits.TryGetValue(memento.Value, out var unitItem);
         if (unitItem is not null)
         {
@@ -66,7 +100,7 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
         return ValueTask.FromResult<ICommandArg?>(
             new ActionCommandArg(
                 unit.UnitId,
-                unit.Current.Value.UnitItemId,
+                oldValue,
                 CommandParameterActionType.Change
             )
         );
