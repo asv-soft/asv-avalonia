@@ -72,7 +72,11 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
         );
     }
 
-    public override ValueTask<ICommandArg?> Execute(IRoutable context, ICommandArg newValue, CancellationToken cancel = default)
+    public override ValueTask<ICommandArg?> Execute(
+        IRoutable context,
+        ICommandArg newValue,
+        CancellationToken cancel = default
+    )
     {
         if (newValue is not ActionCommandArg memento)
         {
@@ -98,11 +102,7 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
         }
 
         return ValueTask.FromResult<ICommandArg?>(
-            new ActionCommandArg(
-                unit.UnitId,
-                oldValue,
-                CommandParameterActionType.Change
-            )
+            new ActionCommandArg(unit.UnitId, oldValue, CommandParameterActionType.Change)
         );
     }
 }

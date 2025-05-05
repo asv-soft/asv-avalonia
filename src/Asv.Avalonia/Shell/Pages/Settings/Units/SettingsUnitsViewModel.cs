@@ -24,7 +24,13 @@ public class SettingsUnitsViewModel : SettingsSubPage
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList.CreateView(x => new MeasureUnitViewModel(x) { Parent = this });
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
-        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(Disposable);
+        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(
+            Disposable
+        );
+        SelectedItem.Subscribe(_ =>
+        {
+            Console.Write("rrr");
+        });
         SearchText = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
@@ -65,15 +71,12 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        foreach (var child in base.GetRoutableChildren())
-        {
-            yield return child;
-        }
-
         foreach (var model in _view)
         {
             yield return model;
         }
+
+        base.GetRoutableChildren();
     }
 
     public override IExportInfo Source => SystemModule.Instance;
