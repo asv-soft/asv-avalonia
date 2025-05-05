@@ -60,13 +60,13 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
         unit.AvailableUnits.TryGetValue(memento.Value, out var unitItem);
         if (unitItem is not null)
         {
-            unit.Current.Value = unitItem;
+            unit.CurrentUnitItem.Value = unitItem;
         }
 
         return ValueTask.FromResult<ICommandArg?>(
             new ActionCommandArg(
                 oldValue.UnitId,
-                oldValue.Current.Value.UnitItemId,
+                oldValue.CurrentUnitItem.Value.UnitItemId,
                 CommandParameterActionType.Change
             )
         );
@@ -94,11 +94,11 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
 
         _svc.Units.TryGetValue(memento.Id, out var unit);
         ArgumentNullException.ThrowIfNull(unit);
-        var oldValue = unit.Current.Value.UnitItemId;
+        var oldValue = unit.CurrentUnitItem.Value.UnitItemId;
         unit.AvailableUnits.TryGetValue(memento.Value, out var unitItem);
         if (unitItem is not null)
         {
-            unit.Current.Value = unitItem;
+            unit.CurrentUnitItem.Value = unitItem;
         }
 
         return ValueTask.FromResult<ICommandArg?>(
