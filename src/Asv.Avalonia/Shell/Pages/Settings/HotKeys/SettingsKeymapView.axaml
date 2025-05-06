@@ -11,10 +11,14 @@
         <avalonia:SettingsKeymapViewModel />
     </Design.DataContext>
     <UserControl.Resources>
-        <!-- Добавляем NullToBoolConverter локально -->
         <avalonia:NullToBoolConverter x:Key="SelectedItemToBoolConverter"/>
     </UserControl.Resources>
-    <DockPanel>
+    <UserControl.Styles>
+        <Style Selector="DataGridRowsPresenter">
+            <Setter Property="Margin" Value="0,0,0,15"/>
+        </Style>
+    </UserControl.Styles>
+    <DockPanel Margin="8">
         <TextBox DockPanel.Dock="Top" HorizontalAlignment="Stretch" Text="{Binding SearchText.Value}"/>
         <Button DockPanel.Dock="Top" HorizontalAlignment="Right" Content="{x:Static avalonia:RS.SettingsKeyMapView_Action_ResetCustomHotKeys}" Margin="10" Command="{Binding ResetHotKeysToDefaultCommand}"/>
         <DataGrid x:Name="HotKeyGrid" Focusable="False" ItemsSource="{Binding Items}"
@@ -57,13 +61,11 @@
                                 <Grid ColumnDefinitions="*,Auto,Auto" IsVisible="{Binding !IsChangingHotKey.Value}">
                                     <TextBlock Grid.Column="0"   HorizontalAlignment="Center" VerticalAlignment="Center"
                                                Text="{Binding CurrentHotKeyValue.Value}" />
-                                   
                                     <Button IsEnabled="{Binding #HotKeyGrid.SelectedItem, Converter={StaticResource SelectedItemToBoolConverter}}"  Grid.Column="1" Padding="4" Command="{Binding ChangeHotKeyCommand}">
                                         <avalonia1:MaterialIcon Kind="Pencil"></avalonia1:MaterialIcon>
                                     </Button>
                                 </Grid>
                             </Grid>
-
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

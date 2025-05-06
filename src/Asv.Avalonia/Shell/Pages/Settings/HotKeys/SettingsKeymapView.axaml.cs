@@ -11,14 +11,11 @@ public partial class SettingsKeymapView : UserControl
         InitializeComponent();
     }
 
+    private Key _previousKey;
+
     protected override void OnKeyDown(KeyEventArgs e)
     {
         if (DataContext is not SettingsKeymapViewModel vm)
-        {
-            return;
-        }
-
-        if (vm.SelectedItem.Value is null)
         {
             return;
         }
@@ -27,20 +24,24 @@ public partial class SettingsKeymapView : UserControl
         {
             return;
         }
-
-        var rawGesture = string.Empty;
+        
+        var rawGesture = vm.SelectedItem.Value.NewHotKeyValue.Value ?? string.Empty;
         base.OnKeyDown(e);
-
-        if (
-            (vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 0 } && !IsModifierKey(e.Key))
-            || vm.SelectedItem.Value.NewHotKeyValue.Value is { Length: 2 }
-        )
+        if (rawGesture.Length == 0)
+        {
+            _previousKey = default;
+        }
+        
+        if ((rawGesture.Length == 0 && !IsModifierKey(e.Key))
+            || (rawGesture != string.Empty && !rawGesture.EndsWith('+'))
+            || (IsModifierKey(e.Key) && IsModifierKey(_previousKey))
+           )
         {
             return;
         }
 
         var keyValue = $"{e.Key}";
-        if (e.Key == Key.LWin || e.Key == Key.LWin)
+        if (e.Key is Key.LWin or Key.LWin)
         {
             return;
         }
@@ -61,17 +62,18 @@ public partial class SettingsKeymapView : UserControl
             rawGesture += $"{keyValue}";
         }
 
-        vm.SelectedItem.Value.NewHotKeyValue.Value += rawGesture;
+        _previousKey = e.Key;
+        vm.SelectedItem.Value.NewHotKeyValue.Value = rawGesture;
     }
 
     private bool IsModifierKey(Key key)
     {
         return key
             is Key.LeftShift
-                or Key.RightShift
-                or Key.LeftCtrl
-                or Key.RightCtrl
-                or Key.LeftAlt
-                or Key.LeftAlt;
+            or Key.RightShift
+            or Key.LeftCtrl
+            or Key.RightCtrl
+            or Key.LeftAlt
+            or Key.LeftAlt;
     }
 }

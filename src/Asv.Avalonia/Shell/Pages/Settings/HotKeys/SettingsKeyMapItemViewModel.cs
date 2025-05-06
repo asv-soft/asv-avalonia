@@ -54,7 +54,7 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
         });
         CancelChangeHotKeyCommand = new ReactiveCommand(_ =>
         {
-            NewHotKeyValue.Value = PreviousHotKeyValue.Value!.ToString();
+            NewHotKeyValue.Value = PreviousHotKeyValue.Value?.ToString();
             IsChangingHotKey.Value = false;
         });
         ConfirmChangeHotKeyCommand = new ReactiveCommand(_ =>
@@ -82,14 +82,8 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
 
     public bool Filter(string text)
     {
-        return (
-                Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
-                == true
-            )
-            || (
-                Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
-                == true
-            )
+        return (Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true)
+            || (Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true)
             || Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase)
             || Info.Source.ModuleName.Contains(text, StringComparison.OrdinalIgnoreCase)
             || Info.Description.Contains(text, StringComparison.OrdinalIgnoreCase);
