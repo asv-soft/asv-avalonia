@@ -27,10 +27,6 @@ public class SettingsUnitsViewModel : SettingsSubPage
         SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(
             Disposable
         );
-        SelectedItem.Subscribe(_ =>
-        {
-            Console.Write("rrr");
-        });
         SearchText = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))

@@ -37,9 +37,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
-                                <Run Text="{Binding Base.CurrentUnitItem.CurrentValue.Name}"/>
+                                <Run Text="{Binding Name.Value}"/>
                                 <Run Text=" [ "/>
-                                <Run Text="{Binding Base.CurrentUnitItem.CurrentValue.Symbol}"/>
+                                <Run Text="{Binding Symbol.Value}"/>
                                 <Run Text=" ]"/>
                             </TextBlock>
                         </DataTemplate>
