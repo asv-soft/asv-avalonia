@@ -11,6 +11,8 @@ public class MeasureUnitViewModel : RoutableViewModel
     {
         SelectedItem = new BindableReactiveProperty<IUnitItem>(item.CurrentUnitItem.CurrentValue);
         Base = item;
+        Name = Base.CurrentUnitItem.Select(u => u.Name).ToBindableReactiveProperty<string>();
+        Symbol = Base.CurrentUnitItem.Select(u => u.Symbol).ToBindableReactiveProperty<string>();
         _internalChange = true;
         _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);
         _sub2 = item.CurrentUnitItem.Subscribe(OnChangeByModel);
@@ -49,6 +51,9 @@ public class MeasureUnitViewModel : RoutableViewModel
     public BindableReactiveProperty<IUnitItem> SelectedItem { get; }
 
     public IUnit Base { get; }
+
+    public IReadOnlyBindableReactiveProperty<string> Name { get; }
+    public IReadOnlyBindableReactiveProperty<string> Symbol { get; }
 
     public bool Filter(string search)
     {

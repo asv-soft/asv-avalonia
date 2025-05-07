@@ -98,6 +98,7 @@ public class DockControl : SelectingItemsControl
         if (tab != null)
         {
             _selectedTab = tab;
+            SelectedItem = tab.Content;
         }
 
         e.Pointer.Capture(this);

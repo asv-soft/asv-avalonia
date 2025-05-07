@@ -67,15 +67,12 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        foreach (var child in base.GetRoutableChildren())
-        {
-            yield return child;
-        }
-
         foreach (var model in _view)
         {
             yield return model;
         }
+
+        base.GetRoutableChildren();
     }
 
     public override IExportInfo Source => SystemModule.Instance;

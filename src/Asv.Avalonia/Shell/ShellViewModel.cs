@@ -30,7 +30,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         Collapse = new ReactiveCommand((_, c) => CollapseAsync(c));
         Title = new BindableReactiveProperty<string>();
 
-        SelectedPage = new BindableReactiveProperty<IPage>();
+        SelectedPage = new BindableReactiveProperty<IPage?>();
         MainMenu = new ObservableList<IMenuItem>();
         MainMenuView = new MenuTree(MainMenu).DisposeItWith(Disposable);
         MainMenu.SetRoutableParent(this, true).DisposeItWith(Disposable);
@@ -93,7 +93,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
     protected ObservableList<IPage> InternalPages => _pages;
     public IReadOnlyObservableList<IPage> Pages => _pages;
-    public BindableReactiveProperty<IPage> SelectedPage { get; }
+    public BindableReactiveProperty<IPage?> SelectedPage { get; }
     public NotifyCollectionChangedSynchronizedViewList<IPage> PagesView { get; }
 
     #endregion
@@ -110,12 +110,19 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 page.InitArgs(id.Args);
                 _pages.Add(page);
 
+                SelectedPage.Value = null;
                 SelectedPage.Value = page;
             }
 
             return ValueTask.FromResult<IRoutable>(page);
         }
 
+        if (page.Id == SelectedPage.Value?.Id)
+        {
+            return ValueTask.FromResult<IRoutable>(page);
+        }
+
+        SelectedPage.Value = null;
         SelectedPage.Value = page;
 
         return base.Navigate(id);

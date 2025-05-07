@@ -10,6 +10,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
 {
+    private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
     private readonly IContainerHost _container;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
@@ -26,7 +27,8 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             ITreePage,
             NavigationId
         >?>().DisposeItWith(Disposable);
-        SelectedPage = new BindableReactiveProperty<ITreeSubpage?>().DisposeItWith(Disposable);
+        _selectedPage = new ReactiveProperty<ITreeSubpage?>().DisposeItWith(Disposable);
+        SelectedPage = _selectedPage.ToBindableReactiveProperty().DisposeItWith(Disposable);
         _breadCrumbSource = [];
         BreadCrumb = _breadCrumbSource.ToViewList().DisposeItWith(Disposable);
         SelectedNode.SubscribeAwait(SelectedNodeChanged).DisposeItWith(Disposable);
@@ -86,7 +88,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     {
         if (SelectedPage.Value != null && SelectedPage.Value.Id == id)
         {
-            await ValueTask.FromResult(SelectedPage.Value);
+            return SelectedPage.Value;
         }
 
         if (SelectedNode.Value?.Base.NavigateTo != id)
@@ -102,9 +104,17 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             return this;
         }
 
-        SelectedPage.Value?.Dispose();
+        var sub = _selectedPage.Value;
         newPage.Parent = this;
-        SelectedPage.Value = newPage;
+        _selectedPage.Value = newPage;
+
+        var children = _selectedPage.Value.GetRoutableChildren();
+        foreach (var child in children)
+        {
+            child.Parent = newPage;
+        }
+
+        sub?.Dispose();
         return newPage;
     }
 
