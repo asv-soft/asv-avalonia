@@ -34,6 +34,13 @@ public class SettingsKeymapViewModel : SettingsSubPage
         _view.DisposeMany().DisposeItWith(Disposable);
         _view.SetRoutableParentForView(this).DisposeItWith(Disposable);
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
+        SelectedItem
+            .Subscribe(item =>
+            {
+                _view.ForEach(it => it.IsSelected.Value = false);
+                item.IsSelected.Value = true;
+            })
+            .DisposeItWith(Disposable);
         SearchText
             .ThrottleLast(TimeSpan.FromMilliseconds(500))
             .Subscribe(x =>
@@ -53,7 +60,7 @@ public class SettingsKeymapViewModel : SettingsSubPage
     public ReactiveCommand ResetHotKeysToDefaultCommand { get; set; }
     public NotifyCollectionChangedSynchronizedViewList<SettingsKeyMapItemViewModel> Items { get; }
     public BindableReactiveProperty<string> SearchText { get; }
-    public IBindableReactiveProperty<SettingsKeyMapItemViewModel> SelectedItem { get; }
+    public BindableReactiveProperty<SettingsKeyMapItemViewModel> SelectedItem { get; }
 
     public override ValueTask<IRoutable> Navigate(NavigationId id)
     {

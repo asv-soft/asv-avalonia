@@ -10,23 +10,35 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
         : base(commandInfo.Id)
     {
         Info = commandInfo;
-        IsReset.Subscribe(reset =>
-        {
-            if (!reset)
-            {
-                return;
-            }
+        IsReset = new ReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        CurrentHotKeyValue = new BindableReactiveProperty<KeyGesture?>(
+            Info.CustomHotKey
+        ).DisposeItWith(Disposable);
+        PreviousHotKeyValue = new BindableReactiveProperty<KeyGesture?>().DisposeItWith(Disposable);
+        NewHotKeyValue = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
+        IsChangingHotKey = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        IsValid = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        IsSelected = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
 
-            Info.CustomHotKey = null;
-            if (Info.DefaultHotKey != null)
+        IsReset
+            .Subscribe(reset =>
             {
-                svc.SetHotKey(Info.Id, Info.DefaultHotKey);
-            }
+                if (!reset)
+                {
+                    return;
+                }
 
-            IsReset.Value = false;
-            CurrentHotKeyValue.Value = Info.CustomHotKey;
-        });
-        CurrentHotKeyValue.Value = Info.CustomHotKey;
+                Info.CustomHotKey = null;
+                if (Info.DefaultHotKey != null)
+                {
+                    svc.SetHotKey(Info.Id, Info.DefaultHotKey);
+                }
+
+                IsReset.Value = false;
+                CurrentHotKeyValue.Value = Info.CustomHotKey;
+            })
+            .DisposeItWith(Disposable);
+
         NewHotKeyValue
             .Subscribe(_ =>
             {
@@ -46,17 +58,19 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
                 }
             })
             .DisposeItWith(Disposable);
-        ChangeHotKeyCommand = new ReactiveCommand(_ =>
-        {
-            NewHotKeyValue.Value = string.Empty;
-            PreviousHotKeyValue.Value = Info.CustomHotKey ?? Info.DefaultHotKey;
-            IsChangingHotKey.Value = true;
-        });
+        ChangeHotKeyCommand = IsSelected
+            .ToReactiveCommand(_ =>
+            {
+                NewHotKeyValue.Value = string.Empty;
+                PreviousHotKeyValue.Value = Info.CustomHotKey ?? Info.DefaultHotKey;
+                IsChangingHotKey.Value = true;
+            })
+            .DisposeItWith(Disposable);
         CancelChangeHotKeyCommand = new ReactiveCommand(_ =>
         {
             NewHotKeyValue.Value = PreviousHotKeyValue.Value?.ToString();
             IsChangingHotKey.Value = false;
-        });
+        }).DisposeItWith(Disposable);
         ConfirmChangeHotKeyCommand = new ReactiveCommand(_ =>
         {
             if (NewHotKeyValue.Value == null)
@@ -70,7 +84,7 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
                 svc.GetHostKey(Info.Id) == Info.DefaultHotKey ? null : svc.GetHostKey(Info.Id);
 
             IsChangingHotKey.Value = false;
-        });
+        }).DisposeItWith(Disposable);
     }
 
     public ICommandInfo Info { get; }
@@ -82,19 +96,26 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
 
     public bool Filter(string text)
     {
-        return (Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true)
-            || (Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase) == true)
+        return (
+                Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
+                == true
+            )
+            || (
+                Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
+                == true
+            )
             || Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase)
             || Info.Source.ModuleName.Contains(text, StringComparison.OrdinalIgnoreCase)
             || Info.Description.Contains(text, StringComparison.OrdinalIgnoreCase);
     }
 
-    public ReactiveProperty<bool> IsReset { get; set; } = new(false);
-    public BindableReactiveProperty<KeyGesture?> CurrentHotKeyValue { get; set; } = new();
-    public BindableReactiveProperty<KeyGesture?> PreviousHotKeyValue { get; set; } = new();
-    public BindableReactiveProperty<string?> NewHotKeyValue { get; set; } = new();
-    public BindableReactiveProperty<bool> IsChangingHotKey { get; set; } = new(false);
-    public BindableReactiveProperty<bool> IsValid { get; set; } = new(false);
+    public ReactiveProperty<bool> IsReset { get; }
+    public BindableReactiveProperty<KeyGesture?> CurrentHotKeyValue { get; }
+    public BindableReactiveProperty<KeyGesture?> PreviousHotKeyValue { get; }
+    public BindableReactiveProperty<string?> NewHotKeyValue { get; }
+    public BindableReactiveProperty<bool> IsChangingHotKey { get; }
+    public BindableReactiveProperty<bool> IsValid { get; }
+    public BindableReactiveProperty<bool> IsSelected { get; }
     public ReactiveCommand ChangeHotKeyCommand { get; set; }
     public ReactiveCommand CancelChangeHotKeyCommand { get; set; }
     public ReactiveCommand ConfirmChangeHotKeyCommand { get; set; }
