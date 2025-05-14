@@ -24,18 +24,19 @@ public partial class SettingsKeymapView : UserControl
         {
             return;
         }
-        
+
         var rawGesture = vm.SelectedItem.Value.NewHotKeyValue.Value ?? string.Empty;
         base.OnKeyDown(e);
         if (rawGesture.Length == 0)
         {
             _previousKey = default;
         }
-        
-        if ((rawGesture.Length == 0 && !IsModifierKey(e.Key))
+
+        if (
+            (rawGesture.Length == 0 && !IsModifierKey(e.Key))
             || (rawGesture != string.Empty && !rawGesture.EndsWith('+'))
             || (IsModifierKey(e.Key) && IsModifierKey(_previousKey))
-           )
+        )
         {
             return;
         }
@@ -70,10 +71,10 @@ public partial class SettingsKeymapView : UserControl
     {
         return key
             is Key.LeftShift
-            or Key.RightShift
-            or Key.LeftCtrl
-            or Key.RightCtrl
-            or Key.LeftAlt
-            or Key.LeftAlt;
+                or Key.RightShift
+                or Key.LeftCtrl
+                or Key.RightCtrl
+                or Key.LeftAlt
+                or Key.LeftAlt;
     }
 }
