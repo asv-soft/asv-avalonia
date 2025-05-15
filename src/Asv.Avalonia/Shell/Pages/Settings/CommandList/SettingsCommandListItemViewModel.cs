@@ -4,9 +4,9 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class SettingsKeyMapItemViewModel : RoutableViewModel
+public class SettingsCommandListItemViewModel : RoutableViewModel
 {
-    public SettingsKeyMapItemViewModel(ICommandInfo commandInfo, ICommandService svc)
+    public SettingsCommandListItemViewModel(ICommandInfo commandInfo, ICommandService svc)
         : base(commandInfo.Id)
     {
         Info = commandInfo;
@@ -19,6 +19,16 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
         IsChangingHotKey = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
         IsValid = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
         IsSelected = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
+
+        IsSelected
+            .Subscribe(isSelected =>
+            {
+                if (!isSelected)
+                {
+                    IsChangingHotKey.Value = false;
+                }
+            })
+            .DisposeItWith(Disposable);
 
         IsReset
             .Subscribe(reset =>
@@ -61,6 +71,11 @@ public class SettingsKeyMapItemViewModel : RoutableViewModel
         ChangeHotKeyCommand = IsSelected
             .ToReactiveCommand(_ =>
             {
+                if (commandInfo.DefaultHotKey is null)
+                {
+                    return;
+                }
+
                 NewHotKeyValue.Value = string.Empty;
                 PreviousHotKeyValue.Value = Info.CustomHotKey ?? Info.DefaultHotKey;
                 IsChangingHotKey.Value = true;

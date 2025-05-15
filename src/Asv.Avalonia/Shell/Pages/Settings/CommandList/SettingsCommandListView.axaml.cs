@@ -3,10 +3,10 @@ using Avalonia.Input;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor(typeof(SettingsKeymapViewModel))]
-public partial class SettingsKeymapView : UserControl
+[ExportViewFor(typeof(SettingsCommandListViewModel))]
+public partial class SettingsCommandListView : UserControl
 {
-    public SettingsKeymapView()
+    public SettingsCommandListView()
     {
         InitializeComponent();
     }
@@ -15,7 +15,7 @@ public partial class SettingsKeymapView : UserControl
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        if (DataContext is not SettingsKeymapViewModel vm)
+        if (DataContext is not SettingsCommandListViewModel vm)
         {
             return;
         }
@@ -42,7 +42,7 @@ public partial class SettingsKeymapView : UserControl
         }
 
         var keyValue = $"{e.Key}";
-        if (e.Key is Key.LWin or Key.LWin)
+        if (e.Key is Key.LWin or Key.RWin)
         {
             return;
         }
@@ -51,9 +51,9 @@ public partial class SettingsKeymapView : UserControl
         {
             keyValue = e.Key switch
             {
-                Key.LeftAlt or Key.LeftAlt => KeyModifiers.Alt.ToString(),
-                Key.RightCtrl or Key.LeftCtrl => KeyModifiers.Control.ToString(),
-                Key.LeftShift or Key.RightShift => KeyModifiers.Shift.ToString(),
+                Key.LeftAlt or Key.RightAlt => nameof(KeyModifiers.Alt),
+                Key.RightCtrl or Key.LeftCtrl => nameof(KeyModifiers.Control),
+                Key.LeftShift or Key.RightShift => nameof(KeyModifiers.Shift),
                 _ => keyValue,
             };
             rawGesture += $"{keyValue}+";
@@ -75,6 +75,6 @@ public partial class SettingsKeymapView : UserControl
                 or Key.LeftCtrl
                 or Key.RightCtrl
                 or Key.LeftAlt
-                or Key.LeftAlt;
+                or Key.RightAlt;
     }
 }

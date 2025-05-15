@@ -33,10 +33,10 @@ public class SettingsExtension() : IExtensionFor<ISettingsPage>
 
         context.Nodes.Add(
             new TreePage(
-                SettingsKeymapViewModel.SubPageId,
-                RS.SettingsKeymapViewModel_Name,
+                SettingsCommandListViewModel.SubPageId,
+                RS.SettingsCommandListViewModel_Name,
                 MaterialIconKind.KeyboardSettings,
-                SettingsKeymapViewModel.SubPageId,
+                SettingsCommandListViewModel.SubPageId,
                 NavigationId.Empty
             ).DisposeItWith(contextDispose)
         );

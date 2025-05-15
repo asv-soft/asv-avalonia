@@ -86,13 +86,13 @@
     <data name="RedoCommand_CommandInfo_Description" xml:space="preserve">
         <value>Redo the last action</value>
     </data>
-    <data name="SettingsKeyMapView_Header_Name" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_Name" xml:space="preserve">
         <value>Name</value>
     </data>
-    <data name="SettingsKeyMapView_Header_Description" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_Description" xml:space="preserve">
         <value>Description</value>
     </data>
-    <data name="SettingsKeyMapView_Header_DefaultHotKey" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_DefaultHotKey" xml:space="preserve">
         <value>Default hotKey</value>
     </data>
     <data name="HomePageViewModel_Title" xml:space="preserve">
@@ -107,8 +107,8 @@
     <data name="SettingsUnitsViewModel_Name" xml:space="preserve">
         <value>Units</value>
     </data>
-    <data name="SettingsKeymapViewModel_Name" xml:space="preserve">
-        <value>Hotkeys</value>
+    <data name="SettingsCommandListViewModel_Name" xml:space="preserve">
+        <value>Command List</value>
     </data>
     <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
         <value>Nautical Mile</value>
@@ -141,10 +141,10 @@
     <data name="ShellView_Toolbar_Help" xml:space="preserve">
         <value>Help</value>
     </data>
-    <data name="SettingsKeyMapView_Header_CustomHotKey" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_CustomHotKey" xml:space="preserve">
         <value>Custom hotkey</value>
     </data>
-    <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
+    <data name="SettingsCommandListView_Action_ResetCustomHotKeys" xml:space="preserve">
         <value>Reset all to default </value>
     </data>
     <data name="ChangeCurrentUnitItemCommand_CommandInfo_Name" xml:space="preserve">
