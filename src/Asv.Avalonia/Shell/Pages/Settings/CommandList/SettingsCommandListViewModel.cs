@@ -24,7 +24,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
         SearchText = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         var observableList = new ObservableList<ICommandInfo>(svc.Commands);
         SelectedItem =
-            new BindableReactiveProperty<SettingsCommandListItemViewModel>().DisposeItWith(
+            new BindableReactiveProperty<SettingsCommandListItemViewModel?>().DisposeItWith(
                 Disposable
             );
         ResetHotKeysToDefaultCommand = new ReactiveCommand(ResetHotkeys).DisposeItWith(Disposable);
@@ -38,6 +38,11 @@ public class SettingsCommandListViewModel : SettingsSubPage
         SelectedItem
             .Subscribe(item =>
             {
+                if (item is null)
+                {
+                    return;
+                }
+
                 _view.ForEach(it => it.IsSelected.Value = false);
                 item.IsSelected.Value = true;
             })
@@ -61,7 +66,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
     public ReactiveCommand ResetHotKeysToDefaultCommand { get; set; }
     public NotifyCollectionChangedSynchronizedViewList<SettingsCommandListItemViewModel> Items { get; }
     public BindableReactiveProperty<string> SearchText { get; }
-    public BindableReactiveProperty<SettingsCommandListItemViewModel> SelectedItem { get; }
+    public BindableReactiveProperty<SettingsCommandListItemViewModel?> SelectedItem { get; }
 
     public override ValueTask<IRoutable> Navigate(NavigationId id)
     {

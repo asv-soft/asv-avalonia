@@ -17,16 +17,23 @@ public partial class SettingsCommandListView : UserControl
     {
         if (DataContext is not SettingsCommandListViewModel vm)
         {
+            base.OnKeyDown(e);
+            return;
+        }
+
+        if (vm.SelectedItem.Value is null)
+        {
+            base.OnKeyDown(e);
             return;
         }
 
         if (!vm.SelectedItem.Value.IsChangingHotKey.Value)
         {
+            base.OnKeyDown(e);
             return;
         }
 
         var rawGesture = vm.SelectedItem.Value.NewHotKeyValue.Value ?? string.Empty;
-        base.OnKeyDown(e);
         if (rawGesture.Length == 0)
         {
             _previousKey = default;
@@ -65,6 +72,8 @@ public partial class SettingsCommandListView : UserControl
 
         _previousKey = e.Key;
         vm.SelectedItem.Value.NewHotKeyValue.Value = rawGesture;
+        e.Handled = true;
+        base.OnKeyDown(e);
     }
 
     private bool IsModifierKey(Key key)

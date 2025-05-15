@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Asv.Common;
 using Avalonia.Input;
 using R3;
@@ -6,10 +7,13 @@ namespace Asv.Avalonia;
 
 public class SettingsCommandListItemViewModel : RoutableViewModel
 {
+    private readonly ICommandService _commandService;
+
     public SettingsCommandListItemViewModel(ICommandInfo commandInfo, ICommandService svc)
         : base(commandInfo.Id)
     {
         Info = commandInfo;
+        _commandService = svc;
         IsReset = new ReactiveProperty<bool>(false).DisposeItWith(Disposable);
         CurrentHotKeyValue = new BindableReactiveProperty<KeyGesture?>(
             Info.CustomHotKey
@@ -39,7 +43,7 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
                 }
 
                 Info.CustomHotKey = null;
-                if (Info.DefaultHotKey != null)
+                if (Info.DefaultHotKey is not null)
                 {
                     svc.SetHotKey(Info.Id, Info.DefaultHotKey);
                 }
@@ -86,20 +90,24 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
             NewHotKeyValue.Value = PreviousHotKeyValue.Value?.ToString();
             IsChangingHotKey.Value = false;
         }).DisposeItWith(Disposable);
-        ConfirmChangeHotKeyCommand = new ReactiveCommand(_ =>
+        ConfirmChangeHotKey = new BindableAsyncCommand(ConfirmChangeHotKeyCommand.Id, this);
+    }
+
+    internal void ConfirmChangeHotKeyImpl()
+    {
+        if (NewHotKeyValue.Value == null)
         {
-            if (NewHotKeyValue.Value == null)
-            {
-                return;
-            }
+            return;
+        }
 
-            Info.CustomHotKey = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
-            svc.SetHotKey(Info.Id, Info.CustomHotKey);
-            CurrentHotKeyValue.Value =
-                svc.GetHostKey(Info.Id) == Info.DefaultHotKey ? null : svc.GetHostKey(Info.Id);
+        Info.CustomHotKey = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
+        _commandService.SetHotKey(Info.Id, Info.CustomHotKey);
+        CurrentHotKeyValue.Value =
+            _commandService.GetHostKey(Info.Id) == Info.DefaultHotKey
+                ? null
+                : _commandService.GetHostKey(Info.Id);
 
-            IsChangingHotKey.Value = false;
-        }).DisposeItWith(Disposable);
+        IsChangingHotKey.Value = false;
     }
 
     public ICommandInfo Info { get; }
@@ -133,5 +141,5 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
     public BindableReactiveProperty<bool> IsSelected { get; }
     public ReactiveCommand ChangeHotKeyCommand { get; set; }
     public ReactiveCommand CancelChangeHotKeyCommand { get; set; }
-    public ReactiveCommand ConfirmChangeHotKeyCommand { get; set; }
+    public ICommand ConfirmChangeHotKey { get; set; }
 }

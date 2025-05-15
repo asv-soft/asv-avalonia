@@ -61,6 +61,11 @@ public class CommandService : AsyncDisposableOnce, ICommandService
     {
         try
         {
+            if (keyEventArgs.Handled)
+            {
+                return;
+            }
+
             if (keyEventArgs.KeyModifiers == KeyModifiers.None)
             {
                 // we don't want to handle key events without modifiers
