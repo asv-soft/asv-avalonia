@@ -1,8 +1,11 @@
+using System.Composition;
 using Avalonia.Input;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
+[ExportCommand]
+[Shared]
 public class ChangeKeyGesturePropertyCommand : ContextCommand<IHistoricalProperty<KeyGesture?>>
 {
     #region Static

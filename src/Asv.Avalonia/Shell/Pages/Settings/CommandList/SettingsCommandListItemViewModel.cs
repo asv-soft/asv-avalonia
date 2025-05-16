@@ -15,24 +15,11 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
         Info = commandInfo;
         _commandService = svc;
         IsReset = new ReactiveProperty<bool>(false).DisposeItWith(Disposable);
-        CurrentHotKeyValue = Info
-            .HotKeyInfo.CustomHotKey.ToReadOnlyBindableReactiveProperty()
-            .DisposeItWith(Disposable);
-        PreviousHotKeyValue = new BindableReactiveProperty<KeyGesture?>().DisposeItWith(Disposable);
-        NewHotKeyValue = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
+        CurrentHotKeyString = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
+        CurrentHotKey = new BindableReactiveProperty<KeyGesture?>().DisposeItWith(Disposable);
         IsChangingHotKey = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
-        IsValid = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
         IsSelected = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
-
-        IsSelected
-            .Subscribe(isSelected =>
-            {
-                if (!isSelected)
-                {
-                    IsChangingHotKey.Value = false;
-                }
-            })
-            .DisposeItWith(Disposable);
+        IsValid = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
 
         IsReset
             .Subscribe(reset =>
@@ -48,11 +35,13 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
                     svc.SetHotKey(Info.Id, Info.HotKeyInfo.DefaultHotKey);
                 }
 
+                CurrentHotKeyString.Value = string.Empty;
+                CurrentHotKey.Value = null;
                 IsReset.Value = false;
             })
             .DisposeItWith(Disposable);
 
-        NewHotKeyValue
+        CurrentHotKeyString
             .Subscribe(_ =>
             {
                 if (_ == null)
@@ -62,7 +51,7 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
 
                 try
                 {
-                    KeyGesture.Parse(_.TrimEnd('+'));
+                    CurrentHotKey.Value = KeyGesture.Parse(_.TrimEnd('+'));
                     IsValid.Value = true;
                 }
                 catch (Exception)
@@ -71,6 +60,7 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
                 }
             })
             .DisposeItWith(Disposable);
+
         ChangeHotKeyCommand = IsSelected
             .ToReactiveCommand(_ =>
             {
@@ -79,29 +69,42 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
                     return;
                 }
 
-                NewHotKeyValue.Value = string.Empty;
-                PreviousHotKeyValue.Value =
-                    Info.HotKeyInfo.CustomHotKey.Value ?? Info.HotKeyInfo.DefaultHotKey;
+                CurrentHotKeyString.Value = string.Empty;
+                CurrentHotKey.Value = null;
                 IsChangingHotKey.Value = true;
             })
             .DisposeItWith(Disposable);
         CancelChangeHotKeyCommand = new ReactiveCommand(_ =>
         {
-            NewHotKeyValue.Value = PreviousHotKeyValue.Value?.ToString();
+            CurrentHotKeyString.Value = Info.HotKeyInfo.CustomHotKey.Value?.ToString();
+            CurrentHotKey.Value = Info.HotKeyInfo.CustomHotKey.Value;
             IsChangingHotKey.Value = false;
         }).DisposeItWith(Disposable);
         ConfirmChangeHotKey = new BindableAsyncCommand(ConfirmChangeHotKeyCommand.Id, this);
+
+        IsSelected
+            .Subscribe(isSelected =>
+            {
+                if (!isSelected)
+                {
+                    CancelChangeHotKeyCommand.Execute(Unit.Default);
+                }
+            })
+            .DisposeItWith(Disposable);
     }
 
     internal void ConfirmChangeHotKeyImpl()
     {
-        if (NewHotKeyValue.Value == null)
+        if (CurrentHotKey.Value is null)
         {
-            return;
+            return; // TODO: work more on ctrl+z
         }
 
-        Info.HotKeyInfo.CustomHotKey.Value = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
-        _commandService.SetHotKey(Info.Id, Info.HotKeyInfo.CustomHotKey.Value);
+        if (CurrentHotKey.Value is not null)
+        {
+            _commandService.SetHotKey(Info.Id, CurrentHotKey.Value);
+            Info.HotKeyInfo.CustomHotKey.Value = CurrentHotKey.Value;
+        }
 
         IsChangingHotKey.Value = false;
     }
@@ -129,9 +132,8 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
     }
 
     public ReactiveProperty<bool> IsReset { get; }
-    public IReadOnlyBindableReactiveProperty<KeyGesture?> CurrentHotKeyValue { get; }
-    public BindableReactiveProperty<KeyGesture?> PreviousHotKeyValue { get; }
-    public BindableReactiveProperty<string?> NewHotKeyValue { get; }
+    public BindableReactiveProperty<string?> CurrentHotKeyString { get; }
+    public BindableReactiveProperty<KeyGesture?> CurrentHotKey { get; }
     public BindableReactiveProperty<bool> IsChangingHotKey { get; }
     public BindableReactiveProperty<bool> IsValid { get; }
     public BindableReactiveProperty<bool> IsSelected { get; }

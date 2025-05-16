@@ -33,7 +33,7 @@ public partial class SettingsCommandListView : UserControl
             return;
         }
 
-        var rawGesture = vm.SelectedItem.Value.NewHotKeyValue.Value ?? string.Empty;
+        var rawGesture = vm.SelectedItem.Value.CurrentHotKeyString.Value ?? string.Empty;
         if (rawGesture.Length == 0)
         {
             _previousKey = default;
@@ -71,7 +71,7 @@ public partial class SettingsCommandListView : UserControl
         }
 
         _previousKey = e.Key;
-        vm.SelectedItem.Value.NewHotKeyValue.Value = rawGesture;
+        vm.SelectedItem.Value.CurrentHotKeyString.Value = rawGesture;
         e.Handled = true;
         base.OnKeyDown(e);
     }

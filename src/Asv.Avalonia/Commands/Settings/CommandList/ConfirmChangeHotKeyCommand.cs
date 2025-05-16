@@ -31,15 +31,18 @@ public sealed class ConfirmChangeHotKeyCommand : ContextCommand<SettingsCommandL
         CancellationToken cancel
     )
     {
-        if (newValue is null)
+        var oldValue = new KeyGestureCommandArg(context.Info.HotKeyInfo.CustomHotKey.Value);
+        if (newValue == CommandArg.Empty)
         {
             context.ConfirmChangeHotKeyImpl();
         }
-        else
+        else if (newValue is KeyGestureCommandArg arg)
         {
-            // context.CurrentHotKeyValue.Value = null;
+            context.CurrentHotKeyString.Value = arg.Value?.ToString();
+            context.CurrentHotKey.Value = arg.Value;
+            context.ConfirmChangeHotKeyImpl();
         }
 
-        return ValueTask.FromResult<ICommandArg?>(null);
+        return ValueTask.FromResult<ICommandArg?>(oldValue);
     }
 }
