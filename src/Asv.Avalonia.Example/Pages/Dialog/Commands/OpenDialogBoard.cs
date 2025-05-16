@@ -17,7 +17,7 @@ public class OpenDialogBoardCommand(INavigationService nav)
         Name = "Open dialog board",
         Description = "Commands that opens the dialog board",
         Icon = DialogBoardViewModel.PageIcon,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

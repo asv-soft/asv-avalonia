@@ -18,7 +18,7 @@ public sealed class ChangeCurrentUnitItemCommand : NoContextCommand
         Name = RS.ChangeCurrentUnitItemCommand_CommandInfo_Name,
         Description = RS.ChangeCurrentUnitItemCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Settings,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

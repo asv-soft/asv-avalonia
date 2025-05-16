@@ -19,7 +19,7 @@ public class OpenDebugWindowCommand(ExportFactory<IDebugWindow> factory) : NoCon
         Name = RS.OpenDebugCommand_CommandInfo_Name,
         Description = RS.OpenDebugCommand_CommandInfo_Description,
         Icon = MaterialIconKind.WindowOpenVariant,
-        DefaultHotKey = KeyGesture.Parse("Ctrl+D"),
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = KeyGesture.Parse("Ctrl+D") },
         Source = SystemModule.Instance,
     };
 

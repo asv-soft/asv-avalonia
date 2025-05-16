@@ -17,7 +17,7 @@ public class ChangeLanguageCommand : NoContextCommand
         Name = RS.ChangeLanguageCommand_CommandInfo_Name,
         Description = RS.ChangeLanguageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Translate,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

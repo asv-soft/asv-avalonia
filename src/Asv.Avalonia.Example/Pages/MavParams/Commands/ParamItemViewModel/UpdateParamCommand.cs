@@ -16,7 +16,10 @@ public class UpdateParamCommand : ContextCommand<ParamItemViewModel>
         Name = RS.UpdateParamCommand_CommandInfo_Name,
         Description = RS.UpdateParamCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Update,
-        DefaultHotKey = null, // TODO: make a key bind when new key listener system appears
+        HotKeyInfo = new HotKeyInfo
+        {
+            DefaultHotKey = null, // TODO: make a key bind when new key listener system appears
+        },
         Source = SystemModule.Instance,
     };
 

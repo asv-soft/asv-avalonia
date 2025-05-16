@@ -17,7 +17,7 @@ public class ChangeThemeCommand : NoContextCommand
         Name = RS.ChangeThemeCommand_CommandInfo_Name,
         Description = RS.ChangeThemeCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ThemeLightDark,
-        DefaultHotKey = KeyGesture.Parse("Ctrl+T"),
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = KeyGesture.Parse("Ctrl+T") },
         Source = SystemModule.Instance,
     };
 

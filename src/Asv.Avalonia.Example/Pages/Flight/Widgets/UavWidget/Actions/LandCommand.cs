@@ -21,7 +21,7 @@ public class LandCommand : ContextCommand<UavWidgetViewModel>
         Name = RS.UavAction_Land,
         Description = RS.UavAction_Land_Description,
         Icon = MaterialIconKind.AeroplaneLanding,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

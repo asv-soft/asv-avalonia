@@ -79,14 +79,14 @@
     <data name="RedoCommand_CommandInfo_Description" xml:space="preserve">
         <value>Повторить последнее действие</value>
     </data>
-    <data name="SettingsKeyMapView_Header_Name" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_Name" xml:space="preserve">
         <value>Имя</value>
     </data>
-    <data name="SettingsKeyMapView_Header_Description" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_Description" xml:space="preserve">
         <value>Описание</value>
     </data>
    
-    <data name="SettingsKeyMapView_Header_DefaultHotKey" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_DefaultHotKey" xml:space="preserve">
         <value>Горячая клавиша по умолчанию</value>
     </data>
     
@@ -106,8 +106,8 @@
         <value>Единицы измерения</value>
     </data>
     
-    <data name="SettingsKeymapViewModel_Name" xml:space="preserve">
-        <value>Горячие клавиши</value>
+    <data name="SettingsCommandListViewModel_Name" xml:space="preserve">
+        <value>Список команд</value>
     </data>
     <data name="ShellView_WindowControlButton_Close" xml:space="preserve">
         <value>Закрыть</value>
@@ -134,10 +134,10 @@
     <data name="ShellView_Toolbar_View" xml:space="preserve">
         <value>Вид</value>
     </data>
-    <data name="SettingsKeyMapView_Header_CustomHotKey" xml:space="preserve">
+    <data name="SettingsCommandListMapView_Header_CustomHotKey" xml:space="preserve">
         <value>Пользовательская горячая клавиша</value>
     </data>
-    <data name="SettingsKeyMapView_Action_ResetCustomHotKeys" xml:space="preserve">
+    <data name="SettingsCommandListView_Action_ResetCustomHotKeys" xml:space="preserve">
         <value>Сбросить всё по умолчанию</value>
     </data>
     <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
@@ -683,5 +683,11 @@
     </data>
     <data name="InParts_Progress_Description" xml:space="preserve">
         <value>Прогресс в частях</value>
+    </data>
+    <data name="ChangeKeyGesturePropertyCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Изменить свойство типа KeyGesture</value>
+    </data>
+    <data name="ChangeKeyGesturePropertyCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда меняет значение свойства с типом KeyGesture</value>
     </data>
 </root>

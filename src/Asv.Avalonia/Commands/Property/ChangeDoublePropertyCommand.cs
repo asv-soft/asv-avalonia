@@ -17,7 +17,7 @@ public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<do
         Name = RS.ChangeDoublePropertyCommand_CommandInfo_Name,
         Description = RS.ChangeDoublePropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 
