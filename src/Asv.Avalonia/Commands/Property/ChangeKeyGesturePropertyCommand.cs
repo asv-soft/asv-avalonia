@@ -1,21 +1,19 @@
-using System.Composition;
+using Avalonia.Input;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
-public class ChangeBoolPropertyCommand : ContextCommand<IHistoricalProperty<bool>>
+public class ChangeKeyGesturePropertyCommand : ContextCommand<IHistoricalProperty<KeyGesture?>>
 {
     #region Static
 
-    public const string Id = $"{BaseId}.property.bool";
+    public const string Id = $"{BaseId}.property.keygesture";
 
     private static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = RS.ChangeBoolPropertyCommand_CommandInfo_Name,
-        Description = RS.ChangeBoolPropertyCommand_CommandInfo_Description,
+        Name = RS.ChangeKeyGesturePropertyCommand_CommandInfo_Name,
+        Description = RS.ChangeKeyGesturePropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
         HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
@@ -26,19 +24,19 @@ public class ChangeBoolPropertyCommand : ContextCommand<IHistoricalProperty<bool
     #endregion
 
     protected override ValueTask<ICommandArg?> InternalExecute(
-        IHistoricalProperty<bool> context,
+        IHistoricalProperty<KeyGesture?> context,
         ICommandArg newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is not BoolCommandArg value)
+        if (newValue is not KeyGestureCommandArg value)
         {
             throw new InvalidCastException(
-                $"Invalid value type. Argument must be {nameof(BoolCommandArg)}"
+                $"Invalid value type. Persistable must be a {typeof(KeyGesture)}"
             );
         }
 
-        var oldValue = new BoolCommandArg(context.ModelValue.Value);
+        var oldValue = new KeyGestureCommandArg(context.ModelValue.Value);
         context.ModelValue.OnNext(value.Value);
         return ValueTask.FromResult<ICommandArg?>(oldValue);
     }

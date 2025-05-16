@@ -1358,5 +1358,17 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("InParts_Progress_Description", resourceCulture);
             }
         }
+        
+        public static string ChangeKeyGesturePropertyCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ChangeKeyGesturePropertyCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ChangeKeyGesturePropertyCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ChangeKeyGesturePropertyCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
     }
 }

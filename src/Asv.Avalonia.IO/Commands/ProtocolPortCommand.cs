@@ -16,8 +16,7 @@ public class ProtocolPortCommand(IDeviceManager manager) : NoContextCommand
         Name = "Add/remove/change port",
         Description = "Add/remove/change port",
         Icon = MaterialIconKind.SerialPort,
-        DefaultHotKey = null,
-        CustomHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = IoModule.Instance,
     };
 

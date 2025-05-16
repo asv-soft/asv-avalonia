@@ -18,7 +18,7 @@ public class ClosePageCommand : ContextCommand<IPage>
         Name = RS.ClosePageCommand_CommandInfo_Name,
         Description = RS.ClosePageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.CloseBold,
-        DefaultHotKey = KeyGesture.Parse("Ctrl+Q"),
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = KeyGesture.Parse("Ctrl+Q") },
         Source = SystemModule.Instance,
     };
 

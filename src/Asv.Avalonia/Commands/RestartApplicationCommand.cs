@@ -17,7 +17,7 @@ public class RestartApplicationCommand : ContextCommand<IRoutable>
         Name = RS.RestartApplicationCommand_Info_Name,
         Description = RS.RestartApplicationCommand_Info_Description,
         Icon = MaterialIconKind.Restart,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

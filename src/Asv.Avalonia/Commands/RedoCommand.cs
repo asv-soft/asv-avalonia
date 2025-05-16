@@ -17,7 +17,7 @@ public class RedoCommand : ContextCommand<IShell>
             Name = RS.RedoCommand_CommandInfo_Name,
             Description = RS.RedoCommand_CommandInfo_Description,
             Icon = MaterialIconKind.RedoVariant,
-            DefaultHotKey = KeyGesture.Parse("Ctrl+Y"),
+            HotKeyInfo = new HotKeyInfo { DefaultHotKey = KeyGesture.Parse("Ctrl+Y") },
             Source = SystemModule.Instance,
         };
 

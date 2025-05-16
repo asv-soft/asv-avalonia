@@ -17,7 +17,7 @@ public class ChangeStringPropertyCommand : ContextCommand<IHistoricalProperty<st
         Name = RS.ChangeStringPropertyCommand_CommandInfo_Name,
         Description = RS.ChangeStringPropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

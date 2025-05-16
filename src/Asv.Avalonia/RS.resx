@@ -686,4 +686,10 @@
     <data name="InParts_Progress_Description" xml:space="preserve">
         <value>Progress in parts</value>
     </data>
+    <data name="ChangeKeyGesturePropertyCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Change KeyGesture property</value>
+    </data>
+    <data name="ChangeKeyGesturePropertyCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command changes the value of a property with the KeyGeture type</value>
+    </data>
 </root>

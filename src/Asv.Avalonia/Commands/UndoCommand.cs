@@ -17,7 +17,7 @@ public class UndoCommand : ContextCommand<IShell>
             Name = RS.UndoCommand_CommandInfo_Name,
             Description = RS.UndoCommand_CommandInfo_Description,
             Icon = MaterialIconKind.UndoVariant,
-            DefaultHotKey = KeyGesture.Parse("Ctrl+Z"),
+            HotKeyInfo = new HotKeyInfo { DefaultHotKey = KeyGesture.Parse("Ctrl+Z") },
             Source = SystemModule.Instance,
         };
 

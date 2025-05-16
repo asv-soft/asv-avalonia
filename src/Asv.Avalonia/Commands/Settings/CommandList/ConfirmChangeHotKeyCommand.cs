@@ -17,7 +17,7 @@ public sealed class ConfirmChangeHotKeyCommand : ContextCommand<SettingsCommandL
         Name = "Confirm change hotkey",
         Description = "Command that confirms hotkey change",
         Icon = MaterialIconKind.KeyboardCaps,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

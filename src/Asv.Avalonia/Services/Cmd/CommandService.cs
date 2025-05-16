@@ -138,13 +138,13 @@ public class CommandService : AsyncDisposableOnce, ICommandService
         // define hotkeys according to loaded CommandInfo
         foreach (var value in _commands.Values)
         {
-            if (value.Info.DefaultHotKey == null)
+            if (value.Info.HotKeyInfo.DefaultHotKey == null)
             {
                 continue;
             }
 
-            keyVsCommandBuilder.Add(value.Info.DefaultHotKey, value);
-            commandVsKeyBuilder.Add(value.Info.Id, value.Info.DefaultHotKey);
+            keyVsCommandBuilder.Add(value.Info.HotKeyInfo.DefaultHotKey, value);
+            commandVsKeyBuilder.Add(value.Info.Id, value.Info.HotKeyInfo.DefaultHotKey);
         }
 
         var config = _cfg.Get<CommandServiceConfig>();
@@ -208,13 +208,13 @@ public class CommandService : AsyncDisposableOnce, ICommandService
                 continue;
             }
 
-            command.Info.CustomHotKey = keyGesture; // set the custom value manually
+            command.Info.HotKeyInfo.CustomHotKey.Value = keyGesture; // set the custom value manually
 
-            if (command.Info.CustomHotKey == keyGesture)
+            if (command.Info.HotKeyInfo.CustomHotKey.Value == keyGesture)
             {
-                if (command.Info.DefaultHotKey is not null)
+                if (command.Info.HotKeyInfo.DefaultHotKey is not null)
                 {
-                    keyVsCommandBuilder.Remove(command.Info.DefaultHotKey); // remove command with default key value
+                    keyVsCommandBuilder.Remove(command.Info.HotKeyInfo.DefaultHotKey); // remove command with default key value
                 }
             }
 

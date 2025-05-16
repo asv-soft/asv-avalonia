@@ -15,9 +15,9 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
         Info = commandInfo;
         _commandService = svc;
         IsReset = new ReactiveProperty<bool>(false).DisposeItWith(Disposable);
-        CurrentHotKeyValue = new BindableReactiveProperty<KeyGesture?>(
-            Info.CustomHotKey
-        ).DisposeItWith(Disposable);
+        CurrentHotKeyValue = Info
+            .HotKeyInfo.CustomHotKey.ToReadOnlyBindableReactiveProperty()
+            .DisposeItWith(Disposable);
         PreviousHotKeyValue = new BindableReactiveProperty<KeyGesture?>().DisposeItWith(Disposable);
         NewHotKeyValue = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
         IsChangingHotKey = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
@@ -42,14 +42,13 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
                     return;
                 }
 
-                Info.CustomHotKey = null;
-                if (Info.DefaultHotKey is not null)
+                Info.HotKeyInfo.CustomHotKey.Value = null;
+                if (Info.HotKeyInfo.DefaultHotKey is not null)
                 {
-                    svc.SetHotKey(Info.Id, Info.DefaultHotKey);
+                    svc.SetHotKey(Info.Id, Info.HotKeyInfo.DefaultHotKey);
                 }
 
                 IsReset.Value = false;
-                CurrentHotKeyValue.Value = Info.CustomHotKey;
             })
             .DisposeItWith(Disposable);
 
@@ -75,13 +74,14 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
         ChangeHotKeyCommand = IsSelected
             .ToReactiveCommand(_ =>
             {
-                if (commandInfo.DefaultHotKey is null)
+                if (commandInfo.HotKeyInfo.DefaultHotKey is null)
                 {
                     return;
                 }
 
                 NewHotKeyValue.Value = string.Empty;
-                PreviousHotKeyValue.Value = Info.CustomHotKey ?? Info.DefaultHotKey;
+                PreviousHotKeyValue.Value =
+                    Info.HotKeyInfo.CustomHotKey.Value ?? Info.HotKeyInfo.DefaultHotKey;
                 IsChangingHotKey.Value = true;
             })
             .DisposeItWith(Disposable);
@@ -100,12 +100,8 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
             return;
         }
 
-        Info.CustomHotKey = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
-        _commandService.SetHotKey(Info.Id, Info.CustomHotKey);
-        CurrentHotKeyValue.Value =
-            _commandService.GetHostKey(Info.Id) == Info.DefaultHotKey
-                ? null
-                : _commandService.GetHostKey(Info.Id);
+        Info.HotKeyInfo.CustomHotKey.Value = KeyGesture.Parse(NewHotKeyValue.Value.TrimEnd('+'));
+        _commandService.SetHotKey(Info.Id, Info.HotKeyInfo.CustomHotKey.Value);
 
         IsChangingHotKey.Value = false;
     }
@@ -120,12 +116,12 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
     public bool Filter(string text)
     {
         return (
-                Info.CustomHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
-                == true
+                Info.HotKeyInfo.CustomHotKey.Value?.ToString()
+                    .Contains(text, StringComparison.OrdinalIgnoreCase) == true
             )
             || (
-                Info.DefaultHotKey?.ToString().Contains(text, StringComparison.OrdinalIgnoreCase)
-                == true
+                Info.HotKeyInfo.DefaultHotKey?.ToString()
+                    .Contains(text, StringComparison.OrdinalIgnoreCase) == true
             )
             || Info.Name.Contains(text, StringComparison.OrdinalIgnoreCase)
             || Info.Source.ModuleName.Contains(text, StringComparison.OrdinalIgnoreCase)
@@ -133,7 +129,7 @@ public class SettingsCommandListItemViewModel : RoutableViewModel
     }
 
     public ReactiveProperty<bool> IsReset { get; }
-    public BindableReactiveProperty<KeyGesture?> CurrentHotKeyValue { get; }
+    public IReadOnlyBindableReactiveProperty<KeyGesture?> CurrentHotKeyValue { get; }
     public BindableReactiveProperty<KeyGesture?> PreviousHotKeyValue { get; }
     public BindableReactiveProperty<string?> NewHotKeyValue { get; }
     public BindableReactiveProperty<bool> IsChangingHotKey { get; }
