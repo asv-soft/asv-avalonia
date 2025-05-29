@@ -77,8 +77,8 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
 
         _localItems = [];
         _remoteItems = [];
-        _localItems.DisposeRemovedItems();
-        _remoteItems.DisposeRemovedItems();
+        _localItems.DisposeMany();
+        _remoteItems.DisposeMany();
 
         LocalItemsView = new BrowserTree(_localItems, _localRootPath);
         RemoteItemsView = new BrowserTree(

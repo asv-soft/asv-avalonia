@@ -1,11 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using Asv.Avalonia;
 using Asv.Avalonia.Example.PacketViewer;
 using Asv.Common;
 using R3;
 
-public class PacketFilterViewModel : IDisposable
+public class PacketFilterViewModel : RoutableViewModel
 {
     private volatile int _cnt;
     private readonly IncrementalRateCounter _packetRate = new(3);
@@ -24,6 +25,7 @@ public class PacketFilterViewModel : IDisposable
     }
 
     public PacketFilterViewModel(PacketMessageViewModel pkt, IUnitService unitService)
+        : base(pkt.Id.ToString())
     {
         Type = new BindableReactiveProperty<string>(string.Empty);
         Source = new BindableReactiveProperty<string>(string.Empty);
@@ -59,8 +61,13 @@ public class PacketFilterViewModel : IDisposable
         MessageRateText.Value = _unit.InternationalSystemUnit.PrintWithUnits(packetRate);
     }
 
-    public void Dispose()
+    protected override void Dispose(bool disposing)
     {
         _disposables.Dispose();
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
     }
 }

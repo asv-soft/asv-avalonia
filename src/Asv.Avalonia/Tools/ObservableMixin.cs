@@ -109,7 +109,7 @@ public static class ObservableMixin
         return src.ObserveRemove().Subscribe(x => x.Value.View.Dispose());
     }
 
-    public static IDisposable DisposeRemovedItems<T>(this IObservableCollection<T> src)
+    public static IDisposable DisposeMany<T>(this IObservableCollection<T> src)
         where T : IDisposable
     {
         return src.ObserveRemove().Subscribe(x => x.Value.Dispose());

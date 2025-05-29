@@ -36,15 +36,15 @@
             <Button DockPanel.Dock="Right" Grid.Row="0" Margin="5 0 0 0" HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch" Command="{Binding ExportToCsv}"
                     Content="{avalonia:MaterialIconExt ContentSave}"
-                    ToolTip.Tip="{x:Static gui1:RS.PacketViewerView_Save}"
+                    ToolTip.Tip="Save"
                     IsEnabled="{Binding IsPause.Value}"
                     Classes="saveButton" />
             <Button DockPanel.Dock="Right" Margin="5 0 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     Command="{CompiledBinding ClearAll}" Content="{avalonia:MaterialIconExt Bin}"
-                    ToolTip.Tip="{x:Static gui1:RS.PacketViewerView_ClearAll}" />
+                    ToolTip.Tip="Clear all" />
             <ToggleButton DockPanel.Dock="Right" Margin="5 0 5 0" HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch" IsChecked="{Binding IsPause.Value, Mode=TwoWay}"
-                          ToolTip.Tip="{x:Static gui1:RS.PacketViewerView_PlayPause}">
+                          ToolTip.Tip="PLAY/PAUSE">
                 <Panel>
                     <ContentPresenter Content="{avalonia:MaterialIconExt Play}" Classes="tbchecked" />
                     <ContentPresenter Content="{avalonia:MaterialIconExt Pause}" Classes="tbunchecked" />
@@ -95,11 +95,11 @@
         </ListBox>
 
         <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="340" Spacing="4">
-            <Expander Header="{x:Static gui1:RS.PacketViewer_Expander_MessageSources}">
+            <Expander Header="Message sources">
                 <StackPanel Spacing="4">
                     <CheckBox HorizontalAlignment="Left" IsChecked="True" 
-                             Checked="OnSourcesChecked" Unchecked="OnSourcesUnchecked" 
-                             Content="{x:Static gui1:RS.PacketViewerView_CheckAll}" />
+                             IsCheckedChanged="OnSourcesChecked"
+                             Content="Check All" />
                     <ListBox HorizontalAlignment="Stretch" x:Name="SourceFilters"
                              ItemsSource="{Binding FiltersBySource}" Grid.IsSharedSizeScope="True">
                         <ItemsControl.ItemTemplate>
@@ -123,11 +123,11 @@
                     </ListBox>
                 </StackPanel>
             </Expander>
-            <Expander Header="{x:Static gui1:RS.PacketViewer_Expander_MessageTypes}">
+            <Expander Header="Message Types">
                 <StackPanel Spacing="4">
                     <CheckBox HorizontalAlignment="Left" IsChecked="True" 
-                             Checked="OnTypesChecked" Unchecked="OnTypesUnchecked" 
-                             Content="{x:Static gui1:RS.PacketViewerView_CheckAll}" />
+                             IsCheckedChanged="OnTypesChecked"
+                             Content="Check ALL" />
                     <ListBox HorizontalAlignment="Stretch" x:Name="TypeFilters" 
                              ItemsSource="{Binding FiltersByType}" Grid.IsSharedSizeScope="True">
                         <ItemsControl.ItemTemplate>

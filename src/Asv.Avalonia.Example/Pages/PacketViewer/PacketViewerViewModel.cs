@@ -1,12 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.Example.Converters;
-using Asv.Avalonia.Example.PacketViewer.Dialogs;
 using Asv.Avalonia.IO;
 using Asv.Common;
 using Asv.Mavlink;
@@ -22,27 +20,23 @@ namespace Asv.Avalonia.Example.PacketViewer;
 [ExportPage(PageId)]
 public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 {
-    public const string PageId = "packet_viewer";
+    public const string PageId = "packet-viewer";
     public const MaterialIconKind PageIcon = MaterialIconKind.Package;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly INavigationService _navigationService;
     private readonly ILogger<PacketViewerViewModel> _logger;
     private readonly IAppPath _app;
     private readonly IUnitService _unit;
     private readonly IDeviceManager _deviceManager;
     private readonly IEnumerable<IPacketConverter> _converters;
-    private readonly IDialogService _dialogService;
-    private readonly CompositeDisposable _disposables = new();
     public const int MaxPacketSize = 1000;
 
-    private readonly ObservableList<PacketMessageViewModel> _packetsList = new();
-    private readonly ObservableList<PacketFilterViewModel> _filtersBySourceList = new();
-    private readonly ObservableList<PacketFilterViewModel> _filtersByTypeList = new();
+    private readonly ObservableList<PacketMessageViewModel> _packetsList;
+    private readonly ObservableList<PacketFilterViewModel> _filtersBySourceList;
+    private readonly ObservableList<PacketFilterViewModel> _filtersByTypeList;
     private NotifyCollectionChangedSynchronizedViewList<PacketMessageViewModel> _filteredPackets;
 
-    public BindableReactiveProperty<bool> IsPause { get; } = new(false);
-    public BindableReactiveProperty<string> SearchText { get; } = new(string.Empty);
-    public BindableReactiveProperty<PacketMessageViewModel?> SelectedPacket { get; } = new();
+    public BindableReactiveProperty<bool> IsPause { get; }
+    public BindableReactiveProperty<string> SearchText { get; }
+    public BindableReactiveProperty<PacketMessageViewModel?> SelectedPacket { get; }
 
     public INotifyCollectionChangedSynchronizedViewList<PacketMessageViewModel> Packets =>
         _filteredPackets;
@@ -57,12 +51,11 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             NullUnitService.Instance,
             null!,
             NullDeviceManager.Instance,
-            null!,
+            NullDialogService.Instance,
             NullNavigationService.Instance
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Title.OnNext(RS.PacketViewerViewDockPanelText);
         _packetsList.AddRange(
             new[]
             {
@@ -104,35 +97,47 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
     )
         : base(PageId, cmd)
     {
-        Title.OnNext(RS.PacketViewerViewDockPanelText);
+        Title = "Packet Viewer";
         _app = app;
         _logger = logFactory.CreateLogger<PacketViewerViewModel>();
-        _loggerFactory = logFactory;
         _unit = unit;
         _converters = converters;
         _deviceManager = deviceManager;
-        _dialogService = service;
-        _navigationService = navigationService;
 
-        ExportToCsv = new ReactiveCommand(ExportToCsvAsync);
+        _packetsList = [];
+        _filtersBySourceList = [];
+        _filtersByTypeList = [];
+        _packetsList.DisposeMany().DisposeItWith(Disposable);
+        _filtersBySourceList.DisposeMany().DisposeItWith(Disposable);
+        _filtersByTypeList.DisposeMany().DisposeItWith(Disposable);
+        IsPause = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
+        SearchText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+        SelectedPacket = new BindableReactiveProperty<PacketMessageViewModel?>().DisposeItWith(
+            Disposable
+        );
+
+        // ExportToCsv = new ReactiveCommand(ExportToCsvAsync);
         ClearAll = new ReactiveCommand(ClearAllAsync);
 
         _deviceManager
             .Router.OnRxMessage.Where(_ => !IsPause.Value)
             .ThrottleFirst(TimeSpan.FromMilliseconds(100))
-            .Select(packet => ConvertPacketsAndUpdateFiltersAsync((MavlinkMessage)packet))
-            .Subscribe(async packets =>
+            .SelectAwait(
+                async (packet, ct) =>
+                    await ConvertPacketsAndUpdateFiltersAsync((MavlinkMessage)packet, ct)
+            )
+            .Subscribe(packets =>
             {
-                _logger.LogInformation($"Received {packets.Result.Count} packets");
-                if (_packetsList.Count + packets.Result.Count > MaxPacketSize)
+                _logger.LogInformation("Received {ResultCount} packets", packets.Count);
+                if (_packetsList.Count + packets.Count > MaxPacketSize)
                 {
-                    var toRemove = _packetsList.Count + packets.Result.Count - MaxPacketSize;
+                    var toRemove = _packetsList.Count + packets.Count - MaxPacketSize;
                     _packetsList.RemoveRange(0, toRemove);
                 }
 
-                _packetsList.AddRange(packets.Result);
+                _packetsList.AddRange(packets);
             })
-            .AddTo(_disposables);
+            .DisposeItWith(Disposable);
 
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
@@ -151,7 +156,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                     }
                 });
             })
-            .AddTo(_disposables);
+            .DisposeItWith(Disposable);
 
         SelectedPacket
             .WhereNotNull()
@@ -162,29 +167,33 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                     item.Highlight = item.Type == selectedPacket.Type;
                 }
             })
-            .AddTo(_disposables);
+            .DisposeItWith(Disposable);
 
         _filteredPackets = _packetsList.CreateView(x => x).ToNotifyCollectionChanged();
 
-        SetupFilteringAsync().GetAwaiter().GetResult();
+        SetupFiltering();
 
         _filtersBySourceList
             .ObserveChanged()
             .Subscribe(_ =>
                 _logger.LogInformation(
-                    $"FiltersBySource updated, count: {_filtersBySourceList.Count}"
+                    "FiltersBySource updated, count: {Count}",
+                    _filtersBySourceList.Count
                 )
             )
-            .AddTo(_disposables);
+            .DisposeItWith(Disposable);
         _filtersByTypeList
             .ObserveChanged()
             .Subscribe(_ =>
-                _logger.LogInformation($"FiltersByType updated, count: {_filtersByTypeList.Count}")
+                _logger.LogInformation(
+                    "FiltersByType updated, count: {Count}",
+                    _filtersByTypeList.Count
+                )
             )
-            .AddTo(_disposables);
+            .DisposeItWith(Disposable);
     }
 
-    private Task SetupFilteringAsync()
+    private void SetupFiltering()
     {
         var view = _packetsList.CreateView(x => x);
         _filteredPackets = view.ToNotifyCollectionChanged();
@@ -217,30 +226,66 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                     return sourceMatch && typeMatch && searchMatch;
                 });
             })
-            .AddTo(_disposables);
-
-        return Task.CompletedTask;
+            .DisposeItWith(Disposable);
     }
 
     #region Commands
 
     public ReactiveCommand ExportToCsv { get; }
 
-    public async ValueTask ExportToCsvAsync(Unit unit, CancellationToken cancellationToken) { }
+    private async Task ExportToCsvAsync(IProgress<double> progress, CancellationToken cancel)
+    {
+        // try
+        // {
+        //     var separator = ";";
+        //     var shieldSymbol = ",";
+        //
+        //     if (IsComa.Value)
+        //     {
+        //         separator = ",";
+        //         shieldSymbol = ";";
+        //     }
+        //     else if (IsTab.Value)
+        //     {
+        //         separator = "\t";
+        //         shieldSymbol = ",";
+        //     }
+        //
+        //     var fullPath = FilePath.Value;
+        //
+        //     CsvHelper.SaveToCsv(
+        //         _packetsList,
+        //         fullPath,
+        //         separator,
+        //         shieldSymbol,
+        //         new CsvColumn<PacketMessageViewModel>("Date", x => x.DateTime.ToString("G")),
+        //         new CsvColumn<PacketMessageViewModel>("Type", x => x.Type),
+        //         new CsvColumn<PacketMessageViewModel>("Source", x => x.Source),
+        //         new CsvColumn<PacketMessageViewModel>("Message", x => x.Message)
+        //     );
+        //
+        //     _logger.LogInformation("Файл сохранен по пути: {0}", fullPath);
+        // }
+        // catch (Exception ex)
+        // {
+        //     _logger.LogError(ex, "Ошибка при сохранении файла по пути: {0}", FilePath.Value);
+        // }
+    }
 
     public ReactiveCommand ClearAll { get; }
 
     public ValueTask ClearAllAsync(Unit unit, CancellationToken cancellationToken)
     {
-        _packetsList.Clear();
-        _filtersBySourceList.Clear();
-        _filtersByTypeList.Clear();
+        _packetsList.RemoveAll();
+        _filtersBySourceList.RemoveAll();
+        _filtersByTypeList.RemoveAll();
         return ValueTask.CompletedTask;
     }
     #endregion
 
     private async ValueTask<IList<PacketMessageViewModel>> ConvertPacketsAndUpdateFiltersAsync(
-        MavlinkMessage packet
+        MavlinkMessage packet,
+        CancellationToken cancel
     )
     {
         var result = new List<PacketMessageViewModel>();
@@ -250,14 +295,15 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             () => new PacketMessageViewModel(packet, converter)
         );
         result.Add(vm);
-        await UpdateFiltersAsync(vm);
+        await UpdateFiltersAsync(vm, cancel);
         return result;
     }
 
-    private async ValueTask UpdateFiltersAsync(PacketMessageViewModel vm)
+    private async ValueTask UpdateFiltersAsync(PacketMessageViewModel vm, CancellationToken cancel)
     {
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
+            cancel.ThrowIfCancellationRequested();
             var sourceFilter = _filtersBySourceList.FirstOrDefault(x =>
                 x.Source.Value == vm.Source
             );
@@ -268,9 +314,9 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             else
             {
                 var newSourceFilter = new PacketFilterViewModel(vm, _unit);
-                newSourceFilter.IsChecked.Subscribe(_ => { }).AddTo(_disposables);
+                using var sub = newSourceFilter.IsChecked.Subscribe(_ => { });
                 _filtersBySourceList.Add(newSourceFilter);
-                _logger.LogInformation($"Added new source filter: {vm.Source}");
+                _logger.LogInformation("Added new source filter: {Source}", vm.Source);
             }
 
             var typeFilter = _filtersByTypeList.FirstOrDefault(x => x.Type.Value == vm.Type);
@@ -281,9 +327,9 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             else
             {
                 var newTypeFilter = new PacketFilterViewModel(vm, _unit);
-                newTypeFilter.IsChecked.Subscribe(_ => { }).AddTo(_disposables);
+                using var sub = newTypeFilter.IsChecked.Subscribe(_ => { });
                 _filtersByTypeList.Add(newTypeFilter);
-                _logger.LogInformation($"Added new type filter: {vm.Type}");
+                _logger.LogInformation("Added new type filter: {Type}", vm.Type);
             }
         });
     }
@@ -291,6 +337,18 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
     public override IEnumerable<IRoutable> GetRoutableChildren() => [];
 
     protected override void AfterLoadExtensions() { }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _packetsList.RemoveAll();
+            _filtersBySourceList.RemoveAll();
+            _filtersByTypeList.RemoveAll();
+        }
+
+        base.Dispose(disposing);
+    }
 
     public override IExportInfo Source => SystemModule.Instance;
 }

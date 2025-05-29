@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Composition;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
-using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
-using Microsoft.IO;
 using ObservableCollections;
 using R3;
 
@@ -21,12 +21,14 @@ public class SeparatorViewModel : DialogViewModelBase
     public SeparatorViewModel()
         : base(ViewModelId)
     {
+        DesignTime.ThrowIfNotDesignMode();
         FilePath = new BindableReactiveProperty<string>(string.Empty);
         IsSemicolon = new BindableReactiveProperty<bool>(true);
         IsComa = new BindableReactiveProperty<bool>(false);
         IsTab = new BindableReactiveProperty<bool>(false);
     }
 
+    [ImportingConstructor]
     public SeparatorViewModel(
         ILoggerFactory loggerFactory,
         ObservableList<PacketMessageViewModel> packetsList
@@ -97,47 +99,7 @@ public class SeparatorViewModel : DialogViewModelBase
     public BindableReactiveProperty<bool> IsComa { get; }
     public BindableReactiveProperty<bool> IsTab { get; }
 
-    private async Task ExportToCsvAsync(IProgress<double> progress, CancellationToken cancel)
-    {
-        try
-        {
-            var separator = ";";
-            var shieldSymbol = ",";
-
-            if (IsComa.Value)
-            {
-                separator = ",";
-                shieldSymbol = ";";
-            }
-            else if (IsTab.Value)
-            {
-                separator = "\t";
-                shieldSymbol = ",";
-            }
-
-            var fullPath = FilePath.Value;
-
-            CsvHelper.SaveToCsv(
-                _packetsList,
-                fullPath,
-                separator,
-                shieldSymbol,
-                new CsvColumn<PacketMessageViewModel>("Date", x => x.DateTime.ToString("G")),
-                new CsvColumn<PacketMessageViewModel>("Type", x => x.Type),
-                new CsvColumn<PacketMessageViewModel>("Source", x => x.Source),
-                new CsvColumn<PacketMessageViewModel>("Message", x => x.Message)
-            );
-
-            _logger.LogInformation("Файл сохранен по пути: {0}", fullPath);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Ошибка при сохранении файла по пути: {0}", FilePath.Value);
-            throw;
-        }
-    }
-
-    public void ApplyDialog(ContentDialog dialog)
+    public override void ApplyDialog(ContentDialog dialog)
     {
         ArgumentNullException.ThrowIfNull(dialog);
 
@@ -145,10 +107,6 @@ public class SeparatorViewModel : DialogViewModelBase
         {
             dialog.IsPrimaryButtonEnabled = isValid;
         });
-
-        dialog.PrimaryButtonCommand = new ReactiveCommand<IProgress<double>>(
-            async (p, ct) => await ExportToCsvAsync(p, ct)
-        );
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren() => [];

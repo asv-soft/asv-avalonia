@@ -13,10 +13,10 @@ public class OpenPacketViewerCommand(INavigationService nav)
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = RS.PacketViewerViewDockPanelText,
-        Description = RS.PacketViewer_Open,
+        Name = "Open Packet Viewer",
+        Description = "Command that opens packet viewer",
         Icon = PacketViewerViewModel.PageIcon,
-        DefaultHotKey = null,
+        HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
 

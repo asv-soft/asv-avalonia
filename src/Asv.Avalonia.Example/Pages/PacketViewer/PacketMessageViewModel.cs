@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Asv.Avalonia.Example.Converters;
 using Asv.IO;
 using Asv.Mavlink;
@@ -8,7 +9,7 @@ using PacketFormatting = Asv.Avalonia.Example.Converters.PacketFormatting;
 
 namespace Asv.Avalonia.Example.PacketViewer;
 
-public class PacketMessageViewModel : AvaloniaObject
+public class PacketMessageViewModel : RoutableViewModel
 {
     public DateTime DateTime { get; set; }
     public string Source { get; set; }
@@ -18,25 +19,20 @@ public class PacketMessageViewModel : AvaloniaObject
 
     private bool _highlight;
 
-    public static readonly DirectProperty<PacketMessageViewModel, bool> HighlightProperty =
-        AvaloniaProperty.RegisterDirect<PacketMessageViewModel, bool>(
-            nameof(Highlight),
-            o => o.Highlight,
-            (o, v) => o.Highlight = v
-        );
-
     public bool Highlight
     {
         get => _highlight;
-        set => SetAndRaise(HighlightProperty, ref _highlight, value);
+        set => SetField(ref _highlight, value);
     }
 
     public PacketMessageViewModel()
+        : base(NavigationId.Empty)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public PacketMessageViewModel(MavlinkMessage packet, IPacketConverter converter)
+        : base(packet.Id.ToString())
     {
         DateTime = DateTime.Now;
         Source = $"[{packet.SystemId},{packet.ComponentId}]";
@@ -49,4 +45,9 @@ public class PacketMessageViewModel : AvaloniaObject
 
     public Guid Id { get; }
     public string Description { get; }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
 }
