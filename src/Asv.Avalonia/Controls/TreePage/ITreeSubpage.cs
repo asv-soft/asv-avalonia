@@ -20,7 +20,8 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     protected TreeSubpage(NavigationId id)
         : base(id)
     {
-        Menu.SetRoutableParent(this, true).DisposeItWith(Disposable);
+        Menu.DisposeMany().DisposeItWith(Disposable);
+        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }
 

@@ -32,14 +32,11 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
     private readonly ObservableList<PacketMessageViewModel> _packetsList;
     private readonly ObservableList<PacketFilterViewModel> _filtersBySourceList;
     private readonly ObservableList<PacketFilterViewModel> _filtersByTypeList;
-    private NotifyCollectionChangedSynchronizedViewList<PacketMessageViewModel> _filteredPackets;
 
     public BindableReactiveProperty<bool> IsPause { get; }
     public BindableReactiveProperty<string> SearchText { get; }
     public BindableReactiveProperty<PacketMessageViewModel?> SelectedPacket { get; }
-
-    public INotifyCollectionChangedSynchronizedViewList<PacketMessageViewModel> Packets =>
-        _filteredPackets;
+    public INotifyCollectionChangedSynchronizedViewList<PacketMessageViewModel> Packets { get; }
     public ObservableList<PacketFilterViewModel> FiltersBySource => _filtersBySourceList;
     public ObservableList<PacketFilterViewModel> FiltersByType => _filtersByTypeList;
 
@@ -107,6 +104,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         _packetsList = [];
         _filtersBySourceList = [];
         _filtersByTypeList = [];
+        _packetsList.SetRoutableParent(this).DisposeItWith(Disposable);
         _packetsList.DisposeMany().DisposeItWith(Disposable);
         _filtersBySourceList.DisposeMany().DisposeItWith(Disposable);
         _filtersByTypeList.DisposeMany().DisposeItWith(Disposable);
@@ -169,9 +167,44 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             })
             .DisposeItWith(Disposable);
 
-        _filteredPackets = _packetsList.CreateView(x => x).ToNotifyCollectionChanged();
+        var view = _packetsList.CreateView(x => x);
+        Packets = view.ToNotifyCollectionChanged();
 
-        SetupFiltering();
+        Observable
+            .Merge(
+                _filtersBySourceList.ObserveChanged().Select(_ => Unit.Default),
+                _filtersByTypeList.ObserveChanged().Select(_ => Unit.Default),
+                SearchText.Select(_ => Unit.Default),
+                SelectedPacket.Select(_ => Unit.Default)
+            )
+            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+            .Subscribe(_ =>
+            {
+                var isSourcesChecked = _filtersBySourceList.Any(item => item.IsChecked.Value);
+                var isTypesChecked = _filtersByTypeList.Any(item => item.IsChecked.Value);
+                var isSearchMatch = !string.IsNullOrEmpty(SearchText.Value);
+
+                if (!isSourcesChecked && !isTypesChecked && !isSearchMatch)
+                {
+                    view.ResetFilter();
+                }
+
+                view.AttachFilter(packet =>
+                {
+                    return packet.Match(p =>
+                            p.Message.Contains(SearchText.Value, StringComparison.OrdinalIgnoreCase)
+                        )
+                        && packet.Match(p =>
+                            _filtersByTypeList.Any(f => f.IsChecked.Value && f.Type.Value == p.Type)
+                        )
+                        && packet.Match(p =>
+                            _filtersBySourceList.Any(f =>
+                                f.IsChecked.Value && f.Source.Value == p.Source
+                            )
+                        );
+                });
+            })
+            .DisposeItWith(Disposable);
 
         _filtersBySourceList
             .ObserveChanged()
@@ -190,42 +223,6 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                     _filtersByTypeList.Count
                 )
             )
-            .DisposeItWith(Disposable);
-    }
-
-    private void SetupFiltering()
-    {
-        var view = _packetsList.CreateView(x => x);
-        _filteredPackets = view.ToNotifyCollectionChanged();
-
-        Observable
-            .Merge(
-                _packetsList.ObserveChanged().Select(_ => Unit.Default),
-                _filtersBySourceList.ObserveChanged().Select(_ => Unit.Default),
-                _filtersByTypeList.ObserveChanged().Select(_ => Unit.Default),
-                SearchText.Select(_ => Unit.Default),
-                SelectedPacket.Select(_ => Unit.Default)
-            )
-            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
-            .Subscribe(_ =>
-            {
-                view.AttachFilter(x =>
-                {
-                    var sourceMatch =
-                        _filtersBySourceList.Count == 0
-                        || _filtersBySourceList.Any(f =>
-                            f.IsChecked.Value && f.Source.Value == x.Source
-                        );
-                    var typeMatch =
-                        _filtersByTypeList.Count == 0
-                        || _filtersByTypeList.Any(f => f.IsChecked.Value && f.Type.Value == x.Type);
-                    var searchMatch =
-                        string.IsNullOrEmpty(SearchText.Value)
-                        || x.Message.Contains(SearchText.Value, StringComparison.OrdinalIgnoreCase);
-
-                    return sourceMatch && typeMatch && searchMatch;
-                });
-            })
             .DisposeItWith(Disposable);
     }
 

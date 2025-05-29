@@ -42,12 +42,9 @@ public class PacketFilterViewModel : RoutableViewModel
             );
         UpdateRates();
 
-        if (pkt != null)
-        {
-            Type.Value = pkt.Type;
-            Source.Value = pkt.Source;
-            IsChecked.Value = true;
-        }
+        Type.Value = pkt.Type;
+        Source.Value = pkt.Source;
+        IsChecked.Value = true;
     }
 
     public void UpdateRates()

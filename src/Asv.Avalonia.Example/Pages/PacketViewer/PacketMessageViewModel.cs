@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Asv.Avalonia.Example.Converters;
 using Asv.IO;
 using Asv.Mavlink;
 using Avalonia;
+using ObservableCollections;
 using R3;
 using PacketFormatting = Asv.Avalonia.Example.Converters.PacketFormatting;
 
@@ -34,17 +36,21 @@ public class PacketMessageViewModel : RoutableViewModel
     public PacketMessageViewModel(MavlinkMessage packet, IPacketConverter converter)
         : base(packet.Id.ToString())
     {
+        Id.ChangeArgs(Guid.NewGuid().ToString());
         DateTime = DateTime.Now;
         Source = $"[{packet.SystemId},{packet.ComponentId}]";
         Message = $"[{packet.Sequence:000}] {converter.Convert(packet)}";
         Description = converter.Convert(packet, PacketFormatting.Indented);
         Type = packet.Name;
-        Id = Guid.NewGuid();
         Size = packet.GetByteSize();
     }
 
-    public Guid Id { get; }
     public string Description { get; }
+
+    public bool Match(Func<PacketMessageViewModel, bool> condition)
+    {
+        return condition(this);
+    }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
