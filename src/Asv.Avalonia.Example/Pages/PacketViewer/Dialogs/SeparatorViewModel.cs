@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Composition;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
-using Asv.Common;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -13,7 +11,7 @@ namespace Asv.Avalonia.Example.PacketViewer.Dialogs;
 
 public class SeparatorViewModel : DialogViewModelBase
 {
-    public const string ViewModelId = "packet_viewer.separator.dialog";
+    public const string ViewModelId = $"{PacketViewerViewModel.PageId}.dialog.separator";
 
     private readonly ILogger _logger;
     private readonly ObservableList<PacketMessageViewModel> _packetsList;
@@ -49,15 +47,13 @@ public class SeparatorViewModel : DialogViewModelBase
                 if (string.IsNullOrWhiteSpace(value))
                 {
                     return ValueTask.FromResult<ValidationResult>(
-                        new Exception("Путь к файлу обязателен")
+                        new Exception("You must specify a file path")
                     );
                 }
 
                 if (!Directory.Exists(Path.GetDirectoryName(value)))
                 {
-                    return ValueTask.FromResult<ValidationResult>(
-                        new Exception("Указанная папка не существует")
-                    );
+                    return ValueTask.FromResult<ValidationResult>(new DirectoryNotFoundException());
                 }
 
                 return ValidationResult.Success;
@@ -68,29 +64,35 @@ public class SeparatorViewModel : DialogViewModelBase
 
         _sub2 = IsSemicolon.Subscribe(value =>
         {
-            if (value)
+            if (!value)
             {
-                IsComa.Value = false;
-                IsTab.Value = false;
+                return;
             }
+
+            IsComa.Value = false;
+            IsTab.Value = false;
         });
 
         _sub3 = IsComa.Subscribe(value =>
         {
-            if (value)
+            if (!value)
             {
-                IsSemicolon.Value = false;
-                IsTab.Value = false;
+                return;
             }
+
+            IsSemicolon.Value = false;
+            IsTab.Value = false;
         });
 
         _sub4 = IsTab.Subscribe(value =>
         {
-            if (value)
+            if (!value)
             {
-                IsSemicolon.Value = false;
-                IsComa.Value = false;
+                return;
             }
+
+            IsSemicolon.Value = false;
+            IsComa.Value = false;
         });
     }
 
@@ -127,7 +129,7 @@ public class SeparatorViewModel : DialogViewModelBase
             _sub2.Dispose();
             _sub3.Dispose();
             _sub4.Dispose();
-            _sub5?.Dispose();
+            _sub5.Dispose();
         }
 
         base.Dispose(isDisposing);

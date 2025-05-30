@@ -6,12 +6,11 @@ using Asv.Avalonia.Example.PacketViewer;
 using Asv.Common;
 using R3;
 
-public class PacketFilterViewModel : RoutableViewModel
+public sealed class PacketFilterViewModel : RoutableViewModel
 {
     private volatile int _cnt;
     private readonly IncrementalRateCounter _packetRate = new(3);
     private readonly IUnit _unit;
-    private readonly CompositeDisposable _disposables = new();
 
     public BindableReactiveProperty<string> Type { get; }
     public BindableReactiveProperty<string> Source { get; }
@@ -19,7 +18,7 @@ public class PacketFilterViewModel : RoutableViewModel
     public BindableReactiveProperty<bool> IsChecked { get; }
 
     public PacketFilterViewModel()
-        : this(null!, NullUnitService.Instance)
+        : this(new PacketMessageViewModel(), NullUnitService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -27,14 +26,12 @@ public class PacketFilterViewModel : RoutableViewModel
     public PacketFilterViewModel(PacketMessageViewModel pkt, IUnitService unitService)
         : base(pkt.Id.ToString())
     {
-        Type = new BindableReactiveProperty<string>(string.Empty);
-        Source = new BindableReactiveProperty<string>(string.Empty);
-        MessageRateText = new BindableReactiveProperty<string>(string.Empty);
-        IsChecked = new BindableReactiveProperty<bool>(false);
-        _disposables.Add(Type);
-        _disposables.Add(Source);
-        _disposables.Add(MessageRateText);
-        _disposables.Add(IsChecked);
+        Type = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+        Source = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+        MessageRateText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(
+            Disposable
+        );
+        IsChecked = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
         _unit =
             unitService[VelocityBase.Id]
             ?? throw new ArgumentException(
@@ -56,11 +53,6 @@ public class PacketFilterViewModel : RoutableViewModel
     {
         var packetRate = Math.Round(_packetRate.Calculate(_cnt), 1);
         MessageRateText.Value = _unit.InternationalSystemUnit.PrintWithUnits(packetRate);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        _disposables.Dispose();
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

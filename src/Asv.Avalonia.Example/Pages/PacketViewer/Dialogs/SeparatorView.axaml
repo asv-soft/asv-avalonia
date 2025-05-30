@@ -12,10 +12,10 @@
     </Design.DataContext>
     <Panel>
         <StackPanel Spacing="10" Margin="10">
-            <TextBlock Text="Путь к файлу" FontSize="18" FontWeight="Bold"/>
+            <TextBlock Text="Path to the file" FontSize="18" FontWeight="Bold"/>
             <TextBox Text="{CompiledBinding FilePath.Value, Mode=TwoWay}" 
                      Watermark="C:/Path/To/File.csv"/>
-            <TextBlock Text="Разделитель:" FontSize="16"/>
+            <TextBlock Text="Separator:" FontSize="16"/>
             <RadioButton Content=";"
                          IsChecked="{CompiledBinding IsSemicolon.Value, Mode=TwoWay}" />
             <RadioButton Content=","

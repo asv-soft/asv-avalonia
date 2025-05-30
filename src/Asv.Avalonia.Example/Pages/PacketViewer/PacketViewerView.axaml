@@ -97,8 +97,7 @@
         <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="340" Spacing="4">
             <Expander Header="Message sources">
                 <StackPanel Spacing="4">
-                    <CheckBox HorizontalAlignment="Left" IsChecked="True" 
-                             IsCheckedChanged="OnSourcesChecked"
+                    <CheckBox HorizontalAlignment="Left" IsChecked="{CompiledBinding IsCheckedAllSources}" 
                              Content="Check All" />
                     <ListBox HorizontalAlignment="Stretch" x:Name="SourceFilters"
                              ItemsSource="{Binding FiltersBySource}" Grid.IsSharedSizeScope="True">
@@ -125,10 +124,9 @@
             </Expander>
             <Expander Header="Message Types">
                 <StackPanel Spacing="4">
-                    <CheckBox HorizontalAlignment="Left" IsChecked="True" 
-                             IsCheckedChanged="OnTypesChecked"
+                    <CheckBox HorizontalAlignment="Left" IsChecked="{CompiledBinding IsCheckedAllTypes.Value}" 
                              Content="Check ALL" />
-                    <ListBox HorizontalAlignment="Stretch" x:Name="TypeFilters" 
+                    <ListBox HorizontalAlignment="Stretch" x:Name="TypeFilters"
                              ItemsSource="{Binding FiltersByType}" Grid.IsSharedSizeScope="True">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>

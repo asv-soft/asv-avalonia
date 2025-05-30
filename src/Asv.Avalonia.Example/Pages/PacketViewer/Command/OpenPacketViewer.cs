@@ -19,7 +19,7 @@ public class OpenPacketViewerCommand(INavigationService nav)
         HotKeyInfo = new HotKeyInfo { DefaultHotKey = null },
         Source = SystemModule.Instance,
     };
-
     #endregion
+
     public override ICommandInfo Info => StaticInfo;
 }

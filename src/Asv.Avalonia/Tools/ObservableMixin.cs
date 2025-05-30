@@ -193,5 +193,20 @@ public static class ObservableMixin
         src.DequeueRange(src.Count);
     }
 
+    public static void RemoveAll<T>(this ObservableHashSet<T> src)
+        where T : notnull
+    {
+        src.RemoveRange(src);
+    }
+
+    public static void RemoveAll<T>(this ObservableFixedSizeRingBuffer<T> src)
+    {
+        var count = src.Count;
+        for (var i = 0; i < count; i++)
+        {
+            src.RemoveLast();
+        }
+    }
+
     #endregion
 }
