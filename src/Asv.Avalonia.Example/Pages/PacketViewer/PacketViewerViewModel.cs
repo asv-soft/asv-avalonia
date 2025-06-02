@@ -105,7 +105,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         _converters = converters;
         _deviceManager = deviceManager;
 
-        _packetsBuffer = new ObservableFixedSizeRingBuffer<PacketMessageViewModel>(10); // Change to MaxPacketsSize
+        _packetsBuffer = new ObservableFixedSizeRingBuffer<PacketMessageViewModel>(20); // Change to MaxPacketsSize
         _filtersBySourceSet = new ObservableHashSet<PacketFilterViewModel>(
             PacketFilterViewModelComparer.Instance
         );
@@ -154,21 +154,16 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             .DisposeItWith(Disposable);
         _packetsBuffer
             .ObserveAdd()
-            .Subscribe(item =>
-            {
-                UpdateFilters(item.Value);
-            })
+            .Subscribe(item => UpdateFilters(item.Value))
             .DisposeItWith(Disposable);
 
         _deviceManager
             .Router.OnRxMessage.Where(_ => !IsPause.Value)
-            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+            .ThrottleFirst(TimeSpan.FromMilliseconds(300))
             .FilterByType<MavlinkMessage>()
             .Select(ConvertToPacketMessage)
             .Subscribe(packets =>
             {
-                _logger.LogInformation("Received {ResultCount} packets", packets.Count());
-
                 foreach (var item in packets)
                 {
                     _packetsBuffer.AddLast(item);
@@ -238,25 +233,6 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                 });
             })
             .DisposeItWith(Disposable);
-
-        _filtersBySourceSet
-            .ObserveChanged()
-            .Subscribe(_ =>
-                _logger.LogInformation(
-                    "FiltersBySource updated, count: {Count}",
-                    _filtersBySourceSet.Count
-                )
-            )
-            .DisposeItWith(Disposable);
-        _filtersByTypeSet
-            .ObserveChanged()
-            .Subscribe(_ =>
-                _logger.LogInformation(
-                    "FiltersByType updated, count: {Count}",
-                    _filtersByTypeSet.Count
-                )
-            )
-            .DisposeItWith(Disposable);
     }
 
     #region Commands
@@ -324,29 +300,36 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
     private void UpdateFilters(PacketMessageViewModel vm)
     {
+        UpdateSourceFilters(vm);
+        UpdateTypeFilters(vm);
+    }
+
+    private void UpdateSourceFilters(PacketMessageViewModel vm)
+    {
         var sourceFilter = _filtersBySourceSet.FirstOrDefault(x => x.Source.Value == vm.Source);
-        if (sourceFilter != null)
-        {
-            sourceFilter.UpdateRates();
-        }
-        else
+        if (sourceFilter is null)
         {
             var newSourceFilter = new PacketFilterViewModel(vm, _unit);
             _filtersBySourceSet.Add(newSourceFilter);
             _logger.LogInformation("Added new source filter: {Source}", vm.Source);
+            return;
         }
 
+        sourceFilter.UpdateRates();
+    }
+
+    private void UpdateTypeFilters(PacketMessageViewModel vm)
+    {
         var typeFilter = _filtersByTypeSet.FirstOrDefault(x => x.Type.Value == vm.Type);
-        if (typeFilter != null)
-        {
-            typeFilter.UpdateRates();
-        }
-        else
+        if (typeFilter is null)
         {
             var newTypeFilter = new PacketFilterViewModel(vm, _unit);
             _filtersByTypeSet.Add(newTypeFilter);
             _logger.LogInformation("Added new type filter: {Type}", vm.Type);
+            return;
         }
+
+        typeFilter.UpdateRates();
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

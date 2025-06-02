@@ -97,7 +97,7 @@
         <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="340" Spacing="4">
             <Expander Header="Message sources">
                 <StackPanel Spacing="4">
-                    <CheckBox HorizontalAlignment="Left" IsChecked="{CompiledBinding IsCheckedAllSources}" 
+                    <CheckBox HorizontalAlignment="Left" IsChecked="{CompiledBinding IsCheckedAllSources.Value}" 
                              Content="Check All" />
                     <ListBox HorizontalAlignment="Stretch" x:Name="SourceFilters"
                              ItemsSource="{Binding FiltersBySource}" Grid.IsSharedSizeScope="True">
