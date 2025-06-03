@@ -1,13 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using Asv.Avalonia;
-using Asv.Avalonia.Example.PacketViewer;
 using Asv.Common;
 using R3;
 
+namespace Asv.Avalonia.Example;
+
 public sealed class PacketFilterViewModel : RoutableViewModel
 {
+    public const string PageId = "packet-filter";
+
     private volatile int _cnt;
     private readonly IncrementalRateCounter _packetRate = new(3);
     private readonly IUnit _unit;
@@ -24,8 +26,9 @@ public sealed class PacketFilterViewModel : RoutableViewModel
     }
 
     public PacketFilterViewModel(PacketMessageViewModel pkt, IUnitService unitService)
-        : base(pkt.Id.ToString())
+        : base(PageId)
     {
+        Id.ChangeArgs(Guid.NewGuid().ToString());
         Type = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
         Source = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
         MessageRateText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(

@@ -9,10 +9,11 @@ using ObservableCollections;
 using R3;
 using PacketFormatting = Asv.Avalonia.Example.Converters.PacketFormatting;
 
-namespace Asv.Avalonia.Example.PacketViewer;
+namespace Asv.Avalonia.Example;
 
 public class PacketMessageViewModel : RoutableViewModel
 {
+    public const string PageId = "packet-message";
     public DateTime DateTime { get; set; }
     public string Source { get; set; }
     public int Size { get; set; }
@@ -34,7 +35,7 @@ public class PacketMessageViewModel : RoutableViewModel
     }
 
     public PacketMessageViewModel(MavlinkMessage packet, IPacketConverter converter)
-        : base(packet.Id.ToString())
+        : base($"{PageId}.{packet.Id.ToString()}")
     {
         Id.ChangeArgs(Guid.NewGuid().ToString());
         DateTime = DateTime.Now;

@@ -9,7 +9,6 @@ using Asv.Avalonia.IO;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
-using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -57,6 +56,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         )
     {
         DesignTime.ThrowIfNotDesignMode();
+        _disposables = new CompositeDisposable();
         _packetsBuffer.AddLastRange(
             new[]
             {
@@ -104,8 +104,11 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         _unit = unit;
         _converters = converters;
         _deviceManager = deviceManager;
+        _disposables = new CompositeDisposable();
 
-        _packetsBuffer = new ObservableFixedSizeRingBuffer<PacketMessageViewModel>(20); // Change to MaxPacketsSize
+        _packetsBuffer = new ObservableFixedSizeRingBuffer<PacketMessageViewModel>(
+            MaxPacketsAmount
+        );
         _filtersBySourceSet = new ObservableHashSet<PacketFilterViewModel>(
             PacketFilterViewModelComparer.Instance
         );
@@ -154,21 +157,32 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             .DisposeItWith(Disposable);
         _packetsBuffer
             .ObserveAdd()
+            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
             .Subscribe(item => UpdateFilters(item.Value))
             .DisposeItWith(Disposable);
 
         _deviceManager
             .Router.OnRxMessage.Where(_ => !IsPause.Value)
-            .ThrottleFirst(TimeSpan.FromMilliseconds(300))
+            .ThrottleLast(TimeSpan.FromMilliseconds(300))
             .FilterByType<MavlinkMessage>()
             .Select(ConvertToPacketMessage)
-            .Subscribe(packets =>
-            {
-                foreach (var item in packets)
+            .SubscribeAwait(
+                async (packets, cancel) =>
                 {
-                    _packetsBuffer.AddLast(item);
+                    await Task.Run(
+                        () =>
+                        {
+                            foreach (var item in packets)
+                            {
+                                _packetsBuffer.AddLast(item);
+                            }
+
+                            return Task.CompletedTask;
+                        },
+                        cancel
+                    );
                 }
-            })
+            )
             .DisposeItWith(Disposable);
 
         Observable
@@ -200,6 +214,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
         Observable
             .Merge(
+                _packetsBuffer.ObserveChanged().Select(_ => Unit.Default),
                 _filtersBySourceSet.ObserveChanged().Select(_ => Unit.Default),
                 _filtersByTypeSet.ObserveChanged().Select(_ => Unit.Default),
                 SearchText.Select(_ => Unit.Default),
@@ -215,6 +230,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                 if (!isSourcesChecked && !isTypesChecked && !isSearchMatch)
                 {
                     packetsView.ResetFilter();
+                    return;
                 }
 
                 packetsView.AttachFilter(packet =>
@@ -295,6 +311,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         var converter =
             _converters.FirstOrDefault(_ => _.CanConvert(packet)) ?? new DefaultPacketConverter();
         var vm = new PacketMessageViewModel(packet, converter);
+        _disposables.Add(vm);
         yield return vm;
     }
 
@@ -310,6 +327,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         if (sourceFilter is null)
         {
             var newSourceFilter = new PacketFilterViewModel(vm, _unit);
+            _disposables.Add(newSourceFilter);
             _filtersBySourceSet.Add(newSourceFilter);
             _logger.LogInformation("Added new source filter: {Source}", vm.Source);
             return;
@@ -324,6 +342,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         if (typeFilter is null)
         {
             var newTypeFilter = new PacketFilterViewModel(vm, _unit);
+            _disposables.Add(newTypeFilter);
             _filtersByTypeSet.Add(newTypeFilter);
             _logger.LogInformation("Added new type filter: {Type}", vm.Type);
             return;
@@ -352,6 +371,10 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
     protected override void AfterLoadExtensions() { }
 
+    #region Dispose
+
+    private readonly CompositeDisposable _disposables;
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
@@ -359,10 +382,13 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             _packetsBuffer.RemoveAll();
             _filtersBySourceSet.RemoveAll();
             _filtersByTypeSet.RemoveAll();
+            _disposables.Dispose();
         }
 
         base.Dispose(disposing);
     }
+
+    #endregion
 
     public override IExportInfo Source => SystemModule.Instance;
 }

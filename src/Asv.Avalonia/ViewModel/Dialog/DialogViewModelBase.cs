@@ -13,7 +13,7 @@ public abstract class DialogViewModelBase(NavigationId id) : RoutableViewModel(i
 
     public virtual void ApplyDialog(ContentDialog dialog)
     {
-        return;
+        throw new NotImplementedException();
     }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)

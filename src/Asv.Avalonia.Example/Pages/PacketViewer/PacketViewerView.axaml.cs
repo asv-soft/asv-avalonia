@@ -14,48 +14,4 @@ public partial class PacketViewerView : UserControl
     {
         InitializeComponent();
     }
-
-    private void OnSourcesChecked(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is PacketViewerViewModel vm)
-        {
-            foreach (var filter in vm.FiltersBySource)
-            {
-                filter.IsChecked.Value = true;
-            }
-        }
-    }
-
-    private void OnSourcesUnchecked(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is PacketViewerViewModel vm)
-        {
-            foreach (var filter in vm.FiltersBySource)
-            {
-                filter.IsChecked.Value = false;
-            }
-        }
-    }
-
-    private void OnTypesChecked(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is PacketViewerViewModel vm)
-        {
-            foreach (var filter in vm.FiltersByType)
-            {
-                filter.IsChecked.Value = true;
-            }
-        }
-    }
-
-    private void OnTypesUnchecked(object? sender, RoutedEventArgs e)
-    {
-        if (DataContext is PacketViewerViewModel vm)
-        {
-            foreach (var filter in vm.FiltersByType)
-            {
-                filter.IsChecked.Value = false;
-            }
-        }
-    }
 }
