@@ -2,7 +2,7 @@ using Asv.Avalonia.Example.PacketViewer.Command;
 using Asv.Common;
 using R3;
 
-namespace Asv.Avalonia.Example.PacketViewer;
+namespace Asv.Avalonia.Example;
 
 [ExportExtensionFor<IHomePage>]
 public class HomePacketViewerExtension : IExtensionFor<IHomePage>

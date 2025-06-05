@@ -1,9 +1,4 @@
-using System.Linq;
-using Asv.Avalonia.Example.PacketViewer;
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Example;
 

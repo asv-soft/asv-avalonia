@@ -3,10 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:packetViewer="clr-namespace:Asv.Avalonia.Example.PacketViewer"
              xmlns:gui1="clr-namespace:Asv.Avalonia.Example"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:DataType="packetViewer:PacketViewerViewModel"
+             x:DataType="gui1:PacketViewerViewModel"
              x:Class="Asv.Avalonia.Example.PacketViewerView">
     <UserControl.Styles>
         <Style Selector="ToggleButton ContentPresenter.tbchecked">
@@ -29,7 +28,7 @@
         </Style>
     </UserControl.Styles>
     <Design.DataContext>
-        <packetViewer:PacketViewerViewModel />
+        <gui1:PacketViewerViewModel />
     </Design.DataContext>
     <Grid ColumnDefinitions="* Auto" RowDefinitions="Auto *" Margin="8">
         <DockPanel Grid.Row="0" Grid.ColumnSpan="2">
@@ -111,7 +110,7 @@
                                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsChecked.Value, Mode=TwoWay}"
                                               Padding="4 2 0 0">
                                         <CheckBox.Content>
-                                            <TextBlock VerticalAlignment="Center" Text="{Binding Source.Value}" />
+                                            <TextBlock VerticalAlignment="Center" Text="{Binding FilterValue.Value}" />
                                         </CheckBox.Content>
                                     </CheckBox>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center"
@@ -138,7 +137,7 @@
                                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsChecked.Value, Mode=TwoWay}"
                                               Padding="4 2 0 0">
                                         <CheckBox.Content>
-                                            <TextBlock Text="{Binding Type.Value}" />
+                                            <TextBlock Text="{Binding FilterValue.Value}" />
                                         </CheckBox.Content>
                                     </CheckBox>
                                     <TextBlock Grid.Column="1" VerticalAlignment="Center"

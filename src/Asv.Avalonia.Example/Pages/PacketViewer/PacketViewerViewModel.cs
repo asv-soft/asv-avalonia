@@ -15,13 +15,17 @@ using Microsoft.Extensions.Logging.Abstractions;
 using ObservableCollections;
 using R3;
 
-namespace Asv.Avalonia.Example.PacketViewer;
+namespace Asv.Avalonia.Example;
 
 [ExportPage(PageId)]
 public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 {
     public const string PageId = "packet-viewer";
-    public const int MaxPacketsAmount = 1000;
+    private const int MaxPacketsAmount = 1000;
+    private readonly SynchronizedViewFilter<
+        PacketMessageViewModel,
+        PacketMessageViewModel
+    > _viewFilter;
 
     public const MaterialIconKind PageIcon = MaterialIconKind.Package;
     private readonly ILogger<PacketViewerViewModel> _logger;
@@ -31,8 +35,8 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
     private readonly IEnumerable<IPacketConverter> _converters;
 
     private readonly ObservableFixedSizeRingBuffer<PacketMessageViewModel> _packetsBuffer;
-    private readonly ObservableHashSet<PacketFilterViewModel> _filtersBySourceSet;
-    private readonly ObservableHashSet<PacketFilterViewModel> _filtersByTypeSet;
+    private readonly ObservableHashSet<SourcePacketFilterViewModel> _filtersBySourceSet;
+    private readonly ObservableHashSet<TypePacketFilterViewModel> _filtersByTypeSet;
 
     public BindableReactiveProperty<bool> IsPause { get; }
     public BindableReactiveProperty<string> SearchText { get; }
@@ -40,8 +44,8 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
     public BindableReactiveProperty<bool> IsCheckedAllTypes { get; }
     public BindableReactiveProperty<PacketMessageViewModel?> SelectedPacket { get; }
     public INotifyCollectionChangedSynchronizedViewList<PacketMessageViewModel> Packets { get; }
-    public INotifyCollectionChangedSynchronizedViewList<PacketFilterViewModel> FiltersBySource { get; }
-    public INotifyCollectionChangedSynchronizedViewList<PacketFilterViewModel> FiltersByType { get; }
+    public INotifyCollectionChangedSynchronizedViewList<SourcePacketFilterViewModel> FiltersBySource { get; }
+    public INotifyCollectionChangedSynchronizedViewList<TypePacketFilterViewModel> FiltersByType { get; }
 
     public PacketViewerViewModel()
         : this(
@@ -49,7 +53,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             NullAppPath.Instance,
             NullLoggerFactory.Instance,
             NullUnitService.Instance,
-            null!,
+            new List<IPacketConverter>(),
             NullDeviceManager.Instance,
             NullDialogService.Instance,
             NullNavigationService.Instance
@@ -109,11 +113,11 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         _packetsBuffer = new ObservableFixedSizeRingBuffer<PacketMessageViewModel>(
             MaxPacketsAmount
         );
-        _filtersBySourceSet = new ObservableHashSet<PacketFilterViewModel>(
-            PacketFilterViewModelComparer.Instance
+        _filtersBySourceSet = new ObservableHashSet<SourcePacketFilterViewModel>(
+            SourcePacketFilterComparer.Instance
         );
-        _filtersByTypeSet = new ObservableHashSet<PacketFilterViewModel>(
-            PacketFilterViewModelComparer.Instance
+        _filtersByTypeSet = new ObservableHashSet<TypePacketFilterViewModel>(
+            TypePacketFilterComparer.Instance
         );
         _packetsBuffer.SetRoutableParent(this).DisposeItWith(Disposable);
         _filtersBySourceSet.SetRoutableParent(this).DisposeItWith(Disposable);
@@ -133,6 +137,17 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         IsCheckedAllTypes = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);
         SelectedPacket = new BindableReactiveProperty<PacketMessageViewModel?>().DisposeItWith(
             Disposable
+        );
+
+        _viewFilter = new SynchronizedViewFilter<PacketMessageViewModel, PacketMessageViewModel>(
+            (_, packet) =>
+                packet.Message.Contains(SearchText.Value, StringComparison.OrdinalIgnoreCase)
+                && _filtersByTypeSet.Any(f =>
+                    f.IsChecked.Value && f.FilterValue.Value == packet.Type
+                )
+                && _filtersBySourceSet.Any(f =>
+                    f.IsChecked.Value && f.FilterValue.Value == packet.Source
+                )
         );
 
         // ExportToCsv = new ReactiveCommand(ExportToCsvAsync);
@@ -185,22 +200,6 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             )
             .DisposeItWith(Disposable);
 
-        Observable
-            .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
-            .Subscribe(_ =>
-            {
-                foreach (var filter in _filtersBySourceSet)
-                {
-                    filter.UpdateRateText();
-                }
-
-                foreach (var filter in _filtersByTypeSet)
-                {
-                    filter.UpdateRateText();
-                }
-            })
-            .DisposeItWith(Disposable);
-
         SelectedPacket
             .WhereNotNull()
             .Subscribe(selectedPacket =>
@@ -233,20 +232,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                     return;
                 }
 
-                packetsView.AttachFilter(packet =>
-                {
-                    return packet.Match(p =>
-                            p.Message.Contains(SearchText.Value, StringComparison.OrdinalIgnoreCase)
-                        )
-                        && packet.Match(p =>
-                            _filtersByTypeSet.Any(f => f.IsChecked.Value && f.Type.Value == p.Type)
-                        )
-                        && packet.Match(p =>
-                            _filtersBySourceSet.Any(f =>
-                                f.IsChecked.Value && f.Source.Value == p.Source
-                            )
-                        );
-                });
+                packetsView.AttachFilter(_viewFilter);
             })
             .DisposeItWith(Disposable);
     }
@@ -323,32 +309,44 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
     private void UpdateSourceFilters(PacketMessageViewModel vm)
     {
-        var sourceFilter = _filtersBySourceSet.FirstOrDefault(x => x.Source.Value == vm.Source);
-        if (sourceFilter is null)
+        var filter = _filtersBySourceSet.FirstOrDefault(x => x.FilterValue.Value == vm.Source);
+        if (filter is not null)
         {
-            var newSourceFilter = new PacketFilterViewModel(vm, _unit);
-            _disposables.Add(newSourceFilter);
-            _filtersBySourceSet.Add(newSourceFilter);
-            _logger.LogInformation("Added new source filter: {Source}", vm.Source);
+            filter.IncreaseRatesCounterSafe();
             return;
         }
 
-        sourceFilter.UpdateRates();
+        var newFilter = new SourcePacketFilterViewModel(vm, _unit);
+        _disposables.Add(newFilter);
+        var isAdded = _filtersBySourceSet.Add(newFilter);
+
+        if (!isAdded)
+        {
+            newFilter.Dispose();
+        }
+
+        _logger.LogInformation("Added new source filter: {Source}", vm.Source);
     }
 
     private void UpdateTypeFilters(PacketMessageViewModel vm)
     {
-        var typeFilter = _filtersByTypeSet.FirstOrDefault(x => x.Type.Value == vm.Type);
-        if (typeFilter is null)
+        var filter = _filtersByTypeSet.FirstOrDefault(x => x.FilterValue.Value == vm.Type);
+        if (filter is not null)
         {
-            var newTypeFilter = new PacketFilterViewModel(vm, _unit);
-            _disposables.Add(newTypeFilter);
-            _filtersByTypeSet.Add(newTypeFilter);
-            _logger.LogInformation("Added new type filter: {Type}", vm.Type);
+            filter.IncreaseRatesCounterSafe();
             return;
         }
 
-        typeFilter.UpdateRates();
+        var newFilter = new TypePacketFilterViewModel(vm, _unit);
+        _disposables.Add(newFilter);
+        var isAdded = _filtersByTypeSet.Add(newFilter);
+
+        if (!isAdded)
+        {
+            newFilter.Dispose();
+        }
+
+        _logger.LogInformation("Added new type filter: {Type}", vm.Type);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
@@ -391,47 +389,4 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
     #endregion
 
     public override IExportInfo Source => SystemModule.Instance;
-}
-
-file class PacketFilterViewModelComparer : IEqualityComparer<PacketFilterViewModel>
-{
-    public static PacketFilterViewModelComparer Instance { get; } = new();
-
-    public bool Equals(PacketFilterViewModel? x, PacketFilterViewModel? y)
-    {
-        if (ReferenceEquals(x, y))
-        {
-            return true;
-        }
-
-        if (x is null)
-        {
-            return false;
-        }
-
-        if (y is null)
-        {
-            return false;
-        }
-
-        if (x.GetType() != y.GetType())
-        {
-            return false;
-        }
-
-        return x.Id.Equals(y.Id)
-            && x.Type.Value.Equals(y.Type.Value)
-            && x.Source.Value.Equals(y.Source.Value)
-            && x.MessageRateText.Value.Equals(y.MessageRateText.Value);
-    }
-
-    public int GetHashCode(PacketFilterViewModel obj)
-    {
-        return HashCode.Combine(
-            obj.Id,
-            obj.Type.Value,
-            obj.Source.Value,
-            obj.MessageRateText.Value
-        );
-    }
 }
