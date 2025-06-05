@@ -35,9 +35,8 @@ public class PacketMessageViewModel : RoutableViewModel
     }
 
     public PacketMessageViewModel(MavlinkMessage packet, IPacketConverter converter)
-        : base($"{PageId}.{packet.Id.ToString()}")
+        : base(new NavigationId($"{PageId}.{packet.Id.ToString()}", Guid.NewGuid().ToString()))
     {
-        Id.ChangeArgs(Guid.NewGuid().ToString());
         DateTime = DateTime.Now;
         Source = $"[{packet.SystemId},{packet.ComponentId}]";
         Message = $"[{packet.Sequence:000}] {converter.Convert(packet)}";

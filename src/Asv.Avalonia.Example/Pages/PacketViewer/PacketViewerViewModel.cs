@@ -178,7 +178,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
         _deviceManager
             .Router.OnRxMessage.Where(_ => !IsPause.Value)
-            .ThrottleLast(TimeSpan.FromMilliseconds(300))
+            .ThrottleFirst(TimeSpan.FromMilliseconds(300))
             .FilterByType<MavlinkMessage>()
             .Select(ConvertToPacketMessage)
             .SubscribeAwait(
@@ -187,11 +187,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                     await Task.Run(
                         () =>
                         {
-                            foreach (var item in packets)
-                            {
-                                _packetsBuffer.AddLast(item);
-                            }
-
+                            _packetsBuffer.AddLastRange(packets);
                             return Task.CompletedTask;
                         },
                         cancel

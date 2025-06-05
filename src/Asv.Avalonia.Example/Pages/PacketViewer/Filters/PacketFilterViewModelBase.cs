@@ -8,24 +8,23 @@ namespace Asv.Avalonia.Example;
 public abstract class PacketFilterViewModelBase<TFilter> : RoutableViewModel
     where TFilter : PacketFilterViewModelBase<TFilter>
 {
-    public const string FilterId = $"packet-filter.{nameof(TFilter)}";
+    public static string BaseId => $"packet-filter.{typeof(TFilter).Name}";
     private const int BaseMovingAverageSize = 3;
 
     private readonly IUnit _unit;
+    private readonly IncrementalRateCounter _packetRate = new(BaseMovingAverageSize);
     private volatile int _cnt;
 
-    protected virtual IncrementalRateCounter PacketRate => new(BaseMovingAverageSize);
-
-    public PacketFilterViewModelBase(IUnitService unitService)
-        : base(FilterId)
+    public PacketFilterViewModelBase(string idArg, IUnitService unitService)
+        : base(new NavigationId(BaseId, idArg))
     {
-        Id.ChangeArgs(Guid.NewGuid().ToString());
+        _unit = unitService.Units[FrequencyBase.Id];
         MessageRateText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(
             Disposable
         );
         IsChecked = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
-        _unit = unitService.Units[FrequencyBase.Id];
         IncreaseRatesCounterSafe();
+        UpdateRateText();
 
         IsChecked.Value = true;
 
@@ -42,8 +41,8 @@ public abstract class PacketFilterViewModelBase<TFilter> : RoutableViewModel
 
     private void UpdateRateText()
     {
-        var packetRate = Math.Round(PacketRate.Calculate(_cnt), 1);
-        MessageRateText.Value = _unit.CurrentUnitItem.Value.PrintWithUnits(packetRate, "F2");
+        var packetRate = Math.Round(_packetRate.Calculate(_cnt), 1);
+        MessageRateText.Value = _unit.CurrentUnitItem.Value.PrintWithUnits(packetRate, "F1");
     }
 
     public abstract BindableReactiveProperty<string> FilterValue { get; }

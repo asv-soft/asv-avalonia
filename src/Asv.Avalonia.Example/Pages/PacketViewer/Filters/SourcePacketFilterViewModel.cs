@@ -8,7 +8,7 @@ public sealed class SourcePacketFilterViewModel
     : PacketFilterViewModelBase<SourcePacketFilterViewModel>
 {
     public SourcePacketFilterViewModel(PacketMessageViewModel pkt, IUnitService unitService)
-        : base(unitService)
+        : base(pkt.Source, unitService)
     {
         FilterValue = new BindableReactiveProperty<string>(pkt.Source).DisposeItWith(Disposable);
     }

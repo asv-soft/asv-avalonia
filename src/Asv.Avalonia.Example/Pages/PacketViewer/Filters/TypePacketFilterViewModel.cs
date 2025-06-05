@@ -7,7 +7,7 @@ namespace Asv.Avalonia.Example;
 public sealed class TypePacketFilterViewModel : PacketFilterViewModelBase<TypePacketFilterViewModel>
 {
     public TypePacketFilterViewModel(PacketMessageViewModel pkt, IUnitService unitService)
-        : base(unitService)
+        : base(pkt.Type, unitService)
     {
         FilterValue = new BindableReactiveProperty<string>(pkt.Type).DisposeItWith(Disposable);
     }
