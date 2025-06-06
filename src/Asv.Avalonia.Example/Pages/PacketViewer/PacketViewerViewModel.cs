@@ -172,31 +172,14 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
         _packetsBuffer
             .ObserveAdd()
-            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
             .Subscribe(item => UpdateFilters(item.Value))
             .DisposeItWith(Disposable);
         _deviceManager
             .Router.OnRxMessage.Where(_ => !IsPaused.Value)
-            .ThrottleFirst(TimeSpan.FromMilliseconds(300))
             .FilterByType<MavlinkMessage>()
+            .Chunk(TimeSpan.FromSeconds(1))
             .Select(ConvertToPacketMessage)
-            .SubscribeAwait(
-                async (packets, cancel) =>
-                {
-                    await Task.Run(
-                        () =>
-                        {
-                            foreach (var packet in packets)
-                            {
-                                _packetsBuffer.AddFirst(packet);
-                            }
-
-                            return Task.CompletedTask;
-                        },
-                        cancel
-                    );
-                }
-            )
+            .Subscribe(_packetsBuffer.AddLastRange)
             .DisposeItWith(Disposable);
 
         SelectedPacket
@@ -290,13 +273,22 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
     #endregion
 
-    private IEnumerable<PacketMessageViewModel> ConvertToPacketMessage(MavlinkMessage packet)
+    private IEnumerable<PacketMessageViewModel> ConvertToPacketMessage(
+        IEnumerable<MavlinkMessage> messages
+    )
     {
-        var converter =
-            _converters.FirstOrDefault(_ => _.CanConvert(packet)) ?? new DefaultPacketConverter();
-        var vm = new PacketMessageViewModel(packet, converter);
-        _disposables.Add(vm);
-        yield return vm;
+        var packets = new List<PacketMessageViewModel>();
+        foreach (var packet in messages)
+        {
+            var converter =
+                _converters.FirstOrDefault(_ => _.CanConvert(packet))
+                ?? new DefaultPacketConverter();
+            var vm = new PacketMessageViewModel(packet, converter);
+            _disposables.Add(vm);
+            packets.Add(vm);
+        }
+
+        return packets;
     }
 
     private void UpdateFilters(PacketMessageViewModel vm)
