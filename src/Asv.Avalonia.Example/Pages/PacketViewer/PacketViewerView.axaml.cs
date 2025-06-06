@@ -10,12 +10,4 @@ public partial class PacketViewerView : UserControl
     {
         InitializeComponent();
     }
-
-    private void PacketList_LostFocus(object sender, RoutedEventArgs e)
-    {
-        if (DataContext is PacketViewerViewModel vm)
-        {
-            vm.SelectedPacket.Value = null;
-        }
-    }
 }

@@ -25,6 +25,12 @@ public class PacketMessageViewModel : RoutableViewModel
         : base(NavigationId.Empty)
     {
         DesignTime.ThrowIfNotDesignMode();
+        DateTime = DateTime.Now;
+        Source = "[1,1]";
+        Message = "[1000] information";
+        Description = "Some description";
+        Type = "HEARTBEAT";
+        Size = 10;
     }
 
     public PacketMessageViewModel(MavlinkMessage packet, IPacketConverter converter)

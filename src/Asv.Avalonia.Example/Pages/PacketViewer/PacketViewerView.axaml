@@ -99,7 +99,6 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-
         <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="340" Spacing="4">
             <Expander Header="Message sources">
                 <StackPanel Spacing="4">

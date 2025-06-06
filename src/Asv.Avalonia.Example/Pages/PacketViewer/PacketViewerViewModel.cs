@@ -150,10 +150,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         // ExportToCsv = new ReactiveCommand(ExportToCsvAsync);
         ClearAll = new ReactiveCommand(ClearAllImpl).DisposeItWith(Disposable);
 
-        IsPaused.Subscribe(isPaused =>
-        {
-            SelectedPacket.Value = null;
-        });
+        IsPaused.Subscribe(_ => SelectedPacket.Value = null);
         IsCheckedAllSources
             .Subscribe(isChecked =>
             {
@@ -172,12 +169,12 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                 }
             })
             .DisposeItWith(Disposable);
+
         _packetsBuffer
             .ObserveAdd()
             .ThrottleFirst(TimeSpan.FromMilliseconds(100))
             .Subscribe(item => UpdateFilters(item.Value))
             .DisposeItWith(Disposable);
-
         _deviceManager
             .Router.OnRxMessage.Where(_ => !IsPaused.Value)
             .ThrottleFirst(TimeSpan.FromMilliseconds(300))
@@ -218,8 +215,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                 _packetsBuffer.ObserveChanged().Select(_ => Unit.Default),
                 _filtersBySourceSet.ObserveChanged().Select(_ => Unit.Default),
                 _filtersByTypeSet.ObserveChanged().Select(_ => Unit.Default),
-                SearchText.Select(_ => Unit.Default),
-                SelectedPacket.Select(_ => Unit.Default)
+                SearchText.Select(_ => Unit.Default)
             )
             .ThrottleFirst(TimeSpan.FromMilliseconds(100))
             .Subscribe(_ =>
