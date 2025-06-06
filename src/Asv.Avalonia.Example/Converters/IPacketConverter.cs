@@ -1,7 +1,7 @@
 using Asv.IO;
 using Asv.Mavlink;
 
-namespace Asv.Avalonia.Example.Converters;
+namespace Asv.Avalonia.Example;
 
 /// <summary>
 /// Represents the formatting options for packet data.

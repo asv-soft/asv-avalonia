@@ -1,13 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Asv.Avalonia.Example.Converters;
-using Asv.IO;
 using Asv.Mavlink;
-using Avalonia;
-using ObservableCollections;
-using R3;
-using PacketFormatting = Asv.Avalonia.Example.Converters.PacketFormatting;
 
 namespace Asv.Avalonia.Example;
 
@@ -46,11 +39,6 @@ public class PacketMessageViewModel : RoutableViewModel
     }
 
     public string Description { get; }
-
-    public bool Match(Func<PacketMessageViewModel, bool> condition)
-    {
-        return condition(this);
-    }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {

@@ -3,7 +3,7 @@ using System.Composition;
 using Asv.Mavlink;
 using Newtonsoft.Json;
 
-namespace Asv.Avalonia.Example.Converters;
+namespace Asv.Avalonia.Example;
 
 /// <summary>
 /// Default packet converter. Used when there is no specialized converter for some packet type.
@@ -38,21 +38,17 @@ public class DefaultPacketConverter : IPacketConverter
             throw new ArgumentException("Converter can not convert incoming packet!");
         }
 
-        string result = string.Empty;
-
-        if (formatting == PacketFormatting.None)
+        return formatting switch
         {
-            result = JsonConvert.SerializeObject(packet.GetPayload(), Formatting.None);
-        }
-        else if (formatting == PacketFormatting.Indented)
-        {
-            result = JsonConvert.SerializeObject(packet.GetPayload(), Formatting.Indented);
-        }
-        else
-        {
-            throw new ArgumentException("Wrong packet formatting!");
-        }
-
-        return result;
+            PacketFormatting.None => JsonConvert.SerializeObject(
+                packet.GetPayload(),
+                Formatting.None
+            ),
+            PacketFormatting.Indented => JsonConvert.SerializeObject(
+                packet.GetPayload(),
+                Formatting.Indented
+            ),
+            _ => throw new ArgumentException("Wrong packet formatting!"),
+        };
     }
 }

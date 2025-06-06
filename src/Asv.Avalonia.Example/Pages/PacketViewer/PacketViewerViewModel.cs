@@ -4,7 +4,6 @@ using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Asv.Avalonia.Example.Converters;
 using Asv.Avalonia.IO;
 using Asv.Common;
 using Asv.IO;
@@ -22,23 +21,22 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 {
     public const string PageId = "packet-viewer";
     private const int MaxPacketsAmount = 1000;
-    private readonly SynchronizedViewFilter<
-        PacketMessageViewModel,
-        PacketMessageViewModel
-    > _viewFilter;
-
     public const MaterialIconKind PageIcon = MaterialIconKind.Package;
+
     private readonly ILogger<PacketViewerViewModel> _logger;
     private readonly IAppPath _app;
     private readonly IUnitService _unit;
     private readonly IDeviceManager _deviceManager;
     private readonly IEnumerable<IPacketConverter> _converters;
-
+    private readonly SynchronizedViewFilter<
+        PacketMessageViewModel,
+        PacketMessageViewModel
+    > _viewFilter;
     private readonly ObservableFixedSizeRingBuffer<PacketMessageViewModel> _packetsBuffer;
     private readonly ObservableHashSet<SourcePacketFilterViewModel> _filtersBySourceSet;
     private readonly ObservableHashSet<TypePacketFilterViewModel> _filtersByTypeSet;
 
-    public BindableReactiveProperty<bool> IsPause { get; }
+    public BindableReactiveProperty<bool> IsPaused { get; }
     public BindableReactiveProperty<string> SearchText { get; }
     public BindableReactiveProperty<bool> IsCheckedAllSources { get; }
     public BindableReactiveProperty<bool> IsCheckedAllTypes { get; }
@@ -60,7 +58,6 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        _disposables = new CompositeDisposable();
         _packetsBuffer.AddLastRange(
             new[]
             {
@@ -131,7 +128,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         FiltersBySource = _filtersBySourceSet.ToNotifyCollectionChanged().DisposeItWith(Disposable);
         FiltersByType = _filtersByTypeSet.ToNotifyCollectionChanged().DisposeItWith(Disposable);
 
-        IsPause = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
+        IsPaused = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         SearchText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
         IsCheckedAllSources = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);
         IsCheckedAllTypes = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);
@@ -152,6 +149,11 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
         // ExportToCsv = new ReactiveCommand(ExportToCsvAsync);
         ClearAll = new ReactiveCommand(ClearAllImpl).DisposeItWith(Disposable);
+
+        IsPaused.Subscribe(isPaused =>
+        {
+            SelectedPacket.Value = null;
+        });
         IsCheckedAllSources
             .Subscribe(isChecked =>
             {
@@ -177,7 +179,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
             .DisposeItWith(Disposable);
 
         _deviceManager
-            .Router.OnRxMessage.Where(_ => !IsPause.Value)
+            .Router.OnRxMessage.Where(_ => !IsPaused.Value)
             .ThrottleFirst(TimeSpan.FromMilliseconds(300))
             .FilterByType<MavlinkMessage>()
             .Select(ConvertToPacketMessage)
@@ -187,7 +189,11 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
                     await Task.Run(
                         () =>
                         {
-                            _packetsBuffer.AddLastRange(packets);
+                            foreach (var packet in packets)
+                            {
+                                _packetsBuffer.AddFirst(packet);
+                            }
+
                             return Task.CompletedTask;
                         },
                         cancel

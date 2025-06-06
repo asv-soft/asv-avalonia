@@ -36,13 +36,13 @@
                     VerticalAlignment="Stretch" Command="{Binding ExportToCsv}"
                     Content="{avalonia:MaterialIconExt ContentSave}"
                     ToolTip.Tip="Save"
-                    IsEnabled="{Binding IsPause.Value}"
+                    IsEnabled="{Binding IsPaused.Value}"
                     Classes="saveButton" />
             <Button DockPanel.Dock="Right" Margin="5 0 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     Command="{CompiledBinding ClearAll}" Content="{avalonia:MaterialIconExt Bin}"
                     ToolTip.Tip="Clear all" />
             <ToggleButton DockPanel.Dock="Right" Margin="5 0 5 0" HorizontalAlignment="Stretch"
-                          VerticalAlignment="Stretch" IsChecked="{Binding IsPause.Value, Mode=TwoWay}"
+                          VerticalAlignment="Stretch" IsChecked="{Binding IsPaused.Value, Mode=TwoWay}"
                           ToolTip.Tip="PLAY/PAUSE">
                 <Panel>
                     <ContentPresenter Content="{avalonia:MaterialIconExt Play}" Classes="tbchecked" />
@@ -63,17 +63,24 @@
             </TextBox>
             <avalonia:MaterialIcon DockPanel.Dock="Left" Height="30" Width="30" Kind="Package" />
         </DockPanel>
-        
-        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Visible" Grid.Column="0" Grid.Row="1" Margin="0,0,8,0"
-                 SelectedItem="{Binding SelectedPacket.Value}" ItemsSource="{Binding Packets}" Grid.IsSharedSizeScope="True">
+        <ListBox 
+            IsHitTestVisible="{CompiledBinding IsPaused.Value}"
+            ScrollViewer.HorizontalScrollBarVisibility="Visible" 
+            Grid.Column="0" 
+            Grid.Row="1" 
+            Margin="0,0,8,0"
+            ItemsSource="{CompiledBinding Packets}" 
+            SelectedItem="{CompiledBinding SelectedPacket.Value}" 
+            Grid.IsSharedSizeScope="True">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="MinHeight" Value="25"></Setter>
                 </Style>
             </ListBox.Styles>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <Grid ToolTip.Tip="{Binding Description}">
+            <ListBox.ItemTemplate>
+                <DataTemplate DataType="gui1:PacketMessageViewModel">
+                    <Grid
+                        ToolTip.Tip="{CompiledBinding Description}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="Date" Width="Auto" />
                             <ColumnDefinition SharedSizeGroup="Source" Width="Auto" />
@@ -90,7 +97,7 @@
                         <TextBlock FontFamily="Consolas" Margin="5,0" Grid.Column="4" Text="{Binding Message}" />
                     </Grid>
                 </DataTemplate>
-            </ItemsControl.ItemTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
 
         <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="340" Spacing="4">
@@ -105,6 +112,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
+                                        <ColumnDefinition Width="8" />
                                         <ColumnDefinition Width="Auto" SharedSizeGroup="Rate" />
                                     </Grid.ColumnDefinitions>
                                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsChecked.Value, Mode=TwoWay}"
@@ -113,7 +121,7 @@
                                             <TextBlock VerticalAlignment="Center" Text="{Binding FilterValue.Value}" />
                                         </CheckBox.Content>
                                     </CheckBox>
-                                    <TextBlock Grid.Column="1" VerticalAlignment="Center"
+                                    <TextBlock Grid.Column="2" VerticalAlignment="Center"
                                                Text="{Binding MessageRateText.Value}" />
                                 </Grid>
                             </DataTemplate>
@@ -132,6 +140,7 @@
                                 <Grid>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition />
+                                        <ColumnDefinition Width="8" />
                                         <ColumnDefinition Width="Auto" SharedSizeGroup="Rate" />
                                     </Grid.ColumnDefinitions>
                                     <CheckBox VerticalAlignment="Center" IsChecked="{Binding IsChecked.Value, Mode=TwoWay}"
@@ -140,7 +149,7 @@
                                             <TextBlock Text="{Binding FilterValue.Value}" />
                                         </CheckBox.Content>
                                     </CheckBox>
-                                    <TextBlock Grid.Column="1" VerticalAlignment="Center"
+                                    <TextBlock Grid.Column="2" VerticalAlignment="Center"
                                                Text="{Binding MessageRateText.Value}" />
                                 </Grid>
                             </DataTemplate>
