@@ -40,7 +40,7 @@
                     Classes="saveButton" />
             <Button DockPanel.Dock="Right" Margin="5 0 0 0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                     Command="{CompiledBinding ClearAll}" Content="{avalonia:MaterialIconExt Bin}"
-                    ToolTip.Tip="Clear all" />
+                    ToolTip.Tip="Clear All" />
             <ToggleButton DockPanel.Dock="Right" Margin="5 0 5 0" HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch" IsChecked="{Binding IsPaused.Value, Mode=TwoWay}"
                           ToolTip.Tip="PLAY/PAUSE">

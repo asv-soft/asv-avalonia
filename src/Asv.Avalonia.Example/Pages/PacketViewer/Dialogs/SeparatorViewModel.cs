@@ -3,103 +3,64 @@ using System.Collections.Generic;
 using System.Composition;
 using System.IO;
 using System.Threading.Tasks;
+using Asv.Common;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using ObservableCollections;
 using R3;
 
-namespace Asv.Avalonia.Example.PacketViewer.Dialogs;
+namespace Asv.Avalonia.Example;
 
 public class SeparatorViewModel : DialogViewModelBase
 {
     public const string ViewModelId = $"{PacketViewerViewModel.PageId}.dialog.separator";
+    public const string DefaultSeparator = ";";
+    public const string DefaultShieldSymbol = ",";
 
-    private readonly ILogger _logger;
-    private readonly ObservableList<PacketMessageViewModel> _packetsList;
-
+    [ImportingConstructor]
     public SeparatorViewModel()
         : base(ViewModelId)
     {
-        DesignTime.ThrowIfNotDesignMode();
-        FilePath = new BindableReactiveProperty<string>(string.Empty);
-        IsSemicolon = new BindableReactiveProperty<bool>(true);
-        IsComa = new BindableReactiveProperty<bool>(false);
-        IsTab = new BindableReactiveProperty<bool>(false);
-    }
-
-    [ImportingConstructor]
-    public SeparatorViewModel(
-        ILoggerFactory loggerFactory,
-        ObservableList<PacketMessageViewModel> packetsList
-    )
-        : base(ViewModelId)
-    {
-        _logger = loggerFactory.CreateLogger<SeparatorViewModel>();
-        _packetsList = packetsList ?? throw new ArgumentNullException(nameof(packetsList));
-
-        FilePath = new BindableReactiveProperty<string>(string.Empty);
-        IsSemicolon = new BindableReactiveProperty<bool>(true);
-        IsComa = new BindableReactiveProperty<bool>(false);
-        IsTab = new BindableReactiveProperty<bool>(false);
-
-        _sub1 = FilePath.EnableValidation(
-            value =>
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    return ValueTask.FromResult<ValidationResult>(
-                        new Exception("You must specify a file path")
-                    );
-                }
-
-                if (!Directory.Exists(Path.GetDirectoryName(value)))
-                {
-                    return ValueTask.FromResult<ValidationResult>(new DirectoryNotFoundException());
-                }
-
-                return ValidationResult.Success;
-            },
-            this,
-            true
+        IsSemicolon = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);
+        IsComa = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        IsTab = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        Separator = new BindableReactiveProperty<string>(DefaultSeparator).DisposeItWith(
+            Disposable
+        );
+        ShieldSymbol = new BindableReactiveProperty<string>(DefaultShieldSymbol).DisposeItWith(
+            Disposable
         );
 
-        _sub2 = IsSemicolon.Subscribe(value =>
-        {
-            if (!value)
+        _sub2 = IsSemicolon
+            .Where(value => value)
+            .Subscribe(_ =>
             {
-                return;
-            }
+                Separator.Value = DefaultSeparator;
+                ShieldSymbol.Value = DefaultShieldSymbol;
+            });
 
-            IsComa.Value = false;
-            IsTab.Value = false;
-        });
-
-        _sub3 = IsComa.Subscribe(value =>
-        {
-            if (!value)
+        _sub3 = IsComa
+            .Where(value => value)
+            .Subscribe(_ =>
             {
-                return;
-            }
+                Separator.Value = ",";
+                ShieldSymbol.Value = ";";
+            });
 
-            IsSemicolon.Value = false;
-            IsTab.Value = false;
-        });
-
-        _sub4 = IsTab.Subscribe(value =>
-        {
-            if (!value)
+        _sub4 = IsTab
+            .Where(value => value)
+            .Subscribe(_ =>
             {
-                return;
-            }
-
-            IsSemicolon.Value = false;
-            IsComa.Value = false;
-        });
+                Separator.Value = "\t";
+                ShieldSymbol.Value = DefaultShieldSymbol;
+            });
     }
 
-    public BindableReactiveProperty<string> FilePath { get; }
     public BindableReactiveProperty<bool> IsSemicolon { get; }
     public BindableReactiveProperty<bool> IsComa { get; }
     public BindableReactiveProperty<bool> IsTab { get; }
+    public BindableReactiveProperty<string> Separator { get; }
+    public BindableReactiveProperty<string> ShieldSymbol { get; }
 
     public override void ApplyDialog(ContentDialog dialog)
     {

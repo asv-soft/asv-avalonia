@@ -7,14 +7,15 @@ namespace Asv.Avalonia.Example;
 public class PacketMessageViewModel : RoutableViewModel
 {
     public const string PageId = "packet-message";
-    public DateTime DateTime { get; set; }
-    public string Source { get; set; }
-    public int Size { get; set; }
-    public string Message { get; set; }
-    public string Type { get; set; }
+
+    public DateTime DateTime { get; }
+    public string Source { get; }
+    public int Size { get; }
+    public string Message { get; }
+    public string Type { get; }
+    public string Description { get; }
 
     private bool _highlight;
-
     public bool Highlight
     {
         get => _highlight;
@@ -43,8 +44,6 @@ public class PacketMessageViewModel : RoutableViewModel
         Type = packet.Name;
         Size = packet.GetByteSize();
     }
-
-    public string Description { get; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {

@@ -15,6 +15,11 @@ public abstract class PacketFilterViewModelBase<TFilter> : RoutableViewModel
     private readonly IncrementalRateCounter _packetRate = new(BaseMovingAverageSize);
     private volatile int _cnt;
 
+    public abstract BindableReactiveProperty<string> FilterValue { get; }
+
+    public BindableReactiveProperty<string> MessageRateText { get; }
+    public BindableReactiveProperty<bool> IsChecked { get; }
+
     public PacketFilterViewModelBase(string idArg, IUnitService unitService)
         : base(new NavigationId(BaseId, idArg))
     {
@@ -44,9 +49,4 @@ public abstract class PacketFilterViewModelBase<TFilter> : RoutableViewModel
         var packetRate = Math.Round(_packetRate.Calculate(_cnt), 1);
         MessageRateText.Value = _unit.CurrentUnitItem.Value.PrintWithUnits(packetRate, "F1");
     }
-
-    public abstract BindableReactiveProperty<string> FilterValue { get; }
-
-    public BindableReactiveProperty<string> MessageRateText { get; }
-    public BindableReactiveProperty<bool> IsChecked { get; }
 }
