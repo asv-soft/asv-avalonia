@@ -279,7 +279,7 @@ public class ParamItemViewModel : RoutableViewModel
             }
         }
 
-        if (searchText.IsNullOrWhiteSpace())
+        if (searchText.IsNullOrWhiteSpace()) // TODO: сделать правильный вызов проверки
         {
             return true;
         }

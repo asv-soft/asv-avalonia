@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Asv.Mavlink;
+using ObservableCollections;
 
 namespace Asv.Avalonia.Example;
 
@@ -43,6 +45,38 @@ public class PacketMessageViewModel : RoutableViewModel
         Description = converter.Convert(packet, PacketFormatting.Indented);
         Type = packet.Name;
         Size = packet.GetByteSize();
+    }
+
+    public bool Filter(
+        string searchText,
+        IEnumerable<TypePacketFilterViewModel> typeFilters,
+        IEnumerable<SourcePacketFilterViewModel> sourceFilters
+    )
+    {
+        var hasRequiredType = typeFilters.Any(f =>
+            f.IsChecked.Value && f.FilterValue.Value == Type
+        );
+
+        var hasRequiredSource = sourceFilters.Any(f =>
+            f.IsChecked.Value && f.FilterValue.Value == Source
+        );
+
+        if (!hasRequiredSource)
+        {
+            return false;
+        }
+
+        if (!hasRequiredType)
+        {
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            return true;
+        }
+
+        return Message.Contains(searchText, StringComparison.OrdinalIgnoreCase);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

@@ -35,6 +35,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
     private readonly ObservableFixedSizeRingBuffer<PacketMessageViewModel> _packetsBuffer;
     private readonly ObservableHashSet<SourcePacketFilterViewModel> _filtersBySourceSet;
     private readonly ObservableHashSet<TypePacketFilterViewModel> _filtersByTypeSet;
+    private readonly ReactiveProperty<bool> _filterChangeTrigger;
 
     public ReactiveCommand ClearAll { get; }
     public ReactiveCommand ExportToCsv { get; }
@@ -89,6 +90,7 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
         _deviceManager = deviceManager;
         _navigationService = navigationService;
         _disposables = new CompositeDisposable();
+        _filterChangeTrigger = new ReactiveProperty<bool>(false).DisposeItWith(Disposable);
 
         _packetsBuffer = new ObservableFixedSizeRingBuffer<PacketMessageViewModel>(
             MaxPacketsAmount
@@ -174,30 +176,66 @@ public class PacketViewerViewModel : PageViewModel<PacketViewerViewModel>
 
         var viewFilter = new SynchronizedViewFilter<PacketMessageViewModel, PacketMessageViewModel>(
             (_, packet) =>
-                packet.Message.Contains(SearchText.Value, StringComparison.OrdinalIgnoreCase)
-                && _filtersByTypeSet.Any(f =>
-                    f.IsChecked.Value && f.FilterValue.Value == packet.Type
-                )
-                && _filtersBySourceSet.Any(f =>
-                    f.IsChecked.Value && f.FilterValue.Value == packet.Source
-                )
+            {
+                var isOk = packet.Filter(SearchText.Value, _filtersByTypeSet, _filtersBySourceSet);
+
+                if (!isOk)
+                {
+                    return false;
+                }
+
+                if (_filtersBySourceSet.All(x => !x.IsChecked.Value))
+                {
+                    return false;
+                }
+
+                if (_filtersByTypeSet.All(x => !x.IsChecked.Value))
+                {
+                    return false;
+                }
+
+                return isOk;
+            }
         );
+
+        _filtersBySourceSet
+            .ObserveAdd()
+            .Subscribe(filter =>
+            {
+                var sub = filter.Value.IsChecked.Subscribe(_ =>
+                    _filterChangeTrigger.Value = !_filterChangeTrigger.Value
+                );
+
+                _disposables.Add(sub);
+            })
+            .DisposeItWith(Disposable);
+        _filtersByTypeSet
+            .ObserveAdd()
+            .Subscribe(filter =>
+            {
+                var sub = filter.Value.IsChecked.Subscribe(_ =>
+                    _filterChangeTrigger.Value = !_filterChangeTrigger.Value
+                );
+
+                _disposables.Add(sub);
+            })
+            .DisposeItWith(Disposable);
 
         Observable
             .Merge(
-                _packetsBuffer.ObserveChanged().Select(_ => Unit.Default),
                 _filtersBySourceSet.ObserveChanged().Select(_ => Unit.Default),
                 _filtersByTypeSet.ObserveChanged().Select(_ => Unit.Default),
-                SearchText.Select(_ => Unit.Default)
+                SearchText.Select(_ => Unit.Default),
+                _filterChangeTrigger.Select(_ => Unit.Default)
             )
-            .ThrottleFirst(TimeSpan.FromMilliseconds(100))
+            .ThrottleLast(TimeSpan.FromMilliseconds(500))
             .Subscribe(_ =>
             {
-                var isSourcesChecked = _filtersBySourceSet.Any(item => item.IsChecked.Value);
-                var isTypesChecked = _filtersByTypeSet.Any(item => item.IsChecked.Value);
-                var isSearchMatch = !string.IsNullOrEmpty(SearchText.Value);
+                var allSourcesSelected = _filtersBySourceSet.All(x => x.IsChecked.Value);
+                var allTypesSelected = _filtersByTypeSet.All(x => x.IsChecked.Value);
+                var hasNoSearchString = string.IsNullOrEmpty(SearchText.Value);
 
-                if (!isSourcesChecked && !isTypesChecked && !isSearchMatch)
+                if (hasNoSearchString && allSourcesSelected && allTypesSelected)
                 {
                     packetsView.ResetFilter();
                     return;
