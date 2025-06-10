@@ -99,14 +99,30 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <StackPanel Grid.Column="1" Grid.Row="1" MinWidth="340" Spacing="4">
-            <Expander Header="Message sources">
-                <StackPanel Spacing="4">
-                    <CheckBox HorizontalAlignment="Left" IsChecked="{CompiledBinding IsCheckedAllSources.Value}" 
-                             Content="Check All" />
-                    <ListBox HorizontalAlignment="Stretch" x:Name="SourceFilters"
-                             ItemsSource="{Binding FiltersBySource}" Grid.IsSharedSizeScope="True">
-                        <ItemsControl.ItemTemplate>
+        <Grid Grid.Column="1" Grid.Row="1" MinWidth="340">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/> 
+            </Grid.RowDefinitions>
+            <Expander 
+                Grid.Row="0" 
+                Header="Message sources" 
+                VerticalAlignment="Top"
+                HorizontalAlignment="Stretch">
+                <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+                    <CheckBox
+                        Grid.Row="0" 
+                        HorizontalAlignment="Left" 
+                        IsChecked="{CompiledBinding IsCheckedAllSources.Value}" 
+                        Content="Check All" />
+                    <ListBox
+                        Grid.Row="1"
+                        HorizontalAlignment="Stretch" 
+                        x:Name="SourceFilters"
+                        ItemsSource="{Binding FiltersBySource}" 
+                        ScrollViewer.VerticalScrollBarVisibility="Visible"
+                        Grid.IsSharedSizeScope="True">
+                        <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -124,17 +140,29 @@
                                                Text="{Binding MessageRateText.Value}" />
                                 </Grid>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
-                </StackPanel>
+                </Grid>
             </Expander>
-            <Expander Header="Message Types">
-                <StackPanel Spacing="4">
-                    <CheckBox HorizontalAlignment="Left" IsChecked="{CompiledBinding IsCheckedAllTypes.Value}" 
-                             Content="Check ALL" />
-                    <ListBox HorizontalAlignment="Stretch" x:Name="TypeFilters"
-                             ItemsSource="{Binding FiltersByType}" Grid.IsSharedSizeScope="True">
-                        <ItemsControl.ItemTemplate>
+            <Expander 
+                Grid.Row="1" 
+                Header="Message Types" 
+                VerticalAlignment="Stretch"
+                HorizontalAlignment="Stretch">
+                <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+                    <CheckBox
+                        Grid.Row="0" 
+                        HorizontalAlignment="Left" 
+                        IsChecked="{CompiledBinding IsCheckedAllTypes.Value}" 
+                        Content="Check ALL" />
+                    <ListBox 
+                        Grid.Row="1" 
+                        HorizontalAlignment="Stretch" 
+                        x:Name="TypeFilters"
+                        ItemsSource="{Binding FiltersByType}" 
+                        ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                        Grid.IsSharedSizeScope="True">
+                        <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
@@ -152,10 +180,10 @@
                                                Text="{Binding MessageRateText.Value}" />
                                 </Grid>
                             </DataTemplate>
-                        </ItemsControl.ItemTemplate>
+                        </ListBox.ItemTemplate>
                     </ListBox>
-                </StackPanel>
+                </Grid>
             </Expander>
-        </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
