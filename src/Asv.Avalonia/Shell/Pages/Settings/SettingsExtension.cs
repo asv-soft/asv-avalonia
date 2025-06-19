@@ -36,10 +36,10 @@ public class SettingsExtension(ILoggerFactory loggerFactory) : IExtensionFor<ISe
 
         context.Nodes.Add(
             new TreePage(
-                SettingsCommandsViewModel.SubPageId,
-                RS.SettingsCommandListViewModel_Name,
+                SettingsHotKeysListViewModel.PageId,
+                RS.SettingsHotKeysListViewModel_Name,
                 MaterialIconKind.KeyboardSettings,
-                SettingsCommandsViewModel.SubPageId,
+                SettingsHotKeysListViewModel.PageId,
                 NavigationId.Empty,
                 loggerFactory
             ).DisposeItWith(contextDispose)

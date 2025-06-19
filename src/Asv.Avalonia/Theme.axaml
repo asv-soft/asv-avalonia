@@ -244,6 +244,7 @@
     <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/TelemBox.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/GeoPoint/GeoPointEditor.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/Tags/Tag.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/HotKeys/HotKeyBox.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/AwaitingScreen.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/ActionScreen.axaml"/>
     

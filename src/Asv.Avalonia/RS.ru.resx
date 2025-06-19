@@ -106,7 +106,7 @@
         <value>Единицы измерения</value>
     </data>
     
-    <data name="SettingsCommandListViewModel_Name" xml:space="preserve">
+    <data name="SettingsHotKeysListViewModel_Name" xml:space="preserve">
         <value>Список команд</value>
     </data>
     <data name="ShellView_WindowControlButton_Close" xml:space="preserve">
@@ -133,12 +133,6 @@
     </data>
     <data name="ShellView_Toolbar_View" xml:space="preserve">
         <value>Вид</value>
-    </data>
-    <data name="SettingsCommandListMapView_Header_CustomHotKey" xml:space="preserve">
-        <value>Сочетание клавиш</value>
-    </data>
-    <data name="SettingsCommandListView_Action_ResetCustomHotKeys" xml:space="preserve">
-        <value>Сбросить всё по умолчанию</value>
     </data>
     <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
         <value>Морская миля</value>
@@ -759,13 +753,22 @@
     <data name="LogViewerView_Button_Filters" xml:space="preserve">
         <value>Фильтры</value>
     </data>
-    <data name="SettingsCommandListMapView_Header_DefaultHotKey" xml:space="preserve">
-        <value>По умолчанию</value>
+    <data name="SettingsHotKeysListView_SearchBar_Watermark" xml:space="preserve">
+        <value>Поиск</value>
     </data>
-    <data name="SettingsCommandListMapView_Header_Description" xml:space="preserve">
+    <data name="SettingsHotKeysListView_ResetButton_Content" xml:space="preserve">
+        <value>Сбросить всё</value>
+    </data>
+    <data name="SettingsHotKeysListView_HotKey_Header" xml:space="preserve">
+        <value>Горячая клавиша</value>
+    </data>
+    <data name="SettingsHotKeysListView_Name_Header" xml:space="preserve">
+        <value>Команда</value>
+    </data>
+    <data name="SettingsHotKeysListView_Description_Header" xml:space="preserve">
         <value>Описание</value>
     </data>
-    <data name="SettingsCommandListMapView_Header_Name" xml:space="preserve">
-        <value>Команда</value>
+    <data name="SettingsHotKeysListView_Source_Header" xml:space="preserve">
+        <value>Источник</value>
     </data>
 </root>

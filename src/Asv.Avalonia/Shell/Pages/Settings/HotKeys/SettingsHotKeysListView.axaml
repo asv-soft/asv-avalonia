@@ -1,0 +1,89 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia"
+             xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="avalonia:SettingsHotKeysListViewModel"
+             x:Class="Asv.Avalonia.SettingsHotKeysListView">
+    <Design.DataContext>
+        <avalonia:SettingsHotKeysListViewModel />
+    </Design.DataContext>
+    <Grid RowDefinitions="*, 8*">
+        <Grid Grid.Row="0" 
+              ColumnDefinitions="4*,*" >
+            <TextBox Grid.Column="0"
+                     MaxHeight="40"
+                     Margin="8"
+                     VerticalContentAlignment="Center"
+                     Watermark="{x:Static avalonia:RS.SettingsHotKeysListView_SearchBar_Watermark}" 
+                     Text="{Binding SearchText.ViewValue.Value}"/>
+            <Button Grid.Column="1"
+                    MaxHeight="40"
+                    HorizontalAlignment="Center"
+                    Margin="8 0"
+                    Content="{x:Static avalonia:RS.SettingsHotKeysListView_ResetButton_Content}"/>
+        </Grid>
+        <DataGrid Grid.Row="1" 
+                  ItemsSource="{Binding HotKeysView}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="False"
+                  ColumnWidth="Auto"
+                  CanUserResizeColumns="True"
+                  SelectionMode="Single"
+                  SelectedItem="{Binding SelectedItem.Value}">
+            <DataGrid.Styles>
+                
+            </DataGrid.Styles>
+            <DataGrid.Columns>
+                
+                <!-- Conflict indicator icon -->
+                <DataGridTemplateColumn Width="40">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <material:MaterialIcon Kind="AlertCircle"
+                                                   Width="20" Height="20"
+                                                   Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
+                                                   IsVisible="{Binding HasConflict.Value}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <!-- Icon -->
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <material:MaterialIcon Kind="{Binding Icon}"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                
+                <!-- Command name -->
+                <DataGridTextColumn Header="Command"
+                                   Binding="{Binding Name}"
+                                   Width="*" />
+                
+                <!-- User hot‑key (editable) -->
+                <DataGridTextColumn Header="Current"
+                                    Binding="{Binding UserHotKey.ViewValue.Value}"
+                                    Width="*" />
+
+                <!-- Default hot‑key (read‑only) -->
+                <DataGridTextColumn Header="Default"
+                                   Binding="{Binding DefaultHotKey}"
+                                   Width="*" />
+                
+                <!-- Command description -->
+                <DataGridTextColumn Header="Description"
+                                    Binding="{Binding Description}"
+                                    Width="2*" />
+                
+                <!-- Command source -->
+                <DataGridTextColumn Header="Source"
+                                    Binding="{Binding Source}"
+                                    Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>
