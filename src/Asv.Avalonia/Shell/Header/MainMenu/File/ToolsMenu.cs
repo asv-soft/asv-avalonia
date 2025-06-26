@@ -12,6 +12,19 @@ public class ToolsMenu(ILoggerFactory loggerFactory)
 }
 
 [ExportMainMenu]
+public class ToolsHomeMenu : MenuItem
+{
+    public const string MenuId = $"{ToolsMenu.MenuId}.home";
+
+    [ImportingConstructor]
+    public ToolsHomeMenu(ILoggerFactory loggerFactory)
+        : base(MenuId, RS.ToolsMenu_Home, loggerFactory, ToolsMenu.MenuId)
+    {
+        Command = new BindableAsyncCommand(OpenHomePageCommand.Id, this);
+    }
+}
+
+[ExportMainMenu]
 public class ToolsSettingsMenu : MenuItem
 {
     public const string MenuId = $"{ToolsMenu.MenuId}.settings";

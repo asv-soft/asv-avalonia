@@ -594,6 +594,9 @@
     <data name="ToolsMenu_Settings" xml:space="preserve">
         <value>Настройки</value>
     </data>
+    <data name="ToolsMenu_Home" xml:space="preserve">
+        <value>Главная</value>
+    </data>
     <data name="ChangeThemeCommand_CommandInfo_Description" xml:space="preserve">
         <value>Сменить тему приложения</value>
     </data>
@@ -700,6 +703,12 @@
         <value>Команда, которая открывает настройки</value>
     </data>
     <data name="OpenSettingsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Открыть настройки</value>
+    </data>
+    <data name="OpenHomePageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда, которая открывает настройки</value>
+    </data>
+    <data name="OpenHomePageCommand_CommandInfo_Name" xml:space="preserve">
         <value>Открыть настройки</value>
     </data>
     <data name="ResetHotKeysCommand_CommandInfo_Name" xml:space="preserve">
