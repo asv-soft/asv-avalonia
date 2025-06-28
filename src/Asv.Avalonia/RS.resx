@@ -593,6 +593,9 @@
     <data name="ToolsMenu_Settings" xml:space="preserve">
         <value>Settings</value>
     </data>
+    <data name="ToolsMenu_Home" xml:space="preserve">
+        <value>Home</value>
+    </data>
     <data name="ChangeThemeCommand_CommandInfo_Description" xml:space="preserve">
         <value>Change application's theme</value>
     </data>
@@ -703,6 +706,12 @@
     </data>
     <data name="OpenSettingsCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that opens settings</value>
+    </data>
+    <data name="OpenHomePageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open home page command</value>
+    </data>
+    <data name="OpenHomePageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that opens home page</value>
     </data>
     <data name="ResetHotKeysCommand_CommandInfo_Name" xml:space="preserve">
         <value>Reset Hotkeys</value>
