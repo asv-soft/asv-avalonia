@@ -15,7 +15,7 @@ public class HomePageTesInfoBoxExtension(ILoggerFactory loggerFactory)
     {
         context.Tools.Add(
             OpenTestInfoBoxPageCommand
-                .StaticInfo.CreateAction(loggerFactory)
+                .StaticInfo.CreateAction(loggerFactory, "Test Info", "Opens test info page")
                 .DisposeItWith(contextDispose)
         );
     }

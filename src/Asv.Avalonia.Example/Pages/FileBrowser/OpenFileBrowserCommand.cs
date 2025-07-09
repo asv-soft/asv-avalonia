@@ -14,8 +14,8 @@ public class OpenFileBrowserCommand(INavigationService nav)
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "File browser",
-        Description = "Open FTP file browser",
+        Name = "Open file browser",
+        Description = "Command that opens FTP file browser",
         Icon = FileBrowserViewModel.PageIcon,
         DefaultHotKey = null,
         Source = SystemModule.Instance,

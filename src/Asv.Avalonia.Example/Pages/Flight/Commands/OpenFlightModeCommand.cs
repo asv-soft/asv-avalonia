@@ -15,8 +15,8 @@ public class OpenFlightModeCommand(INavigationService nav)
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Flight mode",
-        Description = "Open flight mode map",
+        Name = "Open flight mode",
+        Description = "Command that opens flight mode map",
         Icon = FlightPageViewModel.PageIcon,
         DefaultHotKey = "Ctrl+F2",
         Source = SystemModule.Instance,

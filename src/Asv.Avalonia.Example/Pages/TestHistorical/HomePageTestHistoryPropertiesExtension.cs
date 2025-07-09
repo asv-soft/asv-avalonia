@@ -15,7 +15,11 @@ public class HomePageTestHistoryPropertiesExtension(ILoggerFactory loggerFactory
     {
         context.Tools.Add(
             OpenTestHistoryPropertiesPageCommand
-                .StaticInfo.CreateAction(loggerFactory)
+                .StaticInfo.CreateAction(
+                    loggerFactory,
+                    "History properties",
+                    "Opens history properties page"
+                )
                 .DisposeItWith(contextDispose)
         );
     }
