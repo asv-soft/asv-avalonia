@@ -14,7 +14,11 @@ public class HomePageInstalledPluginsExtension(ILoggerFactory loggerFactory)
     {
         context.Tools.Add(
             OpenInstalledPluginsCommand
-                .StaticInfo.CreateAction(loggerFactory)
+                .StaticInfo.CreateAction(
+                    loggerFactory,
+                    "Installed plugins",
+                    "Opens installed plugins page"
+                )
                 .DisposeItWith(contextDispose)
         );
     }

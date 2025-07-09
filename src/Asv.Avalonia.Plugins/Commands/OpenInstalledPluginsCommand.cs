@@ -14,8 +14,8 @@ public class OpenInstalledPluginsCommand(INavigationService nav)
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Installed Plugins",
-        Description = "Open installed plugins page",
+        Name = "Open installed plugins page",
+        Description = "Command that opens installed plugins page",
         Icon = InstalledPluginsViewModel.PageIcon,
         DefaultHotKey = null,
         Source = SystemModule.Instance,
