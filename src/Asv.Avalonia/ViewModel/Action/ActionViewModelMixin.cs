@@ -6,14 +6,16 @@ public static class ActionViewModelMixin
 {
     public static IActionViewModel CreateAction(
         this ICommandInfo info,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        string? customTitle = null,
+        string? customDescription = null
     )
     {
         var model = new ActionViewModel(info.Id, loggerFactory)
         {
             Icon = info.Icon,
-            Header = info.Name,
-            Description = info.Description,
+            Header = customTitle ?? info.Name,
+            Description = customDescription ?? info.Description,
         };
         model.Command = new BindableAsyncCommand(info.Id, model);
         return model;

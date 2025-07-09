@@ -13,7 +13,7 @@ public class HomePageFlightExtension(ILoggerFactory loggerFactory) : IExtensionF
     {
         context.Tools.Add(
             OpenFlightModeCommand
-                .StaticInfo.CreateAction(loggerFactory)
+                .StaticInfo.CreateAction(loggerFactory, "Flight mode", "Opens flight mode page")
                 .DisposeItWith(contextDispose)
         );
     }
