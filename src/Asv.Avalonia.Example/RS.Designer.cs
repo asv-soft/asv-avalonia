@@ -402,6 +402,78 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Dialog Board.
+        /// </summary>
+        public static string OpenDialogBoard_CommandInfo_ButtonDescription {
+            get {
+                return ResourceManager.GetString("OpenDialogBoard_CommandInfo_ButtonDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dialog Board.
+        /// </summary>
+        public static string OpenDialogBoard_CommandInfo_ButtonName {
+            get {
+                return ResourceManager.GetString("OpenDialogBoard_CommandInfo_ButtonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command that opens File Browser.
+        /// </summary>
+        public static string OpenFileBrowserCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("OpenFileBrowserCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open File Browser.
+        /// </summary>
+        public static string OpenFileBrowserCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("OpenFileBrowserCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Flight Mode map.
+        /// </summary>
+        public static string OpenFlightModeCommand_CommandInfo_ButtonDescription {
+            get {
+                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_ButtonDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Flight Mode.
+        /// </summary>
+        public static string OpenFlightModeCommand_CommandInfo_ButtonName {
+            get {
+                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_ButtonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command that opens Flight Mode map.
+        /// </summary>
+        public static string OpenFlightModeCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Flight Mode map.
+        /// </summary>
+        public static string OpenFlightModeCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command opens mavlink params editor.
         /// </summary>
         public static string OpenMavParamsCommand_CommandInfo_Description {

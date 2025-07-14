@@ -77,4 +77,10 @@
     <data name="HomePageDeviceItem_Info_Type" xml:space="preserve">
         <value>Тип</value>
     </data>
+    <data name="OpenSettingsCommand_CommandInfo_ButtonName" xml:space="preserve">
+        <value>Настройки</value>
+    </data>
+    <data name="OpenSettingsCommand_CommandInfo_ButtonDescription" xml:space="preserve">
+        <value>Открыть настройки</value>
+    </data>
 </root>

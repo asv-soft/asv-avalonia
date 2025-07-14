@@ -311,4 +311,28 @@
     <data name="HomePageParamsDeviceItemAction_ActionViewModel_Description" xml:space="preserve">
         <value>Edit mavlink device parameters</value>
     </data>
+    <data name="OpenDialogBoard_CommandInfo_ButtonName" xml:space="preserve">
+        <value>Dialog Board</value>
+    </data>
+    <data name="OpenDialogBoard_CommandInfo_ButtonDescription" xml:space="preserve">
+        <value>Open Dialog Board</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_ButtonName" xml:space="preserve">
+        <value>Flight Mode</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_ButtonDescription" xml:space="preserve">
+        <value>Open Flight Mode map</value>
+    </data>
+    <data name="OpenFileBrowserCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open File Browser</value>
+    </data>
+    <data name="OpenFileBrowserCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that opens File Browser</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open Flight Mode map</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that opens Flight Mode map</value>
+    </data>
 </root>

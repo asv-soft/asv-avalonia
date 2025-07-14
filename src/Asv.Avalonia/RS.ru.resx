@@ -876,4 +876,10 @@
     <data name="SearchBoxView_MainTextBox_Watermark" xml:space="preserve">
         <value>Искать</value>
     </data>
+    <data name="OpenLogViewerCommand_CommandInfo_ButtonName" xml:space="preserve">
+        <value>Просмотр логов</value>
+    </data>
+    <data name="OpenLogViewerCommand_CommandInfo_ButtonDescription" xml:space="preserve">
+        <value>Открыть просмотр логов</value>
+    </data>
 </root>

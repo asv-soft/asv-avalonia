@@ -1428,6 +1428,24 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Log Viewer.
+        /// </summary>
+        public static string OpenLogViewerCommand_CommandInfo_ButtonDescription {
+            get {
+                return ResourceManager.GetString("OpenLogViewerCommand_CommandInfo_ButtonDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Log Viewer.
+        /// </summary>
+        public static string OpenLogViewerCommand_CommandInfo_ButtonName {
+            get {
+                return ResourceManager.GetString("OpenLogViewerCommand_CommandInfo_ButtonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command that opens settings.
         /// </summary>
         public static string OpenSettingsCommand_CommandInfo_Description {
