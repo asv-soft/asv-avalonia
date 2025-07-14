@@ -12,7 +12,9 @@ public class HomePageSettingsExtension(ILoggerFactory loggerFactory) : IExtensio
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
         context.Tools.Add(
-            OpenSettingsCommand.StaticInfo.CreateAction(loggerFactory).DisposeItWith(contextDispose)
+            OpenSettingsCommand
+                .StaticInfo.CreateAction(loggerFactory, "Settings", "Opens Settings page")
+                .DisposeItWith(contextDispose)
         );
     }
 }
