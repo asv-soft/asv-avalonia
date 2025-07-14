@@ -299,4 +299,28 @@
     <data name="HomePageParamsDeviceItemAction_ActionViewModel_Description" xml:space="preserve">
         <value>Изменить параметры мавлинк устройства</value>
     </data>
+    <data name="OpenDialogBoard_CommandInfo_ButtonName" xml:space="preserve">
+        <value>Диалоговое окно</value>
+    </data>
+    <data name="OpenDialogBoard_CommandInfo_ButtonDescription" xml:space="preserve">
+        <value>Открыть диалоговое окно</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_ButtonName" xml:space="preserve">
+        <value>Режим полёта</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_ButtonDescription" xml:space="preserve">
+        <value>Открыть карту полёта</value>
+    </data>
+    <data name="OpenFileBrowserCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Открыть просмотр файлов</value>
+    </data>
+    <data name="OpenFileBrowserCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда, которая открывает просмотр файлов</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Открыть карту полёта</value>
+    </data>
+    <data name="OpenFlightModeCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда, которая открывать карту полёта</value>
+    </data>
 </root>

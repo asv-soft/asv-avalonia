@@ -96,6 +96,24 @@ namespace Asv.Avalonia.IO {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Settings.
+        /// </summary>
+        public static string OpenSettingsCommand_CommandInfo_ButtonDescription {
+            get {
+                return ResourceManager.GetString("OpenSettingsCommand_CommandInfo_ButtonDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string OpenSettingsCommand_CommandInfo_ButtonName {
+            get {
+                return ResourceManager.GetString("OpenSettingsCommand_CommandInfo_ButtonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command to add/remove/change port.
         /// </summary>
         public static string PortCrudCommand_CommandInfo_Description {

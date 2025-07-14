@@ -84,4 +84,10 @@
     <data name="HomePageDeviceItem_Info_Link" xml:space="preserve">
         <value>Status</value>
     </data>
+    <data name="OpenSettingsCommand_CommandInfo_ButtonName" xml:space="preserve">
+        <value>Settings</value>
+    </data>
+    <data name="OpenSettingsCommand_CommandInfo_ButtonDescription" xml:space="preserve">
+        <value>Open Settings</value>
+    </data>
 </root>

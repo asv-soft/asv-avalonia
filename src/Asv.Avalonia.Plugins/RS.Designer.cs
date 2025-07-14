@@ -195,6 +195,24 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open Installed Plagins.
+        /// </summary>
+        public static string OpenInstalledPluginsCommand_CommandInfo_ButtonDescription {
+            get {
+                return ResourceManager.GetString("OpenInstalledPluginsCommand_CommandInfo_ButtonDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Installed Plugins.
+        /// </summary>
+        public static string OpenInstalledPluginsCommand_CommandInfo_ButtonName {
+            get {
+                return ResourceManager.GetString("OpenInstalledPluginsCommand_CommandInfo_ButtonName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install.
         /// </summary>
         public static string PluginInstallerViewModel_InstallDialog_PrimaryButtonText {

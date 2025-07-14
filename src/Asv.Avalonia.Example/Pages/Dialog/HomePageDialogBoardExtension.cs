@@ -15,7 +15,11 @@ public class HomePageDialogBoardExtension(ILoggerFactory loggerFactory)
     {
         context.Tools.Add(
             OpenDialogBoardCommand
-                .StaticInfo.CreateAction(loggerFactory)
+                .StaticInfo.CreateAction(
+                    loggerFactory,
+                    RS.OpenDialogBoard_CommandInfo_ButtonName,
+                    RS.OpenDialogBoard_CommandInfo_ButtonDescription
+                )
                 .DisposeItWith(contextDispose)
         );
     }
