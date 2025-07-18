@@ -1,6 +1,6 @@
 using System.Composition;
 
-namespace Asv.Avalonia.Phase;
+namespace Asv.Avalonia;
 
 [ExportUnitItem(PhaseBase.Id)]
 [Shared]

@@ -1,7 +1,7 @@
 ﻿using Material.Icons;
 using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.LogViewer;
+namespace Asv.Avalonia;
 
 public class LogMessageViewModel : RoutableViewModel
 {

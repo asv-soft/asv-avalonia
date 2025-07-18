@@ -1,5 +1,4 @@
-﻿using Asv.Avalonia.Tree;
-using ObservableCollections;
+﻿using ObservableCollections;
 
 namespace Asv.Avalonia.Example;
 

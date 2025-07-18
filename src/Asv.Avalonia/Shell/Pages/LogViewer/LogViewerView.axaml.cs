@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 
-namespace Asv.Avalonia.LogViewer;
+namespace Asv.Avalonia;
 
 [ExportViewFor(typeof(LogViewerViewModel))]
 public partial class LogViewerView : UserControl

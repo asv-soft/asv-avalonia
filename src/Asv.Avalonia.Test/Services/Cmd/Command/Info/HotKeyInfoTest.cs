@@ -1,9 +1,8 @@
-﻿using Asv.Avalonia;
-using Avalonia.Input;
+﻿using Avalonia.Input;
 using JetBrains.Annotations;
 using Xunit;
 
-namespace Asv.Avalonia.Tests.Services.Cmd.Command.Info;
+namespace Asv.Avalonia.Test;
 
 [TestSubject(typeof(HotKeyInfo))]
 public class HotKeyInfoTest

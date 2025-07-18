@@ -2,7 +2,7 @@ using System.Composition;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.LogViewer;
+namespace Asv.Avalonia;
 
 [ExportExtensionFor<IHomePage>]
 [method: ImportingConstructor]

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Specialized;
 using System.Text;
-using Asv.Avalonia;
 using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Xunit;
 
-namespace Asv.Avalonia.Tests.ViewModel.Routable;
+namespace Asv.Avalonia.Test;
 
 [TestSubject(typeof(NavigationId))]
 public class NavigationIdTest

@@ -1,6 +1,6 @@
 ﻿using System.Composition;
 
-namespace Asv.Avalonia.LogViewer;
+namespace Asv.Avalonia;
 
 [ExportCommand]
 [method: ImportingConstructor]

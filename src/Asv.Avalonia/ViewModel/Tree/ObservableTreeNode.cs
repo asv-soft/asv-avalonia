@@ -4,7 +4,7 @@ using Asv.Common;
 using ObservableCollections;
 using R3;
 
-namespace Asv.Avalonia.Tree;
+namespace Asv.Avalonia;
 
 public class ObservableTreeNode<T, TKey>
     : AsyncDisposableOnce,

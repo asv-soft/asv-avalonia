@@ -2,7 +2,7 @@ using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
-namespace Asv.Avalonia.Phase;
+namespace Asv.Avalonia;
 
 internal sealed class PhaseConfig
 {

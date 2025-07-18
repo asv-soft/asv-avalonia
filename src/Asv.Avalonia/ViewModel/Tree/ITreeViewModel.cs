@@ -1,4 +1,4 @@
-﻿namespace Asv.Avalonia.Tree;
+﻿namespace Asv.Avalonia;
 
 public interface ITreeViewModel : IViewModel
 {

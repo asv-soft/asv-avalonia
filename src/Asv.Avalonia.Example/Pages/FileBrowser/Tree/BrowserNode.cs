@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Asv.Avalonia.Tree;
 using ObservableCollections;
 
 namespace Asv.Avalonia.Example;

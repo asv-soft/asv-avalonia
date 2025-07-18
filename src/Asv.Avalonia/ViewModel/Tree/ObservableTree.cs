@@ -2,7 +2,7 @@
 using ObservableCollections;
 using R3;
 
-namespace Asv.Avalonia.Tree;
+namespace Asv.Avalonia;
 
 public delegate ObservableTreeNode<T, TKey> CreateNodeDelegate<T, TKey>(
     T baseItem,

@@ -9,7 +9,7 @@ using ObservableCollections;
 using R3;
 using ZLogger;
 
-namespace Asv.Avalonia.LogViewer;
+namespace Asv.Avalonia;
 
 public interface ILogViewerViewModel : IPage { }
 
