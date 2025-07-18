@@ -61,7 +61,7 @@
                    avalonia:WindowHelper.EnableDrag="True"
                    avalonia:WindowHelper.DoubleTappedWindowState="True">
             <DropDownButton Background="Transparent">
-                <avalonia1:MaterialIcon Kind="Menu"/>
+                <avalonia1:MaterialIcon Kind="Menu" Foreground="White"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout ItemsSource="{Binding MainMenuView.Items}">
                         <MenuFlyout.ItemContainerTheme>
@@ -83,7 +83,7 @@
             </DropDownButton>
             
             <DropDownButton Name="WindowControlButton" Background="Transparent" DockPanel.Dock="Right">
-                <avalonia1:MaterialIcon Kind="DotsVertical"/>
+                <avalonia1:MaterialIcon Kind="DotsVertical" Foreground="White"/>
                 <DropDownButton.Flyout>
                     <MenuFlyout>
                         <MenuItem 
@@ -101,22 +101,22 @@
                 </DropDownButton.Flyout>
             </DropDownButton>
             <Button Background="Transparent" DockPanel.Dock="Right" DataContext="{Binding ElementName=DockControl}" Command="{Binding UnSplitAllCommand}">
-                <avalonia1:MaterialIcon Kind="ArrowLeftBox"/>
+                <avalonia1:MaterialIcon Kind="ArrowLeftBox" Foreground="White"/>
                 <ToolTip.Tip>
                     <TextBlock Text="{x:Static avalonia:RS.ShellView_UnsplitAllTabsButton_ToolTip}"/>
                 </ToolTip.Tip>
             </Button>
 
             <Button Background="Transparent" DockPanel.Dock="Right">
-                <avalonia1:MaterialIcon Kind="Cog"/>
+                <avalonia1:MaterialIcon Kind="Cog" Foreground="White"/>
             </Button>
             
             <StackPanel Spacing="4" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button Background="Transparent" Command="{Binding Navigation.Backward}">
-                    <avalonia1:MaterialIcon Kind="ArrowLeft"/>
+                    <avalonia1:MaterialIcon Kind="ArrowLeft" Foreground="White"/>
                 </Button>
                 <Button Background="Transparent" Command="{Binding Navigation.Forward}">
-                    <avalonia1:MaterialIcon Kind="ArrowRight"/>
+                    <avalonia1:MaterialIcon Kind="ArrowRight" Foreground="White"/>
                 </Button>
                 <AutoCompleteBox VerticalAlignment="Center" Width="200"></AutoCompleteBox>
             </StackPanel>

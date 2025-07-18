@@ -32,6 +32,12 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
     private readonly INavigationService _navigation;
 
+    public ContentDialog()
+        : this(NullDialogViewModel.Instance, DesignTime.Navigation)
+    {
+        DesignTime.ThrowIfNotDesignMode();
+    }
+
     public ContentDialog(DialogViewModelBase content, INavigationService navigationService)
     {
         _navigation = navigationService;
