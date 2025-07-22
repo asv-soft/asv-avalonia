@@ -212,4 +212,10 @@
     <data name="HistoricalControlsPageView_Enum" xml:space="preserve">
         <value>Перечисление:</value>
     </data>
+    <data name="DialogControlsPageViewModel_Position_Result" xml:space="preserve">
+        <value>Позиция: {0}</value>
+    </data>
+    <data name="DialogControlsPageView_Custom_Position" xml:space="preserve">
+        <value>Открыть диалог позиции</value>
+    </data>
 </root>

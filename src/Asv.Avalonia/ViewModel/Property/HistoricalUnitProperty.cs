@@ -72,6 +72,13 @@ public sealed class HistoricalUnitProperty : HistoricalPropertyBase<double, stri
         _internalChange = false;
     }
 
+    public void SetViewValue(double valueInCurrentUnit)
+    {
+        _internalChange = true;
+        ViewValue.OnNext(_unit.CurrentUnitItem.CurrentValue.Print(valueInCurrentUnit, _format));
+        _internalChange = false;
+    }
+
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         return [];

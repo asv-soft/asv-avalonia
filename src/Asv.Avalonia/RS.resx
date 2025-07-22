@@ -119,7 +119,6 @@
     <data name="ShellView_WindowControlButton_Collapse" xml:space="preserve">
         <value>Collapse</value>
     </data>
-    
     <data name="ShellView_Toolbar_Open" xml:space="preserve">
         <value>Open</value>
     </data>
@@ -729,5 +728,8 @@
     </data>
     <data name="ChangeEnumPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command changes the enum property</value>
+    </data>
+    <data name="DialogButton_Cancel" xml:space="preserve">
+        <value>Cancel</value>
     </data>
 </root>
