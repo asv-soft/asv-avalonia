@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Avalonia.GeoMap;
+using Asv.Avalonia.Plugins;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -17,6 +19,9 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     public const string PageId = "dialog";
     public const MaterialIconKind PageIcon = MaterialIconKind.Dialogue;
 
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly INavigationService _navigationService;
+
     private readonly SelectFolderDialogDesktopPrefab _selectFolderDialog;
     private readonly ObserveFolderDialogPrefab _observeFolderDialog;
     private readonly SaveFileDialogDesktopPrefab _saveFileDialog;
@@ -24,9 +29,15 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     private readonly SaveCancelDialogPrefab _saveCancelDialog;
     private readonly YesOrNoDialogPrefab _yesNoDialog;
     private readonly InputDialogPrefab _inputDialog;
+    private readonly PositionDialogPrefab _positionDialog;
 
     public DialogBoardViewModel()
-        : this(DesignTime.CommandService, NullLoggerFactory.Instance, NullDialogService.Instance)
+        : this(
+            DesignTime.CommandService,
+            NullLoggerFactory.Instance,
+            NullDialogService.Instance,
+            NullNavigationService.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Title = RS.DialogPageViewModel_Title;
@@ -36,11 +47,15 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     public DialogBoardViewModel(
         ICommandService cmd,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        INavigationService navigationService
     )
         : base(PageId, cmd, loggerFactory)
     {
         Title = RS.DialogPageViewModel_Title;
+
+        _loggerFactory = loggerFactory;
+        _navigationService = navigationService;
 
         _selectFolderDialog = dialogService.GetDialogPrefab<SelectFolderDialogDesktopPrefab>();
         _observeFolderDialog = dialogService.GetDialogPrefab<ObserveFolderDialogPrefab>();
@@ -49,6 +64,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
         _saveCancelDialog = dialogService.GetDialogPrefab<SaveCancelDialogPrefab>();
         _yesNoDialog = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
         _inputDialog = dialogService.GetDialogPrefab<InputDialogPrefab>();
+        _positionDialog = dialogService.GetDialogPrefab<PositionDialogPrefab>();
 
         OpenFileCommand = new ReactiveCommand(OpenFileAsync);
         SaveFileCommand = new ReactiveCommand(SaveFileAsync);
@@ -57,8 +73,10 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
         YesNoCommand = new ReactiveCommand(YesNoMessageAsync);
         SaveCancelCommand = new ReactiveCommand(SaveCancelAsync);
         ShowUnitInputCommand = new ReactiveCommand(ShowUnitInputAsync);
+        OpenPositionDialogCommand = new ReactiveCommand(ShowPositionDialog);
     }
 
+    public ReactiveCommand OpenPositionDialogCommand { get; }
     public ReactiveCommand OpenFileCommand { get; }
     public ReactiveCommand SaveFileCommand { get; }
     public ReactiveCommand SelectFolderCommand { get; }
@@ -145,6 +163,19 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
 
         var res = await _inputDialog.ShowDialogAsync(payload);
         Logger.LogInformation("UnitInput result = {res}", res);
+    }
+
+    private async ValueTask ShowPositionDialog(Unit unit, CancellationToken cancellationToken)
+    {
+        var payload = new PositionDialogPayload
+        {
+            X = 1,
+            Y = 1,
+            Z = 0.5,
+        };
+
+        var res = await _positionDialog.ShowDialogAsync(payload);
+        Logger.LogInformation("Coordinates result = {res}", res);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

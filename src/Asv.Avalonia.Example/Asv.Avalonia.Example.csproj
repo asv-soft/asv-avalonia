@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <LangVersion>preview</LangVersion>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
@@ -37,7 +37,7 @@
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="$(AvaloniaVersion)"/>
 
-        <PackageReference Include="Roslynator.Analyzers" Version="4.14.0">
+        <PackageReference Include="Roslynator.Analyzers" Version="4.13.1">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
@@ -70,12 +70,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <UpToDateCheckInput Remove="Pages\Flight\FlightPageView.axaml" />
-      <UpToDateCheckInput Remove="Pages\Flight\Widgets\UavWidget\Controls\Attitude\AttitudeIndicatorStyles.axaml" />
-      <UpToDateCheckInput Remove="Pages\Flight\Widgets\UavWidget\Controls\RouteIndicator\RouteIndicatorStyles.axaml" />
-      <UpToDateCheckInput Remove="Pages\Flight\Widgets\UavWidget\Dialogs\SetAltitudeDialog.axaml" />
-      <UpToDateCheckInput Remove="Pages\Flight\Widgets\UavWidget\MissionProgress\MissionProgressView.axaml" />
-      <UpToDateCheckInput Remove="Pages\Flight\Widgets\UavWidget\UavWidgetView.axaml" />
+      <AdditionalFiles Include="PositionDialog\PositionDialogView.axaml" />
     </ItemGroup>
 
    

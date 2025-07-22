@@ -1,0 +1,157 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             xmlns:geoMap1="clr-namespace:Asv.Avalonia.GeoMap;assembly=Asv.Avalonia.GeoMap"
+             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d"
+             Width="440"
+             x:CompileBindings="True"
+             x:DataType="example:PositionDialogViewModel"
+             x:Class="Asv.Avalonia.Example.PositionDialogView"
+             PointerWheelChanged="InputElement_OnPointerWheelChanged">
+
+    <Design.DataContext>
+        <example:PositionDialogViewModel />
+    </Design.DataContext>
+
+    <Grid Margin="0,0,20,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> 
+                <RowDefinition Height="Auto"/> 
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Margin="0,0,0,10"
+                    Padding="4"
+                    BorderBrush="LightGray"
+                    BorderThickness="1"
+                    CornerRadius="4">
+                <geoMap1:MapItemsControl Width="220"
+                                         Height="220"
+                                         ItemsSource="{CompiledBinding Anchors}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <avalonia1:MaterialIcon Width="30"
+                                                    Height="30"
+                                                    Foreground="Red"
+                                                    Kind="{Binding Icon}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                    <ItemsControl.ItemContainerTheme>
+                        <ControlTheme TargetType="geoMap1:MapItem"
+                                      x:DataType="geoMap1:IMapAnchor">
+                            <Setter Property="Location" Value="{Binding Location}" />
+                            <Setter Property="Rotation" Value="{Binding Azimuth}" />
+                            <Setter Property="CenterX" Value="{Binding CenterX}" />
+                            <Setter Property="CenterY" Value="{Binding CenterY}" />
+                            <Setter Property="IsReadOnly" Value="True" />
+                            <Setter Property="IsVisible" Value="{Binding IsVisible}" />
+                            <Setter Property="Polygon" Value="{Binding PolygonView}" />
+                            <Setter Property="IsPolygonClosed" Value="{Binding IsPolygonClosed}" />
+                            <Setter Property="Pen" Value="{Binding PolygonPen}" />
+                        </ControlTheme>
+                    </ItemsControl.ItemContainerTheme>
+                </geoMap1:MapItemsControl>
+            </Border>
+
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        Margin="0,10,0,0">
+                <UniformGrid Rows="3" Columns="3">
+                    <Button Content="↖️" Command="{Binding MoveTopLeftCommand}" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="35" Height="35"/>
+                    <Button Content="↑"  Command="{Binding MoveUpCommand}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"     Width="35" Height="35"/>
+                    <Button Content="↗️" Command="{Binding MoveTopRightCommand}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="35" Height="35"/>
+                    <Button Content="←"  Command="{Binding MoveLeftCommand}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"     Width="35" Height="35"/>
+                    <Border Width="30" Height="30" Background="Transparent"/>
+                    <Button Content="→"  Command="{Binding MoveRightCommand}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center"    Width="35" Height="35"/>
+                    <Button Content="↙️" Command="{Binding MoveBottomLeftCommand}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="35" Height="35"/>
+                    <Button Content="↓"  Command="{Binding MoveDownCommand}"   HorizontalContentAlignment="Center" VerticalContentAlignment="Center"     Width="35" Height="35"/>
+                    <Button Content="↘️" Command="{Binding MoveBottomRightCommand}"  HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Width="35" Height="35"/>
+                </UniformGrid>
+            </StackPanel>
+        </Grid>
+
+        <!-- X, Y, Z, Step -->
+        <Grid Grid.Column="1" Margin="10,0,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="90"/>  <!-- X -->
+                <RowDefinition Height="90"/>  <!-- Y -->
+                <RowDefinition Height="90"/>  <!-- Z -->
+                <RowDefinition Height="Auto"/> <!-- Step -->
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>  
+                <ColumnDefinition Width="125"/>   
+                <ColumnDefinition Width="Auto"/>  
+            </Grid.ColumnDefinitions>
+
+            <!-- X -->
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       Text="X:" VerticalAlignment="Top" Margin="5,8,2,0"/>
+            <TextBox   Grid.Row="0" Grid.Column="1"
+                       VerticalAlignment="Top"
+                       Text="{Binding XCoord.Value, Mode=TwoWay}"/>
+            <TextBlock Grid.Row="0" Grid.Column="2"
+                       Text="{Binding XUnitName.Value}"
+                       VerticalAlignment="Top" Margin="5,8,0,0"/>
+
+            <!-- Y -->
+            <TextBlock Grid.Row="1" Grid.Column="0"
+                       Text="Y:" VerticalAlignment="Top" Margin="5,8,2,0"/>
+            <TextBox   Grid.Row="1" Grid.Column="1"
+                       VerticalAlignment="Top"
+                       Text="{Binding YCoord.Value, Mode=TwoWay}"/>
+            <TextBlock Grid.Row="1" Grid.Column="2"
+                       Text="{Binding YUnitName.Value}"
+                       VerticalAlignment="Top" Margin="5,8,0,0"/>
+
+            <!-- Z -->
+            <TextBlock Grid.Row="2" Grid.Column="0"
+                       Text="Z:" VerticalAlignment="Top" Margin="5,8,2,0"/>
+            <Grid Grid.Row="2" Grid.Column="1" VerticalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0"
+                         VerticalAlignment="Top"
+                         Text="{Binding ZCoord.Value, Mode=TwoWay}"/>
+                <StackPanel Grid.Column="1"
+                            Orientation="Vertical"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Spacing="2"
+                            Margin="4,-15,0,0">
+                    <Button Content="↑" Command="{Binding IncreaseZCommand}" Width="40" Height="30"/>
+                    <Button Content="↓" Command="{Binding DecreaseZCommand}" Width="40" Height="30"/>
+                </StackPanel>
+            </Grid>
+            <TextBlock Grid.Row="2" Grid.Column="2"
+                       Text="{Binding ZUnitName.Value}"
+                       VerticalAlignment="Top" Margin="5,8,0,0"/>
+
+            <!-- Step -->
+            <StackPanel Grid.Row="3"
+                        Grid.Column="0" Grid.ColumnSpan="3"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Left"
+                        Margin="0,10,0,0"
+                        Spacing="4">
+                <TextBlock Text="Step:" VerticalAlignment="Center"/>
+                <AutoCompleteBox Width="80"
+                                 ItemsSource="{Binding StepOptions}"
+                                 SelectedItem="{Binding SelectedStep.Value, Mode=TwoWay}"
+                                 MinimumPrefixLength="0"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

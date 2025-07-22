@@ -15,6 +15,7 @@
             <Button Command="{Binding YesNoCommand}"  Padding="0" Content="Yes or No dialog"/>
             <Button Command="{Binding SaveCancelCommand}"  Padding="0" Content="Save cancel dialog"/>
             <Button Command="{Binding ShowUnitInputCommand}"  Padding="0" Content="Show input dialog"/>
+            <Button Command="{Binding OpenPositionDialogCommand}"  Padding="0" Content="Open position dialog"/>
         </StackPanel>
     </StackPanel>
 </UserControl>
