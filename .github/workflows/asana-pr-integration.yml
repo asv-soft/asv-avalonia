@@ -1,0 +1,57 @@
+﻿name: Sync Asana Task Status and Comments
+
+on:
+  pull_request:
+    types: [opened]
+  pull_request_review:
+    types: [submitted]
+
+jobs:
+  handle-asana-task:
+    runs-on: ubuntu-latest
+    name: Sync Asana Task Status and Comments
+
+    steps:
+      - name: Extract Asana Task ID from PR
+        id: extract
+        run: |
+          PR_TEXT="${{ github.event.pull_request.title || github.event.pull_request.body }}"
+          TASK_ID=$(echo "$PR_TEXT" | grep -oE '[0-9]{16,}' | head -1)
+          echo "ASANA_TASK_ID=$TASK_ID" >> $GITHUB_ENV
+
+      - name: Add PR Opened Comment to Asana
+        if: github.event_name == 'pull_request' && github.event.action == 'opened' && env.ASANA_TASK_ID != ''
+        run: |
+          COMMENT_TEXT="Pull Request [${{ github.event.pull_request.title }}](${{ github.event.pull_request.html_url }}) was opened"
+          curl -X POST "https://app.asana.com/api/1.0/tasks/$ASANA_TASK_ID/stories" \
+            -H "Authorization: Bearer ${{ secrets.ASANA_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d "{\"text\": \"$COMMENT_TEXT\"}"
+
+      - name: Set Asana status to Review Needed
+        if: github.event_name == 'pull_request' && github.event.action == 'opened' && env.ASANA_TASK_ID != ''
+        run: |
+          curl -X PUT "https://app.asana.com/api/1.0/tasks/$ASANA_TASK_ID" \
+            -H "Authorization: Bearer ${{ secrets.ASANA_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "custom_fields": {
+                "1204341243817358": "1204341243817361"
+              }
+            }'
+
+      - name: Set Asana status to In Review on PR review comment
+        if: >
+          github.event_name == 'pull_request_review' &&
+          github.event.action == 'submitted' &&
+          github.event.review.state  != 'approved' &&
+          env.ASANA_TASK_ID != ''
+        run: |
+          curl -X PUT "https://app.asana.com/api/1.0/tasks/$ASANA_TASK_ID" \
+            -H "Authorization: Bearer ${{ secrets.ASANA_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "custom_fields": {
+                "1204341243817358": "1207831943928012"
+              }
+            }'
