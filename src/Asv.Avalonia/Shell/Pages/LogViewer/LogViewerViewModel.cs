@@ -21,7 +21,7 @@ public class LogViewerViewModel
         ISupportCancel,
         ISupportRefresh
 {
-    private readonly ILogService _logService;
+    private readonly ILogReaderService _logReaderService;
     private readonly ISearchService _search;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<LogMessageViewModel> _itemsSource = new();
@@ -135,13 +135,13 @@ public class LogViewerViewModel
     [ImportingConstructor]
     public LogViewerViewModel(
         ICommandService cmd,
-        ILogService logService,
+        ILogReaderService logReaderService,
         ISearchService search,
         ILoggerFactory loggerFactory
     )
         : base(PageId, cmd, loggerFactory)
     {
-        _logService = logService;
+        _logReaderService = logReaderService;
         _search = search;
         _loggerFactory = loggerFactory;
         Title = RS.LogViewerViewModel_Title;
@@ -200,7 +200,9 @@ public class LogViewerViewModel
             progress.Report(double.NaN);
 
             await foreach (
-                var logMessage in _logService.LoadItemsFromLogFile(cancel).ConfigureAwait(false)
+                var logMessage in _logReaderService
+                    .LoadItemsFromLogFile(cancel)
+                    .ConfigureAwait(false)
             )
             {
                 if (cancel.IsCancellationRequested)

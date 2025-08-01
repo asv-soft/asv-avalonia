@@ -4,8 +4,6 @@ using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.Plugins;
 using Avalonia;
 using Avalonia.Controls;
-using Microsoft.Extensions.Logging;
-using PluginManagerMixin = Asv.Avalonia.Plugins.PluginManagerMixin;
 
 namespace Asv.Avalonia.Example.Desktop;
 
@@ -21,16 +19,13 @@ sealed class Program
 
         builder
             .UseAvalonia(BuildAvaloniaApp)
-            .UseLogToConsoleOnDebug()
-            .UseLogToFile()
-            .SetLogLevel(LogLevel.Trace)
             .UseAppPath(opt => opt.WithRelativeFolder("data"))
             .UseJsonUserConfig(opt =>
                 opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
             )
             .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
             .UseSoloRun(opt => opt.WithArgumentForwarding())
-            .UseLogService()
+            .UseLogging(options => options.WithLogToFile().WithLogViewer())
             .UseAsvMap()
             .UsePluginManager(options =>
             {
