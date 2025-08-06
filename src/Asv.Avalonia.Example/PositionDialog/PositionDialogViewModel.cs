@@ -19,8 +19,8 @@ namespace Asv.Avalonia.Example
         public const string DialogId = "dialog.position";
 
         private readonly List<INotifyDataErrorInfo> _validateProperties = new();
-        private readonly BindableReactiveProperty<bool> _hasChanges;
-        private readonly BindableReactiveProperty<bool> _hasValidationError;
+        private readonly BindableReactiveProperty<bool> _hasChanges = new();
+        private readonly BindableReactiveProperty<bool> _hasValidationError = new();
 
         public ObservableCollection<IMapAnchor> Anchors { get; }
         public BindableReactiveProperty<string?> StepInput { get; }

@@ -6,16 +6,78 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Example.DialogBoardView"
              x:DataType="example:DialogBoardViewModel">
-    <StackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Spacing="8" Margin="8">
-        <StackPanel Orientation="Vertical" Spacing="8" Margin="0,20,0,0">
-            <Button Command="{Binding OpenFileCommand}"  Padding="0" Content="Open file dialog"/>
-            <Button Command="{Binding SaveFileCommand}"  Padding="0" Content="Save file dialog"/>
-            <Button Command="{Binding SelectFolderCommand}"  Padding="0" Content="Select folder dialog"/>
-            <Button Command="{Binding ObserveFolderCommand}"  Padding="0" Content="Observe folder dialog"/>
-            <Button Command="{Binding YesNoCommand}"  Padding="0" Content="Yes or No dialog"/>
-            <Button Command="{Binding SaveCancelCommand}"  Padding="0" Content="Save cancel dialog"/>
-            <Button Command="{Binding ShowUnitInputCommand}"  Padding="0" Content="Show input dialog"/>
-            <Button Command="{Binding OpenPositionDialogCommand}"  Padding="0" Content="Open position dialog"/>
+  <StackPanel Grid.IsSharedSizeScope="True"
+              HorizontalAlignment="Stretch"
+              Spacing="8"
+              Margin="8">
+
+    <StackPanel Orientation="Vertical"
+                Spacing="8"
+                Margin="0,20,0,0">
+
+      <!-- other dialog buttons -->
+      <Button Command="{Binding OpenFileCommand}"
+              Padding="0"
+              Content="Open file dialog"/>
+      <Button Command="{Binding SaveFileCommand}"
+              Padding="0"
+              Content="Save file dialog"/>
+      <Button Command="{Binding SelectFolderCommand}"
+              Padding="0"
+              Content="Select folder dialog"/>
+      <Button Command="{Binding ObserveFolderCommand}"
+              Padding="0"
+              Content="Observe folder dialog"/>
+      <Button Command="{Binding YesNoCommand}"
+              Padding="0"
+              Content="Yes or No dialog"/>
+      <Button Command="{Binding SaveCancelCommand}"
+              Padding="0"
+              Content="Save cancel dialog"/>
+      <Button Command="{Binding ShowUnitInputCommand}"
+              Padding="0"
+              Content="Show input dialog"/>
+
+      <!-- Position button + X/Y/Z panel -->
+      <StackPanel Orientation="Horizontal"
+                  Spacing="12"
+                  VerticalAlignment="Top">
+
+        <!-- Open position dialog button -->
+        <Button Command="{Binding OpenPositionDialogCommand}"
+                Padding="0"
+                Content="Open position dialog"/>
+
+        <!-- X, Y, Z inputs -->
+        <StackPanel Orientation="Horizontal" Spacing="12" Margin="10,0,0,0">
+
+            <!-- X -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Spacing="4">
+                <TextBlock Text="X:" VerticalAlignment="Center"/>
+                <TextBox Width="130" Text="{Binding XCoord.Value, Mode=TwoWay}"/>
+                <TextBlock Text="{Binding XUnitName.Value}" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Y -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Spacing="4">
+                <TextBlock Text="Y:" VerticalAlignment="Center"/>
+                <TextBox Width="130" Text="{Binding YCoord.Value, Mode=TwoWay}"/>
+                <TextBlock Text="{Binding YUnitName.Value}" VerticalAlignment="Center"/>
+            </StackPanel>
+
+            <!-- Z -->
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Spacing="4">
+                <TextBlock Text="Z:" VerticalAlignment="Center"/>
+                <TextBox Width="100" Text="{Binding ZCoord.Value, Mode=TwoWay}"/>
+                <TextBlock Text="{Binding ZUnitName.Value}" VerticalAlignment="Center"/>
+            </StackPanel>
+
         </StackPanel>
+
+
+      </StackPanel>
+      <!-- end of Position + inputs panel -->
+
     </StackPanel>
+  </StackPanel>
 </UserControl>

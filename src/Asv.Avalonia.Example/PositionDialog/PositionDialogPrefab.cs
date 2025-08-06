@@ -26,9 +26,9 @@ public sealed class PositionDialogPrefab(
     INavigationService nav,
     ILoggerFactory loggerFactory,
     IUnitService unitService
-) : IDialogPrefab<PositionDialogPayload, string?>
+) : IDialogPrefab<PositionDialogPayload, CoordinatesDialogResult?>
 {
-    public async Task<string?> ShowDialogAsync(PositionDialogPayload dialogPayload)
+    public async Task<CoordinatesDialogResult?> ShowDialogAsync(PositionDialogPayload dialogPayload)
     {
         using var vm = new PositionDialogViewModel(loggerFactory, unitService);
 
@@ -50,7 +50,7 @@ public sealed class PositionDialogPrefab(
             var coordinates = vm.GetResult();
             if (coordinates != null)
             {
-                return $"{coordinates.X},{coordinates.Y},{coordinates.Z}";
+                return coordinates;
             }
         }
 
