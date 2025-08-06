@@ -335,4 +335,10 @@
     <data name="OpenFlightModeCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that opens Flight Mode map</value>
     </data>
+    <data name="PositionDialogViewModel_ParamIsRequired" xml:space="preserve">
+        <value>Param is Required</value>
+    </data>
+    <data name="PositionDialogViewModel_InvalidFormat" xml:space="preserve">
+        <value>Invalid Format</value>
+    </data>
 </root>

@@ -1,10 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Composition;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.Plugins;
+using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -22,6 +25,22 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     private readonly ILoggerFactory _loggerFactory;
     private readonly INavigationService _navigationService;
 
+    public BindableReactiveProperty<string?> XCoord { get; }
+    public BindableReactiveProperty<string?> YCoord { get; }
+    public BindableReactiveProperty<string?> ZCoord { get; }
+
+    public BindableReactiveProperty<string> XUnitName { get; }
+    public BindableReactiveProperty<string> YUnitName { get; }
+    public BindableReactiveProperty<string> ZUnitName { get; }
+
+    private readonly HistoricalUnitProperty _historicalXUnit;
+    private readonly HistoricalUnitProperty _historicalYUnit;
+    private readonly HistoricalUnitProperty _historicalZUnit;
+
+    private readonly IDisposable _subX;
+    private readonly IDisposable _subY;
+    private readonly IDisposable _subZ;
+
     private readonly SelectFolderDialogDesktopPrefab _selectFolderDialog;
     private readonly ObserveFolderDialogPrefab _observeFolderDialog;
     private readonly SaveFileDialogDesktopPrefab _saveFileDialog;
@@ -36,7 +55,8 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
             DesignTime.CommandService,
             NullLoggerFactory.Instance,
             NullDialogService.Instance,
-            NullNavigationService.Instance
+            NullNavigationService.Instance,
+            NullUnitService.Instance
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -48,7 +68,8 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
         ICommandService cmd,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        INavigationService navigationService
+        INavigationService navigationService,
+        IUnitService unitService
     )
         : base(PageId, cmd, loggerFactory)
     {
@@ -74,6 +95,111 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
         SaveCancelCommand = new ReactiveCommand(SaveCancelAsync);
         ShowUnitInputCommand = new ReactiveCommand(ShowUnitInputAsync);
         OpenPositionDialogCommand = new ReactiveCommand(ShowPositionDialog);
+
+        _historicalXUnit = new HistoricalUnitProperty(
+            LongitudeBase.Id,
+            new ReactiveProperty<double>(0.0),
+            unitService.Units[LongitudeBase.Id],
+            loggerFactory,
+            this
+        );
+
+        _historicalYUnit = new HistoricalUnitProperty(
+            LatitudeBase.Id,
+            new ReactiveProperty<double>(0.0),
+            unitService.Units[LatitudeBase.Id],
+            loggerFactory,
+            this
+        );
+
+        _historicalZUnit = new HistoricalUnitProperty(
+            AltitudeBase.Id,
+            new ReactiveProperty<double>(0.0),
+            unitService.Units[AltitudeBase.Id],
+            loggerFactory,
+            this
+        );
+
+        XCoord = new BindableReactiveProperty<string?>("0.0").DisposeItWith(Disposable);
+        YCoord = new BindableReactiveProperty<string?>("0.0").DisposeItWith(Disposable);
+        ZCoord = new BindableReactiveProperty<string?>("0.0").DisposeItWith(Disposable);
+
+        XUnitName = _historicalXUnit
+            .Unit.CurrentUnitItem.Select(u => u.Symbol)
+            .ToBindableReactiveProperty<string>();
+
+        YUnitName = _historicalYUnit
+            .Unit.CurrentUnitItem.Select(u => u.Symbol)
+            .ToBindableReactiveProperty<string>();
+
+        ZUnitName = _historicalZUnit
+            .Unit.CurrentUnitItem.Select(u => u.Symbol)
+            .ToBindableReactiveProperty<string>();
+
+        _subX = XCoord.EnableValidationRoutable(
+            value =>
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return new Exception(RS.PositionDialogViewModel_ParamIsRequired);
+                }
+
+                var fmt = _historicalXUnit.Unit.CurrentUnitItem.CurrentValue.ValidateValue(value);
+                if (fmt.IsFailed)
+                {
+                    return new Exception(RS.PositionDialogViewModel_ParamIsRequired);
+                }
+
+                double si = _historicalXUnit.Unit.CurrentUnitItem.CurrentValue.ParseToSi(value);
+                return ValidationResult.Success;
+            },
+            this,
+            true
+        );
+
+        _subY = YCoord.EnableValidationRoutable(
+            value =>
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return new Exception(RS.PositionDialogViewModel_ParamIsRequired);
+                }
+
+                var fmt = _historicalYUnit.Unit.CurrentUnitItem.CurrentValue.ValidateValue(value);
+                if (fmt.IsFailed)
+                {
+                    return new Exception(RS.PositionDialogViewModel_InvalidFormat);
+                }
+
+                double si = _historicalYUnit.Unit.CurrentUnitItem.CurrentValue.ParseToSi(value);
+                return ValidationResult.Success;
+            },
+            this,
+            true
+        );
+
+        _subZ = ZCoord.EnableValidationRoutable(
+            value =>
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return new Exception(RS.PositionDialogViewModel_ParamIsRequired);
+                }
+
+                var fmt = _historicalZUnit.Unit.CurrentUnitItem.CurrentValue.ValidateValue(value);
+                if (fmt.IsFailed)
+                {
+                    return new Exception(RS.PositionDialogViewModel_InvalidFormat);
+                }
+
+                double si = _historicalZUnit.Unit.CurrentUnitItem.CurrentValue.ParseToSi(value);
+                return ValidationResult.Success;
+            },
+            this,
+            true
+        );
+
+        SetInitialCoordinates(1, 1, 1);
     }
 
     public ReactiveCommand OpenPositionDialogCommand { get; }
@@ -84,6 +210,27 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     public ReactiveCommand YesNoCommand { get; }
     public ReactiveCommand SaveCancelCommand { get; }
     public ReactiveCommand ShowUnitInputCommand { get; }
+
+    public void SetInitialCoordinates(double? x, double? y, double? z)
+    {
+        if (x.HasValue)
+        {
+            var xStr = _historicalXUnit.Unit.CurrentUnitItem.CurrentValue.PrintFromSi(x.Value);
+            XCoord.Value = xStr;
+        }
+
+        if (y.HasValue)
+        {
+            var yStr = _historicalYUnit.Unit.CurrentUnitItem.CurrentValue.PrintFromSi(y.Value);
+            YCoord.Value = yStr;
+        }
+
+        if (z.HasValue)
+        {
+            var zStr = _historicalZUnit.Unit.CurrentUnitItem.CurrentValue.PrintFromSi(z.Value);
+            ZCoord.Value = zStr;
+        }
+    }
 
     private async ValueTask OpenFileAsync(Unit unit, CancellationToken cancellationToken)
     {
@@ -167,15 +314,42 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
 
     private async ValueTask ShowPositionDialog(Unit unit, CancellationToken cancellationToken)
     {
+        var doubleyValue = _historicalYUnit.Unit.CurrentUnitItem.CurrentValue.ParseToSi(
+            YCoord.Value
+        );
+        var doublexValue = _historicalXUnit.Unit.CurrentUnitItem.CurrentValue.ParseToSi(
+            XCoord.Value
+        );
+        var doublezValue = _historicalZUnit.Unit.CurrentUnitItem.CurrentValue.ParseToSi(
+            ZCoord.Value
+        );
+
         var payload = new PositionDialogPayload
         {
-            X = 1,
-            Y = 1,
-            Z = 0.5,
+            X = doublexValue,
+            Y = doubleyValue,
+            Z = doublezValue,
         };
 
         var res = await _positionDialog.ShowDialogAsync(payload);
         Logger.LogInformation("Coordinates result = {res}", res);
+
+        if (res is not null)
+        {
+            var xStr = _historicalYUnit.Unit.CurrentUnitItem.CurrentValue.PrintFromSi(
+                res.Value.Longitude
+            );
+            var yStr = _historicalXUnit.Unit.CurrentUnitItem.CurrentValue.PrintFromSi(
+                res.Value.Latitude
+            );
+            var zStr = _historicalZUnit.Unit.CurrentUnitItem.CurrentValue.PrintFromSi(
+                res.Value.Altitude
+            );
+
+            XCoord.Value = xStr;
+            YCoord.Value = yStr;
+            ZCoord.Value = zStr;
+        }
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

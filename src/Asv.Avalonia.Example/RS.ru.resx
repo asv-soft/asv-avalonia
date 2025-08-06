@@ -323,4 +323,10 @@
     <data name="OpenFlightModeCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, которая открывать карту полёта</value>
     </data>
+    <data name="PositionDialogViewModel_ParamIsRequired" xml:space="preserve">
+        <value>Параметр обязателен</value>
+    </data>
+    <data name="PositionDialogViewModel_InvalidFormat" xml:space="preserve">
+        <value>Неверный формат</value>
+    </data>
 </root>

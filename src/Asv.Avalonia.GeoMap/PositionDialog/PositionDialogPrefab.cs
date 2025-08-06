@@ -1,10 +1,11 @@
 ﻿using System.Composition;
 using System.Threading.Tasks;
 using Asv.Avalonia.GeoMap;
+using Asv.Common;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.Example;
+namespace Asv.Avalonia.GeoMap;
 
 /// <summary>
 /// Payload for PositionDialog prefab.
@@ -26,9 +27,9 @@ public sealed class PositionDialogPrefab(
     INavigationService nav,
     ILoggerFactory loggerFactory,
     IUnitService unitService
-) : IDialogPrefab<PositionDialogPayload, string?>
+) : IDialogPrefab<PositionDialogPayload, GeoPoint?>
 {
-    public async Task<string?> ShowDialogAsync(PositionDialogPayload dialogPayload)
+    public async Task<GeoPoint?> ShowDialogAsync(PositionDialogPayload dialogPayload)
     {
         using var vm = new PositionDialogViewModel(loggerFactory, unitService);
 
@@ -50,7 +51,7 @@ public sealed class PositionDialogPrefab(
             var coordinates = vm.GetResult();
             if (coordinates != null)
             {
-                return $"{coordinates.X},{coordinates.Y},{coordinates.Z}";
+                return coordinates;
             }
         }
 
