@@ -80,7 +80,6 @@
             </StackPanel>
         </Grid>
 
-        <!-- X, Y, Z, Step -->
         <Grid Grid.Column="1" Margin="10,0,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="90"/>  <!-- X -->
@@ -94,7 +93,6 @@
                 <ColumnDefinition Width="Auto"/>  
             </Grid.ColumnDefinitions>
 
-            <!-- X -->
             <TextBlock Grid.Row="0" Grid.Column="0"
                        Text="X:" VerticalAlignment="Top" Margin="5,8,2,0"/>
             <TextBox   Grid.Row="0" Grid.Column="1"
@@ -104,7 +102,6 @@
                        Text="{Binding XUnitName.Value}"
                        VerticalAlignment="Top" Margin="5,8,0,0"/>
 
-            <!-- Y -->
             <TextBlock Grid.Row="1" Grid.Column="0"
                        Text="Y:" VerticalAlignment="Top" Margin="5,8,2,0"/>
             <TextBox   Grid.Row="1" Grid.Column="1"
@@ -114,7 +111,6 @@
                        Text="{Binding YUnitName.Value}"
                        VerticalAlignment="Top" Margin="5,8,0,0"/>
 
-            <!-- Z -->
             <TextBlock Grid.Row="2" Grid.Column="0"
                        Text="Z:" VerticalAlignment="Top" Margin="5,8,2,0"/>
             <Grid Grid.Row="2" Grid.Column="1" VerticalAlignment="Stretch">
@@ -139,7 +135,6 @@
                        Text="{Binding ZUnitName.Value}"
                        VerticalAlignment="Top" Margin="5,8,0,0"/>
 
-            <!-- Step -->
             <StackPanel Grid.Row="3"
                         Grid.Column="0" Grid.ColumnSpan="3"
                         Orientation="Horizontal"

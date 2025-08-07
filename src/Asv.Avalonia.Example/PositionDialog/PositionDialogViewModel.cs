@@ -11,6 +11,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using ObservableCollections;
 using R3;
+using R3.Collections;
 
 namespace Asv.Avalonia.Example
 {
@@ -18,28 +19,25 @@ namespace Asv.Avalonia.Example
     {
         public const string DialogId = "dialog.position";
 
-        private readonly List<INotifyDataErrorInfo> _validateProperties = new();
-        private readonly BindableReactiveProperty<bool> _hasChanges = new();
-        private readonly BindableReactiveProperty<bool> _hasValidationError = new();
-
-        public ObservableCollection<IMapAnchor> Anchors { get; }
-        public BindableReactiveProperty<string?> StepInput { get; }
-
+        private readonly List<INotifyDataErrorInfo> _validateProperties;
+        private readonly BindableReactiveProperty<bool> _hasChanges;
+        private readonly BindableReactiveProperty<bool> _hasValidationError;
+        private readonly CompositeDisposable _disposables = new();
         private MapAnchor<IMapAnchor> _anchor;
-        public BindableReactiveProperty<string?> XCoord { get; }
-        public BindableReactiveProperty<string?> YCoord { get; }
-        public BindableReactiveProperty<string?> ZCoord { get; }
-
-        public BindableReactiveProperty<string> XUnitName { get; }
-        public BindableReactiveProperty<string> YUnitName { get; }
-        public BindableReactiveProperty<string> ZUnitName { get; }
-
         private readonly IUnit _xUnit;
         private readonly IUnit _yUnit;
         private readonly IUnit _zUnit;
 
-        public BindableReactiveProperty<double> SelectedStep { get; }
-        public ObservableCollection<double> StepOptions { get; }
+        public ObservableCollection<IMapAnchor> Anchors { get; }
+        public BindableReactiveProperty<string?> StepInput { get; private set; }
+        public BindableReactiveProperty<string?> XCoord { get; }
+        public BindableReactiveProperty<string?> YCoord { get; }
+        public BindableReactiveProperty<string?> ZCoord { get; }
+        public IReadOnlyBindableReactiveProperty<string> XUnitName { get; }
+        public IReadOnlyBindableReactiveProperty<string> YUnitName { get; private set; }
+        public IReadOnlyBindableReactiveProperty<string> ZUnitName { get; private set; }
+        public IReadOnlyBindableReactiveProperty<double> SelectedStep { get; }
+        public IEnumerable<string> StepOptions { get; set; }
 
         public ReactiveCommand MoveUpCommand { get; }
         public ReactiveCommand MoveDownCommand { get; }
@@ -65,6 +63,10 @@ namespace Asv.Avalonia.Example
             _yUnit = unitService.Units[LatitudeBase.Id];
             _zUnit = unitService.Units[AltitudeBase.Id];
 
+            _hasChanges = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
+            _hasValidationError = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
+            _validateProperties = new List<INotifyDataErrorInfo>();
+
             XCoord = new BindableReactiveProperty<string?>("0.0").DisposeItWith(Disposable);
             YCoord = new BindableReactiveProperty<string?>("0.0").DisposeItWith(Disposable);
             ZCoord = new BindableReactiveProperty<string?>("0.0").DisposeItWith(Disposable);
@@ -79,31 +81,44 @@ namespace Asv.Avalonia.Example
                 .CurrentUnitItem.Select(u => u.Symbol)
                 .ToBindableReactiveProperty<string>();
 
-            StepOptions = new ObservableCollection<double> { 1, 10, 50, 100, 5000, 10000, 50000 };
+            StepOptions = new List<string> { "1", "10", "50", "100", "5000", "10000", "50000" };
+
             SelectedStep = new BindableReactiveProperty<double>(1.0).DisposeItWith(Disposable);
 
             StepInput = new BindableReactiveProperty<string?>("1.0").DisposeItWith(Disposable);
 
-            IncreaseZCommand = new ReactiveCommand(_ => ChangeZ(+SelectedStep.Value));
-            DecreaseZCommand = new ReactiveCommand(_ => ChangeZ(-SelectedStep.Value));
+            IncreaseZCommand = new ReactiveCommand(_ => ChangeZ(+SelectedStep.Value)).AddTo(
+                _disposables
+            );
+            DecreaseZCommand = new ReactiveCommand(_ => ChangeZ(-SelectedStep.Value)).AddTo(
+                _disposables
+            );
 
-            MoveUpCommand = new ReactiveCommand(_ => Move(0, +SelectedStep.Value));
-            MoveDownCommand = new ReactiveCommand(_ => Move(0, -SelectedStep.Value));
-            MoveLeftCommand = new ReactiveCommand(_ => Move(-SelectedStep.Value, 0));
-            MoveRightCommand = new ReactiveCommand(_ => Move(+SelectedStep.Value, 0));
+            MoveUpCommand = new ReactiveCommand(_ => Move(0, +SelectedStep.Value)).AddTo(
+                _disposables
+            );
+            MoveDownCommand = new ReactiveCommand(_ => Move(0, -SelectedStep.Value)).AddTo(
+                _disposables
+            );
+            MoveLeftCommand = new ReactiveCommand(_ => Move(-SelectedStep.Value, 0)).AddTo(
+                _disposables
+            );
+            MoveRightCommand = new ReactiveCommand(_ => Move(+SelectedStep.Value, 0)).AddTo(
+                _disposables
+            );
 
             MoveTopLeftCommand = new ReactiveCommand(_ =>
                 Move(-SelectedStep.Value, +SelectedStep.Value)
-            );
+            ).AddTo(_disposables);
             MoveTopRightCommand = new ReactiveCommand(_ =>
                 Move(+SelectedStep.Value, +SelectedStep.Value)
-            );
+            ).AddTo(_disposables);
             MoveBottomLeftCommand = new ReactiveCommand(_ =>
                 Move(-SelectedStep.Value, -SelectedStep.Value)
-            );
+            ).AddTo(_disposables);
             MoveBottomRightCommand = new ReactiveCommand(_ =>
                 Move(+SelectedStep.Value, -SelectedStep.Value)
-            );
+            ).AddTo(_disposables);
 
             _anchor = new MapAnchor<IMapAnchor>("anchor", DesignTime.LoggerFactory)
             {
@@ -116,9 +131,17 @@ namespace Asv.Avalonia.Example
             AddToValidation(YCoord = new BindableReactiveProperty<string>(), YCoordValidate);
             AddToValidation(ZCoord = new BindableReactiveProperty<string>(), ZCoordValidate);
 
-            XCoord.Subscribe(_ => OnXCoordChanged());
-            YCoord.Subscribe(_ => OnYCoordChanged());
-            ZCoord.Subscribe(_ => OnZCoordChanged());
+            _disposables.Add(XCoord.Subscribe(_ => OnXCoordChanged()));
+            _disposables.Add(YCoord.Subscribe(_ => OnYCoordChanged()));
+            _disposables.Add(ZCoord.Subscribe(_ => OnZCoordChanged()));
+        }
+
+        public new void Dispose()
+        {
+            XUnitName.Dispose();
+            _disposables.Clear();
+
+            base.Dispose();
         }
 
         private Exception? ZCoordValidate(string arg)
@@ -325,7 +348,7 @@ namespace Asv.Avalonia.Example
 
             if (x != null && y != null && z != null)
             {
-                _anchor.Location = new GeoPoint(y.Value, x.Value, z.Value); // lat, lon, alt
+                _anchor.Location = new GeoPoint(y.Value, x.Value, z.Value);
             }
         }
 
