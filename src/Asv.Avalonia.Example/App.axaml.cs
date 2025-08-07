@@ -8,7 +8,6 @@ using System.Linq;
 using System.Reflection;
 using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
-using Asv.Avalonia.IO;
 using Asv.Avalonia.Plugins;
 using Asv.Cfg;
 using Asv.Common;
@@ -23,10 +22,9 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-public partial class App : Application, IContainerHost, IShellHost
+public class App : Application, IContainerHost, IShellHost
 {
     private readonly CompositionHost _container;
-    private IShell _shell;
     private readonly Subject<IShell> _onShellLoaded = new();
 
     public App()
@@ -52,7 +50,8 @@ public partial class App : Application, IContainerHost, IShellHost
         }
         else
         {
-            var pluginManager = AppHost.Instance.GetService<IPluginManager>();
+            // TODO: use it when plugin manager implementation will be finished
+            // var pluginManager = AppHost.Instance.GetService<IPluginManager>();
             var logReader = AppHost.Instance.GetService<ILogReaderService>();
 
             containerCfg
@@ -63,9 +62,7 @@ public partial class App : Application, IContainerHost, IShellHost
                 .WithExport(AppHost.Instance.GetService<IAppInfo>())
                 .WithExport(AppHost.Instance.GetService<IMeterFactory>())
                 .WithExport(TimeProvider.System)
-                .WithExport(pluginManager)
                 .WithExport(logReader)
-                .WithAssemblies(pluginManager.PluginsAssemblies)
                 .WithExport<IDataTemplateHost>(this)
                 .WithExport<IShellHost>(this)
                 .WithDefaultConventions(conventions);
@@ -84,10 +81,11 @@ public partial class App : Application, IContainerHost, IShellHost
         {
             yield return GetType().Assembly; // Asv.Avalonia.Example
             yield return typeof(AppHost).Assembly; // Asv.Avalonia
-            yield return typeof(IoModule).Assembly; // Asv.Avalonia.IO
             yield return typeof(GeoMapModule).Assembly; // Asv.Avalonia.GeoMap
             yield return typeof(ApiModule).Assembly; // Asv.Avalonia.Example.Api
-            yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
+
+            // TODO: use it when plugin manager implementation will be finished
+            // yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
         }
     }
 
@@ -154,16 +152,15 @@ public partial class App : Application, IContainerHost, IShellHost
 
     public IShell Shell
     {
-        get => _shell;
+        get;
         private set
         {
-            _shell = value;
+            field = value;
             _onShellLoaded.OnNext(value);
         }
     }
 
     public Observable<IShell> OnShellLoaded => _onShellLoaded;
-
-    public TopLevel TopLevel { get; private set; }
     public IExportInfo Source => SystemModule.Instance;
+    public TopLevel TopLevel { get; private set; }
 }

@@ -29,310 +29,187 @@
     <data name="MapExamplePageViewModel_Title" xml:space="preserve">
         <value>Map Example</value>
     </data>
-    <data name="DocumentPageViewModel_Title" xml:space="preserve">
-        <value>Document</value>
-    </data>
-    <data name="ParametersEditorParameterView_PinToggleButton_ToolTip" xml:space="preserve">
-        <value>On/ off pin for this parameter</value>
-    </data>
-    <data name="ParametersEditorParameterView_UpdateButton_ToolTip" xml:space="preserve">
-        <value>Update this parameter from UAV</value>
-    </data>
-    <data name="ParametersEditorParameterView_UpdateButton" xml:space="preserve">
-        <value>Update</value>
-    </data>
-    <data name="ParametersEditorParameterView_WriteButton_ToolTip" xml:space="preserve">
-        <value>Write this parameter to UAV</value>
-    </data>
-    <data name="ParametersEditorParameterView_WriteButton" xml:space="preserve">
-        <value>Write</value>
-    </data>
-    <data name="ParametersEditorParameterView_RebootRequired" xml:space="preserve">
-        <value>Reboot required</value>
-    </data>
-    <data name="ParametersEditorPageView_StarsToggleButton_ToolTip" xml:space="preserve">
-        <value>Show only starred parameters</value>
-    </data>
-    <data name="ParametersEditorPageView_UpdateButton_ToolTip" xml:space="preserve">
-        <value>Update all parameters</value>
-    </data>
-    <data name="ParametersEditorPageView_PinsOffButton_ToolTip" xml:space="preserve">
-        <value>Remove all pinned parameters</value>
-    </data>
-    <data name="ParametersEditorPageViewModel_Search" xml:space="preserve">
-        <value>Search</value>
-    </data>
-    <data name="ParametersEditorPageViewModel_Total" xml:space="preserve">
-        <value>Total: {0}</value>
-    </data>
-    <data name="ParametersEditorPageView_StarButton_ToolTip" xml:space="preserve">
-        <value>Star this parameter</value>
-    </data>
-    <data name="ParamPageViewModel_DataLossDialog_Content" xml:space="preserve">
-        <value>You have unsaved changes. Do you want to save them?</value>
-    </data>
-    <data name="ParamPageViewModel_DataLossDialog_Title" xml:space="preserve">
-        <value>Potential data loss warning</value>
-    </data>
-    <data name="ParamPageViewModel_DataLossDialog_PrimaryButtonText" xml:space="preserve">
-        <value>Save</value>
-    </data>
-    <data name="ParamPageViewModel_DataLossDialog_SecondaryButtonText" xml:space="preserve">
-        <value>Don't save</value>
-    </data>
-    <data name="ParamPageViewModel_DataLossDialog_CloseButtonText" xml:space="preserve">
-        <value>Cancel</value>
-    </data>
-    <data name="Unit_Byte_Abbreviation" xml:space="preserve">
-        <value>byte</value>
-    </data>
-    <data name="Unit_Kilobyte_Abbreviation" xml:space="preserve">
-        <value>KB</value>
-    </data>
-    <data name="Unit_Megabyte_Abbreviation" xml:space="preserve">
-        <value>MB</value>
-    </data>
-    <data name="Unit_Gigabyte_Abbreviation" xml:space="preserve">
-        <value>GB</value>
-    </data>
-    <data name="Unit_Terabyte_Abbreviation" xml:space="preserve">
-        <value>TB</value>
-    </data>
-    <data name="FileBrowserViewModel_UploadingDialog_Title" xml:space="preserve">
-        <value>Uploading</value>
-    </data>
-    <data name="FileBrowserViewModel_UploadingDialog_Message" xml:space="preserve">
-        <value>Do you want to upload file '{0}' to device?</value>
-    </data>
-    <data name="FileBrowserViewModel_DownloadDialog_Title" xml:space="preserve">
-        <value>Download</value>
-    </data>
-    <data name="FileBrowserViewModel_DownloadDialog_Message" xml:space="preserve">
-        <value>Do you want to download file '{0}'?</value>
-    </data>
-    <data name="FileBrowserViewModel_FileDownloadedSuccessfully" xml:space="preserve">
-        <value>File downloaded successfully: {0}</value>
-    </data>
-    <data name="FileBrowserViewModel_RemoveDialog_Title" xml:space="preserve">
-        <value>Remove</value>
-    </data>
-    <data name="FileBrowserViewModel_RemoveDialog_Message" xml:space="preserve">
-        <value>Do you want to remove the item?</value>
-    </data>
-    <data name="FileBrowserViewModel_BurstDownloadDialog_Title" xml:space="preserve">
-        <value>Burst download</value>
-    </data>
-    <data name="FileBrowserViewModel_BurstDownloadDialog_PrimaryButtonText" xml:space="preserve">
-        <value>Download</value>
-    </data>
-    <data name="FileBrowserViewModel_BurstDownloadDialog_SecondaryButtonText" xml:space="preserve">
-        <value>Cancel</value>
-    </data>
-    <data name="MavParamsPageViewModel_DeviceName_Unknown" xml:space="preserve">
-        <value>Unknown</value>
-    </data>
-    <data name="NotANumber" xml:space="preserve">
-        <value>N/A</value>
-    </data>
-    <data name="MissionProgressView_Title" xml:space="preserve">
-        <value>Mission progress</value>
-    </data>
-    <data name="MissionProgressView_SubStatusText" xml:space="preserve">
-        <value>before complete</value>
-    </data>
-    <data name="MissionProgressView_MissionDistanceRTT" xml:space="preserve">
-        <value>Mission</value>
-    </data>
-    <data name="MissionProgressView_TotalDistanceRTT" xml:space="preserve">
-        <value>Total</value>
-    </data>
-    <data name="MissionProgressView_HomeDistance" xml:space="preserve">
-        <value>Home</value>
-    </data>
-    <data name="MissionProgressView_TargetDistance" xml:space="preserve">
-        <value>Target</value>
-    </data>
-    <data name="MissionProgressView_DownLoadingMission" xml:space="preserve">
-        <value>Downloading mission</value>
-    </data>
-    <data name="UavAction_AutoMode_Name" xml:space="preserve">
-        <value>Auto mode</value>
-    </data>
-    <data name="UavAction_GuidedMode" xml:space="preserve">
-        <value>Guided mode</value>
-    </data>
-    <data name="UavAction_TakeOff" xml:space="preserve">
-        <value>TakeOff</value>
-    </data>
-    <data name="UavAction_Rtl_Name" xml:space="preserve">
-        <value>RTL</value>
-    </data>
-    <data name="UavAction_Land" xml:space="preserve">
-        <value>Land</value>
-    </data>
-    <data name="UavAction_StartMission" xml:space="preserve">
-        <value>Start Mission</value>
-    </data>
-    <data name="UavAction_StartMission_Description" xml:space="preserve">
-        <value>Begins uploaded mission</value>
-    </data>
-    <data name="UavRttItem_Mode" xml:space="preserve">
-        <value>Mode</value>
-    </data>
-    <data name="UavRttItem_Altitude" xml:space="preserve">
-        <value>Altitude</value>
-    </data>
-    <data name="UavRttItem_Velocity" xml:space="preserve">
-        <value>Velocity</value>
-    </data>
-    <data name="UavRttItem_Azimuth" xml:space="preserve">
-        <value>Azimuth</value>
-    </data>
-    <data name="UavRttItem_Battery" xml:space="preserve">
-        <value>Battery</value>
-    </data>
-    <data name="UavRttItem_GNSS" xml:space="preserve">
-        <value>GNSS</value>
-    </data>
-    <data name="UavRttItem_Link" xml:space="preserve">
-        <value>Link</value>
-    </data>
-    <data name="UavWidgetViewModel_StatusText_Armed" xml:space="preserve">
-        <value>Armed</value>
-    </data>
-    <data name="UavWidgetViewModel_StatusText_PullUp" xml:space="preserve">
-        <value>Pull Up</value>
-    </data>
-    <data name="UavWidgetViewModel_StatusText_DisArmed" xml:space="preserve">
-        <value>Disarmed</value>
-    </data>
-    <data name="FlightPageViewModel_Title" xml:space="preserve">
-        <value>Flight</value>
-    </data>
-    <data name="UavAction_TakeOff_Description" xml:space="preserve">
-        <value>Start takeoff</value>
-    </data>
-    <data name="UavAction_Rtl_Description" xml:space="preserve">
-        <value>Return to launch</value>
-    </data>
-    <data name="UavAction_Land_Description" xml:space="preserve">
-        <value>Immediately Land</value>
-    </data>
-    <data name="UavAction_AutoMode_Description" xml:space="preserve">
-        <value>Set an Auto mode. Use it to continue mission after interrupt</value>
-    </data>
-    <data name="UavAction_GuidedMode_Description" xml:space="preserve">
-        <value>Set a Guided mode</value>
-    </data>
-    <data name="GpsFixType_GpsFixType2dFix" xml:space="preserve">
-        <value>2D position Fix</value>
-    </data>
-    <data name="GpsFixType_GpsFixTypeRtkFloat" xml:space="preserve">
-        <value>RTK Float</value>
-    </data>
-    <data name="GpsFixType_GpsFixTypeRtkFixed" xml:space="preserve">
-        <value>Rtk Fixed</value>
-    </data>
-    <data name="GpsFixType_GpsFixTypeDgps" xml:space="preserve">
-        <value>DGPS/SBAS</value>
-    </data>
-    <data name="GpsFixType_GpsFixTypePpp" xml:space="preserve">
-        <value>PPP 3D position</value>
-    </data>
-    <data name="GpsFixType_GpsFixType3dFix" xml:space="preserve">
-        <value>3D position Fix</value>
-    </data>
-    <data name="GpsFixType_GpsFixTypeStatic" xml:space="preserve">
-        <value>Static Fix</value>
-    </data>
-    <data name="GpsFixType_GpsFixTypeNoGps" xml:space="preserve">
-        <value>No GPS connected</value>
-    </data>
-    <data name="SetAltitudeDialogViewModel_ApplyDialog_PrimaryButton_TakeOff" xml:space="preserve">
-        <value>Take off</value>
-    </data>
-    <data name="SetAltitudeDialogViewModel_ApplyDialog_SecondaryButton_Cancel" xml:space="preserve">
-        <value>Cancel</value>
-    </data>
-    <data name="MissionProgressViewModel_MissionFlightTime_Symbol" xml:space="preserve">
-        <value>min</value>
-    </data>
-    <data name="FileBrowserView_Watermark_Local" xml:space="preserve">
-        <value>Local files</value>
-    </data>
-    <data name="FileBrowserView_Watermark_Remote" xml:space="preserve">
-        <value>Remote files</value>
-    </data>
-    <data name="FileBrowserView_Button_Download_Content" xml:space="preserve">
-        <value>Download</value>
-    </data>
-    <data name="FileBrowserView_Button_BurstDownload_Content" xml:space="preserve">
-        <value>Burst download</value>
-    </data>
-    <data name="UnpinAllParamsCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Unpin all params</value>
-    </data>
-    <data name="WriteParamCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Command that writes the param to the mavlink device</value>
-    </data>
-    <data name="WritePatamCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Write param</value>
-    </data>
-    <data name="UnpinAllParamsCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Command removes all pinned items from the params page</value>
-    </data>
-    <data name="StopUpdateParamsCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Stop refreshing params</value>
-    </data>
-    <data name="StopUpdateParamsCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Command to stop receiving parameters from the mavlink device</value>
-    </data>
-    <data name="UpdateParamsCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Refresh params</value>
-    </data>
-    <data name="UpdateParamsCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Command that refreshes params from the mavlink device</value>
-    </data>
-    <data name="UpdateParamCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Update param</value>
-    </data>
-    <data name="UpdateParamCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Command that updates param from the mavlink device</value>
-    </data>
-    <data name="OpenMavParamsCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Open mavlink params</value>
-    </data>
-    <data name="OpenMavParamsCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Command opens mavlink params editor</value>
-    </data>
-    <data name="HomePageParamsDeviceItemAction_ActionViewModel_Header" xml:space="preserve">
-        <value>Params editor</value>
-    </data>
-    <data name="HomePageParamsDeviceItemAction_ActionViewModel_Description" xml:space="preserve">
-        <value>Edit mavlink device parameters</value>
-    </data>
     <data name="OpenDialogBoardCommand_Action_Title" xml:space="preserve">
         <value>Dialog Board</value>
     </data>
     <data name="OpenDialogBoardCommand_Action_Description" xml:space="preserve">
         <value>Open Dialog Board</value>
     </data>
-    <data name="OpenFlightModeCommand_CommandInfo_ButtonName" xml:space="preserve">
-        <value>Flight Mode</value>
+    <data name="OpenInfoBoxCommand_Action_Description" xml:space="preserve">
+        <value>Open infobox controls</value>
     </data>
-    <data name="OpenFlightModeCommand_CommandInfo_ButtonDescription" xml:space="preserve">
-        <value>Open Flight Mode map</value>
+    <data name="OpenInfoBoxCommand_Action_Title" xml:space="preserve">
+        <value>Infobox controls</value>
     </data>
-    <data name="OpenFileBrowserCommand_Action_Title" xml:space="preserve">
-        <value>Open File Browser</value>
+    <data name="InfoBoxPageViewModel_Title" xml:space="preserve">
+        <value>InfoBox</value>
     </data>
-    <data name="OpenFileBrowserCommand_Action_Description" xml:space="preserve">
-        <value>Command that opens File Browser</value>
+    <data name="OpenHistoricalCommand_Action_Title" xml:space="preserve">
+        <value>Historical fields</value>
     </data>
-    <data name="OpenFlightModeCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Open Flight Mode map</value>
+    <data name="OpenHistoricalCommand_Action_Description" xml:space="preserve">
+        <value>Open historical fields</value>
     </data>
-    <data name="OpenFlightModeCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Command that opens Flight Mode map</value>
+    <data name="HistoricalPageViewModel_Title" xml:space="preserve">
+        <value>Historical fields</value>
+    </data>
+    <data name="OpenMapExampleCommand_Action_Title" xml:space="preserve">
+        <value>Map example</value>
+    </data>
+    <data name="OpenMapExampleCommand_Action_Description" xml:space="preserve">
+        <value>Open map example</value>
+    </data>
+    <data name="ControlsGalleryViewModel_Title" xml:space="preserve">
+        <value>Controls gallery</value>
+    </data>
+    <data name="OpenControlsGalleryCommand_Action_Description" xml:space="preserve">
+        <value>Open controls gallery</value>
+    </data>
+    <data name="OpenControlsGalleryCommand_Action_Title" xml:space="preserve">
+        <value>Controls gallery</value>
+    </data>
+    <data name="DialogPageViewModel_OpenFile_Title" xml:space="preserve">
+        <value>Open File</value>
+    </data>
+    <data name="DialogPageViewModel_SaveFile_Title" xml:space="preserve">
+        <value>Save File</value>
+    </data>
+    <data name="DialogPageViewModel_OpenFolder_Title" xml:space="preserve">
+        <value>Open Folder</value>
+    </data>
+    <data name="DialogPageViewModel_ObserveFolder_Title" xml:space="preserve">
+        <value>Observe Folder</value>
+    </data>
+    <data name="DialogPageViewModel_Confirmation_Title" xml:space="preserve">
+        <value>Warning</value>
+    </data>
+    <data name="DialogPageViewModel_Confirmation_Message" xml:space="preserve">
+        <value>Вы действительно хотите выйти?</value>
+    </data>
+    <data name="DialogPageViewModel_Save_Title" xml:space="preserve">
+        <value>Saving</value>
+    </data>
+    <data name="DialogPageViewModel_Save_Message" xml:space="preserve">
+        <value>Save?</value>
+    </data>
+    <data name="DialogPageViewModel_KeyCapture_Title" xml:space="preserve">
+        <value>Key Capture</value>
+    </data>
+    <data name="DialogPageViewModel_KeyCapture_Message" xml:space="preserve">
+        <value>Press the key</value>
+    </data>
+    <data name="DialogPageViewModel_Input_Title" xml:space="preserve">
+        <value>Input</value>
+    </data>
+    <data name="DialogPageViewModel_Input_Message" xml:space="preserve">
+        <value>Pass the data</value>
+    </data>
+    <data name="DialogPageView_Note" xml:space="preserve">
+        <value>System dialogs are available on desktop platforms. Some options depend on OS capabilities.</value>
+    </data>
+    <data name="HistoricalPageView_Description" xml:space="preserve">
+        <value>Examples of historical properties with simple editing.</value>
+    </data>
+    <data name="InfoBoxPageView_Description" xml:space="preserve">
+        <value>Inline notification for app-wide messages. Examples below show basic usage, action button, and closable variants.</value>
+    </data>
+    <data name="DialogPageView_Description" xml:space="preserve">
+        <value>Examples of system and custom dialogs.</value>
+    </data>
+    <data name="DialogPageView_Custom_Title" xml:space="preserve">
+        <value>Custom dialogs</value>
+    </data>
+    <data name="DialogPageView_Custom_Description" xml:space="preserve">
+        <value>Common confirmations and inputs</value>
+    </data>
+    <data name="DialogPageView_System_Title" xml:space="preserve">
+        <value>System dialogs</value>
+    </data>
+    <data name="DialogPageView_System_Description" xml:space="preserve">
+        <value>File/folder pickers</value>
+    </data>
+    <data name="DialogPageView_LastResult" xml:space="preserve">
+        <value>Last result</value>
+    </data>
+    <data name="HistoricalPageView_Rules_Description" xml:space="preserve">
+        <value>Rules: non-empty; and second input additionally forbids ‘s’.</value>
+    </data>
+    <data name="HistoricalPageView_Rules_One" xml:space="preserve">
+        <value>One rule:</value>
+    </data>
+    <data name="HistoricalPageView_Rules_Many" xml:space="preserve">
+        <value>Many rules:</value>
+    </data>
+    <data name="InfoBoxPageView_Common_Title" xml:space="preserve">
+        <value>Title</value>
+    </data>
+    <data name="InfoBoxPageView_Common_Message" xml:space="preserve">
+        <value>Message</value>
+    </data>
+    <data name="InfoBoxPageView_Common_Severity" xml:space="preserve">
+        <value>Severity</value>
+    </data>
+    <data name="InfoBoxPageView_Basic" xml:space="preserve">
+        <value>Basic</value>
+    </data>
+    <data name="InfoBoxPageView_ActionButton" xml:space="preserve">
+        <value>With action button</value>
+    </data>
+    <data name="InfoBoxPageView_Closable" xml:space="preserve">
+        <value>Closable</value>
+    </data>
+    <data name="InfoBoxPageView_Examples" xml:space="preserve">
+        <value>Examples</value>
+    </data>
+    <data name="InfoBoxPageView_ActionButton_Title" xml:space="preserve">
+        <value>Do action</value>
+    </data>
+    <data name="HistoricalPageView_GeoPoint" xml:space="preserve">
+        <value>GeoPoint:</value>
+    </data>
+    <data name="HistoricalPageView_Toggle" xml:space="preserve">
+        <value>Toggle:</value>
+    </data>
+    <data name="HistoricalPageView_String" xml:space="preserve">
+        <value>String (no validation):</value>
+    </data>
+    <data name="HistoricalPageView_Unit" xml:space="preserve">
+        <value>Speed:</value>
+    </data>
+    <data name="HistoricalPageView_Basic" xml:space="preserve">
+        <value>Basic</value>
+    </data>
+    <data name="HistoricalPageView_Validation" xml:space="preserve">
+        <value>Validation</value>
+    </data>
+    <data name="InfoBoxPageViewModel_Example_Title" xml:space="preserve">
+        <value>Example InfoBox title</value>
+    </data>
+    <data name="InfoBoxPageViewModel_Example_Message" xml:space="preserve">
+        <value>Example InfoBox message</value>
+    </data>
+    <data name="DialogPageView_System_OpenFile" xml:space="preserve">
+        <value>Open file</value>
+    </data>
+    <data name="DialogPageView_System_SaveFile" xml:space="preserve">
+        <value>Save file</value>
+    </data>
+    <data name="DialogPageView_System_OpenFolder" xml:space="preserve">
+        <value>Select folder</value>
+    </data>
+    <data name="DialogPageView_System_ObserveFolder" xml:space="preserve">
+        <value>Observe folder</value>
+    </data>
+    <data name="DialogPageView_Custom_Confirmation" xml:space="preserve">
+        <value>Open confirmation dialog</value>
+    </data>
+    <data name="DialogPageView_Custom_Saving" xml:space="preserve">
+        <value>Open saving dialog</value>
+    </data>
+    <data name="DialogPageView_Custom_Input" xml:space="preserve">
+        <value>Open input dialog</value>
+    </data>
+    <data name="DialogPageView_Custom_KeyCapture" xml:space="preserve">
+        <value>Open key capture dialog</value>
     </data>
 </root>

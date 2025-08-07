@@ -26,9 +26,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-
-        <PackageReference Include="Asv.Mavlink" Version="$(AsvMavlinkVersion)" />
-        <ProjectReference Include="..\Asv.Avalonia.IO\Asv.Avalonia.IO.csproj" />
+        
         <ProjectReference Include="..\Asv.Avalonia.GeoMap\Asv.Avalonia.GeoMap.csproj" />
         <ProjectReference Include="..\Asv.Avalonia.Plugins\Asv.Avalonia.Plugins.csproj" />
         <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />

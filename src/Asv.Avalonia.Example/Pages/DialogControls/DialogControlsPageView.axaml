@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.DialogControlsPageView"
+             x:DataType="example:DialogControlsPageViewModel">
+    <Design.DataContext>
+        <example:DialogControlsPageViewModel />
+    </Design.DataContext>
+
+    <DockPanel Margin="16">
+        <Border DockPanel.Dock="Top" 
+                Padding="16" 
+                Background="{DynamicResource SystemRegionBrush}" 
+                CornerRadius="6"
+                Margin="0,0,0,12">
+            <StackPanel Spacing="6">
+                <TextBlock 
+                    Text="{x:Static example:RS.DialogPageViewModel_Title}" 
+                    FontSize="18" 
+                    FontWeight="SemiBold" />
+                <TextBlock 
+                    Text="{x:Static example:RS.DialogPageView_Description}" 
+                    Opacity="0.85" />
+                <TextBlock 
+                    Text="{x:Static example:RS.DialogPageView_Note}" 
+                    TextWrapping="Wrap" 
+                    Opacity="0.75" />
+            </StackPanel>
+        </Border>
+
+        <Grid ColumnDefinitions="*,16,*,16,*" HorizontalAlignment="Stretch">
+            <Border Grid.Column="0" Padding="16" Background="{DynamicResource SystemRegionBrush}" CornerRadius="6">
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="h2" Text="{x:Static example:RS.DialogPageView_System_Title}" />
+                        <TextBlock Text="{x:Static example:RS.DialogPageView_System_Description}" Opacity="0.8" />
+                    </StackPanel>
+                    <Button Command="{Binding OpenFileCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_System_OpenFile}"
+                            HorizontalAlignment="Stretch" />
+                    <Button Command="{Binding SaveFileCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_System_SaveFile}"
+                            HorizontalAlignment="Stretch" />
+                    <Button Command="{Binding SelectFolderCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_System_OpenFolder}"
+                            HorizontalAlignment="Stretch" />
+                    <Button Command="{Binding ObserveFolderCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_System_ObserveFolder}"
+                            HorizontalAlignment="Stretch" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2" 
+                    Padding="16" 
+                    Background="{DynamicResource SystemRegionBrush}" 
+                    CornerRadius="6">
+                <StackPanel Orientation="Vertical" Spacing="10">
+                    <StackPanel Spacing="2">
+                        <TextBlock Classes="h2" 
+                                   Text="{x:Static example:RS.DialogPageView_Custom_Title}" />
+                        <TextBlock Text="{x:Static example:RS.DialogPageView_Custom_Description}" 
+                                   Opacity="0.8" />
+                    </StackPanel>
+                    <Button Command="{Binding YesNoCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_Custom_Confirmation}" 
+                            HorizontalAlignment="Stretch" />
+                    <Button Command="{Binding SaveCancelCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_Custom_Saving}"
+                            HorizontalAlignment="Stretch" />
+                    <Button Command="{Binding ShowUnitInputCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_Custom_Input}"
+                            HorizontalAlignment="Stretch" />
+                    <Button Command="{Binding ShowKeyCaptureCommand}" 
+                            Content="{x:Static example:RS.DialogPageView_Custom_KeyCapture}"
+                            HorizontalAlignment="Stretch" />
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="4"  
+                    Padding="16" 
+                    Background="{DynamicResource SystemRegionBrush}" 
+                    CornerRadius="6">
+                <Grid ColumnDefinitions="Auto,8,*">
+                    <TextBlock Grid.Column="0" 
+                               Text="{x:Static example:RS.DialogPageView_LastResult}" 
+                               FontWeight="SemiBold" />
+                    <TextBlock Grid.Column="2" 
+                               Text="{Binding LastResult.Value}" 
+                               TextWrapping="Wrap" />
+                </Grid>
+            </Border>
+        </Grid>
+    </DockPanel>
+</UserControl>
