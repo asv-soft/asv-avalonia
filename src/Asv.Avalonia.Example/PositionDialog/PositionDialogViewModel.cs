@@ -9,9 +9,7 @@ using Asv.Mavlink;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using ObservableCollections;
 using R3;
-using R3.Collections;
 
 namespace Asv.Avalonia.Example
 {
