@@ -62,4 +62,7 @@
       <Compile Remove="Diialog\TestDialogItemTextViewModel.cs" />
       <Compile Remove="Diialog\TestDialogItemTextView.axaml.cs" />
     </ItemGroup>
+    <ItemGroup>
+      <UpToDateCheckInput Remove="PositionDialog\PositionDialogView.axaml" />
+    </ItemGroup>
 </Project>
