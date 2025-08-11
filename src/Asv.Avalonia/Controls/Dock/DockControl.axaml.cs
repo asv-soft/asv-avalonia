@@ -16,86 +16,143 @@ public class ShellItem
 {
     public required string Id { get; init; }
     public TabItem TabControl { get; init; } = new();
-    public int Column { get; set; }
 }
 
-public partial class DockControl : SelectingItemsControl
+public partial class DockControl : SelectingItemsControl // TODO: fix deletion
 {
-    private const int ColumnIncrement = 2;
-    private readonly List<Border> _targetBorders = [];
+    private readonly List<ShellItem> _shellItems = [];
     private readonly List<ShellItem> _windowedItems = [];
-    private List<ShellItem> _shellItems = [];
+
     private TabItem? _selectedTab;
-    private Border _leftSelector;
-    private Border _rightSelector;
-    private Grid _dropTargetGrid;
+    private AdaptiveTabStripTabControl? _mainTabControl;
 
-    public DockControl()
-    {
-        UnSplitAllCommand = new ReactiveCommand(_ => UnsplitAll());
-    }
+    public DockControl() { }
 
-    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        UnSplitAllCommand.Dispose();
+        base.OnApplyTemplate(e);
+
+        _mainTabControl =
+            e.NameScope.Find<AdaptiveTabStripTabControl>("PART_MainTabControl")
+            ?? throw new ApplicationException("PART_MainTabControl not found in DockControl.axaml");
+
+        CreateOrUpdateTabs();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == SelectedItemProperty)
+        if (change.Property == SelectedItemProperty && _mainTabControl != null)
         {
             var selected = _shellItems.FirstOrDefault(_ => _.TabControl.Content == change.NewValue);
-            if (selected is null)
+            if (selected != null)
             {
-                if (_shellItems.Count == 0)
+                foreach (var item in _shellItems)
                 {
-                    return;
+                    item.TabControl.IsSelected = false;
                 }
 
-                var lastTabControl = _shellItems[^1].TabControl;
-
-                SelectedItem = lastTabControl.Content;
-                lastTabControl.IsSelected = true;
-                return;
+                selected.TabControl.IsSelected = true;
+                SelectedItem = selected.TabControl.Content;
             }
-
-            _shellItems.ForEach(item => item.TabControl.IsSelected = false);
-            SelectedItem = selected.TabControl.Content;
-            selected.TabControl.IsSelected = true;
         }
         else if (change.Property == ItemCountProperty)
         {
-            CreateTabs();
+            CreateOrUpdateTabs();
         }
     }
 
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    protected override void LogicalChildrenCollectionChanged(
+        object? sender,
+        NotifyCollectionChangedEventArgs e
+    )
     {
-        base.OnApplyTemplate(e);
-        _leftSelector =
-            e.NameScope.Find<Border>("PART_LeftSelector")
-            ?? throw new ApplicationException(
-                "Part of control PART_LeftSelector not found in DockControl.axaml"
-            );
-        _rightSelector =
-            e.NameScope.Find<Border>("PART_RightSelector")
-            ?? throw new ApplicationException(
-                "Part of control PART_RightSelector not found in DockControl.axaml"
-            );
-        _dropTargetGrid =
-            e.NameScope.Find<Grid>("PART_DockSelectivePart")
-            ?? throw new ApplicationException(
-                "Part of control PART_DockSelectivePart not found in DockControl.axaml"
-            );
+        base.LogicalChildrenCollectionChanged(sender, e);
 
-        _targetBorders.Add(_leftSelector);
-        _targetBorders.Add(_rightSelector);
-        CreateTabs();
+        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
+        {
+            foreach (var removedItem in e.OldItems)
+            {
+                var shellItem = _shellItems.FirstOrDefault(item =>
+                    item.TabControl.Content == removedItem
+                );
+                if (shellItem != null)
+                {
+                    _shellItems.Remove(shellItem);
+                    _mainTabControl?.Items.Remove(shellItem.TabControl);
+                }
+            }
+        }
+        else if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
+        {
+            foreach (var newItem in e.NewItems)
+            {
+                AddTabIfNotExists(newItem);
+            }
+        }
     }
 
-    #region TabDockEvents
+    private void CreateOrUpdateTabs()
+    {
+        if (_mainTabControl == null)
+        {
+            return;
+        }
+        foreach (var content in Items)
+        {
+            AddTabIfNotExists(content);
+        }
+    }
+
+    private void AddTabIfNotExists(object? content)
+    {
+        if (_mainTabControl == null)
+        {
+            return;
+        }
+
+        if (content is not IPage page)
+        {
+            return;
+        }
+
+        if (_shellItems.Any(it => it.Id == page.Id.ToString()))
+        {
+            return;
+        }
+
+        if (_windowedItems.Any(it => it.Id == page.Id.ToString()))
+        {
+            return;
+        }
+
+        var tab = CreateTabItem(content);
+        var shellItem = new ShellItem { Id = page.Id.ToString(), TabControl = tab };
+
+        _shellItems.Add(shellItem);
+        _mainTabControl.Items.Add(tab);
+    }
+
+    private TabItem CreateTabItem(object content)
+    {
+        var header = new TabStripItem
+        {
+            Content = content,
+            ContentTemplate = TabControlStripItemTemplate,
+        };
+        SubscribeToEvents(header);
+
+        var tab = new TabItem { Content = content, Header = header };
+
+        return tab;
+    }
+
+    private void SubscribeToEvents(TabStripItem header)
+    {
+        header.PointerPressed += PressedHandler;
+        header.PointerMoved += PointerMovedHandler;
+    }
 
     private void PressedHandler(object? sender, PointerPressedEventArgs e)
     {
@@ -117,82 +174,12 @@ public partial class DockControl : SelectingItemsControl
 
     private void PointerMovedHandler(object? sender, PointerEventArgs e)
     {
-        if (_selectedTab == null)
-        {
-            return;
-        }
-
-        var pointerPosition = e.GetPosition(this);
-
-        foreach (var border in _targetBorders)
-        {
-            border.Background = TurnBorderIndicator(
-                IsCursorWithinTargetBorder(pointerPosition, border)
-            );
-        }
-    }
-
-    protected override void OnPointerMoved(PointerEventArgs e)
-    {
-        base.OnPointerMoved(e);
-
-        if (_selectedTab == null)
-        {
-            return;
-        }
-
-        foreach (var item in _dropTargetGrid.Children.OfType<AdaptiveTabStripTabControl>())
-        {
-            item.BorderBrush = Brushes.Transparent;
-        }
-
-        var isBorderSelected = false;
-
-        var pointerPosition = e.GetPosition(this);
-
-        foreach (var border in _targetBorders)
-        {
-            border.Background = TurnBorderIndicator(
-                IsCursorWithinTargetBorder(pointerPosition, border)
-            );
-            if (IsCursorWithinTargetBorder(pointerPosition, border))
-            {
-                isBorderSelected = true;
-            }
-        }
-
-        if (isBorderSelected)
-        {
-            return;
-        }
-
-        foreach (var item in _dropTargetGrid.Children.OfType<AdaptiveTabStripTabControl>())
-        {
-            if (_selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>() == item)
-            {
-                continue;
-            }
-
-            item.BorderBrush = TurnBorderIndicator(IsCursorWithinTabControl(pointerPosition, item));
-
-            item.BorderThickness = new Thickness(
-                IsCursorWithinTabControl(pointerPosition, item) ? 4 : 0
-            );
-        }
-    }
-
-    private IBrush TurnBorderIndicator(bool turnOn)
-    {
-        return turnOn ? BorderHighLightColor : Brushes.Transparent;
+        // TODO add visual drag indicator
     }
 
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
-        foreach (var border in _targetBorders)
-        {
-            border.Background = Brushes.Transparent;
-        }
 
         if (_selectedTab == null)
         {
@@ -205,400 +192,59 @@ public partial class DockControl : SelectingItemsControl
         }
 
         var cursorPosition = e.GetPosition(window);
-        foreach (var targetBorder in _targetBorders)
+
+        if (!Bounds.Contains(e.GetPosition(this)))
         {
-            if (IsCursorWithinTargetBorder(cursorPosition, targetBorder))
-            {
-                AddTabItemToTabControl(_selectedTab, targetBorder);
-                break;
-            }
-
-            if (IsCursorOutOfDockControl(cursorPosition))
-            {
-                continue;
-            }
-
-            var parent = _selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>();
-            if (parent is null)
-            {
-                return;
-            }
-
-            if (_selectedTab.Content is HomePageViewModel)
-            {
-                return;
-            }
-
-            var shellItem = _shellItems.FirstOrDefault(item => item.TabControl == _selectedTab);
-            if (shellItem is null)
-            {
-                return;
-            }
-
-            parent.Items.Remove(_selectedTab);
-            _shellItems.Remove(shellItem);
-
-            var win = new Window
-            {
-                Content = _selectedTab.Content,
-                Title = (_selectedTab.Header as TabStripItem)?.Content?.ToString(),
-            };
-            _windowedItems.Add(shellItem);
-            win.Closing += OnClosing;
-            win.Show();
-            _selectedTab = null;
-            return;
-
-            void OnClosing(object? sender, CancelEventArgs args)
-            {
-                if (win.Content is IPage page)
-                {
-                    TryCloseAsync(page, false).SafeFireAndForget();
-                }
-
-                win.Closing -= OnClosing;
-            }
-
-            async Task TryCloseAsync(IPage page, bool force)
-            {
-                await page.TryCloseAsync(force);
-                _windowedItems.Remove(shellItem);
-            }
-        }
-
-        foreach (var child in _dropTargetGrid.Children)
-        {
-            if (child is not AdaptiveTabStripTabControl tabControl)
-            {
-                continue;
-            }
-
-            if (!IsCursorWithinTabControl(cursorPosition, tabControl))
-            {
-                continue;
-            }
-
-            if (_selectedTab.FindAncestorOfType<AdaptiveTabStripTabControl>() == tabControl)
-            {
-                continue;
-            }
-
-            _shellItems.First(item => item.TabControl == _selectedTab).Column = Grid.GetColumn(
-                tabControl
-            );
-            UpdateGrid();
-            break;
+            DetachTab(_selectedTab);
         }
 
         _selectedTab = null;
     }
 
-    #endregion
-
-    protected override void LogicalChildrenCollectionChanged(
-        object? sender,
-        NotifyCollectionChangedEventArgs e
-    )
+    private void DetachTab(TabItem tab)
     {
-        base.LogicalChildrenCollectionChanged(sender, e);
-        if (e.Action == NotifyCollectionChangedAction.Remove)
-        {
-            if (e.OldItems != null)
-            {
-                foreach (var removedItem in e.OldItems)
-                {
-                    var shellItem = _shellItems.FirstOrDefault(item =>
-                        item.TabControl.Content == removedItem
-                    );
-                    if (shellItem != null)
-                    {
-                        _shellItems.Remove(shellItem);
-                    }
-                }
-            }
-        }
-
-        UpdateGrid();
-    }
-
-    private void CreateTabs()
-    {
-#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
-        var occupiedColumns = _shellItems.ToDictionary(
-            key => key.TabControl.Content,
-            value => value.Column
-        );
-#pragma warning restore CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
-        _shellItems.ForEach(_ => _.TabControl.Loaded -= OnTabLoaded);
-        _shellItems.Clear();
-
-        if (Items.Count == 0)
+        if (tab.Content is not IPage page)
         {
             return;
         }
 
-        if (_dropTargetGrid is null)
+        var shellItem = _shellItems.FirstOrDefault(item => item.TabControl == tab);
+        if (shellItem == null)
         {
-            throw new ArgumentNullException(
-                $"{nameof(_dropTargetGrid)} in {nameof(DockControl)} is not found"
-            );
+            return;
         }
 
-        foreach (var content in Items)
+        _mainTabControl?.Items.Remove(tab);
+        _shellItems.Remove(shellItem);
+
+        var win = new DockWindow(shellItem.Id)
         {
-            if (content is not IPage page)
-            {
-                continue;
-            }
+            Content = tab.Content,
+            Title = (tab.Header as TabStripItem)?.Content?.ToString(),
+        };
 
-            var column = occupiedColumns.GetValueOrDefault(content, 0);
+        _windowedItems.Add(shellItem);
+        win.Closing += (_, _) => AttachTab(shellItem);
+        win.Show();
+    }
 
-            if (_windowedItems.Any(it => it.Id == page.Id))
-            {
-                continue;
-            }
+    private void AttachTab(ShellItem shellItem)
+    {
+        if (_mainTabControl == null)
+        {
+            return;
+        }
 
-            var item = CreateTabItem(content);
-            var shellItem = new ShellItem
-            {
-                Id = page.Id.ToString(),
-                TabControl = item,
-                Column = column,
-            };
-
+        if (!_shellItems.Contains(shellItem))
+        {
             _shellItems.Add(shellItem);
         }
 
-        UpdateGrid();
-    }
-
-    private void UpdateGrid()
-    {
-        SortShellItems();
-
-        _dropTargetGrid.Children.Clear();
-        _dropTargetGrid.ColumnDefinitions.Clear();
-
-        var occupiedColumns = _shellItems.Select(item => item.Column).ToHashSet();
-        GenerateColumns(_dropTargetGrid, occupiedColumns);
-
-        foreach (var item in _shellItems)
+        if (!_mainTabControl.Items.Contains(shellItem.TabControl))
         {
-            var tabControl =
-                FindTabControlInColumn(_dropTargetGrid, item.Column)
-                ?? new AdaptiveTabStripTabControl();
-            var oldParent = tabControl.Parent as Grid;
-            oldParent?.Children.Remove(tabControl);
-
-            var parent = item.TabControl.FindAncestorOfType<AdaptiveTabStripTabControl>();
-            parent?.Items.Remove(item.TabControl);
-
-            tabControl.Items.Add(item.TabControl);
-            Grid.SetColumn(tabControl, item.Column);
-            _dropTargetGrid.Children.Add(tabControl);
-        }
-    }
-
-    private void GenerateColumns(Grid grid, HashSet<int> items)
-    {
-        grid.ColumnDefinitions.Clear();
-        grid.Children.Clear();
-
-        var columnCount = items.ToArray().Length;
-
-        for (var i = 0; i < columnCount; i++)
-        {
-            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Star));
-            if (i >= columnCount - 1)
-            {
-                continue;
-            }
-
-            grid.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
-
-            var splitter = new GridSplitter()
-            {
-                Background = Brushes.White,
-                Width = 1,
-                ResizeDirection = GridResizeDirection.Columns,
-            };
-
-            Grid.SetColumn(splitter, grid.ColumnDefinitions.Count - 1);
-            grid.Children.Add(splitter);
-        }
-    }
-
-    private AdaptiveTabStripTabControl? FindTabControlInColumn(Grid myGrid, int columnIndex)
-    {
-        foreach (var child in myGrid.Children)
-        {
-            if (
-                child is AdaptiveTabStripTabControl tabControl
-                && Grid.GetColumn(tabControl) == columnIndex
-            )
-            {
-                return tabControl;
-            }
+            _mainTabControl.Items.Add(shellItem.TabControl);
         }
 
-        return null;
+        _windowedItems.Remove(shellItem);
     }
-
-    private void UnsplitAll()
-    {
-        foreach (var item in _shellItems)
-        {
-            item.Column = 0;
-        }
-
-        UpdateGrid();
-    }
-
-    private TabItem CreateTabItem(object content)
-    {
-        var header = new TabStripItem()
-        {
-            Content = content,
-            ContentTemplate = TabControlStripItemTemplate,
-        };
-        SubscribeToEvents(header);
-        var tab = new TabItem() { Content = content, Header = header };
-        tab.Loaded += OnTabLoaded;
-        return tab;
-    }
-
-    private void SubscribeToEvents(TabStripItem header)
-    {
-        header.PointerPressed += PressedHandler;
-        header.PointerMoved += PointerMovedHandler;
-    }
-
-    private void OnTabUnloaded(object? sender, RoutedEventArgs e)
-    {
-        if (sender is TabItem { Header: TabStripItem header } tabItem)
-        {
-            header.PointerPressed -= PressedHandler;
-            header.PointerMoved -= PointerMovedHandler;
-            tabItem.Loaded += OnTabLoaded;
-            tabItem.Unloaded -= OnTabUnloaded;
-        }
-    }
-
-    private void OnTabLoaded(object? sender, RoutedEventArgs e)
-    {
-        if (sender is TabItem { Header: TabStripItem header } tabItem)
-        {
-            SubscribeToEvents(header);
-            tabItem.Unloaded += OnTabUnloaded;
-            tabItem.Loaded -= OnTabLoaded;
-        }
-    }
-
-    #region HelperMethods
-
-    private bool IsCursorWithinTargetBorder(Point cursorPosition, Border targetBorder)
-    {
-        return targetBorder.Bounds.Contains(cursorPosition);
-    }
-
-    private bool IsCursorWithinTabControl(
-        Point cursorPosition,
-        AdaptiveTabStripTabControl targetPanel
-    )
-    {
-        return targetPanel.Bounds.Contains(cursorPosition);
-    }
-
-    private bool IsCursorOutOfDockControl(Point cursorPosition)
-    {
-        if (this.GetVisualRoot() is not Window window)
-        {
-            throw new Exception($"{nameof(window)} is null");
-        }
-
-        return window.Bounds.Contains(cursorPosition);
-    }
-
-    private void AddTabItemToTabControl(TabItem tabItem, Border selectorBorder)
-    {
-        var updateItem = _shellItems.Find(shellItem => shellItem.TabControl == tabItem);
-        if (updateItem == null)
-        {
-            return;
-        }
-
-        if (selectorBorder == _leftSelector)
-        {
-            updateItem.Column -= ColumnIncrement;
-
-            if (
-                _shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column))
-                >= ColumnIncrement
-            )
-            {
-                updateItem.Column -= ColumnIncrement;
-            }
-
-            if (updateItem.Column < 0)
-            {
-                foreach (var item in _shellItems)
-                {
-                    item.Column += ColumnIncrement;
-                }
-
-                updateItem.Column = 0;
-            }
-        }
-        else if (selectorBorder == _rightSelector)
-        {
-            updateItem.Column += ColumnIncrement;
-
-            if (
-                _shellItems.Count(shellItem => shellItem.Column.Equals(updateItem.Column))
-                >= ColumnIncrement
-            )
-            {
-                updateItem.Column += ColumnIncrement;
-            }
-        }
-
-        UpdateGrid();
-    }
-
-    private void SortShellItems()
-    {
-        if (_shellItems.Count == 0)
-        {
-            return;
-        }
-
-        var minItem = _shellItems.MinItem(shellItem => shellItem.Column);
-        if (minItem.Column != 0)
-        {
-            foreach (var item in _shellItems)
-            {
-                item.Column -= ColumnIncrement;
-            }
-        }
-
-        var maxColumnIndex = MaxSplitAmount * ColumnIncrement;
-        var maxItem = _shellItems.MaxItem(shellItem => shellItem.Column);
-        if (maxItem.Column >= maxColumnIndex)
-        {
-            maxItem.Column -= ColumnIncrement;
-        }
-
-        _shellItems = _shellItems.OrderBy(shellItem => shellItem.Column).ToList();
-
-        var gapPairs = _shellItems
-            .Zip(_shellItems.Skip(1), (prev, curr) => new { prev, curr })
-            .Where(pair => pair.curr.Column - pair.prev.Column > 2)
-            .ToList();
-        foreach (var pair in gapPairs)
-        {
-            pair.curr.Column -= ColumnIncrement;
-        }
-    }
-
-    #endregion
 }

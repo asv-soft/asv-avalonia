@@ -11,40 +11,15 @@
             </controls:DockControl>
         </Border>
     </Design.PreviewWith>
+
     <Style Selector="controls|DockControl">
-        <!-- Set Defaults -->
         <Setter Property="ClipToBounds" Value="True" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*" ClipToBounds="True">
-                        <Grid Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0" Grid.RowSpan="3"
-                              x:Name="PART_DockSelectivePart">
-                        </Grid>
-                    <Panel x:Name="PART_SelectorPanel" Grid.Row="0" Grid.RowSpan="3" Grid.ColumnSpan="3"
-                           Grid.Column="0">
-                        <Grid MinWidth="100" x:Name="PART_SelectorGrid" RowDefinitions="*,*,*"
-                              ColumnDefinitions="*,*,*">
-                            <Border x:Name="PART_LeftSelector" IsEnabled="False" Grid.Row="1" Grid.Column="0" />
-                            <Border x:Name="PART_RightSelector" IsEnabled="False" Grid.Row="1" Grid.Column="2" />
-                        </Grid>
-                    </Panel>
+                <Grid>
+                    <controls:AdaptiveTabStripTabControl x:Name="PART_MainTabControl" />
                 </Grid>
             </ControlTemplate>
         </Setter>
-        
-
-        <Style Selector="^/template/ Border#PART_LeftSelector">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Width" Value="100" />
-            <Setter Property="Height" Value="300" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-        </Style>
-
-        <Style Selector="^/template/ Border#PART_RightSelector">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Width" Value="100" />
-            <Setter Property="Height" Value="300" />
-            <Setter Property="HorizontalAlignment" Value="Right" />
-        </Style>
-        </Style>
+    </Style>
 </Styles>
