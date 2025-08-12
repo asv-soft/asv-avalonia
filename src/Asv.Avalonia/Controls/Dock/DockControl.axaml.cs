@@ -1,21 +1,16 @@
 ﻿using System.Collections.Specialized;
-using System.ComponentModel;
-using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
-using Avalonia.Interactivity;
-using Avalonia.Media;
 using Avalonia.VisualTree;
-using R3;
 
 namespace Asv.Avalonia;
 
 public class ShellItem
 {
     public required string Id { get; init; }
-    public TabItem TabControl { get; init; } = new();
+    public required TabItem TabControl { get; init; }
 }
 
 public partial class DockControl : SelectingItemsControl // TODO: fix deletion
@@ -24,7 +19,7 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
     private readonly List<ShellItem> _windowedItems = [];
 
     private TabItem? _selectedTab;
-    private AdaptiveTabStripTabControl? _mainTabControl;
+    private AdaptiveTabStripTabControl _mainTabControl = null!;
 
     public DockControl() { }
 
@@ -36,82 +31,73 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
             e.NameScope.Find<AdaptiveTabStripTabControl>("PART_MainTabControl")
             ?? throw new ApplicationException("PART_MainTabControl not found in DockControl.axaml");
 
-        CreateOrUpdateTabs();
-    }
-
-    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
-    {
-        base.OnPropertyChanged(change);
-
-        if (change.Property == SelectedItemProperty && _mainTabControl != null)
+        if (Items is INotifyCollectionChanged notifyCol)
         {
-            var selected = _shellItems.FirstOrDefault(_ => _.TabControl.Content == change.NewValue);
-            if (selected != null)
-            {
-                foreach (var item in _shellItems)
-                {
-                    item.TabControl.IsSelected = false;
-                }
+            notifyCol.CollectionChanged -= ItemsCollectionChanged;
+            notifyCol.CollectionChanged += ItemsCollectionChanged;
+        }
 
-                selected.TabControl.IsSelected = true;
-                SelectedItem = selected.TabControl.Content;
-            }
-        }
-        else if (change.Property == ItemCountProperty)
-        {
-            CreateOrUpdateTabs();
-        }
-    }
-
-    protected override void LogicalChildrenCollectionChanged(
-        object? sender,
-        NotifyCollectionChangedEventArgs e
-    )
-    {
-        base.LogicalChildrenCollectionChanged(sender, e);
-
-        if (e.Action == NotifyCollectionChangedAction.Remove && e.OldItems != null)
-        {
-            foreach (var removedItem in e.OldItems)
-            {
-                var shellItem = _shellItems.FirstOrDefault(item =>
-                    item.TabControl.Content == removedItem
-                );
-                if (shellItem != null)
-                {
-                    _shellItems.Remove(shellItem);
-                    _mainTabControl?.Items.Remove(shellItem.TabControl);
-                }
-            }
-        }
-        else if (e.Action == NotifyCollectionChangedAction.Add && e.NewItems != null)
-        {
-            foreach (var newItem in e.NewItems)
-            {
-                AddTabIfNotExists(newItem);
-            }
-        }
-    }
-
-    private void CreateOrUpdateTabs()
-    {
-        if (_mainTabControl == null)
-        {
-            return;
-        }
         foreach (var content in Items)
         {
             AddTabIfNotExists(content);
         }
     }
 
-    private void AddTabIfNotExists(object? content)
+    private void ItemsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        if (_mainTabControl == null)
+        if (e is { Action: NotifyCollectionChangedAction.Add, NewItems: not null })
         {
+            foreach (var ni in e.NewItems)
+            {
+                AddTabIfNotExists(ni);
+            }
+
             return;
         }
 
+        if (e is { Action: NotifyCollectionChangedAction.Remove, OldItems: not null })
+        {
+            foreach (var removedItem in e.OldItems)
+            {
+                var shellItem = _shellItems.FirstOrDefault(item =>
+                    item.TabControl.Content == removedItem
+                );
+
+                if (shellItem is not null)
+                {
+                    _shellItems.Remove(shellItem);
+                    _mainTabControl?.Items.Remove(shellItem.TabControl);
+                }
+            }
+
+            return;
+        }
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == SelectedItemProperty)
+        {
+            var selected = _shellItems.FirstOrDefault(_ => _.TabControl.Content == change.NewValue);
+            if (selected is null)
+            {
+                return;
+            }
+
+            foreach (var item in _shellItems)
+            {
+                item.TabControl.IsSelected = false;
+            }
+
+            selected.TabControl.IsSelected = true;
+            SelectedItem = selected.TabControl.Content;
+        }
+    }
+
+    private void AddTabIfNotExists(object? content)
+    {
         if (content is not IPage page)
         {
             return;
@@ -134,6 +120,14 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
         _mainTabControl.Items.Add(tab);
     }
 
+    private ShellItem CreateShellItem(string id, object content)
+    {
+        var tab = CreateTabItem(content);
+        var shellItem = new ShellItem { Id = id, TabControl = tab };
+
+        return shellItem;
+    }
+
     private TabItem CreateTabItem(object content)
     {
         var header = new TabStripItem
@@ -141,17 +135,15 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
             Content = content,
             ContentTemplate = TabControlStripItemTemplate,
         };
-        SubscribeToEvents(header);
+
+        header.PointerPressed -= PressedHandler;
+        header.PointerMoved -= PointerMovedHandler;
+        header.PointerPressed += PressedHandler;
+        header.PointerMoved += PointerMovedHandler;
 
         var tab = new TabItem { Content = content, Header = header };
 
         return tab;
-    }
-
-    private void SubscribeToEvents(TabStripItem header)
-    {
-        header.PointerPressed += PressedHandler;
-        header.PointerMoved += PointerMovedHandler;
     }
 
     private void PressedHandler(object? sender, PointerPressedEventArgs e)
@@ -163,7 +155,7 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
 
         var source = e.Source as Visual;
         var tab = source as TabItem ?? source?.FindAncestorOfType<TabItem>();
-        if (tab != null)
+        if (tab is not null)
         {
             _selectedTab = tab;
             SelectedItem = tab.Content;
@@ -181,7 +173,7 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
     {
         base.OnPointerReleased(e);
 
-        if (_selectedTab == null)
+        if (_selectedTab is null)
         {
             return;
         }
@@ -193,7 +185,7 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
 
         var cursorPosition = e.GetPosition(window);
 
-        if (!Bounds.Contains(e.GetPosition(this)))
+        if (!Bounds.Contains(cursorPosition))
         {
             DetachTab(_selectedTab);
         }
@@ -209,12 +201,12 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
         }
 
         var shellItem = _shellItems.FirstOrDefault(item => item.TabControl == tab);
-        if (shellItem == null)
+        if (shellItem is null)
         {
             return;
         }
 
-        _mainTabControl?.Items.Remove(tab);
+        _mainTabControl.Items.Remove(tab);
         _shellItems.Remove(shellItem);
 
         var win = new DockWindow(shellItem.Id)
@@ -230,11 +222,6 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
 
     private void AttachTab(ShellItem shellItem)
     {
-        if (_mainTabControl == null)
-        {
-            return;
-        }
-
         if (!_shellItems.Contains(shellItem))
         {
             _shellItems.Add(shellItem);
