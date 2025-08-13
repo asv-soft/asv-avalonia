@@ -7,16 +7,10 @@ using Avalonia.VisualTree;
 
 namespace Asv.Avalonia;
 
-public class ShellItem
+public partial class DockControl : SelectingItemsControl
 {
-    public required string Id { get; init; }
-    public required TabItem TabControl { get; init; }
-}
-
-public partial class DockControl : SelectingItemsControl // TODO: fix deletion
-{
-    private readonly List<ShellItem> _shellItems = [];
-    private readonly List<ShellItem> _windowedItems = [];
+    private readonly List<DockItem> _shellItems = [];
+    private readonly List<DockItem> _windowedItems = [];
 
     private TabItem? _selectedTab;
     private AdaptiveTabStripTabControl _mainTabControl = null!;
@@ -28,8 +22,10 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
         base.OnApplyTemplate(e);
 
         _mainTabControl =
-            e.NameScope.Find<AdaptiveTabStripTabControl>("PART_MainTabControl")
-            ?? throw new ApplicationException("PART_MainTabControl not found in DockControl.axaml");
+            e.NameScope.Find<AdaptiveTabStripTabControl>(PART_MainTabControl)
+            ?? throw new ApplicationException(
+                $"{PART_MainTabControl} not found in {nameof(DockControl)} template."
+            );
 
         if (Items is INotifyCollectionChanged notifyCol)
         {
@@ -114,16 +110,16 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
         }
 
         var tab = CreateTabItem(content);
-        var shellItem = new ShellItem { Id = page.Id.ToString(), TabControl = tab };
+        var shellItem = new DockItem { Id = page.Id.ToString(), TabControl = tab };
 
         _shellItems.Add(shellItem);
         _mainTabControl.Items.Add(tab);
     }
 
-    private ShellItem CreateShellItem(string id, object content)
+    private DockItem CreateShellItem(string id, object content)
     {
         var tab = CreateTabItem(content);
-        var shellItem = new ShellItem { Id = id, TabControl = tab };
+        var shellItem = new DockItem { Id = id, TabControl = tab };
 
         return shellItem;
     }
@@ -220,18 +216,18 @@ public partial class DockControl : SelectingItemsControl // TODO: fix deletion
         win.Show();
     }
 
-    private void AttachTab(ShellItem shellItem)
+    private void AttachTab(DockItem dockItem)
     {
-        if (!_shellItems.Contains(shellItem))
+        if (!_shellItems.Contains(dockItem))
         {
-            _shellItems.Add(shellItem);
+            _shellItems.Add(dockItem);
         }
 
-        if (!_mainTabControl.Items.Contains(shellItem.TabControl))
+        if (!_mainTabControl.Items.Contains(dockItem.TabControl))
         {
-            _mainTabControl.Items.Add(shellItem.TabControl);
+            _mainTabControl.Items.Add(dockItem.TabControl);
         }
 
-        _windowedItems.Remove(shellItem);
+        _windowedItems.Remove(dockItem);
     }
 }

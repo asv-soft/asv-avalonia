@@ -45,7 +45,7 @@
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Tools/ToolsListStyles.axaml"/>
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/ContentDialog/ContentDialogStyles.axaml"/>
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/InfoBar/InfoBarStyles.axaml"/>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/AdaptiveTabControlStrip/AdaptiveTabStripTabControl.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/AdaptiveTabControlStrip/AdaptiveTabStripTabControl.axaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <ResourceDictionary.ThemeDictionaries>

@@ -1,12 +1,22 @@
 ﻿<Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia">
+        xmlns:controls="using:Asv.Avalonia"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
     <Design.PreviewWith>
         <Border Width="800" Height="1200" Margin="20" ClipToBounds="True">
             <controls:DockControl>
-                <controls:SettingsPageViewModel />
-                <controls:SettingsPageViewModel />
-                <controls:SettingsPageViewModel />
+                <controls:DockControl.TabControlStripItemTemplate> 
+                    <DataTemplate x:DataType="controls:IPage"> 
+                        <StackPanel Orientation="Horizontal" Spacing="4"> 
+                            <avalonia:MaterialIcon Width="16" Height="16" Kind="{Binding Icon}"/> 
+                            <TextBlock VerticalAlignment="Center" Text="{Binding Title}"/> 
+                            <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}"  Padding="0"> 
+                                <avalonia:MaterialIcon Kind="Close"/> 
+                            </Button> 
+                        </StackPanel> 
+                    </DataTemplate>
+                </controls:DockControl.TabControlStripItemTemplate> 
+                <controls:HomePageViewModel />
                 <controls:SettingsPageViewModel />
             </controls:DockControl>
         </Border>
@@ -17,7 +27,7 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <controls:AdaptiveTabStripTabControl x:Name="PART_MainTabControl" />
+                    <controls:AdaptiveTabStripTabControl x:Name="PART_MainTabControl"/>
                 </Grid>
             </ControlTemplate>
         </Setter>

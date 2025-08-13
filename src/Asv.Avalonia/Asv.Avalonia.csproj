@@ -90,4 +90,8 @@
     <ItemGroup>
       <None Remove="icon.ico" />
     </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Controls\Dock\AdaptiveTabControlStrip\AdaptiveTabStripTabControl.axaml" />
+    </ItemGroup>
 </Project>

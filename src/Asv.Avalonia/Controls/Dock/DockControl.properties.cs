@@ -6,6 +6,8 @@ namespace Asv.Avalonia;
 
 public partial class DockControl
 {
+    private const string PART_MainTabControl = "PART_MainTabControl";
+
     public static readonly StyledProperty<IDataTemplate?> TabControlStripItemTemplateProperty =
         AvaloniaProperty.Register<DockControl, IDataTemplate?>(nameof(TabControlStripItemTemplate));
 
