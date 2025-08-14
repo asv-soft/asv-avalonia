@@ -1,12 +1,12 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:control="clr-namespace:Asv.Avalonia"
+                    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
     <Design.PreviewWith>
         <Border Width="800" Height="1200" Margin="20" ClipToBounds="True">
-            <controls:DockControl>
-                <controls:DockControl.TabControlStripItemTemplate> 
-                    <DataTemplate x:DataType="controls:IPage"> 
+            <control:DockControl>
+                <control:DockControl.TabControlStripItemTemplate> 
+                    <DataTemplate x:DataType="control:IPage"> 
                         <StackPanel Orientation="Horizontal" Spacing="4"> 
                             <avalonia:MaterialIcon Width="16" Height="16" Kind="{Binding Icon}"/> 
                             <TextBlock VerticalAlignment="Center" Text="{Binding Title}"/> 
@@ -15,21 +15,21 @@
                             </Button> 
                         </StackPanel> 
                     </DataTemplate>
-                </controls:DockControl.TabControlStripItemTemplate> 
-                <controls:HomePageViewModel />
-                <controls:SettingsPageViewModel />
-            </controls:DockControl>
+                </control:DockControl.TabControlStripItemTemplate> 
+                <control:HomePageViewModel />
+                <control:SettingsPageViewModel />
+            </control:DockControl>
         </Border>
     </Design.PreviewWith>
-
-    <Style Selector="controls|DockControl">
+    
+    <ControlTheme x:Key="{x:Type control:DockControl}" TargetType="control:DockControl">
         <Setter Property="ClipToBounds" Value="True" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <controls:AdaptiveTabStripTabControl x:Name="PART_MainTabControl"/>
+                    <control:DockTabControl x:Name="PART_MainTabControl"/>
                 </Grid>
             </ControlTemplate>
         </Setter>
-    </Style>
-</Styles>
+</ControlTheme>
+</ResourceDictionary>
