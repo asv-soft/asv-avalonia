@@ -3,7 +3,7 @@
                     xmlns:avalonia="clr-namespace:Asv.Avalonia">
     <Design.PreviewWith>
         <Border Width="100" Height="300">
-            <avalonia:AdaptiveTabStripTabControl>
+            <avalonia:DockTabControl>
                 <TabItem Header="Arch">
                     <Border Background="AntiqueWhite" Height="100">
                         <TextBlock Text="Content" Foreground="Black" FontSize="20" />
@@ -33,10 +33,10 @@
                     <Border Background="Green" Height="100" />
                 </TabItem>
                 <TabItem Header="Disabled" IsEnabled="False" />
-            </avalonia:AdaptiveTabStripTabControl>
+            </avalonia:DockTabControl>
         </Border>
     </Design.PreviewWith>
-    <ControlTheme x:Key="{x:Type avalonia:AdaptiveTabStripTabControl}" TargetType="avalonia:AdaptiveTabStripTabControl">
+    <ControlTheme x:Key="{x:Type avalonia:DockTabControl}" TargetType="avalonia:DockTabControl">
         <Setter Property="Margin" Value="0" />
         <Setter Property="Padding" Value="{DynamicResource TabItemMargin}" />
         <Setter Property="Background" Value="{DynamicResource TabControlBackground}" />
@@ -68,12 +68,6 @@
                 </Border>
             </ControlTemplate>
         </Setter>
-        <Style Selector="^[TabStripPlacement=Left] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
-            <Setter Property="Orientation" Value="Vertical" />
-        </Style>
-        <Style Selector="^[TabStripPlacement=Right] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
-            <Setter Property="Orientation" Value="Vertical" />
-        </Style>
         <Style Selector="^[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
             <Setter Property="Orientation" Value="Horizontal" />
             <Setter Property="Margin" Value="{DynamicResource TabControlTopPlacementItemMargin}" />

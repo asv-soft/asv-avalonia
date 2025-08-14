@@ -85,13 +85,12 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>RS.resx</DependentUpon>
         </Compile>
+        <Compile Update="Controls\Dock\DockControl.cs">
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
       <None Remove="icon.ico" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Controls\Dock\AdaptiveTabControlStrip\AdaptiveTabStripTabControl.axaml" />
     </ItemGroup>
 </Project>

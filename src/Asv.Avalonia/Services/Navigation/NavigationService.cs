@@ -15,7 +15,7 @@ namespace Asv.Avalonia;
 
 public class NavigationServiceConfig
 {
-    public HashSet<string> Pages { get; } = [];
+    public Dictionary<string, PageState> Pages { get; } = [];
 }
 
 [Export(typeof(INavigationService))]
@@ -84,9 +84,14 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         {
             var cfg = _cfgSvc.Get<NavigationServiceConfig>();
             _logger.ZLogInformation($"Try to load layout: {string.Join(",", cfg.Pages)}");
-            foreach (var page in cfg.Pages)
+            foreach (var page in cfg.Pages.Keys)
             {
                 await GoTo(new NavigationPath(page));
+            }
+
+            foreach (var page in shell.Pages) // TODO: fix load
+            {
+                page.State = cfg.Pages[page.Id.ToString()];
             }
         }
         catch (Exception e)
@@ -152,14 +157,16 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         try
         {
             var cfg = new NavigationServiceConfig();
-            cfg.Pages.Clear();
-            cfg.Pages.AddAll(_host.Shell.Pages.Select(x => x.Id.ToString()));
+            foreach (var page in _host.Shell.Pages)
+            {
+                cfg.Pages.Add(page.Id.ToString(), page.State);
+            }
             _logger.ZLogTrace($"Save layout: {string.Join(",", cfg.Pages)}");
             _cfgSvc.Set(cfg);
         }
         catch (Exception e)
         {
-            _logger.LogError(e, $"Error saving layout: {e.Message}");
+            _logger.LogError(e, "Error saving layout: {EMessage}", e.Message);
             Debug.Assert(false, $"Error saving layout: {e.Message}");
         }
         finally

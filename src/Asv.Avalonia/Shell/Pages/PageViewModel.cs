@@ -53,6 +53,12 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         set => SetField(ref field, value);
     }
 
+    public PageState State
+    {
+        get;
+        set => SetField(ref field, value);
+    } = PageState.Tab;
+
     public ICommandHistory History { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
     public ICommand TryClose { get; }

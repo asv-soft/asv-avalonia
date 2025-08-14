@@ -10,10 +10,10 @@ namespace Asv.Avalonia;
 public partial class DockControl : SelectingItemsControl
 {
     private readonly List<DockItem> _shellItems = [];
-    private readonly List<DockItem> _windowedItems = [];
+    private readonly List<DockItem> _windowedItems = []; // TODO: remove try to remove windowedItems and shellItems
 
     private TabItem? _selectedTab;
-    private AdaptiveTabStripTabControl _mainTabControl = null!;
+    private DockTabControl _mainTabControl = null!;
 
     public DockControl() { }
 
@@ -22,7 +22,7 @@ public partial class DockControl : SelectingItemsControl
         base.OnApplyTemplate(e);
 
         _mainTabControl =
-            e.NameScope.Find<AdaptiveTabStripTabControl>(PART_MainTabControl)
+            e.NameScope.Find<DockTabControl>(PART_MainTabControl)
             ?? throw new ApplicationException(
                 $"{PART_MainTabControl} not found in {nameof(DockControl)} template."
             );
@@ -110,18 +110,16 @@ public partial class DockControl : SelectingItemsControl
         }
 
         var tab = CreateTabItem(content);
+        if (page.State == PageState.Window)
+        {
+            DetachTab(tab);
+            return;
+        }
+
         var shellItem = new DockItem { Id = page.Id.ToString(), TabControl = tab };
 
         _shellItems.Add(shellItem);
         _mainTabControl.Items.Add(tab);
-    }
-
-    private DockItem CreateShellItem(string id, object content)
-    {
-        var tab = CreateTabItem(content);
-        var shellItem = new DockItem { Id = id, TabControl = tab };
-
-        return shellItem;
     }
 
     private TabItem CreateTabItem(object content)
@@ -205,13 +203,10 @@ public partial class DockControl : SelectingItemsControl
         _mainTabControl.Items.Remove(tab);
         _shellItems.Remove(shellItem);
 
-        var win = new DockWindow(shellItem.Id)
-        {
-            Content = tab.Content,
-            Title = (tab.Header as TabStripItem)?.Content?.ToString(),
-        };
+        var win = new DockWindow(shellItem.Id) { Content = tab.Content, Title = page.Title };
 
         _windowedItems.Add(shellItem);
+        page.State = PageState.Window;
         win.Closing += (_, _) => AttachTab(shellItem);
         win.Show();
     }
@@ -229,5 +224,10 @@ public partial class DockControl : SelectingItemsControl
         }
 
         _windowedItems.Remove(dockItem);
+
+        if (dockItem.TabControl.Content is IPage page)
+        {
+            page.State = PageState.Tab;
+        }
     }
 }
