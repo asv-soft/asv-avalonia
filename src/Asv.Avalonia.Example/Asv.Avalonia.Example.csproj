@@ -29,9 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asv.Mavlink" Version="$(AsvMavlinkVersion)" />
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
-        <PackageReference Include="Asv.IO" Version="$(AsvCommonVersion)" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
@@ -52,7 +50,6 @@
       <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
     </ItemGroup>
 
-
     <ItemGroup>
       <EmbeddedResource Update="RS.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
@@ -65,6 +62,26 @@
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
+      </Compile>
+      <Compile Update="Pages\Map\MapExamplePageView.axaml.cs">
+        <DependentUpon>MapExamplePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Pages\Inputs\InputsPageView.axaml.cs">
+        <DependentUpon>DevicePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Pages\Layouts\LayoutsPageView.axaml.cs">
+        <DependentUpon>DevicePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Pages\Others\OthersPageView.axaml.cs">
+        <DependentUpon>DevicePageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Pages\Controls\DialogControlsPageView.axaml.cs">
+        <DependentUpon>DialogControlsPageView.axaml</DependentUpon>
+        <SubType>Code</SubType>
       </Compile>
      
     </ItemGroup>

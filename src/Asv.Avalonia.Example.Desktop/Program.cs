@@ -1,7 +1,5 @@
 ﻿using System;
-using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
-using Asv.Avalonia.Plugins;
 using Avalonia;
 using Avalonia.Controls;
 
@@ -31,12 +29,7 @@ sealed class Program
                 options.WithLogToConsole();
                 options.WithLogViewer();
             })
-            .UseAsvMap()
-            .UsePluginManager(options =>
-            {
-                options.WithApiPackage(typeof(ApiModule).Assembly);
-                options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
-            });
+            .UseAsvMap();
 
         using var host = builder.Build();
         host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);

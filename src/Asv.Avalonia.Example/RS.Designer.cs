@@ -57,570 +57,6 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DocumentPageViewModel_Title {
-            get {
-                return ResourceManager.GetString("DocumentPageViewModel_Title", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorParameterView_PinToggleButton_ToolTip {
-            get {
-                return ResourceManager.GetString("ParametersEditorParameterView_PinToggleButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorParameterView_UpdateButton_ToolTip {
-            get {
-                return ResourceManager.GetString("ParametersEditorParameterView_UpdateButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorParameterView_UpdateButton {
-            get {
-                return ResourceManager.GetString("ParametersEditorParameterView_UpdateButton", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorParameterView_WriteButton_ToolTip {
-            get {
-                return ResourceManager.GetString("ParametersEditorParameterView_WriteButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorParameterView_WriteButton {
-            get {
-                return ResourceManager.GetString("ParametersEditorParameterView_WriteButton", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorParameterView_RebootRequired {
-            get {
-                return ResourceManager.GetString("ParametersEditorParameterView_RebootRequired", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorPageView_StarsToggleButton_ToolTip {
-            get {
-                return ResourceManager.GetString("ParametersEditorPageView_StarsToggleButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorPageView_UpdateButton_ToolTip {
-            get {
-                return ResourceManager.GetString("ParametersEditorPageView_UpdateButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorPageView_PinsOffButton_ToolTip {
-            get {
-                return ResourceManager.GetString("ParametersEditorPageView_PinsOffButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorPageViewModel_Search {
-            get {
-                return ResourceManager.GetString("ParametersEditorPageViewModel_Search", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorPageViewModel_Total {
-            get {
-                return ResourceManager.GetString("ParametersEditorPageViewModel_Total", resourceCulture);
-            }
-        }
-        
-        public static string ParametersEditorPageView_StarButton_ToolTip {
-            get {
-                return ResourceManager.GetString("ParametersEditorPageView_StarButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        public static string ParamPageViewModel_DataLossDialog_Content {
-            get {
-                return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_Content", resourceCulture);
-            }
-        }
-        
-        public static string ParamPageViewModel_DataLossDialog_Title {
-            get {
-                return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_Title", resourceCulture);
-            }
-        }
-        
-        public static string ParamPageViewModel_DataLossDialog_PrimaryButtonText {
-            get {
-                return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_PrimaryButtonText", resourceCulture);
-            }
-        }
-        
-        public static string ParamPageViewModel_DataLossDialog_SecondaryButtonText {
-            get {
-                return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_SecondaryButtonText", resourceCulture);
-            }
-        }
-        
-        public static string ParamPageViewModel_DataLossDialog_CloseButtonText {
-            get {
-                return ResourceManager.GetString("ParamPageViewModel_DataLossDialog_CloseButtonText", resourceCulture);
-            }
-        }
-        
-        public static string Unit_Byte_Abbreviation {
-            get {
-                return ResourceManager.GetString("Unit_Byte_Abbreviation", resourceCulture);
-            }
-        }
-        
-        public static string Unit_Kilobyte_Abbreviation {
-            get {
-                return ResourceManager.GetString("Unit_Kilobyte_Abbreviation", resourceCulture);
-            }
-        }
-        
-        public static string Unit_Megabyte_Abbreviation {
-            get {
-                return ResourceManager.GetString("Unit_Megabyte_Abbreviation", resourceCulture);
-            }
-        }
-        
-        public static string Unit_Gigabyte_Abbreviation {
-            get {
-                return ResourceManager.GetString("Unit_Gigabyte_Abbreviation", resourceCulture);
-            }
-        }
-        
-        public static string Unit_Terabyte_Abbreviation {
-            get {
-                return ResourceManager.GetString("Unit_Terabyte_Abbreviation", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_UploadingDialog_Title {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_UploadingDialog_Title", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_UploadingDialog_Message {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_UploadingDialog_Message", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_DownloadDialog_Title {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_DownloadDialog_Title", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_DownloadDialog_Message {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_DownloadDialog_Message", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_FileDownloadedSuccessfully {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_FileDownloadedSuccessfully", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_RemoveDialog_Title {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_RemoveDialog_Title", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_RemoveDialog_Message {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_RemoveDialog_Message", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_BurstDownloadDialog_Title {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_BurstDownloadDialog_Title", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_BurstDownloadDialog_PrimaryButtonText {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_BurstDownloadDialog_PrimaryButtonText", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserViewModel_BurstDownloadDialog_SecondaryButtonText {
-            get {
-                return ResourceManager.GetString("FileBrowserViewModel_BurstDownloadDialog_SecondaryButtonText", resourceCulture);
-            }
-        }
-        
-        public static string MavParamsPageViewModel_DeviceName_Unknown {
-            get {
-                return ResourceManager.GetString("MavParamsPageViewModel_DeviceName_Unknown", resourceCulture);
-            }
-        }
-        
-        public static string NotANumber {
-            get {
-                return ResourceManager.GetString("NotANumber", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressView_Title {
-            get {
-                return ResourceManager.GetString("MissionProgressView_Title", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressView_SubStatusText {
-            get {
-                return ResourceManager.GetString("MissionProgressView_SubStatusText", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressView_MissionDistanceRTT {
-            get {
-                return ResourceManager.GetString("MissionProgressView_MissionDistanceRTT", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressView_TotalDistanceRTT {
-            get {
-                return ResourceManager.GetString("MissionProgressView_TotalDistanceRTT", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressView_HomeDistance {
-            get {
-                return ResourceManager.GetString("MissionProgressView_HomeDistance", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressView_TargetDistance {
-            get {
-                return ResourceManager.GetString("MissionProgressView_TargetDistance", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressView_DownLoadingMission {
-            get {
-                return ResourceManager.GetString("MissionProgressView_DownLoadingMission", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_AutoMode_Name {
-            get {
-                return ResourceManager.GetString("UavAction_AutoMode_Name", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_GuidedMode {
-            get {
-                return ResourceManager.GetString("UavAction_GuidedMode", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_TakeOff {
-            get {
-                return ResourceManager.GetString("UavAction_TakeOff", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_Rtl_Name {
-            get {
-                return ResourceManager.GetString("UavAction_Rtl_Name", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_Land {
-            get {
-                return ResourceManager.GetString("UavAction_Land", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_StartMission {
-            get {
-                return ResourceManager.GetString("UavAction_StartMission", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_StartMission_Description {
-            get {
-                return ResourceManager.GetString("UavAction_StartMission_Description", resourceCulture);
-            }
-        }
-        
-        public static string UavRttItem_Mode {
-            get {
-                return ResourceManager.GetString("UavRttItem_Mode", resourceCulture);
-            }
-        }
-        
-        public static string UavRttItem_Altitude {
-            get {
-                return ResourceManager.GetString("UavRttItem_Altitude", resourceCulture);
-            }
-        }
-        
-        public static string UavRttItem_Velocity {
-            get {
-                return ResourceManager.GetString("UavRttItem_Velocity", resourceCulture);
-            }
-        }
-        
-        public static string UavRttItem_Azimuth {
-            get {
-                return ResourceManager.GetString("UavRttItem_Azimuth", resourceCulture);
-            }
-        }
-        
-        public static string UavRttItem_Battery {
-            get {
-                return ResourceManager.GetString("UavRttItem_Battery", resourceCulture);
-            }
-        }
-        
-        public static string UavRttItem_GNSS {
-            get {
-                return ResourceManager.GetString("UavRttItem_GNSS", resourceCulture);
-            }
-        }
-        
-        public static string UavRttItem_Link {
-            get {
-                return ResourceManager.GetString("UavRttItem_Link", resourceCulture);
-            }
-        }
-        
-        public static string UavWidgetViewModel_StatusText_Armed {
-            get {
-                return ResourceManager.GetString("UavWidgetViewModel_StatusText_Armed", resourceCulture);
-            }
-        }
-        
-        public static string UavWidgetViewModel_StatusText_PullUp {
-            get {
-                return ResourceManager.GetString("UavWidgetViewModel_StatusText_PullUp", resourceCulture);
-            }
-        }
-        
-        public static string UavWidgetViewModel_StatusText_DisArmed {
-            get {
-                return ResourceManager.GetString("UavWidgetViewModel_StatusText_DisArmed", resourceCulture);
-            }
-        }
-        
-        public static string FlightPageViewModel_Title {
-            get {
-                return ResourceManager.GetString("FlightPageViewModel_Title", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_TakeOff_Description {
-            get {
-                return ResourceManager.GetString("UavAction_TakeOff_Description", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_Rtl_Description {
-            get {
-                return ResourceManager.GetString("UavAction_Rtl_Description", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_Land_Description {
-            get {
-                return ResourceManager.GetString("UavAction_Land_Description", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_AutoMode_Description {
-            get {
-                return ResourceManager.GetString("UavAction_AutoMode_Description", resourceCulture);
-            }
-        }
-        
-        public static string UavAction_GuidedMode_Description {
-            get {
-                return ResourceManager.GetString("UavAction_GuidedMode_Description", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixType2dFix {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixType2dFix", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixTypeRtkFloat {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixTypeRtkFloat", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixTypeRtkFixed {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixTypeRtkFixed", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixTypeDgps {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixTypeDgps", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixTypePpp {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixTypePpp", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixType3dFix {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixType3dFix", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixTypeStatic {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixTypeStatic", resourceCulture);
-            }
-        }
-        
-        public static string GpsFixType_GpsFixTypeNoGps {
-            get {
-                return ResourceManager.GetString("GpsFixType_GpsFixTypeNoGps", resourceCulture);
-            }
-        }
-        
-        public static string SetAltitudeDialogViewModel_ApplyDialog_PrimaryButton_TakeOff {
-            get {
-                return ResourceManager.GetString("SetAltitudeDialogViewModel_ApplyDialog_PrimaryButton_TakeOff", resourceCulture);
-            }
-        }
-        
-        public static string SetAltitudeDialogViewModel_ApplyDialog_SecondaryButton_Cancel {
-            get {
-                return ResourceManager.GetString("SetAltitudeDialogViewModel_ApplyDialog_SecondaryButton_Cancel", resourceCulture);
-            }
-        }
-        
-        public static string MissionProgressViewModel_MissionFlightTime_Symbol {
-            get {
-                return ResourceManager.GetString("MissionProgressViewModel_MissionFlightTime_Symbol", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserView_Watermark_Local {
-            get {
-                return ResourceManager.GetString("FileBrowserView_Watermark_Local", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserView_Watermark_Remote {
-            get {
-                return ResourceManager.GetString("FileBrowserView_Watermark_Remote", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserView_Button_Download_Content {
-            get {
-                return ResourceManager.GetString("FileBrowserView_Button_Download_Content", resourceCulture);
-            }
-        }
-        
-        public static string FileBrowserView_Button_BurstDownload_Content {
-            get {
-                return ResourceManager.GetString("FileBrowserView_Button_BurstDownload_Content", resourceCulture);
-            }
-        }
-        
-        public static string UnpinAllParamsCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("UnpinAllParamsCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        public static string WriteParamCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("WriteParamCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        public static string WritePatamCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("WritePatamCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        public static string UnpinAllParamsCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("UnpinAllParamsCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        public static string StopUpdateParamsCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("StopUpdateParamsCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        public static string StopUpdateParamsCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("StopUpdateParamsCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        public static string UpdateParamsCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("UpdateParamsCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        public static string UpdateParamsCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("UpdateParamsCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        public static string UpdateParamCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("UpdateParamCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        public static string UpdateParamCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("UpdateParamCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        public static string OpenMavParamsCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("OpenMavParamsCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        public static string OpenMavParamsCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("OpenMavParamsCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        public static string HomePageParamsDeviceItemAction_ActionViewModel_Header {
-            get {
-                return ResourceManager.GetString("HomePageParamsDeviceItemAction_ActionViewModel_Header", resourceCulture);
-            }
-        }
-        
-        public static string HomePageParamsDeviceItemAction_ActionViewModel_Description {
-            get {
-                return ResourceManager.GetString("HomePageParamsDeviceItemAction_ActionViewModel_Description", resourceCulture);
-            }
-        }
-        
         public static string OpenDialogBoardCommand_Action_Title {
             get {
                 return ResourceManager.GetString("OpenDialogBoardCommand_Action_Title", resourceCulture);
@@ -633,39 +69,357 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string OpenFlightModeCommand_CommandInfo_ButtonName {
+        public static string OpenInfoBoxCommand_Action_Description {
             get {
-                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_ButtonName", resourceCulture);
+                return ResourceManager.GetString("OpenInfoBoxCommand_Action_Description", resourceCulture);
             }
         }
         
-        public static string OpenFlightModeCommand_CommandInfo_ButtonDescription {
+        public static string OpenInfoBoxCommand_Action_Title {
             get {
-                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_ButtonDescription", resourceCulture);
+                return ResourceManager.GetString("OpenInfoBoxCommand_Action_Title", resourceCulture);
             }
         }
         
-        public static string OpenFileBrowserCommand_Action_Title {
+        public static string InfoBoxPageViewModel_Title {
             get {
-                return ResourceManager.GetString("OpenFileBrowserCommand_Action_Title", resourceCulture);
+                return ResourceManager.GetString("InfoBoxPageViewModel_Title", resourceCulture);
             }
         }
         
-        public static string OpenFileBrowserCommand_Action_Description {
+        public static string OpenHistoricalCommand_Action_Title {
             get {
-                return ResourceManager.GetString("OpenFileBrowserCommand_Action_Description", resourceCulture);
+                return ResourceManager.GetString("OpenHistoricalCommand_Action_Title", resourceCulture);
             }
         }
         
-        public static string OpenFlightModeCommand_CommandInfo_Name {
+        public static string OpenHistoricalCommand_Action_Description {
             get {
-                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_Name", resourceCulture);
+                return ResourceManager.GetString("OpenHistoricalCommand_Action_Description", resourceCulture);
             }
         }
         
-        public static string OpenFlightModeCommand_CommandInfo_Description {
+        public static string HistoricalPageViewModel_Title {
             get {
-                return ResourceManager.GetString("OpenFlightModeCommand_CommandInfo_Description", resourceCulture);
+                return ResourceManager.GetString("HistoricalPageViewModel_Title", resourceCulture);
+            }
+        }
+        
+        public static string OpenMapExampleCommand_Action_Title {
+            get {
+                return ResourceManager.GetString("OpenMapExampleCommand_Action_Title", resourceCulture);
+            }
+        }
+        
+        public static string OpenMapExampleCommand_Action_Description {
+            get {
+                return ResourceManager.GetString("OpenMapExampleCommand_Action_Description", resourceCulture);
+            }
+        }
+        
+        public static string ControlsGalleryViewModel_Title {
+            get {
+                return ResourceManager.GetString("ControlsGalleryViewModel_Title", resourceCulture);
+            }
+        }
+        
+        public static string OpenControlsGalleryCommand_Action_Description {
+            get {
+                return ResourceManager.GetString("OpenControlsGalleryCommand_Action_Description", resourceCulture);
+            }
+        }
+        
+        public static string OpenControlsGalleryCommand_Action_Title {
+            get {
+                return ResourceManager.GetString("OpenControlsGalleryCommand_Action_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_OpenFile_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_OpenFile_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_SaveFile_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_SaveFile_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_OpenFolder_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_OpenFolder_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_ObserveFolder_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_ObserveFolder_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_Confirmation_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_Confirmation_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_Confirmation_Message {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_Confirmation_Message", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_Save_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_Save_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_Save_Message {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_Save_Message", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_KeyCapture_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_KeyCapture_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_KeyCapture_Message {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_KeyCapture_Message", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_Input_Title {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_Input_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageViewModel_Input_Message {
+            get {
+                return ResourceManager.GetString("DialogPageViewModel_Input_Message", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Note {
+            get {
+                return ResourceManager.GetString("DialogPageView_Note", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Description {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Description", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_Description {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Description {
+            get {
+                return ResourceManager.GetString("DialogPageView_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Custom_Title {
+            get {
+                return ResourceManager.GetString("DialogPageView_Custom_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Custom_Description {
+            get {
+                return ResourceManager.GetString("DialogPageView_Custom_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_System_Title {
+            get {
+                return ResourceManager.GetString("DialogPageView_System_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_System_Description {
+            get {
+                return ResourceManager.GetString("DialogPageView_System_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_LastResult {
+            get {
+                return ResourceManager.GetString("DialogPageView_LastResult", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Rules_Description {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Rules_Description", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Rules_One {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Rules_One", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Rules_Many {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Rules_Many", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_Common_Title {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_Common_Title", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_Common_Message {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_Common_Message", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_Common_Severity {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_Common_Severity", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_Basic {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_Basic", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_ActionButton {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_ActionButton", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_Closable {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_Closable", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_Examples {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_Examples", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageView_ActionButton_Title {
+            get {
+                return ResourceManager.GetString("InfoBoxPageView_ActionButton_Title", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_GeoPoint {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_GeoPoint", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Toggle {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Toggle", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_String {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_String", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Unit {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Unit", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Basic {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Basic", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalPageView_Validation {
+            get {
+                return ResourceManager.GetString("HistoricalPageView_Validation", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageViewModel_Example_Title {
+            get {
+                return ResourceManager.GetString("InfoBoxPageViewModel_Example_Title", resourceCulture);
+            }
+        }
+        
+        public static string InfoBoxPageViewModel_Example_Message {
+            get {
+                return ResourceManager.GetString("InfoBoxPageViewModel_Example_Message", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_System_OpenFile {
+            get {
+                return ResourceManager.GetString("DialogPageView_System_OpenFile", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_System_SaveFile {
+            get {
+                return ResourceManager.GetString("DialogPageView_System_SaveFile", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_System_OpenFolder {
+            get {
+                return ResourceManager.GetString("DialogPageView_System_OpenFolder", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_System_ObserveFolder {
+            get {
+                return ResourceManager.GetString("DialogPageView_System_ObserveFolder", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Custom_Confirmation {
+            get {
+                return ResourceManager.GetString("DialogPageView_Custom_Confirmation", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Custom_Saving {
+            get {
+                return ResourceManager.GetString("DialogPageView_Custom_Saving", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Custom_Input {
+            get {
+                return ResourceManager.GetString("DialogPageView_Custom_Input", resourceCulture);
+            }
+        }
+        
+        public static string DialogPageView_Custom_KeyCapture {
+            get {
+                return ResourceManager.GetString("DialogPageView_Custom_KeyCapture", resourceCulture);
             }
         }
     }

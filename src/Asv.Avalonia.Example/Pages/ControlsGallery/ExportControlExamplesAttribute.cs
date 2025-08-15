@@ -1,0 +1,11 @@
+using System;
+using System.Composition;
+
+namespace Asv.Avalonia.Example;
+
+[AttributeUsage(AttributeTargets.Class)]
+public class ExportControlExamplesAttribute : ExportAttribute
+{
+    public ExportControlExamplesAttribute(string id)
+        : base(id, typeof(IControlsGallerySubPage)) { }
+}
