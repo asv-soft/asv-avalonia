@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -10,9 +11,11 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
+public sealed class DialogBoardViewModelConfig : PageConfig { }
+
 // TODO:Localize
 [ExportPage(PageId)]
-public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
+public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel, DialogBoardViewModelConfig>
 {
     public const string PageId = "dialog";
     public const MaterialIconKind PageIcon = MaterialIconKind.Dialogue;
@@ -26,7 +29,12 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     private readonly InputDialogPrefab _inputDialog;
 
     public DialogBoardViewModel()
-        : this(DesignTime.CommandService, NullLoggerFactory.Instance, NullDialogService.Instance)
+        : this(
+            DesignTime.CommandService,
+            NullLoggerFactory.Instance,
+            DesignTime.Configuration,
+            NullDialogService.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Title = RS.DialogPageViewModel_Title;
@@ -36,9 +44,10 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel>
     public DialogBoardViewModel(
         ICommandService cmd,
         ILoggerFactory loggerFactory,
+        IConfiguration configuration,
         IDialogService dialogService
     )
-        : base(PageId, cmd, loggerFactory)
+        : base(PageId, cmd, configuration, loggerFactory)
     {
         Title = RS.DialogPageViewModel_Title;
 

@@ -1,6 +1,7 @@
 ﻿using System.Composition;
 using System.Diagnostics;
 using System.Globalization;
+using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Threading;
 using Material.Icons;
@@ -13,9 +14,11 @@ namespace Asv.Avalonia;
 
 public interface ILogViewerViewModel : IPage { }
 
+public class LogViewerViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
 public class LogViewerViewModel
-    : PageViewModel<ILogViewerViewModel>,
+    : PageViewModel<ILogViewerViewModel, LogViewerViewModelConfig>,
         ILogViewerViewModel,
         ISupportPagination,
         ISupportCancel,
@@ -29,7 +32,12 @@ public class LogViewerViewModel
     public const MaterialIconKind PageIcon = MaterialIconKind.Journal;
 
     public LogViewerViewModel()
-        : base(DesignTime.Id, NullCommandService.Instance, DesignTime.LoggerFactory)
+        : base(
+            DesignTime.Id,
+            NullCommandService.Instance,
+            DesignTime.Configuration,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Title = RS.LogViewerViewModel_Title;
@@ -137,9 +145,10 @@ public class LogViewerViewModel
         ICommandService cmd,
         ILogReaderService logReaderService,
         ISearchService search,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, loggerFactory)
+        : base(PageId, cmd, cfg, loggerFactory)
     {
         _logReaderService = logReaderService;
         _search = search;

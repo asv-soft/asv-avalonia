@@ -1,4 +1,5 @@
 using System.Composition;
+using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Asv.Cfg;
 using Avalonia;

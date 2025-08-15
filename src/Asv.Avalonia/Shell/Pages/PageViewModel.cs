@@ -1,4 +1,5 @@
 using System.Windows.Input;
+using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -6,10 +7,24 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, IPage
-    where TContext : class, IPage
+public abstract class PageConfig()
 {
-    protected PageViewModel(NavigationId id, ICommandService cmd, ILoggerFactory loggerFactory)
+    public PageState PageState { get; set; } = PageState.Tab;
+}
+
+public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TContext>, IPage
+    where TContext : class, IPage
+    where TConfig : PageConfig, new()
+{
+    protected readonly IConfiguration CfgService;
+    protected readonly TConfig Config;
+
+    protected PageViewModel(
+        NavigationId id,
+        ICommandService cmd,
+        IConfiguration cfgService,
+        ILoggerFactory loggerFactory
+    )
         : base(id, loggerFactory)
     {
         History = cmd.CreateHistory(this);
@@ -17,6 +32,21 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         Title = id.ToString();
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
+        CfgService = cfgService;
+        Config = cfgService.Get<TConfig>();
+        State = new BindableReactiveProperty<PageState>(Config.PageState);
+
+        _sub1 = State.Subscribe(_ => HasChanges.Value = true);
+        _sub2 = HasChanges.SubscribeAwait(
+            async (hasChanges, ct) =>
+            {
+                if (hasChanges)
+                {
+                    await SafeChanges(ct);
+                    HasChanges.Value = false;
+                }
+            }
+        );
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
@@ -53,15 +83,25 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         set => SetField(ref field, value);
     }
 
-    public PageState State
-    {
-        get;
-        set => SetField(ref field, value);
-    } = PageState.Tab;
-
     public ICommandHistory History { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
+    public BindableReactiveProperty<PageState> State { get; }
     public ICommand TryClose { get; }
+
+    protected virtual ValueTask SafeChanges(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Config.PageState = State.Value;
+        CfgService.Set(Config);
+
+        return ValueTask.CompletedTask;
+    }
+
+    #region Dispose
+
+    private readonly IDisposable _sub1;
+    private readonly IDisposable _sub2;
 
     protected override void Dispose(bool disposing)
     {
@@ -69,10 +109,15 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         {
             History.Dispose();
             HasChanges.Dispose();
+            State.Dispose();
+            _sub1.Dispose();
+            _sub2.Dispose();
         }
 
         base.Dispose(disposing);
     }
+
+    #endregion
 
     public abstract IExportInfo Source { get; }
 }

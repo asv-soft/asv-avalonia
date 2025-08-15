@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using Asv.Cfg;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -6,8 +7,10 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
+public sealed class HomePageViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
+public class HomePageViewModel : PageViewModel<IHomePage, HomePageViewModelConfig>, IHomePage
 {
     public const string PageId = "home";
 
@@ -16,6 +19,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
             NullCommandService.Instance,
             NullAppInfo.Instance,
             NullContainerHost.Instance,
+            DesignTime.Configuration,
             DesignTime.LoggerFactory
         )
     {
@@ -94,9 +98,10 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         ICommandService cmd,
         IAppInfo appInfo,
         IContainerHost container,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, loggerFactory)
+        : base(PageId, cmd, cfg, loggerFactory)
     {
         AppInfo = appInfo;
         Icon = MaterialIconKind.Home;

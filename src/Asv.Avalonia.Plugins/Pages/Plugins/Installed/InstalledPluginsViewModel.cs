@@ -2,14 +2,16 @@
 using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.Plugins;
 
+public sealed class InstalledPluginsViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel>
+public class InstalledPluginsViewModel
+    : PageViewModel<InstalledPluginsViewModel, InstalledPluginsViewModelConfig>
 {
     public const string PageId = "plugins.installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
@@ -45,7 +47,7 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
         IConfiguration cfg,
         INavigationService navigationService
     )
-        : base(PageId, cmd, loggerFactory)
+        : base(PageId, cmd, cfg, loggerFactory)
     {
         _manager = manager;
         _loggerFactory = loggerFactory;

@@ -8,9 +8,9 @@ public interface IPage : IRoutable, IExportable
 {
     MaterialIconKind Icon { get; }
     string Title { get; }
-    PageState State { get; set; }
     ICommandHistory History { get; }
     BindableReactiveProperty<bool> HasChanges { get; }
+    BindableReactiveProperty<PageState> State { get; }
     ICommand TryClose { get; }
     ValueTask TryCloseAsync(bool force);
 }

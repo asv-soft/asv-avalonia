@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Diagnostics;
+using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
@@ -9,8 +10,9 @@ using ZLogger;
 
 namespace Asv.Avalonia.IO;
 
-public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
+public abstract class DevicePageViewModel<T, TCfg> : PageViewModel<T, TCfg>, IDevicePage
     where T : class, IDevicePage
+    where TCfg : PageConfig, new()
 {
     private readonly IDeviceManager? _devices;
     private string? _targetDeviceId;
@@ -22,9 +24,10 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         NavigationId id,
         IDeviceManager devices,
         ICommandService cmd,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, loggerFactory)
+        : base(id, cmd, cfg, loggerFactory)
     {
         _devices = devices;
         _target = new ReactiveProperty<DeviceWrapper?>().DisposeItWith(Disposable);

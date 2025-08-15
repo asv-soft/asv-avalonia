@@ -1,15 +1,17 @@
-﻿using Asv.Common;
+﻿using Asv.Cfg;
+using Asv.Common;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class TreePageViewModel<TContext, TSubPage>
-    : PageViewModel<TContext>,
+public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
+    : PageViewModel<TContext, TConfig>,
         IDesignTimeTreePage
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
+    where TConfig : PageConfig, new()
 {
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
     private readonly IContainerHost _container;
@@ -21,9 +23,10 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         NavigationId id,
         ICommandService cmd,
         IContainerHost container,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, loggerFactory)
+        : base(id, cmd, cfg, loggerFactory)
     {
         _container = container;
         _loggerFactory = loggerFactory;

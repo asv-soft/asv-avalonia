@@ -110,16 +110,14 @@ public partial class DockControl : SelectingItemsControl
         }
 
         var tab = CreateTabItem(content);
-        if (page.State == PageState.Window)
-        {
-            DetachTab(tab);
-            return;
-        }
-
         var shellItem = new DockItem { Id = page.Id.ToString(), TabControl = tab };
-
         _shellItems.Add(shellItem);
         _mainTabControl.Items.Add(tab);
+
+        if (page.State.Value == PageState.Window)
+        {
+            DetachTab(tab);
+        }
     }
 
     private TabItem CreateTabItem(object content)
@@ -200,13 +198,13 @@ public partial class DockControl : SelectingItemsControl
             return;
         }
 
-        _mainTabControl.Items.Remove(tab);
         _shellItems.Remove(shellItem);
+        _mainTabControl.Items.Remove(tab);
 
-        var win = new DockWindow(shellItem.Id) { Content = tab.Content, Title = page.Title };
+        var win = new DockWindow(page.Id) { Content = tab.Content, Title = page.Title };
 
         _windowedItems.Add(shellItem);
-        page.State = PageState.Window;
+        page.State.Value = PageState.Window;
         win.Closing += (_, _) => AttachTab(shellItem);
         win.Show();
     }
@@ -227,7 +225,7 @@ public partial class DockControl : SelectingItemsControl
 
         if (dockItem.TabControl.Content is IPage page)
         {
-            page.State = PageState.Tab;
+            page.State.Value = PageState.Tab;
         }
     }
 }

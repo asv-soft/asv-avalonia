@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using Asv.Cfg;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -8,8 +9,11 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
+public sealed class TestHistoryPropertiesPageViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class TestHistoryPropertiesPageViewModel : PageViewModel<TestHistoryPropertiesPageViewModel>
+public class TestHistoryPropertiesPageViewModel
+    : PageViewModel<TestHistoryPropertiesPageViewModel, TestInfoBoxPageViewModelConfig>
 {
     public const string PageId = "test.history.properties";
     public const MaterialIconKind PageIcon = MaterialIconKind.TestTube;
@@ -22,7 +26,12 @@ public class TestHistoryPropertiesPageViewModel : PageViewModel<TestHistoryPrope
     private readonly ReactiveProperty<string?> _stringWithManyValidations;
 
     public TestHistoryPropertiesPageViewModel()
-        : this(DesignTime.UnitService, DesignTime.CommandService, DesignTime.LoggerFactory)
+        : this(
+            DesignTime.UnitService,
+            DesignTime.CommandService,
+            DesignTime.Configuration,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -31,9 +40,10 @@ public class TestHistoryPropertiesPageViewModel : PageViewModel<TestHistoryPrope
     public TestHistoryPropertiesPageViewModel(
         IUnitService unit,
         ICommandService commandService,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, commandService, loggerFactory)
+        : base(PageId, commandService, cfg, loggerFactory)
     {
         Title = "Test History Properties";
         var un = unit.Units[VelocityBase.Id];

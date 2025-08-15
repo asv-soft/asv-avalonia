@@ -1,15 +1,21 @@
 ﻿using System.Composition;
+using Asv.Cfg;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Configuration;
 using NuGet.Protocol.Core.Types;
 using ObservableCollections;
 using R3;
+using IConfiguration = Asv.Cfg.IConfiguration;
 
 namespace Asv.Avalonia.Plugins;
 
+public sealed class PluginsSourcesViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
+public class PluginsSourcesViewModel
+    : PageViewModel<PluginsSourcesViewModel, PluginsSourcesViewModelConfig>
 {
     public const string PageId = "plugins.sources";
 
@@ -23,6 +29,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
+            DesignTime.Configuration,
             DesignTime.LoggerFactory,
             DesignTime.Navigation
         )
@@ -55,10 +62,11 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
     public PluginsSourcesViewModel(
         ICommandService cmd,
         IPluginManager mng,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory,
         INavigationService navigationService
     )
-        : base(PageId, cmd, loggerFactory)
+        : base(PageId, cmd, cfg, loggerFactory)
     {
         _mng = mng;
         _navigation = navigationService;

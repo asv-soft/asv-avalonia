@@ -6,18 +6,23 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.IO;
+using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Asv.Mavlink;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.Example;
 
+public sealed class FileBrowserViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
+public class FileBrowserViewModel
+    : DevicePageViewModel<FileBrowserViewModel, FileBrowserViewModelConfig>
 {
     public const string PageId = "files.browser";
     public const MaterialIconKind PageIcon = MaterialIconKind.FolderEye;
@@ -31,7 +36,15 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
     private readonly ObservableList<IBrowserItem> _remoteItems;
 
     public FileBrowserViewModel()
-        : this(DesignTime.CommandService, null!, null!, null!, null!, DesignTime.Navigation)
+        : this(
+            DesignTime.CommandService,
+            NullDeviceManager.Instance,
+            NullDialogService.Instance,
+            NullAppPath.Instance,
+            DesignTime.Configuration,
+            NullLoggerFactory.Instance,
+            DesignTime.Navigation
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
 
@@ -65,10 +78,11 @@ public class FileBrowserViewModel : DevicePageViewModel<FileBrowserViewModel>
         IDeviceManager devices,
         IDialogService dialogService,
         IAppPath appPath,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory,
         INavigationService navigation
     )
-        : base(PageId, devices, cmd, loggerFactory)
+        : base(PageId, devices, cmd, cfg, loggerFactory)
     {
         _localRootPath = appPath.UserDataFolder;
         _yesNoDialog = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();

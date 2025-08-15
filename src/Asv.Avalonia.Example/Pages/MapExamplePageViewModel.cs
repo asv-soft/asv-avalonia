@@ -2,6 +2,7 @@
 using System.Composition;
 using System.Threading.Tasks;
 using Asv.Avalonia.GeoMap;
+using Asv.Cfg;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -10,13 +11,17 @@ namespace Asv.Avalonia.Example;
 
 public interface IMapContext : IPage { }
 
+public sealed class MapExamplePageViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class MapExamplePageViewModel : PageViewModel<IMapContext>, IMapContext
+public class MapExamplePageViewModel
+    : PageViewModel<IMapContext, MapExamplePageViewModelConfig>,
+        IMapContext
 {
     public const string PageId = "MapExamplePage";
 
     public MapExamplePageViewModel()
-        : this(DesignTime.CommandService, DesignTime.LoggerFactory)
+        : this(DesignTime.CommandService, DesignTime.Configuration, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
 
@@ -24,8 +29,12 @@ public class MapExamplePageViewModel : PageViewModel<IMapContext>, IMapContext
     }
 
     [ImportingConstructor]
-    public MapExamplePageViewModel(ICommandService cmd, ILoggerFactory loggerFactory)
-        : base(PageId, cmd, loggerFactory)
+    public MapExamplePageViewModel(
+        ICommandService cmd,
+        IConfiguration cfg,
+        ILoggerFactory loggerFactory
+    )
+        : base(PageId, cmd, cfg, loggerFactory)
     {
         Title = RS.MapExamplePageViewModel_Title;
         Anchors = new MapViewModel("Anthor1", loggerFactory);

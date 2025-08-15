@@ -1,17 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
-using System.Threading.Tasks;
+using Asv.Cfg;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
+public sealed class DocumentPageViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class DocumentPageViewModel : PageViewModel<DocumentPageViewModel>
+public class DocumentPageViewModel
+    : PageViewModel<DocumentPageViewModel, DocumentPageViewModelConfig>
 {
     public const string PageId = "document";
 
     public DocumentPageViewModel()
-        : this(DesignTime.CommandService, DesignTime.LoggerFactory)
+        : this(DesignTime.CommandService, DesignTime.Configuration, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
 
@@ -19,8 +22,12 @@ public class DocumentPageViewModel : PageViewModel<DocumentPageViewModel>
     }
 
     [ImportingConstructor]
-    public DocumentPageViewModel(ICommandService cmd, ILoggerFactory loggerFactory)
-        : base(PageId, cmd, loggerFactory)
+    public DocumentPageViewModel(
+        ICommandService cmd,
+        IConfiguration cfg,
+        ILoggerFactory loggerFactory
+    )
+        : base(PageId, cmd, cfg, loggerFactory)
     {
         Title = RS.DocumentPageViewModel_Title;
     }
