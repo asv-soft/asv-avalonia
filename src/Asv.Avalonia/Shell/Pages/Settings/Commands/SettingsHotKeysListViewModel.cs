@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Input;
 using Avalonia.Threading;
@@ -9,8 +10,10 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
+public class SettingsHotKeysListViewModelConfig : TreeSubpageConfig { }
+
 [ExportSettings(PageId)]
-public class SettingsHotKeysListViewModel : SettingsSubPage
+public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListViewModelConfig>
 {
     public const string PageId = "hotkeys";
 
@@ -27,6 +30,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
             DesignTime.CommandService,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
+            DesignTime.Configuration,
             NullSearchService.Instance
         )
     {
@@ -85,9 +89,10 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
         ICommandService commandsService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
+        IConfiguration cfg,
         ISearchService searchService
     )
-        : base(PageId, loggerFactory)
+        : base(PageId, cfg, loggerFactory)
     {
         _commandsService = commandsService;
         _loggerFactory = loggerFactory;

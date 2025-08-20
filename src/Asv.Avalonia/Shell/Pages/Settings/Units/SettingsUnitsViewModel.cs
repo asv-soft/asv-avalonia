@@ -1,4 +1,5 @@
 using System.Composition;
+using Asv.Cfg;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -6,21 +7,27 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public sealed class SettingsUnitsViewModelConfig : TreeSubpageConfig { }
+
 [ExportSettings(PageId)]
-public class SettingsUnitsViewModel : SettingsSubPage
+public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConfig>
 {
     public const string PageId = "units";
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
 
     public SettingsUnitsViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(DesignTime.UnitService, DesignTime.Configuration, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public SettingsUnitsViewModel(IUnitService unit, ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public SettingsUnitsViewModel(
+        IUnitService unit,
+        IConfiguration cfg,
+        ILoggerFactory loggerFactory
+    )
+        : base(PageId, cfg, loggerFactory)
     {
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList

@@ -1,11 +1,14 @@
 ﻿using System.Composition;
+using Asv.Cfg;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
+public sealed class SettingsAppearanceViewModelConfig : TreeSubpageConfig { }
+
 [ExportSettings(PageId)]
-public class SettingsAppearanceViewModel : SettingsSubPage
+public class SettingsAppearanceViewModel : SettingsSubPage<SettingsAppearanceViewModelConfig>
 {
     public const string PageId = "appearance";
 
@@ -15,7 +18,8 @@ public class SettingsAppearanceViewModel : SettingsSubPage
         : this(
             DesignTime.ThemeService,
             DesignTime.LocalizationService,
-            null!,
+            NullDialogService.Instance,
+            DesignTime.Configuration,
             DesignTime.LoggerFactory
         )
     {
@@ -29,9 +33,10 @@ public class SettingsAppearanceViewModel : SettingsSubPage
         IThemeService themeService,
         ILocalizationService localizationService,
         IDialogService dialog,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, loggerFactory)
+        : base(PageId, cfg, loggerFactory)
     {
         Theme = new ThemeProperty(themeService, loggerFactory) { Parent = this }.DisposeItWith(
             Disposable

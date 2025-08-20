@@ -1,3 +1,4 @@
+using Asv.Cfg;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -43,10 +44,26 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     }
 }
 
-public abstract class TreeSubpage<TContext>(NavigationId id, ILoggerFactory loggerFactory)
-    : TreeSubpage(id, loggerFactory),
-        ITreeSubpage<TContext>
+public abstract class TreeSubpage<TContext, TConfig> : TreeSubpage, ITreeSubpage<TContext>
     where TContext : class, IPage
+    where TConfig : TreeSubpageConfig, new()
 {
+    protected readonly IConfiguration CfgService;
+    protected readonly TConfig Config;
+
+    public TreeSubpage(NavigationId id, IConfiguration cfg, ILoggerFactory loggerFactory)
+        : base(id, loggerFactory)
+    {
+        CfgService = cfg;
+        Config = cfg.Get<TConfig>();
+    }
+
     public abstract ValueTask Init(TContext context);
+
+    protected virtual ValueTask SaveChanges(CancellationToken cancel)
+    {
+        CfgService.Set(Config);
+
+        return ValueTask.CompletedTask;
+    }
 }
