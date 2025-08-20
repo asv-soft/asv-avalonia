@@ -36,17 +36,17 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
         Config = cfgService.Get<TConfig>();
         State = new BindableReactiveProperty<PageState>(Config.PageState);
 
-        _sub1 = State.Subscribe(_ => HasChanges.Value = true);
-        _sub2 = HasChanges.SubscribeAwait(
-            async (hasChanges, ct) =>
-            {
-                if (hasChanges)
+        _sub1 = State.Skip(1).Subscribe(_ => HasChanges.Value = true);
+        _sub2 = HasChanges
+            .Skip(1)
+            .Where(hasChanges => hasChanges)
+            .SubscribeAwait(
+                async (_, ct) =>
                 {
-                    await SafeChanges(ct);
+                    await SaveChanges(ct);
                     HasChanges.Value = false;
                 }
-            }
-        );
+            );
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
@@ -88,7 +88,7 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
     public BindableReactiveProperty<PageState> State { get; }
     public ICommand TryClose { get; }
 
-    protected virtual ValueTask SafeChanges(CancellationToken cancellationToken)
+    protected virtual ValueTask SaveChanges(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

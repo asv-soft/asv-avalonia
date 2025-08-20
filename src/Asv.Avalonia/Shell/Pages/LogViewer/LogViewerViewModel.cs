@@ -14,7 +14,12 @@ namespace Asv.Avalonia;
 
 public interface ILogViewerViewModel : IPage { }
 
-public class LogViewerViewModelConfig : PageConfig { }
+public class LogViewerViewModelConfig : PageConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+    public int Skip { get; set; } = 0;
+    public int Take { get; set; } = 50;
+}
 
 [ExportPage(PageId)]
 public class LogViewerViewModel
@@ -160,8 +165,8 @@ public class LogViewerViewModel
             .SetRoutableParent(this, Disposable)
             .DisposeItWith(Disposable);
 
-        Skip = new BindableReactiveProperty<int>(0).DisposeItWith(Disposable);
-        Take = new BindableReactiveProperty<int>(50).DisposeItWith(Disposable);
+        Skip = new BindableReactiveProperty<int>(Config.Skip).DisposeItWith(Disposable);
+        Take = new BindableReactiveProperty<int>(Config.Take).DisposeItWith(Disposable);
         FromToText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
         TextMessage = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
 
@@ -179,12 +184,22 @@ public class LogViewerViewModel
         Next = new ReactiveCommand(_ => Commands.NextPage(this)).DisposeItWith(Disposable);
         Previous = new ReactiveCommand(_ => Commands.PreviousPage(this)).DisposeItWith(Disposable);
 
+        Search.Text.Value = Config.SearchText;
         Search.Refresh();
+
+        Observable
+            .Merge(
+                Skip.Skip(1).Select(_ => Unit.Default),
+                Take.Skip(1).Select(_ => Unit.Default),
+                Search.Text.Skip(1).Select(_ => Unit.Default)
+            )
+            .Subscribe(_ => HasChanges.Value = true)
+            .DisposeItWith(Disposable);
     }
 
     public SearchBoxViewModel Search { get; }
 
-    public async Task UpdateImpl(
+    private async Task UpdateImpl(
         string? query,
         IProgress<double> progress,
         CancellationToken cancel
@@ -338,6 +353,17 @@ public class LogViewerViewModel
     }
 
     protected override void AfterLoadExtensions() { }
+
+    protected override ValueTask SaveChanges(CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        Config.SearchText = Search.Text.Value;
+        Config.Skip = Skip.Value;
+        Config.Take = Take.Value;
+
+        return base.SaveChanges(cancellationToken);
+    }
 
     public override IExportInfo Source => SystemModule.Instance;
     public INotifyCollectionChangedSynchronizedViewList<LogMessageViewModel> Items { get; }

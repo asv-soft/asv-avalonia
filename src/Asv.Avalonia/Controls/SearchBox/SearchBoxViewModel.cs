@@ -49,7 +49,7 @@ public class SearchBoxViewModel : RoutableViewModel, ISupportTextSearch, IProgre
             Text.Skip(1)
                 .Debounce(throttleTime.Value)
                 .SubscribeAwait(
-                    (x, _) => TextSearchCommand.Execute(this, x),
+                    async (x, _) => await TextSearchCommand.Execute(this, x),
                     AwaitOperation.Parallel
                 )
                 .DisposeItWith(Disposable);
