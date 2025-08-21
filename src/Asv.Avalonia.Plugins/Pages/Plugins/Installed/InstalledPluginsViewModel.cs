@@ -52,7 +52,7 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
         _loggerFactory = loggerFactory;
         _navigation = navigationService;
         _cfg = cfg;
-        Plugins = new ObservableList<ILocalPluginInfo>();
+        Plugins = [];
 
         Search = new ReactiveCommand(_ => SearchImpl());
 

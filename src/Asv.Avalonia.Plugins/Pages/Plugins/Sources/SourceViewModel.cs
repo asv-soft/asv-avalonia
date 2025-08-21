@@ -112,7 +112,7 @@ public class SourceViewModel : DialogViewModelBase
         });
     }
 
-    private ValueTask Update()
+    public ValueTask Update()
     {
         if (_viewModel != null)
         {

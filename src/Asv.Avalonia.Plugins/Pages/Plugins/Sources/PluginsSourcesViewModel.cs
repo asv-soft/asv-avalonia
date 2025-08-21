@@ -1,4 +1,6 @@
 ﻿using System.Composition;
+using Asv.Cfg;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Configuration;
@@ -9,8 +11,8 @@ using IConfiguration = Asv.Cfg.IConfiguration;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportPage(PageId)]
-public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
+[ExportSettings(PageId)]
+public class PluginsSourcesViewModel : SettingsSubPage
 {
     public const string PageId = "plugins.sources";
 
@@ -24,9 +26,9 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
+            DesignTime.Configuration,
             DesignTime.LoggerFactory,
-            DesignTime.Navigation,
-            DesignTime.DialogService
+            DesignTime.Navigation
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -57,11 +59,11 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
     public PluginsSourcesViewModel(
         ICommandService cmd,
         IPluginManager mng,
+        IConfiguration cfg,
         ILoggerFactory loggerFactory,
-        INavigationService navigationService,
-        IDialogService dialogService
+        INavigationService navigationService
     )
-        : base(PageId, cmd, loggerFactory, dialogService)
+        : base(PageId, loggerFactory)
     {
         _mng = mng;
         _navigation = navigationService;
@@ -112,6 +114,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
 
         if (result == ContentDialogResult.Primary)
         {
+            await viewModel.Update();
             _update.Execute(Unit.Default);
         }
     }
@@ -168,8 +171,6 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
     {
         return [];
     }
-
-    protected override void AfterLoadExtensions() { }
 
     public override IExportInfo Source => SystemModule.Instance;
 

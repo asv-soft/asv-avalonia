@@ -1,7 +1,9 @@
 ﻿using System.Composition;
 using Asv.Cfg;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NuGet.Packaging;
 using ObservableCollections;
 using R3;
 
@@ -11,12 +13,12 @@ namespace Asv.Avalonia.Plugins;
 public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
 {
     public const string PageId = "plugins.market";
+    public const MaterialIconKind PageIcon = MaterialIconKind.Store;
 
     private readonly IPluginManager _manager;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<PluginInfoViewModel> _plugins;
     private readonly IConfiguration _cfg;
-    private string _previouslySelectedPluginId;
 
     public PluginsMarketViewModel()
         : this(
@@ -90,28 +92,35 @@ public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
 
     private async Task SearchImpl(Unit arg, IProgress<double> progress, CancellationToken cancel)
     {
-        var items = await _manager.Search(SearchQuery.Empty, cancel);
-
-        if (SelectedPlugin.Value is not null)
+        var query = new SearchQuery
         {
-            _previouslySelectedPluginId = SelectedPlugin.Value.Id;
+            Name = string.IsNullOrWhiteSpace(SearchString.Value) ? null : SearchString.Value,
+            IncludePrerelease = true, // TODO: add BindableReactiveProperty<bool> IncludePrerelease
+            Skip = 0,
+            Take = 50,
+        };
+        foreach (var server in _manager.Servers)
+        {
+            query.Sources.Add(server.SourceUri);
         }
+        progress.Report(0);
+        var items = await _manager.Search(query, cancel);
 
+        var selectedId = SelectedPlugin.Value?.Id;
         SelectedPlugin.OnNext(null);
         _plugins.Clear();
-        var filteredItems = OnlyVerified.Value ? items.Where(item => item.IsVerified) : items;
+        var filtered = OnlyVerified.Value ? items.Where(x => x.IsVerified) : items;
         _plugins.AddRange(
-            filteredItems.Select(item => new PluginInfoViewModel(
-                $"id{item.Id}",
-                item,
+            filtered.Select(info => new PluginInfoViewModel(
+                $"id{info.Id}",
+                info,
                 _manager,
                 _loggerFactory
             ))
         );
-        SelectedPlugin.OnNext(
-            _plugins.FirstOrDefault(plugin => plugin.Id == _previouslySelectedPluginId)
-                ?? _plugins[0]
-        );
+        var first = _plugins.FirstOrDefault(x => x.Id == selectedId) ?? _plugins.FirstOrDefault();
+        SelectedPlugin.OnNext(first);
+        progress.Report(1);
     }
 
     public override ValueTask<IRoutable> Navigate(NavigationId id)
