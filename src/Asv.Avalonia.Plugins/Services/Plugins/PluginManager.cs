@@ -414,7 +414,7 @@ public class PluginManager : IPluginManager
             query.Sources.Count == 0
                 ? _repositories.ToArray()
                 : _repositories
-                    .Where(_ => query.Sources.Contains(_.PackageSource.Source))
+                    .Where(r => query.Sources.Contains(r.PackageSource.Source))
                     .ToArray();
         _repositoriesLock.ExitReadLock();
 
@@ -448,7 +448,15 @@ public class PluginManager : IPluginManager
                             _nugetLogger,
                             cancel
                         );
-                        if (dependencyInfo == null)
+                        if (
+                            !dependencyInfo.Dependencies.Any(x =>
+                                string.Equals(
+                                    x.Id,
+                                    _apiPackageId,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                        )
                         {
                             continue;
                         }

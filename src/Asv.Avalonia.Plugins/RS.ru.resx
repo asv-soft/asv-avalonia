@@ -135,4 +135,7 @@
     <data name="OpenInstalledPluginsCommand_Action_Description" xml:space="preserve">
         <value>Открыть установленные плагины</value>
     </data>
+    <data name="PluginsSourcesViewModel_Name" xml:space="preserve">
+        <value>Источники плагинов</value>
+    </data>
 </root>

@@ -1,0 +1,82 @@
+name: Build and Publish Plugin Example (github only)
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+-example.[0-9]+'
+
+env:
+  GITHUB_PACKAGES_URL: 'https://nuget.pkg.github.com/asv-soft/index.json'
+  PROJECT_NAME: 'Asv.Avalonia.Example.Plugin.PluginExample'
+  PROPS_VERSION_VAR_NAME: 'ApiVersion'
+  ARTIFACTS_DIR: 'artifacts/nuget'
+
+permissions:
+  contents: write
+  packages: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.x'
+
+      - name: Cache NuGet
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.nuget/packages
+            ~/.local/share/NuGet/v3-cache
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.sln', '**/*.csproj', '**/*.props', '**/*.targets') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
+
+      - name: Resolve version from tag
+        run: |
+          TAG="${GITHUB_REF_NAME}"
+          echo "VERSION=${TAG#v}" >> "$GITHUB_ENV"
+
+      - name: Add GitHub Packages source
+        run: |
+          dotnet nuget remove source github || true
+          dotnet nuget add source "${{ env.GITHUB_PACKAGES_URL }}" \
+            --name "github" \
+            --username "${{ github.repository_owner }}" \
+            --password "${{ secrets.GIHUB_NUGET_AUTH_TOKEN }}"
+
+      - name: Restore
+        run: dotnet restore ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj
+
+      - name: Build (Release)
+        run: |
+          dotnet build ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj \
+            -c Release --no-restore -p:ContinuousIntegrationBuild=true
+
+      - name: Pack NuGet
+        run: |
+          mkdir -p "${{ env.ARTIFACTS_DIR }}"
+          dotnet pack ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj \
+            -c Release --no-build --no-restore \
+            -p:PackageVersion="${{ env.VERSION }}" \
+            -p:${{ env.PROPS_VERSION_VAR_NAME }}="${{ env.VERSION }}" \
+            -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg \
+            -p:RepositoryUrl="https://github.com/${{ github.repository }}" \
+            -p:RepositoryCommit="${{ github.sha }}" \
+            -o "${{ env.ARTIFACTS_DIR }}"
+
+      - name: Publish to GitHub Packages
+        run: |
+          dotnet nuget push "${{ env.ARTIFACTS_DIR }}/*.nupkg" \
+            --source "github" \
+            --api-key "${{ secrets.GIHUB_NUGET_AUTH_TOKEN }}" \
+            --skip-duplicate
+          dotnet nuget push "${{ env.ARTIFACTS_DIR }}/*.snupkg" \
+            --source "github" \
+            --api-key "${{ secrets.GIHUB_NUGET_AUTH_TOKEN }}" \
+            --skip-duplicate
