@@ -11,11 +11,8 @@ using IConfiguration = Asv.Cfg.IConfiguration;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class PluginsSourcesViewModelConfig : PageConfig { }
-
-[ExportPage(PageId)]
-public class PluginsSourcesViewModel
-    : PageViewModel<PluginsSourcesViewModel, PluginsSourcesViewModelConfig>
+[ExportSettings(PageId)]
+public class PluginsSourcesViewModel : SettingsSubPage
 {
     public const string PageId = "plugins.sources";
 
@@ -66,7 +63,7 @@ public class PluginsSourcesViewModel
         ILoggerFactory loggerFactory,
         INavigationService navigationService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, loggerFactory)
     {
         _mng = mng;
         _navigation = navigationService;
@@ -117,6 +114,7 @@ public class PluginsSourcesViewModel
 
         if (result == ContentDialogResult.Primary)
         {
+            await viewModel.Update();
             _update.Execute(Unit.Default);
         }
     }
@@ -173,8 +171,6 @@ public class PluginsSourcesViewModel
     {
         return [];
     }
-
-    protected override void AfterLoadExtensions() { }
 
     public override IExportInfo Source => SystemModule.Instance;
 
