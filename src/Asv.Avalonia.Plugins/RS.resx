@@ -18,123 +18,175 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="InstalledPluginsView_Search" xml:space="preserve">
-        <value>Search</value>
-    </data>
-    <data name="InstalledPluginsView_Uninstalled" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Uninstalled" xml:space="preserve">
         <value>Uninstalled</value>
     </data>
-    <data name="InstalledPluginsView_LoadingError" xml:space="preserve">
+    <data name="InstalledPluginsInfoDataTemplate_LoadingError_Text" xml:space="preserve">
         <value>Loading error</value>
     </data>
-    <data name="InstalledPluginsView_Uninstall" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Uninstall" xml:space="preserve">
         <value>Uninstall</value>
     </data>
-    <data name="InstalledPluginsView_UninstalledMessageTitle" xml:space="preserve">
+    <data name="InstalledPluginsPageView_UninstalledMessageTitle" xml:space="preserve">
         <value>Uninstalled</value>
     </data>
-    <data name="InstalledPluginsView_UninstalledMessage" xml:space="preserve">
+    <data name="InstalledPluginsPageView_UninstalledMessage" xml:space="preserve">
         <value>This plugin has been marked for deletion. It will be removed on the next application load.</value>
     </data>
-    <data name="InstalledPluginsView_CancelUninstall" xml:space="preserve">
+    <data name="InstalledPluginsPageView_CancelUninstall" xml:space="preserve">
         <value>Cancel</value>
     </data>
-       <data name="InstalledPluginsView_Tab_Description" xml:space="preserve">
+       <data name="InstalledPluginsPageView_Tab_Description" xml:space="preserve">
         <value>Description</value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo" xml:space="preserve">
         <value>Additional info</value>
     </data>
-       <data name="PluginsMarketView_ToggleSwitch_OnlyVerified" xml:space="preserve">
+       <data name="PluginsMarketPageView_ToggleSwitch_OnlyVerified" xml:space="preserve">
         <value>Only verified</value>
     </data>
-     <data name="PluginsMarketView_InfoBar_IsVerified_Message" xml:space="preserve">
+     <data name="PluginsMarketPageView_InfoBar_IsVerified_Message" xml:space="preserve">
         <value>This plugin is verified by developers</value>
     </data>
-      <data name="InstalledPluginsView_SelectedPluginIsNull" xml:space="preserve">
+      <data name="InstalledPluginsPageView_SelectedPluginIsNull" xml:space="preserve">
         <value>Please select plugin</value>
     </data>
-      <data name="PluginInstallerViewModel_InstallDialog_Title" xml:space="preserve">
-        <value>Plugin Installer</value>
-    </data>
-    <data name="PluginInstallerViewModel_InstallPluginAsync_Success" xml:space="preserve">
-        <value>Plugin installed successfully</value>
-    </data>
-      <data name="PluginsMarketView_Install" xml:space="preserve">
+    <data name="PluginsMarketPageView_Install" xml:space="preserve">
         <value>Install</value>
     </data>
-    <data name="PluginsMarketView_SelectedPluginIsNull" xml:space="preserve">
+    <data name="PluginsMarketPageView_SelectedPluginIsNull" xml:space="preserve">
         <value>Please select plugin</value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_Dependencies" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Dependencies" xml:space="preserve">
         <value>Dependencies: </value>
     </data>
-    <data name="InstalledPluginsView_AllVersions" xml:space="preserve">
+    <data name="InstalledPluginsPageView_AllVersions" xml:space="preserve">
         <value>All versions</value>
     </data>
-    <data name="PluginsMarketView_Cancel" xml:space="preserve">
-        <value>Cancel</value>
-    </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_Author" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Author" xml:space="preserve">
         <value>Author: </value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_DownloadCount" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_DownloadCount" xml:space="preserve">
         <value>Downloads: </value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_Tags" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Tags" xml:space="preserve">
         <value>Tags: </value>
     </data>
-    <data name="SourceViewModel_NameValidation_NameIsRequired" xml:space="preserve">
+    <data name="SourceDialogViewModel_NameValidation_NameIsRequired" xml:space="preserve">
         <value>Name is required</value>
     </data>
-    <data name="SourceViewModel_SourceUriValidation_SourceUriIsRequired" xml:space="preserve">
+    <data name="SourceDialogViewModel_SourceUriValidation_SourceUriIsRequired" xml:space="preserve">
         <value>Server URI is required</value>
     </data>
-    <data name="PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate" xml:space="preserve">
-        <value>Error to update plugin server list</value>
-    </data>
-    <data name="PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove" xml:space="preserve">
-        <value>Error to remove plugin server</value>
-    </data>
-    <data name="PluginsSourcesViewModel_AddImpl_Title" xml:space="preserve">
+    <data name="SettingsPluginsSourcesViewModel_AddDialog_Title" xml:space="preserve">
         <value>Add new plugin source</value>
     </data>
-    <data name="PluginsSourcesViewModel_AddImpl_Add" xml:space="preserve">
+    <data name="SettingsPluginsSourcesViewModel_AddDialog_PrimaryButtonText" xml:space="preserve">
         <value>Add</value>
     </data>
-    <data name="PluginsSourcesViewModel_AddImpl_Cancel" xml:space="preserve">
-        <value>Cancel</value>
-    </data>
-    <data name="PluginsSourcesViewModel_EditImpl_Title" xml:space="preserve">
+    <data name="PluginsSourceViewModel_EditDialog_Title" xml:space="preserve">
         <value>Edit plugin source</value>
     </data>
-    <data name="PluginsSourcesViewModel_EditImpl_Save" xml:space="preserve">
+    <data name="PluginsSourceViewModel_EditDialog_PrimaryButtonText" xml:space="preserve">
         <value>Save</value>
     </data>
-    <data name="PluginsSourcesViewModel_AddAction_Label" xml:space="preserve">
-        <value>Add</value>
-    </data>
-    <data name="SourcesView_Name" xml:space="preserve">
+    <data name="SourcesDialogView_Name" xml:space="preserve">
         <value>Name</value>
     </data>
-    <data name="SourcesView_URL" xml:space="preserve">
+    <data name="SourcesDialogView_URL" xml:space="preserve">
         <value>URL Address</value>
     </data>
-    <data name="SourcesView_Username" xml:space="preserve">
+    <data name="SourcesDialogView_Username" xml:space="preserve">
         <value>Username</value>
     </data>
-    <data name="SourcesView_Password" xml:space="preserve">
+    <data name="SourcesDialogView_Password" xml:space="preserve">
         <value>New password</value>
-    </data>
-    <data name="PluginInstallerViewModel_InstallDialog_SecondaryButtonText" xml:space="preserve">
-        <value>Cancel</value></data>
-    <data name="PluginInstallerViewModel_InstallDialog_PrimaryButtonText" xml:space="preserve">
-        <value>Install</value>
     </data>
     <data name="OpenInstalledPluginsCommand_Action_Title" xml:space="preserve">
         <value>Installed Plugins</value>
     </data>
     <data name="OpenInstalledPluginsCommand_Action_Description" xml:space="preserve">
-        <value>Open Installed Plagins</value>
+        <value>Open Installed Plugins</value>
+    </data>
+    <data name="SettingsPluginsSourcesViewModel_Name" xml:space="preserve">
+        <value>Plugins Sources</value>
+    </data>
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Source" xml:space="preserve">
+        <value>Source: </value>
+    </data>
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Version" xml:space="preserve">
+        <value>Version: </value>
+    </data>
+    <data name="OpenPluginsMarketCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open Plugins Market</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command opens plugins market page</value>
+    </data>
+    <data name="InstalledPluginsPageViewModel_Title" xml:space="preserve">
+        <value>Installed Plugins</value>
+    </data>
+    <data name="InstalledPluginsPageViewModel_IntallManuallyDialog_Title" xml:space="preserve">
+        <value>Select plugin to install</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open Installed Plugins</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command opens intalled plugins page</value>
+    </data>
+    <data name="InstalledPluginsPageView_InfoBarLoadingError_Title" xml:space="preserve">
+        <value>Loading Error</value>
+    </data>
+    <data name="PluginsMarketPageViewModel_Title" xml:space="preserve">
+        <value>Plugins Market</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Title" xml:space="preserve">
+        <value>Plugins Market</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Description" xml:space="preserve">
+        <value>Open plugins market page</value>
+    </data>
+    <data name="SettingsPluginsSourcesViewModel_MenuItem_Add_Title" xml:space="preserve">
+        <value>Add Source</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_NameColumn_Header" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_UriColumn_Header" xml:space="preserve">
+        <value>Uri</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_EditColumn_Header" xml:space="preserve">
+        <value>Edit</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_DeleteColumn_Header" xml:space="preserve">
+        <value>Delete</value>
+    </data>
+    <data name="PluginsSourceViewModel_RemoveDialog_Title" xml:space="preserve">
+        <value>Delete Source</value>
+    </data>
+    <data name="PluginsSourceViewModel_RemoveDialog_Message" xml:space="preserve">
+        <value>Are you sure you want to delete this source?</value>
+    </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Add plugins' source</value>
+    </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command adds source for plugins</value>
+    </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Edit plugins' source</value>
+    </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command edits source for plugins</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Delete plugins' source</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command deletes source for plugins</value>
+    </data>
+    <data name="PluginInfoViewModel_InstallCommand_Title" xml:space="preserve">
+        <value>Installing...</value>
     </data>
 </root>

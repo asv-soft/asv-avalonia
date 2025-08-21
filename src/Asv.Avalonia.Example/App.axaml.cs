@@ -52,8 +52,7 @@ public class App : Application, IContainerHost, IShellHost
         else
         {
             // TODO: use it when plugin manager implementation will be finished
-            // var pluginManager = AppHost.Instance.GetService<IPluginManager>();
-            var logReader = AppHost.Instance.GetService<ILogReaderService>();
+            var pluginManager = AppHost.Instance.GetService<IPluginManager>();
 
             containerCfg
                 .WithExport<IContainerHost>(this)
@@ -64,15 +63,16 @@ public class App : Application, IContainerHost, IShellHost
                 .WithExport(AppHost.Instance.GetService<IMeterFactory>())
                 .WithExport(AppHost.Instance.GetService<ISoloRunFeature>())
                 .WithExport(TimeProvider.System)
-                .WithExport(logReader)
+                .WithExport(AppHost.Instance.GetService<ILogReaderService>())
+                .WithExport(pluginManager)
                 .WithExport<IDataTemplateHost>(this)
                 .WithExport<IShellHost>(this)
-                .WithDefaultConventions(conventions);
+                .WithDefaultConventions(conventions)
+                .WithAssemblies(pluginManager.PluginsAssemblies.Distinct())
+                .WithAssemblies(PluginManagerModule.Assemblies);
         }
 
         containerCfg = containerCfg.WithAssemblies(DefaultAssemblies.Distinct());
-
-        // TODO: load plugin manager before creating container
         _container = containerCfg.CreateContainer();
         DataTemplates.Add(new CompositionViewLocator(_container));
         if (!Design.IsDesignMode)
@@ -90,9 +90,6 @@ public class App : Application, IContainerHost, IShellHost
             yield return typeof(GeoMapModule).Assembly; // Asv.Avalonia.GeoMap
             yield return typeof(ApiModule).Assembly; // Asv.Avalonia.Example.Api
             yield return typeof(IoModule).Assembly; // Asv.Avalonia.IO
-
-            // TODO: use it when plugin manager implementation will be finished
-            // yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
         }
     }
 

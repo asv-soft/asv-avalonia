@@ -11,122 +11,90 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="InstalledPluginsView_Search" xml:space="preserve">
-        <value>Поиск</value>
-    </data>
-    <data name="InstalledPluginsView_Uninstalled" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Uninstalled" xml:space="preserve">
         <value>Удален</value>
     </data>
-    <data name="InstalledPluginsView_LoadingError" xml:space="preserve">
+    <data name="InstalledPluginsInfoDataTemplate_LoadingError_Text" xml:space="preserve">
         <value>Ошибка загрузки</value>
     </data>
-    <data name="InstalledPluginsView_Uninstall" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Uninstall" xml:space="preserve">
         <value>Удалить</value>
     </data>
-    <data name="InstalledPluginsView_UninstalledMessage" xml:space="preserve">
+    <data name="InstalledPluginsPageView_UninstalledMessage" xml:space="preserve">
         <value>Этот плагин был отмечен для удаления. Он будет удален при следующей загрузке приложения.</value>
     </data>
-    <data name="InstalledPluginsView_UninstalledMessageTitle" xml:space="preserve">
+    <data name="InstalledPluginsPageView_UninstalledMessageTitle" xml:space="preserve">
         <value>Удален</value>
     </data>
 
-    <data name="InstalledPluginsView_CancelUninstall" xml:space="preserve">
+    <data name="InstalledPluginsPageView_CancelUninstall" xml:space="preserve">
         <value>Отменить</value></data>
-    <data name="InstalledPluginsView_Tab_Description" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_Description" xml:space="preserve">
         <value>Описание</value></data>
-        <data name="InstalledPluginsView_Tab_AdditionalInfo" xml:space="preserve">
+        <data name="InstalledPluginsPageView_Tab_AdditionalInfo" xml:space="preserve">
         <value>Дополнительно</value>
     </data>
     
-    <data name="PluginsMarketView_ToggleSwitch_OnlyVerified" xml:space="preserve">
+    <data name="PluginsMarketPageView_ToggleSwitch_OnlyVerified" xml:space="preserve">
         <value>Только проверенные</value>
     </data>
     
-    <data name="PluginsMarketView_InfoBar_IsVerified_Message" xml:space="preserve">
+    <data name="PluginsMarketPageView_InfoBar_IsVerified_Message" xml:space="preserve">
         <value>Этот плагин проверен разработчиками</value>
     </data>
     
-    <data name="InstalledPluginsView_SelectedPluginIsNull" xml:space="preserve">
+    <data name="InstalledPluginsPageView_SelectedPluginIsNull" xml:space="preserve">
         <value>Пожалуйста, выберите плагин</value>
     </data>
-    
-    <data name="PluginInstallerViewModel_InstallDialog_PrimaryButtonText" xml:space="preserve">
+    <data name="PluginsMarketPageView_Install" xml:space="preserve">
         <value>Установить</value>
     </data>
-    
-    <data name="PluginInstallerViewModel_InstallDialog_SecondaryButtonText" xml:space="preserve">
-        <value>Отменить</value></data>
-        <data name="PluginInstallerViewModel_InstallDialog_Title" xml:space="preserve">
-        <value>Установщик плагинов</value>
-    </data>
-    <data name="PluginInstallerViewModel_InstallPluginAsync_Success" xml:space="preserve">
-        <value>Плагин успешно установлен</value>
-    </data>
-   
-    <data name="PluginsMarketView_Install" xml:space="preserve">
-        <value>Установить</value>
-    </data>
-    <data name="PluginsMarketView_SelectedPluginIsNull" xml:space="preserve">
+    <data name="PluginsMarketPageView_SelectedPluginIsNull" xml:space="preserve">
         <value>Пожалуйста, выберите плагин</value>
     </data>
-    <data name="InstalledPluginsView_AllVersions" xml:space="preserve">
+    <data name="InstalledPluginsPageView_AllVersions" xml:space="preserve">
         <value>Все версии</value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_Tags" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Tags" xml:space="preserve">
         <value>Теги: </value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_DownloadCount" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_DownloadCount" xml:space="preserve">
         <value>Загрузки: </value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_Dependencies" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Dependencies" xml:space="preserve">
         <value>Зависимости: </value>
     </data>
-    <data name="InstalledPluginsView_Tab_AdditionalInfo_Author" xml:space="preserve">
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Author" xml:space="preserve">
         <value>Автор: </value>
     </data>
-    <data name="PluginsMarketView_Cancel" xml:space="preserve">
-        <value>Отмена</value>
-    </data>
-    <data name="SourceViewModel_NameValidation_NameIsRequired" xml:space="preserve">
+    <data name="SourceDialogViewModel_NameValidation_NameIsRequired" xml:space="preserve">
         <value>Имя не должно быть пустым</value>
     </data>
-    <data name="SourceViewModel_SourceUriValidation_SourceUriIsRequired" xml:space="preserve">
+    <data name="SourceDialogViewModel_SourceUriValidation_SourceUriIsRequired" xml:space="preserve">
         <value>URI сервера не может быть пустым</value>
     </data>
-    <data name="PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate" xml:space="preserve">
-        <value>Ошибка обновления списка серверов плагина</value>
-    </data>
-    <data name="PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove" xml:space="preserve">
-        <value>Ошибка удаления сервера</value>
-    </data>
-    <data name="PluginsSourcesViewModel_EditImpl_Title" xml:space="preserve">
+    <data name="PluginsSourceViewModel_EditDialog_Title" xml:space="preserve">
         <value>Редактриовать сервер</value>
     </data>
-    <data name="PluginsSourcesViewModel_EditImpl_Save" xml:space="preserve">
+    <data name="PluginsSourceViewModel_EditDialog_PrimaryButtonText" xml:space="preserve">
         <value>Сохранить</value>
     </data>
-    <data name="PluginsSourcesViewModel_AddImpl_Title" xml:space="preserve">
+    <data name="SettingsPluginsSourcesViewModel_AddDialog_Title" xml:space="preserve">
         <value>Добавить новый сервер</value>
     </data>
-    <data name="PluginsSourcesViewModel_AddImpl_Cancel" xml:space="preserve">
-        <value>Отменить</value>
-    </data>
-    <data name="PluginsSourcesViewModel_AddImpl_Add" xml:space="preserve">
+    <data name="SettingsPluginsSourcesViewModel_AddDialog_PrimaryButtonText" xml:space="preserve">
         <value>Добавить</value>
     </data>
-    <data name="PluginsSourcesViewModel_AddAction_Label" xml:space="preserve">
-        <value>Добавить</value>
-    </data>
-    <data name="SourcesView_Name" xml:space="preserve">
+    <data name="SourcesDialogView_Name" xml:space="preserve">
         <value>Имя</value>
     </data>
-    <data name="SourcesView_Password" xml:space="preserve">
+    <data name="SourcesDialogView_Password" xml:space="preserve">
         <value>Новый пароль</value>
     </data>
-    <data name="SourcesView_URL" xml:space="preserve">
+    <data name="SourcesDialogView_URL" xml:space="preserve">
         <value>Адрес URL</value>
     </data>
-    <data name="SourcesView_Username" xml:space="preserve">
+    <data name="SourcesDialogView_Username" xml:space="preserve">
         <value>Имя пользователя</value>
     </data>
     <data name="OpenInstalledPluginsCommand_Action_Title" xml:space="preserve">
@@ -134,5 +102,86 @@
     </data>
     <data name="OpenInstalledPluginsCommand_Action_Description" xml:space="preserve">
         <value>Открыть установленные плагины</value>
+    </data>
+    <data name="SettingsPluginsSourcesViewModel_Name" xml:space="preserve">
+        <value>Источники плагинов</value>
+    </data>
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Source" xml:space="preserve">
+        <value>Источник: </value>
+    </data>
+    <data name="InstalledPluginsPageView_Tab_AdditionalInfo_Version" xml:space="preserve">
+        <value>Версия: </value>
+    </data>
+    <data name="OpenPluginsMarketCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда открывает магазин плагинов</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Открыть магазин плагинов</value>
+    </data>
+    <data name="InstalledPluginsPageViewModel_Title" xml:space="preserve">
+        <value>Установленные плагины</value>
+    </data>
+    <data name="InstalledPluginsPageViewModel_IntallManuallyDialog_Title" xml:space="preserve">
+        <value>Выберите плагин для установки</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Открыть установленные плагины</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда открывает страницу установленных плагинов</value>
+    </data>
+    <data name="InstalledPluginsPageView_InfoBarLoadingError_Title" xml:space="preserve">
+        <value>Ошибка загрузки</value>
+    </data>
+    <data name="PluginsMarketPageViewModel_Title" xml:space="preserve">
+        <value>Магазин плагинов</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Title" xml:space="preserve">
+        <value>Магазин плагинов</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Description" xml:space="preserve">
+        <value>Открыть страницу магазина плагинов</value>
+    </data>
+    <data name="SettingsPluginsSourcesViewModel_MenuItem_Add_Title" xml:space="preserve">
+        <value>Добавить источник</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_NameColumn_Header" xml:space="preserve">
+        <value>Имя</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_UriColumn_Header" xml:space="preserve">
+        <value>Адрес</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_DeleteColumn_Header" xml:space="preserve">
+        <value>Удалить</value>
+    </data>
+    <data name="SettingsPluginsSourcesView_EditColumn_Header" xml:space="preserve">
+        <value>Редактировать</value>
+    </data>
+    <data name="PluginsSourceViewModel_RemoveDialog_Message" xml:space="preserve">
+        <value>Вы уверены, что хотите удалить этот источник?</value>
+    </data>
+    <data name="PluginsSourceViewModel_RemoveDialog_Title" xml:space="preserve">
+        <value>Удалить источник</value>
+    </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Изменить источник плагинов</value>
+    </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда изменяет источник плагинов</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Удалить источник плагинов</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда удаляет источник плагинов</value>
+    </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Добавить источник плагинов</value>
+    </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда добавляет источник плагинов</value>
+    </data>
+    <data name="PluginInfoViewModel_InstallCommand_Title" xml:space="preserve">
+        <value>Установка...</value>
     </data>
 </root>

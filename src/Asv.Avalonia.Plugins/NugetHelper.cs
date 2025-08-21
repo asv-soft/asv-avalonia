@@ -9,7 +9,7 @@ using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
 using NuGet.Resolver;
 
-namespace Asv.Avalonia;
+namespace Asv.Avalonia.Plugins;
 
 public static class NugetHelper
 {
@@ -20,16 +20,59 @@ public static class NugetHelper
     );
 
     public static readonly HashSet<string> IncludedPackages = LoadDependencies();
-    public static readonly NuGetFramework DefaultFramework = NuGetFramework.ParseFrameworkName(
-        Assembly
+    public static readonly NuGetFramework DefaultFramework = CreateDefaultFramework();
+
+    private static NuGetFramework CreateDefaultFramework()
+    {
+        var nameProvider = new DefaultFrameworkNameProvider();
+
+        foreach (var frameworkName in EnumerateFrameworkCandidates())
+        {
+            if (string.IsNullOrWhiteSpace(frameworkName))
+            {
+                continue;
+            }
+
+            try
+            {
+                var framework = frameworkName.Contains(',')
+                    ? NuGetFramework.ParseFrameworkName(frameworkName, nameProvider)
+                    : NuGetFramework.ParseFolder(frameworkName);
+
+                if (!NuGetFramework.UnsupportedFramework.Equals(framework))
+                {
+                    return framework;
+                }
+            }
+            catch
+            {
+                // Ignore parsing errors and try the next candidate.
+            }
+        }
+
+        return NuGetFramework.AnyFramework;
+    }
+
+    private static IEnumerable<string?> EnumerateFrameworkCandidates()
+    {
+        yield return Assembly
+            .GetEntryAssembly()
+            ?.GetCustomAttribute<TargetFrameworkAttribute>()
+            ?.FrameworkName;
+
+        yield return typeof(NugetHelper)
+            .Assembly.GetCustomAttribute<TargetFrameworkAttribute>()
+            ?.FrameworkName;
+
+        yield return Assembly
             .GetExecutingAssembly()
             .GetCustomAttribute<TargetFrameworkAttribute>()
-            ?.FrameworkName
-            ?? new DirectoryInfo(
-                AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar)
-            ).Name,
-        new DefaultFrameworkNameProvider()
-    );
+            ?.FrameworkName;
+
+        yield return new DirectoryInfo(
+            AppDomain.CurrentDomain.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar)
+        ).Name;
+    }
 
     public static async Task<IReadOnlyList<SourcePackageDependencyInfo>> ListAllDependencies(
         IEnumerable<SourceRepository> repositories,
@@ -138,6 +181,21 @@ public static class NugetHelper
                 );
             }
         }
+    }
+
+    public static bool IsPathToNugetFile(string path)
+    {
+        if (!Path.HasExtension(path))
+        {
+            return false;
+        }
+
+        if (!Path.GetExtension(path).Equals(".nupkg", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     public static async Task<string> DownloadPackage(
