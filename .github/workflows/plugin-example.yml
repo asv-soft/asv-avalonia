@@ -48,7 +48,8 @@ jobs:
           dotnet nuget add source "${{ env.GITHUB_PACKAGES_URL }}" \
             --name "github" \
             --username "${{ github.repository_owner }}" \
-            --password "${{ secrets.GIHUB_NUGET_AUTH_TOKEN }}"
+            --password "${{ secrets.GIHUB_NUGET_AUTH_TOKEN }}" \
+            --store-password-in-clear-text
 
       - name: Restore
         run: dotnet restore ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj
