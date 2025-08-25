@@ -12,12 +12,15 @@ public abstract class PageConfig()
     public PageState PageState { get; set; } = PageState.Tab;
 }
 
-public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TContext>, IPage
+public abstract class PageViewModel<TContext, TConfig>
+    : ExtendableViewModel<TContext>,
+        IPage,
+        IConfigurable<TConfig>
     where TContext : class, IPage
     where TConfig : PageConfig, new()
 {
-    protected readonly IConfiguration CfgService;
-    protected readonly TConfig Config;
+    public IConfiguration CfgService { get; init; }
+    public TConfig Config { get; init; }
 
     protected PageViewModel(
         NavigationId id,
@@ -88,7 +91,7 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
     public BindableReactiveProperty<PageState> State { get; }
     public ICommand TryClose { get; }
 
-    protected virtual ValueTask SaveChanges(CancellationToken cancellationToken)
+    public virtual ValueTask SaveChanges(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

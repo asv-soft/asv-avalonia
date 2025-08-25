@@ -137,7 +137,7 @@ public class SettingsConnectionViewModel
     public IPortViewModel? SelectedItem
     {
         get => _selectedItem;
-        set { SetField(ref _selectedItem, value); }
+        set => SetField(ref _selectedItem, value);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IPortViewModel> View { get; }

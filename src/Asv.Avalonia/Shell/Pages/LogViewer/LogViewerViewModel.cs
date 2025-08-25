@@ -354,7 +354,7 @@ public class LogViewerViewModel
 
     protected override void AfterLoadExtensions() { }
 
-    protected override ValueTask SaveChanges(CancellationToken cancellationToken)
+    public override ValueTask SaveChanges(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 

@@ -7,7 +7,10 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class SettingsUnitsViewModelConfig : TreeSubpageConfig { }
+public sealed class SettingsUnitsViewModelConfig : TreeSubpageConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+}
 
 [ExportSettings(PageId)]
 public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConfig>
@@ -48,7 +51,13 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
+        Search.Text.Value = Config.SearchText;
         Search.Refresh();
+
+        Observable
+            .Merge(Search.Text.Skip(1).Select(_ => Unit.Default))
+            .Subscribe(_ => HasChanges.Value = true)
+            .DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
@@ -95,6 +104,12 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
         }
 
         base.GetRoutableChildren();
+    }
+
+    public override ValueTask SaveChanges(CancellationToken cancellationToken)
+    {
+        Config.SearchText = Search.Text.CurrentValue;
+        return base.SaveChanges(cancellationToken);
     }
 
     public override IExportInfo Source => SystemModule.Instance;
