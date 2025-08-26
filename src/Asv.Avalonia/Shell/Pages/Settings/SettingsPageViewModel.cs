@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public sealed class SettingsPageViewModelConfig : PageConfig { }
+public sealed class SettingsPageViewModelConfig : TreePageViewModelConfig { }
 
 [ExportPage(PageId)]
 public class SettingsPageViewModel

@@ -6,12 +6,17 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public class TreePageViewModelConfig : PageConfig
+{
+    public string SelectedNodeId { get; set; } = string.Empty;
+}
+
 public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
     : PageViewModel<TContext, TConfig>,
         IDesignTimeTreePage
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
-    where TConfig : PageConfig, new()
+    where TConfig : TreePageViewModelConfig, new()
 {
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
     private readonly IContainerHost _container;
@@ -45,6 +50,32 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
         SelectedNode.SubscribeAwait(SelectedNodeChanged).DisposeItWith(Disposable);
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).DisposeItWith(Disposable);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).DisposeItWith(Disposable);
+
+        _sub1 = Nodes
+            .ObserveAdd()
+            .Subscribe(addEvent =>
+            {
+                if (addEvent.Value.Id != Config.SelectedNodeId)
+                {
+                    return;
+                }
+
+                var selectedNode = TreeView.FindNode(x =>
+                    x.Base.NavigateTo == Config.SelectedNodeId
+                );
+                if (selectedNode is null)
+                {
+                    return;
+                }
+
+                SelectedNode.Value = selectedNode;
+                _sub1?.Dispose();
+            });
+
+        Observable
+            .Merge(SelectedNode.Skip(1).Select(_ => Unit.Default))
+            .Subscribe(_ => HasChanges.Value = true)
+            .DisposeItWith(Disposable);
     }
 
     #region Menu
@@ -70,7 +101,7 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
         CancellationToken cancel
     )
     {
-        if (node?.Base.NavigateTo == null || _internalNavigate)
+        if (node?.Base.NavigateTo is null || _internalNavigate)
         {
             return;
         }
@@ -159,6 +190,12 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
     >?> SelectedNode { get; }
     public ObservableList<ITreePage> Nodes { get; }
 
+    public override ValueTask SaveChanges(CancellationToken cancellationToken)
+    {
+        Config.SelectedNodeId = SelectedNode.Value?.Key.Id ?? string.Empty;
+        return base.SaveChanges(cancellationToken);
+    }
+
     protected override TContext GetContext()
     {
         return this as TContext ?? throw new InvalidOperationException("Can't cast to context");
@@ -169,13 +206,20 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
         // do nothing
     }
 
+    #region Dispose
+
+    private readonly IDisposable? _sub1;
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
+            _sub1?.Dispose();
             SelectedPage.Value?.Dispose();
         }
 
         base.Dispose(disposing);
     }
+
+    #endregion
 }

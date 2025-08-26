@@ -15,7 +15,7 @@ public interface IDesignTimeTreePage : IPage
     ReactiveCommand HideMenuCommand { get; }
 }
 
-public sealed class DesignTimeTreePageViewModelConfig : PageConfig { }
+public sealed class DesignTimeTreePageViewModelConfig : TreePageViewModelConfig { }
 
 public class DesignTimeTreePageViewModel
     : TreePageViewModel<IPage, ITreeSubpage<IPage>, DesignTimeTreePageViewModelConfig>

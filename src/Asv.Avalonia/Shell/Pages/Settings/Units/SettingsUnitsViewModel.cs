@@ -10,6 +10,7 @@ namespace Asv.Avalonia;
 public sealed class SettingsUnitsViewModelConfig : TreeSubpageConfig
 {
     public string SearchText { get; set; } = string.Empty;
+    public string SelectedUnitId { get; set; } = string.Empty;
 }
 
 [ExportSettings(PageId)]
@@ -38,9 +39,16 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
+
         SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(
             Disposable
         );
+
+        var selectedUnit = _view.FirstOrDefault(u => u.Id == Config.SelectedUnitId);
+        if (selectedUnit is not null)
+        {
+            SelectedItem.OnNext(selectedUnit);
+        }
 
         Search = new SearchBoxViewModel(
             nameof(Search),
@@ -55,7 +63,10 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
         Search.Refresh();
 
         Observable
-            .Merge(Search.Text.Skip(1).Select(_ => Unit.Default))
+            .Merge(
+                Search.Text.Skip(1).Select(_ => Unit.Default),
+                SelectedItem.Skip(1).Select(_ => Unit.Default)
+            )
             .Subscribe(_ => HasChanges.Value = true)
             .DisposeItWith(Disposable);
     }
@@ -109,6 +120,7 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
     public override ValueTask SaveChanges(CancellationToken cancellationToken)
     {
         Config.SearchText = Search.Text.CurrentValue;
+        Config.SelectedUnitId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
         return base.SaveChanges(cancellationToken);
     }
 
