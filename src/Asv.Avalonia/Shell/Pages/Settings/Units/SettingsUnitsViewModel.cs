@@ -95,18 +95,6 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
         return Task.CompletedTask;
     }
 
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
-    {
-        var item = _view.FirstOrDefault(x => x.Id == id);
-        if (item != null)
-        {
-            SelectedItem.Value = item;
-            return ValueTask.FromResult<IRoutable>(item);
-        }
-
-        return base.Navigate(id);
-    }
-
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         foreach (var model in _view)
@@ -114,13 +102,16 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
             yield return model;
         }
 
-        base.GetRoutableChildren();
+        foreach (var children in base.GetRoutableChildren())
+        {
+            yield return children;
+        }
     }
 
     public override ValueTask SaveChanges(CancellationToken cancellationToken)
     {
         Config.SearchText = Search.Text.CurrentValue;
-        Config.SelectedUnitId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+        Config.SelectedUnitId = SelectedItem.Value.Id.ToString();
         return base.SaveChanges(cancellationToken);
     }
 

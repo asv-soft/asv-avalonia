@@ -48,8 +48,12 @@
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox IsDropDownOpen="True" HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding Base.AvailableUnits.Values}" 
-                                      SelectedItem="{Binding SelectedItem.Value}" >
+                            <ComboBox
+                                IsDropDownOpen="True" 
+                                HorizontalAlignment="Stretch" 
+                                VerticalAlignment="Center" 
+                                ItemsSource="{Binding Base.AvailableUnits.Values}" 
+                                SelectedItem="{Binding SelectedItem.Value}" >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock VerticalAlignment="Center">

@@ -41,7 +41,7 @@ public class NullCommandService : ICommandService
         // Do nothing
     }
 
-    public void SetHotKey(string commandId, HotKeyInfo hotKey)
+    public void SetHotKey(string commandId, HotKeyInfo? hotKey)
     {
         // Do nothing
     }

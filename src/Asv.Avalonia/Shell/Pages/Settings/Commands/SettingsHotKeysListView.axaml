@@ -28,12 +28,13 @@
         </Grid>
         <DataGrid Grid.Row="1" 
                   ItemsSource="{Binding Items}"
+                  Focusable="False"
                   AutoGenerateColumns="False"
                   IsReadOnly="False"
                   ColumnWidth="Auto"
                   CanUserResizeColumns="True"
                   SelectionMode="Single"
-                  SelectedItem="{Binding SelectedItem}">
+                  SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Columns>
                 
                 <!-- Conflict indicator icon -->
@@ -67,7 +68,8 @@
                             <SelectableTextBlock SelectionStart="{Binding NameSelection.Start}"
                                                  SelectionEnd="{Binding NameSelection.Stop}"
                                                  Text="{Binding Name}"
-                                                 VerticalAlignment="Center"/>
+                                                 VerticalAlignment="Center"
+                                                 IsHitTestVisible="False"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
