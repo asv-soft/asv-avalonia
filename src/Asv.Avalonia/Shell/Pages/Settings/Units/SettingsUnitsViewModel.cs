@@ -40,7 +40,7 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
 
-        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(
+        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel?>().DisposeItWith(
             Disposable
         );
 
@@ -73,7 +73,7 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
 
-    public BindableReactiveProperty<MeasureUnitViewModel> SelectedItem { get; }
+    public BindableReactiveProperty<MeasureUnitViewModel?> SelectedItem { get; }
 
     public SearchBoxViewModel Search { get; }
 
@@ -111,7 +111,7 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
     public override ValueTask SaveChanges(CancellationToken cancellationToken)
     {
         Config.SearchText = Search.Text.CurrentValue;
-        Config.SelectedUnitId = SelectedItem.Value.Id.ToString();
+        Config.SelectedUnitId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
         return base.SaveChanges(cancellationToken);
     }
 

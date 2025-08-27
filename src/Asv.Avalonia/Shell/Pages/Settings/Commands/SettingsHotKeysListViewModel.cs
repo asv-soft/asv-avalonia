@@ -25,8 +25,6 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
     private readonly ObservableList<ICommandInfo> _itemsSource;
     private readonly ISynchronizedView<ICommandInfo, HotKeyViewModel> _view;
 
-    #region Design
-
     public SettingsHotKeysListViewModel()
         : this(
             DesignTime.CommandService,
@@ -38,8 +36,6 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
     {
         DesignTime.ThrowIfNotDesignMode();
     }
-
-    #endregion
 
     [ImportingConstructor]
     public SettingsHotKeysListViewModel(
@@ -56,7 +52,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
         _dialogService = dialogService;
         _searchService = searchService;
 
-        SelectedItem = new BindableReactiveProperty<HotKeyViewModel>().DisposeItWith(Disposable);
+        SelectedItem = new BindableReactiveProperty<HotKeyViewModel?>().DisposeItWith(Disposable);
 
         Search = new SearchBoxViewModel(
             nameof(Search),
@@ -102,7 +98,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
     }
 
     public SearchBoxViewModel Search { get; }
-    public BindableReactiveProperty<HotKeyViewModel> SelectedItem { get; }
+    public BindableReactiveProperty<HotKeyViewModel?> SelectedItem { get; }
     public INotifyCollectionChangedSynchronizedViewList<HotKeyViewModel> Items { get; }
 
     private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
@@ -137,7 +133,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return Search;
-        foreach (var item in Items)
+        foreach (var item in _view)
         {
             yield return item;
         }
@@ -150,7 +146,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
 
     public override ValueTask SaveChanges(CancellationToken cancellationToken)
     {
-        Config.SelectedCommandId = SelectedItem.Value.Id.ToString();
+        Config.SelectedCommandId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
         Config.SearchText = Search.Text.Value;
         return base.SaveChanges(cancellationToken);
     }
