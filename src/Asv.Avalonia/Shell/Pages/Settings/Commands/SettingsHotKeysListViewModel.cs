@@ -22,6 +22,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
     private readonly ILoggerFactory _loggerFactory;
     private readonly IDialogService _dialogService;
     private readonly ISearchService _searchService;
+    private readonly IStateSaver<SettingsHotKeysListViewModelConfig> _stateSaver;
     private readonly ObservableList<ICommandInfo> _itemsSource;
     private readonly ISynchronizedView<ICommandInfo, HotKeyViewModel> _view;
 
@@ -31,6 +32,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
             DesignTime.Configuration,
+            NullStateSaverFactory.Instance,
             NullSearchService.Instance
         )
     {
@@ -43,6 +45,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ISearchService searchService
     )
         : base(PageId, cfg, loggerFactory)
@@ -51,6 +54,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
         _loggerFactory = loggerFactory;
         _dialogService = dialogService;
         _searchService = searchService;
+        _stateSaver = stateSaverFactory.Create<SettingsHotKeysListViewModelConfig>();
 
         SelectedItem = new BindableReactiveProperty<HotKeyViewModel?>().DisposeItWith(Disposable);
 
@@ -61,6 +65,16 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
             TimeSpan.FromMilliseconds(500)
         )
             .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+
+        _stateSaver
+            .Add(Search.Text, (value, cf) => cf.SearchText = value)
+            .DisposeItWith(Disposable);
+        _stateSaver
+            .Add(
+                SelectedItem,
+                (value, cf) => cf.SelectedCommandId = value?.Id.ToString() ?? string.Empty
+            )
             .DisposeItWith(Disposable);
 
         _itemsSource = new ObservableList<ICommandInfo>(
@@ -79,22 +93,19 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
 
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
 
-        var selectedItem = _view.FirstOrDefault(c => c.Id == Config.SelectedCommandId);
+        var selectedItem = _view.FirstOrDefault(c => c.Id == _stateSaver.Config.SelectedCommandId);
         if (selectedItem is not null)
         {
             SelectedItem.OnNext(selectedItem);
         }
 
-        Search.Text.Value = Config.SearchText;
+        Search.Text.Value = _stateSaver.Config.SearchText;
         Search.Refresh();
 
-        Observable
-            .Merge(
-                Search.Text.Skip(1).Select(_ => Unit.Default),
-                SelectedItem.Skip(1).Select(_ => Unit.Default)
-            )
-            .Subscribe(_ => HasChanges.Value = true)
-            .DisposeItWith(Disposable);
+        var obsv = Observable.Merge(
+            Search.Text.Skip(1).Select(_ => Unit.Default),
+            SelectedItem.Skip(1).Select(_ => Unit.Default)
+        );
     }
 
     public SearchBoxViewModel Search { get; }
@@ -144,12 +155,11 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
         }
     }
 
-    public override ValueTask SaveChanges(CancellationToken cancellationToken)
-    {
-        Config.SelectedCommandId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
-        Config.SearchText = Search.Text.Value;
-        return base.SaveChanges(cancellationToken);
-    }
-
+    // public override ValueTask SaveChanges(CancellationToken cancellationToken)
+    // {
+    //     Config.SelectedCommandId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+    //     Config.SearchText = Search.Text.Value;
+    //     return base.SaveChanges(cancellationToken);
+    // }
     public override IExportInfo Source => SystemModule.Instance;
 }

@@ -44,12 +44,11 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
             Disposable
         );
 
-        var selectedUnit = _view.FirstOrDefault(u => u.Id == Config.SelectedUnitId);
-        if (selectedUnit is not null)
-        {
-            SelectedItem.OnNext(selectedUnit);
-        }
-
+        // var selectedUnit = _view.FirstOrDefault(u => u.Id == Config.SelectedUnitId);
+        // if (selectedUnit is not null)
+        // {
+        //     SelectedItem.OnNext(selectedUnit);
+        // }
         Search = new SearchBoxViewModel(
             nameof(Search),
             loggerFactory,
@@ -59,7 +58,7 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Search.Text.Value = Config.SearchText;
+        // Search.Text.Value = Config.SearchText;
         Search.Refresh();
 
         Observable
@@ -106,13 +105,6 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
         {
             yield return children;
         }
-    }
-
-    public override ValueTask SaveChanges(CancellationToken cancellationToken)
-    {
-        Config.SearchText = Search.Text.CurrentValue;
-        Config.SelectedUnitId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
-        return base.SaveChanges(cancellationToken);
     }
 
     public override IExportInfo Source => SystemModule.Instance;
