@@ -1,11 +1,9 @@
 ﻿using System.Composition;
+using Asv.Cfg;
 using Asv.Common;
-using Avalonia.Input;
-using Avalonia.Threading;
-using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
-using ZLogger;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -18,9 +16,8 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
     private readonly ILoggerFactory _loggerFactory;
     private readonly IDialogService _dialogService;
     private readonly ISearchService _searchService;
-    private readonly ObservableList<HotKeyViewModel> _itemsSource;
-
-    #region Design
+    private readonly ObservableList<ICommandInfo> _itemsSource;
+    private readonly ISynchronizedView<ICommandInfo, HotKeyViewModel> _view;
 
     public SettingsHotKeysListViewModel()
         : this(
@@ -31,54 +28,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        _itemsSource = new ObservableList<HotKeyViewModel>(
-            new List<ICommandInfo>(
-                [
-                    new CommandInfo
-                    {
-                        Id = "command1",
-                        Name = "Command1",
-                        Description = "Description for Command1",
-                        Icon = MaterialIconKind.Abacus,
-                        DefaultHotKey = new HotKeyInfo(KeyGesture.Parse("Ctrl+Shift+A")),
-                        Source = SystemModule.Instance,
-                    },
-                    new CommandInfo
-                    {
-                        Id = "command2",
-                        Name = "Command2",
-                        Description = "Description for Command2",
-                        Icon = MaterialIconKind.ABCOff,
-                        DefaultHotKey = new HotKeyInfo(KeyGesture.Parse("Ctrl+F")),
-                        Source = SystemModule.Instance,
-                    },
-                    new CommandInfo
-                    {
-                        Id = "command3",
-                        Name = "Command3",
-                        Description = "Description for Command3",
-                        Icon = MaterialIconKind.AbTesting,
-                        DefaultHotKey = null,
-                        Source = SystemModule.Instance,
-                    },
-                ]
-            ).Select(x => new HotKeyViewModel(
-                this,
-                x,
-                _commandsService,
-                _dialogService,
-                _loggerFactory
-            ))
-        );
-        Items = _itemsSource
-            .ToNotifyCollectionChangedSlim()
-            .SetRoutableParent(this, Disposable)
-            .DisposeItWith(Disposable);
-
-        Search = new SearchBoxViewModel();
     }
-
-    #endregion
 
     [ImportingConstructor]
     public SettingsHotKeysListViewModel(
@@ -94,6 +44,8 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
         _dialogService = dialogService;
         _searchService = searchService;
 
+        SelectedItem = new BindableReactiveProperty<HotKeyViewModel?>().DisposeItWith(Disposable);
+
         Search = new SearchBoxViewModel(
             nameof(Search),
             loggerFactory,
@@ -103,83 +55,47 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        _itemsSource = new ObservableList<HotKeyViewModel>(
-            commandsService
-                .Commands.Where(x => x.DefaultHotKey is not null)
-                .Select(x => new HotKeyViewModel(
-                    this,
-                    x,
-                    _commandsService,
-                    _dialogService,
-                    _loggerFactory
-                ))
+        _itemsSource = new ObservableList<ICommandInfo>(
+            commandsService.Commands.Where(x => x.DefaultHotKey is not null)
         );
-        Items = _itemsSource
-            .ToNotifyCollectionChangedSlim()
-            .SetRoutableParent(this, Disposable)
+
+        _view = _itemsSource
+            .CreateView(cmdInfo => new HotKeyViewModel(
+                cmdInfo,
+                _commandsService,
+                _dialogService,
+                _loggerFactory
+            ))
             .DisposeItWith(Disposable);
+        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+
+        Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
 
         Search.Refresh();
     }
 
     public SearchBoxViewModel Search { get; }
-    public HotKeyViewModel SelectedItem
-    {
-        get;
-        set => SetField(ref field, value);
-    }
+    public BindableReactiveProperty<HotKeyViewModel?> SelectedItem { get; }
     public INotifyCollectionChangedSynchronizedViewList<HotKeyViewModel> Items { get; }
 
-    private async Task UpdateImpl( // TODO: Simplify with the common filtering from ObservableCollections
-        string? query,
-        IProgress<double> progress,
-        CancellationToken cancel
-    )
+    private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
     {
-        try
+        if (string.IsNullOrWhiteSpace(query))
         {
-            var text = query?.ToLower();
-            await Dispatcher.UIThread.InvokeAsync(_itemsSource.Clear);
-            var editableCommands = _commandsService
-                .Commands.Where(x => x.DefaultHotKey is not null)
-                .ToList();
-            var filtered = 0;
-            var total = editableCommands.Count;
-            Logger.ZLogTrace($"Start filtering log messages with filter: '{text}'");
-            progress.Report(double.NaN);
-
-            foreach (
-                var command in editableCommands.TakeWhile(_ => !cancel.IsCancellationRequested)
-            )
-            {
-                ++filtered;
-
-                if (
-                    HotKeyViewModel.TryCreate(
-                        command,
-                        this,
-                        _searchService,
-                        _commandsService,
-                        _dialogService,
-                        query,
-                        _loggerFactory,
-                        out var vm
-                    )
-                    && vm != null
+            _view.ResetFilter();
+            _view.ForEach(vm => vm.ResetSelections());
+        }
+        else
+        {
+            _view.AttachFilter(
+                new SynchronizedViewFilter<ICommandInfo, HotKeyViewModel>(
+                    (_, model) => model.Filter(query, _searchService)
                 )
-                {
-                    ++filtered;
-                    await Dispatcher.UIThread.InvokeAsync(() => _itemsSource.Add(vm));
-                    progress.Report((double)total / filtered);
-                    Logger.ZLogTrace($"Filtered {filtered} items from {total}");
-                }
-            }
+            );
         }
-        finally
-        {
-            _itemsSource.Sort(HotKeyViewModelComparer.Instance);
-            progress.Report(1);
-        }
+
+        progress.Report(1);
+        return Task.CompletedTask;
     }
 
     public void ResetAllHotKeys() // TODO: Make a command
@@ -194,27 +110,16 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return Search;
-
-        foreach (var item in Items)
+        foreach (var item in _view)
         {
             yield return item;
         }
 
-        foreach (var child in base.GetRoutableChildren())
+        foreach (var children in base.GetRoutableChildren())
         {
-            yield return child;
+            yield return children;
         }
     }
 
     public override IExportInfo Source => SystemModule.Instance;
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            SelectedItem.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
 }

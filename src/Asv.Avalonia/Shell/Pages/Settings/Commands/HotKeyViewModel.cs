@@ -7,23 +7,21 @@ namespace Asv.Avalonia;
 
 public sealed class HotKeyViewModel : RoutableViewModel
 {
-    public const string ViewModelId = "hotkey";
+    public const string ViewModelBaseId = "hotkey";
     public const string EmptyHotKey = "-";
     private readonly ICommandService _svc;
     private readonly IDialogService _dialogService;
 
     public HotKeyViewModel(
-        IRoutable parent,
         ICommandInfo command,
         ICommandService svc,
         IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
-        : base(new NavigationId(ViewModelId, command.Id), loggerFactory)
+        : base(new NavigationId(ViewModelBaseId, command.Id), loggerFactory)
     {
         _svc = svc;
         _dialogService = dialogService;
-        Parent = parent;
         Base = command;
 
         var hotkey = svc.GetHotKey(command.Id);
@@ -65,8 +63,18 @@ public sealed class HotKeyViewModel : RoutableViewModel
 
     #endregion
 
-    public Selection NameSelection { get; private init; }
-    public Selection DescriptionSelection { get; private init; }
+    public Selection NameSelection
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+
+    public Selection DescriptionSelection
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+
     public ICommandInfo Base { get; }
 
     public async Task EditCommand()
@@ -86,37 +94,6 @@ public sealed class HotKeyViewModel : RoutableViewModel
         }
     }
 
-    public static bool TryCreate(
-        ICommandInfo info,
-        IRoutable parent,
-        ISearchService searchService,
-        ICommandService commandsService,
-        IDialogService dialogService,
-        string? query,
-        ILoggerFactory loggerFactory,
-        out HotKeyViewModel? vm
-    )
-    {
-        vm = null;
-        var descriptionMatch = Selection.Empty;
-
-        var result =
-            searchService.Match(info.Name, query, out var nameMatch)
-            || searchService.Match(info.Description, query, out descriptionMatch);
-        if (!result)
-        {
-            return false;
-        }
-
-        vm = new HotKeyViewModel(parent, info, commandsService, dialogService, loggerFactory)
-        {
-            NameSelection = nameMatch,
-            DescriptionSelection = descriptionMatch,
-        };
-
-        return true;
-    }
-
     private void SyncConflict(string? value)
     {
         if (value == null)
@@ -131,6 +108,46 @@ public sealed class HotKeyViewModel : RoutableViewModel
             .Any(hk => hk == value);
 
         HasConflict.Value = duplicateExists;
+    }
+
+    public bool Filter(string search, ISearchService searchService)
+    {
+        if (string.IsNullOrWhiteSpace(search))
+        {
+            return true;
+        }
+
+        var descriptionMatch = Selection.Empty;
+
+        var result =
+            searchService.Match(Name, search, out var nameMatch)
+            || searchService.Match(Description, search, out descriptionMatch);
+
+        if (result)
+        {
+            NameSelection = nameMatch;
+            DescriptionSelection = descriptionMatch;
+        }
+        else
+        {
+            ResetSelections();
+        }
+
+        return result
+            || Name.Contains(search, StringComparison.OrdinalIgnoreCase)
+            || Description.Contains(search, StringComparison.OrdinalIgnoreCase)
+            || Source.Contains(search, StringComparison.OrdinalIgnoreCase)
+            || (DefaultHotKey?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false)
+            || (
+                EditedHotKey.ViewValue.Value?.Contains(search, StringComparison.OrdinalIgnoreCase)
+                ?? false
+            );
+    }
+
+    public void ResetSelections()
+    {
+        NameSelection = Selection.Empty;
+        DescriptionSelection = Selection.Empty;
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
