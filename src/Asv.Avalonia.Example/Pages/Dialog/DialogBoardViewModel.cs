@@ -32,7 +32,7 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel, DialogBo
         : this(
             DesignTime.CommandService,
             NullLoggerFactory.Instance,
-            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
             NullDialogService.Instance
         )
     {
@@ -44,10 +44,10 @@ public class DialogBoardViewModel : PageViewModel<DialogBoardViewModel, DialogBo
     public DialogBoardViewModel(
         ICommandService cmd,
         ILoggerFactory loggerFactory,
-        IConfiguration configuration,
+        IStateSaverFactory stateSaverFactory,
         IDialogService dialogService
     )
-        : base(PageId, cmd, configuration, loggerFactory)
+        : base(PageId, cmd, stateSaverFactory, loggerFactory)
     {
         Title = RS.DialogPageViewModel_Title;
 

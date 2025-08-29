@@ -18,7 +18,6 @@ public class PluginsMarketViewModel
     private readonly IPluginManager _manager;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<PluginInfoViewModel> _plugins;
-    private readonly IConfiguration _cfg;
     private string _previouslySelectedPluginId;
 
     public PluginsMarketViewModel()
@@ -26,7 +25,7 @@ public class PluginsMarketViewModel
             DesignTime.CommandService,
             NullPluginManager.Instance,
             NullLoggerFactory.Instance,
-            new JsonConfiguration("null")
+            DesignTime.StateSaverFactory
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -64,13 +63,12 @@ public class PluginsMarketViewModel
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
-        IConfiguration cfg
+        IStateSaverFactory stateSaverFactory
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, stateSaverFactory, loggerFactory)
     {
         Title = "Plugin Manager";
         _manager = manager ?? throw new ArgumentNullException(nameof(manager));
-        _cfg = cfg;
 
         _plugins = new ObservableList<PluginInfoViewModel>();
         _loggerFactory = loggerFactory;

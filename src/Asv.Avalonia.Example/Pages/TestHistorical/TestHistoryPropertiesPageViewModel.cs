@@ -29,7 +29,7 @@ public class TestHistoryPropertiesPageViewModel
         : this(
             DesignTime.UnitService,
             DesignTime.CommandService,
-            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
             DesignTime.LoggerFactory
         )
     {
@@ -40,10 +40,10 @@ public class TestHistoryPropertiesPageViewModel
     public TestHistoryPropertiesPageViewModel(
         IUnitService unit,
         ICommandService commandService,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, commandService, cfg, loggerFactory)
+        : base(PageId, commandService, stateSaverFactory, loggerFactory)
     {
         Title = "Test History Properties";
         var un = unit.Units[VelocityBase.Id];

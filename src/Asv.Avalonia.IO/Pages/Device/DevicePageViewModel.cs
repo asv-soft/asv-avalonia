@@ -24,10 +24,10 @@ public abstract class DevicePageViewModel<T, TCfg> : PageViewModel<T, TCfg>, IDe
         NavigationId id,
         IDeviceManager devices,
         ICommandService cmd,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, cfg, loggerFactory)
+        : base(id, cmd, stateSaverFactory, loggerFactory)
     {
         _devices = devices;
         _target = new ReactiveProperty<DeviceWrapper?>().DisposeItWith(Disposable);

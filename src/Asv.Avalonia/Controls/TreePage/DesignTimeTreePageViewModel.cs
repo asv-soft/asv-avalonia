@@ -25,7 +25,7 @@ public class DesignTimeTreePageViewModel
             DesignTime.Id,
             DesignTime.CommandService,
             DesignTime.ContainerHost,
-            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
             DesignTime.LoggerFactory
         )
     {

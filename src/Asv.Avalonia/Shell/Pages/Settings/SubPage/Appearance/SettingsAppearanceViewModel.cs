@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 public sealed class SettingsAppearanceViewModelConfig : TreeSubpageConfig { }
 
 [ExportSettings(PageId)]
-public class SettingsAppearanceViewModel : SettingsSubPage<SettingsAppearanceViewModelConfig>
+public class SettingsAppearanceViewModel : SettingsSubPage
 {
     public const string PageId = "appearance";
 

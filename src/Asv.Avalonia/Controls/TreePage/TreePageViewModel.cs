@@ -28,10 +28,10 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
         NavigationId id,
         ICommandService cmd,
         IContainerHost container,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, cfg, loggerFactory)
+        : base(id, cmd, stateSaverFactory, loggerFactory)
     {
         _container = container;
         _loggerFactory = loggerFactory;
@@ -51,17 +51,24 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).DisposeItWith(Disposable);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).DisposeItWith(Disposable);
 
+        StateSaver
+            .StartTracking(
+                SelectedNode,
+                (node, config) => config.SelectedNodeId = node?.Key.Id ?? string.Empty
+            )
+            .DisposeItWith(Disposable);
+
         _sub1 = Nodes
             .ObserveAdd()
             .Subscribe(addEvent =>
             {
-                if (addEvent.Value.Id != Config.SelectedNodeId)
+                if (addEvent.Value.Id != StateSaver.Config.SelectedNodeId)
                 {
                     return;
                 }
 
                 var selectedNode = TreeView.FindNode(x =>
-                    x.Base.NavigateTo == Config.SelectedNodeId
+                    x.Base.NavigateTo == StateSaver.Config.SelectedNodeId
                 );
                 if (selectedNode is null)
                 {
@@ -71,11 +78,6 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
                 SelectedNode.Value = selectedNode;
                 _sub1?.Dispose();
             });
-
-        Observable
-            .Merge(SelectedNode.Skip(1).Select(_ => Unit.Default))
-            .Subscribe(_ => HasChanges.Value = true)
-            .DisposeItWith(Disposable);
     }
 
     #region Menu
@@ -189,12 +191,6 @@ public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
         NavigationId
     >?> SelectedNode { get; }
     public ObservableList<ITreePage> Nodes { get; }
-
-    public override ValueTask SaveChanges(CancellationToken cancellationToken)
-    {
-        Config.SelectedNodeId = SelectedNode.Value?.Key.Id ?? string.Empty;
-        return base.SaveChanges(cancellationToken);
-    }
 
     protected override TContext GetContext()
     {

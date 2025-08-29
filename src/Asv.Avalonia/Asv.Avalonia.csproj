@@ -93,4 +93,10 @@
     <ItemGroup>
       <None Remove="icon.ico" />
     </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Shell\Pages\Settings\SubPage\Appearance\SettingsAppearanceView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\Settings\SubPage\Commands\SettingsHotKeysListView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\Settings\SubPage\Units\SettingsUnitsView.axaml" />
+    </ItemGroup>
 </Project>

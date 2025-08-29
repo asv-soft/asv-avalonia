@@ -14,7 +14,7 @@ public class SettingsHotKeysListViewModelConfig : TreeSubpageConfig
 }
 
 [ExportSettings(PageId)]
-public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListViewModelConfig>
+public class SettingsHotKeysListViewModel : SettingsSubPage
 {
     public const string PageId = "hotkeys";
 
@@ -67,16 +67,6 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        _stateSaver
-            .Add(Search.Text, (value, cf) => cf.SearchText = value)
-            .DisposeItWith(Disposable);
-        _stateSaver
-            .Add(
-                SelectedItem,
-                (value, cf) => cf.SelectedCommandId = value?.Id.ToString() ?? string.Empty
-            )
-            .DisposeItWith(Disposable);
-
         _itemsSource = new ObservableList<ICommandInfo>(
             commandsService.Commands.Where(x => x.DefaultHotKey is not null)
         );
@@ -102,10 +92,15 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
         Search.Text.Value = _stateSaver.Config.SearchText;
         Search.Refresh();
 
-        var obsv = Observable.Merge(
-            Search.Text.Skip(1).Select(_ => Unit.Default),
-            SelectedItem.Skip(1).Select(_ => Unit.Default)
-        );
+        _stateSaver
+            .StartTracking(Search.Text, (value, cf) => cf.SearchText = value)
+            .DisposeItWith(Disposable);
+        _stateSaver
+            .StartTracking(
+                SelectedItem,
+                (value, cf) => cf.SelectedCommandId = value?.Id.ToString() ?? string.Empty
+            )
+            .DisposeItWith(Disposable);
     }
 
     public SearchBoxViewModel Search { get; }
@@ -155,11 +150,5 @@ public class SettingsHotKeysListViewModel : SettingsSubPage<SettingsHotKeysListV
         }
     }
 
-    // public override ValueTask SaveChanges(CancellationToken cancellationToken)
-    // {
-    //     Config.SelectedCommandId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
-    //     Config.SearchText = Search.Text.Value;
-    //     return base.SaveChanges(cancellationToken);
-    // }
     public override IExportInfo Source => SystemModule.Instance;
 }

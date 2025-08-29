@@ -27,4 +27,5 @@ public static class DesignTime
     public static ILocalizationService LocalizationService => NullLocalizationService.Instance;
     public static ILogReaderService LogReaderService => NullLogReaderService.Instance;
     public static ICommandService CommandService => NullCommandService.Instance;
+    public static IStateSaverFactory StateSaverFactory => NullStateSaverFactory.Instance;
 }

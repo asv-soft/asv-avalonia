@@ -40,37 +40,3 @@ public abstract class TreeSubpage<TContext>(NavigationId id, ILoggerFactory logg
 {
     public abstract ValueTask Init(TContext context);
 }
-
-public abstract class TreeSubpage<TContext, TConfig> : TreeSubpage<TContext>, IConfigurable<TConfig>
-    where TContext : class, IPage
-    where TConfig : new()
-{
-    public IConfiguration CfgService { get; init; }
-    public TConfig Config { get; init; }
-    public BindableReactiveProperty<bool> HasChanges { get; }
-
-    protected TreeSubpage(NavigationId id, IConfiguration cfg, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
-    {
-        CfgService = cfg;
-        Config = CfgService.Get<TConfig>();
-        HasChanges = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
-        HasChanges
-            .Skip(1)
-            .Where(hasChanges => hasChanges)
-            .SubscribeAwait(
-                async (_, ct) =>
-                {
-                    await SaveChanges(ct);
-                    HasChanges.Value = false;
-                }
-            )
-            .DisposeItWith(Disposable);
-    }
-
-    public virtual ValueTask SaveChanges(CancellationToken cancellationToken)
-    {
-        CfgService.Set(Config);
-        return ValueTask.CompletedTask;
-    }
-}

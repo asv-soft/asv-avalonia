@@ -27,7 +27,7 @@ public class InstalledPluginsViewModel
             DesignTime.CommandService,
             NullPluginManager.Instance,
             DesignTime.LoggerFactory,
-            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
             NullNavigationService.Instance
         )
     {
@@ -44,15 +44,14 @@ public class InstalledPluginsViewModel
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         INavigationService navigationService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, stateSaverFactory, loggerFactory)
     {
         _manager = manager;
         _loggerFactory = loggerFactory;
         _navigation = navigationService;
-        _cfg = cfg;
         Plugins = new ObservableList<ILocalPluginInfo>();
 
         Search = new ReactiveCommand(_ => SearchImpl());

@@ -41,7 +41,7 @@ public class FileBrowserViewModel
             NullDeviceManager.Instance,
             NullDialogService.Instance,
             NullAppPath.Instance,
-            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
             NullLoggerFactory.Instance,
             DesignTime.Navigation
         )
@@ -78,11 +78,11 @@ public class FileBrowserViewModel
         IDeviceManager devices,
         IDialogService dialogService,
         IAppPath appPath,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory,
         INavigationService navigation
     )
-        : base(PageId, devices, cmd, cfg, loggerFactory)
+        : base(PageId, devices, cmd, stateSaverFactory, loggerFactory)
     {
         _localRootPath = appPath.UserDataFolder;
         _yesNoDialog = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();

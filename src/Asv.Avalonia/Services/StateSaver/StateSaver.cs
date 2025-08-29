@@ -3,7 +3,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class StateSaver<TConfig> : IStateSaver<TConfig>
+public class StateSaver<TConfig> : IStateSaver<TConfig> // TODO: try ta make static
     where TConfig : new()
 {
     private readonly IConfiguration _configuration;
@@ -16,10 +16,9 @@ public class StateSaver<TConfig> : IStateSaver<TConfig>
         Config = configuration.Get<TConfig>();
     }
 
-    public IDisposable Add<T>(
+    public IDisposable StartTracking<T>(
         Observable<T> source,
         Action<T, TConfig> applyToConfig,
-        bool saveImmediately = true,
         bool skipInitial = true
     )
     {
@@ -27,7 +26,7 @@ public class StateSaver<TConfig> : IStateSaver<TConfig>
         ArgumentNullException.ThrowIfNull(applyToConfig);
 
         var first = true;
-        var subscription = source.Subscribe(value =>
+        return source.Subscribe(value =>
         {
             if (skipInitial && first)
             {
@@ -38,12 +37,7 @@ public class StateSaver<TConfig> : IStateSaver<TConfig>
 
             applyToConfig(value, Config);
 
-            if (saveImmediately)
-            {
-                _configuration.Set(Config);
-            }
+            _configuration.Set(Config);
         });
-
-        return subscription;
     }
 }

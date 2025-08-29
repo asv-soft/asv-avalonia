@@ -14,13 +14,19 @@ public sealed class SettingsUnitsViewModelConfig : TreeSubpageConfig
 }
 
 [ExportSettings(PageId)]
-public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConfig>
+public class SettingsUnitsViewModel : SettingsSubPage
 {
     public const string PageId = "units";
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
+    private readonly IStateSaver<SettingsUnitsViewModelConfig> _stateSaver;
 
     public SettingsUnitsViewModel()
-        : this(DesignTime.UnitService, DesignTime.Configuration, DesignTime.LoggerFactory)
+        : this(
+            DesignTime.UnitService,
+            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -29,6 +35,7 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
     public SettingsUnitsViewModel(
         IUnitService unit,
         IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
         : base(PageId, cfg, loggerFactory)
@@ -39,16 +46,18 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
+        _stateSaver = stateSaverFactory.Create<SettingsUnitsViewModelConfig>();
 
         SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel?>().DisposeItWith(
             Disposable
         );
 
-        // var selectedUnit = _view.FirstOrDefault(u => u.Id == Config.SelectedUnitId);
-        // if (selectedUnit is not null)
-        // {
-        //     SelectedItem.OnNext(selectedUnit);
-        // }
+        var selectedUnit = _view.FirstOrDefault(u => u.Id == _stateSaver.Config.SelectedUnitId);
+        if (selectedUnit is not null)
+        {
+            SelectedItem.OnNext(selectedUnit);
+        }
+
         Search = new SearchBoxViewModel(
             nameof(Search),
             loggerFactory,
@@ -58,15 +67,18 @@ public class SettingsUnitsViewModel : SettingsSubPage<SettingsUnitsViewModelConf
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        // Search.Text.Value = Config.SearchText;
+        Search.Text.Value = _stateSaver.Config.SearchText;
+
         Search.Refresh();
 
-        Observable
-            .Merge(
-                Search.Text.Skip(1).Select(_ => Unit.Default),
-                SelectedItem.Skip(1).Select(_ => Unit.Default)
+        _stateSaver
+            .StartTracking(Search.Text, (value, cf) => cf.SearchText = value)
+            .DisposeItWith(Disposable);
+        _stateSaver
+            .StartTracking(
+                SelectedItem,
+                (value, cf) => cf.SelectedUnitId = value?.Id.ToString() ?? string.Empty
             )
-            .Subscribe(_ => HasChanges.Value = true)
             .DisposeItWith(Disposable);
     }
 

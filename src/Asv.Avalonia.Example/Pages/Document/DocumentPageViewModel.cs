@@ -14,7 +14,7 @@ public class DocumentPageViewModel
     public const string PageId = "document";
 
     public DocumentPageViewModel()
-        : this(DesignTime.CommandService, DesignTime.Configuration, DesignTime.LoggerFactory)
+        : this(DesignTime.CommandService, DesignTime.StateSaverFactory, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
 
@@ -24,10 +24,10 @@ public class DocumentPageViewModel
     [ImportingConstructor]
     public DocumentPageViewModel(
         ICommandService cmd,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, stateSaverFactory, loggerFactory)
     {
         Title = RS.DocumentPageViewModel_Title;
     }

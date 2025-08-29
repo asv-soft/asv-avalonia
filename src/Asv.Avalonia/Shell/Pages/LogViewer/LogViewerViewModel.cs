@@ -40,7 +40,7 @@ public class LogViewerViewModel
         : base(
             DesignTime.Id,
             NullCommandService.Instance,
-            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
             DesignTime.LoggerFactory
         )
     {
@@ -150,10 +150,10 @@ public class LogViewerViewModel
         ICommandService cmd,
         ILogReaderService logReaderService,
         ISearchService search,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, stateSaverFactory, loggerFactory)
     {
         _logReaderService = logReaderService;
         _search = search;
@@ -165,8 +165,8 @@ public class LogViewerViewModel
             .SetRoutableParent(this, Disposable)
             .DisposeItWith(Disposable);
 
-        Skip = new BindableReactiveProperty<int>(Config.Skip).DisposeItWith(Disposable);
-        Take = new BindableReactiveProperty<int>(Config.Take).DisposeItWith(Disposable);
+        Skip = new BindableReactiveProperty<int>(StateSaver.Config.Skip).DisposeItWith(Disposable);
+        Take = new BindableReactiveProperty<int>(StateSaver.Config.Take).DisposeItWith(Disposable);
         FromToText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
         TextMessage = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
 
@@ -184,17 +184,16 @@ public class LogViewerViewModel
         Next = new ReactiveCommand(_ => Commands.NextPage(this)).DisposeItWith(Disposable);
         Previous = new ReactiveCommand(_ => Commands.PreviousPage(this)).DisposeItWith(Disposable);
 
-        Search.Text.Value = Config.SearchText;
+        Search.Text.Value = StateSaver.Config.SearchText;
         Search.Refresh();
 
-        Observable
-            .Merge(
-                Skip.Skip(1).Select(_ => Unit.Default),
-                Take.Skip(1).Select(_ => Unit.Default),
-                Search.Text.Skip(1).Select(_ => Unit.Default)
-            )
-            .Subscribe(_ => HasChanges.Value = true)
+        StateSaver
+            .StartTracking(Search.Text, (value, cf) => cf.SearchText = value)
             .DisposeItWith(Disposable);
+
+        StateSaver.StartTracking(Skip, (value, cf) => cf.Skip = value).DisposeItWith(Disposable);
+
+        StateSaver.StartTracking(Take, (value, cf) => cf.Take = value).DisposeItWith(Disposable);
     }
 
     public SearchBoxViewModel Search { get; }
@@ -353,17 +352,6 @@ public class LogViewerViewModel
     }
 
     protected override void AfterLoadExtensions() { }
-
-    public override ValueTask SaveChanges(CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        Config.SearchText = Search.Text.Value;
-        Config.Skip = Skip.Value;
-        Config.Take = Take.Value;
-
-        return base.SaveChanges(cancellationToken);
-    }
 
     public override IExportInfo Source => SystemModule.Instance;
     public INotifyCollectionChangedSynchronizedViewList<LogMessageViewModel> Items { get; }

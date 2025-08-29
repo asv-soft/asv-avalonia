@@ -19,7 +19,7 @@ public class SettingsPageViewModel
         : this(
             DesignTime.CommandService,
             NullContainerHost.Instance,
-            DesignTime.Configuration,
+            DesignTime.StateSaverFactory,
             DesignTime.LoggerFactory
         )
     {
@@ -32,10 +32,10 @@ public class SettingsPageViewModel
     public SettingsPageViewModel(
         ICommandService svc,
         IContainerHost host,
-        IConfiguration configuration,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, svc, host, configuration, loggerFactory)
+        : base(PageId, svc, host, stateSaverFactory, loggerFactory)
     {
         Title = RS.SettingsPageViewModel_Title;
     }

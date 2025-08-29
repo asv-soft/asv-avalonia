@@ -20,7 +20,7 @@ public class TestInfoBoxPageViewModel
     public const MaterialIconKind PageIcon = MaterialIconKind.TestTube;
 
     public TestInfoBoxPageViewModel()
-        : this(DesignTime.CommandService, DesignTime.Configuration, NullLoggerFactory.Instance)
+        : this(DesignTime.CommandService, DesignTime.StateSaverFactory, NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         IsVisible.Value = true;
@@ -30,10 +30,10 @@ public class TestInfoBoxPageViewModel
     [ImportingConstructor]
     public TestInfoBoxPageViewModel(
         ICommandService cmd,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory logFactory
     )
-        : base(PageId, cmd, cfg, logFactory)
+        : base(PageId, cmd, stateSaverFactory, logFactory)
     {
         Title = "Test infobox";
 

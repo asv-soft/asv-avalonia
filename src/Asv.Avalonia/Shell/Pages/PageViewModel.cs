@@ -1,5 +1,4 @@
 using System.Windows.Input;
-using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -12,44 +11,28 @@ public abstract class PageConfig()
     public PageState PageState { get; set; } = PageState.Tab;
 }
 
-public abstract class PageViewModel<TContext, TConfig>
-    : ExtendableViewModel<TContext>,
-        IPage,
-        IConfigurable<TConfig>
+public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TContext>, IPage
     where TContext : class, IPage
     where TConfig : PageConfig, new()
 {
-    public IConfiguration CfgService { get; init; }
-    public TConfig Config { get; init; }
+    protected readonly IStateSaver<TConfig> StateSaver;
 
     protected PageViewModel(
         NavigationId id,
         ICommandService cmd,
-        IConfiguration cfgService,
+        IStateSaverFactory stateFactory,
         ILoggerFactory loggerFactory
     )
         : base(id, loggerFactory)
     {
+        StateSaver = stateFactory.Create<TConfig>();
         History = cmd.CreateHistory(this);
         Icon = MaterialIconKind.Window;
         Title = id.ToString();
-        HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
-        CfgService = cfgService;
-        Config = cfgService.Get<TConfig>();
-        State = new BindableReactiveProperty<PageState>(Config.PageState);
+        State = new BindableReactiveProperty<PageState>(StateSaver.Config.PageState);
 
-        _sub1 = State.Skip(1).Subscribe(_ => HasChanges.Value = true);
-        _sub2 = HasChanges
-            .Skip(1)
-            .Where(hasChanges => hasChanges)
-            .SubscribeAwait(
-                async (_, ct) =>
-                {
-                    await SaveChanges(ct);
-                    HasChanges.Value = false;
-                }
-            );
+        _sub1 = StateSaver.StartTracking(State, (v, c) => c.PageState = v);
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
@@ -87,34 +70,20 @@ public abstract class PageViewModel<TContext, TConfig>
     }
 
     public ICommandHistory History { get; }
-    public BindableReactiveProperty<bool> HasChanges { get; }
     public BindableReactiveProperty<PageState> State { get; }
     public ICommand TryClose { get; }
-
-    public virtual ValueTask SaveChanges(CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        Config.PageState = State.Value;
-        CfgService.Set(Config);
-
-        return ValueTask.CompletedTask;
-    }
 
     #region Dispose
 
     private readonly IDisposable _sub1;
-    private readonly IDisposable _sub2;
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             History.Dispose();
-            HasChanges.Dispose();
             State.Dispose();
             _sub1.Dispose();
-            _sub2.Dispose();
         }
 
         base.Dispose(disposing);

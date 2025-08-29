@@ -6,10 +6,9 @@ public class NullStateFactory<TConfig> : IStateSaver<TConfig>
 {
     public TConfig Config { get; }
 
-    public IDisposable Add<T>(
+    public IDisposable StartTracking<T>(
         Observable<T> source,
         Action<T, TConfig> applyToConfig,
-        bool saveImmediately = true,
         bool skipInitial = true
     )
     {

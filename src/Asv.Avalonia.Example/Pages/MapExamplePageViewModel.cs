@@ -21,7 +21,7 @@ public class MapExamplePageViewModel
     public const string PageId = "MapExamplePage";
 
     public MapExamplePageViewModel()
-        : this(DesignTime.CommandService, DesignTime.Configuration, DesignTime.LoggerFactory)
+        : this(DesignTime.CommandService, DesignTime.StateSaverFactory, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
 
@@ -31,10 +31,10 @@ public class MapExamplePageViewModel
     [ImportingConstructor]
     public MapExamplePageViewModel(
         ICommandService cmd,
-        IConfiguration cfg,
+        IStateSaverFactory stateSaverFactory,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, stateSaverFactory, loggerFactory)
     {
         Title = RS.MapExamplePageViewModel_Title;
         Anchors = new MapViewModel("Anthor1", loggerFactory);
