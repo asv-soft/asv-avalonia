@@ -1,5 +1,6 @@
 using Asv.Common;
 using Avalonia;
+using Avalonia.Data;
 using Avalonia.Media;
 
 namespace Asv.Avalonia.GeoMap;
@@ -42,7 +43,7 @@ public partial class MapItem
     public GeoPoint Location
     {
         get => GetValue(LocationProperty);
-        set => SetValue(LocationProperty, value);
+        set => SetCurrentValue(LocationProperty, value);
     }
 
     #endregion

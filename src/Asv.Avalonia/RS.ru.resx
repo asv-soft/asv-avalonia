@@ -834,4 +834,7 @@
     <data name="ChangeEnumPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда изменяет свойство типа перечисления</value>
     </data>
+    <data name="DialogButton_Cancel" xml:space="preserve">
+        <value>Отмена</value>
+    </data>
 </root>

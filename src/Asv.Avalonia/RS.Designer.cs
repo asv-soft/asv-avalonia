@@ -1448,5 +1448,11 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("ChangeEnumPropertyCommand_CommandInfo_Description", resourceCulture);
             }
         }
+        
+        public static string DialogButton_Cancel {
+            get {
+                return ResourceManager.GetString("DialogButton_Cancel", resourceCulture);
+            }
+        }
     }
 }
