@@ -6,12 +6,11 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
-    : PageViewModel<TContext, TConfig>,
+public abstract class TreePageViewModel<TContext, TSubPage>
+    : PageViewModel<TContext>,
         IDesignTimeTreePage
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
-    where TConfig : PageConfig, new()
 {
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
     private readonly IContainerHost _container;

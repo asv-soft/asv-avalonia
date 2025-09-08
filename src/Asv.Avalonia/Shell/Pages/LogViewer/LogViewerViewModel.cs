@@ -12,11 +12,9 @@ namespace Asv.Avalonia;
 
 public interface ILogViewerViewModel : IPage { }
 
-public class LogViewerViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
 public class LogViewerViewModel
-    : PageViewModel<ILogViewerViewModel, LogViewerViewModelConfig>,
+    : PageViewModel<ILogViewerViewModel>,
         ILogViewerViewModel,
         ISupportPagination
 {

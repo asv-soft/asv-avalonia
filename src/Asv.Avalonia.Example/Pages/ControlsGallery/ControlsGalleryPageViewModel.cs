@@ -6,15 +6,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia.Example;
 
-public sealed class ControlsGalleryPageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
 public class ControlsGalleryPageViewModel
-    : TreePageViewModel<
-        IControlsGalleryPage,
-        IControlsGallerySubPage,
-        ControlsGalleryPageViewModelConfig
-    >,
+    : TreePageViewModel<IControlsGalleryPage, IControlsGallerySubPage>,
         IControlsGalleryPage
 {
     public const string PageId = "controls_gallery";

@@ -7,11 +7,8 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class PluginsMarketViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class PluginsMarketViewModel
-    : PageViewModel<PluginsMarketViewModel, PluginsMarketViewModelConfig>
+public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
 {
     public const string PageId = "plugins.market";
 

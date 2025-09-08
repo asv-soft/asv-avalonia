@@ -7,10 +7,8 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public sealed class HomePageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class HomePageViewModel : PageViewModel<IHomePage, HomePageViewModelConfig>, IHomePage
+public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 {
     public const string PageId = "home";
 

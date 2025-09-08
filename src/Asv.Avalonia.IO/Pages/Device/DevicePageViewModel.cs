@@ -10,9 +10,8 @@ using ZLogger;
 
 namespace Asv.Avalonia.IO;
 
-public abstract class DevicePageViewModel<T, TCfg> : PageViewModel<T, TCfg>, IDevicePage
+public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
     where T : class, IDevicePage
-    where TCfg : PageConfig, new()
 {
     private readonly IDeviceManager? _devices;
     private string? _targetDeviceId;

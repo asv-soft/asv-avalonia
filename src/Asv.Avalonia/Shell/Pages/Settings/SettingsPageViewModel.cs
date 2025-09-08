@@ -6,11 +6,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public sealed class SettingsPageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
 public class SettingsPageViewModel
-    : TreePageViewModel<ISettingsPage, ISettingsSubPage, SettingsPageViewModelConfig>,
+    : TreePageViewModel<ISettingsPage, ISettingsSubPage>,
         ISettingsPage
 {
     public const string PageId = "settings";

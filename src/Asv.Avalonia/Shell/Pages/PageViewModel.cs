@@ -7,18 +7,9 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public abstract class PageConfig()
-{
-    public PageState PageState { get; set; } = PageState.Tab;
-}
-
-public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TContext>, IPage
+public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, IPage
     where TContext : class, IPage
-    where TConfig : PageConfig, new()
 {
-    protected readonly IConfiguration CfgService;
-    protected readonly TConfig Config;
-
     protected PageViewModel(
         NavigationId id,
         ICommandService cmd,
@@ -32,11 +23,6 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
         Title = id.ToString();
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
-        CfgService = cfgService;
-        Config = cfgService.Get<TConfig>();
-        State = new BindableReactiveProperty<PageState>(Config.PageState);
-
-        _sub1 = State.Subscribe(_ => HasChanges.Value = true);
         _sub2 = HasChanges.SubscribeAwait(
             async (hasChanges, ct) =>
             {
@@ -71,6 +57,11 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
         }
     }
 
+    public ValueTask TrySaveStateAsync(bool force)
+    {
+        throw new NotImplementedException();
+    }
+
     public MaterialIconKind Icon
     {
         get;
@@ -85,15 +76,11 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
 
     public ICommandHistory History { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
-    public BindableReactiveProperty<PageState> State { get; }
     public ICommand TryClose { get; }
 
     protected virtual ValueTask SafeChanges(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
-
-        Config.PageState = State.Value;
-        CfgService.Set(Config);
 
         return ValueTask.CompletedTask;
     }
@@ -109,7 +96,6 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
         {
             History.Dispose();
             HasChanges.Dispose();
-            State.Dispose();
             _sub1.Dispose();
             _sub2.Dispose();
         }

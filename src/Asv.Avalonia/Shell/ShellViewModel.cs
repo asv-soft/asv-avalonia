@@ -8,11 +8,17 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
+public class ShellViewModelConfig
+{
+    public Dictionary<string, PageState> PageInfos = new();
+}
+
 public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 {
     private readonly ObservableList<IPage> _pages;
     private readonly IContainerHost _container;
     private readonly ICommandService _cmd;
+    private readonly IConfiguration _cfg;
 
     protected ShellViewModel(
         IContainerHost ioc,
@@ -23,6 +29,9 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         : base(id, loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(ioc);
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(cfg);
+        _cfg = cfg;
         _container = ioc;
         _cmd = ioc.GetExport<ICommandService>();
         Navigation = ioc.GetExport<INavigationService>();
@@ -161,6 +170,11 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 break;
             case RestartApplicationEvent:
                 Environment.Exit(0);
+                break;
+            case SaveStateEvent saveState:
+                var config = _cfg.Get<ShellViewModelConfig>();
+                foreach (var page in _pages) { }
+
                 break;
             case PageCloseRequestedEvent close:
             {

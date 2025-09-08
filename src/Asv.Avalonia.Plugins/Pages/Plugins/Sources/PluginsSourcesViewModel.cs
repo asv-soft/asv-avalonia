@@ -1,6 +1,4 @@
 ﻿using System.Composition;
-using Asv.Cfg;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Configuration;
@@ -11,11 +9,8 @@ using IConfiguration = Asv.Cfg.IConfiguration;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class PluginsSourcesViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class PluginsSourcesViewModel
-    : PageViewModel<PluginsSourcesViewModel, PluginsSourcesViewModelConfig>
+public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
 {
     public const string PageId = "plugins.sources";
 
