@@ -59,7 +59,7 @@ public sealed class CommandDescriptionSortComparer : MarkupExtension, IComparer
         {
             string s => s,
             ICommandInfo cmd => cmd.Description,
-            HotKeyViewModel vm => vm.Description,
+            CommandViewModel vm => vm.Description,
             _ => null,
         };
 }

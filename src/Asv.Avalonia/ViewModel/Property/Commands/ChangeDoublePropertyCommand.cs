@@ -11,7 +11,7 @@ public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<do
 
     public const string Id = $"{BaseId}.property.double";
 
-    private static readonly ICommandInfo StaticInfo = new CommandInfo
+    public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
         Name = RS.ChangeDoublePropertyCommand_CommandInfo_Name,

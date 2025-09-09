@@ -11,7 +11,7 @@ public class ChangeBoolPropertyCommand : ContextCommand<IHistoricalProperty<bool
 
     public const string Id = $"{BaseId}.property.bool";
 
-    private static readonly ICommandInfo StaticInfo = new CommandInfo
+    public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
         Name = RS.ChangeBoolPropertyCommand_CommandInfo_Name,

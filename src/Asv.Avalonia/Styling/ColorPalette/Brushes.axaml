@@ -10,6 +10,7 @@
     <SolidColorBrush x:Key="AsvBackgroundSuccessBrush" Color="{DynamicResource AsvBackgroundSuccessColor}" />
 
     <SolidColorBrush x:Key="AsvForegroundUnknownBrush" Color="{DynamicResource AsvForegroundUnknownColor}" />
+    <SolidColorBrush x:Key="AsvForegroundUnknownBrushWithTransparency" Color="{DynamicResource AsvForegroundUnknownColor}" Opacity="0.5"/>
     <SolidColorBrush x:Key="AsvBackgroundUnknownBrush" Color="{DynamicResource AsvBackgroundUnknownColor}" />
 
     <SolidColorBrush x:Key="AsvForegroundInfoBrush" Color="{DynamicResource AsvForegroundInfoColor}" />

@@ -98,7 +98,7 @@
     <data name="SettingsUnitsViewModel_Name" xml:space="preserve">
         <value>Units</value>
     </data>
-    <data name="SettingsHotKeysListViewModel_Name" xml:space="preserve">
+    <data name="SettingsCommandListViewModel_Name" xml:space="preserve">
         <value>Command List</value>
     </data>
     <data name="NauticalMile_UnitItem_Name" xml:space="preserve">
@@ -119,6 +119,7 @@
     <data name="ShellView_WindowControlButton_Collapse" xml:space="preserve">
         <value>Collapse</value>
     </data>
+    
     <data name="ShellView_Toolbar_Open" xml:space="preserve">
         <value>Open</value>
     </data>
@@ -606,22 +607,22 @@
     <data name="OpenHomePageCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that opens home page</value>
     </data>
-    <data name="SettingsHotKeysListView_ResetButton_Content" xml:space="preserve">
+    <data name="SettingsCommandListView_ResetButton_Content" xml:space="preserve">
         <value>Reset all</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_Command_Header" xml:space="preserve">
-        <value>Command</value>
+    <data name="SettingsCommandListView_DataGrid_Command_Header" xml:space="preserve">
+        <value>Name</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_CustomHotKey_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_CustomHotKey_Header" xml:space="preserve">
         <value>Custom</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_DefaultHotKey_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_DefaultHotKey_Header" xml:space="preserve">
         <value>Default</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_Description_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_Description_Header" xml:space="preserve">
         <value>Description</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_Source_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_Source_Header" xml:space="preserve">
         <value>Source</value>
     </data>
     <data name="HotKeyViewModel_HotKeyCaptureDialog_Title" xml:space="preserve">
@@ -731,5 +732,14 @@
     </data>
     <data name="DialogButton_Cancel" xml:space="preserve">
         <value>Cancel</value>
+    </data>
+    <data name="SettingsCommandListView_CommandsSortingType_All" xml:space="preserve">
+        <value>All</value>
+    </data>
+    <data name="SettingsCommandListView_CommandsSortingType_WithHotkeysOnly" xml:space="preserve">
+        <value>With hotkeys</value>
+    </data>
+    <data name="SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly" xml:space="preserve">
+        <value>Without hotkeys</value>
     </data>
 </root>
