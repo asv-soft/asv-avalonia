@@ -10,6 +10,7 @@ public interface IPage : IRoutable, IExportable
     string Title { get; }
     ICommandHistory History { get; }
     BindableReactiveProperty<bool> HasChanges { get; }
+    ReactiveProperty<PageState> State { get; }
     ICommand TryClose { get; }
     ValueTask TryCloseAsync(bool force);
     ValueTask TrySaveStateAsync(bool force);

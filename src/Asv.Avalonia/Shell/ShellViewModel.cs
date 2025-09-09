@@ -172,10 +172,31 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 Environment.Exit(0);
                 break;
             case SaveStateEvent saveState:
-                var config = _cfg.Get<ShellViewModelConfig>();
-                foreach (var page in _pages) { }
+            {
+                if (saveState.Source is IPage page)
+                {
+                    var configSave = _cfg.Get<ShellViewModelConfig>();
+                    configSave.PageInfos[page.Id.ToString()] = page.State.Value;
+                    _cfg.Set(configSave);
+                }
 
                 break;
+            }
+            case LoadStateEvent loadState:
+            {
+                if (loadState.Source is IPage page)
+                {
+                    var configLoad = _cfg.Get<ShellViewModelConfig>();
+                    if (!configLoad.PageInfos.TryGetValue(page.Id.ToString(), out var state))
+                    {
+                        return;
+                    }
+
+                    page.State.Value = state;
+                }
+
+                break;
+            }
             case PageCloseRequestedEvent close:
             {
                 Logger.ZLogInformation($"Close page [{close.Page.Id}]");

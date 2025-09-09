@@ -93,4 +93,8 @@
     <ItemGroup>
       <None Remove="icon.ico" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Events\State\" />
+    </ItemGroup>
 </Project>
