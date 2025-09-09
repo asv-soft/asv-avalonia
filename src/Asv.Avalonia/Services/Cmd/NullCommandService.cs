@@ -12,6 +12,8 @@ public class NullCommandService : ICommandService
             ChangeThemeFreeCommand.StaticInfo,
             UndoCommand.StaticInfo,
             RedoCommand.StaticInfo,
+            ChangeBoolPropertyCommand.StaticInfo,
+            ChangeDoublePropertyCommand.StaticInfo,
         ];
     }
 

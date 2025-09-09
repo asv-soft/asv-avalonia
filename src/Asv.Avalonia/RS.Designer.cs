@@ -189,9 +189,9 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string SettingsHotKeysListViewModel_Name {
+        public static string SettingsCommandListViewModel_Name {
             get {
-                return ResourceManager.GetString("SettingsHotKeysListViewModel_Name", resourceCulture);
+                return ResourceManager.GetString("SettingsCommandListViewModel_Name", resourceCulture);
             }
         }
         
@@ -1203,39 +1203,39 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string SettingsHotKeysListView_ResetButton_Content {
+        public static string SettingsCommandListView_ResetButton_Content {
             get {
-                return ResourceManager.GetString("SettingsHotKeysListView_ResetButton_Content", resourceCulture);
+                return ResourceManager.GetString("SettingsCommandListView_ResetButton_Content", resourceCulture);
             }
         }
         
-        public static string SettingsHotKeysListView_DataGrid_Command_Header {
+        public static string SettingsCommandListView_DataGrid_Command_Header {
             get {
-                return ResourceManager.GetString("SettingsHotKeysListView_DataGrid_Command_Header", resourceCulture);
+                return ResourceManager.GetString("SettingsCommandListView_DataGrid_Command_Header", resourceCulture);
             }
         }
         
-        public static string SettingsHotKeysListView_DataGrid_CustomHotKey_Header {
+        public static string SettingsCommandListView_DataGrid_CustomHotKey_Header {
             get {
-                return ResourceManager.GetString("SettingsHotKeysListView_DataGrid_CustomHotKey_Header", resourceCulture);
+                return ResourceManager.GetString("SettingsCommandListView_DataGrid_CustomHotKey_Header", resourceCulture);
             }
         }
         
-        public static string SettingsHotKeysListView_DataGrid_DefaultHotKey_Header {
+        public static string SettingsCommandListView_DataGrid_DefaultHotKey_Header {
             get {
-                return ResourceManager.GetString("SettingsHotKeysListView_DataGrid_DefaultHotKey_Header", resourceCulture);
+                return ResourceManager.GetString("SettingsCommandListView_DataGrid_DefaultHotKey_Header", resourceCulture);
             }
         }
         
-        public static string SettingsHotKeysListView_DataGrid_Description_Header {
+        public static string SettingsCommandListView_DataGrid_Description_Header {
             get {
-                return ResourceManager.GetString("SettingsHotKeysListView_DataGrid_Description_Header", resourceCulture);
+                return ResourceManager.GetString("SettingsCommandListView_DataGrid_Description_Header", resourceCulture);
             }
         }
         
-        public static string SettingsHotKeysListView_DataGrid_Source_Header {
+        public static string SettingsCommandListView_DataGrid_Source_Header {
             get {
-                return ResourceManager.GetString("SettingsHotKeysListView_DataGrid_Source_Header", resourceCulture);
+                return ResourceManager.GetString("SettingsCommandListView_DataGrid_Source_Header", resourceCulture);
             }
         }
         
@@ -1452,6 +1452,24 @@ namespace Asv.Avalonia {
         public static string DialogButton_Cancel {
             get {
                 return ResourceManager.GetString("DialogButton_Cancel", resourceCulture);
+            }
+        }
+        
+        public static string SettingsCommandListView_CommandsSortingType_All {
+            get {
+                return ResourceManager.GetString("SettingsCommandListView_CommandsSortingType_All", resourceCulture);
+            }
+        }
+        
+        public static string SettingsCommandListView_CommandsSortingType_WithHotkeysOnly {
+            get {
+                return ResourceManager.GetString("SettingsCommandListView_CommandsSortingType_WithHotkeysOnly", resourceCulture);
+            }
+        }
+        
+        public static string SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly {
+            get {
+                return ResourceManager.GetString("SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly", resourceCulture);
             }
         }
     }
