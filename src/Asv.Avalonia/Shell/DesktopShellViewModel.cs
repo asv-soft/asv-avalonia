@@ -1,5 +1,4 @@
 using System.Composition;
-using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Asv.Cfg;
 using Avalonia;
@@ -9,11 +8,8 @@ using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
-using R3;
 
 namespace Asv.Avalonia;
-
-public class DesktopShellViewModelConfig { }
 
 [Export(ShellId, typeof(IShell))]
 public class DesktopShellViewModel : ShellViewModel
@@ -166,10 +162,5 @@ public class DesktopShellViewModel : ShellViewModel
                     ? RS.ShellView_WindowControlButton_Minimize
                     : RS.ShellView_WindowControlButton_Maximize;
         }
-    }
-
-    private void OpenFile(string filePath)
-    {
-        // TODO: Pass the file to the file processing service
     }
 }

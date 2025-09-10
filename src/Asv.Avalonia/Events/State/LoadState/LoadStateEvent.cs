@@ -5,8 +5,13 @@ public sealed class LoadStateEvent(IRoutable source)
 
 public static class LoadStateMixin
 {
-    public static ValueTask RequestLoadState(this IRoutable src)
+    public static ValueTask RequestLoadState(this IRoutable src, CancellationToken cancel = default)
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         return src.Rise(new LoadStateEvent(src));
     }
 }

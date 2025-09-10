@@ -8,17 +8,11 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public class ShellViewModelConfig
-{
-    public Dictionary<string, PageState> PageInfos = new();
-}
-
 public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 {
     private readonly ObservableList<IPage> _pages;
     private readonly IContainerHost _container;
     private readonly ICommandService _cmd;
-    private readonly IConfiguration _cfg;
 
     protected ShellViewModel(
         IContainerHost ioc,
@@ -31,7 +25,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
         ArgumentNullException.ThrowIfNull(cfg);
-        _cfg = cfg;
+        Cfg = cfg;
         _container = ioc;
         _cmd = ioc.GetExport<ICommandService>();
         Navigation = ioc.GetExport<INavigationService>();
@@ -62,6 +56,11 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             .DisposeItWith(Disposable);
         StatusItems.SetRoutableParent(this).DisposeItWith(Disposable);
         StatusItems.DisposeRemovedItems().DisposeItWith(Disposable);
+
+        _pages
+            .ObserveAdd()
+            .SubscribeAwait(async (p, ct) => await p.Value.RequestLoadState(cancel: ct))
+            .DisposeItWith(Disposable);
     }
 
     #region Theme command
@@ -128,6 +127,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     public IReadOnlyObservableList<IPage> Pages => _pages;
     public BindableReactiveProperty<IPage?> SelectedPage { get; }
     public NotifyCollectionChangedSynchronizedViewList<IPage> PagesView { get; }
+    public IConfiguration Cfg { get; }
 
     #endregion
 
@@ -173,28 +173,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 break;
             case SaveStateEvent saveState:
             {
-                if (saveState.Source is IPage page)
-                {
-                    var configSave = _cfg.Get<ShellViewModelConfig>();
-                    configSave.PageInfos[page.Id.ToString()] = page.State.Value;
-                    _cfg.Set(configSave);
-                }
-
                 break;
             }
             case LoadStateEvent loadState:
             {
-                if (loadState.Source is IPage page)
-                {
-                    var configLoad = _cfg.Get<ShellViewModelConfig>();
-                    if (!configLoad.PageInfos.TryGetValue(page.Id.ToString(), out var state))
-                    {
-                        return;
-                    }
-
-                    page.State.Value = state;
-                }
-
                 break;
             }
             case PageCloseRequestedEvent close:

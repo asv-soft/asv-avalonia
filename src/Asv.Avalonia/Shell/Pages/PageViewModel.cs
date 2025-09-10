@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using Asv.Cfg;
 using Asv.Common;
+using DotNext.Threading.Tasks;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -22,11 +23,9 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         History = cmd.CreateHistory(this);
         Icon = MaterialIconKind.Window;
         Title = id.ToString();
-        State = new ReactiveProperty<PageState>();
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
-        _sub1 = State.SubscribeAwait(async (_, _) => await this.RequestSaveState());
-        _sub2 = HasChanges.SubscribeAwait(
+        _sub1 = HasChanges.SubscribeAwait(
             async (hasChanges, ct) =>
             {
                 if (hasChanges)
@@ -36,8 +35,6 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
                 }
             }
         );
-
-        this.RequestLoadState().SafeFireAndForget();
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
@@ -81,7 +78,6 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
 
     public ICommandHistory History { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
-    public ReactiveProperty<PageState> State { get; }
     public ICommand TryClose { get; }
 
     protected virtual ValueTask SafeChanges(CancellationToken cancellationToken)
@@ -94,17 +90,14 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     #region Dispose
 
     private readonly IDisposable _sub1;
-    private readonly IDisposable _sub2;
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            State.Dispose();
             History.Dispose();
             HasChanges.Dispose();
             _sub1.Dispose();
-            _sub2.Dispose();
         }
 
         base.Dispose(disposing);

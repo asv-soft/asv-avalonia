@@ -162,6 +162,7 @@
         <Border BorderThickness="0, 1, 0, 1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" >
             <avalonia:DockControl 
                 x:Name="DockControl"
+                Configuration="{CompiledBinding Cfg}"
                 ItemsSource="{CompiledBinding PagesView}" 
                 SelectedItem="{Binding SelectedPage.Value, Mode=TwoWay}">
             </avalonia:DockControl>

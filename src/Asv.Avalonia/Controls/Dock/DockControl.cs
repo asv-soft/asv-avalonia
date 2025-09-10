@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -7,6 +8,17 @@ using Avalonia.VisualTree;
 
 namespace Asv.Avalonia;
 
+internal enum DockItemState
+{
+    Tab,
+    Window,
+}
+
+internal sealed class DockControlConfig
+{
+    public readonly Dictionary<string, DockItemState> DockItemStates = new();
+}
+
 public partial class DockControl : SelectingItemsControl
 {
     private const string PART_MainTabControl = "PART_MainTabControl";
@@ -14,6 +26,7 @@ public partial class DockControl : SelectingItemsControl
 
     private DockTabItem? _selectedTab;
     private DockTabControl _mainTabControl = null!;
+    private DockControlConfig _config = null!;
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -24,6 +37,9 @@ public partial class DockControl : SelectingItemsControl
             ?? throw new ApplicationException(
                 $"{PART_MainTabControl} not found in {nameof(DockControl)} template."
             );
+
+        ArgumentNullException.ThrowIfNull(Configuration);
+        _config = Configuration.Get<DockControlConfig>();
 
         if (Items is INotifyCollectionChanged notifyCol)
         {
@@ -117,10 +133,19 @@ public partial class DockControl : SelectingItemsControl
         }
 
         var tab = CreateDockTabItem(page);
-        if (page.State.Value == PageState.Window)
+
+        if (_config.DockItemStates.TryGetValue(page.Id.ToString(), out var state))
         {
-            DetachTab(tab);
-            return;
+            if (state == DockItemState.Window)
+            {
+                DetachTab(tab);
+                return;
+            }
+        }
+        else
+        {
+            _config.DockItemStates[page.Id.ToString()] = DockItemState.Tab;
+            Configuration?.Set(_config);
         }
 
         _mainTabControl.Items.Add(tab);
@@ -216,7 +241,8 @@ public partial class DockControl : SelectingItemsControl
         };
 
         _windowedItems.Add(tab);
-        tab.Content.State.Value = PageState.Window;
+        _config.DockItemStates[tab.Content.Id.ToString()] = DockItemState.Window;
+        Configuration?.Set(_config);
 
         win.Closing += AttachTab;
         win.Show();
@@ -225,6 +251,11 @@ public partial class DockControl : SelectingItemsControl
         void AttachTab(object? source, WindowClosingEventArgs args)
         {
             win.Closing -= AttachTab;
+
+            if (args.CloseReason == WindowCloseReason.ApplicationShutdown)
+            {
+                return;
+            }
 
             if (!_mainTabControl.Items.Contains(tab))
             {
@@ -238,7 +269,8 @@ public partial class DockControl : SelectingItemsControl
                 return;
             }
 
-            tab.Content.State.Value = PageState.Tab;
+            _config.DockItemStates[tab.Content.Id.ToString()] = DockItemState.Tab;
+            Configuration?.Set(_config);
         }
     }
 
