@@ -52,7 +52,7 @@ public class App : Application, IContainerHost, IShellHost
         else
         {
             // TODO: use it when plugin manager implementation will be finished
-            // var pluginManager = AppHost.Instance.GetService<IPluginManager>();
+            var pluginManager = AppHost.Instance.GetService<IPluginManager>();
             var logReader = AppHost.Instance.GetService<ILogReaderService>();
 
             containerCfg
@@ -65,6 +65,7 @@ public class App : Application, IContainerHost, IShellHost
                 .WithExport(AppHost.Instance.GetService<ISoloRunFeature>())
                 .WithExport(TimeProvider.System)
                 .WithExport(logReader)
+                .WithExport(pluginManager)
                 .WithExport<IDataTemplateHost>(this)
                 .WithExport<IShellHost>(this)
                 .WithDefaultConventions(conventions);
@@ -92,7 +93,7 @@ public class App : Application, IContainerHost, IShellHost
             yield return typeof(IoModule).Assembly; // Asv.Avalonia.IO
 
             // TODO: use it when plugin manager implementation will be finished
-            // yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
+            yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
         }
     }
 

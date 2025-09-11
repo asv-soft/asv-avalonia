@@ -107,7 +107,7 @@ public class PluginInfoViewModel : DisposableViewModel
     public BindableReactiveProperty<bool> IsInstalled { get; set; }
     public BindableReactiveProperty<bool> IsUninstalled { get; set; }
     public BindableReactiveProperty<bool> IsVerified { get; set; }
-    public CancellableCommandWithProgress<Unit> Uninstall { get; }
+    public CancellableCommandWithProgress<Unit> Uninstall { get; } // TODO: CancellableCommandWithProgress is not working, need to replace
     public CancellableCommandWithProgress<Unit> CancelUninstall { get; }
     public CancellableCommandWithProgress<Unit> Install { get; }
 
