@@ -18,7 +18,7 @@ public class ControlsGalleryPageViewModel
         : this(
             DesignTime.CommandService,
             DesignTime.ContainerHost,
-            DesignTime.Configuration,
+            NullLayoutService.Instance,
             NullLoggerFactory.Instance
         )
     {
@@ -29,10 +29,10 @@ public class ControlsGalleryPageViewModel
     public ControlsGalleryPageViewModel(
         ICommandService cmd,
         IContainerHost containerHost,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, containerHost, cfg, loggerFactory)
+        : base(PageId, cmd, containerHost, layoutService, loggerFactory)
     {
         Title = RS.ControlsGalleryPageViewModel_Title;
         Icon = PageIcon;

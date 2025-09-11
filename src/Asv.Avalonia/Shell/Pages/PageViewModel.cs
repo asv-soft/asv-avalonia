@@ -1,7 +1,4 @@
 using System.Windows.Input;
-using Asv.Cfg;
-using Asv.Common;
-using DotNext.Threading.Tasks;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -15,7 +12,7 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     protected PageViewModel(
         NavigationId id,
         ICommandService cmd,
-        IConfiguration cfgService,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
         : base(id, loggerFactory)
@@ -25,16 +22,6 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         Title = id.ToString();
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
-        _sub1 = HasChanges.SubscribeAwait(
-            async (hasChanges, ct) =>
-            {
-                if (hasChanges)
-                {
-                    await SafeChanges(ct);
-                    HasChanges.Value = false;
-                }
-            }
-        );
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
@@ -79,13 +66,6 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     public ICommandHistory History { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
     public ICommand TryClose { get; }
-
-    protected virtual ValueTask SafeChanges(CancellationToken cancellationToken)
-    {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        return ValueTask.CompletedTask;
-    }
 
     #region Dispose
 

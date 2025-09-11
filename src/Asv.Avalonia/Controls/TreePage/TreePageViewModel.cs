@@ -22,10 +22,10 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         NavigationId id,
         ICommandService cmd,
         IContainerHost container,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, cfg, loggerFactory)
+        : base(id, cmd, layoutService, loggerFactory)
     {
         _container = container;
         _loggerFactory = loggerFactory;

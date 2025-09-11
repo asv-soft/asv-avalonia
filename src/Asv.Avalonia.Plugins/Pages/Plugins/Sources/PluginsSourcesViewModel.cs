@@ -24,7 +24,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
-            DesignTime.Configuration,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.Navigation
         )
@@ -57,11 +57,11 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
     public PluginsSourcesViewModel(
         ICommandService cmd,
         IPluginManager mng,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         INavigationService navigationService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, layoutService, loggerFactory)
     {
         _mng = mng;
         _navigation = navigationService;

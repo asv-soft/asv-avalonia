@@ -24,6 +24,7 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
             DesignTime.CommandService,
             NullPluginManager.Instance,
             DesignTime.LoggerFactory,
+            NullLayoutService.Instance,
             DesignTime.Configuration,
             NullNavigationService.Instance
         )
@@ -41,10 +42,11 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
+        ILayoutService layoutService,
         IConfiguration cfg,
         INavigationService navigationService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, layoutService, loggerFactory)
     {
         _manager = manager;
         _loggerFactory = loggerFactory;

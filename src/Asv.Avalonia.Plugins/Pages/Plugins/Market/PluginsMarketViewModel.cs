@@ -23,7 +23,8 @@ public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
             DesignTime.CommandService,
             NullPluginManager.Instance,
             NullLoggerFactory.Instance,
-            new JsonConfiguration("null")
+            NullLayoutService.Instance,
+            DesignTime.Configuration
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -61,9 +62,10 @@ public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
+        ILayoutService layoutService,
         IConfiguration cfg
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, layoutService, loggerFactory)
     {
         Title = "Plugin Manager";
         _manager = manager ?? throw new ArgumentNullException(nameof(manager));
