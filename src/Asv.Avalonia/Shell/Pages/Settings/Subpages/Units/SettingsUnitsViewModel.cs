@@ -6,22 +6,35 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public class SettingsUnitsViewModelConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+}
+
 [ExportSettings(PageId)]
 public class SettingsUnitsViewModel : SettingsSubPage
 {
     public const string PageId = "units";
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
+    private readonly ILayoutService _layoutService;
+
+    private Lazy<SettingsUnitsViewModelConfig> _config;
 
     public SettingsUnitsViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(DesignTime.UnitService, NullLayoutService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public SettingsUnitsViewModel(IUnitService unit, ILoggerFactory loggerFactory)
+    public SettingsUnitsViewModel(
+        IUnitService unit,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, loggerFactory)
     {
+        _layoutService = layoutService;
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList
             .CreateView(x => new MeasureUnitViewModel(x, loggerFactory))
@@ -92,6 +105,22 @@ public class SettingsUnitsViewModel : SettingsSubPage
         {
             yield return child;
         }
+    }
+
+    protected override ValueTask HandleSubpageSave()
+    {
+        _config.Value.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+        _layoutService.Set(this, _config.Value);
+        return base.HandleSubpageSave();
+    }
+
+    protected override ValueTask HandleSubpageLoad()
+    {
+        _layoutService.Get(this, _config);
+        Search.Text.ModelValue.Value = _config.Value.SearchText;
+
+        Search.Text.ViewValue.SubscribeSaveState(this).DisposeItWith(Disposable);
+        return base.HandleSubpageLoad();
     }
 
     public override IExportInfo Source => SystemModule.Instance;

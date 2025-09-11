@@ -67,6 +67,59 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     public BindableReactiveProperty<bool> HasChanges { get; }
     public ICommand TryClose { get; }
 
+    protected override async ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        switch (e)
+        {
+            case SaveStateEvent saveState:
+            {
+                if (saveState.Source is not IPage page)
+                {
+                    break;
+                }
+
+                if (page.Id != Id)
+                {
+                    break;
+                }
+
+                await HandlePageSave();
+                break;
+            }
+
+            case LoadStateEvent loadState:
+            {
+                if (loadState.Source is not IPage page)
+                {
+                    break;
+                }
+
+                if (page.Id != Id)
+                {
+                    break;
+                }
+
+                await HandlePageLoad();
+                break;
+            }
+
+            default:
+                break;
+        }
+
+        await base.InternalCatchEvent(e);
+    }
+
+    protected virtual ValueTask HandlePageSave()
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    protected virtual ValueTask HandlePageLoad()
+    {
+        return ValueTask.CompletedTask;
+    }
+
     #region Dispose
 
     private readonly IDisposable _sub1;

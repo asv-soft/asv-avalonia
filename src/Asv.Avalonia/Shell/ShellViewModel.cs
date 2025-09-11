@@ -169,25 +169,23 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 await _cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandArg, cmd.Cancel);
                 break;
             case RestartApplicationEvent:
+                foreach (var page in _pages)
+                {
+                    await page.RequestSaveState();
+                }
+
                 Environment.Exit(0);
                 break;
-            case SaveStateEvent saveState:
-            {
-                break;
-            }
-            case LoadStateEvent loadState:
-            {
-                break;
-            }
             case PageCloseRequestedEvent close:
             {
                 Logger.ZLogInformation($"Close page [{close.Page.Id}]");
 
-                // TODO: save page layout
                 if (_pages is [HomePageViewModel])
                 {
                     return;
                 }
+
+                await close.Page.RequestSaveState();
 
                 var current = SelectedPage.Value; // TODO: fix page selection
                 var removedIndex = _pages.IndexOf(close.Page);

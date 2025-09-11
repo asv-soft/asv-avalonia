@@ -302,57 +302,26 @@ public class LogViewerViewModel
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    protected override ValueTask HandlePageSave()
     {
-        switch (e)
-        {
-            case SaveStateEvent saveState:
-            {
-                if (saveState.Source is not IPage page)
-                {
-                    break;
-                }
+        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+        _config.Skip = Skip.Value;
+        _config.Take = Take.Value;
+        _layoutService.Set(this, _config);
+        return base.HandlePageSave();
+    }
 
-                if (page.Id != Id)
-                {
-                    break;
-                }
+    protected override ValueTask HandlePageLoad()
+    {
+        _config = _layoutService.Get(this, new Lazy<LogViewerViewModelConfig>());
+        Search.Text.ModelValue.Value = _config.SearchText;
+        Skip.Value = _config.Skip;
+        Take.Value = _config.Take;
 
-                _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
-                _config.Skip = Skip.Value;
-                _config.Take = Take.Value;
-                _layoutService.Set(this, _config);
-                break;
-            }
-
-            case LoadStateEvent loadState:
-            {
-                if (loadState.Source is not IPage page)
-                {
-                    break;
-                }
-
-                if (page.Id != Id)
-                {
-                    break;
-                }
-
-                _config = _layoutService.Get(this, new Lazy<LogViewerViewModelConfig>());
-                Search.Text.ModelValue.Value = _config.SearchText;
-                Skip.Value = _config.Skip;
-                Take.Value = _config.Take;
-
-                Search.Text.ViewValue.SubscribeSaveState(this).DisposeItWith(Disposable);
-                Skip.SubscribeSaveState(this).DisposeItWith(Disposable);
-                Take.SubscribeSaveState(this).DisposeItWith(Disposable);
-                break;
-            }
-
-            default:
-                break;
-        }
-
-        return base.InternalCatchEvent(e);
+        Search.Text.ViewValue.SubscribeSaveState(this).DisposeItWith(Disposable);
+        Skip.SubscribeSaveState(this).DisposeItWith(Disposable);
+        Take.SubscribeSaveState(this).DisposeItWith(Disposable);
+        return base.HandlePageLoad();
     }
 
     public BindableReactiveProperty<int> Skip { get; }

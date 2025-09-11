@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Composition;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -36,11 +35,6 @@ public class SettingsPageViewModel
         : base(PageId, svc, host, layoutService, loggerFactory)
     {
         Title = RS.SettingsPageViewModel_Title;
-    }
-
-    protected override void InternalInitArgs(NameValueCollection args)
-    {
-        base.InternalInitArgs(args);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

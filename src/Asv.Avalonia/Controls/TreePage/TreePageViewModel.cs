@@ -1,10 +1,14 @@
-﻿using Asv.Cfg;
-using Asv.Common;
+﻿using Asv.Common;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
+
+public class TreePageViewModelConfig
+{
+    public string SelectedNodeId { get; set; } = string.Empty;
+}
 
 public abstract class TreePageViewModel<TContext, TSubPage>
     : PageViewModel<TContext>,
@@ -12,11 +16,13 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
 {
+    private readonly ILayoutService _layoutService;
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
     private readonly IContainerHost _container;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
+    private TreePageViewModelConfig _config;
 
     protected TreePageViewModel(
         NavigationId id,
@@ -29,6 +35,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     {
         _container = container;
         _loggerFactory = loggerFactory;
+        _layoutService = layoutService;
         Nodes = [];
         Nodes.SetRoutableParent(this).DisposeItWith(Disposable);
         Nodes.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -44,6 +51,11 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         SelectedNode.SubscribeAwait(SelectedNodeChanged).DisposeItWith(Disposable);
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).DisposeItWith(Disposable);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).DisposeItWith(Disposable);
+
+        Nodes
+            .ObserveAdd()
+            .SubscribeAwait(async (node, ct) => await node.Value.RequestLoadState(ct))
+            .DisposeItWith(Disposable);
     }
 
     #region Menu
@@ -69,7 +81,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         CancellationToken cancel
     )
     {
-        if (node?.Base.NavigateTo == null || _internalNavigate)
+        if (node?.Base.NavigateTo is null || _internalNavigate)
         {
             return;
         }
@@ -148,6 +160,59 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return null;
     }
 
+    protected override ValueTask HandlePageSave()
+    {
+        _config.SelectedNodeId = SelectedNode.Value?.Key.ToString() ?? string.Empty;
+        _layoutService.Set(this, _config);
+        return base.HandlePageSave();
+    }
+
+    protected override ValueTask HandlePageLoad()
+    {
+        _config = _layoutService.Get(this, new Lazy<TreePageViewModelConfig>());
+        if (!string.IsNullOrEmpty(_config.SelectedNodeId))
+        {
+            SetSelectedNodeFromConfig();
+        }
+
+        SelectedPage.SubscribeSaveState(this).DisposeItWith(Disposable);
+        return base.HandlePageLoad();
+    }
+
+    private void SetSelectedNodeFromConfig()
+    {
+        var selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == _config.SelectedNodeId);
+
+        SelectedNode.Value = selectedNode;
+
+        if (selectedNode is not null)
+        {
+            return;
+        }
+
+        // TreeView may not have all nodes yet
+        _sub1?.Dispose();
+        _sub1 = null;
+        _sub1 = Nodes
+            .ObserveAdd()
+            .Subscribe(addEvent =>
+            {
+                if (addEvent.Value.Id != _config.SelectedNodeId)
+                {
+                    return;
+                }
+
+                selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == _config.SelectedNodeId);
+                if (selectedNode is null)
+                {
+                    return;
+                }
+
+                SelectedNode.Value = selectedNode;
+                _sub1?.Dispose();
+            });
+    }
+
     public ObservableTree<ITreePage, NavigationId> TreeView { get; }
     public BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
@@ -168,13 +233,20 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         // do nothing
     }
 
+    #region Dispose
+
+    private IDisposable? _sub1;
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
+            _sub1?.Dispose();
             SelectedPage.Value?.Dispose();
         }
 
         base.Dispose(disposing);
     }
+
+    #endregion
 }
