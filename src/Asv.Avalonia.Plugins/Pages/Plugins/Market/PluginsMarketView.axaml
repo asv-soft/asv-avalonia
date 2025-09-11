@@ -37,8 +37,7 @@
                 Command="{Binding Search.Cancel}">
                 <avalonia:MaterialIcon Kind="Cancel" />
             </Button>
-
-
+            
             <TextBox Watermark="{x:Static plugins:RS.InstalledPluginsView_Search}"
                      Background="Transparent"
                      CornerRadius="0"
@@ -46,19 +45,21 @@
                      Text="{Binding SearchString.Value}">
                 <TextBox.InnerRightContent>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xE721;"
-                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                        <Button FontFamily="{StaticResource SymbolThemeFontFamily}"
                                 Theme="{DynamicResource TransparentButton}"
                                 Command="{Binding $parent[TextBox].Clear}"
-                                IsHitTestVisible="False" />
+                                IsHitTestVisible="False" >
+                            <avalonia:MaterialIcon Kind="Search"/>
+                        </Button>
                     </StackPanel>
                 </TextBox.InnerRightContent>
                 <TextBox.InnerLeftContent>
-                    <Button Content="&#xE8BB;"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    <Button FontFamily="{StaticResource SymbolThemeFontFamily}"
                             Theme="{DynamicResource TransparentButton}"
                             Command="{Binding $parent[TextBox].Clear}"
-                            IsVisible="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                            IsVisible="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" >
+                        <avalonia:MaterialIconExt Kind="Close"/>
+                    </Button>
                 </TextBox.InnerLeftContent>
             </TextBox>
         </DockPanel>

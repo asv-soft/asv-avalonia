@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Asv.Common;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia.Plugins;
 
@@ -23,7 +24,7 @@ public interface IPluginServerInfo
     public string? Username { get; }
 }
 
-public interface IPluginManager
+public interface IPluginManager : IHostedService
 {
     IReadOnlyList<IPluginServerInfo> Servers { get; }
     IEnumerable<ILocalPluginInfo> Installed { get; }

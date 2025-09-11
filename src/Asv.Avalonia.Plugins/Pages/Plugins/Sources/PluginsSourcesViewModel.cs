@@ -121,11 +121,6 @@ public class PluginsSourcesViewModel : SettingsSubPage
 
     public async ValueTask EditImpl(PluginSourceViewModel arg, CancellationToken token)
     {
-        if (SelectedItem.CurrentValue?.Id != arg.Id)
-        {
-            return;
-        }
-
         using var viewModel = new SourceViewModel(_mng, _loggerFactory, arg);
         var dialog = new ContentDialog(viewModel, _navigation)
         {
@@ -140,17 +135,13 @@ public class PluginsSourcesViewModel : SettingsSubPage
         var result = await dialog.ShowAsync();
         if (result == ContentDialogResult.Primary)
         {
+            await viewModel.Update();
             _update.Execute(Unit.Default);
         }
     }
 
     public void RemoveImpl(PluginSourceViewModel arg)
     {
-        if (SelectedItem.CurrentValue?.Id != arg.Id)
-        {
-            return;
-        }
-
         _mng.RemoveServer(arg.Model);
         _update.Execute(Unit.Default);
     }
