@@ -106,7 +106,7 @@
         <value>Единицы измерения</value>
     </data>
     
-    <data name="SettingsHotKeysListViewModel_Name" xml:space="preserve">
+    <data name="SettingsCommandListViewModel_Name" xml:space="preserve">
         <value>Список команд</value>
     </data>
     <data name="ShellView_WindowControlButton_Close" xml:space="preserve">
@@ -696,37 +696,37 @@
     <data name="ResetHotKeysCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, которая сбрасывает горячие клавиши к значениям по умолчанию</value>
     </data>
-    <data name="SettingsHotKeysListView_SearchBar_Watermark" xml:space="preserve">
+    <data name="SettingsCommandListView_SearchBar_Watermark" xml:space="preserve">
         <value>Поиск</value>
     </data>
-    <data name="SettingsHotKeysListView_ResetButton_Content" xml:space="preserve">
+    <data name="SettingsCommandListView_ResetButton_Content" xml:space="preserve">
         <value>Сбросить всё</value>
     </data>
-    <data name="SettingsHotKeysListView_HotKey_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_HotKey_Header" xml:space="preserve">
         <value>Горячая клавиша</value>
     </data>
-    <data name="SettingsHotKeysListView_Name_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_Name_Header" xml:space="preserve">
         <value>Команда</value>
     </data>
-    <data name="SettingsHotKeysListView_Description_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_Description_Header" xml:space="preserve">
         <value>Описание</value>
     </data>
-    <data name="SettingsHotKeysListView_Source_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_Source_Header" xml:space="preserve">
         <value>Источник</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_Command_Header" xml:space="preserve">
-        <value>Команда</value>
+    <data name="SettingsCommandListView_DataGrid_Command_Header" xml:space="preserve">
+        <value>Название</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_CustomHotKey_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_CustomHotKey_Header" xml:space="preserve">
         <value>Своя комбинация</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_DefaultHotKey_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_DefaultHotKey_Header" xml:space="preserve">
         <value>По умолчанию</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_Description_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_Description_Header" xml:space="preserve">
         <value>Описание</value>
     </data>
-    <data name="SettingsHotKeysListView_DataGrid_Source_Header" xml:space="preserve">
+    <data name="SettingsCommandListView_DataGrid_Source_Header" xml:space="preserve">
         <value>Источник</value>
     </data>
     <data name="HotKeyViewModel_HotKeyCaptureDialog_Title" xml:space="preserve">
@@ -836,5 +836,14 @@
     </data>
     <data name="DialogButton_Cancel" xml:space="preserve">
         <value>Отмена</value>
+    </data>
+    <data name="SettingsCommandListView_CommandsSortingType_All" xml:space="preserve">
+        <value>Все</value>
+    </data>
+    <data name="SettingsCommandListView_CommandsSortingType_WithHotkeysOnly" xml:space="preserve">
+        <value>С горячими клавишами</value>
+    </data>
+    <data name="SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly" xml:space="preserve">
+        <value>Без горячих клавиш</value>
     </data>
 </root>

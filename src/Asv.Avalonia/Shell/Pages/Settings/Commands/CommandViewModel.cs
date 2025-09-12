@@ -5,14 +5,14 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class HotKeyViewModel : RoutableViewModel
+public sealed class CommandViewModel : RoutableViewModel
 {
     public const string ViewModelBaseId = "hotkey";
     public const string EmptyHotKey = "-";
     private readonly ICommandService _svc;
     private readonly IDialogService _dialogService;
 
-    public HotKeyViewModel(
+    public CommandViewModel(
         ICommandInfo command,
         ICommandService svc,
         IDialogService dialogService,
@@ -58,6 +58,7 @@ public sealed class HotKeyViewModel : RoutableViewModel
     public string Description => Base.Description;
     public string Source => Base.Source.ModuleName;
     public string? DefaultHotKey => Base.DefaultHotKey;
+    public bool IsHotkeyConfigurable => DefaultHotKey is not null;
     public HistoricalStringProperty EditedHotKey { get; }
     public BindableReactiveProperty<bool> HasConflict { get; } = new();
 
