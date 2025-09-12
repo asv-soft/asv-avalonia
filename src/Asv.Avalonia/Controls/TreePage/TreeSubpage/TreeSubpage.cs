@@ -24,7 +24,7 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     {
         if (disposing)
         {
-            Menu.Clear();
+            Menu.RemoveAll();
         }
 
         base.Dispose(disposing);

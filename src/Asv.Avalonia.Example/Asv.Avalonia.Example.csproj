@@ -47,8 +47,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Asv.Avalonia.Example.Api\Asv.Avalonia.Example.Api.csproj" />
-      <ProjectReference Include="..\Asv.Avalonia.IO\Asv.Avalonia.IO.csproj" />
-      <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
     </ItemGroup>
 
     <ItemGroup>

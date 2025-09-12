@@ -52,9 +52,9 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).DisposeItWith(Disposable);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).DisposeItWith(Disposable);
 
-        Nodes
-            .ObserveAdd()
-            .SubscribeAwait(async (node, ct) => await node.Value.RequestLoadState(ct))
+        _selectedPage
+            .WhereNotNull()
+            .SubscribeAwait(async (p, ct) => await p.RequestLoadState(ct))
             .DisposeItWith(Disposable);
     }
 

@@ -7,6 +7,4 @@ public abstract class SettingsSubPage(NavigationId id, ILoggerFactory loggerFact
         ISettingsSubPage
 {
     public override ValueTask Init(ISettingsPage context) => ValueTask.CompletedTask;
-
-    public override IEnumerable<IRoutable> GetRoutableChildren() => Menu;
 }
