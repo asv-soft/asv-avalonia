@@ -1,114 +1,642 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:example="clr-namespace:Asv.Avalonia.Example"
-             xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Example.DialogControlsPageView"
-             x:DataType="example:DialogControlsPageViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.Example.DialogControlsPageView"
+    x:DataType="example:DialogControlsPageViewModel">
     <Design.DataContext>
         <example:DialogControlsPageViewModel />
     </Design.DataContext>
 
-    <DockPanel Margin="16">
-        <Border DockPanel.Dock="Top"
-                Padding="16"
-                Background="{DynamicResource SystemRegionBrush}"
-                CornerRadius="6"
-                Margin="0,0,0,12">
+    <UserControl.Styles>
+        <Style Selector="Border.DialogBlockInnerInvisibleStyle">
+            <Setter Property="Padding" Value="12, 14, 12, 14" />
+        </Style>
+
+        <Style Selector="Border.DialogBlockInnerStyle">
+            <Setter Property="Padding" Value="12, 14, 12, 14" />
+            <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <Style Selector="Border.DialogBlockStyle">
+            <Setter Property="Padding" Value="12, 20, 12, 20" />
+            <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+
+        <Style Selector="Border.TitleBlockStyle">
+            <Setter Property="Padding" Value="12, 20, 12, 20" />
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListLowBrush}" />
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+        </Style>
+    </UserControl.Styles>
+
+    <DockPanel Margin="12">
+        <!-- Main header -->
+        <Border DockPanel.Dock="Top" Classes="TitleBlockStyle">
             <StackPanel Spacing="6">
-                <TextBlock Text="{x:Static example:RS.DialogControlsPageViewModel_Title}"
-                           FontSize="18"
-                           FontWeight="SemiBold" />
-                <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Description}"
-                           Opacity="0.85" />
-                <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Note}"
-                           TextWrapping="Wrap"
-                           Opacity="0.75" />
+                <TextBlock
+                    Classes="h1"
+                    Text="{x:Static example:RS.DialogControlsPageViewModel_Title}"
+                    FontSize="18"
+                    FontWeight="SemiBold" />
+                <TextBlock
+                    Text="{x:Static example:RS.DialogControlsPageView_Description}"
+                    Opacity="0.85" />
             </StackPanel>
         </Border>
 
-        <Grid ColumnDefinitions="*,16,*,16,*" HorizontalAlignment="Stretch">
-            <Border Grid.Column="0" 
-                    Padding="16" 
-                    Background="{DynamicResource SystemRegionBrush}" 
-                    CornerRadius="6">
-                <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Spacing="2">
-                        <TextBlock Classes="h2" Text="{x:Static example:RS.DialogControlsPageView_System_Title}" />
-                        <TextBlock Text="{x:Static example:RS.DialogControlsPageView_System_Description}" Opacity="0.8" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="12" Grid.IsSharedSizeScope="True">
+                <!-- Custom dialog header -->
+                <Border Classes="TitleBlockStyle">
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="h2" Text="{x:Static example:RS.DialogControlsPageView_CustomDialog_Header}" />
+                        <TextBlock
+                            Text="{x:Static example:RS.DialogControlsPageView_CustomDialog_Description}"
+                            Opacity="0.85"
+                            TextWrapping="Wrap" />
                     </StackPanel>
-                    <Button Command="{Binding OpenFileCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_System_OpenFile}"
-                            HorizontalAlignment="Stretch" />
-                    <Button Command="{Binding SaveFileCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_System_SaveFile}"
-                            HorizontalAlignment="Stretch" />
-                    <Button Command="{Binding SelectFolderCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_System_SelectFolder}"
-                            HorizontalAlignment="Stretch" />
-                    <Button Command="{Binding ObserveFolderCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_System_ObserveFolder}"
-                            HorizontalAlignment="Stretch" />
-                </StackPanel>
-            </Border>
-            <Border Grid.Column="2"
-                    Padding="16"
-                    Background="{DynamicResource SystemRegionBrush}"
-                    CornerRadius="6">
-                <StackPanel Orientation="Vertical" Spacing="10">
-                    <StackPanel Spacing="2">
-                        <TextBlock Classes="h2"
-                                   Text="{x:Static example:RS.DialogControlsPageView_Custom_Title}" />
-                        <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Custom_Description}"
-                                   Opacity="0.8" />
-                    </StackPanel>
-                    <Button Command="{Binding YesOrNoCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_Custom_YesOrNo}"
-                            HorizontalAlignment="Stretch" />
-                    <Button Command="{Binding SaveCancelCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_Custom_Save}"
-                            HorizontalAlignment="Stretch" />
-                    <Button Command="{Binding ShowInputCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_Custom_Input}"
-                            HorizontalAlignment="Stretch" />
-                    <Button Command="{Binding ShowHotKeyCaptureCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_Custom_HotKeyCapture}"
-                            HorizontalAlignment="Stretch" />
+                </Border>
 
-                    <Button Command="{Binding OpenGeoPointDialogCommand}"
-                            Content="{x:Static example:RS.DialogControlsPageView_Custom_GeoPoint}"
-                            HorizontalAlignment="Stretch" />
-                    
-                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*" HorizontalAlignment="Stretch">
-                        <TextBlock Grid.Column="0" Grid.Row="0" Text="{x:Static asv:RS.Longitude_Name}" VerticalAlignment="Center"/>
-                        <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding GeoPointProperty.Longitude.ViewValue.Value, Mode=TwoWay}"/>
-                        <TextBlock Grid.Column="2" Grid.Row="0" Margin="4" Text="{Binding LonUnitName.Value}" VerticalAlignment="Center"/>
-                        
-                        <TextBlock Grid.Column="0" Grid.Row="1" Text="{x:Static asv:RS.Latitude_Name}" VerticalAlignment="Center"/>
-                        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding GeoPointProperty.Latitude.ViewValue.Value, Mode=TwoWay}"/>
-                        <TextBlock Grid.Column="2" Grid.Row="1" Margin="4" Text="{Binding LatUnitName.Value}" VerticalAlignment="Center"/>
-                        
-                        <TextBlock Grid.Column="0" Grid.Row="2" Text="{x:Static asv:RS.Altitude_Name}" VerticalAlignment="Center"/>
-                        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding GeoPointProperty.Altitude.ViewValue.Value, Mode=TwoWay}"/>
-                        <TextBlock Grid.Column="2" Grid.Row="2" Margin="4" Text="{Binding AltUnitName.Value}" VerticalAlignment="Center"/>
-                    </Grid>
-                </StackPanel>
-            </Border>
-            <Border Grid.Column="4"
-                    Padding="16"
-                    Background="{DynamicResource SystemRegionBrush}"
-                    CornerRadius="6">
-                <Grid ColumnDefinitions="Auto,8,*">
-                    <TextBlock Grid.Column="0"
-                               Text="{x:Static example:RS.DialogControlsPageView_LastResult}"
-                               FontWeight="SemiBold" />
-                    <TextBlock Grid.Column="2"
-                               Text="{Binding LastResult.Value}"
-                               TextWrapping="Wrap" />
+                <!-- Custom dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto">
+                            <StackPanel Spacing="8" VerticalAlignment="Center">
+                                <TextBlock Text="{x:Static example:RS.DialogControlsPageView_CustomDialog_Title}" />
+                                <TextBox Text="{Binding CustomDialogTitle.ViewValue.Value, Mode=TwoWay}"/>
+                                <TextBlock Text="{x:Static example:RS.DialogControlsPageView_CustomDialog_Content}" />
+                                <TabControl>
+                                    <TabItem Header="{x:Static example:RS.DialogControlsPageView_CustomDialog_TextContent}"
+                                             IsSelected="{Binding !CustomDialogIsImageContent.ViewValue.Value, Mode=TwoWay}">
+                                        <TextBox
+                                            Text="{Binding CustomDialogMessage.ViewValue.Value, Mode=TwoWay}"
+                                            AcceptsReturn="True"
+                                            TextWrapping="Wrap" />
+                                    </TabItem>
+                                    <TabItem Header="{x:Static example:RS.DialogControlsPageView_CustomDialog_ImageContent}"
+                                             IsSelected="{Binding CustomDialogIsImageContent.ViewValue.Value, Mode=TwoWay}">
+                                        <StackPanel Spacing="4" Orientation="Horizontal">
+                                            <Button
+                                                HorizontalAlignment="Center"
+                                                VerticalAlignment="Center"
+                                                Command="{Binding OpenImageForCustomDialogAsyncCommand}"
+                                                Content="{x:Static example:RS.DialogControlsPageView_System_OpenFile_Title}" />
+                                            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                                <TextBlock
+                                                    Text="{Binding CustomDialogImagePath.ViewValue.Value, Converter={x:Static asv:PathToFileNameConverter.Instance}}"
+                                                    TextWrapping="Wrap"/>
+                                                <TextBlock
+                                                    Text="{x:Static example:RS.DialogControlsPageView_CustomDialog_ImageContent_Select}"
+                                                    IsVisible="{Binding CustomDialogImagePath.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                                    TextWrapping="Wrap"
+                                                    Foreground="Gray"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </TabItem>
+                                </TabControl>
+                                <TextBlock Text="{x:Static example:RS.DialogControlsPageView_CustomDialog_Buttons}" />
+                                    <Grid
+                                        ColumnDefinitions="*,*"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Stretch"
+                                        ColumnSpacing="4">
+                                        <Grid ColumnDefinitions="*,7*" Grid.Column="0" ColumnSpacing="2">
+                                            <CheckBox Grid.Column="0"
+                                                      HorizontalAlignment="Center"
+                                                      IsChecked="{Binding CustomDialogIsPrimaryButtonEnabled.ViewValue.Value, Mode=TwoWay}"/>
+                                            <TextBox Grid.Column="1"
+                                                     IsEnabled="{Binding CustomDialogIsPrimaryButtonEnabled.ViewValue.Value}"
+                                                     Text="{Binding CustomDialogPrimaryButtonText.ViewValue.Value, Mode=TwoWay}" />
+                                        </Grid>
+
+                                        <Grid ColumnDefinitions="*,7*" Grid.Column="1" ColumnSpacing="2">
+                                            <CheckBox Grid.Column="0"
+                                                      HorizontalAlignment="Center"
+                                                      IsChecked="{Binding CustomDialogIsSecondaryButtonEnabled.ViewValue.Value, Mode=TwoWay}"/>
+                                            <TextBox Grid.Column="1"
+                                                     IsEnabled="{Binding CustomDialogIsSecondaryButtonEnabled.ViewValue.Value}"
+                                                     Text="{Binding CustomDialogSecondaryButtonText.ViewValue.Value, Mode=TwoWay}" />
+                                        </Grid>
+                                    </Grid>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding ShowCustomDialogCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0 0 4 0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Custom_OpenDialog}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerInvisibleStyle">
+                                <asv:ContentDialogMini DialogResult="{Binding CustomDialogResult.ViewValue.Value}"
+                                                       Width="100" Height="100"
+                                                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                                                       DialogIsImageContentType="{Binding CustomDialogIsImageContent.ViewValue.Value}"/>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetCustomResultCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
                 </Grid>
-            </Border>
-        </Grid>
+
+                <!-- Ready dialog prefabs header -->
+                <Border Classes="TitleBlockStyle">
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="h2" Text="{x:Static example:RS.DialogControlsPageView_Prefabs_Header}" />
+                        <TextBlock
+                            Text="{x:Static example:RS.DialogControlsPageView_Prefabs_Description}"
+                            Opacity="0.85"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Custom dialogs header -->
+                <Border Classes="TitleBlockStyle">
+                    <TextBlock Classes="h3" Text="{x:Static example:RS.DialogControlsPageView_Custom_Title}" />
+                </Border>
+
+                <!-- Yes/no dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_YesOrNo_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_YesOrNo_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding YesOrNoCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Custom_OpenDialog}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerInvisibleStyle">
+                                <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <asv:BoolIndicator Value="{Binding YesOrNoDialogResult.ViewValue.Value, Converter={x:Static example:ConfirmationStatusToBoolConverter.Instance}}"
+                                                       IconSize="40"/>
+                                </StackPanel>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetYerOrNoCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Save/cancel dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_Save_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_Save_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding SaveCancelCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Custom_OpenDialog}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerInvisibleStyle">
+                                <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center"
+                                            HorizontalAlignment="Center">
+                                    <asv:BoolIndicator Value="{Binding SaveCancelDialogResult.ViewValue.Value, Converter={x:Static example:ConfirmationStatusToBoolConverter.Instance}}"
+                                                       IconSize="40"/>
+                                </StackPanel>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetSaveCancelResultCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Input dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_Input_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_Input_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding ShowInputCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Custom_OpenDialog}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2" MaxWidth="400">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock
+                                        Text="{Binding ShowInputDialogResult.ViewValue.Value}"
+                                        TextWrapping="Wrap" />
+                                    <TextBlock
+                                        Text="{x:Static example:RS.DialogControlsPageView_Custom_Input_Placeholder}"
+                                        IsVisible="{Binding ShowInputDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                        TextWrapping="Wrap"
+                                        Foreground="Gray"/>
+                                </Grid>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetShowInputResultCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- HotKey capture dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_HotKeyCapture_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_HotKeyCapture_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding ShowHotKeyCaptureCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Custom_OpenDialog}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <asv:HotKeyBox Width="200" VerticalAlignment="Center" HorizontalAlignment="Center"
+                                               HotKey="{Binding ShowHotKeyCaptureDialogResult.ViewValue.Value, Converter={x:Static example:StringToHotKeyConverter.Instance}}" />
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetShowHotKeyResultCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- GeoPoint dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_GeoPoint_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_Custom_GeoPoint_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding OpenGeoPointDialogCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_Custom_OpenDialog}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <Grid
+                                    ColumnDefinitions="*,*,*"
+                                    RowDefinitions="*,*,*"
+                                    ColumnSpacing="4"
+                                    RowSpacing="4"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Center">
+                                <TextBlock Grid.Column="0" Grid.Row="0"
+                                           Text="{x:Static asv:RS.Longitude_Name}"
+                                           VerticalAlignment="Center" />
+                                <TextBox Grid.Column="1" Grid.Row="0"
+                                         Text="{Binding GeoPointDialogResult.Longitude.ViewValue.Value, Mode=TwoWay}" />
+                                <TextBlock Grid.Column="2" Grid.Row="0"
+                                           Text="{Binding LonUnitName.Value}"
+                                           VerticalAlignment="Center" />
+
+                                <TextBlock Grid.Column="0" Grid.Row="1"
+                                           Text="{x:Static asv:RS.Latitude_Name}"
+                                           VerticalAlignment="Center" />
+                                <TextBox Grid.Column="1" Grid.Row="1"
+                                         Text="{Binding GeoPointDialogResult.Latitude.ViewValue.Value, Mode=TwoWay}" />
+                                <TextBlock Grid.Column="2" Grid.Row="1"
+                                           Text="{Binding LatUnitName.Value}"
+                                           VerticalAlignment="Center" />
+
+                                <TextBlock Grid.Column="0" Grid.Row="2"
+                                           Text="{x:Static asv:RS.Altitude_Name}"
+                                           VerticalAlignment="Center" />
+                                <TextBox Grid.Column="1" Grid.Row="2"
+                                         Text="{Binding GeoPointDialogResult.Altitude.ViewValue.Value, Mode=TwoWay}" />
+                                <TextBlock Grid.Column="2" Grid.Row="2"
+                                           Text="{Binding AltUnitName.Value}"
+                                           VerticalAlignment="Center" />
+                                </Grid>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetOpenGeoPointResultCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- System dialogs header -->
+                <Border Classes="TitleBlockStyle">
+                    <StackPanel Spacing="6">
+                        <TextBlock Classes="h3" Text="{x:Static example:RS.DialogControlsPageView_System_Title}" />
+                        <TextBlock
+                            Text="{x:Static example:RS.DialogControlsPageView_System_Note}"
+                            TextWrapping="Wrap"
+                            Opacity="0.75" />
+                    </StackPanel>
+                </Border>
+
+                <!-- Open file dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_System_OpenFile_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_System_OpenFile_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding OpenFileCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_System_OpenFile_Title}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2" MaxWidth="400">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock
+                                        Text="{Binding OpenFileDialogResult.ViewValue.Value}"
+                                        TextWrapping="Wrap"/>
+                                    <TextBlock
+                                        Text="/Users/folder/inner/file.txt"
+                                        IsVisible="{Binding OpenFileDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                        TextWrapping="Wrap"
+                                        Foreground="Gray"/>
+                                </Grid>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetOpenFileCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Save file dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_System_SaveFile_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_System_SaveFile_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding SaveFileCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_System_SaveFile_Title}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2" MaxWidth="400">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock
+                                        Text="{Binding SaveFileDialogResult.ViewValue.Value}"
+                                        TextWrapping="Wrap"/>
+                                    <TextBlock
+                                        Text="/Users/folder/inner/file.txt"
+                                        IsVisible="{Binding SaveFileDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                        TextWrapping="Wrap"
+                                        Foreground="Gray"/>
+                                </Grid>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetSaveFileCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Select folder dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_System_SelectFolder_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_System_SelectFolder_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding SelectFolderCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_System_SelectFolder_Title}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2" MaxWidth="400">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock
+                                        Text="{Binding SelectFolderDialogResult.ViewValue.Value}"
+                                        TextWrapping="Wrap"/>
+                                    <TextBlock
+                                        Text="/Users/petya/folder/"
+                                        IsVisible="{Binding SelectFolderDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                        TextWrapping="Wrap"
+                                        Foreground="Gray"/>
+                                </Grid>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetSelectFolderCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+
+                <!-- Observe folder dialog -->
+                <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="ResultColumn" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock
+                                FontWeight="SemiBold"
+                                Text="{x:Static example:RS.DialogControlsPageView_System_ObserveFolder_Title}" />
+                            <TextBlock
+                                Text="{x:Static example:RS.DialogControlsPageView_System_ObserveFolder_Description}"
+                                Opacity="0.8"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            Command="{Binding ObserveFolderCommand}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="{x:Static example:RS.DialogControlsPageView_System_ObserveFolder_Title}"
+                                       TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                    <TextBlock
+                                        Text="{Binding ObserveFolderDialogResult.ViewValue.Value}"
+                                        TextWrapping="Wrap"/>
+                                    <TextBlock
+                                        Text="{x:Static example:RS.DialogControlsPageView_System_ObserveFolder_PlaceHolder}"
+                                        IsVisible="{Binding ObserveFolderDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                        TextWrapping="Wrap"
+                                        Foreground="Gray"/>
+                                </Grid>
+                            </Border>
+                            <Button Grid.Column="1" Command="{Binding ResetObserveFolderCommand}">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>

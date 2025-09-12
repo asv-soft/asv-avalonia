@@ -742,4 +742,10 @@
     <data name="SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly" xml:space="preserve">
         <value>Without hotkeys</value>
     </data>
+    <data name="ResetPageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Reset page</value>
+    </data>
+    <data name="ResetPageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Reset all data on the page</value>
+    </data>
 </root>

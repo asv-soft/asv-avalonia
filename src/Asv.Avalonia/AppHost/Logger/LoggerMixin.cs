@@ -85,7 +85,7 @@ public static class LoggerMixin
             options.UsePlainTextFormatter(formatter =>
             {
                 formatter.SetPrefixFormatter(
-                    $"{0:HH:mm:ss.fff} | {3:00} | ={1:short}= | {2,-40} ",
+                    $"{0:HH:mm:ss.fff} | {3:00} | ={1:short}= | {2, -40} ",
                     (in MessageTemplate template, in LogInfo info) =>
                         template.Format(
                             info.Timestamp,

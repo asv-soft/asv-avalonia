@@ -93,4 +93,8 @@
     <ItemGroup>
       <None Remove="icon.ico" />
     </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Controls\ContentDialogMini\ContentDialogMini.axaml" />
+    </ItemGroup>
 </Project>
