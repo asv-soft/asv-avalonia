@@ -7,6 +7,12 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public class SettingsHotKeysListViewModelConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+    public string SelectedItemId { get; set; } = string.Empty;
+}
+
 [ExportSettings(PageId)]
 public class SettingsHotKeysListViewModel : SettingsSubPage
 {
@@ -17,13 +23,17 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
     private readonly IDialogService _dialogService;
     private readonly ISearchService _searchService;
     private readonly ObservableList<ICommandInfo> _itemsSource;
+    private readonly ILayoutService _layoutService;
     private readonly ISynchronizedView<ICommandInfo, HotKeyViewModel> _view;
+
+    private SettingsHotKeysListViewModelConfig _config;
 
     public SettingsHotKeysListViewModel()
         : this(
             DesignTime.CommandService,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
+            NullLayoutService.Instance,
             NullSearchService.Instance
         )
     {
@@ -35,6 +45,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
         ICommandService commandsService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
+        ILayoutService layoutService,
         ISearchService searchService
     )
         : base(PageId, loggerFactory)
@@ -43,6 +54,7 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
         _loggerFactory = loggerFactory;
         _dialogService = dialogService;
         _searchService = searchService;
+        _layoutService = layoutService;
 
         SelectedItem = new BindableReactiveProperty<HotKeyViewModel?>().DisposeItWith(Disposable);
 
@@ -119,6 +131,30 @@ public class SettingsHotKeysListViewModel : SettingsSubPage
         {
             yield return children;
         }
+    }
+
+    protected override ValueTask HandleSubpageSave()
+    {
+        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+        _config.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+        _layoutService.Set(this, _config);
+        return base.HandleSubpageSave();
+    }
+
+    protected override ValueTask HandleSubpageLoad()
+    {
+        _config = _layoutService.Get(this, new Lazy<SettingsHotKeysListViewModelConfig>());
+        Search.Text.ModelValue.Value = _config.SearchText;
+        var selected = _view.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
+
+        if (selected is not null)
+        {
+            SelectedItem.Value = selected;
+        }
+
+        Search.Text.ViewValue.SubscribeSaveState(this).DisposeItWith(Disposable);
+        SelectedItem.SubscribeSaveState(this).DisposeItWith(Disposable);
+        return base.HandleSubpageLoad();
     }
 
     public override IExportInfo Source => SystemModule.Instance;

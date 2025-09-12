@@ -116,7 +116,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
         }
 
         Search.Text.ViewValue.SubscribeSaveState(this).DisposeItWith(Disposable);
-        SelectedItem.WhereNotNull().SubscribeSaveState(this).DisposeItWith(Disposable);
+        SelectedItem.SubscribeSaveState(this).DisposeItWith(Disposable);
         return base.HandleSubpageLoad();
     }
 
