@@ -1,0 +1,63 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Design.PreviewWith>
+        <Border Padding="20" Background="{DynamicResource SystemControlPageBackgroundChromeLowBrush}">
+            <Grid RowDefinitions="Auto" ColumnSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*" MinWidth="130" />
+                        <ColumnDefinition Width="*" MinWidth="80" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <Border Classes="DialogBlockStyle" Grid.Column="0">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock FontWeight="SemiBold" Text="Some title" />
+                            <TextBlock Text="Some description text" Opacity="0.8" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="1">
+                        <Button
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock Text="Button" TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </Border>
+                    <Border Classes="DialogBlockStyle" Grid.Column="2">
+                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Border Grid.Column="0" Classes="DialogBlockInnerStyle">
+                                <TextBlock Text="Result" TextWrapping="WrapWithOverflow" />
+                            </Border>
+                            <Button Grid.Column="1">
+                                <avalonia:MaterialIcon Kind="Undo"/>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </Grid>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="Border.DialogBlockInnerInvisibleStyle">
+        <Setter Property="Padding" Value="12, 14, 12, 14" />
+    </Style>
+
+    <Style Selector="Border.DialogBlockInnerStyle">
+        <Setter Property="Padding" Value="12, 14, 12, 14" />
+        <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+        <Setter Property="CornerRadius" Value="6" />
+    </Style>
+
+    <Style Selector="Border.DialogBlockStyle">
+        <Setter Property="Padding" Value="12, 20, 12, 20" />
+        <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+
+    <Style Selector="Border.TitleBlockStyle">
+        <Setter Property="Padding" Value="12, 20, 12, 20" />
+        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListLowBrush}" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+</Styles>
