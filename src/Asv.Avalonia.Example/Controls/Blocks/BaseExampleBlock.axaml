@@ -1,0 +1,22 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:example="using:Asv.Avalonia.Example">
+    <Design.PreviewWith>
+        <Panel Margin="10">
+            <example:BaseExampleBlock Content="Hello world"/>
+        </Panel>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type example:BaseExampleBlock}" TargetType="example:BaseExampleBlock">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Padding="12, 20, 12, 20"
+                        CornerRadius="6"
+                        Margin="0,0,0,10"
+                        Background="{Binding Background, RelativeSource={RelativeSource AncestorType=example:BaseExampleBlock}}">
+                    <ContentPresenter Content="{TemplateBinding Content}"/>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

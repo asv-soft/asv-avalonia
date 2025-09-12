@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
+                xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
 
         </xsd:element>
@@ -44,43 +44,43 @@
     <data name="OpenControlsGalleryPageCommand_CommandInfo_Name" xml:space="preserve">
         <value>Open controls gallery</value>
     </data>
-    <data name="DialogControlsPageViewModel_OpenFile_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_OpenFilePrefab_Title" xml:space="preserve">
         <value>Open File</value>
     </data>
-    <data name="DialogControlsPageViewModel_SaveFile_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SaveFilePrefab_Title" xml:space="preserve">
         <value>Save File</value>
     </data>
-    <data name="DialogControlsPageViewModel_SelectFolder_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SelectFolderPrefab_Title" xml:space="preserve">
         <value>Open Folder</value>
     </data>
-    <data name="DialogControlsPageViewModel_ObserveFolder_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_ObserveFolderPrefab_Title" xml:space="preserve">
         <value>Observe Folder</value>
     </data>
-    <data name="DialogControlsPageViewModel_YesOrNo_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_YesOrNoPrefab_Title" xml:space="preserve">
         <value>Warning</value>
     </data>
-    <data name="DialogControlsPageViewModel_YesOrNo_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_YesOrNoPrefab_Message" xml:space="preserve">
         <value>Do you really want to exit?</value>
     </data>
-    <data name="DialogControlsPageViewModel_Save_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SavePrefab_Title" xml:space="preserve">
         <value>Saving</value>
     </data>
-    <data name="DialogControlsPageViewModel_Save_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SavePrefab_Message" xml:space="preserve">
         <value>Save?</value>
     </data>
-    <data name="DialogControlsPageViewModel_HotKeyCapture_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_HotKeyCapturePrefab_Title" xml:space="preserve">
         <value>Key Capture</value>
     </data>
-    <data name="DialogControlsPageViewModel_HotKeyCapture_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_HotKeyCapturePrefab_Message" xml:space="preserve">
         <value>Press the key</value>
     </data>
-    <data name="DialogControlsPageViewModel_Input_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_InputPrefab_Title" xml:space="preserve">
         <value>Input</value>
     </data>
-    <data name="DialogControlsPageViewModel_Input_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_InputPrefab_Message" xml:space="preserve">
         <value>Pass the data</value>
     </data>
-    <data name="DialogControlsPageView_Note" xml:space="preserve">
+    <data name="DialogControlsPageView_System_Note" xml:space="preserve">
         <value>System dialogs are available on desktop platforms. Some options depend on OS capabilities.</value>
     </data>
     <data name="HistoricalControlsPageView_Description" xml:space="preserve">
@@ -90,22 +90,13 @@
         <value>Inline notification for app-wide messages. Examples below show basic usage, action button, and closable variants.</value>
     </data>
     <data name="DialogControlsPageView_Description" xml:space="preserve">
-        <value>Examples of system and custom dialogs.</value>
+        <value>Examples of dialogs — windows for text input, option selection, action confirmation and so on.</value>
     </data>
     <data name="DialogControlsPageView_Custom_Title" xml:space="preserve">
-        <value>Custom dialogs</value>
-    </data>
-    <data name="DialogControlsPageView_Custom_Description" xml:space="preserve">
-        <value>Common confirmations and inputs</value>
+        <value>Custom dialog prefabs</value>
     </data>
     <data name="DialogControlsPageView_System_Title" xml:space="preserve">
-        <value>System dialogs</value>
-    </data>
-    <data name="DialogControlsPageView_System_Description" xml:space="preserve">
-        <value>File/folder pickers</value>
-    </data>
-    <data name="DialogControlsPageView_LastResult" xml:space="preserve">
-        <value>Last result</value>
+        <value>Prefabs of the system dialogs</value>
     </data>
     <data name="HistoricalControlsPageView_Rules_Description" xml:space="preserve">
         <value>Rules: non-empty; and second input additionally forbids ‘s’.</value>
@@ -164,56 +155,56 @@
     <data name="InfoBoxControlsPageViewModel_Example_Message" xml:space="preserve">
         <value>Example InfoBox message</value>
     </data>
-    <data name="DialogControlsPageView_System_OpenFile" xml:space="preserve">
+    <data name="DialogControlsPageView_OpenFilePrefab_Title" xml:space="preserve">
         <value>Open file</value>
     </data>
-    <data name="DialogControlsPageView_System_SaveFile" xml:space="preserve">
+    <data name="DialogControlsPageView_SaveFilePrefab_Title" xml:space="preserve">
         <value>Save file</value>
     </data>
-    <data name="DialogControlsPageView_System_SelectFolder" xml:space="preserve">
+    <data name="DialogControlsPageView_SelectFolderPrefab_Title" xml:space="preserve">
         <value>Select folder</value>
     </data>
-    <data name="DialogControlsPageView_System_ObserveFolder" xml:space="preserve">
+    <data name="DialogControlsPageView_ObserveFolderPrefab_Title" xml:space="preserve">
         <value>Observe folder</value>
     </data>
-    <data name="DialogControlsPageView_Custom_YesOrNo" xml:space="preserve">
+    <data name="DialogControlsPageView_YesOrNoPrefab_Title" xml:space="preserve">
         <value>Open confirmation dialog</value>
     </data>
-    <data name="DialogControlsPageView_Custom_Save" xml:space="preserve">
+    <data name="DialogControlsPageView_SavePrefab_Title" xml:space="preserve">
         <value>Open saving dialog</value>
     </data>
-    <data name="DialogControlsPageView_Custom_Input" xml:space="preserve">
+    <data name="DialogControlsPageView_InputPrefab_Title" xml:space="preserve">
         <value>Open input dialog</value>
     </data>
-    <data name="DialogControlsPageView_Custom_HotKeyCapture" xml:space="preserve">
+    <data name="DialogControlsPageView_HotKeyCapturePrefab_Title" xml:space="preserve">
         <value>Open key capture dialog</value>
     </data>
     <data name="DialogControlsPageViewModel_CancelResult" xml:space="preserve">
         <value>cancel</value>
     </data>
-    <data name="DialogControlsPageViewModel_OpenFile_Result" xml:space="preserve">
-        <value>OpenFile: {0}</value>
+    <data name="DialogControlsPageViewModel_OpenFilePrefab_Result" xml:space="preserve">
+        <value>Opened file: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_SaveFile_Result" xml:space="preserve">
-        <value>SaveFile: {0}</value>
+    <data name="DialogControlsPageViewModel_SaveFilePrefab_Result" xml:space="preserve">
+        <value>Saved file: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_SelectFolder_Result" xml:space="preserve">
-        <value>SelectFolder: {0}</value>
+    <data name="DialogControlsPageViewModel_SelectFolderPrefab_Result" xml:space="preserve">
+        <value>Selected folder: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_ObserveFolder_Result" xml:space="preserve">
-        <value>ObserveFolder: opened {0}</value>
+    <data name="DialogControlsPageViewModel_ObserveFolderPrefab_Result" xml:space="preserve">
+        <value>Observed folder: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_YesOrNo_Result" xml:space="preserve">
-        <value>YesNo: {0}</value>
+    <data name="DialogControlsPageViewModel_YesOrNoPrefab_Result" xml:space="preserve">
+        <value>Yes/No: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_Save_Result" xml:space="preserve">
-        <value>SaveCancel: {0}</value>
+    <data name="DialogControlsPageViewModel_SavePrefab_Result" xml:space="preserve">
+        <value>Saved: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_Input_Result" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_InputPrefab_Result" xml:space="preserve">
         <value>Input: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_HotKeyCapture_Result" xml:space="preserve">
-        <value>HotKey: {0}</value>
+    <data name="DialogControlsPageViewModel_HotKeyCapturePrefab_Result" xml:space="preserve">
+        <value>Selected HotKey: {0}</value>
     </data>
     <data name="OpenControlsGalleryPageCommand_Action_Title" xml:space="preserve">
         <value>Controls gallery</value>
@@ -224,10 +215,142 @@
     <data name="HistoricalControlsPageView_Enum" xml:space="preserve">
         <value>Enum:</value>
     </data>
-    <data name="DialogControlsPageViewModel_GeoPoint_Result" xml:space="preserve">
-        <value>GeoPoint: {0}</value>
+    <data name="DialogControlsPageViewModel_GeoPointPrefab_Result" xml:space="preserve">
+        <value>Selected GeoPoint: {0}</value>
     </data>
-    <data name="DialogControlsPageView_Custom_GeoPoint" xml:space="preserve">
+    <data name="DialogControlsPageView_GeoPointPrefab_Title" xml:space="preserve">
         <value>Open geopoint dialog</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Title" xml:space="preserve">
+        <value>Title</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Content" xml:space="preserve">
+        <value>Content</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Buttons" xml:space="preserve">
+        <value>Primary / Secondary:</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Header" xml:space="preserve">
+        <value>Custom dialog</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Description" xml:space="preserve">
+        <value>You can create a new dialog from scratch. You can configure its content, the displayed buttons, their text, and whether they are enabled or not. Below you will find only a few customization options — all other parameters are configured programmatically.</value>
+    </data>
+    <data name="DialogControlsPageView_Prefabs_Header" xml:space="preserve">
+        <value>Ready dialog prefabs</value>
+    </data>
+    <data name="DialogControlsPageView_Prefabs_Description" xml:space="preserve">
+        <value>You can also use ready-made dialog prefabs that are suitable for most tasks, such as text input, selecting a geolocation point, choosing a file, and so on. Some parameters in them, such as the message or button availability, can also be customized. Prefabs are divided into two types: custom dialogs created manually for specific tasks, and system dialogs such as the file picker.</value>
+    </data>
+    <data name="DialogControlsPageView_SelectFolderPrefab_Description" xml:space="preserve">
+    <value>
+Allows the user to select a folder.
+
+• Input: dialog title and initial location.  
+• Output: selected folder path.
+    </value>
+</data>
+    <data name="DialogControlsPageView_SaveFilePrefab_Description" xml:space="preserve">
+    <value>
+Allows the user to save a file.
+
+• Input: title, default extension, type filter, and initial directory.  
+• Output: selected file path.
+    </value>
+</data>
+    <data name="DialogControlsPageView_OpenFilePrefab_Description" xml:space="preserve">
+    <value>
+Allows the user to open a file.
+
+• Input: title, type filter, and initial directory.  
+• Output: selected file path.
+    </value>
+</data>
+    <data name="DialogControlsPageView_ObserveFolderPrefab_Description" xml:space="preserve">
+    <value>
+Shows the contents of the selected folder.
+
+• Input: dialog title and default path.  
+• Output: none.
+    </value>
+</data>
+    <data name="DialogControlsPageView_YesOrNoPrefab_Description" xml:space="preserve">
+    <value>
+Allows the user to agree or decline.
+
+• Input: dialog title and message.  
+• Output: true or false.
+    </value>
+</data>
+    <data name="DialogControlsPageView_HotKeyCapturePrefab_Description" xml:space="preserve">
+    <value>
+Allows the user to choose a hotkey by pressing it.
+
+• Input: title, message, and default hotkey.  
+• Output: selected hotkey.
+    </value>
+</data>
+    <data name="DialogControlsPageView_GeoPointPrefab_Description" xml:space="preserve">
+    <value>
+Allows the user to select a point on the map.
+
+• Input: initial location.  
+• Output: GeoPoint.
+    </value>
+</data>
+    <data name="DialogControlsPageView_InputPrefab_Description" xml:space="preserve">
+    <value>
+Allows the user to enter text.
+
+• Input: dialog title and message.  
+• Output: entered text value.
+    </value>
+</data>
+    <data name="DialogControlsPageView_SavePrefab_Description" xml:space="preserve">
+    <value>
+Used to confirm saving information.
+
+• Input: dialog title and message.  
+• Output: true or false.
+    </value>
+</data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Result" xml:space="preserve">
+        <value>Custom dialog result: {0}</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ObserveFolderPrefab_ResultShort" xml:space="preserve">
+        <value>Directory opened!</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Primary" xml:space="preserve">
+        <value>Primary</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Secondary" xml:space="preserve">
+        <value>Secondary</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Close" xml:space="preserve">
+        <value>Close</value>
+    </data>
+    <data name="DialogControlsPageView_InputPrefab_Placeholder" xml:space="preserve">
+        <value>Some text...</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_TextContent" xml:space="preserve">
+        <value>Text</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_ImageContent" xml:space="preserve">
+        <value>Image</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_ImageContent_Select" xml:space="preserve">
+        <value>Select photo...</value>
+    </data>
+    <data name="DialogControlsPageView_ObserveFolderPrefab_PlaceHolder" xml:space="preserve">
+        <value>Press the button...</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Open" xml:space="preserve">
+        <value>Open dialog</value>
+    </data>
+    <data name="ResetGeoPointDialogResultCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Reset geopoint dialog</value>
+    </data>
+    <data name="ResetGeoPointDialogResultCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Reset the geopoint dialog result</value>
     </data>
 </root>
