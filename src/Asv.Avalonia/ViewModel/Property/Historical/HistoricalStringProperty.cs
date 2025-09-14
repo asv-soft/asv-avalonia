@@ -4,17 +4,13 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class HistoricalStringProperty : HistoricalPropertyBase<string?, string?>
+public sealed class HistoricalStringProperty
+    : BindablePropertyBase<string?, string?>,
+        IHistoricalProperty<string?>
 {
-    private readonly ReactiveProperty<string?> _modelValue;
     private readonly IList<Func<string?, ValidationResult>> _validationRules = [];
-
-    private bool _internalChange;
     private bool _externalChange;
-
-    public override ReactiveProperty<string?> ModelValue => _modelValue;
-    public override BindableReactiveProperty<string?> ViewValue { get; } = new();
-    public override BindableReactiveProperty<bool> IsSelected { get; } = new();
+    private bool _internalChange;
 
     public HistoricalStringProperty(
         string id,
@@ -26,14 +22,26 @@ public sealed class HistoricalStringProperty : HistoricalPropertyBase<string?, s
         : base(id, loggerFactory, parent)
     {
         InternalInitValidationRules(validationRules);
-        _modelValue = modelValue;
+
+        ModelValue = modelValue;
+        ViewValue = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
+        IsSelected = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         ViewValue.EnableValidation(ValidateValue);
 
         _internalChange = true;
-        _sub2 = ViewValue.SubscribeAwait(OnChangedByUser, AwaitOperation.Drop);
+        ViewValue.SubscribeAwait(OnChangedByUser, AwaitOperation.Drop).DisposeItWith(Disposable);
         _internalChange = false;
 
-        _sub3 = _modelValue.Subscribe(OnChangeByModel);
+        ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
+    }
+
+    public override ReactiveProperty<string?> ModelValue { get; }
+    public override BindableReactiveProperty<string?> ViewValue { get; }
+    public override BindableReactiveProperty<bool> IsSelected { get; }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
     }
 
     public void AddValidationRule(Func<string?, ValidationResult> validationFunc)
@@ -46,7 +54,7 @@ public sealed class HistoricalStringProperty : HistoricalPropertyBase<string?, s
         foreach (var rule in _validationRules)
         {
             var res = rule(userValue);
-            if (res.IsSuccess == false)
+            if (!res.IsSuccess)
             {
                 return res.ValidationException;
             }
@@ -68,8 +76,7 @@ public sealed class HistoricalStringProperty : HistoricalPropertyBase<string?, s
         }
 
         _externalChange = true;
-        var newValue = new StringArg(userValue ?? string.Empty);
-        await this.ExecuteCommand(ChangeStringPropertyCommand.Id, newValue, cancel);
+        await ChangeModelValue(userValue ?? string.Empty, cancel);
         _externalChange = false;
     }
 
@@ -83,11 +90,6 @@ public sealed class HistoricalStringProperty : HistoricalPropertyBase<string?, s
         _internalChange = true;
         ViewValue.OnNext(modelValue);
         _internalChange = false;
-    }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        return [];
     }
 
     private void InternalInitValidationRules(
@@ -105,10 +107,11 @@ public sealed class HistoricalStringProperty : HistoricalPropertyBase<string?, s
         }
     }
 
-    #region Dispose
-
-    private readonly IDisposable _sub2;
-    private readonly IDisposable _sub3;
+    protected override async ValueTask ChangeModelValue(string? value, CancellationToken cancel)
+    {
+        var newValue = new StringArg(value ?? string.Empty);
+        await this.ExecuteCommand(ChangeStringPropertyCommand.Id, newValue, cancel);
+    }
 
     protected override void Dispose(bool disposing)
     {
@@ -117,12 +120,6 @@ public sealed class HistoricalStringProperty : HistoricalPropertyBase<string?, s
             return;
         }
 
-        _sub2.Dispose();
-        _sub3.Dispose();
-        ViewValue.Dispose();
-        IsSelected.Dispose();
         _validationRules.Clear();
     }
-
-    #endregion
 }
