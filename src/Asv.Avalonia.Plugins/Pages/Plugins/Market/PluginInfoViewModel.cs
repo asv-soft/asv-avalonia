@@ -45,7 +45,7 @@ public class PluginInfoViewModel : DisposableViewModel
         IsInstalled = new BindableReactiveProperty<bool>(
             _manager.IsInstalled(pluginInfo.PackageId, out _localInfo)
         );
-        IsUninstalled = new BindableReactiveProperty<bool>(true);
+        IsUninstalled = new BindableReactiveProperty<bool>(false);
         if (_localInfo != null)
         {
             IsUninstalled.OnNext(_localInfo.IsUninstalled);
@@ -62,7 +62,7 @@ public class PluginInfoViewModel : DisposableViewModel
             _localInfo != null ? $"{_localInfo?.Version} (API: {_localInfo?.ApiVersion})" : null;
         DownloadCount = pluginInfo.DownloadCount.ToString();
         Tags = pluginInfo.Tags;
-        Dependencies = new List<string>();
+        Dependencies = [];
         IsVerified = new BindableReactiveProperty<bool>();
         SelectedVersion = new BindableReactiveProperty<string>();
         foreach (var dependency in pluginInfo.Dependencies)
@@ -106,6 +106,10 @@ public class PluginInfoViewModel : DisposableViewModel
     public BindableReactiveProperty<string> SelectedVersion { get; set; }
     public BindableReactiveProperty<bool> IsInstalled { get; set; }
     public BindableReactiveProperty<bool> IsUninstalled { get; set; }
+    public BindableReactiveProperty<bool> ShowUninstalledMessage =>
+        IsInstalled
+            .CombineLatest(IsUninstalled, (installed, uninstalled) => !installed && uninstalled)
+            .ToBindableReactiveProperty();
     public BindableReactiveProperty<bool> IsVerified { get; set; }
     public CancellableCommandWithProgress<Unit> Uninstall { get; } // TODO: CancellableCommandWithProgress is not working, need to replace
     public CancellableCommandWithProgress<Unit> CancelUninstall { get; }
