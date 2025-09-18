@@ -89,13 +89,14 @@ public partial class DockControl : SelectingItemsControl
                 return;
             }
 
-            foreach (var item in _mainTabControl.Items.OfType<DockTabItem>())
+            foreach (
+                var item in _mainTabControl.Items.OfType<DockTabItem>().Where(it => it.IsSelected)
+            )
             {
                 item.IsSelected = false;
             }
 
             selected.IsSelected = true;
-            SelectedItem = selected.Content;
         }
     }
 
@@ -147,6 +148,11 @@ public partial class DockControl : SelectingItemsControl
 
     private void PressedHandler(object? sender, PointerPressedEventArgs e)
     {
+        if (e.Handled)
+        {
+            return;
+        }
+
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
             return;
@@ -161,6 +167,7 @@ public partial class DockControl : SelectingItemsControl
         }
 
         e.Pointer.Capture(this);
+        e.Handled = true;
     }
 
     private void PointerMovedHandler(object? sender, PointerEventArgs e)
@@ -190,6 +197,7 @@ public partial class DockControl : SelectingItemsControl
         }
 
         _selectedTab = null;
+        e.Pointer.Capture(null);
     }
 
     private void DetachTab(DockTabItem tab)
