@@ -503,26 +503,31 @@ public class PluginManager : IPluginManager
             query.Sources.Count == 0
                 ? _repositories.ToArray()
                 : _repositories
-                    .Where(_ => query.Sources.Contains(_.PackageSource.Source))
+                    .Where(r => query.Sources.Contains(r.PackageSource.Source))
                     .ToArray();
         _repositoriesLock.ExitReadLock();
 
-        var result = new List<string>();
+        var versions = new HashSet<NuGetVersion>(VersionComparer.VersionRelease);
 
         foreach (var repository in repositories)
         {
             try
             {
                 var resource = await repository.GetResourceAsync<FindPackageByIdResource>(cancel);
-
-                var packages = await resource.GetAllVersionsAsync(
+                var all = await resource.GetAllVersionsAsync(
                     pluginId,
                     new SourceCacheContext(),
                     new LoggerAdapter(_logger),
                     cancel
                 );
 
-                result.AddRange(packages.Select(package => package.Version.ToString()));
+                foreach (var v in all)
+                {
+                    if (query.IncludePrerelease || !v.IsPrerelease)
+                    {
+                        versions.Add(v);
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -530,7 +535,10 @@ public class PluginManager : IPluginManager
             }
         }
 
-        return result;
+        return versions
+            .OrderByDescending(v => v, VersionComparer.VersionRelease)
+            .Select(v => v.ToFullString())
+            .ToList();
     }
 
     public async Task Install(
