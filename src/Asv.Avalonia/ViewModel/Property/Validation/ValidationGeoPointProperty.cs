@@ -1,0 +1,115 @@
+using Asv.Common;
+using Microsoft.Extensions.Logging;
+using R3;
+
+namespace Asv.Avalonia;
+
+public sealed class ValidationGeoPointProperty : CompositeValidationPropertyBase<GeoPoint>
+{
+    public ValidationGeoPointProperty(
+        NavigationId id,
+        ReactiveProperty<GeoPoint> modelValue,
+        IUnit latUnit,
+        IUnit lonUnit,
+        IUnit altUnit,
+        ILoggerFactory loggerFactory,
+        IRoutable parent
+    )
+        : base(id, loggerFactory, parent)
+    {
+        ModelValue = modelValue;
+
+        var modelLat = new ReactiveProperty<double>(modelValue.CurrentValue.Latitude).DisposeItWith(
+            Disposable
+        );
+        modelLat
+            .Subscribe(x =>
+            {
+                ModelValue.Value = new GeoPoint(
+                    x,
+                    ModelValue.Value.Longitude,
+                    ModelValue.Value.Altitude
+                );
+            })
+            .DisposeItWith(Disposable);
+
+        var modelLon = new ReactiveProperty<double>(
+            modelValue.CurrentValue.Longitude
+        ).DisposeItWith(Disposable);
+        modelLon
+            .Subscribe(x =>
+            {
+                ModelValue.Value = new GeoPoint(
+                    ModelValue.Value.Latitude,
+                    x,
+                    ModelValue.Value.Altitude
+                );
+            })
+            .DisposeItWith(Disposable);
+
+        var modelAlt = new ReactiveProperty<double>(modelValue.CurrentValue.Altitude).DisposeItWith(
+            Disposable
+        );
+        modelAlt
+            .Subscribe(x =>
+            {
+                ModelValue.Value = new GeoPoint(
+                    ModelValue.Value.Latitude,
+                    ModelValue.Value.Longitude,
+                    x
+                );
+            })
+            .DisposeItWith(Disposable);
+
+        Latitude = new ValidationUnitProperty(
+            nameof(Latitude),
+            modelLat,
+            latUnit,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        Longitude = new ValidationUnitProperty(
+            nameof(Longitude),
+            modelLon,
+            lonUnit,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        Altitude = new ValidationUnitProperty(
+            nameof(Altitude),
+            modelAlt,
+            altUnit,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+
+        ModelValue
+            .Subscribe(x =>
+            {
+                modelLat.Value = x.Latitude;
+                modelLon.Value = x.Longitude;
+                modelAlt.Value = x.Altitude;
+            })
+            .DisposeItWith(Disposable);
+    }
+
+    public ValidationUnitProperty Latitude { get; }
+    public ValidationUnitProperty Longitude { get; }
+    public ValidationUnitProperty Altitude { get; }
+
+    public override void ForceValidate()
+    {
+        Latitude.ForceValidate();
+        Longitude.ForceValidate();
+        Altitude.ForceValidate();
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        yield return Latitude;
+        yield return Longitude;
+        yield return Altitude;
+    }
+
+    public override ReactiveProperty<GeoPoint> ModelValue { get; }
+}

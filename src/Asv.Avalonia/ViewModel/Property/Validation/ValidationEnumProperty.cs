@@ -4,13 +4,15 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum, TEnum>
+public class ValidationEnumProperty<TEnum>
+    : ValidationPropertyBase<Enum, TEnum>,
+        IValidationProperty<Enum>
     where TEnum : struct, Enum
 {
-    private bool _internalChange;
     private bool _externalChange;
+    private bool _internalChange;
 
-    public HistoricalEnumProperty(
+    public ValidationEnumProperty(
         NavigationId id,
         ReactiveProperty<Enum> modelValue,
         ILoggerFactory loggerFactory,
@@ -19,7 +21,6 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
         : base(id, loggerFactory, parent)
     {
         ModelValue = modelValue;
-
         ViewValue = new BindableReactiveProperty<TEnum>().DisposeItWith(Disposable);
         IsSelected = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         ViewValue.EnableValidation(ValidateValue);
@@ -29,6 +30,17 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
+    }
+
+    public sealed override ReactiveProperty<Enum> ModelValue { get; }
+    public sealed override BindableReactiveProperty<TEnum> ViewValue { get; }
+    public sealed override BindableReactiveProperty<bool> IsSelected { get; }
+
+    public TEnum[] EnumItems => Enum.GetValues<TEnum>();
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
     }
 
     protected override Exception? ValidateValue(TEnum userValue)
@@ -44,8 +56,7 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
         }
 
         _externalChange = true;
-        var newValue = new StringArg(Enum.GetName(userValue) ?? string.Empty);
-        await this.ExecuteCommand(ChangeEnumPropertyCommand.Id, newValue, cancel: cancel);
+        await ChangeModelValue(userValue, cancel);
         _externalChange = false;
     }
 
@@ -65,15 +76,4 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
         ViewValue.OnNext(newEnum);
         _internalChange = false;
     }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        return [];
-    }
-
-    public override BindableReactiveProperty<TEnum> ViewValue { get; }
-    public override BindableReactiveProperty<bool> IsSelected { get; }
-    public override ReactiveProperty<Enum> ModelValue { get; }
-
-    public TEnum[] EnumItems => Enum.GetValues<TEnum>();
 }

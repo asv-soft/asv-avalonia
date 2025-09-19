@@ -4,13 +4,12 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class HistoricalBoolProperty : HistoricalPropertyBase<bool, bool>
+public class ValidationBoolProperty : ValidationPropertyBase<bool, bool>
 {
-    private readonly ReactiveProperty<bool> _modelValue;
-    private bool _internalChange;
     private bool _externalChange;
+    private bool _internalChange;
 
-    public HistoricalBoolProperty(
+    public ValidationBoolProperty(
         NavigationId id,
         ReactiveProperty<bool> modelValue,
         ILoggerFactory loggerFactory,
@@ -18,7 +17,7 @@ public sealed class HistoricalBoolProperty : HistoricalPropertyBase<bool, bool>
     )
         : base(id, loggerFactory, parent)
     {
-        _modelValue = modelValue;
+        ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         IsSelected = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         ViewValue.EnableValidation(ValidateValue);
@@ -27,8 +26,12 @@ public sealed class HistoricalBoolProperty : HistoricalPropertyBase<bool, bool>
         ViewValue.SubscribeAwait(OnChangedByUser, AwaitOperation.Drop).DisposeItWith(Disposable);
         _internalChange = false;
 
-        _modelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
+        ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
     }
+
+    public sealed override ReactiveProperty<bool> ModelValue { get; }
+    public sealed override BindableReactiveProperty<bool> ViewValue { get; }
+    public sealed override BindableReactiveProperty<bool> IsSelected { get; }
 
     protected override Exception? ValidateValue(bool userValue)
     {
@@ -43,8 +46,7 @@ public sealed class HistoricalBoolProperty : HistoricalPropertyBase<bool, bool>
         }
 
         _externalChange = true;
-        var newValue = new BoolArg(userValue);
-        await this.ExecuteCommand(ChangeBoolPropertyCommand.Id, newValue, cancel: cancel);
+        await ChangeModelValue(userValue, cancel);
         _externalChange = false;
     }
 
@@ -64,8 +66,4 @@ public sealed class HistoricalBoolProperty : HistoricalPropertyBase<bool, bool>
     {
         return [];
     }
-
-    public override BindableReactiveProperty<bool> ViewValue { get; }
-    public override BindableReactiveProperty<bool> IsSelected { get; }
-    public override ReactiveProperty<bool> ModelValue => _modelValue;
 }

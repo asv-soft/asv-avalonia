@@ -4,10 +4,10 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class HistoricalGeoPointProperty : CompositeHistoricalPropertyBase<GeoPoint>
+public sealed class HistoricalGeoPointProperty
+    : CompositeValidationPropertyBase<GeoPoint>,
+        IHistoricalProperty<GeoPoint>
 {
-    private readonly ReactiveProperty<GeoPoint> _modelValue;
-
     public HistoricalGeoPointProperty(
         NavigationId id,
         ReactiveProperty<GeoPoint> modelValue,
@@ -19,17 +19,18 @@ public sealed class HistoricalGeoPointProperty : CompositeHistoricalPropertyBase
     )
         : base(id, loggerFactory, parent)
     {
-        _modelValue = modelValue;
+        ModelValue = modelValue;
+
         var modelLat = new ReactiveProperty<double>(modelValue.CurrentValue.Latitude).DisposeItWith(
             Disposable
         );
         modelLat
             .Subscribe(x =>
             {
-                _modelValue.Value = new GeoPoint(
+                ModelValue.Value = new GeoPoint(
                     x,
-                    _modelValue.Value.Longitude,
-                    _modelValue.Value.Altitude
+                    ModelValue.Value.Longitude,
+                    ModelValue.Value.Altitude
                 );
             })
             .DisposeItWith(Disposable);
@@ -40,10 +41,10 @@ public sealed class HistoricalGeoPointProperty : CompositeHistoricalPropertyBase
         modelLon
             .Subscribe(x =>
             {
-                _modelValue.Value = new GeoPoint(
-                    _modelValue.Value.Latitude,
+                ModelValue.Value = new GeoPoint(
+                    ModelValue.Value.Latitude,
                     x,
-                    _modelValue.Value.Altitude
+                    ModelValue.Value.Altitude
                 );
             })
             .DisposeItWith(Disposable);
@@ -54,9 +55,9 @@ public sealed class HistoricalGeoPointProperty : CompositeHistoricalPropertyBase
         modelAlt
             .Subscribe(x =>
             {
-                _modelValue.Value = new GeoPoint(
-                    _modelValue.Value.Latitude,
-                    _modelValue.Value.Longitude,
+                ModelValue.Value = new GeoPoint(
+                    ModelValue.Value.Latitude,
+                    ModelValue.Value.Longitude,
                     x
                 );
             })
@@ -84,7 +85,7 @@ public sealed class HistoricalGeoPointProperty : CompositeHistoricalPropertyBase
             this
         ).DisposeItWith(Disposable);
 
-        _modelValue
+        ModelValue
             .Subscribe(x =>
             {
                 modelLat.Value = x.Latitude;
@@ -93,6 +94,10 @@ public sealed class HistoricalGeoPointProperty : CompositeHistoricalPropertyBase
             })
             .DisposeItWith(Disposable);
     }
+
+    public HistoricalUnitProperty Latitude { get; }
+    public HistoricalUnitProperty Longitude { get; }
+    public HistoricalUnitProperty Altitude { get; }
 
     public override void ForceValidate()
     {
@@ -108,9 +113,5 @@ public sealed class HistoricalGeoPointProperty : CompositeHistoricalPropertyBase
         yield return Altitude;
     }
 
-    public HistoricalUnitProperty Latitude { get; }
-    public HistoricalUnitProperty Longitude { get; }
-    public HistoricalUnitProperty Altitude { get; }
-
-    public override ReactiveProperty<GeoPoint> ModelValue => _modelValue;
+    public override ReactiveProperty<GeoPoint> ModelValue { get; }
 }

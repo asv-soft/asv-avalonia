@@ -3,9 +3,9 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class CompositeHistoricalPropertyBase<T> : RoutableViewModel, IHistoricalProperty<T>
+public abstract class CompositeValidationPropertyBase<T> : RoutableViewModel, IValidationProperty<T>
 {
-    protected CompositeHistoricalPropertyBase(
+    protected CompositeValidationPropertyBase(
         NavigationId id,
         ILoggerFactory loggerFactory,
         IRoutable parent
