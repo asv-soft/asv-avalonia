@@ -25,20 +25,19 @@
             </StackPanel>
             <Button
                 DockPanel.Dock="Right"
-                IsVisible="{Binding !Search.IsExecuting}"
+                IsVisible="{Binding !Search.IsExecuting.Value}"
                 Theme="{DynamicResource TransparentButton}"
                 Command="{Binding Search.Command}">
                 <avalonia:MaterialIcon Kind="Refresh" />
             </Button>
             <Button
                 DockPanel.Dock="Right"
-                IsVisible="{Binding Search.IsExecuting}"
+                IsVisible="{Binding Search.IsExecuting.Value}"
                 Theme="{DynamicResource TransparentButton}"
                 Command="{Binding Search.Cancel}">
                 <avalonia:MaterialIcon Kind="Cancel" />
             </Button>
-
-
+            
             <TextBox Watermark="{x:Static plugins:RS.InstalledPluginsView_Search}"
                      Background="Transparent"
                      CornerRadius="0"
@@ -46,19 +45,21 @@
                      Text="{Binding SearchString.Value}">
                 <TextBox.InnerRightContent>
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xE721;"
-                                FontFamily="{StaticResource SymbolThemeFontFamily}"
+                        <Button FontFamily="{StaticResource SymbolThemeFontFamily}"
                                 Theme="{DynamicResource TransparentButton}"
                                 Command="{Binding $parent[TextBox].Clear}"
-                                IsHitTestVisible="False" />
+                                IsHitTestVisible="False" >
+                            <avalonia:MaterialIcon Kind="Search"/>
+                        </Button>
                     </StackPanel>
                 </TextBox.InnerRightContent>
                 <TextBox.InnerLeftContent>
-                    <Button Content="&#xE8BB;"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
+                    <Button FontFamily="{StaticResource SymbolThemeFontFamily}"
                             Theme="{DynamicResource TransparentButton}"
                             Command="{Binding $parent[TextBox].Clear}"
-                            IsVisible="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                            IsVisible="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" >
+                        <avalonia:MaterialIconExt Kind="Close"/>
+                    </Button>
                 </TextBox.InnerLeftContent>
             </TextBox>
         </DockPanel>
@@ -122,15 +123,15 @@
                        
 
                         <Panel Grid.Row="2" Grid.Column="0" IsVisible="{Binding !IsInstalled.Value}">
-                            <Button Classes="accent" Width="100" IsVisible="{Binding !Install.IsExecuting}"
+                            <Button Classes="accent" Width="100" IsVisible="{Binding !Install.IsExecuting.Value}"
                                     Command="{Binding Install.Command}"
                                     Content="{x:Static plugins:RS.PluginsMarketView_Install}" />
-                            <Button Classes="accent" Width="100" IsVisible="{Binding Install.IsExecuting}"
+                            <Button Classes="accent" Width="100" IsVisible="{Binding Install.IsExecuting.Value}"
                                     Command="{Binding Install.Cancel}"
                                     Content="{x:Static plugins:RS.PluginsMarketView_Cancel}" />
                             <ProgressBar IsIndeterminate="True" 
                                          Margin="85 40 0 0"
-                                         IsVisible="{Binding Install.IsExecuting}" />
+                                         IsVisible="{Binding Install.IsExecuting.Value}" />
                         </Panel>
                         
                         <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
@@ -157,7 +158,7 @@
                         </ComboBox>
                     </Grid>
                     
-                    <avalonia1:InfoBar IsVisible="{Binding IsUninstalled.Value}" DockPanel.Dock="Top"
+                    <avalonia1:InfoBar IsVisible="{Binding ShowUninstalledMessage.Value}" DockPanel.Dock="Top"
                                       Title="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessageTitle}"
                                       IsOpen="True" IsIconVisible="True" Severity="Warning" IsClosable="False"
                                       Message="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessage}">

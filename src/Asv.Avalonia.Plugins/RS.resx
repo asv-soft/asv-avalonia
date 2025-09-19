@@ -137,4 +137,7 @@
     <data name="OpenInstalledPluginsCommand_Action_Description" xml:space="preserve">
         <value>Open Installed Plagins</value>
     </data>
+    <data name="PluginsSourcesViewModel_Name" xml:space="preserve">
+        <value>Plugins Sources</value>
+    </data>
 </root>
