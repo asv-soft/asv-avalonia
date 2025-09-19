@@ -18,21 +18,33 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public const string PageId = "dialog_controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.Dialogue;
 
-    private readonly OpenFileDialogDesktopPrefab _openFileDialog;
-    private readonly SaveFileDialogDesktopPrefab _saveFileDialog;
-    private readonly SelectFolderDialogDesktopPrefab _selectFolderDialog;
-    private readonly ObserveFolderDialogPrefab _observeFolderDialog;
-
-    private readonly YesOrNoDialogPrefab _yesOrNoDialog;
-    private readonly SaveCancelDialogPrefab _saveCancelDialog;
-    private readonly InputDialogPrefab _inputDialog;
-    private readonly HotKeyCaptureDialogPrefab _hotKeyCaptureDialog;
-    private readonly GeoPointDialogPrefab _geoPointDialog;
+    private readonly ReactiveProperty<string?> _customDialogMessage;
+    private readonly ReactiveProperty<string?> _customDialogPrimaryButtonText;
+    private readonly ReactiveProperty<string?> _customDialogSecondaryButtonText;
+    private readonly ReactiveProperty<string?> _customDialogTitle;
 
     private readonly ReactiveProperty<GeoPoint> _geoPointProperty;
 
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly INavigationService _navigationService;
+
+    private readonly HotKeyCaptureDialogPrefab _hotKeyCaptureDialog;
+    private readonly InputDialogPrefab _inputDialog;
+    private readonly ObserveFolderDialogPrefab _observeFolderDialog;
+    private readonly OpenFileDialogDesktopPrefab _openFileDialog;
+    private readonly SaveCancelDialogPrefab _saveCancelDialog;
+    private readonly SaveFileDialogDesktopPrefab _saveFileDialog;
+    private readonly SelectFolderDialogDesktopPrefab _selectFolderDialog;
+    private readonly YesOrNoDialogPrefab _yesOrNoDialog;
+    private readonly GeoPointDialogPrefab _geoPointDialog;
+
     public DialogControlsPageViewModel()
-        : this(NullLoggerFactory.Instance, NullDialogService.Instance, NullUnitService.Instance)
+        : this(
+            NullLoggerFactory.Instance,
+            NullDialogService.Instance,
+            NullNavigationService.Instance,
+            NullUnitService.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -41,10 +53,14 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public DialogControlsPageViewModel(
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
+        INavigationService navigationService,
         IUnitService unitService
     )
         : base(PageId, loggerFactory)
     {
+        _loggerFactory = loggerFactory;
+        _navigationService = navigationService;
+
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
         _saveFileDialog = dialogService.GetDialogPrefab<SaveFileDialogDesktopPrefab>();
         _selectFolderDialog = dialogService.GetDialogPrefab<SelectFolderDialogDesktopPrefab>();
@@ -56,14 +72,26 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         _hotKeyCaptureDialog = dialogService.GetDialogPrefab<HotKeyCaptureDialogPrefab>();
         _geoPointDialog = dialogService.GetDialogPrefab<GeoPointDialogPrefab>();
 
+        _customDialogMessage = new ReactiveProperty<string?>(
+            RS.DialogControlsPageView_CustomDialog_Content
+        ).DisposeItWith(Disposable);
+        _customDialogTitle = new ReactiveProperty<string?>(
+            RS.DialogControlsPageView_CustomDialog_Title
+        ).DisposeItWith(Disposable);
+        _customDialogPrimaryButtonText = new ReactiveProperty<string?>(
+            RS.DialogControlsPageView_CustomDialog_Content
+        ).DisposeItWith(Disposable);
+        _customDialogSecondaryButtonText = new ReactiveProperty<string?>(
+            RS.DialogControlsPageView_CustomDialog_Content
+        ).DisposeItWith(Disposable);
+
         var latUnit = unitService.Units[LatitudeBase.Id];
         var lonUnit = unitService.Units[LongitudeBase.Id];
         var altUnit = unitService.Units[AltitudeBase.Id];
 
         _geoPointProperty = new ReactiveProperty<GeoPoint>(GeoPoint.Zero).DisposeItWith(Disposable);
-
-        GeoPointProperty = new HistoricalGeoPointProperty(
-            nameof(GeoPointProperty),
+        GeoPointDialogResult = new HistoricalGeoPointProperty(
+            nameof(GeoPointDialogResult),
             _geoPointProperty,
             latUnit,
             lonUnit,
@@ -71,7 +99,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
-        GeoPointProperty.ForceValidate();
+        GeoPointDialogResult.ForceValidate();
 
         LonUnitName = lonUnit
             .CurrentUnitItem.Select(item => item.Symbol)
@@ -86,13 +114,52 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             .ToBindableReactiveProperty<string>()
             .DisposeItWith(Disposable);
 
-        LastResult = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        CustomDialogMessage = new HistoricalStringProperty(
+            nameof(CustomDialogMessage),
+            _customDialogMessage,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        CustomDialogTitle = new HistoricalStringProperty(
+            nameof(CustomDialogTitle),
+            _customDialogTitle,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        CustomDialogPrimaryButtonText = new HistoricalStringProperty(
+            nameof(CustomDialogPrimaryButtonText),
+            _customDialogPrimaryButtonText,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        CustomDialogSecondaryButtonText = new HistoricalStringProperty(
+            nameof(CustomDialogSecondaryButtonText),
+            _customDialogSecondaryButtonText,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
 
+        CustomDialogResult = new BindableReactiveProperty<ContentDialogResult?>().DisposeItWith(
+            Disposable
+        );
+        OpenFileDialogResult = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        SaveFileDialogResult = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        SelectFolderDialogResult = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        ObserveFolderDialogResult = new BindableReactiveProperty<string>().DisposeItWith(
+            Disposable
+        );
+        YesOrNoDialogResult = new BindableReactiveProperty<bool?>().DisposeItWith(Disposable);
+        SaveCancelDialogResult = new BindableReactiveProperty<bool?>().DisposeItWith(Disposable);
+        ShowInputDialogResult = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        ShowHotKeyCaptureDialogResult = new BindableReactiveProperty<HotKeyInfo?>().DisposeItWith(
+            Disposable
+        );
+
+        ShowCustomDialogCommand = new ReactiveCommand(OpenCustomAsync).DisposeItWith(Disposable);
         OpenFileCommand = new ReactiveCommand(OpenFileAsync).DisposeItWith(Disposable);
         SaveFileCommand = new ReactiveCommand(SaveFileAsync).DisposeItWith(Disposable);
         SelectFolderCommand = new ReactiveCommand(SelectFolderAsync).DisposeItWith(Disposable);
         ObserveFolderCommand = new ReactiveCommand(ObserveFolderAsync).DisposeItWith(Disposable);
-
         YesOrNoCommand = new ReactiveCommand(YesOrNoMessageAsync).DisposeItWith(Disposable);
         SaveCancelCommand = new ReactiveCommand(SaveCancelAsync).DisposeItWith(Disposable);
         ShowInputCommand = new ReactiveCommand(ShowInputAsync).DisposeItWith(Disposable);
@@ -104,24 +171,67 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         );
     }
 
+    public ReactiveCommand ShowCustomDialogCommand { get; }
     public ReactiveCommand OpenFileCommand { get; }
     public ReactiveCommand SaveFileCommand { get; }
     public ReactiveCommand SelectFolderCommand { get; }
     public ReactiveCommand ObserveFolderCommand { get; }
-
     public ReactiveCommand YesOrNoCommand { get; }
     public ReactiveCommand SaveCancelCommand { get; }
     public ReactiveCommand ShowInputCommand { get; }
     public ReactiveCommand ShowHotKeyCaptureCommand { get; }
     public ReactiveCommand OpenGeoPointDialogCommand { get; }
 
-    public BindableReactiveProperty<string> LastResult { get; }
-    public HistoricalGeoPointProperty GeoPointProperty { get; }
+    public BindableReactiveProperty<string> OpenFileDialogResult { get; }
+    public BindableReactiveProperty<string> SaveFileDialogResult { get; }
+    public BindableReactiveProperty<string> SelectFolderDialogResult { get; }
+    public BindableReactiveProperty<string> ObserveFolderDialogResult { get; }
+    public BindableReactiveProperty<bool?> YesOrNoDialogResult { get; }
+    public BindableReactiveProperty<bool?> SaveCancelDialogResult { get; }
+    public BindableReactiveProperty<string> ShowInputDialogResult { get; }
+    public BindableReactiveProperty<HotKeyInfo?> ShowHotKeyCaptureDialogResult { get; }
+    public HistoricalGeoPointProperty GeoPointDialogResult { get; }
+    public BindableReactiveProperty<ContentDialogResult?> CustomDialogResult { get; }
+
+    public HistoricalStringProperty CustomDialogMessage { get; }
+    public HistoricalStringProperty CustomDialogTitle { get; }
+    public HistoricalStringProperty CustomDialogPrimaryButtonText { get; }
+    public HistoricalStringProperty CustomDialogSecondaryButtonText { get; }
+
     public BindableReactiveProperty<string> LonUnitName { get; }
     public BindableReactiveProperty<string> LatUnitName { get; }
     public BindableReactiveProperty<string> AltUnitName { get; }
 
     public override IExportInfo Source => SystemModule.Instance;
+
+    private async ValueTask OpenCustomAsync(Unit unit, CancellationToken cancellationToken)
+    {
+        using var vm = new DialogItemTextViewModel(_loggerFactory)
+        {
+            Message = CustomDialogMessage.ViewValue.Value ?? string.Empty,
+        };
+
+        var dialogContent = new ContentDialog(vm, _navigationService)
+        {
+            Title = CustomDialogTitle.ViewValue.Value ?? string.Empty,
+            PrimaryButtonText = CustomDialogPrimaryButtonText.ViewValue.Value ?? string.Empty,
+            SecondaryButtonText = CustomDialogSecondaryButtonText.ViewValue.Value ?? string.Empty,
+        };
+
+        var result = await dialogContent.ShowAsync();
+
+        CustomDialogResult.Value = result;
+
+        var resultToLog = result switch
+        {
+            ContentDialogResult.None => RS.DialogControlsPageViewModel_CancelResult,
+            ContentDialogResult.Primary => RS.DialogControlsPageViewModel_Custom_Primary,
+            ContentDialogResult.Secondary => RS.DialogControlsPageViewModel_Custom_Secondary,
+            _ => string.Empty,
+        };
+        var msg = string.Format(RS.DialogControlsPageViewModel_Custom_Result, resultToLog);
+        Logger.LogInformation("{msg}", msg);
+    }
 
     private async ValueTask OpenFileAsync(Unit unit, CancellationToken cancellationToken)
     {
@@ -134,9 +244,11 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
             var rawResult = await _openFileDialog.ShowDialogAsync(payload);
             var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
+
+            OpenFileDialogResult.OnNext(result);
+
             var msg = string.Format(RS.DialogControlsPageViewModel_OpenFile_Result, result);
-            LastResult.OnNext(msg);
-            Logger.LogInformation("{msg}", msg); // TODO: Give more info. Example: OpenFileDialog result: {msg}
+            Logger.LogInformation("{msg}", msg);
         }
     }
 
@@ -151,8 +263,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
             var rawResult = await _saveFileDialog.ShowDialogAsync(payload);
             var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
+
+            SaveFileDialogResult.OnNext(result);
+
             var msg = string.Format(RS.DialogControlsPageViewModel_SaveFile_Result, result);
-            LastResult.OnNext(msg);
             Logger.LogInformation("{msg}", msg);
         }
     }
@@ -168,8 +282,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
             var rawResult = await _selectFolderDialog.ShowDialogAsync(payload);
             var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
+
+            SelectFolderDialogResult.OnNext(result);
+
             var msg = string.Format(RS.DialogControlsPageViewModel_SelectFolder_Result, result);
-            LastResult.OnNext(msg);
             Logger.LogInformation("{msg}", msg);
         }
     }
@@ -185,11 +301,15 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             };
 
             await _observeFolderDialog.ShowDialogAsync(payload);
+
+            ObserveFolderDialogResult.OnNext(
+                RS.DialogControlsPageViewModel_ObserveFolder_ResultShort
+            );
+
             var msg = string.Format(
                 RS.DialogControlsPageViewModel_ObserveFolder_Result,
                 payload.DefaultPath
             );
-            LastResult.OnNext(msg);
             Logger.LogInformation("{msg}", msg);
         }
     }
@@ -203,8 +323,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         };
 
         var result = await _yesOrNoDialog.ShowDialogAsync(payload);
+
+        YesOrNoDialogResult.OnNext(result);
+
         var msg = string.Format(RS.DialogControlsPageViewModel_YesOrNo_Result, result);
-        LastResult.OnNext(msg);
         Logger.LogInformation("{msg}", msg);
     }
 
@@ -217,8 +339,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         };
 
         var result = await _saveCancelDialog.ShowDialogAsync(payload);
+
+        SaveCancelDialogResult.OnNext(result);
+
         var msg = string.Format(RS.DialogControlsPageViewModel_Save_Result, result);
-        LastResult.OnNext(msg);
         Logger.LogInformation("{msg}", msg);
     }
 
@@ -232,8 +356,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         var rawResult = await _inputDialog.ShowDialogAsync(payload);
         var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
+
+        ShowInputDialogResult.OnNext(result);
+
         var msg = string.Format(RS.DialogControlsPageViewModel_Input_Result, result);
-        LastResult.OnNext(msg);
         Logger.LogInformation("{msg}", msg);
     }
 
@@ -245,10 +371,14 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             Message = RS.DialogControlsPageViewModel_HotKeyCapture_Message,
         };
 
-        var rawResult = await _hotKeyCaptureDialog.ShowDialogAsync(payload);
-        var result = rawResult?.ToString() ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
-        var msg = string.Format(RS.DialogControlsPageViewModel_HotKeyCapture_Result, result);
-        LastResult.OnNext(msg);
+        var result = await _hotKeyCaptureDialog.ShowDialogAsync(payload);
+
+        ShowHotKeyCaptureDialogResult.OnNext(result);
+
+        var msg = string.Format(
+            RS.DialogControlsPageViewModel_HotKeyCapture_Result,
+            result ?? RS.DialogControlsPageViewModel_CancelResult
+        );
         Logger.LogInformation("{msg}", msg);
     }
 
@@ -256,23 +386,23 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     {
         var payload = new GeoPointDialogPayload
         {
-            InitialLocation = GeoPointProperty.ModelValue.CurrentValue,
+            InitialLocation = GeoPointDialogResult.ModelValue.CurrentValue,
         };
 
         var rawResult = await _geoPointDialog.ShowDialogAsync(payload);
-        var result = rawResult?.ToString() ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
-        var msg = string.Format(RS.DialogControlsPageViewModel_GeoPoint_Result, result);
-        LastResult.OnNext(msg);
-        Logger.LogInformation("{msg}", msg);
 
         if (rawResult is not null)
         {
-            GeoPointProperty.ModelValue.Value = rawResult.Value;
+            GeoPointDialogResult.ModelValue.Value = rawResult.Value;
         }
+
+        var result = rawResult?.ToString() ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
+        var msg = string.Format(RS.DialogControlsPageViewModel_GeoPoint_Result, result);
+        Logger.LogInformation("{msg}", msg);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        yield return GeoPointProperty;
+        yield return GeoPointDialogResult;
     }
 }

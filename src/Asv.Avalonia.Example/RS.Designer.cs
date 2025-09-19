@@ -159,9 +159,9 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageView_Note {
+        public static string DialogControlsPageView_System_Note {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Note", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_System_Note", resourceCulture);
             }
         }
         
@@ -189,27 +189,9 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageView_Custom_Description {
-            get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_Description", resourceCulture);
-            }
-        }
-        
         public static string DialogControlsPageView_System_Title {
             get {
                 return ResourceManager.GetString("DialogControlsPageView_System_Title", resourceCulture);
-            }
-        }
-        
-        public static string DialogControlsPageView_System_Description {
-            get {
-                return ResourceManager.GetString("DialogControlsPageView_System_Description", resourceCulture);
-            }
-        }
-        
-        public static string DialogControlsPageView_LastResult {
-            get {
-                return ResourceManager.GetString("DialogControlsPageView_LastResult", resourceCulture);
             }
         }
         
@@ -327,51 +309,51 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageView_System_OpenFile {
+        public static string DialogControlsPageView_System_OpenFile_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_OpenFile", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_System_OpenFile_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_System_SaveFile {
+        public static string DialogControlsPageView_System_SaveFile_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_SaveFile", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_System_SaveFile_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_System_SelectFolder {
+        public static string DialogControlsPageView_System_SelectFolder_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_SelectFolder", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_System_SelectFolder_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_System_ObserveFolder {
+        public static string DialogControlsPageView_System_ObserveFolder_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_ObserveFolder", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_System_ObserveFolder_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_YesOrNo {
+        public static string DialogControlsPageView_Custom_YesOrNo_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_YesOrNo", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_Custom_YesOrNo_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_Save {
+        public static string DialogControlsPageView_Custom_Save_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_Save", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_Custom_Save_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_Input {
+        public static string DialogControlsPageView_Custom_Input_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_Input", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_Custom_Input_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_HotKeyCapture {
+        public static string DialogControlsPageView_Custom_HotKeyCapture_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_HotKeyCapture", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_Custom_HotKeyCapture_Title", resourceCulture);
             }
         }
         
@@ -453,9 +435,135 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageView_Custom_GeoPoint {
+        public static string DialogControlsPageView_Custom_GeoPoint_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_GeoPoint", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_Custom_GeoPoint_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_CustomDialog_Custom {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_CustomDialog_Custom", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_CustomDialog_Title {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_CustomDialog_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_CustomDialog_Content {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_CustomDialog_Content", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_CustomDialog_Buttons {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_CustomDialog_Buttons", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_CustomDialog_Header {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_CustomDialog_Header", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_CustomDialog_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_CustomDialog_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Prefabs_Header {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Prefabs_Header", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Prefabs_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Prefabs_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_System_SelectFolder_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_System_SelectFolder_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_System_SaveFile_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_System_SaveFile_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_System_OpenFile_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_System_OpenFile_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_System_ObserveFolder_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_System_ObserveFolder_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Custom_YesOrNo_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Custom_YesOrNo_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Custom_HotKeyCapture_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Custom_HotKeyCapture_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Custom_GeoPoint_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Custom_GeoPoint_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Custom_Input_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Custom_Input_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Custom_Save_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Custom_Save_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_Custom_Result {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_Custom_Result", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_ObserveFolder_ResultShort {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_ObserveFolder_ResultShort", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_Custom_Primary {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_Custom_Primary", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_Custom_Secondary {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_Custom_Secondary", resourceCulture);
             }
         }
     }
