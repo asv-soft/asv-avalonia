@@ -127,6 +127,11 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
 
         var sub = _selectedPage.Value;
+        if (_selectedPage.Value is not null)
+        {
+            await _selectedPage.Value.RequestSaveState();
+        }
+
         newPage.Parent = this;
         _selectedPage.Value = newPage;
 
@@ -160,11 +165,17 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return null;
     }
 
-    protected override ValueTask HandlePageSave()
+    protected override async ValueTask HandlePageSave()
     {
         _config.SelectedNodeId = SelectedNode.Value?.Key.ToString() ?? string.Empty;
         _layoutService.Set(this, _config);
-        return base.HandlePageSave();
+
+        if (_selectedPage.Value is not null)
+        {
+            await _selectedPage.Value.RequestSaveState();
+        }
+
+        await base.HandlePageSave();
     }
 
     protected override ValueTask HandlePageLoad()
@@ -175,7 +186,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             SetSelectedNodeFromConfig();
         }
 
-        SelectedPage.SubscribeSaveState(this).DisposeItWith(Disposable);
         return base.HandlePageLoad();
     }
 

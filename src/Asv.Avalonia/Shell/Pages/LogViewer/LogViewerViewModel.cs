@@ -318,9 +318,6 @@ public class LogViewerViewModel
         Skip.Value = _config.Skip;
         Take.Value = _config.Take;
 
-        Search.Text.ViewValue.SubscribeSaveState(this).DisposeItWith(Disposable);
-        Skip.SubscribeSaveState(this).DisposeItWith(Disposable);
-        Take.SubscribeSaveState(this).DisposeItWith(Disposable);
         return base.HandlePageLoad();
     }
 

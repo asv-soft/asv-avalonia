@@ -9,9 +9,9 @@ namespace Asv.Avalonia;
 [Shared]
 public class LayoutService : ILayoutService
 {
+    public const string LayoutFolder = "layouts.json";
     private readonly IConfiguration _cfg;
     private readonly ILogger<LayoutService> _logger;
-    public const string LayoutFolder = "layouts.json";
 
     [ImportingConstructor]
     public LayoutService(IAppPath path, ILoggerFactory loggerFactory)

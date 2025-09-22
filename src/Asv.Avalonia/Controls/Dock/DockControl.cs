@@ -4,6 +4,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.VisualTree;
 
 namespace Asv.Avalonia;
@@ -105,13 +106,14 @@ public partial class DockControl : SelectingItemsControl
                 return;
             }
 
-            foreach (var item in _mainTabControl.Items.OfType<DockTabItem>())
+            foreach (
+                var item in _mainTabControl.Items.OfType<DockTabItem>().Where(it => it.IsSelected)
+            )
             {
                 item.IsSelected = false;
             }
 
             selected.IsSelected = true;
-            SelectedItem = selected.Content;
         }
     }
 
@@ -153,7 +155,7 @@ public partial class DockControl : SelectingItemsControl
 
     private DockTabItem CreateDockTabItem(IPage content)
     {
-        var header = new DockTabStripItem { Content = content };
+        var header = new DockTabStripItem { Content = content, Background = Brushes.Transparent };
 
         header.PointerPressed -= PressedHandler;
         header.PointerMoved -= PointerMovedHandler;
@@ -172,6 +174,11 @@ public partial class DockControl : SelectingItemsControl
 
     private void PressedHandler(object? sender, PointerPressedEventArgs e)
     {
+        if (e.Handled)
+        {
+            return;
+        }
+
         if (!e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
         {
             return;
@@ -186,6 +193,7 @@ public partial class DockControl : SelectingItemsControl
         }
 
         e.Pointer.Capture(this);
+        e.Handled = true;
     }
 
     private void PointerMovedHandler(object? sender, PointerEventArgs e)
@@ -199,6 +207,7 @@ public partial class DockControl : SelectingItemsControl
 
         if (_selectedTab is null)
         {
+            e.Pointer.Capture(null);
             return;
         }
 
@@ -215,6 +224,7 @@ public partial class DockControl : SelectingItemsControl
         }
 
         _selectedTab = null;
+        e.Pointer.Capture(null);
     }
 
     private void DetachTab(DockTabItem tab)

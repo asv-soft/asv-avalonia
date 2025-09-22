@@ -40,11 +40,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         MainMenu.SetRoutableParent(this).DisposeItWith(Disposable);
         MainMenu.DisposeRemovedItems().DisposeItWith(Disposable);
         SelectedPage
-            .Subscribe(page =>
-            {
-                Logger.LogInformation($"Navigated to {page?.Id}");
-                Navigation.ForceFocus(page);
-            })
+            .WhereNotNull()
+            .SubscribeAwait(async (page, ct) => await page.RequestLoadState(ct))
             .DisposeItWith(Disposable);
 
         StatusItems = [];
@@ -56,11 +53,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             .DisposeItWith(Disposable);
         StatusItems.SetRoutableParent(this).DisposeItWith(Disposable);
         StatusItems.DisposeRemovedItems().DisposeItWith(Disposable);
-
-        _pages
-            .ObserveAdd()
-            .SubscribeAwait(async (p, ct) => await p.Value.RequestLoadState(cancel: ct))
-            .DisposeItWith(Disposable);
     }
 
     #region Theme command
@@ -132,10 +124,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     #endregion
 
     #region Routable
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
+    public override async ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var page = _pages.FirstOrDefault(x => x.Id == id);
-        if (page == null)
+        if (page is null)
         {
             if (_container.TryGetExport<IPage>(id.Id, out page))
             {
@@ -143,20 +135,30 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 page.InitArgs(id.Args);
                 _pages.Add(page);
 
+                if (SelectedPage.Value is not null)
+                {
+                    await SelectedPage.Value.RequestSaveState();
+                }
+
                 SelectedPage.Value = page;
             }
 
-            return ValueTask.FromResult<IRoutable>(page);
+            return page;
         }
 
         if (page.Id == SelectedPage.Value?.Id)
         {
-            return ValueTask.FromResult<IRoutable>(page);
+            return page;
+        }
+
+        if (SelectedPage.Value is not null)
+        {
+            await SelectedPage.Value.RequestSaveState();
         }
 
         SelectedPage.Value = page;
 
-        return base.Navigate(id);
+        return await base.Navigate(id);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren() => _pages;

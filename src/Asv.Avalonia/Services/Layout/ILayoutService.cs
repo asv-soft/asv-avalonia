@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -6,6 +7,9 @@ namespace Asv.Avalonia;
 
 public interface ILayoutService
 {
+    TPocoType Get<TPocoType>(IRoutable source)
+        where TPocoType : class, new() => Get(source, new Lazy<TPocoType>());
+
     TPocoType Get<TPocoType>(IRoutable source, Lazy<TPocoType> defaultValue)
         where TPocoType : class, new();
 
@@ -32,6 +36,12 @@ public interface ILayoutService
         );
     }
 
+    TPocoType Get<TPocoType>(StyledElement source)
+        where TPocoType : class, new()
+    {
+        return Get(source, new Lazy<TPocoType>());
+    }
+
     void Set<TPocoType>(StyledElement source, TPocoType value)
         where TPocoType : class, new()
     {
@@ -41,7 +51,7 @@ public interface ILayoutService
             if (control.DataContext is IRoutable routable)
             {
                 Set(routable, value);
-                break;
+                return;
             }
 
             // Try to find IRoutable DataContext in logical parent

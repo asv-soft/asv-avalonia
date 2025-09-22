@@ -82,7 +82,7 @@ public class DesktopShellViewModel : ShellViewModel
             lifetime.Shutdown();
         }
 
-        return ValueTask.CompletedTask;
+        return base.CloseAsync(cancellationToken);
     }
 
     protected override ValueTask ChangeWindowModeAsync(CancellationToken cancellationToken)
@@ -118,7 +118,7 @@ public class DesktopShellViewModel : ShellViewModel
             UpdateWindowStateUi(window.WindowState);
         }
 
-        return ValueTask.CompletedTask;
+        return base.ChangeWindowModeAsync(cancellationToken);
     }
 
     protected override ValueTask CollapseAsync(CancellationToken cancellationToken)
@@ -133,7 +133,7 @@ public class DesktopShellViewModel : ShellViewModel
             }
         }
 
-        return ValueTask.CompletedTask;
+        return base.CollapseAsync(cancellationToken);
     }
 
     public void UpdateWindowStateUi(WindowState state)
