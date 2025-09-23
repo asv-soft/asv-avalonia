@@ -126,8 +126,6 @@
                         <Button IsEnabled="{Binding !IsUninstalled.Value}" Grid.Row="2" Grid.Column="0" Width="100"
                                 Command="{Binding Uninstall}"
                                 Content="{x:Static plugins:RS.InstalledPluginsView_Uninstall}" />
-                        <TextBlock Grid.Row="2" Grid.Column="1" Theme="{DynamicResource BodyStrongTextBlockStyle}"
-                                   Text="{Binding LocalVersion}" VerticalAlignment="Center" />
                     </Grid>
                     <avalonia1:InfoBar IsVisible="{Binding IsUninstalled.Value}" DockPanel.Dock="Top"
                                       Title="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessageTitle}"
@@ -155,7 +153,26 @@
                         <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsView_Tab_Description}">
                                 <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" />
                         </TabItem>
-                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo}" />
+                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo}">
+                            <ScrollViewer>
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                        <TextBlock Text="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo_Author}" FontWeight="Bold"/>
+                                        <TextBlock Margin="6,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding Author}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                        <TextBlock Text="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo_Source}" FontWeight="Bold"/>
+                                        <TextBlock Margin="6,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding SourceName}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                        <TextBlock Text="{x:Static plugins:RS.InstalledPluginsView_Tab_AdditionalInfo_Version}" FontWeight="Bold"/>
+                                        <TextBlock Margin="6,0,0,0" TextWrapping="WrapWithOverflow" Text="{Binding LocalVersion}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
                     </TabControl>
                 </DockPanel>
             </Panel>

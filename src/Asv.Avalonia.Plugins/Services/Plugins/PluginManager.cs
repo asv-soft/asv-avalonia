@@ -165,11 +165,11 @@ public class PluginManager : IPluginManager
 
         _cache = new SourceCacheContext
         {
-            /*GeneratedTempFolder = nuget_cache,
+            GeneratedTempFolder = "nuget_cache",
             SessionId = Guid.Empty,
             DirectDownload = true,
             NoCache = true,
-            MaxAge = DateTimeOffset.MaxValue*/
+            MaxAge = DateTimeOffset.MaxValue,
         };
 
         // load all plugins
@@ -699,7 +699,7 @@ public class PluginManager : IPluginManager
                 );
 
                 // if we already have this package we don't need to download it
-                if (File.Exists(dependencyPackageFile) == false)
+                if (!File.Exists(dependencyPackageFile))
                 {
                     var dependencyFindPackageByIdResource =
                         await identity.Source.GetResourceAsync<FindPackageByIdResource>(cancel);

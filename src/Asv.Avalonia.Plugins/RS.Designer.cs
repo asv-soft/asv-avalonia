@@ -141,11 +141,29 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Source: .
+        /// </summary>
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Source {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Source", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tags: .
         /// </summary>
         public static string InstalledPluginsView_Tab_AdditionalInfo_Tags {
             get {
                 return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Tags", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version: .
+        /// </summary>
+        public static string InstalledPluginsView_Tab_AdditionalInfo_Version {
+            get {
+                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Version", resourceCulture);
             }
         }
         
