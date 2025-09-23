@@ -3,23 +3,17 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class HistoricalPropertyBase<TModel, TView>
-    : RoutableViewModel,
-        IHistoricalProperty<TModel>
+public abstract class BindablePropertyBase<TModel, TView> : RoutableViewModel
 {
-    protected HistoricalPropertyBase(
-        NavigationId id,
-        ILoggerFactory loggerFactory,
-        IRoutable parent
-    )
+    protected BindablePropertyBase(NavigationId id, ILoggerFactory loggerFactory, IRoutable parent)
         : base(id, loggerFactory)
     {
         Parent = parent;
     }
 
     public abstract BindableReactiveProperty<TView> ViewValue { get; }
-    public abstract ReactiveProperty<TModel> ModelValue { get; }
     public abstract BindableReactiveProperty<bool> IsSelected { get; }
+    public abstract ReactiveProperty<TModel> ModelValue { get; }
 
     public void ForceValidate()
     {
@@ -31,4 +25,10 @@ public abstract class HistoricalPropertyBase<TModel, TView>
     protected abstract ValueTask OnChangedByUser(TView userValue, CancellationToken cancel);
 
     protected abstract void OnChangeByModel(TModel modelValue);
+
+    protected virtual ValueTask ChangeModelValue(TModel value, CancellationToken cancel)
+    {
+        ModelValue.OnNext(value);
+        return ValueTask.CompletedTask;
+    }
 }

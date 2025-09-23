@@ -31,7 +31,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         _distanceUnit = unitService.Units[DistanceBase.Id];
 
         _geoPointProperty = new ReactiveProperty<GeoPoint>(GeoPoint.Zero).DisposeItWith(Disposable);
-        GeoPointProperty = new HistoricalGeoPointProperty(
+        GeoPointProperty = new BindableGeoPointProperty(
             nameof(GeoPointProperty),
             _geoPointProperty,
             latUnit,
@@ -86,19 +86,19 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         MapViewModel.Anchors.Add(_anchor);
 
         GeoPointProperty
-            .Longitude.ViewValue.Subscribe(_ => RefreshGeoPointValidationAndData())
+            .Longitude.ViewValue.Subscribe(_ => RefreshGeoPointValidation())
             .DisposeItWith(Disposable);
         GeoPointProperty
-            .Latitude.ViewValue.Subscribe(_ => RefreshGeoPointValidationAndData())
+            .Latitude.ViewValue.Subscribe(_ => RefreshGeoPointValidation())
             .DisposeItWith(Disposable);
         GeoPointProperty
-            .Altitude.ViewValue.Subscribe(_ => RefreshGeoPointValidationAndData())
+            .Altitude.ViewValue.Subscribe(_ => RefreshGeoPointValidation())
             .DisposeItWith(Disposable);
 
         GeoPointProperty
             .ModelValue.Subscribe(location =>
             {
-                if (_anchor.ReactiveLocation.Value.Equals(location))
+                if (_anchor.ReactiveLocation.Value.Equals(location) || IsGeoPointInvalid(location))
                 {
                     return;
                 }
@@ -141,7 +141,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
     public IReadOnlyList<double> StepOptions { get; }
 
     public MapViewModel MapViewModel { get; }
-    public HistoricalGeoPointProperty GeoPointProperty { get; }
+    public BindableGeoPointProperty GeoPointProperty { get; }
     public BindableReactiveProperty<string> DistanceProperty { get; }
 
     public IReadOnlyBindableReactiveProperty<string> LonUnitName { get; }
@@ -151,44 +151,22 @@ public class GeoPointDialogViewModel : DialogViewModelBase
 
     public ReactiveCommand<MoveDirection> MoveCommand { get; }
 
-    private void RefreshGeoPointValidationAndData()
+    private void RefreshGeoPointValidation()
     {
         var isLonOk = !GeoPointProperty.Longitude.ViewValue.HasErrors;
         var isLatOk = !GeoPointProperty.Latitude.ViewValue.HasErrors;
         var isAltOk = !GeoPointProperty.Altitude.ViewValue.HasErrors;
 
         IsValid.Value = isLonOk && isLatOk && isAltOk;
-
-        if (!IsValid.CurrentValue)
-        {
-            return;
-        }
-
-        var newLon = GetUnitPropertyValueInSi(GeoPointProperty.Longitude);
-        var newLat = GetUnitPropertyValueInSi(GeoPointProperty.Latitude);
-        var newAlt = GetUnitPropertyValueInSi(GeoPointProperty.Altitude);
-
-        if (
-            GeoPointProperty.ModelValue.Value.Longitude.ApproximatelyEquals(newLon)
-            && GeoPointProperty.ModelValue.Value.Latitude.ApproximatelyEquals(newLat)
-            && GeoPointProperty.ModelValue.Value.Altitude.ApproximatelyEquals(newAlt)
-        )
-        {
-            return;
-        }
-
-        GeoPointProperty.ModelValue.Value = new GeoPoint(newLat, newLon, newAlt);
     }
 
-    private double GetUnitPropertyValueInSi(HistoricalUnitProperty property)
+    private bool IsGeoPointInvalid(GeoPoint geoPoint)
     {
-        var valueRaw = property.ViewValue.CurrentValue;
-        if (valueRaw is null)
-        {
-            return 0;
-        }
-        var value = property.Unit.CurrentUnitItem.CurrentValue.ParseToSi(valueRaw);
-        return double.IsNaN(value) ? 0 : value;
+        var lonIsBad = double.IsNaN(geoPoint.Longitude) || double.IsInfinity(geoPoint.Longitude);
+        var latIsBad = double.IsNaN(geoPoint.Latitude) || double.IsInfinity(geoPoint.Latitude);
+        var altIsBad = double.IsNaN(geoPoint.Altitude) || double.IsInfinity(geoPoint.Altitude);
+
+        return lonIsBad || latIsBad || altIsBad;
     }
 
     private Exception? ValidateDistancePropertyValue(string? userValue)
