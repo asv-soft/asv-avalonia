@@ -1,4 +1,4 @@
-﻿using System.Collections.Specialized;
+using System.Collections.Specialized;
 using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
@@ -7,22 +7,24 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public abstract class DevicePageViewModel<TContext, TCfg>
-    : PageViewModel<TContext, TCfg>,
+public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
+    : TreePageViewModel<TContext, TSubPage, TConfig>,
         IDevicePage
-    where TContext : class, IDevicePage
-    where TCfg : PageConfig, new()
+    where TContext : class, IPage
+    where TSubPage : ITreeSubpage<TContext>
+    where TConfig : PageConfig, new()
 {
     private readonly DevicePageCore _deviceCore;
 
-    protected DevicePageViewModel(
+    protected TreeDevicePageViewModel(
         NavigationId id,
         IDeviceManager devices,
         ICommandService cmd,
+        IContainerHost container,
         IConfiguration cfg,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, cfg, loggerFactory)
+        : base(id, cmd, container, cfg, loggerFactory)
     {
         _deviceCore = new DevicePageCore(devices, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
