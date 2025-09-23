@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 
 public abstract class TreePageViewModel<TContext, TSubPage, TConfig>
     : PageViewModel<TContext, TConfig>,
-        IDesignTimeTreePage
+        ITreePageViewModel
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
     where TConfig : PageConfig, new()
