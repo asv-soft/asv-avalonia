@@ -138,4 +138,10 @@
     <data name="PluginsSourcesViewModel_Name" xml:space="preserve">
         <value>Источники плагинов</value>
     </data>
+    <data name="InstalledPluginsView_Tab_AdditionalInfo_Source" xml:space="preserve">
+        <value>Источник: </value>
+    </data>
+    <data name="InstalledPluginsView_Tab_AdditionalInfo_Version" xml:space="preserve">
+        <value>Версия: </value>
+    </data>
 </root>

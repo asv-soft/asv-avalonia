@@ -16,27 +16,25 @@
         ColumnDefinitions="2*,5,3*"
         RowDefinitions="Auto,5,*">
         <DockPanel>
-            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5 0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                 <ToggleSwitch IsChecked="{Binding OnlyVerified.Value}"
                               Command="{Binding Search.Command}"
-                              OnContent=""
-                              OffContent=""/>
-                <TextBlock Text="{x:Static plugins:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
+                              OnContent="" OffContent=""/>
+                <TextBlock VerticalAlignment="Center"
+                           Text="{x:Static plugins:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" />
             </StackPanel>
-            <Button
-                DockPanel.Dock="Right"
-                IsVisible="{Binding !Search.IsExecuting.Value}"
-                Theme="{DynamicResource TransparentButton}"
-                Command="{Binding Search.Command}">
-                <avalonia:MaterialIcon Kind="Refresh" />
-            </Button>
-            <Button
-                DockPanel.Dock="Right"
-                IsVisible="{Binding Search.IsExecuting.Value}"
-                Theme="{DynamicResource TransparentButton}"
-                Command="{Binding Search.Cancel}">
-                <avalonia:MaterialIcon Kind="Cancel" />
-            </Button>
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="4">
+                <Button DockPanel.Dock="Right" IsVisible="{Binding !Search.IsExecuting.Value}"
+                        Theme="{DynamicResource TransparentButton}"
+                        Command="{Binding Search.Command}">
+                    <avalonia:MaterialIcon Kind="Refresh" />
+                </Button>
+                <Button DockPanel.Dock="Right" IsVisible="{Binding Search.IsExecuting.Value}"
+                        Theme="{DynamicResource TransparentButton}"
+                        Command="{Binding Search.Cancel}">
+                    <avalonia:MaterialIcon Kind="Close" />
+                </Button>
+            </StackPanel>
             
             <TextBox Watermark="{x:Static plugins:RS.InstalledPluginsView_Search}"
                      Background="Transparent"
@@ -44,23 +42,13 @@
                      BorderThickness="0"
                      Text="{Binding SearchString.Value}">
                 <TextBox.InnerRightContent>
-                    <StackPanel Orientation="Horizontal">
-                        <Button FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                Theme="{DynamicResource TransparentButton}"
-                                Command="{Binding $parent[TextBox].Clear}"
-                                IsHitTestVisible="False" >
-                            <avalonia:MaterialIcon Kind="Search"/>
-                        </Button>
-                    </StackPanel>
-                </TextBox.InnerRightContent>
-                <TextBox.InnerLeftContent>
-                    <Button FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            Theme="{DynamicResource TransparentButton}"
+                    <Button Theme="{DynamicResource TransparentButton}"
                             Command="{Binding $parent[TextBox].Clear}"
-                            IsVisible="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" >
-                        <avalonia:MaterialIconExt Kind="Close"/>
+                            IsVisible="{Binding Text, RelativeSource={RelativeSource AncestorType=TextBox},
+                                  Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <avalonia:MaterialIcon Kind="Close" />
                     </Button>
-                </TextBox.InnerLeftContent>
+                </TextBox.InnerRightContent>
             </TextBox>
         </DockPanel>
 
