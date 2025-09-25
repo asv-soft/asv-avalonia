@@ -106,13 +106,10 @@ public class SourceViewModel : DialogViewModelBase
     {
         ArgumentNullException.ThrowIfNull(dialog);
 
-        _sub3 = IsValid.Subscribe(b =>
-        {
-            dialog.IsPrimaryButtonEnabled = b;
-        });
+        _sub3 = IsValid.Subscribe(b => dialog.IsPrimaryButtonEnabled = b);
     }
 
-    private ValueTask Update()
+    public ValueTask Update()
     {
         if (_viewModel != null)
         {

@@ -6,6 +6,7 @@ using R3;
 
 namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
+// Plugin version: v1.0.3-example.1
 [ExportExtensionFor<IHomePage>]
 [method: ImportingConstructor]
 public class HomePagePluginExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
