@@ -846,4 +846,10 @@
     <data name="SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly" xml:space="preserve">
         <value>Без горячих клавиш</value>
     </data>
+    <data name="ResetPageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сбросить страницу</value>
+    </data>
+    <data name="ResetPageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Сбрасывает все данные на странице</value>
+    </data>
 </root>

@@ -1472,5 +1472,17 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly", resourceCulture);
             }
         }
+        
+        public static string ResetPageCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ResetPageCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ResetPageCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ResetPageCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
     }
 }
