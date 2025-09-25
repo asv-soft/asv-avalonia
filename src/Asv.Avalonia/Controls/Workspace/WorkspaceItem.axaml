@@ -4,31 +4,36 @@
         xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:avalonia2="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia">
     <Design.PreviewWith>
-        <StackPanel Spacing="4" Width="200">
-            <avalonia:WorkspaceItem Header="HEADER">
-                <avalonia:WorkspaceItem.Flyout>
-                    <MenuFlyout>
-                        <MenuItem Header="Action1"></MenuItem>
-                    </MenuFlyout>
-                </avalonia:WorkspaceItem.Flyout>
-                <StackPanel>
-                    <TextBlock Text="AAAA"/>
-                    <TextBox></TextBox>
-                </StackPanel>
-            </avalonia:WorkspaceItem>
-            <avalonia:WorkspaceItem Width="200" Header="asdasd" >
-                <StackPanel>
-                    <TextBlock Text="AAAA"/>
-                    <TextBox></TextBox>
-                </StackPanel>
-            </avalonia:WorkspaceItem>
-        </StackPanel>
+        <Border BorderThickness="1" BorderBrush="Aqua">
+            <DockPanel HorizontalAlignment="Stretch" Width="200" Height="600">
+                <avalonia:WorkspaceItem Header="HEADER" DockPanel.Dock="Top">
+                    <avalonia:WorkspaceItem.Flyout>
+                        <MenuFlyout>
+                            <MenuItem Header="Action1"></MenuItem>
+                        </MenuFlyout>
+                    </avalonia:WorkspaceItem.Flyout>
+                    <StackPanel>
+                        <TextBlock Text="AAAA"/>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                </avalonia:WorkspaceItem>
+                <avalonia:WorkspaceItem Width="200" Header="asdasd" >
+                    <Border BorderThickness="1" BorderBrush="Red" >
+                        <StackPanel>
+                            <TextBlock Text="AAAA"/>
+                            <TextBox></TextBox>
+                        </StackPanel>    
+                    </Border>
+                </avalonia:WorkspaceItem>
+            </DockPanel>
+        </Border>
+        
         
     </Design.PreviewWith>
 
     <Style Selector="avalonia|WorkspaceItem">
         <!-- Set Defaults -->
-        <Setter Property="Padding" Value="8"></Setter>
+        <Setter Property="Padding" Value="4"></Setter>
         <Setter Property="avalonia:WorkspacePanel.Dock" Value="{Binding Position, RelativeSource={RelativeSource Self}}"/>
         <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeBlackMediumBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeBlackHighBrush}"/>
@@ -36,9 +41,9 @@
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Border CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}">
-                    <StackPanel Spacing="4" Margin="{TemplateBinding Padding}">
-                        <DockPanel>
+                <Border VerticalAlignment="Stretch" CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}">
+                    <DockPanel Margin="{TemplateBinding Padding}">
+                        <DockPanel Margin="0,4,0,4" DockPanel.Dock="Top">
                            
                             <Button IsVisible="{TemplateBinding Flyout, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="0" Padding="5,4" DockPanel.Dock="Right" Theme="{DynamicResource TransparentButton}"
                                     Flyout="{TemplateBinding Flyout}">
@@ -71,7 +76,7 @@
                                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           RenderTransformOrigin="0,0"/>
-                    </StackPanel>    
+                    </DockPanel>    
                 </Border>
                 
             </ControlTemplate>

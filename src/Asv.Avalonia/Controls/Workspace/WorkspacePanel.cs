@@ -53,7 +53,6 @@ public partial class WorkspacePanel : Panel
 
         mainGrid.RowDefinitions =
         [
-            new RowDefinition(GridLength.Auto),
             _centerRow = new RowDefinition
             {
                 [!RowDefinition.HeightProperty] = this[!CentralHeightProperty],
@@ -68,28 +67,28 @@ public partial class WorkspacePanel : Panel
         ];
 
         // Left ScrollViewer with the StackPanel
-        _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = 8 };
+        _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = 4 };
         var leftScrollViewer = new ScrollViewer
         {
-            Margin = new Thickness(8, 8, 0, 8),
+            //Margin = new Thickness(4, 4, 0, 4),
             Background = null,
             Content = _leftPanel,
         };
         Grid.SetRow(leftScrollViewer, 0);
         Grid.SetColumn(leftScrollViewer, 0);
-        Grid.SetRowSpan(leftScrollViewer, 4);
+        Grid.SetRowSpan(leftScrollViewer, 3);
 
         // Right ScrollViewer with the StackPanel
-        _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = 8 };
+        _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = 4 };
         var rightScrollViewer = new ScrollViewer
         {
-            Margin = new Thickness(0, 8, 8, 8),
+            //Margin = new Thickness(0, 4, 4, 4),
             Background = null,
             Content = _rightPanel,
         };
         Grid.SetRow(rightScrollViewer, 0);
         Grid.SetColumn(rightScrollViewer, 4);
-        Grid.SetRowSpan(rightScrollViewer, 4);
+        Grid.SetRowSpan(rightScrollViewer, 3);
 
         // Bottom TabControl
         var bottomTab = new TabControl
@@ -98,24 +97,21 @@ public partial class WorkspacePanel : Panel
             TabStripPlacement = Dock.Bottom,
             Background = null,
         };
-        Grid.SetRow(bottomTab, 3);
+        Grid.SetRow(bottomTab, 2);
         Grid.SetColumn(bottomTab, 2);
         bottomTab.ItemsSource = _bottomPanel = new AvaloniaList<Control>();
 
         _centerPanel = new DockPanel
         {
             Name = "PART_CenterPanel",
+            VerticalAlignment = VerticalAlignment.Stretch,
+            HorizontalAlignment = HorizontalAlignment.Stretch,
             Background = Brushes.Transparent,
             LastChildFill = true,
         };
-        var centerScrollViewer = new ScrollViewer
-        {
-            Margin = new Thickness(8, 8, 8, 8),
-            Background = null,
-            Content = _centerPanel,
-        };
-        Grid.SetRow(centerScrollViewer, 0);
-        Grid.SetColumn(centerScrollViewer, 2);
+
+        Grid.SetRow(_centerPanel, 0);
+        Grid.SetColumn(_centerPanel, 2);
 
         // Vertical GridSplitter between columns 0 and 2
         var verticalSplitter1 = new GridSplitter
@@ -129,7 +125,7 @@ public partial class WorkspacePanel : Panel
         verticalSplitter1.DragCompleted += HorizontalSplitterOnDragCompleted;
 
         Grid.SetRow(verticalSplitter1, 0);
-        Grid.SetRowSpan(verticalSplitter1, 4);
+        Grid.SetRowSpan(verticalSplitter1, 3);
         Grid.SetColumn(verticalSplitter1, 1);
 
         // Vertical GridSplitter between columns 2 and 4
@@ -145,7 +141,7 @@ public partial class WorkspacePanel : Panel
         verticalSplitter2.DragCompleted += HorizontalSplitterOnDragCompleted;
 
         Grid.SetRow(verticalSplitter2, 0);
-        Grid.SetRowSpan(verticalSplitter2, 4);
+        Grid.SetRowSpan(verticalSplitter2, 3);
         Grid.SetColumn(verticalSplitter2, 3);
 
         // Horizontal GridSplitter in row 2
@@ -167,7 +163,7 @@ public partial class WorkspacePanel : Panel
         mainGrid.Children.Add(leftScrollViewer);
         mainGrid.Children.Add(rightScrollViewer);
         mainGrid.Children.Add(bottomTab);
-        mainGrid.Children.Add(centerScrollViewer);
+        mainGrid.Children.Add(_centerPanel);
         mainGrid.Children.Add(verticalSplitter1);
         mainGrid.Children.Add(verticalSplitter2);
         mainGrid.Children.Add(horizontalSplitter);
@@ -265,9 +261,22 @@ public partial class WorkspacePanel : Panel
                     _rightPanel.Children.Remove(control);
                     _bottomPanel.Remove(control);
                     _centerPanel.Children.Add(control);
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        for (int i = 0; i < _centerPanel.Children.Count; i++)
+        {
+            if (i < _centerPanel.Children.Count - 1)
+            {
+                DockPanel.SetDock(_centerPanel.Children[i], Dock.Top);
+            }
+            else
+            {
+                _centerPanel.Children[i].ClearValue(DockPanel.DockProperty);
             }
         }
     }

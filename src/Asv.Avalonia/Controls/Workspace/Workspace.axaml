@@ -36,11 +36,23 @@
                     </StackPanel>
                 </avalonia:WorkspaceItem>
                 
-                <avalonia:WorkspaceItem Header="Central" Position="Center">
-                    <DockPanel>
-                        <TextBlock Text="AAAA"/>
-                        <TextBox></TextBox>
-                    </DockPanel>
+                <avalonia:WorkspaceItem Header="Central" Position="Center" HorizontalAlignment="Stretch">
+                    <Border  BorderThickness="1" BorderBrush="Red" Margin="4">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" Text="AAAA"/>
+                            <TextBox></TextBox>
+                        </DockPanel>    
+                    </Border>
+                    
+                </avalonia:WorkspaceItem>
+                <avalonia:WorkspaceItem Header="Central" Position="Center" HorizontalAlignment="Stretch">
+                    <Border  BorderThickness="1" BorderBrush="Red" Margin="4">
+                        <DockPanel>
+                            <TextBlock DockPanel.Dock="Top" Text="AAAA"/>
+                            <TextBox></TextBox>
+                        </DockPanel>    
+                    </Border>
+                    
                 </avalonia:WorkspaceItem>
             </avalonia:Workspace>
         </Panel>
