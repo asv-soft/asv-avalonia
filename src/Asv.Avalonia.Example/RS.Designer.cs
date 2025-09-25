@@ -446,5 +446,17 @@ namespace Asv.Avalonia.Example {
                 return ResourceManager.GetString("HistoricalControlsPageView_Enum", resourceCulture);
             }
         }
+        
+        public static string DialogControlsPageViewModel_GeoPoint_Result {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_GeoPoint_Result", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Custom_GeoPoint {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Custom_GeoPoint", resourceCulture);
+            }
+        }
     }
 }

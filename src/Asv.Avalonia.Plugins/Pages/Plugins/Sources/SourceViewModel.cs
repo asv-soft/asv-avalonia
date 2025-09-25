@@ -8,7 +8,7 @@ namespace Asv.Avalonia.Plugins;
 // TODO: add validation
 public class SourceViewModel : DialogViewModelBase
 {
-    public const string ViewModelId = "plugins.sources.source.dialog";
+    public const string ViewModelId = $"{BaseId}.plugins.sources.source";
 
     private readonly IPluginManager _mng;
     private readonly PluginSourceViewModel? _viewModel;

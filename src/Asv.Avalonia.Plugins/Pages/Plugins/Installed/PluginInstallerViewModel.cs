@@ -12,7 +12,7 @@ public class PluginInstallerViewModelConfig
 
 public class PluginInstallerViewModel : DialogViewModelBase
 {
-    public const string ViewModelId = "plugins.installed.installer.dialog";
+    public const string ViewModelId = $"{BaseId}.plugins.installed.installer";
     private readonly IPluginManager _manager;
 
     public PluginInstallerViewModel()

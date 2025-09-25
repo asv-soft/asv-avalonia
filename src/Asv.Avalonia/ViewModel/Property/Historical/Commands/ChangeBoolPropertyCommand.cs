@@ -5,17 +5,17 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<double>>
+public class ChangeBoolPropertyCommand : ContextCommand<IHistoricalProperty<bool>>
 {
     #region Static
 
-    public const string Id = $"{BaseId}.property.double";
+    public const string Id = $"{BaseId}.property.bool";
 
-    private static readonly ICommandInfo StaticInfo = new CommandInfo
+    public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = RS.ChangeDoublePropertyCommand_CommandInfo_Name,
-        Description = RS.ChangeDoublePropertyCommand_CommandInfo_Description,
+        Name = RS.ChangeBoolPropertyCommand_CommandInfo_Name,
+        Description = RS.ChangeBoolPropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
         DefaultHotKey = null,
         Source = SystemModule.Instance,
@@ -26,17 +26,17 @@ public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<do
     #endregion
 
     protected override ValueTask<CommandArg?> InternalExecute(
-        IHistoricalProperty<double> context,
+        IHistoricalProperty<bool> context,
         CommandArg newValue,
         CancellationToken cancel
     )
     {
-        if (newValue is not DoubleArg value)
+        if (newValue is not BoolArg value)
         {
-            throw new CommandArgMismatchException(typeof(DoubleArg));
+            throw new CommandArgMismatchException(typeof(BoolArg));
         }
 
-        var oldValue = new DoubleArg(context.ModelValue.Value);
+        var oldValue = new BoolArg(context.ModelValue.Value);
         context.ModelValue.OnNext(value.Value);
         return ValueTask.FromResult<CommandArg?>(oldValue);
     }

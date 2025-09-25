@@ -212,4 +212,10 @@
     <data name="HistoricalControlsPageView_Enum" xml:space="preserve">
         <value>Перечисление:</value>
     </data>
+    <data name="DialogControlsPageViewModel_GeoPoint_Result" xml:space="preserve">
+        <value>Геоточка: {0}</value>
+    </data>
+    <data name="DialogControlsPageView_Custom_GeoPoint" xml:space="preserve">
+        <value>Открыть диалог выбора геоточки</value>
+    </data>
 </root>

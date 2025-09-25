@@ -61,5 +61,19 @@
       </Compile>
       <Compile Remove="Diialog\TestDialogItemTextViewModel.cs" />
       <Compile Remove="Diialog\TestDialogItemTextView.axaml.cs" />
+      <Compile Update="PositionDialog\GeoPointDialogView.axaml.cs">
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="RS.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RS.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+    <ItemGroup>
+      <EmbeddedResource Update="RS.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <LastGenOutput>RS.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 </Project>

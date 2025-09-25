@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -25,15 +27,22 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     private readonly SaveCancelDialogPrefab _saveCancelDialog;
     private readonly InputDialogPrefab _inputDialog;
     private readonly HotKeyCaptureDialogPrefab _hotKeyCaptureDialog;
+    private readonly GeoPointDialogPrefab _geoPointDialog;
+
+    private readonly ReactiveProperty<GeoPoint> _geoPointProperty;
 
     public DialogControlsPageViewModel()
-        : this(NullLoggerFactory.Instance, NullDialogService.Instance)
+        : this(NullLoggerFactory.Instance, NullDialogService.Instance, NullUnitService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public DialogControlsPageViewModel(ILoggerFactory loggerFactory, IDialogService dialogService)
+    public DialogControlsPageViewModel(
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService,
+        IUnitService unitService
+    )
         : base(PageId, loggerFactory)
     {
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
@@ -45,6 +54,37 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         _saveCancelDialog = dialogService.GetDialogPrefab<SaveCancelDialogPrefab>();
         _inputDialog = dialogService.GetDialogPrefab<InputDialogPrefab>();
         _hotKeyCaptureDialog = dialogService.GetDialogPrefab<HotKeyCaptureDialogPrefab>();
+        _geoPointDialog = dialogService.GetDialogPrefab<GeoPointDialogPrefab>();
+
+        var latUnit = unitService.Units[LatitudeBase.Id];
+        var lonUnit = unitService.Units[LongitudeBase.Id];
+        var altUnit = unitService.Units[AltitudeBase.Id];
+
+        _geoPointProperty = new ReactiveProperty<GeoPoint>(GeoPoint.Zero).DisposeItWith(Disposable);
+
+        GeoPointProperty = new HistoricalGeoPointProperty(
+            nameof(GeoPointProperty),
+            _geoPointProperty,
+            latUnit,
+            lonUnit,
+            altUnit,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        GeoPointProperty.ForceValidate();
+
+        LonUnitName = lonUnit
+            .CurrentUnitItem.Select(item => item.Symbol)
+            .ToBindableReactiveProperty<string>()
+            .DisposeItWith(Disposable);
+        LatUnitName = latUnit
+            .CurrentUnitItem.Select(item => item.Symbol)
+            .ToBindableReactiveProperty<string>()
+            .DisposeItWith(Disposable);
+        AltUnitName = altUnit
+            .CurrentUnitItem.Select(item => item.Symbol)
+            .ToBindableReactiveProperty<string>()
+            .DisposeItWith(Disposable);
 
         LastResult = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
 
@@ -59,6 +99,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         ShowHotKeyCaptureCommand = new ReactiveCommand(ShowHotKeyCaptureAsync).DisposeItWith(
             Disposable
         );
+        OpenGeoPointDialogCommand = new ReactiveCommand(ShowGeoPointDialog).DisposeItWith(
+            Disposable
+        );
     }
 
     public ReactiveCommand OpenFileCommand { get; }
@@ -70,8 +113,13 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public ReactiveCommand SaveCancelCommand { get; }
     public ReactiveCommand ShowInputCommand { get; }
     public ReactiveCommand ShowHotKeyCaptureCommand { get; }
+    public ReactiveCommand OpenGeoPointDialogCommand { get; }
 
     public BindableReactiveProperty<string> LastResult { get; }
+    public HistoricalGeoPointProperty GeoPointProperty { get; }
+    public BindableReactiveProperty<string> LonUnitName { get; }
+    public BindableReactiveProperty<string> LatUnitName { get; }
+    public BindableReactiveProperty<string> AltUnitName { get; }
 
     public override IExportInfo Source => SystemModule.Instance;
 
@@ -202,5 +250,29 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         var msg = string.Format(RS.DialogControlsPageViewModel_HotKeyCapture_Result, result);
         LastResult.OnNext(msg);
         Logger.LogInformation("{msg}", msg);
+    }
+
+    private async ValueTask ShowGeoPointDialog(Unit unit, CancellationToken cancellationToken)
+    {
+        var payload = new GeoPointDialogPayload
+        {
+            InitialLocation = GeoPointProperty.ModelValue.CurrentValue,
+        };
+
+        var rawResult = await _geoPointDialog.ShowDialogAsync(payload);
+        var result = rawResult?.ToString() ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
+        var msg = string.Format(RS.DialogControlsPageViewModel_GeoPoint_Result, result);
+        LastResult.OnNext(msg);
+        Logger.LogInformation("{msg}", msg);
+
+        if (rawResult is not null)
+        {
+            GeoPointProperty.ModelValue.Value = rawResult.Value;
+        }
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        yield return GeoPointProperty;
     }
 }

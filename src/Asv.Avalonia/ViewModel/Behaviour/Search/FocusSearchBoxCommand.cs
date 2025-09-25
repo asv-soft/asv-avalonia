@@ -34,7 +34,7 @@ public class FocusSearchBoxCommand : ContextCommand<IRoutable>
         }
 
         // we assume that the ISearchBox with the longest path to root is the main search box
-        found.MaxItem(x => x.GetPathToRoot().Count).Focus();
+        found.MaxItem(x => x.GetPathToRoot().Count)?.Focus();
         return null;
     }
 }

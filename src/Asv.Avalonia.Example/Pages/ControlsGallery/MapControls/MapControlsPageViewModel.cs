@@ -31,11 +31,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         MapViewModel.Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
 
         MapViewModel.Anchors.Add(
-            new MapAnchor<IMapAnchor>("1", loggerFactory)
-            {
-                Icon = MaterialIconKind.Navigation,
-                Location = new GeoPoint(53, 53, 0),
-            }
+            new MapAnchor<IMapAnchor>("1", loggerFactory) { Icon = MaterialIconKind.Navigation }
         );
     }
 

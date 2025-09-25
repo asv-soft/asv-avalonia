@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using Asv.Common;
+﻿using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -28,12 +27,11 @@ public class MapViewModel : RoutableViewModel, IMap
         var drone = new MapAnchor<IMapAnchor>(DesignTime.Id, DesignTime.LoggerFactory)
         {
             Icon = MaterialIconKind.Navigation,
-            Location = new GeoPoint(53, 53, 100),
         };
         Anchors.Add(drone);
         var azimuth = 0;
         TimeProvider.System.CreateTimer(
-            x =>
+            _ =>
             {
                 drone.Azimuth = (azimuth++ * 10) % 360;
             },

@@ -224,4 +224,10 @@
     <data name="HistoricalControlsPageView_Enum" xml:space="preserve">
         <value>Enum:</value>
     </data>
+    <data name="DialogControlsPageViewModel_GeoPoint_Result" xml:space="preserve">
+        <value>GeoPoint: {0}</value>
+    </data>
+    <data name="DialogControlsPageView_Custom_GeoPoint" xml:space="preserve">
+        <value>Open geopoint dialog</value>
+    </data>
 </root>

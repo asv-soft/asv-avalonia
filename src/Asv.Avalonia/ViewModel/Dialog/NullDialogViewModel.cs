@@ -1,8 +1,8 @@
 ﻿namespace Asv.Avalonia;
 
-public class NullDialogViewModel : DialogViewModelBase
+public sealed class NullDialogViewModel : DialogViewModelBase
 {
-    public const string DialogId = "null-dialog-vm";
+    public const string DialogId = $"{BaseId}.null";
 
     public static NullDialogViewModel Instance { get; } = new();
 

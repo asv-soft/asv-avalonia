@@ -93,7 +93,7 @@ public class App : Application, IContainerHost, IShellHost
             yield return typeof(IoModule).Assembly; // Asv.Avalonia.IO
 
             // TODO: use it when plugin manager implementation will be finished
-            //yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
+            // yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
         }
     }
 

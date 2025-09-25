@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 
 public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
 {
-    public const string DialogId = "dialog.hotkey.capture";
+    public const string DialogId = $"{BaseId}.hotkey.capture";
 
     public DialogItemHotKeyCaptureViewModel()
         : this(DesignTime.LoggerFactory)

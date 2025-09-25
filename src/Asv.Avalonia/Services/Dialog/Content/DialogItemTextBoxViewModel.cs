@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 
 public class DialogItemTextBoxViewModel : DialogViewModelBase
 {
-    public const string DialogId = "dialog.item.textbox";
+    public const string DialogId = $"{BaseId}.item.textbox";
 
     public DialogItemTextBoxViewModel()
         : this(NullLoggerFactory.Instance)

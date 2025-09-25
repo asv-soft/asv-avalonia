@@ -4,11 +4,13 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum, TEnum>
+public sealed class HistoricalEnumProperty<TEnum>
+    : BindablePropertyBase<Enum, TEnum>,
+        IHistoricalProperty<Enum>
     where TEnum : struct, Enum
 {
-    private bool _internalChange;
     private bool _externalChange;
+    private bool _internalChange;
 
     public HistoricalEnumProperty(
         NavigationId id,
@@ -19,7 +21,6 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
         : base(id, loggerFactory, parent)
     {
         ModelValue = modelValue;
-
         ViewValue = new BindableReactiveProperty<TEnum>().DisposeItWith(Disposable);
         IsSelected = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         ViewValue.EnableValidation(ValidateValue);
@@ -30,6 +31,12 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
     }
+
+    public override ReactiveProperty<Enum> ModelValue { get; }
+    public override BindableReactiveProperty<TEnum> ViewValue { get; }
+    public override BindableReactiveProperty<bool> IsSelected { get; }
+
+    public TEnum[] EnumItems => Enum.GetValues<TEnum>();
 
     protected override Exception? ValidateValue(TEnum userValue)
     {
@@ -44,8 +51,7 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
         }
 
         _externalChange = true;
-        var newValue = new StringArg(Enum.GetName(userValue) ?? string.Empty);
-        await this.ExecuteCommand(ChangeEnumPropertyCommand.Id, newValue, cancel: cancel);
+        await ChangeModelValue(userValue, cancel);
         _externalChange = false;
     }
 
@@ -66,14 +72,14 @@ public sealed class HistoricalEnumProperty<TEnum> : HistoricalPropertyBase<Enum,
         _internalChange = false;
     }
 
+    protected override async ValueTask ChangeModelValue(Enum value, CancellationToken cancel)
+    {
+        var newValue = new StringArg(Enum.GetName(value.GetType(), value) ?? string.Empty);
+        await this.ExecuteCommand(ChangeEnumPropertyCommand.Id, newValue, cancel);
+    }
+
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         return [];
     }
-
-    public override BindableReactiveProperty<TEnum> ViewValue { get; }
-    public override BindableReactiveProperty<bool> IsSelected { get; }
-    public override ReactiveProperty<Enum> ModelValue { get; }
-
-    public TEnum[] EnumItems => Enum.GetValues<TEnum>();
 }

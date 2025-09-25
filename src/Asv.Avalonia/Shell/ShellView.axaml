@@ -54,9 +54,8 @@
               ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
           Classes.warning="{Binding ErrorState, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }"
-          >
-    <DockPanel>
+              ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
+    <DockPanel Focusable="True">
         <DockPanel x:Name="Header" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Dock="Top"
                    avalonia:WindowHelper.EnableDrag="True"
                    avalonia:WindowHelper.DoubleTappedWindowState="True">
@@ -160,7 +159,6 @@
             </ItemsControl>
         </Border>
         
-        
         <Border BorderThickness="0, 1, 0, 1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" >
             <avalonia:DockControl 
                 x:Name="DockControl"
@@ -170,5 +168,4 @@
         </Border>
     </DockPanel>
     </Border>
-  
 </UserControl>

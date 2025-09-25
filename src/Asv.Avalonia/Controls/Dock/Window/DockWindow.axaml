@@ -6,7 +6,8 @@
         x:Class="Asv.Avalonia.DockWindow"
         mc:Ignorable="d"
         d:DesignWidth="800"
-        d:DesignHeight="450">
+        d:DesignHeight="450"
+        Focusable="True">
     <Design.PreviewWith>
         <avalonia:HomePageViewModel/>
     </Design.PreviewWith>

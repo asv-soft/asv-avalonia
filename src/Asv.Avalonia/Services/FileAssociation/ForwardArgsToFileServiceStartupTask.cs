@@ -12,12 +12,12 @@ public class ForwardArgsToFileServiceStartupTask(IFileAssociationService svc) : 
 {
     public override void AppCtor()
     {
-        if (Design.IsDesignMode == false)
+        if (!Design.IsDesignMode)
         {
             AppHost
                 .Instance.Services.GetRequiredService<ISoloRunFeature>()
                 .Args.Where(x => x.Tags.Count > 1)
-                .Subscribe(x => svc.Open(x.Tags.Skip(1).First()));
+                .SubscribeAwait(async (x, ct) => await svc.Open(x.Tags.Skip(1).First()));
         }
     }
 }

@@ -6,6 +6,8 @@ namespace Asv.Avalonia;
 public abstract class DialogViewModelBase(NavigationId id, ILoggerFactory loggerFactory)
     : RoutableViewModel(id, loggerFactory)
 {
+    protected const string BaseId = "dialog";
+
     private readonly HashSet<IBindableReactiveProperty> _validationData = new(
         EqualityComparer<IBindableReactiveProperty>.Default
     );
