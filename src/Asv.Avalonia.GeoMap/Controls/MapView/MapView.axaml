@@ -44,9 +44,7 @@
                 </ControlTheme>
             </ItemsControl.ItemContainerTheme>
         </map:MapItemsControl>
-        <avalonia1:Workspace ItemsSource="{Binding WidgetsView}">
-            
-        </avalonia1:Workspace>
+        <avalonia1:Workspace ItemsSource="{Binding WidgetsView}"/>
     </Panel>
     
     
