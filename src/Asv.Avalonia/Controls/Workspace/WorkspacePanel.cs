@@ -68,24 +68,14 @@ public partial class WorkspacePanel : Panel
 
         // Left ScrollViewer with the StackPanel
         _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = 4 };
-        var leftScrollViewer = new ScrollViewer
-        {
-            //Margin = new Thickness(4, 4, 0, 4),
-            Background = null,
-            Content = _leftPanel,
-        };
+        var leftScrollViewer = new ScrollViewer { Background = null, Content = _leftPanel };
         Grid.SetRow(leftScrollViewer, 0);
         Grid.SetColumn(leftScrollViewer, 0);
         Grid.SetRowSpan(leftScrollViewer, 3);
 
         // Right ScrollViewer with the StackPanel
         _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = 4 };
-        var rightScrollViewer = new ScrollViewer
-        {
-            //Margin = new Thickness(0, 4, 4, 4),
-            Background = null,
-            Content = _rightPanel,
-        };
+        var rightScrollViewer = new ScrollViewer { Background = null, Content = _rightPanel };
         Grid.SetRow(rightScrollViewer, 0);
         Grid.SetColumn(rightScrollViewer, 4);
         Grid.SetRowSpan(rightScrollViewer, 3);
@@ -99,14 +89,14 @@ public partial class WorkspacePanel : Panel
         };
         Grid.SetRow(bottomTab, 2);
         Grid.SetColumn(bottomTab, 2);
-        bottomTab.ItemsSource = _bottomPanel = new AvaloniaList<Control>();
+        bottomTab.ItemsSource = _bottomPanel = [];
 
         _centerPanel = new DockPanel
         {
             Name = "PART_CenterPanel",
             VerticalAlignment = VerticalAlignment.Stretch,
             HorizontalAlignment = HorizontalAlignment.Stretch,
-            Background = Brushes.Transparent,
+            Background = null,
             LastChildFill = true,
         };
 

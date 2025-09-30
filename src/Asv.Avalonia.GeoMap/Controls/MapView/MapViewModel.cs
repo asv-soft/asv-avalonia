@@ -45,10 +45,14 @@ public class MapViewModel : RoutableViewModel, IMap
         : base(id, loggerFactory)
     {
         Anchors = new ObservableList<IMapAnchor>();
+        Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
+        Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim();
         Widgets = new ObservableList<IMapWidget>();
+        Widgets.SetRoutableParent(this).DisposeItWith(Disposable);
+        Widgets.DisposeRemovedItems().DisposeItWith(Disposable);
         WidgetsView = Widgets.ToNotifyCollectionChangedSlim();
-        SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>();
+        SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IMapWidget> WidgetsView { get; }
@@ -61,21 +65,14 @@ public class MapViewModel : RoutableViewModel, IMap
 
     public BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
 
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
-    {
-        var anchor = AnchorsView.FirstOrDefault(x => x.Id == id);
-        if (anchor != null)
-        {
-            SelectedAnchor.Value = anchor;
-            return ValueTask.FromResult<IRoutable>(anchor);
-        }
-
-        return ValueTask.FromResult<IRoutable>(this);
-    }
-
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         foreach (var item in AnchorsView)
+        {
+            yield return item;
+        }
+
+        foreach (var item in WidgetsView)
         {
             yield return item;
         }
