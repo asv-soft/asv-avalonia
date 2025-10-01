@@ -144,4 +144,10 @@
     <data name="InstalledPluginsView_Tab_AdditionalInfo_Version" xml:space="preserve">
         <value>Версия: </value>
     </data>
+    <data name="OpenPluginsMarketCommand_Description" xml:space="preserve">
+        <value>Открыть маркет плагинов</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Name" xml:space="preserve">
+        <value>Маркет плагинов</value>
+    </data>
 </root>

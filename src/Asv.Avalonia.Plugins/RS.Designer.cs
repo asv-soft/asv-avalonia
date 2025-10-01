@@ -231,6 +231,24 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open plugins market page.
+        /// </summary>
+        public static string OpenPluginsMarketCommand_Description {
+            get {
+                return ResourceManager.GetString("OpenPluginsMarketCommand_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugins Market.
+        /// </summary>
+        public static string OpenPluginsMarketCommand_Name {
+            get {
+                return ResourceManager.GetString("OpenPluginsMarketCommand_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Install.
         /// </summary>
         public static string PluginInstallerViewModel_InstallDialog_PrimaryButtonText {
