@@ -14,8 +14,8 @@ public class OpenPluginsMarketCommand(INavigationService nav)
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Plugins Market",
-        Description = "Open plugins market page",
+        Name = RS.OpenPluginsMarketCommand_Name,
+        Description = RS.OpenPluginsMarketCommand_Description,
         Icon = PluginsMarketViewModel.PageIcon,
         DefaultHotKey = null,
         Source = SystemModule.Instance,
