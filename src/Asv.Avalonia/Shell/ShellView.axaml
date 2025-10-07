@@ -16,20 +16,7 @@
                 <Setter Property="Background" Value="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"/>
             </Style>
         </Style>
-        <Style Selector="Border.frame">
-            <Style Selector="^.normal">
-                <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-                <Setter Property="Background" Value="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"/>
-            </Style>
-            <Style Selector="^.error">
-                <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-                <Setter Property="Background" Value="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"/>
-            </Style>
-            <Style Selector="^.warning">
-                <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}" />
-                <Setter Property="Background" Value="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"/>
-            </Style>
-        </Style>
+        
         
         
         <Style Selector="DockPanel#Header avalonia1|MaterialIcon">
@@ -44,15 +31,29 @@
         <Style Selector="DropDownButton#WindowControlButton /template/ PathIcon">
             <Setter Property="IsVisible" Value="False" />
         </Style>
+        
+        <Style Selector="Border#WindowFrame">
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
+        </Style>
+        
+        <Style Selector="avalonia|DockTabItem:selected /template/ Border#PART_SelectedPipe">
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Height" Value="26"/>
+            <Setter Property="Opacity" Value="0.3"/>
+            <Setter Property="Background" Value="{DynamicResource SystemAccentColorDark2}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
     </UserControl.Styles>
-    <Border Classes="frame" BorderThickness="1"
-            Classes.normal="{Binding ErrorState, 
+    <Border x:Name="WindowFrame" BorderThickness="1"
+            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+            Classes.normal-frame="{Binding ErrorState, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Normal} }"
-            Classes.error="{Binding ErrorState, 
+            Classes.error-frame="{Binding ErrorState, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
-          Classes.warning="{Binding ErrorState, 
+          Classes.warning-frame="{Binding ErrorState, 
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
               ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
     <DockPanel Focusable="True">
@@ -126,16 +127,7 @@
         <Border 
             Classes="status" 
             DockPanel.Dock="Bottom"
-            Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
-            Classes.normal="{Binding ErrorState, 
-            Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-            ConverterParameter={x:Static avalonia:ShellErrorState.Normal} }"
-            Classes.error="{Binding ErrorState, 
-            Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-            ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
-            Classes.warning="{Binding ErrorState, 
-            Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, 
-            ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }"
+            
         >
             <ItemsControl x:Name="Status" ItemsSource="{Binding StatusItemsView}" Height="25" DockPanel.Dock="Bottom"
                           Background="{DynamicResource InfoBarErrorSeverityBackgroundBrush}">
@@ -159,13 +151,12 @@
             </ItemsControl>
         </Border>
         
-        <Border BorderThickness="0, 1, 0, 1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" >
-            <avalonia:DockControl 
-                x:Name="DockControl"
-                ItemsSource="{CompiledBinding PagesView}" 
-                SelectedItem="{Binding SelectedPage.Value, Mode=TwoWay}">
-            </avalonia:DockControl>
-        </Border>
+        <avalonia:DockControl 
+            x:Name="DockControl"
+            Margin="0,0,0,0"
+            ItemsSource="{CompiledBinding PagesView}" 
+            SelectedItem="{Binding SelectedPage.Value, Mode=TwoWay}">
+        </avalonia:DockControl>
     </DockPanel>
     </Border>
 </UserControl>

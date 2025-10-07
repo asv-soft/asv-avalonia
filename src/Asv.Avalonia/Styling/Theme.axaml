@@ -68,9 +68,14 @@
         </ResourceDictionary>
         
         <Thickness x:Key="ButtonPadding">11,5,11,6</Thickness>
-    
         <system:Double x:Key="AsvFontSizeSmall">12</system:Double>
         <system:Double x:Key="AsvFontSizeNormal">14</system:Double>
+        
+        <CornerRadius x:Key="PanelCornerRadius">8,8,8,8</CornerRadius>
+        <CornerRadius x:Key="PanelCornerRadiusUp">8,8,0,0</CornerRadius>
+        <CornerRadius x:Key="PanelCornerRadiusDown">0,0,8,8</CornerRadius>
+        <CornerRadius x:Key="PanelCornerRadiusLeft">8,0,0,8</CornerRadius>
+        <CornerRadius x:Key="PanelCornerRadiusRight">0,8,8,0</CornerRadius>
         
         <system:Double x:Key="AsvH1FontSize">20</system:Double>
         <system:Double x:Key="AsvH2FontSize">18</system:Double>

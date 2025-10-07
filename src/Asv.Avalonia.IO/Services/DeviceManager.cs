@@ -52,7 +52,7 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
         ArgumentNullException.ThrowIfNull(cfgSvc);
         _cfgSvc = cfgSvc;
         _extensions = [.. extensions];
-        var factory = Protocol.Create(builder =>
+        ProtocolFactory = Protocol.Create(builder =>
         {
             builder.SetLog(loggerFactory);
             builder.SetMetrics(meterFactory);
@@ -63,7 +63,7 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
             }
         });
 
-        Router = factory.CreateRouter("ROUTER");
+        Router = ProtocolFactory.CreateRouter("ROUTER");
         Explorer = DeviceExplorer.Create(
             Router,
             builder =>
@@ -81,6 +81,8 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
         _config = _cfgSvc.Get<DeviceManagerConfig>();
         Task.Factory.StartNew(LoadPortsAtBackground, null, TaskCreationOptions.LongRunning);
     }
+
+    public IProtocolFactory ProtocolFactory { get; }
 
     private void LoadPortsAtBackground(object? obj)
     {

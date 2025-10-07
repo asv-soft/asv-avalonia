@@ -4,7 +4,7 @@
         xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:avalonia2="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia">
     <Design.PreviewWith>
-        <Border BorderThickness="1" BorderBrush="Aqua">
+        <Border BorderThickness="1" BorderBrush="Aqua" Background="Red">
             <DockPanel HorizontalAlignment="Stretch" Width="200" Height="600">
                 <avalonia:WorkspaceItem Header="HEADER" DockPanel.Dock="Top">
                     <avalonia:WorkspaceItem.Flyout>
@@ -35,10 +35,11 @@
         <!-- Set Defaults -->
         <Setter Property="Padding" Value="4"></Setter>
         <Setter Property="avalonia:WorkspacePanel.Dock" Value="{Binding Position, RelativeSource={RelativeSource Self}}"/>
-        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeBlackMediumBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeBlackHighBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
+        <Setter Property="Margin" Value="4"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Border VerticalAlignment="Stretch" CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}">

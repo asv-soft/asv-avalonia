@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:avalonia="clr-namespace:Asv.Avalonia">
     <Design.PreviewWith>
-        <Border Width="100" Height="300">
+        <Border Width="600" Height="400">
             <avalonia:DockTabControl>
                 <TabItem Header="Arch">
                     <Border Background="AntiqueWhite" Height="100">
@@ -37,15 +37,12 @@
         </Border>
     </Design.PreviewWith>
     <ControlTheme x:Key="{x:Type avalonia:DockTabControl}" TargetType="avalonia:DockTabControl">
-        <Setter Property="Margin" Value="0" />
-        <Setter Property="Padding" Value="{DynamicResource TabItemMargin}" />
-        <Setter Property="Background" Value="{DynamicResource TabControlBackground}" />
+        <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border BorderBrush="{TemplateBinding BorderBrush}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         CornerRadius="{TemplateBinding CornerRadius}"
-                        Background="{TemplateBinding Background}"
                         HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                         VerticalAlignment="{TemplateBinding VerticalAlignment}"
                         >
@@ -54,23 +51,29 @@
                             HorizontalScrollBarVisibility="Auto"
                             VerticalScrollBarVisibility="Disabled"
                             DockPanel.Dock="Top"
+                            
                             Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}">
                             <ItemsPresenter Name="PART_ItemsPresenter" />
                         </ScrollViewer>
-                        <ContentPresenter DockPanel.Dock="Bottom" Name="PART_SelectedContentHost"
-                                          MinWidth="100"
-                                          Margin="{TemplateBinding Padding}"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          Content="{TemplateBinding SelectedContent}"
-                                          ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                        <Border BorderThickness="0, 1, 0, 1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" >
+                            <ContentPresenter DockPanel.Dock="Bottom" Name="PART_SelectedContentHost"
+                                              MinWidth="100"
+                                              Background="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"
+                                              Margin="{TemplateBinding Padding}"
+                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              Content="{TemplateBinding SelectedContent}"
+                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
+                        </Border>
+                        
                     </DockPanel>
                 </Border>
             </ControlTemplate>
         </Setter>
         <Style Selector="^[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
             <Setter Property="Orientation" Value="Horizontal" />
-            <Setter Property="Margin" Value="{DynamicResource TabControlTopPlacementItemMargin}" />
+            <Setter Property="Margin" Value="0" />
         </Style>
+        
     </ControlTheme>
 </ResourceDictionary>

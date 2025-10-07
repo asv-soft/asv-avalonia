@@ -10,14 +10,16 @@ public class NullDeviceManager : IDeviceManager
 
     private NullDeviceManager()
     {
-        var factory = Protocol.Create(builder =>
+        ProtocolFactory = Protocol.Create(builder =>
         {
             builder.Protocols.RegisterExampleProtocol();
         });
 
-        Router = factory.CreateRouter("DesignTime");
+        Router = ProtocolFactory.CreateRouter("DesignTime");
         Explorer = DeviceExplorer.Create(Router, builder => { });
     }
+
+    public IProtocolFactory ProtocolFactory { get; }
 
     public MaterialIconKind? GetIcon(DeviceId id)
     {

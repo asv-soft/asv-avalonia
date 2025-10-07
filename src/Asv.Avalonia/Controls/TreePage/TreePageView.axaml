@@ -91,6 +91,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button 
+                            MinWidth="70"
                             Command="{Binding Base.Command}"
                             CommandParameter="{Binding Base.CommandParameter}"
                             IsEnabled="{Binding Base.IsEnabled}"

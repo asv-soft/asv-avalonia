@@ -11,18 +11,20 @@
             </control:DockTabStripItem>
         </Border>
     </Design.PreviewWith>
-    
     <DataTemplate x:Key="DockTabStripItemHeaderTemplate" x:DataType="control:IPage">
-        <StackPanel Orientation="Horizontal" Spacing="4" Margin="2">
-            <avalonia:MaterialIcon Width="16" Height="16" Kind="{Binding Icon}" />
+        <StackPanel Orientation="Horizontal" Spacing="4" Margin="4,8,4,8" >
+            <avalonia:MaterialIcon Classes="small" Width="16" Height="16" Kind="{Binding Icon}" />
             <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
-            <Button Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}" Padding="0">
-                <avalonia:MaterialIcon Kind="Close" />
+            <Button CornerRadius="10" Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}" Padding="0">
+                <avalonia:MaterialIcon Width="16" Height="16" Classes="unknown" Kind="Close" />
             </Button>
-        </StackPanel>
+        </StackPanel>    
     </DataTemplate>
-    
     <ControlTheme x:Key="{x:Type control:DockTabStripItem}" TargetType="control:DockTabStripItem">
         <Setter Property="ContentTemplate" Value="{StaticResource DockTabStripItemHeaderTemplate}" />
+        
     </ControlTheme>
+    
+    
+    
 </ResourceDictionary>
