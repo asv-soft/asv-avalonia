@@ -2,6 +2,7 @@
 using System.Composition;
 using System.Diagnostics.Metrics;
 using Asv.Cfg;
+using Asv.Common;
 using Asv.IO;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
@@ -79,7 +80,12 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
             }
         );
         _config = _cfgSvc.Get<DeviceManagerConfig>();
-        Task.Factory.StartNew(LoadPortsAtBackground, null, TaskCreationOptions.LongRunning);
+        Task.Factory.StartNew(LoadPortsAtBackground, null, TaskCreationOptions.LongRunning)
+            .SafeFireAndForget();
+        foreach (var extension in _extensions)
+        {
+            extension.Run(this);
+        }
     }
 
     public IProtocolFactory ProtocolFactory { get; }
