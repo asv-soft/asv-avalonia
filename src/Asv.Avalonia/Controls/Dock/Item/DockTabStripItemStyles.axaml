@@ -12,9 +12,9 @@
         </Border>
     </Design.PreviewWith>
     <DataTemplate x:Key="DockTabStripItemHeaderTemplate" x:DataType="control:IPage">
-        <StackPanel Orientation="Horizontal" Spacing="4" Margin="4,8,4,8" >
-            <avalonia:MaterialIcon Classes="small" Width="16" Height="16" Kind="{Binding Icon}" />
-            <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+        <StackPanel Background="Transparent" Orientation="Horizontal" Spacing="4" Margin="8,4,4,4" >
+            <avalonia:MaterialIcon Width="16" Height="16"  Kind="{Binding Icon}" />
+            <TextBlock FontSize="14" VerticalAlignment="Center" Text="{Binding Title}" />
             <Button CornerRadius="10" Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}" Padding="0">
                 <avalonia:MaterialIcon Width="16" Height="16" Classes="unknown" Kind="Close" />
             </Button>

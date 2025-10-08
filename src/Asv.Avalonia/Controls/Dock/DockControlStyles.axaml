@@ -2,11 +2,15 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:control="clr-namespace:Asv.Avalonia">
     <Design.PreviewWith>
-        <Border Width="800" Height="1200" ClipToBounds="True">
-            <control:DockControl>
-                <control:HomePageViewModel />
-                <control:SettingsPageViewModel />
-            </control:DockControl>
+        <Border Width="350" Height="1200" ClipToBounds="True">
+            <Panel>
+                <Button HorizontalAlignment="Left" VerticalAlignment="Top">asdasd</Button>
+                <control:DockControl>
+                    <control:HomePageViewModel />
+                    <control:SettingsPageViewModel />
+                </control:DockControl>    
+            </Panel>
+            
         </Border>
     </Design.PreviewWith>
     
@@ -14,9 +18,10 @@
         <Setter Property="ClipToBounds" Value="True" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid>
-                    <control:DockTabControl x:Name="PART_MainTabControl"/>
-                </Grid>
+                <control:DockTabControl 
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
+                    CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}" x:Name="PART_MainTabControl"/>
             </ControlTemplate>
         </Setter>
     </ControlTheme>

@@ -53,7 +53,37 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             .DisposeItWith(Disposable);
         StatusItems.SetRoutableParent(this).DisposeItWith(Disposable);
         StatusItems.DisposeRemovedItems().DisposeItWith(Disposable);
+
+        LeftMenu = new ObservableList<IMenuItem>();
+        LeftMenuView = new MenuTree(LeftMenu);
+        LeftMenu.Sort(HeadlinedComparer.Instance);
+        LeftMenu
+            .ObserveAdd()
+            .Subscribe(_ => LeftMenu.Sort(HeadlinedComparer.Instance))
+            .DisposeItWith(Disposable);
+        LeftMenu.SetRoutableParent(this).DisposeItWith(Disposable);
+        LeftMenu.DisposeRemovedItems().DisposeItWith(Disposable);
+
+        RightMenu = new ObservableList<IMenuItem>();
+        RightMenuView = new MenuTree(RightMenu);
+        RightMenu.Sort(HeadlinedComparer.Instance);
+        RightMenu
+            .ObserveAdd()
+            .Subscribe(_ => RightMenu.Sort(HeadlinedComparer.Instance))
+            .DisposeItWith(Disposable);
+        RightMenu.SetRoutableParent(this).DisposeItWith(Disposable);
+        RightMenu.DisposeRemovedItems().DisposeItWith(Disposable);
     }
+
+    #region  Tools
+
+    public ObservableList<IMenuItem> LeftMenu { get; }
+    public MenuTree LeftMenuView { get; }
+
+    public ObservableList<IMenuItem> RightMenu { get; }
+    public MenuTree RightMenuView { get; }
+
+    #endregion
 
     #region Theme command
 
@@ -212,6 +242,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     }
 
     #endregion
+
 
     public virtual INavigationService Navigation { get; }
 

@@ -25,7 +25,7 @@ public class HeadlinedViewModel(NavigationId id, ILoggerFactory loggerFactory)
     {
         get;
         set => SetField(ref field, value);
-    } = Brushes.Violet;
+    }
 
     public bool IsVisible
     {

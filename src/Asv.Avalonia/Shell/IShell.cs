@@ -37,4 +37,7 @@ public interface IShell : IRoutable
     IReadOnlyObservableList<IPage> Pages { get; }
     BindableReactiveProperty<IPage?> SelectedPage { get; }
     ObservableList<IStatusItem> StatusItems { get; }
+
+    ObservableList<IMenuItem> LeftMenu { get; }
+    ObservableList<IMenuItem> RightMenu { get; }
 }

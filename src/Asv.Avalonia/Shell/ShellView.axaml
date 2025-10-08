@@ -38,8 +38,10 @@
         
         <Style Selector="avalonia|DockTabItem:selected /template/ Border#PART_SelectedPipe">
             <Setter Property="VerticalAlignment" Value="Stretch"/>
-            <Setter Property="Height" Value="26"/>
+            <Setter Property="Height" Value="28"/>
             <Setter Property="Opacity" Value="0.3"/>
+            <Setter Property="Focusable" Value="False"/>
+            <Setter Property="IsHitTestVisible" Value="False"/>
             <Setter Property="Background" Value="{DynamicResource SystemAccentColorDark2}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
@@ -58,11 +60,13 @@
               ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }">
     <DockPanel Focusable="True">
         <DockPanel x:Name="Header" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Dock="Top"
+                   LastChildFill="False"
+                   Margin="0,4,0,4"
                    avalonia:WindowHelper.EnableDrag="True"
                    avalonia:WindowHelper.DoubleTappedWindowState="True">
-            <DropDownButton Background="Transparent"  Foreground="{DynamicResource SystemControlForegroundAccentBrush}">
-                <avalonia1:MaterialIcon Kind="Menu" Foreground="{DynamicResource SystemControlForegroundAccentBrush}" />
-                <DropDownButton.Flyout>
+            <Button Height="28"  Margin="4,0,0,0" Padding="2" Background="Transparent"  Foreground="{DynamicResource SystemControlForegroundAccentBrush}">
+                <avalonia1:MaterialIcon Classes="medium" Kind="Menu" Foreground="{DynamicResource SystemControlForegroundAccentBrush}" />
+                <Button.Flyout>
                     <MenuFlyout ItemsSource="{Binding MainMenuView.Items}">
                         <MenuFlyout.ItemContainerTheme>
                             <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
@@ -79,36 +83,41 @@
                             </ControlTheme>
                         </MenuFlyout.ItemContainerTheme>
                     </MenuFlyout>
-                </DropDownButton.Flyout>
-            </DropDownButton>
+                </Button.Flyout>
+            </Button>
             
-            <Button Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding Close}">
+            <Button Height="28"  Theme="{DynamicResource TransparentButton}"  DockPanel.Dock="Right" Command="{Binding Close}">
                 <avalonia1:MaterialIcon Kind="Close" />
                 <ToolTip.Tip>
-                    <TextBlock Text="{x:Static avalonia:RS.ShellView_WindowControlButton_Close}"/>
+                    <TextBlock Classes="smallest" Text="{x:Static avalonia:RS.ShellView_WindowControlButton_Close}"/>
                 </ToolTip.Tip>
             </Button>
-            <Button Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding ChangeWindowState}">
-                <avalonia1:MaterialIcon Kind="{Binding WindowSateIconKind.Value}" />
+            <Button Height="28"  Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding ChangeWindowState}">
+                <avalonia1:MaterialIcon Classes="smallest" Kind="{Binding WindowSateIconKind.Value}" />
                 <ToolTip.Tip>
                     <TextBlock Text="{Binding WindowStateHeader.Value}"/>
                 </ToolTip.Tip>
             </Button>
-            <Button Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding Collapse}">
-                <avalonia1:MaterialIcon Kind="Minimize" />
+            <Button Height="28"  Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding Collapse}">
+                <avalonia1:MaterialIcon Classes="smallest" Kind="Minimize" />
                 <ToolTip.Tip>
                     <TextBlock Text="{x:Static avalonia:RS.ShellView_WindowControlButton_Collapse}"/>
                 </ToolTip.Tip>
             </Button>
 
-            <Button Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding OpenSettings}">
-                <avalonia1:MaterialIcon Kind="Cog" />
+            <Button  Height="28" Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding OpenSettings}">
+                <avalonia1:MaterialIcon Classes="smallest" Kind="Cog" />
             </Button>
-            <Button Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding ChangeTheme}">
-                <avalonia1:MaterialIcon Kind="ThemeLightDark" />
+            <Button Height="28" Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Command="{Binding ChangeTheme}">
+                <avalonia1:MaterialIcon Classes="smallest" Kind="ThemeLightDark" />
             </Button>
-            
-            <StackPanel Spacing="4" HorizontalAlignment="Center" Orientation="Horizontal">
+            <Button Height="28" Padding="8,4" DockPanel.Dock="Left" Theme="{DynamicResource TransparentButton}" Command="{Binding Navigation.Backward}">
+                <avalonia1:MaterialIcon Classes="smallest"  Kind="ArrowLeft" />
+            </Button>
+            <Button  Height="28" Padding="8,4" DockPanel.Dock="Left" Theme="{DynamicResource TransparentButton}" Command="{Binding Navigation.Forward}">
+                <avalonia1:MaterialIcon Classes="smallest" Kind="ArrowRight" />
+            </Button>
+            <!--<StackPanel Spacing="4" HorizontalAlignment="Center" Orientation="Horizontal">
                 <Button Theme="{DynamicResource TransparentButton}" Command="{Binding Navigation.Backward}">
                     <avalonia1:MaterialIcon Kind="ArrowLeft" />
                 </Button>
@@ -122,8 +131,82 @@
                         </AutoCompleteBox.InnerRightContent>
                     </AutoCompleteBox>
                 </Viewbox>
-            </StackPanel>
+            </StackPanel>-->
         </DockPanel>
+        <ItemsControl IsVisible="{Binding !!LeftMenuView.Items.Count}" Margin="0,4,0,0" VerticalAlignment="Stretch" Background="Transparent" avalonia:WindowHelper.EnableDrag="True" DockPanel.Dock="Left" Width="35" ItemsSource="{Binding LeftMenuView.Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Spacing="4"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Padding="5" 
+                            Theme="{StaticResource TransparentButton}" 
+                            ToolTip.Tip="{Binding Base.Header}"
+                            Command="{Binding Base.Command}" 
+                            CommandParameter="{Binding Base.CommandParameter}">
+                        <avalonia1:MaterialIcon Kind="{Binding Base.Icon}" >
+                           
+                        </avalonia1:MaterialIcon>
+                        <Button.Flyout>
+                            <MenuFlyout ItemsSource="{Binding Items}">
+                                <MenuFlyout.ItemContainerTheme>
+                                    <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
+                                                  x:DataType="avalonia:MenuNode">
+                                        <Setter Property="Icon" Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}" />
+                                        <Setter Property="Header" Value="{Binding Base.Header}"/>
+                                        <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                                        <Setter Property="Command" Value="{Binding Base.Command}"/>
+                                        <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}"/>
+                                        <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+                                        <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+                                        <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+                                        <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                                    </ControlTheme>
+                                </MenuFlyout.ItemContainerTheme>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <ItemsControl IsVisible="{Binding !!RightMenuView.Items.Count}" HorizontalAlignment="Stretch" Background="Transparent" avalonia:WindowHelper.EnableDrag="True" DockPanel.Dock="Right" Width="35" ItemsSource="{Binding RightMenuView.Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel HorizontalAlignment="Center" Orientation="Vertical" Spacing="4"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Button Padding="5" 
+                            Theme="{StaticResource TransparentButton}" 
+                            ToolTip.Tip="{Binding Base.Header}"
+                            Command="{Binding Base.Command}" 
+                            CommandParameter="{Binding Base.CommandParameter}">
+                        <avalonia1:MaterialIcon Foreground="{Binding Base.IconBrush}" Kind="{Binding Base.Icon}" />
+                        <Button.Flyout>
+                            <MenuFlyout ItemsSource="{Binding Items}">
+                                <MenuFlyout.ItemContainerTheme>
+                                    <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
+                                                  x:DataType="avalonia:MenuNode">
+                                        <Setter Property="Icon" Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}" />
+                                        <Setter Property="Header" Value="{Binding Base.Header}"/>
+                                        <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                                        <Setter Property="Command" Value="{Binding Base.Command}"/>
+                                        <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}"/>
+                                        <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+                                        <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+                                        <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+                                        <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                                    </ControlTheme>
+                                </MenuFlyout.ItemContainerTheme>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <Border 
             Classes="status" 
             DockPanel.Dock="Bottom"
@@ -151,9 +234,14 @@
             </ItemsControl>
         </Border>
         
-        <avalonia:DockControl 
+        <avalonia:DockControl
+            
+            BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+            BorderThickness="1"
             x:Name="DockControl"
-            Margin="0,0,0,0"
+            Padding="100,0,210,0"
+            DisabledHitTestHeight="40"
+            Margin="0,-33,0,0"
             ItemsSource="{CompiledBinding PagesView}" 
             SelectedItem="{Binding SelectedPage.Value, Mode=TwoWay}">
         </avalonia:DockControl>

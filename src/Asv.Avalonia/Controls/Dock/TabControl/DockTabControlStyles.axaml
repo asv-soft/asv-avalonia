@@ -1,10 +1,11 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:avalonia="clr-namespace:Asv.Avalonia">
+                    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+                    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
     <Design.PreviewWith>
-        <Border Width="600" Height="400">
-            <avalonia:DockTabControl>
-                <TabItem Header="Arch">
+        <Border Width="350" Height="400">
+            <avalonia:DockTabControl  CornerRadius="10" BorderBrush="Red" BorderThickness="1">
+                <TabItem  Header="Arch">
                     <Border Background="AntiqueWhite" Height="100">
                         <TextBlock Text="Content" Foreground="Black" FontSize="20" />
                     </Border>
@@ -37,29 +38,57 @@
         </Border>
     </Design.PreviewWith>
     <ControlTheme x:Key="{x:Type avalonia:DockTabControl}" TargetType="avalonia:DockTabControl">
-        <Setter Property="Padding" Value="0" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border BorderBrush="{TemplateBinding BorderBrush}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius}"
-                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                        >
-                    <DockPanel>
-                        <ScrollViewer 
-                            HorizontalScrollBarVisibility="Auto"
-                            VerticalScrollBarVisibility="Disabled"
-                            DockPanel.Dock="Top"
+                <DockPanel >
+                        <DockPanel  x:Name="PART_TabStripDockPanel" Margin="{TemplateBinding Padding}" DockPanel.Dock="Top" >
+                            <Button Padding="2" DockPanel.Dock="Left" Theme="{StaticResource TransparentButton}" 
+                                    Command="{Binding ElementName=TabScrollViewer, Path=PageLeft}">
+                                <Button.IsVisible>
+                                    <MultiBinding Converter="{x:Static avalonia:CanScrollLeftConverter.Instance}">
+                                        <Binding ElementName="TabScrollViewer" Path="Offset.X"/>
+                                        <Binding ElementName="TabScrollViewer" Path="Viewport.Width"/>
+                                        <Binding ElementName="TabScrollViewer" Path="Extent.Width"/>
+                                    </MultiBinding>
+                                </Button.IsVisible>
+                                <avalonia1:MaterialIcon Classes="small unknown" Kind="MenuLeft"/>
+                            </Button>
+                            <Button
+                                Padding="2" DockPanel.Dock="Right" Theme="{StaticResource TransparentButton}" 
+                                    Command="{Binding ElementName=TabScrollViewer, Path=PageRight}">
+                                <Button.IsVisible>
+                                    <MultiBinding Converter="{x:Static avalonia:CanScrollRightConverter.Instance}">
+                                        <Binding ElementName="TabScrollViewer" Path="Offset.X"/>
+                                        <Binding ElementName="TabScrollViewer" Path="Viewport.Width"/>
+                                        <Binding ElementName="TabScrollViewer" Path="Extent.Width"/>
+                                    </MultiBinding>
+                                </Button.IsVisible>
+                                <avalonia1:MaterialIcon Classes="small unknown" Kind="MenuRight"/>
+                            </Button>
+                            <ScrollViewer 
+                                HorizontalScrollBarVisibility="Hidden"
+                                VerticalScrollBarVisibility="Disabled"
+                                x:Name="TabScrollViewer"
+                                avalonia:WindowHelper.EnableDrag="True"
+                                avalonia:WindowHelper.DoubleTappedWindowState="True"
                             
-                            Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}">
-                            <ItemsPresenter Name="PART_ItemsPresenter" />
-                        </ScrollViewer>
-                        <Border BorderThickness="0, 1, 0, 1" BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}" >
-                            <ContentPresenter DockPanel.Dock="Bottom" Name="PART_SelectedContentHost"
+                                Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}">
+                            
+                                <ItemsPresenter Name="PART_ItemsPresenter" />
+                            
+                            </ScrollViewer>
+                        </DockPanel>
+                        
+                        <Border 
+                            Margin="0,4,0,0"
+                            Background="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" 
+                            BorderBrush="{TemplateBinding BorderBrush }"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            >
+                            <ContentPresenter  DockPanel.Dock="Bottom" Name="PART_SelectedContentHost"
                                               MinWidth="100"
-                                              Background="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"
-                                              Margin="{TemplateBinding Padding}"
+                                              
                                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                               Content="{TemplateBinding SelectedContent}"
@@ -67,7 +96,6 @@
                         </Border>
                         
                     </DockPanel>
-                </Border>
             </ControlTemplate>
         </Setter>
         <Style Selector="^[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">

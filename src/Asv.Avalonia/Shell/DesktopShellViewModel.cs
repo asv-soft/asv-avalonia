@@ -21,18 +21,21 @@ public class DesktopShellViewModel : ShellViewModel
     public const string ShellId = "shell.desktop";
     private readonly IFileAssociationService _fileService;
     private readonly IContainerHost _ioc;
+    private readonly INavigationService _navigationService;
 
     [ImportingConstructor]
     public DesktopShellViewModel(
         IFileAssociationService fileService,
         IConfiguration cfg,
         IContainerHost ioc,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        INavigationService navigationService
     )
         : base(ioc, loggerFactory, cfg, ShellId)
     {
         _fileService = fileService;
         _ioc = ioc;
+        _navigationService = navigationService;
         var wnd = ioc.GetExport<ShellWindow>();
         wnd.DataContext = this;
         if (
@@ -57,23 +60,34 @@ public class DesktopShellViewModel : ShellViewModel
 
     private void OnFileDrop(object? sender, DragEventArgs e)
     {
-        var data = e.Data;
+        var selected = _navigationService.SelectedControl.CurrentValue ?? this;
+        selected.Rise(new DesktopDragEvent(selected, args: e));
+    }
 
-        if (data.Contains(DataFormats.Files))
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        if (e is DesktopDragEvent eve)
         {
-            var fileData = data.Get(DataFormats.Files);
-            if (fileData is IEnumerable<IStorageItem> items)
+            var data = eve.Args.Data;
+
+            if (data.Contains(DataFormats.Files))
             {
-                foreach (var file in items)
+                var fileData = data.Get(DataFormats.Files);
+                if (fileData is IEnumerable<IStorageItem> items)
                 {
-                    var path = file.TryGetLocalPath();
-                    if (Path.Exists(path))
+                    foreach (var file in items)
                     {
-                        _fileService.Open(path);
+                        var path = file.TryGetLocalPath();
+                        if (Path.Exists(path))
+                        {
+                            return _fileService.Open(path);
+                        }
                     }
                 }
             }
         }
+
+        return base.InternalCatchEvent(e);
     }
 
     protected override ValueTask CloseAsync(CancellationToken cancellationToken)

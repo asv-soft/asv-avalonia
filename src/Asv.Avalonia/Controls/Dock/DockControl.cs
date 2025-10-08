@@ -3,11 +3,12 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Rendering;
 using Avalonia.VisualTree;
 
 namespace Asv.Avalonia;
 
-public partial class DockControl : SelectingItemsControl
+public partial class DockControl : SelectingItemsControl, ICustomHitTest
 {
     private const string PART_MainTabControl = "PART_MainTabControl";
     private readonly List<DockTabItem> _windowedItems = [];
@@ -219,8 +220,8 @@ public partial class DockControl : SelectingItemsControl
         var win = new DockWindow
         {
             Id = tab.Content.Id.ToString(),
-            Content = tab.Content,
-            Title = tab.Content.Title,
+            Page = tab.Content,
+            DataContext = tab.DataContext,
         };
 
         _windowedItems.Add(tab);
@@ -280,5 +281,40 @@ public partial class DockControl : SelectingItemsControl
         }
 
         base.OnDetachedFromVisualTree(e);
+    }
+
+    public static readonly DirectProperty<DockControl, double> LeftDisabledHitTestHeightProperty =
+        AvaloniaProperty.RegisterDirect<DockControl, double>(
+            nameof(DisabledHitTestHeight),
+            o => o.DisabledHitTestHeight,
+            (o, v) => o.DisabledHitTestHeight = v
+        );
+
+    public double DisabledHitTestHeight
+    {
+        get;
+        set => SetAndRaise(LeftDisabledHitTestHeightProperty, ref field, value);
+    }
+
+    public bool HitTest(Point point)
+    {
+        var leftBounds = new Rect(0, 0, Padding.Left, DisabledHitTestHeight);
+        if (leftBounds.Contains(point))
+        {
+            return false;
+        }
+
+        var rightBounds = new Rect(
+            this.Bounds.Width - Padding.Right,
+            0,
+            Padding.Right,
+            DisabledHitTestHeight
+        );
+        if (rightBounds.Contains(point))
+        {
+            return false;
+        }
+
+        return true;
     }
 }

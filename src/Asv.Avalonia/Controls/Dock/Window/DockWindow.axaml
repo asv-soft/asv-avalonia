@@ -3,12 +3,35 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalonia="clr-namespace:Asv.Avalonia"
+        xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         x:Class="Asv.Avalonia.DockWindow"
         mc:Ignorable="d"
         d:DesignWidth="800"
         d:DesignHeight="450"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="0"
+        Title="{Binding $self.Page.Title}"
+        x:Name="Self"
         Focusable="True">
-    <Design.PreviewWith>
-        <avalonia:HomePageViewModel/>
-    </Design.PreviewWith>
+    <DockPanel Focusable="True">
+        <DockPanel x:Name="Header" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" Dock="Top"
+                   avalonia:WindowHelper.EnableDrag="True"
+                   avalonia:WindowHelper.DoubleTappedWindowState="True">
+                           
+            <Button Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right" Click="Button_OnClick" >
+                <avalonia1:MaterialIcon Classes="unknown" Kind="Close" />
+                <ToolTip.Tip>
+                    <TextBlock Text="{x:Static avalonia:RS.ShellView_WindowControlButton_Close}"/>
+                </ToolTip.Tip>
+            </Button>
+                    
+            <StackPanel Orientation="Horizontal" Spacing="4" Margin="8,8,4,8" >
+                <avalonia1:MaterialIcon Classes="small" Width="16" Height="16" Kind="{Binding ElementName=Self, Path=Page.Icon}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding ElementName=Self, Path=Page.Title}" />
+                
+            </StackPanel> 
+        </DockPanel>
+        <ContentPresenter Content="{Binding ElementName=Self, Path=Page}"/>
+    </DockPanel>
 </Window>

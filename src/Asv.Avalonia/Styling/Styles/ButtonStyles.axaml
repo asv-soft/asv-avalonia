@@ -1,6 +1,7 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style Selector="Button">
+       
         <Style Selector="^.error /template/ ContentPresenter#PART_ContentPresenter">
             <Setter Property="Background" Value="{DynamicResource AsvBackgroundErrorBrush}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}"/>

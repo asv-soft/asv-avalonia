@@ -1,13 +1,17 @@
+using System.Windows.Input;
 using Asv.Cfg;
 using Avalonia.Controls;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using R3;
 
 namespace Asv.Avalonia;
 
 public static class DesignTime
 {
     public static NavigationId Id => NavigationId.GenerateRandom();
+    public static ICommand EmptyCommand = new ReactiveCommand();
 
     public static void ThrowIfNotDesignMode()
     {
@@ -17,6 +21,11 @@ public static class DesignTime
         }
     }
 
+    public static MaterialIconKind RandomImage =>
+        Enum.GetValues(typeof(MaterialIconKind))
+            .Cast<MaterialIconKind>()
+            .Skip(Random.Shared.Next(1, Enum.GetValues<MaterialIconKind>().Length))
+            .First();
     public static IAppStartupService AppStartupService => NullAppStartupService.Instance;
     public static IConfiguration Configuration { get; } = new InMemoryConfiguration();
     public static ILoggerFactory LoggerFactory => NullLoggerFactory.Instance;

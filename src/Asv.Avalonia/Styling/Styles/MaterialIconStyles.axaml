@@ -2,7 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
      <Style Selector="avalonia|MaterialIcon">
-        <Style Selector="^.blink">
+        
+         <Style Selector="^.blink">
             <Style.Animations>
                 <Animation IterationCount="Infinite" Duration="0:0:1"> 
                     <KeyFrame Cue="0%">
@@ -37,18 +38,21 @@
         </Style>
         <Style Selector="^.big">
             <Setter Property="Width" Value="{StaticResource  AsvIconBigSize}"/>
-            <Setter Property="Height" Value="{DynamicResource  AsvIconBigSize}"/>
+            <Setter Property="Height" Value="{StaticResource  AsvIconBigSize}"/>
         </Style>
         <Style Selector="^.medium">
             <Setter Property="Width" Value="{StaticResource  AsvIconMediumSize}"/>
-            <Setter Property="Height" Value="{DynamicResource  AsvIconMediumSize}"/>
+            <Setter Property="Height" Value="{StaticResource  AsvIconMediumSize}"/>
         </Style>
         <Style Selector="^.small">
             <Setter Property="Width" Value="{StaticResource  AsvIconSmallSize}"/>
-            <Setter Property="Height" Value="{DynamicResource  AsvIconSmallSize}"/>
+            <Setter Property="Height" Value="{StaticResource  AsvIconSmallSize}"/>
         </Style>
-        <Setter Property="Width" Value="{DynamicResource  IconElementThemeWidth}"/>
-        <Setter Property="Height" Value="{DynamicResource  IconElementThemeHeight}"/>
+         <Style Selector="^.smallest">
+             <Setter Property="Width" Value="{StaticResource  AsvIconSmallestSize}"/>
+             <Setter Property="Height" Value="{StaticResource  AsvIconSmallestSize}"/>
+         </Style>
+       
         <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
         <Style Selector="^.error">
             <Setter Property="Foreground" Value="{DynamicResource AsvForegroundErrorBrush}"/>
