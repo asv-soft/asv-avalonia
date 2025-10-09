@@ -61,7 +61,7 @@
             <Setter Property="MinHeight" Value="20"/>
         </Style>
     </UserControl.Styles>
-    <DockPanel>
+    <DockPanel Margin="8">
         <DockPanel DockPanel.Dock="Top">
             <Button Command="{Binding Next}" DockPanel.Dock="Right" Theme="{StaticResource TransparentButton}">
                 <avalonia:MaterialIcon Kind="ChevronRight"/>

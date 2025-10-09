@@ -14,9 +14,6 @@
             <ControlTemplate>
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
-                        <Button Theme="{DynamicResource TransparentButton}" DockPanel.Dock="Right">
-                            <avalonia:MaterialIcon Kind="Connection" />
-                        </Button>
                         <TextBlock Margin="4" Classes="h1" Text="{x:Static asv:RS.HomePageView_DeviceBrowser_Title}" />
                     </DockPanel>
                     

@@ -1,13 +1,13 @@
 <Project>
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <ProductVersion>1.0.3-dev.19</ProductVersion>
-    <AvaloniaVersion>11.3.6</AvaloniaVersion>
+    <ProductVersion>1.0.3-dev.20</ProductVersion>
+    <AvaloniaVersion>11.3.7</AvaloniaVersion>
     <DotNetVersion>9.0.9</DotNetVersion>
     <R3Version>1.3.0</R3Version>
     <R3CollectionVersion>3.3.4</R3CollectionVersion>
-    <AsvCommonVersion>3.3.0-dev.1</AsvCommonVersion>
-    <AsvMavlinkVersion>4.0.18-dev.7</AsvMavlinkVersion>
+    <AsvCommonVersion>3.3.0-dev.2</AsvCommonVersion>
+    <AsvMavlinkVersion>4.0.18-dev.8</AsvMavlinkVersion>
     <ZLoggerVersion>2.5.10</ZLoggerVersion>
     <MaterialIconsAvaloniaVersion>2.4.1</MaterialIconsAvaloniaVersion>
     <NugetVersion>6.14.0</NugetVersion>

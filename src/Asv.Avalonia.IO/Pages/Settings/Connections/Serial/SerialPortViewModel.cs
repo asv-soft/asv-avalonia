@@ -82,6 +82,12 @@ public class SerialPortViewModel : PortViewModel
     public IEnumerable<string> BaudRates { get; } =
         ["9600", "19200", "38400", "57600", "115200", "230400", "460800", "921600"];
 
+    public bool IsVersion2
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     protected override void InternalLoadChanges(ProtocolPortConfig config)
     {
         base.InternalLoadChanges(config);
@@ -89,6 +95,7 @@ public class SerialPortViewModel : PortViewModel
         {
             PortName.Value = serialConfig.PortName;
             BaudRate.Value = serialConfig.BoundRate.ToString();
+            IsVersion2 = serialConfig.Version == 2;
             UpdateTags(serialConfig);
         }
     }
@@ -99,6 +106,10 @@ public class SerialPortViewModel : PortViewModel
         if (config is SerialProtocolPortConfig serialConfig)
         {
             serialConfig.PortName = PortName.Value;
+            if (IsVersion2)
+            {
+                serialConfig.Version = 2;
+            }
             if (BaudRate.Value != null)
             {
                 serialConfig.BoundRate = int.Parse(BaudRate.Value);

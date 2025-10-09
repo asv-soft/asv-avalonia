@@ -49,6 +49,8 @@
                 <RowDefinition />
                 <RowDefinition Height="5"/>
                 <RowDefinition />
+                <RowDefinition Height="5"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
             
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="0" Kind="TagTextOutline"/>
@@ -62,6 +64,10 @@
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="4" Kind="Speedometer"/>
             <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="4" Text="{x:Static io:RS.SerialPortView_Text_BaudRate}"/>
             <AutoCompleteBox Grid.Row="4" Grid.Column="4" ItemsSource="{Binding BaudRates}" Text="{Binding BaudRate.Value}"/>
+            
+            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="6" Kind="Bluetooth"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="6" Text="Driver"/>
+            <ToggleSwitch OnContent="Version 2" OffContent="Version 1" Grid.Row="6" Grid.Column="4" IsChecked="{Binding IsVersion2}" />
         </Grid>
     </DockPanel>
 </UserControl>

@@ -2,6 +2,7 @@ using System.Composition;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Asv.Cfg;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -51,12 +52,19 @@ public class DesktopShellViewModel : ShellViewModel
         // Set window as the drop target
         DragDrop.SetAllowDrop(wnd, true);
         wnd.AddHandler(DragDrop.DropEvent, OnFileDrop);
+        wnd.AddHandler(DragDrop.DragOverEvent, OnDragOver);
 
         UpdateWindowStateUi(wnd.WindowState);
 
         lifetime.MainWindow = wnd;
         lifetime.MainWindow.Show();
     }
+    
+    private void OnDragOver(object sender, DragEventArgs e)
+    {
+        e.DragEffects = DragDropEffects.Copy;
+    }
+    
 
     private void OnFileDrop(object? sender, DragEventArgs e)
     {
@@ -68,21 +76,17 @@ public class DesktopShellViewModel : ShellViewModel
     {
         if (e is DesktopDragEvent eve)
         {
-            var data = eve.Args.Data;
-
-            if (data.Contains(DataFormats.Files))
+            var files = eve.Args.DataTransfer.TryGetFiles();
+            if (files == null)
             {
-                var fileData = data.Get(DataFormats.Files);
-                if (fileData is IEnumerable<IStorageItem> items)
+                return ValueTask.CompletedTask;
+            }
+            foreach (var file in files)
+            {
+                var path = file.TryGetLocalPath();
+                if (Path.Exists(path))
                 {
-                    foreach (var file in items)
-                    {
-                        var path = file.TryGetLocalPath();
-                        if (Path.Exists(path))
-                        {
-                            return _fileService.Open(path);
-                        }
-                    }
+                    return _fileService.Open(path);
                 }
             }
         }
@@ -182,8 +186,4 @@ public class DesktopShellViewModel : ShellViewModel
         }
     }
 
-    private void OpenFile(string filePath)
-    {
-        // TODO: Pass the file to the file processing service
-    }
 }
