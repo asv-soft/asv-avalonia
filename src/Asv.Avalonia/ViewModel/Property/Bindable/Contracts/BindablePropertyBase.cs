@@ -5,8 +5,13 @@ namespace Asv.Avalonia;
 
 public abstract class BindablePropertyBase<TModel, TView> : RoutableViewModel
 {
-    protected BindablePropertyBase(NavigationId id, ILoggerFactory loggerFactory, IRoutable parent)
-        : base(id, loggerFactory)
+    protected BindablePropertyBase(
+        NavigationId id,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory,
+        IRoutable parent
+    )
+        : base(id, layoutService, loggerFactory)
     {
         Parent = parent;
     }

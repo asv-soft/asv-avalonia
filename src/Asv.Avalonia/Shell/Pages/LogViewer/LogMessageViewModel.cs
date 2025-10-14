@@ -7,9 +7,15 @@ public class LogMessageViewModel : RoutableViewModel
 {
     private readonly ILoggerFactory _loggerFactory;
 
-    public LogMessageViewModel(LogMessage @base, IRoutable parent, ILoggerFactory loggerFactory)
+    public LogMessageViewModel(
+        LogMessage @base,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory,
+        IRoutable parent
+    )
         : base(
             NavigationId.GenerateByHash(@base.Message, @base.Category, @base.Description),
+            layoutService,
             loggerFactory
         )
     {
@@ -54,10 +60,11 @@ public class LogMessageViewModel : RoutableViewModel
 
     public static bool TryCreate(
         LogMessage logMessage,
-        IRoutable parent,
         ISearchService search,
         string? query,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
+        IRoutable parent,
         out LogMessageViewModel? msg
     )
     {
@@ -72,7 +79,7 @@ public class LogMessageViewModel : RoutableViewModel
             return false;
         }
 
-        msg = new LogMessageViewModel(logMessage, parent, loggerFactory)
+        msg = new LogMessageViewModel(logMessage, layoutService, loggerFactory, parent)
         {
             MessageSelection = msgSelection,
             CategorySelection = catSelection,

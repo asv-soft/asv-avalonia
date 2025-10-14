@@ -7,12 +7,19 @@ namespace Asv.Avalonia.IO;
 
 [ExportExtensionFor<ISettingsConnectionSubPage>]
 [method: ImportingConstructor]
-public class SettingsConnectionTcpServerPortExtension(ILoggerFactory loggerFactory)
-    : IExtensionFor<ISettingsConnectionSubPage>
+public class SettingsConnectionTcpServerPortExtension(
+    ILayoutService layoutService,
+    ILoggerFactory loggerFactory
+) : IExtensionFor<ISettingsConnectionSubPage>
 {
     public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
     {
-        var menu = new MenuItem(TcpServerProtocolPort.Scheme, "TCP Server", loggerFactory);
+        var menu = new MenuItem(
+            TcpServerProtocolPort.Scheme,
+            "TCP Server",
+            layoutService,
+            loggerFactory
+        );
         menu.Icon = TcpServerPortViewModel.DefaultIcon;
         menu.Command = new BindableAsyncCommand(PortCrudCommand.Id, menu);
         var defaultConfig = TcpServerProtocolPortConfig.CreateDefault();

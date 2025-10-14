@@ -25,12 +25,15 @@ public sealed class InputDialogPayload
 [ExportDialogPrefab]
 [Shared]
 [method: ImportingConstructor]
-public sealed class InputDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
-    : IDialogPrefab<InputDialogPayload, string?>
+public sealed class InputDialogPrefab(
+    INavigationService nav,
+    ILayoutService layoutService,
+    ILoggerFactory loggerFactory
+) : IDialogPrefab<InputDialogPayload, string?>
 {
     public async Task<string?> ShowDialogAsync(InputDialogPayload dialogPayload)
     {
-        using var vm = new DialogItemTextBoxViewModel(loggerFactory)
+        using var vm = new DialogItemTextBoxViewModel(layoutService, loggerFactory)
         {
             Message = dialogPayload.Message,
         };

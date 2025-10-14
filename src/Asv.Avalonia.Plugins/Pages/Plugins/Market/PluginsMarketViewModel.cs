@@ -7,11 +7,8 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class PluginsMarketViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class PluginsMarketViewModel
-    : PageViewModel<PluginsMarketViewModel, PluginsMarketViewModelConfig>
+public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
 {
     public const string PageId = "plugins.market";
 
@@ -25,8 +22,9 @@ public class PluginsMarketViewModel
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
+            NullLayoutService.Instance,
             NullLoggerFactory.Instance,
-            new JsonConfiguration("null")
+            DesignTime.Configuration
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -63,10 +61,11 @@ public class PluginsMarketViewModel
     public PluginsMarketViewModel(
         ICommandService cmd,
         IPluginManager manager,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IConfiguration cfg
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, layoutService, loggerFactory)
     {
         Title = "Plugin Manager";
         _manager = manager ?? throw new ArgumentNullException(nameof(manager));
@@ -106,6 +105,7 @@ public class PluginsMarketViewModel
                 $"id{item.Id}",
                 item,
                 _manager,
+                LayoutService,
                 _loggerFactory
             ))
         );

@@ -15,11 +15,12 @@ public sealed class HistoricalStringProperty
     public HistoricalStringProperty(
         string id,
         ReactiveProperty<string?> modelValue,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent,
         IList<Func<string?, ValidationResult>>? validationRules = null
     )
-        : base(id, loggerFactory, parent)
+        : base(id, layoutService, loggerFactory, parent)
     {
         InternalInitValidationRules(validationRules);
 

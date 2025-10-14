@@ -16,17 +16,18 @@ public class PluginInstallerViewModel : DialogViewModelBase
     private readonly IPluginManager _manager;
 
     public PluginInstallerViewModel()
-        : base(DesignTime.Id, DesignTime.LoggerFactory)
+        : base(DesignTime.Id, NullLayoutService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public PluginInstallerViewModel(
         IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IPluginManager manager
     )
-        : base(ViewModelId, loggerFactory)
+        : base(ViewModelId, layoutService, loggerFactory)
     {
         _manager = manager;
         var config = cfg.Get<PluginInstallerViewModelConfig>();

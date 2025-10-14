@@ -6,6 +6,7 @@ namespace Asv.Avalonia.Plugins;
 
 public class PluginInstaller(
     IConfiguration cfg,
+    ILayoutService layoutService,
     ILoggerFactory loggerFactory,
     IPluginManager manager,
     INavigationService navigationService
@@ -14,7 +15,12 @@ public class PluginInstaller(
     public async Task ShowInstallDialog(IProgress<double> progress, CancellationToken cancel)
     {
         var log = loggerFactory.CreateLogger<PluginInstaller>();
-        using var viewModel = new PluginInstallerViewModel(cfg, loggerFactory, manager);
+        using var viewModel = new PluginInstallerViewModel(
+            cfg,
+            layoutService,
+            loggerFactory,
+            manager
+        );
         var dialog = new ContentDialog(viewModel, navigationService)
         {
             Title = RS.PluginInstallerViewModel_InstallDialog_Title,

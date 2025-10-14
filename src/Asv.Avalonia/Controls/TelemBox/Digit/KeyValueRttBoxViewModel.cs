@@ -54,10 +54,11 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
 
     public KeyValueRttBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(id, layoutService, loggerFactory, networkErrorTimeout)
     {
         _itemsSource = new ObservableList<KeyValueViewModel>();
         Items = _itemsSource.ToNotifyCollectionChangedSlim(
@@ -114,11 +115,12 @@ public class KeyValueRttBoxViewModel<T> : KeyValueRttBoxViewModel
 
     public KeyValueRttBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(id, layoutService, loggerFactory, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         valueStream

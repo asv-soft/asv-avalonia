@@ -7,8 +7,11 @@ namespace Asv.Avalonia;
 /// Represents a base view model that supports disposable resources and cancellation handling.
 /// This class ensures proper cleanup of resources when the view model is disposed.
 /// </summary>
-public class DisposableViewModel(NavigationId id, ILoggerFactory loggerFactory)
-    : ViewModelBase(id: id, loggerFactory)
+public class DisposableViewModel(
+    NavigationId id,
+    ILayoutService layoutService,
+    ILoggerFactory loggerFactory
+) : ViewModelBase(id: id, layoutService, loggerFactory)
 {
     private volatile CancellationTokenSource? _cancel;
     private volatile CompositeDisposable? _dispose;

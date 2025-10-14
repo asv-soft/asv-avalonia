@@ -16,10 +16,11 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
         IUnit latUnit,
         IUnit lonUnit,
         IUnit altUnit,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent
     )
-        : base(id, loggerFactory, parent)
+        : base(id, layoutService, loggerFactory, parent)
     {
         ModelValue = modelValue;
 
@@ -70,6 +71,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
             nameof(Latitude),
             ModelLat,
             latUnit,
+            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -77,6 +79,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
             nameof(Longitude),
             ModelLon,
             lonUnit,
+            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -84,6 +87,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
             nameof(Altitude),
             ModelAlt,
             altUnit,
+            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);

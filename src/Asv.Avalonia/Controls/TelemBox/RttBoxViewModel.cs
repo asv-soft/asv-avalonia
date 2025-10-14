@@ -22,7 +22,7 @@ public class RttBoxViewModel : RoutableViewModel
     private long _lastUpdate;
 
     public RttBoxViewModel()
-        : base(DesignTime.Id, DesignTime.LoggerFactory)
+        : base(DesignTime.Id, NullLayoutService.Instance, DesignTime.LoggerFactory)
     {
         _timeProvider = TimeProvider.System;
         DesignTime.ThrowIfNotDesignMode();
@@ -30,10 +30,11 @@ public class RttBoxViewModel : RoutableViewModel
 
     public RttBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory)
+        : base(id, layoutService, loggerFactory)
     {
         _timeProvider = TimeProvider.System;
         if (networkErrorTimeout != null)

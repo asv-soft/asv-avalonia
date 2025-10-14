@@ -13,7 +13,12 @@ public class StatisticViewModel : RoutableViewModel
     private readonly IncrementalRateCounter _txPackets;
 
     public StatisticViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, TimeProvider.System)
+        : this(
+            DesignTime.Id,
+            NullLayoutService.Instance,
+            DesignTime.LoggerFactory,
+            TimeProvider.System
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         var stat = new Statistic();
@@ -39,10 +44,11 @@ public class StatisticViewModel : RoutableViewModel
 
     public StatisticViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base(id, loggerFactory)
+        : base(id, layoutService, loggerFactory)
     {
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);

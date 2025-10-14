@@ -6,8 +6,9 @@ namespace Asv.Avalonia;
 
 public abstract class ExtendableHeadlinedViewModel<TSelfInterface>(
     NavigationId id,
+    ILayoutService layoutService,
     ILoggerFactory loggerFactory
-) : ExtendableViewModel<TSelfInterface>(id, loggerFactory), IHeadlinedViewModel
+) : ExtendableViewModel<TSelfInterface>(id, layoutService, loggerFactory), IHeadlinedViewModel
     where TSelfInterface : class
 {
     public MaterialIconKind? Icon

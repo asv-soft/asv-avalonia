@@ -9,7 +9,7 @@ public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
     public const string DialogId = $"{BaseId}.hotkey.capture";
 
     public DialogItemHotKeyCaptureViewModel()
-        : this(DesignTime.LoggerFactory)
+        : this(NullLayoutService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         HotKey = new BindableReactiveProperty<HotKeyInfo?>(
@@ -17,8 +17,11 @@ public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
         ).DisposeItWith(Disposable);
     }
 
-    public DialogItemHotKeyCaptureViewModel(ILoggerFactory loggerFactory)
-        : base(DialogId, loggerFactory)
+    public DialogItemHotKeyCaptureViewModel(
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory
+    )
+        : base(DialogId, layoutService, loggerFactory)
     {
         HotKey = new BindableReactiveProperty<HotKeyInfo?>().DisposeItWith(Disposable);
     }

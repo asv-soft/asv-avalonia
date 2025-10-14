@@ -7,14 +7,17 @@ namespace Asv.Avalonia.IO;
 
 [ExportExtensionFor<ISettingsConnectionSubPage>]
 [method: ImportingConstructor]
-public class SettingsConnectionSerialPortExtension(ILoggerFactory loggerFactory)
-    : IExtensionFor<ISettingsConnectionSubPage>
+public class SettingsConnectionSerialPortExtension(
+    ILayoutService layoutService,
+    ILoggerFactory loggerFactory
+) : IExtensionFor<ISettingsConnectionSubPage>
 {
     public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
     {
         var menu = new MenuItem(
             SerialProtocolPort.Scheme,
             RS.SettingsConnectionSerialExtension_MenuItem_Header,
+            layoutService,
             loggerFactory
         );
         menu.Icon = SerialPortViewModel.DefaultIcon;

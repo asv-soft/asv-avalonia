@@ -19,8 +19,8 @@ public interface IHomePageItem : IHeadlinedViewModel
 
 public class HomePageItem : HeadlinedViewModel, IHomePageItem
 {
-    public HomePageItem(NavigationId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    public HomePageItem(NavigationId id, ILayoutService layoutService, ILoggerFactory loggerFactory)
+        : base(id, layoutService, loggerFactory)
     {
         Disposable.AddAction(() => Actions.Clear());
         Disposable.AddAction(() => Info.Clear());

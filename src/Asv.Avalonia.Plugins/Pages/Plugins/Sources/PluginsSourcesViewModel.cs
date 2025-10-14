@@ -1,6 +1,4 @@
 ﻿using System.Composition;
-using Asv.Cfg;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Configuration;
@@ -11,11 +9,8 @@ using IConfiguration = Asv.Cfg.IConfiguration;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class PluginsSourcesViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class PluginsSourcesViewModel
-    : PageViewModel<PluginsSourcesViewModel, PluginsSourcesViewModelConfig>
+public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
 {
     public const string PageId = "plugins.sources";
 
@@ -29,7 +24,7 @@ public class PluginsSourcesViewModel
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
-            DesignTime.Configuration,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.Navigation
         )
@@ -53,6 +48,7 @@ public class PluginsSourcesViewModel
         );
         Items = items.ToNotifyCollectionChanged(x => new PluginSourceViewModel(
             x,
+            NullLayoutService.Instance,
             NullLoggerFactory.Instance,
             this
         ));
@@ -62,17 +58,22 @@ public class PluginsSourcesViewModel
     public PluginsSourcesViewModel(
         ICommandService cmd,
         IPluginManager mng,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         INavigationService navigationService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, layoutService, loggerFactory)
     {
         _mng = mng;
         _navigation = navigationService;
         _loggerFactory = loggerFactory;
         var items = new ObservableList<IPluginServerInfo>();
-        _view = items.CreateView(info => new PluginSourceViewModel(info, loggerFactory, this));
+        _view = items.CreateView(info => new PluginSourceViewModel(
+            info,
+            layoutService,
+            loggerFactory,
+            this
+        ));
         SelectedItem = new BindableReactiveProperty<PluginSourceViewModel?>();
         Items = _view.ToNotifyCollectionChanged();
 
@@ -102,7 +103,7 @@ public class PluginsSourcesViewModel
 
     private async ValueTask AddImpl(Unit unit, CancellationToken token)
     {
-        using var viewModel = new SourceViewModel(_mng, _loggerFactory, null);
+        using var viewModel = new SourceViewModel(_mng, LayoutService, _loggerFactory, null);
         var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.PluginsSourcesViewModel_AddImpl_Title,
@@ -128,7 +129,7 @@ public class PluginsSourcesViewModel
             return;
         }
 
-        using var viewModel = new SourceViewModel(_mng, _loggerFactory, arg);
+        using var viewModel = new SourceViewModel(_mng, LayoutService, _loggerFactory, arg);
         var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.PluginsSourcesViewModel_EditImpl_Title,

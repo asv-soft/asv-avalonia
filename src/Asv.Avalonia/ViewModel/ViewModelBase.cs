@@ -14,6 +14,7 @@ namespace Asv.Avalonia;
 public abstract class ViewModelBase : IViewModel
 {
     protected ILogger Logger { get; }
+    protected ILayoutService LayoutService { get; }
     private volatile int _isDisposed;
 
     /// <summary>
@@ -22,9 +23,14 @@ public abstract class ViewModelBase : IViewModel
     /// property change notifications and a proper disposal mechanism.
     /// This class is designed to be inherited by other view models.
     /// </summary>
-    protected ViewModelBase(NavigationId id, ILoggerFactory loggerFactory)
+    protected ViewModelBase(
+        NavigationId id,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory
+    )
     {
         Logger = loggerFactory.CreateLogger(GetType());
+        LayoutService = layoutService;
         Id = id;
     }
 

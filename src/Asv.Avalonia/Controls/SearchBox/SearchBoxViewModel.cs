@@ -27,25 +27,35 @@ public class SearchBoxViewModel
     private CancellationTokenSource? _cancellationTokenSource;
 
     public SearchBoxViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, (_, _, _) => Task.CompletedTask)
+        : this(
+            DesignTime.Id,
+            NullLayoutService.Instance,
+            DesignTime.LoggerFactory,
+            (_, _, _) => Task.CompletedTask
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public SearchBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         SearchDelegate searchCallback,
         TimeSpan? throttleTime = null
     )
-        : base(id, loggerFactory)
+        : base(id, layoutService, loggerFactory)
     {
         _searchCallback = searchCallback;
 
         var text = new ReactiveProperty<string?>(string.Empty).DisposeItWith(Disposable);
-        Text = new HistoricalStringProperty(nameof(Text), text, loggerFactory, this).DisposeItWith(
-            Disposable
-        );
+        Text = new HistoricalStringProperty(
+            nameof(Text),
+            text,
+            layoutService,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
 
         _isExecuting = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         _canExecute = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);
@@ -125,7 +135,7 @@ public class SearchBoxViewModel
             _isExecuting.Value = false;
             _canExecute.Value = true;
             _progress.Value = 1;
-            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
         }
     }

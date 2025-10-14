@@ -9,9 +9,10 @@ public class HomePageItemDecorator : ExtendableViewModel<IHomePageItem>
     public HomePageItemDecorator(
         IHomePageItem homePageItem,
         IContainerHost container,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base($"decorator_{homePageItem.Id}", loggerFactory)
+        : base($"decorator_{homePageItem.Id}", layoutService, loggerFactory)
     {
         homePageItem.Parent = this;
         HomePageItem = homePageItem;

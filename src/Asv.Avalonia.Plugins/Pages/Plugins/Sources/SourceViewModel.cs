@@ -16,7 +16,7 @@ public class SourceViewModel : DialogViewModelBase
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public SourceViewModel()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        : base(DesignTime.Id, DesignTime.LoggerFactory)
+        : base(DesignTime.Id, NullLayoutService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         Name = new BindableReactiveProperty<string>("Github").EnableValidation();
@@ -41,10 +41,11 @@ public class SourceViewModel : DialogViewModelBase
 
     public SourceViewModel(
         IPluginManager mng,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         PluginSourceViewModel? viewModel
     )
-        : base(ViewModelId, loggerFactory)
+        : base(ViewModelId, layoutService, loggerFactory)
     {
         _mng = mng;
         _viewModel = viewModel;

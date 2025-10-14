@@ -33,10 +33,11 @@ public class UdpPortViewModel : PortViewModel
     [ImportingConstructor]
     public UdpPortViewModel(
         IConfiguration cfgSvc,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{UdpProtocolPort.Scheme}-editor", loggerFactory, timeProvider)
+        : base($"{UdpProtocolPort.Scheme}-editor", layoutService, loggerFactory, timeProvider)
     {
         _cfgSvc = cfgSvc;
         Icon = DefaultIcon;
@@ -132,6 +133,6 @@ public class UdpPortViewModel : PortViewModel
 
     protected override EndpointViewModel EndpointFactory(IProtocolEndpoint arg)
     {
-        return new UdpEndpointViewModel(arg, LoggerFactory, TimeProvider);
+        return new UdpEndpointViewModel(arg, LayoutService, LoggerFactory, TimeProvider);
     }
 }

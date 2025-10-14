@@ -64,10 +64,11 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
 
     public TwoColumnRttBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory, networkErrorTimeout) { }
+        : base(id, layoutService, loggerFactory, networkErrorTimeout) { }
 
     public KeyValueViewModel Left { get; } = new();
     public KeyValueViewModel Right { get; } = new();
@@ -85,11 +86,12 @@ public class TwoColumnRttBoxViewModel<T> : TwoColumnRttBoxViewModel
 
     public TwoColumnRttBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(id, layoutService, loggerFactory, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         valueStream

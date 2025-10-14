@@ -1,6 +1,5 @@
 ﻿using System.Composition;
 using System.Diagnostics;
-using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -12,44 +11,25 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public class NavigationServiceConfig
-{
-    public IList<string> Pages { get; } = [];
-}
-
 [Export(typeof(INavigationService))]
 [Shared]
 public class NavigationService : AsyncDisposableOnce, INavigationService
 {
-    private readonly IContainerHost _ioc;
     private readonly IShellHost _host;
-    private readonly IConfiguration _cfgSvc;
     private readonly IDisposable _disposeIt;
     private readonly ReactiveProperty<IRoutable?> _selectedControl;
     private readonly ReactiveProperty<NavigationPath> _selectedControlPath;
     private readonly ObservableStack<NavigationPath> _backwardStack = new();
     private readonly ObservableStack<NavigationPath> _forwardStack = new();
     private readonly ILogger<NavigationService> _logger;
-    private IDisposable? _sub2;
-    private IDisposable? _sub1;
-    private int _saveLayoutInProgress;
 
     [ImportingConstructor]
-    public NavigationService(
-        IContainerHost ioc,
-        IShellHost host,
-        IConfiguration cfgSvc,
-        ILoggerFactory loggerFactory
-    )
+    public NavigationService(IShellHost host, ILoggerFactory loggerFactory)
     {
-        ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(host);
-        ArgumentNullException.ThrowIfNull(cfgSvc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
         _logger = loggerFactory.CreateLogger<NavigationService>();
-        _ioc = ioc;
         _host = host;
-        _cfgSvc = cfgSvc;
         var dispose = Disposable.CreateBuilder();
 
         _selectedControl = new ReactiveProperty<IRoutable?>().AddTo(ref dispose);
@@ -66,7 +46,12 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         GoHome = new ReactiveCommand((_, _) => GoHomeAsync()).AddTo(ref dispose);
         SelectedControl = _selectedControl.ToReadOnlyReactiveProperty().AddTo(ref dispose);
         SelectedControlPath = _selectedControlPath.ToReadOnlyReactiveProperty().AddTo(ref dispose);
-        _host.OnShellLoaded.SubscribeAwait(LoadLayout).AddTo(ref dispose);
+
+        _host
+            .OnShellLoaded.SubscribeAwait(
+                async (sh, ct) => await sh.RequestLoadLayoutForSelfOnly(ct)
+            )
+            .AddTo(ref dispose);
         _disposeIt = dispose.Build();
     }
 
@@ -75,32 +60,6 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         _logger.ZLogTrace($"Push navigation history: {navigationPath}");
         _backwardStack.Push(navigationPath);
         _forwardStack.Clear();
-    }
-
-    private async ValueTask LoadLayout(IShell shell, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var cfg = _cfgSvc.Get<NavigationServiceConfig>();
-            _logger.ZLogInformation($"Try to load layout: {string.Join(",", cfg.Pages)}");
-            foreach (var page in cfg.Pages)
-            {
-                await GoTo(new NavigationPath(page));
-            }
-        }
-        catch (Exception e)
-        {
-            _logger.ZLogError(e, $"Error loading layout: {e.Message}");
-        }
-        finally
-        {
-            _sub1 = shell.Pages.ObserveAdd().Subscribe(_ => SaveLayout());
-            _sub2 = shell.Pages.ObserveRemove().Subscribe(_ => SaveLayout());
-            if (_host.Shell.Pages.Count == 0)
-            {
-                await GoHomeAsync();
-            }
-        }
     }
 
     private void FocusControlChanged(IRoutable? routable)
@@ -138,35 +97,6 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
         _selectedControl.Value = routable;
         _selectedControlPath.Value = path;
-    }
-
-    private void SaveLayout()
-    {
-        if (Interlocked.CompareExchange(ref _saveLayoutInProgress, 1, 0) != 0)
-        {
-            _logger.LogWarning("Save layout is already in progress");
-            return;
-        }
-
-        try
-        {
-            var cfg = new NavigationServiceConfig();
-            foreach (var page in _host.Shell.Pages)
-            {
-                cfg.Pages.Add(page.Id.ToString());
-            }
-            _logger.ZLogTrace($"Save layout: {string.Join(",", cfg.Pages)}");
-            _cfgSvc.Set(cfg);
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error saving layout: {EMessage}", e.Message);
-            Debug.Assert(false, $"Error saving layout: {e.Message}");
-        }
-        finally
-        {
-            Interlocked.Exchange(ref _saveLayoutInProgress, 0);
-        }
     }
 
     public async ValueTask<IRoutable> GoTo(NavigationPath path)
@@ -273,8 +203,6 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         if (disposing)
         {
             _disposeIt.Dispose();
-            _sub1?.Dispose();
-            _sub2?.Dispose();
         }
 
         base.Dispose(disposing);
@@ -282,8 +210,6 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
     protected override async ValueTask DisposeAsyncCore()
     {
-        _sub1?.Dispose();
-        _sub2?.Dispose();
         if (_disposeIt is IAsyncDisposable disposeItAsyncDisposable)
         {
             await disposeItAsyncDisposable.DisposeAsync();

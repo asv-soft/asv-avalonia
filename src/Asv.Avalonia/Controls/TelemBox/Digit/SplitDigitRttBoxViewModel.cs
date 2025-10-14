@@ -16,13 +16,14 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
 
     public SplitDigitRttBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IUnitService units,
         string unitId,
         Observable<double> value,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, units, unitId, value, networkErrorTimeout)
+        : base(id, layoutService, loggerFactory, units, unitId, value, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
     }
@@ -53,7 +54,7 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
             FracString = fracFormat;
         }
 
-        if (_networkErrorTimeout != null)
+        if (_networkErrorTimeout is not null)
         {
             Updated();
         }
