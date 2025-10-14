@@ -15,7 +15,8 @@ public class SettingsAppearanceViewModel : SettingsSubPage
         : this(
             DesignTime.ThemeService,
             DesignTime.LocalizationService,
-            null!,
+            NullDialogService.Instance,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -29,9 +30,10 @@ public class SettingsAppearanceViewModel : SettingsSubPage
         IThemeService themeService,
         ILocalizationService localizationService,
         IDialogService dialog,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, loggerFactory)
+        : base(PageId, layoutService, loggerFactory)
     {
         Theme = new ThemeProperty(themeService, loggerFactory) { Parent = this }.DisposeItWith(
             Disposable

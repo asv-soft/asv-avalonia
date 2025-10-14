@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -8,12 +9,25 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
+public sealed class HistoricalControlsPageViewModelConfig
+{
+    public string Speed { get; set; } = string.Empty;
+    public bool IsTurnedOn { get; set; } = false;
+    public string StringPropWithoutValidation { get; set; } = string.Empty;
+    public string StringPropWithOneValidation { get; set; } = string.Empty;
+    public string StringPropWithManyValidations { get; set; } = string.Empty;
+    public GeoPoint GeoPointProperty { get; set; } = GeoPoint.ZeroWithAlt;
+    public TagType TagTypeProp { get; set; } = TagType.Unknown;
+    public RttBoxStatus RttBoxStatusProp { get; set; } = RttBoxStatus.Normal;
+}
+
 [ExportControlExamples(PageId)]
 public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "historical_controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.History;
 
+    private readonly ILayoutService _layoutService;
     private readonly ReactiveProperty<bool> _isTurnedOn;
     private readonly ReactiveProperty<double> _speed;
     private readonly ReactiveProperty<string?> _stringWithManyValidations;
@@ -23,16 +37,23 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<Enum> _tagTypeProp;
     private readonly ReactiveProperty<Enum> _rttBoxStatusProp;
 
+    private HistoricalControlsPageViewModelConfig _config;
+
     public HistoricalControlsPageViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(DesignTime.UnitService, NullLayoutService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public HistoricalControlsPageViewModel(IUnitService unit, ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public HistoricalControlsPageViewModel(
+        IUnitService unit,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory
+    )
+        : base(PageId, layoutService, loggerFactory)
     {
+        _layoutService = layoutService;
         var un = unit.Units[VelocityBase.Id];
         var latUnit = unit.Units[LatitudeBase.Id];
         var lonUnit = unit.Units[LongitudeBase.Id];
@@ -178,6 +199,37 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         {
             yield return child;
         }
+    }
+
+    protected override ValueTask HandleSaveLayout()
+    {
+        _config.IsTurnedOn = IsTurnedOn.ViewValue.Value;
+        _config.Speed = Speed.ViewValue.Value ?? string.Empty;
+        _config.StringPropWithoutValidation =
+            StringPropWithoutValidation.ViewValue.Value ?? string.Empty;
+        _config.StringPropWithOneValidation =
+            StringPropWithOneValidation.ViewValue.Value ?? string.Empty;
+        _config.StringPropWithManyValidations =
+            StringPropWithManyValidations.ViewValue.Value ?? string.Empty;
+        _config.GeoPointProperty = GeoPointProperty.ModelValue.Value;
+        _config.TagTypeProp = TagTypeProp.ViewValue.Value;
+        _config.RttBoxStatusProp = RttBoxStatusProp.ViewValue.Value;
+        _layoutService.SetInMemory(this, _config);
+        return base.HandleSaveLayout();
+    }
+
+    protected override ValueTask HandleLoadLayout()
+    {
+        _config = _layoutService.Get<HistoricalControlsPageViewModelConfig>(this);
+        IsTurnedOn.ViewValue.Value = _config.IsTurnedOn;
+        Speed.ViewValue.Value = _config.Speed;
+        StringPropWithoutValidation.ViewValue.Value = _config.StringPropWithoutValidation;
+        StringPropWithOneValidation.ViewValue.Value = _config.StringPropWithOneValidation;
+        StringPropWithManyValidations.ViewValue.Value = _config.StringPropWithManyValidations;
+        GeoPointProperty.ModelValue.Value = _config.GeoPointProperty;
+        TagTypeProp.ModelValue.Value = _config.TagTypeProp;
+        RttBoxStatusProp.ModelValue.Value = _config.RttBoxStatusProp;
+        return base.HandleLoadLayout();
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -9,26 +10,37 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
+public sealed class InfoBoxControlsPageViewModelConfig
+{
+    public InfoBarSeverity Severity { get; set; } = InfoBarSeverity.Informational;
+    public string InfoBoxTitle { get; set; } = string.Empty;
+    public string InfoBoxMessage { get; set; } = string.Empty;
+}
+
 [ExportControlExamples(PageId)]
 public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "info_box_controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.InfoBox;
 
+    private readonly ILayoutService _layoutService;
     private readonly ReactiveProperty<Enum> _severity;
     private readonly ReactiveProperty<string?> _infoBoxMessage;
     private readonly ReactiveProperty<string?> _infoBoxTitle;
 
+    private InfoBoxControlsPageViewModelConfig _config;
+
     public InfoBoxControlsPageViewModel()
-        : this(NullLoggerFactory.Instance)
+        : this(NullLayoutService.Instance, NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public InfoBoxControlsPageViewModel(ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public InfoBoxControlsPageViewModel(ILayoutService layoutService, ILoggerFactory loggerFactory)
+        : base(PageId, layoutService, loggerFactory)
     {
+        _layoutService = layoutService;
         _severity = new ReactiveProperty<Enum>(InfoBarSeverity.Informational).DisposeItWith(
             Disposable
         );
@@ -73,6 +85,32 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         {
             yield return child;
         }
+    }
+
+    protected override ValueTask HandleSaveLayout()
+    {
+        _config.Severity = Severity.ViewValue.Value;
+        _config.InfoBoxTitle = InfoBoxTitle.ViewValue.Value ?? string.Empty;
+        _config.InfoBoxMessage = InfoBoxMessage.ViewValue.Value ?? string.Empty;
+        _layoutService.SetInMemory(this, _config);
+        return base.HandleSaveLayout();
+    }
+
+    protected override ValueTask HandleLoadLayout()
+    {
+        _config = _layoutService.Get<InfoBoxControlsPageViewModelConfig>(this);
+        Severity.ModelValue.Value = _config.Severity;
+        if (!string.IsNullOrEmpty(_config.InfoBoxTitle))
+        {
+            InfoBoxTitle.ModelValue.Value = _config.InfoBoxTitle;
+        }
+
+        if (!string.IsNullOrEmpty(_config.InfoBoxMessage))
+        {
+            InfoBoxMessage.ModelValue.Value = _config.InfoBoxMessage;
+        }
+
+        return base.HandleLoadLayout();
     }
 
     public override IExportInfo Source => SystemModule.Instance;

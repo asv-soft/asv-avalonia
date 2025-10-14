@@ -7,11 +7,8 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public abstract class DevicePageViewModel<TContext, TCfg>
-    : PageViewModel<TContext, TCfg>,
-        IDevicePage
-    where TContext : class, IDevicePage
-    where TCfg : PageConfig, new()
+public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
+    where T : class, IDevicePage
 {
     private readonly DevicePageCore _deviceCore;
 
@@ -19,10 +16,10 @@ public abstract class DevicePageViewModel<TContext, TCfg>
         NavigationId id,
         IDeviceManager devices,
         ICommandService cmd,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, cfg, loggerFactory)
+        : base(id, cmd, layoutService, loggerFactory)
     {
         _deviceCore = new DevicePageCore(devices, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;

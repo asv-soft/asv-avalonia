@@ -1,6 +1,5 @@
 ﻿using System.Composition;
 using System.Diagnostics;
-using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Threading;
 using Material.Icons;
@@ -10,13 +9,18 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public interface ILogViewerViewModel : IPage { }
+public class LogViewerViewModelConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+    public int Skip { get; set; } = 0;
+    public int Take { get; set; } = 50;
+}
 
-public class LogViewerViewModelConfig : PageConfig { }
+public interface ILogViewerViewModel : IPage { }
 
 [ExportPage(PageId)]
 public class LogViewerViewModel
-    : PageViewModel<ILogViewerViewModel, LogViewerViewModelConfig>,
+    : PageViewModel<ILogViewerViewModel>,
         ILogViewerViewModel,
         ISupportPagination
 {
@@ -26,13 +30,16 @@ public class LogViewerViewModel
     private readonly ILogReaderService _logReaderService;
     private readonly ISearchService _search;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly ILayoutService _layoutService;
     private readonly ObservableList<LogMessageViewModel> _itemsSource = new();
+
+    private LogViewerViewModelConfig _config;
 
     public LogViewerViewModel()
         : base(
             DesignTime.Id,
             NullCommandService.Instance,
-            DesignTime.Configuration,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -142,14 +149,15 @@ public class LogViewerViewModel
         ICommandService cmd,
         ILogReaderService logReaderService,
         ISearchService search,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, layoutService, loggerFactory)
     {
         _logReaderService = logReaderService;
         _search = search;
         _loggerFactory = loggerFactory;
+        _layoutService = layoutService;
         Title = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
         Items = _itemsSource
@@ -171,7 +179,7 @@ public class LogViewerViewModel
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Skip.Skip(1).Subscribe(_ => Search.Refresh());
+        Skip.Skip(1).Subscribe(_ => Search.Refresh()).DisposeItWith(Disposable);
 
         Next = new ReactiveCommand(_ => Commands.NextPage(this)).DisposeItWith(Disposable);
         Previous = new ReactiveCommand(_ => Commands.PreviousPage(this)).DisposeItWith(Disposable);
@@ -292,6 +300,25 @@ public class LogViewerViewModel
             FromToText.Value = $"{Skip.Value + 1} - {Skip.Value + _itemsSource.Count} ";
             progress.Report(1);
         }
+    }
+
+    protected override ValueTask HandleSaveLayout()
+    {
+        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+        _config.Skip = Skip.Value;
+        _config.Take = Take.Value;
+        _layoutService.SetInMemory(this, _config);
+        return base.HandleSaveLayout();
+    }
+
+    protected override ValueTask HandleLoadLayout()
+    {
+        _config = _layoutService.Get<LogViewerViewModelConfig>(this);
+        Search.Text.ModelValue.Value = _config.SearchText;
+        Skip.Value = _config.Skip;
+        Take.Value = _config.Take;
+
+        return base.HandleLoadLayout();
     }
 
     public BindableReactiveProperty<int> Skip { get; }

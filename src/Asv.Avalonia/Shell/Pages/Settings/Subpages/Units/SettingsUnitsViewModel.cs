@@ -6,29 +6,43 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public class SettingsUnitsViewModelConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+    public string SelectedItemId { get; set; } = string.Empty;
+}
+
 [ExportSettings(PageId)]
 public class SettingsUnitsViewModel : SettingsSubPage
 {
     public const string PageId = "units";
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
+    private readonly ILayoutService _layoutService;
+
+    private SettingsUnitsViewModelConfig _config;
 
     public SettingsUnitsViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(DesignTime.UnitService, NullLayoutService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public SettingsUnitsViewModel(IUnitService unit, ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public SettingsUnitsViewModel(
+        IUnitService unit,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory
+    )
+        : base(PageId, layoutService, loggerFactory)
     {
+        _layoutService = layoutService;
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList
             .CreateView(x => new MeasureUnitViewModel(x, loggerFactory))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
-        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel>().DisposeItWith(
+        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel?>().DisposeItWith(
             Disposable
         );
 
@@ -46,7 +60,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
 
-    public BindableReactiveProperty<MeasureUnitViewModel> SelectedItem { get; }
+    public BindableReactiveProperty<MeasureUnitViewModel?> SelectedItem { get; }
 
     public SearchBoxViewModel Search { get; }
 
@@ -68,18 +82,6 @@ public class SettingsUnitsViewModel : SettingsSubPage
         return Task.CompletedTask;
     }
 
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
-    {
-        var item = _view.FirstOrDefault(x => x.Id == id);
-        if (item != null)
-        {
-            SelectedItem.Value = item;
-            return ValueTask.FromResult<IRoutable>(item);
-        }
-
-        return base.Navigate(id);
-    }
-
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return Search;
@@ -92,6 +94,28 @@ public class SettingsUnitsViewModel : SettingsSubPage
         {
             yield return child;
         }
+    }
+
+    protected override ValueTask HandleSaveLayout()
+    {
+        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+        _config.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+        _layoutService.SetInMemory(this, _config);
+        return base.HandleSaveLayout();
+    }
+
+    protected override ValueTask HandleLoadLayout()
+    {
+        _config = _layoutService.Get<SettingsUnitsViewModelConfig>(this);
+        Search.Text.ModelValue.Value = _config.SearchText;
+        var selected = _view.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
+
+        if (selected is not null)
+        {
+            SelectedItem.Value = selected;
+        }
+
+        return base.HandleLoadLayout();
     }
 
     public override IExportInfo Source => SystemModule.Instance;

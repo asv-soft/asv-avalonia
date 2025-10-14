@@ -3,10 +3,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-[ExportMainMenuAttribute]
+[ExportMainMenu]
 public class OpenMenu : MenuItem
 {
-    public const string MenuId = "shell.menu.open";
+    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.open";
 
     [ImportingConstructor]
     public OpenMenu(ILoggerFactory loggerFactory, ICommandService cmd)

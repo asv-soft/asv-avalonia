@@ -1,5 +1,4 @@
 using System.Collections.Specialized;
-using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
@@ -7,12 +6,11 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
-    : TreePageViewModel<TContext, TSubPage, TConfig>,
+public abstract class TreeDevicePageViewModel<TContext, TSubPage>
+    : TreePageViewModel<TContext, TSubPage>,
         IDevicePage
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
-    where TConfig : PageConfig, new()
 {
     private readonly DevicePageCore _deviceCore;
 
@@ -21,10 +19,10 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
         IDeviceManager devices,
         ICommandService cmd,
         IContainerHost container,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, container, cfg, loggerFactory)
+        : base(id, cmd, container, layoutService, loggerFactory)
     {
         _deviceCore = new DevicePageCore(devices, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;

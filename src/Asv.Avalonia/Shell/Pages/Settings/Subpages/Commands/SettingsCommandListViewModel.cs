@@ -6,6 +6,13 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public sealed class SettingsCommandListViewModelConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+    public string SelectedItemId { get; set; } = string.Empty;
+    public CommandSortingType CommandSortingType { get; set; } = CommandSortingType.All;
+}
+
 [ExportSettings(PageId)]
 public class SettingsCommandListViewModel : SettingsSubPage
 {
@@ -18,12 +25,16 @@ public class SettingsCommandListViewModel : SettingsSubPage
     private readonly ObservableList<ICommandInfo> _itemsSource;
     private readonly ISynchronizedView<ICommandInfo, CommandViewModel> _view;
     private readonly ReactiveProperty<Enum> _commandSortingType;
+    private readonly ILayoutService _layoutService;
+
+    private SettingsCommandListViewModelConfig _config;
 
     public SettingsCommandListViewModel()
         : this(
             DesignTime.CommandService,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
+            NullLayoutService.Instance,
             NullSearchService.Instance
         )
     {
@@ -35,14 +46,16 @@ public class SettingsCommandListViewModel : SettingsSubPage
         ICommandService commandsService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
+        ILayoutService layoutService,
         ISearchService searchService
     )
-        : base(PageId, loggerFactory)
+        : base(PageId, layoutService, loggerFactory)
     {
         _commandsService = commandsService;
         _loggerFactory = loggerFactory;
         _dialogService = dialogService;
         _searchService = searchService;
+        _layoutService = layoutService;
 
         SelectedItem = new BindableReactiveProperty<CommandViewModel?>().DisposeItWith(Disposable);
 
@@ -85,8 +98,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
     public BindableReactiveProperty<CommandViewModel?> SelectedItem { get; }
     public INotifyCollectionChangedSynchronizedViewList<CommandViewModel> Items { get; }
     public HistoricalEnumProperty<CommandSortingType> CommandSortingType { get; }
-
-    public override IExportInfo Source => SystemModule.Instance;
 
     private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
     {
@@ -163,4 +174,24 @@ public class SettingsCommandListViewModel : SettingsSubPage
             yield return children;
         }
     }
+
+    protected override ValueTask HandleSaveLayout()
+    {
+        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+        _config.CommandSortingType = CommandSortingType.ViewValue.Value;
+        _config.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+        _layoutService.SetInMemory(this, _config);
+        return base.HandleSaveLayout();
+    }
+
+    protected override ValueTask HandleLoadLayout()
+    {
+        _config = _layoutService.Get<SettingsCommandListViewModelConfig>(this);
+        Search.Text.ModelValue.Value = _config.SearchText;
+        CommandSortingType.ModelValue.Value = _config.CommandSortingType;
+        SelectedItem.Value = _view.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
+        return base.HandleLoadLayout();
+    }
+
+    public override IExportInfo Source => SystemModule.Instance;
 }

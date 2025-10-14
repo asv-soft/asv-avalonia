@@ -30,8 +30,8 @@
         <ProjectReference Include="..\Asv.Avalonia.GeoMap\Asv.Avalonia.GeoMap.csproj" />
         <ProjectReference Include="..\Asv.Avalonia.Plugins\Asv.Avalonia.Plugins.csproj" />
         <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
-
-      
+        <ProjectReference Include="..\Asv.Avalonia.IO\Asv.Avalonia.IO.csproj" />
+        
       <PackageReference Include="Roslynator.Analyzers" Version="4.14.0">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
