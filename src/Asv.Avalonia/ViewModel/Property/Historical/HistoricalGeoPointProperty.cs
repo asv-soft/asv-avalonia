@@ -21,17 +21,14 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
         base.Altitude.Dispose();
 
         Latitude = new HistoricalUnitProperty(nameof(Latitude), ModelLat, latUnit, loggerFactory)
-        {
-            Parent = this,
-        }.DisposeItWith(Disposable);
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         Longitude = new HistoricalUnitProperty(nameof(Longitude), ModelLon, lonUnit, loggerFactory)
-        {
-            Parent = this,
-        }.DisposeItWith(Disposable);
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         Altitude = new HistoricalUnitProperty(nameof(Altitude), ModelAlt, altUnit, loggerFactory)
-        {
-            Parent = this,
-        }.DisposeItWith(Disposable);
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
     }
 
     public new HistoricalUnitProperty Latitude { get; }

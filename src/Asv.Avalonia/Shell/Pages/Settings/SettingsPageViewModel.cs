@@ -1,16 +1,12 @@
-using System.Collections.Specialized;
 using System.Composition;
-using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public sealed class SettingsPageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
 public class SettingsPageViewModel
-    : TreePageViewModel<ISettingsPage, ISettingsSubPage, SettingsPageViewModelConfig>,
+    : TreePageViewModel<ISettingsPage, ISettingsSubPage>,
         ISettingsPage
 {
     public const string PageId = "settings";
@@ -20,7 +16,7 @@ public class SettingsPageViewModel
         : this(
             DesignTime.CommandService,
             NullContainerHost.Instance,
-            DesignTime.Configuration,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.DialogService
         )
@@ -34,18 +30,13 @@ public class SettingsPageViewModel
     public SettingsPageViewModel(
         ICommandService svc,
         IContainerHost host,
-        IConfiguration configuration,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
-        : base(PageId, svc, host, configuration, loggerFactory, dialogService)
+        : base(PageId, svc, host, layoutService, loggerFactory, dialogService)
     {
         Title = RS.SettingsPageViewModel_Title;
-    }
-
-    protected override void InternalInitArgs(NameValueCollection args)
-    {
-        base.InternalInitArgs(args);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

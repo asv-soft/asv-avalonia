@@ -16,6 +16,8 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
     public HomePageDeviceListExtension(IDeviceManager svc, ILoggerFactory loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(svc);
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+
         _svc = svc;
         _loggerFactory = loggerFactory;
     }

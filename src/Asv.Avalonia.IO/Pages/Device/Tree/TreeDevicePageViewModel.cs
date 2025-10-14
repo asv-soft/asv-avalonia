@@ -1,18 +1,15 @@
 using System.Collections.Specialized;
-using Asv.Cfg;
-using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia.IO;
 
-public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
-    : TreePageViewModel<TContext, TSubPage, TConfig>,
+public abstract class TreeDevicePageViewModel<TContext, TSubPage>
+    : TreePageViewModel<TContext, TSubPage>,
         IDevicePage
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
-    where TConfig : PageConfig, new()
 {
     private readonly DevicePageCore _deviceCore;
 
@@ -21,18 +18,17 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
         IDeviceManager devices,
         ICommandService cmd,
         IContainerHost container,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
-        : base(id, cmd, container, cfg, loggerFactory, dialogService)
+        : base(id, cmd, container, layoutService, loggerFactory, dialogService)
     {
-        _deviceCore = new DevicePageCore(devices, Logger, this);
+        _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
-        _deviceCore.DisposeItWith(Disposable);
     }
 
     private void AfterDeviceInitializedBase(
@@ -73,4 +69,8 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
     }
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
+    public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized =>
+        _deviceCore.IsDeviceInitialized.ToReadOnlyBindableReactiveProperty();
+    public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
+    public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }

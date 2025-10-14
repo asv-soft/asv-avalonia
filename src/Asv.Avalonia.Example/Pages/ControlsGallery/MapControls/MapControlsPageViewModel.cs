@@ -23,7 +23,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
     public MapControlsPageViewModel(ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {
-        MapViewModel = new MapViewModel("Anchor", loggerFactory)
+        MapViewModel = new MapViewModel("Map", loggerFactory)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 

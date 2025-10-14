@@ -1,12 +1,27 @@
 ﻿using System.Collections.Specialized;
+using Asv.Cfg;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
+using Avalonia.Media;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
 
 namespace Asv.Avalonia;
+
+internal enum DockItemState
+{
+    Tab,
+    Window,
+}
+
+internal sealed class DockControlConfig
+{
+    public readonly Dictionary<string, DockItemState> DockItemStates = new();
+    public string? SelectedDockTabItemId { get; set; }
+}
 
 public partial class DockControl : SelectingItemsControl, ICustomHitTest
 {
@@ -15,6 +30,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
     private DockTabItem? _selectedTab;
     private DockTabControl _mainTabControl = null!;
+    private DockControlConfig _config = null!;
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -25,6 +41,9 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             ?? throw new ApplicationException(
                 $"{PART_MainTabControl} not found in {nameof(DockControl)} template."
             );
+
+        ArgumentNullException.ThrowIfNull(Configuration);
+        _config = Configuration.Get<DockControlConfig>();
 
         if (Items is INotifyCollectionChanged notifyCol)
         {
@@ -87,6 +106,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
                 .FirstOrDefault(_ => _.Content == change.NewValue);
             if (selected is null)
             {
+                EnsureDockTabItemFromCfgSelected();
                 return;
             }
 
@@ -119,10 +139,19 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         }
 
         var tab = CreateDockTabItem(page);
-        if (page.State.Value == PageState.Window)
+
+        if (_config.DockItemStates.TryGetValue(page.Id.ToString(), out var state))
         {
-            DetachTab(tab);
-            return;
+            if (state == DockItemState.Window)
+            {
+                DetachTab(tab);
+                return;
+            }
+        }
+        else
+        {
+            _config.DockItemStates[page.Id.ToString()] = DockItemState.Tab;
+            Configuration?.Set(_config);
         }
 
         _mainTabControl.Items.Add(tab);
@@ -130,7 +159,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
     private DockTabItem CreateDockTabItem(IPage content)
     {
-        var header = new DockTabStripItem { Content = content };
+        var header = new DockTabStripItem { Content = content, Background = Brushes.Transparent };
 
         header.PointerPressed -= PressedHandler;
         header.PointerMoved -= PointerMovedHandler;
@@ -163,6 +192,18 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         var tab = source as DockTabItem ?? source?.FindAncestorOfType<DockTabItem>();
         if (tab is not null)
         {
+            if (SelectedItem is IPage current && current.Id != tab.Content?.Id)
+            {
+                if (LayoutService is null)
+                {
+                    throw new Exception($"{nameof(LayoutService)} is null");
+                }
+
+                current.RequestSaveLayout(LayoutService).SafeFireAndForget();
+                _config.SelectedDockTabItemId = tab.Id;
+                Configuration?.Set(_config);
+            }
+
             _selectedTab = tab;
             SelectedItem = tab.Content;
         }
@@ -182,6 +223,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
         if (_selectedTab is null)
         {
+            e.Pointer.Capture(null);
             return;
         }
 
@@ -197,7 +239,6 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             DetachTab(_selectedTab);
         }
 
-        _selectedTab = null;
         e.Pointer.Capture(null);
     }
 
@@ -215,6 +256,8 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         if (dockTabItem is not null)
         {
             _mainTabControl.Items.Remove(dockTabItem);
+            _selectedTab = _mainTabControl.SelectedItem as DockTabItem;
+            _config.SelectedDockTabItemId = _selectedTab?.Id;
         }
 
         var win = new DockWindow
@@ -225,7 +268,8 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         };
 
         _windowedItems.Add(tab);
-        tab.Content.State.Value = PageState.Window;
+        _config.DockItemStates[tab.Content.Id.ToString()] = DockItemState.Window;
+        Configuration?.Set(_config);
 
         win.Closing += AttachTab;
         win.Show();
@@ -234,6 +278,15 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         void AttachTab(object? source, WindowClosingEventArgs args)
         {
             win.Closing -= AttachTab;
+
+            if (LayoutService is not null)
+            {
+                tab.Content.RequestSaveLayout(LayoutService).SafeFireAndForget();
+            }
+            if (args.CloseReason == WindowCloseReason.ApplicationShutdown)
+            {
+                return;
+            }
 
             if (!_mainTabControl.Items.Contains(tab))
             {
@@ -247,8 +300,40 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
                 return;
             }
 
-            tab.Content.State.Value = PageState.Tab;
+            _config.DockItemStates[tab.Content.Id.ToString()] = DockItemState.Tab;
+            Configuration?.Set(_config);
+
+            _selectedTab = tab;
+            _config.SelectedDockTabItemId = tab.Id;
+            Configuration?.Set(_config);
+
+            SelectedItem = null;
+            SelectedItem = tab.Content;
         }
+    }
+
+    private void EnsureDockTabItemFromCfgSelected()
+    {
+        if (_config.SelectedDockTabItemId is null)
+        {
+            return;
+        }
+
+        var fromCfg = _mainTabControl
+            .Items.OfType<DockTabItem>()
+            .FirstOrDefault(it => it.Id == _config.SelectedDockTabItemId);
+
+        if (fromCfg is null)
+        {
+            return;
+        }
+
+        foreach (var item in _mainTabControl.Items.OfType<DockTabItem>().Where(it => it.IsSelected))
+        {
+            item.IsSelected = false;
+        }
+
+        fromCfg.IsSelected = true;
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)

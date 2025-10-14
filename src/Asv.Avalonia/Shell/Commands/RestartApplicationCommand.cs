@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class RestartApplicationCommand : ContextCommand<IRoutable>
+public sealed class RestartApplicationCommand : ContextCommand<IRoutable>
 {
     #region Static
 

@@ -13,9 +13,10 @@ public class MobileShellViewModel : ShellViewModel
     public MobileShellViewModel(
         IConfiguration cfg,
         IContainerHost containerHost,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(containerHost, loggerFactory, cfg, ShellId)
+        : base(containerHost, layoutService, loggerFactory, cfg, ShellId)
     {
         // do nothing
     }

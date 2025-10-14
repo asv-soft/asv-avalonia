@@ -7,10 +7,8 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public sealed class HomePageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class HomePageViewModel : PageViewModel<IHomePage, HomePageViewModelConfig>, IHomePage
+public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 {
     public const string PageId = "home";
 
@@ -19,7 +17,6 @@ public class HomePageViewModel : PageViewModel<IHomePage, HomePageViewModelConfi
             NullCommandService.Instance,
             NullAppInfo.Instance,
             NullContainerHost.Instance,
-            DesignTime.Configuration,
             DesignTime.LoggerFactory,
             DesignTime.DialogService
         )
@@ -99,11 +96,10 @@ public class HomePageViewModel : PageViewModel<IHomePage, HomePageViewModelConfi
         ICommandService cmd,
         IAppInfo appInfo,
         IContainerHost container,
-        IConfiguration cfg,
         ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
-        : base(PageId, cmd, cfg, loggerFactory, dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService)
     {
         AppInfo = appInfo;
         Icon = MaterialIconKind.Home;

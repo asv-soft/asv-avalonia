@@ -96,9 +96,13 @@ public abstract class RoutableViewModel(NavigationId id, ILoggerFactory loggerFa
 
     protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e is TreeVisitorEvent visitorEvent)
+        switch (e)
         {
-            visitorEvent.Visit(this);
+            case TreeVisitorEvent treeVisitorEvent:
+                treeVisitorEvent.Visit(this);
+                break;
+            default:
+                break;
         }
 
         return ValueTask.CompletedTask;
