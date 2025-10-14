@@ -2,7 +2,6 @@ using System.Composition;
 using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Asv.Cfg;
-using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -10,11 +9,10 @@ using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
-using R3;
 
 namespace Asv.Avalonia;
 
-public class DesktopShellViewModelConfig { }
+public class DesktopShellViewModelConfig : ShellViewModelConfig { }
 
 [Export(ShellId, typeof(IShell))]
 public class DesktopShellViewModel : ShellViewModel
@@ -29,10 +27,11 @@ public class DesktopShellViewModel : ShellViewModel
         IFileAssociationService fileService,
         IConfiguration cfg,
         IContainerHost ioc,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         INavigationService navigationService
     )
-        : base(ioc, loggerFactory, cfg, ShellId)
+        : base(ioc, layoutService, loggerFactory, cfg, ShellId)
     {
         _fileService = fileService;
         _ioc = ioc;
@@ -59,12 +58,11 @@ public class DesktopShellViewModel : ShellViewModel
         lifetime.MainWindow = wnd;
         lifetime.MainWindow.Show();
     }
-    
+
     private void OnDragOver(object sender, DragEventArgs e)
     {
         e.DragEffects = DragDropEffects.Copy;
     }
-    
 
     private void OnFileDrop(object? sender, DragEventArgs e)
     {
@@ -94,8 +92,10 @@ public class DesktopShellViewModel : ShellViewModel
         return base.InternalCatchEvent(e);
     }
 
-    protected override ValueTask CloseAsync(CancellationToken cancellationToken)
+    protected override async ValueTask CloseAsync(CancellationToken cancellationToken)
     {
+        await base.CloseAsync(cancellationToken);
+
         if (
             Application.Current?.ApplicationLifetime
             is IClassicDesktopStyleApplicationLifetime lifetime
@@ -103,8 +103,6 @@ public class DesktopShellViewModel : ShellViewModel
         {
             lifetime.Shutdown();
         }
-
-        return ValueTask.CompletedTask;
     }
 
     protected override ValueTask ChangeWindowModeAsync(CancellationToken cancellationToken)
@@ -140,7 +138,7 @@ public class DesktopShellViewModel : ShellViewModel
             UpdateWindowStateUi(window.WindowState);
         }
 
-        return ValueTask.CompletedTask;
+        return base.ChangeWindowModeAsync(cancellationToken);
     }
 
     protected override ValueTask CollapseAsync(CancellationToken cancellationToken)
@@ -155,7 +153,7 @@ public class DesktopShellViewModel : ShellViewModel
             }
         }
 
-        return ValueTask.CompletedTask;
+        return base.CollapseAsync(cancellationToken);
     }
 
     public void UpdateWindowStateUi(WindowState state)
@@ -185,5 +183,4 @@ public class DesktopShellViewModel : ShellViewModel
                     : RS.ShellView_WindowControlButton_Maximize;
         }
     }
-
 }

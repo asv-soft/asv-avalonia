@@ -16,6 +16,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
             DesignTime.Navigation,
             DesignTime.ShellHost,
             DesignTime.CommandService,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         ) { }
 
@@ -24,12 +25,17 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
         INavigationService nav,
         IShellHost host,
         ICommandService cmd,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(ModelId, loggerFactory)
+        : base(ModelId, layoutService, loggerFactory)
     {
         SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty();
-        _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x, loggerFactory));
+        _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(
+            x,
+            layoutService,
+            loggerFactory
+        ));
         Pages = _pageView.ToNotifyCollectionChanged();
         BackwardStack = nav.BackwardStack.ToNotifyCollectionChanged();
         ForwardStack = nav.ForwardStack.ToNotifyCollectionChanged();
@@ -43,7 +49,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
     public NotifyCollectionChangedSynchronizedViewList<DebugPageViewModel> Pages { get; }
     public IReadOnlyBindableReactiveProperty<NavigationPath> SelectedControlPath { get; }
 
-    public IReadOnlyBindableReactiveProperty<HotKeyInfo?> HotKey { get; }
+    public IReadOnlyBindableReactiveProperty<HotKeyInfo> HotKey { get; }
 
     protected override void Dispose(bool disposing)
     {
@@ -54,8 +60,11 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
     }
 }
 
-public class DebugPageViewModel(IPage page, ILoggerFactory loggerFactory)
-    : ViewModelBase(page.Id, loggerFactory)
+public class DebugPageViewModel(
+    IPage page,
+    ILayoutService layoutService,
+    ILoggerFactory loggerFactory
+) : ViewModelBase(page.Id, layoutService, loggerFactory)
 {
     public NotifyCollectionChangedSynchronizedViewList<CommandSnapshot> RedoStack { get; } =
         page.History.RedoStack.ToNotifyCollectionChanged();

@@ -16,8 +16,9 @@ public delegate Task BackgroundCommandDelegate<in TArg>(
 public class BackgroundCommand<TArg>(
     string id,
     BackgroundCommandDelegate<TArg> execute,
+    ILayoutService layoutService,
     ILoggerFactory loggerFactory
-) : ViewModelBase(id, loggerFactory)
+) : ViewModelBase(id, layoutService, loggerFactory)
 {
     private readonly BindableReactiveProperty<bool> _isExecuting = new();
     private readonly BindableReactiveProperty<bool> _canExecute = new();

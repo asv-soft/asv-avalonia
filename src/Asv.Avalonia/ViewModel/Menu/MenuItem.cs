@@ -8,10 +8,11 @@ namespace Asv.Avalonia
         public MenuItem(
             string id,
             string header,
+            ILayoutService layoutService,
             ILoggerFactory loggerFactory,
             string? parentId = null
         )
-            : base(id, loggerFactory)
+            : base(id, layoutService, loggerFactory)
         {
             ParentId = parentId == null ? NavigationId.Empty : new NavigationId(parentId);
             Order = 0;

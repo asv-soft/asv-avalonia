@@ -13,9 +13,13 @@ public interface IMenuItem : IActionViewModel
 
 public static class MenuItemMixin
 {
-    public static IMenuItem CreateMenu(this ICommandInfo cmdInfo, ILoggerFactory loggerFactory)
+    public static IMenuItem CreateMenu(
+        this ICommandInfo cmdInfo,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory
+    )
     {
-        var item = new MenuItem(cmdInfo.Id, cmdInfo.Name, loggerFactory)
+        var item = new MenuItem(cmdInfo.Id, cmdInfo.Name, layoutService, loggerFactory)
         {
             Description = cmdInfo.Description,
             Icon = cmdInfo.Icon,

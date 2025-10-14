@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -8,6 +9,13 @@ using Microsoft.Extensions.Logging.Abstractions;
 using R3;
 
 namespace Asv.Avalonia.Example;
+
+public sealed class InfoBoxControlsPageViewModelConfig
+{
+    public InfoBarSeverity Severity { get; set; } = InfoBarSeverity.Informational;
+    public string InfoBoxTitle { get; set; } = string.Empty;
+    public string InfoBoxMessage { get; set; } = string.Empty;
+}
 
 [ExportControlExamples(PageId)]
 public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
@@ -19,15 +27,17 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<string?> _infoBoxMessage;
     private readonly ReactiveProperty<string?> _infoBoxTitle;
 
+    private InfoBoxControlsPageViewModelConfig _config;
+
     public InfoBoxControlsPageViewModel()
-        : this(NullLoggerFactory.Instance)
+        : this(NullLayoutService.Instance, NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public InfoBoxControlsPageViewModel(ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public InfoBoxControlsPageViewModel(ILayoutService layoutService, ILoggerFactory loggerFactory)
+        : base(PageId, layoutService, loggerFactory)
     {
         _severity = new ReactiveProperty<Enum>(InfoBarSeverity.Informational).DisposeItWith(
             Disposable
@@ -42,18 +52,21 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         Severity = new HistoricalEnumProperty<InfoBarSeverity>(
             nameof(Severity),
             _severity,
+            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
         InfoBoxTitle = new HistoricalStringProperty(
             nameof(InfoBoxTitle),
             _infoBoxTitle,
+            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
         InfoBoxMessage = new HistoricalStringProperty(
             nameof(InfoBoxMessage),
             _infoBoxMessage,
+            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -73,6 +86,32 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         {
             yield return child;
         }
+    }
+
+    protected override ValueTask HandleSaveLayout()
+    {
+        _config.Severity = Severity.ViewValue.Value;
+        _config.InfoBoxTitle = InfoBoxTitle.ViewValue.Value ?? string.Empty;
+        _config.InfoBoxMessage = InfoBoxMessage.ViewValue.Value ?? string.Empty;
+        LayoutService.SetInMemory(this, _config);
+        return base.HandleSaveLayout();
+    }
+
+    protected override ValueTask HandleLoadLayout()
+    {
+        _config = LayoutService.Get<InfoBoxControlsPageViewModelConfig>(this);
+        Severity.ModelValue.Value = _config.Severity;
+        if (!string.IsNullOrEmpty(_config.InfoBoxTitle))
+        {
+            InfoBoxTitle.ModelValue.Value = _config.InfoBoxTitle;
+        }
+
+        if (!string.IsNullOrEmpty(_config.InfoBoxMessage))
+        {
+            InfoBoxMessage.ModelValue.Value = _config.InfoBoxMessage;
+        }
+
+        return base.HandleLoadLayout();
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using System.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Asv.Common;
 using Asv.IO;
@@ -13,19 +14,24 @@ namespace Asv.Avalonia.IO;
 [ExportStatusItem]
 public class ConnectionRateStatusViewModel : StatusItem
 {
+    public const string NavId = $"{DefaultId}.connection_rate";
+
     private readonly ILoggerFactory _loggerFactory;
     private readonly TimeProvider _timeProvider;
     private readonly INavigationService _nav;
-    public const string NavId = $"{DefaultId}.connection_rate";
 
     private readonly IncrementalRateCounter _rxBytes;
     private readonly IncrementalRateCounter _txBytes;
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
-    private StatisticViewModel? _fullStatistic;
 
     public ConnectionRateStatusViewModel()
-        : this(NullLoggerFactory.Instance, TimeProvider.System, DesignTime.Navigation)
+        : this(
+            NullLayoutService.Instance,
+            NullLoggerFactory.Instance,
+            TimeProvider.System,
+            DesignTime.Navigation
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         var stat = new Statistic();
@@ -52,11 +58,12 @@ public class ConnectionRateStatusViewModel : StatusItem
     [ImportingConstructor]
     public ConnectionRateStatusViewModel(
         IDeviceManager deviceManager,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider,
         INavigationService nav
     )
-        : this(loggerFactory, timeProvider, nav)
+        : this(layoutService, loggerFactory, timeProvider, nav)
     {
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
@@ -68,11 +75,12 @@ public class ConnectionRateStatusViewModel : StatusItem
     }
 
     private ConnectionRateStatusViewModel(
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider,
         INavigationService nav
     )
-        : base(NavId, loggerFactory)
+        : base(NavId, layoutService, loggerFactory)
     {
         _loggerFactory = loggerFactory;
         _timeProvider = timeProvider;
@@ -98,12 +106,14 @@ public class ConnectionRateStatusViewModel : StatusItem
         }
     }
 
+    [field: AllowNull, MaybeNull]
     public StatisticViewModel FullStatistic
     {
         get
         {
-            return _fullStatistic ??= new StatisticViewModel(
+            return field ??= new StatisticViewModel(
                 $"{NavId}.statistic",
+                LayoutService,
                 _loggerFactory,
                 _timeProvider
             );

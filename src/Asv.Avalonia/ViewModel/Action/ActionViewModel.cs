@@ -3,8 +3,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class ActionViewModel(string id, ILoggerFactory loggerFactory)
-    : HeadlinedViewModel(id, loggerFactory),
+public class ActionViewModel(string id, ILayoutService layoutService, ILoggerFactory loggerFactory)
+    : HeadlinedViewModel(id, layoutService, loggerFactory),
         IActionViewModel
 {
     public ICommand? Command

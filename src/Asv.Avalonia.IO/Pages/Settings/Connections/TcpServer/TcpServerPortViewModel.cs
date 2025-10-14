@@ -33,10 +33,11 @@ public class TcpServerPortViewModel : PortViewModel
     [ImportingConstructor]
     public TcpServerPortViewModel(
         IConfiguration cfgSvc,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{TcpServerProtocolPort.Scheme}-editor", loggerFactory, timeProvider)
+        : base($"{TcpServerProtocolPort.Scheme}-editor", layoutService, loggerFactory, timeProvider)
     {
         _cfgSvc = cfgSvc;
         Icon = DefaultIcon;
@@ -97,6 +98,6 @@ public class TcpServerPortViewModel : PortViewModel
 
     protected override EndpointViewModel EndpointFactory(IProtocolEndpoint arg)
     {
-        return new TcpServerEndpointViewModel(arg, LoggerFactory, TimeProvider);
+        return new TcpServerEndpointViewModel(arg, LayoutService, LoggerFactory, TimeProvider);
     }
 }

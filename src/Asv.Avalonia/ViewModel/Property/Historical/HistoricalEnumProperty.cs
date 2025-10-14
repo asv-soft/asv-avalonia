@@ -15,10 +15,11 @@ public sealed class HistoricalEnumProperty<TEnum>
     public HistoricalEnumProperty(
         NavigationId id,
         ReactiveProperty<Enum> modelValue,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent
     )
-        : base(id, loggerFactory, parent)
+        : base(id, layoutService, loggerFactory, parent)
     {
         ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<TEnum>().DisposeItWith(Disposable);

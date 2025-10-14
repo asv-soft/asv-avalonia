@@ -9,24 +9,40 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
+public class SettingsConnectionViewModelConfig
+{
+    public string SelectedItemId { get; set; } = string.Empty;
+}
+
 [ExportSettings(SubPageId)]
 public class SettingsConnectionViewModel
     : ExtendableViewModel<ISettingsConnectionSubPage>,
         ISettingsConnectionSubPage
 {
-    private readonly IDeviceManager _deviceManager;
+    public const string SubPageId = "connections";
+    public const MaterialIconKind Icon = MaterialIconKind.Connection;
+
     private readonly INavigationService _navigationService;
     private readonly IContainerHost _containerHost;
-    private IPortViewModel? _selectedItem;
 
-    public const string SubPageId = "settings.connection";
-    public const MaterialIconKind Icon = MaterialIconKind.Connection;
+    private SettingsConnectionViewModelConfig _config;
+
+    public MenuTree MenuView { get; }
+    public ObservableList<IMenuItem> Menu { get; } = [];
+    public IExportInfo Source => IoModule.Instance;
+    public NotifyCollectionChangedSynchronizedViewList<IPortViewModel> View { get; }
+    public IPortViewModel? SelectedItem
+    {
+        get;
+        set => SetField(ref field, value);
+    }
 
     public SettingsConnectionViewModel()
         : this(
             NullDeviceManager.Instance,
             DesignTime.Navigation,
             NullContainerHost.Instance,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -36,7 +52,7 @@ public class SettingsConnectionViewModel
             .Timer(TimeSpan.FromSeconds(3))
             .Subscribe(x =>
             {
-                source.Add(new SerialPortViewModel() { Name = { Value = "Serial name" } });
+                source.Add(new SerialPortViewModel { Name = { Value = "Serial name" } });
                 source.Add(new TcpPortViewModel { Name = { Value = "TCP Client name" } });
                 source.Add(new TcpServerPortViewModel { Name = { Value = "TCP Server name" } });
             });
@@ -48,11 +64,11 @@ public class SettingsConnectionViewModel
         IDeviceManager deviceManager,
         INavigationService navigationService,
         IContainerHost containerHost,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(SubPageId, loggerFactory)
+        : base(SubPageId, layoutService, loggerFactory)
     {
-        _deviceManager = deviceManager;
         _navigationService = navigationService;
         _containerHost = containerHost;
         ObservableList<IProtocolPort> source = [];
@@ -63,25 +79,33 @@ public class SettingsConnectionViewModel
         View = sourceSyncView
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
-        View.CollectionChanged += (sender, args) =>
-        {
-            OnChanged(args);
-        };
+        View.CollectionChanged -= OnChanged;
+        View.CollectionChanged += OnChanged;
 
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
 
-        foreach (var port in deviceManager.Router.Ports)
-        {
-            source.Add(port);
-        }
+        source.AddRange(deviceManager.Router.Ports);
 
         deviceManager.Router.PortAdded.Subscribe(x => source.Add(x)).DisposeItWith(Disposable);
         deviceManager.Router.PortRemoved.Subscribe(x => source.Remove(x)).DisposeItWith(Disposable);
     }
 
-    private void OnChanged(NotifyCollectionChangedEventArgs viewChangedEvent)
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        foreach (var menu in Menu)
+        {
+            yield return menu;
+        }
+
+        foreach (var model in View)
+        {
+            yield return model;
+        }
+    }
+
+    private void OnChanged(object? sender, NotifyCollectionChangedEventArgs viewChangedEvent)
     {
         switch (viewChangedEvent.Action)
         {
@@ -99,25 +123,12 @@ public class SettingsConnectionViewModel
                 }
                 break;
             case NotifyCollectionChangedAction.Replace:
-                break;
             case NotifyCollectionChangedAction.Move:
-                break;
             case NotifyCollectionChangedAction.Reset:
                 break;
             default:
                 throw new ArgumentOutOfRangeException();
         }
-    }
-
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
-    {
-        var item = View.FirstOrDefault(x => x.Id == id);
-        if (item != null)
-        {
-            SelectedItem = item;
-            return new ValueTask<IRoutable>(item);
-        }
-        return base.Navigate(id);
     }
 
     private IPortViewModel CreatePort(IProtocolPort protocolPort)
@@ -129,37 +140,30 @@ public class SettingsConnectionViewModel
             )
         )
         {
-            viewModel = new PortViewModel { Parent = this };
+            viewModel = new PortViewModel().SetRoutableParent(this);
         }
 
         viewModel.Init(protocolPort);
         return viewModel;
     }
 
-    public IPortViewModel? SelectedItem
+    protected override ValueTask HandleSaveLayout()
     {
-        get => _selectedItem;
-        set { SetField(ref _selectedItem, value); }
+        _config.SelectedItemId = SelectedItem?.Id.ToString() ?? string.Empty;
+        LayoutService.SetInMemory(this, _config);
+        return base.HandleSaveLayout();
     }
 
-    public NotifyCollectionChangedSynchronizedViewList<IPortViewModel> View { get; }
+    protected override ValueTask HandleLoadLayout()
+    {
+        _config = LayoutService.Get<SettingsConnectionViewModelConfig>(this);
+        SelectedItem = View.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
+        return base.HandleLoadLayout();
+    }
 
     public ValueTask Init(ISettingsPage context)
     {
         return ValueTask.CompletedTask;
-    }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        foreach (var menu in Menu)
-        {
-            yield return menu;
-        }
-
-        foreach (var model in View)
-        {
-            yield return model;
-        }
     }
 
     protected override void AfterLoadExtensions()
@@ -167,7 +171,13 @@ public class SettingsConnectionViewModel
         // do nothing
     }
 
-    public MenuTree MenuView { get; }
-    public ObservableList<IMenuItem> Menu { get; } = [];
-    public IExportInfo Source => IoModule.Instance;
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            View.CollectionChanged -= OnChanged;
+        }
+
+        base.Dispose(disposing);
+    }
 }

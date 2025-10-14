@@ -25,12 +25,15 @@ public sealed class SaveCancelDialogPayload
 [ExportDialogPrefab]
 [Shared]
 [method: ImportingConstructor]
-public sealed class SaveCancelDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
-    : IDialogPrefab<SaveCancelDialogPayload, bool>
+public sealed class SaveCancelDialogPrefab(
+    INavigationService nav,
+    ILayoutService layoutService,
+    ILoggerFactory loggerFactory
+) : IDialogPrefab<SaveCancelDialogPayload, bool>
 {
     public async Task<bool> ShowDialogAsync(SaveCancelDialogPayload dialogPayload)
     {
-        using var vm = new DialogItemTextViewModel(loggerFactory)
+        using var vm = new DialogItemTextViewModel(layoutService, loggerFactory)
         {
             Message = dialogPayload.Message,
         };

@@ -7,11 +7,8 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class InstalledPluginsViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class InstalledPluginsViewModel
-    : PageViewModel<InstalledPluginsViewModel, InstalledPluginsViewModelConfig>
+public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel>
 {
     public const string PageId = "plugins.installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
@@ -27,6 +24,7 @@ public class InstalledPluginsViewModel
             DesignTime.CommandService,
             NullPluginManager.Instance,
             DesignTime.LoggerFactory,
+            NullLayoutService.Instance,
             DesignTime.Configuration,
             NullNavigationService.Instance
         )
@@ -44,10 +42,11 @@ public class InstalledPluginsViewModel
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
+        ILayoutService layoutService,
         IConfiguration cfg,
         INavigationService navigationService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, layoutService, loggerFactory)
     {
         _manager = manager;
         _loggerFactory = loggerFactory;
@@ -69,6 +68,7 @@ public class InstalledPluginsViewModel
                 $"{PageId}[{info.Id}]",
                 manager,
                 info,
+                layoutService,
                 loggerFactory
             ))
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
@@ -93,7 +93,13 @@ public class InstalledPluginsViewModel
 
     private async Task InstallManuallyImpl(IProgress<double> progress, CancellationToken cancel)
     {
-        var installer = new PluginInstaller(_cfg, _loggerFactory, _manager, _navigation);
+        var installer = new PluginInstaller(
+            _cfg,
+            LayoutService,
+            _loggerFactory,
+            _manager,
+            _navigation
+        );
         await installer.ShowInstallDialog(progress, cancel);
     }
 

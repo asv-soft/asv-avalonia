@@ -3,9 +3,11 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public abstract class RoutableViewModel(NavigationId id, ILoggerFactory loggerFactory)
-    : DisposableViewModel(id, loggerFactory),
-        IRoutable
+public abstract class RoutableViewModel(
+    NavigationId id,
+    ILayoutService layoutService,
+    ILoggerFactory loggerFactory
+) : DisposableViewModel(id, layoutService, loggerFactory), IRoutable
 {
     private RoutedEventHandler? _routedEventHandler;
 
@@ -94,13 +96,43 @@ public abstract class RoutableViewModel(NavigationId id, ILoggerFactory loggerFa
 
     public abstract IEnumerable<IRoutable> GetRoutableChildren();
 
-    protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    protected virtual async ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e is TreeVisitorEvent visitorEvent)
+        switch (e)
         {
-            visitorEvent.Visit(this);
-        }
+            case TreeVisitorEvent treeVisitorEvent:
+                treeVisitorEvent.Visit(this);
+                break;
 
+            case SaveLayoutEvent:
+            {
+                await HandleSaveLayout();
+                break;
+            }
+
+            case LoadLayoutEvent:
+            {
+                await HandleLoadLayout();
+                break;
+            }
+
+            case SaveLayoutToFileEvent:
+                await HandleSaveLayout();
+                LayoutService.FlushFromMemory(this);
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    protected virtual ValueTask HandleSaveLayout()
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    protected virtual ValueTask HandleLoadLayout()
+    {
         return ValueTask.CompletedTask;
     }
 
