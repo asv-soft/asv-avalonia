@@ -147,18 +147,18 @@ public class SettingsConnectionViewModel
         return viewModel;
     }
 
-    protected override ValueTask HandleSaveLayout()
+    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
     {
         _config.SelectedItemId = SelectedItem?.Id.ToString() ?? string.Empty;
         LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout();
+        return base.HandleSaveLayout(cancel);
     }
 
-    protected override ValueTask HandleLoadLayout()
+    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
     {
         _config = LayoutService.Get<SettingsConnectionViewModelConfig>(this);
         SelectedItem = View.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
-        return base.HandleLoadLayout();
+        return base.HandleLoadLayout(cancel);
     }
 
     public ValueTask Init(ISettingsPage context)

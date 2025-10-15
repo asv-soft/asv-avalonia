@@ -172,22 +172,22 @@ public class SettingsCommandListViewModel : SettingsSubPage
         }
     }
 
-    protected override ValueTask HandleSaveLayout()
+    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
     {
         _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
         _config.CommandSortingType = CommandSortingType.ViewValue.Value;
         _config.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
         LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout();
+        return base.HandleSaveLayout(cancel);
     }
 
-    protected override ValueTask HandleLoadLayout()
+    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
     {
         _config = LayoutService.Get<SettingsCommandListViewModelConfig>(this);
         Search.Text.ModelValue.Value = _config.SearchText;
         CommandSortingType.ModelValue.Value = _config.CommandSortingType;
         SelectedItem.Value = _view.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
-        return base.HandleLoadLayout();
+        return base.HandleLoadLayout(cancel);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

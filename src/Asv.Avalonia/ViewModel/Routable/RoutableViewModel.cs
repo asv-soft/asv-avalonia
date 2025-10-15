@@ -104,34 +104,51 @@ public abstract class RoutableViewModel(
                 treeVisitorEvent.Visit(this);
                 break;
 
-            case SaveLayoutEvent:
+            case SaveLayoutEvent saveLayoutEvent:
             {
+                if (saveLayoutEvent.IsHandled)
+                {
+                    break;
+                }
+
                 await HandleSaveLayout();
                 break;
             }
 
-            case LoadLayoutEvent:
+            case LoadLayoutEvent loadLayoutEvent:
             {
+                if (loadLayoutEvent.IsHandled)
+                {
+                    break;
+                }
+
                 await HandleLoadLayout();
                 break;
             }
 
-            case SaveLayoutToFileEvent:
+            case SaveLayoutToFileEvent saveLayoutToFileEvent:
+            {
+                if (saveLayoutToFileEvent.IsHandled)
+                {
+                    break;
+                }
+
                 await HandleSaveLayout();
                 LayoutService.FlushFromMemory(this);
                 break;
+            }
 
             default:
                 break;
         }
     }
 
-    protected virtual ValueTask HandleSaveLayout()
+    protected virtual ValueTask HandleSaveLayout(CancellationToken cancel = default)
     {
         return ValueTask.CompletedTask;
     }
 
-    protected virtual ValueTask HandleLoadLayout()
+    protected virtual ValueTask HandleLoadLayout(CancellationToken cancel = default)
     {
         return ValueTask.CompletedTask;
     }

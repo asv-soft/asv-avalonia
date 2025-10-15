@@ -309,23 +309,23 @@ public class LogViewerViewModel
         }
     }
 
-    protected override ValueTask HandleSaveLayout()
+    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
     {
         _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
         _config.Skip = Skip.Value;
         _config.Take = Take.Value;
         LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout();
+        return base.HandleSaveLayout(cancel);
     }
 
-    protected override ValueTask HandleLoadLayout()
+    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
     {
         _config = LayoutService.Get<LogViewerViewModelConfig>(this);
         Search.Text.ModelValue.Value = _config.SearchText;
         Skip.Value = _config.Skip;
         Take.Value = _config.Take;
 
-        return base.HandleLoadLayout();
+        return base.HandleLoadLayout(cancel);
     }
 
     public BindableReactiveProperty<int> Skip { get; }

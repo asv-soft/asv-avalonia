@@ -169,14 +169,14 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return null;
     }
 
-    protected override async ValueTask HandleSaveLayout()
+    protected override async ValueTask HandleSaveLayout(CancellationToken cancel = default)
     {
         _config.SelectedNodeId = SelectedNode.Value?.Key.ToString() ?? string.Empty;
         LayoutService.SetInMemory(this, _config);
-        await base.HandleSaveLayout();
+        await base.HandleSaveLayout(cancel);
     }
 
-    protected override ValueTask HandleLoadLayout()
+    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
     {
         _config = LayoutService.Get<TreePageViewModelConfig>(this);
         if (!string.IsNullOrEmpty(_config.SelectedNodeId))
@@ -184,7 +184,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             SetSelectedNodeFromConfig();
         }
 
-        return base.HandleLoadLayout();
+        return base.HandleLoadLayout(cancel);
     }
 
     private void SetSelectedNodeFromConfig()

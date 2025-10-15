@@ -30,6 +30,10 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         _deviceCore.OnDeviceInitialized += AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
         _deviceCore.DisposeItWith(Disposable);
+        Target
+            .Where(wrapper => wrapper is not null)
+            .SubscribeAwait(async (_, ct) => await this.RequestLoadLayout(ct))
+            .DisposeItWith(Disposable);
     }
 
     private void AfterDeviceInitializedBase(
