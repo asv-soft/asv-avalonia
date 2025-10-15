@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
@@ -207,7 +208,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
-    protected override ValueTask HandleSaveLayout()
+    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
     {
         _config.IsTurnedOn = IsTurnedOn.ViewValue.Value;
         _config.Speed = Speed.ViewValue.Value ?? string.Empty;
@@ -221,10 +222,10 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         _config.TagTypeProp = TagTypeProp.ViewValue.Value;
         _config.RttBoxStatusProp = RttBoxStatusProp.ViewValue.Value;
         LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout();
+        return base.HandleSaveLayout(cancel);
     }
 
-    protected override ValueTask HandleLoadLayout()
+    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
     {
         _config = LayoutService.Get<HistoricalControlsPageViewModelConfig>(this);
         IsTurnedOn.ViewValue.Value = _config.IsTurnedOn;
@@ -235,7 +236,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         GeoPointProperty.ModelValue.Value = _config.GeoPointProperty;
         TagTypeProp.ModelValue.Value = _config.TagTypeProp;
         RttBoxStatusProp.ModelValue.Value = _config.RttBoxStatusProp;
-        return base.HandleLoadLayout();
+        return base.HandleLoadLayout(cancel);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

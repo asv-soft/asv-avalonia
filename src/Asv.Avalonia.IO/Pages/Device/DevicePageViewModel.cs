@@ -25,6 +25,10 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
         _deviceCore.DisposeItWith(Disposable);
+        Target
+            .Where(wrapper => wrapper is not null)
+            .SubscribeAwait(async (_, ct) => await this.RequestLoadLayout(ct))
+            .DisposeItWith(Disposable);
     }
 
     protected override void InternalInitArgs(NameValueCollection args)

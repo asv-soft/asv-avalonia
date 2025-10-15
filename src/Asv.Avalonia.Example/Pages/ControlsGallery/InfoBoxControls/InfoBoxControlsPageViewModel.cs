@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
@@ -88,16 +89,16 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
-    protected override ValueTask HandleSaveLayout()
+    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
     {
         _config.Severity = Severity.ViewValue.Value;
         _config.InfoBoxTitle = InfoBoxTitle.ViewValue.Value ?? string.Empty;
         _config.InfoBoxMessage = InfoBoxMessage.ViewValue.Value ?? string.Empty;
         LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout();
+        return base.HandleSaveLayout(cancel);
     }
 
-    protected override ValueTask HandleLoadLayout()
+    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
     {
         _config = LayoutService.Get<InfoBoxControlsPageViewModelConfig>(this);
         Severity.ModelValue.Value = _config.Severity;
@@ -111,7 +112,7 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
             InfoBoxMessage.ModelValue.Value = _config.InfoBoxMessage;
         }
 
-        return base.HandleLoadLayout();
+        return base.HandleLoadLayout(cancel);
     }
 
     public override IExportInfo Source => SystemModule.Instance;
