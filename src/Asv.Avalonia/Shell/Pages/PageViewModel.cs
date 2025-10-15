@@ -64,15 +64,12 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
 
     #region Dispose
 
-    private readonly IDisposable _sub1;
-
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             History.Dispose();
             HasChanges.Dispose();
-            _sub1.Dispose();
         }
 
         base.Dispose(disposing);
