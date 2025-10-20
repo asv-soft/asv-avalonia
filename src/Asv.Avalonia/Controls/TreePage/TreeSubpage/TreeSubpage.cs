@@ -6,12 +6,8 @@ namespace Asv.Avalonia;
 
 public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
 {
-    protected TreeSubpage(
-        NavigationId id,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(id, layoutService, loggerFactory)
+    protected TreeSubpage(NavigationId id, ILoggerFactory loggerFactory)
+        : base(id, loggerFactory)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -35,11 +31,9 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     }
 }
 
-public abstract class TreeSubpage<TContext>(
-    NavigationId id,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : TreeSubpage(id, layoutService, loggerFactory), ITreeSubpage<TContext>
+public abstract class TreeSubpage<TContext>(NavigationId id, ILoggerFactory loggerFactory)
+    : TreeSubpage(id, loggerFactory),
+        ITreeSubpage<TContext>
     where TContext : class, IPage
 {
     public abstract ValueTask Init(TContext context);

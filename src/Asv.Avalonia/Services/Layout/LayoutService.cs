@@ -195,6 +195,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
     {
         if (disposing)
         {
+            _cache.Clear();
             _sub1.Dispose();
             _cfg.Dispose();
             _cfgInMemory.Dispose();

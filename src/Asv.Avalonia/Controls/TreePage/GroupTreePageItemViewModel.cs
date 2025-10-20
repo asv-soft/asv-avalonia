@@ -9,7 +9,7 @@ namespace Asv.Avalonia;
 public class GroupTreePageItemViewModel : TreeSubpage
 {
     public GroupTreePageItemViewModel()
-        : base(DesignTime.Id, NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : base(DesignTime.Id, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         var root = new TreePage(
@@ -67,10 +67,9 @@ public class GroupTreePageItemViewModel : TreeSubpage
     public GroupTreePageItemViewModel(
         ObservableTreeNode<ITreePage, NavigationId> node,
         Func<NavigationId, ValueTask<IRoutable>> navigateCallback,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(NavigationId.GenerateRandom(), layoutService, loggerFactory)
+        : base(NavigationId.GenerateRandom(), loggerFactory)
     {
         Node = node;
         NavigateCommand = new ReactiveCommand<NavigationId>(x => navigateCallback(x)).DisposeItWith(

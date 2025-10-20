@@ -24,7 +24,11 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
     private readonly ILogger<NavigationService> _logger;
 
     [ImportingConstructor]
-    public NavigationService(IShellHost host, ILoggerFactory loggerFactory)
+    public NavigationService(
+        IShellHost host,
+        ILayoutService layoutService,
+        ILoggerFactory loggerFactory
+    )
     {
         ArgumentNullException.ThrowIfNull(host);
         ArgumentNullException.ThrowIfNull(loggerFactory);
@@ -49,7 +53,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
         _host
             .OnShellLoaded.SubscribeAwait(
-                async (sh, ct) => await sh.RequestLoadLayoutForSelfOnly(ct)
+                async (sh, ct) => await sh.RequestLoadLayoutForSelfOnly(layoutService, ct)
             )
             .AddTo(ref dispose);
         _disposeIt = dispose.Build();

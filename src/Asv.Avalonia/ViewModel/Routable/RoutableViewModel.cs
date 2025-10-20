@@ -3,11 +3,9 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public abstract class RoutableViewModel(
-    NavigationId id,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : DisposableViewModel(id, layoutService, loggerFactory), IRoutable
+public abstract class RoutableViewModel(NavigationId id, ILoggerFactory loggerFactory)
+    : DisposableViewModel(id, loggerFactory),
+        IRoutable
 {
     private RoutedEventHandler? _routedEventHandler;
 
@@ -96,60 +94,17 @@ public abstract class RoutableViewModel(
 
     public abstract IEnumerable<IRoutable> GetRoutableChildren();
 
-    protected virtual async ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    protected virtual ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
         switch (e)
         {
             case TreeVisitorEvent treeVisitorEvent:
                 treeVisitorEvent.Visit(this);
                 break;
-
-            case SaveLayoutEvent saveLayoutEvent:
-            {
-                if (saveLayoutEvent.IsHandled)
-                {
-                    break;
-                }
-
-                await HandleSaveLayout();
-                break;
-            }
-
-            case LoadLayoutEvent loadLayoutEvent:
-            {
-                if (loadLayoutEvent.IsHandled)
-                {
-                    break;
-                }
-
-                await HandleLoadLayout();
-                break;
-            }
-
-            case SaveLayoutToFileEvent saveLayoutToFileEvent:
-            {
-                if (saveLayoutToFileEvent.IsHandled)
-                {
-                    break;
-                }
-
-                await HandleSaveLayout();
-                LayoutService.FlushFromMemory(this);
-                break;
-            }
-
             default:
                 break;
         }
-    }
 
-    protected virtual ValueTask HandleSaveLayout(CancellationToken cancel = default)
-    {
-        return ValueTask.CompletedTask;
-    }
-
-    protected virtual ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
         return ValueTask.CompletedTask;
     }
 

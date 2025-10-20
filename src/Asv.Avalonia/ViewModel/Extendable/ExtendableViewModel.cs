@@ -20,12 +20,8 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
     /// <param name="id">A unique identifier for the view model.</param>
     /// <param name="layoutService"> Service used to save layout.</param>
     /// <param name="loggerFactory"> The factory used to create loggers for error handling and debugging.</param>
-    protected ExtendableViewModel(
-        NavigationId id,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(id, layoutService, loggerFactory) { }
+    protected ExtendableViewModel(NavigationId id, ILoggerFactory loggerFactory)
+        : base(id, loggerFactory) { }
 
     /// <summary>
     /// Gets the current instance as <typeparamref name="TSelfInterface"/> or throws an exception if not implemented.

@@ -7,11 +7,10 @@ public abstract class CompositeBindablePropertyBase<T> : RoutableViewModel
 {
     protected CompositeBindablePropertyBase(
         NavigationId id,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent
     )
-        : base(id, layoutService, loggerFactory)
+        : base(id, loggerFactory)
     {
         Parent = parent;
     }
