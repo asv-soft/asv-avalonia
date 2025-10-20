@@ -9,13 +9,8 @@ namespace Asv.Avalonia;
 public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, IPage
     where TContext : class, IPage
 {
-    protected PageViewModel(
-        NavigationId id,
-        ICommandService cmd,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(id, layoutService, loggerFactory)
+    protected PageViewModel(NavigationId id, ICommandService cmd, ILoggerFactory loggerFactory)
+        : base(id, loggerFactory)
     {
         History = cmd.CreateHistory(this);
         Icon = MaterialIconKind.Window;

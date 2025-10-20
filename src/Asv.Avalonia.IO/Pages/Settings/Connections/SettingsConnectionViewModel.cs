@@ -42,7 +42,6 @@ public class SettingsConnectionViewModel
             NullDeviceManager.Instance,
             DesignTime.Navigation,
             NullContainerHost.Instance,
-            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -64,10 +63,9 @@ public class SettingsConnectionViewModel
         IDeviceManager deviceManager,
         INavigationService navigationService,
         IContainerHost containerHost,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(SubPageId, layoutService, loggerFactory)
+        : base(SubPageId, loggerFactory)
     {
         _navigationService = navigationService;
         _containerHost = containerHost;
@@ -147,18 +145,34 @@ public class SettingsConnectionViewModel
         return viewModel;
     }
 
-    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        _config.SelectedItemId = SelectedItem?.Id.ToString() ?? string.Empty;
-        LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout(cancel);
-    }
+        if (e.IsHandled)
+        {
+            return ValueTask.CompletedTask;
+        }
 
-    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
-        _config = LayoutService.Get<SettingsConnectionViewModelConfig>(this);
-        SelectedItem = View.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
-        return base.HandleLoadLayout(cancel);
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg => cfg.SelectedItemId = SelectedItem?.Id.ToString() ?? string.Empty
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<SettingsConnectionViewModelConfig>(
+                    this,
+                    cfg =>
+                        SelectedItem = View.FirstOrDefault(x =>
+                            x.Id.ToString() == cfg.SelectedItemId
+                        )
+                );
+                break;
+        }
+
+        return base.InternalCatchEvent(e);
     }
 
     public ValueTask Init(ISettingsPage context)

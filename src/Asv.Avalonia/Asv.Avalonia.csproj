@@ -95,10 +95,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Events\Layout\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Appearance\SettingsAppearanceView.axaml" />
       <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Units\SettingsUnitsView.axaml" />
     </ItemGroup>

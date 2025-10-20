@@ -16,6 +16,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     where TContext : class, IPage
     where TSubPage : ITreeSubpage<TContext>
 {
+    private readonly ILayoutService _layoutService;
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
     private readonly IContainerHost _container;
     private readonly ILoggerFactory _loggerFactory;
@@ -30,10 +31,11 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, layoutService, loggerFactory)
+        : base(id, cmd, loggerFactory)
     {
         _container = container;
         _loggerFactory = loggerFactory;
+        _layoutService = layoutService;
         Nodes = [];
         Nodes.SetRoutableParent(this).DisposeItWith(Disposable);
         Nodes.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -52,7 +54,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
         _selectedPage
             .WhereNotNull()
-            .SubscribeAwait(async (p, ct) => await p.RequestLoadLayout(ct))
+            .SubscribeAwait(async (p, ct) => await p.RequestLoadLayout(layoutService, ct))
             .DisposeItWith(Disposable);
     }
 
@@ -94,19 +96,14 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             );
         }
 
-        await this.RequestSaveLayout(cancel: cancel);
+        await this.RequestSaveLayout(_layoutService, cancel);
         await Navigate(node.Base.NavigateTo);
     }
 
     protected virtual ITreeSubpage? CreateDefaultPage()
     {
         return SelectedNode.Value != null
-            ? new GroupTreePageItemViewModel(
-                SelectedNode.Value,
-                Navigate,
-                LayoutService,
-                _loggerFactory
-            )
+            ? new GroupTreePageItemViewModel(SelectedNode.Value, Navigate, _loggerFactory)
             : null;
     }
 
@@ -169,22 +166,37 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return null;
     }
 
-    protected override async ValueTask HandleSaveLayout(CancellationToken cancel = default)
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        _config.SelectedNodeId = SelectedNode.Value?.Key.ToString() ?? string.Empty;
-        LayoutService.SetInMemory(this, _config);
-        await base.HandleSaveLayout(cancel);
-    }
-
-    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
-        _config = LayoutService.Get<TreePageViewModelConfig>(this);
-        if (!string.IsNullOrEmpty(_config.SelectedNodeId))
+        if (e.IsHandled)
         {
-            SetSelectedNodeFromConfig();
+            return ValueTask.CompletedTask;
         }
 
-        return base.HandleLoadLayout(cancel);
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg => cfg.SelectedNodeId = SelectedNode.Value?.Key.ToString() ?? string.Empty
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<TreePageViewModelConfig>(
+                    this,
+                    cfg =>
+                    {
+                        if (!string.IsNullOrEmpty(cfg.SelectedNodeId))
+                        {
+                            SetSelectedNodeFromConfig();
+                        }
+                    }
+                );
+                break;
+        }
+
+        return base.InternalCatchEvent(e);
     }
 
     private void SetSelectedNodeFromConfig()
