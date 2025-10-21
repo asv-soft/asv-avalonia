@@ -37,7 +37,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<Enum> _tagTypeProp;
     private readonly ReactiveProperty<Enum> _rttBoxStatusProp;
 
-    private HistoricalControlsPageViewModelConfig _config;
+    private HistoricalControlsPageViewModelConfig? _config;
 
     public HistoricalControlsPageViewModel()
         : this(DesignTime.UnitService, DesignTime.LoggerFactory)
@@ -198,14 +198,14 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e.IsHandled)
-        {
-            return ValueTask.CompletedTask;
-        }
-
         switch (e)
         {
             case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
                 saveLayoutEvent.HandleSaveLayout(
                     this,
                     _config,

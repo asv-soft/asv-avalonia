@@ -25,7 +25,7 @@ public class SettingsConnectionViewModel
     private readonly INavigationService _navigationService;
     private readonly IContainerHost _containerHost;
 
-    private SettingsConnectionViewModelConfig _config;
+    private SettingsConnectionViewModelConfig? _config;
 
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
@@ -147,14 +147,14 @@ public class SettingsConnectionViewModel
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e.IsHandled)
-        {
-            return ValueTask.CompletedTask;
-        }
-
         switch (e)
         {
             case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
                 saveLayoutEvent.HandleSaveLayout(
                     this,
                     _config,

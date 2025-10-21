@@ -32,7 +32,7 @@ public class LogViewerViewModel
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<LogMessageViewModel> _itemsSource = new();
 
-    private LogViewerViewModelConfig _config;
+    private LogViewerViewModelConfig? _config;
 
     public LogViewerViewModel()
         : base(DesignTime.Id, NullCommandService.Instance, DesignTime.LoggerFactory)
@@ -296,14 +296,14 @@ public class LogViewerViewModel
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e.IsHandled)
-        {
-            return ValueTask.CompletedTask;
-        }
-
         switch (e)
         {
             case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
                 saveLayoutEvent.HandleSaveLayout(
                     this,
                     _config,

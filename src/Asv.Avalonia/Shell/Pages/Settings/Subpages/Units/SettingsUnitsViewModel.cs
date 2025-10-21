@@ -18,7 +18,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
     public const string PageId = "units";
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
 
-    private SettingsUnitsViewModelConfig _config;
+    private SettingsUnitsViewModelConfig? _config;
 
     public SettingsUnitsViewModel()
         : this(DesignTime.UnitService, DesignTime.LoggerFactory)
@@ -92,14 +92,14 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e.IsHandled)
-        {
-            return ValueTask.CompletedTask;
-        }
-
         switch (e)
         {
             case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
                 saveLayoutEvent.HandleSaveLayout(
                     this,
                     _config,
