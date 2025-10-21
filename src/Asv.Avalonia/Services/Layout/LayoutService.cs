@@ -113,6 +113,18 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         SetInMemory(key, value);
     }
 
+    public void RemoveFromMemory(IRoutable source)
+    {
+        var key = GetKey(source);
+        RemoveFromMemory(key);
+    }
+
+    public void RemoveFromMemory(StyledElement source)
+    {
+        var key = GetKey(source);
+        RemoveFromMemory(key);
+    }
+
     public void FlushFromMemory(StyledElement source)
     {
         var key = GetKey(source);
@@ -167,6 +179,28 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
     {
         _logger.ZLogTrace($"Set layout for {key} in memory");
         _cfgInMemory.Set(key, value);
+    }
+
+    private void RemoveFromMemory(string key)
+    {
+        try
+        {
+            _cfgInMemory.Remove(key);
+            if (!_cache.TryRemove(key, out _))
+            {
+                _logger.ZLogWarning($"Failed to remove layout config for id = {key} from cache");
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            _logger.ZLogError(
+                $"Failed to remove layout config for id = {key} from {nameof(InMemoryConfiguration)}",
+                e
+            );
+        }
+
+        _logger.LogInformation("Removed layout config for id = {Key}", key);
     }
 
     private void FlushFromMemory(string key)

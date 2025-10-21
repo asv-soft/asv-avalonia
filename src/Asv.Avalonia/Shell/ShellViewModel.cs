@@ -216,8 +216,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                     return;
                 }
 
-                await close.Page.RequestSaveLayout(LayoutService);
-
+                LayoutService.RemoveFromMemory(close.Page);
                 var current = SelectedPage.Value; // TODO: fix page selection
                 var removedIndex = _pages.IndexOf(close.Page);
                 if (removedIndex < 0)
@@ -237,11 +236,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
                 if (current?.Id == close.Page.Id)
                 {
-                    if (SelectedPage.Value is not null)
-                    {
-                        await SelectedPage.Value.RequestSaveLayout(LayoutService);
-                    }
-
                     SelectedPage.Value = null;
 
                     var newIndex = removedIndex < _pages.Count ? removedIndex : 0;

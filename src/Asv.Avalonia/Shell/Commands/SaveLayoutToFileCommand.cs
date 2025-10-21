@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class SaveLayoutCommand : ContextCommand<IRoutable>
+public class SaveLayoutToFileCommand : ContextCommand<IRoutable>
 {
     #region Static
 
@@ -26,7 +26,7 @@ public class SaveLayoutCommand : ContextCommand<IRoutable>
     private readonly ILayoutService _layoutService;
 
     [ImportingConstructor]
-    public SaveLayoutCommand(ILayoutService layoutService)
+    public SaveLayoutToFileCommand(ILayoutService layoutService)
     {
         _layoutService = layoutService;
     }
