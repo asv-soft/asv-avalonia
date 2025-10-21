@@ -5,11 +5,11 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class SaveAllLayoutCommand : ContextCommand<IRoutable>
+public class SaveAllLayoutToFileCommand : ContextCommand<IRoutable>
 {
     #region Static
 
-    public const string Id = $"{SaveLayoutCommand.Id}.all";
+    public const string Id = $"{SaveLayoutToFileCommand.Id}.all";
 
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
@@ -26,7 +26,7 @@ public class SaveAllLayoutCommand : ContextCommand<IRoutable>
     private readonly ILayoutService _layoutService;
 
     [ImportingConstructor]
-    public SaveAllLayoutCommand(ILayoutService layoutService)
+    public SaveAllLayoutToFileCommand(ILayoutService layoutService)
     {
         _layoutService = layoutService;
     }

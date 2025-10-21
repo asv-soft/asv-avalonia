@@ -13,8 +13,8 @@ public sealed class ViewSaveAllMenu : MenuItem
         : base(MenuId, "Save All", loggerFactory, ViewMenu.MenuId)
     {
         Order = 1;
-        Icon = SaveAllLayoutCommand.StaticInfo.Icon;
-        HotKey = cmd.GetHotKey(SaveAllLayoutCommand.Id)?.Gesture;
-        Command = new BindableAsyncCommand(SaveAllLayoutCommand.Id, this);
+        Icon = SaveAllLayoutToFileCommand.StaticInfo.Icon;
+        HotKey = cmd.GetHotKey(SaveAllLayoutToFileCommand.Id)?.Gesture;
+        Command = new BindableAsyncCommand(SaveAllLayoutToFileCommand.Id, this);
     }
 }

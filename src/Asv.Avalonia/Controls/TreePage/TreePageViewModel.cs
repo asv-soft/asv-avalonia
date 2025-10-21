@@ -175,6 +175,20 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
         switch (e)
         {
+            case PageCloseRequestedEvent close:
+            {
+                if (Id != close.Page.Id)
+                {
+                    break;
+                }
+
+                foreach (var node in Nodes)
+                {
+                    _layoutService.RemoveFromMemory(node);
+                }
+
+                break;
+            }
             case SaveLayoutEvent saveLayoutEvent:
                 saveLayoutEvent.HandleSaveLayout(
                     this,

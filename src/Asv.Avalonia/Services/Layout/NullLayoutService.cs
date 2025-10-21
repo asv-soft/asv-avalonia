@@ -31,6 +31,11 @@ public sealed class NullLayoutService : ILayoutService
         return;
     }
 
+    public void RemoveFromMemory(StyledElement source)
+    {
+        return;
+    }
+
     public void FlushFromMemory()
     {
         return;
@@ -44,6 +49,11 @@ public sealed class NullLayoutService : ILayoutService
 
     public void SetInMemory<TPocoType>(StyledElement source, TPocoType value)
         where TPocoType : class, new()
+    {
+        return;
+    }
+
+    public void RemoveFromMemory(IRoutable source)
     {
         return;
     }
