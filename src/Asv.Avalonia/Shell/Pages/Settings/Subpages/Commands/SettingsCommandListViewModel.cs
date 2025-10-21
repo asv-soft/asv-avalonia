@@ -24,7 +24,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
     private readonly ISynchronizedView<ICommandInfo, CommandViewModel> _view;
     private readonly ReactiveProperty<Enum> _commandSortingType;
 
-    private SettingsCommandListViewModelConfig _config;
+    private SettingsCommandListViewModelConfig? _config;
 
     public SettingsCommandListViewModel()
         : this(
@@ -169,14 +169,14 @@ public class SettingsCommandListViewModel : SettingsSubPage
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e.IsHandled)
-        {
-            return ValueTask.CompletedTask;
-        }
-
         switch (e)
         {
             case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
                 saveLayoutEvent.HandleSaveLayout(
                     this,
                     _config,

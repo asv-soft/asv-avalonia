@@ -22,7 +22,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
-    private TreePageViewModelConfig _config;
+    private TreePageViewModelConfig? _config;
 
     protected TreePageViewModel(
         NavigationId id,
@@ -122,7 +122,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
 
         var newPage = await CreateSubPage(id) ?? CreateDefaultPage();
-        if (newPage == null)
+        if (newPage is null)
         {
             return this;
         }
@@ -168,11 +168,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e.IsHandled)
-        {
-            return ValueTask.CompletedTask;
-        }
-
         switch (e)
         {
             case PageCloseRequestedEvent close:
@@ -190,6 +185,11 @@ public abstract class TreePageViewModel<TContext, TSubPage>
                 break;
             }
             case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
                 saveLayoutEvent.HandleSaveLayout(
                     this,
                     _config,
@@ -207,6 +207,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
                         }
                     }
                 );
+
                 break;
         }
 

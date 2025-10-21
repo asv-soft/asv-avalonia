@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
@@ -28,7 +27,7 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<string?> _infoBoxMessage;
     private readonly ReactiveProperty<string?> _infoBoxTitle;
 
-    private InfoBoxControlsPageViewModelConfig _config;
+    private InfoBoxControlsPageViewModelConfig? _config;
 
     public InfoBoxControlsPageViewModel()
         : this(NullLoggerFactory.Instance)
@@ -88,14 +87,14 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        if (e.IsHandled)
-        {
-            return ValueTask.CompletedTask;
-        }
-
         switch (e)
         {
             case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
                 saveLayoutEvent.HandleSaveLayout(
                     this,
                     _config,
