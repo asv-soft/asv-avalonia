@@ -7,10 +7,8 @@ namespace Asv.Avalonia;
 
 [ExportExtensionFor<IHomePage>]
 [method: ImportingConstructor]
-public sealed class HomePageLogViewerExtension(
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : IExtensionFor<IHomePage>
+public sealed class HomePageLogViewerExtension(ILoggerFactory loggerFactory)
+    : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, R3.CompositeDisposable contextDispose)
     {
@@ -23,7 +21,6 @@ public sealed class HomePageLogViewerExtension(
         context.Tools.Add(
             OpenLogViewerCommand
                 .StaticInfo.CreateAction(
-                    layoutService,
                     loggerFactory,
                     RS.OpenLogViewerCommand_Action_Title,
                     RS.OpenLogViewerCommand_Action_Description

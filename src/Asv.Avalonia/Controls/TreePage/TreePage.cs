@@ -12,10 +12,9 @@ public class TreePage : HeadlinedViewModel, ITreePage
         MaterialIconKind? icon,
         NavigationId navigateTo,
         NavigationId parentId,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(id, layoutService, loggerFactory)
+        : base(id, loggerFactory)
     {
         NavigateTo = navigateTo;
         ParentId = parentId;

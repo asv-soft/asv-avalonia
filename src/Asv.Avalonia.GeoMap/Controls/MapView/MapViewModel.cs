@@ -21,14 +21,10 @@ public interface IMapWidget : IHeadlinedViewModel
 public class MapViewModel : RoutableViewModel, IMap
 {
     public MapViewModel()
-        : this(DesignTime.Id, NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : this(DesignTime.Id, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
-        var drone = new MapAnchor<IMapAnchor>(
-            DesignTime.Id,
-            NullLayoutService.Instance,
-            DesignTime.LoggerFactory
-        )
+        var drone = new MapAnchor<IMapAnchor>(DesignTime.Id, DesignTime.LoggerFactory)
         {
             Icon = MaterialIconKind.Navigation,
         };
@@ -45,8 +41,8 @@ public class MapViewModel : RoutableViewModel, IMap
         );
     }
 
-    public MapViewModel(NavigationId id, ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(id, layoutService, loggerFactory)
+    public MapViewModel(NavigationId id, ILoggerFactory loggerFactory)
+        : base(id, loggerFactory)
     {
         Anchors = new ObservableList<IMapAnchor>();
         Anchors.SetRoutableParent(this).DisposeItWith(Disposable);

@@ -16,11 +16,10 @@ public class EndpointViewModel : HeadlinedViewModel
 
     private EndpointViewModel(
         NavigationId id,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base(id, layoutService, loggerFactory)
+        : base(id, loggerFactory)
     {
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
@@ -31,7 +30,7 @@ public class EndpointViewModel : HeadlinedViewModel
             .ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
         TagsSource.Add(
-            RxTag = new TagViewModel("rx", layoutService, loggerFactory)
+            RxTag = new TagViewModel("rx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 TagType = TagType.Success,
@@ -39,7 +38,7 @@ public class EndpointViewModel : HeadlinedViewModel
             }
         );
         TagsSource.Add(
-            TxTag = new TagViewModel("tx", layoutService, loggerFactory)
+            TxTag = new TagViewModel("tx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 TagType = TagType.Success,
@@ -49,12 +48,7 @@ public class EndpointViewModel : HeadlinedViewModel
     }
 
     internal EndpointViewModel()
-        : this(
-            DesignTime.Id,
-            NullLayoutService.Instance,
-            DesignTime.LoggerFactory,
-            TimeProvider.System
-        )
+        : this(DesignTime.Id, DesignTime.LoggerFactory, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         Header = "127.0.0.1:7574";
@@ -62,11 +56,10 @@ public class EndpointViewModel : HeadlinedViewModel
 
     public EndpointViewModel(
         IProtocolEndpoint protocolEndpoint,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : this(protocolEndpoint.Id, layoutService, loggerFactory, timeProvider)
+        : this(protocolEndpoint.Id, loggerFactory, timeProvider)
     {
         _protocolEndpoint = protocolEndpoint;
         Header = protocolEndpoint.Id;

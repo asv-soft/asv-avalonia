@@ -25,15 +25,12 @@ public sealed class YesOrNoDialogPayload
 [ExportDialogPrefab]
 [Shared]
 [method: ImportingConstructor]
-public sealed class YesOrNoDialogPrefab(
-    INavigationService nav,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : IDialogPrefab<YesOrNoDialogPayload, bool>
+public sealed class YesOrNoDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
+    : IDialogPrefab<YesOrNoDialogPayload, bool>
 {
     public async Task<bool> ShowDialogAsync(YesOrNoDialogPayload dialogPayload)
     {
-        using var vm = new DialogItemTextViewModel(layoutService, loggerFactory)
+        using var vm = new DialogItemTextViewModel(loggerFactory)
         {
             Message = dialogPayload.Message,
         };

@@ -38,11 +38,10 @@ public class TcpPortViewModel : PortViewModel
     [ImportingConstructor]
     public TcpPortViewModel(
         IConfiguration cfgSvc,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{TcpClientProtocolPort.Scheme}-editor", layoutService, loggerFactory, timeProvider)
+        : base($"{TcpClientProtocolPort.Scheme}-editor", loggerFactory, timeProvider)
     {
         _cfgSvc = cfgSvc;
         Icon = DefaultIcon;

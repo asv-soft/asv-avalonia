@@ -23,12 +23,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
     private readonly IncrementalRateCounter _txPackets;
 
     public PortViewModel()
-        : this(
-            DesignTime.Id,
-            NullLayoutService.Instance,
-            DesignTime.LoggerFactory,
-            TimeProvider.System
-        )
+        : this(DesignTime.Id, DesignTime.LoggerFactory, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         InitArgs(Guid.NewGuid().ToString());
@@ -49,28 +44,20 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
             })
             .DisposeItWith(Disposable);
         TagsSource.Add(
-            new TagViewModel("ip", NullLayoutService.Instance, DesignTime.LoggerFactory)
-            {
-                Key = "ip",
-                Value = "127.0.0.1",
-            }
+            new TagViewModel("ip", DesignTime.LoggerFactory) { Key = "ip", Value = "127.0.0.1" }
         );
         TagsSource.Add(
-            new TagViewModel("port", NullLayoutService.Instance, DesignTime.LoggerFactory)
-            {
-                Key = "port",
-                Value = "7341",
-            }
+            new TagViewModel("port", DesignTime.LoggerFactory) { Key = "port", Value = "7341" }
         );
         TagsSource.Add(
-            new TagViewModel("rx", NullLayoutService.Instance, DesignTime.LoggerFactory)
+            new TagViewModel("rx", DesignTime.LoggerFactory)
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 Value = "12kb",
             }
         );
         TagsSource.Add(
-            new TagViewModel("tx", NullLayoutService.Instance, DesignTime.LoggerFactory)
+            new TagViewModel("tx", DesignTime.LoggerFactory)
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 Value = "38kb",
@@ -86,13 +73,8 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         EndpointsView = source.ToNotifyCollectionChangedSlim();
     }
 
-    public PortViewModel(
-        NavigationId id,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory,
-        TimeProvider timeProvider
-    )
-        : base(id, layoutService, loggerFactory)
+    public PortViewModel(NavigationId id, ILoggerFactory loggerFactory, TimeProvider timeProvider)
+        : base(id, loggerFactory)
     {
         LoggerFactory = loggerFactory;
         TimeProvider = timeProvider;
@@ -128,15 +110,11 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         RemovePortCommand = new ReactiveCommand(RemovePort).DisposeItWith(Disposable);
 
         TagsSource.Add(
-            TypeTag = new TagViewModel("type", layoutService, loggerFactory)
-            {
-                TagType = TagType.Info,
-                Key = null,
-            }
+            TypeTag = new TagViewModel("type", loggerFactory) { TagType = TagType.Info, Key = null }
         );
 
         TagsSource.Add(
-            ConfigTag = new TagViewModel("cfg", layoutService, loggerFactory)
+            ConfigTag = new TagViewModel("cfg", loggerFactory)
             {
                 Icon = null,
                 TagType = TagType.Success,
@@ -144,7 +122,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
             }
         );
         TagsSource.Add(
-            RxTag = new TagViewModel("rx", layoutService, loggerFactory)
+            RxTag = new TagViewModel("rx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 TagType = TagType.Success,
@@ -152,7 +130,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
             }
         );
         TagsSource.Add(
-            TxTag = new TagViewModel("tx", layoutService, loggerFactory)
+            TxTag = new TagViewModel("tx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 TagType = TagType.Success,
@@ -166,7 +144,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
 
     protected virtual EndpointViewModel EndpointFactory(IProtocolEndpoint arg)
     {
-        return new EndpointViewModel(arg, LayoutService, LoggerFactory, TimeProvider);
+        return new EndpointViewModel(arg, LoggerFactory, TimeProvider);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<EndpointViewModel> EndpointsView { get; }

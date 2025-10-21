@@ -57,14 +57,13 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
 
     public DigitRttBoxViewModel(
         NavigationId id,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IUnitService units,
         string unitId,
         Observable<double> value,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, layoutService, loggerFactory, networkErrorTimeout)
+        : base(id, loggerFactory, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         MeasureUnit =

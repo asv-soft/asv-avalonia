@@ -32,14 +32,16 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         IConfiguration cfg,
         string id
     )
-        : base(id, layoutService, loggerFactory)
+        : base(id, loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(layoutService);
         ArgumentNullException.ThrowIfNull(cfg);
 
         Cfg = cfg;
         _container = ioc;
+        LayoutService = layoutService;
         _cmd = ioc.GetExport<ICommandService>();
         Navigation = ioc.GetExport<INavigationService>();
         _pages = new ObservableList<IPage>();
@@ -54,7 +56,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         MainMenu.DisposeRemovedItems().DisposeItWith(Disposable);
         SelectedPage
             .WhereNotNull()
-            .SubscribeAwait(async (page, ct) => await page.RequestLoadLayout(ct))
+            .SubscribeAwait(async (page, ct) => await page.RequestLoadLayout(layoutService, ct))
             .DisposeItWith(Disposable);
 
         StatusItems = [];
@@ -162,7 +164,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     public IReadOnlyObservableList<IPage> Pages => _pages;
     public BindableReactiveProperty<IPage?> SelectedPage { get; }
     public NotifyCollectionChangedSynchronizedViewList<IPage> PagesView { get; }
-    public IConfiguration Cfg { get; }
 
     #endregion
 
@@ -215,7 +216,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                     return;
                 }
 
-                await close.Page.RequestSaveLayout();
+                await close.Page.RequestSaveLayout(LayoutService);
 
                 var current = SelectedPage.Value; // TODO: fix page selection
                 var removedIndex = _pages.IndexOf(close.Page);
@@ -238,7 +239,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 {
                     if (SelectedPage.Value is not null)
                     {
-                        await SelectedPage.Value.RequestSaveLayout();
+                        await SelectedPage.Value.RequestSaveLayout(LayoutService);
                     }
 
                     SelectedPage.Value = null;
@@ -254,16 +255,23 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
                 break;
             }
-            case SaveLayoutToFileGlobalEvent:
+            case SaveLayoutToFileGlobalEvent saveLayoutToFileGlobalEvent:
                 if (SelectedPage.Value is not null)
                 {
-                    await SelectedPage.Value.RequestSaveLayout();
+                    await SelectedPage.Value.RequestSaveLayout(
+                        saveLayoutToFileGlobalEvent.LayoutService
+                    );
                 }
 
-                LayoutService.FlushFromMemory();
+                saveLayoutToFileGlobalEvent.LayoutService.FlushFromMemory();
                 break;
-            case LoadLayoutSelfEvent:
-                await LoadLayout(CancellationToken.None);
+            case LoadLayoutEvent loadLayoutEvent:
+                if (loadLayoutEvent.Source is not IShell)
+                {
+                    return;
+                }
+
+                await InternalLoadLayoutEventHandler(loadLayoutEvent);
                 break;
 
             default:
@@ -272,7 +280,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         }
     }
 
-    private async ValueTask LoadLayout(CancellationToken cancellationToken)
+    private async ValueTask InternalLoadLayoutEventHandler(
+        LoadLayoutEvent loadLayoutEvent,
+        CancellationToken cancellationToken = default
+    )
     {
         if (_isLoaded)
         {
@@ -281,7 +292,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
         try
         {
-            _config = LayoutService.Get<ShellViewModelConfig>(this);
+            _config = loadLayoutEvent.LayoutService.Get<ShellViewModelConfig>(this);
             Logger.ZLogInformation($"Try to load layout: {string.Join(",", _config.Pages)}");
             foreach (var page in _config.Pages)
             {
@@ -307,9 +318,13 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             _sub2?.Dispose();
             _sub3?.Dispose();
 
-            _sub1 = Pages.ObserveAdd(CancellationToken.None).Subscribe(_ => SaveLayoutToFile());
-            _sub2 = Pages.ObserveRemove(CancellationToken.None).Subscribe(_ => SaveLayoutToFile());
-            _sub3 = SelectedPage.Subscribe(_ => SaveLayoutToFile());
+            _sub1 = Pages
+                .ObserveAdd(CancellationToken.None)
+                .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
+            _sub2 = Pages
+                .ObserveRemove(CancellationToken.None)
+                .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
+            _sub3 = SelectedPage.Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
             if (Pages.Count == 0)
             {
                 await this.NavigateByPath(new NavigationPath(HomePageViewModel.PageId));
@@ -317,7 +332,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         }
     }
 
-    private void SaveLayoutToFile()
+    private void SaveLayoutToFile(ILayoutService layoutService)
     {
         if (Interlocked.CompareExchange(ref _saveLayoutInProgress, 1, 0) != 0)
         {
@@ -331,8 +346,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             _config.SelectedPageId = SelectedPage.Value?.Id.ToString();
 
             Logger.ZLogTrace($"Save layout: {string.Join(",", _config.Pages)}");
-            LayoutService.SetInMemory(this, _config);
-            LayoutService.FlushFromMemory(this);
+            layoutService.SetInMemory(this, _config);
+            layoutService.FlushFromMemory(this);
         }
         catch (Exception e)
         {
@@ -347,8 +362,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
     #endregion
 
-
     public virtual INavigationService Navigation { get; }
+
+    public IConfiguration Cfg { get; }
+    public ILayoutService LayoutService { get; }
 
     public ShellErrorState ErrorState
     {

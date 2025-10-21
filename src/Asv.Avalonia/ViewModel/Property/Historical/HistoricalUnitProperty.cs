@@ -9,12 +9,11 @@ public sealed class HistoricalUnitProperty : BindableUnitProperty, IHistoricalPr
         string id,
         ReactiveProperty<double> modelValue,
         IUnit unit,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent,
         string? format = null
     )
-        : base(id, modelValue, unit, layoutService, loggerFactory, parent, format) { }
+        : base(id, modelValue, unit, loggerFactory, parent, format) { }
 
     protected override async ValueTask ChangeModelValue(double value, CancellationToken cancel)
     {

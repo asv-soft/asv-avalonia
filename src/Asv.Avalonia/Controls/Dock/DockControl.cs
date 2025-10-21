@@ -194,7 +194,12 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         {
             if (SelectedItem is IPage current && current.Id != tab.Content?.Id)
             {
-                current.RequestSaveLayout().SafeFireAndForget();
+                if (LayoutService is null)
+                {
+                    throw new Exception($"{nameof(LayoutService)} is null");
+                }
+
+                current.RequestSaveLayout(LayoutService).SafeFireAndForget();
                 _config.SelectedDockTabItemId = tab.Id;
                 Configuration?.Set(_config);
             }

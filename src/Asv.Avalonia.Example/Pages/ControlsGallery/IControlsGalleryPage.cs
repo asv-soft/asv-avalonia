@@ -12,11 +12,9 @@ public interface IControlsGalleryPage : IPage
 
 public interface IControlsGallerySubPage : ITreeSubpage<IControlsGalleryPage> { }
 
-public abstract class ControlsGallerySubPage(
-    NavigationId id,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : TreeSubpage<IControlsGalleryPage>(id, layoutService, loggerFactory), IControlsGallerySubPage
+public abstract class ControlsGallerySubPage(NavigationId id, ILoggerFactory loggerFactory)
+    : TreeSubpage<IControlsGalleryPage>(id, loggerFactory),
+        IControlsGallerySubPage
 {
     public override ValueTask Init(IControlsGalleryPage context) => ValueTask.CompletedTask;
 

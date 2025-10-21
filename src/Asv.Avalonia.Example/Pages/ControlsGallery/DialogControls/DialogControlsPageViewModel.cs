@@ -32,24 +32,18 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<GeoPoint> _geoPointProperty;
 
     public DialogControlsPageViewModel()
-        : this(
-            NullLayoutService.Instance,
-            NullLoggerFactory.Instance,
-            NullDialogService.Instance,
-            NullUnitService.Instance
-        )
+        : this(NullLoggerFactory.Instance, NullDialogService.Instance, NullUnitService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
     public DialogControlsPageViewModel(
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IUnitService unitService
     )
-        : base(PageId, layoutService, loggerFactory)
+        : base(PageId, loggerFactory)
     {
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
         _saveFileDialog = dialogService.GetDialogPrefab<SaveFileDialogDesktopPrefab>();
@@ -74,7 +68,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             latUnit,
             lonUnit,
             altUnit,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);

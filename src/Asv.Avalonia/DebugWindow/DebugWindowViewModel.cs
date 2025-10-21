@@ -28,14 +28,10 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
         ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(ModelId, layoutService, loggerFactory)
+        : base(ModelId, loggerFactory)
     {
         SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty();
-        _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(
-            x,
-            layoutService,
-            loggerFactory
-        ));
+        _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x, loggerFactory));
         Pages = _pageView.ToNotifyCollectionChanged();
         BackwardStack = nav.BackwardStack.ToNotifyCollectionChanged();
         ForwardStack = nav.ForwardStack.ToNotifyCollectionChanged();
@@ -60,11 +56,8 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
     }
 }
 
-public class DebugPageViewModel(
-    IPage page,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : ViewModelBase(page.Id, layoutService, loggerFactory)
+public class DebugPageViewModel(IPage page, ILoggerFactory loggerFactory)
+    : ViewModelBase(page.Id, loggerFactory)
 {
     public NotifyCollectionChangedSynchronizedViewList<CommandSnapshot> RedoStack { get; } =
         page.History.RedoStack.ToNotifyCollectionChanged();

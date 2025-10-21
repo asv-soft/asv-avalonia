@@ -239,6 +239,7 @@
             BorderThickness="1"
             x:Name="DockControl"
             Configuration="{CompiledBinding Cfg}"
+            LayoutService="{CompiledBinding LayoutService}"
             Padding="100,0,210,0"
             DisabledHitTestHeight="40"
             Margin="0,-33,0,0"

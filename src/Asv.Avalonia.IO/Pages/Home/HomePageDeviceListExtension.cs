@@ -11,21 +11,14 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 {
     private readonly IDeviceManager _svc;
     private readonly ILoggerFactory _loggerFactory;
-    private readonly ILayoutService _layoutService;
 
     [ImportingConstructor]
-    public HomePageDeviceListExtension(
-        IDeviceManager svc,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
+    public HomePageDeviceListExtension(IDeviceManager svc, ILoggerFactory loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(svc);
-        ArgumentNullException.ThrowIfNull(layoutService);
         ArgumentNullException.ThrowIfNull(loggerFactory);
 
         _svc = svc;
-        _layoutService = layoutService;
         _loggerFactory = loggerFactory;
     }
 
@@ -42,6 +35,6 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 
     private HomePageDeviceItem TryAdd(IClientDevice device)
     {
-        return new HomePageDeviceItem(device, _svc, _layoutService, _loggerFactory);
+        return new HomePageDeviceItem(device, _svc, _loggerFactory);
     }
 }

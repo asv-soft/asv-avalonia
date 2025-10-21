@@ -6,13 +6,12 @@ public static class ActionViewModelMixin
 {
     public static IActionViewModel CreateAction(
         this ICommandInfo info,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         string? customTitle = null,
         string? customDescription = null
     )
     {
-        var model = new ActionViewModel(info.Id, layoutService, loggerFactory)
+        var model = new ActionViewModel(info.Id, loggerFactory)
         {
             Icon = info.Icon,
             Header = customTitle ?? info.Name,

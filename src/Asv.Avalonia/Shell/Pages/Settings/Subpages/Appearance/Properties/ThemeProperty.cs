@@ -13,18 +13,14 @@ public class ThemeProperty : RoutableViewModel
     public const string ViewModelId = "theme.current";
 
     public ThemeProperty()
-        : this(DesignTime.ThemeService, NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : this(DesignTime.ThemeService, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public ThemeProperty(
-        IThemeService svc,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(ViewModelId, layoutService, loggerFactory)
+    public ThemeProperty(IThemeService svc, ILoggerFactory loggerFactory)
+        : base(ViewModelId, loggerFactory)
     {
         _svc = svc;
         SelectedItem = new BindableReactiveProperty<IThemeInfo>(svc.CurrentTheme.CurrentValue);

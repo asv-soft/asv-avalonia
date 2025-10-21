@@ -19,15 +19,20 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(id, cmd, layoutService, loggerFactory)
+        : base(id, cmd, loggerFactory)
     {
+        ArgumentNullException.ThrowIfNull(devices);
+        ArgumentNullException.ThrowIfNull(layoutService);
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(cmd);
+
         _deviceCore = new DevicePageCore(devices, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
         _deviceCore.DisposeItWith(Disposable);
         Target
             .Where(wrapper => wrapper is not null)
-            .SubscribeAwait(async (_, ct) => await this.RequestLoadLayout(ct))
+            .SubscribeAwait(async (_, ct) => await this.RequestLoadLayout(layoutService, ct))
             .DisposeItWith(Disposable);
     }
 

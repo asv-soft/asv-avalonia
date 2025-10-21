@@ -24,7 +24,6 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
             DesignTime.CommandService,
             NullPluginManager.Instance,
             DesignTime.LoggerFactory,
-            NullLayoutService.Instance,
             DesignTime.Configuration,
             NullNavigationService.Instance
         )
@@ -42,11 +41,10 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
-        ILayoutService layoutService,
         IConfiguration cfg,
         INavigationService navigationService
     )
-        : base(PageId, cmd, layoutService, loggerFactory)
+        : base(PageId, cmd, loggerFactory)
     {
         _manager = manager;
         _loggerFactory = loggerFactory;
@@ -68,7 +66,6 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
                 $"{PageId}[{info.Id}]",
                 manager,
                 info,
-                layoutService,
                 loggerFactory
             ))
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
@@ -93,13 +90,7 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
 
     private async Task InstallManuallyImpl(IProgress<double> progress, CancellationToken cancel)
     {
-        var installer = new PluginInstaller(
-            _cfg,
-            LayoutService,
-            _loggerFactory,
-            _manager,
-            _navigation
-        );
+        var installer = new PluginInstaller(_cfg, _loggerFactory, _manager, _navigation);
         await installer.ShowInstallDialog(progress, cancel);
     }
 

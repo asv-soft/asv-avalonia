@@ -21,22 +21,18 @@ public class SettingsUnitsViewModel : SettingsSubPage
     private SettingsUnitsViewModelConfig _config;
 
     public SettingsUnitsViewModel()
-        : this(DesignTime.UnitService, NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public SettingsUnitsViewModel(
-        IUnitService unit,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(PageId, layoutService, loggerFactory)
+    public SettingsUnitsViewModel(IUnitService unit, ILoggerFactory loggerFactory)
+        : base(PageId, loggerFactory)
     {
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList
-            .CreateView(x => new MeasureUnitViewModel(x, layoutService, loggerFactory))
+            .CreateView(x => new MeasureUnitViewModel(x, loggerFactory))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
@@ -46,7 +42,6 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
         Search = new SearchBoxViewModel(
             nameof(Search),
-            layoutService,
             loggerFactory,
             UpdateImpl,
             TimeSpan.FromMilliseconds(500)
@@ -95,26 +90,46 @@ public class SettingsUnitsViewModel : SettingsSubPage
         }
     }
 
-    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
-        _config.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
-        LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout(cancel);
-    }
-
-    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
-        _config = LayoutService.Get<SettingsUnitsViewModelConfig>(this);
-        Search.Text.ModelValue.Value = _config.SearchText;
-        var selected = _view.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
-
-        if (selected is not null)
+        if (e.IsHandled)
         {
-            SelectedItem.Value = selected;
+            return ValueTask.CompletedTask;
         }
 
-        return base.HandleLoadLayout(cancel);
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg =>
+                    {
+                        cfg.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+                        cfg.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+                    }
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<SettingsUnitsViewModelConfig>(
+                    this,
+                    cfg =>
+                    {
+                        Search.Text.ModelValue.Value = cfg.SearchText;
+                        var selected = _view.FirstOrDefault(x =>
+                            x.Id.ToString() == cfg.SelectedItemId
+                        );
+
+                        if (selected is not null)
+                        {
+                            SelectedItem.Value = selected;
+                        }
+                    }
+                );
+                break;
+        }
+
+        return base.InternalCatchEvent(e);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

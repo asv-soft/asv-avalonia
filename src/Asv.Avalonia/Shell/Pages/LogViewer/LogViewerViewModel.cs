@@ -35,12 +35,7 @@ public class LogViewerViewModel
     private LogViewerViewModelConfig _config;
 
     public LogViewerViewModel()
-        : base(
-            DesignTime.Id,
-            NullCommandService.Instance,
-            NullLayoutService.Instance,
-            DesignTime.LoggerFactory
-        )
+        : base(DesignTime.Id, NullCommandService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         Title = RS.LogViewerViewModel_Title;
@@ -59,7 +54,6 @@ public class LogViewerViewModel
                     "Design time log message",
                     "This is a design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory,
                 this
             )
@@ -73,7 +67,6 @@ public class LogViewerViewModel
                     "Design time log message 2",
                     "This is another design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory,
                 this
             )
@@ -87,7 +80,6 @@ public class LogViewerViewModel
                     "Design time log message 3",
                     "This is yet another design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory,
                 this
             )
@@ -101,7 +93,6 @@ public class LogViewerViewModel
                     "Design time log message 4",
                     "This is a debug log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory,
                 this
             )
@@ -115,7 +106,6 @@ public class LogViewerViewModel
                     "Design time log message 5",
                     "This is a critical log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory,
                 this
             )
@@ -129,7 +119,6 @@ public class LogViewerViewModel
                     "Design time log message 6",
                     "This is a trace log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory,
                 this
             )
@@ -143,7 +132,6 @@ public class LogViewerViewModel
                     "Design time log message 7",
                     "This is a log message with no specific level for the Log Viewer. It will not be shown in the actual application."
                 ),
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory,
                 this
             )
@@ -155,10 +143,9 @@ public class LogViewerViewModel
         ICommandService cmd,
         ILogReaderService logReaderService,
         ISearchService search,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, layoutService, loggerFactory)
+        : base(PageId, cmd, loggerFactory)
     {
         _logReaderService = logReaderService;
         _search = search;
@@ -177,7 +164,6 @@ public class LogViewerViewModel
 
         Search = new SearchBoxViewModel(
             nameof(Search),
-            layoutService,
             loggerFactory,
             UpdateImpl,
             TimeSpan.FromMilliseconds(500)
@@ -237,7 +223,6 @@ public class LogViewerViewModel
                         logMessage,
                         _search,
                         text,
-                        LayoutService,
                         _loggerFactory,
                         this,
                         out var vm
@@ -309,23 +294,41 @@ public class LogViewerViewModel
         }
     }
 
-    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
-        _config.Skip = Skip.Value;
-        _config.Take = Take.Value;
-        LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout(cancel);
-    }
+        if (e.IsHandled)
+        {
+            return ValueTask.CompletedTask;
+        }
 
-    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
-        _config = LayoutService.Get<LogViewerViewModelConfig>(this);
-        Search.Text.ModelValue.Value = _config.SearchText;
-        Skip.Value = _config.Skip;
-        Take.Value = _config.Take;
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg =>
+                    {
+                        cfg.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+                        cfg.Skip = Skip.Value;
+                        cfg.Take = Take.Value;
+                    }
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<LogViewerViewModelConfig>(
+                    this,
+                    cfg =>
+                    {
+                        Search.Text.ModelValue.Value = cfg.SearchText;
+                        Skip.Value = cfg.Skip;
+                        Take.Value = cfg.Take;
+                    }
+                );
+                break;
+        }
 
-        return base.HandleLoadLayout(cancel);
+        return base.InternalCatchEvent(e);
     }
 
     public BindableReactiveProperty<int> Skip { get; }

@@ -11,7 +11,7 @@ public class DialogItemTextBoxViewModel : DialogViewModelBase
     public const string DialogId = $"{BaseId}.item.textbox";
 
     public DialogItemTextBoxViewModel()
-        : this(NullLayoutService.Instance, NullLoggerFactory.Instance)
+        : this(NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         if (Design.IsDesignMode)
@@ -20,8 +20,8 @@ public class DialogItemTextBoxViewModel : DialogViewModelBase
         }
     }
 
-    public DialogItemTextBoxViewModel(ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(DialogId, layoutService, loggerFactory)
+    public DialogItemTextBoxViewModel(ILoggerFactory loggerFactory)
+        : base(DialogId, loggerFactory)
     {
         Input = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
     }

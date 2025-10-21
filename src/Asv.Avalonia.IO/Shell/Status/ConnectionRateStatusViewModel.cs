@@ -26,12 +26,7 @@ public class ConnectionRateStatusViewModel : StatusItem
     private readonly IncrementalRateCounter _txPackets;
 
     public ConnectionRateStatusViewModel()
-        : this(
-            NullLayoutService.Instance,
-            NullLoggerFactory.Instance,
-            TimeProvider.System,
-            DesignTime.Navigation
-        )
+        : this(NullLoggerFactory.Instance, TimeProvider.System, DesignTime.Navigation)
     {
         DesignTime.ThrowIfNotDesignMode();
         var stat = new Statistic();
@@ -58,12 +53,11 @@ public class ConnectionRateStatusViewModel : StatusItem
     [ImportingConstructor]
     public ConnectionRateStatusViewModel(
         IDeviceManager deviceManager,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider,
         INavigationService nav
     )
-        : this(layoutService, loggerFactory, timeProvider, nav)
+        : this(loggerFactory, timeProvider, nav)
     {
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
@@ -75,12 +69,11 @@ public class ConnectionRateStatusViewModel : StatusItem
     }
 
     private ConnectionRateStatusViewModel(
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider,
         INavigationService nav
     )
-        : base(NavId, layoutService, loggerFactory)
+        : base(NavId, loggerFactory)
     {
         _loggerFactory = loggerFactory;
         _timeProvider = timeProvider;
@@ -106,14 +99,14 @@ public class ConnectionRateStatusViewModel : StatusItem
         }
     }
 
-    [field: AllowNull, MaybeNull]
+    [field: AllowNull]
+    [field: MaybeNull]
     public StatisticViewModel FullStatistic
     {
         get
         {
             return field ??= new StatisticViewModel(
                 $"{NavId}.statistic",
-                LayoutService,
                 _loggerFactory,
                 _timeProvider
             );

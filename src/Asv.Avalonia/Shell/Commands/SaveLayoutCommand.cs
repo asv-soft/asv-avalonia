@@ -23,6 +23,14 @@ public class SaveLayoutCommand : ContextCommand<IRoutable>
 
     #endregion
 
+    private readonly ILayoutService _layoutService;
+
+    [ImportingConstructor]
+    public SaveLayoutCommand(ILayoutService layoutService)
+    {
+        _layoutService = layoutService;
+    }
+
     public override ICommandInfo Info => StaticInfo;
 
     protected override async ValueTask<CommandArg?> InternalExecute(
@@ -36,7 +44,7 @@ public class SaveLayoutCommand : ContextCommand<IRoutable>
         {
             if (current is IPage page)
             {
-                await page.RequestSaveLayoutToFile(cancel);
+                await page.RequestSaveLayoutToFile(_layoutService, cancel);
                 return null;
             }
 
@@ -52,7 +60,7 @@ public class SaveLayoutCommand : ContextCommand<IRoutable>
                     return null;
                 }
 
-                await model.SelectedPage.Value.RequestSaveLayoutToFile(cancel);
+                await model.SelectedPage.Value.RequestSaveLayoutToFile(_layoutService, cancel);
                 return null;
             }
 

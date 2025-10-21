@@ -10,22 +10,17 @@ public class PluginSourceViewModel : RoutableViewModel
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
     public PluginSourceViewModel()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-        : base(DesignTime.Id, NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : base(DesignTime.Id, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public PluginSourceViewModel(
         IPluginServerInfo pluginServerInfo,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         PluginsSourcesViewModel sourcesViewModel
     )
-        : base(
-            $"{ViewModelIdPart}.{NavigationId.GenerateRandomAsString()}",
-            layoutService,
-            loggerFactory
-        )
+        : base($"{ViewModelIdPart}.{NavigationId.GenerateRandomAsString()}", loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(pluginServerInfo);
         ArgumentNullException.ThrowIfNull(loggerFactory);

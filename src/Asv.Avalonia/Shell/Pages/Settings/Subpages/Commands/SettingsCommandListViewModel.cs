@@ -31,7 +31,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
             DesignTime.CommandService,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
-            NullLayoutService.Instance,
             NullSearchService.Instance
         )
     {
@@ -43,10 +42,9 @@ public class SettingsCommandListViewModel : SettingsSubPage
         ICommandService commandsService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        ILayoutService layoutService,
         ISearchService searchService
     )
-        : base(PageId, layoutService, loggerFactory)
+        : base(PageId, loggerFactory)
     {
         _commandsService = commandsService;
         _searchService = searchService;
@@ -59,7 +57,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
                 cmdInfo,
                 commandsService,
                 dialogService,
-                layoutService,
                 loggerFactory
             ))
             .DisposeItWith(Disposable);
@@ -68,7 +65,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
 
         Search = new SearchBoxViewModel(
             nameof(Search),
-            layoutService,
             loggerFactory,
             UpdateImpl,
             TimeSpan.FromMilliseconds(500)
@@ -82,7 +78,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
         CommandSortingType = new HistoricalEnumProperty<CommandSortingType>(
             nameof(CommandSortingType),
             _commandSortingType,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -172,22 +167,43 @@ public class SettingsCommandListViewModel : SettingsSubPage
         }
     }
 
-    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        _config.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
-        _config.CommandSortingType = CommandSortingType.ViewValue.Value;
-        _config.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
-        LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout(cancel);
-    }
+        if (e.IsHandled)
+        {
+            return ValueTask.CompletedTask;
+        }
 
-    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
-        _config = LayoutService.Get<SettingsCommandListViewModelConfig>(this);
-        Search.Text.ModelValue.Value = _config.SearchText;
-        CommandSortingType.ModelValue.Value = _config.CommandSortingType;
-        SelectedItem.Value = _view.FirstOrDefault(x => x.Id.ToString() == _config.SelectedItemId);
-        return base.HandleLoadLayout(cancel);
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg =>
+                    {
+                        cfg.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+                        cfg.CommandSortingType = CommandSortingType.ViewValue.Value;
+                        cfg.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+                    }
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<SettingsCommandListViewModelConfig>(
+                    this,
+                    cfg =>
+                    {
+                        Search.Text.ModelValue.Value = cfg.SearchText;
+                        CommandSortingType.ModelValue.Value = cfg.CommandSortingType;
+                        SelectedItem.Value = _view.FirstOrDefault(x =>
+                            x.Id.ToString() == cfg.SelectedItemId
+                        );
+                    }
+                );
+                break;
+        }
+
+        return base.InternalCatchEvent(e);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

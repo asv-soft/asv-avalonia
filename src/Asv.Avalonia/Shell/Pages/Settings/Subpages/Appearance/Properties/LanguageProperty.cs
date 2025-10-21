@@ -16,12 +16,7 @@ public class LanguageProperty : RoutableViewModel
     public BindableReactiveProperty<ILanguageInfo> SelectedItem { get; }
 
     public LanguageProperty()
-        : this(
-            DesignTime.LocalizationService,
-            NullDialogService.Instance,
-            NullLayoutService.Instance,
-            DesignTime.LoggerFactory
-        )
+        : this(DesignTime.LocalizationService, NullDialogService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -30,10 +25,9 @@ public class LanguageProperty : RoutableViewModel
     public LanguageProperty(
         ILocalizationService svc,
         IDialogService dialog,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(ViewModelId, layoutService, loggerFactory)
+        : base(ViewModelId, loggerFactory)
     {
         _svc = svc;
         _dialog = dialog.GetDialogPrefab<YesOrNoDialogPrefab>();

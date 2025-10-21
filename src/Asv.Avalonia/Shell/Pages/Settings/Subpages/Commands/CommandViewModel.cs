@@ -16,10 +16,9 @@ public sealed class CommandViewModel : RoutableViewModel
         ICommandInfo command,
         ICommandService svc,
         IDialogService dialogService,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(new NavigationId(ViewModelBaseId, command.Id), layoutService, loggerFactory)
+        : base(new NavigationId(ViewModelBaseId, command.Id), loggerFactory)
     {
         _svc = svc;
         _dialogService = dialogService;
@@ -33,7 +32,6 @@ public sealed class CommandViewModel : RoutableViewModel
         EditedHotKey = new HistoricalStringProperty(
             nameof(EditedHotKey),
             editedHotkey,
-            layoutService,
             loggerFactory,
             this
         );

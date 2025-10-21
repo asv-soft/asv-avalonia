@@ -34,7 +34,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1",
                 NavigationId.Empty,
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -45,7 +44,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node2",
                 NavigationId.Empty,
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -56,7 +54,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node3",
                 NavigationId.Empty,
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -67,7 +64,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node4",
                 NavigationId.Empty,
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -78,7 +74,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node5",
                 NavigationId.Empty,
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -89,7 +84,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1",
                 "node1",
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -100,7 +94,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1",
                 "node1",
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -111,7 +104,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1",
                 "node1",
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -122,7 +114,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1",
                 "node1",
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -133,7 +124,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1",
                 "node1",
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -144,7 +134,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1.1",
                 "node1.1",
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -155,7 +144,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 MaterialIconKind.Abacus,
                 "node1.1",
                 "node1.1",
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
         );
@@ -166,18 +154,10 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
     protected override ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
     {
         var set = new SettingsAppearanceViewModel();
-        set.Menu.Add(
-            new MenuItem("cmd0", "Command", NullLayoutService.Instance, DesignTime.LoggerFactory)
-        );
-        set.Menu.Add(
-            new MenuItem("cmd01", "Command1", NullLayoutService.Instance, DesignTime.LoggerFactory)
-        );
-        set.Menu.Add(
-            new MenuItem("cmd02", "Command2", NullLayoutService.Instance, DesignTime.LoggerFactory)
-        );
-        set.Menu.Add(
-            new MenuItem("cmd03", "Command3", NullLayoutService.Instance, DesignTime.LoggerFactory)
-        );
+        set.Menu.Add(new MenuItem("cmd0", "Command", DesignTime.LoggerFactory));
+        set.Menu.Add(new MenuItem("cmd01", "Command1", DesignTime.LoggerFactory));
+        set.Menu.Add(new MenuItem("cmd02", "Command2", DesignTime.LoggerFactory));
+        set.Menu.Add(new MenuItem("cmd03", "Command3", DesignTime.LoggerFactory));
         return ValueTask.FromResult<ITreeSubpage?>(set);
     }
 

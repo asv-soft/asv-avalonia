@@ -10,16 +10,11 @@ namespace Asv.Avalonia.GeoMap;
 public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
     where TContext : class, IMapAnchor
 {
-    public MapAnchor(NavigationId id, ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : this(id, layoutService, loggerFactory, GeoPoint.Zero) { }
+    public MapAnchor(NavigationId id, ILoggerFactory loggerFactory)
+        : this(id, loggerFactory, GeoPoint.Zero) { }
 
-    public MapAnchor(
-        NavigationId id,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory,
-        GeoPoint? location = null
-    )
-        : base(id, layoutService, loggerFactory)
+    public MapAnchor(NavigationId id, ILoggerFactory loggerFactory, GeoPoint? location = null)
+        : base(id, loggerFactory)
     {
         Title = id.ToString();
         Polygon = new ObservableList<GeoPoint>();

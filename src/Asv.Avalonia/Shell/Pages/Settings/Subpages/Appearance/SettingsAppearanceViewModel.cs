@@ -16,7 +16,6 @@ public class SettingsAppearanceViewModel : SettingsSubPage
             DesignTime.ThemeService,
             DesignTime.LocalizationService,
             NullDialogService.Instance,
-            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -30,15 +29,14 @@ public class SettingsAppearanceViewModel : SettingsSubPage
         IThemeService themeService,
         ILocalizationService localizationService,
         IDialogService dialog,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, layoutService, loggerFactory)
+        : base(PageId, loggerFactory)
     {
-        Theme = new ThemeProperty(themeService, layoutService, loggerFactory)
+        Theme = new ThemeProperty(themeService, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Language = new LanguageProperty(localizationService, dialog, layoutService, loggerFactory)
+        Language = new LanguageProperty(localizationService, dialog, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
     }

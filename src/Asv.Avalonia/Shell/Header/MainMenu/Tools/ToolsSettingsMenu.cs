@@ -9,8 +9,8 @@ public class ToolsSettingsMenu : MenuItem
     public const string MenuId = $"{ToolsMenu.MenuId}.settings";
 
     [ImportingConstructor]
-    public ToolsSettingsMenu(ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(MenuId, RS.ToolsMenu_Settings, layoutService, loggerFactory, ToolsMenu.MenuId)
+    public ToolsSettingsMenu(ILoggerFactory loggerFactory)
+        : base(MenuId, RS.ToolsMenu_Settings, loggerFactory, ToolsMenu.MenuId)
     {
         Icon = OpenSettingsCommand.StaticInfo.Icon;
         Command = new BindableAsyncCommand(OpenSettingsCommand.Id, this);

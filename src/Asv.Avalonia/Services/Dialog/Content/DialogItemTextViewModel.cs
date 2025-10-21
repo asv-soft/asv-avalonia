@@ -4,13 +4,13 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia;
 
-public class DialogItemTextViewModel(ILayoutService layoutService, ILoggerFactory loggerFactory)
-    : DialogViewModelBase(DialogId, layoutService, loggerFactory)
+public class DialogItemTextViewModel(ILoggerFactory loggerFactory)
+    : DialogViewModelBase(DialogId, loggerFactory)
 {
     public const string DialogId = $"{BaseId}.item.text";
 
     public DialogItemTextViewModel()
-        : this(NullLayoutService.Instance, NullLoggerFactory.Instance)
+        : this(NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         if (Design.IsDesignMode)

@@ -16,17 +16,13 @@ public class GeoPointDialogViewModel : DialogViewModelBase
     private bool _internalAnchorChange;
 
     public GeoPointDialogViewModel()
-        : this(NullLoggerFactory.Instance, NullLayoutService.Instance, NullUnitService.Instance)
+        : this(NullLoggerFactory.Instance, NullUnitService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public GeoPointDialogViewModel(
-        ILoggerFactory loggerFactory,
-        ILayoutService layoutService,
-        IUnitService unitService
-    )
-        : base(DialogId, layoutService, loggerFactory)
+    public GeoPointDialogViewModel(ILoggerFactory loggerFactory, IUnitService unitService)
+        : base(DialogId, loggerFactory)
     {
         var latUnit = unitService.Units[LatitudeBase.Id];
         var lonUnit = unitService.Units[LongitudeBase.Id];
@@ -41,7 +37,6 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             latUnit,
             lonUnit,
             altUnit,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -75,14 +70,14 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .ToBindableReactiveProperty<string>()
             .DisposeItWith(Disposable);
 
-        _anchor = new MapAnchor<IMapAnchor>(nameof(_anchor), layoutService, loggerFactory)
+        _anchor = new MapAnchor<IMapAnchor>(nameof(_anchor), loggerFactory)
         {
             Icon = MaterialIconKind.Location,
             Title = RS.GeoPointDialogViewModel_Anchor_Title,
         };
         _anchor.SetRoutableParent(this);
 
-        MapViewModel = new MapViewModel(nameof(MapViewModel), layoutService, loggerFactory)
+        MapViewModel = new MapViewModel(nameof(MapViewModel), loggerFactory)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 

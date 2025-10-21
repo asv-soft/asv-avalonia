@@ -7,11 +7,10 @@ public class UdpEndpointViewModel : EndpointViewModel
 {
     public UdpEndpointViewModel(
         IProtocolEndpoint protocolEndpoint,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base(protocolEndpoint, layoutService, loggerFactory, timeProvider)
+        : base(protocolEndpoint, loggerFactory, timeProvider)
     {
         Header = $"Address {((UdpSocketProtocolEndpoint)protocolEndpoint).RemoteEndPoint}";
     }

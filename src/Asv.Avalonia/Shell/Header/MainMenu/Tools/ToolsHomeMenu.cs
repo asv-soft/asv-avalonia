@@ -9,8 +9,8 @@ public class ToolsHomeMenu : MenuItem
     public const string MenuId = $"{ToolsMenu.MenuId}.home";
 
     [ImportingConstructor]
-    public ToolsHomeMenu(ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(MenuId, RS.ToolsMenu_Home, layoutService, loggerFactory, ToolsMenu.MenuId)
+    public ToolsHomeMenu(ILoggerFactory loggerFactory)
+        : base(MenuId, RS.ToolsMenu_Home, loggerFactory, ToolsMenu.MenuId)
     {
         Icon = OpenHomePageCommand.StaticInfo.Icon;
         Command = new BindableAsyncCommand(OpenHomePageCommand.Id, this);

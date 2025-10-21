@@ -10,13 +10,7 @@ public class EditUndoMenu : MenuItem
 
     [ImportingConstructor]
     public EditUndoMenu(ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(
-            MenuId,
-            RS.UndoCommand_CommandInfo_Name,
-            layoutService,
-            loggerFactory,
-            EditMenu.MenuId
-        )
+        : base(MenuId, RS.UndoCommand_CommandInfo_Name, loggerFactory, EditMenu.MenuId)
     {
         Icon = UndoCommand.StaticInfo.Icon;
         Command = new BindableAsyncCommand(UndoCommand.Id, this);

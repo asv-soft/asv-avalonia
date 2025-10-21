@@ -23,6 +23,14 @@ public class SaveAllLayoutCommand : ContextCommand<IRoutable>
 
     #endregion
 
+    private readonly ILayoutService _layoutService;
+
+    [ImportingConstructor]
+    public SaveAllLayoutCommand(ILayoutService layoutService)
+    {
+        _layoutService = layoutService;
+    }
+
     public override ICommandInfo Info => StaticInfo;
 
     protected override async ValueTask<CommandArg?> InternalExecute(
@@ -31,7 +39,7 @@ public class SaveAllLayoutCommand : ContextCommand<IRoutable>
         CancellationToken cancel
     )
     {
-        await context.RequestSaveAllLayoutToFile(cancel);
+        await context.RequestSaveAllLayoutToFile(_layoutService, cancel);
         return null;
     }
 }

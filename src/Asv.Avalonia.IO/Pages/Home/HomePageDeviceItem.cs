@@ -11,17 +11,16 @@ public class HomePageDeviceItem : HomePageItem
     public HomePageDeviceItem(
         IClientDevice device,
         IDeviceManager deviceManager,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(NavigationId.NormalizeTypeId(device.Id.AsString()), layoutService, loggerFactory)
+        : base(NavigationId.NormalizeTypeId(device.Id.AsString()), loggerFactory)
     {
         Device = device;
         Icon = deviceManager.GetIcon(device.Id);
         IconBrush = deviceManager.GetDeviceBrush(device.Id);
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         Info.Add(
-            new HeadlinedViewModel("id", NullLayoutService.Instance, DesignTime.LoggerFactory)
+            new HeadlinedViewModel("id", DesignTime.LoggerFactory)
             {
                 Icon = MaterialIconKind.IdCard,
                 Header = RS.HomePageDeviceItem_Info_Id,
@@ -29,18 +28,14 @@ public class HomePageDeviceItem : HomePageItem
             }
         );
         Info.Add(
-            new HeadlinedViewModel("type", NullLayoutService.Instance, DesignTime.LoggerFactory)
+            new HeadlinedViewModel("type", DesignTime.LoggerFactory)
             {
                 Icon = MaterialIconKind.MergeType,
                 Header = RS.HomePageDeviceItem_Info_Type,
                 Description = device.Id.DeviceClass,
             }
         );
-        var linkInfo = new HeadlinedViewModel(
-            "link",
-            NullLayoutService.Instance,
-            DesignTime.LoggerFactory
-        )
+        var linkInfo = new HeadlinedViewModel("link", DesignTime.LoggerFactory)
         {
             Icon = MaterialIconKind.Network,
             Header = RS.HomePageDeviceItem_Info_Link,
