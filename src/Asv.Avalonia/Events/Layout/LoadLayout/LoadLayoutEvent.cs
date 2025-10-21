@@ -11,7 +11,8 @@ public static class LoadLayoutMixin
     public static ValueTask RequestLoadLayout(
         this IRoutable src,
         ILayoutService layoutService,
-        CancellationToken cancel = default
+        CancellationToken cancel = default,
+        RoutingStrategy routingStrategy = RoutingStrategy.Tunnel
     )
     {
         if (cancel.IsCancellationRequested)
@@ -19,7 +20,7 @@ public static class LoadLayoutMixin
             return ValueTask.CompletedTask;
         }
 
-        return src.Rise(new LoadLayoutEvent(src, layoutService));
+        return src.Rise(new LoadLayoutEvent(src, layoutService, routingStrategy));
     }
 
     public static ValueTask RequestLoadLayoutForSelfOnly(

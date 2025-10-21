@@ -97,6 +97,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
 
         await this.RequestSaveLayout(_layoutService, cancel);
+        await this.RequestSaveLayoutToFile(_layoutService, cancel, RoutingStrategy.Direct);
         await Navigate(node.Base.NavigateTo);
     }
 
