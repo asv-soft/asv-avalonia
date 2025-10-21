@@ -6,5 +6,6 @@ public abstract class LayoutEventBase(
     RoutingStrategy routingStrategy
 ) : AsyncRoutedEvent(source, routingStrategy)
 {
+    public const RoutingStrategy DefaultRoutingStrategy = RoutingStrategy.Tunnel;
     public ILayoutService LayoutService => layoutService;
 }

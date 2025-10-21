@@ -4,7 +4,7 @@ public class SaveLayoutEvent(
     IRoutable source,
     ILayoutService layoutService,
     bool isFlushToFile = false,
-    RoutingStrategy routingStrategy = RoutingStrategy.Tunnel
+    RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy
 ) : LayoutEventBase(source, layoutService, routingStrategy)
 {
     public bool IsFlushToFile => isFlushToFile;
@@ -15,19 +15,21 @@ public static class SaveLayoutMixin
     public static ValueTask RequestSaveLayout(
         this IRoutable src,
         ILayoutService layoutService,
-        CancellationToken cancel = default
+        CancellationToken cancel = default,
+        RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy
     )
     {
-        return InternalSaveLayout(src, layoutService, false, cancel);
+        return InternalSaveLayout(src, layoutService, false, routingStrategy, cancel);
     }
 
     public static ValueTask RequestSaveLayoutToFile(
         this IRoutable src,
         ILayoutService layoutService,
-        CancellationToken cancel = default
+        CancellationToken cancel = default,
+        RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy
     )
     {
-        return InternalSaveLayout(src, layoutService, true, cancel);
+        return InternalSaveLayout(src, layoutService, true, routingStrategy, cancel);
     }
 
     public static async ValueTask HandleSaveLayoutAsync<TConfig>(
@@ -74,6 +76,7 @@ public static class SaveLayoutMixin
         this IRoutable src,
         ILayoutService layoutService,
         bool isFlushToFile,
+        RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy,
         CancellationToken cancel = default
     )
     {
@@ -82,6 +85,6 @@ public static class SaveLayoutMixin
             return default;
         }
 
-        return src.Rise(new SaveLayoutEvent(src, layoutService, isFlushToFile));
+        return src.Rise(new SaveLayoutEvent(src, layoutService, isFlushToFile, routingStrategy));
     }
 }
