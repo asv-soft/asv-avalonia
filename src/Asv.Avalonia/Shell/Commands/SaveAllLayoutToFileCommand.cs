@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class SaveAllLayoutToFileCommand : ContextCommand<IRoutable>
+public sealed class SaveAllLayoutToFileCommand : ContextCommand<IRoutable>
 {
     #region Static
 
@@ -14,8 +14,8 @@ public class SaveAllLayoutToFileCommand : ContextCommand<IRoutable>
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Save All Layout",
-        Description = "Command that saves layout of the whole app to file",
+        Name = RS.SaveAllLayoutToFileCommand_CommandInfo_Name,
+        Description = RS.SaveAllLayoutToFileCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ContentSaveAll,
         DefaultHotKey = "Ctrl+Alt+L",
         Source = SystemModule.Instance,

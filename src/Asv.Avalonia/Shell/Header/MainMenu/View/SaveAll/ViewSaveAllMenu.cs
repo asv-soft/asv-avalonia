@@ -10,7 +10,7 @@ public sealed class ViewSaveAllMenu : MenuItem
 
     [ImportingConstructor]
     public ViewSaveAllMenu(ILoggerFactory loggerFactory, ICommandService cmd)
-        : base(MenuId, "Save All", loggerFactory, ViewMenu.MenuId)
+        : base(MenuId, RS.ViewSaveAllMenu_Header, loggerFactory, ViewMenu.MenuId)
     {
         Order = 1;
         Icon = SaveAllLayoutToFileCommand.StaticInfo.Icon;

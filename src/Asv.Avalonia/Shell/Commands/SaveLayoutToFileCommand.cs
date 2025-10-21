@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 [ExportCommand]
 [Shared]
-public class SaveLayoutToFileCommand : ContextCommand<IRoutable>
+public sealed class SaveLayoutToFileCommand : ContextCommand<IRoutable>
 {
     #region Static
 
@@ -14,8 +14,8 @@ public class SaveLayoutToFileCommand : ContextCommand<IRoutable>
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Save Layout",
-        Description = "Command that saves layout of the current page to file",
+        Name = RS.SaveLayoutToFileCommand_CommandInfo_Name,
+        Description = RS.SaveLayoutToFileCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ContentSave,
         DefaultHotKey = "Ctrl+L",
         Source = SystemModule.Instance,
