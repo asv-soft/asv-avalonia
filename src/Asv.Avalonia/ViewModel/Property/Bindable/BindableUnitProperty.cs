@@ -14,12 +14,11 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
         string id,
         ReactiveProperty<double> modelValue,
         IUnit unit,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent,
         string? format = null
     )
-        : base(id, layoutService, loggerFactory, parent)
+        : base(id, loggerFactory, parent)
     {
         Unit = unit;
         _format = format;

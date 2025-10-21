@@ -8,13 +8,12 @@ namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
 [ExportExtensionFor<IHomePage>]
 [method: ImportingConstructor]
-public class HomePagePluginExtension(ILayoutService layoutService, ILoggerFactory loggerFactory)
-    : IExtensionFor<IHomePage>
+public class HomePagePluginExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
         context.Tools.Add(
-            new ActionViewModel("plugin_action", layoutService, loggerFactory)
+            new ActionViewModel("plugin_action", loggerFactory)
             {
                 Parent = null,
                 Icon = MaterialIconKind.Plugin,

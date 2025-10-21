@@ -6,12 +6,8 @@ namespace Asv.Avalonia;
 
 public class HomePageItemViewModel : RoutableViewModel
 {
-    public HomePageItemViewModel(
-        IHomePageItem homePageItem,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(homePageItem.Id, layoutService, loggerFactory)
+    public HomePageItemViewModel(IHomePageItem homePageItem, ILoggerFactory loggerFactory)
+        : base(homePageItem.Id, loggerFactory)
     {
         HomePageItem = homePageItem;
         ActionsView = homePageItem

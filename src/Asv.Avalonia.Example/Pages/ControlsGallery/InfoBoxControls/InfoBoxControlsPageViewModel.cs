@@ -31,14 +31,14 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
     private InfoBoxControlsPageViewModelConfig _config;
 
     public InfoBoxControlsPageViewModel()
-        : this(NullLayoutService.Instance, NullLoggerFactory.Instance)
+        : this(NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public InfoBoxControlsPageViewModel(ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(PageId, layoutService, loggerFactory)
+    public InfoBoxControlsPageViewModel(ILoggerFactory loggerFactory)
+        : base(PageId, loggerFactory)
     {
         _severity = new ReactiveProperty<Enum>(InfoBarSeverity.Informational).DisposeItWith(
             Disposable
@@ -53,21 +53,18 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         Severity = new HistoricalEnumProperty<InfoBarSeverity>(
             nameof(Severity),
             _severity,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
         InfoBoxTitle = new HistoricalStringProperty(
             nameof(InfoBoxTitle),
             _infoBoxTitle,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
         InfoBoxMessage = new HistoricalStringProperty(
             nameof(InfoBoxMessage),
             _infoBoxMessage,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -89,30 +86,48 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
-    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        _config.Severity = Severity.ViewValue.Value;
-        _config.InfoBoxTitle = InfoBoxTitle.ViewValue.Value ?? string.Empty;
-        _config.InfoBoxMessage = InfoBoxMessage.ViewValue.Value ?? string.Empty;
-        LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout(cancel);
-    }
-
-    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
-        _config = LayoutService.Get<InfoBoxControlsPageViewModelConfig>(this);
-        Severity.ModelValue.Value = _config.Severity;
-        if (!string.IsNullOrEmpty(_config.InfoBoxTitle))
+        if (e.IsHandled)
         {
-            InfoBoxTitle.ModelValue.Value = _config.InfoBoxTitle;
+            return ValueTask.CompletedTask;
         }
 
-        if (!string.IsNullOrEmpty(_config.InfoBoxMessage))
+        switch (e)
         {
-            InfoBoxMessage.ModelValue.Value = _config.InfoBoxMessage;
+            case SaveLayoutEvent saveLayoutEvent:
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg =>
+                    {
+                        cfg.Severity = Severity.ViewValue.Value;
+                        cfg.InfoBoxTitle = InfoBoxTitle.ViewValue.Value ?? string.Empty;
+                        cfg.InfoBoxMessage = InfoBoxMessage.ViewValue.Value ?? string.Empty;
+                    }
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<InfoBoxControlsPageViewModelConfig>(
+                    this,
+                    cfg =>
+                    {
+                        Severity.ModelValue.Value = cfg.Severity;
+                        if (!string.IsNullOrEmpty(cfg.InfoBoxTitle))
+                        {
+                            InfoBoxTitle.ModelValue.Value = cfg.InfoBoxTitle;
+                        }
+
+                        if (!string.IsNullOrEmpty(cfg.InfoBoxMessage))
+                        {
+                            InfoBoxMessage.ModelValue.Value = cfg.InfoBoxMessage;
+                        }
+                    }
+                );
+                break;
         }
 
-        return base.HandleLoadLayout(cancel);
+        return base.InternalCatchEvent(e);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -8,8 +8,7 @@ namespace Asv.Avalonia;
 
 [ExportExtensionFor<ISettingsPage>]
 [method: ImportingConstructor]
-public class SettingsExtension(ILayoutService layoutService, ILoggerFactory loggerFactory)
-    : IExtensionFor<ISettingsPage>
+public class SettingsExtension(ILoggerFactory loggerFactory) : IExtensionFor<ISettingsPage>
 {
     public void Extend(ISettingsPage context, CompositeDisposable contextDispose)
     {
@@ -20,7 +19,6 @@ public class SettingsExtension(ILayoutService layoutService, ILoggerFactory logg
                 MaterialIconKind.ThemeLightDark,
                 SettingsAppearanceViewModel.PageId,
                 NavigationId.Empty,
-                layoutService,
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );
@@ -32,7 +30,6 @@ public class SettingsExtension(ILayoutService layoutService, ILoggerFactory logg
                 MaterialIconKind.TemperatureCelsius,
                 SettingsUnitsViewModel.PageId,
                 NavigationId.Empty,
-                layoutService,
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );
@@ -44,7 +41,6 @@ public class SettingsExtension(ILayoutService layoutService, ILoggerFactory logg
                 MaterialIconKind.KeyboardSettings,
                 SettingsCommandListViewModel.PageId,
                 NavigationId.Empty,
-                layoutService,
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );

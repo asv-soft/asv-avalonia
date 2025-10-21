@@ -37,23 +37,11 @@ public class DesignTimeShellViewModel : ShellViewModel
         InternalPages.Add(new SettingsPageViewModel());
         InternalPages.Add(new HomePageViewModel());
 
-        var file = new OpenMenu(
-            NullLayoutService.Instance,
-            DesignTime.LoggerFactory,
-            DesignTime.CommandService
-        );
+        var file = new OpenMenu(DesignTime.LoggerFactory, DesignTime.CommandService);
         MainMenu.Add(file);
 
-        MainMenu.Add(
-            new MenuItem(
-                "open",
-                "Open",
-                NullLayoutService.Instance,
-                DesignTime.LoggerFactory,
-                file.Id.Id
-            )
-        );
-        MainMenu.Add(new EditMenu(NullLayoutService.Instance, DesignTime.LoggerFactory));
+        MainMenu.Add(new MenuItem("open", "Open", DesignTime.LoggerFactory, file.Id.Id));
+        MainMenu.Add(new EditMenu(DesignTime.LoggerFactory));
 
         var addLeft = true;
         Observable
@@ -63,38 +51,21 @@ public class DesignTimeShellViewModel : ShellViewModel
                 if (addLeft)
                 {
                     LeftMenu.Add(
-                        new MenuItem(
-                            $"open{x}",
-                            "Open",
-                            NullLayoutService.Instance,
-                            DesignTime.LoggerFactory
-                        )
+                        new MenuItem($"open{x}", "Open", DesignTime.LoggerFactory)
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
                         }
                     );
                     LeftMenu.Add(
-                        new MenuItem(
-                            $"open{x}_{x}",
-                            "Open",
-                            NullLayoutService.Instance,
-                            DesignTime.LoggerFactory,
-                            $"open{x}"
-                        )
+                        new MenuItem($"open{x}_{x}", "Open", DesignTime.LoggerFactory, $"open{x}")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
                         }
                     );
                     LeftMenu.Add(
-                        new MenuItem(
-                            $"open{x}_{x}_2",
-                            "Open",
-                            NullLayoutService.Instance,
-                            DesignTime.LoggerFactory,
-                            $"open{x}"
-                        )
+                        new MenuItem($"open{x}_{x}_2", "Open", DesignTime.LoggerFactory, $"open{x}")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
@@ -122,12 +93,7 @@ public class DesignTimeShellViewModel : ShellViewModel
                 if (addRight)
                 {
                     RightMenu.Add(
-                        new MenuItem(
-                            $"open{x}",
-                            "Open",
-                            NullLayoutService.Instance,
-                            DesignTime.LoggerFactory
-                        )
+                        new MenuItem($"open{x}", "Open", DesignTime.LoggerFactory)
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,

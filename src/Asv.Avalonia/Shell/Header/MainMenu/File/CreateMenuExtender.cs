@@ -6,11 +6,8 @@ namespace Asv.Avalonia;
 
 [ExportExtensionFor<IShell>]
 [method: ImportingConstructor]
-public class CreateMenuExtender(
-    IFileAssociationService svc,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : IExtensionFor<IShell>
+public class CreateMenuExtender(IFileAssociationService svc, ILoggerFactory loggerFactory)
+    : IExtensionFor<IShell>
 {
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {
@@ -19,7 +16,6 @@ public class CreateMenuExtender(
             var menu = new MenuItem(
                 $"{CreateMenu.MenuId}.{file.Id}",
                 file.Title,
-                layoutService,
                 loggerFactory,
                 CreateMenu.MenuId
             )

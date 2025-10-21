@@ -14,11 +14,10 @@ public sealed class HistoricalGeoPointProperty
         IUnit latUnit,
         IUnit lonUnit,
         IUnit altUnit,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent
     )
-        : base(id, modelValue, latUnit, lonUnit, altUnit, layoutService, loggerFactory, parent)
+        : base(id, modelValue, latUnit, lonUnit, altUnit, loggerFactory, parent)
     {
         base.Latitude.Dispose();
         base.Longitude.Dispose();
@@ -28,7 +27,6 @@ public sealed class HistoricalGeoPointProperty
             nameof(Latitude),
             ModelLat,
             latUnit,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -36,7 +34,6 @@ public sealed class HistoricalGeoPointProperty
             nameof(Longitude),
             ModelLon,
             lonUnit,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -44,7 +41,6 @@ public sealed class HistoricalGeoPointProperty
             nameof(Altitude),
             ModelAlt,
             altUnit,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);

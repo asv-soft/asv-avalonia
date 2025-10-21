@@ -10,8 +10,8 @@ public class ToolsMenu : MenuItem
     public const string MenuId = $"{ExportMainMenuAttribute.Contract}.tools";
 
     [method: ImportingConstructor]
-    public ToolsMenu(ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(MenuId, RS.ToolsMenu_Name, layoutService, loggerFactory)
+    public ToolsMenu(ILoggerFactory loggerFactory)
+        : base(MenuId, RS.ToolsMenu_Name, loggerFactory)
     {
         Order = 50;
         Icon = MaterialIconKind.Tools;

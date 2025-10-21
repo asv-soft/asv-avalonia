@@ -9,12 +9,8 @@ public sealed class ViewSaveMenu : MenuItem
     public const string MenuId = $"{ViewMenu.MenuId}.save";
 
     [ImportingConstructor]
-    public ViewSaveMenu(
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory,
-        ICommandService cmd
-    )
-        : base(MenuId, "Save", layoutService, loggerFactory, ViewMenu.MenuId)
+    public ViewSaveMenu(ILoggerFactory loggerFactory, ICommandService cmd)
+        : base(MenuId, "Save", loggerFactory, ViewMenu.MenuId)
     {
         Order = 0;
         Icon = SaveLayoutCommand.StaticInfo.Icon;

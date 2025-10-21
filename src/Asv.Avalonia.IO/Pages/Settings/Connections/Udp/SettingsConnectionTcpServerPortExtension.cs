@@ -7,14 +7,12 @@ namespace Asv.Avalonia.IO;
 
 [ExportExtensionFor<ISettingsConnectionSubPage>]
 [method: ImportingConstructor]
-public class SettingsConnectionUdpPortExtension(
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : IExtensionFor<ISettingsConnectionSubPage>
+public class SettingsConnectionUdpPortExtension(ILoggerFactory loggerFactory)
+    : IExtensionFor<ISettingsConnectionSubPage>
 {
     public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
     {
-        var menu = new MenuItem(UdpProtocolPort.Scheme, "UDP", layoutService, loggerFactory);
+        var menu = new MenuItem(UdpProtocolPort.Scheme, "UDP", loggerFactory);
         menu.Icon = UdpPortViewModel.DefaultIcon;
         menu.Command = new BindableAsyncCommand(PortCrudCommand.Id, menu);
         var defaultConfig = UdpProtocolPortConfig.CreateDefault();

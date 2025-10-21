@@ -7,7 +7,7 @@ public sealed class NullDialogViewModel : DialogViewModelBase
     public static NullDialogViewModel Instance { get; } = new();
 
     private NullDialogViewModel()
-        : base(DialogId, NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : base(DialogId, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }

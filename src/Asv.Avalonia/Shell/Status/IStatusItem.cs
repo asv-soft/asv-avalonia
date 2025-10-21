@@ -8,11 +8,9 @@ public interface IStatusItem : IRoutable
     int Order { get; }
 }
 
-public abstract class StatusItem(
-    NavigationId id,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : RoutableViewModel(id, layoutService, loggerFactory), IStatusItem
+public abstract class StatusItem(NavigationId id, ILoggerFactory loggerFactory)
+    : RoutableViewModel(id, loggerFactory),
+        IStatusItem
 {
     public const string DefaultId = "shell.status.item";
     public abstract int Order { get; }

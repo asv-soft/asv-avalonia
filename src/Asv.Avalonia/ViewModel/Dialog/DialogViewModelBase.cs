@@ -3,11 +3,8 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class DialogViewModelBase(
-    NavigationId id,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : RoutableViewModel(id, layoutService, loggerFactory)
+public abstract class DialogViewModelBase(NavigationId id, ILoggerFactory loggerFactory)
+    : RoutableViewModel(id, loggerFactory)
 {
     protected const string BaseId = "dialog";
 

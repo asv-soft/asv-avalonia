@@ -15,15 +15,12 @@ public sealed class HotKeyCaptureDialogPayload
 [ExportDialogPrefab]
 [Shared]
 [method: ImportingConstructor]
-public sealed class HotKeyCaptureDialogPrefab(
-    INavigationService nav,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : IDialogPrefab<HotKeyCaptureDialogPayload, HotKeyInfo?>
+public sealed class HotKeyCaptureDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
+    : IDialogPrefab<HotKeyCaptureDialogPayload, HotKeyInfo?>
 {
     public async Task<HotKeyInfo?> ShowDialogAsync(HotKeyCaptureDialogPayload dialogPayload)
     {
-        using var vm = new DialogItemHotKeyCaptureViewModel(layoutService, loggerFactory);
+        using var vm = new DialogItemHotKeyCaptureViewModel(loggerFactory);
         vm.HotKey.OnNext(dialogPayload.CurrentHotKey);
 
         var dialogContent = new ContentDialog(vm, nav)

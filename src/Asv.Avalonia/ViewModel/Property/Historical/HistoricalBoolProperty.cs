@@ -14,11 +14,10 @@ public sealed class HistoricalBoolProperty
     public HistoricalBoolProperty(
         NavigationId id,
         ReactiveProperty<bool> modelValue,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IRoutable parent
     )
-        : base(id, layoutService, loggerFactory, parent)
+        : base(id, loggerFactory, parent)
     {
         ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);

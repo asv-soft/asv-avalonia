@@ -53,12 +53,11 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
 
     public GeoPointRttBoxViewModel(
         NavigationId id,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IUnitService units,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, layoutService, loggerFactory, networkErrorTimeout)
+        : base(id, loggerFactory, networkErrorTimeout)
     {
         Location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
         _latitudeUnit =
@@ -138,13 +137,12 @@ public class GeoPointRttBoxViewModel<T> : GeoPointRttBoxViewModel
 
     public GeoPointRttBoxViewModel(
         NavigationId id,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IUnitService units,
         Observable<T> value,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, layoutService, loggerFactory, units, networkErrorTimeout)
+        : base(id, loggerFactory, units, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         value

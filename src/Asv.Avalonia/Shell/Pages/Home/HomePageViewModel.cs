@@ -17,7 +17,6 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
             NullCommandService.Instance,
             NullAppInfo.Instance,
             NullContainerHost.Instance,
-            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -26,7 +25,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         for (int i = 0; i < 5; i++)
         {
             Tools.Add(
-                new ActionViewModel($"cmd{i}", NullLayoutService.Instance, DesignTime.LoggerFactory)
+                new ActionViewModel($"cmd{i}", DesignTime.LoggerFactory)
                 {
                     Icon = (MaterialIconKind)Random.Shared.Next(1, items.Length),
                     Header = $"Tool {i}",
@@ -40,11 +39,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 
         for (int i = 0; i < 5; i++)
         {
-            var d = new HomePageItem(
-                $"dev{i}",
-                NullLayoutService.Instance,
-                DesignTime.LoggerFactory
-            )
+            var d = new HomePageItem($"dev{i}", DesignTime.LoggerFactory)
             {
                 Icon = MaterialIconKind.Drone,
                 Header = $"Device {i}",
@@ -52,11 +47,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
                 Order = 0,
             };
             d.Info.Add(
-                new HeadlinedViewModel(
-                    "prop1",
-                    NullLayoutService.Instance,
-                    DesignTime.LoggerFactory
-                )
+                new HeadlinedViewModel("prop1", DesignTime.LoggerFactory)
                 {
                     Icon = MaterialIconKind.IdCard,
                     Header = "StaticId",
@@ -64,11 +55,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
                 }
             );
             d.Info.Add(
-                new HeadlinedViewModel(
-                    "prop2",
-                    NullLayoutService.Instance,
-                    DesignTime.LoggerFactory
-                )
+                new HeadlinedViewModel("prop2", DesignTime.LoggerFactory)
                 {
                     Icon = MaterialIconKind.MergeType,
                     Header = "Type",
@@ -76,11 +63,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
                 }
             );
             d.Info.Add(
-                new HeadlinedViewModel(
-                    "prop3",
-                    NullLayoutService.Instance,
-                    DesignTime.LoggerFactory
-                )
+                new HeadlinedViewModel("prop3", DesignTime.LoggerFactory)
                 {
                     Icon = MaterialIconKind.SerialPort,
                     Header = "Port",
@@ -91,11 +74,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
             for (int j = 0; j < 5; j++)
             {
                 d.Actions.Add(
-                    new ActionViewModel(
-                        $"cmd{i}",
-                        NullLayoutService.Instance,
-                        DesignTime.LoggerFactory
-                    )
+                    new ActionViewModel($"cmd{i}", DesignTime.LoggerFactory)
                     {
                         Icon = (MaterialIconKind)Random.Shared.Next(1, items.Length),
                         Header = $"Device tool {i}",
@@ -116,10 +95,9 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         ICommandService cmd,
         IAppInfo appInfo,
         IContainerHost container,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, layoutService, loggerFactory)
+        : base(PageId, cmd, loggerFactory)
     {
         AppInfo = appInfo;
         Icon = MaterialIconKind.Home;
@@ -133,7 +111,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         Items = [];
 
         ItemsList = Items
-            .CreateView(x => new HomePageItemDecorator(x, container, layoutService, loggerFactory))
+            .CreateView(x => new HomePageItemDecorator(x, container, loggerFactory))
             .DisposeItWith(Disposable);
 
         ItemsList.DisposeMany().DisposeItWith(Disposable);

@@ -18,7 +18,6 @@ public class GroupTreePageItemViewModel : TreeSubpage
             MaterialIconKind.Abacus,
             NavigationId.Empty,
             NavigationId.Empty,
-            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         )
         {
@@ -33,7 +32,6 @@ public class GroupTreePageItemViewModel : TreeSubpage
                 MaterialIconKind.Abacus,
                 NavigationId.Empty,
                 root.Id,
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
             {
@@ -45,7 +43,6 @@ public class GroupTreePageItemViewModel : TreeSubpage
                 MaterialIconKind.Abacus,
                 NavigationId.Empty,
                 root.Id,
-                NullLayoutService.Instance,
                 DesignTime.LoggerFactory
             )
             {

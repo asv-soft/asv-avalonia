@@ -24,7 +24,6 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
-            NullLayoutService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.Navigation
         )
@@ -48,7 +47,6 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
         );
         Items = items.ToNotifyCollectionChanged(x => new PluginSourceViewModel(
             x,
-            NullLayoutService.Instance,
             NullLoggerFactory.Instance,
             this
         ));
@@ -58,22 +56,16 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
     public PluginsSourcesViewModel(
         ICommandService cmd,
         IPluginManager mng,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         INavigationService navigationService
     )
-        : base(PageId, cmd, layoutService, loggerFactory)
+        : base(PageId, cmd, loggerFactory)
     {
         _mng = mng;
         _navigation = navigationService;
         _loggerFactory = loggerFactory;
         var items = new ObservableList<IPluginServerInfo>();
-        _view = items.CreateView(info => new PluginSourceViewModel(
-            info,
-            layoutService,
-            loggerFactory,
-            this
-        ));
+        _view = items.CreateView(info => new PluginSourceViewModel(info, loggerFactory, this));
         SelectedItem = new BindableReactiveProperty<PluginSourceViewModel?>();
         Items = _view.ToNotifyCollectionChanged();
 
@@ -103,7 +95,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
 
     private async ValueTask AddImpl(Unit unit, CancellationToken token)
     {
-        using var viewModel = new SourceViewModel(_mng, LayoutService, _loggerFactory, null);
+        using var viewModel = new SourceViewModel(_mng, _loggerFactory, null);
         var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.PluginsSourcesViewModel_AddImpl_Title,
@@ -129,7 +121,7 @@ public class PluginsSourcesViewModel : PageViewModel<PluginsSourcesViewModel>
             return;
         }
 
-        using var viewModel = new SourceViewModel(_mng, LayoutService, _loggerFactory, arg);
+        using var viewModel = new SourceViewModel(_mng, _loggerFactory, arg);
         var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.PluginsSourcesViewModel_EditImpl_Title,

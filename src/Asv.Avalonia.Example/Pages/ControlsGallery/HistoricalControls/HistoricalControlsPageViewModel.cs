@@ -40,18 +40,14 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     private HistoricalControlsPageViewModelConfig _config;
 
     public HistoricalControlsPageViewModel()
-        : this(DesignTime.UnitService, NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public HistoricalControlsPageViewModel(
-        IUnitService unit,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(PageId, layoutService, loggerFactory)
+    public HistoricalControlsPageViewModel(IUnitService unit, ILoggerFactory loggerFactory)
+        : base(PageId, loggerFactory)
     {
         var un = unit.Units[VelocityBase.Id];
         var latUnit = unit.Units[LatitudeBase.Id];
@@ -72,7 +68,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         IsTurnedOn = new HistoricalBoolProperty(
             nameof(IsTurnedOn),
             _isTurnedOn,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -85,7 +80,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             nameof(Speed),
             _speed,
             un,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -93,7 +87,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         StringPropWithoutValidation = new HistoricalStringProperty(
             nameof(StringPropWithoutValidation),
             _stringWithoutValidation,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -101,7 +94,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         StringPropWithOneValidation = new HistoricalStringProperty(
             nameof(StringPropWithOneValidation),
             _stringWithOneValidation,
-            layoutService,
             loggerFactory,
             this,
             [
@@ -121,7 +113,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         StringPropWithManyValidations = new HistoricalStringProperty(
             nameof(StringPropWithManyValidations),
             _stringWithManyValidations,
-            layoutService,
             loggerFactory,
             this,
             [
@@ -158,7 +149,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             latUnit,
             lonUnit,
             altUnit,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -167,7 +157,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         TagTypeProp = new HistoricalEnumProperty<TagType>(
             nameof(TagTypeProp),
             _tagTypeProp,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -175,7 +164,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         RttBoxStatusProp = new HistoricalEnumProperty<RttBoxStatus>(
             nameof(RttBoxStatusProp),
             _rttBoxStatusProp,
-            layoutService,
             loggerFactory,
             this
         ).DisposeItWith(Disposable);
@@ -208,35 +196,57 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
-    protected override ValueTask HandleSaveLayout(CancellationToken cancel = default)
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
-        _config.IsTurnedOn = IsTurnedOn.ViewValue.Value;
-        _config.Speed = Speed.ViewValue.Value ?? string.Empty;
-        _config.StringPropWithoutValidation =
-            StringPropWithoutValidation.ViewValue.Value ?? string.Empty;
-        _config.StringPropWithOneValidation =
-            StringPropWithOneValidation.ViewValue.Value ?? string.Empty;
-        _config.StringPropWithManyValidations =
-            StringPropWithManyValidations.ViewValue.Value ?? string.Empty;
-        _config.GeoPointProperty = GeoPointProperty.ModelValue.Value;
-        _config.TagTypeProp = TagTypeProp.ViewValue.Value;
-        _config.RttBoxStatusProp = RttBoxStatusProp.ViewValue.Value;
-        LayoutService.SetInMemory(this, _config);
-        return base.HandleSaveLayout(cancel);
-    }
+        if (e.IsHandled)
+        {
+            return ValueTask.CompletedTask;
+        }
 
-    protected override ValueTask HandleLoadLayout(CancellationToken cancel = default)
-    {
-        _config = LayoutService.Get<HistoricalControlsPageViewModelConfig>(this);
-        IsTurnedOn.ViewValue.Value = _config.IsTurnedOn;
-        Speed.ViewValue.Value = _config.Speed;
-        StringPropWithoutValidation.ViewValue.Value = _config.StringPropWithoutValidation;
-        StringPropWithOneValidation.ViewValue.Value = _config.StringPropWithOneValidation;
-        StringPropWithManyValidations.ViewValue.Value = _config.StringPropWithManyValidations;
-        GeoPointProperty.ModelValue.Value = _config.GeoPointProperty;
-        TagTypeProp.ModelValue.Value = _config.TagTypeProp;
-        RttBoxStatusProp.ModelValue.Value = _config.RttBoxStatusProp;
-        return base.HandleLoadLayout(cancel);
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg =>
+                    {
+                        cfg.IsTurnedOn = IsTurnedOn.ViewValue.Value;
+                        cfg.Speed = Speed.ViewValue.Value ?? string.Empty;
+                        cfg.StringPropWithoutValidation =
+                            StringPropWithoutValidation.ViewValue.Value ?? string.Empty;
+                        cfg.StringPropWithOneValidation =
+                            StringPropWithOneValidation.ViewValue.Value ?? string.Empty;
+                        cfg.StringPropWithManyValidations =
+                            StringPropWithManyValidations.ViewValue.Value ?? string.Empty;
+                        cfg.GeoPointProperty = GeoPointProperty.ModelValue.Value;
+                        cfg.TagTypeProp = TagTypeProp.ViewValue.Value;
+                        cfg.RttBoxStatusProp = RttBoxStatusProp.ViewValue.Value;
+                    }
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<HistoricalControlsPageViewModelConfig>(
+                    this,
+                    cfg =>
+                    {
+                        IsTurnedOn.ViewValue.Value = cfg.IsTurnedOn;
+                        Speed.ViewValue.Value = cfg.Speed;
+                        StringPropWithoutValidation.ViewValue.Value =
+                            cfg.StringPropWithoutValidation;
+                        StringPropWithOneValidation.ViewValue.Value =
+                            cfg.StringPropWithOneValidation;
+                        StringPropWithManyValidations.ViewValue.Value =
+                            cfg.StringPropWithManyValidations;
+                        GeoPointProperty.ModelValue.Value = cfg.GeoPointProperty;
+                        TagTypeProp.ModelValue.Value = cfg.TagTypeProp;
+                        RttBoxStatusProp.ModelValue.Value = cfg.RttBoxStatusProp;
+                    }
+                );
+                break;
+        }
+
+        return base.InternalCatchEvent(e);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -15,11 +15,8 @@ public enum TagType
     Info4,
 }
 
-public class TagViewModel(
-    NavigationId id,
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : ViewModelBase(id: id, layoutService, loggerFactory)
+public class TagViewModel(NavigationId id, ILoggerFactory loggerFactory)
+    : ViewModelBase(id: id, loggerFactory)
 {
     public TagType? TagType
     {

@@ -14,16 +14,16 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
     public const MaterialIconKind PageIcon = MaterialIconKind.Map;
 
     public MapControlsPageViewModel()
-        : this(NullLayoutService.Instance, DesignTime.LoggerFactory)
+        : this(DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public MapControlsPageViewModel(ILayoutService layoutService, ILoggerFactory loggerFactory)
-        : base(PageId, layoutService, loggerFactory)
+    public MapControlsPageViewModel(ILoggerFactory loggerFactory)
+        : base(PageId, loggerFactory)
     {
-        MapViewModel = new MapViewModel("Map", layoutService, loggerFactory)
+        MapViewModel = new MapViewModel("Map", loggerFactory)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 
@@ -31,10 +31,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         MapViewModel.Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
 
         MapViewModel.Anchors.Add(
-            new MapAnchor<IMapAnchor>("1", layoutService, loggerFactory)
-            {
-                Icon = MaterialIconKind.Navigation,
-            }
+            new MapAnchor<IMapAnchor>("1", loggerFactory) { Icon = MaterialIconKind.Navigation }
         );
     }
 

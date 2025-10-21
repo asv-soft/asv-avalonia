@@ -7,10 +7,8 @@ namespace Asv.Avalonia.Example;
 
 [ExportExtensionFor<IControlsGalleryPage>]
 [method: ImportingConstructor]
-public class ControlsGalleryPageExtension(
-    ILayoutService layoutService,
-    ILoggerFactory loggerFactory
-) : IExtensionFor<IControlsGalleryPage>
+public class ControlsGalleryPageExtension(ILoggerFactory loggerFactory)
+    : IExtensionFor<IControlsGalleryPage>
 {
     public void Extend(IControlsGalleryPage context, CompositeDisposable contextDispose)
     {
@@ -21,7 +19,6 @@ public class ControlsGalleryPageExtension(
                 DialogControlsPageViewModel.PageIcon,
                 DialogControlsPageViewModel.PageId,
                 NavigationId.Empty,
-                layoutService,
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );
@@ -33,7 +30,6 @@ public class ControlsGalleryPageExtension(
                 HistoricalControlsPageViewModel.PageIcon,
                 HistoricalControlsPageViewModel.PageId,
                 NavigationId.Empty,
-                layoutService,
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );
@@ -45,7 +41,6 @@ public class ControlsGalleryPageExtension(
                 InfoBoxControlsPageViewModel.PageIcon,
                 InfoBoxControlsPageViewModel.PageId,
                 NavigationId.Empty,
-                layoutService,
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );
@@ -57,7 +52,6 @@ public class ControlsGalleryPageExtension(
                 MapControlsPageViewModel.PageIcon,
                 MapControlsPageViewModel.PageId,
                 NavigationId.Empty,
-                layoutService,
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );

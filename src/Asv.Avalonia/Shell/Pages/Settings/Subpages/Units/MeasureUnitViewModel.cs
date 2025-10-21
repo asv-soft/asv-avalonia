@@ -7,12 +7,8 @@ public class MeasureUnitViewModel : RoutableViewModel
 {
     private bool _internalChange;
 
-    public MeasureUnitViewModel(
-        IUnit item,
-        ILayoutService layoutService,
-        ILoggerFactory loggerFactory
-    )
-        : base(item.UnitId, layoutService, loggerFactory)
+    public MeasureUnitViewModel(IUnit item, ILoggerFactory loggerFactory)
+        : base(item.UnitId, loggerFactory)
     {
         SelectedItem = new BindableReactiveProperty<IUnitItem>(item.CurrentUnitItem.CurrentValue);
         Base = item;

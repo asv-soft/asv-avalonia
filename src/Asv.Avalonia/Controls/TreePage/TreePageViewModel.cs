@@ -189,7 +189,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
                     {
                         if (!string.IsNullOrEmpty(cfg.SelectedNodeId))
                         {
-                            SetSelectedNodeFromConfig();
+                            SetSelectedNodeFromConfig(cfg);
                         }
                     }
                 );
@@ -199,9 +199,9 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return base.InternalCatchEvent(e);
     }
 
-    private void SetSelectedNodeFromConfig()
+    private void SetSelectedNodeFromConfig(TreePageViewModelConfig cfg)
     {
-        var selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == _config.SelectedNodeId);
+        var selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == cfg.SelectedNodeId);
 
         SelectedNode.Value = selectedNode;
 
@@ -217,12 +217,12 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             .ObserveAdd()
             .Subscribe(addEvent =>
             {
-                if (addEvent.Value.Id != _config.SelectedNodeId)
+                if (addEvent.Value.Id != cfg.SelectedNodeId)
                 {
                     return;
                 }
 
-                selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == _config.SelectedNodeId);
+                selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == cfg.SelectedNodeId);
                 if (selectedNode is null)
                 {
                     return;

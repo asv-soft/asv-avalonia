@@ -7,15 +7,13 @@ namespace Asv.Avalonia;
 
 [ExportExtensionFor<IHomePage>]
 [method: ImportingConstructor]
-public class HomePageSettingsExtension(ILayoutService layoutService, ILoggerFactory loggerFactory)
-    : IExtensionFor<IHomePage>
+public class HomePageSettingsExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
         context.Tools.Add(
             OpenSettingsCommand
                 .StaticInfo.CreateAction(
-                    layoutService,
                     loggerFactory,
                     RS.OpenSettingsCommand_Action_Title,
                     RS.OpenSettingsCommand_Action_Description
