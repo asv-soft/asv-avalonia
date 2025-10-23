@@ -76,6 +76,19 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         SetInMemory(key, value);
     }
 
+    public void RemoveFromMemory(IRoutable source)
+    {
+        var key = GetKey(source);
+        RemoveFromMemory(key);
+    }
+
+    public void RemoveFromMemoryViewmodelAndView(IRoutable source)
+    {
+        var keyForView = CreateViewKeyFromViewmodel(source);
+        RemoveFromMemory(source);
+        RemoveFromMemory(keyForView);
+    }
+
     public void FlushFromMemory(IRoutable target)
     {
         ArgumentNullException.ThrowIfNull(target);
@@ -113,16 +126,16 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         SetInMemory(key, value);
     }
 
-    public void RemoveFromMemory(IRoutable source)
+    public void RemoveFromMemory(StyledElement source)
     {
         var key = GetKey(source);
         RemoveFromMemory(key);
     }
 
-    public void RemoveFromMemory(StyledElement source)
+    public void RemoveFromMemoryViewmodelAndView(StyledElement source)
     {
-        var key = GetKey(source);
-        RemoveFromMemory(key);
+        RemoveFromMemory(source);
+        RemoveFromMemory(FindRoutableDataContext(source));
     }
 
     public void FlushFromMemory(StyledElement source)
@@ -151,7 +164,12 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     private string GetKey(StyledElement source)
     {
-        return GetKey(FindRoutableDataContext(source)) + ViewIdPart;
+        return CreateViewKeyFromViewmodel(FindRoutableDataContext(source));
+    }
+
+    private string CreateViewKeyFromViewmodel(IRoutable source)
+    {
+        return GetKey(source) + ViewIdPart;
     }
 
     #endregion
@@ -188,7 +206,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
             _cfgInMemory.Remove(key);
             if (!_cache.TryRemove(key, out _))
             {
-                _logger.ZLogWarning($"Failed to remove layout config for id = {key} from cache");
+                _logger.ZLogTrace($"Failed to remove layout config for id = {key} from cache");
                 return;
             }
         }
