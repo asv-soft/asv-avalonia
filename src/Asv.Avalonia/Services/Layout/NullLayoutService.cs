@@ -36,6 +36,16 @@ public sealed class NullLayoutService : ILayoutService
         return;
     }
 
+    public void RemoveFromMemoryViewmodelAndView(IRoutable source)
+    {
+        return;
+    }
+
+    public void RemoveFromMemoryViewmodelAndView(StyledElement source)
+    {
+        return;
+    }
+
     public void FlushFromMemory()
     {
         return;
