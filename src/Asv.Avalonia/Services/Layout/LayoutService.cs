@@ -82,13 +82,6 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         RemoveFromMemory(key);
     }
 
-    public void RemoveFromMemoryViewmodelAndView(IRoutable source)
-    {
-        var keyForView = CreateViewKeyFromViewmodel(source);
-        RemoveFromMemory(source);
-        RemoveFromMemory(keyForView);
-    }
-
     public void FlushFromMemory(IRoutable target)
     {
         ArgumentNullException.ThrowIfNull(target);
@@ -132,44 +125,42 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         RemoveFromMemory(key);
     }
 
-    public void RemoveFromMemoryViewmodelAndView(StyledElement source)
-    {
-        RemoveFromMemory(source);
-        RemoveFromMemory(FindRoutableDataContext(source));
-    }
-
     public void FlushFromMemory(StyledElement source)
     {
         var key = GetKey(source);
         FlushFromMemory(key);
     }
 
-    private IRoutable FindRoutableDataContext(StyledElement source)
+    #endregion
+
+    #region Combined logic
+
+    public void RemoveFromMemoryViewModelAndView(IRoutable source)
     {
-        var control = source;
-        while (control is not null)
-        {
-            if (control.DataContext is IRoutable routable)
-            {
-                return routable;
-            }
-
-            control = control.GetLogicalParent() as Control;
-        }
-
-        throw new InvalidOperationException(
-            $"No {nameof(IRoutable)} DataContext found in the logical tree of the provided StyledElement."
-        );
+        var keyForView = CreateViewKeyFromViewmodel(source);
+        RemoveFromMemory(source);
+        RemoveFromMemory(keyForView);
     }
 
-    private string GetKey(StyledElement source)
+    public void RemoveFromMemoryViewmodelAndView(StyledElement source)
     {
-        return CreateViewKeyFromViewmodel(FindRoutableDataContext(source));
+        var srcRoutable = FindRoutableDataContext(source);
+        RemoveFromMemory(source);
+        RemoveFromMemory(srcRoutable);
     }
 
-    private string CreateViewKeyFromViewmodel(IRoutable source)
+    public void FlushFromMemoryViewModelAndView(IRoutable target)
     {
-        return GetKey(source) + ViewIdPart;
+        var keyForView = CreateViewKeyFromViewmodel(target);
+        FlushFromMemory(target);
+        FlushFromMemory(keyForView);
+    }
+
+    public void FlushFromMemoryViewModelAndView(StyledElement source)
+    {
+        var srcRoutable = FindRoutableDataContext(source);
+        FlushFromMemory(source);
+        FlushFromMemory(srcRoutable);
     }
 
     #endregion
@@ -237,6 +228,34 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         _logger.ZLogWarning(
             $"Failed to flush configuration for id = {key}, type = {value?.GetType()}"
         );
+    }
+
+    private IRoutable FindRoutableDataContext(StyledElement source)
+    {
+        var control = source;
+        while (control is not null)
+        {
+            if (control.DataContext is IRoutable routable)
+            {
+                return routable;
+            }
+
+            control = control.GetLogicalParent() as Control;
+        }
+
+        throw new InvalidOperationException(
+            $"No {nameof(IRoutable)} DataContext found in the logical tree of the provided StyledElement."
+        );
+    }
+
+    private string GetKey(StyledElement source)
+    {
+        return CreateViewKeyFromViewmodel(FindRoutableDataContext(source));
+    }
+
+    private string CreateViewKeyFromViewmodel(IRoutable source)
+    {
+        return GetKey(source) + ViewIdPart;
     }
 
     #region Dispose
