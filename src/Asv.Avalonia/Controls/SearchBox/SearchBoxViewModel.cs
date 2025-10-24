@@ -51,23 +51,26 @@ public class SearchBoxViewModel
         _canExecute = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);
         _progress = new BindableReactiveProperty<double>().DisposeItWith(Disposable);
 
+        var textValueObservable = Text.ViewValue.Skip(1);
+
         if (throttleTime is not null)
         {
-            Text.ViewValue.Skip(1)
-                .Debounce(throttleTime.Value)
-                .DistinctUntilChanged()
-                .WhereNotNull()
-                .SubscribeAwait(
-                    async (x, c) =>
-                        await this.ExecuteCommand(
-                            TextSearchCommand.Id,
-                            CommandArg.CreateString(x),
-                            cancel: c
-                        ),
-                    AwaitOperation.Parallel
-                )
-                .DisposeItWith(Disposable);
+            textValueObservable = textValueObservable.Debounce(throttleTime.Value);
         }
+
+        textValueObservable
+            .DistinctUntilChanged()
+            .WhereNotNull()
+            .SubscribeAwait(
+                async (x, c) =>
+                    await this.ExecuteCommand(
+                        TextSearchCommand.Id,
+                        CommandArg.CreateString(x),
+                        cancel: c
+                    ),
+                AwaitOperation.Parallel
+            )
+            .DisposeItWith(Disposable);
 
         Disposable.AddAction(() => _cancellationTokenSource?.Cancel(false));
     }
