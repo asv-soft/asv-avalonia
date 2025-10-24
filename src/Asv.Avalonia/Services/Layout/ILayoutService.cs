@@ -23,10 +23,12 @@ public interface ILayoutService : IExportable
 
     void RemoveFromMemory(IRoutable source);
     void RemoveFromMemory(StyledElement source);
-    void RemoveFromMemoryViewmodelAndView(IRoutable source);
+    void RemoveFromMemoryViewModelAndView(IRoutable source);
     void RemoveFromMemoryViewmodelAndView(StyledElement source);
 
     void FlushFromMemory();
     void FlushFromMemory(IRoutable target);
     void FlushFromMemory(StyledElement source);
+    void FlushFromMemoryViewModelAndView(IRoutable target);
+    void FlushFromMemoryViewModelAndView(StyledElement source);
 }

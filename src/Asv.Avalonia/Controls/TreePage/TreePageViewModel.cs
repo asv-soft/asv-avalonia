@@ -180,7 +180,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
                 foreach (var node in Nodes)
                 {
-                    _layoutService.RemoveFromMemoryViewmodelAndView(node);
+                    _layoutService.RemoveFromMemoryViewModelAndView(node);
                 }
 
                 break;

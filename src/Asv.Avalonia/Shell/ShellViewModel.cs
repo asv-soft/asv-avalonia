@@ -216,7 +216,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                     return;
                 }
 
-                LayoutService.RemoveFromMemoryViewmodelAndView(close.Page);
+                LayoutService.RemoveFromMemoryViewModelAndView(close.Page);
                 var current = SelectedPage.Value; // TODO: fix page selection
                 var removedIndex = _pages.IndexOf(close.Page);
                 if (removedIndex < 0)
