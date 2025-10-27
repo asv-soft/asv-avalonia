@@ -91,6 +91,14 @@ public class DesktopShellViewModel : ShellViewModel
             }
         }
 
+        if (e is DesktopPushArgsEvent argsEvent)
+        {
+            if (argsEvent.Args.Tags.Count > 1)
+            {
+                return _fileService.Open(argsEvent.Args.Tags.Skip(1).First());
+            }
+        }
+
         return base.InternalCatchEvent(e);
     }
 

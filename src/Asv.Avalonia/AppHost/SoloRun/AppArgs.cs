@@ -7,12 +7,12 @@ namespace Asv.Avalonia;
 public partial class AppArgs : IAppArgs
 {
     private readonly ImmutableDictionary<string, string> _args;
-    private readonly ImmutableSortedSet<string> _tags;
+    private readonly ImmutableArray<string> _tags;
 
     [GeneratedRegex(@"^--([^=]+)=(.*)$", RegexOptions.Compiled)]
     private static partial Regex ArgsParserRegex();
 
-    private AppArgs(ImmutableDictionary<string, string> keys, ImmutableSortedSet<string> values)
+    private AppArgs(ImmutableDictionary<string, string> keys, ImmutableArray<string> values)
     {
         _args = keys;
         _tags = values;
@@ -22,7 +22,7 @@ public partial class AppArgs : IAppArgs
     {
         var keyValuePattern = ArgsParserRegex();
         var builder = ImmutableDictionary.CreateBuilder<string, string>();
-        var tagBuilder = ImmutableSortedSet.CreateBuilder<string>();
+        var tagBuilder = ImmutableArray.CreateBuilder<string>();
 
         foreach (var arg in args)
         {
@@ -45,7 +45,7 @@ public partial class AppArgs : IAppArgs
 
     public IReadOnlyDictionary<string, string> Args => _args;
 
-    public IReadOnlySet<string> Tags => _tags;
+    public IReadOnlyList<string> Tags => _tags;
 
     public string this[string key, string defaultValue] =>
         _args.GetValueOrDefault(key, defaultValue);
@@ -66,7 +66,7 @@ public partial class AppArgs : IAppArgs
     {
         var model = JsonConvert.DeserializeObject<SerializationModel>(sourceString);
         var builder = ImmutableDictionary.CreateBuilder<string, string>();
-        var tagBuilder = ImmutableSortedSet.CreateBuilder<string>();
+        var tagBuilder = ImmutableArray.CreateBuilder<string>();
 
         if (model != null)
         {
