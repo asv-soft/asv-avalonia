@@ -116,6 +116,19 @@ public partial class WorkspacePanel
         set => SetValue(MinCentralWidthProperty, value);
     }
 
+    public static readonly DirectProperty<WorkspacePanel, double> SplitterSizeProperty =
+        AvaloniaProperty.RegisterDirect<WorkspacePanel, double>(
+            nameof(SplitterSize),
+            o => o.SplitterSize,
+            (o, v) => o.SplitterSize = v
+        );
+
+    public double SplitterSize
+    {
+        get;
+        set => SetAndRaise(SplitterSizeProperty, ref field, value);
+    } = 4;
+
     public static readonly RoutedEvent<WorkspaceEventArgs> WorkspaceChangedEvent =
         RoutedEvent.Register<WorkspacePanel, WorkspaceEventArgs>(
             nameof(WorkspaceChanged),

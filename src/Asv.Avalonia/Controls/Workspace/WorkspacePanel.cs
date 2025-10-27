@@ -20,7 +20,12 @@ public partial class WorkspacePanel : Panel
     private readonly ColumnDefinition _rightColumn;
     private readonly RowDefinition _centerRow;
     private readonly RowDefinition _bottomRow;
-    private static int SplitterSize => 4;
+    private readonly GridSplitter _horizontalSplitter;
+    private readonly GridSplitter _verticalSplitter1;
+    private readonly GridSplitter _verticalSplitter2;
+    private readonly RowDefinition _horizontalSplitterRaw;
+    private readonly ColumnDefinition _verticalSplitterRaw1;
+    private readonly ColumnDefinition _verticalSplitterRaw2;
 
     static WorkspacePanel()
     {
@@ -38,7 +43,9 @@ public partial class WorkspacePanel : Panel
                 [!ColumnDefinition.WidthProperty] = this[!LeftWidthProperty],
                 [!ColumnDefinition.MinWidthProperty] = this[!MinLeftWidthProperty],
             },
-            new ColumnDefinition(new GridLength(SplitterSize, GridUnitType.Pixel))
+            _verticalSplitterRaw1 = new ColumnDefinition(
+                new GridLength(SplitterSize, GridUnitType.Pixel)
+            )
             {
                 MaxWidth = SplitterSize,
             },
@@ -47,7 +54,9 @@ public partial class WorkspacePanel : Panel
                 [!ColumnDefinition.WidthProperty] = this[!CentralWidthProperty],
                 [!ColumnDefinition.MinWidthProperty] = this[!MinCentralWidthProperty],
             },
-            new ColumnDefinition(new GridLength(SplitterSize, GridUnitType.Pixel))
+            _verticalSplitterRaw2 = new ColumnDefinition(
+                new GridLength(SplitterSize, GridUnitType.Pixel)
+            )
             {
                 MaxWidth = SplitterSize,
             },
@@ -65,7 +74,9 @@ public partial class WorkspacePanel : Panel
                 [!RowDefinition.HeightProperty] = this[!CentralHeightProperty],
                 [!RowDefinition.MinHeightProperty] = this[!MinCentralHeightProperty],
             },
-            new RowDefinition(new GridLength(SplitterSize, GridUnitType.Pixel))
+            _horizontalSplitterRaw = new RowDefinition(
+                new GridLength(SplitterSize, GridUnitType.Pixel)
+            )
             {
                 MaxHeight = SplitterSize,
             },
@@ -115,55 +126,55 @@ public partial class WorkspacePanel : Panel
         Grid.SetColumn(_centerPanel, 2);
 
         // Vertical GridSplitter between columns 0 and 2
-        var verticalSplitter1 = new GridSplitter
+        _verticalSplitter1 = new GridSplitter
         {
             Width = SplitterSize,
             IsHitTestVisible = true,
-            Cursor = Cursor.Parse("SizeAll"),
+            Cursor = Cursor.Parse("DragMove"),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
-        verticalSplitter1.DragCompleted += HorizontalSplitterOnDragCompleted;
+        _verticalSplitter1.DragCompleted += HorizontalSplitterOnDragCompleted;
 
-        Grid.SetRow(verticalSplitter1, 0);
-        Grid.SetRowSpan(verticalSplitter1, 3);
-        Grid.SetColumn(verticalSplitter1, 1);
+        Grid.SetRow(_verticalSplitter1, 0);
+        Grid.SetRowSpan(_verticalSplitter1, 3);
+        Grid.SetColumn(_verticalSplitter1, 1);
 
         // Vertical GridSplitter between columns 2 and 4
-        var verticalSplitter2 = new GridSplitter
+        _verticalSplitter2 = new GridSplitter
         {
             Width = SplitterSize,
             IsHitTestVisible = true,
-            Cursor = Cursor.Parse("SizeAll"),
+            Cursor = Cursor.Parse("DragMove"),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
-        verticalSplitter2.DragCompleted += HorizontalSplitterOnDragCompleted;
+        _verticalSplitter2.DragCompleted += HorizontalSplitterOnDragCompleted;
 
-        Grid.SetRow(verticalSplitter2, 0);
-        Grid.SetRowSpan(verticalSplitter2, 3);
-        Grid.SetColumn(verticalSplitter2, 3);
+        Grid.SetRow(_verticalSplitter2, 0);
+        Grid.SetRowSpan(_verticalSplitter2, 3);
+        Grid.SetColumn(_verticalSplitter2, 3);
 
         // Horizontal GridSplitter in row 2
-        var horizontalSplitter = new GridSplitter
+        _horizontalSplitter = new GridSplitter
         {
             Height = SplitterSize,
             HorizontalAlignment = HorizontalAlignment.Stretch,
             IsHitTestVisible = true,
-            Cursor = Cursor.Parse("SizeAll"),
+            Cursor = Cursor.Parse("DragMove"),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
 
-        horizontalSplitter.DragCompleted += HorizontalSplitterOnDragCompleted;
-        Grid.SetRow(horizontalSplitter, 1);
-        Grid.SetColumn(horizontalSplitter, 2);
+        _horizontalSplitter.DragCompleted += HorizontalSplitterOnDragCompleted;
+        Grid.SetRow(_horizontalSplitter, 1);
+        Grid.SetColumn(_horizontalSplitter, 2);
 
         // Add all elements to the Grid
         mainGrid.Children.Add(leftScrollViewer);
         mainGrid.Children.Add(rightScrollViewer);
         mainGrid.Children.Add(bottomTab);
         mainGrid.Children.Add(_centerPanel);
-        mainGrid.Children.Add(verticalSplitter1);
-        mainGrid.Children.Add(verticalSplitter2);
-        mainGrid.Children.Add(horizontalSplitter);
+        mainGrid.Children.Add(_verticalSplitter1);
+        mainGrid.Children.Add(_verticalSplitter2);
+        mainGrid.Children.Add(_horizontalSplitter);
 
         // Add the Grid as the only child element of the panel
         LogicalChildren.Add(mainGrid);
@@ -263,6 +274,50 @@ public partial class WorkspacePanel : Panel
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+
+        if (!_leftPanel.Children.Any(x => x.IsVisible))
+        {
+            _leftColumn.Width = GridLength.Auto;
+            _leftColumn.MinWidth = 0;
+            _verticalSplitter1.IsVisible = false;
+            _verticalSplitterRaw1.Width = GridLength.Auto;
+        }
+        else
+        {
+            _leftColumn.Width = LeftWidth;
+            _leftColumn.MinWidth = MinLeftWidth;
+            _verticalSplitter1.IsVisible = true;
+            _verticalSplitterRaw1.Width = new GridLength(SplitterSize, GridUnitType.Pixel);
+        }
+
+        if (!_rightPanel.Children.Any(x => x.IsVisible))
+        {
+            _rightColumn.Width = GridLength.Auto;
+            _rightColumn.MinWidth = 0;
+            _verticalSplitter2.IsVisible = false;
+            _verticalSplitterRaw2.Width = GridLength.Auto;
+        }
+        else
+        {
+            _rightColumn.Width = LeftWidth;
+            _rightColumn.MinWidth = MinLeftWidth;
+            _verticalSplitter2.IsVisible = true;
+            _verticalSplitterRaw2.Width = new GridLength(SplitterSize, GridUnitType.Pixel);
+        }
+
+        if (!_bottomPanel.Any(x => x.IsVisible))
+        {
+            _bottomRow.Height = GridLength.Auto;
+            _horizontalSplitter.IsVisible = false;
+            _horizontalSplitterRaw.Height = GridLength.Auto;
+        }
+        else
+        {
+            _bottomRow.Height = BottomHeight;
+            _bottomRow.MinHeight = MinBottomHeight;
+            _horizontalSplitter.IsVisible = true;
+            _horizontalSplitterRaw.Height = new GridLength(SplitterSize, GridUnitType.Pixel);
         }
 
         for (int i = 0; i < _centerPanel.Children.Count; i++)
