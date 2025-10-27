@@ -59,12 +59,11 @@ public class DesktopShellViewModel : ShellViewModel
         lifetime.MainWindow = wnd;
         lifetime.MainWindow.Show();
     }
-    
+
     private void OnDragOver(object sender, DragEventArgs e)
     {
         e.DragEffects = DragDropEffects.Copy;
     }
-    
 
     private void OnFileDrop(object? sender, DragEventArgs e)
     {
@@ -193,5 +192,4 @@ public class DesktopShellViewModel : ShellViewModel
                     : RS.ShellView_WindowControlButton_Maximize;
         }
     }
-
 }

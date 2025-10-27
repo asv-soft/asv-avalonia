@@ -9,7 +9,11 @@ namespace Asv.Avalonia;
 [Export(typeof(IStartupTask))]
 [Shared]
 [method: ImportingConstructor]
-public class ForwardArgsToSelectedControlTask(IFileAssociationService svc, INavigationService navigationService, IShellHost shellHost) : StartupTask
+public class ForwardArgsToSelectedControlTask(
+    IFileAssociationService svc,
+    INavigationService navigationService,
+    IShellHost shellHost
+) : StartupTask
 {
     public override void AppCtor()
     {
@@ -17,15 +21,14 @@ public class ForwardArgsToSelectedControlTask(IFileAssociationService svc, INavi
         {
             AppHost
                 .Instance.Services.GetRequiredService<ISoloRunFeature>()
-                .Args
-                .SubscribeAwait(HandleEvent);
+                .Args.SubscribeAwait(HandleEvent);
         }
     }
 
     private ValueTask HandleEvent(AppArgs appArgs, CancellationToken ct)
     {
         var context = navigationService.SelectedControl.CurrentValue ?? shellHost.Shell;
-        
+
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (context == null)
         {
