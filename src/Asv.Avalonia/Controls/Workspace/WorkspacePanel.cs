@@ -20,6 +20,7 @@ public partial class WorkspacePanel : Panel
     private readonly ColumnDefinition _rightColumn;
     private readonly RowDefinition _centerRow;
     private readonly RowDefinition _bottomRow;
+    private static int SplitterSize => 4;
 
     static WorkspacePanel()
     {
@@ -37,13 +38,19 @@ public partial class WorkspacePanel : Panel
                 [!ColumnDefinition.WidthProperty] = this[!LeftWidthProperty],
                 [!ColumnDefinition.MinWidthProperty] = this[!MinLeftWidthProperty],
             },
-            new ColumnDefinition(new GridLength(5, GridUnitType.Pixel)) { MaxWidth = 5 },
+            new ColumnDefinition(new GridLength(SplitterSize, GridUnitType.Pixel))
+            {
+                MaxWidth = SplitterSize,
+            },
             _centerColumn = new ColumnDefinition
             {
                 [!ColumnDefinition.WidthProperty] = this[!CentralWidthProperty],
                 [!ColumnDefinition.MinWidthProperty] = this[!MinCentralWidthProperty],
             },
-            new ColumnDefinition(new GridLength(5, GridUnitType.Pixel)) { MaxWidth = 5 },
+            new ColumnDefinition(new GridLength(SplitterSize, GridUnitType.Pixel))
+            {
+                MaxWidth = SplitterSize,
+            },
             _rightColumn = new ColumnDefinition
             {
                 [!ColumnDefinition.WidthProperty] = this[!RightWidthProperty],
@@ -58,7 +65,10 @@ public partial class WorkspacePanel : Panel
                 [!RowDefinition.HeightProperty] = this[!CentralHeightProperty],
                 [!RowDefinition.MinHeightProperty] = this[!MinCentralHeightProperty],
             },
-            new RowDefinition(new GridLength(5, GridUnitType.Pixel)) { MaxHeight = 5 },
+            new RowDefinition(new GridLength(SplitterSize, GridUnitType.Pixel))
+            {
+                MaxHeight = SplitterSize,
+            },
             _bottomRow = new RowDefinition
             {
                 [!RowDefinition.HeightProperty] = this[!BottomHeightProperty],
@@ -86,6 +96,7 @@ public partial class WorkspacePanel : Panel
             Name = "PART_BottomTab",
             TabStripPlacement = Dock.Bottom,
             Background = null,
+            Padding = new Thickness(0),
         };
         Grid.SetRow(bottomTab, 2);
         Grid.SetColumn(bottomTab, 2);
@@ -106,8 +117,7 @@ public partial class WorkspacePanel : Panel
         // Vertical GridSplitter between columns 0 and 2
         var verticalSplitter1 = new GridSplitter
         {
-            Width = 5,
-            Background = Brushes.Transparent,
+            Width = SplitterSize,
             IsHitTestVisible = true,
             Cursor = Cursor.Parse("SizeAll"),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
@@ -121,10 +131,8 @@ public partial class WorkspacePanel : Panel
         // Vertical GridSplitter between columns 2 and 4
         var verticalSplitter2 = new GridSplitter
         {
-            Width = 5,
-            Background = Brushes.Transparent,
+            Width = SplitterSize,
             IsHitTestVisible = true,
-            Opacity = 1,
             Cursor = Cursor.Parse("SizeAll"),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
@@ -137,17 +145,16 @@ public partial class WorkspacePanel : Panel
         // Horizontal GridSplitter in row 2
         var horizontalSplitter = new GridSplitter
         {
-            Height = 5,
+            Height = SplitterSize,
             HorizontalAlignment = HorizontalAlignment.Stretch,
-            Background = Brushes.Transparent,
             IsHitTestVisible = true,
             Cursor = Cursor.Parse("SizeAll"),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
+
         horizontalSplitter.DragCompleted += HorizontalSplitterOnDragCompleted;
-        Grid.SetRow(horizontalSplitter, 2);
-        Grid.SetColumn(horizontalSplitter, 1);
-        Grid.SetColumnSpan(horizontalSplitter, 3);
+        Grid.SetRow(horizontalSplitter, 1);
+        Grid.SetColumn(horizontalSplitter, 2);
 
         // Add all elements to the Grid
         mainGrid.Children.Add(leftScrollViewer);

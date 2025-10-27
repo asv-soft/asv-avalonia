@@ -59,7 +59,10 @@
         
         
     </Design.PreviewWith>
-    <Style Selector="avalonia|Workspace">
+    <Style Selector="avalonia|Workspace" >
+        <Style Selector="^ GridSplitter:pointerover">
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+        </Style>
         <!-- Set Defaults -->
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>

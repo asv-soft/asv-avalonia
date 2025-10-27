@@ -17,7 +17,18 @@
                         <TextBox></TextBox>
                     </StackPanel>
                 </avalonia:WorkspaceItem>
-                <avalonia:WorkspaceItem Width="200" Header="asdasd" >
+                <avalonia:WorkspaceItem Header="HEADER" CanExpand="False" DockPanel.Dock="Top">
+                    <avalonia:WorkspaceItem.Flyout>
+                        <MenuFlyout>
+                            <MenuItem Header="Action1"></MenuItem>
+                        </MenuFlyout>
+                    </avalonia:WorkspaceItem.Flyout>
+                    <StackPanel>
+                        <TextBlock Text="AAAA"/>
+                        <TextBox></TextBox>
+                    </StackPanel>
+                </avalonia:WorkspaceItem>
+                <avalonia:WorkspaceItem Width="200" Header="asdasd" Position="Bottom" >
                     <Border BorderThickness="1" BorderBrush="Red" >
                         <StackPanel>
                             <TextBlock Text="AAAA"/>
@@ -32,6 +43,9 @@
     </Design.PreviewWith>
 
     <Style Selector="avalonia|WorkspaceItem">
+        <Style Selector="^[Position=Bottom] DockPanel#PART_Header">
+            <Setter Property="IsVisible" Value="False"/>
+        </Style>
         <!-- Set Defaults -->
         <Setter Property="Padding" Value="4"></Setter>
         <Setter Property="avalonia:WorkspacePanel.Dock" Value="{Binding Position, RelativeSource={RelativeSource Self}}"/>
@@ -43,8 +57,8 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <Border VerticalAlignment="Stretch" CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}">
-                    <DockPanel Margin="{TemplateBinding Padding}">
-                        <DockPanel Margin="0,4,0,4" DockPanel.Dock="Top">
+                    <DockPanel  Margin="{TemplateBinding Padding}">
+                        <DockPanel x:Name="PART_Header" Margin="0,0,0,4" DockPanel.Dock="Top">
                            
                             <Button IsVisible="{TemplateBinding Flyout, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="0" Padding="5,4" DockPanel.Dock="Right" Theme="{DynamicResource TransparentButton}"
                                     Flyout="{TemplateBinding Flyout}">
@@ -53,7 +67,16 @@
                                                         HorizontalAlignment="Center"/>
                                 
                             </Button>
-                            <ToggleButton HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Padding="2,4" IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" Theme="{DynamicResource TransparentButton}">
+                            <DockPanel IsVisible="{TemplateBinding CanExpand, Converter={x:Static BoolConverters.Not}}">
+                                <avalonia1:MaterialIcon DockPanel.Dock="Left" Kind="{TemplateBinding Icon}"
+                                                        Width="16" Height="16"
+                                                        Margin="0,0,4,0"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Left"/>
+                                <TextBlock  VerticalAlignment="Center" Text="{TemplateBinding Header}"/>
+                            </DockPanel>
+                            
+                            <ToggleButton IsVisible="{TemplateBinding CanExpand}" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Center" Padding="2,4" IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" Theme="{DynamicResource TransparentButton}">
                                 <DockPanel>
                                     <avalonia1:MaterialIcon DockPanel.Dock="Left" Kind="{TemplateBinding Icon}"
                                                             Width="16" Height="16"
@@ -67,7 +90,7 @@
                                     <TextBlock VerticalAlignment="Center" Text="{TemplateBinding Header}"/>    
                                 </DockPanel>
                             </ToggleButton>
-                            
+                             
                             
                         </DockPanel>
                         <ContentPresenter Name="PART_ContentPresenter"

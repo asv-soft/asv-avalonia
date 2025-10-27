@@ -50,7 +50,7 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<GridLength> BottomHeightProperty =
         AvaloniaProperty.Register<WorkspacePanel, GridLength>(
             nameof(BottomHeight),
-            new GridLength(1, GridUnitType.Star)
+            new GridLength(0, GridUnitType.Auto)
         );
     public GridLength BottomHeight
     {

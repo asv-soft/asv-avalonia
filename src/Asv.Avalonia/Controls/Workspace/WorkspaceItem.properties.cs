@@ -49,4 +49,15 @@ public partial class WorkspaceItem
         get => GetValue(IsExpandedProperty);
         set => SetValue(IsExpandedProperty, value);
     }
+
+    public static readonly StyledProperty<bool> CanExpandProperty = AvaloniaProperty.Register<
+        WorkspaceItem,
+        bool
+    >(nameof(CanExpand), defaultValue: true);
+
+    public bool CanExpand
+    {
+        get => GetValue(CanExpandProperty);
+        set => SetValue(CanExpandProperty, value);
+    }
 }
