@@ -64,5 +64,8 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
+      <Compile Update="Controls\Block\DialogBlock.axaml.cs">
+        <DependentUpon>DialogBlockStyles.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
 </Project>
