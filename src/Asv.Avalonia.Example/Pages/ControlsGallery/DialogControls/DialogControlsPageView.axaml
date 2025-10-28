@@ -18,6 +18,7 @@
     <UserControl.Styles>
         <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/ContentDialogMini/ContentDialogMini.axaml"/>
         <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/Block/BlockStyles.axaml"/>
+        <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/Block/DialogBlockStyles.axaml"/>
     </UserControl.Styles>
 
     <DockPanel Margin="12">
@@ -143,21 +144,19 @@
                                    TextWrapping="WrapWithOverflow" />
                     </Button>
                 </Border>
-                <Border Grid.Row="1" Grid.Column="2" Classes="DialogBlockStyle" VerticalAlignment="Stretch">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                        <Grid ColumnDefinitions="*" RowDefinitions="*" MinWidth="140">
-                            <example:ContentDialogMini DialogResult="{Binding CustomDialogResult.ViewValue.Value}"
-                                                       Width="100" Height="100"
-                                                       VerticalAlignment="Center" HorizontalAlignment="Center"
-                                                       IsImageContentType="{Binding IsCustomDialogImageContent.ViewValue.Value}"/>
-                            <Button Command="{Binding ResetCustomResultCommand}"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top">
-                                <avalonia:MaterialIcon Kind="Restore"/>
-                            </Button>
-                        </Grid>
-                    </ScrollViewer>
-                </Border>
+                <example:DialogBlock 
+                    Grid.Row="1" 
+                    Grid.Column="2" 
+                    VerticalAlignment="Stretch"
+                    ButtonCommand="{Binding ResetCustomResultCommand}">
+                    <example:DialogBlock.Content>
+                        <example:ContentDialogMini 
+                            DialogResult="{Binding CustomDialogResult.ViewValue.Value}"
+                            Width="100" Height="100"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            IsImageContentType="{Binding IsCustomDialogImageContent.ViewValue.Value}"/>
+                    </example:DialogBlock.Content>
+                </example:DialogBlock>
 
                 <!-- Ready dialog prefabs header -->
                 <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Classes="TitleBlockStyle">
@@ -198,20 +197,20 @@
                     </Button>
                 </Border>
                 <Border Grid.Row="4" Grid.Column="2" Classes="DialogBlockStyle" VerticalAlignment="Stretch">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                        <Grid ColumnDefinitions="*" RowDefinitions="*" MinWidth="140">
+                    <Grid ColumnDefinitions="*" RowDefinitions="*" MinWidth="140">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto">
                             <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center"
                                         HorizontalAlignment="Center">
                                 <example:BoolIndicator Value="{Binding YesOrNoDialogResult.ViewValue.Value, Converter={x:Static example:ConfirmationStatusToBoolConverter.Instance}}"
                                                        IconSize="40"/>
                             </StackPanel>
-                            <Button Command="{Binding ResetYerOrNoCommand}"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top">
+                        </ScrollViewer>
+                        <Button Command="{Binding ResetYerOrNoCommand}"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top">
                                 <avalonia:MaterialIcon Kind="Restore"/>
-                            </Button>
-                        </Grid>
-                    </ScrollViewer>
+                        </Button>
+                    </Grid>
                 </Border>
 
                 <!-- Save/cancel dialog -->
@@ -363,10 +362,13 @@
                                    TextWrapping="WrapWithOverflow" />
                     </Button>
                 </Border>
-                <Border Grid.Row="8" Grid.Column="2" Classes="DialogBlockStyle" VerticalAlignment="Stretch">
-                    <ScrollViewer HorizontalScrollBarVisibility="Auto">
-                        <Grid ColumnDefinitions="*" RowDefinitions="*" MinWidth="140">
-                            <Border Classes="DialogBlockInnerStyle"
+                <example:DialogBlock 
+                    Grid.Row="8" 
+                    Grid.Column="2" 
+                    VerticalAlignment="Stretch"
+                    ButtonCommand="{Binding ResetOpenGeoPointResultCommand}">
+                    <example:DialogBlock.Content>
+                        <Border Classes="DialogBlockInnerStyle"
                                     VerticalAlignment="Center" 
                                     HorizontalAlignment="Center">
                                 <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*" ColumnSpacing="4" RowSpacing="4"
@@ -399,14 +401,8 @@
                                                VerticalAlignment="Center" />
                                 </Grid>
                             </Border>
-                            <Button Command="{Binding ResetOpenGeoPointResultCommand}"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Top">
-                                <avalonia:MaterialIcon Kind="Restore"/>
-                            </Button>
-                        </Grid>
-                    </ScrollViewer>
-                </Border>
+                    </example:DialogBlock.Content>
+                </example:DialogBlock>
 
                 <!-- System dialogs header -->
                 <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" Classes="TitleBlockStyle">
