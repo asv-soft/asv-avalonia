@@ -142,7 +142,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         RemoveFromMemory(keyForView);
     }
 
-    public void RemoveFromMemoryViewmodelAndView(StyledElement source)
+    public void RemoveFromMemoryViewModelAndView(StyledElement source)
     {
         var srcRoutable = FindRoutableDataContext(source);
         RemoveFromMemory(source);

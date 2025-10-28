@@ -41,7 +41,7 @@ public sealed class NullLayoutService : ILayoutService
         return;
     }
 
-    public void RemoveFromMemoryViewmodelAndView(StyledElement source)
+    public void RemoveFromMemoryViewModelAndView(StyledElement source)
     {
         return;
     }
