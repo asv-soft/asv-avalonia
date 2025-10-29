@@ -492,9 +492,6 @@
     <data name="DialogButton_Yes" xml:space="preserve">
         <value>Да</value>
     </data>
-    <data name="DialogPageViewModel_Title" xml:space="preserve">
-        <value>Диалоги</value>
-    </data>
     <data name="RestartApplicationCommand_Info_Name" xml:space="preserve">
         <value>Перезапустить приложение</value>
     </data>
@@ -506,12 +503,6 @@
     </data>
     <data name="LanguageProperty_RestartDialog_Message" xml:space="preserve">
         <value>Чтобы изменения вступили в силу, требуется перезапустить приложение</value>
-    </data>
-    <data name="AddSerialPortCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Добавить последовательный порт</value>
-    </data>
-    <data name="AddSerialPortCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Команда, которая добавляет последовательный порт</value>
     </data>
     <data name="Unit_Terabyte_Abbreviation" xml:space="preserve">
         <value>ТБ</value>
@@ -527,54 +518,6 @@
     </data>
     <data name="Unit_Byte_Abbreviation" xml:space="preserve">
         <value>байт</value>
-    </data>
-    <data name="FileBrowserViewModel_DownloadDialog_PrimaryButtonText" xml:space="preserve">
-        <value>Отменить</value>
-    </data>
-    <data name="FileBrowserViewModel_DownloadDialog_SecondaryButtonText" xml:space="preserve">
-        <value>Скачать</value>
-    </data>
-    <data name="FileBrowserViewModel_DownloadDialog_Title" xml:space="preserve">
-        <value>Загрузка</value>
-    </data>
-    <data name="FileBrowserViewModel_UploadDialog_PrimaryButtonText" xml:space="preserve">
-        <value>Отменить</value>
-    </data>
-    <data name="FileBrowserViewModel_UploadDialog_Title" xml:space="preserve">
-        <value>Выгрузка</value>
-    </data>
-    <data name="FileBrowserView_CommitRename_Button_Tooltip" xml:space="preserve">
-        <value>Сохранить</value>
-    </data>
-    <data name="FileBrowserView_CompareSelectedItems_Button_Tooltip" xml:space="preserve">
-        <value>Сравнить выделенные элементы</value>
-    </data>
-    <data name="FileBrowserView_CRC32_Button_Tooltip" xml:space="preserve">
-        <value>Вычислить CRC32</value>
-    </data>
-    <data name="FileBrowserView_Delete_Button_Tooltip" xml:space="preserve">
-        <value>Удалить</value>
-    </data>
-    <data name="FileBrowserView_Download_button_Tooltip" xml:space="preserve">
-        <value>Скачать файл</value>
-    </data>
-    <data name="FileBrowserView_FindFile_Button_Tooltip" xml:space="preserve">
-        <value>Поиск файла</value>
-    </data>
-    <data name="FileBrowserView_NewFolder_Button_Tooltip" xml:space="preserve">
-        <value>Новая папка</value>
-    </data>
-    <data name="FileBrowserView_Refresh_Button_Tooltip" xml:space="preserve">
-        <value>Обновить</value>
-    </data>
-    <data name="FileBrowserView_Rename_Button_Tooltip" xml:space="preserve">
-        <value>Переименовать</value>
-    </data>
-    <data name="FileBrowserView_Search_Watermark" xml:space="preserve">
-        <value>Найти</value>
-    </data>
-    <data name="FileBrowserView_Upload_button_Tooltip" xml:space="preserve">
-        <value>Поместить файл</value>
     </data>
     <data name="ChangeStringPropertyCommand_CommandInfo_Name" xml:space="preserve">
         <value>Изменить свойство типа стринг</value>
@@ -689,12 +632,6 @@
     </data>
     <data name="OpenHomePageCommand_CommandInfo_Name" xml:space="preserve">
         <value>Команда, которая открывает домашнюю страницу</value>
-    </data>
-    <data name="ResetHotKeysCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Сбросить горячие клавиши</value>
-    </data>
-    <data name="ResetHotKeysCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Команда, которая сбрасывает горячие клавиши к значениям по умолчанию</value>
     </data>
     <data name="SettingsCommandListView_SearchBar_Watermark" xml:space="preserve">
         <value>Поиск</value>
@@ -845,5 +782,23 @@
     </data>
     <data name="SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly" xml:space="preserve">
         <value>Без горячих клавиш</value>
+    </data>
+    <data name="SaveLayoutToFileCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сохранить лейаут в файл</value>
+    </data>
+    <data name="SaveLayoutToFileCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда сохраняет лейаут текущей страницы в файл</value>
+    </data>
+    <data name="SaveAllLayoutToFileCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сохранить весь лейаут в файл</value>
+    </data>
+    <data name="SaveAllLayoutToFileCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда сохраняет лейаут всего приложения в файл</value>
+    </data>
+    <data name="ViewSaveMenu_Header" xml:space="preserve">
+        <value>Сохранить</value>
+    </data>
+    <data name="ViewSaveAllMenu_Header" xml:space="preserve">
+        <value>Сохранить все</value>
     </data>
 </root>

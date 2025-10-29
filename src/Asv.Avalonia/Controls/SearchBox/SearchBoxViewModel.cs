@@ -125,7 +125,7 @@ public class SearchBoxViewModel
             _isExecuting.Value = false;
             _canExecute.Value = true;
             _progress.Value = 1;
-            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
         }
     }

@@ -12,6 +12,7 @@ public class DesignTimeShellViewModel : ShellViewModel
     public DesignTimeShellViewModel()
         : base(
             NullContainerHost.Instance,
+            NullLayoutService.Instance,
             NullLoggerFactory.Instance,
             DesignTime.Configuration,
             ShellId

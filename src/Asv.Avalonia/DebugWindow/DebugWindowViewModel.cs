@@ -16,6 +16,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
             DesignTime.Navigation,
             DesignTime.ShellHost,
             DesignTime.CommandService,
+            NullLayoutService.Instance,
             DesignTime.LoggerFactory
         ) { }
 
@@ -24,6 +25,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
         INavigationService nav,
         IShellHost host,
         ICommandService cmd,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
         : base(ModelId, loggerFactory)
@@ -43,7 +45,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
     public NotifyCollectionChangedSynchronizedViewList<DebugPageViewModel> Pages { get; }
     public IReadOnlyBindableReactiveProperty<NavigationPath> SelectedControlPath { get; }
 
-    public IReadOnlyBindableReactiveProperty<HotKeyInfo?> HotKey { get; }
+    public IReadOnlyBindableReactiveProperty<HotKeyInfo> HotKey { get; }
 
     protected override void Dispose(bool disposing)
     {

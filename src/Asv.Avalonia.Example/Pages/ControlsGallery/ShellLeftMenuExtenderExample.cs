@@ -10,7 +10,7 @@ public class ShellLeftMenuExtenderExample : IExtensionFor<IShell>
     private readonly ILoggerFactory _loggerFactory;
 
     [ImportingConstructor]
-    public ShellLeftMenuExtenderExample(ILoggerFactory loggerFactory)
+    public ShellLeftMenuExtenderExample(ILayoutService layoutService, ILoggerFactory loggerFactory)
     {
         _loggerFactory = loggerFactory;
     }

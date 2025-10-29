@@ -742,4 +742,22 @@
     <data name="SettingsCommandListView_CommandsSortingType_WithoutHotkeysOnly" xml:space="preserve">
         <value>Without hotkeys</value>
     </data>
+    <data name="SaveLayoutToFileCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Save layout to file</value>
+    </data>
+    <data name="SaveLayoutToFileCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that saves layout of the current page to file</value>
+    </data>
+    <data name="SaveAllLayoutToFileCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Save All layout to file</value>
+    </data>
+    <data name="SaveAllLayoutToFileCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that saves layout of the whole app to file</value>
+    </data>
+    <data name="ViewSaveMenu_Header" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="ViewSaveAllMenu_Header" xml:space="preserve">
+        <value>Save All</value>
+    </data>
 </root>

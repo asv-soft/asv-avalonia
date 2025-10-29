@@ -85,6 +85,7 @@ public class TwoColumnRttBoxViewModel<T> : TwoColumnRttBoxViewModel
 
     public TwoColumnRttBoxViewModel(
         NavigationId id,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout

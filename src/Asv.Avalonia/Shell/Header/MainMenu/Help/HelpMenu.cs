@@ -7,6 +7,8 @@ namespace Asv.Avalonia;
 [ExportMainMenu]
 public class HelpMenu : MenuItem
 {
+    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.help";
+
     [method: ImportingConstructor]
     public HelpMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ShellView_Toolbar_Help, loggerFactory)
@@ -14,6 +16,4 @@ public class HelpMenu : MenuItem
         Order = 100;
         Icon = MaterialIconKind.Help;
     }
-
-    public const string MenuId = "shell.menu.help";
 }

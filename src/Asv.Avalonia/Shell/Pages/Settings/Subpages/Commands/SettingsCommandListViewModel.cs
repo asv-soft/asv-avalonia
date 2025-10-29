@@ -6,18 +6,25 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public sealed class SettingsCommandListViewModelConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+    public string SelectedItemId { get; set; } = string.Empty;
+    public CommandSortingType CommandSortingType { get; set; } = CommandSortingType.All;
+}
+
 [ExportSettings(PageId)]
 public class SettingsCommandListViewModel : SettingsSubPage
 {
     public const string PageId = "hotkeys";
 
     private readonly ICommandService _commandsService;
-    private readonly IDialogService _dialogService;
-    private readonly ILoggerFactory _loggerFactory;
     private readonly ISearchService _searchService;
     private readonly ObservableList<ICommandInfo> _itemsSource;
     private readonly ISynchronizedView<ICommandInfo, CommandViewModel> _view;
     private readonly ReactiveProperty<Enum> _commandSortingType;
+
+    private SettingsCommandListViewModelConfig? _config;
 
     public SettingsCommandListViewModel()
         : this(
@@ -40,8 +47,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
         : base(PageId, loggerFactory)
     {
         _commandsService = commandsService;
-        _loggerFactory = loggerFactory;
-        _dialogService = dialogService;
         _searchService = searchService;
 
         SelectedItem = new BindableReactiveProperty<CommandViewModel?>().DisposeItWith(Disposable);
@@ -50,9 +55,9 @@ public class SettingsCommandListViewModel : SettingsSubPage
         _view = _itemsSource
             .CreateView(cmdInfo => new CommandViewModel(
                 cmdInfo,
-                _commandsService,
-                _dialogService,
-                _loggerFactory
+                commandsService,
+                dialogService,
+                loggerFactory
             ))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
@@ -85,8 +90,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
     public BindableReactiveProperty<CommandViewModel?> SelectedItem { get; }
     public INotifyCollectionChangedSynchronizedViewList<CommandViewModel> Items { get; }
     public HistoricalEnumProperty<CommandSortingType> CommandSortingType { get; }
-
-    public override IExportInfo Source => SystemModule.Instance;
 
     private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
     {
@@ -163,4 +166,45 @@ public class SettingsCommandListViewModel : SettingsSubPage
             yield return children;
         }
     }
+
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
+                saveLayoutEvent.HandleSaveLayout(
+                    this,
+                    _config,
+                    cfg =>
+                    {
+                        cfg.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+                        cfg.CommandSortingType = CommandSortingType.ViewValue.Value;
+                        cfg.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
+                    }
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = loadLayoutEvent.HandleLoadLayout<SettingsCommandListViewModelConfig>(
+                    this,
+                    cfg =>
+                    {
+                        Search.Text.ModelValue.Value = cfg.SearchText;
+                        CommandSortingType.ModelValue.Value = cfg.CommandSortingType;
+                        SelectedItem.Value = _view.FirstOrDefault(x =>
+                            x.Id.ToString() == cfg.SelectedItemId
+                        );
+                    }
+                );
+                break;
+        }
+
+        return base.InternalCatchEvent(e);
+    }
+
+    public override IExportInfo Source => SystemModule.Instance;
 }

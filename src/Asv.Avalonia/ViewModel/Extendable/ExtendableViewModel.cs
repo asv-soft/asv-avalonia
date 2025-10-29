@@ -18,6 +18,7 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
     /// Initializes a new instance of the <see cref="ExtendableViewModel{TSelfInterface}"/> class.
     /// </summary>
     /// <param name="id">A unique identifier for the view model.</param>
+    /// <param name="layoutService"> Service used to save layout.</param>
     /// <param name="loggerFactory"> The factory used to create loggers for error handling and debugging.</param>
     protected ExtendableViewModel(NavigationId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory) { }

@@ -1,5 +1,6 @@
 ﻿using System.Buffers;
 using System.Composition;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Asv.Common;
 using Asv.IO;
@@ -13,16 +14,16 @@ namespace Asv.Avalonia.IO;
 [ExportStatusItem]
 public class ConnectionRateStatusViewModel : StatusItem
 {
+    public const string NavId = $"{DefaultId}.connection_rate";
+
     private readonly ILoggerFactory _loggerFactory;
     private readonly TimeProvider _timeProvider;
     private readonly INavigationService _nav;
-    public const string NavId = $"{DefaultId}.connection_rate";
 
     private readonly IncrementalRateCounter _rxBytes;
     private readonly IncrementalRateCounter _txBytes;
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
-    private StatisticViewModel? _fullStatistic;
 
     public ConnectionRateStatusViewModel()
         : this(NullLoggerFactory.Instance, TimeProvider.System, DesignTime.Navigation)
@@ -98,11 +99,13 @@ public class ConnectionRateStatusViewModel : StatusItem
         }
     }
 
+    [field: AllowNull]
+    [field: MaybeNull]
     public StatisticViewModel FullStatistic
     {
         get
         {
-            return _fullStatistic ??= new StatisticViewModel(
+            return field ??= new StatisticViewModel(
                 $"{NavId}.statistic",
                 _loggerFactory,
                 _timeProvider

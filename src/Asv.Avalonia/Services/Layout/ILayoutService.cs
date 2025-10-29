@@ -1,55 +1,34 @@
 using Avalonia;
-using Avalonia.Controls;
-using Avalonia.LogicalTree;
 
 namespace Asv.Avalonia;
 
-public interface ILayoutService
+public interface ILayoutService : IExportable
 {
+    TPocoType Get<TPocoType>(IRoutable source)
+        where TPocoType : class, new() => Get(source, new Lazy<TPocoType>());
     TPocoType Get<TPocoType>(IRoutable source, Lazy<TPocoType> defaultValue)
         where TPocoType : class, new();
+    TPocoType Get<TPocoType>(StyledElement source, Lazy<TPocoType> defaultValue)
+        where TPocoType : class, new();
+    TPocoType Get<TPocoType>(StyledElement source)
+        where TPocoType : class, new()
+    {
+        return Get(source, new Lazy<TPocoType>());
+    }
 
-    void Set<TPocoType>(IRoutable source, TPocoType value)
+    void SetInMemory<TPocoType>(IRoutable source, TPocoType value)
+        where TPocoType : class, new();
+    void SetInMemory<TPocoType>(StyledElement source, TPocoType value)
         where TPocoType : class, new();
 
-    TPocoType Get<TPocoType>(StyledElement source, Lazy<TPocoType> defaultValue)
-        where TPocoType : class, new()
-    {
-        var control = source;
-        while (control != null)
-        {
-            if (control.DataContext is IRoutable routable)
-            {
-                return Get(routable, defaultValue);
-            }
+    void RemoveFromMemory(IRoutable source);
+    void RemoveFromMemory(StyledElement source);
+    void RemoveFromMemoryViewModelAndView(IRoutable source);
+    void RemoveFromMemoryViewModelAndView(StyledElement source);
 
-            // Try to find IRoutable DataContext in logical parent
-            control = control.GetLogicalParent() as Control;
-        }
-
-        throw new InvalidOperationException(
-            "No IRoutable DataContext found in the logical tree of the provided StyledElement."
-        );
-    }
-
-    void Set<TPocoType>(StyledElement source, TPocoType value)
-        where TPocoType : class, new()
-    {
-        var control = source;
-        while (control != null)
-        {
-            if (control.DataContext is IRoutable routable)
-            {
-                Set(routable, value);
-                break;
-            }
-
-            // Try to find IRoutable DataContext in logical parent
-            control = control.GetLogicalParent() as Control;
-        }
-
-        throw new InvalidOperationException(
-            "No IRoutable DataContext found in the logical tree of the provided StyledElement."
-        );
-    }
+    void FlushFromMemory(IReadOnlyCollection<IRoutable>? ignoreCollection = null);
+    void FlushFromMemory(IRoutable target);
+    void FlushFromMemory(StyledElement source);
+    void FlushFromMemoryViewModelAndView(IRoutable target);
+    void FlushFromMemoryViewModelAndView(StyledElement source);
 }

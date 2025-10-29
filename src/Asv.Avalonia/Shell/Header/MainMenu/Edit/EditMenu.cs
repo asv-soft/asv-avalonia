@@ -7,7 +7,7 @@ namespace Asv.Avalonia;
 [ExportMainMenu]
 public class EditMenu : MenuItem
 {
-    public const string MenuId = "shell.menu.edit";
+    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.edit";
 
     [ImportingConstructor]
     public EditMenu(ILoggerFactory loggerFactory)

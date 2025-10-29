@@ -7,6 +7,8 @@ namespace Asv.Avalonia;
 [ExportMainMenu]
 public class ViewMenu : MenuItem
 {
+    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.view";
+
     [method: ImportingConstructor]
     public ViewMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ShellView_Toolbar_View, loggerFactory)
@@ -14,6 +16,4 @@ public class ViewMenu : MenuItem
         Order = 80;
         Icon = MaterialIconKind.ViewGrid;
     }
-
-    public const string MenuId = "shell.menu.view";
 }

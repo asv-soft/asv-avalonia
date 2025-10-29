@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 [ExportMainMenu]
 public class CreateMenu : MenuItem
 {
-    public const string MenuId = "shell.menu.create";
+    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.create";
 
     [ImportingConstructor]
     public CreateMenu(ILoggerFactory loggerFactory)

@@ -15,7 +15,7 @@ public class SettingsAppearanceViewModel : SettingsSubPage
         : this(
             DesignTime.ThemeService,
             DesignTime.LocalizationService,
-            null!,
+            NullDialogService.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -33,13 +33,12 @@ public class SettingsAppearanceViewModel : SettingsSubPage
     )
         : base(PageId, loggerFactory)
     {
-        Theme = new ThemeProperty(themeService, loggerFactory) { Parent = this }.DisposeItWith(
-            Disposable
-        );
+        Theme = new ThemeProperty(themeService, loggerFactory)
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         Language = new LanguageProperty(localizationService, dialog, loggerFactory)
-        {
-            Parent = this,
-        }.DisposeItWith(Disposable);
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
     }
 
     public ThemeProperty Theme { get; }

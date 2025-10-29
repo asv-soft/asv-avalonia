@@ -16,7 +16,7 @@ public class LanguageProperty : RoutableViewModel
     public BindableReactiveProperty<ILanguageInfo> SelectedItem { get; }
 
     public LanguageProperty()
-        : this(DesignTime.LocalizationService, null!, DesignTime.LoggerFactory)
+        : this(DesignTime.LocalizationService, NullDialogService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }

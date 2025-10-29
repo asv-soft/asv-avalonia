@@ -6,15 +6,9 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia.Example;
 
-public sealed class ControlsGalleryPageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
 public class ControlsGalleryPageViewModel
-    : TreePageViewModel<
-        IControlsGalleryPage,
-        IControlsGallerySubPage,
-        ControlsGalleryPageViewModelConfig
-    >,
+    : TreePageViewModel<IControlsGalleryPage, IControlsGallerySubPage>,
         IControlsGalleryPage
 {
     public const string PageId = "controls_gallery";
@@ -24,7 +18,7 @@ public class ControlsGalleryPageViewModel
         : this(
             DesignTime.CommandService,
             DesignTime.ContainerHost,
-            DesignTime.Configuration,
+            NullLayoutService.Instance,
             NullLoggerFactory.Instance
         )
     {
@@ -35,10 +29,10 @@ public class ControlsGalleryPageViewModel
     public ControlsGalleryPageViewModel(
         ICommandService cmd,
         IContainerHost containerHost,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, cmd, containerHost, cfg, loggerFactory)
+        : base(PageId, cmd, containerHost, layoutService, loggerFactory)
     {
         Title = RS.ControlsGalleryPageViewModel_Title;
         Icon = PageIcon;

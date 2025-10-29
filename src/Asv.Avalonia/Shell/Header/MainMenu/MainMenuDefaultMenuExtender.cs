@@ -12,6 +12,26 @@ public class MainMenuDefaultMenuExtender(
 {
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {
-        context.MainMenu.AddRange(items.Select(x => x.DisposeItWith(contextDispose)));
+        context.MainMenu.AddRange(
+            items.Select(x =>
+            {
+                if (x.ParentId != NavigationId.Empty)
+                {
+                    var parent = items.FirstOrDefault(item => item.Id == x.ParentId);
+
+                    if (parent is not null)
+                    {
+                        x.SetRoutableParent(parent);
+                    }
+                }
+                else
+                {
+                    x.SetRoutableParent(context);
+                }
+
+                x.DisposeItWith(contextDispose);
+                return x;
+            })
+        );
     }
 }

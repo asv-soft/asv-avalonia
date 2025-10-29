@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Diagnostics;
 using Asv.Cfg;
 using Asv.Common;
 using Material.Icons;
@@ -8,14 +10,25 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
+public class ShellViewModelConfig
+{
+    public IList<string> Pages { get; set; } = [];
+    public string? SelectedPageId { get; set; } = string.Empty;
+}
+
 public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 {
     private readonly ObservableList<IPage> _pages;
     private readonly IContainerHost _container;
     private readonly ICommandService _cmd;
+    private ShellViewModelConfig _config;
+    private bool _isLoaded;
+
+    private int _saveLayoutInProgress;
 
     protected ShellViewModel(
         IContainerHost ioc,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IConfiguration cfg,
         string id
@@ -23,7 +36,13 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         : base(id, loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(ioc);
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(layoutService);
+        ArgumentNullException.ThrowIfNull(cfg);
+
+        Cfg = cfg;
         _container = ioc;
+        LayoutService = layoutService;
         _cmd = ioc.GetExport<ICommandService>();
         Navigation = ioc.GetExport<INavigationService>();
         _pages = new ObservableList<IPage>();
@@ -37,11 +56,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         MainMenu.SetRoutableParent(this).DisposeItWith(Disposable);
         MainMenu.DisposeRemovedItems().DisposeItWith(Disposable);
         SelectedPage
-            .Subscribe(page =>
-            {
-                Logger.LogInformation($"Navigated to {page?.Id}");
-                Navigation.ForceFocus(page);
-            })
+            .WhereNotNull()
+            .SubscribeAwait(async (page, ct) => await page.RequestLoadLayout(layoutService, ct))
             .DisposeItWith(Disposable);
 
         StatusItems = [];
@@ -153,10 +169,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     #endregion
 
     #region Routable
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
+    public override async ValueTask<IRoutable> Navigate(NavigationId id)
     {
         var page = _pages.FirstOrDefault(x => x.Id == id);
-        if (page == null)
+        if (page is null)
         {
             if (_container.TryGetExport<IPage>(id.Id, out page))
             {
@@ -167,17 +183,17 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 SelectedPage.Value = page;
             }
 
-            return ValueTask.FromResult<IRoutable>(page);
+            return page;
         }
 
         if (page.Id == SelectedPage.Value?.Id)
         {
-            return ValueTask.FromResult<IRoutable>(page);
+            return page;
         }
 
         SelectedPage.Value = page;
 
-        return base.Navigate(id);
+        return await base.Navigate(id);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren() => _pages;
@@ -196,12 +212,12 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             {
                 Logger.ZLogInformation($"Close page [{close.Page.Id}]");
 
-                // TODO: save page layout
                 if (_pages is [HomePageViewModel])
                 {
                     return;
                 }
 
+                LayoutService.RemoveFromMemoryViewModelAndView(close.Page);
                 var current = SelectedPage.Value; // TODO: fix page selection
                 var removedIndex = _pages.IndexOf(close.Page);
                 if (removedIndex < 0)
@@ -234,6 +250,27 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
                 break;
             }
+            case SaveLayoutToFileGlobalEvent saveLayoutToFileGlobalEvent:
+                if (SelectedPage.Value is not null)
+                {
+                    await SelectedPage.Value.RequestSaveLayout(
+                        saveLayoutToFileGlobalEvent.LayoutService
+                    );
+                }
+
+                var restrictions = await this.RequestChildApprovalToSaveLayoutToFile();
+                var ignore = restrictions.Select(r => r.Source).ToImmutableArray();
+
+                saveLayoutToFileGlobalEvent.LayoutService.FlushFromMemory(ignore);
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                if (loadLayoutEvent.Source is not IShell)
+                {
+                    return;
+                }
+
+                await InternalLoadLayoutEventHandler(loadLayoutEvent);
+                break;
 
             default:
                 await base.InternalCatchEvent(e);
@@ -241,10 +278,92 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         }
     }
 
+    private async ValueTask InternalLoadLayoutEventHandler(
+        LoadLayoutEvent loadLayoutEvent,
+        CancellationToken cancellationToken = default
+    )
+    {
+        if (_isLoaded)
+        {
+            return;
+        }
+
+        try
+        {
+            _config = loadLayoutEvent.LayoutService.Get<ShellViewModelConfig>(this);
+            Logger.ZLogInformation($"Try to load layout: {string.Join(",", _config.Pages)}");
+            foreach (var page in _config.Pages)
+            {
+                await this.NavigateByPath(new NavigationPath(page));
+            }
+
+            if (_config.SelectedPageId is not null)
+            {
+                SelectedPage.Value = Pages.FirstOrDefault(page =>
+                    page.Id == _config.SelectedPageId
+                );
+            }
+
+            _isLoaded = true;
+        }
+        catch (Exception e)
+        {
+            Logger.ZLogError(e, $"Error loading layout: {e.Message}");
+        }
+        finally
+        {
+            _sub1?.Dispose();
+            _sub2?.Dispose();
+            _sub3?.Dispose();
+
+            _sub1 = Pages
+                .ObserveAdd(CancellationToken.None)
+                .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
+            _sub2 = Pages
+                .ObserveRemove(CancellationToken.None)
+                .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
+            _sub3 = SelectedPage.Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
+            if (Pages.Count == 0)
+            {
+                await this.NavigateByPath(new NavigationPath(HomePageViewModel.PageId));
+            }
+        }
+    }
+
+    private void SaveLayoutToFile(ILayoutService layoutService)
+    {
+        if (Interlocked.CompareExchange(ref _saveLayoutInProgress, 1, 0) != 0)
+        {
+            Logger.LogWarning("Save layout is already in progress");
+            return;
+        }
+
+        try
+        {
+            _config.Pages = Pages.Select(page => page.Id.ToString()).ToList();
+            _config.SelectedPageId = SelectedPage.Value?.Id.ToString();
+
+            Logger.ZLogTrace($"Save layout: {string.Join(",", _config.Pages)}");
+            layoutService.SetInMemory(this, _config);
+            layoutService.FlushFromMemory(this);
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error saving layout: {EMessage}", e.Message);
+            Debug.Assert(false, $"Error saving layout: {e.Message}");
+        }
+        finally
+        {
+            Interlocked.Exchange(ref _saveLayoutInProgress, 0);
+        }
+    }
+
     #endregion
 
-
     public virtual INavigationService Navigation { get; }
+
+    public IConfiguration Cfg { get; }
+    public ILayoutService LayoutService { get; }
 
     public ShellErrorState ErrorState
     {
@@ -265,12 +384,16 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
     #endregion
 
-    #region Dispose
-
     protected override void AfterLoadExtensions()
     {
         // do nothing
     }
+
+    #region Dispose
+
+    private IDisposable? _sub1;
+    private IDisposable? _sub2;
+    private IDisposable? _sub3;
 
     protected override void Dispose(bool disposing)
     {
@@ -282,6 +405,9 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             WindowStateHeader.Dispose();
             PagesView.Dispose();
             _pages.ClearWithItemsDispose();
+            _sub1?.Dispose();
+            _sub2?.Dispose();
+            _sub3?.Dispose();
         }
 
         base.Dispose(disposing);

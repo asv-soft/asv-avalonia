@@ -4,18 +4,6 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public interface ITreeSubpage : IRoutable, IExportable
-{
-    MenuTree MenuView { get; }
-    ObservableList<IMenuItem> Menu { get; }
-}
-
-public interface ITreeSubpage<in TContext> : ITreeSubpage
-    where TContext : class, IPage
-{
-    ValueTask Init(TContext context);
-}
-
 public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
 {
     protected TreeSubpage(NavigationId id, ILoggerFactory loggerFactory)
@@ -36,7 +24,7 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     {
         if (disposing)
         {
-            Menu.Clear();
+            Menu.RemoveAll();
         }
 
         base.Dispose(disposing);
