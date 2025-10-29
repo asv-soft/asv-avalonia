@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Diagnostics;
 using Asv.Cfg;
 using Asv.Common;
@@ -257,7 +258,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                     );
                 }
 
-                saveLayoutToFileGlobalEvent.LayoutService.FlushFromMemory();
+                var restrictions = await this.RequestChildApprovalToSaveLayoutToFile();
+                var ignore = restrictions.Select(r => r.Source).ToImmutableArray();
+
+                saveLayoutToFileGlobalEvent.LayoutService.FlushFromMemory(ignore);
                 break;
             case LoadLayoutEvent loadLayoutEvent:
                 if (loadLayoutEvent.Source is not IShell)

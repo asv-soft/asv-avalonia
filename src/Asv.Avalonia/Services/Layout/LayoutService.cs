@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Composition;
 using Asv.Cfg;
 using Asv.Common;
@@ -89,11 +90,18 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         FlushFromMemory(key);
     }
 
-    public void FlushFromMemory()
+    public void FlushFromMemory(IReadOnlyCollection<IRoutable>? ignoreCollection = null)
     {
+        var keysToIgnore = ignoreCollection?.Select(GetKey).ToImmutableArray();
         _logger.LogInformation("Started flushing the layout");
         foreach (var kvp in _cache)
         {
+            if (keysToIgnore?.Contains(kvp.Key) == true)
+            {
+                _logger.LogInformation("Configuration flush was ignored for id = {Key}", kvp.Key);
+                continue;
+            }
+
             _cfg.Set(kvp.Key, kvp.Value);
             _logger.ZLogTrace(
                 $"Configuration was flushed for id = {kvp.Key}, type = {kvp.Value?.GetType()}"

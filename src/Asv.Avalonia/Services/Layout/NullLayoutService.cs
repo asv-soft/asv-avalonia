@@ -26,6 +26,11 @@ public sealed class NullLayoutService : ILayoutService
         return;
     }
 
+    public void FlushFromMemory(IReadOnlyCollection<IRoutable>? keysToIgnore = null)
+    {
+        return;
+    }
+
     public void FlushFromMemory(IRoutable target)
     {
         return;
@@ -42,11 +47,6 @@ public sealed class NullLayoutService : ILayoutService
     }
 
     public void RemoveFromMemoryViewModelAndView(StyledElement source)
-    {
-        return;
-    }
-
-    public void FlushFromMemory()
     {
         return;
     }

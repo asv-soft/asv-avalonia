@@ -26,7 +26,7 @@ public interface ILayoutService : IExportable
     void RemoveFromMemoryViewModelAndView(IRoutable source);
     void RemoveFromMemoryViewModelAndView(StyledElement source);
 
-    void FlushFromMemory();
+    void FlushFromMemory(IReadOnlyCollection<IRoutable>? ignoreCollection = null);
     void FlushFromMemory(IRoutable target);
     void FlushFromMemory(StyledElement source);
     void FlushFromMemoryViewModelAndView(IRoutable target);
