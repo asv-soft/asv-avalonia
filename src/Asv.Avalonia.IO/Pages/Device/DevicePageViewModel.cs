@@ -4,6 +4,7 @@ using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
+using ZstdSharp.Unsafe;
 
 namespace Asv.Avalonia.IO;
 
@@ -26,14 +27,10 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         ArgumentNullException.ThrowIfNull(loggerFactory);
         ArgumentNullException.ThrowIfNull(cmd);
 
-        _deviceCore = new DevicePageCore(devices, Logger, this);
+        _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
         _deviceCore.DisposeItWith(Disposable);
-        Target
-            .Where(wrapper => wrapper is not null)
-            .SubscribeAwait(async (_, ct) => await this.RequestLoadLayout(layoutService, ct))
-            .DisposeItWith(Disposable);
     }
 
     protected override void InternalInitArgs(NameValueCollection args)
@@ -52,10 +49,15 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         {
             _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
             _deviceCore.Dispose();
+            Target.Dispose();
+            IsDeviceInitialized.Dispose();
         }
 
         base.Dispose(disposing);
     }
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
+    public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _deviceCore.IsDeviceInitialized;
+    public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
+    public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }

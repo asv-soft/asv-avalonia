@@ -24,16 +24,12 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
     )
         : base(id, cmd, container, layoutService, loggerFactory)
     {
-        _deviceCore = new DevicePageCore(devices, Logger, this);
+        _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
         _deviceCore.DisposeItWith(Disposable);
-        Target
-            .Where(wrapper => wrapper is not null)
-            .SubscribeAwait(async (_, ct) => await this.RequestLoadLayout(layoutService, ct))
-            .DisposeItWith(Disposable);
     }
 
     private void AfterDeviceInitializedBase(
@@ -68,10 +64,15 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
             _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
             _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
             _deviceCore.Dispose();
+            Target.Dispose();
+            IsDeviceInitialized.Dispose();
         }
 
         base.Dispose(disposing);
     }
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
+    public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _deviceCore.IsDeviceInitialized;
+    public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
+    public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }
