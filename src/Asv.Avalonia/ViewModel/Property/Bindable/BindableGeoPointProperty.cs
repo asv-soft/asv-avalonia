@@ -65,29 +65,16 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
             })
             .DisposeItWith(Disposable);
 
-        Latitude = new BindableUnitProperty(
-            nameof(Latitude),
-            ModelLat,
-            latUnit,
-            loggerFactory
-        )
+        Latitude = new BindableUnitProperty(nameof(Latitude), ModelLat, latUnit, loggerFactory)
         {
             Parent = this,
         }.DisposeItWith(Disposable);
-        Longitude = new BindableUnitProperty(
-            nameof(Longitude),
-            ModelLon,
-            lonUnit,
-            loggerFactory
-        ){
+        Longitude = new BindableUnitProperty(nameof(Longitude), ModelLon, lonUnit, loggerFactory)
+        {
             Parent = this,
         }.DisposeItWith(Disposable);
-        Altitude = new BindableUnitProperty(
-            nameof(Altitude),
-            ModelAlt,
-            altUnit,
-            loggerFactory
-        ){
+        Altitude = new BindableUnitProperty(nameof(Altitude), ModelAlt, altUnit, loggerFactory)
+        {
             Parent = this,
         }.DisposeItWith(Disposable);
 

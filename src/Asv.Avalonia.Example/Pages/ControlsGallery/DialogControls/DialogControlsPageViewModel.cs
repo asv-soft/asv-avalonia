@@ -140,50 +140,42 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         CustomDialogTitle = new HistoricalStringProperty(
             nameof(CustomDialogTitle),
             _customDialogTitle,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         IsCustomDialogImageContent = new HistoricalBoolProperty(
             nameof(IsCustomDialogImageContent),
             _customDialogIsImageContent,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         CustomDialogMessage = new HistoricalStringProperty(
             nameof(CustomDialogMessage),
             _customDialogMessage,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         CustomDialogImagePath = new HistoricalStringProperty(
             nameof(CustomDialogImagePath),
             _customDialogImagePath,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         CustomDialogPrimaryButtonText = new HistoricalStringProperty(
             nameof(CustomDialogPrimaryButtonText),
             _customDialogPrimaryButtonText,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         IsCustomDialogPrimaryButtonEnabled = new HistoricalBoolProperty(
             nameof(IsCustomDialogPrimaryButtonEnabled),
             _customDialogIsPrimaryButtonEnabled,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         CustomDialogSecondaryButtonText = new HistoricalStringProperty(
             nameof(CustomDialogSecondaryButtonText),
             _customDialogSecondaryButtonText,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         IsCustomDialogSecondaryButtonEnabled = new HistoricalBoolProperty(
             nameof(IsCustomDialogSecondaryButtonEnabled),
             _customDialogIsSecondaryButtonEnabled,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
 
         #endregion
@@ -212,32 +204,27 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         CustomDialogResult = new HistoricalEnumProperty<ContentDialogResult>(
             nameof(CustomDialogResult),
             _customDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         YesOrNoDialogResult = new HistoricalEnumProperty<ConfirmationStatus>(
             nameof(YesOrNoDialogResult),
             _yesOrNoDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         SaveCancelDialogResult = new HistoricalEnumProperty<ConfirmationStatus>(
             nameof(SaveCancelDialogResult),
             _saveCancelDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         ShowInputDialogResult = new HistoricalStringProperty(
             nameof(ShowInputDialogResult),
             _showInputDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         ShowHotKeyCaptureDialogResult = new HistoricalStringProperty(
             nameof(ShowHotKeyCaptureDialogResult),
             _showHotKeyCaptureDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         GeoPointDialogResult = new HistoricalGeoPointProperty(
             nameof(GeoPointDialogResult),
@@ -245,32 +232,27 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             latUnit,
             lonUnit,
             altUnit,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         OpenFileDialogResult = new HistoricalStringProperty(
             nameof(OpenFileDialogResult),
             _openFileDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         SaveFileDialogResult = new HistoricalStringProperty(
             nameof(SaveFileDialogResult),
             _saveFileDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         SelectFolderDialogResult = new HistoricalStringProperty(
             nameof(SelectFolderDialogResult),
             _selectFolderDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         ObserveFolderDialogResult = new HistoricalStringProperty(
             nameof(ObserveFolderDialogResult),
             _observeFolderDialogResult,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
 
         #endregion

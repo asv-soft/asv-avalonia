@@ -26,7 +26,7 @@ public static class DesignTime
             .Cast<MaterialIconKind>()
             .Skip(Random.Shared.Next(1, Enum.GetValues<MaterialIconKind>().Length))
             .First();
-    
+
     public static IShell Shell => DesignTimeShellViewModel.Instance;
     public static IAppStartupService AppStartupService => NullAppStartupService.Instance;
     public static IConfiguration Configuration { get; } = new InMemoryConfiguration();

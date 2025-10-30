@@ -8,48 +8,68 @@ using R3;
 
 namespace Asv.Avalonia;
 
-
-public class UnitPropertyViewModel : HistoricalUnitProperty, IPropertyViewModel, ISupportCancel, ISupportRefresh
+public class UnitPropertyViewModel
+    : HistoricalUnitProperty,
+        IPropertyViewModel,
+        ISupportCancel,
+        ISupportRefresh
 {
     private double _lastValue;
 
     public UnitPropertyViewModel()
         : this(
-            DesignTime.Id.ToString(), 
-            new BindableReactiveProperty<double>(), 
-            new AltitudeBase(DesignTime.Configuration, [new MeterAltitudeUnit(), new FeetAltitudeUnit()]), 
-            DesignTime.LoggerFactory)
+            DesignTime.Id.ToString(),
+            new BindableReactiveProperty<double>(),
+            new AltitudeBase(
+                DesignTime.Configuration,
+                [new MeterAltitudeUnit(), new FeetAltitudeUnit()]
+            ),
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
         Header = "Altitude";
         Description = "Altitude description";
         Icon = MaterialIconKind.Altimeter;
-        Observable.Timer(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5)).Subscribe(x =>
-        {
-            ShortName = Random.Shared.NextBoolean() ? "Alt" : null;
-            Icon = Random.Shared.NextBoolean() ? DesignTime.RandomImage : null;
-            ViewValue.Value = Random.Shared.NextBoolean() ? "err value" : Random.Shared.Next<short>().ToString();
-        });
+        Observable
+            .Timer(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5))
+            .Subscribe(x =>
+            {
+                ShortName = Random.Shared.NextBoolean() ? "Alt" : null;
+                Icon = Random.Shared.NextBoolean() ? DesignTime.RandomImage : null;
+                ViewValue.Value = Random.Shared.NextBoolean()
+                    ? "err value"
+                    : Random.Shared.Next<short>().ToString();
+            });
         ChangeUnitCommand = new ReactiveCommand<IUnitItem>(x => { });
     }
 
-    public UnitPropertyViewModel(string id, ReactiveProperty<double> modelValue, IUnit unit, ILoggerFactory loggerFactory, string? format = null) 
+    public UnitPropertyViewModel(
+        string id,
+        ReactiveProperty<double> modelValue,
+        IUnit unit,
+        ILoggerFactory loggerFactory,
+        string? format = null
+    )
         : base(id, modelValue, unit, loggerFactory, format)
     {
-        ChangeUnitCommand = new ReactiveCommand<IUnitItem>(item => ChangeMeasureUnitCommand.ExecuteCommand(this, unit, item).SafeFireAndForget())
-            .DisposeItWith(Disposable);
-        CurrentUnit = unit.CurrentUnitItem
-            .ToBindableReactiveProperty(unit.CurrentUnitItem.Value)
+        ChangeUnitCommand = new ReactiveCommand<IUnitItem>(item =>
+            ChangeMeasureUnitCommand.ExecuteCommand(this, unit, item).SafeFireAndForget()
+        ).DisposeItWith(Disposable);
+        CurrentUnit = unit
+            .CurrentUnitItem.ToBindableReactiveProperty(unit.CurrentUnitItem.Value)
             .DisposeItWith(Disposable);
     }
+
     public BindableReactiveProperty<IUnitItem> CurrentUnit { get; }
     public ReactiveCommand<IUnitItem> ChangeUnitCommand { get; }
 
     public void CommitValue()
     {
         IsInEditMode = false;
-        this.ExecuteCommand(ChangeDoublePropertyCommand.Id, new DoubleArg(_lastValue)).SafeFireAndForget();
+        this.ExecuteCommand(ChangeDoublePropertyCommand.Id, new DoubleArg(_lastValue))
+            .SafeFireAndForget();
     }
 
     protected override ValueTask ApplyValueToModel(double value, CancellationToken cancel)
@@ -76,7 +96,7 @@ public class UnitPropertyViewModel : HistoricalUnitProperty, IPropertyViewModel,
         get;
         set => SetField(ref field, value);
     }
-   
+
     public MaterialIconKind? Icon
     {
         get;

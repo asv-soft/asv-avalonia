@@ -59,13 +59,10 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             IsTurnedOn.ViewValue.Value = !IsTurnedOn.ViewValue.Value
         ).DisposeItWith(Disposable);
 
-        Speed = new HistoricalUnitProperty(
-            nameof(Speed),
-            _speed,
-            un,
-            loggerFactory){
-                Parent = this,
-            }.DisposeItWith(Disposable);
+        Speed = new HistoricalUnitProperty(nameof(Speed), _speed, un, loggerFactory)
+        {
+            Parent = this,
+        }.DisposeItWith(Disposable);
 
         StringPropWithoutValidation = new HistoricalStringProperty(
             nameof(StringPropWithoutValidation),
@@ -91,7 +88,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     return ValidationResult.Success;
                 },
             ]
-        ){
+        )
+        {
             Parent = this,
         }.DisposeItWith(Disposable);
         StringPropWithOneValidation.ForceValidate();
@@ -125,7 +123,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     return ValidationResult.Success;
                 },
             ]
-        ){
+        )
+        {
             Parent = this,
         }.DisposeItWith(Disposable);
         StringPropWithManyValidations.ForceValidate();

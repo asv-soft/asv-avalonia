@@ -55,7 +55,7 @@ public class ControlsGalleryPageExtension(ILoggerFactory loggerFactory)
                 loggerFactory
             ).DisposeItWith(contextDispose)
         );
-        
+
         context.Nodes.Add(
             new TreePage(
                 PropertyEditorPageViewModel.PageId,

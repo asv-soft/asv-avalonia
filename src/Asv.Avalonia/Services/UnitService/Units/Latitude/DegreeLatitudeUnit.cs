@@ -14,6 +14,4 @@ public sealed class DegreeLatitudeUnit : LatitudeUnitItemBase
     public override string Description => RS.Degree_Latitude_Description;
     public override string Symbol => RS.Degree_UnitItem_Symbol;
     public override bool IsInternationalSystemUnit => true;
-
-    
 }

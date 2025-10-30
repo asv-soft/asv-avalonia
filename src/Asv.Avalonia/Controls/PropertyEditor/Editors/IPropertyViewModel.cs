@@ -1,6 +1,3 @@
 namespace Asv.Avalonia;
 
-public interface IPropertyViewModel : IRoutable,  IHeadlinedViewModel
-{
-    
-}
+public interface IPropertyViewModel : IRoutable, IHeadlinedViewModel { }

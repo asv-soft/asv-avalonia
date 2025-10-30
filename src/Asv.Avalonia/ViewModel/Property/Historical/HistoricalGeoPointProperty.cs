@@ -4,9 +4,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class HistoricalGeoPointProperty
-    : BindableGeoPointProperty,
-        IHistoricalProperty<GeoPoint>
+public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalProperty<GeoPoint>
 {
     public HistoricalGeoPointProperty(
         NavigationId id,
@@ -22,31 +20,15 @@ public class HistoricalGeoPointProperty
         base.Longitude.Dispose();
         base.Altitude.Dispose();
 
-        Latitude = new HistoricalUnitProperty(
-            nameof(Latitude),
-            ModelLat,
-            latUnit,
-            loggerFactory
-        ) 
-        {
-            Parent = this,
-        }
-            .DisposeItWith(Disposable);
-        Longitude = new HistoricalUnitProperty(
-            nameof(Longitude),
-            ModelLon,
-            lonUnit,
-            loggerFactory
-        )
+        Latitude = new HistoricalUnitProperty(nameof(Latitude), ModelLat, latUnit, loggerFactory)
         {
             Parent = this,
         }.DisposeItWith(Disposable);
-        Altitude = new HistoricalUnitProperty(
-            nameof(Altitude),
-            ModelAlt,
-            altUnit,
-            loggerFactory
-        )
+        Longitude = new HistoricalUnitProperty(nameof(Longitude), ModelLon, lonUnit, loggerFactory)
+        {
+            Parent = this,
+        }.DisposeItWith(Disposable);
+        Altitude = new HistoricalUnitProperty(nameof(Altitude), ModelAlt, altUnit, loggerFactory)
         {
             Parent = this,
         }.DisposeItWith(Disposable);
