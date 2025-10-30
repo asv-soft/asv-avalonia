@@ -187,7 +187,7 @@
         <value>Bearing in degrees</value>
     </data>
     <data name="DM_UnitItem_Symbol" xml:space="preserve">
-        <value>[D]°[M]'</value>
+        <value>D°M'</value>
     </data>
     <data name="DM_Bearing_Description" xml:space="preserve">
         <value>Bearing in degrees and minutes</value>
@@ -256,7 +256,7 @@
         <value>Angle</value>
     </data>
     <data name="Degree_UnitItem_Symbol" xml:space="preserve">
-        <value>[D]°</value>
+        <value>D°</value>
     </data>
     <data name="Ms_UnitItem_Name" xml:space="preserve">
         <value>Minutes and seconds</value>
@@ -274,7 +274,7 @@
         <value>Angle in degrees, minutes and seconds</value>
     </data>
     <data name="Dms_UnitItem_Symbol" xml:space="preserve">
-        <value>D]°[M]′[S]′′</value>
+        <value>D°M′S′′</value>
     </data>
     <data name="FieldStrength_Name" xml:space="preserve">
         <value>Field strength</value>

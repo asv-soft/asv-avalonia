@@ -37,10 +37,7 @@ public abstract class LongitudeUnitItemBase() : UnitItemBase(1)
             : double.NaN;
     }
 
-    public override string Print(double value, string? format = null)
-    {
-        return GeoPointLongitude.PrintDms(value);
-    }
+    
 
     public override string PrintWithUnits(double value, string? format = null)
     {

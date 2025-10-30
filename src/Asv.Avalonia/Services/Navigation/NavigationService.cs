@@ -184,6 +184,10 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
                 path[0] == _host.Shell.Id ? path[1..] : path
             );
             FocusControlChanged(result);
+            if (result is ISupportFocus focus)
+            {
+                focus.Focus();
+            }
             return result;
         }
         catch (Exception e)

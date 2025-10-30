@@ -43,7 +43,10 @@ public class SearchBoxViewModel
         _searchCallback = searchCallback;
 
         var text = new ReactiveProperty<string?>(string.Empty).DisposeItWith(Disposable);
-        Text = new HistoricalStringProperty(nameof(Text), text, loggerFactory, this).DisposeItWith(
+        Text = new HistoricalStringProperty(nameof(Text), text, loggerFactory)
+        {
+            Parent = this,
+        }.DisposeItWith(
             Disposable
         );
 
@@ -77,12 +80,6 @@ public class SearchBoxViewModel
 
     public HistoricalStringProperty Text { get; }
 
-    public bool IsSelected
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
     public void Query(string? text)
     {
         if (_isExecuting.Value)
@@ -91,6 +88,11 @@ public class SearchBoxViewModel
         }
 
         InternalExecuteAsync(text ?? string.Empty).SafeFireAndForget(ErrorHandler);
+    }
+
+    public void Focus()
+    {
+        Text.Focus();
     }
 
     private void ErrorHandler(Exception err)
@@ -162,21 +164,9 @@ public class SearchBoxViewModel
         await this.ExecuteCommand(ClearCommand.Id);
     }
 
-    public void Focus()
-    {
-        IsSelected = false;
-        IsSelected = true;
-    }
-
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return Text;
-    }
-
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
-    {
-        Focus();
-        return base.Navigate(id);
     }
 
     public void Report(double value) => _progress.Value = value;

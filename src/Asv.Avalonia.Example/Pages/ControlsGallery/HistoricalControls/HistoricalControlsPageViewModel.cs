@@ -52,8 +52,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         IsTurnedOn = new HistoricalBoolProperty(
             nameof(IsTurnedOn),
             _isTurnedOn,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
 
         TurnOn = new ReactiveCommand(_ =>
@@ -64,22 +63,23 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             nameof(Speed),
             _speed,
             un,
-            loggerFactory,
-            this
-        ).DisposeItWith(Disposable);
+            loggerFactory){
+                Parent = this,
+            }.DisposeItWith(Disposable);
 
         StringPropWithoutValidation = new HistoricalStringProperty(
             nameof(StringPropWithoutValidation),
             _stringWithoutValidation,
-            loggerFactory,
-            this
-        ).DisposeItWith(Disposable);
+            loggerFactory
+        )
+        {
+            Parent = this,
+        }.DisposeItWith(Disposable);
 
         StringPropWithOneValidation = new HistoricalStringProperty(
             nameof(StringPropWithOneValidation),
             _stringWithOneValidation,
             loggerFactory,
-            this,
             [
                 v =>
                 {
@@ -91,14 +91,15 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     return ValidationResult.Success;
                 },
             ]
-        ).DisposeItWith(Disposable);
+        ){
+            Parent = this,
+        }.DisposeItWith(Disposable);
         StringPropWithOneValidation.ForceValidate();
 
         StringPropWithManyValidations = new HistoricalStringProperty(
             nameof(StringPropWithManyValidations),
             _stringWithManyValidations,
             loggerFactory,
-            this,
             [
                 v =>
                 {
@@ -124,7 +125,9 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     return ValidationResult.Success;
                 },
             ]
-        ).DisposeItWith(Disposable);
+        ){
+            Parent = this,
+        }.DisposeItWith(Disposable);
         StringPropWithManyValidations.ForceValidate();
 
         GeoPointProperty = new HistoricalGeoPointProperty(
@@ -133,23 +136,20 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             latUnit,
             lonUnit,
             altUnit,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         GeoPointProperty.ForceValidate();
 
         TagTypeProp = new HistoricalEnumProperty<TagType>(
             nameof(TagTypeProp),
             _tagTypeProp,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
 
         RttBoxStatusProp = new HistoricalEnumProperty<RttBoxStatus>(
             nameof(RttBoxStatusProp),
             _rttBoxStatusProp,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
     }
 

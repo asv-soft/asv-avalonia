@@ -32,9 +32,11 @@ public sealed class CommandViewModel : RoutableViewModel
         EditedHotKey = new HistoricalStringProperty(
             nameof(EditedHotKey),
             editedHotkey,
-            loggerFactory,
-            this
-        );
+            loggerFactory
+        )
+        {
+            Parent = this,
+        };
 
         SyncConflict(EditedHotKey.ModelValue.Value);
 

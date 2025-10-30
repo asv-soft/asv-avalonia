@@ -7,21 +7,21 @@ namespace Asv.Avalonia;
 
 public class NavigationHelper
 {
-    public static readonly AttachedProperty<bool> IsSelectedProperty =
+    public static readonly AttachedProperty<bool> IsFocusedProperty =
         AvaloniaProperty.RegisterAttached<Control, bool>(
-            "IsSelected",
+            "IsFocused",
             typeof(NavigationHelper),
             defaultBindingMode: BindingMode.TwoWay
         );
 
-    public static bool GetIsSelected(Control control) => control.GetValue(IsSelectedProperty);
+    public static bool GetIsFocused(Control control) => control.GetValue(IsFocusedProperty);
 
-    public static void SetIsSelected(Control control, bool value) =>
-        control.SetValue(IsSelectedProperty, value);
+    public static void SetIsFocused(Control control, bool value) =>
+        control.SetValue(IsFocusedProperty, value);
 
     static NavigationHelper()
     {
-        IsSelectedProperty
+        IsFocusedProperty
             .Changed.ToObservable()
             .Subscribe(args =>
             {

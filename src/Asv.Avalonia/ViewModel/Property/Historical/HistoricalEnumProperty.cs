@@ -15,15 +15,13 @@ public sealed class HistoricalEnumProperty<TEnum>
     public HistoricalEnumProperty(
         NavigationId id,
         ReactiveProperty<Enum> modelValue,
-        ILoggerFactory loggerFactory,
-        IRoutable parent
+        ILoggerFactory loggerFactory
     )
-        : base(id, loggerFactory, parent)
+        : base(id, loggerFactory)
     {
         ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<TEnum>().DisposeItWith(Disposable);
-        IsSelected = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        ViewValue.EnableValidation(ValidateValue);
+        ViewValue.EnableValidation(ValidateUserValue);
 
         _internalChange = true;
         ViewValue.SubscribeAwait(OnChangedByUser, AwaitOperation.Drop).DisposeItWith(Disposable);
@@ -34,11 +32,10 @@ public sealed class HistoricalEnumProperty<TEnum>
 
     public override ReactiveProperty<Enum> ModelValue { get; }
     public override BindableReactiveProperty<TEnum> ViewValue { get; }
-    public override BindableReactiveProperty<bool> IsSelected { get; }
 
     public TEnum[] EnumItems => Enum.GetValues<TEnum>();
 
-    protected override Exception? ValidateValue(TEnum userValue)
+    protected override Exception? ValidateUserValue(TEnum userValue)
     {
         return null;
     }
@@ -51,7 +48,7 @@ public sealed class HistoricalEnumProperty<TEnum>
         }
 
         _externalChange = true;
-        await ChangeModelValue(userValue, cancel);
+        await ApplyValueToModel(userValue, cancel);
         _externalChange = false;
     }
 
@@ -72,7 +69,7 @@ public sealed class HistoricalEnumProperty<TEnum>
         _internalChange = false;
     }
 
-    protected override async ValueTask ChangeModelValue(Enum value, CancellationToken cancel)
+    protected override async ValueTask ApplyValueToModel(Enum value, CancellationToken cancel)
     {
         var newValue = new StringArg(Enum.GetName(value.GetType(), value) ?? string.Empty);
         await this.ExecuteCommand(ChangeEnumPropertyCommand.Id, newValue, cancel);

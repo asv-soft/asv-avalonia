@@ -14,15 +14,13 @@ public sealed class HistoricalBoolProperty
     public HistoricalBoolProperty(
         NavigationId id,
         ReactiveProperty<bool> modelValue,
-        ILoggerFactory loggerFactory,
-        IRoutable parent
+        ILoggerFactory loggerFactory
     )
-        : base(id, loggerFactory, parent)
+        : base(id, loggerFactory)
     {
         ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        IsSelected = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        ViewValue.EnableValidation(ValidateValue);
+        ViewValue.EnableValidation(ValidateUserValue);
 
         _internalChange = true;
         ViewValue.SubscribeAwait(OnChangedByUser, AwaitOperation.Drop).DisposeItWith(Disposable);
@@ -33,9 +31,8 @@ public sealed class HistoricalBoolProperty
 
     public override ReactiveProperty<bool> ModelValue { get; }
     public override BindableReactiveProperty<bool> ViewValue { get; }
-    public override BindableReactiveProperty<bool> IsSelected { get; }
 
-    protected override Exception? ValidateValue(bool userValue)
+    protected override Exception? ValidateUserValue(bool userValue)
     {
         return null;
     }
@@ -48,7 +45,7 @@ public sealed class HistoricalBoolProperty
         }
 
         _externalChange = true;
-        await ChangeModelValue(userValue, cancel);
+        await ApplyValueToModel(userValue, cancel);
         _externalChange = false;
     }
 
@@ -69,7 +66,7 @@ public sealed class HistoricalBoolProperty
         return [];
     }
 
-    protected override async ValueTask ChangeModelValue(bool value, CancellationToken cancel)
+    protected override async ValueTask ApplyValueToModel(bool value, CancellationToken cancel)
     {
         var newValue = new BoolArg(value);
         await this.ExecuteCommand(ChangeBoolPropertyCommand.Id, newValue, cancel);

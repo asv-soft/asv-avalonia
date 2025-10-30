@@ -37,8 +37,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             latUnit,
             lonUnit,
             altUnit,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         GeoPointProperty.ForceValidate();
 

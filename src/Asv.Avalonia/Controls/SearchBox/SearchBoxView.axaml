@@ -12,7 +12,8 @@
     </Design.DataContext>
     <Panel>
         <TextBox MinWidth="200" Padding="0" VerticalContentAlignment="Center" 
-                 avalonia1:NavigationHelper.IsSelected ="{Binding IsSelected, Mode=OneWay}"
+                 avalonia1:NavigationHelper.IsFocused ="{Binding Text.IsFocused, Mode=OneWay}"
+                 GotFocus="InputElement_OnGotFocus"
                  Text="{Binding Text.ViewValue.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Watermark="{x:Static avalonia1:RS.SearchBoxView_MainTextBox_Watermark}"
                  MinHeight="0" Height="25" >

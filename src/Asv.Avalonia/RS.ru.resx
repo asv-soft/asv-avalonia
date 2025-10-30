@@ -195,7 +195,7 @@
         <value>Несущая в процентах</value>
     </data>
     <data name="DM_UnitItem_Symbol" xml:space="preserve">
-        <value>[Г]°[М]'</value>
+        <value>Г°М'</value>
     </data>
     <data name="DM_Bearing_Description" xml:space="preserve">
         <value>Несущая в градусах и минутах</value>
@@ -264,7 +264,7 @@
         <value>Угол</value>
     </data>
     <data name="Degree_UnitItem_Symbol" xml:space="preserve">
-        <value>[Г]°</value>
+        <value>Г°</value>
     </data>
     <data name="Ms_UnitItem_Name" xml:space="preserve">
         <value>Минуты и секунды</value>
@@ -276,7 +276,7 @@
         <value>[М]′[С]′′</value>
     </data>
     <data name="Dms_UnitItem_Symbol" xml:space="preserve">
-        <value>[Г]°[М]′[С]′'</value>
+        <value>Г°М′С′'</value>
     </data>
     <data name="Dms_UnitItem_Name" xml:space="preserve">
         <value>Градусы, минуты и секунды</value>

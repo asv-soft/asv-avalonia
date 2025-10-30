@@ -73,8 +73,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
         CommandSortingType = new HistoricalEnumProperty<CommandSortingType>(
             nameof(CommandSortingType),
             _commandSortingType,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         CommandSortingType.ViewValue.Subscribe(_ => UpdateFilter()).DisposeItWith(Disposable);
 

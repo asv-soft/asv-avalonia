@@ -42,21 +42,22 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         Severity = new HistoricalEnumProperty<InfoBarSeverity>(
             nameof(Severity),
             _severity,
-            loggerFactory,
-            this
+            loggerFactory
         ).DisposeItWith(Disposable);
         InfoBoxTitle = new HistoricalStringProperty(
             nameof(InfoBoxTitle),
             _infoBoxTitle,
-            loggerFactory,
-            this
-        ).DisposeItWith(Disposable);
+            loggerFactory
+        ){
+            Parent = this,
+        }.DisposeItWith(Disposable);
         InfoBoxMessage = new HistoricalStringProperty(
             nameof(InfoBoxMessage),
             _infoBoxMessage,
-            loggerFactory,
-            this
-        ).DisposeItWith(Disposable);
+            loggerFactory
+        ){
+            Parent = this,
+        }.DisposeItWith(Disposable);
     }
 
     public HistoricalEnumProperty<InfoBarSeverity> Severity { get; }

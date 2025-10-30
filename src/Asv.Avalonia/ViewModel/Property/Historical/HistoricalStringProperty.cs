@@ -16,17 +16,15 @@ public sealed class HistoricalStringProperty
         string id,
         ReactiveProperty<string?> modelValue,
         ILoggerFactory loggerFactory,
-        IRoutable parent,
         IList<Func<string?, ValidationResult>>? validationRules = null
     )
-        : base(id, loggerFactory, parent)
+        : base(id, loggerFactory)
     {
         InternalInitValidationRules(validationRules);
 
         ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
-        IsSelected = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        ViewValue.EnableValidation(ValidateValue);
+        ViewValue.EnableValidation(ValidateUserValue);
 
         _internalChange = true;
         ViewValue.SubscribeAwait(OnChangedByUser, AwaitOperation.Drop).DisposeItWith(Disposable);
@@ -37,7 +35,6 @@ public sealed class HistoricalStringProperty
 
     public override ReactiveProperty<string?> ModelValue { get; }
     public override BindableReactiveProperty<string?> ViewValue { get; }
-    public override BindableReactiveProperty<bool> IsSelected { get; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
@@ -49,7 +46,7 @@ public sealed class HistoricalStringProperty
         _validationRules.Add(validationFunc);
     }
 
-    protected override Exception? ValidateValue(string? userValue)
+    protected override Exception? ValidateUserValue(string? userValue)
     {
         foreach (var rule in _validationRules)
         {
@@ -76,7 +73,7 @@ public sealed class HistoricalStringProperty
         }
 
         _externalChange = true;
-        await ChangeModelValue(userValue ?? string.Empty, cancel);
+        await ApplyValueToModel(userValue ?? string.Empty, cancel);
         _externalChange = false;
     }
 
@@ -107,7 +104,7 @@ public sealed class HistoricalStringProperty
         }
     }
 
-    protected override async ValueTask ChangeModelValue(string? value, CancellationToken cancel)
+    protected override async ValueTask ApplyValueToModel(string? value, CancellationToken cancel)
     {
         var newValue = new StringArg(value ?? string.Empty);
         await this.ExecuteCommand(ChangeStringPropertyCommand.Id, newValue, cancel);

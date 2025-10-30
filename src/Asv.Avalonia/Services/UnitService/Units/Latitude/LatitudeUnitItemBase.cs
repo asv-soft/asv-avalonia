@@ -37,11 +37,6 @@ public abstract class LatitudeUnitItemBase() : UnitItemBase(1)
             : double.NaN;
     }
 
-    public override string Print(double value, string? format = null)
-    {
-        return GeoPointLatitude.PrintDms(value);
-    }
-
     public override string PrintWithUnits(double value, string? format = null)
     {
         return Print(value, format);
