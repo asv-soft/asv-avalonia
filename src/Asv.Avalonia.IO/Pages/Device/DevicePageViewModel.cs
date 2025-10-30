@@ -57,7 +57,8 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
     }
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
-    public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _deviceCore.IsDeviceInitialized;
+    public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized =>
+        _deviceCore.IsDeviceInitialized.ToReadOnlyBindableReactiveProperty();
     public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
     public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }
