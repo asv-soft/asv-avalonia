@@ -2,6 +2,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using Asv.Common;
 using Asv.IO;
+using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -15,15 +16,7 @@ namespace Asv.Avalonia.IO;
 /// <remarks>
 /// This class is used for aggregation.
 /// </remarks>
-/// <param name="devices">The device manager.</param>
-/// <param name="logger">Logger of the owner.</param>
-/// <param name="owner">Page that wants to extend itself with DevicePage functionality.</param>
-public sealed class DevicePageCore(
-    IDeviceManager devices,
-    ILayoutService layoutService,
-    ILogger logger,
-    IPage owner
-) : IDisposable
+public sealed class DevicePageCore : IDisposable
 {
     private readonly CompositeDisposable _disposable = new();
     private readonly ReactiveProperty<bool> _isDeviceInitialized = new();
@@ -35,6 +28,36 @@ public sealed class DevicePageCore(
     private string? _targetDeviceId;
     private IDisposable? _waitInitSubscription;
     private CancellationTokenSource? _deviceDisconnectedToken;
+    private readonly IDeviceManager _devices;
+    private readonly ILayoutService _layoutService;
+    private readonly ILogger _logger;
+    private readonly IPage _owner;
+
+    public DevicePageCore(
+        IDeviceManager devices,
+        ILayoutService layoutService,
+        ILogger logger,
+        IPage owner
+    )
+    {
+        if (Design.IsDesignMode)
+        {
+            _isDeviceInitialized.OnNext(false);
+            TimeProvider
+                .System.CreateTimer(
+                    _ => _isDeviceInitialized.OnNext(true),
+                    null,
+                    TimeSpan.FromSeconds(5),
+                    Timeout.InfiniteTimeSpan
+                )
+                .DisposeItWith(_disposable);
+        }
+
+        _devices = devices;
+        _layoutService = layoutService;
+        _logger = logger;
+        _owner = owner;
+    }
 
     public event Action<IClientDevice, CancellationToken>? OnDeviceInitialized;
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _target;
@@ -46,8 +69,8 @@ public sealed class DevicePageCore(
     {
         ThrowIfDisposed();
 
-        logger.ZLogTrace($"{nameof(owner.Id)} init args: {args}");
-        Debug.Assert(devices != null, "_devices != null");
+        _logger.ZLogTrace($"{nameof(_owner.Id)} init args: {args}");
+        Debug.Assert(_devices != null, "_devices != null");
 
         _targetDeviceId =
             args[DevicePageViewModelMixin.ArgsDeviceIdKey]
@@ -56,23 +79,23 @@ public sealed class DevicePageCore(
             );
 
         _onDeviceDisconnecting
-            .SubscribeAwait(async (_, ct) => await owner.RequestSaveLayout(layoutService, ct))
+            .SubscribeAwait(async (_, ct) => await _owner.RequestSaveLayout(_layoutService, ct))
             .DisposeItWith(_disposable);
         _isDeviceInitialized
             .Where(isInit => isInit)
-            .SubscribeAwait(async (_, ct) => await owner.RequestLoadLayout(layoutService, ct))
+            .SubscribeAwait(async (_, ct) => await _owner.RequestLoadLayout(_layoutService, ct))
             .DisposeItWith(_disposable);
         _onDeviceDisconnected
             .Subscribe(_ => _isDeviceInitialized.Value = false)
             .DisposeItWith(_disposable);
 
-        devices
+        _devices
             .Explorer.Devices.ObserveAdd()
             .Where(_targetDeviceId, (e, id) => e.Value.Key.AsString() == id)
             .Subscribe(x => DeviceFoundButNotInitialized(x.Value.Value))
             .DisposeItWith(_disposable);
 
-        devices
+        _devices
             .Explorer.Devices.ObserveRemove()
             .Where(_targetDeviceId, (e, id) => e.Value.Key.AsString() == id)
             .Subscribe(_ =>
@@ -84,7 +107,7 @@ public sealed class DevicePageCore(
             .DisposeItWith(_disposable);
 
         foreach (
-            var device in devices.Explorer.Devices.Where(x => x.Key.AsString() == _targetDeviceId)
+            var device in _devices.Explorer.Devices.Where(x => x.Key.AsString() == _targetDeviceId)
         )
         {
             DeviceFoundButNotInitialized(device.Value);
@@ -93,7 +116,7 @@ public sealed class DevicePageCore(
 
     private void DeviceRemoved()
     {
-        logger.ZLogTrace($"{nameof(owner.Id)}  device removed: {_targetDeviceId}");
+        _logger.ZLogTrace($"{nameof(_owner.Id)}  device removed: {_targetDeviceId}");
         _deviceDisconnectedToken?.Cancel(false);
         _deviceDisconnectedToken?.Dispose();
         _deviceDisconnectedToken = null;
@@ -104,7 +127,7 @@ public sealed class DevicePageCore(
     private void DeviceFoundButNotInitialized(IClientDevice device)
     {
         DeviceRemoved();
-        logger.ZLogTrace($"{nameof(owner.Id)}  device found: {device.Id}");
+        _logger.ZLogTrace($"{nameof(_owner.Id)}  device found: {device.Id}");
         _waitInitSubscription = device
             .State.Where(x => x == ClientDeviceState.Complete)
             .Take(1)
@@ -113,7 +136,7 @@ public sealed class DevicePageCore(
 
     private void DeviceFoundAndInitialized(ClientDeviceState state, IClientDevice device)
     {
-        logger.ZLogTrace($"{nameof(owner.Id)}  device initialized: {device.Id}");
+        _logger.ZLogTrace($"{nameof(_owner.Id)}  device initialized: {device.Id}");
         try
         {
             _waitInitSubscription?.Dispose();
@@ -124,7 +147,7 @@ public sealed class DevicePageCore(
         }
         catch (Exception e)
         {
-            logger.ZLogError(e, $"Error while initializing device {device.Id}");
+            _logger.ZLogError(e, $"Error while initializing device {device.Id}");
             throw;
         }
     }
