@@ -1,0 +1,34 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:example="clr-namespace:Asv.Avalonia.Example"
+        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Design.PreviewWith>
+        <example:PreviewExampleBlock />
+    </Design.PreviewWith>
+    
+    <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/Blocks/BaseExampleBlock.axaml"/>
+
+    <Style Selector="example|PreviewExampleBlock">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <example:BaseExampleBlock>
+                    <example:BaseExampleBlock.Content>
+                        <Grid ColumnDefinitions="*" RowDefinitions="*" MinWidth="140">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto"
+                                          VerticalScrollBarVisibility="Auto">
+                                <ContentPresenter Content="{Binding PreviewContent, RelativeSource={RelativeSource AncestorType=example:PreviewExampleBlock}}"
+                                                  HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </ScrollViewer>
+                            <Button Command="{Binding RestoreCommand, RelativeSource={RelativeSource AncestorType=example:PreviewExampleBlock}}"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Top">
+                                <avalonia:MaterialIcon Kind="Restore"/>
+                            </Button>
+                        </Grid>
+                    </example:BaseExampleBlock.Content>
+                </example:BaseExampleBlock>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
