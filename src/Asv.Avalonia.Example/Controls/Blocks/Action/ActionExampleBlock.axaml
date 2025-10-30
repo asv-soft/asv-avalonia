@@ -1,0 +1,28 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:example="clr-namespace:Asv.Avalonia.Example">
+    <Design.PreviewWith>
+        <example:ActionExampleBlock />
+    </Design.PreviewWith>
+
+    <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/Blocks/BaseExampleBlock.axaml" />
+
+    <Style Selector="example|ActionExampleBlock">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <example:BaseExampleBlock>
+                    <example:BaseExampleBlock.Content>
+                        <Button
+                            Command="{Binding ButtonCommand, RelativeSource={RelativeSource AncestorType=example:ActionExampleBlock}}"
+                            VerticalAlignment="Center" HorizontalAlignment="Center"
+                            Margin="0,0,4,0">
+                            <TextBlock
+                                Text="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=example:ActionExampleBlock}}"
+                                TextWrapping="WrapWithOverflow" />
+                        </Button>
+                    </example:BaseExampleBlock.Content>
+                </example:BaseExampleBlock>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
