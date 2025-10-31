@@ -48,14 +48,16 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
             nameof(InfoBoxTitle),
             _infoBoxTitle,
             loggerFactory
-        ){
+        )
+        {
             Parent = this,
         }.DisposeItWith(Disposable);
         InfoBoxMessage = new HistoricalStringProperty(
             nameof(InfoBoxMessage),
             _infoBoxMessage,
             loggerFactory
-        ){
+        )
+        {
             Parent = this,
         }.DisposeItWith(Disposable);
     }

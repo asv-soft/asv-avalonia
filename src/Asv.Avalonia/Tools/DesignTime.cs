@@ -4,12 +4,56 @@ using Avalonia.Controls;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
 public static class DesignTime
 {
+    public static IEnumerable<string> NameArray10 =>
+        Enumerable.Range(0, 10).Select(i => $"Name{i}");
+
+    public static IReadOnlyObservableList<IMenuItem> Menu =>
+        new ObservableList<IMenuItem>(
+            [
+                new MenuItem("id_1", "Menu1", LoggerFactory)
+                {
+                    Icon = RandomImage,
+                    Command = EmptyCommand,
+                },
+                new MenuItem("id_2", "Menu2", LoggerFactory)
+                {
+                    Icon = RandomImage,
+                    Command = EmptyCommand,
+                },
+                new MenuItem("id_3", "Menu3", LoggerFactory)
+                {
+                    Icon = RandomImage,
+                    Command = EmptyCommand,
+                },
+                new MenuItem("id_3_1", "Menu3_1", LoggerFactory, "id_1")
+                {
+                    Icon = RandomImage,
+                    Command = EmptyCommand,
+                },
+                new MenuItem("id_3_2", "Menu3_2", LoggerFactory, "id_1")
+                {
+                    Icon = RandomImage,
+                    Command = EmptyCommand,
+                },
+                new MenuItem("id_3_3", "Menu3_3", LoggerFactory, "id_1")
+                {
+                    Icon = RandomImage,
+                    Command = EmptyCommand,
+                },
+            ]
+        );
+    public static NotifyCollectionChangedSynchronizedViewList<
+        ObservableTreeNode<IMenuItem, NavigationId>
+    > MenuTreeItems => MenuTree.Items;
+    public static MenuTree MenuTree => new(Menu);
+
     public static NavigationId Id => NavigationId.GenerateRandom();
     public static ICommand EmptyCommand = new ReactiveCommand();
 
@@ -26,7 +70,7 @@ public static class DesignTime
             .Cast<MaterialIconKind>()
             .Skip(Random.Shared.Next(1, Enum.GetValues<MaterialIconKind>().Length))
             .First();
-    
+
     public static IShell Shell => DesignTimeShellViewModel.Instance;
     public static IAppStartupService AppStartupService => NullAppStartupService.Instance;
     public static IConfiguration Configuration { get; } = new InMemoryConfiguration();

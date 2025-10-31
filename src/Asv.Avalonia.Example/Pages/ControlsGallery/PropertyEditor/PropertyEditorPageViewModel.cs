@@ -19,7 +19,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
-        
     }
 
     [ImportingConstructor]
@@ -31,8 +30,12 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             Parent = this,
             ItemsSource =
             {
-                new UnitPropertyViewModel("lat", Latitude, unit[LatitudeBase.Id] ?? throw new ArgumentNullException(),
-                    loggerFactory)
+                new UnitPropertyViewModel(
+                    "lat",
+                    Latitude,
+                    unit[LatitudeBase.Id] ?? throw new ArgumentNullException(),
+                    loggerFactory
+                )
                 {
                     Parent = this,
                     Header = "Position",
@@ -40,8 +43,12 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Description = "Latitude description",
                     Icon = MaterialIconKind.Latitude,
                 },
-                new UnitPropertyViewModel("lon", Longitude, unit[LongitudeBase.Id] ?? throw new ArgumentNullException(),
-                    loggerFactory)
+                new UnitPropertyViewModel(
+                    "lon",
+                    Longitude,
+                    unit[LongitudeBase.Id] ?? throw new ArgumentNullException(),
+                    loggerFactory
+                )
                 {
                     Parent = this,
                     Header = "Longitude",
@@ -49,8 +56,12 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Description = "Latitude description",
                     Icon = MaterialIconKind.Latitude,
                 },
-                new UnitPropertyViewModel("alt", Altitude, unit[AltitudeBase.Id] ?? throw new ArgumentNullException(),
-                    loggerFactory)
+                new UnitPropertyViewModel(
+                    "alt",
+                    Altitude,
+                    unit[AltitudeBase.Id] ?? throw new ArgumentNullException(),
+                    loggerFactory
+                )
                 {
                     Parent = this,
                     Header = "Altitude",
@@ -84,12 +95,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public BindableReactiveProperty<double> Altitude { get; } = new();
     public BindableReactiveProperty<double> Latitude { get; } = new();
     public BindableReactiveProperty<double> Longitude { get; } = new();
-    
+
     public BindableReactiveProperty<GeoPoint> GeoPoint { get; } = new();
-    
 
     public PropertyEditorViewModel PropertyEditor { get; }
-    
+
     public override IExportInfo Source => SystemModule.Instance;
-    
 }

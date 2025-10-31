@@ -29,7 +29,8 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
         _internalChange = true;
         ViewValue
             .Skip(1) // this is for first change
-            .SubscribeAwait(OnChangedByUser, AwaitOperation.Drop).DisposeItWith(Disposable);
+            .SubscribeAwait(OnChangedByUser, AwaitOperation.Drop)
+            .DisposeItWith(Disposable);
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
@@ -45,8 +46,10 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
     protected override Exception? ValidateUserValue(string? userValue)
     {
         var result = Unit.CurrentUnitItem.CurrentValue.ValidateValue(userValue);
-        return result.IsSuccess ? ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue)) :
-            result.IsSuccess ? null : result.ValidationException;
+        return result.IsSuccess
+                ? ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue))
+            : result.IsSuccess ? null
+            : result.ValidationException;
     }
 
     protected virtual Exception? ValidateSiValue(double siValue)

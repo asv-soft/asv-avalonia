@@ -17,7 +17,7 @@ public class PropertyEditorViewModel : RoutableViewModel
         _itemsSource.Add(new UnitPropertyViewModel());
         Parent = DesignTime.Shell;
     }
-    
+
     public PropertyEditorViewModel(NavigationId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
@@ -29,7 +29,7 @@ public class PropertyEditorViewModel : RoutableViewModel
     }
 
     public ObservableList<IPropertyViewModel> ItemsSource => _itemsSource;
-    
+
     public NotifyCollectionChangedSynchronizedViewList<IPropertyViewModel> Items { get; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

@@ -1,11 +1,19 @@
+using System.Windows.Input;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Material.Icons;
+using R3;
 
 namespace Asv.Avalonia;
 
 public partial class WorkspaceItem
 {
+    public WorkspaceItem()
+    {
+        OpenContextMenu = new ReactiveCommand(_ => ContextMenu?.Open());
+    }
+
     public static readonly StyledProperty<WorkspaceDock> PositionProperty =
         AvaloniaProperty.Register<WorkspaceItem, WorkspaceDock>(nameof(Position));
 
@@ -28,10 +36,8 @@ public partial class WorkspaceItem
         set => SetAndRaise(IconProperty, ref field, value);
     } = MaterialIconKind.ListBox;
 
-    public static readonly StyledProperty<FlyoutBase?> FlyoutProperty = AvaloniaProperty.Register<
-        WorkspaceItem,
-        FlyoutBase?
-    >(nameof(Flyout));
+    public static readonly StyledProperty<FlyoutBase?> FlyoutProperty =
+        Button.FlyoutProperty.AddOwner<WorkspaceItem>();
 
     public FlyoutBase? Flyout
     {
@@ -59,5 +65,18 @@ public partial class WorkspaceItem
     {
         get => GetValue(CanExpandProperty);
         set => SetValue(CanExpandProperty, value);
+    }
+
+    public static readonly DirectProperty<WorkspaceItem, ICommand?> OpenContextMenuProperty =
+        AvaloniaProperty.RegisterDirect<WorkspaceItem, ICommand?>(
+            nameof(OpenContextMenu),
+            o => o.OpenContextMenu,
+            (o, v) => o.OpenContextMenu = v
+        );
+
+    public ICommand? OpenContextMenu
+    {
+        get;
+        set => SetAndRaise(OpenContextMenuProperty, ref field, value);
     }
 }

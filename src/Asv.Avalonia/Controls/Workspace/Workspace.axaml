@@ -56,8 +56,6 @@
                 </avalonia:WorkspaceItem>
             </avalonia:Workspace>
         </Panel>
-        
-        
     </Design.PreviewWith>
     <Style Selector="avalonia|Workspace" >
         <Style Selector="^ GridSplitter:pointerover">

@@ -7,11 +7,7 @@
         <Border BorderThickness="1" BorderBrush="Aqua" Background="Red">
             <DockPanel HorizontalAlignment="Stretch" Width="200" Height="600">
                 <avalonia:WorkspaceItem Header="HEADER" DockPanel.Dock="Top">
-                    <avalonia:WorkspaceItem.Flyout>
-                        <MenuFlyout>
-                            <MenuItem Header="Action1"></MenuItem>
-                        </MenuFlyout>
-                    </avalonia:WorkspaceItem.Flyout>
+                   
                     <StackPanel>
                         <TextBlock Text="AAAA"/>
                         <TextBox></TextBox>
@@ -43,9 +39,6 @@
     </Design.PreviewWith>
 
     <Style Selector="avalonia|WorkspaceItem">
-        <Style Selector="^[Position=Bottom] DockPanel#PART_Header">
-            <Setter Property="IsVisible" Value="False"/>
-        </Style>
         <!-- Set Defaults -->
         <Setter Property="Padding" Value="4"></Setter>
         <Setter Property="avalonia:WorkspacePanel.Dock" Value="{Binding Position, RelativeSource={RelativeSource Self}}"/>
@@ -54,6 +47,41 @@
         <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
         <Setter Property="Margin" Value="4"/>
+        <Style Selector="^[Position=Bottom] DockPanel#PART_Header">
+            <Setter Property="IsVisible" Value="False"/>
+        </Style>
+       
+        
+        <Style Selector="^" x:DataType="avalonia:IWorkspaceWidget">
+            <Setter Property="Position" Value="{Binding Position}"/>
+            <Setter Property="Header" Value="{Binding Header}"/>
+            <Setter Property="Icon" Value="{Binding Icon}"/>
+            <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
+            <Setter Property="CanExpand" Value="{Binding CanExpand}"/>
+            <Setter Property="ContextMenu">
+                <ContextMenu ItemsSource="{Binding MenuView.Items}">
+                    <ContextMenu.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel Orientation="Vertical"/>
+                        </ItemsPanelTemplate>
+                    </ContextMenu.ItemsPanel>
+                    <ContextMenu.ItemContainerTheme>
+                        <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" x:DataType="avalonia:MenuNode" >
+                            <Setter Property="Icon" Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}" />
+                            <Setter Property="Header" Value="{Binding Base.Header}"/>
+                            <Setter Property="ItemsSource" Value="{Binding Items}"/>
+                            <Setter Property="Command" Value="{Binding Base.Command}"/>
+                            <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}"/>
+                            <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+                            <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+                            <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+                            <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                        </ControlTheme>
+                    </ContextMenu.ItemContainerTheme>    
+                </ContextMenu>
+            </Setter>
+            
+        </Style>
         <Setter Property="Template">
             <ControlTemplate>
                 <Border VerticalAlignment="Stretch" CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}">
@@ -62,6 +90,13 @@
                            
                             <Button IsVisible="{TemplateBinding Flyout, Converter={x:Static ObjectConverters.IsNotNull}}" Margin="0" Padding="5,4" DockPanel.Dock="Right" Theme="{DynamicResource TransparentButton}"
                                     Flyout="{TemplateBinding Flyout}">
+                                <avalonia1:MaterialIcon Kind="DotsVertical" Width="18" Height="18"
+                                                        VerticalAlignment="Center"
+                                                        HorizontalAlignment="Center"/>
+                                
+                            </Button>
+                            <Button IsVisible="{TemplateBinding Flyout, Converter={x:Static ObjectConverters.IsNull}}" Margin="0" Padding="5,4" DockPanel.Dock="Right" Theme="{DynamicResource TransparentButton}"
+                                    Command="{TemplateBinding OpenContextMenu}">
                                 <avalonia1:MaterialIcon Kind="DotsVertical" Width="18" Height="18"
                                                         VerticalAlignment="Center"
                                                         HorizontalAlignment="Center"/>

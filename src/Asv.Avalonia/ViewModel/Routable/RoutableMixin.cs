@@ -173,7 +173,10 @@ public static class RoutableMixin
     {
         var sub1 = src.ObserveAdd().Subscribe(x => x.Value.Parent = parent);
         var sub2 = src.ObserveRemove().Subscribe(x => x.Value.Parent = null);
-
+        foreach (var routable in src)
+        {
+            routable.Parent = parent;
+        }
         return new CompositeDisposable(sub1, sub2);
     }
 

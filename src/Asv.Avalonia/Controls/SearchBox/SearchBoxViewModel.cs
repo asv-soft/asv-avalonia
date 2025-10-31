@@ -46,9 +46,7 @@ public class SearchBoxViewModel
         Text = new HistoricalStringProperty(nameof(Text), text, loggerFactory)
         {
             Parent = this,
-        }.DisposeItWith(
-            Disposable
-        );
+        }.DisposeItWith(Disposable);
 
         _isExecuting = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         _canExecute = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);

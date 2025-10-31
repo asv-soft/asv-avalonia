@@ -1,0 +1,26 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.WorkspacePageView"
+             x:DataType="example:WorkspacePageViewModel">
+    <Design.DataContext>
+        <example:WorkspacePageViewModel/>
+    </Design.DataContext>
+    <avalonia:Workspace 
+        ItemsSource="{Binding Items}">
+        <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+                <avalonia:WorkspacePanel 
+                    MinLeftWidth="250" 
+                    LeftWidth="*" 
+                    CentralWidth="3*" 
+                    MinRightWidth="260" 
+                    RightWidth="*"/>
+            </ItemsPanelTemplate>
+        </ItemsControl.ItemsPanel>
+    </avalonia:Workspace>
+</UserControl>

@@ -5,7 +5,8 @@ namespace Asv.Avalonia;
 
 public abstract class CompositeBindablePropertyBase<T>(
     NavigationId id,
-    ILoggerFactory loggerFactory) : RoutableViewModel(id, loggerFactory)
+    ILoggerFactory loggerFactory
+) : RoutableViewModel(id, loggerFactory)
 {
     public abstract ReactiveProperty<T> ModelValue { get; }
     public abstract void ForceValidate();
