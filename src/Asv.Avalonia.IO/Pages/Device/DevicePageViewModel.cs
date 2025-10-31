@@ -1,10 +1,7 @@
 ﻿using System.Collections.Specialized;
-using Asv.Cfg;
-using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
-using ZstdSharp.Unsafe;
 
 namespace Asv.Avalonia.IO;
 
@@ -30,7 +27,6 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
-        _deviceCore.DisposeItWith(Disposable);
     }
 
     protected override void InternalInitArgs(NameValueCollection args)
@@ -49,8 +45,6 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         {
             _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
             _deviceCore.Dispose();
-            Target.Dispose();
-            IsDeviceInitialized.Dispose();
         }
 
         base.Dispose(disposing);

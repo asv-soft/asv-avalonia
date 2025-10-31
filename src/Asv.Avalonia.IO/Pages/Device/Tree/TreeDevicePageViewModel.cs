@@ -29,7 +29,6 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
-        _deviceCore.DisposeItWith(Disposable);
     }
 
     private void AfterDeviceInitializedBase(
@@ -64,8 +63,6 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
             _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
             _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
             _deviceCore.Dispose();
-            Target.Dispose();
-            IsDeviceInitialized.Dispose();
         }
 
         base.Dispose(disposing);
