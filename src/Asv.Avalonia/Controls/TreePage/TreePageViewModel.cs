@@ -191,15 +191,15 @@ public abstract class TreePageViewModel<TContext, TSubPage>
                     break;
                 }
 
-                saveLayoutEvent.HandleSaveLayout(
-                    this,
+                this.HandleSaveLayout(
+                    saveLayoutEvent,
                     _config,
                     cfg => cfg.SelectedNodeId = SelectedNode.Value?.Key.ToString() ?? string.Empty
                 );
                 break;
             case LoadLayoutEvent loadLayoutEvent:
-                _config = loadLayoutEvent.HandleLoadLayout<TreePageViewModelConfig>(
-                    this,
+                _config = this.HandleLoadLayout<TreePageViewModelConfig>(
+                    loadLayoutEvent,
                     cfg =>
                     {
                         if (!string.IsNullOrEmpty(cfg.SelectedNodeId))

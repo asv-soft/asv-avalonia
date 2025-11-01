@@ -155,15 +155,15 @@ public class SettingsConnectionViewModel
                     break;
                 }
 
-                saveLayoutEvent.HandleSaveLayout(
-                    this,
+                this.HandleSaveLayout(
+                    saveLayoutEvent,
                     _config,
                     cfg => cfg.SelectedItemId = SelectedItem?.Id.ToString() ?? string.Empty
                 );
                 break;
             case LoadLayoutEvent loadLayoutEvent:
-                _config = loadLayoutEvent.HandleLoadLayout<SettingsConnectionViewModelConfig>(
-                    this,
+                _config = this.HandleLoadLayout<SettingsConnectionViewModelConfig>(
+                    loadLayoutEvent,
                     cfg =>
                         SelectedItem = View.FirstOrDefault(x =>
                             x.Id.ToString() == cfg.SelectedItemId

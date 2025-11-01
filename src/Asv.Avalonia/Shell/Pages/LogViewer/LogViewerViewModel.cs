@@ -304,8 +304,8 @@ public class LogViewerViewModel
                     break;
                 }
 
-                saveLayoutEvent.HandleSaveLayout(
-                    this,
+                this.HandleSaveLayout(
+                    saveLayoutEvent,
                     _config,
                     cfg =>
                     {
@@ -316,8 +316,8 @@ public class LogViewerViewModel
                 );
                 break;
             case LoadLayoutEvent loadLayoutEvent:
-                _config = loadLayoutEvent.HandleLoadLayout<LogViewerViewModelConfig>(
-                    this,
+                _config = this.HandleLoadLayout<LogViewerViewModelConfig>(
+                    loadLayoutEvent,
                     cfg =>
                     {
                         Search.Text.ModelValue.Value = cfg.SearchText;

@@ -206,8 +206,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     break;
                 }
 
-                saveLayoutEvent.HandleSaveLayout(
-                    this,
+                this.HandleSaveLayout(
+                    saveLayoutEvent,
                     _config,
                     cfg =>
                     {
@@ -226,8 +226,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                 );
                 break;
             case LoadLayoutEvent loadLayoutEvent:
-                _config = loadLayoutEvent.HandleLoadLayout<HistoricalControlsPageViewModelConfig>(
-                    this,
+                _config = this.HandleLoadLayout<HistoricalControlsPageViewModelConfig>(
+                    loadLayoutEvent,
                     cfg =>
                     {
                         IsTurnedOn.ViewValue.Value = cfg.IsTurnedOn;

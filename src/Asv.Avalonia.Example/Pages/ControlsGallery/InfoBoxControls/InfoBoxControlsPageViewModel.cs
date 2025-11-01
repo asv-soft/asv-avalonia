@@ -95,8 +95,8 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
                     break;
                 }
 
-                saveLayoutEvent.HandleSaveLayout(
-                    this,
+                this.HandleSaveLayout(
+                    saveLayoutEvent,
                     _config,
                     cfg =>
                     {
@@ -107,8 +107,8 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
                 );
                 break;
             case LoadLayoutEvent loadLayoutEvent:
-                _config = loadLayoutEvent.HandleLoadLayout<InfoBoxControlsPageViewModelConfig>(
-                    this,
+                _config = this.HandleLoadLayout<InfoBoxControlsPageViewModelConfig>(
+                    loadLayoutEvent,
                     cfg =>
                     {
                         Severity.ModelValue.Value = cfg.Severity;

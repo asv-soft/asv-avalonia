@@ -279,6 +279,10 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         {
             win.Closing -= AttachTab;
 
+            if (LayoutService is not null)
+            {
+                tab.Content.RequestSaveLayout(LayoutService).SafeFireAndForget();
+            }
             if (args.CloseReason == WindowCloseReason.ApplicationShutdown)
             {
                 return;

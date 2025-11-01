@@ -100,8 +100,8 @@ public class SettingsUnitsViewModel : SettingsSubPage
                     break;
                 }
 
-                saveLayoutEvent.HandleSaveLayout(
-                    this,
+                this.HandleSaveLayout(
+                    saveLayoutEvent,
                     _config,
                     cfg =>
                     {
@@ -111,8 +111,8 @@ public class SettingsUnitsViewModel : SettingsSubPage
                 );
                 break;
             case LoadLayoutEvent loadLayoutEvent:
-                _config = loadLayoutEvent.HandleLoadLayout<SettingsUnitsViewModelConfig>(
-                    this,
+                _config = this.HandleLoadLayout<SettingsUnitsViewModelConfig>(
+                    loadLayoutEvent,
                     cfg =>
                     {
                         Search.Text.ModelValue.Value = cfg.SearchText;

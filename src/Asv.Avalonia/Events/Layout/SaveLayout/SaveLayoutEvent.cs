@@ -39,8 +39,8 @@ public static class SaveLayoutMixin
     }
 
     public static async ValueTask HandleSaveLayoutAsync<TConfig>(
-        this SaveLayoutEvent e,
-        IRoutable target,
+        this IRoutable target,
+        SaveLayoutEvent e,
         TConfig cfgToSave,
         Func<TConfig, CancellationToken, ValueTask> saveCallback,
         CancellationToken cancel = default,
@@ -53,8 +53,8 @@ public static class SaveLayoutMixin
     }
 
     public static void HandleSaveLayout<TConfig>(
-        this SaveLayoutEvent e,
-        IRoutable target,
+        this IRoutable target,
+        SaveLayoutEvent e,
         TConfig cfgToSave,
         Action<TConfig> saveCallback,
         FlushingStrategy flushingStrategy = FlushingStrategy.FlushExclusively

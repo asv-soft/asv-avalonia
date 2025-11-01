@@ -38,8 +38,8 @@ public static class LoadLayoutMixin
     }
 
     public static async ValueTask<TConfig> HandleLoadLayoutAsync<TConfig>(
-        this LoadLayoutEvent e,
-        IRoutable target,
+        this IRoutable target,
+        LoadLayoutEvent e,
         Func<TConfig, CancellationToken, ValueTask> loadCallback,
         CancellationToken cancel = default
     )
@@ -51,8 +51,8 @@ public static class LoadLayoutMixin
     }
 
     public static TConfig HandleLoadLayout<TConfig>(
-        this LoadLayoutEvent e,
-        IRoutable target,
+        this IRoutable target,
+        LoadLayoutEvent e,
         Action<TConfig> loadCallback
     )
         where TConfig : class, new()
