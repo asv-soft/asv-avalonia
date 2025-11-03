@@ -1,46 +1,25 @@
-using System.Collections;
 using Asv.Common;
-using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspaceWidget
+public class WorkspaceWidget : HeadlinedViewModel, IWorkspaceWidget
 {
-    public PropertyEditorWidgetViewModel(
-        NavigationId id,
-        string header,
-        ILoggerFactory loggerFactory
-    )
+    public WorkspaceWidget(NavigationId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
-        Header = header;
+        Menu = [];
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
-
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
-    }
-
-    public ObservableList<IMenuItem> Menu { get; } = new();
-
-    public MaterialIconKind? Icon
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public string Header
-    {
-        get;
-        set => SetField(ref field, value);
     }
 
     public WorkspaceDock Position
     {
         get;
         set => SetField(ref field, value);
-    } = WorkspaceDock.Left;
+    }
 
     public bool IsExpanded
     {
@@ -53,6 +32,6 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         get;
         set => SetField(ref field, value);
     } = true;
-
+    public ObservableList<IMenuItem> Menu { get; }
     public MenuTree? MenuView { get; }
 }

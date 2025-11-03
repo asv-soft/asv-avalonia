@@ -19,6 +19,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
+        
     }
 
     [ImportingConstructor]
@@ -37,16 +38,60 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                         new ReactiveProperty<GeoPoint>(),
                         loggerFactory,
                         unitService
-                    ),
+                    )
+                    {
+                        Header = "Location 1",
+                    },
                     new GeoPointPropertyViewModel(
                         "location1",
                         new ReactiveProperty<GeoPoint>(),
                         loggerFactory,
                         unitService
-                    ),
+                    )
+                    {
+                        Header = "Location 2",
+                    },
                 },
                 Menu = { new MenuItem("action1", "Action 1", loggerFactory) },
             },
+            new WidgetPanelViewModel("rtt-box", loggerFactory)
+            {
+                Position = WorkspaceDock.Right,
+                ItemsSource =
+                {
+                    new SingleRttBoxViewModel("rtt-single-1", loggerFactory)
+                    {
+                        Header = "Single RTT 1",
+                        ShortHeader = "RTT1",
+                        ValueString = "15.25",
+                    },
+                    new SingleRttBoxViewModel("rtt-single-2", loggerFactory)
+                    {
+                        Header = "Single RTT 2",
+                        ShortHeader = "RTT2",
+                        ValueString = "15.25",
+                    },
+                },
+            },
+            new WidgetPanelViewModel("rtt-box2", loggerFactory)
+            {
+                Position = WorkspaceDock.Right,
+                ItemsSource =
+                {
+                    new SingleRttBoxViewModel("rtt-single-1", loggerFactory)
+                    {
+                        Header = "Single RTT 1",
+                        ShortHeader = "RTT1",
+                        ValueString = "15.25",
+                    },
+                    new SingleRttBoxViewModel("rtt-single-2", loggerFactory)
+                    {
+                        Header = "Single RTT 2",
+                        ShortHeader = "RTT2",
+                        ValueString = "15.25",
+                    },
+                },
+            }
         ];
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         _itemsSource.SetRoutableParent(this).DisposeItWith(Disposable);

@@ -19,6 +19,7 @@
     <StackPanel Spacing="4">
         <avalonia:UnitPropertyView DataContext="{Binding Latitude}"/>
         <avalonia:UnitPropertyView DataContext="{Binding Longitude}"/>
+        <avalonia:UnitPropertyView DataContext="{Binding Altitude}"/>
         <Button  Padding="0" HorizontalAlignment="Stretch" Theme="{StaticResource  TransparentButton}">
                 <avalonia1:MaterialIcon Kind="DotsHorizontal"/>
                 <Button.Flyout>
@@ -53,7 +54,6 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-        <avalonia:UnitPropertyView DataContext="{Binding Altitude}"/>
     </StackPanel>
     
 </UserControl>

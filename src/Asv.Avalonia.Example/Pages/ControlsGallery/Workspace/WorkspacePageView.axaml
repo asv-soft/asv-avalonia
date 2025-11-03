@@ -14,15 +14,14 @@
     <Panel>
         <geoMap:MapView/> 
         <avalonia:Workspace 
-            
             ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <avalonia:WorkspacePanel 
-                        MinLeftWidth="250" 
+                        MinLeftWidth="210"
                         LeftWidth="*" 
-                        CentralWidth="3*" 
-                        MinRightWidth="260" 
+                        CentralWidth="4*" 
+                        MinRightWidth="200" 
                         RightWidth="*"/>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>

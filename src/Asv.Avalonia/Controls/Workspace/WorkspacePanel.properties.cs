@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Interactivity;
 
 namespace Asv.Avalonia;
@@ -17,7 +18,8 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<GridLength> LeftWidthProperty = AvaloniaProperty.Register<
         WorkspacePanel,
         GridLength
-    >(nameof(LeftWidth), new GridLength(1, GridUnitType.Star));
+    >(nameof(LeftWidth), new GridLength(1, GridUnitType.Star),
+        defaultBindingMode: BindingMode.TwoWay);
 
     public GridLength LeftWidth
     {
@@ -28,7 +30,8 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<GridLength> CentralWidthProperty =
         AvaloniaProperty.Register<WorkspacePanel, GridLength>(
             nameof(CentralWidth),
-            new GridLength(3, GridUnitType.Star)
+            new GridLength(3, GridUnitType.Star),
+            defaultBindingMode: BindingMode.TwoWay
         );
     public GridLength CentralWidth
     {
@@ -39,7 +42,8 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<GridLength> RightWidthProperty =
         AvaloniaProperty.Register<WorkspacePanel, GridLength>(
             nameof(RightWidth),
-            new GridLength(1, GridUnitType.Star)
+            new GridLength(1, GridUnitType.Star),
+            defaultBindingMode: BindingMode.TwoWay
         );
     public GridLength RightWidth
     {
@@ -50,7 +54,8 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<GridLength> BottomHeightProperty =
         AvaloniaProperty.Register<WorkspacePanel, GridLength>(
             nameof(BottomHeight),
-            new GridLength(0, GridUnitType.Auto)
+            new GridLength(0, GridUnitType.Auto),
+            defaultBindingMode: BindingMode.TwoWay
         );
     public GridLength BottomHeight
     {
@@ -61,7 +66,8 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<GridLength> CentralHeightProperty =
         AvaloniaProperty.Register<WorkspacePanel, GridLength>(
             nameof(CentralHeight),
-            new GridLength(3, GridUnitType.Star)
+            new GridLength(3, GridUnitType.Star),
+            defaultBindingMode: BindingMode.TwoWay
         );
 
     public GridLength CentralHeight
@@ -73,7 +79,8 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<double> MinLeftWidthProperty = AvaloniaProperty.Register<
         WorkspacePanel,
         double
-    >(nameof(MinLeftWidth));
+    >(nameof(MinLeftWidth),
+        defaultBindingMode: BindingMode.TwoWay);
 
     public double MinLeftWidth
     {
