@@ -90,6 +90,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return PropertyEditor;
+        foreach (var item in base.GetRoutableChildren())
+        {
+            yield return item;
+        }
     }
 
     public BindableReactiveProperty<double> Altitude { get; } = new();

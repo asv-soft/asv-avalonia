@@ -34,6 +34,6 @@ public class PropertyEditorViewModel : RoutableViewModel
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        return Items;
+        return _itemsSource;
     }
 }

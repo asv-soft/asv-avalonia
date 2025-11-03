@@ -55,4 +55,17 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
     } = true;
 
     public MenuTree? MenuView { get; }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        foreach (var item in Menu)
+        {
+            yield return item;
+        }
+        
+        foreach (var item in base.GetRoutableChildren())
+        {
+            yield return item;
+        } 
+    }
 }

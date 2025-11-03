@@ -1,4 +1,5 @@
-﻿using System.Composition;
+﻿using System.Collections.Generic;
+using System.Composition;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -99,6 +100,19 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IWorkspaceWidget> Items { get; }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        foreach (var item in _itemsSource)
+        {
+            yield return item;
+        }
+        
+        foreach (var item in base.GetRoutableChildren())
+        {
+            yield return item;
+        }
+    }
 
     public override IExportInfo Source => SystemModule.Instance;
 }

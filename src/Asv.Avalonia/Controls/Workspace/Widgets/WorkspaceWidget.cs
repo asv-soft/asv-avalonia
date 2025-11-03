@@ -34,4 +34,17 @@ public class WorkspaceWidget : HeadlinedViewModel, IWorkspaceWidget
     } = true;
     public ObservableList<IMenuItem> Menu { get; }
     public MenuTree? MenuView { get; }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        foreach (var item in Menu)
+        {
+            yield return item;
+        }
+        
+        foreach (var item in base.GetRoutableChildren())
+        {
+            yield return item;
+        } 
+    }
 }

@@ -93,6 +93,17 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         };
     }
 
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        yield return Latitude;
+        yield return Longitude;
+        yield return Altitude;
+        foreach (var item in base.GetRoutableChildren())
+        {
+            yield return item;
+        }
+    }
+
     public UnitPropertyViewModel Latitude { get; }
     public UnitPropertyViewModel Longitude { get; }
     public UnitPropertyViewModel Altitude { get; }
