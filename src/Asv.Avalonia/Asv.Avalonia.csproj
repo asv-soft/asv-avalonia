@@ -93,8 +93,4 @@
     <ItemGroup>
       <None Remove="icon.ico" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Controls\Charts\" />
-    </ItemGroup>
 </Project>
