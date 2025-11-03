@@ -3,7 +3,7 @@
         xmlns:avalonia="clr-namespace:Asv.Avalonia"
         >
     <Design.PreviewWith>
-        <Panel Width="1024" Height="500">
+        <Panel Width="1024" Height="500" Background="Gray">
             <avalonia:Workspace BorderThickness="3" >
                 <avalonia:WorkspaceItem Header="HEADER1" Position="Right">
                     <StackPanel>
@@ -60,6 +60,9 @@
     <Style Selector="avalonia|Workspace" >
         <Style Selector="^ GridSplitter:pointerover">
             <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+        </Style>
+        <Style Selector="^ GridSplitter">
+            <Setter Property="Background" Value="Transparent"/>
         </Style>
         <!-- Set Defaults -->
         <Setter Property="ItemsPanel">

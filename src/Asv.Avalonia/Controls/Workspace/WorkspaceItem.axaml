@@ -4,10 +4,9 @@
         xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
         xmlns:avalonia2="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia">
     <Design.PreviewWith>
-        <Border BorderThickness="1" BorderBrush="Aqua" Background="Red">
+        <Border BorderThickness="1" Background="Gray">
             <DockPanel HorizontalAlignment="Stretch" Width="200" Height="600">
                 <avalonia:WorkspaceItem Header="HEADER" DockPanel.Dock="Top">
-                   
                     <StackPanel>
                         <TextBlock Text="AAAA"/>
                         <TextBox></TextBox>
@@ -25,7 +24,7 @@
                     </StackPanel>
                 </avalonia:WorkspaceItem>
                 <avalonia:WorkspaceItem Width="200" Header="asdasd" Position="Bottom" >
-                    <Border BorderThickness="1" BorderBrush="Red" >
+                    <Border  >
                         <StackPanel>
                             <TextBlock Text="AAAA"/>
                             <TextBox></TextBox>
@@ -42,7 +41,7 @@
         <!-- Set Defaults -->
         <Setter Property="Padding" Value="4"></Setter>
         <Setter Property="avalonia:WorkspacePanel.Dock" Value="{Binding Position, RelativeSource={RelativeSource Self}}"/>
-        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumBrush}"/>
         <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
         <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}"/>
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
@@ -84,7 +83,8 @@
         </Style>
         <Setter Property="Template">
             <ControlTemplate>
-                <Border VerticalAlignment="Stretch" CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}">
+                <Panel>
+                    <Border VerticalAlignment="Stretch" CornerRadius="{TemplateBinding CornerRadius}" Background="{TemplateBinding Background}" Opacity="0.8"/>
                     <DockPanel  Margin="{TemplateBinding Padding}">
                         <DockPanel x:Name="PART_Header" Margin="0,0,0,4" DockPanel.Dock="Top">
                            
@@ -135,8 +135,8 @@
                                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                                           RenderTransformOrigin="0,0"/>
-                    </DockPanel>    
-                </Border>
+                    </DockPanel>  
+                </Panel>
                 
             </ControlTemplate>
         </Setter>

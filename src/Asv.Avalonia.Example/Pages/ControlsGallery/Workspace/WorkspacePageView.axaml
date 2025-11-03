@@ -4,23 +4,29 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:example="clr-namespace:Asv.Avalonia.Example"
              xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             xmlns:geoMap="clr-namespace:Asv.Avalonia.GeoMap;assembly=Asv.Avalonia.GeoMap"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Example.WorkspacePageView"
              x:DataType="example:WorkspacePageViewModel">
     <Design.DataContext>
         <example:WorkspacePageViewModel/>
     </Design.DataContext>
-    <avalonia:Workspace 
-        ItemsSource="{Binding Items}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <avalonia:WorkspacePanel 
-                    MinLeftWidth="250" 
-                    LeftWidth="*" 
-                    CentralWidth="3*" 
-                    MinRightWidth="260" 
-                    RightWidth="*"/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </avalonia:Workspace>
+    <Panel>
+        <geoMap:MapView/> 
+        <avalonia:Workspace 
+            
+            ItemsSource="{Binding Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <avalonia:WorkspacePanel 
+                        MinLeftWidth="250" 
+                        LeftWidth="*" 
+                        CentralWidth="3*" 
+                        MinRightWidth="260" 
+                        RightWidth="*"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </avalonia:Workspace>
+    </Panel>
+    
 </UserControl>
