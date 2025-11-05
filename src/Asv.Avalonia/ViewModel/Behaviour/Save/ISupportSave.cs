@@ -4,4 +4,3 @@ public interface ISupportSave : IRoutable
 {
     ValueTask Save();
 }
-

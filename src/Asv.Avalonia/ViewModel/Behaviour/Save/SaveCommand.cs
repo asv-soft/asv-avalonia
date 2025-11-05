@@ -16,7 +16,7 @@ public class SaveCommand : ContextCommand<ISupportSave>
             Name = "Save",
             Description = "Save changes",
             Icon = MaterialIconKind.FloppyDisc,
-            DefaultHotKey = "Ctrl+S", 
+            DefaultHotKey = "Ctrl+S",
             Source = SystemModule.Instance,
         };
 
