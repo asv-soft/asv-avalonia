@@ -63,15 +63,17 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
                 if (reasons.Count != 0)
                 {
                     var vm = _dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
-                    var result = await vm.ShowDialogAsync(new YesOrNoDialogPayload
-                    {
-                        Title = "Close page anyway?",
-                        Message = string.Join('\n', reasons.Select(r => r.Message)),
-                    });
+                    var result = await vm.ShowDialogAsync(
+                        new YesOrNoDialogPayload
+                        {
+                            Title = "Close page anyway?",
+                            Message = string.Join('\n', reasons.Select(r => r.Message)),
+                        }
+                    );
                     Logger.ZLogTrace($"Try close page {Title}[{Id}] result: {result}");
                     if (!result)
                     {
-                        return;    
+                        return;
                     }
                 }
             }

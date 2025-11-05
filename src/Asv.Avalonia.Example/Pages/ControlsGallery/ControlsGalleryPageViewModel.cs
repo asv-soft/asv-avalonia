@@ -37,7 +37,7 @@ public class ControlsGalleryPageViewModel
         ICommandService cmd,
         IContainerHost containerHost,
         IConfiguration cfg,
-        ILoggerFactory loggerFactory, 
+        ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
         : base(PageId, cmd, containerHost, cfg, loggerFactory, dialogService)

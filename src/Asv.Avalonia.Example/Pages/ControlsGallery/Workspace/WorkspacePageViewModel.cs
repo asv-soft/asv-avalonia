@@ -119,7 +119,6 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         if (e is PageCloseAttemptEvent close)
         {
             close.AddRestriction(new Restriction(this, "Test restriction for close"));
-            
         }
         return base.InternalCatchEvent(e);
     }

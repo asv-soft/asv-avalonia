@@ -22,7 +22,7 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
         ICommandService cmd,
         IContainerHost container,
         IConfiguration cfg,
-        ILoggerFactory loggerFactory, 
+        ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
         : base(id, cmd, container, cfg, loggerFactory, dialogService)

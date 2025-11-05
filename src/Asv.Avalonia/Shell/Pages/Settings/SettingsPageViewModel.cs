@@ -35,7 +35,7 @@ public class SettingsPageViewModel
         ICommandService svc,
         IContainerHost host,
         IConfiguration configuration,
-        ILoggerFactory loggerFactory, 
+        ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
         : base(PageId, svc, host, configuration, loggerFactory, dialogService)
