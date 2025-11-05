@@ -41,10 +41,10 @@ public class WorkspaceWidget : HeadlinedViewModel, IWorkspaceWidget
         {
             yield return item;
         }
-        
+
         foreach (var item in base.GetRoutableChildren())
         {
             yield return item;
-        } 
+        }
     }
 }

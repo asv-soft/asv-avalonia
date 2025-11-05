@@ -18,8 +18,11 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<GridLength> LeftWidthProperty = AvaloniaProperty.Register<
         WorkspacePanel,
         GridLength
-    >(nameof(LeftWidth), new GridLength(1, GridUnitType.Star),
-        defaultBindingMode: BindingMode.TwoWay);
+    >(
+        nameof(LeftWidth),
+        new GridLength(1, GridUnitType.Star),
+        defaultBindingMode: BindingMode.TwoWay
+    );
 
     public GridLength LeftWidth
     {
@@ -79,8 +82,7 @@ public partial class WorkspacePanel
     public static readonly StyledProperty<double> MinLeftWidthProperty = AvaloniaProperty.Register<
         WorkspacePanel,
         double
-    >(nameof(MinLeftWidth),
-        defaultBindingMode: BindingMode.TwoWay);
+    >(nameof(MinLeftWidth), defaultBindingMode: BindingMode.TwoWay);
 
     public double MinLeftWidth
     {

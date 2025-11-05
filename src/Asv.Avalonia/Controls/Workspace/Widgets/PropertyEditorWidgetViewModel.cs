@@ -62,10 +62,10 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         {
             yield return item;
         }
-        
+
         foreach (var item in base.GetRoutableChildren())
         {
             yield return item;
-        } 
+        }
     }
 }

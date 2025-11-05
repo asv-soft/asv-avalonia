@@ -20,7 +20,6 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
-        
     }
 
     [ImportingConstructor]
@@ -92,7 +91,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                         ValueString = "15.25",
                     },
                 },
-            }
+            },
         ];
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         _itemsSource.SetRoutableParent(this).DisposeItWith(Disposable);
@@ -107,7 +106,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         {
             yield return item;
         }
-        
+
         foreach (var item in base.GetRoutableChildren())
         {
             yield return item;

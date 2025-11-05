@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 
 public class WidgetPanelViewModel : WorkspaceWidget
 {
-    public WidgetPanelViewModel() 
+    public WidgetPanelViewModel()
         : this(DesignTime.Id, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -22,8 +22,8 @@ public class WidgetPanelViewModel : WorkspaceWidget
         ItemsSource.Add(new GeoPointRttBoxViewModel());
         ItemsSource.Add(new GeoPointRttBoxViewModel());
     }
-    
-    public WidgetPanelViewModel(NavigationId id, ILoggerFactory loggerFactory) 
+
+    public WidgetPanelViewModel(NavigationId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
         ItemsSource = new ObservableList<IRoutable>();
@@ -31,7 +31,7 @@ public class WidgetPanelViewModel : WorkspaceWidget
         ItemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         ItemsView = ItemsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
-    
+
     public ObservableList<IRoutable> ItemsSource { get; }
     public NotifyCollectionChangedSynchronizedViewList<IRoutable> ItemsView { get; }
 }
