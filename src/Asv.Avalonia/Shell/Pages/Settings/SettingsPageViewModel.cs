@@ -21,7 +21,8 @@ public class SettingsPageViewModel
             DesignTime.CommandService,
             NullContainerHost.Instance,
             DesignTime.Configuration,
-            DesignTime.LoggerFactory
+            DesignTime.LoggerFactory,
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -34,9 +35,10 @@ public class SettingsPageViewModel
         ICommandService svc,
         IContainerHost host,
         IConfiguration configuration,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory, 
+        IDialogService dialogService
     )
-        : base(PageId, svc, host, configuration, loggerFactory)
+        : base(PageId, svc, host, configuration, loggerFactory, dialogService)
     {
         Title = RS.SettingsPageViewModel_Title;
     }

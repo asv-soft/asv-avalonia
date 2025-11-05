@@ -26,7 +26,8 @@ public class DesignTimeTreePageViewModel
             DesignTime.CommandService,
             DesignTime.ContainerHost,
             DesignTime.Configuration,
-            DesignTime.LoggerFactory
+            DesignTime.LoggerFactory,
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();

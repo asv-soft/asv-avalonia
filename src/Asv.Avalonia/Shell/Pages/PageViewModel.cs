@@ -17,13 +17,15 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
     where TConfig : PageConfig, new()
 {
     protected readonly IConfiguration CfgService;
+    private readonly IDialogService _dialogService;
     protected readonly TConfig Config;
 
     protected PageViewModel(
         NavigationId id,
         ICommandService cmd,
         IConfiguration cfgService,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService
     )
         : base(id, loggerFactory)
     {
@@ -33,6 +35,7 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
         CfgService = cfgService;
+        _dialogService = dialogService;
         Config = cfgService.Get<TConfig>();
         State = new BindableReactiveProperty<PageState>(Config.PageState);
 
@@ -59,7 +62,17 @@ public abstract class PageViewModel<TContext, TConfig> : ExtendableViewModel<TCo
                 var reasons = await this.RequestChildCloseApproval();
                 if (reasons.Count != 0)
                 {
-                    return;
+                    var vm = _dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
+                    var result = await vm.ShowDialogAsync(new YesOrNoDialogPayload
+                    {
+                        Title = "Close page anyway?",
+                        Message = string.Join('\n', reasons.Select(r => r.Message)),
+                    });
+                    Logger.ZLogTrace($"Try close page {Title}[{Id}] result: {result}");
+                    if (!result)
+                    {
+                        return;    
+                    }
                 }
             }
 

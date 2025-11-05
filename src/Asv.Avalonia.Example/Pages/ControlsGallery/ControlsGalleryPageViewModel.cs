@@ -25,7 +25,8 @@ public class ControlsGalleryPageViewModel
             DesignTime.CommandService,
             DesignTime.ContainerHost,
             DesignTime.Configuration,
-            NullLoggerFactory.Instance
+            NullLoggerFactory.Instance,
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -36,9 +37,10 @@ public class ControlsGalleryPageViewModel
         ICommandService cmd,
         IContainerHost containerHost,
         IConfiguration cfg,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory, 
+        IDialogService dialogService
     )
-        : base(PageId, cmd, containerHost, cfg, loggerFactory)
+        : base(PageId, cmd, containerHost, cfg, loggerFactory, dialogService)
     {
         Title = RS.ControlsGalleryPageViewModel_Title;
         Icon = PageIcon;

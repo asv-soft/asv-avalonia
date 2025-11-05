@@ -20,9 +20,10 @@ public abstract class DevicePageViewModel<TContext, TCfg>
         IDeviceManager devices,
         ICommandService cmd,
         IConfiguration cfg,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService
     )
-        : base(id, cmd, cfg, loggerFactory)
+        : base(id, cmd, cfg, loggerFactory, dialogService)
     {
         _deviceCore = new DevicePageCore(devices, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;

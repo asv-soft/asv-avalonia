@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Composition;
+using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -111,6 +112,16 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         {
             yield return item;
         }
+    }
+
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        if (e is PageCloseAttemptEvent close)
+        {
+            close.AddRestriction(new Restriction(this, "Test restriction for close"));
+            
+        }
+        return base.InternalCatchEvent(e);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -20,7 +20,8 @@ public class HomePageViewModel : PageViewModel<IHomePage, HomePageViewModelConfi
             NullAppInfo.Instance,
             NullContainerHost.Instance,
             DesignTime.Configuration,
-            DesignTime.LoggerFactory
+            DesignTime.LoggerFactory,
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -99,9 +100,10 @@ public class HomePageViewModel : PageViewModel<IHomePage, HomePageViewModelConfi
         IAppInfo appInfo,
         IContainerHost container,
         IConfiguration cfg,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, cfg, loggerFactory, dialogService)
     {
         AppInfo = appInfo;
         Icon = MaterialIconKind.Home;

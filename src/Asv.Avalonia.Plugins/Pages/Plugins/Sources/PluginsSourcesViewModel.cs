@@ -31,7 +31,8 @@ public class PluginsSourcesViewModel
             NullPluginManager.Instance,
             DesignTime.Configuration,
             DesignTime.LoggerFactory,
-            DesignTime.Navigation
+            DesignTime.Navigation,
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -64,9 +65,10 @@ public class PluginsSourcesViewModel
         IPluginManager mng,
         IConfiguration cfg,
         ILoggerFactory loggerFactory,
-        INavigationService navigationService
+        INavigationService navigationService,
+        IDialogService dialogService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, cfg, loggerFactory, dialogService)
     {
         _mng = mng;
         _navigation = navigationService;

@@ -22,9 +22,10 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage, TConfig>
         ICommandService cmd,
         IContainerHost container,
         IConfiguration cfg,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory, 
+        IDialogService dialogService
     )
-        : base(id, cmd, container, cfg, loggerFactory)
+        : base(id, cmd, container, cfg, loggerFactory, dialogService)
     {
         _deviceCore = new DevicePageCore(devices, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
