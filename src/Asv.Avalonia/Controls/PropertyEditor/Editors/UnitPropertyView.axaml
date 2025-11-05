@@ -110,7 +110,7 @@
                         Foreground="{DynamicResource AsvForegroundSuccessBrush}"
                     />
                 </Button>
-                <Button Theme="{DynamicResource TransparentButton}">
+                <Button IsTabStop="False" Theme="{DynamicResource TransparentButton}">
                     <Button.Flyout>
                         <MenuFlyout ItemsSource="{Binding Unit.AvailableUnits.Values}">
                             <MenuFlyout.ItemContainerTheme>

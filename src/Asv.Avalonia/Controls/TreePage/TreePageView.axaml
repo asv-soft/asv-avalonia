@@ -10,13 +10,22 @@
     <Design.DataContext>
         <avalonia:DesignTimeTreePageViewModel />
     </Design.DataContext>
-    <Grid>
+    <UserControl.Styles>
+        <Style Selector="GridSplitter">
+            <Setter Property="Background" Value="Transparent"/>
+            <Style Selector="^:pointerover">
+                <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+            </Style>
+        </Style>
+        
+    </UserControl.Styles>
+    <Grid Name="PART_MainGrid">
         <Grid.RowDefinitions>
             <RowDefinition MinHeight="40" MaxHeight="40" Height="40" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" MaxWidth="{Binding IsMenuVisible, Converter={x:Static avalonia:ZeroDoubleIfFalseConverter.Instance}}" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
@@ -67,12 +76,11 @@
                    Fill="{StaticResource SystemChromeDisabledLowColor}" Height="0.5" VerticalAlignment="Bottom" />
         
         <GridSplitter IsVisible="{Binding IsMenuVisible}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
-                      Background="Transparent" Width="10" HorizontalAlignment="Stretch" />
+                      Width="10" HorizontalAlignment="Stretch" />
+        
         <Rectangle IsVisible="{Binding IsMenuVisible}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
                    Fill="{StaticResource SystemChromeDisabledLowColor}" Width="0.5" VerticalAlignment="Stretch" />
-        <avalonia1:MaterialIcon IsVisible="{Binding IsMenuVisible}" Grid.Row="0" Grid.RowSpan="2" Width="15"
-                                Height="15" Grid.Column="1" Kind="UnfoldMoreVertical"
-                                Foreground="{StaticResource SystemChromeLowColor}" />
+        
         <ContentControl Margin="0,8,0,0" Grid.Column="2" Grid.Row="1" Content="{Binding SelectedPage.Value}" />
         
         <Button Grid.Row="0" Grid.Column="2" Height="100" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" IsVisible="{Binding !IsMenuVisible}" Command="{Binding ShowMenuCommand}" Background="Transparent" Padding="0">
