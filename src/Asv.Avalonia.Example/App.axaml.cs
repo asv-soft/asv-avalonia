@@ -17,9 +17,9 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 using R3;
 
 namespace Asv.Avalonia.Example;
@@ -33,29 +33,34 @@ public class App : Application, IContainerHost, IShellHost
     {
         var conventions = new ConventionBuilder();
         var containerCfg = new ContainerConfiguration();
+
         if (Design.IsDesignMode)
         {
             containerCfg
+                .WithExport<IDataTemplateHost>(this)
+                .WithExport<IShellHost>(this)
                 .WithExport(NullContainerHost.Instance)
                 .WithExport<IConfiguration>(new InMemoryConfiguration())
                 .WithExport(NullLoggerFactory.Instance)
                 .WithExport(NullAppPath.Instance)
-                .WithExport(NullPluginManager.Instance)
-                .WithExport(NullLogReaderService.Instance)
                 .WithExport(NullAppInfo.Instance)
                 .WithExport<IMeterFactory>(new DefaultMeterFactory())
+                .WithExport(NullPluginManager.Instance)
                 .WithExport(TimeProvider.System)
-                .WithExport<IDataTemplateHost>(this)
-                .WithExport<IShellHost>(this)
+                .WithExport(NullLogReaderService.Instance)
+                .WithExportFromModule(
+                    IoModule.Instance,
+                    Options.Create(new IoModuleOptions { EnableDevices = true })
+                )
                 .WithDefaultConventions(conventions);
         }
         else
         {
             // TODO: use it when plugin manager implementation will be finished
             // var pluginManager = AppHost.Instance.GetService<IPluginManager>();
-            var logReader = AppHost.Instance.GetService<ILogReaderService>();
-
             containerCfg
+                .WithExport<IDataTemplateHost>(this)
+                .WithExport<IShellHost>(this)
                 .WithExport<IContainerHost>(this)
                 .WithExport(AppHost.Instance.GetService<IConfiguration>())
                 .WithExport(AppHost.Instance.GetService<ILoggerFactory>())
@@ -63,10 +68,12 @@ public class App : Application, IContainerHost, IShellHost
                 .WithExport(AppHost.Instance.GetService<IAppInfo>())
                 .WithExport(AppHost.Instance.GetService<IMeterFactory>())
                 .WithExport(AppHost.Instance.GetService<ISoloRunFeature>())
-                .WithExport(TimeProvider.System)
-                .WithExport(logReader)
-                .WithExport<IDataTemplateHost>(this)
-                .WithExport<IShellHost>(this)
+                .WithExport(AppHost.Instance.GetService<TimeProvider>())
+                .WithExport(AppHost.Instance.GetService<ILogReaderService>())
+                .WithExportFromModule(
+                    IoModule.Instance,
+                    AppHost.Instance.GetService<IOptions<IoModuleOptions>>()
+                )
                 .WithDefaultConventions(conventions);
         }
 
@@ -74,7 +81,9 @@ public class App : Application, IContainerHost, IShellHost
 
         // TODO: load plugin manager before creating container
         _container = containerCfg.CreateContainer();
+
         DataTemplates.Add(new CompositionViewLocator(_container));
+
         if (!Design.IsDesignMode)
         {
             _container.GetExport<IAppStartupService>().AppCtor();
@@ -89,7 +98,6 @@ public class App : Application, IContainerHost, IShellHost
             yield return typeof(AppHost).Assembly; // Asv.Avalonia
             yield return typeof(GeoMapModule).Assembly; // Asv.Avalonia.GeoMap
             yield return typeof(ApiModule).Assembly; // Asv.Avalonia.Example.Api
-            yield return typeof(IoModule).Assembly; // Asv.Avalonia.IO
 
             // TODO: use it when plugin manager implementation will be finished
             // yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins

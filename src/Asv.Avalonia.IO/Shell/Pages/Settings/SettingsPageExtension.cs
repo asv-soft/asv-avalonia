@@ -1,7 +1,8 @@
-﻿using System.Composition;
+using System.Composition;
 using Asv.Common;
-using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using R3;
 
 namespace Asv.Avalonia.IO;
