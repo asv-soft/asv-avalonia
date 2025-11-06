@@ -1743,6 +1743,42 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command that saves layout of the whole app to file.
+        /// </summary>
+        public static string SaveAllLayoutToFileCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("SaveAllLayoutToFileCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save All layout to file.
+        /// </summary>
+        public static string SaveAllLayoutToFileCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("SaveAllLayoutToFileCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command that saves layout of the current page to file.
+        /// </summary>
+        public static string SaveLayoutToFileCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("SaveLayoutToFileCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save layout to file.
+        /// </summary>
+        public static string SaveLayoutToFileCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("SaveLayoutToFileCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sum depth of modulation measure units.
         /// </summary>
         public static string Sdm_Description {
@@ -2153,6 +2189,24 @@ namespace Asv.Avalonia {
         public static string Velocity_Name {
             get {
                 return ResourceManager.GetString("Velocity_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save All.
+        /// </summary>
+        public static string ViewSaveAllMenu_Header {
+            get {
+                return ResourceManager.GetString("ViewSaveAllMenu_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string ViewSaveMenu_Header {
+            get {
+                return ResourceManager.GetString("ViewSaveMenu_Header", resourceCulture);
             }
         }
         

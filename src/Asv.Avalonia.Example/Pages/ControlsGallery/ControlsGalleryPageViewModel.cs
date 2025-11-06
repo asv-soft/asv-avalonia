@@ -1,20 +1,13 @@
 using System.Composition;
-using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia.Example;
 
-public sealed class ControlsGalleryPageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
 public class ControlsGalleryPageViewModel
-    : TreePageViewModel<
-        IControlsGalleryPage,
-        IControlsGallerySubPage,
-        ControlsGalleryPageViewModelConfig
-    >,
+    : TreePageViewModel<IControlsGalleryPage, IControlsGallerySubPage>,
         IControlsGalleryPage
 {
     public const string PageId = "controls_gallery";
@@ -24,7 +17,7 @@ public class ControlsGalleryPageViewModel
         : this(
             DesignTime.CommandService,
             DesignTime.ContainerHost,
-            DesignTime.Configuration,
+            NullLayoutService.Instance,
             NullLoggerFactory.Instance,
             DesignTime.DialogService
         )
@@ -36,11 +29,11 @@ public class ControlsGalleryPageViewModel
     public ControlsGalleryPageViewModel(
         ICommandService cmd,
         IContainerHost containerHost,
-        IConfiguration cfg,
+        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
-        : base(PageId, cmd, containerHost, cfg, loggerFactory, dialogService)
+        : base(PageId, cmd, containerHost, layoutService, loggerFactory, dialogService)
     {
         Title = RS.ControlsGalleryPageViewModel_Title;
         Icon = PageIcon;

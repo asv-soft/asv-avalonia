@@ -38,7 +38,9 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             lonUnit,
             altUnit,
             loggerFactory
-        ).DisposeItWith(Disposable);
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         GeoPointProperty.ForceValidate();
 
         StepOptions = new List<double> { 1, 10, 50, 100, 5000, 10000, 50000 };

@@ -125,7 +125,7 @@ public class SearchBoxViewModel
             _isExecuting.Value = false;
             _canExecute.Value = true;
             _progress.Value = 1;
-            _cancellationTokenSource.Dispose();
+            _cancellationTokenSource?.Dispose();
             _cancellationTokenSource = null;
         }
     }
@@ -165,6 +165,12 @@ public class SearchBoxViewModel
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return Text;
+    }
+
+    public override ValueTask<IRoutable> Navigate(NavigationId id)
+    {
+        Focus();
+        return base.Navigate(id);
     }
 
     public void Report(double value) => _progress.Value = value;

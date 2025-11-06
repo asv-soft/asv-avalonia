@@ -43,7 +43,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
     public NotifyCollectionChangedSynchronizedViewList<DebugPageViewModel> Pages { get; }
     public IReadOnlyBindableReactiveProperty<NavigationPath> SelectedControlPath { get; }
 
-    public IReadOnlyBindableReactiveProperty<HotKeyInfo?> HotKey { get; }
+    public IReadOnlyBindableReactiveProperty<HotKeyInfo> HotKey { get; }
 
     protected override void Dispose(bool disposing)
     {

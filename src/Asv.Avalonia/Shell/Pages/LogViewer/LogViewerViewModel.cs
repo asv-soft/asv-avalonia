@@ -1,6 +1,5 @@
 ﻿using System.Composition;
 using System.Diagnostics;
-using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Threading;
 using Material.Icons;
@@ -10,13 +9,18 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public interface ILogViewerViewModel : IPage { }
+public class LogViewerViewModelConfig
+{
+    public string SearchText { get; set; } = string.Empty;
+    public int Skip { get; set; } = 0;
+    public int Take { get; set; } = 50;
+}
 
-public class LogViewerViewModelConfig : PageConfig { }
+public interface ILogViewerViewModel : IPage { }
 
 [ExportPage(PageId)]
 public class LogViewerViewModel
-    : PageViewModel<ILogViewerViewModel, LogViewerViewModelConfig>,
+    : PageViewModel<ILogViewerViewModel>,
         ILogViewerViewModel,
         ISupportPagination
 {
@@ -28,11 +32,12 @@ public class LogViewerViewModel
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<LogMessageViewModel> _itemsSource = new();
 
+    private LogViewerViewModelConfig? _config;
+
     public LogViewerViewModel()
         : base(
             DesignTime.Id,
             NullCommandService.Instance,
-            DesignTime.Configuration,
             DesignTime.LoggerFactory,
             DesignTime.DialogService
         )
@@ -54,8 +59,8 @@ public class LogViewerViewModel
                     "Design time log message",
                     "This is a design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                this,
-                DesignTime.LoggerFactory
+                DesignTime.LoggerFactory,
+                this
             )
         );
         _itemsSource.Add(
@@ -67,8 +72,8 @@ public class LogViewerViewModel
                     "Design time log message 2",
                     "This is another design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                this,
-                DesignTime.LoggerFactory
+                DesignTime.LoggerFactory,
+                this
             )
         );
         _itemsSource.Add(
@@ -80,8 +85,8 @@ public class LogViewerViewModel
                     "Design time log message 3",
                     "This is yet another design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                this,
-                DesignTime.LoggerFactory
+                DesignTime.LoggerFactory,
+                this
             )
         );
         _itemsSource.Add(
@@ -93,8 +98,8 @@ public class LogViewerViewModel
                     "Design time log message 4",
                     "This is a debug log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                this,
-                DesignTime.LoggerFactory
+                DesignTime.LoggerFactory,
+                this
             )
         );
         _itemsSource.Add(
@@ -106,8 +111,8 @@ public class LogViewerViewModel
                     "Design time log message 5",
                     "This is a critical log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                this,
-                DesignTime.LoggerFactory
+                DesignTime.LoggerFactory,
+                this
             )
         );
         _itemsSource.Add(
@@ -119,8 +124,8 @@ public class LogViewerViewModel
                     "Design time log message 6",
                     "This is a trace log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                this,
-                DesignTime.LoggerFactory
+                DesignTime.LoggerFactory,
+                this
             )
         );
         _itemsSource.Add(
@@ -132,8 +137,8 @@ public class LogViewerViewModel
                     "Design time log message 7",
                     "This is a log message with no specific level for the Log Viewer. It will not be shown in the actual application."
                 ),
-                this,
-                DesignTime.LoggerFactory
+                DesignTime.LoggerFactory,
+                this
             )
         );
     }
@@ -143,11 +148,10 @@ public class LogViewerViewModel
         ICommandService cmd,
         ILogReaderService logReaderService,
         ISearchService search,
-        IConfiguration cfg,
         ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
-        : base(PageId, cmd, cfg, loggerFactory, dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService)
     {
         _logReaderService = logReaderService;
         _search = search;
@@ -173,7 +177,7 @@ public class LogViewerViewModel
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Skip.Skip(1).Subscribe(_ => Search.Refresh());
+        Skip.Skip(1).Subscribe(_ => Search.Refresh()).DisposeItWith(Disposable);
 
         Next = new ReactiveCommand(_ => Commands.NextPage(this)).DisposeItWith(Disposable);
         Previous = new ReactiveCommand(_ => Commands.PreviousPage(this)).DisposeItWith(Disposable);
@@ -223,10 +227,10 @@ public class LogViewerViewModel
                 if (
                     LogMessageViewModel.TryCreate(
                         logMessage,
-                        this,
                         _search,
                         text,
                         _loggerFactory,
+                        this,
                         out var vm
                     )
                     && vm != null
@@ -294,6 +298,43 @@ public class LogViewerViewModel
             FromToText.Value = $"{Skip.Value + 1} - {Skip.Value + _itemsSource.Count} ";
             progress.Report(1);
         }
+    }
+
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        switch (e)
+        {
+            case SaveLayoutEvent saveLayoutEvent:
+                if (_config is null)
+                {
+                    break;
+                }
+
+                this.HandleSaveLayout(
+                    saveLayoutEvent,
+                    _config,
+                    cfg =>
+                    {
+                        cfg.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
+                        cfg.Skip = Skip.Value;
+                        cfg.Take = Take.Value;
+                    }
+                );
+                break;
+            case LoadLayoutEvent loadLayoutEvent:
+                _config = this.HandleLoadLayout<LogViewerViewModelConfig>(
+                    loadLayoutEvent,
+                    cfg =>
+                    {
+                        Search.Text.ModelValue.Value = cfg.SearchText;
+                        Skip.Value = cfg.Skip;
+                        Take.Value = cfg.Take;
+                    }
+                );
+                break;
+        }
+
+        return base.InternalCatchEvent(e);
     }
 
     public BindableReactiveProperty<int> Skip { get; }

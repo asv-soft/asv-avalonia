@@ -53,7 +53,7 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
             FracString = fracFormat;
         }
 
-        if (_networkErrorTimeout != null)
+        if (_networkErrorTimeout is not null)
         {
             Updated();
         }

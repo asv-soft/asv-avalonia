@@ -69,7 +69,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             lonUnit,
             altUnit,
             loggerFactory
-        ).DisposeItWith(Disposable);
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         GeoPointProperty.ForceValidate();
 
         LonUnitName = lonUnit

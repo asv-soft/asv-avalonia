@@ -63,11 +63,13 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
         {
             return;
         }
+
         if (ViewValue.HasErrors)
         {
             // we don't apply value if view has errors
             return;
         }
+
         _externalChange = true;
         var value = Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue);
         await ApplyValueToModel(value, cancel);

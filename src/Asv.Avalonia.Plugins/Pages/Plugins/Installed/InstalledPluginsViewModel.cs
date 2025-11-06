@@ -7,11 +7,8 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class InstalledPluginsViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class InstalledPluginsViewModel
-    : PageViewModel<InstalledPluginsViewModel, InstalledPluginsViewModelConfig>
+public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel>
 {
     public const string PageId = "plugins.installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
@@ -28,7 +25,7 @@ public class InstalledPluginsViewModel
             NullPluginManager.Instance,
             DesignTime.LoggerFactory,
             DesignTime.Configuration,
-            NullNavigationService.Instance,
+            DesignTime.Navigation,
             DesignTime.DialogService
         )
     {
@@ -49,7 +46,7 @@ public class InstalledPluginsViewModel
         INavigationService navigationService,
         IDialogService dialogService
     )
-        : base(PageId, cmd, cfg, loggerFactory, dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService)
     {
         _manager = manager;
         _loggerFactory = loggerFactory;

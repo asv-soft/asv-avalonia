@@ -3,7 +3,6 @@ using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
-using ObservableExtensions = System.ObservableExtensions;
 
 namespace Asv.Avalonia;
 
