@@ -1,4 +1,4 @@
-﻿using System.Composition;
+using System.Composition;
 using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
