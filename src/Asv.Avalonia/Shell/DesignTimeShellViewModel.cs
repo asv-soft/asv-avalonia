@@ -1,5 +1,4 @@
 using System.Reactive.Linq;
-using Material.Icons;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia;

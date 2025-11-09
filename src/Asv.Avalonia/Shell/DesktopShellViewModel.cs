@@ -1,5 +1,4 @@
 using System.Composition;
-using System.Reactive.Linq;
 using System.Runtime.InteropServices;
 using Asv.Cfg;
 using Avalonia;
@@ -20,7 +19,6 @@ public class DesktopShellViewModel : ShellViewModel
     public const string ShellId = "shell.desktop";
     private readonly IFileAssociationService _fileService;
     private readonly IContainerHost _ioc;
-    private readonly INavigationService _navigationService;
 
     [ImportingConstructor]
     public DesktopShellViewModel(
@@ -28,14 +26,12 @@ public class DesktopShellViewModel : ShellViewModel
         IConfiguration cfg,
         IContainerHost ioc,
         ILayoutService layoutService,
-        ILoggerFactory loggerFactory,
-        INavigationService navigationService
+        ILoggerFactory loggerFactory
     )
         : base(ioc, layoutService, loggerFactory, cfg, ShellId)
     {
         _fileService = fileService;
         _ioc = ioc;
-        _navigationService = navigationService;
         var wnd = ioc.GetExport<ShellWindow>();
         wnd.DataContext = this;
         if (
@@ -59,14 +55,14 @@ public class DesktopShellViewModel : ShellViewModel
         lifetime.MainWindow.Show();
     }
 
-    private void OnDragOver(object sender, DragEventArgs e)
+    private void OnDragOver(object? sender, DragEventArgs e)
     {
         e.DragEffects = DragDropEffects.Copy;
     }
 
     private void OnFileDrop(object? sender, DragEventArgs e)
     {
-        var selected = _navigationService.SelectedControl.CurrentValue ?? this;
+        var selected = Navigation.SelectedControl.CurrentValue ?? this;
         selected.Rise(new DesktopDragEvent(selected, args: e));
     }
 
@@ -103,6 +99,12 @@ public class DesktopShellViewModel : ShellViewModel
     protected override async ValueTask CloseAsync(CancellationToken cancellationToken)
     {
         await base.CloseAsync(cancellationToken);
+
+        foreach (var page in Pages.ToArray())
+        {
+            // TODO: do something with unclosed pages
+            await page.TryCloseAsync(false);
+        }
 
         if (
             Application.Current?.ApplicationLifetime
