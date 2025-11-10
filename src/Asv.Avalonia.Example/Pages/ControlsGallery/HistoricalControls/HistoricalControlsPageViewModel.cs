@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
-using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
@@ -12,7 +11,7 @@ namespace Asv.Avalonia.Example;
 
 public sealed class HistoricalControlsPageViewModelConfig
 {
-    public string Speed { get; set; } = string.Empty;
+    public double Speed { get; set; } = -1;
     public bool IsTurnedOn { get; set; } = false;
     public string StringPropWithoutValidation { get; set; } = string.Empty;
     public string StringPropWithOneValidation { get; set; } = string.Empty;
@@ -207,7 +206,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     cfg =>
                     {
                         cfg.IsTurnedOn = IsTurnedOn.ViewValue.Value;
-                        cfg.Speed = Speed.ViewValue.Value ?? string.Empty;
+                        cfg.Speed = Speed.ModelValue.Value;
                         cfg.StringPropWithoutValidation =
                             StringPropWithoutValidation.ViewValue.Value ?? string.Empty;
                         cfg.StringPropWithOneValidation =
@@ -225,13 +224,17 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     loadLayoutEvent,
                     cfg =>
                     {
-                        IsTurnedOn.ViewValue.Value = cfg.IsTurnedOn;
-                        Speed.ViewValue.Value = cfg.Speed;
-                        StringPropWithoutValidation.ViewValue.Value =
+                        IsTurnedOn.ModelValue.Value = cfg.IsTurnedOn;
+                        if (cfg.Speed >= 0)
+                        {
+                            Speed.ModelValue.Value = cfg.Speed;
+                        }
+
+                        StringPropWithoutValidation.ModelValue.Value =
                             cfg.StringPropWithoutValidation;
-                        StringPropWithOneValidation.ViewValue.Value =
+                        StringPropWithOneValidation.ModelValue.Value =
                             cfg.StringPropWithOneValidation;
-                        StringPropWithManyValidations.ViewValue.Value =
+                        StringPropWithManyValidations.ModelValue.Value =
                             cfg.StringPropWithManyValidations;
                         GeoPointProperty.ModelValue.Value = cfg.GeoPointProperty;
                         TagTypeProp.ModelValue.Value = cfg.TagTypeProp;
