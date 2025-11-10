@@ -183,6 +183,21 @@ public static class NugetHelper
         }
     }
 
+    public static bool IsPathToNugetFile(string path)
+    {
+        if (!Path.HasExtension(path))
+        {
+            return false;
+        }
+
+        if (!Path.GetExtension(path).Equals(".nupkg", StringComparison.InvariantCultureIgnoreCase))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     public static async Task<string> DownloadPackage(
         PackageIdentity identity,
         SourceRepository repository,
