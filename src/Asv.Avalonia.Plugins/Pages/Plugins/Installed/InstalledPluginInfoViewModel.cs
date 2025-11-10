@@ -4,17 +4,20 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class InstalledPluginInfoViewModel : DisposableViewModel
+public class InstalledPluginInfoViewModel : RoutableViewModel
 {
-    private readonly ILoggerFactory? _loggerFactory;
     private readonly IPluginManager _manager;
     private readonly ILocalPluginInfo? _pluginInfo;
-    private readonly ILogger? _logger;
 
 #pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public InstalledPluginInfoViewModel()
 #pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        : base(DesignTime.Id, DesignTime.LoggerFactory)
+        : this(
+            NavigationId.Empty,
+            NullPluginManager.Instance,
+            NullLocalPluginInfo.Instance,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Uninstall = new ReactiveCommand(_ => { });
@@ -22,18 +25,15 @@ public class InstalledPluginInfoViewModel : DisposableViewModel
     }
 
     public InstalledPluginInfoViewModel(
-        string id,
+        NavigationId id,
         IPluginManager manager,
         ILocalPluginInfo pluginInfo,
         ILoggerFactory loggerFactory
     )
         : base(id, loggerFactory)
     {
-        _loggerFactory = loggerFactory;
         _manager = manager;
         _pluginInfo = pluginInfo;
-
-        _logger = loggerFactory?.CreateLogger<InstalledPluginInfoViewModel>();
 
         PluginId = pluginInfo.Id;
         Name = pluginInfo.Title;
@@ -76,7 +76,7 @@ public class InstalledPluginInfoViewModel : DisposableViewModel
     {
         if (_pluginInfo == null)
         {
-            _logger?.LogError("Plugin is not installed");
+            Logger.LogError("Plugin is not installed");
             return;
         }
 
@@ -88,11 +88,16 @@ public class InstalledPluginInfoViewModel : DisposableViewModel
     {
         if (_pluginInfo == null)
         {
-            _logger?.LogError("Plugin is not installed");
+            Logger.LogError("Plugin is not installed");
             return;
         }
 
         _manager.Uninstall(_pluginInfo);
         IsUninstalled.OnNext(true);
+    }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
     }
 }

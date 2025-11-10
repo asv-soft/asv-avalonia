@@ -59,7 +59,7 @@ public class NullPluginManager : IPluginManager
 
     public void CancelUninstall(ILocalPluginInfo pluginInfo) { }
 
-    public IEnumerable<ILocalPluginInfo> Installed { get; } = new List<ILocalPluginInfo>();
+    public IEnumerable<ILocalPluginInfo> Installed { get; } = [NullLocalPluginInfo.Instance];
 
     public bool IsInstalled(string packageId, out ILocalPluginInfo? info)
     {

@@ -5,7 +5,7 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
              xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="1500" d:DesignHeight="450"
              x:Class="Asv.Avalonia.Plugins.InstalledPluginsView">
     <Design.DataContext>
         <plugins:InstalledPluginsViewModel />
@@ -16,8 +16,7 @@
         RowDefinitions="Auto,5,*">
         <DockPanel>
             <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5 0">
-            <ToggleSwitch IsChecked="{Binding OnlyVerified.Value}"
-                          Command="{Binding Search}"
+            <ToggleSwitch IsChecked="{Binding IsShowOnlyVerified.ViewValue.Value}"
                           OnContent=""
                           OffContent=""/>
             <TextBlock Text="{x:Static plugins:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
@@ -29,35 +28,13 @@
                 Command="{Binding InstallManually}">
                 <avalonia:MaterialIcon Kind="Add" />
             </Button>
-            <Button
-                DockPanel.Dock="Right"
-                IsVisible="{Binding !Search.IsDisabled}"
-                Theme="{DynamicResource TransparentButton}"
-                Command="{Binding Search}">
-                <avalonia:MaterialIcon Kind="Refresh" />
-            </Button>
-            <TextBox Watermark="{x:Static plugins:RS.InstalledPluginsView_Search}"
-                     Background="Transparent"
-                     CornerRadius="0"
-                     BorderThickness="0"
-                     Text="{Binding SearchString.Value}">
-                <TextBox.InnerRightContent>
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="&#xE721;"
-                                FontFamily="{StaticResource SymbolThemeFontFamily}"
-                                Theme="{DynamicResource TransparentButton}"
-                                Command="{Binding $parent[TextBox].Clear}"
-                                IsHitTestVisible="False" />
-                    </StackPanel>
-                </TextBox.InnerRightContent>
-                <TextBox.InnerLeftContent>
-                    <Button Content="&#xE8BB;"
-                            FontFamily="{StaticResource SymbolThemeFontFamily}"
-                            Theme="{DynamicResource TransparentButton}"
-                            Command="{Binding $parent[TextBox].Clear}"
-                            IsVisible="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType=TextBox}, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
-                </TextBox.InnerLeftContent>
-            </TextBox>
+            <avalonia1:SearchBoxView 
+                Background="Transparent"
+                CornerRadius="0"
+                BorderThickness="0" 
+                DataContext="{Binding Search}"
+                Margin="4, 0, 0, 0"
+                />
         </DockPanel>
 
         <Rectangle Grid.Column="0" Grid.Row="1" Fill="{DynamicResource ButtonBorderBrush}" Height="1"
@@ -66,8 +43,12 @@
                    VerticalAlignment="Stretch" />
         <avalonia:MaterialIcon Grid.Row="0" Grid.RowSpan="3" Width="15" Height="15" Grid.Column="1"
                                Kind="UnfoldMoreVertical" Foreground="{DynamicResource ButtonBorderBrush}" />
-        <ListBox Margin="4" Grid.Row="2" Grid.Column="0" ItemsSource="{Binding PluginsView}"
-                 SelectedItem="{Binding SelectedPlugin.Value}">
+        <ListBox 
+            Margin="4" 
+            Grid.Row="2" 
+            Grid.Column="0" 
+            ItemsSource="{Binding InstalledPluginsView}"
+            SelectedItem="{Binding SelectedPlugin.Value}">
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="4" />

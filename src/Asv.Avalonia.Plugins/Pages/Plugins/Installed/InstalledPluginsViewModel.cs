@@ -1,5 +1,7 @@
 ﻿using System.Composition;
 using Asv.Cfg;
+using Asv.Common;
+using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -7,8 +9,11 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
+public sealed class InstalledPluginsViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel>
+public class InstalledPluginsViewModel
+    : PageViewModel<InstalledPluginsViewModel, InstalledPluginsViewModelConfig>
 {
     public const string PageId = "plugins.installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
@@ -17,7 +22,8 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
     private readonly ILoggerFactory _loggerFactory;
     private readonly IConfiguration _cfg;
     private readonly INavigationService _navigation;
-    protected readonly ObservableList<ILocalPluginInfo> Plugins;
+    private readonly ObservableList<ILocalPluginInfo> _plugins;
+    private readonly ISynchronizedView<ILocalPluginInfo, InstalledPluginInfoViewModel> _view;
 
     public InstalledPluginsViewModel()
         : this(
@@ -25,16 +31,10 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
             NullPluginManager.Instance,
             DesignTime.LoggerFactory,
             DesignTime.Configuration,
-            DesignTime.Navigation,
-            DesignTime.DialogService
+            DesignTime.Navigation
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Plugins = new ObservableList<ILocalPluginInfo>();
-        PluginsView = Plugins
-            .CreateView<InstalledPluginInfoViewModel>(_ => new InstalledPluginInfoViewModel())
-            .ToNotifyCollectionChanged();
-        SelectedPlugin = new BindableReactiveProperty<InstalledPluginInfoViewModel>(PluginsView[0]);
     }
 
     [ImportingConstructor]
@@ -43,70 +43,127 @@ public class InstalledPluginsViewModel : PageViewModel<InstalledPluginsViewModel
         IPluginManager manager,
         ILoggerFactory loggerFactory,
         IConfiguration cfg,
-        INavigationService navigationService,
-        IDialogService dialogService
+        INavigationService navigationService
     )
-        : base(PageId, cmd, loggerFactory, dialogService)
+        : base(PageId, cmd, cfg, loggerFactory)
     {
+        Title = RS.InstalledPluginsViewModel_Title;
         _manager = manager;
         _loggerFactory = loggerFactory;
         _navigation = navigationService;
         _cfg = cfg;
-        Plugins = [];
+        _plugins = new ObservableList<ILocalPluginInfo>(_manager.Installed);
 
-        Search = new ReactiveCommand(_ => SearchImpl());
+        Search = new SearchBoxViewModel(
+            nameof(Search),
+            loggerFactory,
+            SearchImpl,
+            TimeSpan.FromMilliseconds(500)
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
-        SearchString = new BindableReactiveProperty<string>();
-        SelectedPlugin = new BindableReactiveProperty<InstalledPluginInfoViewModel>();
-        OnlyVerified = new BindableReactiveProperty<bool>(false);
+        SelectedPlugin =
+            new BindableReactiveProperty<InstalledPluginInfoViewModel?>().DisposeItWith(Disposable);
 
-        InstallManually = new ReactiveCommand<IProgress<double>>(
-            async (p, ct) => await InstallManuallyImpl(p, ct)
+        var isShowOnlyVerified = new ReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        IsShowOnlyVerified = new HistoricalBoolProperty(
+            nameof(IsShowOnlyVerified),
+            isShowOnlyVerified,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+
+        InstallManually = new ReactiveCommand<IProgress<double>>(InstallManuallyImpl).DisposeItWith(
+            Disposable
         );
-        PluginsView = Plugins
+        _view = _plugins
             .CreateView(info => new InstalledPluginInfoViewModel(
-                $"{PageId}[{info.Id}]",
+                new NavigationId(PageId, info.Id),
                 manager,
                 info,
                 loggerFactory
             ))
-            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current);
+            .DisposeItWith(Disposable);
+        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        _view.DisposeMany().DisposeItWith(Disposable);
+        InstalledPluginsView = _view
+            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
+
+        IsShowOnlyVerified.ViewValue.ObserveOnUIThreadDispatcher().Subscribe(_ => Search.Refresh());
+        Search.Refresh();
     }
 
-    public ReactiveCommand Search { get; set; }
+    public SearchBoxViewModel Search { get; }
     public ReactiveCommand<IProgress<double>> InstallManually { get; }
-    public NotifyCollectionChangedSynchronizedViewList<InstalledPluginInfoViewModel> PluginsView { get; set; }
-    public BindableReactiveProperty<string> SearchString { get; set; }
-    public BindableReactiveProperty<InstalledPluginInfoViewModel> SelectedPlugin { get; set; }
-    public BindableReactiveProperty<bool> OnlyVerified { get; set; }
+    public NotifyCollectionChangedSynchronizedViewList<InstalledPluginInfoViewModel> InstalledPluginsView { get; }
+    public BindableReactiveProperty<InstalledPluginInfoViewModel?> SelectedPlugin { get; }
+    public HistoricalBoolProperty IsShowOnlyVerified { get; }
 
-    private void SearchImpl()
+    private Task SearchImpl(string? text, IProgress<double> progress, CancellationToken cancel)
     {
-        Plugins.Clear();
-        Plugins.AddRange(
-            OnlyVerified.Value
-                ? _manager.Installed.Where(item => item.IsVerified)
-                : _manager.Installed
-        );
+        progress.Report(0);
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            if (cancel.IsCancellationRequested)
+            {
+                return;
+            }
+
+            _plugins.RemoveAll();
+            if (string.IsNullOrWhiteSpace(text) && !IsShowOnlyVerified.ViewValue.Value)
+            {
+                _plugins.AddRange(_manager.Installed);
+                return;
+            }
+
+            _plugins.AddRange(
+                _manager.Installed.Where(model =>
+                {
+                    var isOk = true;
+                    if (!string.IsNullOrWhiteSpace(text))
+                    {
+                        isOk =
+                            model.Title?.Contains(text, StringComparison.InvariantCultureIgnoreCase)
+                            ?? false;
+                    }
+
+                    if (IsShowOnlyVerified.ViewValue.Value)
+                    {
+                        return isOk && model.IsVerified;
+                    }
+
+                    return isOk;
+                })
+            );
+        });
+        progress.Report(1);
+        return Task.CompletedTask;
     }
 
-    private async Task InstallManuallyImpl(IProgress<double> progress, CancellationToken cancel)
+    private async ValueTask InstallManuallyImpl(
+        IProgress<double> progress,
+        CancellationToken cancel
+    )
     {
         var installer = new PluginInstaller(_cfg, _loggerFactory, _manager, _navigation);
         await installer.ShowInstallDialog(progress, cancel);
-    }
-
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
-    {
-        return ValueTask.FromResult<IRoutable>(this);
+        Search.Refresh();
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        return [];
+        foreach (var viewModel in _view)
+        {
+            yield return viewModel;
+        }
+
+        yield return Search;
+        yield return IsShowOnlyVerified;
     }
 
     protected override void AfterLoadExtensions() { }
 
-    public override IExportInfo Source => SystemModule.Instance;
+    public override IExportInfo Source => PluginManagerModule.Instance;
 }

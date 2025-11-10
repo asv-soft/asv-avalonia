@@ -146,10 +146,13 @@
     <data name="InstalledPluginsView_Tab_AdditionalInfo_Version" xml:space="preserve">
         <value>Version: </value>
     </data>
-    <data name="OpenPluginsMarketCommand_Name" xml:space="preserve">
-        <value>Plugins Market</value>
+    <data name="OpenPluginsMarketCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open Plugins Market</value>
     </data>
-    <data name="OpenPluginsMarketCommand_Description" xml:space="preserve">
-        <value>Open plugins market page</value>
+    <data name="OpenPluginsMarketCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command opens plugins market page</value>
+    </data>
+    <data name="InstalledPluginsViewModel_Title" xml:space="preserve">
+        <value>Installed Plugins</value>
     </data>
 </root>

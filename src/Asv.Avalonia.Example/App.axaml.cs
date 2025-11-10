@@ -69,7 +69,8 @@ public class App : Application, IContainerHost, IShellHost
                 .WithExport<IDataTemplateHost>(this)
                 .WithExport<IShellHost>(this)
                 .WithDefaultConventions(conventions)
-                .WithAssemblies(pluginManager.PluginsAssemblies.Distinct());
+                .WithAssemblies(pluginManager.PluginsAssemblies.Distinct())
+                .WithAssemblies(PluginManagerModule.Assemblies);
         }
 
         containerCfg = containerCfg.WithAssemblies(DefaultAssemblies.Distinct());
@@ -90,7 +91,6 @@ public class App : Application, IContainerHost, IShellHost
             yield return typeof(GeoMapModule).Assembly; // Asv.Avalonia.GeoMap
             yield return typeof(ApiModule).Assembly; // Asv.Avalonia.Example.Api
             yield return typeof(IoModule).Assembly; // Asv.Avalonia.IO
-            yield return typeof(PluginManagerModule).Assembly; // Asv.Avalonia.Plugins
         }
     }
 

@@ -14,11 +14,11 @@ public class OpenPluginsMarketCommand(INavigationService nav)
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = RS.OpenPluginsMarketCommand_Name,
-        Description = RS.OpenPluginsMarketCommand_Description,
+        Name = RS.OpenPluginsMarketCommand_CommandInfo_Name,
+        Description = RS.OpenPluginsMarketCommand_CommandInfo_Description,
         Icon = PluginsMarketViewModel.PageIcon,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
+        Source = PluginManagerModule.Instance,
     };
 
     #endregion
