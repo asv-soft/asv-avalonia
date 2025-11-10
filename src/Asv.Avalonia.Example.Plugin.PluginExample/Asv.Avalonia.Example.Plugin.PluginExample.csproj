@@ -27,7 +27,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <OutputPath>C:\asv\prj\asv-avalonia\src\Asv.Avalonia.Example.Plugin.PluginExample\..\Asv.Avalonia.Example.Desktop\bin\Debug\net9.0\data\plugins\Asv.Avalonia.Example.Plugin.PluginExample\</OutputPath>
+      <OutputPath>..\Asv.Avalonia.Example.Desktop\bin\Debug\net9.0\data\plugins\Asv.Avalonia.Example.Plugin.PluginExample\</OutputPath>
     </PropertyGroup>
 
     <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿using System.Composition;
 using Asv.Cfg;
 using Asv.Common;
+using Avalonia.Controls;
 using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -20,6 +21,7 @@ public class InstalledPluginsViewModel
 
     private readonly IPluginManager _manager;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly OpenFileDialogDesktopPrefab _openFileDialog;
     private readonly IConfiguration _cfg;
     private readonly INavigationService _navigation;
     private readonly ObservableList<ILocalPluginInfo> _plugins;
@@ -29,9 +31,10 @@ public class InstalledPluginsViewModel
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
-            DesignTime.LoggerFactory,
             DesignTime.Configuration,
-            DesignTime.Navigation
+            DesignTime.Navigation,
+            NullDialogService.Instance,
+            DesignTime.LoggerFactory
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -41,14 +44,16 @@ public class InstalledPluginsViewModel
     public InstalledPluginsViewModel(
         ICommandService cmd,
         IPluginManager manager,
-        ILoggerFactory loggerFactory,
         IConfiguration cfg,
-        INavigationService navigationService
+        INavigationService navigationService,
+        IDialogService dialogService,
+        ILoggerFactory loggerFactory
     )
         : base(PageId, cmd, cfg, loggerFactory)
     {
         Title = RS.InstalledPluginsViewModel_Title;
         _manager = manager;
+        _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
         _loggerFactory = loggerFactory;
         _navigation = navigationService;
         _cfg = cfg;
@@ -147,9 +152,34 @@ public class InstalledPluginsViewModel
         CancellationToken cancel
     )
     {
-        var installer = new PluginInstaller(_cfg, _loggerFactory, _manager, _navigation);
-        await installer.ShowInstallDialog(progress, cancel);
-        Search.Refresh();
+        var payload = new OpenFileDialogPayload
+        {
+            Title = "Select plugin to install",
+            TypeFilter = "nupkg",
+        };
+
+        var pathToPlugin = await _openFileDialog.ShowDialogAsync(payload);
+
+        if (string.IsNullOrWhiteSpace(pathToPlugin) || !NugetHelper.IsPathToNugetFile(pathToPlugin))
+        {
+            Logger.LogWarning("Invalid path to plugin");
+            return;
+        }
+
+        try
+        {
+            await _manager.InstallManually(
+                pathToPlugin,
+                new Progress<ProgressMessage>(m => progress.Report(m.Progress)),
+                cancel
+            );
+            Logger.LogInformation("Plugin installed successfully");
+            Search.Refresh();
+        }
+        catch (Exception e)
+        {
+            Logger.LogError(e, "Error during manual plugin installation");
+        }
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
