@@ -65,6 +65,14 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
+      <Compile Update="Pages\Plugins\Installed\ManualInstaller\PluginInstallerView.axaml.cs">
+        <DependentUpon>PluginInstallerView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\Settings\" />
     </ItemGroup>
 
 </Project>

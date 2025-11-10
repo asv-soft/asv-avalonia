@@ -213,6 +213,15 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installed Plugins.
+        /// </summary>
+        public static string InstalledPluginsViewModel_Title {
+            get {
+                return ResourceManager.GetString("InstalledPluginsViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open Installed Plagins.
         /// </summary>
         public static string OpenInstalledPluginsCommand_Action_Description {
@@ -231,20 +240,20 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open plugins market page.
+        ///   Looks up a localized string similar to Command opens plugins market page.
         /// </summary>
-        public static string OpenPluginsMarketCommand_Description {
+        public static string OpenPluginsMarketCommand_CommandInfo_Description {
             get {
-                return ResourceManager.GetString("OpenPluginsMarketCommand_Description", resourceCulture);
+                return ResourceManager.GetString("OpenPluginsMarketCommand_CommandInfo_Description", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plugins Market.
+        ///   Looks up a localized string similar to Open Plugins Market.
         /// </summary>
-        public static string OpenPluginsMarketCommand_Name {
+        public static string OpenPluginsMarketCommand_CommandInfo_Name {
             get {
-                return ResourceManager.GetString("OpenPluginsMarketCommand_Name", resourceCulture);
+                return ResourceManager.GetString("OpenPluginsMarketCommand_CommandInfo_Name", resourceCulture);
             }
         }
         
