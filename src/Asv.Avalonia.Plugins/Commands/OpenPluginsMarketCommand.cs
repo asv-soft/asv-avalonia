@@ -4,7 +4,7 @@ namespace Asv.Avalonia.Plugins;
 
 [ExportCommand]
 [method: ImportingConstructor]
-public class OpenPluginsMarketCommand(INavigationService nav)
+public sealed class OpenPluginsMarketCommand(INavigationService nav)
     : OpenPageCommandBase(PluginsMarketViewModel.PageId, nav)
 {
     #region Static

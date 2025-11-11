@@ -71,6 +71,7 @@ public class PluginsMarketViewModel
         : base(PageId, cmd, cfg, loggerFactory)
     {
         Title = "Plugin Manager";
+        Icon = PageIcon;
         _manager = manager ?? throw new ArgumentNullException(nameof(manager));
         _cfg = cfg;
 

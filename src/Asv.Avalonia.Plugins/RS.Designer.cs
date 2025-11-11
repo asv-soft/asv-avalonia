@@ -60,6 +60,15 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Loading error.
+        /// </summary>
+        public static string InstalledPluginsInfoDataTemplate_LoadingError_Text {
+            get {
+                return ResourceManager.GetString("InstalledPluginsInfoDataTemplate_LoadingError_Text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All versions.
         /// </summary>
         public static string InstalledPluginsView_AllVersions {
@@ -78,11 +87,11 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Loading error.
+        ///   Looks up a localized string similar to Loading Error.
         /// </summary>
-        public static string InstalledPluginsView_LoadingError {
+        public static string InstalledPluginsView_InfoBarLoadingError_Title {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_LoadingError", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsView_InfoBarLoadingError_Title", resourceCulture);
             }
         }
         
@@ -213,6 +222,15 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select plugin to install.
+        /// </summary>
+        public static string InstalledPluginsViewModel_IntallManuallyDialog_Title {
+            get {
+                return ResourceManager.GetString("InstalledPluginsViewModel_IntallManuallyDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Installed Plugins.
         /// </summary>
         public static string InstalledPluginsViewModel_Title {
@@ -222,7 +240,7 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Installed Plagins.
+        ///   Looks up a localized string similar to Open Installed Plugins.
         /// </summary>
         public static string OpenInstalledPluginsCommand_Action_Description {
             get {
@@ -236,6 +254,24 @@ namespace Asv.Avalonia.Plugins {
         public static string OpenInstalledPluginsCommand_Action_Title {
             get {
                 return ResourceManager.GetString("OpenInstalledPluginsCommand_Action_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command opens intalled plugins page.
+        /// </summary>
+        public static string OpenInstalledPluginsCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("OpenInstalledPluginsCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open Installed Plugins.
+        /// </summary>
+        public static string OpenInstalledPluginsCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("OpenInstalledPluginsCommand_CommandInfo_Name", resourceCulture);
             }
         }
         
@@ -254,42 +290,6 @@ namespace Asv.Avalonia.Plugins {
         public static string OpenPluginsMarketCommand_CommandInfo_Name {
             get {
                 return ResourceManager.GetString("OpenPluginsMarketCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Install.
-        /// </summary>
-        public static string PluginInstallerViewModel_InstallDialog_PrimaryButtonText {
-            get {
-                return ResourceManager.GetString("PluginInstallerViewModel_InstallDialog_PrimaryButtonText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cancel.
-        /// </summary>
-        public static string PluginInstallerViewModel_InstallDialog_SecondaryButtonText {
-            get {
-                return ResourceManager.GetString("PluginInstallerViewModel_InstallDialog_SecondaryButtonText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Plugin Installer.
-        /// </summary>
-        public static string PluginInstallerViewModel_InstallDialog_Title {
-            get {
-                return ResourceManager.GetString("PluginInstallerViewModel_InstallDialog_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Plugin installed successfully.
-        /// </summary>
-        public static string PluginInstallerViewModel_InstallPluginAsync_Success {
-            get {
-                return ResourceManager.GetString("PluginInstallerViewModel_InstallPluginAsync_Success", resourceCulture);
             }
         }
         

@@ -17,7 +17,7 @@
     <data name="InstalledPluginsView_Uninstalled" xml:space="preserve">
         <value>Удален</value>
     </data>
-    <data name="InstalledPluginsView_LoadingError" xml:space="preserve">
+    <data name="InstalledPluginsInfoDataTemplate_LoadingError_Text" xml:space="preserve">
         <value>Ошибка загрузки</value>
     </data>
     <data name="InstalledPluginsView_Uninstall" xml:space="preserve">
@@ -49,20 +49,6 @@
     <data name="InstalledPluginsView_SelectedPluginIsNull" xml:space="preserve">
         <value>Пожалуйста, выберите плагин</value>
     </data>
-    
-    <data name="PluginInstallerViewModel_InstallDialog_PrimaryButtonText" xml:space="preserve">
-        <value>Установить</value>
-    </data>
-    
-    <data name="PluginInstallerViewModel_InstallDialog_SecondaryButtonText" xml:space="preserve">
-        <value>Отменить</value></data>
-        <data name="PluginInstallerViewModel_InstallDialog_Title" xml:space="preserve">
-        <value>Установщик плагинов</value>
-    </data>
-    <data name="PluginInstallerViewModel_InstallPluginAsync_Success" xml:space="preserve">
-        <value>Плагин успешно установлен</value>
-    </data>
-   
     <data name="PluginsMarketView_Install" xml:space="preserve">
         <value>Установить</value>
     </data>
@@ -152,5 +138,17 @@
     </data>
     <data name="InstalledPluginsViewModel_Title" xml:space="preserve">
         <value>Установленные плагины</value>
+    </data>
+    <data name="InstalledPluginsViewModel_IntallManuallyDialog_Title" xml:space="preserve">
+        <value>Выберите плагин для установки</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Открыть установленные плагины</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда открывает страницу установленных плагинов</value>
+    </data>
+    <data name="InstalledPluginsView_InfoBarLoadingError_Title" xml:space="preserve">
+        <value>Ошибка загрузки</value>
     </data>
 </root>

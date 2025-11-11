@@ -4,7 +4,7 @@ namespace Asv.Avalonia.Plugins;
 
 [ExportCommand]
 [method: ImportingConstructor]
-public class OpenInstalledPluginsCommand(INavigationService nav)
+public sealed class OpenInstalledPluginsCommand(INavigationService nav)
     : OpenPageCommandBase(InstalledPluginsViewModel.PageId, nav)
 {
     #region Static
@@ -14,8 +14,8 @@ public class OpenInstalledPluginsCommand(INavigationService nav)
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Installed Plugins",
-        Description = "Open installed plugins page",
+        Name = RS.OpenInstalledPluginsCommand_CommandInfo_Name,
+        Description = RS.OpenInstalledPluginsCommand_CommandInfo_Description,
         Icon = InstalledPluginsViewModel.PageIcon,
         DefaultHotKey = null,
         Source = SystemModule.Instance,
