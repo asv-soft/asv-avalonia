@@ -7,29 +7,23 @@ namespace Asv.Avalonia.Plugins;
 
 public class InstalledPluginInfoViewModel : RoutableViewModel
 {
+    public const string ViewModelIdPart = "plugin.installed";
+
     private readonly IPluginManager _manager;
     private readonly ILocalPluginInfo? _pluginInfo;
 
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
     public InstalledPluginInfoViewModel()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        : this(
-            NavigationId.Empty,
-            NullPluginManager.Instance,
-            NullLocalPluginInfo.Instance,
-            DesignTime.LoggerFactory
-        )
+        : this(NullLocalPluginInfo.Instance, NullPluginManager.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public InstalledPluginInfoViewModel(
-        NavigationId id,
-        IPluginManager manager,
         ILocalPluginInfo pluginInfo,
+        IPluginManager manager,
         ILoggerFactory loggerFactory
     )
-        : base(id, loggerFactory)
+        : base(new NavigationId(ViewModelIdPart, pluginInfo.Id), loggerFactory)
     {
         _manager = manager;
         _pluginInfo = pluginInfo;

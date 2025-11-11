@@ -1,62 +1,38 @@
 ﻿using System.Composition;
 using Asv.Cfg;
+using Asv.Common;
+using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
-using NuGet.Packaging;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.Plugins;
 
+public sealed class PluginsMarketViewModelConfig : PageConfig { }
+
 [ExportPage(PageId)]
-public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
+public class PluginsMarketViewModel
+    : PageViewModel<PluginsMarketViewModel, PluginsMarketViewModelConfig>
 {
     public const string PageId = "plugins.market";
     public const MaterialIconKind PageIcon = MaterialIconKind.Store;
 
     private readonly IPluginManager _manager;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ObservableList<PluginInfoViewModel> _plugins;
-    private readonly IConfiguration _cfg;
+    private readonly ObservableList<IPluginSearchInfo> _plugins;
+    private readonly ISynchronizedView<IPluginSearchInfo, PluginInfoViewModel> _view;
 
     public PluginsMarketViewModel()
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
             NullLoggerFactory.Instance,
-            DesignTime.Configuration,
-            DesignTime.DialogService
+            DesignTime.Configuration
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        _plugins = new ObservableList<PluginInfoViewModel>(
-            [
-                new PluginInfoViewModel
-                {
-                    Id = "#1",
-                    Author = "Asv Soft",
-                    SourceName = "Nuget",
-                    Name = "Example1",
-                    Description = "Example plugin",
-                    LastVersion = "1.0.0",
-                    IsInstalled = new BindableReactiveProperty<bool>(true),
-                    LocalVersion = "3.4.5",
-                    IsVerified = new BindableReactiveProperty<bool>(true),
-                },
-                new PluginInfoViewModel
-                {
-                    Id = "#2",
-                    Author = "Asv Soft",
-                    SourceName = "Github",
-                    Name = "Example2",
-                    Description = "Example plugin",
-                    LastVersion = "0.1.0",
-                },
-            ]
-        );
-        PluginsView = _plugins.CreateView(x => x).ToNotifyCollectionChanged();
-        SelectedPlugin = new BindableReactiveProperty<PluginInfoViewModel?>(_plugins[0]);
+        _plugins.Add(NullPluginSearchInfo.Instance);
     }
 
     [ImportingConstructor]
@@ -64,77 +40,113 @@ public class PluginsMarketViewModel : PageViewModel<PluginsMarketViewModel>
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
-        IConfiguration cfg,
-        IDialogService dialogService
+        IConfiguration cfg
     )
-        : base(PageId, cmd, loggerFactory, dialogService)
+        : base(PageId, cmd, cfg, loggerFactory)
     {
-        Title = "Plugin Manager";
+        ArgumentNullException.ThrowIfNull(cmd);
+        ArgumentNullException.ThrowIfNull(manager);
+
+        Title = RS.PluginsMarketViewModel_Title;
         Icon = PageIcon;
-        _manager = manager ?? throw new ArgumentNullException(nameof(manager));
-        _cfg = cfg;
 
-        _plugins = new ObservableList<PluginInfoViewModel>();
-        _loggerFactory = loggerFactory;
+        _manager = manager;
 
-        OnlyVerified = new BindableReactiveProperty<bool>(true);
-        SearchString = new BindableReactiveProperty<string>();
-        SelectedPlugin = new BindableReactiveProperty<PluginInfoViewModel?>();
+        _plugins = [];
 
-        PluginsView = _plugins.CreateView(x => x).ToNotifyCollectionChanged();
-        Search = new CancellableCommandWithProgress<Unit>(SearchImpl, "Search", loggerFactory);
+        var isShowOnlyVerified = new ReactiveProperty<bool>(true).DisposeItWith(Disposable);
+        IsShowOnlyVerified = new HistoricalBoolProperty(
+            nameof(IsShowOnlyVerified),
+            isShowOnlyVerified,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        SelectedPlugin = new BindableReactiveProperty<PluginInfoViewModel?>().DisposeItWith(
+            Disposable
+        );
+
+        _view = _plugins
+            .CreateView(info => new PluginInfoViewModel(info, _manager, loggerFactory))
+            .DisposeItWith(Disposable);
+        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        _view.DisposeMany().DisposeItWith(Disposable);
+        PluginsView = _view
+            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
+
+        Search = new SearchBoxViewModel(
+            nameof(Search),
+            loggerFactory,
+            SearchImpl,
+            TimeSpan.FromMilliseconds(500)
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+
+        IsShowOnlyVerified
+            .ViewValue.ObserveOnUIThreadDispatcher()
+            .Skip(1)
+            .Subscribe(_ => Search.Refresh())
+            .DisposeItWith(Disposable);
     }
 
-    public CancellableCommandWithProgress<Unit> Search { get; }
-    public NotifyCollectionChangedSynchronizedViewList<PluginInfoViewModel> PluginsView { get; set; }
-    public BindableReactiveProperty<bool> OnlyVerified { get; set; }
-    public BindableReactiveProperty<string> SearchString { get; set; }
-    public BindableReactiveProperty<PluginInfoViewModel?> SelectedPlugin { get; set; }
+    public SearchBoxViewModel Search { get; }
+    public NotifyCollectionChangedSynchronizedViewList<PluginInfoViewModel> PluginsView { get; }
+    public HistoricalBoolProperty IsShowOnlyVerified { get; }
+    public BindableReactiveProperty<PluginInfoViewModel?> SelectedPlugin { get; }
 
-    private async Task SearchImpl(Unit arg, IProgress<double> progress, CancellationToken cancel)
+    private async Task SearchImpl(
+        string? text,
+        IProgress<double> progress,
+        CancellationToken cancel
+    )
     {
+        progress.Report(0);
         var query = new SearchQuery
         {
-            Name = string.IsNullOrWhiteSpace(SearchString.Value) ? null : SearchString.Value,
-            IncludePrerelease = true, // TODO: add BindableReactiveProperty<bool> IncludePrerelease
-            Skip = 0,
-            Take = 50,
+            Name = text,
+            IncludePrerelease = true, // TODO: add Historical IncludePrerelease
+            Skip = 0, // TODO: add Historical Skip
+            Take = 50, // TODO: add Historical Take
         };
+
         foreach (var server in _manager.Servers)
         {
             query.Sources.Add(server.SourceUri);
         }
-        progress.Report(0);
+
         var items = await _manager.Search(query, cancel);
 
-        var selectedId = SelectedPlugin.Value?.Id;
-        SelectedPlugin.OnNext(null);
-        _plugins.Clear();
-        var filtered = OnlyVerified.Value ? items.Where(x => x.IsVerified) : items;
-        _plugins.AddRange(
-            filtered.Select(info => new PluginInfoViewModel(
-                $"id{info.Id}",
-                info,
-                _manager,
-                _loggerFactory
-            ))
-        );
-        var first = _plugins.FirstOrDefault(x => x.Id == selectedId) ?? _plugins.FirstOrDefault();
-        SelectedPlugin.OnNext(first);
-        progress.Report(1);
-    }
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            var selectedId = SelectedPlugin.Value?.Id;
+            SelectedPlugin.OnNext(null);
+            _plugins.RemoveAll();
+            var filtered = IsShowOnlyVerified.ViewValue.Value
+                ? items.Where(x => x.IsVerified)
+                : items;
+            _plugins.AddRange(filtered);
+            progress.Report(0.6);
 
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
-    {
-        return ValueTask.FromResult<IRoutable>(this);
+            var first = _view.FirstOrDefault(x => x.Id == selectedId);
+            SelectedPlugin.OnNext(first);
+        });
+
+        progress.Report(1);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        return [];
+        foreach (var viewModel in _view)
+        {
+            yield return viewModel;
+        }
+
+        yield return Search;
+        yield return IsShowOnlyVerified;
     }
 
     protected override void AfterLoadExtensions() { }
 
-    public override IExportInfo Source => SystemModule.Instance;
+    public override IExportInfo Source => PluginManagerModule.Instance;
 }

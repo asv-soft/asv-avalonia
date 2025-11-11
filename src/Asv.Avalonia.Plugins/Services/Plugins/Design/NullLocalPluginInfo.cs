@@ -3,12 +3,14 @@ using Avalonia.Media.Imaging;
 
 namespace Asv.Avalonia.Plugins;
 
-public class NullLocalPluginInfo : ILocalPluginInfo
+public sealed class NullLocalPluginInfo : ILocalPluginInfo
 {
     public static readonly ILocalPluginInfo Instance = new NullLocalPluginInfo();
 
-    public SemVersion ApiVersion { get; } = new(new Version());
-    public string PackageId { get; } = NavigationId.Empty.ToString();
+    private NullLocalPluginInfo() { }
+
+    public SemVersion ApiVersion => new(new Version());
+    public string PackageId => NavigationId.Empty.ToString();
     public string? Title => "Null Plugin info";
     public string? Description => "Null plugin info for design time";
     public string? Authors => "Asv.Soft";

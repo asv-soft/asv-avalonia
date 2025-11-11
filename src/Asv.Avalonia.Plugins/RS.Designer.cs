@@ -339,6 +339,15 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plugins Market.
+        /// </summary>
+        public static string PluginsMarketViewModel_Title {
+            get {
+                return ResourceManager.GetString("PluginsMarketViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add.
         /// </summary>
         public static string PluginsSourcesViewModel_AddAction_Label {

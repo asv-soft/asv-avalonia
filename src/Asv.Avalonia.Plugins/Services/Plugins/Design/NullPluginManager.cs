@@ -7,12 +7,10 @@ public class NullPluginManager : IPluginManager
 {
     public static IPluginManager Instance { get; } = new NullPluginManager();
 
-    public IReadOnlyList<IPluginServerInfo> Sources { get; } = new List<IPluginServerInfo>();
-
-    public IReadOnlyList<IPluginServerInfo> Servers { get; }
+    public IReadOnlyList<IPluginServerInfo> Servers => [NullPluginServerInfo.Instance];
 
     public IReadOnlyList<Assembly> PluginsAssemblies { get; } = new List<Assembly>();
-    public SemVersion ApiVersion { get; }
+    public SemVersion ApiVersion => new(new Version());
 
     public void AddServer(PluginServer server) { }
 
@@ -23,7 +21,7 @@ public class NullPluginManager : IPluginManager
         CancellationToken cancel
     )
     {
-        return Task.FromResult((IReadOnlyList<IPluginSearchInfo>)new List<IPluginSearchInfo>());
+        return Task.FromResult<IReadOnlyList<IPluginSearchInfo>>([NullPluginSearchInfo.Instance]);
     }
 
     public Task<IReadOnlyList<string>> ListPluginVersions(
@@ -32,7 +30,7 @@ public class NullPluginManager : IPluginManager
         CancellationToken cancel
     )
     {
-        return Task.FromResult((IReadOnlyList<string>)new List<string>());
+        return Task.FromResult<IReadOnlyList<string>>([NullPluginSearchInfo.Instance.LastVersion]);
     }
 
     public Task Install(

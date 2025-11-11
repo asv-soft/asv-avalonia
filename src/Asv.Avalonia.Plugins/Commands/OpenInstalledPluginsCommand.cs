@@ -18,7 +18,7 @@ public sealed class OpenInstalledPluginsCommand(INavigationService nav)
         Description = RS.OpenInstalledPluginsCommand_CommandInfo_Description,
         Icon = InstalledPluginsViewModel.PageIcon,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
+        Source = PluginManagerModule.Instance,
     };
 
     #endregion
