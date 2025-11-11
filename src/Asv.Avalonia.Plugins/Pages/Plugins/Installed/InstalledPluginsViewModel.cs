@@ -1,7 +1,6 @@
 ﻿using System.Composition;
 using Asv.Cfg;
 using Asv.Common;
-using Avalonia.Controls;
 using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -20,10 +19,7 @@ public class InstalledPluginsViewModel
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
 
     private readonly IPluginManager _manager;
-    private readonly ILoggerFactory _loggerFactory;
     private readonly OpenFileDialogDesktopPrefab _openFileDialog;
-    private readonly IConfiguration _cfg;
-    private readonly INavigationService _navigation;
     private readonly ObservableList<ILocalPluginInfo> _plugins;
     private readonly ISynchronizedView<ILocalPluginInfo, InstalledPluginInfoViewModel> _view;
 
@@ -32,12 +28,12 @@ public class InstalledPluginsViewModel
             DesignTime.CommandService,
             NullPluginManager.Instance,
             DesignTime.Configuration,
-            DesignTime.Navigation,
             NullDialogService.Instance,
             DesignTime.LoggerFactory
         )
     {
         DesignTime.ThrowIfNotDesignMode();
+        IsShowOnlyVerified.ModelValue.Value = false;
     }
 
     [ImportingConstructor]
@@ -45,7 +41,6 @@ public class InstalledPluginsViewModel
         ICommandService cmd,
         IPluginManager manager,
         IConfiguration cfg,
-        INavigationService navigationService,
         IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
@@ -55,9 +50,6 @@ public class InstalledPluginsViewModel
         Icon = PageIcon;
         _manager = manager;
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
-        _loggerFactory = loggerFactory;
-        _navigation = navigationService;
-        _cfg = cfg;
         _plugins = new ObservableList<ILocalPluginInfo>(_manager.Installed);
 
         Search = new SearchBoxViewModel(
@@ -72,7 +64,7 @@ public class InstalledPluginsViewModel
         SelectedPlugin =
             new BindableReactiveProperty<InstalledPluginInfoViewModel?>().DisposeItWith(Disposable);
 
-        var isShowOnlyVerified = new ReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        var isShowOnlyVerified = new ReactiveProperty<bool>(true).DisposeItWith(Disposable);
         IsShowOnlyVerified = new HistoricalBoolProperty(
             nameof(IsShowOnlyVerified),
             isShowOnlyVerified,
@@ -84,12 +76,7 @@ public class InstalledPluginsViewModel
             Disposable
         );
         _view = _plugins
-            .CreateView(info => new InstalledPluginInfoViewModel(
-                new NavigationId(PageId, info.Id),
-                manager,
-                info,
-                loggerFactory
-            ))
+            .CreateView(info => new InstalledPluginInfoViewModel(info, manager, loggerFactory))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
@@ -97,7 +84,10 @@ public class InstalledPluginsViewModel
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
 
-        IsShowOnlyVerified.ViewValue.ObserveOnUIThreadDispatcher().Subscribe(_ => Search.Refresh());
+        IsShowOnlyVerified
+            .ViewValue.ObserveOnUIThreadDispatcher()
+            .Subscribe(_ => Search.Refresh())
+            .DisposeItWith(Disposable);
         Search.Refresh();
     }
 

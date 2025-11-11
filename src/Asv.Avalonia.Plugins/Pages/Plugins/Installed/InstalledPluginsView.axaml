@@ -14,15 +14,16 @@
     <Grid
         ColumnDefinitions="2*,5,3*"
         RowDefinitions="Auto,5,*">
-        <DockPanel>
-            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="5 0">
-            <ToggleSwitch IsChecked="{Binding IsShowOnlyVerified.ViewValue.Value}"
-                          OnContent=""
-                          OffContent=""/>
-            <TextBlock Text="{x:Static plugins:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
+        <DockPanel Margin="0 4 0 0">
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Margin="4 0">
+                <ToggleSwitch IsChecked="{Binding IsShowOnlyVerified.ViewValue.Value}"
+                              OnContent=""
+                              OffContent=""/>
+                <TextBlock Text="{x:Static plugins:RS.PluginsMarketView_ToggleSwitch_OnlyVerified}" VerticalAlignment="Center"/>
             </StackPanel>
             <Button
                 DockPanel.Dock="Right"
+                Margin="4, 0, 0, 0"
                 IsVisible="True"
                 Theme="{DynamicResource TransparentButton}"
                 Command="{Binding InstallManually}">
