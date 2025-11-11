@@ -31,13 +31,17 @@ public class PluginInfoViewModel : RoutableViewModel
     {
         _pluginInfo = pluginInfo;
         _manager = manager;
-        Install = new ReactiveCommand<IProgress<double>>(InstallImpl).DisposeItWith(Disposable);
+        Install = new CancellableCommandWithProgress<Unit>(
+            InstallImpl,
+            "Installing...",
+            logFactory
+        ).DisposeItWith(Disposable);
         Uninstall = new ReactiveCommand(_ => UninstallImpl()).DisposeItWith(Disposable);
         CancelUninstall = new ReactiveCommand(_ => CancelUninstallImpl()).DisposeItWith(Disposable);
+
         IsInstalled = new BindableReactiveProperty<bool>(
             _manager.IsInstalled(pluginInfo.PackageId, out _localInfo)
         );
-
         var isUninstalled = new ReactiveProperty<bool>(
             _localInfo?.IsUninstalled ?? false
         ).DisposeItWith(Disposable);
@@ -89,7 +93,10 @@ public class PluginInfoViewModel : RoutableViewModel
         Version = pluginInfo.LastVersion;
 
         _pluginVersions = [];
-        PluginVersionsView = _pluginVersions.CreateView(x => x).ToNotifyCollectionChanged();
+        PluginVersionsView = _pluginVersions
+            .CreateView(x => x)
+            .ToNotifyCollectionChanged()
+            .DisposeItWith(Disposable);
 
         GetPreviousVersions().SafeFireAndForget();
     }
@@ -118,7 +125,7 @@ public class PluginInfoViewModel : RoutableViewModel
     public IReadOnlyBindableReactiveProperty<bool> ShowUninstalledMessage { get; }
     public ReactiveCommand Uninstall { get; }
     public ReactiveCommand CancelUninstall { get; }
-    public ReactiveCommand<IProgress<double>> Install { get; }
+    public CancellableCommandWithProgress<Unit> Install { get; }
     public NotifyCollectionChangedSynchronizedViewList<string> PluginVersionsView { get; }
 
     private void UninstallImpl()
@@ -143,7 +150,7 @@ public class PluginInfoViewModel : RoutableViewModel
         IsUninstalled.ViewValue.OnNext(false);
     }
 
-    private async ValueTask InstallImpl(IProgress<double> progress, CancellationToken cancel)
+    private async Task InstallImpl(Unit unit, IProgress<double> progress, CancellationToken cancel)
     {
         await _manager.Install(
             _pluginInfo.Source,

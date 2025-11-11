@@ -115,7 +115,9 @@ public class PluginsMarketViewModel
             query.Sources.Add(server.SourceUri);
         }
 
+        progress.Report(0.2);
         var items = await _manager.Search(query, cancel);
+        progress.Report(0.8);
 
         Dispatcher.UIThread.Invoke(() =>
         {
@@ -126,7 +128,6 @@ public class PluginsMarketViewModel
                 ? items.Where(x => x.IsVerified)
                 : items;
             _plugins.AddRange(filtered);
-            progress.Report(0.6);
 
             var first = _view.FirstOrDefault(x => x.Id == selectedId);
             SelectedPlugin.OnNext(first);
