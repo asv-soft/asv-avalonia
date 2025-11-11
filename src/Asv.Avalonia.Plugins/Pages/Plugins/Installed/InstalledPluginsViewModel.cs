@@ -52,6 +52,7 @@ public class InstalledPluginsViewModel
         : base(PageId, cmd, cfg, loggerFactory)
     {
         Title = RS.InstalledPluginsViewModel_Title;
+        Icon = PageIcon;
         _manager = manager;
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
         _loggerFactory = loggerFactory;
@@ -154,7 +155,7 @@ public class InstalledPluginsViewModel
     {
         var payload = new OpenFileDialogPayload
         {
-            Title = "Select plugin to install",
+            Title = RS.InstalledPluginsViewModel_IntallManuallyDialog_Title,
             TypeFilter = "nupkg",
         };
 

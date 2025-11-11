@@ -1,4 +1,5 @@
-﻿using Avalonia.Media.Imaging;
+﻿using Asv.Common;
+using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -20,8 +21,6 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Uninstall = new ReactiveCommand(_ => { });
-        CancelUninstall = new ReactiveCommand(_ => { });
     }
 
     public InstalledPluginInfoViewModel(
@@ -43,61 +42,73 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
         LocalVersion = $"{pluginInfo.Version} (API: {pluginInfo.ApiVersion})";
         Icon = pluginInfo.Icon;
         IsContainsIcon = Icon != null;
-        LoadingError = new BindableReactiveProperty<string>(pluginInfo.LoadingError);
-        IsUninstalled = new BindableReactiveProperty<bool>(pluginInfo.IsUninstalled);
-        IsLoaded = new BindableReactiveProperty<bool>(pluginInfo.IsLoaded);
-        IsVerified = new BindableReactiveProperty<bool>(pluginInfo.IsVerified);
-        if (Author != null)
+        LoadingError = pluginInfo.LoadingError;
+        var isUninstalled = new ReactiveProperty<bool>(pluginInfo.IsUninstalled).DisposeItWith(
+            Disposable
+        );
+        IsUninstalled = new HistoricalBoolProperty(
+            nameof(IsUninstalled),
+            isUninstalled,
+            loggerFactory,
+            this
+        ).DisposeItWith(Disposable);
+        IsLoaded = pluginInfo.IsLoaded;
+        IsVerified = pluginInfo.IsVerified;
+        if (Author is not null)
         {
-            IsVerified.OnNext(Author.Contains("https://github.com/asv-soft"));
+            IsVerified = Author.Contains("https://github.com/asv-soft");
         }
 
-        Uninstall = new ReactiveCommand(_ => UninstallImpl());
-        CancelUninstall = new ReactiveCommand(_ => CancelUninstallImpl());
+        Uninstall = new ReactiveCommand(_ => UninstallImpl()).DisposeItWith(Disposable);
+        CancelUninstall = new ReactiveCommand(_ => CancelUninstallImpl()).DisposeItWith(Disposable);
     }
 
-    public string PluginId { get; set; }
-    public string? Author { get; set; }
-    public string? Name { get; set; }
-    public string? Description { get; set; }
-    public string SourceName { get; set; }
-    public string LocalVersion { get; set; }
-    public bool IsContainsIcon { get; set; }
-    public Bitmap? Icon { get; set; }
-    public BindableReactiveProperty<string> LoadingError { get; set; }
-    public BindableReactiveProperty<bool> IsLoaded { get; set; }
-    public BindableReactiveProperty<bool> IsUninstalled { get; set; }
-    public BindableReactiveProperty<bool> IsVerified { get; set; }
+    public string PluginId { get; }
+    public string? Author { get; }
+    public string? Name { get; }
+    public string? Description { get; }
+    public string SourceName { get; }
+    public string LocalVersion { get; }
+    public bool IsContainsIcon { get; }
+    public Bitmap? Icon { get; }
+    public bool IsLoaded { get; }
+    public string LoadingError { get; }
+    public bool IsVerified
+    {
+        get;
+        private init => SetField(ref field, value);
+    }
 
-    public ReactiveCommand Uninstall { get; set; }
-    public ReactiveCommand CancelUninstall { get; set; }
+    public HistoricalBoolProperty IsUninstalled { get; }
+    public ReactiveCommand Uninstall { get; }
+    public ReactiveCommand CancelUninstall { get; }
 
     private void CancelUninstallImpl()
     {
-        if (_pluginInfo == null)
+        if (_pluginInfo is null)
         {
             Logger.LogError("Plugin is not installed");
             return;
         }
 
         _manager.CancelUninstall(_pluginInfo);
-        IsUninstalled.OnNext(false);
+        IsUninstalled.ViewValue.OnNext(false);
     }
 
     private void UninstallImpl()
     {
-        if (_pluginInfo == null)
+        if (_pluginInfo is null)
         {
             Logger.LogError("Plugin is not installed");
             return;
         }
 
         _manager.Uninstall(_pluginInfo);
-        IsUninstalled.OnNext(true);
+        IsUninstalled.ViewValue.OnNext(true);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        return [];
+        yield return IsUninstalled;
     }
 }

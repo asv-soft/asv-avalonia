@@ -24,7 +24,7 @@
     <data name="InstalledPluginsView_Uninstalled" xml:space="preserve">
         <value>Uninstalled</value>
     </data>
-    <data name="InstalledPluginsView_LoadingError" xml:space="preserve">
+    <data name="InstalledPluginsInfoDataTemplate_LoadingError_Text" xml:space="preserve">
         <value>Loading error</value>
     </data>
     <data name="InstalledPluginsView_Uninstall" xml:space="preserve">
@@ -54,13 +54,7 @@
       <data name="InstalledPluginsView_SelectedPluginIsNull" xml:space="preserve">
         <value>Please select plugin</value>
     </data>
-      <data name="PluginInstallerViewModel_InstallDialog_Title" xml:space="preserve">
-        <value>Plugin Installer</value>
-    </data>
-    <data name="PluginInstallerViewModel_InstallPluginAsync_Success" xml:space="preserve">
-        <value>Plugin installed successfully</value>
-    </data>
-      <data name="PluginsMarketView_Install" xml:space="preserve">
+    <data name="PluginsMarketView_Install" xml:space="preserve">
         <value>Install</value>
     </data>
     <data name="PluginsMarketView_SelectedPluginIsNull" xml:space="preserve">
@@ -126,16 +120,11 @@
     <data name="SourcesView_Password" xml:space="preserve">
         <value>New password</value>
     </data>
-    <data name="PluginInstallerViewModel_InstallDialog_SecondaryButtonText" xml:space="preserve">
-        <value>Cancel</value></data>
-    <data name="PluginInstallerViewModel_InstallDialog_PrimaryButtonText" xml:space="preserve">
-        <value>Install</value>
-    </data>
     <data name="OpenInstalledPluginsCommand_Action_Title" xml:space="preserve">
         <value>Installed Plugins</value>
     </data>
     <data name="OpenInstalledPluginsCommand_Action_Description" xml:space="preserve">
-        <value>Open Installed Plagins</value>
+        <value>Open Installed Plugins</value>
     </data>
     <data name="PluginsSourcesViewModel_Name" xml:space="preserve">
         <value>Plugins Sources</value>
@@ -154,5 +143,17 @@
     </data>
     <data name="InstalledPluginsViewModel_Title" xml:space="preserve">
         <value>Installed Plugins</value>
+    </data>
+    <data name="InstalledPluginsViewModel_IntallManuallyDialog_Title" xml:space="preserve">
+        <value>Select plugin to install</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open Installed Plugins</value>
+    </data>
+    <data name="OpenInstalledPluginsCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command opens intalled plugins page</value>
+    </data>
+    <data name="InstalledPluginsView_InfoBarLoadingError_Title" xml:space="preserve">
+        <value>Loading Error</value>
     </data>
 </root>
