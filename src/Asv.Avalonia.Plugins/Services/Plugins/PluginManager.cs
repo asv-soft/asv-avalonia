@@ -552,13 +552,14 @@ public class PluginManager : IPluginManager
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(packageId);
         ArgumentNullException.ThrowIfNull(version);
+        progress?.Report(new ProgressMessage(0, "Started downloading package"));
         var downloadVersion = NuGetVersion.Parse(version);
         if (TryGetLocalPluginInfoById(packageId, out var info))
         {
             Debug.Assert(info != null, nameof(info) + " != null");
             var localVersion = NuGetVersion.Parse(info.Version);
             throw new Exception(
-                $"Local version {localVersion} of {packageId} is exists. Remove it first."
+                $"Local version {localVersion} of {packageId} exists. Remove it first."
             );
         }
 
@@ -566,6 +567,7 @@ public class PluginManager : IPluginManager
 
         try
         {
+            progress?.Report(new ProgressMessage(0.2, "Created Directory"));
             Directory.CreateDirectory(currentPluginFolder);
             var repository = _repositories.FirstOrDefault(_ =>
                 _.PackageSource.Source == source.SourceUri
@@ -583,6 +585,7 @@ public class PluginManager : IPluginManager
             );
             var findPackageByIdResource =
                 await repository.GetResourceAsync<FindPackageByIdResource>(cancel);
+            progress?.Report(new ProgressMessage(0.3, "Found source"));
 
             var tmpFile = Path.Combine(
                 currentPluginFolder,
@@ -621,6 +624,8 @@ public class PluginManager : IPluginManager
                             + $"from source {source.SourceUri}. CopyNupkgToStreamAsync returned false."
                     );
                 }
+
+                progress?.Report(new ProgressMessage(0.5, "Package was successfully downloaded"));
             }
             try
             {
@@ -628,6 +633,7 @@ public class PluginManager : IPluginManager
 
                 // Attempt to read identity forces zip central directory read (quick integrity check)
                 _ = await validationReader.GetIdentityAsync(cancel);
+                progress?.Report(new ProgressMessage(0.6, "Check integrity"));
             }
             catch (Exception ex)
             {
@@ -658,6 +664,7 @@ public class PluginManager : IPluginManager
             }
 
             // now we need to load all dependencies
+            progress?.Report(new ProgressMessage(0.65, "Loading dependencies..."));
             var dependencyInfoResource = await repository.GetResourceAsync<DependencyInfoResource>(
                 cancel
             );
@@ -735,6 +742,7 @@ public class PluginManager : IPluginManager
                     );
                 }
             }
+            progress?.Report(new ProgressMessage(0.8, "All dependencies were loaded"));
 
             SetPluginStateById(
                 packageId,
@@ -746,8 +754,9 @@ public class PluginManager : IPluginManager
                     x.InstalledFromSourceUri = source.SourceUri;
                 }
             );
+            progress?.Report(new ProgressMessage(1, "Finished"));
         }
-        catch (Exception) when (Directory.Exists(currentPluginFolder))
+        catch (Exception ex) when (Directory.Exists(currentPluginFolder))
         {
             try
             {
@@ -756,6 +765,11 @@ public class PluginManager : IPluginManager
             catch
             {
                 // ignore
+            }
+
+            if (ex is OperationCanceledException)
+            {
+                return;
             }
 
             throw;
