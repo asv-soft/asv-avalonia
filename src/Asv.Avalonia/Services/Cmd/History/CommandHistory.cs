@@ -70,7 +70,7 @@ public class CommandHistory : ICommandHistory
 
         try
         {
-            CommandHistoryFile.Save(undoPath, _undoStack, HistoryOwner.Id.ToString());
+            CommandHistoryFile.Save(undoPath, _undoStack.Reverse(), HistoryOwner.Id.ToString());
         }
         catch (Exception e)
         {
@@ -79,7 +79,7 @@ public class CommandHistory : ICommandHistory
 
         try
         {
-            CommandHistoryFile.Save(redoPath, _redoStack, HistoryOwner.Id.ToString());
+            CommandHistoryFile.Save(redoPath, _redoStack.Reverse(), HistoryOwner.Id.ToString());
         }
         catch (Exception e)
         {

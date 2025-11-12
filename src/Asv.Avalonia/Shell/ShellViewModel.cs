@@ -297,11 +297,19 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 await this.NavigateByPath(new NavigationPath(page));
             }
 
+            NavigationPath? navigationPathToGo = null;
             if (_config.SelectedPageId is not null)
             {
-                SelectedPage.Value = Pages.FirstOrDefault(page =>
-                    page.Id == _config.SelectedPageId
-                );
+                navigationPathToGo = Pages
+                    .FirstOrDefault(page => page.Id == _config.SelectedPageId)
+                    ?.GetPathToRoot();
+            }
+
+            navigationPathToGo ??= Pages.FirstOrDefault()?.GetPathToRoot();
+
+            if (navigationPathToGo is not null)
+            {
+                await Navigation.GoTo(navigationPathToGo.Value);
             }
 
             _isLoaded = true;
