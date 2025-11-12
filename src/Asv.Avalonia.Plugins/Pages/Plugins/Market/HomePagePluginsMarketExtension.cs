@@ -13,7 +13,11 @@ public class HomePagePluginsMarketExtension(ILoggerFactory loggerFactory) : IExt
     {
         context.Tools.Add(
             OpenPluginsMarketCommand
-                .StaticInfo.CreateAction(loggerFactory, "Plugins Market", "Open plugins market")
+                .StaticInfo.CreateAction(
+                    loggerFactory,
+                    RS.OpenPluginsMarketCommand_Action_Title,
+                    RS.OpenPluginsMarketCommand_Action_Description
+                )
                 .DisposeItWith(contextDispose)
         );
     }

@@ -11,9 +11,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="InstalledPluginsView_Search" xml:space="preserve">
-        <value>Поиск</value>
-    </data>
     <data name="InstalledPluginsView_Uninstalled" xml:space="preserve">
         <value>Удален</value>
     </data>
@@ -70,9 +67,6 @@
     <data name="InstalledPluginsView_Tab_AdditionalInfo_Author" xml:space="preserve">
         <value>Автор: </value>
     </data>
-    <data name="PluginsMarketView_Cancel" xml:space="preserve">
-        <value>Отмена</value>
-    </data>
     <data name="SourceViewModel_NameValidation_NameIsRequired" xml:space="preserve">
         <value>Имя не должно быть пустым</value>
     </data>
@@ -98,9 +92,6 @@
         <value>Отменить</value>
     </data>
     <data name="PluginsSourcesViewModel_AddImpl_Add" xml:space="preserve">
-        <value>Добавить</value>
-    </data>
-    <data name="PluginsSourcesViewModel_AddAction_Label" xml:space="preserve">
         <value>Добавить</value>
     </data>
     <data name="SourcesView_Name" xml:space="preserve">
@@ -153,5 +144,11 @@
     </data>
     <data name="PluginsMarketViewModel_Title" xml:space="preserve">
         <value>Магазин плагинов</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Title" xml:space="preserve">
+        <value>Магазин плагинов</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Description" xml:space="preserve">
+        <value>Открыть страницу магазина плагинов</value>
     </data>
 </root>

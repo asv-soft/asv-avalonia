@@ -31,6 +31,7 @@ public class PluginInfoViewModel : RoutableViewModel
     {
         _pluginInfo = pluginInfo;
         _manager = manager;
+
         Install = new CancellableCommandWithProgress<Unit>(
             InstallImpl,
             "Installing...",
@@ -83,7 +84,7 @@ public class PluginInfoViewModel : RoutableViewModel
             .ToReadOnlyBindableReactiveProperty()
             .DisposeItWith(Disposable);
 
-        if (Author != null)
+        if (Author is not null)
         {
             IsVerified =
                 Author.Contains("https://github.com/asv-soft")

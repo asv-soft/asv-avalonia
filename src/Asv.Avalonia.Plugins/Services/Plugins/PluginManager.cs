@@ -404,10 +404,12 @@ public class PluginManager : IPluginManager
 
     public async Task<IReadOnlyList<IPluginSearchInfo>> Search(
         SearchQuery query,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         ArgumentNullException.ThrowIfNull(query);
+        progress?.Report(new ProgressMessage(0, "Started search"));
         _repositoriesLock.EnterReadLock();
         var repositories =
             query.Sources.Count == 0
@@ -419,6 +421,8 @@ public class PluginManager : IPluginManager
 
         var result = new List<IPluginSearchInfo>();
 
+        int progressCount = 1;
+        progress?.Report(new ProgressMessage(0.1, "Scanning repos..."));
         foreach (var repository in repositories)
         {
             try
@@ -487,7 +491,13 @@ public class PluginManager : IPluginManager
             {
                 _logger.ZLogError(e, $"Error search in {repository.PackageSource.Source}");
             }
+
+            progress?.Report(
+                new ProgressMessage(progressCount / (double)repositories.Length, "Scanned repo")
+            );
         }
+
+        progress?.Report(new ProgressMessage(1, "Search finished"));
 
         return result;
     }
@@ -495,7 +505,7 @@ public class PluginManager : IPluginManager
     public async Task<IReadOnlyList<string>> ListPluginVersions(
         SearchQuery query,
         string pluginId,
-        CancellationToken cancel
+        CancellationToken cancel = default
     )
     {
         _repositoriesLock.EnterReadLock();
@@ -545,8 +555,8 @@ public class PluginManager : IPluginManager
         IPluginServerInfo source,
         string packageId,
         string version,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         ArgumentNullException.ThrowIfNull(source);
@@ -795,8 +805,8 @@ public class PluginManager : IPluginManager
 
     public async Task InstallManually(
         string from,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         ArgumentNullException.ThrowIfNull(from);

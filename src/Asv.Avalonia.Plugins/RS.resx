@@ -18,9 +18,6 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="InstalledPluginsView_Search" xml:space="preserve">
-        <value>Search</value>
-    </data>
     <data name="InstalledPluginsView_Uninstalled" xml:space="preserve">
         <value>Uninstalled</value>
     </data>
@@ -66,9 +63,6 @@
     <data name="InstalledPluginsView_AllVersions" xml:space="preserve">
         <value>All versions</value>
     </data>
-    <data name="PluginsMarketView_Cancel" xml:space="preserve">
-        <value>Cancel</value>
-    </data>
     <data name="InstalledPluginsView_Tab_AdditionalInfo_Author" xml:space="preserve">
         <value>Author: </value>
     </data>
@@ -104,9 +98,6 @@
     </data>
     <data name="PluginsSourcesViewModel_EditImpl_Save" xml:space="preserve">
         <value>Save</value>
-    </data>
-    <data name="PluginsSourcesViewModel_AddAction_Label" xml:space="preserve">
-        <value>Add</value>
     </data>
     <data name="SourcesView_Name" xml:space="preserve">
         <value>Name</value>
@@ -158,5 +149,11 @@
     </data>
     <data name="PluginsMarketViewModel_Title" xml:space="preserve">
         <value>Plugins Market</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Title" xml:space="preserve">
+        <value>Plugins Market</value>
+    </data>
+    <data name="OpenPluginsMarketCommand_Action_Description" xml:space="preserve">
+        <value>Open plugins market page</value>
     </data>
 </root>
