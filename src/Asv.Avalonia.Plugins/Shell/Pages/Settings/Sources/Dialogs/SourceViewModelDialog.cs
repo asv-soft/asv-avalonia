@@ -5,17 +5,11 @@ using Exception = System.Exception;
 
 namespace Asv.Avalonia.Plugins;
 
-// TODO: add validation
-public class SourceViewModel : DialogViewModelBase
+public class SourceDialogViewModel : DialogViewModelBase
 {
     public const string ViewModelId = $"{BaseId}.plugins.sources.source";
 
-    private readonly IPluginManager _mng;
-    private readonly PluginSourceViewModel? _viewModel;
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
-    public SourceViewModel()
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider adding the 'required' modifier or declaring as nullable.
+    public SourceDialogViewModel()
         : base(DesignTime.Id, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -39,21 +33,17 @@ public class SourceViewModel : DialogViewModelBase
         });
     }
 
-    public SourceViewModel(
-        IPluginManager mng,
+    public SourceDialogViewModel(
         ILoggerFactory loggerFactory,
-        PluginSourceViewModel? viewModel
+        in PluginSourceViewModel? viewModel = null
     )
         : base(ViewModelId, loggerFactory)
     {
-        _mng = mng;
-        _viewModel = viewModel;
-
-        Name = new BindableReactiveProperty<string>(_viewModel?.Name.Value ?? string.Empty);
+        Name = new BindableReactiveProperty<string>(viewModel?.Name.Value ?? string.Empty);
         SourceUri = new BindableReactiveProperty<string>(
-            _viewModel?.SourceUri.Value ?? string.Empty
+            viewModel?.SourceUri.Value ?? string.Empty
         );
-        Username = new BindableReactiveProperty<string?>(_viewModel?.Model.Username);
+        Username = new BindableReactiveProperty<string?>(viewModel?.Model.Username);
         Password = new BindableReactiveProperty<string>();
 
         _sub1 = Name.EnableValidationRoutable(
@@ -107,20 +97,6 @@ public class SourceViewModel : DialogViewModelBase
         ArgumentNullException.ThrowIfNull(dialog);
 
         _sub3 = IsValid.Subscribe(b => dialog.IsPrimaryButtonEnabled = b);
-    }
-
-    public ValueTask Update()
-    {
-        if (_viewModel != null)
-        {
-            _mng.RemoveServer(_viewModel.Model);
-        }
-
-        _mng.AddServer(
-            new PluginServer(Name.Value, SourceUri.Value, Username.Value, Password.Value)
-        );
-
-        return ValueTask.CompletedTask;
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
