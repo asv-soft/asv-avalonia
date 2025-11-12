@@ -68,7 +68,8 @@ public class CancellableCommandWithProgress<TArg> : AsyncDisposableOnce, IProgre
             CanExecute.Value = true;
             Progress.Value = 1;
         });
-        _logger.LogWarning($"Command '{Title}' was cancelled");
+
+        _logger.LogWarning("Command '{Title}' was cancelled", Title);
     }
 
     private async ValueTask InternalExecute(TArg arg, CancellationToken token = default)
