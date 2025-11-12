@@ -96,15 +96,6 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search.
-        /// </summary>
-        public static string InstalledPluginsView_Search {
-            get {
-                return ResourceManager.GetString("InstalledPluginsView_Search", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Please select plugin.
         /// </summary>
         public static string InstalledPluginsView_SelectedPluginIsNull {
@@ -276,6 +267,24 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open plugins market page.
+        /// </summary>
+        public static string OpenPluginsMarketCommand_Action_Description {
+            get {
+                return ResourceManager.GetString("OpenPluginsMarketCommand_Action_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugins Market.
+        /// </summary>
+        public static string OpenPluginsMarketCommand_Action_Title {
+            get {
+                return ResourceManager.GetString("OpenPluginsMarketCommand_Action_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command opens plugins market page.
         /// </summary>
         public static string OpenPluginsMarketCommand_CommandInfo_Description {
@@ -290,15 +299,6 @@ namespace Asv.Avalonia.Plugins {
         public static string OpenPluginsMarketCommand_CommandInfo_Name {
             get {
                 return ResourceManager.GetString("OpenPluginsMarketCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cancel.
-        /// </summary>
-        public static string PluginsMarketView_Cancel {
-            get {
-                return ResourceManager.GetString("PluginsMarketView_Cancel", resourceCulture);
             }
         }
         
@@ -344,15 +344,6 @@ namespace Asv.Avalonia.Plugins {
         public static string PluginsMarketViewModel_Title {
             get {
                 return ResourceManager.GetString("PluginsMarketViewModel_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add.
-        /// </summary>
-        public static string PluginsSourcesViewModel_AddAction_Label {
-            get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_AddAction_Label", resourceCulture);
             }
         }
         

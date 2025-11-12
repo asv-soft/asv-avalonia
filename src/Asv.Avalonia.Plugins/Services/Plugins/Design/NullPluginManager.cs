@@ -18,7 +18,8 @@ public class NullPluginManager : IPluginManager
 
     public Task<IReadOnlyList<IPluginSearchInfo>> Search(
         SearchQuery query,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         return Task.FromResult<IReadOnlyList<IPluginSearchInfo>>([NullPluginSearchInfo.Instance]);
@@ -27,7 +28,7 @@ public class NullPluginManager : IPluginManager
     public Task<IReadOnlyList<string>> ListPluginVersions(
         SearchQuery query,
         string pluginId,
-        CancellationToken cancel
+        CancellationToken cancel = default
     )
     {
         return Task.FromResult<IReadOnlyList<string>>([NullPluginSearchInfo.Instance.LastVersion]);
@@ -37,8 +38,8 @@ public class NullPluginManager : IPluginManager
         IPluginServerInfo source,
         string packageId,
         string version,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         return Task.CompletedTask;
@@ -46,8 +47,8 @@ public class NullPluginManager : IPluginManager
 
     public Task InstallManually(
         string from,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         return Task.CompletedTask;

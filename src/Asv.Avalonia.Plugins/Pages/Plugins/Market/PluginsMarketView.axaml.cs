@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 
 namespace Asv.Avalonia.Plugins;
 

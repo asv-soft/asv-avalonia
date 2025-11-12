@@ -101,7 +101,6 @@ public class PluginsMarketViewModel
         CancellationToken cancel
     )
     {
-        progress.Report(0);
         var query = new SearchQuery
         {
             Name = text,
@@ -115,9 +114,11 @@ public class PluginsMarketViewModel
             query.Sources.Add(server.SourceUri);
         }
 
-        progress.Report(0.2);
-        var items = await _manager.Search(query, cancel);
-        progress.Report(0.8);
+        var items = await _manager.Search(
+            query,
+            new Progress<ProgressMessage>(m => progress.Report(m.Progress)),
+            cancel
+        );
 
         Dispatcher.UIThread.Invoke(() =>
         {
@@ -132,8 +133,6 @@ public class PluginsMarketViewModel
             var first = _view.FirstOrDefault(x => x.Id == selectedId);
             SelectedPlugin.OnNext(first);
         });
-
-        progress.Report(1);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

@@ -12,23 +12,27 @@ public interface IPluginManager : IHostedService
     SemVersion ApiVersion { get; }
     void AddServer(PluginServer server);
     void RemoveServer(IPluginServerInfo server);
-    Task<IReadOnlyList<IPluginSearchInfo>> Search(SearchQuery query, CancellationToken cancel);
+    Task<IReadOnlyList<IPluginSearchInfo>> Search(
+        SearchQuery query,
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
+    );
     Task<IReadOnlyList<string>> ListPluginVersions(
         SearchQuery query,
         string pluginId,
-        CancellationToken cancel
+        CancellationToken cancel = default
     );
     Task Install(
         IPluginServerInfo source,
         string packageId,
         string version,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     );
     Task InstallManually(
         string from,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     );
     void Uninstall(ILocalPluginInfo plugin);
     void CancelUninstall(ILocalPluginInfo pluginInfo);
