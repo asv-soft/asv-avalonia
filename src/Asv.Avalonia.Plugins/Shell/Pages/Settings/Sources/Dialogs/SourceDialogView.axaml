@@ -6,8 +6,8 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
              mc:Ignorable="d" d:DesignWidth="400"
-             x:Class="Asv.Avalonia.Plugins.SourceView"
-             x:DataType="plugins:SourceViewModel">
+             x:Class="Asv.Avalonia.Plugins.SourceDialogView"
+             x:DataType="plugins:SourceDialogViewModel">
     <StackPanel Spacing="8">
         <TextBox Name="Name" Watermark="{x:Static plugins:RS.SourcesView_Name}" Text="{CompiledBinding Name.Value}">
             <TextBox.InnerLeftContent>

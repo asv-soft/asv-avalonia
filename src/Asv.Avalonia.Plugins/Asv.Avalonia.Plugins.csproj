@@ -65,10 +65,20 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
+      <Compile Update="Shell\Pages\Settings\Sources\Dialog\SourceView.axaml.cs">
+        <DependentUpon>SourceView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Settings\" />
+      <Folder Include="Shell\" />
+      <Folder Include="Shell\Pages\Settings\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Shell\Pages\Plugins\Installed\InstalledPluginsView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\Plugins\Market\PluginsMarketView.axaml" />
     </ItemGroup>
 
 </Project>
