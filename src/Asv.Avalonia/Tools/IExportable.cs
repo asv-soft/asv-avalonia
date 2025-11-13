@@ -1,8 +1,20 @@
-﻿namespace Asv.Avalonia;
+﻿using System.Composition.Hosting;
+using Microsoft.Extensions.Options;
+
+namespace Asv.Avalonia;
 
 public interface IExportInfo
 {
     string ModuleName { get; }
+}
+
+public interface IExportModule<in TOptions>
+    where TOptions : class
+{
+    ContainerConfiguration ExportTypes(
+        ContainerConfiguration containerConfiguration,
+        IOptions<TOptions> options
+    );
 }
 
 /// <summary>
