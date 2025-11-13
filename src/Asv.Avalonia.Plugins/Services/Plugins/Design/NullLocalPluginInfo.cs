@@ -5,7 +5,7 @@ namespace Asv.Avalonia.Plugins;
 
 public sealed class NullLocalPluginInfo : ILocalPluginInfo
 {
-    public static readonly ILocalPluginInfo Instance = new NullLocalPluginInfo();
+    public static ILocalPluginInfo Instance { get; } = new NullLocalPluginInfo();
 
     private NullLocalPluginInfo() { }
 

@@ -2,12 +2,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:gui="clr-namespace:Asv.Avalonia"
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
              mc:Ignorable="d" d:DesignWidth="400"
              x:Class="Asv.Avalonia.Plugins.SourceDialogView"
              x:DataType="plugins:SourceDialogViewModel">
+    <Design.DataContext>
+        <plugins:SourceDialogViewModel/>
+    </Design.DataContext>
     <StackPanel Spacing="8">
         <TextBox Name="Name" Watermark="{x:Static plugins:RS.SourcesView_Name}" Text="{CompiledBinding Name.Value}">
             <TextBox.InnerLeftContent>

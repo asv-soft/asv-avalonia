@@ -5,7 +5,7 @@ namespace Asv.Avalonia.Plugins;
 
 public sealed class NullPluginSearchInfo : IPluginSearchInfo
 {
-    public static readonly IPluginSearchInfo Instance = new NullPluginSearchInfo();
+    public static IPluginSearchInfo Instance { get; } = new NullPluginSearchInfo();
 
     private NullPluginSearchInfo() { }
 

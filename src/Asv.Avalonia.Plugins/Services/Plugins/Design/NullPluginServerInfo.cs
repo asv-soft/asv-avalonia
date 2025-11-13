@@ -2,7 +2,7 @@
 
 public sealed class NullPluginServerInfo : IPluginServerInfo
 {
-    public static readonly IPluginServerInfo Instance = new NullPluginServerInfo();
+    public static IPluginServerInfo Instance { get; } = new NullPluginServerInfo();
 
     private NullPluginServerInfo() { }
 

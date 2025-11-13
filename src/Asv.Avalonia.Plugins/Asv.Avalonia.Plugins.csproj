@@ -69,6 +69,10 @@
         <DependentUpon>SourceView.axaml</DependentUpon>
         <SubType>Code</SubType>
       </Compile>
+      <Compile Update="Shell\Pages\Settings\Sources\PluginsSourcesView.axaml.cs">
+        <DependentUpon>PluginsSourcesView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>

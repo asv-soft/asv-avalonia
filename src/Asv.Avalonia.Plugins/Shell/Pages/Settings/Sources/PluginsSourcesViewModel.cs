@@ -41,11 +41,13 @@ public class PluginsSourcesViewModel : SettingsSubPage
                 ),
             ]
         );
-        Items = items.ToNotifyCollectionChanged(x => new PluginSourceViewModel(
-            x,
-            NullNavigationService.Instance,
-            NullLoggerFactory.Instance
-        ));
+        Items = items
+            .ToNotifyCollectionChanged(x => new PluginSourceViewModel(
+                x,
+                NullNavigationService.Instance,
+                NullLoggerFactory.Instance
+            ))
+            .DisposeItWith(Disposable);
     }
 
     [ImportingConstructor]
@@ -83,12 +85,28 @@ public class PluginsSourcesViewModel : SettingsSubPage
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
+        switch (e)
+        {
+            case RemovePluginSourceEvent remove:
+            {
+                _pluginManager.RemoveServer(remove.ServerInfo);
+                break;
+            }
+
+            case UpdatePluginSourceEvent update:
+            {
+                _pluginManager.RemoveServer(update.ServerInfo);
+                _pluginManager.AddServer(update.Server);
+                break;
+            }
+        }
+
         return base.InternalCatchEvent(e);
     }
 
     private async ValueTask AddImpl(Unit unit, CancellationToken token)
     {
-        using var viewModel = new SourceDialogViewModel();
+        using var viewModel = new SourceDialogViewModel(_loggerFactory);
         var dialog = new ContentDialog(viewModel, _navigation)
         {
             Title = RS.PluginsSourcesViewModel_AddImpl_Title,

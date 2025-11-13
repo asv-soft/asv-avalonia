@@ -7,6 +7,8 @@ public class NullPluginManager : IPluginManager
 {
     public static IPluginManager Instance { get; } = new NullPluginManager();
 
+    private NullPluginManager() { }
+
     public IReadOnlyList<IPluginServerInfo> Servers => [NullPluginServerInfo.Instance];
 
     public IReadOnlyList<Assembly> PluginsAssemblies { get; } = new List<Assembly>();
