@@ -39,8 +39,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Name.Value}"/>
-                <DataGridTextColumn IsReadOnly="True" Header="SourceUri" Binding="{Binding SourceUri.Value}"/>
+                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn IsReadOnly="True" Header="SourceUri" Binding="{Binding SourceUri}"/>
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

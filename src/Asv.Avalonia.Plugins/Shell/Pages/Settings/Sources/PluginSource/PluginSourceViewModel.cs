@@ -22,17 +22,7 @@ public class PluginSourceViewModel : RoutableViewModel
         INavigationService navigationService,
         ILoggerFactory loggerFactory
     )
-        : base(
-            new NavigationId(
-                ViewModelIdPart,
-                NavigationId.GenerateByHashAsString(
-                    pluginServerInfo.Name,
-                    pluginServerInfo.SourceUri,
-                    pluginServerInfo.Username
-                )
-            ),
-            loggerFactory
-        )
+        : base(new NavigationId(ViewModelIdPart, pluginServerInfo.SourceUri), loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(pluginServerInfo);
         ArgumentNullException.ThrowIfNull(navigationService);
@@ -40,15 +30,8 @@ public class PluginSourceViewModel : RoutableViewModel
         _loggerFactory = loggerFactory;
         _navigationService = navigationService;
 
-        SourceId = new BindableReactiveProperty<string>(pluginServerInfo.SourceUri).DisposeItWith(
-            Disposable
-        );
-        Name = new BindableReactiveProperty<string>(pluginServerInfo.Name).DisposeItWith(
-            Disposable
-        );
-        SourceUri = new BindableReactiveProperty<string>(pluginServerInfo.SourceUri).DisposeItWith(
-            Disposable
-        );
+        Name = pluginServerInfo.Name;
+        SourceUri = pluginServerInfo.SourceUri;
         Model = pluginServerInfo;
         IsEnabled = Observable.Return(true);
 
@@ -59,9 +42,8 @@ public class PluginSourceViewModel : RoutableViewModel
     }
 
     public IPluginServerInfo Model { get; }
-    public BindableReactiveProperty<string> SourceId { get; }
-    public BindableReactiveProperty<string> Name { get; }
-    public BindableReactiveProperty<string> SourceUri { get; }
+    public string Name { get; }
+    public string SourceUri { get; }
     public ReactiveCommand<Unit> Edit { get; }
     public ReactiveCommand<Unit> Remove { get; }
     public Observable<bool> IsEnabled { get; set; }
@@ -82,13 +64,24 @@ public class PluginSourceViewModel : RoutableViewModel
         var result = await dialog.ShowAsync();
         if (result == ContentDialogResult.Primary)
         {
-            await Rise(new UpdatePluginSourceEvent(this));
+            await Rise(
+                new UpdatePluginSourceEvent(
+                    this,
+                    Model,
+                    new PluginServer(
+                        viewModel.Name.Value,
+                        viewModel.SourceUri.Value,
+                        viewModel.Username.Value,
+                        viewModel.Password.Value
+                    )
+                )
+            );
         }
     }
 
     private async ValueTask RemoveImpl(Unit unit, CancellationToken cancel = default)
     {
-        await Rise(new RemovePluginSourceEvent(this));
+        await Rise(new RemovePluginSourceEvent(this, Model));
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

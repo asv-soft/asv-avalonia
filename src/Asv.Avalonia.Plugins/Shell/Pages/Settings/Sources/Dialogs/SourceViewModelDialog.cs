@@ -1,36 +1,19 @@
 ﻿using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
-using Exception = System.Exception;
 
 namespace Asv.Avalonia.Plugins;
 
-public class SourceDialogViewModel : DialogViewModelBase
+public sealed class SourceDialogViewModel : DialogViewModelBase
 {
     public const string ViewModelId = $"{BaseId}.plugins.sources.source";
 
     public SourceDialogViewModel()
-        : base(DesignTime.Id, DesignTime.LoggerFactory)
+        : this(DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
-        Name = new BindableReactiveProperty<string>("Github").EnableValidation();
-        SourceUri = new BindableReactiveProperty<string>("https://github.com").EnableValidation();
-        _sub1 = Name.Subscribe(x =>
-        {
-            if (string.IsNullOrWhiteSpace(x))
-            {
-                Name.OnErrorResume(new Exception(RS.SourceViewModel_NameValidation_NameIsRequired));
-            }
-        });
-        _sub2 = SourceUri.Subscribe(x =>
-        {
-            if (string.IsNullOrWhiteSpace(x))
-            {
-                SourceUri.OnErrorResume(
-                    new Exception(RS.SourceViewModel_SourceUriValidation_SourceUriIsRequired)
-                );
-            }
-        });
+        Name.Value = "Github";
+        SourceUri.Value = "https://github.com";
     }
 
     public SourceDialogViewModel(
@@ -39,17 +22,15 @@ public class SourceDialogViewModel : DialogViewModelBase
     )
         : base(ViewModelId, loggerFactory)
     {
-        Name = new BindableReactiveProperty<string>(viewModel?.Name.Value ?? string.Empty);
-        SourceUri = new BindableReactiveProperty<string>(
-            viewModel?.SourceUri.Value ?? string.Empty
-        );
+        Name = new BindableReactiveProperty<string>(viewModel?.Name ?? string.Empty);
+        SourceUri = new BindableReactiveProperty<string>(viewModel?.SourceUri ?? string.Empty);
         Username = new BindableReactiveProperty<string?>(viewModel?.Model.Username);
         Password = new BindableReactiveProperty<string>();
 
         _sub1 = Name.EnableValidationRoutable(
-            value =>
+            name =>
             {
-                if (string.IsNullOrWhiteSpace(value))
+                if (string.IsNullOrWhiteSpace(name))
                 {
                     return new ValidationResult
                     {
@@ -67,9 +48,9 @@ public class SourceDialogViewModel : DialogViewModelBase
         );
 
         _sub2 = SourceUri.EnableValidationRoutable(
-            x =>
+            uri =>
             {
-                if (string.IsNullOrWhiteSpace(x))
+                if (string.IsNullOrWhiteSpace(uri))
                 {
                     return new ValidationResult
                     {
@@ -96,7 +77,7 @@ public class SourceDialogViewModel : DialogViewModelBase
     {
         ArgumentNullException.ThrowIfNull(dialog);
 
-        _sub3 = IsValid.Subscribe(b => dialog.IsPrimaryButtonEnabled = b);
+        _sub3.Disposable = IsValid.Subscribe(b => dialog.IsPrimaryButtonEnabled = b);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
@@ -108,7 +89,7 @@ public class SourceDialogViewModel : DialogViewModelBase
 
     private readonly IDisposable _sub1;
     private readonly IDisposable _sub2;
-    private IDisposable _sub3;
+    private readonly SerialDisposable _sub3 = new();
 
     protected override void Dispose(bool disposing)
     {
