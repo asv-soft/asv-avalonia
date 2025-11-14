@@ -14,19 +14,32 @@
         <plugins:PluginsSourcesViewModel />
     </Design.DataContext>
     
-    <DockPanel>
-        <Button
-            DockPanel.Dock="Top"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="8"
-            Command="{Binding Add}">
-            <TextBlock Text="Add Source"/>
-        </Button>
-        <DataGrid Focusable="False" ItemsSource="{Binding Items}" 
-                        SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
+    <Grid RowDefinitions="Auto,*">
+        <Grid Grid.Row="0" ColumnDefinitions="Auto, Auto, *" Margin="8" ColumnSpacing="4">
+            <Button Grid.Column="1"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Command="{CompiledBinding Refresh}">
+                <TextBlock Text="Refresh"/>
+            </Button>
+            <Button Grid.Column="2"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Command="{Binding Add}">
+                <TextBlock Text="Add Source"/>
+            </Button>
+        </Grid>
+        <DataGrid Grid.Row="1" 
+                  Focusable="False"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="False"
+                  ColumnWidth="Auto"
+                  CanUserResizeColumns="True"
+                  SelectionMode="Single"
+                  ItemsSource="{Binding Items}" 
+                  SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Columns>
-                <DataGridTemplateColumn>
+                <DataGridTemplateColumn Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <avalonia:MaterialIcon 
@@ -39,9 +52,11 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn IsReadOnly="True" Header="Name" Binding="{Binding Name}"/>
-                <DataGridTextColumn IsReadOnly="True" Header="SourceUri" Binding="{Binding SourceUri}"/>
-                <DataGridTemplateColumn>
+                
+                <DataGridTextColumn Width="Auto" IsReadOnly="True" Header="Name" Binding="{Binding Name}"/>
+                <DataGridTextColumn Width="*" IsReadOnly="True" Header="Uri" Binding="{Binding SourceUri}"/>
+                
+                <DataGridTemplateColumn Width="Auto" Header="Edit">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -61,7 +76,8 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn>
+                
+                <DataGridTemplateColumn Width="Auto" Header="Delete">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button
@@ -84,5 +100,5 @@
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-    </DockPanel>
+    </Grid>
 </UserControl>
