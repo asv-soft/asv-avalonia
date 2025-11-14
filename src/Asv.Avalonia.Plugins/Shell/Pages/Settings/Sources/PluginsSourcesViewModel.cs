@@ -76,12 +76,16 @@ public class PluginsSourcesViewModel : SettingsSubPage
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
-        Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
+        Items = _view
+            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<PluginSourceViewModel> Items { get; }
     public BindableReactiveProperty<PluginSourceViewModel?> SelectedItem { get; }
     public ReactiveCommand Add { get; }
+
+    public void Refresh() => InternalUpdate();
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
@@ -90,6 +94,7 @@ public class PluginsSourcesViewModel : SettingsSubPage
             case RemovePluginSourceEvent remove:
             {
                 _pluginManager.RemoveServer(remove.ServerInfo);
+                InternalUpdate();
                 break;
             }
 
@@ -97,6 +102,7 @@ public class PluginsSourcesViewModel : SettingsSubPage
             {
                 _pluginManager.RemoveServer(update.ServerInfo);
                 _pluginManager.AddServer(update.Server);
+                InternalUpdate();
                 break;
             }
         }
