@@ -41,10 +41,5 @@ public class SettingsPageViewModel
         Title = RS.SettingsPageViewModel_Title;
     }
 
-    protected override void InternalInitArgs(NameValueCollection args)
-    {
-        base.InternalInitArgs(args);
-    }
-
     public override IExportInfo Source => SystemModule.Instance;
 }
