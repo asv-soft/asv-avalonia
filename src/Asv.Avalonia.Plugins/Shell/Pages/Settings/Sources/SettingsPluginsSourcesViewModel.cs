@@ -1,6 +1,7 @@
 ﻿using System.Composition;
 using Asv.Common;
 using Avalonia.Threading;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using NuGet.Configuration;
@@ -11,7 +12,7 @@ using R3;
 namespace Asv.Avalonia.Plugins;
 
 [ExportSettings(PageId)]
-public class PluginsSourcesViewModel : SettingsSubPage
+public class SettingsPluginsSourcesViewModel : SettingsSubPage
 {
     public const string PageId = "plugins.sources";
 
@@ -19,10 +20,15 @@ public class PluginsSourcesViewModel : SettingsSubPage
     private readonly INavigationService _navigation;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<IPluginServerInfo> _sources;
-    private readonly ISynchronizedView<IPluginServerInfo, PluginSourceViewModel> _view;
+    private readonly ISynchronizedView<IPluginServerInfo, PluginsSourceViewModel> _view;
 
-    public PluginsSourcesViewModel()
-        : this(NullPluginManager.Instance, DesignTime.Navigation, DesignTime.LoggerFactory)
+    public SettingsPluginsSourcesViewModel()
+        : this(
+            NullPluginManager.Instance,
+            DesignTime.Navigation,
+            NullDialogService.Instance,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         var items = new ObservableList<IPluginServerInfo>(
@@ -42,18 +48,20 @@ public class PluginsSourcesViewModel : SettingsSubPage
             ]
         );
         Items = items
-            .ToNotifyCollectionChanged(x => new PluginSourceViewModel(
+            .ToNotifyCollectionChanged(x => new PluginsSourceViewModel(
                 x,
                 NullNavigationService.Instance,
+                NullDialogService.Instance,
                 NullLoggerFactory.Instance
             ))
             .DisposeItWith(Disposable);
     }
 
     [ImportingConstructor]
-    public PluginsSourcesViewModel(
+    public SettingsPluginsSourcesViewModel(
         IPluginManager pluginManager,
         INavigationService navigationService,
+        IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
         : base(PageId, loggerFactory)
@@ -61,48 +69,74 @@ public class PluginsSourcesViewModel : SettingsSubPage
         _pluginManager = pluginManager;
         _navigation = navigationService;
         _loggerFactory = loggerFactory;
-
-        Add = new ReactiveCommand(AddImpl).DisposeItWith(Disposable);
-        Add.IgnoreOnErrorResume(ex =>
-            Logger.LogError(ex, "Error to add info about plugin sources")
-        );
-        SelectedItem = new BindableReactiveProperty<PluginSourceViewModel?>().DisposeItWith(
+        SelectedItem = new BindableReactiveProperty<PluginsSourceViewModel?>().DisposeItWith(
             Disposable
         );
 
         _sources = new ObservableList<IPluginServerInfo>(_pluginManager.Servers);
         _view = _sources
-            .CreateView(info => new PluginSourceViewModel(info, navigationService, loggerFactory))
+            .CreateView(info => new PluginsSourceViewModel(
+                info,
+                navigationService,
+                dialogService,
+                loggerFactory
+            ))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         Items = _view
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
+
+        var add = new MenuItem("add", "Add Source", loggerFactory)
+        {
+            Order = 0,
+            Icon = MaterialIconKind.Add,
+            Command = new BindableAsyncCommand(AddPluginsSourceCommand.Id, this),
+        };
+
+        var refresh = new MenuItem("refresh", string.Empty, loggerFactory)
+        {
+            Order = 1,
+            Icon = MaterialIconKind.Refresh,
+            Command = new ReactiveCommand(_ => Refresh()).DisposeItWith(Disposable),
+        };
+        Menu.Add(add);
+        Menu.Add(refresh);
     }
 
-    public NotifyCollectionChangedSynchronizedViewList<PluginSourceViewModel> Items { get; }
-    public BindableReactiveProperty<PluginSourceViewModel?> SelectedItem { get; }
-    public ReactiveCommand Add { get; }
+    public NotifyCollectionChangedSynchronizedViewList<PluginsSourceViewModel> Items { get; }
+    public BindableReactiveProperty<PluginsSourceViewModel?> SelectedItem { get; }
 
-    public void Refresh() => InternalUpdate();
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        foreach (var child in base.GetRoutableChildren())
+        {
+            yield return child;
+        }
+
+        foreach (var view in _view)
+        {
+            yield return view;
+        }
+    }
 
     protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
     {
         switch (e)
         {
-            case RemovePluginSourceEvent remove:
+            case RemovePluginsSourceEvent remove:
             {
                 _pluginManager.RemoveServer(remove.ServerInfo);
-                InternalUpdate();
+                Refresh();
                 break;
             }
 
-            case UpdatePluginSourceEvent update:
+            case UpdatePluginsSourceEvent update:
             {
                 _pluginManager.RemoveServer(update.ServerInfo);
                 _pluginManager.AddServer(update.Server);
-                InternalUpdate();
+                Refresh();
                 break;
             }
         }
@@ -110,36 +144,7 @@ public class PluginsSourcesViewModel : SettingsSubPage
         return base.InternalCatchEvent(e);
     }
 
-    private async ValueTask AddImpl(Unit unit, CancellationToken token)
-    {
-        using var viewModel = new SourceDialogViewModel(_loggerFactory);
-        var dialog = new ContentDialog(viewModel, _navigation)
-        {
-            Title = RS.PluginsSourcesViewModel_AddImpl_Title,
-            PrimaryButtonText = RS.PluginsSourcesViewModel_AddImpl_Add,
-            IsSecondaryButtonEnabled = true,
-            CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
-        };
-
-        viewModel.ApplyDialog(dialog);
-
-        var result = await dialog.ShowAsync();
-
-        if (result == ContentDialogResult.Primary)
-        {
-            _pluginManager.AddServer(
-                new PluginServer(
-                    viewModel.Name.Value,
-                    viewModel.SourceUri.Value,
-                    viewModel.Username.Value,
-                    viewModel.Password.Value
-                )
-            );
-            InternalUpdate();
-        }
-    }
-
-    private void InternalUpdate()
+    internal void Refresh()
     {
         try
         {
@@ -152,19 +157,6 @@ public class PluginsSourcesViewModel : SettingsSubPage
         catch (Exception e)
         {
             Logger.LogError(e, "Error to update info about plugin sources");
-        }
-    }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        foreach (var child in base.GetRoutableChildren())
-        {
-            yield return child;
-        }
-
-        foreach (var view in _view)
-        {
-            yield return view;
         }
     }
 

@@ -18,7 +18,7 @@ public sealed class SourceDialogViewModel : DialogViewModelBase
 
     public SourceDialogViewModel(
         ILoggerFactory loggerFactory,
-        in PluginSourceViewModel? viewModel = null
+        in PluginsSourceViewModel? viewModel = null
     )
         : base(ViewModelId, loggerFactory)
     {

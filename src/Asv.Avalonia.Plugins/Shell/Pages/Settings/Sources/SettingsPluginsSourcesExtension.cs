@@ -15,10 +15,10 @@ public class SettingsPluginsSourcesExtension(ILoggerFactory loggerFactory)
     {
         context.Nodes.Add(
             new TreePage(
-                PluginsSourcesViewModel.PageId,
+                SettingsPluginsSourcesViewModel.PageId,
                 RS.PluginsSourcesViewModel_Name,
                 MaterialIconKind.Cloud,
-                PluginsSourcesViewModel.PageId,
+                SettingsPluginsSourcesViewModel.PageId,
                 NavigationId.Empty,
                 loggerFactory
             ).DisposeItWith(contextDispose)

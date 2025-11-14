@@ -1,10 +1,10 @@
 ﻿namespace Asv.Avalonia.Plugins;
 
-public sealed class UpdatePluginSourceEvent(
-    PluginSourceViewModel source,
+public sealed class UpdatePluginsSourceEvent(
+    PluginsSourceViewModel source,
     IPluginServerInfo info,
     PluginServer server
-) : PluginSourceEventBase(source, info)
+) : PluginsSourceEventBase(source, info)
 {
     public PluginServer Server => server;
 }
