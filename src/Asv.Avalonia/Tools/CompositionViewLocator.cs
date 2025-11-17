@@ -32,6 +32,16 @@ public class CompositionViewLocator(CompositionHost container) : IDataTemplate
                 return control;
             }
 
+            // try to find view by implemented interfaces
+            foreach (var @interface in viewModelType.GetInterfaces())
+            {
+                viewModelContract = @interface.FullName;
+                if (_container.TryGetExport<Control>(viewModelContract, out var ifcControl))
+                {
+                    return ifcControl;
+                }
+            }
+
             /*// try default Avalonia behaviour: rename and try to find view
             var type = Type.GetType(viewModelContract.Replace("ViewModel", "View"));
             if (type != null)
