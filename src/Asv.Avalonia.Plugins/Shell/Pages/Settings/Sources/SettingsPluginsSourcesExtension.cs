@@ -16,7 +16,7 @@ public class SettingsPluginsSourcesExtension(ILoggerFactory loggerFactory)
         context.Nodes.Add(
             new TreePage(
                 SettingsPluginsSourcesViewModel.PageId,
-                RS.PluginsSourcesViewModel_Name,
+                RS.SettingsPluginsSourcesViewModel_Name,
                 MaterialIconKind.Cloud,
                 SettingsPluginsSourcesViewModel.PageId,
                 NavigationId.Empty,

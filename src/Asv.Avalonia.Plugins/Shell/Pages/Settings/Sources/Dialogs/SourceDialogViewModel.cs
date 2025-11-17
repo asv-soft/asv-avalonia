@@ -36,7 +36,7 @@ public sealed class SourceDialogViewModel : DialogViewModelBase
                     {
                         IsSuccess = false,
                         ValidationException = new ValidationException(
-                            RS.SourceViewModel_NameValidation_NameIsRequired
+                            RS.SourceDialogViewModel_NameValidation_NameIsRequired
                         ),
                     };
                 }
@@ -56,7 +56,7 @@ public sealed class SourceDialogViewModel : DialogViewModelBase
                     {
                         IsSuccess = false,
                         ValidationException = new ValidationException(
-                            RS.SourceViewModel_SourceUriValidation_SourceUriIsRequired
+                            RS.SourceDialogViewModel_SourceUriValidation_SourceUriIsRequired
                         ),
                     };
                 }

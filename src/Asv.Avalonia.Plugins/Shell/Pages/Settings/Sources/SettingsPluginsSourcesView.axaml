@@ -38,10 +38,18 @@
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
                 
-            <DataGridTextColumn Width="Auto" IsReadOnly="True" Header="Name" Binding="{Binding Name}"/>
-            <DataGridTextColumn Width="*" IsReadOnly="True" Header="Uri" Binding="{Binding SourceUri}"/>
+            <DataGridTextColumn 
+                Width="Auto"
+                IsReadOnly="True" 
+                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_NameColumn_Header}" 
+                Binding="{Binding Name}"/>
+            <DataGridTextColumn 
+                Width="*" 
+                IsReadOnly="True" 
+                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_UriColumn_Header}" 
+                Binding="{Binding SourceUri}"/>
                 
-            <DataGridTemplateColumn Width="Auto" Header="Edit">
+            <DataGridTemplateColumn Width="Auto" Header="{x:Static plugins:RS.SettingsPluginsSourcesView_EditColumn_Header}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button
@@ -62,7 +70,7 @@
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
                 
-            <DataGridTemplateColumn Width="Auto" Header="Delete">
+            <DataGridTemplateColumn Width="Auto" Header="{x:Static plugins:RS.SettingsPluginsSourcesView_DeleteColumn_Header}">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button

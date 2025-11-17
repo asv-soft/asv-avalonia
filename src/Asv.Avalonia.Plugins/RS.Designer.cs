@@ -71,162 +71,162 @@ namespace Asv.Avalonia.Plugins {
         /// <summary>
         ///   Looks up a localized string similar to All versions.
         /// </summary>
-        public static string InstalledPluginsView_AllVersions {
+        public static string InstalledPluginsPageView_AllVersions {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_AllVersions", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_AllVersions", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string InstalledPluginsView_CancelUninstall {
+        public static string InstalledPluginsPageView_CancelUninstall {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_CancelUninstall", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_CancelUninstall", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Loading Error.
         /// </summary>
-        public static string InstalledPluginsView_InfoBarLoadingError_Title {
+        public static string InstalledPluginsPageView_InfoBarLoadingError_Title {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_InfoBarLoadingError_Title", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_InfoBarLoadingError_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please select plugin.
         /// </summary>
-        public static string InstalledPluginsView_SelectedPluginIsNull {
+        public static string InstalledPluginsPageView_SelectedPluginIsNull {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_SelectedPluginIsNull", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_SelectedPluginIsNull", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Additional info.
         /// </summary>
-        public static string InstalledPluginsView_Tab_AdditionalInfo {
+        public static string InstalledPluginsPageView_Tab_AdditionalInfo {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_AdditionalInfo", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Author: .
         /// </summary>
-        public static string InstalledPluginsView_Tab_AdditionalInfo_Author {
+        public static string InstalledPluginsPageView_Tab_AdditionalInfo_Author {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Author", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_AdditionalInfo_Author", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Dependencies: .
         /// </summary>
-        public static string InstalledPluginsView_Tab_AdditionalInfo_Dependencies {
+        public static string InstalledPluginsPageView_Tab_AdditionalInfo_Dependencies {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Dependencies", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_AdditionalInfo_Dependencies", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Downloads: .
         /// </summary>
-        public static string InstalledPluginsView_Tab_AdditionalInfo_DownloadCount {
+        public static string InstalledPluginsPageView_Tab_AdditionalInfo_DownloadCount {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_DownloadCount", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_AdditionalInfo_DownloadCount", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Source: .
         /// </summary>
-        public static string InstalledPluginsView_Tab_AdditionalInfo_Source {
+        public static string InstalledPluginsPageView_Tab_AdditionalInfo_Source {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Source", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_AdditionalInfo_Source", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Tags: .
         /// </summary>
-        public static string InstalledPluginsView_Tab_AdditionalInfo_Tags {
+        public static string InstalledPluginsPageView_Tab_AdditionalInfo_Tags {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Tags", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_AdditionalInfo_Tags", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Version: .
         /// </summary>
-        public static string InstalledPluginsView_Tab_AdditionalInfo_Version {
+        public static string InstalledPluginsPageView_Tab_AdditionalInfo_Version {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_AdditionalInfo_Version", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_AdditionalInfo_Version", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
-        public static string InstalledPluginsView_Tab_Description {
+        public static string InstalledPluginsPageView_Tab_Description {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Tab_Description", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Tab_Description", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Uninstall.
         /// </summary>
-        public static string InstalledPluginsView_Uninstall {
+        public static string InstalledPluginsPageView_Uninstall {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Uninstall", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Uninstall", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Uninstalled.
         /// </summary>
-        public static string InstalledPluginsView_Uninstalled {
+        public static string InstalledPluginsPageView_Uninstalled {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_Uninstalled", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_Uninstalled", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to This plugin has been marked for deletion. It will be removed on the next application load..
         /// </summary>
-        public static string InstalledPluginsView_UninstalledMessage {
+        public static string InstalledPluginsPageView_UninstalledMessage {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_UninstalledMessage", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_UninstalledMessage", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Uninstalled.
         /// </summary>
-        public static string InstalledPluginsView_UninstalledMessageTitle {
+        public static string InstalledPluginsPageView_UninstalledMessageTitle {
             get {
-                return ResourceManager.GetString("InstalledPluginsView_UninstalledMessageTitle", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageView_UninstalledMessageTitle", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Select plugin to install.
         /// </summary>
-        public static string InstalledPluginsViewModel_IntallManuallyDialog_Title {
+        public static string InstalledPluginsPageViewModel_IntallManuallyDialog_Title {
             get {
-                return ResourceManager.GetString("InstalledPluginsViewModel_IntallManuallyDialog_Title", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageViewModel_IntallManuallyDialog_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Installed Plugins.
         /// </summary>
-        public static string InstalledPluginsViewModel_Title {
+        public static string InstalledPluginsPageViewModel_Title {
             get {
-                return ResourceManager.GetString("InstalledPluginsViewModel_Title", resourceCulture);
+                return ResourceManager.GetString("InstalledPluginsPageViewModel_Title", resourceCulture);
             }
         }
         
@@ -305,171 +305,207 @@ namespace Asv.Avalonia.Plugins {
         /// <summary>
         ///   Looks up a localized string similar to This plugin is verified by developers.
         /// </summary>
-        public static string PluginsMarketView_InfoBar_IsVerified_Message {
+        public static string PluginsMarketPageView_InfoBar_IsVerified_Message {
             get {
-                return ResourceManager.GetString("PluginsMarketView_InfoBar_IsVerified_Message", resourceCulture);
+                return ResourceManager.GetString("PluginsMarketPageView_InfoBar_IsVerified_Message", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Install.
         /// </summary>
-        public static string PluginsMarketView_Install {
+        public static string PluginsMarketPageView_Install {
             get {
-                return ResourceManager.GetString("PluginsMarketView_Install", resourceCulture);
+                return ResourceManager.GetString("PluginsMarketPageView_Install", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Please select plugin.
         /// </summary>
-        public static string PluginsMarketView_SelectedPluginIsNull {
+        public static string PluginsMarketPageView_SelectedPluginIsNull {
             get {
-                return ResourceManager.GetString("PluginsMarketView_SelectedPluginIsNull", resourceCulture);
+                return ResourceManager.GetString("PluginsMarketPageView_SelectedPluginIsNull", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Only verified.
         /// </summary>
-        public static string PluginsMarketView_ToggleSwitch_OnlyVerified {
+        public static string PluginsMarketPageView_ToggleSwitch_OnlyVerified {
             get {
-                return ResourceManager.GetString("PluginsMarketView_ToggleSwitch_OnlyVerified", resourceCulture);
+                return ResourceManager.GetString("PluginsMarketPageView_ToggleSwitch_OnlyVerified", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Plugins Market.
         /// </summary>
-        public static string PluginsMarketViewModel_Title {
+        public static string PluginsMarketPageViewModel_Title {
             get {
-                return ResourceManager.GetString("PluginsMarketViewModel_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add.
-        /// </summary>
-        public static string PluginsSourcesViewModel_AddImpl_Add {
-            get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Add", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cancel.
-        /// </summary>
-        public static string PluginsSourcesViewModel_AddImpl_Cancel {
-            get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add new plugin source.
-        /// </summary>
-        public static string PluginsSourcesViewModel_AddImpl_Title {
-            get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_AddImpl_Title", resourceCulture);
+                return ResourceManager.GetString("PluginsMarketPageViewModel_Title", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
-        public static string PluginsSourcesViewModel_EditImpl_Save {
+        public static string PluginsSourceViewModel_EditDialog_PrimaryButtonText {
             get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_EditImpl_Save", resourceCulture);
+                return ResourceManager.GetString("PluginsSourceViewModel_EditDialog_PrimaryButtonText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Edit plugin source.
         /// </summary>
-        public static string PluginsSourcesViewModel_EditImpl_Title {
+        public static string PluginsSourceViewModel_EditDialog_Title {
             get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_EditImpl_Title", resourceCulture);
+                return ResourceManager.GetString("PluginsSourceViewModel_EditDialog_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Plugins Sources.
+        ///   Looks up a localized string similar to Are you sure you want to delete this source?.
         /// </summary>
-        public static string PluginsSourcesViewModel_Name {
+        public static string PluginsSourceViewModel_RemoveDialog_Message {
             get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_Name", resourceCulture);
+                return ResourceManager.GetString("PluginsSourceViewModel_RemoveDialog_Message", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error to remove plugin server.
+        ///   Looks up a localized string similar to Delete Source.
         /// </summary>
-        public static string PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove {
+        public static string PluginsSourceViewModel_RemoveDialog_Title {
             get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToRemove", resourceCulture);
+                return ResourceManager.GetString("PluginsSourceViewModel_RemoveDialog_Title", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error to update plugin server list.
+        ///   Looks up a localized string similar to Delete.
         /// </summary>
-        public static string PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate {
+        public static string SettingsPluginsSourcesView_DeleteColumn_Header {
             get {
-                return ResourceManager.GetString("PluginsSourcesViewModel_PluginsSourcesViewModel_ErrorToUpdate", resourceCulture);
+                return ResourceManager.GetString("SettingsPluginsSourcesView_DeleteColumn_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        public static string SettingsPluginsSourcesView_EditColumn_Header {
+            get {
+                return ResourceManager.GetString("SettingsPluginsSourcesView_EditColumn_Header", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
-        public static string SourcesView_Name {
+        public static string SettingsPluginsSourcesView_NameColumn_Header {
             get {
-                return ResourceManager.GetString("SourcesView_Name", resourceCulture);
+                return ResourceManager.GetString("SettingsPluginsSourcesView_NameColumn_Header", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New password.
+        ///   Looks up a localized string similar to Uri.
         /// </summary>
-        public static string SourcesView_Password {
+        public static string SettingsPluginsSourcesView_UriColumn_Header {
             get {
-                return ResourceManager.GetString("SourcesView_Password", resourceCulture);
+                return ResourceManager.GetString("SettingsPluginsSourcesView_UriColumn_Header", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to URL Address.
+        ///   Looks up a localized string similar to Add.
         /// </summary>
-        public static string SourcesView_URL {
+        public static string SettingsPluginsSourcesViewModel_AddDialog_PrimaryButtonText {
             get {
-                return ResourceManager.GetString("SourcesView_URL", resourceCulture);
+                return ResourceManager.GetString("SettingsPluginsSourcesViewModel_AddDialog_PrimaryButtonText", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username.
+        ///   Looks up a localized string similar to Add new plugin source.
         /// </summary>
-        public static string SourcesView_Username {
+        public static string SettingsPluginsSourcesViewModel_AddDialog_Title {
             get {
-                return ResourceManager.GetString("SourcesView_Username", resourceCulture);
+                return ResourceManager.GetString("SettingsPluginsSourcesViewModel_AddDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Source.
+        /// </summary>
+        public static string SettingsPluginsSourcesViewModel_MenuItem_Add_Title {
+            get {
+                return ResourceManager.GetString("SettingsPluginsSourcesViewModel_MenuItem_Add_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plugins Sources.
+        /// </summary>
+        public static string SettingsPluginsSourcesViewModel_Name {
+            get {
+                return ResourceManager.GetString("SettingsPluginsSourcesViewModel_Name", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Name is required.
         /// </summary>
-        public static string SourceViewModel_NameValidation_NameIsRequired {
+        public static string SourceDialogViewModel_NameValidation_NameIsRequired {
             get {
-                return ResourceManager.GetString("SourceViewModel_NameValidation_NameIsRequired", resourceCulture);
+                return ResourceManager.GetString("SourceDialogViewModel_NameValidation_NameIsRequired", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Server URI is required.
         /// </summary>
-        public static string SourceViewModel_SourceUriValidation_SourceUriIsRequired {
+        public static string SourceDialogViewModel_SourceUriValidation_SourceUriIsRequired {
             get {
-                return ResourceManager.GetString("SourceViewModel_SourceUriValidation_SourceUriIsRequired", resourceCulture);
+                return ResourceManager.GetString("SourceDialogViewModel_SourceUriValidation_SourceUriIsRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string SourcesDialogView_Name {
+            get {
+                return ResourceManager.GetString("SourcesDialogView_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New password.
+        /// </summary>
+        public static string SourcesDialogView_Password {
+            get {
+                return ResourceManager.GetString("SourcesDialogView_Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to URL Address.
+        /// </summary>
+        public static string SourcesDialogView_URL {
+            get {
+                return ResourceManager.GetString("SourcesDialogView_URL", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string SourcesDialogView_Username {
+            get {
+                return ResourceManager.GetString("SourcesDialogView_Username", resourceCulture);
             }
         }
     }

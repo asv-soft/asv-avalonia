@@ -88,7 +88,11 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
 
-        var add = new MenuItem("add", "Add Source", loggerFactory)
+        var add = new MenuItem(
+            "add",
+            RS.SettingsPluginsSourcesViewModel_MenuItem_Add_Title,
+            loggerFactory
+        )
         {
             Order = 0,
             Icon = MaterialIconKind.Add,
@@ -113,10 +117,10 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         using var viewModel = new SourceDialogViewModel(_loggerFactory);
         var dialog = new ContentDialog(viewModel, _navigation)
         {
-            Title = RS.PluginsSourcesViewModel_AddImpl_Title,
-            PrimaryButtonText = RS.PluginsSourcesViewModel_AddImpl_Add,
+            Title = RS.SettingsPluginsSourcesViewModel_AddDialog_Title,
+            PrimaryButtonText = RS.SettingsPluginsSourcesViewModel_AddDialog_PrimaryButtonText,
             IsSecondaryButtonEnabled = true,
-            CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
+            CloseButtonText = Avalonia.RS.DialogButton_Cancel,
         };
 
         viewModel.ApplyDialog(dialog);

@@ -60,10 +60,10 @@ public class PluginsSourceViewModel : RoutableViewModel
         using var viewModel = new SourceDialogViewModel(_loggerFactory, this);
         var dialog = new ContentDialog(viewModel, _navigationService)
         {
-            Title = RS.PluginsSourcesViewModel_EditImpl_Title,
-            PrimaryButtonText = RS.PluginsSourcesViewModel_EditImpl_Save,
+            Title = RS.PluginsSourceViewModel_EditDialog_Title,
+            PrimaryButtonText = RS.PluginsSourceViewModel_EditDialog_PrimaryButtonText,
             IsSecondaryButtonEnabled = true,
-            CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
+            CloseButtonText = Avalonia.RS.DialogButton_Cancel,
         };
 
         viewModel.ApplyDialog(dialog);
@@ -90,8 +90,8 @@ public class PluginsSourceViewModel : RoutableViewModel
     {
         var payload = new YesOrNoDialogPayload
         {
-            Title = "Delete Source",
-            Message = "Are you sure you want to delete this source?",
+            Title = RS.PluginsSourceViewModel_RemoveDialog_Title,
+            Message = RS.PluginsSourceViewModel_RemoveDialog_Message,
         };
 
         var result = await _yesOrNoDialogPrefab.ShowDialogAsync(payload);

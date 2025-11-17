@@ -46,7 +46,7 @@ public class InstalledPluginsPageViewModel
     )
         : base(PageId, cmd, cfg, loggerFactory)
     {
-        Title = RS.InstalledPluginsViewModel_Title;
+        Title = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;
         _manager = manager;
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
@@ -158,7 +158,7 @@ public class InstalledPluginsPageViewModel
     {
         var payload = new OpenFileDialogPayload
         {
-            Title = RS.InstalledPluginsViewModel_IntallManuallyDialog_Title,
+            Title = RS.InstalledPluginsPageViewModel_IntallManuallyDialog_Title,
             TypeFilter = "nupkg",
         };
 
