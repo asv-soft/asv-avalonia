@@ -9,11 +9,8 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class InstalledPluginsViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class InstalledPluginsPageViewModel
-    : PageViewModel<InstalledPluginsPageViewModel, InstalledPluginsViewModelConfig>
+public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageViewModel>
 {
     public const string PageId = "plugins.installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
@@ -27,9 +24,8 @@ public class InstalledPluginsPageViewModel
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
-            DesignTime.Configuration,
-            NullDialogService.Instance,
-            DesignTime.LoggerFactory
+            DesignTime.LoggerFactory,
+            NullDialogService.Instance
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -40,11 +36,10 @@ public class InstalledPluginsPageViewModel
     public InstalledPluginsPageViewModel(
         ICommandService cmd,
         IPluginManager manager,
-        IConfiguration cfg,
-        IDialogService dialogService,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, loggerFactory, dialogService)
     {
         Title = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;
@@ -68,9 +63,10 @@ public class InstalledPluginsPageViewModel
         IsShowOnlyVerified = new HistoricalBoolProperty(
             nameof(IsShowOnlyVerified),
             isShowOnlyVerified,
-            loggerFactory,
-            this
-        ).DisposeItWith(Disposable);
+            loggerFactory
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
         InstallManually = new ReactiveCommand<IProgress<double>>(InstallManuallyImpl).DisposeItWith(
             Disposable

@@ -357,6 +357,15 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Installing....
+        /// </summary>
+        public static string PluginInfoViewModel_InstallCommand_Title {
+            get {
+                return ResourceManager.GetString("PluginInfoViewModel_InstallCommand_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This plugin is verified by developers.
         /// </summary>
         public static string PluginsMarketPageView_InfoBar_IsVerified_Message {

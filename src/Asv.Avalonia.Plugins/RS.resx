@@ -186,4 +186,7 @@
     <data name="DeletePluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command deletes source for plugins</value>
     </data>
+    <data name="PluginInfoViewModel_InstallCommand_Title" xml:space="preserve">
+        <value>Installing...</value>
+    </data>
 </root>

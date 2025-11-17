@@ -34,7 +34,7 @@ public class PluginInfoViewModel : RoutableViewModel
 
         Install = new CancellableCommandWithProgress<Unit>(
             InstallImpl,
-            "Installing...",
+            RS.PluginInfoViewModel_InstallCommand_Title,
             logFactory
         ).DisposeItWith(Disposable);
 
@@ -44,12 +44,9 @@ public class PluginInfoViewModel : RoutableViewModel
         var isUninstalled = new ReactiveProperty<bool>(
             _localInfo?.IsUninstalled ?? false
         ).DisposeItWith(Disposable);
-        IsUninstalled = new HistoricalBoolProperty(
-            nameof(IsUninstalled),
-            isUninstalled,
-            logFactory,
-            this
-        ).DisposeItWith(Disposable);
+        IsUninstalled = new HistoricalBoolProperty(nameof(IsUninstalled), isUninstalled, logFactory)
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         SelectedVersion = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(
             Disposable
         );

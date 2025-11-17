@@ -40,9 +40,10 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
         IsUninstalled = new HistoricalBoolProperty(
             nameof(IsUninstalled),
             isUninstalled,
-            loggerFactory,
-            this
-        ).DisposeItWith(Disposable);
+            loggerFactory
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         IsLoaded = pluginInfo.IsLoaded;
         IsVerified = pluginInfo.IsVerified;
         if (Author is not null)

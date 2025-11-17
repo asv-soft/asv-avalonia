@@ -8,27 +8,19 @@ namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
 public interface IExamplePageViewModel : IPage { }
 
-public sealed class ExamplePageViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
 [method: ImportingConstructor]
 public class ExamplePageViewModel(
     ICommandService cmd,
-    IConfiguration cfg,
-    ILoggerFactory loggerFactory
-)
-    : PageViewModel<IExamplePageViewModel, ExamplePageViewModelConfig>(
-        PageId,
-        cmd,
-        cfg,
-        loggerFactory
-    )
+    ILoggerFactory loggerFactory,
+    IDialogService dialogService
+) : PageViewModel<IExamplePageViewModel>(PageId, cmd, loggerFactory, dialogService)
 {
     public const string PageId = "example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Earth;
 
     public ExamplePageViewModel()
-        : this(DesignTime.CommandService, DesignTime.Configuration, NullLoggerFactory.Instance)
+        : this(DesignTime.CommandService, NullLoggerFactory.Instance, DesignTime.DialogService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }

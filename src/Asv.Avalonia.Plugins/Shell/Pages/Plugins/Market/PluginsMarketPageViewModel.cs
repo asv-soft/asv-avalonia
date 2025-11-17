@@ -10,11 +10,8 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class PluginsMarketViewModelConfig : PageConfig { }
-
 [ExportPage(PageId)]
-public class PluginsMarketPageViewModel
-    : PageViewModel<PluginsMarketPageViewModel, PluginsMarketViewModelConfig>
+public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewModel>
 {
     public const string PageId = "plugins.market";
     public const MaterialIconKind PageIcon = MaterialIconKind.Store;
@@ -28,7 +25,7 @@ public class PluginsMarketPageViewModel
             DesignTime.CommandService,
             NullPluginManager.Instance,
             NullLoggerFactory.Instance,
-            DesignTime.Configuration
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -40,9 +37,9 @@ public class PluginsMarketPageViewModel
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
-        IConfiguration cfg
+        IDialogService dialogService
     )
-        : base(PageId, cmd, cfg, loggerFactory)
+        : base(PageId, cmd, loggerFactory, dialogService)
     {
         ArgumentNullException.ThrowIfNull(cmd);
         ArgumentNullException.ThrowIfNull(manager);
@@ -58,9 +55,10 @@ public class PluginsMarketPageViewModel
         IsShowOnlyVerified = new HistoricalBoolProperty(
             nameof(IsShowOnlyVerified),
             isShowOnlyVerified,
-            loggerFactory,
-            this
-        ).DisposeItWith(Disposable);
+            loggerFactory
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         SelectedPlugin = new BindableReactiveProperty<PluginInfoViewModel?>().DisposeItWith(
             Disposable
         );
