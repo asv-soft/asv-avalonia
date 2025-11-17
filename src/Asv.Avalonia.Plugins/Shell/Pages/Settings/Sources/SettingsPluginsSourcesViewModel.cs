@@ -92,14 +92,14 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         {
             Order = 0,
             Icon = MaterialIconKind.Add,
-            Command = new BindableAsyncCommand(AddPluginsSourceCommand.Id, this),
+            Command = new ReactiveCommand(AddImpl).DisposeItWith(Disposable),
         };
 
         var refresh = new MenuItem("refresh", string.Empty, loggerFactory)
         {
             Order = 1,
             Icon = MaterialIconKind.Refresh,
-            Command = new ReactiveCommand(_ => Refresh()).DisposeItWith(Disposable),
+            Command = new ReactiveCommand(_ => InternalUpdate()).DisposeItWith(Disposable),
         };
         Menu.Add(add);
         Menu.Add(refresh);
@@ -107,6 +107,36 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
 
     public NotifyCollectionChangedSynchronizedViewList<PluginsSourceViewModel> Items { get; }
     public BindableReactiveProperty<PluginsSourceViewModel?> SelectedItem { get; }
+
+    public async ValueTask AddImpl(Unit unit, CancellationToken cancel = default)
+    {
+        using var viewModel = new SourceDialogViewModel(_loggerFactory);
+        var dialog = new ContentDialog(viewModel, _navigation)
+        {
+            Title = RS.PluginsSourcesViewModel_AddImpl_Title,
+            PrimaryButtonText = RS.PluginsSourcesViewModel_AddImpl_Add,
+            IsSecondaryButtonEnabled = true,
+            CloseButtonText = RS.PluginsSourcesViewModel_AddImpl_Cancel,
+        };
+
+        viewModel.ApplyDialog(dialog);
+
+        var result = await dialog.ShowAsync();
+
+        if (result == ContentDialogResult.Primary)
+        {
+            _pluginManager.AddServer(
+                new PluginServer(
+                    viewModel.Name.Value,
+                    viewModel.SourceUri.Value,
+                    viewModel.Username.Value,
+                    viewModel.Password.Value
+                )
+            );
+
+            InternalUpdate();
+        }
+    }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
@@ -128,7 +158,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             case RemovePluginsSourceEvent remove:
             {
                 _pluginManager.RemoveServer(remove.ServerInfo);
-                Refresh();
+                InternalUpdate();
                 break;
             }
 
@@ -136,7 +166,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             {
                 _pluginManager.RemoveServer(update.ServerInfo);
                 _pluginManager.AddServer(update.Server);
-                Refresh();
+                InternalUpdate();
                 break;
             }
         }
@@ -144,7 +174,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         return base.InternalCatchEvent(e);
     }
 
-    internal void Refresh()
+    private void InternalUpdate()
     {
         try
         {
