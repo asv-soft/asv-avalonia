@@ -60,6 +60,60 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command adds source for plugins.
+        /// </summary>
+        public static string AddPluginsSourceCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("AddPluginsSourceCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add plugins&apos; source.
+        /// </summary>
+        public static string AddPluginsSourceCommand_CommandInfo_Title {
+            get {
+                return ResourceManager.GetString("AddPluginsSourceCommand_CommandInfo_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command deletes source for plugins.
+        /// </summary>
+        public static string DeletePluginsSourceCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("DeletePluginsSourceCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete plugins&apos; source.
+        /// </summary>
+        public static string DeletePluginsSourceCommand_CommandInfo_Title {
+            get {
+                return ResourceManager.GetString("DeletePluginsSourceCommand_CommandInfo_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command edits source for plugins.
+        /// </summary>
+        public static string EditPluginsSourceCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("EditPluginsSourceCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit plugins&apos; source.
+        /// </summary>
+        public static string EditPluginsSourceCommand_CommandInfo_Title {
+            get {
+                return ResourceManager.GetString("EditPluginsSourceCommand_CommandInfo_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Loading error.
         /// </summary>
         public static string InstalledPluginsInfoDataTemplate_LoadingError_Text {

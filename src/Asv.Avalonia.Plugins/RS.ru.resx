@@ -163,4 +163,22 @@
     <data name="PluginsSourceViewModel_RemoveDialog_Title" xml:space="preserve">
         <value>Удалить источник</value>
     </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Изменить источник плагинов</value>
+    </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда изменяет источник плагинов</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Удалить источник плагинов</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда удаляет источник плагинов</value>
+    </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Добавить источник плагинов</value>
+    </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда добавляет источник плагинов</value>
+    </data>
 </root>

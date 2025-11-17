@@ -17,18 +17,11 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     public const string PageId = "plugins.sources";
 
     private readonly IPluginManager _pluginManager;
-    private readonly INavigationService _navigation;
-    private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<IPluginServerInfo> _sources;
     private readonly ISynchronizedView<IPluginServerInfo, PluginsSourceViewModel> _view;
 
     public SettingsPluginsSourcesViewModel()
-        : this(
-            NullPluginManager.Instance,
-            DesignTime.Navigation,
-            NullDialogService.Instance,
-            DesignTime.LoggerFactory
-        )
+        : this(NullPluginManager.Instance, DesignTime.Navigation, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         var items = new ObservableList<IPluginServerInfo>(
@@ -51,7 +44,6 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             .ToNotifyCollectionChanged(x => new PluginsSourceViewModel(
                 x,
                 NullNavigationService.Instance,
-                NullDialogService.Instance,
                 NullLoggerFactory.Instance
             ))
             .DisposeItWith(Disposable);
@@ -61,26 +53,18 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     public SettingsPluginsSourcesViewModel(
         IPluginManager pluginManager,
         INavigationService navigationService,
-        IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
         : base(PageId, loggerFactory)
     {
         _pluginManager = pluginManager;
-        _navigation = navigationService;
-        _loggerFactory = loggerFactory;
         SelectedItem = new BindableReactiveProperty<PluginsSourceViewModel?>().DisposeItWith(
             Disposable
         );
 
         _sources = new ObservableList<IPluginServerInfo>(_pluginManager.Servers);
         _view = _sources
-            .CreateView(info => new PluginsSourceViewModel(
-                info,
-                navigationService,
-                dialogService,
-                loggerFactory
-            ))
+            .CreateView(info => new PluginsSourceViewModel(info, navigationService, loggerFactory))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
@@ -96,14 +80,14 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         {
             Order = 0,
             Icon = MaterialIconKind.Add,
-            Command = new ReactiveCommand(AddImpl).DisposeItWith(Disposable),
+            Command = new BindableAsyncCommand(AddPluginsSourceCommand.Id, this),
         };
 
         var refresh = new MenuItem("refresh", string.Empty, loggerFactory)
         {
             Order = 1,
             Icon = MaterialIconKind.Refresh,
-            Command = new ReactiveCommand(_ => InternalUpdate()).DisposeItWith(Disposable),
+            Command = new ReactiveCommand(_ => Refresh()).DisposeItWith(Disposable),
         };
         Menu.Add(add);
         Menu.Add(refresh);
@@ -111,36 +95,6 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
 
     public NotifyCollectionChangedSynchronizedViewList<PluginsSourceViewModel> Items { get; }
     public BindableReactiveProperty<PluginsSourceViewModel?> SelectedItem { get; }
-
-    public async ValueTask AddImpl(Unit unit, CancellationToken cancel = default)
-    {
-        using var viewModel = new SourceDialogViewModel(_loggerFactory);
-        var dialog = new ContentDialog(viewModel, _navigation)
-        {
-            Title = RS.SettingsPluginsSourcesViewModel_AddDialog_Title,
-            PrimaryButtonText = RS.SettingsPluginsSourcesViewModel_AddDialog_PrimaryButtonText,
-            IsSecondaryButtonEnabled = true,
-            CloseButtonText = Avalonia.RS.DialogButton_Cancel,
-        };
-
-        viewModel.ApplyDialog(dialog);
-
-        var result = await dialog.ShowAsync();
-
-        if (result == ContentDialogResult.Primary)
-        {
-            _pluginManager.AddServer(
-                new PluginServer(
-                    viewModel.Name.Value,
-                    viewModel.SourceUri.Value,
-                    viewModel.Username.Value,
-                    viewModel.Password.Value
-                )
-            );
-
-            InternalUpdate();
-        }
-    }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
@@ -155,30 +109,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
-    {
-        switch (e)
-        {
-            case RemovePluginsSourceEvent remove:
-            {
-                _pluginManager.RemoveServer(remove.ServerInfo);
-                InternalUpdate();
-                break;
-            }
-
-            case UpdatePluginsSourceEvent update:
-            {
-                _pluginManager.RemoveServer(update.ServerInfo);
-                _pluginManager.AddServer(update.Server);
-                InternalUpdate();
-                break;
-            }
-        }
-
-        return base.InternalCatchEvent(e);
-    }
-
-    private void InternalUpdate()
+    internal void Refresh()
     {
         try
         {
@@ -192,6 +123,45 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         {
             Logger.LogError(e, "Error to update info about plugin sources");
         }
+    }
+
+    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    {
+        switch (e)
+        {
+            case RemovePluginsSourceEvent remove:
+            {
+                try
+                {
+                    _pluginManager.RemoveServer(remove.ServerInfo);
+                    Refresh();
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "Error to update plugin server list");
+                }
+
+                break;
+            }
+
+            case UpdatePluginsSourceEvent update:
+            {
+                try
+                {
+                    _pluginManager.RemoveServer(update.ServerInfo);
+                    _pluginManager.AddServer(update.Server);
+                    Refresh();
+                }
+                catch (Exception ex)
+                {
+                    Logger.LogError(ex, "Error to remove plugin server");
+                }
+
+                break;
+            }
+        }
+
+        return base.InternalCatchEvent(e);
     }
 
     public override IExportInfo Source => PluginManagerModule.Instance;

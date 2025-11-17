@@ -168,4 +168,22 @@
     <data name="PluginsSourceViewModel_RemoveDialog_Message" xml:space="preserve">
         <value>Are you sure you want to delete this source?</value>
     </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Add plugins' source</value>
+    </data>
+    <data name="AddPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command adds source for plugins</value>
+    </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Edit plugins' source</value>
+    </data>
+    <data name="EditPluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command edits source for plugins</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Title" xml:space="preserve">
+        <value>Delete plugins' source</value>
+    </data>
+    <data name="DeletePluginsSourceCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command deletes source for plugins</value>
+    </data>
 </root>
