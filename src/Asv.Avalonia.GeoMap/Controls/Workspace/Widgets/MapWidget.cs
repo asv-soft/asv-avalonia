@@ -48,4 +48,10 @@ public class MapWidget : MapViewModel, IWorkspaceWidget
     public ObservableList<IMenuItem> Menu { get; } = [];
 
     public MenuTree? MenuView { get; }
+
+    public bool IsVisible
+    {
+        get;
+        set => SetField(ref field, value);
+    } = true;
 }

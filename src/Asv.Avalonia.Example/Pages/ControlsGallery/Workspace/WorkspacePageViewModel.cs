@@ -27,6 +27,34 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     public WorkspacePageViewModel(ILoggerFactory loggerFactory, IUnitService unitService)
         : base(PageId, loggerFactory)
     {
+        var hideAll = new MenuItem("action1", "Hide all", loggerFactory)
+        {
+            Command = new ReactiveCommand(x =>
+            {
+                if (_itemsSource != null)
+                {
+                    foreach (var workspaceWidget in _itemsSource)
+                    {
+                        workspaceWidget.IsVisible = false;
+                    }
+                }
+            }),
+        };
+        var showAll = new MenuItem("action1", "Show all", loggerFactory)
+        {
+            Command = new ReactiveCommand(x =>
+            {
+                if (_itemsSource != null)
+                {
+                    foreach (var workspaceWidget in _itemsSource)
+                    {
+                        workspaceWidget.IsVisible = true;
+                    }
+                }
+            }),
+        };
+        Menu.Add(showAll);
+        Menu.Add(hideAll);
         _itemsSource =
         [
             new PropertyEditorWidgetViewModel("Poprerty editor", "prop-left", loggerFactory)
@@ -53,7 +81,6 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                         Header = "Location 2",
                     },
                 },
-                Menu = { new MenuItem("action1", "Action 1", loggerFactory) },
             },
             new WidgetPanelViewModel("rtt-box", loggerFactory)
             {

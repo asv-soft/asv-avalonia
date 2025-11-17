@@ -10,4 +10,5 @@ public interface IWorkspaceWidget : IRoutable
     bool IsExpanded { get; }
     bool CanExpand { get; }
     MenuTree? MenuView { get; }
+    bool IsVisible { get; set; }
 }

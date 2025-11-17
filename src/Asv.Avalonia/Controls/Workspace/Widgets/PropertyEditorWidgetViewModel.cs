@@ -56,6 +56,12 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
 
     public MenuTree? MenuView { get; }
 
+    public bool IsVisible
+    {
+        get;
+        set => SetField(ref field, value);
+    } = true;
+
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         foreach (var item in Menu)

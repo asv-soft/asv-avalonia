@@ -216,8 +216,9 @@ public partial class WorkspacePanel : Panel
 
     protected override Size ArrangeOverride(Size finalSize)
     {
+        var size = base.ArrangeOverride(finalSize);
         RefreshChildren();
-        return base.ArrangeOverride(finalSize);
+        return size;
     }
 
     private void RefreshChildren()
@@ -278,44 +279,39 @@ public partial class WorkspacePanel : Panel
 
         if (!_leftPanel.Children.Any(x => x.IsVisible))
         {
-            _leftColumn.Width = GridLength.Auto;
-            _leftColumn.MinWidth = 0;
+            _leftColumn.MaxWidth = 0;
             _verticalSplitter1.IsVisible = false;
             _verticalSplitterRaw1.Width = GridLength.Auto;
         }
         else
         {
-            _leftColumn.Width = LeftWidth;
-            _leftColumn.MinWidth = MinLeftWidth;
+            _leftColumn.MaxWidth = double.PositiveInfinity;
             _verticalSplitter1.IsVisible = true;
             _verticalSplitterRaw1.Width = new GridLength(SplitterSize, GridUnitType.Pixel);
         }
 
         if (!_rightPanel.Children.Any(x => x.IsVisible))
         {
-            _rightColumn.Width = GridLength.Auto;
-            _rightColumn.MinWidth = 0;
+            _rightColumn.MaxWidth = 0;
             _verticalSplitter2.IsVisible = false;
             _verticalSplitterRaw2.Width = GridLength.Auto;
         }
         else
         {
-            _rightColumn.Width = LeftWidth;
-            _rightColumn.MinWidth = MinLeftWidth;
+            _rightColumn.MaxWidth = double.PositiveInfinity;
             _verticalSplitter2.IsVisible = true;
             _verticalSplitterRaw2.Width = new GridLength(SplitterSize, GridUnitType.Pixel);
         }
 
         if (!_bottomPanel.Any(x => x.IsVisible))
         {
-            _bottomRow.Height = GridLength.Auto;
+            _bottomRow.MaxHeight = 0;
             _horizontalSplitter.IsVisible = false;
             _horizontalSplitterRaw.Height = GridLength.Auto;
         }
         else
         {
-            _bottomRow.Height = BottomHeight;
-            _bottomRow.MinHeight = MinBottomHeight;
+            _bottomRow.MaxHeight = double.PositiveInfinity;
             _horizontalSplitter.IsVisible = true;
             _horizontalSplitterRaw.Height = new GridLength(SplitterSize, GridUnitType.Pixel);
         }

@@ -41,6 +41,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             ?? throw new ApplicationException(
                 $"{PART_MainTabControl} not found in {nameof(DockControl)} template."
             );
+        LogicalChildren.Add(_mainTabControl);
 
         ArgumentNullException.ThrowIfNull(Configuration);
         _config = Configuration.Get<DockControlConfig>();
@@ -172,7 +173,6 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             Content = content,
             Header = header,
         };
-
         return tab;
     }
 
