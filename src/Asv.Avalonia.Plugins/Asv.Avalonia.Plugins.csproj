@@ -18,6 +18,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <CodeAnalysisRuleSet>../CodeStyle.ruleset</CodeAnalysisRuleSet>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <WarningsAsErrors>
             CS0169,
             CS0618,
@@ -78,11 +79,6 @@
     <ItemGroup>
       <Folder Include="Shell\" />
       <Folder Include="Shell\Pages\Settings\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <AdditionalFiles Include="Shell\Pages\Plugins\Installed\InstalledPluginsView.axaml" />
-      <AdditionalFiles Include="Shell\Pages\Plugins\Market\PluginsMarketView.axaml" />
     </ItemGroup>
 
 </Project>

@@ -12,8 +12,8 @@ namespace Asv.Avalonia.Plugins;
 public sealed class InstalledPluginsViewModelConfig : PageConfig { }
 
 [ExportPage(PageId)]
-public class InstalledPluginsViewModel
-    : PageViewModel<InstalledPluginsViewModel, InstalledPluginsViewModelConfig>
+public class InstalledPluginsPageViewModel
+    : PageViewModel<InstalledPluginsPageViewModel, InstalledPluginsViewModelConfig>
 {
     public const string PageId = "plugins.installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
@@ -23,7 +23,7 @@ public class InstalledPluginsViewModel
     private readonly ObservableList<ILocalPluginInfo> _plugins;
     private readonly ISynchronizedView<ILocalPluginInfo, InstalledPluginInfoViewModel> _view;
 
-    public InstalledPluginsViewModel()
+    public InstalledPluginsPageViewModel()
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
@@ -37,7 +37,7 @@ public class InstalledPluginsViewModel
     }
 
     [ImportingConstructor]
-    public InstalledPluginsViewModel(
+    public InstalledPluginsPageViewModel(
         ICommandService cmd,
         IPluginManager manager,
         IConfiguration cfg,
@@ -96,6 +96,19 @@ public class InstalledPluginsViewModel
     public NotifyCollectionChangedSynchronizedViewList<InstalledPluginInfoViewModel> InstalledPluginsView { get; }
     public BindableReactiveProperty<InstalledPluginInfoViewModel?> SelectedPlugin { get; }
     public HistoricalBoolProperty IsShowOnlyVerified { get; }
+
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        foreach (var viewModel in _view)
+        {
+            yield return viewModel;
+        }
+
+        yield return Search;
+        yield return IsShowOnlyVerified;
+    }
+
+    protected override void AfterLoadExtensions() { }
 
     private Task SearchImpl(string? text, IProgress<double> progress, CancellationToken cancel)
     {
@@ -172,19 +185,6 @@ public class InstalledPluginsViewModel
             Logger.LogError(e, "Error during manual plugin installation");
         }
     }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        foreach (var viewModel in _view)
-        {
-            yield return viewModel;
-        }
-
-        yield return Search;
-        yield return IsShowOnlyVerified;
-    }
-
-    protected override void AfterLoadExtensions() { }
 
     public override IExportInfo Source => PluginManagerModule.Instance;
 }

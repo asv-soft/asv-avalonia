@@ -37,8 +37,6 @@ public class PluginInfoViewModel : RoutableViewModel
             "Installing...",
             logFactory
         ).DisposeItWith(Disposable);
-        Uninstall = new ReactiveCommand(_ => UninstallImpl()).DisposeItWith(Disposable);
-        CancelUninstall = new ReactiveCommand(_ => CancelUninstallImpl()).DisposeItWith(Disposable);
 
         IsInstalled = new BindableReactiveProperty<bool>(
             _manager.IsInstalled(pluginInfo.PackageId, out _localInfo)
@@ -75,13 +73,24 @@ public class PluginInfoViewModel : RoutableViewModel
                 .Select(d => $"{d.Id} ( \u2265 {d.VersionRange.MinVersion})"),
         ];
 
-        ShowUninstalledMessage = IsInstalled
-            .ObserveOnUIThreadDispatcher()
-            .CombineLatest(
-                IsUninstalled.ViewValue,
-                (installed, uninstalled) => !installed && uninstalled
-            )
-            .ToReadOnlyBindableReactiveProperty()
+        IsUninstalled
+            .ViewValue.Synchronize()
+            .Skip(1)
+            .Subscribe(uninstalled =>
+            {
+                if (_localInfo is null)
+                {
+                    throw new Exception("Plugin not installed");
+                }
+
+                if (uninstalled)
+                {
+                    manager.Uninstall(_localInfo);
+                    return;
+                }
+
+                manager.CancelUninstall(_localInfo);
+            })
             .DisposeItWith(Disposable);
 
         if (Author is not null)
@@ -123,31 +132,26 @@ public class PluginInfoViewModel : RoutableViewModel
     public BindableReactiveProperty<string> SelectedVersion { get; }
     public BindableReactiveProperty<bool> IsInstalled { get; }
     public HistoricalBoolProperty IsUninstalled { get; }
-    public IReadOnlyBindableReactiveProperty<bool> ShowUninstalledMessage { get; }
-    public ReactiveCommand Uninstall { get; }
-    public ReactiveCommand CancelUninstall { get; }
     public CancellableCommandWithProgress<Unit> Install { get; }
     public NotifyCollectionChangedSynchronizedViewList<string> PluginVersionsView { get; }
 
-    private void UninstallImpl()
+    public void Uninstall()
     {
         if (_localInfo is null)
         {
             throw new Exception("Plugin not installed");
         }
 
-        _manager.Uninstall(_localInfo);
         IsUninstalled.ViewValue.OnNext(true);
     }
 
-    private void CancelUninstallImpl()
+    public void CancelUninstall()
     {
         if (_localInfo is null)
         {
             throw new Exception("Plugin not installed");
         }
 
-        _manager.CancelUninstall(_localInfo);
         IsUninstalled.ViewValue.OnNext(false);
     }
 

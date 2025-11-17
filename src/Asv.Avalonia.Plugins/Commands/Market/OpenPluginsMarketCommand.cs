@@ -5,18 +5,18 @@ namespace Asv.Avalonia.Plugins;
 [ExportCommand]
 [method: ImportingConstructor]
 public sealed class OpenPluginsMarketCommand(INavigationService nav)
-    : OpenPageCommandBase(PluginsMarketViewModel.PageId, nav)
+    : OpenPageCommandBase(PluginsMarketPageViewModel.PageId, nav)
 {
     #region Static
 
-    public const string Id = $"{BaseId}.open.{PluginsMarketViewModel.PageId}";
+    public const string Id = $"{BaseId}.open.{PluginsMarketPageViewModel.PageId}";
 
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
         Name = RS.OpenPluginsMarketCommand_CommandInfo_Name,
         Description = RS.OpenPluginsMarketCommand_CommandInfo_Description,
-        Icon = PluginsMarketViewModel.PageIcon,
+        Icon = PluginsMarketPageViewModel.PageIcon,
         DefaultHotKey = null,
         Source = PluginManagerModule.Instance,
     };

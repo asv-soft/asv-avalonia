@@ -13,8 +13,8 @@ namespace Asv.Avalonia.Plugins;
 public sealed class PluginsMarketViewModelConfig : PageConfig { }
 
 [ExportPage(PageId)]
-public class PluginsMarketViewModel
-    : PageViewModel<PluginsMarketViewModel, PluginsMarketViewModelConfig>
+public class PluginsMarketPageViewModel
+    : PageViewModel<PluginsMarketPageViewModel, PluginsMarketViewModelConfig>
 {
     public const string PageId = "plugins.market";
     public const MaterialIconKind PageIcon = MaterialIconKind.Store;
@@ -23,7 +23,7 @@ public class PluginsMarketViewModel
     private readonly ObservableList<IPluginSearchInfo> _plugins;
     private readonly ISynchronizedView<IPluginSearchInfo, PluginInfoViewModel> _view;
 
-    public PluginsMarketViewModel()
+    public PluginsMarketPageViewModel()
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
@@ -36,7 +36,7 @@ public class PluginsMarketViewModel
     }
 
     [ImportingConstructor]
-    public PluginsMarketViewModel(
+    public PluginsMarketPageViewModel(
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,

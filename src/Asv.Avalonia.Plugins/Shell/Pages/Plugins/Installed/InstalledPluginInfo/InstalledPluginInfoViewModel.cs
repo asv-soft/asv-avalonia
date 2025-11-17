@@ -9,9 +9,6 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
 {
     public const string ViewModelIdPart = "plugin.installed";
 
-    private readonly IPluginManager _manager;
-    private readonly ILocalPluginInfo? _pluginInfo;
-
     public InstalledPluginInfoViewModel()
         : this(NullLocalPluginInfo.Instance, NullPluginManager.Instance, DesignTime.LoggerFactory)
     {
@@ -25,8 +22,8 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
     )
         : base(new NavigationId(ViewModelIdPart, pluginInfo.Id), loggerFactory)
     {
-        _manager = manager;
-        _pluginInfo = pluginInfo;
+        ArgumentNullException.ThrowIfNull(pluginInfo);
+        ArgumentNullException.ThrowIfNull(manager);
 
         PluginId = pluginInfo.Id;
         Name = pluginInfo.Title;
@@ -53,8 +50,20 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
             IsVerified = Author.Contains("https://github.com/asv-soft");
         }
 
-        Uninstall = new ReactiveCommand(_ => UninstallImpl()).DisposeItWith(Disposable);
-        CancelUninstall = new ReactiveCommand(_ => CancelUninstallImpl()).DisposeItWith(Disposable);
+        IsUninstalled
+            .ViewValue.Synchronize()
+            .Skip(1)
+            .Subscribe(uninstalled =>
+            {
+                if (uninstalled)
+                {
+                    manager.Uninstall(pluginInfo);
+                    return;
+                }
+
+                manager.CancelUninstall(pluginInfo);
+            })
+            .DisposeItWith(Disposable);
     }
 
     public string PluginId { get; }
@@ -74,30 +83,14 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
     }
 
     public HistoricalBoolProperty IsUninstalled { get; }
-    public ReactiveCommand Uninstall { get; }
-    public ReactiveCommand CancelUninstall { get; }
 
-    private void CancelUninstallImpl()
+    public void CancelUninstall()
     {
-        if (_pluginInfo is null)
-        {
-            Logger.LogError("Plugin is not installed");
-            return;
-        }
-
-        _manager.CancelUninstall(_pluginInfo);
         IsUninstalled.ViewValue.OnNext(false);
     }
 
-    private void UninstallImpl()
+    public void Uninstall()
     {
-        if (_pluginInfo is null)
-        {
-            Logger.LogError("Plugin is not installed");
-            return;
-        }
-
-        _manager.Uninstall(_pluginInfo);
         IsUninstalled.ViewValue.OnNext(true);
     }
 

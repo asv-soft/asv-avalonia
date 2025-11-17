@@ -6,9 +6,10 @@
              xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
              xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              mc:Ignorable="d" d:DesignWidth="1500" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Plugins.InstalledPluginsView">
+             x:Class="Asv.Avalonia.Plugins.InstalledPluginsPageView"
+             x:DataType="plugins:InstalledPluginsPageViewModel">
     <Design.DataContext>
-        <plugins:InstalledPluginsViewModel />
+        <plugins:InstalledPluginsPageViewModel />
     </Design.DataContext>
 
     <Grid

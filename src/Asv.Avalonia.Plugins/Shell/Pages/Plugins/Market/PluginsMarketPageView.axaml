@@ -7,10 +7,10 @@
              xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
              mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="450"
              x:CompileBindings="True"
-             x:DataType="plugins:PluginsMarketViewModel"
-             x:Class="Asv.Avalonia.Plugins.PluginsMarketView">
+             x:DataType="plugins:PluginsMarketPageViewModel"
+             x:Class="Asv.Avalonia.Plugins.PluginsMarketPageView">
     <Design.DataContext>
-        <plugins:PluginsMarketViewModel />
+        <plugins:PluginsMarketPageViewModel />
     </Design.DataContext>
     <Grid
         ColumnDefinitions="2*,5,3*"
@@ -141,7 +141,7 @@
                         </Grid>
                     </Grid>
                     
-                    <avalonia1:InfoBar IsVisible="{Binding ShowUninstalledMessage.Value}" DockPanel.Dock="Top"
+                    <avalonia1:InfoBar IsVisible="{Binding IsUninstalled.ViewValue.Value}" DockPanel.Dock="Top"
                                       Title="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessageTitle}"
                                       IsOpen="True" IsIconVisible="True" Severity="Warning" IsClosable="False"
                                       Message="{x:Static plugins:RS.InstalledPluginsView_UninstalledMessage}">
