@@ -32,5 +32,5 @@ public class ExamplePageViewModel(
 
     protected override void AfterLoadExtensions() { }
 
-    public override IExportInfo Source => SystemModule.Instance;
+    public override IExportInfo Source => PluginExampleInfo.Instance;
 }

@@ -20,7 +20,7 @@ public class OpenExamplePageCommand(INavigationService nav)
         Description = "Open Example Page",
         Icon = ExamplePageViewModel.PageIcon,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
+        Source = PluginExampleInfo.Instance,
     };
 
     #endregion
