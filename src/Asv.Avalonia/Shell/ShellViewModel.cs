@@ -1,7 +1,10 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Windows.Input;
+using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;
 using Asv.Common;
+using DotNext.Collections.Generic;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -18,13 +21,16 @@ public class ShellViewModelConfig
 
 public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 {
+    private const int MaxInfoBarMessages = 3;
+
     private readonly ObservableList<IPage> _pages;
     private readonly IContainerHost _container;
+    private readonly ILoggerFactory _loggerFactory;
     private readonly ICommandService _cmd;
     private ShellViewModelConfig _config;
     private bool _isLoaded;
-
     private int _saveLayoutInProgress;
+    private readonly ObservableList<ShellMessageViewModel> _infoMessagesSource;
 
     protected ShellViewModel(
         IContainerHost ioc,
@@ -42,15 +48,21 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
         Cfg = cfg;
         _container = ioc;
+        _loggerFactory = loggerFactory;
+        WindowSateIconKind = new BindableReactiveProperty<MaterialIconKind>().DisposeItWith(
+            Disposable
+        );
+        WindowStateHeader = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         LayoutService = layoutService;
         _cmd = ioc.GetExport<ICommandService>();
         Navigation = ioc.GetExport<INavigationService>();
         _pages = new ObservableList<IPage>();
+        _pages.DisposeRemovedItems();
         PagesView = _pages.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
-        Close = new ReactiveCommand((_, c) => CloseAsync(c));
+        Close = new ReactiveCommand((_, c) => CloseAsync(c)).DisposeItWith(Disposable);
         ChangeWindowState = new ReactiveCommand((_, c) => ChangeWindowModeAsync(c));
         Collapse = new ReactiveCommand((_, c) => CollapseAsync(c));
-        SelectedPage = new BindableReactiveProperty<IPage?>();
+        SelectedPage = new BindableReactiveProperty<IPage?>().DisposeItWith(Disposable);
         MainMenu = new ObservableList<IMenuItem>();
         MainMenuView = new MenuTree(MainMenu).DisposeItWith(Disposable);
         MainMenu.SetRoutableParent(this).DisposeItWith(Disposable);
@@ -89,9 +101,44 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             .DisposeItWith(Disposable);
         RightMenu.SetRoutableParent(this).DisposeItWith(Disposable);
         RightMenu.DisposeRemovedItems().DisposeItWith(Disposable);
+
+        _infoMessagesSource = new ObservableList<ShellMessageViewModel>();
+        InfoBarMessages = _infoMessagesSource
+            .ToNotifyCollectionChangedSlim()
+            .DisposeItWith(Disposable);
+        _infoMessagesSource.SetRoutableParent(this).DisposeItWith(Disposable);
+        _infoMessagesSource.DisposeRemovedItems().DisposeItWith(Disposable);
+        _infoMessagesSource
+            .ObserveCountChanged()
+            .Subscribe(_ =>
+            {
+                var last = _infoMessagesSource.LastOrDefault();
+                if (last is null)
+                {
+                    ErrorState = ShellErrorState.Normal;
+                    return;
+                }
+                var err = last.Severity == ShellErrorState.Error;
+                if (err)
+                {
+                    ErrorState = ShellErrorState.Error;
+                    return;
+                }
+                var warn = last.Severity == ShellErrorState.Warning;
+                if (warn)
+                {
+                    ErrorState = ShellErrorState.Warning;
+                    return;
+                }
+                ErrorState = ShellErrorState.Normal;
+            })
+            .DisposeItWith(Disposable);
+        CloseInfoMessageCommand = new ReactiveCommand<ShellMessageViewModel>(x =>
+            _infoMessagesSource.Remove(x)
+        ).DisposeItWith(Disposable);
     }
 
-    #region  Tools
+    #region Tools
 
     public ObservableList<IMenuItem> LeftMenu { get; }
     public MenuTree LeftMenuView { get; }
@@ -135,10 +182,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     #region ChangeWindowState
 
     // TODO: Move to DesktopShellViewModel later
-    public BindableReactiveProperty<MaterialIconKind> WindowSateIconKind { get; } = new();
+    public BindableReactiveProperty<MaterialIconKind> WindowSateIconKind { get; }
 
     // TODO: Move to DesktopShellViewModel later
-    public BindableReactiveProperty<string> WindowStateHeader { get; } = new();
+    public BindableReactiveProperty<string> WindowStateHeader { get; }
 
     public ReactiveCommand ChangeWindowState { get; }
 
@@ -271,7 +318,9 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
                 await InternalLoadLayoutEventHandler(loadLayoutEvent);
                 break;
-
+            case ShellMessageEvent showInfoMessageEvent:
+                ShowMessage(showInfoMessageEvent.Message);
+                break;
             default:
                 await base.InternalCatchEvent(e);
                 break;
@@ -392,6 +441,30 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
     #endregion
 
+    #region Info bar
+
+    public void ShowMessage(ShellMessage message)
+    {
+        if (_infoMessagesSource.Count >= MaxInfoBarMessages)
+        {
+            _infoMessagesSource.RemoveAt(0);
+        }
+        _infoMessagesSource.Add(
+            new ShellMessageViewModel(
+                Guid.NewGuid().ToString(),
+                _loggerFactory,
+                CloseInfoMessageCommand,
+                message
+            )
+        );
+    }
+
+    public ReactiveCommand<ShellMessageViewModel> CloseInfoMessageCommand { get; }
+
+    public NotifyCollectionChangedSynchronizedViewList<ShellMessageViewModel> InfoBarMessages { get; }
+
+    #endregion
+
     protected override void AfterLoadExtensions()
     {
         // do nothing
@@ -407,11 +480,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     {
         if (disposing)
         {
-            Close.Dispose();
-            SelectedPage.Dispose();
-            WindowSateIconKind.Dispose();
-            WindowStateHeader.Dispose();
-            PagesView.Dispose();
             _pages.ClearWithItemsDispose();
             _sub1?.Dispose();
             _sub2?.Dispose();

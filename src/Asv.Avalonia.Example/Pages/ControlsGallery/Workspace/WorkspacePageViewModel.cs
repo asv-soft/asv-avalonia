@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Composition;
 using System.Threading.Tasks;
+using Asv.Avalonia.InfoMessage;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -40,7 +42,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 }
             }),
         };
-        var showAll = new MenuItem("action1", "Show all", loggerFactory)
+        var showAll = new MenuItem("action2", "Show all", loggerFactory)
         {
             Command = new ReactiveCommand(x =>
             {
@@ -53,8 +55,28 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 }
             }),
         };
+        var showError = new MenuItem("action3", "Show error", loggerFactory)
+        {
+            Command = new ReactiveCommand(x =>
+            {
+                this.RaiseShellInfoMessage(
+                    new ShellMessage(
+                        "Error",
+                        "This is test error message",
+                        ShellErrorState.Error,
+                        "This is description for test error message",
+                        MaterialIconKind.Cross,
+                        showAll.Command,
+                        null,
+                        commandTitle: "ShowAll",
+                        TimeSpan.FromSeconds(5)
+                    )
+                );
+            }),
+        };
         Menu.Add(showAll);
         Menu.Add(hideAll);
+        Menu.Add(showError);
         _itemsSource =
         [
             new PropertyEditorWidgetViewModel("Poprerty editor", "prop-left", loggerFactory)

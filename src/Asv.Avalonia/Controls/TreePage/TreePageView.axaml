@@ -108,8 +108,8 @@
                                 <avalonia1:MaterialIcon Kind="{Binding Base.Icon}"/>
                                 <TextBlock Text="{Binding Base.Header}"/>    
                             </StackPanel>
-                            
-                            <Button.Flyout>
+                            <!--don't support flyouts yet-->
+                            <!--<Button.Flyout>
                                 <MenuFlyout ItemsSource="{Binding Items, Mode=TwoWay}">
                                     <MenuFlyout.ItemContainerTheme>
                                         <ControlTheme TargetType="MenuItem" BasedOn="{StaticResource {x:Type MenuItem}}" 
@@ -126,7 +126,7 @@
                                         </ControlTheme>
                                     </MenuFlyout.ItemContainerTheme>
                                 </MenuFlyout>
-                            </Button.Flyout>
+                            </Button.Flyout>-->
                         </Button>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

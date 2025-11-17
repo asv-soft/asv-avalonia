@@ -1,5 +1,6 @@
-using System.Reactive.Linq;
 using Microsoft.Extensions.Logging.Abstractions;
+using R3;
+using R3.Avalonia;
 
 namespace Asv.Avalonia;
 
@@ -86,7 +87,7 @@ public class DesignTimeShellViewModel : ShellViewModel
             });
         var addRight = true;
         Observable
-            .Timer(TimeSpan.FromSeconds(5), TimeSpan.FromSeconds(5))
+            .Timer(TimeSpan.FromSeconds(3), TimeSpan.FromSeconds(5))
             .Subscribe(x =>
             {
                 if (addRight)
@@ -111,6 +112,22 @@ public class DesignTimeShellViewModel : ShellViewModel
                         addRight = true;
                     }
                 }
+            });
+
+        Observable
+            .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5))
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(x =>
+            {
+                ShowMessage(
+                    new ShellMessage(
+                        DesignTime.RandomShortName(10, 20),
+                        DesignTime.RandomMessageText(5, 60),
+                        DesignTime.RandomEnum<ShellErrorState>(),
+                        DesignTime.RandomMessageText(50, 100),
+                        DesignTime.RandomImage
+                    )
+                );
             });
     }
 
