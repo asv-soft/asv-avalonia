@@ -47,6 +47,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Asv.Avalonia.Example\Asv.Avalonia.Example.csproj"/>
+        <ProjectReference Include="..\Asv.Avalonia.DC\Asv.Avalonia.DC.csproj" ReferenceOutputAssembly="false"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -61,4 +62,21 @@
       </None>
       <None Remove="icon.ico" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <DependencyCollectorOutputFileName Condition="'$(DependencyCollectorOutputFileName)' == ''">dependencies.json</DependencyCollectorOutputFileName>
+        <DependencyCollectorTargetFramework Condition="'$(DependencyCollectorTargetFramework)' == ''">net9.0</DependencyCollectorTargetFramework>
+    </PropertyGroup>
+
+    <Target Name="RunDependencyCollector" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
+        <PropertyGroup>
+            <DependencyCollectorProject>$(MSBuildProjectDirectory)\..\Asv.Avalonia.DC\Asv.Avalonia.DC.csproj</DependencyCollectorProject>
+            <DependencyCollectorOutputFile>$(TargetDir)$(DependencyCollectorOutputFileName)</DependencyCollectorOutputFile>
+        </PropertyGroup>
+        <MSBuild Projects="$(DependencyCollectorProject)" Targets="GetTargetPath" Properties="Configuration=$(Configuration);TargetFramework=$(DependencyCollectorTargetFramework)">
+            <Output TaskParameter="TargetOutputs" PropertyName="DependencyCollectorTargetPath" />
+        </MSBuild>
+        <Message Importance="High" Text="Generating dependencies list with Asv.Avalonia.DC -&gt; $(DependencyCollectorOutputFile)" Condition="Exists('$(DependencyCollectorTargetPath)')" />
+        <Exec Command="dotnet &quot;$(DependencyCollectorTargetPath)&quot; &quot;$(MSBuildProjectFullPath)&quot; &quot;$(DependencyCollectorOutputFile)&quot;" Condition="Exists('$(DependencyCollectorTargetPath)')" />
+    </Target>
 </Project>

@@ -39,7 +39,6 @@ public class PluginManager : IPluginManager
     private readonly SourceCacheContext _cache;
     private readonly List<AssemblyLoadContext> _pluginContexts = [];
 
-    [ImportingConstructor]
     public PluginManager(
         IOptions<PluginManagerOptions> options,
         IConfiguration userConfig,
@@ -166,11 +165,11 @@ public class PluginManager : IPluginManager
 
         _cache = new SourceCacheContext
         {
-            /*GeneratedTempFolder = _nugetCache,
+            GeneratedTempFolder = "nuget_cache",
             SessionId = Guid.Empty,
             DirectDownload = true,
             NoCache = true,
-            MaxAge = DateTimeOffset.MaxValue*/
+            MaxAge = DateTimeOffset.MaxValue,
         };
 
         // load all plugins
@@ -405,21 +404,25 @@ public class PluginManager : IPluginManager
 
     public async Task<IReadOnlyList<IPluginSearchInfo>> Search(
         SearchQuery query,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         ArgumentNullException.ThrowIfNull(query);
+        progress?.Report(new ProgressMessage(0, "Started search"));
         _repositoriesLock.EnterReadLock();
         var repositories =
             query.Sources.Count == 0
                 ? _repositories.ToArray()
                 : _repositories
-                    .Where(_ => query.Sources.Contains(_.PackageSource.Source))
+                    .Where(r => query.Sources.Contains(r.PackageSource.Source))
                     .ToArray();
         _repositoriesLock.ExitReadLock();
 
         var result = new List<IPluginSearchInfo>();
 
+        int progressCount = 1;
+        progress?.Report(new ProgressMessage(0.1, "Scanning repos..."));
         foreach (var repository in repositories)
         {
             try
@@ -448,7 +451,15 @@ public class PluginManager : IPluginManager
                             _nugetLogger,
                             cancel
                         );
-                        if (dependencyInfo == null)
+                        if (
+                            !dependencyInfo.Dependencies.Any(x =>
+                                string.Equals(
+                                    x.Id,
+                                    _apiPackageId,
+                                    StringComparison.OrdinalIgnoreCase
+                                )
+                            )
+                        )
                         {
                             continue;
                         }
@@ -480,7 +491,13 @@ public class PluginManager : IPluginManager
             {
                 _logger.ZLogError(e, $"Error search in {repository.PackageSource.Source}");
             }
+
+            progress?.Report(
+                new ProgressMessage(progressCount / (double)repositories.Length, "Scanned repo")
+            );
         }
+
+        progress?.Report(new ProgressMessage(1, "Search finished"));
 
         return result;
     }
@@ -488,7 +505,7 @@ public class PluginManager : IPluginManager
     public async Task<IReadOnlyList<string>> ListPluginVersions(
         SearchQuery query,
         string pluginId,
-        CancellationToken cancel
+        CancellationToken cancel = default
     )
     {
         _repositoriesLock.EnterReadLock();
@@ -496,26 +513,31 @@ public class PluginManager : IPluginManager
             query.Sources.Count == 0
                 ? _repositories.ToArray()
                 : _repositories
-                    .Where(_ => query.Sources.Contains(_.PackageSource.Source))
+                    .Where(r => query.Sources.Contains(r.PackageSource.Source))
                     .ToArray();
         _repositoriesLock.ExitReadLock();
 
-        var result = new List<string>();
+        var versions = new HashSet<NuGetVersion>(VersionComparer.VersionRelease);
 
         foreach (var repository in repositories)
         {
             try
             {
                 var resource = await repository.GetResourceAsync<FindPackageByIdResource>(cancel);
-
-                var packages = await resource.GetAllVersionsAsync(
+                var all = await resource.GetAllVersionsAsync(
                     pluginId,
                     new SourceCacheContext(),
                     new LoggerAdapter(_logger),
                     cancel
                 );
 
-                result.AddRange(packages.Select(package => package.Version.ToString()));
+                foreach (var v in all)
+                {
+                    if (query.IncludePrerelease || !v.IsPrerelease)
+                    {
+                        versions.Add(v);
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -523,27 +545,31 @@ public class PluginManager : IPluginManager
             }
         }
 
-        return result;
+        return versions
+            .OrderByDescending(v => v, VersionComparer.VersionRelease)
+            .Select(v => v.ToFullString())
+            .ToList();
     }
 
     public async Task Install(
         IPluginServerInfo source,
         string packageId,
         string version,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         ArgumentNullException.ThrowIfNull(source);
         ArgumentNullException.ThrowIfNull(packageId);
         ArgumentNullException.ThrowIfNull(version);
+        progress?.Report(new ProgressMessage(0, "Started downloading package"));
         var downloadVersion = NuGetVersion.Parse(version);
         if (TryGetLocalPluginInfoById(packageId, out var info))
         {
             Debug.Assert(info != null, nameof(info) + " != null");
             var localVersion = NuGetVersion.Parse(info.Version);
             throw new Exception(
-                $"Local version {localVersion} of {packageId} is exists. Remove it first."
+                $"Local version {localVersion} of {packageId} exists. Remove it first."
             );
         }
 
@@ -551,6 +577,7 @@ public class PluginManager : IPluginManager
 
         try
         {
+            progress?.Report(new ProgressMessage(0.2, "Created Directory"));
             Directory.CreateDirectory(currentPluginFolder);
             var repository = _repositories.FirstOrDefault(_ =>
                 _.PackageSource.Source == source.SourceUri
@@ -568,19 +595,68 @@ public class PluginManager : IPluginManager
             );
             var findPackageByIdResource =
                 await repository.GetResourceAsync<FindPackageByIdResource>(cancel);
-            await using (var file = File.OpenWrite(packageFile))
+            progress?.Report(new ProgressMessage(0.3, "Found source"));
+
+            var tmpFile = Path.Combine(
+                currentPluginFolder,
+                $"{packageIdentity.Id}.{packageIdentity.Version}.nupkg.tmp"
+            );
+
+            _cache.DirectDownload = true;
+            await using (
+                var fs = new FileStream(
+                    tmpFile,
+                    FileMode.Create,
+                    FileAccess.Write,
+                    FileShare.None,
+                    bufferSize: 81920,
+                    useAsync: true
+                )
+            )
             {
-                await findPackageByIdResource.CopyNupkgToStreamAsync(
+                var ok = await findPackageByIdResource.CopyNupkgToStreamAsync(
                     packageIdentity.Id,
                     packageIdentity.Version,
-                    file,
+                    fs,
                     _cache,
                     _nugetLogger,
                     cancel
                 );
-                file.Flush(true);
+
+                await fs.FlushAsync(cancel);
+
+                if (!ok)
+                {
+                    TryDelete(tmpFile);
+
+                    throw new Exception(
+                        $"Failed to download package {packageIdentity.Id} {packageIdentity.Version} "
+                            + $"from source {source.SourceUri}. CopyNupkgToStreamAsync returned false."
+                    );
+                }
+
+                progress?.Report(new ProgressMessage(0.5, "Package was successfully downloaded"));
+            }
+            try
+            {
+                using var validationReader = new PackageArchiveReader(tmpFile);
+
+                // Attempt to read identity forces zip central directory read (quick integrity check)
+                _ = await validationReader.GetIdentityAsync(cancel);
+                progress?.Report(new ProgressMessage(0.6, "Check integrity"));
+            }
+            catch (Exception ex)
+            {
+                TryDelete(tmpFile);
+                throw new Exception(
+                    $"Downloaded package is invalid: {packageIdentity.Id} {packageIdentity.Version}. "
+                        + $"Source: {source.SourceUri}. Details: {ex.Message}",
+                    ex
+                );
             }
 
+            TryDelete(packageFile);
+            File.Move(tmpFile, packageFile, overwrite: true);
             using var packageArchiveReader = new PackageArchiveReader(packageFile);
             var platform = NugetHelper.GetPlatform(packageArchiveReader);
             if (platform == null)
@@ -598,6 +674,7 @@ public class PluginManager : IPluginManager
             }
 
             // now we need to load all dependencies
+            progress?.Report(new ProgressMessage(0.65, "Loading dependencies..."));
             var dependencyInfoResource = await repository.GetResourceAsync<DependencyInfoResource>(
                 cancel
             );
@@ -639,7 +716,7 @@ public class PluginManager : IPluginManager
                 );
 
                 // if we already have this package we don't need to download it
-                if (File.Exists(dependencyPackageFile) == false)
+                if (!File.Exists(dependencyPackageFile))
                 {
                     var dependencyFindPackageByIdResource =
                         await identity.Source.GetResourceAsync<FindPackageByIdResource>(cancel);
@@ -675,6 +752,7 @@ public class PluginManager : IPluginManager
                     );
                 }
             }
+            progress?.Report(new ProgressMessage(0.8, "All dependencies were loaded"));
 
             SetPluginStateById(
                 packageId,
@@ -686,8 +764,9 @@ public class PluginManager : IPluginManager
                     x.InstalledFromSourceUri = source.SourceUri;
                 }
             );
+            progress?.Report(new ProgressMessage(1, "Finished"));
         }
-        catch (Exception) when (Directory.Exists(currentPluginFolder))
+        catch (Exception ex) when (Directory.Exists(currentPluginFolder))
         {
             try
             {
@@ -698,14 +777,36 @@ public class PluginManager : IPluginManager
                 // ignore
             }
 
+            if (ex is OperationCanceledException)
+            {
+                return;
+            }
+
             throw;
+        }
+
+        return;
+
+        static void TryDelete(string path)
+        {
+            try
+            {
+                if (File.Exists(path))
+                {
+                    File.Delete(path);
+                }
+            }
+            catch
+            {
+                // ignore
+            }
         }
     }
 
     public async Task InstallManually(
         string from,
-        IProgress<ProgressMessage>? progress,
-        CancellationToken cancel
+        IProgress<ProgressMessage>? progress = null,
+        CancellationToken cancel = default
     )
     {
         ArgumentNullException.ThrowIfNull(from);
@@ -1206,21 +1307,15 @@ public class PluginManager : IPluginManager
     }
 
     #endregion
-}
 
-public class PluginState
-{
-    public bool IsUninstalled { get; set; }
-    public bool IsLoaded { get; set; }
-    public string? LoadingError { get; set; }
-    public string? InstalledFromSourceUri { get; set; }
-
-    public void CopyFrom(PluginState state)
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        IsLoaded = state.IsLoaded;
-        LoadingError = state.LoadingError;
-        IsUninstalled = state.IsUninstalled;
-        InstalledFromSourceUri = state.InstalledFromSourceUri;
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }
 

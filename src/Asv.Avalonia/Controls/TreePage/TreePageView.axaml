@@ -32,7 +32,7 @@
         
         <Button Margin="4,0,0,0" IsVisible="{Binding IsMenuVisible}" Command="{Binding HideMenuCommand}" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Background="Transparent" Padding="0">
             <StackPanel Spacing="4"  Orientation="Horizontal" Margin="4">
-                <avalonia1:MaterialIcon avalonia:AsvPallete.Color="{Binding IconColor}" Kind="{Binding Icon}"/>
+                <avalonia1:MaterialIcon Kind="{Binding Icon}"/>
                 <TextBlock VerticalAlignment="Center" Text="{Binding Title}"/>    
             </StackPanel>    
         </Button>
@@ -55,23 +55,19 @@
                 <TreeDataTemplate ItemsSource="{Binding Items}">
                     <DockPanel HorizontalAlignment="Stretch">
                         <avalonia1:MaterialIcon
-                            Margin="0,0,4,0"
+                            Margin="0,0,12,0"
                             DockPanel.Dock="Left"
-                            avalonia:AsvPallete.Color="{Binding Base.IconColor}"
                             Kind="{Binding Base.Icon}"
-                            Width="15" Height="15" >
-                        </avalonia1:MaterialIcon>
-                        <avalonia:Tag DockPanel.Dock="Right" IsVisible="{Binding !!.}"
-                                      VerticalAlignment="Center"
-                                      FontSize="10"
-                                      DataContext="{Binding Base.Status}"
-                                      Margin="4,4,4,4"
-                                      Key="{Binding Key}" 
-                                      Value="{Binding Value}" 
-                                      Icon="{Binding Icon}"
-                                      avalonia:AsvPallete.Color="{Binding Color}"
-                                      />
-                        <TextBlock VerticalAlignment="Center" Text="{Binding Base.Header}" />
+                            Width="15" Height="15" />
+
+                        <Border IsVisible="{Binding Base.Status, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                Margin="0,0,5,0" VerticalAlignment="Center" MinWidth="20" CornerRadius="5"
+                                BorderBrush="{DynamicResource ButtonBorderBrush}" BorderThickness="1"
+                                DockPanel.Dock="Right">
+                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2" FontSize="10"
+                                       Text="{Binding Base.Status}" />
+                        </Border>
+                        <TextBlock Text="{Binding Base.Header}" />
                     </DockPanel>
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
@@ -103,14 +99,21 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button 
-                            MinWidth="70"
+                            VerticalContentAlignment="Center"
                             Command="{Binding Base.Command}"
                             CommandParameter="{Binding Base.CommandParameter}"
                             IsEnabled="{Binding Base.IsEnabled}"
                             IsVisible="{Binding Base.IsVisible}">
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <avalonia1:MaterialIcon avalonia:AsvPallete.Color="{Binding Base.IconColor}" Kind="{Binding Base.Icon}"/>
-                                <TextBlock Text="{Binding Base.Header}"/>    
+                                <avalonia1:MaterialIcon 
+                                    Kind="{Binding Base.Icon}"
+                                    IsVisible="{Binding Base.Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    VerticalAlignment="Center"/>
+                                <TextBlock 
+                                    Text="{Binding Base.Header}"
+                                    IsVisible="{Binding Base.Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    VerticalAlignment="Center"
+                                    Margin="0,-1.5,0,0"/>    
                             </StackPanel>
                             <!--don't support flyouts yet-->
                             <!--<Button.Flyout>
@@ -142,7 +145,6 @@
                             <avalonia1:MaterialIcon IsVisible="{Binding !IsFirst}" VerticalAlignment="Center"
                                                     Width="18" Height="18" Kind="ChevronRight" />
                             <avalonia1:MaterialIcon VerticalAlignment="Center"
-                                                    avalonia:AsvPallete.Color="{Binding Item.IconColor}"
                                                     Width="18" Height="18" Kind="{Binding Item.Icon}" />
                             <TextBlock FontSize="16" VerticalAlignment="Center"
                                        Text="{Binding Item.Header}" />

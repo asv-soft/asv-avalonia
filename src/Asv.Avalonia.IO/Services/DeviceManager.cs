@@ -17,8 +17,6 @@ public class DeviceManagerConfig
     public string[] Connections { get; set; } = ["tcp://172.16.0.1:7341#name=GBS"];
 }
 
-[Export(typeof(IDeviceManager))]
-[Shared]
 public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
 {
     private readonly IConfiguration _cfgSvc;

@@ -2,10 +2,12 @@
 using System.IO;
 using System.Reflection;
 using Asv.Avalonia.GeoMap;
+using Asv.Avalonia.IO;
 using Asv.Avalonia.Plugins;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example.Desktop;
@@ -21,8 +23,10 @@ sealed class Program
         var builder = AppHost.CreateBuilder(args);
         var dataFolder =
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+
         builder
             .UseAvalonia(BuildAvaloniaApp)
+            .UseTimeProvider()
             .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
             .UseJsonUserConfig(opt =>
                 opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
@@ -37,11 +41,13 @@ sealed class Program
                 options.WithLogLevel(LogLevel.Trace);
             })
             .UseAsvMap()
+            .UseIo(opt => opt.WithDevices())
             .UsePluginManager(options =>
             {
                 options.WithApiPackage("Asv.Avalonia.Example.Api", SemVersion.Parse("1.0.0"));
                 options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
             });
+
         using var host = builder.Build();
         host.ExitIfNotFirstInstance();
         host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
