@@ -8,6 +8,7 @@ using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
+using ZLogger;
 
 namespace Asv.Avalonia;
 
@@ -17,8 +18,10 @@ public class DesktopShellViewModelConfig : ShellViewModelConfig { }
 public class DesktopShellViewModel : ShellViewModel
 {
     public const string ShellId = "shell.desktop";
+
     private readonly IFileAssociationService _fileService;
-    private readonly IContainerHost _ioc;
+    private readonly YesOrNoDialogPrefab _yesOrNoDialogPrefab;
+    private readonly INavigationService _navigationService;
 
     [ImportingConstructor]
     public DesktopShellViewModel(
@@ -26,12 +29,16 @@ public class DesktopShellViewModel : ShellViewModel
         IConfiguration cfg,
         IContainerHost ioc,
         ILayoutService layoutService,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService,
+        INavigationService navigationService
     )
         : base(ioc, layoutService, loggerFactory, cfg, ShellId)
     {
         _fileService = fileService;
-        _ioc = ioc;
+        _navigationService = navigationService;
+        _yesOrNoDialogPrefab = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
+
         var wnd = ioc.GetExport<ShellWindow>();
         wnd.DataContext = this;
         if (
@@ -98,12 +105,48 @@ public class DesktopShellViewModel : ShellViewModel
 
     protected override async ValueTask CloseAsync(CancellationToken cancellationToken)
     {
+        var pages = Pages.ToArray();
+
+        foreach (var page in pages)
+        {
+            try
+            {
+                var reasons = await page.RequestChildCloseApproval();
+
+                if (reasons.Count != 0)
+                {
+                    await _navigationService.GoTo(page.GetPathToRoot());
+
+                    var result = await _yesOrNoDialogPrefab.ShowDialogAsync(
+                        new YesOrNoDialogPayload
+                        {
+                            Title = RS.DesktopShellViewModel_CloseAsync_UnsavedConfirmTitle,
+                            Message = RS.DesktopShellViewModel_CloseAsync_UnsavedConfirmMessage,
+                        }
+                    );
+
+                    if (result)
+                    {
+                        break;
+                    }
+
+                    return;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.ZLogTrace(
+                    e,
+                    $"Error on requesting approval for the page {page.Title}[{page.Id}]: {e.Message}"
+                );
+            }
+        }
+
         await base.CloseAsync(cancellationToken);
 
-        foreach (var page in Pages.ToArray())
+        foreach (var page in pages.ToArray())
         {
-            // TODO: do something with unclosed pages
-            await page.TryCloseAsync(false);
+            await page.TryCloseAsync(true);
         }
 
         if (

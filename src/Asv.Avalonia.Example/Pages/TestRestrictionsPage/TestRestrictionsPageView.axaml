@@ -1,0 +1,17 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:example="clr-namespace:Asv.Avalonia.Example"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Example.TestRestrictionsPageView"
+             x:DataType="example:TestRestrictionsPageViewModel">
+    <Design.DataContext>
+        <example:TestRestrictionsPageViewModel />
+    </Design.DataContext>
+    <StackPanel Orientation="Vertical" Margin="14" Spacing="8">
+        <TextBox Text="{Binding Input1.Value}"/>
+        <TextBox Text="{Binding Input2.Value}"/>
+        <TextBox Text="{Binding Input3.Value}"/>
+    </StackPanel>
+</UserControl>

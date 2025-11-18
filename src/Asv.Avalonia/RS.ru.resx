@@ -801,4 +801,13 @@
     <data name="ViewSaveAllMenu_Header" xml:space="preserve">
         <value>Сохранить все</value>
     </data>
+    <data name="DesktopShellViewModel_CloseAsync_UnsavedConfirmTitle" xml:space="preserve">
+        <value>У вас есть несохраненные изменения. Всё равно выйти?</value>
+    </data>
+    <data name="DesktopShellViewModel_CloseAsync_UnsavedConfirmMessage" xml:space="preserve">
+        <value>Несохраненные изменения будут потеряны.</value>
+    </data>
+    <data name="UnsavedChangesDialogPrefab_Dialog_Title" xml:space="preserve">
+        <value>У вас есть несохраненные изменения. Всё равно закрыть?</value>
+    </data>
 </root>
