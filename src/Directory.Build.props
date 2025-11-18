@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <ProductVersion>1.0.3-dev.50</ProductVersion>
+    <ProductVersion>1.0.3-dev.51</ProductVersion>
     <AvaloniaVersion>11.3.8</AvaloniaVersion>
     <DotNetVersion>9.0.9</DotNetVersion>
     <R3Version>1.3.0</R3Version>

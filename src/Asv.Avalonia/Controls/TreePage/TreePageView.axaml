@@ -55,19 +55,22 @@
                 <TreeDataTemplate ItemsSource="{Binding Items}">
                     <DockPanel HorizontalAlignment="Stretch">
                         <avalonia1:MaterialIcon
-                            Margin="0,0,12,0"
+                            Margin="0,0,4,0"
                             DockPanel.Dock="Left"
                             Kind="{Binding Base.Icon}"
                             Width="15" Height="15" />
 
-                        <Border IsVisible="{Binding Base.Status, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                Margin="0,0,5,0" VerticalAlignment="Center" MinWidth="20" CornerRadius="5"
-                                BorderBrush="{DynamicResource ButtonBorderBrush}" BorderThickness="1"
-                                DockPanel.Dock="Right">
-                            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Center" Margin="2" FontSize="10"
-                                       Text="{Binding Base.Status}" />
-                        </Border>
-                        <TextBlock Text="{Binding Base.Header}" />
+                        <avalonia:Tag DockPanel.Dock="Right" IsVisible="{Binding !!.}"
+                                      VerticalAlignment="Center"
+                                      FontSize="10"
+                                      DataContext="{Binding Base.Status}"
+                                      Margin="4,4,4,4"
+                                      Key="{Binding Key}" 
+                                      Value="{Binding Value}" 
+                                      Icon="{Binding Icon}"
+                                      avalonia:AsvPallete.Color="{Binding Color}"
+                        />
+                        <TextBlock VerticalAlignment="Center" Text="{Binding Base.Header}" />
                     </DockPanel>
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
