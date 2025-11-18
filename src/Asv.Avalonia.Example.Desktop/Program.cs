@@ -7,7 +7,6 @@ using Asv.Avalonia.Plugins;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example.Desktop;
@@ -40,7 +39,7 @@ sealed class Program
                 options.WithLogViewer();
                 options.WithLogLevel(LogLevel.Trace);
             })
-            .UseAsvMap()
+            .UseAsvGeoMap()
             .UseIo(opt => opt.WithDevices())
             .UsePluginManager(options =>
             {
