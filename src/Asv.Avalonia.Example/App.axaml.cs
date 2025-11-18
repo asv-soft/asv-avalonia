@@ -17,7 +17,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using R3;
@@ -36,45 +35,48 @@ public class App : Application, IContainerHost, IShellHost
         if (Design.IsDesignMode)
         {
             containerCfg
+                .WithExport<IDataTemplateHost>(this)
+                .WithExport<IShellHost>(this)
                 .WithExport(NullContainerHost.Instance)
                 .WithExport<IConfiguration>(new InMemoryConfiguration())
                 .WithExport(NullLoggerFactory.Instance)
                 .WithExport(NullAppPath.Instance)
-                .WithExport(NullPluginManager.Instance)
-                .WithExport(NullLogReaderService.Instance)
                 .WithExport(NullAppInfo.Instance)
                 .WithExport<IMeterFactory>(new DefaultMeterFactory())
+                .WithExport(NullPluginManager.Instance)
                 .WithExport(TimeProvider.System)
-                .WithExport<IDataTemplateHost>(this)
-                .WithExport<IShellHost>(this)
+                .WithExport(NullLogReaderService.Instance)
                 .WithDefaultConventions(conventions);
         }
         else
         {
-            // TODO: use it when plugin manager implementation will be finished
             var pluginManager = AppHost.Instance.GetService<IPluginManager>();
 
             containerCfg
+                .WithExport<IDataTemplateHost>(this)
+                .WithExport<IShellHost>(this)
                 .WithExport<IContainerHost>(this)
+                .WithExport(AppHost.Instance.GetService<TimeProvider>())
                 .WithExport(AppHost.Instance.GetService<IConfiguration>())
                 .WithExport(AppHost.Instance.GetService<ILoggerFactory>())
                 .WithExport(AppHost.Instance.GetService<IAppPath>())
                 .WithExport(AppHost.Instance.GetService<IAppInfo>())
                 .WithExport(AppHost.Instance.GetService<IMeterFactory>())
                 .WithExport(AppHost.Instance.GetService<ISoloRunFeature>())
-                .WithExport(TimeProvider.System)
                 .WithExport(AppHost.Instance.GetService<ILogReaderService>())
                 .WithExport(pluginManager)
-                .WithExport<IDataTemplateHost>(this)
-                .WithExport<IShellHost>(this)
                 .WithDefaultConventions(conventions)
                 .WithAssemblies(pluginManager.PluginsAssemblies.Distinct())
                 .WithAssemblies(PluginManagerModule.Assemblies);
         }
 
+        containerCfg.WithDependenciesFromIoModule();
+
         containerCfg = containerCfg.WithAssemblies(DefaultAssemblies.Distinct());
         _container = containerCfg.CreateContainer();
+
         DataTemplates.Add(new CompositionViewLocator(_container));
+
         if (!Design.IsDesignMode)
         {
             _container.GetExport<IAppStartupService>().AppCtor();
@@ -89,7 +91,6 @@ public class App : Application, IContainerHost, IShellHost
             yield return typeof(AppHost).Assembly; // Asv.Avalonia
             yield return typeof(GeoMapModule).Assembly; // Asv.Avalonia.GeoMap
             yield return typeof(ApiModule).Assembly; // Asv.Avalonia.Example.Api
-            yield return typeof(IoModule).Assembly; // Asv.Avalonia.IO
         }
     }
 
