@@ -99,14 +99,21 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <Button 
-                            MinWidth="70"
+                            VerticalContentAlignment="Center"
                             Command="{Binding Base.Command}"
                             CommandParameter="{Binding Base.CommandParameter}"
                             IsEnabled="{Binding Base.IsEnabled}"
                             IsVisible="{Binding Base.IsVisible}">
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <avalonia1:MaterialIcon Kind="{Binding Base.Icon}"/>
-                                <TextBlock Text="{Binding Base.Header}"/>    
+                                <avalonia1:MaterialIcon 
+                                    Kind="{Binding Base.Icon}"
+                                    IsVisible="{Binding Base.Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    VerticalAlignment="Center"/>
+                                <TextBlock 
+                                    Text="{Binding Base.Header}"
+                                    IsVisible="{Binding Base.Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    VerticalAlignment="Center"
+                                    Margin="0,-1.5,0,0"/>    
                             </StackPanel>
                             <!--don't support flyouts yet-->
                             <!--<Button.Flyout>

@@ -18,6 +18,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <CodeAnalysisRuleSet>../CodeStyle.ruleset</CodeAnalysisRuleSet>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <WarningsAsErrors>
             CS0169,
             CS0618,
@@ -65,6 +66,19 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
+      <Compile Update="Shell\Pages\Settings\Sources\Dialog\SourceView.axaml.cs">
+        <DependentUpon>SourceView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+      <Compile Update="Shell\Pages\Settings\Sources\SettingsPluginsSourcesView.axaml.cs">
+        <DependentUpon>PluginsSourcesView.axaml</DependentUpon>
+        <SubType>Code</SubType>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Shell\" />
+      <Folder Include="Shell\Pages\Settings\" />
     </ItemGroup>
 
 </Project>
