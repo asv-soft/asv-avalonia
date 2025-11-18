@@ -1,6 +1,5 @@
 using System.Composition;
 using Asv.Common;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -12,12 +11,6 @@ public sealed class HomePageLogViewerExtension(ILoggerFactory loggerFactory)
 {
     public void Extend(IHomePage context, R3.CompositeDisposable contextDispose)
     {
-        var logReader = AppHost.Instance.Services.GetService<ILogReaderService>();
-        if (logReader is null)
-        {
-            return;
-        }
-
         context.Tools.Add(
             OpenLogViewerCommand
                 .StaticInfo.CreateAction(

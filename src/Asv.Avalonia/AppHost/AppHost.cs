@@ -67,6 +67,11 @@ public class AppHost : AsyncDisposableWithCancel, IHost
         return _host.Services.GetRequiredService<T>();
     }
 
+    public T? GetServiceOrDefault<T>()
+    {
+        return _host.Services.GetService<T>();
+    }
+
     public void HandleApplicationCrash(Exception e)
     {
         GetService<ILoggerFactory>()

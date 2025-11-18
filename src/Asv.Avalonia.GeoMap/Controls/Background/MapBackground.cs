@@ -32,8 +32,8 @@ public partial class MapBackground : Control
         IsDebug = true;
         _tileLoader = Design.IsDesignMode
             ? new TileLoader(
-                NullLoggerFactory.Instance,
-                new InMemoryConfiguration(),
+                DesignTime.LoggerFactory,
+                DesignTime.Configuration,
                 new DefaultMeterFactory()
             )
             : AppHost.Instance.Services.GetRequiredService<ITileLoader>();

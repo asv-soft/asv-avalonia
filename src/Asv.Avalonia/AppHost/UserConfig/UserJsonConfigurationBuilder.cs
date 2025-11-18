@@ -12,7 +12,7 @@ public class UserJsonConfigurationBuilder
         _fileName = "user_settings.json";
     }
 
-    internal void Build(OptionsBuilder<UserConfigurationConfig> options)
+    internal void Build(OptionsBuilder<UserConfigurationOptions> options)
     {
         options.Configure<IAppPath>(
             (cfg, path) =>

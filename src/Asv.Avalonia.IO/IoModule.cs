@@ -1,6 +1,5 @@
 ﻿using System.Composition.Hosting;
 using Avalonia.Controls;
-using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia.IO;
 
@@ -23,37 +22,44 @@ public static class ContainerConfigurationMixin
         if (Design.IsDesignMode)
         {
             containerConfiguration.WithExport(NullDeviceManager.Instance);
+            return containerConfiguration.WithAssemblies([typeof(IoModule).Assembly]);
+        }
+
+        var exceptionTypes = new List<Type>();
+        if (AppHost.Instance.GetServiceOrDefault<IDeviceManager>() is { } deviceManager)
+        {
+            containerConfiguration.WithExport(deviceManager);
         }
         else
         {
-            var options = AppHost.Instance.GetService<IOptions<IoModuleOptions>>().Value;
-            if (!options.EnableDevices)
-            {
-                return containerConfiguration;
-            }
-
-            containerConfiguration.WithExport(AppHost.Instance.GetService<IDeviceManager>());
+            exceptionTypes.AddRange(
+                [
+                    typeof(HomePageDeviceListExtension),
+                    typeof(SettingsPageExtension),
+                    typeof(SettingsConnectionView),
+                    typeof(SettingsConnectionViewModel),
+                    typeof(PortView),
+                    typeof(SerialPortView),
+                    typeof(SerialPortViewModel),
+                    typeof(SettingsConnectionSerialPortExtension),
+                    typeof(TcpPortView),
+                    typeof(TcpPortViewModel),
+                    typeof(SettingsConnectionTcpPortExtension),
+                    typeof(TcpServerPortView),
+                    typeof(TcpServerPortViewModel),
+                    typeof(SettingsConnectionTcpServerPortExtension),
+                    typeof(UdpPortView),
+                    typeof(UdpPortViewModel),
+                    typeof(SettingsConnectionUdpPortExtension),
+                    typeof(ConnectionRateStatusView),
+                    typeof(ConnectionRateStatusViewModel),
+                    typeof(PortCrudCommand),
+                ]
+            );
         }
 
-        return containerConfiguration
-            .WithPart<HomePageDeviceListExtension>()
-            .WithPart<SettingsPageExtension>()
-            .WithPart<SettingsConnectionView>()
-            .WithPart<SettingsConnectionViewModel>()
-            .WithPart<PortVIew>()
-            .WithPart<SerialPortView>()
-            .WithPart<SerialPortViewModel>()
-            .WithPart<SettingsConnectionSerialPortExtension>()
-            .WithPart<TcpPortView>()
-            .WithPart<TcpPortViewModel>()
-            .WithPart<SettingsConnectionTcpPortExtension>()
-            .WithPart<TcpServerPortView>()
-            .WithPart<TcpServerPortViewModel>()
-            .WithPart<SettingsConnectionTcpServerPortExtension>()
-            .WithPart<UdpPortView>()
-            .WithPart<UdpPortViewModel>()
-            .WithPart<SettingsConnectionUdpPortExtension>()
-            .WithPart<ConnectionRateStatusView>()
-            .WithPart<ConnectionRateStatusViewModel>();
+        var iOTypes = typeof(IoModule).Assembly.GetTypes().Except(exceptionTypes);
+
+        return containerConfiguration.WithParts(iOTypes);
     }
 }
