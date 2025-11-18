@@ -1,4 +1,3 @@
-using System.Composition.Hosting;
 using System.Reflection;
 
 namespace Asv.Avalonia.Plugins;

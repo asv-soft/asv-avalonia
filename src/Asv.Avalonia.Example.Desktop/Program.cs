@@ -26,6 +26,7 @@ sealed class Program
 
         builder
             .UseAvalonia(BuildAvaloniaApp)
+            .UseTimeProvider()
             .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
             .UseJsonUserConfig(opt =>
                 opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
@@ -46,8 +47,6 @@ sealed class Program
                 options.WithApiPackage("Asv.Avalonia.Example.Api", SemVersion.Parse("1.0.0"));
                 options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
             });
-
-        builder.Services.AddSingleton(TimeProvider.System);
 
         using var host = builder.Build();
         host.ExitIfNotFirstInstance();
