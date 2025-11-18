@@ -30,19 +30,17 @@ public partial class AnnotationLayer : Canvas
 
     public AnnotationLayer()
     {
-        DisposableBuilder disposeBuilder = new();
-        _renderRequestSubject.AddTo(ref disposeBuilder);
-        _renderRequestSubject
-            .ThrottleLastFrame(1)
-            .Subscribe(_ => UpdateAnnotationsFromChildren())
-            .AddTo(ref disposeBuilder);
+        // TODO: when dispose it?
+        _renderRequestSubject.ThrottleLastFrame(1).Subscribe(_ => UpdateAnnotationsFromChildren());
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
     }
 
     protected override void OnUnloaded(RoutedEventArgs e)
     {
-        _renderRequestSubject.Dispose();
-        _annotations.ForEach(a => a.Dispose());
-        _annotations.Clear();
         base.OnUnloaded(e);
     }
 

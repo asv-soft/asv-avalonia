@@ -80,8 +80,8 @@
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
                             <ComboBox Grid.Column="1"
-                                      ItemsSource="{Binding RttBoxStatusProp.EnumItems}"
-                                      SelectedItem="{Binding RttBoxStatusProp.ViewValue.Value, Mode=TwoWay}"
+                                      ItemsSource="{Binding AsvColorKindProp.EnumItems}"
+                                      SelectedItem="{Binding AsvColorKindProp.ViewValue.Value, Mode=TwoWay}"
                                       HorizontalAlignment="Stretch">
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>

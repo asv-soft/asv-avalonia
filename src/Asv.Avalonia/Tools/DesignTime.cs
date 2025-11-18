@@ -280,11 +280,8 @@ public static class DesignTime
         }
     }
 
-    public static MaterialIconKind RandomImage =>
-        Enum.GetValues(typeof(MaterialIconKind))
-            .Cast<MaterialIconKind>()
-            .Skip(Random.Shared.Next(1, Enum.GetValues<MaterialIconKind>().Length))
-            .First();
+    public static MaterialIconKind RandomImage => RandomEnum<MaterialIconKind>();
+    public static AsvColorKind RandomColor => RandomEnum<AsvColorKind>();
 
     public static IShell Shell => DesignTimeShellViewModel.Instance;
     public static IAppStartupService AppStartupService => NullAppStartupService.Instance;

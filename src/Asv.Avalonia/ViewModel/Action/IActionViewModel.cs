@@ -16,9 +16,4 @@ public interface IActionViewModel : IHeadlinedViewModel
     /// Gets the parameter passed to the command when executed.
     /// </summary>
     object? CommandParameter { get; }
-
-    /// <summary>
-    /// Gets a value indicating whether the view model is visible.
-    /// </summary>
-    bool IsVisible { get; }
 }

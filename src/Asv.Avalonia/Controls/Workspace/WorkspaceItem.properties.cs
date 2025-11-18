@@ -36,6 +36,15 @@ public partial class WorkspaceItem
         set => SetAndRaise(IconProperty, ref field, value);
     } = MaterialIconKind.ListBox;
 
+    public static readonly StyledProperty<AsvColorKind> IconColorProperty =
+        AvaloniaProperty.Register<WorkspaceItem, AsvColorKind>(nameof(IconColor));
+
+    public AsvColorKind IconColor
+    {
+        get => GetValue(IconColorProperty);
+        set => SetValue(IconColorProperty, value);
+    }
+
     public static readonly StyledProperty<FlyoutBase?> FlyoutProperty =
         Button.FlyoutProperty.AddOwner<WorkspaceItem>();
 

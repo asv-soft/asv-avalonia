@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Composition;
 using System.Threading.Tasks;
+using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.InfoMessage;
 using Asv.Common;
 using Material.Icons;
@@ -14,6 +15,7 @@ namespace Asv.Avalonia.Example;
 [ExportControlExamples(PageId)]
 public class WorkspacePageViewModel : ControlsGallerySubPage
 {
+    private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<IWorkspaceWidget> _itemsSource;
     public const string PageId = "wrokspace-example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Table;
@@ -29,6 +31,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     public WorkspacePageViewModel(ILoggerFactory loggerFactory, IUnitService unitService)
         : base(PageId, loggerFactory)
     {
+        _loggerFactory = loggerFactory;
         var hideAll = new MenuItem("action1", "Hide all", loggerFactory)
         {
             Command = new ReactiveCommand(x =>
@@ -42,6 +45,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 }
             }),
         };
+
         var showAll = new MenuItem("action2", "Show all", loggerFactory)
         {
             Command = new ReactiveCommand(x =>
@@ -142,10 +146,48 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
+            new MapWidget("map", loggerFactory)
+            {
+                Position = WorkspaceDock.Bottom,
+                Icon = MaterialIconKind.Map,
+                IconColor = AsvColorKind.Error | AsvColorKind.Blink,
+                Header = "Map Widget",
+                IsExpanded = true,
+                CanExpand = true,
+            },
+            new MapWidget("ma2p", loggerFactory)
+            {
+                Position = WorkspaceDock.Bottom,
+                Icon = MaterialIconKind.Map,
+                IconColor = AsvColorKind.Error | AsvColorKind.Blink,
+                Header = "Map Widget2",
+                IsExpanded = true,
+                CanExpand = true,
+            },
         ];
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         _itemsSource.SetRoutableParent(this).DisposeItWith(Disposable);
         Items = _itemsSource.ToNotifyCollectionChangedSlim();
+    }
+
+    public override ValueTask Init(IControlsGalleryPage context)
+    {
+        var changeStatus = new MenuItem("action5", "Change status", _loggerFactory)
+        {
+            Command = new ReactiveCommand(x =>
+            {
+                if (context.Status == null)
+                {
+                    context.ChangeStatus(MaterialIconKind.Pencil, AsvColorKind.Error);
+                }
+                else
+                {
+                    context.ChangeStatus(null, AsvColorKind.None);
+                }
+            }),
+        };
+        Menu.Add(changeStatus);
+        return base.Init(context);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IWorkspaceWidget> Items { get; }

@@ -20,13 +20,8 @@
                      Header="{Binding Header}" 
                      SmallContent="{Binding ShortStatusText}"
                      SmallHeader="{Binding ShortHeader}"
-                     Classes.error="{Binding Status, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Error}"
-                     Classes.warning="{Binding Status, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Warning}"
-                     Classes.success="{Binding Status, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Success}"
-                     Classes.info1="{Binding Status, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info1}"
-                     Classes.info2="{Binding Status, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info2}"
-                     Classes.info3="{Binding Status, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info3}"
-                     Classes.info4="{Binding Status, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info4}">
+                     avalonia:AsvPallete.Color="{Binding Status}"
+                     >
         <Grid RowDefinitions="*,*,*,4,Auto,4,Auto" ColumnDefinitions="Auto,5,*">
             <TextBlock FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}"  Grid.Column="0"  Grid.Row="0" Text="Lat"/>
             <TextBlock FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}"  Grid.Column="0"  Grid.Row="1" Text="Lon"/>
@@ -42,13 +37,7 @@
                 Maximum="1" 
                 Value="{Binding Progress}"
                 IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}" 
-                Classes.error="{Binding ProgressStatus, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Error}"
-                Classes.warning="{Binding ProgressStatus, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Warning}"
-                Classes.success="{Binding ProgressStatus, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Success}"
-                Classes.info1="{Binding ProgressStatus, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info1}"
-                Classes.info2="{Binding ProgressStatus, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info2}"
-                Classes.info3="{Binding ProgressStatus, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info3}"
-                Classes.info4="{Binding ProgressStatus, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Info4}"
+                avalonia:AsvPallete.Color="{Binding ProgressStatus}"
                 />
             <TextBlock Foreground="{DynamicResource AsvForegroundUnknownBrush}" FontSize="15" IsVisible="{Binding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}" Grid.ColumnSpan="3" Grid.Column="0"  Grid.Row="6" Text="{Binding StatusText}"/>
         </Grid>

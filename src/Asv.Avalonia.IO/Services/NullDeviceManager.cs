@@ -26,9 +26,9 @@ public class NullDeviceManager : IDeviceManager
         return MaterialIconKind.Navigation;
     }
 
-    public IBrush? GetDeviceBrush(DeviceId id)
+    public AsvColorKind GetDeviceColor(DeviceId id)
     {
-        return Brushes.Aqua;
+        return DesignTime.RandomEnum<AsvColorKind>();
     }
 
     public IProtocolRouter Router { get; }

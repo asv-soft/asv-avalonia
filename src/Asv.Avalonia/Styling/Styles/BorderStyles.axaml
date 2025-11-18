@@ -24,11 +24,39 @@
     </Style>
     
     <Style Selector="Border">
+        <!-- ===================================================== -->
+        <!-- UNIVERSAL ANIMATION CLASSES – works on any Avalonia control -->
+        <!-- Use with AsvPallete.Color = Blink | Fadein | etc.           -->
+        <!-- ===================================================== -->
+
+        <!-- Infinite blinking (on → off → on) -->
+        <Style Selector="^.blink">
+            <Style.Animations>
+                <Animation Duration="0:0:1" IterationCount="Infinite">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Blink 3 times quickly and stop -->
+        <Style Selector="^.blinkonce">
+            <Style.Animations>
+                <Animation Duration="0:0:0.5" IterationCount="3">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Smooth fade-in (from transparent → fully visible) -->
         <Style Selector="^.fadein">
             <Style.Animations>
-                <Animation Duration="0:0:0.5"> 
+                <Animation Duration="0:0:0.6" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="0.3"/>
+                        <Setter Property="Opacity" Value="0.0"/>
                     </KeyFrame>
                     <KeyFrame Cue="100%">
                         <Setter Property="Opacity" Value="1.0"/>
@@ -36,69 +64,114 @@
                 </Animation>
             </Style.Animations>
         </Style>
+
+        <!-- Smooth fade-out (from visible → transparent) -->
+        <Style Selector="^.fadeout">
+            <Style.Animations>
+                <Animation Duration="0:0:0.6" FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1.0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Optional: fade-in + 3 soft blinks (great for notifications) -->
+        <Style Selector="^.fadeinblink">
+            <Style.Animations>
+                <!-- 1. Fade in -->
+                <Animation Duration="0:0:0.6" FillMode="Forward">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+                <!-- 2. Then blink 3 times gently -->
+                <Animation Duration="0:0:0.5" IterationCount="3" Delay="0:0:0.6">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.3"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Status styles -->
         <Style Selector="^.error">
             <Setter Property="Background" Value="{DynamicResource AsvBackgroundErrorBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}"/>
+            <Setter Property="BorderBrush"   Value="{DynamicResource AsvForegroundErrorBrush}"/>
         </Style>
         <Style Selector="^.error-frame">
             <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}"/>
         </Style>
+
         <Style Selector="^.warning">
             <Setter Property="Background" Value="{DynamicResource AsvBackgroundWarningBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundWarningBrush}"/>
+            <Setter Property="BorderBrush"   Value="{DynamicResource AsvForegroundWarningBrush}"/>
         </Style>
         <Style Selector="^.warning-frame">
             <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundWarningBrush}"/>
         </Style>
-    
+
+        <Style Selector="^.success">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundSuccessBrush}"/>
+            <Setter Property="BorderBrush"   Value="{DynamicResource AsvForegroundSuccessBrush}"/>
+        </Style>
+        <Style Selector="^.success-frame">
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundSuccessBrush}"/>
+        </Style>
+
         <Style Selector="^.unknown">
             <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundUnknownBrush}"/>
+            <Setter Property="BorderBrush"   Value="{DynamicResource AsvForegroundUnknownBrush}"/>
         </Style>
         <Style Selector="^.unknown-frame">
             <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundUnknownBrush}"/>
         </Style>
-        
-        <Style Selector="^.success">
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundSuccessBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundSuccessBrush}"/>
-        </Style>
-        
-        <Style Selector="^.success-frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundSuccessBrush}"/>
-        </Style>
-        
-        <Style Selector="^.info">
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfoBrush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfoBrush}"/>
-        </Style>
-        <Style Selector="^.info-frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfoBrush}"/>
-        </Style>
-        
-        <Style Selector="^.info2">
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo2Brush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo2Brush}"/>
-        </Style>
-        
-        <Style Selector="^.info2-frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo2Brush}"/>
-        </Style>
-        
-        <Style Selector="^.info3">
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo3Brush}"/>
-        </Style>
-        <Style Selector="^.info3-frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo3Brush}"/>
-        </Style>
-        
-        <Style Selector="^.info4">
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo4Brush}"/>
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo4Brush}"/>
-        </Style>
-        <Style Selector="^.info4-frame">
-            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo4Brush}"/>
-        </Style>
+
+        <!-- ====================== INFO PALETTE 1–20 ====================== -->
+        <!-- Filled background + border -->
+        <Style Selector="^.info1">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo1Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo1Brush}"/>  </Style>
+        <Style Selector="^.info2">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo2Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo2Brush}"/>  </Style>
+        <Style Selector="^.info3">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo3Brush}"/>  </Style>
+        <Style Selector="^.info4">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo4Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo4Brush}"/>  </Style>
+        <Style Selector="^.info5">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo5Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo5Brush}"/>  </Style>
+        <Style Selector="^.info6">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo6Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo6Brush}"/>  </Style>
+        <Style Selector="^.info7">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo7Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo7Brush}"/>  </Style>
+        <Style Selector="^.info8">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo8Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo8Brush}"/>  </Style>
+        <Style Selector="^.info9">  <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo9Brush}"/>  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo9Brush}"/>  </Style>
+        <Style Selector="^.info10"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo10Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo10Brush}"/> </Style>
+        <Style Selector="^.info11"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo11Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo11Brush}"/> </Style>
+        <Style Selector="^.info12"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo12Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo12Brush}"/> </Style>
+        <Style Selector="^.info13"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo13Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo13Brush}"/> </Style>
+        <Style Selector="^.info14"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo14Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo14Brush}"/> </Style>
+        <Style Selector="^.info15"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo15Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo15Brush}"/> </Style>
+        <Style Selector="^.info16"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo16Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo16Brush}"/> </Style>
+        <Style Selector="^.info17"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo17Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo17Brush}"/> </Style>
+        <Style Selector="^.info18"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo18Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo18Brush}"/> </Style>
+        <Style Selector="^.info19"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo19Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo19Brush}"/> </Style>
+        <Style Selector="^.info20"> <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo20Brush}"/> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo20Brush}"/> </Style>
+
+        <!-- Only border (frame) -->
+        <Style Selector="^.info1-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo1Brush}"/>  </Style>
+        <Style Selector="^.info2-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo2Brush}"/>  </Style>
+        <Style Selector="^.info3-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo3Brush}"/>  </Style>
+        <Style Selector="^.info4-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo4Brush}"/>  </Style>
+        <Style Selector="^.info5-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo5Brush}"/>  </Style>
+        <Style Selector="^.info6-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo6Brush}"/>  </Style>
+        <Style Selector="^.info7-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo7Brush}"/>  </Style>
+        <Style Selector="^.info8-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo8Brush}"/>  </Style>
+        <Style Selector="^.info9-frame">  <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo9Brush}"/>  </Style>
+        <Style Selector="^.info10-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo10Brush}"/> </Style>
+        <Style Selector="^.info11-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo11Brush}"/> </Style>
+        <Style Selector="^.info12-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo12Brush}"/> </Style>
+        <Style Selector="^.info13-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo13Brush}"/> </Style>
+        <Style Selector="^.info14-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo14Brush}"/> </Style>
+        <Style Selector="^.info15-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo15Brush}"/> </Style>
+        <Style Selector="^.info16-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo16Brush}"/> </Style>
+        <Style Selector="^.info17-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo17Brush}"/> </Style>
+        <Style Selector="^.info18-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo18Brush}"/> </Style>
+        <Style Selector="^.info19-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo19Brush}"/> </Style>
+        <Style Selector="^.info20-frame"> <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo20Brush}"/> </Style>
     </Style>
 </Styles>

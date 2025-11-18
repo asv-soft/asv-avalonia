@@ -102,7 +102,7 @@ public class UnitPropertyViewModel
         get;
         set => SetField(ref field, value);
     }
-    public IBrush? IconBrush
+    public AsvColorKind IconColor
     {
         get;
         set => SetField(ref field, value);

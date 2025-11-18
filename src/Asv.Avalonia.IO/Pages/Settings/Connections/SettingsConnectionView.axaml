@@ -107,14 +107,7 @@
                                         Key="{Binding Key}" 
                                         Value="{Binding Value}" 
                                         Icon="{Binding Icon}"
-                                        Classes.error="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Error}"
-                                        Classes.warning="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Warning}"
-                                        Classes.success="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Success}"
-                                        Classes.unknown="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Unknown}"
-                                        Classes.info="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Info}"
-                                        Classes.info2="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Info2}"
-                                        Classes.info3="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Info3}"
-                                        Classes.info4="{Binding  TagType, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=Info4}"
+                                        avalonia1:AsvPallete.Color="{Binding Color}"
                                         />
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

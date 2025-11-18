@@ -33,7 +33,7 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
         Header = "Common RTT";
 
         int index = 0;
-        int maxIndex = Enum.GetValues<RttBoxStatus>().Length;
+        int maxIndex = Enum.GetValues<AsvColorKind>().Length;
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
             .Subscribe(_ =>
@@ -44,8 +44,8 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
                     model.ValueString = (Random.Shared.NextDouble() * 1000.0).ToString($"F{i}");
                 }
 
-                Status = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
-                ProgressStatus = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
+                Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
+                ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 StatusText = Status.ToString();
                 ShortValueString = (Random.Shared.NextDouble() * 1000.0).ToString("F2");
                 Updated();

@@ -21,7 +21,7 @@ public class HeadlinedViewModel(NavigationId id, ILoggerFactory loggerFactory)
         set => SetField(ref field, value);
     }
 
-    public IBrush? IconBrush
+    public AsvColorKind IconColor
     {
         get;
         set => SetField(ref field, value);

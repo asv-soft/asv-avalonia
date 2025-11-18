@@ -17,6 +17,7 @@ public class OpenSettingsCommand(INavigationService nav)
         Name = RS.OpenSettingsCommand_CommandInfo_Name,
         Description = RS.OpenSettingsCommand_CommandInfo_Description,
         Icon = SettingsPageViewModel.PageIcon,
+        IconColor = SettingsPageViewModel.PageIconColor,
         DefaultHotKey = "Ctrl+Shift+S",
         Source = SystemModule.Instance,
     };

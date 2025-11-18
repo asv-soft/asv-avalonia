@@ -18,7 +18,7 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
         DesignTime.ThrowIfNotDesignMode();
         var start = new GeoPoint(55.75, 37.6173, 250.0); // Moscow coordinates
         var index = 0;
-        var maxIndex = Enum.GetValues<RttBoxStatus>().Length;
+        var maxIndex = Enum.GetValues<AsvColorKind>().Length;
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
             .Subscribe(x =>
@@ -34,8 +34,8 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
                     start.Longitude + Random.Shared.NextDouble(),
                     start.Altitude + Random.Shared.NextDouble() + 0.5
                 );
-                Status = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
-                ProgressStatus = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
+                Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
+                ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Progress = Random.Shared.NextDouble();
                 StatusText = Status.ToString();
                 Location.OnNext(point);

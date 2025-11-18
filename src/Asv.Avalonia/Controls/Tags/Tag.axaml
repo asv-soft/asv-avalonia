@@ -5,23 +5,48 @@
     <Design.PreviewWith>
         <StackPanel Spacing="4">
             <StackPanel Spacing="4" Orientation="Horizontal">
-                <controls:Tag Key="key1" Value="value1" Icon="Tag" />
+                <controls:Tag FontSize="10" Key="key1" Value="value1" Icon="Tag" />
+                <controls:Tag FontSize="10" Icon="Tag" />
                 <controls:Tag Key="key2" Value="value2" Icon="Navi" />
                 <controls:Tag Key="key3" Value="value3" Icon="Tag" />    
                 <controls:Tag Value="only value" Icon="Tag" />
                 <controls:Tag Value="without icon"  />
                 <controls:Tag Value="without icon" Icon="{x:Null}" />
+                <controls:Tag Classes="blink" Value="blink" Icon="{x:Null}" />
+                <controls:Tag Classes="blinkonce" Value="blink" Icon="{x:Null}" />
+                <controls:Tag Classes="fadein" Value="fadein" Icon="{x:Null}" />
+                <controls:Tag Classes="fadeout" Value="fadeout" Icon="{x:Null}" />
+                <controls:Tag Classes="fadeinblink" Value="fadeinblink" Icon="{x:Null}" />
             </StackPanel>
-            <StackPanel Spacing="4" Orientation="Horizontal">
-                <controls:Tag Classes="error" Key="class" Value="error" />
-                <controls:Tag Classes="warning" Key="class" Value="warning" />
-                <controls:Tag Classes="success" Key="class" Value="success" />
-                <controls:Tag Classes="unknown" Key="class" Value="unknown" />
-                <controls:Tag Classes="info" Key="class" Value="info" />
-                <controls:Tag Classes="info2" Key="class" Value="info2" />
-                <controls:Tag Classes="info3" Key="class" Value="info3" />
-                <controls:Tag Classes="info4" Key="class" Value="info4" />
-            </StackPanel>
+            <WrapPanel Width="500" ItemSpacing="8" LineSpacing="8">
+                <!-- Status tags -->
+                <controls:Tag Classes="error"    Key="class" Value="error"    />
+                <controls:Tag Classes="warning"  Key="class" Value="warning"  />
+                <controls:Tag Classes="success"  Key="class" Value="success"  />
+                <controls:Tag Classes="unknown"  Key="class" Value="unknown"  />
+
+                <!-- Info palette – all 20 categorical colors -->
+                <controls:Tag Classes="info1"   Key="class" Value="info1"   />
+                <controls:Tag Classes="info2"   Key="class" Value="info2"   />
+                <controls:Tag Classes="info3"   Key="class" Value="info3"   />
+                <controls:Tag Classes="info4"   Key="class" Value="info4"   />
+                <controls:Tag Classes="info5"   Key="class" Value="info5"   />
+                <controls:Tag Classes="info6"   Key="class" Value="info6"   />
+                <controls:Tag Classes="info7"   Key="class" Value="info7"   />
+                <controls:Tag Classes="info8"   Key="class" Value="info8"   />
+                <controls:Tag Classes="info9"   Key="class" Value="info9"   />
+                <controls:Tag Classes="info10"  Key="class" Value="info10"  />
+                <controls:Tag Classes="info11"  Key="class" Value="info11"  />
+                <controls:Tag Classes="info12"  Key="class" Value="info12"  />
+                <controls:Tag Classes="info13"  Key="class" Value="info13"  />
+                <controls:Tag Classes="info14"  Key="class" Value="info14"  />
+                <controls:Tag Classes="info15"  Key="class" Value="info15"  />
+                <controls:Tag Classes="info16"  Key="class" Value="info16"  />
+                <controls:Tag Classes="info17"  Key="class" Value="info17"  />
+                <controls:Tag Classes="info18"  Key="class" Value="info18"  />
+                <controls:Tag Classes="info19"  Key="class" Value="info19"  />
+                <controls:Tag Classes="info20"  Key="class" Value="info20"  />
+            </WrapPanel>
         </StackPanel>
         
         
@@ -32,44 +57,188 @@
         <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}"/>
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        
+        <Setter Property="FontSize" Value="12"></Setter>
+        <!-- ===================================================== -->
+        <!-- UNIVERSAL ANIMATION CLASSES – works on any Avalonia control -->
+        <!-- Use with AsvPallete.Color = Blink | Fadein | etc.           -->
+        <!-- ===================================================== -->
+
+        <!-- Infinite blinking (on → off → on) -->
+        <Style Selector="^.blink">
+            <Style.Animations>
+                <Animation Duration="0:0:1" IterationCount="Infinite">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Blink 3 times quickly and stop -->
+        <Style Selector="^.blinkonce">
+            <Style.Animations>
+                <Animation Duration="0:0:0.5" IterationCount="3">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Smooth fade-in (from transparent → fully visible) -->
+        <Style Selector="^.fadein">
+            <Style.Animations>
+                <Animation Duration="0:0:0.6" FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1.0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Smooth fade-out (from visible → transparent) -->
+        <Style Selector="^.fadeout">
+            <Style.Animations>
+                <Animation Duration="0:0:0.6" FillMode="Forward">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1.0"/>
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0.0"/>
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+
+        <!-- Optional: fade-in + 3 soft blinks (great for notifications) -->
+        <Style Selector="^.fadeinblink">
+            <Style.Animations>
+                <!-- 1. Fade in -->
+                <Animation Duration="0:0:0.6" FillMode="Forward">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+                <!-- 2. Then blink 3 times gently -->
+                <Animation Duration="0:0:0.5" IterationCount="3" Delay="0:0:0.6">
+                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.3"/> </KeyFrame>
+                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+        <!-- ============================================= -->
+        <!-- UNIVERSAL COLOR CLASSES – apply to any control -->
+        <!-- Sets Foreground + Background based on status/info -->
+        <!-- ============================================= -->
         <Style Selector="^.error">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundErrorBrush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundErrorBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundErrorBrush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundErrorBrush}" />
         </Style>
+
         <Style Selector="^.warning">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundWarningBrush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundWarningBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundWarningBrush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundWarningBrush}" />
         </Style>
+
         <Style Selector="^.success">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundSuccessBrush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundSuccessBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundSuccessBrush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundSuccessBrush}" />
         </Style>
+
         <Style Selector="^.unknown">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundUnknownBrush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundSuccessBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundUnknownBrush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}" /> <!-- Исправлено: было Success! -->
         </Style>
-        <Style Selector="^.info">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfoBrush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfoBrush}"/>
+
+        <!-- =============== INFO PALETTE – 20 COLORS =============== -->
+        <Style Selector="^.info1">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo1Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo1Brush}" />
         </Style>
         <Style Selector="^.info2">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo2Brush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo2Brush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo2Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo2Brush}" />
         </Style>
         <Style Selector="^.info3">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}" />
         </Style>
-        <Style Selector="^.info3">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo4Brush}"/>
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo4Brush}"/>
+        <Style Selector="^.info4">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo4Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo4Brush}" />
+        </Style>
+        <Style Selector="^.info5">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo5Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo5Brush}" />
+        </Style>
+        <Style Selector="^.info6">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo6Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo6Brush}" />
+        </Style>
+        <Style Selector="^.info7">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo7Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo7Brush}" />
+        </Style>
+        <Style Selector="^.info8">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo8Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo8Brush}" />
+        </Style>
+        <Style Selector="^.info9">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo9Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo9Brush}" />
+        </Style>
+        <Style Selector="^.info10">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo10Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo10Brush}" />
+        </Style>
+        <Style Selector="^.info11">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo11Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo11Brush}" />
+        </Style>
+        <Style Selector="^.info12">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo12Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo12Brush}" />
+        </Style>
+        <Style Selector="^.info13">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo13Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo13Brush}" />
+        </Style>
+        <Style Selector="^.info14">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo14Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo14Brush}" />
+        </Style>
+        <Style Selector="^.info15">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo15Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo15Brush}" />
+        </Style>
+        <Style Selector="^.info16">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo16Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo16Brush}" />
+        </Style>
+        <Style Selector="^.info17">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo17Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo17Brush}" />
+        </Style>
+        <Style Selector="^.info18">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo18Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo18Brush}" />
+        </Style>
+        <Style Selector="^.info19">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo19Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo19Brush}" />
+        </Style>
+        <Style Selector="^.info20">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo20Brush}" />
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo20Brush}" />
         </Style>
             <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
                 <Border x:Name="MainBorder"
-                        Height="22"
+                        Height="{TemplateBinding FontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=10}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
@@ -78,13 +247,13 @@
                         CornerRadius="{TemplateBinding CornerRadius}">
                     <StackPanel Margin="2" Orientation="Horizontal" Spacing="2">
                         <avalonia:MaterialIcon 
-                            Width="12" Height="12" 
+                            Width="{TemplateBinding FontSize}" Height="{TemplateBinding FontSize}" 
                             IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" 
                              
                             Foreground="{TemplateBinding Foreground}" Kind="{TemplateBinding Icon}"/>
-                        <TextBlock FontSize="12" VerticalAlignment="Center" FontWeight="Bold" Text="{TemplateBinding Key}" />
-                        <TextBlock FontSize="12" IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}" VerticalAlignment="Center" Text=":" />
-                        <TextBlock FontSize="12" VerticalAlignment="Center" Text="{TemplateBinding Value}" />
+                        <TextBlock IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}" FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" FontWeight="Bold" Text="{TemplateBinding Key}" />
+                        <TextBlock IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}" FontSize="{TemplateBinding FontSize}"  VerticalAlignment="Center" Text=":" />
+                        <TextBlock IsVisible="{TemplateBinding Value, Converter={x:Static ObjectConverters.IsNotNull}}" FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" Text="{TemplateBinding Value}" />
                     </StackPanel>
                         
                 </Border>

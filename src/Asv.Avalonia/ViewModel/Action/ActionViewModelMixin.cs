@@ -14,6 +14,7 @@ public static class ActionViewModelMixin
         var model = new ActionViewModel(info.Id, loggerFactory)
         {
             Icon = info.Icon,
+            IconColor = info.IconColor,
             Header = customTitle ?? info.Name,
             Description = customDescription ?? info.Description,
         };

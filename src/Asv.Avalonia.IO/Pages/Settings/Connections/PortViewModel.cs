@@ -110,14 +110,18 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         RemovePortCommand = new ReactiveCommand(RemovePort).DisposeItWith(Disposable);
 
         TagsSource.Add(
-            TypeTag = new TagViewModel("type", loggerFactory) { TagType = TagType.Info, Key = null }
+            TypeTag = new TagViewModel("type", loggerFactory)
+            {
+                Color = AsvColorKind.Info1,
+                Key = null,
+            }
         );
 
         TagsSource.Add(
             ConfigTag = new TagViewModel("cfg", loggerFactory)
             {
                 Icon = null,
-                TagType = TagType.Success,
+                Color = AsvColorKind.Success,
                 Value = DataFormatter.ByteRate.Print(double.NaN),
             }
         );
@@ -125,7 +129,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
             RxTag = new TagViewModel("rx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowDownBold,
-                TagType = TagType.Success,
+                Color = AsvColorKind.Success,
                 Value = DataFormatter.ByteRate.Print(double.NaN),
             }
         );
@@ -133,7 +137,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
             TxTag = new TagViewModel("tx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowUpBold,
-                TagType = TagType.Success,
+                Color = AsvColorKind.Success,
                 Value = DataFormatter.ByteRate.Print(double.NaN),
             }
         );

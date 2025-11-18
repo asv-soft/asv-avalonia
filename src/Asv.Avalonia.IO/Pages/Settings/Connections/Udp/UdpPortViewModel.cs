@@ -127,7 +127,7 @@ public class UdpPortViewModel : PortViewModel
     {
         ConfigTag.Value = $"{config.Host}:{config.Port}";
         TypeTag.Value = "UDP";
-        TypeTag.TagType = TagType.Info4;
+        TypeTag.Color = AsvColorKind.Info4;
     }
 
     protected override EndpointViewModel EndpointFactory(IProtocolEndpoint arg)

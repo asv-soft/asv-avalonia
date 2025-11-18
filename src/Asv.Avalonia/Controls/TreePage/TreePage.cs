@@ -12,7 +12,8 @@ public class TreePage : HeadlinedViewModel, ITreePage
         MaterialIconKind? icon,
         NavigationId navigateTo,
         NavigationId parentId,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        TagViewModel? status = null
     )
         : base(id, loggerFactory)
     {
@@ -20,13 +21,14 @@ public class TreePage : HeadlinedViewModel, ITreePage
         ParentId = parentId;
         Header = title;
         Icon = icon;
+        Status = status;
     }
 
     public NavigationId NavigateTo { get; }
     public ReactiveCommand NavigateCommand { get; }
     public NavigationId ParentId { get; }
 
-    public string? Status
+    public TagViewModel? Status
     {
         get;
         set => SetField(ref field, value);

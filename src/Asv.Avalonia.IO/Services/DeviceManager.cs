@@ -26,17 +26,6 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
     private IDisposable? _sub1;
     private readonly DeviceManagerConfig _config;
 
-    private static readonly ImmutableSolidColorBrush[] DeviceColors =
-    [
-        new(Color.Parse("#AA00FF")),
-        new(Color.Parse("#6200EA")),
-        new(Color.Parse("#304FFE")),
-        new(Color.Parse("#2962FF")),
-        new(Color.Parse("#0091EA")),
-        new(Color.Parse("#00B8D4")),
-        new(Color.Parse("#00BFA5")),
-    ];
-
     [ImportingConstructor]
     public DeviceManager(
         IConfiguration cfgSvc,
@@ -123,7 +112,7 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
         return MaterialIconKind.Navigation;
     }
 
-    public IBrush? GetDeviceBrush(DeviceId id)
+    public AsvColorKind GetDeviceColor(DeviceId id)
     {
         foreach (var extension in _extensions)
         {
@@ -133,7 +122,9 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
             }
         }
 
-        return DeviceColors[Math.Abs(id.GetHashCode()) % DeviceColors.Length];
+        var values = Enum.GetValues<AsvColorKind>();
+
+        return values[Math.Abs(id.GetHashCode()) % values.Length];
     }
 
     public IProtocolRouter Router { get; }

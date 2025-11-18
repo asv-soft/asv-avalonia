@@ -55,6 +55,7 @@
             <Setter Property="Position" Value="{Binding Position}"/>
             <Setter Property="Header" Value="{Binding Header}"/>
             <Setter Property="Icon" Value="{Binding Icon}"/>
+            <Setter Property="IconColor" Value="{Binding IconColor}"/>
             <Setter Property="IsExpanded" Value="{Binding IsExpanded}"/>
             <Setter Property="IsVisible" Value="{Binding IsVisible}"/>
             <Setter Property="CanExpand" Value="{Binding CanExpand}"/>

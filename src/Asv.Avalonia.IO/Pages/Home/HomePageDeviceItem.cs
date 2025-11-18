@@ -17,7 +17,7 @@ public class HomePageDeviceItem : HomePageItem
     {
         Device = device;
         Icon = deviceManager.GetIcon(device.Id);
-        IconBrush = deviceManager.GetDeviceBrush(device.Id);
+        IconColor = deviceManager.GetDeviceColor(device.Id);
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         Info.Add(
             new HeadlinedViewModel("id", DesignTime.LoggerFactory)

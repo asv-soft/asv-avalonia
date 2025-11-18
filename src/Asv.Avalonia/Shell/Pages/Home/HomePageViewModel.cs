@@ -11,6 +11,8 @@ namespace Asv.Avalonia;
 public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 {
     public const string PageId = "home";
+    public const MaterialIconKind PageIcon = MaterialIconKind.Home;
+    public const AsvColorKind PageIconColor = AsvColorKind.None;
 
     public HomePageViewModel()
         : this(
@@ -102,7 +104,8 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         : base(PageId, cmd, loggerFactory, dialogService)
     {
         AppInfo = appInfo;
-        Icon = MaterialIconKind.Home;
+        Icon = PageIcon;
+        IconColor = PageIconColor;
         Title = RS.HomePageViewModel_Title;
 
         Tools = [];

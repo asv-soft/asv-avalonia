@@ -26,6 +26,7 @@ public class LogViewerViewModel
 {
     public const string PageId = "log";
     public const MaterialIconKind PageIcon = MaterialIconKind.Journal;
+    public const AsvColorKind PageIconColor = AsvColorKind.None;
 
     private readonly ILogReaderService _logReaderService;
     private readonly ISearchService _search;
@@ -45,6 +46,7 @@ public class LogViewerViewModel
         DesignTime.ThrowIfNotDesignMode();
         Title = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
+        IconColor = PageIconColor;
         Search = new SearchBoxViewModel();
         Items = _itemsSource
             .ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
@@ -158,6 +160,7 @@ public class LogViewerViewModel
         _loggerFactory = loggerFactory;
         Title = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
+        IconColor = PageIconColor;
         Items = _itemsSource
             .ToNotifyCollectionChangedSlim()
             .SetRoutableParent(this, Disposable)

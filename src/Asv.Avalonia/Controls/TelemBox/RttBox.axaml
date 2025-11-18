@@ -178,59 +178,180 @@
             <Setter Property="Padding" Value="1"/>
         </Style>
         
-        <Style Selector="^.error">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundErrorBrush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundErrorBrush}"/>
+            <!-- ===================================================== -->
+            <!-- UNIVERSAL STATUS & INFO STYLES (with IconBrush support) -->
+            <!-- Applies to any control that has:                        -->
+            <!--   • Background, Foreground, BorderBrush, IconBrush      -->
+            <!-- ===================================================== -->
+
+            <!-- =============== STATUS COLORS =============== -->
+            <Style Selector="^.error">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundErrorBrush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundErrorBrush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundErrorBrush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
             </Style>
+
             <Style Selector="^.warning">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundWarningBrush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundWarningBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundWarningBrush}"/>
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundWarningBrush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundWarningBrush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundWarningBrush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
             </Style>
-        
-            <Style Selector="^.unknown">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundUnknownBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundUnknownBrush}"/>
-            </Style>
-            
+
             <Style Selector="^.success">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundSuccessBrush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundSuccessBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundSuccessBrush}"/>
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundSuccessBrush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundSuccessBrush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundSuccessBrush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
             </Style>
-            
+
+            <Style Selector="^.unknown">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundUnknownBrush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundUnknownBrush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundUnknownBrush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <!-- =============== INFO PALETTE – ALL 20 COLORS =============== -->
             <Style Selector="^.info1">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfoBrush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfoBrush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfoBrush}"/>
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo1Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo1Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo1Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
             </Style>
-            
+
             <Style Selector="^.info2">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo2Brush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo2Brush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo2Brush}"/>
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo2Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo2Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo2Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
             </Style>
-            
+
             <Style Selector="^.info3">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo3Brush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}"/>
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo3Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo3Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo3Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
             </Style>
-            
+
             <Style Selector="^.info4">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo4Brush}"/>
-                <Setter Property="IconBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-                <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo4Brush}"/>
-                <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo4Brush}"/>
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo4Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo4Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo4Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info5">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo5Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo5Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo5Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info6">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo6Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo6Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo6Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info7">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo7Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo7Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo7Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info8">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo8Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo8Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo8Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info9">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo9Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo9Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo9Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info10">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo10Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo10Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo10Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info11">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo11Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo11Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo11Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info12">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo12Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo12Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo12Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info13">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo13Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo13Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo13Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info14">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo14Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo14Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo14Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info15">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo15Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo15Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo15Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info16">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo16Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo16Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo16Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info17">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo17Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo17Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo17Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info18">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo18Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo18Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo18Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info19">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo19Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo19Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo19Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+            </Style>
+
+            <Style Selector="^.info20">
+                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo20Brush}" />
+                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo20Brush}" />
+                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo20Brush}" />
+                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
             </Style>
     </Style>
 </Styles>

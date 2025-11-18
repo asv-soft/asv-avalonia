@@ -97,6 +97,6 @@ public class TcpPortViewModel : PortViewModel
     {
         ConfigTag.Value = $"{config.Host}:{config.Port}";
         TypeTag.Value = RS.TcpPortViewModel_TagViewModel_Value;
-        TypeTag.TagType = TagType.Info2;
+        TypeTag.Color = AsvColorKind.Info2;
     }
 }

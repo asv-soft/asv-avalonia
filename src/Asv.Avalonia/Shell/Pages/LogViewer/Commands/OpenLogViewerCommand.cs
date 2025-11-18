@@ -17,6 +17,7 @@ public class OpenLogViewerCommand(INavigationService nav)
         Name = RS.LogViewer_CommandInfo_Name,
         Description = RS.LogViewer_CommandInfo_Description,
         Icon = LogViewerViewModel.PageIcon,
+        IconColor = LogViewerViewModel.PageIconColor,
         Source = SystemModule.Instance,
         DefaultHotKey = "Ctrl+Shift+L",
     };

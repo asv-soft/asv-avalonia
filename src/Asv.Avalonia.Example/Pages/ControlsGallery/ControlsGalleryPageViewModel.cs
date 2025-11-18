@@ -12,6 +12,7 @@ public class ControlsGalleryPageViewModel
 {
     public const string PageId = "controls_gallery";
     public const MaterialIconKind PageIcon = MaterialIconKind.ViewGallery;
+    public const AsvColorKind PageIconColor = AsvColorKind.Info20;
 
     public ControlsGalleryPageViewModel()
         : this(
@@ -37,7 +38,14 @@ public class ControlsGalleryPageViewModel
     {
         Title = RS.ControlsGalleryPageViewModel_Title;
         Icon = PageIcon;
+        IconColor = PageIconColor;
     }
 
     public override IExportInfo Source => SystemModule.Instance;
+
+    public void ChangeStatus(MaterialIconKind? statusIcon, AsvColorKind color)
+    {
+        Status = statusIcon;
+        StatusColor = color;
+    }
 }

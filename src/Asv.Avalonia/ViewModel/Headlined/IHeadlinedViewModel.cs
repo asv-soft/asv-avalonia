@@ -13,7 +13,7 @@ public interface IHeadlinedViewModel : IRoutable
     /// <summary>
     /// Gets or sets the brush for the icon.
     /// </summary>
-    IBrush? IconBrush { get; set; }
+    AsvColorKind IconColor { get; set; }
 
     /// <summary>
     /// Gets or sets the header (title) of the view model.

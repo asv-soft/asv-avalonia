@@ -92,7 +92,7 @@ public class TcpServerPortViewModel : PortViewModel
     {
         ConfigTag.Value = $"{config.Host}:{config.Port}";
         TypeTag.Value = "TCP Server";
-        TypeTag.TagType = TagType.Info3;
+        TypeTag.Color = AsvColorKind.Info3;
     }
 
     protected override EndpointViewModel EndpointFactory(IProtocolEndpoint arg)

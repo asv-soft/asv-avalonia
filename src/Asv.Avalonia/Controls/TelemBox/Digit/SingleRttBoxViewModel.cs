@@ -15,7 +15,7 @@ public class SingleRttBoxViewModel : RttBoxViewModel
         Header = "Distance";
         Units = "mm";
         int index = 0;
-        int maxIndex = Enum.GetValues<RttBoxStatus>().Length;
+        int maxIndex = Enum.GetValues<AsvColorKind>().Length;
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
             .Subscribe(_ =>
@@ -38,8 +38,8 @@ public class SingleRttBoxViewModel : RttBoxViewModel
                     StatusText = null;
                 }
 
-                Status = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
-                ProgressStatus = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
+                Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
+                ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Updated();
             });
     }

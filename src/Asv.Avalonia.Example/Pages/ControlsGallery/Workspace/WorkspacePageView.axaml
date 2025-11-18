@@ -17,7 +17,15 @@
             ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <avalonia:WorkspacePanel/>
+                    <avalonia:WorkspacePanel
+                        MinLeftWidth="250" 
+                        LeftWidth="250" 
+                        CentralWidth="*" 
+                        MinRightWidth="260" 
+                        RightWidth="260"
+                        BottomHeight="250"
+                        MinBottomHeight="250"
+                        />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </avalonia:Workspace>

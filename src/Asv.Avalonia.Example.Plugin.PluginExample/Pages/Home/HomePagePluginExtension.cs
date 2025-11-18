@@ -17,7 +17,7 @@ public class HomePagePluginExtension(ILoggerFactory loggerFactory) : IExtensionF
             {
                 Parent = null,
                 Icon = MaterialIconKind.Plugin,
-                IconBrush = Brushes.Red,
+                IconColor = AsvColorKind.Info4,
                 Header = "Plugin example action",
                 Description = "This is example action from plugin (do nothing)",
                 Order = 0,

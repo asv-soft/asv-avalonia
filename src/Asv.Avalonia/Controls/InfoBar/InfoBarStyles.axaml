@@ -181,7 +181,7 @@
                 <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfoBrush}" />
             </Style>
             <Style Selector="^ /template/ Ellipse#IconBackground">
-                <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfoBrush}" />
+                <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo1Brush}" />
             </Style>
             <Style Selector="^ /template/ avalonia1|MaterialIcon#StandardIcon">
                 <Setter Property="FontSize" Value="10" />

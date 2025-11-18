@@ -17,8 +17,8 @@ public sealed class HistoricalControlsPageViewModelConfig
     public string StringPropWithOneValidation { get; set; } = string.Empty;
     public string StringPropWithManyValidations { get; set; } = string.Empty;
     public GeoPoint GeoPointProperty { get; set; } = GeoPoint.ZeroWithAlt;
-    public TagType TagTypeProp { get; set; } = TagType.Unknown;
-    public RttBoxStatus RttBoxStatusProp { get; set; } = RttBoxStatus.Normal;
+    public AsvColorKind TagTypeProp { get; set; } = AsvColorKind.Unknown;
+    public AsvColorKind AsvColorKindProp { get; set; } = AsvColorKind.Success;
 }
 
 [ExportControlExamples(PageId)]
@@ -59,8 +59,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         _stringWithOneValidation = new ReactiveProperty<string?>().DisposeItWith(Disposable);
         _stringWithManyValidations = new ReactiveProperty<string?>().DisposeItWith(Disposable);
         _geoPointProperty = new ReactiveProperty<GeoPoint>().DisposeItWith(Disposable);
-        _tagTypeProp = new ReactiveProperty<Enum>(TagType.Error).DisposeItWith(Disposable);
-        _rttBoxStatusProp = new ReactiveProperty<Enum>(RttBoxStatus.Normal).DisposeItWith(
+        _tagTypeProp = new ReactiveProperty<Enum>(AsvColorKind.Error).DisposeItWith(Disposable);
+        _rttBoxStatusProp = new ReactiveProperty<Enum>(AsvColorKind.Success).DisposeItWith(
             Disposable
         );
 
@@ -146,7 +146,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
         GeoPointProperty.ForceValidate();
 
-        TagTypeProp = new HistoricalEnumProperty<TagType>(
+        TagTypeProp = new HistoricalEnumProperty<AsvColorKind>(
             nameof(TagTypeProp),
             _tagTypeProp,
             loggerFactory
@@ -154,8 +154,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        RttBoxStatusProp = new HistoricalEnumProperty<RttBoxStatus>(
-            nameof(RttBoxStatusProp),
+        AsvColorKindProp = new HistoricalEnumProperty<AsvColorKind>(
+            nameof(AsvColorKindProp),
             _rttBoxStatusProp,
             loggerFactory
         )
@@ -170,8 +170,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     public HistoricalStringProperty StringPropWithOneValidation { get; }
     public HistoricalStringProperty StringPropWithManyValidations { get; }
     public HistoricalGeoPointProperty GeoPointProperty { get; }
-    public HistoricalEnumProperty<TagType> TagTypeProp { get; }
-    public HistoricalEnumProperty<RttBoxStatus> RttBoxStatusProp { get; }
+    public HistoricalEnumProperty<AsvColorKind> TagTypeProp { get; }
+    public HistoricalEnumProperty<AsvColorKind> AsvColorKindProp { get; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
@@ -182,7 +182,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         yield return StringPropWithManyValidations;
         yield return GeoPointProperty;
         yield return TagTypeProp;
-        yield return RttBoxStatusProp;
+        yield return AsvColorKindProp;
 
         foreach (var child in base.GetRoutableChildren())
         {
@@ -215,7 +215,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                             StringPropWithManyValidations.ViewValue.Value ?? string.Empty;
                         cfg.GeoPointProperty = GeoPointProperty.ModelValue.Value;
                         cfg.TagTypeProp = TagTypeProp.ViewValue.Value;
-                        cfg.RttBoxStatusProp = RttBoxStatusProp.ViewValue.Value;
+                        cfg.AsvColorKindProp = AsvColorKindProp.ViewValue.Value;
                     }
                 );
                 break;
@@ -238,7 +238,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                             cfg.StringPropWithManyValidations;
                         GeoPointProperty.ModelValue.Value = cfg.GeoPointProperty;
                         TagTypeProp.ModelValue.Value = cfg.TagTypeProp;
-                        RttBoxStatusProp.ModelValue.Value = cfg.RttBoxStatusProp;
+                        AsvColorKindProp.ModelValue.Value = cfg.AsvColorKindProp;
                     }
                 );
                 break;

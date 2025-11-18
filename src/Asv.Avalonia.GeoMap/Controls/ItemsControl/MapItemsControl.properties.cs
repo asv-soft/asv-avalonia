@@ -23,8 +23,6 @@ public partial class MapItemsControl
 
     #region Selection rect
 
-    private double _selectionLeft;
-
     public static readonly DirectProperty<MapItemsControl, double> SelectionLeftProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, double>(
             nameof(SelectionLeft),
@@ -34,11 +32,9 @@ public partial class MapItemsControl
 
     public double SelectionLeft
     {
-        get => _selectionLeft;
-        set => SetAndRaise(SelectionLeftProperty, ref _selectionLeft, value);
+        get;
+        set => SetAndRaise(SelectionLeftProperty, ref field, value);
     }
-
-    private double _selectionTop;
 
     public static readonly DirectProperty<MapItemsControl, double> SelectionTopProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, double>(
@@ -49,11 +45,9 @@ public partial class MapItemsControl
 
     public double SelectionTop
     {
-        get => _selectionTop;
-        set => SetAndRaise(SelectionTopProperty, ref _selectionTop, value);
+        get;
+        set => SetAndRaise(SelectionTopProperty, ref field, value);
     }
-
-    private double _selectionWidth;
 
     public static readonly DirectProperty<MapItemsControl, double> SelectionWidthProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, double>(
@@ -64,11 +58,9 @@ public partial class MapItemsControl
 
     public double SelectionWidth
     {
-        get => _selectionWidth;
-        set => SetAndRaise(SelectionWidthProperty, ref _selectionWidth, value);
+        get;
+        set => SetAndRaise(SelectionWidthProperty, ref field, value);
     }
-
-    private double _selectionHeight;
 
     public static readonly DirectProperty<MapItemsControl, double> SelectionHeightProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, double>(
@@ -79,15 +71,13 @@ public partial class MapItemsControl
 
     public double SelectionHeight
     {
-        get => _selectionHeight;
-        set => SetAndRaise(SelectionHeightProperty, ref _selectionHeight, value);
+        get;
+        set => SetAndRaise(SelectionHeightProperty, ref field, value);
     }
 
     #endregion
 
     #region Drag state
-
-    private DragState _dragState;
 
     public static readonly DirectProperty<MapItemsControl, DragState> DragStateProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, DragState>(
@@ -98,15 +88,13 @@ public partial class MapItemsControl
 
     public DragState DragState
     {
-        get => _dragState;
-        set => SetAndRaise(DragStateProperty, ref _dragState, value);
+        get;
+        set => SetAndRaise(DragStateProperty, ref field, value);
     }
 
     #endregion
 
     #region Cursor position
-
-    private GeoPoint _cursorPosition;
 
     public static readonly DirectProperty<MapItemsControl, GeoPoint> CursorPositionProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, GeoPoint>(
@@ -117,15 +105,13 @@ public partial class MapItemsControl
 
     public GeoPoint CursorPosition
     {
-        get => _cursorPosition;
-        set => SetAndRaise(CursorPositionProperty, ref _cursorPosition, value);
+        get;
+        set => SetAndRaise(CursorPositionProperty, ref field, value);
     }
 
     #endregion
 
     #region CenterMap
-
-    private GeoPoint _centerMap;
 
     public static readonly DirectProperty<MapItemsControl, GeoPoint> CenterMapProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, GeoPoint>(
@@ -136,15 +122,14 @@ public partial class MapItemsControl
 
     public GeoPoint CenterMap
     {
-        get => _centerMap;
-        set => SetAndRaise(CenterMapProperty, ref _centerMap, value);
+        get;
+        set => SetAndRaise(CenterMapProperty, ref field, value);
     }
 
     #endregion
 
     #region Provider
 
-    private ITileProvider _provider = EmptyTileProvider.Instance;
     public static readonly DirectProperty<MapItemsControl, ITileProvider> ProviderProperty =
         AvaloniaProperty.RegisterDirect<MapItemsControl, ITileProvider>(
             nameof(Provider),
@@ -154,9 +139,9 @@ public partial class MapItemsControl
 
     public ITileProvider Provider
     {
-        get => _provider;
-        set => SetAndRaise(ProviderProperty, ref _provider, value);
-    }
+        get;
+        set => SetAndRaise(ProviderProperty, ref field, value);
+    } = EmptyTileProvider.Instance;
 
     #endregion
 

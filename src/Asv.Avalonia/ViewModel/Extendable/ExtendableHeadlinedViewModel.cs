@@ -16,11 +16,11 @@ public abstract class ExtendableHeadlinedViewModel<TSelfInterface>(
         set => SetField(ref field, value);
     }
 
-    public IBrush? IconBrush
+    public AsvColorKind IconColor
     {
         get;
         set => SetField(ref field, value);
-    } = Brushes.BlueViolet;
+    }
 
     public string? Header
     {

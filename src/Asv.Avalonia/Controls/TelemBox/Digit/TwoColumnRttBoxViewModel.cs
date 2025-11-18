@@ -18,7 +18,7 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
         Left.Units = "mm";
         Right.Units = "km/h";
         int index = 0;
-        int maxIndex = Enum.GetValues<RttBoxStatus>().Length;
+        int maxIndex = Enum.GetValues<AsvColorKind>().Length;
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
             .Subscribe(_ =>
@@ -55,8 +55,8 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
                     );
                 }
 
-                Status = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
-                ProgressStatus = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
+                Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
+                ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Updated();
             });
     }

@@ -3,19 +3,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public enum RttBoxStatus
-{
-    Normal,
-    Unknown,
-    Success,
-    Warning,
-    Error,
-    Info1,
-    Info2,
-    Info3,
-    Info4,
-}
-
 public class RttBoxViewModel : RoutableViewModel
 {
     private readonly TimeProvider _timeProvider;
@@ -85,7 +72,7 @@ public class RttBoxViewModel : RoutableViewModel
         set => SetField(ref field, value);
     }
 
-    public RttBoxStatus Status
+    public AsvColorKind Status
     {
         get;
         set => SetField(ref field, value);
@@ -97,7 +84,7 @@ public class RttBoxViewModel : RoutableViewModel
         set => SetField(ref field, value);
     }
 
-    public RttBoxStatus? ProgressStatus
+    public AsvColorKind? ProgressStatus
     {
         get;
         set => SetField(ref field, value);

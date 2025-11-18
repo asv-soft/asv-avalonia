@@ -8,7 +8,7 @@ public interface IDeviceManager
 {
     IProtocolFactory ProtocolFactory { get; }
     MaterialIconKind? GetIcon(DeviceId id);
-    IBrush? GetDeviceBrush(DeviceId id);
+    AsvColorKind GetDeviceColor(DeviceId id);
     IProtocolRouter Router { get; }
     IDeviceExplorer Explorer { get; }
 }

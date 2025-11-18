@@ -23,7 +23,7 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
         var sub = new Subject<double>();
         Observable<double> value = sub;
         int index = 0;
-        int maxIndex = Enum.GetValues<RttBoxStatus>().Length;
+        int maxIndex = Enum.GetValues<AsvColorKind>().Length;
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(2))
             .Subscribe(_ =>
@@ -44,8 +44,8 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
                     sub.OnNext(Random.Shared.Next(-6553500, 6553500) / 100.0);
                 }
 
-                Status = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
-                ProgressStatus = Enum.GetValues<RttBoxStatus>()[index++ % maxIndex];
+                Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
+                ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Updated();
             });
         value

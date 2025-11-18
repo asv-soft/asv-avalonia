@@ -30,6 +30,12 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         set => SetField(ref field, value);
     }
 
+    public AsvColorKind IconColor
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     public string Header
     {
         get;

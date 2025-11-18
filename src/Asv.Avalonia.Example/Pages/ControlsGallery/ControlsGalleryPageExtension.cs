@@ -74,7 +74,12 @@ public class ControlsGalleryPageExtension(ILoggerFactory loggerFactory)
                 WorkspacePageViewModel.PageIcon,
                 WorkspacePageViewModel.PageId,
                 NavigationId.Empty,
-                loggerFactory
+                loggerFactory,
+                new TagViewModel("status", loggerFactory)
+                {
+                    Value = "Active",
+                    Color = AsvColorKind.Success | AsvColorKind.Blink,
+                }
             ).DisposeItWith(contextDispose)
         );
     }

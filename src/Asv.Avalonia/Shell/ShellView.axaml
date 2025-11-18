@@ -132,9 +132,7 @@
                                 ToolTip.Tip="{Binding Base.Header}"
                                 Command="{Binding Base.Command}" 
                                 CommandParameter="{Binding Base.CommandParameter}">
-                            <avalonia1:MaterialIcon Kind="{Binding Base.Icon}" >
-                               
-                            </avalonia1:MaterialIcon>
+                            <avalonia1:MaterialIcon avalonia:AsvPallete.Color="{Binding Base.IconColor}" Kind="{Binding Base.Icon}" />
                             <Button.Flyout>
                                 <MenuFlyout ItemsSource="{Binding Items}">
                                     <MenuFlyout.ItemContainerTheme>
@@ -170,7 +168,7 @@
                                 ToolTip.Tip="{Binding Base.Header}"
                                 Command="{Binding Base.Command}" 
                                 CommandParameter="{Binding Base.CommandParameter}">
-                            <avalonia1:MaterialIcon Foreground="{Binding Base.IconBrush}" Kind="{Binding Base.Icon}" />
+                            <avalonia1:MaterialIcon avalonia:AsvPallete.Color="{Binding Base.IconColor}" Kind="{Binding Base.Icon}" />
                             <Button.Flyout>
                                 <MenuFlyout ItemsSource="{Binding Items}">
                                     <MenuFlyout.ItemContainerTheme>

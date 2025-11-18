@@ -67,6 +67,24 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         set => SetField(ref field, value);
     }
 
+    public AsvColorKind IconColor
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public MaterialIconKind? Status
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public AsvColorKind StatusColor
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     public string Title
     {
         get;

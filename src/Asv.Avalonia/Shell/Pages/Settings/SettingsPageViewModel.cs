@@ -11,6 +11,7 @@ public class SettingsPageViewModel
 {
     public const string PageId = "settings";
     public const MaterialIconKind PageIcon = MaterialIconKind.Settings;
+    public const AsvColorKind PageIconColor = AsvColorKind.None;
 
     public SettingsPageViewModel()
         : this(
@@ -37,6 +38,8 @@ public class SettingsPageViewModel
         : base(PageId, svc, host, layoutService, loggerFactory, dialogService)
     {
         Title = RS.SettingsPageViewModel_Title;
+        Icon = PageIcon;
+        IconColor = PageIconColor;
     }
 
     public override IExportInfo Source => SystemModule.Instance;

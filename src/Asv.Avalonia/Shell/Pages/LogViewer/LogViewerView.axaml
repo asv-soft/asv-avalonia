@@ -17,7 +17,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo2Brush}"/>
             </Style>
             <Style Selector="^.info">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfoBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo1Brush}"/>
             </Style>
             <Style Selector="^.trace">
                 <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundUnknownColor}"/>
@@ -39,7 +39,7 @@
                 <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo2Brush}"/>
             </Style>
             <Style Selector="^.info">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfoBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo1Brush}"/>
             </Style>
             <Style Selector="^.trace">
                 <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundUnknownColor}"/>
@@ -80,7 +80,7 @@
             <ProgressBar Width="50" DockPanel.Dock="Right" IsVisible="{Binding Search.IsExecuting.Value}" 
                          Minimum="0" Maximum="1" 
                          Value="{Binding Search.Progress.Value}" />
-            <TextBlock Foreground="{DynamicResource AsvForegroundInfoBrush}" Text="{Binding TextMessage.Value}"/>
+            <TextBlock Foreground="{DynamicResource AsvForegroundInfo1Brush}" Text="{Binding TextMessage.Value}"/>
         </DockPanel>
         <DataGrid Focusable="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" IsReadOnly="True" BorderThickness="0">
             <DataGrid.Columns>

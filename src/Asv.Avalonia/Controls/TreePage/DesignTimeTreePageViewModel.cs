@@ -1,3 +1,4 @@
+using Avalonia.Media;
 using Material.Icons;
 using ObservableCollections;
 using R3;
@@ -37,6 +38,16 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 NavigationId.Empty,
                 DesignTime.LoggerFactory
             )
+            {
+                IconColor = DesignTime.RandomEnum<AsvColorKind>(),
+                Status = new TagViewModel(DesignTime.Id, DesignTime.LoggerFactory)
+                {
+                    Key = "STATUS",
+                    Value = "Active",
+                    Icon = MaterialIconKind.Tag,
+                    Color = AsvColorKind.Success,
+                },
+            }
         );
         Nodes.Add(
             new TreePage(
@@ -77,6 +88,9 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 NavigationId.Empty,
                 DesignTime.LoggerFactory
             )
+            {
+                IconColor = DesignTime.RandomEnum<AsvColorKind>(),
+            }
         );
         Nodes.Add(
             new TreePage(
@@ -87,6 +101,9 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1",
                 DesignTime.LoggerFactory
             )
+            {
+                IconColor = DesignTime.RandomEnum<AsvColorKind>(),
+            }
         );
         Nodes.Add(
             new TreePage(
@@ -97,6 +114,14 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1",
                 DesignTime.LoggerFactory
             )
+            {
+                IconColor = DesignTime.RandomEnum<AsvColorKind>(),
+                Status = new TagViewModel(DesignTime.Id, DesignTime.LoggerFactory)
+                {
+                    Value = "Active",
+                    Color = AsvColorKind.Success,
+                },
+            }
         );
         Nodes.Add(
             new TreePage(

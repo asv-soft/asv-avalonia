@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 public interface ITreePage : IHeadlinedViewModel
 {
     NavigationId ParentId { get; }
-    string? Status { get; }
+    TagViewModel? Status { get; }
     NavigationId NavigateTo { get; }
     ReactiveCommand NavigateCommand { get; }
 }

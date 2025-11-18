@@ -33,7 +33,7 @@ public class EndpointViewModel : HeadlinedViewModel
             RxTag = new TagViewModel("rx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowDownBold,
-                TagType = TagType.Success,
+                Color = AsvColorKind.Success,
                 Value = DataFormatter.ByteRate.Print(double.NaN),
             }
         );
@@ -41,7 +41,7 @@ public class EndpointViewModel : HeadlinedViewModel
             TxTag = new TagViewModel("tx", loggerFactory)
             {
                 Icon = MaterialIconKind.ArrowUpBold,
-                TagType = TagType.Success,
+                Color = AsvColorKind.Success,
                 Value = DataFormatter.ByteRate.Print(double.NaN),
             }
         );

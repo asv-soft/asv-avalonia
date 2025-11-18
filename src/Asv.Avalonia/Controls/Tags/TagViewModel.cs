@@ -3,22 +3,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public enum TagType
-{
-    Error,
-    Warning,
-    Info,
-    Success,
-    Unknown,
-    Info2,
-    Info3,
-    Info4,
-}
-
 public class TagViewModel(NavigationId id, ILoggerFactory loggerFactory)
     : ViewModelBase(id: id, loggerFactory)
 {
-    public TagType? TagType
+    public AsvColorKind Color
     {
         get;
         set => SetField(ref field, value);

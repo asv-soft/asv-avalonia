@@ -8,14 +8,8 @@ namespace Asv.Avalonia.GeoMap;
 
 public interface IMap : IRoutable
 {
-    ObservableList<IMapWidget> Widgets { get; }
     ObservableList<IMapAnchor> Anchors { get; }
     BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
-}
-
-public interface IMapWidget : IHeadlinedViewModel
-{
-    public WorkspaceDock Position { get; }
 }
 
 public class MapViewModel : RoutableViewModel, IMap
@@ -48,16 +42,8 @@ public class MapViewModel : RoutableViewModel, IMap
         Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim();
-        Widgets = new ObservableList<IMapWidget>();
-        Widgets.SetRoutableParent(this).DisposeItWith(Disposable);
-        Widgets.DisposeRemovedItems().DisposeItWith(Disposable);
-        WidgetsView = Widgets.ToNotifyCollectionChangedSlim();
         SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);
     }
-
-    public NotifyCollectionChangedSynchronizedViewList<IMapWidget> WidgetsView { get; }
-
-    public ObservableList<IMapWidget> Widgets { get; }
 
     public NotifyCollectionChangedSynchronizedViewList<IMapAnchor> AnchorsView { get; }
 
@@ -71,18 +57,12 @@ public class MapViewModel : RoutableViewModel, IMap
         {
             yield return item;
         }
-
-        foreach (var item in WidgetsView)
-        {
-            yield return item;
-        }
     }
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            WidgetsView.Dispose();
             AnchorsView.Dispose();
         }
 

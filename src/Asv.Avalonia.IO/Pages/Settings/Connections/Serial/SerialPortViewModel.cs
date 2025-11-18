@@ -121,7 +121,7 @@ public class SerialPortViewModel : PortViewModel
     {
         ConfigTag.Value = GetOptions(config);
         TypeTag.Value = RS.SerialPortViewModel_TagViewModel_Value;
-        TypeTag.TagType = TagType.Info;
+        TypeTag.Color = AsvColorKind.Info1;
     }
 
     private static string GetOptions(SerialProtocolPortConfig config)

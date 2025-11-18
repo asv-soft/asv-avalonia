@@ -26,7 +26,8 @@
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="asv:HomePageItemDecorator">
                                     <Grid RowDefinitions="25, 0, *" ColumnDefinitions="40, 8, *">
-                                        <avalonia:MaterialIcon Classes="big accent"
+                                        <avalonia:MaterialIcon Classes="big "
+                                                               asv:AsvPallete.Color="{Binding HomePageItem.IconColor}"
                                                                Kind="{Binding HomePageItem.Icon}" 
                                                                Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
                                         <TextBlock Classes="h1"

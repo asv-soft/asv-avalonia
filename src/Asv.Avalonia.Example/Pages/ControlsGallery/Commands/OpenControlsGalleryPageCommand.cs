@@ -19,6 +19,7 @@ public class OpenControlsGalleryPageCommand(INavigationService nav)
         Name = RS.OpenControlsGalleryPageCommand_CommandInfo_Name,
         Description = RS.OpenControlsGalleryPageCommand_CommandInfo_Description,
         Icon = ControlsGalleryPageViewModel.PageIcon,
+        IconColor = ControlsGalleryPageViewModel.PageIconColor,
         DefaultHotKey = null,
         Source = SystemModule.Instance,
     };

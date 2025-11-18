@@ -1,56 +1,77 @@
 <Styles xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- ============================================= -->
+    <!-- TEXTBLOCK & SELECTABLETEXTBLOCK STYLES -->
+    <!-- Applies to headings, descriptions and colored text -->
+    <!-- ============================================= -->
     <Style Selector="TextBlock, SelectableTextBlock">
+
+        <!-- =============== TYPOGRAPHY: HEADINGS =============== -->
         <Style Selector="^.h1">
-            <Setter Property="FontSize" Value="{DynamicResource  AsvH1FontSize}"/>
-            
-            <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
+            <Setter Property="FontSize"   Value="{DynamicResource AsvH1FontSize}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
         </Style>
+
         <Style Selector="^.h2">
-            <Setter Property="FontSize" Value="{DynamicResource  AsvH2FontSize}"/>
-            
-            <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
+            <Setter Property="FontSize"   Value="{DynamicResource AsvH2FontSize}" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
         </Style>
+
         <Style Selector="^.h3">
-            <Setter Property="FontSize" Value="{DynamicResource  AsvH3FontSize}"/>
-            
-            <Setter Property="Foreground" Value="{DynamicResource  TextControlForeground}"/>
+            <Setter Property="FontSize"   Value="{DynamicResource AsvH3FontSize}" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
         </Style>
+
+        <!-- =============== DESCRIPTION / SUBTITLE =============== -->
         <Style Selector="^.description">
-            <Setter Property="FontSize" Value="{DynamicResource  AsvFontSizeSmall}"/>
-            <Setter Property="FontWeight" Value="Normal"/>
-            <Setter Property="Foreground" Value="{DynamicResource   TextControlForegroundDisabled}"/>
+            <Setter Property="FontSize"   Value="{DynamicResource AsvFontSizeSmall}" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="Foreground" Value="{DynamicResource TextControlForegroundDisabled}" />
+            <Setter Property="Opacity"    Value="0.8" />
         </Style>
-        
+
+        <!-- =============== STATUS COLORS =============== -->
         <Style Selector="^.error">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundErrorBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundErrorBrush}" />
         </Style>
+
         <Style Selector="^.warning">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundWarningBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundWarningBrush}" />
         </Style>
-        
-        <Style Selector="^.unknown">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundUnknownBrush}"/>
-        </Style>
-            
+
         <Style Selector="^.success">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundSuccessBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundSuccessBrush}" />
         </Style>
-            
-        <Style Selector="^.info">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfoBrush}"/>
+
+        <Style Selector="^.unknown">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundUnknownBrush}" />
         </Style>
-            
-        <Style Selector="^.info2">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo2Brush}"/>
-        </Style>
-            
-        <Style Selector="^.info3">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}"/>
-        </Style>
-            
-        <Style Selector="^.info4">
-            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo4Brush}"/>
-        </Style>
+
+        <!-- =============== INFO PALETTE – 20 COLORS (no conflict with status) =============== -->
+        <Style Selector="^.info1">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo1Brush}" />   </Style>
+        <Style Selector="^.info2">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo2Brush}" />   </Style>
+        <Style Selector="^.info3">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}" />   </Style>
+        <Style Selector="^.info4">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo4Brush}" />   </Style>
+        <Style Selector="^.info5">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo5Brush}" />   </Style>
+        <Style Selector="^.info6">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo6Brush}" />   </Style>
+        <Style Selector="^.info7">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo7Brush}" />   </Style>
+        <Style Selector="^.info8">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo8Brush}" />   </Style>
+        <Style Selector="^.info9">   <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo9Brush}" />   </Style>
+        <Style Selector="^.info10">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo10Brush}" />  </Style>
+        <Style Selector="^.info11">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo11Brush}" />  </Style>
+        <Style Selector="^.info12">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo12Brush}" />  </Style>
+        <Style Selector="^.info13">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo13Brush}" />  </Style>
+        <Style Selector="^.info14">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo14Brush}" />  </Style>
+        <Style Selector="^.info15">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo15Brush}" />  </Style>
+        <Style Selector="^.info16">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo16Brush}" />  </Style>
+        <Style Selector="^.info17">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo17Brush}" />  </Style>
+        <Style Selector="^.info18">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo18Brush}" />  </Style>
+        <Style Selector="^.info19">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo19Brush}" />  </Style>
+        <Style Selector="^.info20">  <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo20Brush}" />  </Style>
+
     </Style>
 </Styles>

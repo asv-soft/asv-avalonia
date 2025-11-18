@@ -97,9 +97,19 @@ public partial class PolygonLayer : Control
         }
     }
 
+    public PolygonLayer()
+    {
+        // TODO: when disposing?
+        _renderRequestSubject.ThrottleLastFrame(1).Subscribe(_ => InvalidateVisual());
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+    }
+
     protected override void OnUnloaded(RoutedEventArgs e)
     {
-        _renderRequestSubject.Dispose();
         base.OnUnloaded(e);
     }
 
@@ -109,16 +119,6 @@ public partial class PolygonLayer : Control
     }
 
     private readonly Subject<Unit> _renderRequestSubject = new();
-
-    public PolygonLayer()
-    {
-        DisposableBuilder disposeBuilder = new();
-        _renderRequestSubject.AddTo(ref disposeBuilder);
-        _renderRequestSubject
-            .ThrottleLastFrame(1)
-            .Subscribe(_ => InvalidateVisual())
-            .AddTo(ref disposeBuilder);
-    }
 
     public override void Render(DrawingContext context)
     {
