@@ -1,0 +1,53 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:Asv.Avalonia"
+             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="400"
+             x:Class="Asv.Avalonia.DialogItemUnsavedChangesView"
+             x:DataType="avalonia:DialogItemUnsavedChangesViewModel">
+    <Design.DataContext>
+        <avalonia:DialogItemUnsavedChangesViewModel />
+    </Design.DataContext>
+    <StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" MaxHeight="300">
+            <ItemsControl 
+                ItemsSource="{CompiledBinding Changes}"
+                Background="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                Padding="6">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                            <Button
+                                Theme="{DynamicResource TransparentButton}"
+                                Classes="h3"
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                VerticalAlignment="Center" 
+                                Padding="4"
+                                Command="{Binding NavigatePage}"
+                            >
+                                <StackPanel Orientation="Horizontal" Spacing="4">
+                                    <TextBlock
+                                        Classes="h3"
+                                        VerticalAlignment="Center" 
+                                        Theme="{DynamicResource BodyStrongTextBlockStyle}"
+                                        Text="{Binding Base.Page.Title}"/>
+                                    <avalonia1:MaterialIcon Kind="ChevronRight"/>
+                                </StackPanel>
+                            </Button>
+                            <ItemsControl
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Padding="12 6 6 6"
+                                ItemsSource="{Binding Base.Restrictions}">
+                            </ItemsControl>
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+    </StackPanel>
+</UserControl>

@@ -801,4 +801,7 @@
     <data name="ViewSaveAllMenu_Header" xml:space="preserve">
         <value>Сохранить все</value>
     </data>
+    <data name="DesktopShellViewModel_CloseAsync_UnsavedConfirm" xml:space="preserve">
+        <value>У вас есть несохраненные изменения. Всё равно выйти?</value>
+    </data>
 </root>
