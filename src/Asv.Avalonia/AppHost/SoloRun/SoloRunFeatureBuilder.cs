@@ -31,8 +31,8 @@ public class SoloRunFeatureBuilder
         return this;
     }
 
-    internal OptionsBuilder<SoloRunFeatureConfig> Build(
-        OptionsBuilder<SoloRunFeatureConfig> options
+    internal OptionsBuilder<SoloRunFeatureOptions> Build(
+        OptionsBuilder<SoloRunFeatureOptions> options
     )
     {
         return options.Configure(config =>

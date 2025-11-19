@@ -9,7 +9,7 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public class SoloRunFeatureConfig
+public class SoloRunFeatureOptions
 {
     public const string Section = "SoloRun";
     public string? Mutex { get; set; }
@@ -22,7 +22,7 @@ public class SoloRunFeature : AsyncDisposableWithCancel, ISoloRunFeature
     private readonly Mutex _mutex;
     private readonly ReactiveProperty<AppArgs> _args;
 
-    public SoloRunFeature(IOptions<SoloRunFeatureConfig> option, ILoggerFactory loggerFactory)
+    public SoloRunFeature(IOptions<SoloRunFeatureOptions> option, ILoggerFactory loggerFactory)
     {
         var logger = loggerFactory.CreateLogger<SoloRunFeature>();
         _args = new ReactiveProperty<AppArgs>(new AppArgs(Environment.GetCommandLineArgs()));

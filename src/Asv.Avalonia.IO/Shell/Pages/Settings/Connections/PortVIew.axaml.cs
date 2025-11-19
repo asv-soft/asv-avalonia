@@ -3,9 +3,9 @@
 namespace Asv.Avalonia.IO;
 
 [ExportViewFor(typeof(PortViewModel))]
-public partial class PortVIew : UserControl
+public partial class PortView : UserControl
 {
-    public PortVIew()
+    public PortView()
     {
         InitializeComponent();
     }

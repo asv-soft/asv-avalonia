@@ -1,3 +1,7 @@
+using System.Composition.Hosting;
+using Avalonia.Controls;
+using Microsoft.Extensions.Options;
+
 namespace Asv.Avalonia.GeoMap;
 
 public sealed class GeoMapModule : IExportInfo
@@ -8,4 +12,28 @@ public sealed class GeoMapModule : IExportInfo
     private GeoMapModule() { }
 
     public string ModuleName => Name;
+}
+
+public static class ContainerConfigurationMixin
+{
+    public static ContainerConfiguration WithDependenciesFromGeoMapModule(
+        this ContainerConfiguration containerConfiguration
+    )
+    {
+        if (Design.IsDesignMode)
+        {
+            return containerConfiguration.WithAssemblies([typeof(GeoMapModule).Assembly]);
+        }
+
+        // Here we use options instead of service existence check, because we get required service in the view
+        var exceptionTypes = new List<Type>();
+        var options = AppHost.Instance.GetService<IOptions<GeoMapOptions>>().Value;
+        if (!options.IsTurnedOn)
+        {
+            exceptionTypes.AddRange(typeof(GeoMapModule).Assembly.GetTypes());
+        }
+
+        var geoMapTypes = typeof(GeoMapModule).Assembly.GetTypes().Except(exceptionTypes);
+        return containerConfiguration.WithParts(geoMapTypes);
+    }
 }

@@ -15,7 +15,7 @@ public static class UserConfigMixin
         configure?.Invoke(config);
         var options = builder
             .Services.AddSingleton<IConfiguration, UserJsonConfiguration>()
-            .AddOptions<UserConfigurationConfig>()
+            .AddOptions<UserConfigurationOptions>()
             .Bind(builder.Configuration);
         config.Build(options);
         return builder;

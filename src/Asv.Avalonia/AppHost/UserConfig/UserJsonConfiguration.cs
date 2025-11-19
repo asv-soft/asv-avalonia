@@ -4,7 +4,7 @@ using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia;
 
-public class UserConfigurationConfig
+public class UserConfigurationOptions
 {
     public string FilePath { get; set; } = "user_settings.json";
     public int AutoSaveMs { get; set; } = 0;
@@ -13,7 +13,7 @@ public class UserConfigurationConfig
 public class UserJsonConfiguration : JsonOneFileConfiguration
 {
     public UserJsonConfiguration(
-        IOptions<UserConfigurationConfig> config,
+        IOptions<UserConfigurationOptions> config,
         ILoggerFactory loggerFactory
     )
         : base(
