@@ -163,6 +163,15 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 Header = "Map Widget2",
                 IsExpanded = true,
                 CanExpand = true,
+                Anchors =
+                {
+                    new MapAnchor<IMapAnchor>("drone1", loggerFactory)
+                    {
+                        Title = "Drone 1",
+                        Location = new GeoPoint(53.0, 53.0, 100),
+                        Icon = MaterialIconKind.Airplane,
+                    },
+                },
             },
         ];
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);

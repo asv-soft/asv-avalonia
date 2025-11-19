@@ -42,9 +42,9 @@
                     </map:MapItemsControl.Styles>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <avalonia:MaterialIcon Width="30"
-                                                   Height="30"
-                                                   Foreground="{Binding Foreground}"
+                            <avalonia:MaterialIcon Width="{Binding IconSize}"
+                                                   Height="{Binding IconSize}"
+                                                   asv:AsvPallete.Color="{Binding IconColor}"
                                                    Kind="{Binding Icon}" />
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

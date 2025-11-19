@@ -36,6 +36,18 @@ public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
         set => SetField(ref field, value);
     }
 
+    public double IconSize
+    {
+        get;
+        set => SetField(ref field, value);
+    } = 40;
+
+    public AsvColorKind IconColor
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     public MaterialIconKind Icon
     {
         get;

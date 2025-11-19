@@ -13,7 +13,8 @@ public interface IMapAnchor : IRoutable
     double Azimuth { get; }
     BindableReactiveProperty<GeoPoint> ReactiveLocation { get; }
     GeoPoint Location { get; }
-    IBrush Foreground { get; }
+    double IconSize { get; }
+    AsvColorKind IconColor { get; }
     HorizontalOffset CenterX { get; }
     VerticalOffset CenterY { get; }
     bool IsReadOnly { get; }

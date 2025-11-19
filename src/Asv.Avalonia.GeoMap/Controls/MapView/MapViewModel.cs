@@ -21,6 +21,7 @@ public class MapViewModel : RoutableViewModel, IMap
         var drone = new MapAnchor<IMapAnchor>(DesignTime.Id, DesignTime.LoggerFactory)
         {
             Icon = MaterialIconKind.Navigation,
+            Location = new GeoPoint(53, 53, 100),
         };
         Anchors.Add(drone);
         var azimuth = 0;
@@ -41,7 +42,7 @@ public class MapViewModel : RoutableViewModel, IMap
         Anchors = new ObservableList<IMapAnchor>();
         Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
-        AnchorsView = Anchors.ToNotifyCollectionChangedSlim();
+        AnchorsView = Anchors.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);
     }
 
