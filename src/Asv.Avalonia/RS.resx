@@ -760,4 +760,7 @@
     <data name="ViewSaveAllMenu_Header" xml:space="preserve">
         <value>Save All</value>
     </data>
+    <data name="DesktopShellViewModel_CloseAsync_UnsavedConfirm" xml:space="preserve">
+        <value>You have some unsaved changes. Exit anyway?</value>
+    </data>
 </root>
