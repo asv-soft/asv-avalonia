@@ -5,6 +5,7 @@ using Asv.Common;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia;
 
@@ -24,10 +25,11 @@ public static class ContainerConfigurationMixin
         this ContainerConfiguration containerConfiguration
     )
     {
+        containerConfiguration.WithExport(TimeProvider.System);
+
         if (Design.IsDesignMode)
         {
             containerConfiguration
-                .WithExport(TimeProvider.System)
                 .WithExport(DesignTime.Configuration)
                 .WithExport(NullLoggerFactory.Instance)
                 .WithExport(NullAppPath.Instance)
@@ -39,11 +41,6 @@ public static class ContainerConfigurationMixin
         }
 
         var exceptionTypes = new List<Type>();
-        if (AppHost.Instance.GetServiceOrDefault<TimeProvider>() is { } timeProvider)
-        {
-            containerConfiguration.WithExport(timeProvider);
-        }
-
         if (AppHost.Instance.GetServiceOrDefault<IConfiguration>() is { } configuration)
         {
             containerConfiguration.WithExport(configuration);
@@ -74,9 +71,11 @@ public static class ContainerConfigurationMixin
             containerConfiguration.WithExport(soloRunFeature);
         }
 
-        if (AppHost.Instance.GetServiceOrDefault<ILogReaderService>() is { } logReader)
+        if (AppHost.Instance.GetService<IOptions<LoggerOptions>>().Value.ViewerEnabled ?? false)
         {
-            containerConfiguration.WithExport(logReader);
+            containerConfiguration.WithExport(
+                AppHost.Instance.GetService<IOptions<LogToFileOptions>>().Value
+            );
         }
         else
         {
@@ -86,6 +85,8 @@ public static class ContainerConfigurationMixin
                     typeof(LogViewerView),
                     typeof(HomePageLogViewerExtension),
                     typeof(OpenLogViewerCommand),
+                    typeof(ILogReaderService),
+                    typeof(LogReaderService),
                 ]
             );
         }

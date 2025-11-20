@@ -28,7 +28,7 @@ public static class ContainerConfigurationMixin
         // Here we use options instead of service existence check, because we get required service in the view
         var exceptionTypes = new List<Type>();
         var options = AppHost.Instance.GetService<IOptions<GeoMapOptions>>().Value;
-        if (!options.IsTurnedOn)
+        if (!options.IsEnabled)
         {
             exceptionTypes.AddRange(typeof(GeoMapModule).Assembly.GetTypes());
         }

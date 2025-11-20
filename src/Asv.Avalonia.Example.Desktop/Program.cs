@@ -25,7 +25,6 @@ sealed class Program
 
         builder
             .UseAvalonia(BuildAvaloniaApp)
-            .UseTimeProvider()
             .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
             .UseJsonUserConfig(opt =>
                 opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))

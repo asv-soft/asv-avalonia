@@ -3,5 +3,5 @@
 public class GeoMapOptions
 {
     public const string Section = "GeoMap";
-    public required bool IsTurnedOn { get; set; }
+    public required bool IsEnabled { get; set; }
 }
