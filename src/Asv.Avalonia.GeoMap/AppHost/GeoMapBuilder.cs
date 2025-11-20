@@ -8,7 +8,7 @@ public class GeoMapBuilder
     {
         return options.Configure(config =>
         {
-            config.IsTurnedOn = true;
+            config.IsEnabled = true;
         });
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Composition.Hosting;
 using Avalonia.Controls;
+using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia.IO;
 
@@ -26,11 +27,8 @@ public static class ContainerConfigurationMixin
         }
 
         var exceptionTypes = new List<Type>();
-        if (AppHost.Instance.GetServiceOrDefault<IDeviceManager>() is { } deviceManager)
-        {
-            containerConfiguration.WithExport(deviceManager);
-        }
-        else
+        var options = AppHost.Instance.GetService<IOptions<IoModuleOptions>>().Value;
+        if (!options.EnableDevices)
         {
             exceptionTypes.AddRange(
                 [
@@ -54,6 +52,8 @@ public static class ContainerConfigurationMixin
                     typeof(ConnectionRateStatusView),
                     typeof(ConnectionRateStatusViewModel),
                     typeof(PortCrudCommand),
+                    typeof(IDeviceManager),
+                    typeof(DeviceManager),
                 ]
             );
         }

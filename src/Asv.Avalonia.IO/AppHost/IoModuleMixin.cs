@@ -35,20 +35,8 @@ public static class IoModuleMixin
 
         var options = optionsBuilder.Build();
 
-        ApplyDevices(builder, options);
-
         builder.Services.AddSingleton(Options.Create(options));
 
         return builder;
-    }
-
-    private static void ApplyDevices(IHostApplicationBuilder builder, IoModuleOptions loggerOptions)
-    {
-        if (!loggerOptions.EnableDevices)
-        {
-            return;
-        }
-
-        builder.Services.AddSingleton<IDeviceManager, DeviceManager>();
     }
 }

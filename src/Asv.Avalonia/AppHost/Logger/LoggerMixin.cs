@@ -32,7 +32,6 @@ public static class LoggerMixin
         var loggerOptions = loggerOptionsBuilder.Build();
 
         ApplyLogToFile(builder, loggerOptions);
-        ApplyLogViewer(builder, loggerOptions);
         ApplyLogToConsole(builder, loggerOptions);
         ApplyLogLevel(builder, loggerOptions);
 
@@ -49,23 +48,6 @@ public static class LoggerMixin
         }
 
         builder.Logging.SetMinimumLevel(loggerOptions.Level.Value);
-    }
-
-    private static void ApplyLogViewer(IHostApplicationBuilder builder, LoggerOptions loggerOptions)
-    {
-        if (loggerOptions.ViewerEnabled is null || !loggerOptions.ViewerEnabled.Value)
-        {
-            return;
-        }
-
-        if (loggerOptions.LogToFileOptions is null)
-        {
-            throw new ArgumentException(
-                "You must configure LogToFile options to enable log viewer"
-            );
-        }
-
-        builder.Services.AddSingleton<ILogReaderService, LogReaderService>();
     }
 
     private static void ApplyLogToConsole(

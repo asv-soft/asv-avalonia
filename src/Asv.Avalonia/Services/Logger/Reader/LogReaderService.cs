@@ -1,3 +1,4 @@
+using System.Composition;
 using System.Runtime.CompilerServices;
 using System.Text;
 using DotNext.Collections.Generic;
@@ -6,19 +7,20 @@ using Newtonsoft.Json;
 
 namespace Asv.Avalonia;
 
+[Export(typeof(ILogReaderService))]
+[Shared]
 public class LogReaderService : ILogReaderService, IExportable
 {
     private static readonly JsonSerializer Serializer = new();
 
     private readonly string _logsFolder;
 
-    public LogReaderService(IOptions<LogToFileOptions> options)
+    [ImportingConstructor]
+    public LogReaderService(LogToFileOptions options)
     {
-        _logsFolder = options.Value.Folder;
+        _logsFolder = options.Folder;
         ArgumentNullException.ThrowIfNull(_logsFolder);
     }
-
-    public IExportInfo Source => SystemModule.Instance;
 
     public async IAsyncEnumerable<LogMessage> LoadItemsFromLogFile(
         [EnumeratorCancellation] CancellationToken cancel = default
@@ -55,4 +57,6 @@ public class LogReaderService : ILogReaderService, IExportable
             }
         }
     }
+
+    public IExportInfo Source => SystemModule.Instance;
 }
