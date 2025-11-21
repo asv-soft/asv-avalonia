@@ -114,8 +114,6 @@
     <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/ActionScreen.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/RttBox.axaml"/>
     <StyleInclude Source="avares://Asv.Avalonia/Controls/FrequencyScreen/FrequencyControl.axaml"/>
-    
-   
 </Styles>
 
 

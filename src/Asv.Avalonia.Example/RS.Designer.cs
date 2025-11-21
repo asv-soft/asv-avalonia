@@ -87,81 +87,81 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageViewModel_OpenFile_Title {
+        public static string DialogControlsPageViewModel_OpenFilePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_OpenFile_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_OpenFilePrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_SaveFile_Title {
+        public static string DialogControlsPageViewModel_SaveFilePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_SaveFile_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_SaveFilePrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_SelectFolder_Title {
+        public static string DialogControlsPageViewModel_SelectFolderPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_SelectFolder_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_SelectFolderPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_ObserveFolder_Title {
+        public static string DialogControlsPageViewModel_ObserveFolderPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_ObserveFolder_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_ObserveFolderPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_YesOrNo_Title {
+        public static string DialogControlsPageViewModel_YesOrNoPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_YesOrNo_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_YesOrNoPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_YesOrNo_Message {
+        public static string DialogControlsPageViewModel_YesOrNoPrefab_Message {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_YesOrNo_Message", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_YesOrNoPrefab_Message", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_Save_Title {
+        public static string DialogControlsPageViewModel_SavePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_Save_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_SavePrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_Save_Message {
+        public static string DialogControlsPageViewModel_SavePrefab_Message {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_Save_Message", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_SavePrefab_Message", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_HotKeyCapture_Title {
+        public static string DialogControlsPageViewModel_HotKeyCapturePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_HotKeyCapture_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_HotKeyCapturePrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_HotKeyCapture_Message {
+        public static string DialogControlsPageViewModel_HotKeyCapturePrefab_Message {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_HotKeyCapture_Message", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_HotKeyCapturePrefab_Message", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_Input_Title {
+        public static string DialogControlsPageViewModel_InputPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_Input_Title", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_InputPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_Input_Message {
+        public static string DialogControlsPageViewModel_InputPrefab_Message {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_Input_Message", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_InputPrefab_Message", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Note {
+        public static string DialogControlsPageView_System_Note {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Note", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_System_Note", resourceCulture);
             }
         }
         
@@ -189,27 +189,9 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageView_Custom_Description {
-            get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_Description", resourceCulture);
-            }
-        }
-        
         public static string DialogControlsPageView_System_Title {
             get {
                 return ResourceManager.GetString("DialogControlsPageView_System_Title", resourceCulture);
-            }
-        }
-        
-        public static string DialogControlsPageView_System_Description {
-            get {
-                return ResourceManager.GetString("DialogControlsPageView_System_Description", resourceCulture);
-            }
-        }
-        
-        public static string DialogControlsPageView_LastResult {
-            get {
-                return ResourceManager.GetString("DialogControlsPageView_LastResult", resourceCulture);
             }
         }
         
@@ -327,51 +309,51 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageView_System_OpenFile {
+        public static string DialogControlsPageView_OpenFilePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_OpenFile", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_OpenFilePrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_System_SaveFile {
+        public static string DialogControlsPageView_SaveFilePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_SaveFile", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_SaveFilePrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_System_SelectFolder {
+        public static string DialogControlsPageView_SelectFolderPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_SelectFolder", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_SelectFolderPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_System_ObserveFolder {
+        public static string DialogControlsPageView_ObserveFolderPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_System_ObserveFolder", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_ObserveFolderPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_YesOrNo {
+        public static string DialogControlsPageView_YesOrNoPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_YesOrNo", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_YesOrNoPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_Save {
+        public static string DialogControlsPageView_SavePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_Save", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_SavePrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_Input {
+        public static string DialogControlsPageView_InputPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_Input", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_InputPrefab_Title", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_HotKeyCapture {
+        public static string DialogControlsPageView_HotKeyCapturePrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_HotKeyCapture", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_HotKeyCapturePrefab_Title", resourceCulture);
             }
         }
         
@@ -381,51 +363,51 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageViewModel_OpenFile_Result {
+        public static string DialogControlsPageViewModel_OpenFilePrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_OpenFile_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_OpenFilePrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_SaveFile_Result {
+        public static string DialogControlsPageViewModel_SaveFilePrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_SaveFile_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_SaveFilePrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_SelectFolder_Result {
+        public static string DialogControlsPageViewModel_SelectFolderPrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_SelectFolder_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_SelectFolderPrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_ObserveFolder_Result {
+        public static string DialogControlsPageViewModel_ObserveFolderPrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_ObserveFolder_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_ObserveFolderPrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_YesOrNo_Result {
+        public static string DialogControlsPageViewModel_YesOrNoPrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_YesOrNo_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_YesOrNoPrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_Save_Result {
+        public static string DialogControlsPageViewModel_SavePrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_Save_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_SavePrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_Input_Result {
+        public static string DialogControlsPageViewModel_InputPrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_Input_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_InputPrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageViewModel_HotKeyCapture_Result {
+        public static string DialogControlsPageViewModel_HotKeyCapturePrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_HotKeyCapture_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_HotKeyCapturePrefab_Result", resourceCulture);
             }
         }
         
@@ -447,15 +429,189 @@ namespace Asv.Avalonia.Example {
             }
         }
         
-        public static string DialogControlsPageViewModel_GeoPoint_Result {
+        public static string DialogControlsPageViewModel_GeoPointPrefab_Result {
             get {
-                return ResourceManager.GetString("DialogControlsPageViewModel_GeoPoint_Result", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageViewModel_GeoPointPrefab_Result", resourceCulture);
             }
         }
         
-        public static string DialogControlsPageView_Custom_GeoPoint {
+        public static string DialogControlsPageView_GeoPointPrefab_Title {
             get {
-                return ResourceManager.GetString("DialogControlsPageView_Custom_GeoPoint", resourceCulture);
+                return ResourceManager.GetString("DialogControlsPageView_GeoPointPrefab_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_Title {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_Title", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_Content {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_Content", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_Buttons {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_Buttons", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_Header {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_Header", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Prefabs_Header {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Prefabs_Header", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_Prefabs_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_Prefabs_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_SelectFolderPrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_SelectFolderPrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_SaveFilePrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_SaveFilePrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_OpenFilePrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_OpenFilePrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ObserveFolderPrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ObserveFolderPrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_YesOrNoPrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_YesOrNoPrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_HotKeyCapturePrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_HotKeyCapturePrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_GeoPointPrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_GeoPointPrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_InputPrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_InputPrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_SavePrefab_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_SavePrefab_Description", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_ContentDialog_Result {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_ContentDialog_Result", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_ObserveFolderPrefab_ResultShort {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_ObserveFolderPrefab_ResultShort", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_ContentDialog_Primary {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_ContentDialog_Primary", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_ContentDialog_Secondary {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_ContentDialog_Secondary", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageViewModel_ContentDialog_Close {
+            get {
+                return ResourceManager.GetString("DialogControlsPageViewModel_ContentDialog_Close", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_InputPrefab_Placeholder {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_InputPrefab_Placeholder", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_TextContent {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_TextContent", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_ImageContent {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_ImageContent", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_ImageContent_Select {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_ImageContent_Select", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ObserveFolderPrefab_PlaceHolder {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ObserveFolderPrefab_PlaceHolder", resourceCulture);
+            }
+        }
+        
+        public static string DialogControlsPageView_ContentDialog_Open {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_ContentDialog_Open", resourceCulture);
+            }
+        }
+        
+        public static string ResetGeoPointDialogResultCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ResetGeoPointDialogResultCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ResetGeoPointDialogResultCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ResetGeoPointDialogResultCommand_CommandInfo_Description", resourceCulture);
             }
         }
     }

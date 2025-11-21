@@ -1,0 +1,48 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:example="clr-namespace:Asv.Avalonia.Example">
+    <Design.PreviewWith>
+        <example:HeaderBlock
+                             TitleH1="Some block title" 
+                             Description="Some block description. Here will be some text."
+                             Margin="10"/>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type example:HeaderBlock}"
+                  TargetType="example:HeaderBlock"
+                  BasedOn="{StaticResource {x:Type example:BaseExampleBlock}}">
+        <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundListLowBrush}" />
+        <Setter Property="Content">
+            <Template>
+                <StackPanel Spacing="6">
+                    <TextBlock
+                        Text="{Binding TitleH1, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}}"
+                        FontWeight="SemiBold"
+                        Classes="h1" 
+                        TextTrimming="CharacterEllipsis" 
+                        IsVisible="{Binding TitleH1, Converter={x:Static ObjectConverters.IsNotNull}, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}}" />
+                    
+                    <TextBlock
+                        Text="{Binding TitleH2, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}}"
+                        FontWeight="SemiBold"
+                        Classes="h2" 
+                        TextTrimming="CharacterEllipsis" 
+                        IsVisible="{Binding TitleH2, Converter={x:Static ObjectConverters.IsNotNull}, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}}" />
+                    
+                    <TextBlock
+                        Text="{Binding TitleH3, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}}"
+                        FontWeight="SemiBold"
+                        Classes="h3" 
+                        TextTrimming="CharacterEllipsis" 
+                        IsVisible="{Binding TitleH3, Converter={x:Static ObjectConverters.IsNotNull}, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}}" />
+
+                    <TextBlock x:Name="DescriptionTextBlock"
+                               Text="{Binding Description, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}}"
+                               Opacity="0.85"
+                               TextWrapping="Wrap"
+                               IsVisible="{Binding Description, RelativeSource={RelativeSource AncestorType=example:HeaderBlock}, Converter={x:Static ObjectConverters.IsNotNull}}" />
+                </StackPanel>
+            </Template>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

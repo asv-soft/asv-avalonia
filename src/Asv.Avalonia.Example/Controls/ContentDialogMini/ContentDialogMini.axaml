@@ -1,0 +1,84 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example">
+    <Design.PreviewWith>
+        <StackPanel Orientation="Horizontal" Spacing="5" Margin="10">
+            <example:ContentDialogMini DialogResult="Primary" Width="100" Height="100"/>
+            <example:ContentDialogMini DialogResult="Secondary" Width="100" Height="100"/>
+            <example:ContentDialogMini DialogResult="None" Width="100" Height="100"/>
+        </StackPanel>
+    </Design.PreviewWith>
+    
+    <Style Selector="Border.indicator-dot">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Height" Value="8" />
+        <Setter Property="CornerRadius" Value="4" />
+        <Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" />
+        <Setter Property="Margin" Value="4" />
+        <Setter Property="Transitions">
+            <Transitions>
+                <BrushTransition Property="Background" Duration="0:0:0.3" />
+                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.3" />
+            </Transitions>
+        </Setter>
+    </Style>
+
+    <Style Selector="Border.indicator-dot.active">
+        <Setter Property="Background" Value="{DynamicResource SystemAccentColorLight1}" />
+        <Setter Property="RenderTransform" Value="scale(1.3)" />
+    </Style>
+
+    <Style Selector="Border.text-placeholder">
+        <Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+        <Setter Property="CornerRadius" Value="2" />
+        <Setter Property="Opacity" Value="0.6" />
+    </Style>
+    
+    <Style Selector="Border.image-placeholder">
+        <Setter Property="Background" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
+        <Setter Property="CornerRadius" Value="6" />
+        <Setter Property="Opacity" Value="0.4" />
+    </Style>
+
+    <Style Selector="example|ContentDialogMini">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{DynamicResource AsvPopupCommonBrush}"
+                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                        BorderThickness="1"
+                        CornerRadius="12">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="6"
+                                          Color="{DynamicResource SystemBaseHighColor}"
+                                          Opacity="0.15"
+                                          OffsetX="0"
+                                          OffsetY="2" />
+                    </Border.Effect>
+
+                    <Grid RowDefinitions="*,Auto">
+                        <StackPanel x:Name="PART_TextPlaceHolder" Grid.Row="0" Margin="8,8,8,4" Spacing="6">
+                            <Border Classes="text-placeholder" Height="3" HorizontalAlignment="Left" Width="40" />
+                            <Border Classes="text-placeholder" Height="2" HorizontalAlignment="Stretch" />
+                            <Border Classes="text-placeholder" Height="2" HorizontalAlignment="Left" Width="30" />
+                        </StackPanel>
+                        
+                        <Grid x:Name="PART_ImagePlaceHolder" Grid.Row="0" Margin="12,8,12,8">
+                            <Border Classes="image-placeholder"/>
+                        </Grid>
+                        
+                        <Border Grid.Row="1"
+                                Background="{DynamicResource AsvBackgroundUnknownBrush}"
+                                CornerRadius="0,0,12,12"
+                                Padding="8">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Border Classes="indicator-dot" x:Name="PART_PrimaryIndicator" />
+                                <Border Classes="indicator-dot" x:Name="PART_SecondaryIndicator" />
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
