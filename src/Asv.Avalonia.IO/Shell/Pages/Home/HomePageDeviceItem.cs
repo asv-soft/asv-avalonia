@@ -20,7 +20,7 @@ public class HomePageDeviceItem : HomePageItem
         IconColor = deviceManager.GetDeviceColor(device.Id);
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         Info.Add(
-            new HeadlinedViewModel("id", DesignTime.LoggerFactory)
+            new HeadlinedViewModel("id", loggerFactory)
             {
                 Icon = MaterialIconKind.IdCard,
                 Header = RS.HomePageDeviceItem_Info_Id,
@@ -28,14 +28,14 @@ public class HomePageDeviceItem : HomePageItem
             }
         );
         Info.Add(
-            new HeadlinedViewModel("type", DesignTime.LoggerFactory)
+            new HeadlinedViewModel("type", loggerFactory)
             {
                 Icon = MaterialIconKind.MergeType,
                 Header = RS.HomePageDeviceItem_Info_Type,
                 Description = device.Id.DeviceClass,
             }
         );
-        var linkInfo = new HeadlinedViewModel("link", DesignTime.LoggerFactory)
+        var linkInfo = new HeadlinedViewModel("link", loggerFactory)
         {
             Icon = MaterialIconKind.Network,
             Header = RS.HomePageDeviceItem_Info_Link,
