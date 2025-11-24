@@ -1,0 +1,36 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+                    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    <Design.PreviewWith>
+        <example:PreviewExampleBlock Height="140">
+            <example:PreviewExampleBlock.PreviewContent>
+                <TextBlock>
+                    Some text for the preview
+                </TextBlock>
+            </example:PreviewExampleBlock.PreviewContent>
+        </example:PreviewExampleBlock >
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type example:PreviewExampleBlock}"
+                  TargetType="example:PreviewExampleBlock"
+                  BasedOn="{StaticResource {x:Type example:BaseExampleBlock}}">
+        <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+        <Setter Property="Content">
+            <Template>
+                <Grid MinWidth="140">
+                    <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                        <ContentPresenter Content="{Binding PreviewContent, RelativeSource={RelativeSource AncestorType=example:PreviewExampleBlock}}" 
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
+                    </ScrollViewer>
+                    <Button Command="{Binding RestoreCommand, RelativeSource={RelativeSource AncestorType=example:PreviewExampleBlock}}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top">
+                        <avalonia:MaterialIcon Kind="Restore"/>
+                    </Button>
+                </Grid>
+            </Template>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

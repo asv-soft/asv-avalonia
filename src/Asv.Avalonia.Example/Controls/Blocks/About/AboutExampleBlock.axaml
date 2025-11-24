@@ -1,0 +1,27 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:example="clr-namespace:Asv.Avalonia.Example">
+    <Design.PreviewWith>
+        <example:AboutExampleBlock 
+            Title="Some block title" 
+            Description="Some block description. Here will be some text."/>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type example:AboutExampleBlock}"
+                  TargetType="example:AboutExampleBlock"
+                  BasedOn="{StaticResource {x:Type example:BaseExampleBlock}}">
+        <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+        <Setter Property="Content">
+            <Template>
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock FontWeight="SemiBold" 
+                               Text="{Binding Title, RelativeSource={RelativeSource AncestorType=example:AboutExampleBlock}}" 
+                               TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding Description, RelativeSource={RelativeSource AncestorType=example:AboutExampleBlock}}" 
+                               Opacity="0.8" 
+                               TextWrapping="Wrap" />
+                </StackPanel>
+            </Template>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

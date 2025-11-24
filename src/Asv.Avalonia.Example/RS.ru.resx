@@ -6,10 +6,14 @@
         <value>1.3</value>
     </resheader>
     <resheader name="reader">
-        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
     <resheader name="writer">
-        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
     </resheader>
     <data name="DialogControlsPageViewModel_Title" xml:space="preserve">
         <value>Диалоги</value>
@@ -27,49 +31,46 @@
         <value>Список элементов</value>
     </data>
     <data name="OpenControlsGalleryPageCommand_CommandInfo_Description" xml:space="preserve">
-        <value>Команда, которая открывает список примеров контролов</value>
+        <value>Команда, которая открывае галерею контролов</value>
     </data>
     <data name="OpenControlsGalleryPageCommand_CommandInfo_Name" xml:space="preserve">
-        <value>Открыть список примеров контролов</value>
+        <value>Открыть галерею контролов</value>
     </data>
-    <data name="DialogControlsPageViewModel_OpenFile_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_OpenFilePrefab_Title" xml:space="preserve">
         <value>Открыть файл</value>
     </data>
-    <data name="DialogControlsPageViewModel_SaveFile_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SaveFilePrefab_Title" xml:space="preserve">
         <value>Сохранить файл</value>
     </data>
-    <data name="DialogControlsPageViewModel_SelectFolder_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SelectFolderPrefab_Title" xml:space="preserve">
         <value>Открыть папку</value>
     </data>
-    <data name="DialogControlsPageViewModel_ObserveFolder_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_ObserveFolderPrefab_Title" xml:space="preserve">
         <value>Показать папку</value>
     </data>
-    <data name="DialogControlsPageViewModel_YesOrNo_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_YesOrNoPrefab_Message" xml:space="preserve">
         <value>Вы действительно хотите выйти?</value>
     </data>
-    <data name="DialogControlsPageViewModel_YesOrNo_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_YesOrNoPrefab_Title" xml:space="preserve">
         <value>Предупреждение</value>
     </data>
-    <data name="DialogControlsPageViewModel_Save_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SavePrefab_Message" xml:space="preserve">
         <value>Сохранить?</value>
     </data>
-    <data name="DialogControlsPageViewModel_Save_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SavePrefab_Title" xml:space="preserve">
         <value>Сохранение</value>
     </data>
-    <data name="DialogControlsPageViewModel_HotKeyCapture_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_HotKeyCapturePrefab_Title" xml:space="preserve">
         <value>Захват сочетания клавиш</value>
     </data>
-    <data name="DialogControlsPageViewModel_HotKeyCapture_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_HotKeyCapturePrefab_Message" xml:space="preserve">
         <value>Нажмите клавишу</value>
     </data>
-    <data name="DialogControlsPageViewModel_Input_Title" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_InputPrefab_Title" xml:space="preserve">
         <value>Ввод</value>
     </data>
-    <data name="DialogControlsPageViewModel_Input_Message" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_InputPrefab_Message" xml:space="preserve">
         <value>Введите данные</value>
-    </data>
-    <data name="DialogControlsPageView_LastResult" xml:space="preserve">
-        <value>Последний результат</value>
     </data>
     <data name="HistoricalControlsPageView_Rules_One" xml:space="preserve">
         <value>Одно правило:</value>
@@ -86,23 +87,17 @@
     <data name="InfoBoxControlsPageView_Description" xml:space="preserve">
         <value>Встроенное уведомление для сообщений, отображаемых по всему приложению. Примеры ниже показывают базовое использование, вариант с кнопкой действия и вариант с возможностью закрытия.</value>
     </data>
-    <data name="DialogControlsPageView_Note" xml:space="preserve">
+    <data name="DialogControlsPageView_System_Note" xml:space="preserve">
         <value>Системные диалоги доступны на настольных платформах. Некоторые параметры зависят от возможностей операционной системы.</value>
     </data>
     <data name="DialogControlsPageView_Custom_Title" xml:space="preserve">
-        <value>Кастомные диалоги</value>
-    </data>
-    <data name="DialogControlsPageView_Custom_Description" xml:space="preserve">
-        <value>Общие диалоги для подтверждения и ввода</value>
+        <value>Префабы кастомных диалогов</value>
     </data>
     <data name="DialogControlsPageView_Description" xml:space="preserve">
-        <value>Примеры системных и кастомных диалогов</value>
-    </data>
-    <data name="DialogControlsPageView_System_Description" xml:space="preserve">
-        <value>Выбор файлов или папок</value>
+        <value>Примеры диалогов — окон для ввода текста, выбора параметров, подтверждения действий и так далее.</value>
     </data>
     <data name="DialogControlsPageView_System_Title" xml:space="preserve">
-        <value>Системные диалоги</value>
+        <value>Префабы системных диалогов</value>
     </data>
     <data name="InfoBoxControlsPageView_Basic" xml:space="preserve">
         <value>Обычный</value>
@@ -152,70 +147,202 @@
     <data name="InfoBoxControlsPageViewModel_Example_Title" xml:space="preserve">
         <value>Пример названия</value>
     </data>
-    <data name="DialogControlsPageView_System_OpenFile" xml:space="preserve">
+    <data name="DialogControlsPageView_OpenFilePrefab_Title" xml:space="preserve">
         <value>Выбрать файл</value>
     </data>
-    <data name="DialogControlsPageView_System_SaveFile" xml:space="preserve">
+    <data name="DialogControlsPageView_SaveFilePrefab_Title" xml:space="preserve">
         <value>Сохранить файл</value>
     </data>
-    <data name="DialogControlsPageView_System_SelectFolder" xml:space="preserve">
+    <data name="DialogControlsPageView_SelectFolderPrefab_Title" xml:space="preserve">
         <value>Выбрать папку</value>
     </data>
-    <data name="DialogControlsPageView_System_ObserveFolder" xml:space="preserve">
+    <data name="DialogControlsPageView_ObserveFolderPrefab_Title" xml:space="preserve">
         <value>Просмотреть папку</value>
     </data>
-    <data name="DialogControlsPageView_Custom_YesOrNo" xml:space="preserve">
+    <data name="DialogControlsPageView_YesOrNoPrefab_Title" xml:space="preserve">
         <value>Открыть диалог подтверждения</value>
     </data>
-    <data name="DialogControlsPageView_Custom_Input" xml:space="preserve">
+    <data name="DialogControlsPageView_InputPrefab_Title" xml:space="preserve">
         <value>Открыть диалог ввода</value>
     </data>
-    <data name="DialogControlsPageView_Custom_HotKeyCapture" xml:space="preserve">
+    <data name="DialogControlsPageView_HotKeyCapturePrefab_Title" xml:space="preserve">
         <value>Открыть диалог захвата</value>
     </data>
-    <data name="DialogControlsPageView_Custom_Save" xml:space="preserve">
+    <data name="DialogControlsPageView_SavePrefab_Title" xml:space="preserve">
         <value>Открыть диалог сохранения</value>
     </data>
     <data name="DialogControlsPageViewModel_CancelResult" xml:space="preserve">
         <value>отмена</value>
     </data>
-    <data name="DialogControlsPageViewModel_HotKeyCapture_Result" xml:space="preserve">
-        <value>Сочетение клавиш: {0}</value>
+    <data name="DialogControlsPageViewModel_HotKeyCapturePrefab_Result" xml:space="preserve">
+        <value>Выбранное сочетание клавиш: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_Input_Result" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_InputPrefab_Result" xml:space="preserve">
         <value>Ввод: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_Save_Result" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SavePrefab_Result" xml:space="preserve">
         <value>Сохранено: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_YesOrNo_Result" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_YesOrNoPrefab_Result" xml:space="preserve">
         <value>Да/Нет: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_ObserveFolder_Result" xml:space="preserve">
-        <value>Просмотр папки: открыта {0}</value>
+    <data name="DialogControlsPageViewModel_ObserveFolderPrefab_Result" xml:space="preserve">
+        <value>Открыта папка: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_SelectFolder_Result" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SelectFolderPrefab_Result" xml:space="preserve">
         <value>Выбрана папка: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_SaveFile_Result" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_SaveFilePrefab_Result" xml:space="preserve">
         <value>Сохранен файл: {0}</value>
     </data>
-    <data name="DialogControlsPageViewModel_OpenFile_Result" xml:space="preserve">
+    <data name="DialogControlsPageViewModel_OpenFilePrefab_Result" xml:space="preserve">
         <value>Открыт файл: {0}</value>
     </data>
     <data name="OpenControlsGalleryPageCommand_Action_Description" xml:space="preserve">
-        <value>Открыть список примеров контролов</value>
+        <value>Открыть галерею контролов</value>
     </data>
     <data name="OpenControlsGalleryPageCommand_Action_Title" xml:space="preserve">
-        <value>Список примеров контролов</value>
+        <value>Галерея контролов</value>
     </data>
     <data name="HistoricalControlsPageView_Enum" xml:space="preserve">
         <value>Перечисление:</value>
     </data>
-    <data name="DialogControlsPageViewModel_GeoPoint_Result" xml:space="preserve">
-        <value>Геоточка: {0}</value>
+    <data name="DialogControlsPageViewModel_GeoPointPrefab_Result" xml:space="preserve">
+        <value>Выбранная геоточка: {0}</value>
     </data>
-    <data name="DialogControlsPageView_Custom_GeoPoint" xml:space="preserve">
+    <data name="DialogControlsPageView_GeoPointPrefab_Title" xml:space="preserve">
         <value>Открыть диалог выбора геоточки</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Buttons" xml:space="preserve">
+        <value>Главная/вторичная:</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Content" xml:space="preserve">
+        <value>Контент</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Title" xml:space="preserve">
+        <value>Название</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Header" xml:space="preserve">
+        <value>Кастомный диалог</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Description" xml:space="preserve">
+        <value>Вы можете создать новый диалог с нуля. Для этого доступна настройка содержимого (контента), отображаемых кнопок, их текста и возможности взаимодействия с ними. Ниже представлены лишь некоторые из пунктов кастомизации — остальные параметры задаются программно.</value>
+    </data>
+    <data name="DialogControlsPageView_Prefabs_Header" xml:space="preserve">
+        <value>Готовые префабы диалогов</value>
+    </data>
+    <data name="DialogControlsPageView_Prefabs_Description" xml:space="preserve">
+        <value>Вы также можете использовать готовые префабы диалогов, которые подходят для большинства задач: ввод текста, выбор геоточки, файла и так далее. В них можно настраивать часть параметров, например сообщение или доступность кнопок. Готовые префабы делятся на два типа: кастомные диалоги, создаваемые вручную для специфических задач, а также системные диалоги, такие как файловый диалог.</value>
+    </data>
+    <data name="DialogControlsPageView_SelectFolderPrefab_Description" xml:space="preserve">
+    <value>
+Позволяет выбрать папку.
+
+• Ввод: заголовок диалога и начальная локация.  
+• Вывод: путь к выбранной папке.
+    </value>
+</data>
+    <data name="DialogControlsPageView_SaveFilePrefab_Description" xml:space="preserve">
+    <value>
+Позволяет сохранить файл.
+
+• Ввод: заголовок, расширение по умолчанию, фильтр типов и начальная папка.  
+• Вывод: путь к сохранённому файлу.
+    </value>
+</data>
+    <data name="DialogControlsPageView_OpenFilePrefab_Description" xml:space="preserve">
+    <value>
+Позволяет открыть файл.
+
+• Ввод: заголовок, фильтр типов и начальная папка.  
+• Вывод: путь к выбранному файлу.
+    </value>
+</data>
+    <data name="DialogControlsPageView_ObserveFolderPrefab_Description" xml:space="preserve">
+    <value>
+Показывает содержимое выбранной папки.
+
+• Ввод: заголовок и путь по умолчанию.  
+• Вывод: нет.
+    </value>
+</data>
+    <data name="DialogControlsPageView_GeoPointPrefab_Description" xml:space="preserve">
+    <value>
+Позволяет выбрать точку на карте.
+
+• Ввод: начальное местоположение.  
+• Вывод: GeoPoint.
+    </value>
+</data>
+    <data name="DialogControlsPageView_HotKeyCapturePrefab_Description" xml:space="preserve">
+    <value>
+Позволяет выбрать сочетание клавиш, просто нажав его.
+
+• Ввод: заголовок, сообщение и текущая комбинация.  
+• Вывод: выбранная горячая клавиша.
+    </value>
+</data>
+    <data name="DialogControlsPageView_InputPrefab_Description" xml:space="preserve">
+    <value>
+Позволяет ввести текст.
+
+• Ввод: заголовок и сообщение.  
+• Вывод: введённое значение.
+    </value>
+</data>
+    <data name="DialogControlsPageView_SavePrefab_Description" xml:space="preserve">
+    <value>
+Используется для подтверждения сохранения данных.
+
+• Ввод: заголовок и сообщение.  
+• Вывод: true или false.
+    </value>
+</data>
+    <data name="DialogControlsPageView_YesOrNoPrefab_Description" xml:space="preserve">
+    <value>
+Позволяет согласиться или отказаться.
+
+• Ввод: заголовок и сообщение.  
+• Вывод: true или false.
+    </value>
+</data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Result" xml:space="preserve">
+        <value>Результат кастомного диалога: {0}</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ObserveFolderPrefab_ResultShort" xml:space="preserve">
+        <value>Директория открыта!</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Primary" xml:space="preserve">
+        <value>Основная</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Secondary" xml:space="preserve">
+        <value>Вторичная</value>
+    </data>
+    <data name="DialogControlsPageViewModel_ContentDialog_Close" xml:space="preserve">
+        <value>Закрыть</value>
+    </data>
+    <data name="DialogControlsPageView_InputPrefab_Placeholder" xml:space="preserve">
+        <value>Какой-то текст...</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_ImageContent" xml:space="preserve">
+        <value>Фото</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_TextContent" xml:space="preserve">
+        <value>Текст</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_ImageContent_Select" xml:space="preserve">
+        <value>Выберите фото...</value>
+    </data>
+    <data name="DialogControlsPageView_ObserveFolderPrefab_PlaceHolder" xml:space="preserve">
+        <value>Нажмите кнопку...</value>
+    </data>
+    <data name="DialogControlsPageView_ContentDialog_Open" xml:space="preserve">
+        <value>Открыть диалог</value>
+    </data>
+    <data name="ResetGeoPointDialogResultCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сбросить диалог геоточки</value>
+    </data>
+    <data name="ResetGeoPointDialogResultCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Сбросить результат диалога геоточки</value>
     </data>
 </root>
