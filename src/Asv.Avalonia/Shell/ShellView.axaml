@@ -16,9 +16,6 @@
                 <Setter Property="Background" Value="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"/>
             </Style>
         </Style>
-        
-        
-        
         <Style Selector="DockPanel#Header avalonia1|MaterialIcon">
             <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseMediumBrush}" />
         </Style>
@@ -31,7 +28,6 @@
         <Style Selector="DropDownButton#WindowControlButton /template/ PathIcon">
             <Setter Property="IsVisible" Value="False" />
         </Style>
-        
         <Style Selector="Border#WindowFrame">
             <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}"/>
         </Style>
@@ -226,7 +222,6 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </Border>
-            
                 <avalonia:DockControl
                 BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                 BorderThickness="1"
@@ -259,7 +254,6 @@
                     <DataTemplate>
                         <Border Padding="8" CornerRadius="{StaticResource ControlCornerRadius}"
                                 PointerPressed="InputElement_OnPointerPressed"
-                                
                                 Opacity="0.95"
                                 Classes.error="{Binding  Severity, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Error}"
                                 Classes.warning="{Binding  Severity, Converter={x:Static avalonia:EnumToBooleanConverter.Instance}, ConverterParameter=Warning}"
