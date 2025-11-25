@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace Asv.Avalonia;
 
 [Export(ShellId, typeof(IShell))]
-public class MobileShellViewModel : ShellViewModel
+public sealed class MobileShellViewModel : ShellViewModel
 {
     public const string ShellId = "shell.mobile";
 
@@ -13,10 +13,9 @@ public class MobileShellViewModel : ShellViewModel
     public MobileShellViewModel(
         IConfiguration cfg,
         IContainerHost containerHost,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(containerHost, layoutService, loggerFactory, cfg, ShellId)
+        : base(ShellId, containerHost, loggerFactory, cfg)
     {
         // do nothing
     }

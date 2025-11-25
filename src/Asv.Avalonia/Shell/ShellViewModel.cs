@@ -1,10 +1,8 @@
 using System.Collections.Immutable;
 using System.Diagnostics;
-using System.Windows.Input;
 using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;
 using Asv.Common;
-using DotNext.Collections.Generic;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -24,42 +22,52 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     private const int MaxInfoBarMessages = 3;
 
     private readonly ObservableList<IPage> _pages;
-    private readonly IContainerHost _container;
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ICommandService _cmd;
+    private readonly ObservableList<ShellMessageViewModel> _infoMessagesSource;
+    private readonly UnsavedChangesDialogPrefab _unsavedChangesDialogPrefab;
+
     private ShellViewModelConfig _config;
     private bool _isLoaded;
     private int _saveLayoutInProgress;
-    private readonly ObservableList<ShellMessageViewModel> _infoMessagesSource;
+
+    protected readonly IContainerHost Container;
+    protected readonly ILoggerFactory LoggerFactory;
+    protected readonly ICommandService Cmd;
+    protected readonly IDialogService DialogService;
 
     protected ShellViewModel(
+        NavigationId id,
         IContainerHost ioc,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
-        IConfiguration cfg,
-        string id
+        IConfiguration cfg
     )
         : base(id, loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
-        ArgumentNullException.ThrowIfNull(layoutService);
         ArgumentNullException.ThrowIfNull(cfg);
 
         Cfg = cfg;
-        _container = ioc;
-        _loggerFactory = loggerFactory;
+        Container = ioc;
+        LoggerFactory = loggerFactory;
+        LayoutService = ioc.GetExport<ILayoutService>();
+        DialogService = ioc.GetExport<IDialogService>();
+        Cmd = ioc.GetExport<ICommandService>();
+        Navigation = ioc.GetExport<INavigationService>();
+
+        _unsavedChangesDialogPrefab = DialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
+
         WindowSateIconKind = new BindableReactiveProperty<MaterialIconKind>().DisposeItWith(
             Disposable
         );
         WindowStateHeader = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
-        LayoutService = layoutService;
-        _cmd = ioc.GetExport<ICommandService>();
-        Navigation = ioc.GetExport<INavigationService>();
+
         _pages = new ObservableList<IPage>();
-        _pages.DisposeRemovedItems();
+        _pages.DisposeRemovedItems().DisposeItWith(Disposable);
+        _pages.SetRoutableParent(this).DisposeItWith(Disposable);
         PagesView = _pages.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
-        Close = new ReactiveCommand((_, c) => CloseAsync(c)).DisposeItWith(Disposable);
+        Close = new ReactiveCommand(async (_, c) => await TryCloseAsync(c)).DisposeItWith(
+            Disposable
+        );
         ChangeWindowState = new ReactiveCommand((_, c) => ChangeWindowModeAsync(c));
         Collapse = new ReactiveCommand((_, c) => CollapseAsync(c));
         SelectedPage = new BindableReactiveProperty<IPage?>().DisposeItWith(Disposable);
@@ -69,7 +77,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         MainMenu.DisposeRemovedItems().DisposeItWith(Disposable);
         SelectedPage
             .WhereNotNull()
-            .SubscribeAwait(async (page, ct) => await page.RequestLoadLayout(layoutService, ct))
+            .SubscribeAwait(async (page, ct) => await page.RequestLoadLayout(LayoutService, ct))
             .DisposeItWith(Disposable);
 
         StatusItems = [];
@@ -172,9 +180,44 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     #region Close
     public ReactiveCommand Close { get; }
 
-    protected virtual ValueTask CloseAsync(CancellationToken cancellationToken)
+    protected virtual async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
     {
-        return ValueTask.CompletedTask;
+        cancellationToken.ThrowIfCancellationRequested();
+        foreach (var page in _pages)
+        {
+            try
+            {
+                var reasons = await page.RequestChildCloseApproval();
+
+                if (reasons.Count != 0)
+                {
+                    await Navigation.GoTo(page.GetPathToRoot());
+
+                    var result = await _unsavedChangesDialogPrefab.ShowDialogAsync(
+                        new UnsavedChangesDialogPayload
+                        {
+                            Restrictions = reasons,
+                            Title = RS.DesktopShellViewModel_ExitConfirmDialog_Title,
+                        }
+                    );
+
+                    if (!result)
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.ZLogTrace(
+                    e,
+                    $"Error on requesting approval for the page {page.Title}[{page.Id}]: {e.Message}"
+                );
+            }
+        }
+
+        _pages.ClearWithItemsDispose();
+        return true;
     }
 
     #endregion
@@ -221,9 +264,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         var page = _pages.FirstOrDefault(x => x.Id == id);
         if (page is null)
         {
-            if (_container.TryGetExport<IPage>(id.Id, out page))
+            if (Container.TryGetExport<IPage>(id.Id, out page))
             {
-                page.Parent = this;
                 page.InitArgs(id.Args);
                 _pages.Add(page);
 
@@ -250,7 +292,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         switch (e)
         {
             case ExecuteCommandEvent cmd:
-                await _cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandArg, cmd.Cancel);
+                await Cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandArg, cmd.Cancel);
                 break;
             case RestartApplicationEvent:
                 Environment.Exit(0);
@@ -273,8 +315,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 }
 
                 _pages.Remove(close.Page);
-                close.Page.Parent = null;
-                close.Page.Dispose();
 
                 if (_pages.Count == 0)
                 {
@@ -417,7 +457,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
     #endregion
 
-    public virtual INavigationService Navigation { get; }
+    public INavigationService Navigation { get; }
 
     public IConfiguration Cfg { get; }
     public ILayoutService LayoutService { get; }
@@ -452,7 +492,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         _infoMessagesSource.Add(
             new ShellMessageViewModel(
                 Guid.NewGuid().ToString(),
-                _loggerFactory,
+                LoggerFactory,
                 CloseInfoMessageCommand,
                 message
             )

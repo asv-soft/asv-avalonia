@@ -2,6 +2,7 @@ using System.Composition;
 using Avalonia;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using R3;
 using ZLogger;
 
@@ -16,6 +17,12 @@ public partial class ShellWindow : Window, IExportable
     private readonly ILogger<ShellWindow> _logger;
     private ShellWindowConfig _config;
     private bool _internalChange;
+
+    public ShellWindow()
+        : this(NullLayoutService.Instance, NullLoggerFactory.Instance)
+    {
+        DesignTime.ThrowIfNotDesignMode();
+    }
 
     static ShellWindow()
     {
@@ -32,8 +39,14 @@ public partial class ShellWindow : Window, IExportable
     [ImportingConstructor]
     public ShellWindow(ILayoutService layoutService, ILoggerFactory logger)
     {
-        _logger = logger.CreateLogger<ShellWindow>();
         InitializeComponent();
+
+        if (Design.IsDesignMode)
+        {
+            return;
+        }
+
+        _logger = logger.CreateLogger<ShellWindow>();
 
         _layoutService = layoutService;
         _savePosition = new Subject<Unit>();
