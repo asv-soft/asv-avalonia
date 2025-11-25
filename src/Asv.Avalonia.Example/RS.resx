@@ -353,4 +353,7 @@ Used to confirm saving information.
     <data name="ResetGeoPointDialogResultCommand_CommandInfo_Description" xml:space="preserve">
         <value>Reset the geopoint dialog result</value>
     </data>
+    <data name="ShellLeftMenuExtenderExample_HomeItem_Header" xml:space="preserve">
+        <value>Home page</value>
+    </data>
 </root>
