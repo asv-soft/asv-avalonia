@@ -1,23 +1,22 @@
-using Microsoft.Extensions.Logging.Abstractions;
 using R3;
-using R3.Avalonia;
 
 namespace Asv.Avalonia;
 
-public class DesignTimeShellViewModel : ShellViewModel
+public sealed class DesignTimeShellViewModel : ShellViewModel
 {
     public const string ShellId = "shell.design";
     public static DesignTimeShellViewModel Instance { get; } = new();
 
     public DesignTimeShellViewModel()
         : base(
+            ShellId,
             NullContainerHost.Instance,
-            NullLayoutService.Instance,
-            NullLoggerFactory.Instance,
-            DesignTime.Configuration,
-            ShellId
+            DesignTime.LoggerFactory,
+            DesignTime.Configuration
         )
     {
+        DesignTime.ThrowIfNotDesignMode();
+
         int cnt = 0;
         ErrorState = ShellErrorState.Error;
         var all = Enum.GetValues<ShellErrorState>().Length;
@@ -130,6 +129,4 @@ public class DesignTimeShellViewModel : ShellViewModel
                 );
             });
     }
-
-    public override INavigationService Navigation => DesignTime.Navigation;
 }
