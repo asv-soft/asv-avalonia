@@ -8,7 +8,7 @@
         x:DataType="avalonia:ShellViewModel"
         ExtendClientAreaToDecorationsHint="True"
         ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="0"
+        ExtendClientAreaTitleBarHeightHint="1"
         Title="{Binding Title}"
         PositionChanged="WindowBase_OnPositionChanged"
         SizeChanged="Control_OnSizeChanged"

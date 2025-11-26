@@ -80,6 +80,17 @@ public partial class AnnotationLayer : Canvas
     private void SourceChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         Debug.Assert(Source != null, nameof(Source) + " != null");
+        if (e.Action == NotifyCollectionChangedAction.Reset)
+        {
+            Children.Clear();
+            foreach (var mapAnnotation in _annotations)
+            {
+                mapAnnotation.Dispose();
+            }
+            _annotations.Clear();
+            return;
+        }
+
         if (e.NewItems != null)
         {
             foreach (var item in e.NewItems)

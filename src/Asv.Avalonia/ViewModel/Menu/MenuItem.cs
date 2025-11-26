@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using Avalonia.Input;
 using Microsoft.Extensions.Logging;
 
@@ -33,6 +34,24 @@ namespace Asv.Avalonia
         } = true;
 
         public KeyGesture? HotKey
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public MenuItemToggleType ToggleType
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public bool IsChecked
+        {
+            get;
+            set => SetField(ref field, value);
+        }
+
+        public string? GroupName
         {
             get;
             set => SetField(ref field, value);

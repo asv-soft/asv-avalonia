@@ -81,6 +81,9 @@
                                     <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
                                     <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
                                     <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                                    <Setter Property="IsChecked" Value="{Binding Base.IsChecked}"/>
+                                    <Setter Property="ToggleType" Value="{Binding Base.ToggleType}"/>
+                                    <Setter Property="GroupName" Value="{Binding Base.GroupName}"/>
                                 </ControlTheme>
                             </MenuFlyout.ItemContainerTheme>
                         </MenuFlyout>
@@ -147,6 +150,9 @@
                                             <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
                                             <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
                                             <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                                            <Setter Property="IsChecked" Value="{Binding Base.IsChecked}"/>
+                                            <Setter Property="ToggleType" Value="{Binding Base.ToggleType}"/>
+                                            <Setter Property="GroupName" Value="{Binding Base.GroupName}"/>
                                         </ControlTheme>
                                     </MenuFlyout.ItemContainerTheme>
                                 </MenuFlyout>
@@ -183,6 +189,9 @@
                                             <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
                                             <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
                                             <Setter Property="HotKey" Value="{Binding Base.HotKey}" />
+                                            <Setter Property="IsChecked" Value="{Binding Base.IsChecked}"/>
+                                            <Setter Property="ToggleType" Value="{Binding Base.ToggleType}"/>
+                                            <Setter Property="GroupName" Value="{Binding Base.GroupName}"/>
                                         </ControlTheme>
                                     </MenuFlyout.ItemContainerTheme>
                                 </MenuFlyout>

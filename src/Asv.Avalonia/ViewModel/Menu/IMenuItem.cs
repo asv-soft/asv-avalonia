@@ -1,3 +1,4 @@
+using Avalonia.Controls;
 using Avalonia.Input;
 using Microsoft.Extensions.Logging;
 
@@ -7,8 +8,11 @@ public interface IMenuItem : IActionViewModel
 {
     NavigationId ParentId { get; }
     bool StaysOpenOnClick { get; }
-    public bool IsEnabled { get; }
-    public KeyGesture? HotKey { get; }
+    bool IsEnabled { get; }
+    KeyGesture? HotKey { get; }
+    MenuItemToggleType ToggleType { get; }
+    bool IsChecked { get; }
+    string? GroupName { get; }
 }
 
 public static class MenuItemMixin

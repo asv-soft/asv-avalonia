@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using Asv.IO;
+using MemoryPack;
 using Newtonsoft.Json;
 
 namespace Asv.Avalonia;
