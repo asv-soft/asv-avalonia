@@ -46,10 +46,10 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
         _config = cfgSvc.Get<ThemeServiceConfig>();
 
         var theme = _themes.FirstOrDefault(x => x.Id == _config.Theme) ?? _themes[0];
-        CurrentTheme = new BindableReactiveProperty<IThemeInfo>(theme);
+        CurrentTheme = new SynchronizedReactiveProperty<IThemeInfo>(theme);
         _sub1 = CurrentTheme.Subscribe(SetTheme);
 
-        IsCompact = new BindableReactiveProperty<bool>(_config.IsCompact);
+        IsCompact = new SynchronizedReactiveProperty<bool>(_config.IsCompact);
         _sub2 = IsCompact.Subscribe(SaveCompact);
     }
 
@@ -90,8 +90,8 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
     }
 
     public IEnumerable<IThemeInfo> Themes => _themes;
-    public ReactiveProperty<IThemeInfo> CurrentTheme { get; }
-    public ReactiveProperty<bool> IsCompact { get; }
+    public SynchronizedReactiveProperty<IThemeInfo> CurrentTheme { get; }
+    public SynchronizedReactiveProperty<bool> IsCompact { get; }
 
     protected override void Dispose(bool disposing)
     {

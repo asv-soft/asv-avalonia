@@ -17,8 +17,8 @@ public class NullThemeService : IThemeService, IDisposable
     private NullThemeService() { }
 
     public IEnumerable<IThemeInfo> Themes => _themes;
-    public ReactiveProperty<IThemeInfo> CurrentTheme { get; } = new();
-    public ReactiveProperty<bool> IsCompact { get; } = new();
+    public SynchronizedReactiveProperty<IThemeInfo> CurrentTheme { get; } = new();
+    public SynchronizedReactiveProperty<bool> IsCompact { get; } = new();
 
     public void Dispose()
     {

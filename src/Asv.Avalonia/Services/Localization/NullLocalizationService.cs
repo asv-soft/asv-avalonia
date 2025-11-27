@@ -14,7 +14,7 @@ public class NullLocalizationService : ILocalizationService, IDisposable
         new LanguageInfo("ru", "Русский (RU)", () => CultureInfo.GetCultureInfo("ru")),
     ];
 
-    public ReactiveProperty<ILanguageInfo> CurrentLanguage { get; } = new();
+    public SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; } = new();
     public IEnumerable<ILanguageInfo> AvailableLanguages => _languages;
 
     private NullLocalizationService() { }

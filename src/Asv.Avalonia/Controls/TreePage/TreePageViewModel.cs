@@ -228,9 +228,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
 
         // TreeView may not have all nodes yet
-        _sub1?.Dispose();
-        _sub1 = null;
-        _sub1 = Nodes
+        _sub1.Disposable = Nodes
             .ObserveAdd()
             .Subscribe(addEvent =>
             {
@@ -246,7 +244,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
                 }
 
                 SelectedNode.Value = selectedNode;
-                _sub1?.Dispose();
+                _sub1.Disposable?.Dispose();
             });
     }
 
@@ -272,13 +270,13 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     #region Dispose
 
-    private IDisposable? _sub1;
+    private readonly SerialDisposable _sub1 = new();
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
-            _sub1?.Dispose();
+            _sub1.Dispose();
             SelectedPage.Value?.Dispose();
         }
 
