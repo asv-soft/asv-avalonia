@@ -36,13 +36,15 @@ public sealed partial class HotKeyBox : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        _textBlock = e.NameScope.Get<TextBlock>("PART_Text");
+        _textBlock =
+            e.NameScope.Get<TextBlock>("PART_Text")
+            ?? throw new InvalidOperationException("Text block should not be null");
         _textBlock.Focus();
 
         _sub1 = this.GetObservable(HotKeyProperty)
-            .Subscribe(hk => _textBlock!.Text = hk?.ToString() ?? string.Empty);
+            .Subscribe(hk => _textBlock.Text = hk?.ToString() ?? string.Empty);
 
-        _textBlock!.Text = HotKey?.ToString() ?? string.Empty;
+        _textBlock.Text = HotKey?.ToString() ?? string.Empty;
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
@@ -141,7 +143,12 @@ public sealed partial class HotKeyBox : TemplatedControl
     #region Helpers
     private void Commit(bool final)
     {
-        HotKey = new HotKeyInfo(new KeyGesture(_firstKey!.Value, _firstMods), _secondKey);
+        if (_firstKey is null)
+        {
+            throw new Exception("First key should not be null");
+        }
+
+        HotKey = new HotKeyInfo(new KeyGesture(_firstKey.Value, _firstMods), _secondKey);
 
         if (final)
         {
