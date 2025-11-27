@@ -87,6 +87,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
                 {
                     header.PointerPressed -= PressedHandler;
                     header.PointerMoved -= PointerMovedHandler;
+                    header.PointerReleased -= PointerReleasedHandler;
                 }
 
                 _mainTabControl?.Items.Remove(dockTabItem);
@@ -119,6 +120,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             }
 
             selected.IsSelected = true;
+            _selectedTab = selected;
         }
     }
 
@@ -164,8 +166,10 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
         header.PointerPressed -= PressedHandler;
         header.PointerMoved -= PointerMovedHandler;
+        header.PointerReleased -= PointerReleasedHandler;
         header.PointerPressed += PressedHandler;
         header.PointerMoved += PointerMovedHandler;
+        header.PointerReleased += PointerReleasedHandler;
 
         var tab = new DockTabItem
         {
@@ -178,6 +182,11 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
     private void PressedHandler(object? sender, PointerPressedEventArgs e)
     {
+        if (sender is not DockTabStripItem tabStrip)
+        {
+            return;
+        }
+
         if (e.Handled)
         {
             return;
@@ -208,7 +217,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             SelectedItem = tab.Content;
         }
 
-        e.Pointer.Capture(this);
+        e.Pointer.Capture(tabStrip);
         e.Handled = true;
     }
 
@@ -217,10 +226,8 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         // TODO add visual drag indicator
     }
 
-    protected override void OnPointerReleased(PointerReleasedEventArgs e)
+    private void PointerReleasedHandler(object? sender, PointerReleasedEventArgs e)
     {
-        base.OnPointerReleased(e);
-
         if (_selectedTab is null)
         {
             e.Pointer.Capture(null);
@@ -352,6 +359,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
             header.PointerPressed -= PressedHandler;
             header.PointerMoved -= PointerMovedHandler;
+            header.PointerReleased -= PointerReleasedHandler;
         }
 
         foreach (var item in _windowedItems)
@@ -363,6 +371,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
             header.PointerPressed -= PressedHandler;
             header.PointerMoved -= PointerMovedHandler;
+            header.PointerReleased -= PointerReleasedHandler;
         }
 
         base.OnDetachedFromVisualTree(e);
