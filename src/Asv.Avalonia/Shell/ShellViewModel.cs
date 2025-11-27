@@ -409,17 +409,15 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         }
         finally
         {
-            _sub1?.Dispose();
-            _sub2?.Dispose();
-            _sub3?.Dispose();
-
-            _sub1 = Pages
+            _sub1.Disposable = Pages
                 .ObserveAdd(CancellationToken.None)
                 .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
-            _sub2 = Pages
+            _sub2.Disposable = Pages
                 .ObserveRemove(CancellationToken.None)
                 .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
-            _sub3 = SelectedPage.Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
+            _sub3.Disposable = SelectedPage.Subscribe(_ =>
+                SaveLayoutToFile(loadLayoutEvent.LayoutService)
+            );
             if (Pages.Count == 0)
             {
                 await this.NavigateByPath(new NavigationPath(HomePageViewModel.PageId));
@@ -512,18 +510,18 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
     #region Dispose
 
-    private IDisposable? _sub1;
-    private IDisposable? _sub2;
-    private IDisposable? _sub3;
+    private readonly SerialDisposable _sub1 = new();
+    private readonly SerialDisposable _sub2 = new();
+    private readonly SerialDisposable _sub3 = new();
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             _pages.ClearWithItemsDispose();
-            _sub1?.Dispose();
-            _sub2?.Dispose();
-            _sub3?.Dispose();
+            _sub1.Dispose();
+            _sub2.Dispose();
+            _sub3.Dispose();
         }
 
         base.Dispose(disposing);

@@ -27,7 +27,7 @@ public abstract class UnitBase : IUnit
         }
 
         InternationalSystemUnit = defaultUnit[0].Value;
-        CurrentUnitItem = new ReactiveProperty<IUnitItem>(InternationalSystemUnit);
+        CurrentUnitItem = new SynchronizedReactiveProperty<IUnitItem>(InternationalSystemUnit);
 
         _sub1 = CurrentUnitItem.Subscribe(SetUnitItem);
     }
@@ -39,7 +39,7 @@ public abstract class UnitBase : IUnit
     public abstract string Name { get; }
     public abstract string Description { get; }
     public abstract string UnitId { get; }
-    public ReactiveProperty<IUnitItem> CurrentUnitItem { get; }
+    public SynchronizedReactiveProperty<IUnitItem> CurrentUnitItem { get; }
     public IUnitItem InternationalSystemUnit { get; }
 
     #region Dispose
