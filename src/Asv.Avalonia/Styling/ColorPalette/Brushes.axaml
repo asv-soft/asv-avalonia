@@ -18,7 +18,7 @@
     <SolidColorBrush x:Key="AsvBackgroundUnknownBrush"    Color="{DynamicResource AsvBackgroundUnknownColor}" />
 
     <!-- ====================== INFO PALETTE BRUSHES (1–20) ====================== -->
-    <!-- Используйте эти кисти в ScottPlot, легендах, выделениях зон и т.д. -->
+    <!-- Use these brushes in ScottPlot, legends, zone highlights, etc. -->
 
     <SolidColorBrush x:Key="AsvForegroundInfo1Brush"   Color="{DynamicResource AsvForegroundInfo1Color}" />
     <SolidColorBrush x:Key="AsvBackgroundInfo1Brush"   Color="{DynamicResource AsvBackgroundInfo1Color}" />

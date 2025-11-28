@@ -31,7 +31,6 @@ public class CanScrollRightConverter : IMultiValueConverter
             && values[2] is double extentWidth
         )
         {
-            // Проверка: можно ли скроллить вправо
             return offsetX + viewportWidth < extentWidth;
         }
         return false;

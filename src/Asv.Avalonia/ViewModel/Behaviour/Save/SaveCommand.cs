@@ -13,8 +13,8 @@ public class SaveCommand : ContextCommand<ISupportSave>
         new CommandInfo
         {
             Id = Id,
-            Name = "Save",
-            Description = "Save changes",
+            Name = RS.SaveCommand_CommandInfo_Name,
+            Description = RS.SaveCommand_CommandInfo_Description,
             Icon = MaterialIconKind.FloppyDisc,
             DefaultHotKey = "Ctrl+S",
             Source = SystemModule.Instance,

@@ -16,8 +16,8 @@
     <Panel IsVisible="{Binding !View.Count}">
         <avalonia:MaterialIcon Width="50" Height="50" Margin="0,0,100,0" HorizontalAlignment="Right" VerticalAlignment="Top" Classes="warning blink-once" Kind="ArrowUpRightBold"/>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
-            <TextBlock FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="No connections"/>
-            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="Add a new one by clicking the button."/>    
+            <TextBlock FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="{x:Static io:RS.SettingsConnectionView_Panel_NoConnections}"/>
+            <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{x:Static io:RS.SettingsConnectionView_Panel_Hint}"/>    
         </StackPanel>
         
     </Panel>
@@ -147,7 +147,7 @@
                     <avalonia:MaterialIcon Width="25" Height="25" Kind="ArrowLeft"
                                            Foreground="{DynamicResource ButtonForegroundDisabled}" />
                     <TextBlock Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center"
-                               FontSize="15" TextWrapping="WrapWithOverflow" MaxWidth="400" Text="Select port" />
+                               FontSize="15" TextWrapping="WrapWithOverflow" MaxWidth="400" Text="{x:Static io:RS.SettingsConnectionView_SelectPort}" />
                 </StackPanel>
 
             </Panel>

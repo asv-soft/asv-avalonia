@@ -36,8 +36,8 @@ public class NavigationIdTest
     [Fact]
     public void Constructor_Throws_OnInvalidTypeId()
     {
-        Assert.Throws<ArgumentException>(() => new NavigationId("ТестРуc", "x")); // русские буквы
-        Assert.Throws<ArgumentException>(() => new NavigationId("a!b", "x")); // спец. символы
+        Assert.Throws<ArgumentException>(() => new NavigationId("ТестРуc", "x"));
+        Assert.Throws<ArgumentException>(() => new NavigationId("a!b", "x"));
     }
 
     [Theory]
@@ -202,7 +202,6 @@ public class NavigationIdTest
         };
 
         var query = NavigationId.CreateArgs(nvc);
-        // В порядке добавления, URL-кодировка:
         Assert.Contains("k1=v1", query);
         Assert.Contains("key+with+space=value+with+space", query);
         Assert.Contains("empty=", query);

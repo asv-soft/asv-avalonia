@@ -186,7 +186,7 @@ public readonly partial struct NavigationId
         var separatorIndex = value.IndexOf(Separator);
         if (separatorIndex == -1)
         {
-            // Если нет 'Separator', вся строка — это typeId
+            // If there is no separator, the whole string is typeId
             id = value;
             args = null;
             return;

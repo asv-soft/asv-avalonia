@@ -26,7 +26,7 @@
                     <Button HorizontalAlignment="Center" Classes="accent" Command="{Binding NavigateToSettings}">
                         <StackPanel Orientation="Horizontal" Spacing="4">
                             <avalonia:MaterialIcon Kind="Connection"/>
-                            <TextBlock VerticalAlignment="Center" Text="Go to settings"/>
+                            <TextBlock VerticalAlignment="Center" Text="{x:Static io:RS.ConnectionRateStatusView_NavigationButton_Settings}"/>
                         </StackPanel>
                     </Button>    
                 </StackPanel>
