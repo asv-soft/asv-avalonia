@@ -1520,5 +1520,131 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("DesktopShellViewModel_ExitConfirmDialog_Title", resourceCulture);
             }
         }
+        
+        public static string GeoPointPropertyViewModel_Title {
+            get {
+                return ResourceManager.GetString("GeoPointPropertyViewModel_Title", resourceCulture);
+            }
+        }
+        
+        public static string GeoPointPropertyViewModel_Description {
+            get {
+                return ResourceManager.GetString("GeoPointPropertyViewModel_Description", resourceCulture);
+            }
+        }
+        
+        public static string GeoPointPropertyViewModel_Latitude_ShortName {
+            get {
+                return ResourceManager.GetString("GeoPointPropertyViewModel_Latitude_ShortName", resourceCulture);
+            }
+        }
+        
+        public static string GeoPointPropertyViewModel_Longitude_ShortName {
+            get {
+                return ResourceManager.GetString("GeoPointPropertyViewModel_Longitude_ShortName", resourceCulture);
+            }
+        }
+        
+        public static string GeoPointPropertyViewModel_Altitude_ShortName {
+            get {
+                return ResourceManager.GetString("GeoPointPropertyViewModel_Altitude_ShortName", resourceCulture);
+            }
+        }
+        
+        public static string Not_Available {
+            get {
+                return ResourceManager.GetString("Not_Available", resourceCulture);
+            }
+        }
+        
+        public static string CreateFileCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("CreateFileCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string CreateFileCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("CreateFileCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string CreateFileCommand_SelectFile {
+            get {
+                return ResourceManager.GetString("CreateFileCommand_SelectFile", resourceCulture);
+            }
+        }
+        
+        public static string OpenFileCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("OpenFileCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string OpenFileCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("OpenFileCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string OpenFileCommand_SelectFile {
+            get {
+                return ResourceManager.GetString("OpenFileCommand_SelectFile", resourceCulture);
+            }
+        }
+        
+        public static string CreateMenu_Header {
+            get {
+                return ResourceManager.GetString("CreateMenu_Header", resourceCulture);
+            }
+        }
+        
+        public static string NextPageCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("NextPageCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string NextPageCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("NextPageCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string PreviousPageCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("PreviousPageCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string PreviousPageCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("PreviousPageCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string SaveCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("SaveCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string SaveCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("SaveCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string ChangeIntPropertyCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ChangeIntPropertyCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ChangeIntPropertyCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ChangeIntPropertyCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
     }
 }
