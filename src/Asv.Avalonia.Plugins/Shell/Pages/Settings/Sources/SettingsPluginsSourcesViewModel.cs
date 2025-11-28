@@ -60,9 +60,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     {
         _pluginManager = pluginManager;
         _navigationService = navigationService;
-        SelectedItem = new BindableReactiveProperty<PluginsSourceViewModel?>().DisposeItWith(
-            Disposable
-        );
+        SelectedItem = new BindableReactiveProperty<PluginsSourceViewModel?>();
 
         _sources = new ObservableList<IPluginServerInfo>(_pluginManager.Servers);
         _view = _sources
@@ -166,6 +164,17 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         }
 
         return base.InternalCatchEvent(e);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            SelectedItem.Value = null;
+            SelectedItem.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 
     public override IExportInfo Source => PluginManagerModule.Instance;

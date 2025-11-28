@@ -1,5 +1,6 @@
 ﻿using System.Composition;
 using Asv.Common;
+using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -19,7 +20,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
     public const string PageId = "hotkeys";
 
     private readonly ICommandService _commandsService;
-    private readonly ISearchService _searchService;
     private readonly ObservableList<ICommandInfo> _itemsSource;
     private readonly ISynchronizedView<ICommandInfo, CommandViewModel> _view;
     private readonly ReactiveProperty<Enum> _commandSortingType;
@@ -47,21 +47,24 @@ public class SettingsCommandListViewModel : SettingsSubPage
         : base(PageId, loggerFactory)
     {
         _commandsService = commandsService;
-        _searchService = searchService;
 
-        SelectedItem = new BindableReactiveProperty<CommandViewModel?>().DisposeItWith(Disposable);
+        SelectedItem = new BindableReactiveProperty<CommandViewModel?>();
 
         _itemsSource = new ObservableList<ICommandInfo>(commandsService.Commands);
         _view = _itemsSource
             .CreateView(cmdInfo => new CommandViewModel(
                 cmdInfo,
                 commandsService,
+                searchService,
                 dialogService,
                 loggerFactory
             ))
             .DisposeItWith(Disposable);
+        _view.DisposeMany().DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
-        Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
+        Items = _view
+            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
 
         Search = new SearchBoxViewModel(
             nameof(Search),
@@ -82,36 +85,47 @@ public class SettingsCommandListViewModel : SettingsSubPage
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        CommandSortingType.ViewValue.Subscribe(_ => UpdateFilter()).DisposeItWith(Disposable);
+        CommandSortingType.ViewValue.Subscribe(_ => Search.Refresh()).DisposeItWith(Disposable);
 
+        SelectedItem
+            .ObserveOnUIThreadDispatcher()
+            .Skip(1)
+            .Subscribe(selectedCommand =>
+            {
+                foreach (var commandViewModel in _view)
+                {
+                    if (commandViewModel.Id == selectedCommand?.Id)
+                    {
+                        commandViewModel.IsSelected.Value = true;
+                        continue;
+                    }
+
+                    commandViewModel.IsSelected.Value = false;
+                }
+            })
+            .DisposeItWith(Disposable);
         Search.Refresh();
     }
 
     public SearchBoxViewModel Search { get; }
     public BindableReactiveProperty<CommandViewModel?> SelectedItem { get; }
+
     public INotifyCollectionChangedSynchronizedViewList<CommandViewModel> Items { get; }
     public HistoricalEnumProperty<CommandSortingType> CommandSortingType { get; }
 
     private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
     {
-        UpdateFilter();
-
-        progress.Report(1);
-        return Task.CompletedTask;
-    }
-
-    private void UpdateFilter()
-    {
-        _view.ForEach(vm => vm.ResetSelections());
-
+        progress.Report(0);
         var isSearchTextEmpty = string.IsNullOrWhiteSpace(Search.Text.ViewValue.CurrentValue);
         var isCommandSortEmpty =
             CommandSortingType.ViewValue.CurrentValue is Avalonia.CommandSortingType.All;
 
         if (isSearchTextEmpty && isCommandSortEmpty)
         {
+            _view.ForEach(vm => vm.Filter(Search.Text.ViewValue.CurrentValue ?? string.Empty));
             _view.ResetFilter();
-            return;
+            progress.Report(1);
+            return Task.CompletedTask;
         }
 
         var filter = new SynchronizedViewFilter<ICommandInfo, CommandViewModel>(
@@ -121,7 +135,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
 
                 if (!string.IsNullOrWhiteSpace(Search.Text.ViewValue.CurrentValue))
                 {
-                    isOk = isOk && model.Filter(Search.Text.ViewValue.CurrentValue, _searchService);
+                    isOk = isOk && model.Filter(Search.Text.ViewValue.CurrentValue);
                 }
 
                 return isOk
@@ -138,18 +152,23 @@ public class SettingsCommandListViewModel : SettingsSubPage
         );
 
         _view.AttachFilter(filter);
+
+        progress.Report(1);
+        return Task.CompletedTask;
     }
 
     public void ResetAllHotKeys() // TODO: Make a command
     {
         _commandsService.ResetAllHotKeys();
 
-        _itemsSource.Clear();
-        _itemsSource.AddRange(_commandsService.Commands);
+        Dispatcher.UIThread.Invoke(() =>
+        {
+            _itemsSource.RemoveAll();
+            _itemsSource.AddRange(_commandsService.Commands);
+            Search.Refresh();
+        });
 
-        Search.Refresh();
-
-        Logger.LogInformation("All hot keys have been reset to default.");
+        Logger.LogInformation("All hot keys have been reset to default");
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
@@ -205,6 +224,17 @@ public class SettingsCommandListViewModel : SettingsSubPage
         }
 
         return base.InternalCatchEvent(e);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            SelectedItem.Value = null;
+            SelectedItem.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -16,7 +16,10 @@
                                 Margin="8" 
                                 DataContext="{Binding Search}"/>
         
-        <DataGrid Focusable="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
+        <DataGrid 
+            Focusable="False" 
+            ItemsSource="{Binding Items}" 
+            SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Styles>
                 <Style Selector="DataGridRow DataGridCell Rectangle">
                     <Setter Property="IsVisible" Value="False"/>
@@ -33,8 +36,36 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Name}" Binding="{Binding Base.Name}" />
-                <DataGridTextColumn IsReadOnly="True" Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Description}" Binding="{Binding Base.Description}" />
+                <DataGridTemplateColumn 
+                    IsReadOnly="True" 
+                    Width="*"
+                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Name}" >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <SelectableTextBlock 
+                                SelectionStart="{Binding NameSelection.Start}"
+                                SelectionEnd="{Binding NameSelection.Stop}"
+                                Text="{Binding Base.Name}"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn 
+                    IsReadOnly="True" 
+                    Width="2*"
+                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Description}">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <SelectableTextBlock 
+                                SelectionStart="{Binding DescriptionSelection.Start}"
+                                SelectionEnd="{Binding DescriptionSelection.Stop}"
+                                Text="{Binding Base.Description}"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Selected}" MinWidth="150" >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -52,12 +83,12 @@
                                       SelectedItem="{Binding SelectedItem.Value}" >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock VerticalAlignment="Center">
+                                        <SelectableTextBlock VerticalAlignment="Center">
                                             <Run Text="{Binding Name}"/>
                                             <Run Text=" [ "/>
                                             <Run Text="{Binding Symbol}"/>
                                             <Run Text=" ]"/>
-                                        </TextBlock>
+                                        </SelectableTextBlock>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
