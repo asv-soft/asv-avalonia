@@ -4,8 +4,6 @@ using System.Diagnostics.Metrics;
 using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
-using Avalonia.Media;
-using Avalonia.Media.Immutable;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -23,7 +21,7 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
 {
     private readonly IConfiguration _cfgSvc;
     private readonly ImmutableArray<IDeviceManagerExtension> _extensions;
-    private IDisposable? _sub1;
+    private readonly SerialDisposable _sub1 = new();
     private readonly DeviceManagerConfig _config;
 
     [ImportingConstructor]
@@ -87,7 +85,7 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
         }
 
         // this is needed to save config after port changes
-        _sub1 = Router
+        _sub1.Disposable = Router
             .PortUpdated.Merge(Router.PortAdded)
             .Merge(Router.PortRemoved)
             .Subscribe(_ => SaveConfig());
@@ -132,18 +130,14 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
 
     public void Dispose()
     {
-        _sub1?.Dispose();
+        _sub1.Dispose();
         Router.Dispose();
         Explorer.Dispose();
     }
 
     public async ValueTask DisposeAsync()
     {
-        if (_sub1 != null)
-        {
-            await CastAndDispose(_sub1);
-        }
-
+        await CastAndDispose(_sub1);
         await Router.DisposeAsync();
         await Explorer.DisposeAsync();
 

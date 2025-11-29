@@ -23,7 +23,7 @@ public class SearchService : ISearchService
             return false;
         }
 
-        var index = text.IndexOf(query, StringComparison.OrdinalIgnoreCase);
+        var index = text.Normalize().IndexOf(query.Normalize(), StringComparison.OrdinalIgnoreCase);
         if (index < 0)
         {
             match = Selection.Empty;

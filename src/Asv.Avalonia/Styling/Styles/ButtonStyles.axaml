@@ -4,7 +4,7 @@
        
         <!-- Template target (ContentPresenter внутри кнопки) -->
         <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-            <!-- Базовые стили кнопки (по умолчанию) остаются от темы -->
+            <!-- The default base button styles remain from the theme -->
         </Style>
 
         <!-- ========== STATUS BUTTONS ========== -->

@@ -12,8 +12,8 @@ public class PreviousPageCommand : ContextCommand<ISupportPagination>
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Previous Page",
-        Description = "Go to previous page",
+        Name = RS.PreviousPageCommand_CommandInfo_Name,
+        Description = RS.PreviousPageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ArrowLeftBold,
         DefaultHotKey = "Ctrl+Left",
         Source = SystemModule.Instance,

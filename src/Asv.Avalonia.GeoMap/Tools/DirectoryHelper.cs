@@ -6,20 +6,17 @@ public static class DirectoryHelper
     {
         DirectoryInfo dir = new DirectoryInfo(path);
 
-        // Проверяем, существует ли директория
         if (!dir.Exists)
         {
-            throw new DirectoryNotFoundException($"Директория {path} не найдена.");
+            throw new DirectoryNotFoundException($"Directory {path} not found.");
         }
 
-        // Подсчитываем файлы и их размеры в текущей директории
         foreach (FileInfo file in dir.GetFiles())
         {
-            count++; // Увеличиваем счетчик файлов
-            size += file.Length; // Добавляем размер файла
+            count++;
+            size += file.Length;
         }
 
-        // Рекурсивно обходим поддиректории
         foreach (DirectoryInfo subDir in dir.GetDirectories())
         {
             GetDirectorySize(subDir.FullName, ref count, ref size);

@@ -16,29 +16,38 @@ public class SettingsUnitsViewModelConfig
 public class SettingsUnitsViewModel : SettingsSubPage
 {
     public const string PageId = "units";
-    private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
 
+    private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
     private SettingsUnitsViewModelConfig? _config;
 
     public SettingsUnitsViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(NullSearchService.Instance, DesignTime.UnitService, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     [ImportingConstructor]
-    public SettingsUnitsViewModel(IUnitService unit, ILoggerFactory loggerFactory)
+    public SettingsUnitsViewModel(
+        ISearchService searchService,
+        IUnitService unit,
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, loggerFactory)
     {
+        ArgumentNullException.ThrowIfNull(searchService);
+        ArgumentNullException.ThrowIfNull(unit);
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+
         var observableList = new ObservableList<IUnit>(unit.Units.Values);
         _view = observableList
-            .CreateView(x => new MeasureUnitViewModel(x, loggerFactory))
+            .CreateView(u => new MeasureUnitViewModel(u, searchService, loggerFactory))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
-        Items = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
-        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel?>().DisposeItWith(
-            Disposable
-        );
+        _view.DisposeMany().DisposeItWith(Disposable);
+        Items = _view
+            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
+        SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel?>();
 
         Search = new SearchBoxViewModel(
             nameof(Search),
@@ -60,8 +69,10 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
     private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
     {
+        progress.Report(0);
         if (string.IsNullOrWhiteSpace(query))
         {
+            _view.ForEach(vm => vm.Filter(query ?? string.Empty));
             _view.ResetFilter();
         }
         else
@@ -73,6 +84,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
             );
         }
 
+        progress.Report(1);
         return Task.CompletedTask;
     }
 
@@ -130,6 +142,17 @@ public class SettingsUnitsViewModel : SettingsSubPage
         }
 
         return base.InternalCatchEvent(e);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            SelectedItem.Value = null;
+            SelectedItem.Dispose();
+        }
+
+        base.Dispose(disposing);
     }
 
     public override IExportInfo Source => SystemModule.Instance;

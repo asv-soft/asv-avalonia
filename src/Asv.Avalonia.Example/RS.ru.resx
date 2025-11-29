@@ -345,4 +345,7 @@
     <data name="ResetGeoPointDialogResultCommand_CommandInfo_Description" xml:space="preserve">
         <value>Сбросить результат диалога геоточки</value>
     </data>
+    <data name="ShellLeftMenuExtenderExample_HomeItem_Header" xml:space="preserve">
+        <value>Домашняя страница</value>
+    </data>
 </root>

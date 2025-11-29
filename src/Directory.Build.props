@@ -1,12 +1,12 @@
 <Project>
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <ProductVersion>1.0.3-dev.58</ProductVersion>
+    <ProductVersion>1.0.3</ProductVersion>
     <AvaloniaVersion>11.3.8</AvaloniaVersion>
     <DotNetVersion>9.0.9</DotNetVersion>
     <R3Version>1.3.0</R3Version>
     <R3CollectionVersion>3.3.4</R3CollectionVersion>
-    <AsvCommonVersion>3.3.0-dev.4</AsvCommonVersion>
+    <AsvCommonVersion>3.3.0</AsvCommonVersion>
     <ZLoggerVersion>2.5.10</ZLoggerVersion>
     <MaterialIconsAvaloniaVersion>2.4.1</MaterialIconsAvaloniaVersion>
     <NugetVersion>6.14.0</NugetVersion>

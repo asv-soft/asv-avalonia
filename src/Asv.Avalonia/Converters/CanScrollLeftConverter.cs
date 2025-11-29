@@ -31,7 +31,6 @@ public class CanScrollLeftConverter : IMultiValueConverter
             && values[2] is double
         )
         {
-            // Проверка: можно ли скроллить вправо
             return offsetX > 0;
         }
         return false;

@@ -53,4 +53,6 @@ public sealed class DialogService : IDialogService
             return false;
         }
     }
+
+    public IExportInfo Source => SystemModule.Instance;
 }

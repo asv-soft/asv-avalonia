@@ -13,8 +13,8 @@ public class NextPageCommand : ContextCommand<ISupportPagination>
         new CommandInfo
         {
             Id = Id,
-            Name = "Next Page",
-            Description = "Go to next page",
+            Name = RS.NextPageCommand_CommandInfo_Name,
+            Description = RS.NextPageCommand_CommandInfo_Description,
             Icon = MaterialIconKind.ArrowRightBold,
             DefaultHotKey = "Ctrl+Right",
             Source = SystemModule.Instance,

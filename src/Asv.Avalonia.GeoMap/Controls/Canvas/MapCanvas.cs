@@ -49,14 +49,14 @@ public partial class MapCanvas : Panel
         var offsetH = GetCenterX(child);
         var offsetV = GetCenterY(child);
 
-        if (Provider == null || point == null)
+        if (Provider is null || point is null)
         {
             return;
         }
 
         var tileSize = Provider.TileSize;
-        var halfWidth = Bounds.Width * 0.5;
-        var halfHeight = Bounds.Height * 0.5;
+        var halfWidth = finalSize.Width * 0.5;
+        var halfHeight = finalSize.Height * 0.5;
         var projection = Provider.Projection;
 
         var centerPixel = projection.Wgs84ToPixels(CenterMap, Zoom, tileSize);
@@ -65,8 +65,8 @@ public partial class MapCanvas : Panel
 
         pos += offset;
         pos = new Point(
-            pos.X - offsetH.CalculateOffset(child.Bounds.Width),
-            pos.Y - offsetV.CalculateOffset(child.Bounds.Height)
+            pos.X - offsetH.CalculateOffset(child.DesiredSize.Width),
+            pos.Y - offsetV.CalculateOffset(child.DesiredSize.Height)
         );
 
         child.Arrange(new Rect(pos, child.DesiredSize));
