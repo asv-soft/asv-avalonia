@@ -766,4 +766,67 @@
     <data name="DesktopShellViewModel_ExitConfirmDialog_Title" xml:space="preserve">
         <value>This page contains unsaved changes. Exit anyway?</value>
     </data>
+    <data name="GeoPointPropertyViewModel_Title" xml:space="preserve">
+        <value>Position</value>
+    </data>
+    <data name="GeoPointPropertyViewModel_Description" xml:space="preserve">
+        <value>Position</value>
+    </data>
+    <data name="GeoPointPropertyViewModel_Latitude_ShortName" xml:space="preserve">
+        <value>Lat</value>
+    </data>
+    <data name="GeoPointPropertyViewModel_Longitude_ShortName" xml:space="preserve">
+        <value>Lon</value>
+    </data>
+    <data name="GeoPointPropertyViewModel_Altitude_ShortName" xml:space="preserve">
+        <value>Alt</value>
+    </data>
+    <data name="Not_Available" xml:space="preserve">
+        <value>N/A</value>
+    </data>
+    <data name="CreateFileCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Create File</value>
+    </data>
+    <data name="CreateFileCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that creates a file</value>
+    </data>
+    <data name="CreateFileCommand_SelectFile" xml:space="preserve">
+        <value>Select file</value>
+    </data>
+    <data name="OpenFileCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that opens a file</value>
+    </data>
+    <data name="OpenFileCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open File</value>
+    </data>
+    <data name="OpenFileCommand_SelectFile" xml:space="preserve">
+        <value>Select a file</value>
+    </data>
+    <data name="CreateMenu_Header" xml:space="preserve">
+        <value>Create</value>
+    </data>
+    <data name="NextPageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Next page</value>
+    </data>
+    <data name="NextPageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that goes to the next page</value>
+    </data>
+    <data name="PreviousPageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Previous Page</value>
+    </data>
+    <data name="PreviousPageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that goes to the previous page</value>
+    </data>
+    <data name="SaveCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="SaveCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that saves changes</value>
+    </data>
+    <data name="ChangeIntPropertyCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Change Integer Property</value>
+    </data>
+    <data name="ChangeIntPropertyCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that changes the value of a historical property of type int</value>
+    </data>
 </root>

@@ -14,8 +14,8 @@ public class ChangeIntPropertyCommand : ContextCommand<IHistoricalProperty<int>,
     private static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Change Integer Property",
-        Description = "Change the value of a historical property of type int.",
+        Name = RS.ChangeIntPropertyCommand_CommandInfo_Name,
+        Description = RS.ChangeIntPropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
         DefaultHotKey = null,
         Source = SystemModule.Instance,

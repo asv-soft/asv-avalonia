@@ -12,10 +12,10 @@ public class CreateMenu : MenuItem
 
     [ImportingConstructor]
     public CreateMenu(ILoggerFactory loggerFactory)
-        : base(MenuId, "Create", loggerFactory)
+        : base(MenuId, RS.CreateMenu_Header, loggerFactory)
     {
         Order = -90;
         Icon = MaterialIconKind.FilePlus;
-        Header = "Create";
+        Header = RS.CreateMenu_Header;
     }
 }
