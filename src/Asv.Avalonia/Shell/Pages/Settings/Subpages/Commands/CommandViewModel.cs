@@ -9,31 +9,46 @@ public sealed class CommandViewModel : RoutableViewModel
 {
     public const string ViewModelBaseId = "hotkey";
     public const string EmptyHotKey = "-";
+
+    private readonly ICommandInfo _base;
     private readonly ICommandService _svc;
     private readonly IDialogService _dialogService;
+    private readonly ISearchService _searchService;
 
     public CommandViewModel(
         ICommandInfo command,
         ICommandService svc,
+        ISearchService searchService,
         IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
         : base(new NavigationId(ViewModelBaseId, command.Id), loggerFactory)
     {
+        ArgumentNullException.ThrowIfNull(svc);
+        ArgumentNullException.ThrowIfNull(searchService);
+        ArgumentNullException.ThrowIfNull(dialogService);
+        ArgumentNullException.ThrowIfNull(command);
+        ArgumentNullException.ThrowIfNull(loggerFactory);
+
         _svc = svc;
         _dialogService = dialogService;
-        Base = command;
+        _base = command;
+        _searchService = searchService;
 
         var hotkey = svc.GetHotKey(command.Id);
         var editedHotkey = new ReactiveProperty<string?>(
             hotkey == command.DefaultHotKey ? EmptyHotKey : hotkey
-        );
+        ).DisposeItWith(Disposable);
 
         EditedHotKey = new HistoricalStringProperty(
             nameof(EditedHotKey),
             editedHotkey,
             loggerFactory
-        ).SetRoutableParent(this);
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+        HasConflict = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        IsSelected = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
 
         SyncConflict(EditedHotKey.ModelValue.Value);
 
@@ -43,7 +58,7 @@ public sealed class CommandViewModel : RoutableViewModel
         EditedHotKey
             .ViewValue.Subscribe(value =>
                 _svc.SetHotKey(
-                    Base.Id,
+                    _base.Id,
                     value == EmptyHotKey ? null : HotKeyInfo.Parse(value ?? string.Empty)
                 )
             )
@@ -52,16 +67,18 @@ public sealed class CommandViewModel : RoutableViewModel
 
     #region Table columns
 
-    public MaterialIconKind Icon => Base.Icon;
-    public string Name => Base.Name;
-    public string Description => Base.Description;
-    public string Source => Base.Source.ModuleName;
-    public string? DefaultHotKey => Base.DefaultHotKey;
+    public MaterialIconKind Icon => _base.Icon;
+    public string Name => _base.Name;
+    public string Description => _base.Description;
+    public string Source => _base.Source.ModuleName;
+    public string? DefaultHotKey => _base.DefaultHotKey;
     public bool IsHotkeyConfigurable => DefaultHotKey is not null;
     public HistoricalStringProperty EditedHotKey { get; }
-    public BindableReactiveProperty<bool> HasConflict { get; } = new();
+    public BindableReactiveProperty<bool> HasConflict { get; }
 
     #endregion
+
+    public BindableReactiveProperty<bool> IsSelected { get; }
 
     public Selection NameSelection
     {
@@ -75,7 +92,23 @@ public sealed class CommandViewModel : RoutableViewModel
         private set => SetField(ref field, value);
     }
 
-    public ICommandInfo Base { get; }
+    public Selection SourceSelection
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+
+    public Selection DefaultHotKeySelection
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+
+    public Selection EditedHotKeySelection
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
 
     public async Task EditCommand()
     {
@@ -84,7 +117,7 @@ public sealed class CommandViewModel : RoutableViewModel
         {
             Title = RS.HotKeyViewModel_HotKeyCaptureDialog_Title,
             Message = RS.HotKeyViewModel_HotKeyCaptureDialog_Message,
-            CurrentHotKey = Base.DefaultHotKey,
+            CurrentHotKey = _base.DefaultHotKey,
         };
 
         var hotKey = await dialog.ShowDialogAsync(payload);
@@ -96,73 +129,55 @@ public sealed class CommandViewModel : RoutableViewModel
 
     private void SyncConflict(string? value)
     {
-        if (value == null)
+        if (value is null)
         {
             HasConflict.Value = false;
             return;
         }
 
         var duplicateExists = _svc
-            .Commands.Where(c => c.Id != Base.Id && EditedHotKey.ModelValue.Value != EmptyHotKey)
+            .Commands.Where(c => c.Id != _base.Id && EditedHotKey.ModelValue.Value != EmptyHotKey)
             .Select(c => _svc.GetHotKey(c.Id))
             .Any(hk => hk == value);
 
         HasConflict.Value = duplicateExists;
     }
 
-    public bool Filter(string search, ISearchService searchService)
+    public bool Filter(string search)
     {
-        if (string.IsNullOrWhiteSpace(search))
-        {
-            return true;
-        }
+        var isNameMatch = _searchService.Match(Name, search, out var nameMatch);
+        var isDescriptionMatch = _searchService.Match(
+            Description,
+            search,
+            out var descriptionMatch
+        );
+        var isSourceMatch = _searchService.Match(Source, search, out var sourceMatch);
+        var isDefaultHotkeyMatch = _searchService.Match(
+            DefaultHotKey,
+            search,
+            out var defaultHotkeyMatch
+        );
+        var isEditedHotkeyMatch = _searchService.Match(
+            EditedHotKey.ViewValue.Value,
+            search,
+            out var editedHotkeyMatch
+        );
 
-        var descriptionMatch = Selection.Empty;
+        NameSelection = nameMatch;
+        DescriptionSelection = descriptionMatch;
+        SourceSelection = sourceMatch;
+        DefaultHotKeySelection = defaultHotkeyMatch;
+        EditedHotKeySelection = editedHotkeyMatch;
 
-        var result =
-            searchService.Match(Name, search, out var nameMatch)
-            || searchService.Match(Description, search, out descriptionMatch);
-
-        if (result)
-        {
-            NameSelection = nameMatch;
-            DescriptionSelection = descriptionMatch;
-        }
-        else
-        {
-            ResetSelections();
-        }
-
-        return result
-            || Name.Contains(search, StringComparison.OrdinalIgnoreCase)
-            || Description.Contains(search, StringComparison.OrdinalIgnoreCase)
-            || Source.Contains(search, StringComparison.OrdinalIgnoreCase)
-            || (DefaultHotKey?.Contains(search, StringComparison.OrdinalIgnoreCase) ?? false)
-            || (
-                EditedHotKey.ViewValue.Value?.Contains(search, StringComparison.OrdinalIgnoreCase)
-                ?? false
-            );
-    }
-
-    public void ResetSelections()
-    {
-        NameSelection = Selection.Empty;
-        DescriptionSelection = Selection.Empty;
+        return isNameMatch
+            || isDescriptionMatch
+            || isSourceMatch
+            || isDefaultHotkeyMatch
+            || isEditedHotkeyMatch;
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         yield return EditedHotKey;
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            HasConflict.Dispose();
-            EditedHotKey.Dispose();
-        }
-
-        base.Dispose(disposing);
     }
 }

@@ -6,6 +6,7 @@
              xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
              x:DataType="asv:SettingsCommandListViewModel"
+             x:CompileBindings="True"
              x:Class="Asv.Avalonia.SettingsCommandListView">
     <Design.DataContext>
         <asv:SettingsCommandListViewModel />
@@ -35,7 +36,7 @@
                       MaxHeight="40"
                       Margin="8"
                       ItemsSource="{Binding CommandSortingType.EnumItems}"
-                      SelectedItem="{Binding CommandSortingType.ViewValue.Value, Mode=TwoWay}"
+                      SelectedItem="{Binding CommandSortingType.ViewValue.Value}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Center"
                       HorizontalContentAlignment="Center"
@@ -55,7 +56,7 @@
                   ColumnWidth="Auto"
                   CanUserResizeColumns="True"
                   SelectionMode="Single"
-                  SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
+                  SelectedItem="{CompiledBinding SelectedItem.Value, Mode=TwoWay}">
             <DataGrid.Columns>
                 <!-- Conflict indicator icon -->
                 <DataGridTemplateColumn Width="40">
@@ -104,7 +105,8 @@
                             <SelectableTextBlock SelectionStart="{Binding DescriptionSelection.Start}"
                                                  SelectionEnd="{Binding DescriptionSelection.Stop}"
                                                  Text="{Binding Description}"
-                                                 VerticalAlignment="Center" />
+                                                 VerticalAlignment="Center" 
+                                                 IsHitTestVisible="False"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -121,11 +123,16 @@
                                     <Button VerticalAlignment="Center"
                                             Margin="0 0 5 0"
                                             Width="30" Height="30"
-                                            Command="{Binding EditCommand}">
+                                            Command="{Binding EditCommand}"
+                                            IsEnabled="{CompiledBinding IsSelected.Value}">
                                         <avalonia:MaterialIcon Kind="Pencil" />
                                     </Button>
-                                    <TextBlock Text="{Binding EditedHotKey.ViewValue.Value}"
-                                               VerticalAlignment="Center" />
+                                    <SelectableTextBlock 
+                                        SelectionStart="{Binding EditedHotKeySelection.Start}"
+                                        SelectionEnd="{Binding EditedHotKeySelection.Stop}"
+                                        Text="{Binding EditedHotKey.ViewValue.Value}"
+                                        VerticalAlignment="Center"
+                                        IsHitTestVisible="False" />
                                 </StackPanel>
 
                                 <!-- Cannot edit -->
@@ -147,9 +154,13 @@
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <!-- Normal default hotkey -->
-                                <TextBlock Text="{Binding DefaultHotKey}"
-                                           IsVisible="{CompiledBinding IsHotkeyConfigurable}"
-                                           VerticalAlignment="Center" />
+                                <SelectableTextBlock 
+                                    SelectionStart="{Binding DefaultHotKeySelection.Start}"
+                                    SelectionEnd="{Binding DefaultHotKeySelection.Stop}"
+                                    Text="{Binding DefaultHotKey}"
+                                    IsVisible="{CompiledBinding IsHotkeyConfigurable}"
+                                    VerticalAlignment="Center"
+                                    IsHitTestVisible="False"/>
 
                                 <!-- Cannot edit -->
                                 <Border HorizontalAlignment="Stretch"
@@ -163,9 +174,19 @@
                 </DataGridTemplateColumn>
 
                 <!-- Command source -->
-                <DataGridTextColumn Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Source_Header}"
-                                    Binding="{Binding Source}"
-                                    Width="*" />
+                <DataGridTemplateColumn Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Source_Header}"
+                                        Width="*"
+                                        CanUserSort="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <SelectableTextBlock SelectionStart="{Binding SourceSelection.Start}"
+                                                 SelectionEnd="{Binding SourceSelection.Stop}"
+                                                 Text="{Binding Source}"
+                                                 VerticalAlignment="Center" 
+                                                 IsHitTestVisible="False"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
