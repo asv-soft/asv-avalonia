@@ -12,9 +12,7 @@ public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
         : this(DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
-        HotKey = new BindableReactiveProperty<HotKeyInfo?>(
-            HotKeyInfo.Parse("Ctrl+C")
-        ).DisposeItWith(Disposable);
+        HotKey.Value = HotKeyInfo.Parse("Ctrl+C");
     }
 
     public DialogItemHotKeyCaptureViewModel(ILoggerFactory loggerFactory)

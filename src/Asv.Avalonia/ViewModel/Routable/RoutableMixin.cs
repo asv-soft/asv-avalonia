@@ -200,46 +200,6 @@ public static class RoutableMixin
         }
     }
 
-    /*/// <summary>
-    /// Navigates through the specified path, resolving each step sequentially.
-    /// </summary>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
-    /// <param name="path">An ordered segment of path identifiers.</param>
-    /// <returns>
-    /// A <see cref="ValueTask{TResult}"/> resolving to the final <see cref="IRoutable"/> reached in the path.
-    /// </returns>
-    public static async ValueTask<IRoutable> NavigateByPath(
-        this IRoutable src,
-        ArraySegment<NavigationId> path
-    )
-    {
-        while (true)
-        {
-            if (path.Count == 0)
-            {
-                return src;
-            }
-
-            var first = path[0];
-            var item = await src.Navigate(first);
-            src = item;
-            path = path[1..];
-        }
-    }
-
-    /// <summary>
-    /// Navigates through the specified path, resolving each step sequentially.
-    /// </summary>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
-    /// <param name="path">An ordered array of path identifiers.</param>
-    /// <returns>
-    /// A <see cref="ValueTask{TResult}"/> resolving to the final <see cref="IRoutable"/> reached in the path.
-    /// </returns>
-    public static async ValueTask<IRoutable> NavigateByPath(this IRoutable src, NavigationId[] path)
-    {
-        return await src.NavigateByPath(new ArraySegment<NavigationId>(path));
-    }*/
-
     /// <summary>
     /// Retrieves the root <see cref="IRoutable"/> element in the hierarchy.
     /// </summary>

@@ -354,7 +354,6 @@ public class LogViewerViewModel
 
     protected override void AfterLoadExtensions() { }
 
-    public override IExportInfo Source => SystemModule.Instance;
     public INotifyCollectionChangedSynchronizedViewList<LogMessageViewModel> Items { get; }
 
     public BindableReactiveProperty<string> FromToText { get; }
@@ -368,4 +367,6 @@ public class LogViewerViewModel
         get;
         set => SetField(ref field, value);
     }
+
+    public override IExportInfo Source => SystemModule.Instance;
 }

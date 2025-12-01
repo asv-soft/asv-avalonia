@@ -16,7 +16,6 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
 
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
-    public abstract IExportInfo Source { get; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren() => Menu;
 
@@ -29,6 +28,8 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
 
         base.Dispose(disposing);
     }
+
+    public abstract IExportInfo Source { get; }
 }
 
 public abstract class TreeSubpage<TContext>(NavigationId id, ILoggerFactory loggerFactory)

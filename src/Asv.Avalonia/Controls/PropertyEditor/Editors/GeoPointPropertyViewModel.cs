@@ -64,7 +64,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         )
         {
             Parent = this,
-            ShortName = RS.GeoPointPropertyViewModel_Latitude_ShortName,
+            ShortName = RS.Latitude_ShortName,
             Icon = MaterialIconKind.Latitude,
         };
         Longitude = new UnitPropertyViewModel(
@@ -76,7 +76,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         )
         {
             Parent = this,
-            ShortName = RS.GeoPointPropertyViewModel_Longitude_ShortName,
+            ShortName = RS.Longitude_ShortName,
             Icon = MaterialIconKind.Longitude,
         };
         Altitude = new UnitPropertyViewModel(
@@ -88,7 +88,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         )
         {
             Parent = this,
-            ShortName = RS.GeoPointPropertyViewModel_Altitude_ShortName,
+            ShortName = RS.Altitude_ShortName,
             Icon = MaterialIconKind.Altimeter,
         };
     }

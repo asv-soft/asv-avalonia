@@ -19,9 +19,10 @@ public abstract class ExtendableTreeSubpage<TSubContext>
 
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
-    public abstract IExportInfo Source { get; }
 
     public override IEnumerable<IRoutable> GetRoutableChildren() => Menu;
+
+    public abstract IExportInfo Source { get; }
 }
 
 public abstract class ExtendableTreeSubpage<TContext, TSubContext>
