@@ -43,8 +43,15 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             );
         LogicalChildren.Add(_mainTabControl);
 
-        ArgumentNullException.ThrowIfNull(Configuration);
-        _config = Configuration.Get<DockControlConfig>();
+        if (Design.IsDesignMode)
+        {
+            _config = Configuration?.Get<DockControlConfig>() ?? new DockControlConfig();
+        }
+        else
+        {
+            ArgumentNullException.ThrowIfNull(Configuration);
+            _config = Configuration.Get<DockControlConfig>();
+        }
 
         if (Items is INotifyCollectionChanged notifyCol)
         {
