@@ -4,5 +4,7 @@ public class IoModuleOptions
 {
     public const string ConfigurationSection = "IoModule";
 
-    public bool EnableDevices { get; set; }
+    public bool IsEnabled { get; set; } = false;
+
+    public bool IsDeviceFeatureEnabled { get; set; } = false;
 }

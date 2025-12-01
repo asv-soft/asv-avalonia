@@ -1,10 +1,9 @@
 using System.Collections.Generic;
 using System.Composition;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Material.Icons;
 
-namespace Asv.Avalonia.Example.Plugin.PluginExample;
+namespace Asv.Avalonia.Example;
 
 [Export(typeof(IFileHandler))]
 [Shared]

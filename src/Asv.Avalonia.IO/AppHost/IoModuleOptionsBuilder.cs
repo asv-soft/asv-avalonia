@@ -2,23 +2,27 @@ namespace Asv.Avalonia.IO;
 
 public class IoModuleOptionsBuilder
 {
-    private bool _enableDevices;
+    private bool _isDeviceFeatureEnabled;
 
     internal IoModuleOptionsBuilder() { }
 
     internal IoModuleOptionsBuilder(IoModuleOptions defaultOptions)
     {
-        _enableDevices = defaultOptions.EnableDevices;
+        _isDeviceFeatureEnabled = defaultOptions.IsDeviceFeatureEnabled;
     }
 
     public IoModuleOptionsBuilder WithDevices()
     {
-        _enableDevices = true;
+        _isDeviceFeatureEnabled = true;
         return this;
     }
 
     public IoModuleOptions Build()
     {
-        return new IoModuleOptions { EnableDevices = _enableDevices };
+        return new IoModuleOptions
+        {
+            IsEnabled = true,
+            IsDeviceFeatureEnabled = _isDeviceFeatureEnabled,
+        };
     }
 }
