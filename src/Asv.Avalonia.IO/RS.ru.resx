@@ -12,7 +12,7 @@
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
     <data name="SettingsConnectionTcpExtension_MenuItem_Header" xml:space="preserve">
-        <value>TCP Client</value>
+        <value>TCP Клиент</value>
     </data>
     <data name="PortView_Title" xml:space="preserve">
         <value>Общие Настройки</value>
@@ -51,13 +51,13 @@
         <value>Вкл</value>
     </data>
     <data name="SettingsConnectionSerialExtension_MenuItem_Header" xml:space="preserve">
-        <value>Serial port</value>
+        <value>Серийный порт</value>
     </data>
     <data name="TcpPortViewModel_TagViewModel_Value" xml:space="preserve">
-        <value>TCP CLIENT</value>
+        <value>TCP КЛИЕНТ</value>
     </data>
     <data name="SerialPortViewModel_TagViewModel_Value" xml:space="preserve">
-        <value>SERIAL</value>
+        <value>Серийный</value>
     </data>
     <data name="PortCrudCommand_CommandInfo_Name" xml:space="preserve">
         <value>Добавить/Убрать/Изменить порт</value>
@@ -76,12 +76,6 @@
     </data>
     <data name="HomePageDeviceItem_Info_Type" xml:space="preserve">
         <value>Тип</value>
-    </data>
-    <data name="OpenSettingsCommand_Action_Title" xml:space="preserve">
-        <value>Настройки</value>
-    </data>
-    <data name="OpenSettingsCommand_Action_Description" xml:space="preserve">
-        <value>Открыть настройки</value>
     </data>
     <data name="TcpServerPortView_RemoteHost_On" xml:space="preserve">
         <value>Удаленный хост/порт</value>
@@ -109,5 +103,50 @@
     </data>
     <data name="ConnectionRateStatusView_NavigationButton_Settings" xml:space="preserve">
         <value>Перейти в настройки</value>
+    </data>
+    <data name="StatisticView_Row_ByteRate_Text" xml:space="preserve">
+        <value>Частота байт</value>
+    </data>
+    <data name="StatisticView_Row_TotalBytes_Text" xml:space="preserve">
+        <value>Всего байт</value>
+    </data>
+    <data name="StatisticView_Row_TotalMessages_Text" xml:space="preserve">
+        <value>Всего сообщений</value>
+    </data>
+    <data name="StatisticView_Row_MessagesRate_Text" xml:space="preserve">
+        <value>Частота сообщений</value>
+    </data>
+    <data name="StatisticView_Row_Dropped_Text" xml:space="preserve">
+        <value>Отброшенные</value>
+    </data>
+    <data name="StatisticView_Row_Error_Text" xml:space="preserve">
+        <value>Ошибки</value>
+    </data>
+    <data name="StatisticView_Row_BadCrc_Text" xml:space="preserve">
+        <value>Неверный CRC</value>
+    </data>
+    <data name="StatisticView_Row_DeserializeErrors_Text" xml:space="preserve">
+        <value>Ошибки десериализации</value>
+    </data>
+    <data name="StatisticView_Row_MessageReadNotAllData_Text" xml:space="preserve">
+        <value>Сообщения с неполным чтением</value>
+    </data>
+    <data name="StatisticView_Row_UnknownMessages_Text" xml:space="preserve">
+        <value>Неизвестные сообщения</value>
+    </data>
+    <data name="StatisticView_Row_ParsedMessages_Text" xml:space="preserve">
+        <value>Обработанные сообщения</value>
+    </data>
+    <data name="StatisticView_Row_ParsedBytes_Text" xml:space="preserve">
+        <value>Обработанные байты</value>
+    </data>
+    <data name="StatisticView_Table_Protocols_Title" xml:space="preserve">
+        <value>Протоколы</value>
+    </data>
+    <data name="StatisticView_Table_ReceivedData_Title" xml:space="preserve">
+        <value>Полученные данные</value>
+    </data>
+    <data name="StatisticView_Table_TransmittedData_Title" xml:space="preserve">
+        <value>Переданные данные</value>
     </data>
 </root>

@@ -84,12 +84,6 @@
     <data name="HomePageDeviceItem_Info_Link" xml:space="preserve">
         <value>Status</value>
     </data>
-    <data name="OpenSettingsCommand_Action_Title" xml:space="preserve">
-        <value>Settings</value>
-    </data>
-    <data name="OpenSettingsCommand_Action_Description" xml:space="preserve">
-        <value>Open Settings</value>
-    </data>
     <data name="TcpServerPortView_RemoteHost_On" xml:space="preserve">
         <value>Remote host\port</value>
     </data>
@@ -116,5 +110,50 @@
     </data>
     <data name="ConnectionRateStatusView_NavigationButton_Settings" xml:space="preserve">
         <value>Go to settings</value>
+    </data>
+    <data name="StatisticView_Row_TotalBytes_Text" xml:space="preserve">
+        <value>Total bytes</value>
+    </data>
+    <data name="StatisticView_Row_ByteRate_Text" xml:space="preserve">
+        <value>Byte rate</value>
+    </data>
+    <data name="StatisticView_Row_TotalMessages_Text" xml:space="preserve">
+        <value>Total messages</value>
+    </data>
+    <data name="StatisticView_Row_MessagesRate_Text" xml:space="preserve">
+        <value>Messages rate</value>
+    </data>
+    <data name="StatisticView_Row_Dropped_Text" xml:space="preserve">
+        <value>Dropped</value>
+    </data>
+    <data name="StatisticView_Row_Error_Text" xml:space="preserve">
+        <value>Errors</value>
+    </data>
+    <data name="StatisticView_Row_BadCrc_Text" xml:space="preserve">
+        <value>Bad CRC</value>
+    </data>
+    <data name="StatisticView_Row_ParsedBytes_Text" xml:space="preserve">
+        <value>Parsed bytes</value>
+    </data>
+    <data name="StatisticView_Row_ParsedMessages_Text" xml:space="preserve">
+        <value>Parsed messages</value>
+    </data>
+    <data name="StatisticView_Row_MessageReadNotAllData_Text" xml:space="preserve">
+        <value>Messages read not all data</value>
+    </data>
+    <data name="StatisticView_Row_DeserializeErrors_Text" xml:space="preserve">
+        <value>Deserialization errors</value>
+    </data>
+    <data name="StatisticView_Row_UnknownMessages_Text" xml:space="preserve">
+        <value>Unknown messages</value>
+    </data>
+    <data name="StatisticView_Table_ReceivedData_Title" xml:space="preserve">
+        <value>Received data</value>
+    </data>
+    <data name="StatisticView_Table_TransmittedData_Title" xml:space="preserve">
+        <value>Transmitted data</value>
+    </data>
+    <data name="StatisticView_Table_Protocols_Title" xml:space="preserve">
+        <value>Protocols</value>
     </data>
 </root>
