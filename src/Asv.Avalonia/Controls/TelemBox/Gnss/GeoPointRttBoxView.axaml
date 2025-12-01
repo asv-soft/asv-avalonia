@@ -5,8 +5,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="250"
-    d:DesignHeight="450"
     x:Class="Asv.Avalonia.GeoPointRttBoxView"
     HorizontalAlignment="Stretch"
     HorizontalContentAlignment="Stretch"
@@ -33,21 +31,21 @@
                 Foreground="{DynamicResource AsvForegroundUnknownBrush}"
                 Grid.Column="0"
                 Grid.Row="0"
-                Text="Lat"
+                Text="{x:Static avalonia:RS.Latitude_ShortName}"
             />
             <TextBlock
                 FontSize="15"
                 Foreground="{DynamicResource AsvForegroundUnknownBrush}"
                 Grid.Column="0"
                 Grid.Row="1"
-                Text="Lon"
+                Text="{x:Static avalonia:RS.Longitude_ShortName}"
             />
             <TextBlock
                 FontSize="15"
                 Foreground="{DynamicResource AsvForegroundUnknownBrush}"
                 Grid.Column="0"
                 Grid.Row="2"
-                Text="Alt"
+                Text="{x:Static avalonia:RS.Altitude_ShortName}"
             />
             <SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding LatitudeString}" />
             <SelectableTextBlock Grid.Column="2" Grid.Row="1" Text="{Binding LongitudeString}" />

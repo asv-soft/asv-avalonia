@@ -348,4 +348,7 @@
     <data name="ShellLeftMenuExtenderExample_HomeItem_Header" xml:space="preserve">
         <value>Домашняя страница</value>
     </data>
+    <data name="HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS" xml:space="preserve">
+        <value>Значение не должно содержать букву 's'</value>
+    </data>
 </root>

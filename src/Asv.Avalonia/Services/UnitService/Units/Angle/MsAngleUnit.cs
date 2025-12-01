@@ -33,18 +33,7 @@ public sealed class MsAngleUnit() : UnitItemBase(1)
             return ValidationResult.FailAsNullOrWhiteSpace;
         }
 
-        var msg = AngleMs.GetErrorMessage(value);
-
-        if (msg is not null)
-        {
-            return new ValidationResult
-            {
-                IsSuccess = false,
-                ValidationException = new UnitException(msg),
-            };
-        }
-
-        return ValidationResult.Success;
+        return AngleMs.ValidateValue(value);
     }
 
     /// <summary>

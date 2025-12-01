@@ -49,4 +49,12 @@
       <None Remove="Asv.Avalonia.Example.Plugin.PluginExample.csproj.DotSettings" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Shell\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Shell\Pages\Home\ExamplePageView.axaml" />
+    </ItemGroup>
+
 </Project>

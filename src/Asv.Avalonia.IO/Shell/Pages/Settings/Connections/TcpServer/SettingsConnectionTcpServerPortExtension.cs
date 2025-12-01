@@ -12,12 +12,17 @@ public class SettingsConnectionTcpServerPortExtension(ILoggerFactory loggerFacto
 {
     public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
     {
-        var menu = new MenuItem(TcpServerProtocolPort.Scheme, "TCP Server", loggerFactory);
+        var menu = new MenuItem(
+            TcpServerProtocolPort.Scheme,
+            RS.SettingsConnectionTcpServerPortExtension_MenuItem_Header,
+            loggerFactory
+        );
+
         menu.Icon = TcpServerPortViewModel.DefaultIcon;
         menu.Command = new BindableAsyncCommand(PortCrudCommand.Id, menu);
         var defaultConfig = TcpServerProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
-        defaultConfig.Name = "New TCP server";
+        defaultConfig.Name = RS.SettingsConnectionTcpServerPortExtension_DefaultConfig_Name;
         menu.CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
         context.Menu.Add(menu);
     }

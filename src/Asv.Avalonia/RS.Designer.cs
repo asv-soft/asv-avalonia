@@ -75,12 +75,6 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string ThemeService_System {
-            get {
-                return ResourceManager.GetString("ThemeService_System", resourceCulture);
-            }
-        }
-        
         public static string SettingsAppearanceView_AppTheme_Title {
             get {
                 return ResourceManager.GetString("SettingsAppearanceView_AppTheme_Title", resourceCulture);
@@ -1533,21 +1527,21 @@ namespace Asv.Avalonia {
             }
         }
         
-        public static string GeoPointPropertyViewModel_Latitude_ShortName {
+        public static string Latitude_ShortName {
             get {
-                return ResourceManager.GetString("GeoPointPropertyViewModel_Latitude_ShortName", resourceCulture);
+                return ResourceManager.GetString("Latitude_ShortName", resourceCulture);
             }
         }
         
-        public static string GeoPointPropertyViewModel_Longitude_ShortName {
+        public static string Longitude_ShortName {
             get {
-                return ResourceManager.GetString("GeoPointPropertyViewModel_Longitude_ShortName", resourceCulture);
+                return ResourceManager.GetString("Longitude_ShortName", resourceCulture);
             }
         }
         
-        public static string GeoPointPropertyViewModel_Altitude_ShortName {
+        public static string Altitude_ShortName {
             get {
-                return ResourceManager.GetString("GeoPointPropertyViewModel_Altitude_ShortName", resourceCulture);
+                return ResourceManager.GetString("Altitude_ShortName", resourceCulture);
             }
         }
         

@@ -45,7 +45,7 @@
                                 Margin="4,0"
                                 Classes="description"
                                 Foreground="{DynamicResource TextFillColorDisabledBrush}"
-                                Text="Lat"
+                                Text="{x:Static controls:RS.Latitude_ShortName}"
                             />
                         </TextBox.InnerLeftContent>
                         <TextBox.InnerRightContent>
@@ -93,7 +93,7 @@
                                 Margin="4,0"
                                 Classes="description"
                                 Foreground="{DynamicResource TextFillColorDisabledBrush}"
-                                Text="Lon"
+                                Text="{x:Static controls:RS.Longitude_ShortName}"
                             />
                         </TextBox.InnerLeftContent>
                         <TextBox.InnerRightContent>
@@ -137,7 +137,7 @@
                                 Margin="4,0"
                                 Classes="description"
                                 Foreground="{DynamicResource TextFillColorDisabledBrush}"
-                                Text="Alt"
+                                Text="{x:Static controls:RS.Altitude_ShortName}"
                             />
                         </TextBox.InnerLeftContent>
                         <TextBox.InnerRightContent>

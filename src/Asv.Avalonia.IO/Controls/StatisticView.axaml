@@ -7,7 +7,6 @@
     xmlns:io="clr-namespace:Asv.Avalonia.IO"
     mc:Ignorable="d"
     d:DesignWidth="800"
-    d:DesignHeight="450"
     x:Class="Asv.Avalonia.IO.StatisticView"
     x:DataType="io:StatisticViewModel"
 >
@@ -42,7 +41,10 @@
                 Classes="success"
                 Kind="ArrowDownBold"
             />
-            <TextBlock Classes="description" Text="Received data"></TextBlock>
+            <TextBlock
+                Classes="description"
+                Text="{x:Static io:RS.StatisticView_Table_ReceivedData_Title}"
+            ></TextBlock>
         </StackPanel>
 
         <StackPanel
@@ -59,7 +61,10 @@
                 Classes="error"
                 Kind="ArrowUpBold"
             />
-            <TextBlock Classes="description" Text="Transmitted data"></TextBlock>
+            <TextBlock
+                Classes="description"
+                Text="{x:Static io:RS.StatisticView_Table_TransmittedData_Title}"
+            ></TextBlock>
         </StackPanel>
 
         <StackPanel
@@ -77,7 +82,10 @@
                 Classes="success"
                 Kind="CableData"
             />
-            <TextBlock Classes="description" Text="Protocols"></TextBlock>
+            <TextBlock
+                Classes="description"
+                Text="{x:Static io:RS.StatisticView_Table_Protocols_Title}"
+            ></TextBlock>
         </StackPanel>
         <Rectangle
             Grid.Column="0"
@@ -87,7 +95,6 @@
             Height="0.5"
             VerticalAlignment="Bottom"
         />
-
         <Grid
             Grid.Row="2"
             Grid.Column="0"
@@ -102,7 +109,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Total bytes"
+                Text="{x:Static io:RS.StatisticView_Row_TotalBytes_Text}"
             />
             <TextBlock
                 Grid.Row="1"
@@ -117,7 +124,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Byte rate"
+                Text="{x:Static io:RS.StatisticView_Row_ByteRate_Text}"
             />
             <TextBlock
                 Grid.Row="2"
@@ -132,7 +139,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Total messages"
+                Text="{x:Static io:RS.StatisticView_Row_TotalMessages_Text}"
             />
             <TextBlock
                 Grid.Row="3"
@@ -147,7 +154,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Messages rate"
+                Text="{x:Static io:RS.StatisticView_Row_MessagesRate_Text}"
             />
             <TextBlock
                 Grid.Row="4"
@@ -162,7 +169,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Dropped"
+                Text="{x:Static io:RS.StatisticView_Row_Dropped_Text}"
             />
             <TextBlock
                 Grid.Row="5"
@@ -177,7 +184,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Error"
+                Text="{x:Static io:RS.StatisticView_Row_Error_Text}"
             />
             <TextBlock
                 Grid.Row="6"
@@ -209,7 +216,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Total bytes"
+                Text="{x:Static io:RS.StatisticView_Row_TotalBytes_Text}"
             />
             <TextBlock
                 Grid.Row="1"
@@ -224,7 +231,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Byte rate"
+                Text="{x:Static io:RS.StatisticView_Row_ByteRate_Text}"
             />
             <TextBlock
                 Grid.Row="2"
@@ -239,7 +246,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Total messages"
+                Text="{x:Static io:RS.StatisticView_Row_TotalMessages_Text}"
             />
             <TextBlock
                 Grid.Row="3"
@@ -254,7 +261,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Messages rate"
+                Text="{x:Static io:RS.StatisticView_Row_MessagesRate_Text}"
             />
             <TextBlock
                 Grid.Row="4"
@@ -269,7 +276,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Dropped"
+                Text="{x:Static io:RS.StatisticView_Row_Dropped_Text}"
             />
             <TextBlock
                 Grid.Row="5"
@@ -284,7 +291,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Error"
+                Text="{x:Static io:RS.StatisticView_Row_Error_Text}"
             />
             <TextBlock
                 Grid.Row="6"
@@ -316,7 +323,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Bad CRC "
+                Text="{x:Static io:RS.StatisticView_Row_BadCrc_Text}"
             />
             <TextBlock
                 Grid.Row="1"
@@ -331,7 +338,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Parsed bytes"
+                Text="{x:Static io:RS.StatisticView_Row_ParsedBytes_Text}"
             />
             <TextBlock
                 Grid.Row="2"
@@ -346,7 +353,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Parsed messages"
+                Text="{x:Static io:RS.StatisticView_Row_ParsedMessages_Text}"
             />
             <TextBlock
                 Grid.Row="3"
@@ -361,7 +368,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Message read not all data"
+                Text="{x:Static io:RS.StatisticView_Row_MessageReadNotAllData_Text}"
             />
             <TextBlock
                 Grid.Row="4"
@@ -376,7 +383,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Deserialize errors"
+                Text="{x:Static io:RS.StatisticView_Row_DeserializeErrors_Text}"
             />
             <TextBlock
                 Grid.Row="5"
@@ -391,7 +398,7 @@
                 Grid.Column="0"
                 VerticalAlignment="Center"
                 Classes="description"
-                Text="Unknown messages"
+                Text="{x:Static io:RS.StatisticView_Row_UnknownMessages_Text}"
             />
             <TextBlock
                 Grid.Row="6"

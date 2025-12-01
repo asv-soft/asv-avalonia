@@ -13,10 +13,7 @@ public class DialogItemTextViewModel(ILoggerFactory loggerFactory)
         : this(NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
-        if (Design.IsDesignMode)
-        {
-            Message = "Example";
-        }
+        Message = "Example";
     }
 
     public required string Message { get; set; }

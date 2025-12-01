@@ -63,4 +63,18 @@
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Shell\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Shell\Pages\ControlsGallery\ControlsGalleryPageView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\ControlsGallery\DialogControls\DialogControlsPageView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\ControlsGallery\HistoricalControls\HistoricalControlsPageView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\ControlsGallery\InfoBoxControls\InfoBoxControlsPageView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\ControlsGallery\MapControls\MapControlsPageView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\ControlsGallery\PropertyEditor\PropertyEditorPageView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\ControlsGallery\Workspace\WorkspacePageView.axaml" />
+    </ItemGroup>
 </Project>

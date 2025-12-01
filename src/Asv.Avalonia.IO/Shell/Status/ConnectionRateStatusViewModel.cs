@@ -19,6 +19,7 @@ public class ConnectionRateStatusViewModel : StatusItem
     private readonly ILoggerFactory _loggerFactory;
     private readonly TimeProvider _timeProvider;
     private readonly INavigationService _nav;
+    private readonly IUnit _frequencyUnit;
 
     private readonly IncrementalRateCounter _rxBytes;
     private readonly IncrementalRateCounter _txBytes;
@@ -26,7 +27,12 @@ public class ConnectionRateStatusViewModel : StatusItem
     private readonly IncrementalRateCounter _txPackets;
 
     public ConnectionRateStatusViewModel()
-        : this(NullLoggerFactory.Instance, TimeProvider.System, DesignTime.Navigation)
+        : this(
+            DesignTime.UnitService,
+            NullLoggerFactory.Instance,
+            TimeProvider.System,
+            DesignTime.Navigation
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         var stat = new Statistic();
@@ -53,11 +59,12 @@ public class ConnectionRateStatusViewModel : StatusItem
     [ImportingConstructor]
     public ConnectionRateStatusViewModel(
         IDeviceManager deviceManager,
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider,
         INavigationService nav
     )
-        : this(loggerFactory, timeProvider, nav)
+        : this(unitService, loggerFactory, timeProvider, nav)
     {
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
@@ -69,6 +76,7 @@ public class ConnectionRateStatusViewModel : StatusItem
     }
 
     private ConnectionRateStatusViewModel(
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider,
         INavigationService nav
@@ -78,25 +86,13 @@ public class ConnectionRateStatusViewModel : StatusItem
         _loggerFactory = loggerFactory;
         _timeProvider = timeProvider;
         _nav = nav;
+        _frequencyUnit =
+            unitService.Units[FrequencyBase.Id]
+            ?? throw new UnitException($"Unit {FrequencyBase.Id} was not found");
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
         _txPackets = new IncrementalRateCounter(5, timeProvider);
-    }
-
-    private void UpdateStatistic(IStatistic stat)
-    {
-        var rxBytes = DataFormatter.ByteRate.Print(_rxBytes.Calculate(stat.RxBytes));
-        var txBytes = DataFormatter.ByteRate.Print(_txBytes.Calculate(stat.TxBytes));
-        var rxPackets = _rxPackets.Calculate(stat.RxMessages).ToString("F1");
-        var txPackets = _txPackets.Calculate(stat.TxMessages).ToString("F1");
-        TotalRateInString = $"{rxBytes} / {rxPackets} Hz";
-        TotalRateOutString = $"{txBytes} / {txPackets} Hz";
-
-        if (IsFlyoutOpen)
-        {
-            FullStatistic.Update(stat);
-        }
     }
 
     [field: AllowNull]
@@ -111,11 +107,6 @@ public class ConnectionRateStatusViewModel : StatusItem
                 _timeProvider
             );
         }
-    }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        return [];
     }
 
     public override int Order => 256;
@@ -138,6 +129,11 @@ public class ConnectionRateStatusViewModel : StatusItem
         set => SetField(ref field, value);
     }
 
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
+
     public void NavigateToSettings()
     {
         _nav.GoTo(
@@ -147,5 +143,21 @@ public class ConnectionRateStatusViewModel : StatusItem
                 )
             )
             .SafeFireAndForget();
+    }
+
+    private void UpdateStatistic(IStatistic stat)
+    {
+        var rxBytes = DataFormatter.ByteRate.Print(_rxBytes.Calculate(stat.RxBytes));
+        var txBytes = DataFormatter.ByteRate.Print(_txBytes.Calculate(stat.TxBytes));
+        var rxPackets = _rxPackets.Calculate(stat.RxMessages).ToString("F1");
+        var txPackets = _txPackets.Calculate(stat.TxMessages).ToString("F1");
+        var gzUnitSymbol = _frequencyUnit.AvailableUnits[HertzFrequencyUnit.Id].Symbol;
+        TotalRateInString = $"{rxBytes} / {rxPackets} {gzUnitSymbol}";
+        TotalRateOutString = $"{txBytes} / {txPackets} {gzUnitSymbol}";
+
+        if (IsFlyoutOpen)
+        {
+            FullStatistic.Update(stat);
+        }
     }
 }

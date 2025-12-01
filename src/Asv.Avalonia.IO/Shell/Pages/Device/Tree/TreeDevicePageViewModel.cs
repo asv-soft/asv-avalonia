@@ -1,4 +1,5 @@
 using System.Collections.Specialized;
+using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -29,6 +30,10 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
+
+        IsDeviceInitialized = _deviceCore
+            .IsDeviceInitialized.ToReadOnlyBindableReactiveProperty()
+            .DisposeItWith(Disposable);
     }
 
     private void AfterDeviceInitializedBase(
@@ -69,8 +74,7 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
     }
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
-    public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized =>
-        _deviceCore.IsDeviceInitialized.ToReadOnlyBindableReactiveProperty();
+    public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized { get; }
     public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
     public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }

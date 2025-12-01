@@ -28,7 +28,12 @@ public static class ContainerConfigurationMixin
 
         var exceptionTypes = new List<Type>();
         var options = AppHost.Instance.GetService<IOptions<IoModuleOptions>>().Value;
-        if (!options.EnableDevices)
+
+        if (!options.IsEnabled)
+        {
+            exceptionTypes.AddRange(typeof(IoModule).Assembly.GetTypes());
+        }
+        else if (!options.IsDeviceFeatureEnabled)
         {
             exceptionTypes.AddRange([
                 typeof(HomePageDeviceListExtension),
@@ -53,6 +58,8 @@ public static class ContainerConfigurationMixin
                 typeof(PortCrudCommand),
                 typeof(IDeviceManager),
                 typeof(DeviceManager),
+                typeof(StatisticView),
+                typeof(StatisticViewModel),
             ]);
         }
 

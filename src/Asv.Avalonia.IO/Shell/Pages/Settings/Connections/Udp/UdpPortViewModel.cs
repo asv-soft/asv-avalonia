@@ -19,8 +19,9 @@ public class UdpPortViewModelConfig
 [Export(UdpProtocolPort.Scheme, typeof(IPortViewModel))]
 public class UdpPortViewModel : PortViewModel
 {
-    private readonly IConfiguration _cfgSvc;
     public const MaterialIconKind DefaultIcon = MaterialIconKind.IpNetworkOutline;
+    private readonly IConfiguration _cfgSvc;
+    private readonly IUnitService _unitService;
 
     public UdpPortViewModel()
     {
@@ -33,12 +34,14 @@ public class UdpPortViewModel : PortViewModel
     [ImportingConstructor]
     public UdpPortViewModel(
         IConfiguration cfgSvc,
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{UdpProtocolPort.Scheme}-editor", loggerFactory, timeProvider)
+        : base($"{UdpProtocolPort.Scheme}-editor", unitService, loggerFactory, timeProvider)
     {
         _cfgSvc = cfgSvc;
+        _unitService = unitService;
         Icon = DefaultIcon;
         Config = _cfgSvc.Get<UdpPortViewModelConfig>();
         AddToValidation(Host = new BindableReactiveProperty<string>(), HostValidate);
@@ -126,12 +129,12 @@ public class UdpPortViewModel : PortViewModel
     private void UpdateTags(UdpProtocolPortConfig config)
     {
         ConfigTag.Value = $"{config.Host}:{config.Port}";
-        TypeTag.Value = "UDP";
+        TypeTag.Value = RS.UdpPortViewModel_TagViewModel_Value;
         TypeTag.Color = AsvColorKind.Info4;
     }
 
     protected override EndpointViewModel EndpointFactory(IProtocolEndpoint arg)
     {
-        return new UdpEndpointViewModel(arg, LoggerFactory, TimeProvider);
+        return new UdpEndpointViewModel(arg, _unitService, LoggerFactory, TimeProvider);
     }
 }

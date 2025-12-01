@@ -356,4 +356,7 @@ Used to confirm saving information.
     <data name="ShellLeftMenuExtenderExample_HomeItem_Header" xml:space="preserve">
         <value>Home page</value>
     </data>
+    <data name="HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS" xml:space="preserve">
+        <value>Value shouldn't contain 's'</value>
+    </data>
 </root>

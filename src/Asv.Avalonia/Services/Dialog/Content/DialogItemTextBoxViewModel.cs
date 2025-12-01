@@ -14,10 +14,7 @@ public class DialogItemTextBoxViewModel : DialogViewModelBase
         : this(NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
-        if (Design.IsDesignMode)
-        {
-            Message = "Example";
-        }
+        Message = "Example";
     }
 
     public DialogItemTextBoxViewModel(ILoggerFactory loggerFactory)

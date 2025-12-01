@@ -4,9 +4,8 @@
     xmlns:control="clr-namespace:Asv.Avalonia"
 >
     <Design.PreviewWith>
-        <Border Width="350" Height="1200" ClipToBounds="True">
+        <Border ClipToBounds="True" IsHitTestVisible="False">
             <Panel>
-                <Button HorizontalAlignment="Left" VerticalAlignment="Top">asdasd</Button>
                 <control:DockControl>
                     <control:HomePageViewModel />
                     <control:SettingsPageViewModel />

@@ -173,7 +173,9 @@ public class GeoPointDialogViewModel : DialogViewModelBase
     private Exception? ValidateDistancePropertyValue(string? userValue)
     {
         var result = _distanceUnit.CurrentUnitItem.CurrentValue.ValidateValue(userValue);
-        return result.IsSuccess ? null : result.ValidationException;
+        return result.IsSuccess
+            ? null
+            : result.ValidationException?.GetExceptionWithLocalizationOrSelf();
     }
 
     private void Move(MoveDirection moveDirection)
