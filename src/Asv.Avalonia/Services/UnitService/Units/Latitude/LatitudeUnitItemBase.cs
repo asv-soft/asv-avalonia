@@ -30,6 +30,22 @@ public abstract class LatitudeUnitItemBase() : UnitItemBase(1)
         return ValidationResult.Success;
     }
 
+    public override ValidationResultWrapper ValidateValueLocalized(string? value)
+    {
+        var result = ValidateValue(value);
+
+        if (result.IsSuccess)
+        {
+            return new ValidationResultWrapper { Validation = result };
+        }
+
+        return new ValidationResultWrapper
+        {
+            Validation = result,
+            LocalizedErrorText = RS.ValidationResult_ErrorText_LatitudeErrorMessage,
+        };
+    }
+
     public override double Parse(string? value)
     {
         return value != null && GeoPointLatitude.TryParse(value, out var result)

@@ -832,4 +832,28 @@
     <data name="ValidationResult_ErrorText_IsNullOrWhiteSpace" xml:space="preserve">
         <value>Value should not be empty</value>
     </data>
+    <data name="ValidationResult_ErrorText_Unknown" xml:space="preserve">
+        <value>Validation of the value failed</value>
+    </data>
+    <data name="ValidationResult_ErrorText_InvalidCharacters" xml:space="preserve">
+        <value>Value contain invalid characters</value>
+    </data>
+    <data name="ValidationResult_ErrorText_NotANumber" xml:space="preserve">
+        <value>Value is not number</value>
+    </data>
+    <data name="ValidationResult_ErrorText_AngleErrorMessage" xml:space="preserve">
+        <value>Angle must be a real number or DMS format value (e.g. 12°34′56.78)</value>
+    </data>
+    <data name="ValidationResult_ErrorText_AngleMsErrorMessage" xml:space="preserve">
+        <value>Angle must be a real number or MS format value (e.g. 34′56.78)</value>
+    </data>
+    <data name="ValidationResult_ErrorText_AngleDmErrorMessage" xml:space="preserve">
+        <value>Angle must be a real number or DM format value (e.g. 34°56.78′)</value>
+    </data>
+    <data name="ValidationResult_ErrorText_LatitudeErrorMessage" xml:space="preserve">
+        <value>Latitude must be a real number from -90.0 to 90.0 or DMS format value (e.g. 12°34′56.78 N)</value>
+    </data>
+    <data name="ValidationResult_ErrorText_LongitudeErrorMessage" xml:space="preserve">
+        <value>Longitude must be a real number from -180.0 to 180.0 or DMS format value (e.g. 12°34′56.78 N)</value>
+    </data>
 </root>

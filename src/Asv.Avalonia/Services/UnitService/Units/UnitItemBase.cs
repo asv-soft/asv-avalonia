@@ -21,6 +21,15 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return InvariantNumberParser.TryParse(value, out double _);
     }
 
+    public virtual ValidationResultWrapper ValidateValueLocalized(string? value)
+    {
+        var result = ValidateValue(value);
+        var localized = ValidationResultMixin.GetLocalizedExceptionMessage(
+            result.ValidationException
+        );
+        return new ValidationResultWrapper { Validation = result, LocalizedErrorText = localized };
+    }
+
     public virtual double Parse(string? value)
     {
         InvariantNumberParser.TryParse(value, out double result);

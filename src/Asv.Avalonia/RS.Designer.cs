@@ -2382,11 +2382,83 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Angle must be a real number or DM format value (e.g. 34°56.78′).
+        /// </summary>
+        public static string ValidationResult_ErrorText_AngleDmErrorMessage {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_AngleDmErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle must be a real number or DMS format value (e.g. 12°34′56.78).
+        /// </summary>
+        public static string ValidationResult_ErrorText_AngleErrorMessage {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_AngleErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Angle must be a real number or MS format value (e.g. 34′56.78).
+        /// </summary>
+        public static string ValidationResult_ErrorText_AngleMsErrorMessage {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_AngleMsErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value contain invalid characters.
+        /// </summary>
+        public static string ValidationResult_ErrorText_InvalidCharacters {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_InvalidCharacters", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Value should not be empty.
         /// </summary>
         public static string ValidationResult_ErrorText_IsNullOrWhiteSpace {
             get {
                 return ResourceManager.GetString("ValidationResult_ErrorText_IsNullOrWhiteSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Latitude must be a real number from -90.0 to 90.0 or DMS format value (e.g. 12°34′56.78 N).
+        /// </summary>
+        public static string ValidationResult_ErrorText_LatitudeErrorMessage {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_LatitudeErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Longitude must be a real number from -180.0 to 180.0 or DMS format value (e.g. 12°34′56.78 N).
+        /// </summary>
+        public static string ValidationResult_ErrorText_LongitudeErrorMessage {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_LongitudeErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Value is not number.
+        /// </summary>
+        public static string ValidationResult_ErrorText_NotANumber {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_NotANumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Validation of the value failed.
+        /// </summary>
+        public static string ValidationResult_ErrorText_Unknown {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_Unknown", resourceCulture);
             }
         }
         

@@ -11,6 +11,7 @@ public interface IUnitItem
     bool IsInternationalSystemUnit { get; }
     bool IsValid(string? value);
     ValidationResult ValidateValue(string? value);
+    ValidationResultWrapper ValidateValueLocalized(string? value);
     double Parse(string? value);
     double ParseToSi(string? value) => ToSi(Parse(value));
     string Print(double value, string? format = null);

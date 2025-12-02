@@ -79,17 +79,6 @@
     <data name="RedoCommand_CommandInfo_Description" xml:space="preserve">
         <value>Повторить последнее действие</value>
     </data>
-    <data name="SettingsKeyMapView_Header_Name" xml:space="preserve">
-        <value>Имя</value>
-    </data>
-    <data name="SettingsKeyMapView_Header_Description" xml:space="preserve">
-        <value>Описание</value>
-    </data>
-   
-    <data name="SettingsKeyMapView_Header_DefaultHotKey" xml:space="preserve">
-        <value>Горячая клавиша по умолчанию</value>
-    </data>
-    
     <data name="HomePageViewModel_Title" xml:space="preserve">
         <value>Домашняя страница</value>
     </data>
@@ -618,23 +607,8 @@
     <data name="OpenHomePageCommand_CommandInfo_Name" xml:space="preserve">
         <value>Команда, которая открывает домашнюю страницу</value>
     </data>
-    <data name="SettingsCommandListView_SearchBar_Watermark" xml:space="preserve">
-        <value>Поиск</value>
-    </data>
     <data name="SettingsCommandListView_ResetButton_Content" xml:space="preserve">
         <value>Сбросить всё</value>
-    </data>
-    <data name="SettingsCommandListView_HotKey_Header" xml:space="preserve">
-        <value>Горячая клавиша</value>
-    </data>
-    <data name="SettingsCommandListView_Name_Header" xml:space="preserve">
-        <value>Команда</value>
-    </data>
-    <data name="SettingsCommandListView_Description_Header" xml:space="preserve">
-        <value>Описание</value>
-    </data>
-    <data name="SettingsCommandListView_Source_Header" xml:space="preserve">
-        <value>Источник</value>
     </data>
     <data name="SettingsCommandListView_DataGrid_Command_Header" xml:space="preserve">
         <value>Название</value>
@@ -854,5 +828,29 @@
     </data>
     <data name="ValidationResult_ErrorText_IsNullOrWhiteSpace" xml:space="preserve">
         <value>Значение не должно быть пустым</value>
+    </data>
+    <data name="ValidationResult_ErrorText_Unknown" xml:space="preserve">
+        <value>Валидация значения провалилась</value>
+    </data>
+    <data name="ValidationResult_ErrorText_InvalidCharacters" xml:space="preserve">
+        <value>Значение содержит недопустимые символы</value>
+    </data>
+    <data name="ValidationResult_ErrorText_NotANumber" xml:space="preserve">
+        <value>Значение не является числом</value>
+    </data>
+    <data name="ValidationResult_ErrorText_AngleErrorMessage" xml:space="preserve">
+        <value>Угол должен быть дробным числом или значением в формате ГМС (например, 12°34′56.78).</value>
+    </data>
+    <data name="ValidationResult_ErrorText_AngleMsErrorMessage" xml:space="preserve">
+        <value>Угол должен быть дробным числом или значением в формате МС (например, 34′56.78).</value>
+    </data>
+    <data name="ValidationResult_ErrorText_AngleDmErrorMessage" xml:space="preserve">
+        <value>Угол должен быть дробным числом или значением в формате ГМ (например, 34°56.78′).</value>
+    </data>
+    <data name="ValidationResult_ErrorText_LatitudeErrorMessage" xml:space="preserve">
+        <value>Широта должна быть дробным числом от -90.0 до 90.0 или значением в формате ГМС (например, 12°34′56.78 N).</value>
+    </data>
+    <data name="ValidationResult_ErrorText_LongitudeErrorMessage" xml:space="preserve">
+        <value>Долгота должна быть дробным числом от -180.0 до 180.0 или значением в формате ГМС (например, 12°34′56.78 N).</value>
     </data>
 </root>
