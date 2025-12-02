@@ -38,7 +38,7 @@ public class LocalPluginInfo : ILocalPluginInfo
             ApiVersion = new SemVersion(
                 apiPackage.VersionRange.MinVersion.Version.Major,
                 apiPackage.VersionRange.MinVersion.Version.Minor,
-                apiPackage.VersionRange.MinVersion.Version.Revision
+                apiPackage.VersionRange.MinVersion.Version.Build
             );
         }
         else
