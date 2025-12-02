@@ -93,11 +93,11 @@
             </AutoCompleteBox>
             
             
-            <ToggleSwitch IsChecked="{Binding RemoteEnabled}" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="6" OffContent="Filter by remote host\port" OnContent="Remote host\port" />
+            <ToggleSwitch IsChecked="{Binding RemoteEnabled}" VerticalAlignment="Center" Grid.Column="0" Grid.ColumnSpan="5" Grid.Row="6" OffContent="{x:Static io:RS.TcpServerPortView_RemoteHost_Off}" OnContent="{x:Static io:RS.TcpServerPortView_RemoteHost_On}" />
             
             
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="8" Kind="IpNetwork"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="8" Text="Remote address"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="8" Text="{x:Static io:RS.TcpServerPortView_RemoteAddress}"/>
             <AutoCompleteBox IsEnabled="{Binding RemoteEnabled}" ValueMemberBinding="{Binding Key}" Grid.Row="8" Grid.Column="4" ItemsSource="{Binding Config.HostHistory}" Text="{Binding RemoteHost.Value}">
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
@@ -110,7 +110,7 @@
             </AutoCompleteBox>
             
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="10" Kind="Counter"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="10" Text="Remote port"/>
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="10" Text="{x:Static io:RS.TcpServerPortView_RemotePort}"/>
             <AutoCompleteBox IsEnabled="{Binding RemoteEnabled}" ValueMemberBinding="{Binding Key}" Grid.Row="10" Grid.Column="4" ItemsSource="{Binding Config.PortHistory}" Text="{Binding RemotePort.Value}">
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
@@ -124,7 +124,7 @@
         </Grid>
         
         <DockPanel DockPanel.Dock="Top">
-            <TextBlock Classes="h2" Text="Connections"/>
+            <TextBlock Classes="h2" Text="{x:Static io:RS.TcpServerPortView_ConnectionsList_Header}"/>
             <Separator/>
         </DockPanel>
         

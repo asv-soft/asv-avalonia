@@ -31,8 +31,8 @@ public class OpenFileCommand(
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Open File",
-        Description = "Open file",
+        Name = RS.OpenFileCommand_CommandInfo_Name,
+        Description = RS.OpenFileCommand_CommandInfo_Description,
         Icon = MaterialIconKind.File,
         DefaultHotKey = "Ctrl+O",
         Source = SystemModule.Instance,
@@ -133,7 +133,7 @@ public class OpenFileCommand(
                 }
             }
 
-            var dialogTitle = "Select file";
+            var dialogTitle = RS.OpenFileCommand_SelectFile;
             if (arg.TryGetValue(DialogTitleArgKey, out var title) && title is StringArg titleArg)
             {
                 dialogTitle = titleArg.Value;

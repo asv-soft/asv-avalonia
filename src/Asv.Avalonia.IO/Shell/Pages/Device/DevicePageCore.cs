@@ -19,19 +19,19 @@ namespace Asv.Avalonia.IO;
 public sealed class DevicePageCore : IDisposable
 {
     private readonly CompositeDisposable _disposable = new();
-    private readonly ReactiveProperty<bool> _isDeviceInitialized = new();
-    private readonly ReactiveProperty<DeviceWrapper?> _target = new();
+    private readonly SynchronizedReactiveProperty<bool> _isDeviceInitialized = new();
+    private readonly SynchronizedReactiveProperty<DeviceWrapper?> _target = new();
     private readonly Subject<Unit> _onDeviceDisconnecting = new();
     private readonly Subject<Unit> _onDeviceDisconnected = new();
-
-    private bool _disposed;
-    private string? _targetDeviceId;
-    private IDisposable? _waitInitSubscription;
-    private CancellationTokenSource? _deviceDisconnectedToken;
+    private readonly SerialDisposable _waitInitSubscription = new();
     private readonly IDeviceManager _devices;
     private readonly ILayoutService _layoutService;
     private readonly ILogger _logger;
     private readonly IPage _owner;
+
+    private bool _disposed;
+    private string? _targetDeviceId;
+    private CancellationTokenSource? _deviceDisconnectedToken;
 
     public DevicePageCore(
         IDeviceManager devices,
@@ -79,13 +79,20 @@ public sealed class DevicePageCore : IDisposable
             );
 
         _onDeviceDisconnecting
-            .SubscribeAwait(async (_, ct) => await _owner.RequestSaveLayout(_layoutService, ct))
+            .SubscribeAwait(
+                async (_, ct) => await _owner.RequestSaveLayout(_layoutService, ct),
+                AwaitOperation.Switch
+            )
             .DisposeItWith(_disposable);
         _isDeviceInitialized
             .Where(isInit => isInit)
-            .SubscribeAwait(async (_, ct) => await _owner.RequestLoadLayout(_layoutService, ct))
+            .SubscribeAwait(
+                async (_, ct) => await _owner.RequestLoadLayout(_layoutService, ct),
+                AwaitOperation.Switch
+            )
             .DisposeItWith(_disposable);
         _onDeviceDisconnected
+            .Synchronize()
             .Subscribe(_ => _isDeviceInitialized.Value = false)
             .DisposeItWith(_disposable);
 
@@ -120,15 +127,14 @@ public sealed class DevicePageCore : IDisposable
         _deviceDisconnectedToken?.Cancel(false);
         _deviceDisconnectedToken?.Dispose();
         _deviceDisconnectedToken = null;
-        _waitInitSubscription?.Dispose();
-        _waitInitSubscription = null;
+        _waitInitSubscription.Dispose();
     }
 
     private void DeviceFoundButNotInitialized(IClientDevice device)
     {
         DeviceRemoved();
         _logger.ZLogTrace($"{nameof(_owner.Id)}  device found: {device.Id}");
-        _waitInitSubscription = device
+        _waitInitSubscription.Disposable = device
             .State.Where(x => x == ClientDeviceState.Complete)
             .Take(1)
             .Subscribe(device, DeviceFoundAndInitialized);
@@ -139,7 +145,7 @@ public sealed class DevicePageCore : IDisposable
         _logger.ZLogTrace($"{nameof(_owner.Id)}  device initialized: {device.Id}");
         try
         {
-            _waitInitSubscription?.Dispose();
+            _waitInitSubscription.Dispose();
             _deviceDisconnectedToken = new CancellationTokenSource();
             OnDeviceInitialized?.Invoke(device, _deviceDisconnectedToken.Token);
             _target.OnNext(new DeviceWrapper(device, _deviceDisconnectedToken.Token));
@@ -164,6 +170,7 @@ public sealed class DevicePageCore : IDisposable
         _disposable.Dispose();
         _onDeviceDisconnecting.Dispose();
         _onDeviceDisconnected.Dispose();
+        _waitInitSubscription.Dispose();
         _isDeviceInitialized.Dispose();
 
         _disposed = true;

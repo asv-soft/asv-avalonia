@@ -16,13 +16,13 @@ public enum AsvColorKind : ulong
 {
     None = 0,
 
-    // === Статусы ===
+    // === Status ===
     Unknown = 1ul << 0, // 1
     Error = 1ul << 1, // 2
     Warning = 1ul << 2, // 4
     Success = 1ul << 3, // 8
 
-    // === Цвета каналов (Info1–Info20) ===
+    // === (Info1–Info20) ===
     Info1 = 1ul << 4,
     Info2 = 1ul << 5,
     Info3 = 1ul << 6,

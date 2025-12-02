@@ -83,4 +83,31 @@
     <data name="OpenSettingsCommand_Action_Description" xml:space="preserve">
         <value>Открыть настройки</value>
     </data>
+    <data name="TcpServerPortView_RemoteHost_On" xml:space="preserve">
+        <value>Удаленный хост/порт</value>
+    </data>
+    <data name="TcpServerPortView_RemoteHost_Off" xml:space="preserve">
+        <value>Фильтр по удаленному хосту/порту</value>
+    </data>
+    <data name="TcpServerPortView_RemoteAddress" xml:space="preserve">
+        <value>Удаленный адрес</value>
+    </data>
+    <data name="TcpServerPortView_RemotePort" xml:space="preserve">
+        <value>Удаленный порт</value>
+    </data>
+    <data name="TcpServerPortView_ConnectionsList_Header" xml:space="preserve">
+        <value>Соединения</value>
+    </data>
+    <data name="SettingsConnectionView_Panel_NoConnections" xml:space="preserve">
+        <value>Нет соединения</value>
+    </data>
+    <data name="SettingsConnectionView_Panel_Hint" xml:space="preserve">
+        <value>Добавьте нажатием кнопки</value>
+    </data>
+    <data name="SettingsConnectionView_SelectPort" xml:space="preserve">
+        <value>Выберите порт</value>
+    </data>
+    <data name="ConnectionRateStatusView_NavigationButton_Settings" xml:space="preserve">
+        <value>Перейти в настройки</value>
+    </data>
 </root>

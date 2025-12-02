@@ -614,5 +614,11 @@ namespace Asv.Avalonia.Example {
                 return ResourceManager.GetString("ResetGeoPointDialogResultCommand_CommandInfo_Description", resourceCulture);
             }
         }
+        
+        public static string ShellLeftMenuExtenderExample_HomeItem_Header {
+            get {
+                return ResourceManager.GetString("ShellLeftMenuExtenderExample_HomeItem_Header", resourceCulture);
+            }
+        }
     }
 }

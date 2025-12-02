@@ -9,7 +9,7 @@ namespace Asv.Avalonia;
 public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, IPage
     where TContext : class, IPage
 {
-    private readonly IDialogService _dialogService;
+    private readonly UnsavedChangesDialogPrefab _unsavedChangesDialogPrefab;
 
     protected PageViewModel(
         NavigationId id,
@@ -24,7 +24,8 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         Title = id.ToString();
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
-        _dialogService = dialogService;
+
+        _unsavedChangesDialogPrefab = dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
@@ -37,12 +38,11 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
                 var reasons = await this.RequestChildCloseApproval();
                 if (reasons.Count != 0)
                 {
-                    var vm = _dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
-                    var result = await vm.ShowDialogAsync(
-                        new YesOrNoDialogPayload
+                    var result = await _unsavedChangesDialogPrefab.ShowDialogAsync(
+                        new UnsavedChangesDialogPayload
                         {
-                            Title = "Close page anyway?",
-                            Message = string.Join('\n', reasons.Select(r => r.Message)),
+                            Restrictions = reasons,
+                            Title = RS.PageViewModel_CloseConfirmDialog_Title,
                         }
                     );
                     Logger.ZLogTrace($"Try close page {Title}[{Id}] result: {result}");

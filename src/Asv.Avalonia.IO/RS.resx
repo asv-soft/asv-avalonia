@@ -90,4 +90,31 @@
     <data name="OpenSettingsCommand_Action_Description" xml:space="preserve">
         <value>Open Settings</value>
     </data>
+    <data name="TcpServerPortView_RemoteHost_On" xml:space="preserve">
+        <value>Remote host\port</value>
+    </data>
+    <data name="TcpServerPortView_RemoteHost_Off" xml:space="preserve">
+        <value>Filter by remote host\port</value>
+    </data>
+    <data name="TcpServerPortView_RemoteAddress" xml:space="preserve">
+        <value>Remote address</value>
+    </data>
+    <data name="TcpServerPortView_RemotePort" xml:space="preserve">
+        <value>Remote port</value>
+    </data>
+    <data name="TcpServerPortView_ConnectionsList_Header" xml:space="preserve">
+        <value>Connections</value>
+    </data>
+    <data name="SettingsConnectionView_Panel_NoConnections" xml:space="preserve">
+        <value>No connections</value>
+    </data>
+    <data name="SettingsConnectionView_Panel_Hint" xml:space="preserve">
+        <value>Add a new one by clicking the button.</value>
+    </data>
+    <data name="SettingsConnectionView_SelectPort" xml:space="preserve">
+        <value>Select port</value>
+    </data>
+    <data name="ConnectionRateStatusView_NavigationButton_Settings" xml:space="preserve">
+        <value>Go to settings</value>
+    </data>
 </root>

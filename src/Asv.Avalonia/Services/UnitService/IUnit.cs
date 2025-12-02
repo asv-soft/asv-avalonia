@@ -9,7 +9,7 @@ public interface IUnit : IDisposable
     string Description { get; }
     string UnitId { get; }
     IReadOnlyDictionary<string, IUnitItem> AvailableUnits { get; }
-    ReactiveProperty<IUnitItem> CurrentUnitItem { get; }
+    SynchronizedReactiveProperty<IUnitItem> CurrentUnitItem { get; }
     IUnitItem InternationalSystemUnit { get; }
     MaterialIconKind Icon { get; }
     IUnitItem this[string unitItemId] =>

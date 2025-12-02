@@ -7,7 +7,8 @@ namespace Asv.Avalonia.IO;
 
 public abstract class HomePageDeviceItemAction : AsyncDisposableOnce, IExtensionFor<IHomePageItem>
 {
-    private IDisposable? _sub1;
+    private readonly SerialDisposable _sub1 = new();
+
     private IActionViewModel? _action;
     private IClientDevice? _device;
     private HomePageDeviceItem? _context;
@@ -20,7 +21,7 @@ public abstract class HomePageDeviceItemAction : AsyncDisposableOnce, IExtension
             _device = item.Device;
 
             // we need to wait for the device to be initialized
-            _sub1 = _device
+            _sub1.Disposable = _device
                 .State.Where(x => x == ClientDeviceState.Complete)
                 .Take(1)
                 .Subscribe(AddActions);
@@ -54,7 +55,7 @@ public abstract class HomePageDeviceItemAction : AsyncDisposableOnce, IExtension
     {
         if (disposing)
         {
-            _sub1?.Dispose();
+            _sub1.Dispose();
             _action?.Dispose();
         }
 

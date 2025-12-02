@@ -14,24 +14,23 @@ namespace Asv.Avalonia;
 public class DesktopShellViewModelConfig : ShellViewModelConfig { }
 
 [Export(ShellId, typeof(IShell))]
-public class DesktopShellViewModel : ShellViewModel
+public sealed class DesktopShellViewModel : ShellViewModel
 {
     public const string ShellId = "shell.desktop";
+
     private readonly IFileAssociationService _fileService;
-    private readonly IContainerHost _ioc;
 
     [ImportingConstructor]
     public DesktopShellViewModel(
         IFileAssociationService fileService,
         IConfiguration cfg,
         IContainerHost ioc,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory
     )
-        : base(ioc, layoutService, loggerFactory, cfg, ShellId)
+        : base(ShellId, ioc, loggerFactory, cfg)
     {
         _fileService = fileService;
-        _ioc = ioc;
+
         var wnd = ioc.GetExport<ShellWindow>();
         wnd.DataContext = this;
         if (
@@ -96,14 +95,11 @@ public class DesktopShellViewModel : ShellViewModel
         return base.InternalCatchEvent(e);
     }
 
-    protected override async ValueTask CloseAsync(CancellationToken cancellationToken)
+    protected override async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
     {
-        await base.CloseAsync(cancellationToken);
-
-        foreach (var page in Pages.ToArray())
+        if (!await base.TryCloseAsync(cancellationToken))
         {
-            // TODO: do something with unclosed pages
-            await page.TryCloseAsync(false);
+            return false;
         }
 
         if (
@@ -113,6 +109,8 @@ public class DesktopShellViewModel : ShellViewModel
         {
             lifetime.Shutdown();
         }
+
+        return true;
     }
 
     protected override ValueTask ChangeWindowModeAsync(CancellationToken cancellationToken)

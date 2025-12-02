@@ -7,7 +7,7 @@ public interface ILocalizationService
     /// <summary>
     /// Allows you to select or get the current application language.
     /// </summary>
-    ReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
+    SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
 
     /// <summary>
     /// Returns the list of available languages.

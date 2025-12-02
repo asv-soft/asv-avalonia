@@ -45,7 +45,7 @@ public class LocalizationService
         new("ru", "Русский (RU)", () => CultureInfo.GetCultureInfo("ru")),
     ];
 
-    public ReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
+    public SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
     public IEnumerable<ILanguageInfo> AvailableLanguages => _languages;
 
     [ImportingConstructor]
@@ -60,7 +60,7 @@ public class LocalizationService
         }
 
         selectedLang ??= _languages[0];
-        CurrentLanguage = new ReactiveProperty<ILanguageInfo>(selectedLang);
+        CurrentLanguage = new SynchronizedReactiveProperty<ILanguageInfo>(selectedLang);
         _sub1 = CurrentLanguage.SubscribeAwait(SetLanguage);
     }
 

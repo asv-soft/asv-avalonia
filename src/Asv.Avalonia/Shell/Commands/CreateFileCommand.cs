@@ -26,8 +26,8 @@ public class CreateFileCommand(
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
-        Name = "Create File",
-        Description = "Create file",
+        Name = RS.CreateFileCommand_CommandInfo_Name,
+        Description = RS.CreateFileCommand_CommandInfo_Description,
         Icon = MaterialIconKind.FilePlus,
         DefaultHotKey = "Ctrl+N",
         Source = SystemModule.Instance,
@@ -101,7 +101,7 @@ public class CreateFileCommand(
 
         if (filePath == null)
         {
-            var dialogTitle = "Select file";
+            var dialogTitle = RS.CreateFileCommand_SelectFile;
             if (arg.TryGetValue(DialogTitleArgKey, out var title) && title is StringArg titleArg)
             {
                 dialogTitle = titleArg.Value;

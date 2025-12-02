@@ -73,6 +73,7 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
         Location.Subscribe(OnValueChanged).DisposeItWith(Disposable);
     }
 
+    public static string NotAvailableString => RS.Not_Available;
     public ReactiveProperty<GeoPoint> Location { get; }
 
     private void OnValueChanged(GeoPoint geoPoint)
@@ -97,8 +98,6 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
             );
         }
     }
-
-    public string NotAvailableString { get; set; } = "N\\A";
 
     public string? AltitudeString
     {

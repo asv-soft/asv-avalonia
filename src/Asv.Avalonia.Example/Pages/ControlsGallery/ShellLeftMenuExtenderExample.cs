@@ -18,7 +18,7 @@ public class ShellLeftMenuExtenderExample : IExtensionFor<IShell>
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {
         context.LeftMenu.Add(
-            new MenuItem("home", "Home page", _loggerFactory)
+            new MenuItem("home", RS.ShellLeftMenuExtenderExample_HomeItem_Header, _loggerFactory)
             {
                 Icon = OpenHomePageCommand.StaticInfo.Icon,
                 Command = new BindableAsyncCommand(OpenHomePageCommand.Id, context),

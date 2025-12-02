@@ -14,6 +14,6 @@ public interface IThemeInfo
 public interface IThemeService
 {
     IEnumerable<IThemeInfo> Themes { get; }
-    ReactiveProperty<IThemeInfo> CurrentTheme { get; }
-    ReactiveProperty<bool> IsCompact { get; }
+    SynchronizedReactiveProperty<IThemeInfo> CurrentTheme { get; }
+    SynchronizedReactiveProperty<bool> IsCompact { get; }
 }
