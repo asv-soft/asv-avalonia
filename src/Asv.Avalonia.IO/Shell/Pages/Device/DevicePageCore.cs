@@ -57,12 +57,15 @@ public sealed class DevicePageCore : IDisposable
         _layoutService = layoutService;
         _logger = logger;
         _owner = owner;
+
+        OnDeviceDisconnected = _onDeviceDisconnected.AsObservable();
+        OnDeviceDisconnecting = _onDeviceDisconnecting.AsObservable();
     }
 
     public event Action<IClientDevice, CancellationToken>? OnDeviceInitialized;
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _target;
-    public Observable<Unit> OnDeviceDisconnecting => _onDeviceDisconnecting.AsObservable();
-    public Observable<Unit> OnDeviceDisconnected => _onDeviceDisconnected.AsObservable();
+    public Observable<Unit> OnDeviceDisconnecting { get; }
+    public Observable<Unit> OnDeviceDisconnected { get; }
     public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _isDeviceInitialized;
 
     public void Init(NameValueCollection args)
@@ -127,7 +130,7 @@ public sealed class DevicePageCore : IDisposable
         _deviceDisconnectedToken?.Cancel(false);
         _deviceDisconnectedToken?.Dispose();
         _deviceDisconnectedToken = null;
-        _waitInitSubscription.Dispose();
+        _waitInitSubscription.Disposable?.Dispose();
     }
 
     private void DeviceFoundButNotInitialized(IClientDevice device)
@@ -145,7 +148,7 @@ public sealed class DevicePageCore : IDisposable
         _logger.ZLogTrace($"{nameof(_owner.Id)}  device initialized: {device.Id}");
         try
         {
-            _waitInitSubscription.Dispose();
+            _waitInitSubscription.Disposable?.Dispose();
             _deviceDisconnectedToken = new CancellationTokenSource();
             OnDeviceInitialized?.Invoke(device, _deviceDisconnectedToken.Token);
             _target.OnNext(new DeviceWrapper(device, _deviceDisconnectedToken.Token));
