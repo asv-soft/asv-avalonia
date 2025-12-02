@@ -2382,6 +2382,15 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Value should not be empty.
+        /// </summary>
+        public static string ValidationResult_ErrorText_IsNullOrWhiteSpace {
+            get {
+                return ResourceManager.GetString("ValidationResult_ErrorText_IsNullOrWhiteSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Velocity unit.
         /// </summary>
         public static string Velocity_Description {

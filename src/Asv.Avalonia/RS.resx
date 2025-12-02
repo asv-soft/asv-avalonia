@@ -829,4 +829,7 @@
     <data name="ChangeIntPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that changes the value of a historical property of type int</value>
     </data>
+    <data name="ValidationResult_ErrorText_IsNullOrWhiteSpace" xml:space="preserve">
+        <value>Value should not be empty</value>
+    </data>
 </root>

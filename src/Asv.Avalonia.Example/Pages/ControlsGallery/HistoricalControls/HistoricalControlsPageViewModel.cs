@@ -93,7 +93,9 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                 {
                     if (string.IsNullOrWhiteSpace(v))
                     {
-                        return ValidationResult.FailAsNullOrWhiteSpace;
+                        return ValidationResult.FailFromErrorMessage(
+                            Avalonia.RS.ValidationResult_ErrorText_IsNullOrWhiteSpace
+                        );
                     }
 
                     return ValidationResult.Success;
@@ -111,7 +113,9 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                 {
                     if (string.IsNullOrWhiteSpace(v))
                     {
-                        return ValidationResult.FailAsNullOrWhiteSpace;
+                        return ValidationResult.FailFromErrorMessage(
+                            Avalonia.RS.ValidationResult_ErrorText_IsNullOrWhiteSpace
+                        );
                     }
                     return ValidationResult.Success;
                 },
@@ -119,13 +123,9 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                 {
                     if (v?.Contains('s', StringComparison.InvariantCultureIgnoreCase) ?? false)
                     {
-                        return new ValidationResult
-                        {
-                            IsSuccess = false,
-                            ValidationException = new ValidationException(
-                                "Value shouldn't contain \'s\'"
-                            ),
-                        };
+                        return ValidationResult.FailFromErrorMessage(
+                            RS.HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS
+                        );
                     }
 
                     return ValidationResult.Success;
