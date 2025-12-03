@@ -1,38 +1,54 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia.GeoMap"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-        xmlns:system="clr-namespace:System;assembly=System.Runtime"
-        xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Collections">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia.GeoMap"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Collections"
+>
     <Design.PreviewWith>
         <Panel Width="1000" Height="250">
-            <controls:MapItemsControl CenterMap="{controls:GeoPoint 53,53}" >
-                <controls:MapItem Location="{controls:GeoPoint 53,53}"
-                                  
-                                      Rotation="45"
-                                      CenterX="{controls:HorizontalOffset Center}"
-                                      CenterY="{controls:VerticalOffset Center}">
-                    <avalonia:MaterialIcon Foreground="BlueViolet" Width="40" Height="40" Kind="Navigation" />
+            <controls:MapItemsControl CenterMap="{controls:GeoPoint 53,53}">
+                <controls:MapItem
+                    Location="{controls:GeoPoint 53,53}"
+                    Rotation="45"
+                    CenterX="{controls:HorizontalOffset Center}"
+                    CenterY="{controls:VerticalOffset Center}"
+                >
+                    <avalonia:MaterialIcon
+                        Foreground="BlueViolet"
+                        Width="40"
+                        Height="40"
+                        Kind="Navigation"
+                    />
                 </controls:MapItem>
-                <controls:MapItem Location="{controls:GeoPoint 53,53.4}"
-                                  IsReadOnly="True"
-                                  
-                                      CenterX="{controls:HorizontalOffset Center}"
-                                      CenterY="{controls:VerticalOffset Bottom}">
-                    <controls:MapItem.Polygon>
-                        
-                    </controls:MapItem.Polygon>
-                    <avalonia:MaterialIcon x:Name="PART_Icon" Width="40" Height="40" Kind="MapMarker" />
+                <controls:MapItem
+                    Location="{controls:GeoPoint 53,53.4}"
+                    IsReadOnly="True"
+                    CenterX="{controls:HorizontalOffset Center}"
+                    CenterY="{controls:VerticalOffset Bottom}"
+                >
+                    <controls:MapItem.Polygon></controls:MapItem.Polygon>
+                    <avalonia:MaterialIcon
+                        x:Name="PART_Icon"
+                        Width="40"
+                        Height="40"
+                        Kind="MapMarker"
+                    />
                 </controls:MapItem>
-        
             </controls:MapItemsControl>
-            <TextBlock HorizontalAlignment="Right" Text="{ReflectionBinding SelectedItem, ElementName=MAP}"/>
-            <TextBlock HorizontalAlignment="Left" Text="{ReflectionBinding SelectedItems.Count, ElementName=MAP}"/>
-        
+            <TextBlock
+                HorizontalAlignment="Right"
+                Text="{ReflectionBinding SelectedItem, ElementName=MAP}"
+            />
+            <TextBlock
+                HorizontalAlignment="Left"
+                Text="{ReflectionBinding SelectedItems.Count, ElementName=MAP}"
+            />
         </Panel>
     </Design.PreviewWith>
-    
+
     <Style Selector="controls|MapItemsControl">
         <Setter Property="AnnotationTemplate">
             <DataTemplate x:DataType="controls:MapItem">
@@ -42,38 +58,46 @@
         <!-- Set Defaults -->
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>
-               <controls:MapCanvas 
-                   x:Name="PART_MapCanvas"
-                   Provider="{TemplateBinding Provider}" 
-                   CenterMap="{TemplateBinding CenterMap}" 
-                   Zoom="{TemplateBinding Zoom}"/>
+                <controls:MapCanvas
+                    x:Name="PART_MapCanvas"
+                    Provider="{TemplateBinding Provider}"
+                    CenterMap="{TemplateBinding CenterMap}"
+                    Zoom="{TemplateBinding Zoom}"
+                />
             </ItemsPanelTemplate>
         </Setter>
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <controls:MapBackground 
+                    <controls:MapBackground
                         HorizontalAlignment="Stretch"
                         IsDebug="False"
-                        Zoom="{TemplateBinding Zoom}" 
-                        CenterMap="{TemplateBinding CenterMap}" 
-                        Provider="{TemplateBinding Provider}"/>
-                    <controls:AnnotationLayer x:Name="PART_AnnotationLayer" ItemTemplate="{TemplateBinding AnnotationTemplate}" Source="{TemplateBinding}" />
-                    <controls:PolygonLayer x:Name="PART_PolygonLayer" Source="{TemplateBinding}"/>
-                    <ItemsPresenter Name="PART_ItemsPresenter"
-                                    ItemsPanel="{TemplateBinding ItemsPanel}"
-                                    Margin="{TemplateBinding Padding}"/>
-                    <TextBlock Text="{TemplateBinding DragState}" HorizontalAlignment="Center"/>
+                        Zoom="{TemplateBinding Zoom}"
+                        CenterMap="{TemplateBinding CenterMap}"
+                        Provider="{TemplateBinding Provider}"
+                    />
+                    <controls:AnnotationLayer
+                        x:Name="PART_AnnotationLayer"
+                        ItemTemplate="{TemplateBinding AnnotationTemplate}"
+                        Source="{TemplateBinding}"
+                    />
+                    <controls:PolygonLayer x:Name="PART_PolygonLayer" Source="{TemplateBinding}" />
+                    <ItemsPresenter
+                        Name="PART_ItemsPresenter"
+                        ItemsPanel="{TemplateBinding ItemsPanel}"
+                        Margin="{TemplateBinding Padding}"
+                    />
+                    <TextBlock Text="{TemplateBinding DragState}" HorizontalAlignment="Center" />
                     <Canvas>
-                        <Rectangle 
-                            Canvas.Left="{TemplateBinding SelectionLeft}" 
+                        <Rectangle
+                            Canvas.Left="{TemplateBinding SelectionLeft}"
                             Canvas.Top="{TemplateBinding SelectionTop}"
                             Width="{TemplateBinding SelectionWidth}"
-                            Height="{TemplateBinding SelectionHeight}" 
-                            IsVisible="{TemplateBinding DragState, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=SelectRectangle }" 
+                            Height="{TemplateBinding SelectionHeight}"
+                            IsVisible="{TemplateBinding DragState, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=SelectRectangle }"
                             Stroke="BlueViolet"
                             StrokeThickness="2"
-                            />
+                        />
                     </Canvas>
                 </Panel>
             </ControlTemplate>

@@ -1,145 +1,202 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:logViewer="clr-namespace:Asv.Avalonia"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:avalonia1="clr-namespace:Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.LogViewerView"
-             x:DataType="logViewer:LogViewerViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:logViewer="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.LogViewerView"
+    x:DataType="logViewer:LogViewerViewModel"
+>
     <Design.DataContext>
-        <logViewer:LogViewerViewModel/>
+        <logViewer:LogViewerViewModel />
     </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="avalonia|MaterialIcon">
             <Style Selector="^.debug">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo2Brush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo2Brush}" />
             </Style>
             <Style Selector="^.info">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo1Brush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo1Brush}" />
             </Style>
             <Style Selector="^.trace">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundUnknownColor}"/>
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource  AsvForegroundUnknownColor}"
+                />
             </Style>
             <Style Selector="^.warning">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundWarningBrush}"/>
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource  AsvForegroundWarningBrush}"
+                />
             </Style>
             <Style Selector="^.error">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}" />
             </Style>
             <Style Selector="^.fatal">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}" />
             </Style>
         </Style>
         <Style Selector="SelectableTextBlock.DataGridCell">
-            <Setter Property="FontFamily" Value="Consolas"/>
-            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontFamily" Value="Consolas" />
+            <Setter Property="FontSize" Value="14" />
             <Style Selector="^.debug">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo2Brush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo2Brush}" />
             </Style>
             <Style Selector="^.info">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo1Brush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundInfo1Brush}" />
             </Style>
             <Style Selector="^.trace">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundUnknownColor}"/>
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource  AsvForegroundUnknownColor}"
+                />
             </Style>
             <Style Selector="^.warning">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundWarningBrush}"/>
+                <Setter
+                    Property="Foreground"
+                    Value="{DynamicResource  AsvForegroundWarningBrush}"
+                />
             </Style>
             <Style Selector="^.error">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}" />
             </Style>
             <Style Selector="^.fatal">
-                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}"/>
+                <Setter Property="Foreground" Value="{DynamicResource  AsvForegroundErrorBrush}" />
             </Style>
         </Style>
         <Style Selector="DataGridCell">
             <Style Selector="^:focus /template/ Grid#FocusVisual">
-                <Setter Property="IsVisible" Value="False" />    
+                <Setter Property="IsVisible" Value="False" />
             </Style>
-            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="MinHeight" Value="20" />
         </Style>
     </UserControl.Styles>
     <DockPanel Margin="8">
         <DockPanel DockPanel.Dock="Top">
-            <Button Command="{Binding Next}" DockPanel.Dock="Right" Theme="{StaticResource TransparentButton}">
-                <avalonia:MaterialIcon Kind="ChevronRight"/>
+            <Button
+                Command="{Binding Next}"
+                DockPanel.Dock="Right"
+                Theme="{StaticResource TransparentButton}"
+            >
+                <avalonia:MaterialIcon Kind="ChevronRight" />
             </Button>
-            <TextBlock Margin="8,0" VerticalAlignment="Center" DockPanel.Dock="Right" Text="{Binding FromToText.Value}"/>
-            <Button Command="{Binding Previous}" DockPanel.Dock="Right" Theme="{StaticResource TransparentButton}">
-                <avalonia:MaterialIcon Kind="ChevronLeft"/>
+            <TextBlock
+                Margin="8,0"
+                VerticalAlignment="Center"
+                DockPanel.Dock="Right"
+                Text="{Binding FromToText.Value}"
+            />
+            <Button
+                Command="{Binding Previous}"
+                DockPanel.Dock="Right"
+                Theme="{StaticResource TransparentButton}"
+            >
+                <avalonia:MaterialIcon Kind="ChevronLeft" />
             </Button>
-           
-            <avalonia1:SearchBoxView DockPanel.Dock="Right" Margin="0,0,8,0" DataContext="{Binding Search}"/>
-            
-            <TextBlock Classes="h1" Text="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_Title}"></TextBlock>
-            
+
+            <avalonia1:SearchBoxView
+                DockPanel.Dock="Right"
+                Margin="0,0,8,0"
+                DataContext="{Binding Search}"
+            />
+
+            <TextBlock
+                Classes="h1"
+                Text="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_Title}"
+            ></TextBlock>
         </DockPanel>
         <DockPanel DockPanel.Dock="Bottom" Height="20">
-            <ProgressBar Width="50" DockPanel.Dock="Right" IsVisible="{Binding Search.IsExecuting.Value}" 
-                         Minimum="0" Maximum="1" 
-                         Value="{Binding Search.Progress.Value}" />
-            <TextBlock Foreground="{DynamicResource AsvForegroundInfo1Brush}" Text="{Binding TextMessage.Value}"/>
+            <ProgressBar
+                Width="50"
+                DockPanel.Dock="Right"
+                IsVisible="{Binding Search.IsExecuting.Value}"
+                Minimum="0"
+                Maximum="1"
+                Value="{Binding Search.Progress.Value}"
+            />
+            <TextBlock
+                Foreground="{DynamicResource AsvForegroundInfo1Brush}"
+                Text="{Binding TextMessage.Value}"
+            />
         </DockPanel>
-        <DataGrid Focusable="False" ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem}" IsReadOnly="True" BorderThickness="0">
+        <DataGrid
+            Focusable="False"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding SelectedItem}"
+            IsReadOnly="True"
+            BorderThickness="0"
+        >
             <DataGrid.Columns>
-                <DataGridTemplateColumn Header="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_TimeSection}"  >
+                <DataGridTemplateColumn Header="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_TimeSection}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel Margin="4,0" Orientation="Horizontal" Spacing="4">
-                                <avalonia:MaterialIcon  
-                                    Classes.debug="{Binding IsDebug}" 
+                                <avalonia:MaterialIcon
+                                    Classes.debug="{Binding IsDebug}"
                                     Classes.info="{Binding IsInformation}"
                                     Classes.trace="{Binding IsTrace}"
                                     Classes.warning="{Binding IsWarning}"
                                     Classes.error="{Binding IsError}"
-                                    Width="15" Height="15"
-                                    Kind="{Binding Icon}" VerticalAlignment="Center" />
-                                <SelectableTextBlock 
-                                           Classes = "DataGridCell"
-                                           Classes.debug="{Binding IsDebug}" 
-                                           Classes.info="{Binding IsInformation}"
-                                           Classes.trace="{Binding IsTrace}"
-                                           Classes.warning="{Binding IsWarning}"
-                                           Classes.error="{Binding IsError}"
-                                           Text="{Binding DateTime}" VerticalAlignment="Center"  />
+                                    Width="15"
+                                    Height="15"
+                                    Kind="{Binding Icon}"
+                                    VerticalAlignment="Center"
+                                />
+                                <SelectableTextBlock
+                                    Classes="DataGridCell"
+                                    Classes.debug="{Binding IsDebug}"
+                                    Classes.info="{Binding IsInformation}"
+                                    Classes.trace="{Binding IsTrace}"
+                                    Classes.warning="{Binding IsWarning}"
+                                    Classes.error="{Binding IsError}"
+                                    Text="{Binding DateTime}"
+                                    VerticalAlignment="Center"
+                                />
                             </StackPanel>
-                           
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_CategorySection}"  >
+                <DataGridTemplateColumn Header="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_CategorySection}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <SelectableTextBlock
                                 SelectionStart="{Binding CategorySelection.Start}"
                                 SelectionEnd="{Binding CategorySelection.Stop}"
                                 Margin="4,0"
-                                Classes = "DataGridCell"
-                                Classes.debug="{Binding IsDebug}" 
+                                Classes="DataGridCell"
+                                Classes.debug="{Binding IsDebug}"
                                 Classes.info="{Binding IsInformation}"
                                 Classes.trace="{Binding IsTrace}"
                                 Classes.warning="{Binding IsWarning}"
                                 Classes.error="{Binding IsError}"
-                                Text="{Binding Base.Category}" VerticalAlignment="Center"  />
+                                Text="{Binding Base.Category}"
+                                VerticalAlignment="Center"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn  Header="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_MessageSection}">
+                <DataGridTemplateColumn Header="{x:Static avalonia1:RS.LogViewerView_LogMessagesList_MessageSection}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <SelectableTextBlock 
+                            <SelectableTextBlock
                                 SelectionStart="{Binding MessageSelection.Start}"
                                 SelectionEnd="{Binding MessageSelection.Stop}"
                                 Margin="4,0"
-                                       Classes = "DataGridCell"
-                                       Classes.debug="{Binding IsDebug}" 
-                                       Classes.info="{Binding IsInformation}"
-                                       Classes.trace="{Binding IsTrace}"
-                                       Classes.warning="{Binding IsWarning}"
-                                       Classes.error="{Binding IsError}"
-                                       Text="{Binding Base.Message}" VerticalAlignment="Center"  />
+                                Classes="DataGridCell"
+                                Classes.debug="{Binding IsDebug}"
+                                Classes.info="{Binding IsInformation}"
+                                Classes.trace="{Binding IsTrace}"
+                                Classes.warning="{Binding IsWarning}"
+                                Classes.error="{Binding IsError}"
+                                Text="{Binding Base.Message}"
+                                VerticalAlignment="Center"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

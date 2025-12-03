@@ -1,64 +1,159 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.TwoColumnRttBoxView"
-             x:DataType="avalonia:TwoColumnRttBoxViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.TwoColumnRttBoxView"
+    x:DataType="avalonia:TwoColumnRttBoxViewModel"
+>
     <Design.DataContext>
         <avalonia:TwoColumnRttBoxViewModel />
     </Design.DataContext>
-    <avalonia:RttBox IsUpdated="{Binding IsUpdated}" 
-                     Padding="4" 
-                     FontSize="20"
-                     HorizontalContentAlignment="Stretch"
-                     Icon="{Binding Icon}" 
-                     Header="{Binding Header}" 
-                     IsNetworkError="{Binding IsNetworkError}"
-                     SmallHeader="{Binding ShortHeader}"
-                     avalonia:AsvPallete.Color="{Binding Status}"
-                     >
+    <avalonia:RttBox
+        IsUpdated="{Binding IsUpdated}"
+        Padding="4"
+        FontSize="20"
+        HorizontalContentAlignment="Stretch"
+        Icon="{Binding Icon}"
+        Header="{Binding Header}"
+        IsNetworkError="{Binding IsNetworkError}"
+        SmallHeader="{Binding ShortHeader}"
+        avalonia:AsvPallete.Color="{Binding Status}"
+    >
         <avalonia:RttBox.SmallContent>
             <Grid HorizontalAlignment="Stretch" ColumnDefinitions="*,4,*">
-                <TextBlock DataContext="{Binding Left}" FontSize="15" Grid.Column="0" VerticalAlignment="Center"  Margin="0,0,4,0">
-                    <Run Text="{Binding ValueString}"/>
-                    <Run FontSize="12"  Text="{Binding Units}" Foreground="{DynamicResource AsvForegroundUnknownBrush}"/>
+                <TextBlock
+                    DataContext="{Binding Left}"
+                    FontSize="15"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Margin="0,0,4,0"
+                >
+                    <Run Text="{Binding ValueString}" />
+                    <Run
+                        FontSize="12"
+                        Text="{Binding Units}"
+                        Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                    />
                 </TextBlock>
-                <Rectangle  Grid.Column="1" Grid.Row="0"
-                           Fill="{StaticResource SystemChromeDisabledLowColor}" Width="0.5" VerticalAlignment="Stretch" />
-                <TextBlock DataContext="{Binding Right}" FontSize="15" Grid.Column="2" VerticalAlignment="Center"  Margin="0,0,4,0">
-                    <Run Text="{Binding ValueString}"/>
-                    <Run FontSize="12"  Text="{Binding Units}" Foreground="{DynamicResource AsvForegroundUnknownBrush}"/>
+                <Rectangle
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Fill="{StaticResource SystemChromeDisabledLowColor}"
+                    Width="0.5"
+                    VerticalAlignment="Stretch"
+                />
+                <TextBlock
+                    DataContext="{Binding Right}"
+                    FontSize="15"
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Margin="0,0,4,0"
+                >
+                    <Run Text="{Binding ValueString}" />
+                    <Run
+                        FontSize="12"
+                        Text="{Binding Units}"
+                        Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                    />
                 </TextBlock>
             </Grid>
-            
         </avalonia:RttBox.SmallContent>
         <StackPanel>
             <Grid ColumnDefinitions="*,4,*" RowDefinitions="Auto,0,*,4,Auto,4,Auto">
-                <TextBlock DataContext="{Binding Left}" IsVisible="{Binding Header, Converter={x:Static ObjectConverters.IsNotNull}}" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"  FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}" Text="{Binding Header}"/>
-                <TextBlock DataContext="{Binding Left}" Grid.Column="0" Grid.Row="2" Padding="0" Text="{Binding ValueString}" HorizontalAlignment="Center" />
-                <TextBlock DataContext="{Binding Left}" IsVisible="{Binding Units, Converter={x:Static ObjectConverters.IsNotNull}}"  Grid.Column="0" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top"  FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}" Text="{Binding Units}"/>
-                <Rectangle Grid.Column="1" Grid.Row="0" Grid.RowSpan="5"
-                           Fill="{StaticResource SystemChromeDisabledLowColor}" Width="0.5" VerticalAlignment="Stretch" />
-                <TextBlock DataContext="{Binding Right}" IsVisible="{Binding Header, Converter={x:Static ObjectConverters.IsNotNull}}" Grid.Column="2" Grid.Row="0" HorizontalAlignment="Center" VerticalAlignment="Bottom"  FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}" Text="{Binding Header}"/>
-                <TextBlock DataContext="{Binding Right}" Grid.Column="2" Grid.Row="2" Padding="0" Text="{Binding ValueString}" HorizontalAlignment="Center" />
-                <TextBlock DataContext="{Binding Right}" IsVisible="{Binding Units, Converter={x:Static ObjectConverters.IsNotNull}}" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Center" VerticalAlignment="Top"  FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}" Text="{Binding Units}"/>
+                <TextBlock
+                    DataContext="{Binding Left}"
+                    IsVisible="{Binding Header, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Grid.Column="0"
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    FontSize="15"
+                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                    Text="{Binding Header}"
+                />
+                <TextBlock
+                    DataContext="{Binding Left}"
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Padding="0"
+                    Text="{Binding ValueString}"
+                    HorizontalAlignment="Center"
+                />
+                <TextBlock
+                    DataContext="{Binding Left}"
+                    IsVisible="{Binding Units, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Grid.Column="0"
+                    Grid.Row="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    FontSize="15"
+                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                    Text="{Binding Units}"
+                />
+                <Rectangle
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    Grid.RowSpan="5"
+                    Fill="{StaticResource SystemChromeDisabledLowColor}"
+                    Width="0.5"
+                    VerticalAlignment="Stretch"
+                />
+                <TextBlock
+                    DataContext="{Binding Right}"
+                    IsVisible="{Binding Header, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Grid.Column="2"
+                    Grid.Row="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    FontSize="15"
+                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                    Text="{Binding Header}"
+                />
+                <TextBlock
+                    DataContext="{Binding Right}"
+                    Grid.Column="2"
+                    Grid.Row="2"
+                    Padding="0"
+                    Text="{Binding ValueString}"
+                    HorizontalAlignment="Center"
+                />
+                <TextBlock
+                    DataContext="{Binding Right}"
+                    IsVisible="{Binding Units, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Grid.Column="2"
+                    Grid.Row="4"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    FontSize="15"
+                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                    Text="{Binding Units}"
+                />
                 <ProgressBar
-                    Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3"
-                    IsVisible="{Binding ProgressStatus, Converter={x:Static ObjectConverters.IsNotNull}}" 
-                    Margin="4,2" 
-                    Minimum="0" 
-                    Maximum="1" 
+                    Grid.Column="0"
+                    Grid.Row="6"
+                    Grid.ColumnSpan="3"
+                    IsVisible="{Binding ProgressStatus, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Margin="4,2"
+                    Minimum="0"
+                    Maximum="1"
                     Value="{Binding Progress}"
-                    IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}" 
+                    IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}"
                     avalonia:AsvPallete.Color="{Binding ProgressStatus}"
-                    />
+                />
             </Grid>
-            <TextBlock Margin="0,4,0,0"  HorizontalAlignment="Left" Foreground="{DynamicResource AsvForegroundUnknownBrush}" FontSize="15" IsVisible="{Binding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding StatusText}"/>
-            
+            <TextBlock
+                Margin="0,4,0,0"
+                HorizontalAlignment="Left"
+                Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                FontSize="15"
+                IsVisible="{Binding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Text="{Binding StatusText}"
+            />
         </StackPanel>
-        
-        
     </avalonia:RttBox>
 </UserControl>

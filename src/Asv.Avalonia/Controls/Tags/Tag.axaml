@@ -1,16 +1,18 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
     <Design.PreviewWith>
         <StackPanel Spacing="4">
             <StackPanel Spacing="4" Orientation="Horizontal">
                 <controls:Tag FontSize="10" Key="key1" Value="value1" Icon="Tag" />
                 <controls:Tag FontSize="10" Icon="Tag" />
                 <controls:Tag Key="key2" Value="value2" Icon="Navi" />
-                <controls:Tag Key="key3" Value="value3" Icon="Tag" />    
+                <controls:Tag Key="key3" Value="value3" Icon="Tag" />
                 <controls:Tag Value="only value" Icon="Tag" />
-                <controls:Tag Value="without icon"  />
+                <controls:Tag Value="without icon" />
                 <controls:Tag Value="without icon" Icon="{x:Null}" />
                 <controls:Tag Classes="blink" Value="blink" Icon="{x:Null}" />
                 <controls:Tag Classes="blinkonce" Value="blink" Icon="{x:Null}" />
@@ -20,43 +22,41 @@
             </StackPanel>
             <WrapPanel Width="500" ItemSpacing="8" LineSpacing="8">
                 <!-- Status tags -->
-                <controls:Tag Classes="error"    Key="class" Value="error"    />
-                <controls:Tag Classes="warning"  Key="class" Value="warning"  />
-                <controls:Tag Classes="success"  Key="class" Value="success"  />
-                <controls:Tag Classes="unknown"  Key="class" Value="unknown"  />
+                <controls:Tag Classes="error" Key="class" Value="error" />
+                <controls:Tag Classes="warning" Key="class" Value="warning" />
+                <controls:Tag Classes="success" Key="class" Value="success" />
+                <controls:Tag Classes="unknown" Key="class" Value="unknown" />
 
                 <!-- Info palette – all 20 categorical colors -->
-                <controls:Tag Classes="info1"   Key="class" Value="info1"   />
-                <controls:Tag Classes="info2"   Key="class" Value="info2"   />
-                <controls:Tag Classes="info3"   Key="class" Value="info3"   />
-                <controls:Tag Classes="info4"   Key="class" Value="info4"   />
-                <controls:Tag Classes="info5"   Key="class" Value="info5"   />
-                <controls:Tag Classes="info6"   Key="class" Value="info6"   />
-                <controls:Tag Classes="info7"   Key="class" Value="info7"   />
-                <controls:Tag Classes="info8"   Key="class" Value="info8"   />
-                <controls:Tag Classes="info9"   Key="class" Value="info9"   />
-                <controls:Tag Classes="info10"  Key="class" Value="info10"  />
-                <controls:Tag Classes="info11"  Key="class" Value="info11"  />
-                <controls:Tag Classes="info12"  Key="class" Value="info12"  />
-                <controls:Tag Classes="info13"  Key="class" Value="info13"  />
-                <controls:Tag Classes="info14"  Key="class" Value="info14"  />
-                <controls:Tag Classes="info15"  Key="class" Value="info15"  />
-                <controls:Tag Classes="info16"  Key="class" Value="info16"  />
-                <controls:Tag Classes="info17"  Key="class" Value="info17"  />
-                <controls:Tag Classes="info18"  Key="class" Value="info18"  />
-                <controls:Tag Classes="info19"  Key="class" Value="info19"  />
-                <controls:Tag Classes="info20"  Key="class" Value="info20"  />
+                <controls:Tag Classes="info1" Key="class" Value="info1" />
+                <controls:Tag Classes="info2" Key="class" Value="info2" />
+                <controls:Tag Classes="info3" Key="class" Value="info3" />
+                <controls:Tag Classes="info4" Key="class" Value="info4" />
+                <controls:Tag Classes="info5" Key="class" Value="info5" />
+                <controls:Tag Classes="info6" Key="class" Value="info6" />
+                <controls:Tag Classes="info7" Key="class" Value="info7" />
+                <controls:Tag Classes="info8" Key="class" Value="info8" />
+                <controls:Tag Classes="info9" Key="class" Value="info9" />
+                <controls:Tag Classes="info10" Key="class" Value="info10" />
+                <controls:Tag Classes="info11" Key="class" Value="info11" />
+                <controls:Tag Classes="info12" Key="class" Value="info12" />
+                <controls:Tag Classes="info13" Key="class" Value="info13" />
+                <controls:Tag Classes="info14" Key="class" Value="info14" />
+                <controls:Tag Classes="info15" Key="class" Value="info15" />
+                <controls:Tag Classes="info16" Key="class" Value="info16" />
+                <controls:Tag Classes="info17" Key="class" Value="info17" />
+                <controls:Tag Classes="info18" Key="class" Value="info18" />
+                <controls:Tag Classes="info19" Key="class" Value="info19" />
+                <controls:Tag Classes="info20" Key="class" Value="info20" />
             </WrapPanel>
         </StackPanel>
-        
-        
     </Design.PreviewWith>
-    
+
     <Style Selector="controls|Tag">
-        <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}"/>
-        <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}"/>
-        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}"/>
-        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+        <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}" />
+        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        <Setter Property="BorderThickness" Value="1" />
         <Setter Property="FontSize" Value="12"></Setter>
         <!-- ===================================================== -->
         <!-- UNIVERSAL ANIMATION CLASSES – works on any Avalonia control -->
@@ -67,9 +67,15 @@
         <Style Selector="^.blink">
             <Style.Animations>
                 <Animation Duration="0:0:1" IterationCount="Infinite">
-                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
-                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
-                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="Opacity" Value="0.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
@@ -78,9 +84,15 @@
         <Style Selector="^.blinkonce">
             <Style.Animations>
                 <Animation Duration="0:0:0.5" IterationCount="3">
-                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
-                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
-                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="Opacity" Value="0.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
@@ -90,10 +102,10 @@
             <Style.Animations>
                 <Animation Duration="0:0:0.6" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="0.0"/>
+                        <Setter Property="Opacity" Value="0.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="Opacity" Value="1.0"/>
+                        <Setter Property="Opacity" Value="1.0" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -104,10 +116,10 @@
             <Style.Animations>
                 <Animation Duration="0:0:0.6" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="1.0"/>
+                        <Setter Property="Opacity" Value="1.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="Opacity" Value="0.0"/>
+                        <Setter Property="Opacity" Value="0.0" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -118,14 +130,24 @@
             <Style.Animations>
                 <!-- 1. Fade in -->
                 <Animation Duration="0:0:0.6" FillMode="Forward">
-                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="0.0"/> </KeyFrame>
-                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
                 </Animation>
                 <!-- 2. Then blink 3 times gently -->
                 <Animation Duration="0:0:0.5" IterationCount="3" Delay="0:0:0.6">
-                    <KeyFrame Cue="0%">   <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
-                    <KeyFrame Cue="50%">  <Setter Property="Opacity" Value="0.3"/> </KeyFrame>
-                    <KeyFrame Cue="100%"> <Setter Property="Opacity" Value="1.0"/> </KeyFrame>
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="50%">
+                        <Setter Property="Opacity" Value="0.3" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="1.0" />
+                    </KeyFrame>
                 </Animation>
             </Style.Animations>
         </Style>
@@ -150,7 +172,8 @@
 
         <Style Selector="^.unknown">
             <Setter Property="Foreground" Value="{DynamicResource AsvForegroundUnknownBrush}" />
-            <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}" /> <!-- Исправлено: было Success! -->
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}" />
+            <!-- Исправлено: было Success! -->
         </Style>
 
         <!-- =============== INFO PALETTE – 20 COLORS =============== -->
@@ -234,28 +257,47 @@
             <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo20Brush}" />
             <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo20Brush}" />
         </Style>
-            <!-- Set Defaults -->
+        <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Border x:Name="MainBorder"
-                        Height="{TemplateBinding FontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=10}"
-                        BorderThickness="{TemplateBinding BorderThickness}"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        BorderBrush="{TemplateBinding Foreground}"
-                        Background="{TemplateBinding Background}"
-                        CornerRadius="{TemplateBinding CornerRadius}">
+                <Border
+                    x:Name="MainBorder"
+                    Height="{TemplateBinding FontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=10}"
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    BorderBrush="{TemplateBinding Foreground}"
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                >
                     <StackPanel Margin="2" Orientation="Horizontal" Spacing="2">
-                        <avalonia:MaterialIcon 
-                            Width="{TemplateBinding FontSize}" Height="{TemplateBinding FontSize}" 
-                            IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" 
-                             
-                            Foreground="{TemplateBinding Foreground}" Kind="{TemplateBinding Icon}"/>
-                        <TextBlock IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}" FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" FontWeight="Bold" Text="{TemplateBinding Key}" />
-                        <TextBlock IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}" FontSize="{TemplateBinding FontSize}"  VerticalAlignment="Center" Text=":" />
-                        <TextBlock IsVisible="{TemplateBinding Value, Converter={x:Static ObjectConverters.IsNotNull}}" FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" Text="{TemplateBinding Value}" />
+                        <avalonia:MaterialIcon
+                            Width="{TemplateBinding FontSize}"
+                            Height="{TemplateBinding FontSize}"
+                            IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            Foreground="{TemplateBinding Foreground}"
+                            Kind="{TemplateBinding Icon}"
+                        />
+                        <TextBlock
+                            IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            FontSize="{TemplateBinding FontSize}"
+                            VerticalAlignment="Center"
+                            FontWeight="Bold"
+                            Text="{TemplateBinding Key}"
+                        />
+                        <TextBlock
+                            IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            FontSize="{TemplateBinding FontSize}"
+                            VerticalAlignment="Center"
+                            Text=":"
+                        />
+                        <TextBlock
+                            IsVisible="{TemplateBinding Value, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            FontSize="{TemplateBinding FontSize}"
+                            VerticalAlignment="Center"
+                            Text="{TemplateBinding Value}"
+                        />
                     </StackPanel>
-                        
                 </Border>
             </ControlTemplate>
         </Setter>

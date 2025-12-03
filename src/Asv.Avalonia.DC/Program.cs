@@ -9,8 +9,7 @@ using Microsoft.CodeAnalysis.MSBuild;
 
 switch (args.Length)
 {
-    case 0
-    or 1:
+    case 0 or 1:
         Console.WriteLine("Usage: Asv.Avalonia.DC [.csproj file] [output directory]");
         return;
 }

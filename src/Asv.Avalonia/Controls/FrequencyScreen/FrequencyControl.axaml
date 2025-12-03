@@ -1,42 +1,167 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalonia="clr-namespace:Asv.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+>
     <Design.PreviewWith>
-        <avalonia:FrequencyControl Width="250" Height="280"/>
+        <avalonia:FrequencyControl Width="250" Height="280" />
     </Design.PreviewWith>
 
     <Style Selector="avalonia|FrequencyControl">
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid Margin="5" RowDefinitions="Auto,Auto,*,5,*,5,*,5,*" ColumnDefinitions="*,5,*,5,*,5,*">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Text="Frequency"/>
+                <Grid
+                    Margin="5"
+                    RowDefinitions="Auto,Auto,*,5,*,5,*,5,*"
+                    ColumnDefinitions="*,5,*,5,*,5,*"
+                >
+                    <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Text="Frequency" />
                     <!--<MaskedTextBox x:Name="PART_FrequencyTextBox" Margin="0,5,0,5"
                                    Mask="000.000 000"
                                    FontSize="20"
                                    Background="Transparent"
                                    BorderBrush="Transparent"
                                    Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" Text="{TemplateBinding Value}"/>-->
-                    <TextBox x:Name="PART_FrequencyTextBox" 
-                             Margin="0,5,0,5" 
-                             Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" 
-                             FontSize="20" Text="{TemplateBinding Value, Mode=TwoWay}"/>
-                    <Button x:Name="PART_Button1" Tag="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="2">1</Button>
-                    <Button x:Name="PART_Button2" Tag="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="2">2</Button>
-                    <Button x:Name="PART_Button3" Tag="3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="4" Grid.Row="2">3</Button>
-                    <Button x:Name="PART_Button4" Tag="4" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="4">4</Button>
-                    <Button x:Name="PART_Button5" Tag="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="4">5</Button>
-                    <Button x:Name="PART_Button6" Tag="6" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="4" Grid.Row="4">6</Button>
-                    <Button x:Name="PART_Button7" Tag="7" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="6">7</Button>
-                    <Button x:Name="PART_Button8" Tag="8" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="6">8</Button>
-                    <Button x:Name="PART_Button9" Tag="9" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="4" Grid.Row="6">9</Button>
-                    <Button x:Name="PART_Button0" Tag="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="2" Grid.Row="8">0</Button>
-                    <Button x:Name="PART_ButtonDot" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0" Grid.Row="8">.</Button>
-                    <Button x:Name="PART_ButtonHz" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="6" Grid.Row="2">Hz</Button>
-                    <Button x:Name="PART_ButtonKHz" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="6" Grid.Row="4">KHz</Button>
-                    <Button x:Name="PART_ButtonMHz" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="6" Grid.Row="6">MHz</Button>
-                    <Button x:Name="PART_ButtonGHz" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="6" Grid.Row="8">GHz</Button>
-                        
+                    <TextBox
+                        x:Name="PART_FrequencyTextBox"
+                        Margin="0,5,0,5"
+                        Grid.Column="0"
+                        Grid.Row="1"
+                        Grid.ColumnSpan="7"
+                        FontSize="20"
+                        Text="{TemplateBinding Value, Mode=TwoWay}"
+                    />
+                    <Button
+                        x:Name="PART_Button1"
+                        Tag="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="0"
+                        Grid.Row="2"
+                        >1</Button
+                    >
+                    <Button
+                        x:Name="PART_Button2"
+                        Tag="2"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="2"
+                        Grid.Row="2"
+                        >2</Button
+                    >
+                    <Button
+                        x:Name="PART_Button3"
+                        Tag="3"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="4"
+                        Grid.Row="2"
+                        >3</Button
+                    >
+                    <Button
+                        x:Name="PART_Button4"
+                        Tag="4"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="0"
+                        Grid.Row="4"
+                        >4</Button
+                    >
+                    <Button
+                        x:Name="PART_Button5"
+                        Tag="5"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="2"
+                        Grid.Row="4"
+                        >5</Button
+                    >
+                    <Button
+                        x:Name="PART_Button6"
+                        Tag="6"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="4"
+                        Grid.Row="4"
+                        >6</Button
+                    >
+                    <Button
+                        x:Name="PART_Button7"
+                        Tag="7"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="0"
+                        Grid.Row="6"
+                        >7</Button
+                    >
+                    <Button
+                        x:Name="PART_Button8"
+                        Tag="8"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="2"
+                        Grid.Row="6"
+                        >8</Button
+                    >
+                    <Button
+                        x:Name="PART_Button9"
+                        Tag="9"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="4"
+                        Grid.Row="6"
+                        >9</Button
+                    >
+                    <Button
+                        x:Name="PART_Button0"
+                        Tag="0"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="2"
+                        Grid.Row="8"
+                        >0</Button
+                    >
+                    <Button
+                        x:Name="PART_ButtonDot"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="0"
+                        Grid.Row="8"
+                        >.</Button
+                    >
+                    <Button
+                        x:Name="PART_ButtonHz"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="6"
+                        Grid.Row="2"
+                        >Hz</Button
+                    >
+                    <Button
+                        x:Name="PART_ButtonKHz"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="6"
+                        Grid.Row="4"
+                        >KHz</Button
+                    >
+                    <Button
+                        x:Name="PART_ButtonMHz"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="6"
+                        Grid.Row="6"
+                        >MHz</Button
+                    >
+                    <Button
+                        x:Name="PART_ButtonGHz"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        Grid.Column="6"
+                        Grid.Row="8"
+                        >GHz</Button
+                    >
                 </Grid>
             </ControlTemplate>
         </Setter>

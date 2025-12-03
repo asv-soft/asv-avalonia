@@ -1,28 +1,70 @@
-﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:avalonia="clr-namespace:Asv.Avalonia"
-                    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-                    x:CompileBindings="True">
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    x:CompileBindings="True"
+>
     <Design.PreviewWith>
         <Border Padding="40">
             <StackPanel Spacing="10">
-                <avalonia:InfoBar IsOpen="True" Title="Title1" Message="Message" IsClosable="True" IsIconVisible="True" />
-                <avalonia:InfoBar IsOpen="True" Title="Title" Message="Message" IsClosable="False" IsIconVisible="True" />
-                <avalonia:InfoBar IsOpen="True" Title="Title" Message="Message" IsClosable="True" IsIconVisible="False" />
+                <avalonia:InfoBar
+                    IsOpen="True"
+                    Title="Title1"
+                    Message="Message"
+                    IsClosable="True"
+                    IsIconVisible="True"
+                />
+                <avalonia:InfoBar
+                    IsOpen="True"
+                    Title="Title"
+                    Message="Message"
+                    IsClosable="False"
+                    IsIconVisible="True"
+                />
+                <avalonia:InfoBar
+                    IsOpen="True"
+                    Title="Title"
+                    Message="Message"
+                    IsClosable="True"
+                    IsIconVisible="False"
+                />
 
                 <Border Background="Black" Height="1" />
 
-                <avalonia:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Informational" />
-                <avalonia:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Warning" />
+                <avalonia:InfoBar
+                    IsOpen="True"
+                    Title="Title"
+                    Message="Message"
+                    Severity="Informational"
+                />
+                <avalonia:InfoBar
+                    IsOpen="True"
+                    Title="Title"
+                    Message="Message"
+                    Severity="Warning"
+                />
                 <avalonia:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Error" />
-                <avalonia:InfoBar IsOpen="True" Title="Title" Message="Message" Severity="Success" />
+                <avalonia:InfoBar
+                    IsOpen="True"
+                    Title="Title"
+                    Message="Message"
+                    Severity="Success"
+                />
 
-                <avalonia:InfoBar IsOpen="True" Title="Title" Background="DarkSlateBlue" Message="Message" Severity="Success" Foreground="Red" />
+                <avalonia:InfoBar
+                    IsOpen="True"
+                    Title="Title"
+                    Background="DarkSlateBlue"
+                    Message="Message"
+                    Severity="Success"
+                    Foreground="Red"
+                />
 
                 <avalonia:InfoBar IsOpen="True" Title="Custom Icon" Message="custom message">
-                    <avalonia1:MaterialIcon Kind="Add"/>
+                    <avalonia1:MaterialIcon Kind="Add" />
                 </avalonia:InfoBar>
-                
+
                 <!-- <avalonia:InfoBar IsOpen="True" Title="Title" Message="Action Button"> TODO: add icons customisation-->
                 <!--     <avalonia:InfoBar.ActionButton> -->
                 <!--         <Button Content="Click" /> -->
@@ -58,10 +100,12 @@
     <Thickness x:Key="InfoBarMessageVerticalOrientationMargin">0,4,0,0</Thickness>
     <Thickness x:Key="InfoBarActionHorizontalOrientationMargin">16,8,0,0</Thickness>
     <Thickness x:Key="InfoBarActionVerticalOrientationMargin">0,12,0,0</Thickness>
-    
-    <ControlTheme x:Key="InfoBarCloseButtonStyle"
-                  BasedOn="{StaticResource TransparentButton}"
-                  TargetType="Button">
+
+    <ControlTheme
+        x:Key="InfoBarCloseButtonStyle"
+        BasedOn="{StaticResource TransparentButton}"
+        TargetType="Button"
+    >
         <Setter Property="Width" Value="{StaticResource InfoBarCloseButtonSize}" />
         <Setter Property="Height" Value="{StaticResource InfoBarCloseButtonSize}" />
         <Setter Property="VerticalAlignment" Value="Top" />
@@ -76,98 +120,117 @@
         <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Name="ContentRoot"
-                        VerticalAlignment="Top"
-                        BorderBrush="{DynamicResource AsvBackgroundInfoBrush}"
-                        BorderThickness="{DynamicResource InfoBarBorderThickness}"
-                        CornerRadius="{TemplateBinding CornerRadius}"
-                        BackgroundSizing="{TemplateBinding BackgroundSizing}">
-
+                <Border
+                    Name="ContentRoot"
+                    VerticalAlignment="Top"
+                    BorderBrush="{DynamicResource AsvBackgroundInfoBrush}"
+                    BorderThickness="{DynamicResource InfoBarBorderThickness}"
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                    BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                >
                     <!-- Background is used here so that it overrides the severity status color if set. 
                     Padding="{StaticResource InfoBarContentRootPadding}" applied as margin on grid b/c no Padding
                     -->
                     <Panel>
                         <!-- use separate border for Background b/c no margin -->
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="{TemplateBinding CornerRadius}"/>
-                        <Grid HorizontalAlignment="Stretch"
-                              MinHeight="{DynamicResource InfoBarMinHeight}"
-                              Margin="{StaticResource InfoBarContentRootPadding}"
-                              ColumnDefinitions="Auto,*,Auto"
-                              RowDefinitions="Auto,Auto">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                        />
+                        <Grid
+                            HorizontalAlignment="Stretch"
+                            MinHeight="{DynamicResource InfoBarMinHeight}"
+                            Margin="{StaticResource InfoBarContentRootPadding}"
+                            ColumnDefinitions="Auto,*,Auto"
+                            RowDefinitions="Auto,Auto"
+                        >
+                            <Panel Name="StandardIconArea" IsVisible="False">
+                                <Ellipse
+                                    Name="IconBackground"
+                                    Width="16"
+                                    Height="16"
+                                    VerticalAlignment="Top"
+                                    Margin="{StaticResource InfoBarIconMargin}"
+                                />
 
-                            <Panel Name="StandardIconArea"
-                                   IsVisible="False">
-                                <Ellipse Name="IconBackground"
-                                         Width="16" Height="16"
-                                         VerticalAlignment="Top"
-                                         Margin="{StaticResource InfoBarIconMargin}"/>
-
-                                <avalonia1:MaterialIcon Kind="Undo" VerticalAlignment="Top"/>
+                                <avalonia1:MaterialIcon Kind="Undo" VerticalAlignment="Top" />
                             </Panel>
 
-                            <Viewbox Name="UserIconBox"
-                                     IsVisible="False"
-                                     Grid.Column="0"
-                                     VerticalAlignment="Top"
-                                     MaxWidth="{DynamicResource InfoBarIconFontSize}"
-                                     MaxHeight="{DynamicResource InfoBarIconFontSize}"
-                                     Margin="{DynamicResource InfoBarIconMargin}">
-                                <avalonia1:MaterialIcon Kind="WarningCircle"/>
+                            <Viewbox
+                                Name="UserIconBox"
+                                IsVisible="False"
+                                Grid.Column="0"
+                                VerticalAlignment="Top"
+                                MaxWidth="{DynamicResource InfoBarIconFontSize}"
+                                MaxHeight="{DynamicResource InfoBarIconFontSize}"
+                                Margin="{DynamicResource InfoBarIconMargin}"
+                            >
+                                <avalonia1:MaterialIcon Kind="WarningCircle" />
                             </Viewbox>
 
-                            <avalonia:InfoBarPanel Grid.Column="1"
-                                                   Margin="{StaticResource InfoBarPanelMargin}"
-                                                   HorizontalOrientationPadding="{StaticResource InfoBarPanelHorizontalOrientationPadding}"
-                                                   VerticalOrientationPadding="{StaticResource InfoBarPanelVerticalOrientationPadding}">
+                            <avalonia:InfoBarPanel
+                                Grid.Column="1"
+                                Margin="{StaticResource InfoBarPanelMargin}"
+                                HorizontalOrientationPadding="{StaticResource InfoBarPanelHorizontalOrientationPadding}"
+                                VerticalOrientationPadding="{StaticResource InfoBarPanelVerticalOrientationPadding}"
+                            >
+                                <TextBlock
+                                    Name="Title"
+                                    Foreground="{DynamicResource TextControlForeground}"
+                                    Text="{TemplateBinding Title}"
+                                    avalonia:InfoBarPanel.HorizontalOrientationMargin="{StaticResource InfoBarTitleHorizontalOrientationMargin}"
+                                    avalonia:InfoBarPanel.VerticalOrientationMargin="{StaticResource InfoBarTitleVerticalOrientationMargin}"
+                                    TextWrapping="Wrap"
+                                    FontWeight="{StaticResource InfoBarTitleFontWeight}"
+                                    FontSize="{StaticResource InfoBarTitleFontSize}"
+                                />
 
-                                <TextBlock Name="Title"
-                                           Foreground="{DynamicResource TextControlForeground}"
-                                           Text="{TemplateBinding Title}"
-                                           avalonia:InfoBarPanel.HorizontalOrientationMargin="{StaticResource InfoBarTitleHorizontalOrientationMargin}"
-                                           avalonia:InfoBarPanel.VerticalOrientationMargin="{StaticResource InfoBarTitleVerticalOrientationMargin}"
-                                           TextWrapping="Wrap"
-                                           FontWeight="{StaticResource InfoBarTitleFontWeight}"
-                                           FontSize="{StaticResource InfoBarTitleFontSize}" />
+                                <TextBlock
+                                    x:Name="Message"
+                                    Foreground="{DynamicResource TextControlForeground}"
+                                    Text="{TemplateBinding Message}"
+                                    avalonia:InfoBarPanel.HorizontalOrientationMargin="{StaticResource InfoBarMessageHorizontalOrientationMargin}"
+                                    avalonia:InfoBarPanel.VerticalOrientationMargin="{StaticResource InfoBarMessageVerticalOrientationMargin}"
+                                    TextWrapping="Wrap"
+                                    FontWeight="{StaticResource InfoBarMessageFontWeight}"
+                                    FontSize="{StaticResource InfoBarMessageFontSize}"
+                                />
 
-                                <TextBlock x:Name="Message"
-                                           Foreground="{DynamicResource TextControlForeground}"
-                                           Text="{TemplateBinding Message}"
-                                           avalonia:InfoBarPanel.HorizontalOrientationMargin="{StaticResource InfoBarMessageHorizontalOrientationMargin}"
-                                           avalonia:InfoBarPanel.VerticalOrientationMargin="{StaticResource InfoBarMessageVerticalOrientationMargin}"
-                                           TextWrapping="Wrap"
-                                           FontWeight="{StaticResource InfoBarMessageFontWeight}"
-                                           FontSize="{StaticResource InfoBarMessageFontSize}"/>
-
-                                <ContentPresenter avalonia:InfoBarPanel.HorizontalOrientationMargin="{StaticResource InfoBarActionHorizontalOrientationMargin}"
-                                                  avalonia:InfoBarPanel.VerticalOrientationMargin="{StaticResource InfoBarActionVerticalOrientationMargin}"
-                                                  VerticalAlignment="Top"
-                                                  Content="{TemplateBinding ActionButton}"
-                                                  HorizontalContentAlignment="Stretch"
-                                                  VerticalContentAlignment="Center" />
-
+                                <ContentPresenter
+                                    avalonia:InfoBarPanel.HorizontalOrientationMargin="{StaticResource InfoBarActionHorizontalOrientationMargin}"
+                                    avalonia:InfoBarPanel.VerticalOrientationMargin="{StaticResource InfoBarActionVerticalOrientationMargin}"
+                                    VerticalAlignment="Top"
+                                    Content="{TemplateBinding ActionButton}"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Center"
+                                />
                             </avalonia:InfoBarPanel>
 
-                            <ContentPresenter Grid.Column="1"
-                                              Grid.Row="1"
-                                              Content="{TemplateBinding Content}"
-                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              HorizontalContentAlignment="Stretch"
-                                              VerticalContentAlignment="Stretch"
-                                              Name="ContentPresenter"/>
+                            <ContentPresenter
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                HorizontalContentAlignment="Stretch"
+                                VerticalContentAlignment="Stretch"
+                                Name="ContentPresenter"
+                            />
 
-                            <Button Name="CloseButton"
-                                       VerticalAlignment="Center"
-                                       Grid.Column="2"
-                                       Command="{TemplateBinding CloseButtonCommand}"
-                                       CommandParameter="{TemplateBinding CloseButtonCommandParameter}"
-                                       Theme="{StaticResource InfoBarCloseButtonStyle}">
-
-                                <Viewbox Width="{StaticResource InfoBarCloseButtonGlyphSize}"
-                                         Height="{StaticResource InfoBarCloseButtonGlyphSize}"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center">
-                                    <avalonia1:MaterialIcon Kind="Close"/>
+                            <Button
+                                Name="CloseButton"
+                                VerticalAlignment="Center"
+                                Grid.Column="2"
+                                Command="{TemplateBinding CloseButtonCommand}"
+                                CommandParameter="{TemplateBinding CloseButtonCommandParameter}"
+                                Theme="{StaticResource InfoBarCloseButtonStyle}"
+                            >
+                                <Viewbox
+                                    Width="{StaticResource InfoBarCloseButtonGlyphSize}"
+                                    Height="{StaticResource InfoBarCloseButtonGlyphSize}"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                >
+                                    <avalonia1:MaterialIcon Kind="Close" />
                                 </Viewbox>
                             </Button>
                         </Grid>
@@ -230,7 +293,6 @@
             </Style>
         </Style>
 
-
         <Style Selector="^:standardIcon">
             <Style Selector="^ /template/ Panel#StandardIconArea">
                 <Setter Property="IsVisible" Value="True" />
@@ -259,7 +321,6 @@
             <Setter Property="IsVisible" Value="False" />
         </Style>
 
-
         <Style Selector="^:foregroundset">
             <Style Selector="^ /template/ TextBlock#Title">
                 <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
@@ -268,6 +329,5 @@
                 <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
             </Style>
         </Style>
-        
     </ControlTheme>
 </ResourceDictionary>

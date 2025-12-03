@@ -23,6 +23,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		CodeStyle.ruleset = CodeStyle.ruleset
 		..\.github\workflows\docs.yml = ..\.github\workflows\docs.yml
 		..\.github\workflows\plugin-example.yml = ..\.github\workflows\plugin-example.yml
+		..\.csharpierignore = ..\.csharpierignore
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Example", "Example", "{873C01F8-85A8-424D-8970-30EE19011C33}"

@@ -1,93 +1,112 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.SettingsUnitsView"
-             x:DataType="avalonia:SettingsUnitsViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.SettingsUnitsView"
+    x:DataType="avalonia:SettingsUnitsViewModel"
+>
     <Design.DataContext>
-        <avalonia:SettingsUnitsViewModel/>
+        <avalonia:SettingsUnitsViewModel />
     </Design.DataContext>
     <DockPanel>
-        <avalonia:SearchBoxView DockPanel.Dock="Top" 
-                                HorizontalAlignment="Stretch" 
-                                Margin="8" 
-                                DataContext="{Binding Search}"/>
-        
-        <DataGrid 
-            Focusable="False" 
-            ItemsSource="{Binding Items}" 
-            SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
+        <avalonia:SearchBoxView
+            DockPanel.Dock="Top"
+            HorizontalAlignment="Stretch"
+            Margin="8"
+            DataContext="{Binding Search}"
+        />
+
+        <DataGrid
+            Focusable="False"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}"
+        >
             <DataGrid.Styles>
                 <Style Selector="DataGridRow DataGridCell Rectangle">
-                    <Setter Property="IsVisible" Value="False"/>
+                    <Setter Property="IsVisible" Value="False" />
                 </Style>
                 <Style Selector="DataGridRow DataGridCell.action Button">
-                    <Setter Property="IsVisible" Value="False"/>
+                    <Setter Property="IsVisible" Value="False" />
                 </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
                 <DataGridTemplateColumn CellStyleClasses="action">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <avalonia1:MaterialIcon Kind="{Binding Base.Icon}"/>
+                            <avalonia1:MaterialIcon Kind="{Binding Base.Icon}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn 
-                    IsReadOnly="True" 
+                <DataGridTemplateColumn
+                    IsReadOnly="True"
                     Width="*"
-                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Name}" >
+                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Name}"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <SelectableTextBlock 
+                            <SelectableTextBlock
                                 SelectionStart="{Binding NameSelection.Start}"
                                 SelectionEnd="{Binding NameSelection.Stop}"
                                 Text="{Binding Base.Name}"
                                 VerticalAlignment="Center"
-                                IsHitTestVisible="False" />
+                                IsHitTestVisible="False"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn 
-                    IsReadOnly="True" 
+                <DataGridTemplateColumn
+                    IsReadOnly="True"
                     Width="2*"
-                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Description}">
+                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Description}"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <SelectableTextBlock 
+                            <SelectableTextBlock
                                 SelectionStart="{Binding DescriptionSelection.Start}"
                                 SelectionEnd="{Binding DescriptionSelection.Stop}"
                                 Text="{Binding Base.Description}"
                                 VerticalAlignment="Center"
-                                IsHitTestVisible="False" />
+                                IsHitTestVisible="False"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Selected}" MinWidth="150" >
+                <DataGridTemplateColumn
+                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Selected}"
+                    MinWidth="150"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center">
-                                <Run Text="{Binding Name.Value}"/>
-                                <Run Text=" [ "/>
-                                <Run Text="{Binding Symbol.Value}"/>
-                                <Run Text=" ]"/>
+                                <Run Text="{Binding Name.Value}" />
+                                <Run Text=" [ " />
+                                <Run Text="{Binding Symbol.Value}" />
+                                <Run Text=" ]" />
                             </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                     <DataGridTemplateColumn.CellEditingTemplate>
                         <DataTemplate>
-                            <ComboBox IsDropDownOpen="True" HorizontalAlignment="Stretch" VerticalAlignment="Center" ItemsSource="{Binding Base.AvailableUnits.Values}" 
-                                      SelectedItem="{Binding SelectedItem.Value}" >
+                            <ComboBox
+                                IsDropDownOpen="True"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                ItemsSource="{Binding Base.AvailableUnits.Values}"
+                                SelectedItem="{Binding SelectedItem.Value}"
+                            >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <SelectableTextBlock VerticalAlignment="Center">
-                                            <Run Text="{Binding Name}"/>
-                                            <Run Text=" [ "/>
-                                            <Run Text="{Binding Symbol}"/>
-                                            <Run Text=" ]"/>
+                                            <Run Text="{Binding Name}" />
+                                            <Run Text=" [ " />
+                                            <Run Text="{Binding Symbol}" />
+                                            <Run Text=" ]" />
                                         </SelectableTextBlock>
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
@@ -95,14 +114,21 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellEditingTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTemplateColumn Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Default}" MinWidth="150">
+                <DataGridTemplateColumn
+                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Default}"
+                    MinWidth="150"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <TextBlock HorizontalAlignment="Left" Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center">
-                                <Run Text="{Binding Base.InternationalSystemUnit.Name}"/>
-                                <Run Text=" [ "/>
-                                <Run Text="{Binding Base.InternationalSystemUnit.Symbol}"/>
-                                <Run Text=" ]"/>
+                            <TextBlock
+                                HorizontalAlignment="Left"
+                                Foreground="{DynamicResource ButtonForegroundDisabled}"
+                                VerticalAlignment="Center"
+                            >
+                                <Run Text="{Binding Base.InternationalSystemUnit.Name}" />
+                                <Run Text=" [ " />
+                                <Run Text="{Binding Base.InternationalSystemUnit.Symbol}" />
+                                <Run Text=" ]" />
                             </TextBlock>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -110,5 +136,4 @@
             </DataGrid.Columns>
         </DataGrid>
     </DockPanel>
-    
 </UserControl>

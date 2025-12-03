@@ -1,119 +1,117 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:asvavalonia="clr-namespace:Asv.Avalonia"
-        xmlns:system="clr-namespace:System;assembly=System.Runtime">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:asvavalonia="clr-namespace:Asv.Avalonia"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+>
     <Design.PreviewWith>
         <Grid ColumnDefinitions="*,*">
             <ThemeVariantScope RequestedThemeVariant="Dark">
                 <Border Padding="30" Background="{DynamicResource SystemRegionBrush}">
                     <StackPanel>
-                        <avalonia:MaterialIcon Kind="Window"/>
+                        <avalonia:MaterialIcon Kind="Window" />
                         <Button>Button</Button>
                         <Button Theme="{DynamicResource TransparentButton}">Button</Button>
                         <TabControl Width="200" Height="200">
-                            <TabItem Header="Header 1"/>
-                            <TabItem Header="Header 2"/>
+                            <TabItem Header="Header 1" />
+                            <TabItem Header="Header 2" />
                         </TabControl>
                     </StackPanel>
-                </Border>    
+                </Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="1" RequestedThemeVariant="Light">
                 <Border Padding="30" Background="{DynamicResource SystemRegionBrush}">
                     <StackPanel>
-                        <avalonia:MaterialIcon Kind="Window"/>            
-                        <Button>Button</Button>   
+                        <avalonia:MaterialIcon Kind="Window" />
+                        <Button>Button</Button>
                         <TabControl Width="200" Height="200">
-                            <TabItem Header="Header 1"/>
-                            <TabItem Header="Header 2"/>
+                            <TabItem Header="Header 1" />
+                            <TabItem Header="Header 2" />
                         </TabControl>
                     </StackPanel>
                 </Border>
             </ThemeVariantScope>
         </Grid>
     </Design.PreviewWith>
-    
+
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/ColorPalette/Brushes.axaml"/>
-                
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/Styles/TransparentButtonStyles.axaml"/>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/Styles/TabStyles.axaml"/>
-                
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Items/ItemsListStyles.axaml"/>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Tools/ToolsListStyles.axaml"/>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/ContentDialog/ContentDialogStyles.axaml"/>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/InfoBar/InfoBarStyles.axaml"/>
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/ColorPalette/Brushes.axaml" />
+
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/Styles/TransparentButtonStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/Styles/TabStyles.axaml" />
+
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Items/ItemsListStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Tools/ToolsListStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/ContentDialog/ContentDialogStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/InfoBar/InfoBarStyles.axaml" />
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/TabControl/DockTabControlStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/DockControlStyles.axaml"/>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/Item/DockTabStripItemStyles.axaml"/>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/Item/DockTabItemStyles.axaml"/>
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/DockControlStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/Item/DockTabStripItemStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/Item/DockTabItemStyles.axaml" />
             </ResourceDictionary.MergedDictionaries>
-            
+
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Dark">
                     <ResourceDictionary.MergedDictionaries>
-                        <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/ColorPalette/Dark.axaml"/>
+                        <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/ColorPalette/Dark.axaml" />
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Default">
                     <ResourceDictionary.MergedDictionaries>
-                        <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/ColorPalette/Default.axaml"/>
+                        <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/ColorPalette/Default.axaml" />
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
-            
+
             <asvavalonia:MaterialIconConverter x:Key="MaterialIconConverter" />
         </ResourceDictionary>
-        
+
         <Thickness x:Key="ButtonPadding">11,5,11,6</Thickness>
         <system:Double x:Key="AsvFontSizeSmall">12</system:Double>
         <system:Double x:Key="AsvFontSizeNormal">14</system:Double>
-        
+
         <CornerRadius x:Key="PanelCornerRadius">8,8,8,8</CornerRadius>
         <CornerRadius x:Key="PanelCornerRadiusUp">8,8,0,0</CornerRadius>
         <CornerRadius x:Key="PanelCornerRadiusDown">0,0,8,8</CornerRadius>
         <CornerRadius x:Key="PanelCornerRadiusLeft">8,0,0,8</CornerRadius>
         <CornerRadius x:Key="PanelCornerRadiusRight">0,8,8,0</CornerRadius>
-        
+
         <system:Double x:Key="AsvH1FontSize">20</system:Double>
         <system:Double x:Key="AsvH2FontSize">18</system:Double>
         <system:Double x:Key="AsvH3FontSize">16</system:Double>
-        
+
         <system:Double x:Key="AsvIconBigSize">30</system:Double>
         <system:Double x:Key="AsvIconMediumSize">20</system:Double>
         <system:Double x:Key="AsvIconSmallSize">18</system:Double>
         <system:Double x:Key="AsvIconSmallestSize">16</system:Double>
-        
-        
     </Styles.Resources>
-    
+
     <avalonia:MaterialIconStyles />
     <FluentTheme></FluentTheme>
-    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml"/>
+    <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
-    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/BorderStyles.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/EllipseStyles.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/MaterialIconStyles.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/ProgressBarStyles.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/TextBlockStyles.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/TextBoxStyles.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/PathStyles.axaml"/>
-    
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/Workspace.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/WorkspaceItem.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/BatteryIndicator.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/ConnectionQuality.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/GpsStatusIndicator.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/TelemBox.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/GeoPoint/GeoPointEditor.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Tags/Tag.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/HotKeys/HotKeyBox.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/AwaitingScreen.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/ActionScreen.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/RttBox.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/FrequencyScreen/FrequencyControl.axaml"/>
+    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/BorderStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/EllipseStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/MaterialIconStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/ProgressBarStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/TextBlockStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/TextBoxStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/PathStyles.axaml" />
+
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/Workspace.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/WorkspaceItem.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/BatteryIndicator.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/ConnectionQuality.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/GpsStatusIndicator.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/TelemBox.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/GeoPoint/GeoPointEditor.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/Tags/Tag.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/HotKeys/HotKeyBox.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/AwaitingScreen.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/ActionScreen.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/RttBox.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Controls/FrequencyScreen/FrequencyControl.axaml" />
 </Styles>
-
-

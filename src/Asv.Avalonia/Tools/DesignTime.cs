@@ -227,40 +227,38 @@ public static class DesignTime
         Enumerable.Range(0, 10).Select(i => $"Name{i}");
 
     public static IReadOnlyObservableList<IMenuItem> Menu =>
-        new ObservableList<IMenuItem>(
-            [
-                new MenuItem("id_1", "Menu1", LoggerFactory)
-                {
-                    Icon = RandomImage,
-                    Command = EmptyCommand,
-                },
-                new MenuItem("id_2", "Menu2", LoggerFactory)
-                {
-                    Icon = RandomImage,
-                    Command = EmptyCommand,
-                },
-                new MenuItem("id_3", "Menu3", LoggerFactory)
-                {
-                    Icon = RandomImage,
-                    Command = EmptyCommand,
-                },
-                new MenuItem("id_3_1", "Menu3_1", LoggerFactory, "id_1")
-                {
-                    Icon = RandomImage,
-                    Command = EmptyCommand,
-                },
-                new MenuItem("id_3_2", "Menu3_2", LoggerFactory, "id_1")
-                {
-                    Icon = RandomImage,
-                    Command = EmptyCommand,
-                },
-                new MenuItem("id_3_3", "Menu3_3", LoggerFactory, "id_1")
-                {
-                    Icon = RandomImage,
-                    Command = EmptyCommand,
-                },
-            ]
-        );
+        new ObservableList<IMenuItem>([
+            new MenuItem("id_1", "Menu1", LoggerFactory)
+            {
+                Icon = RandomImage,
+                Command = EmptyCommand,
+            },
+            new MenuItem("id_2", "Menu2", LoggerFactory)
+            {
+                Icon = RandomImage,
+                Command = EmptyCommand,
+            },
+            new MenuItem("id_3", "Menu3", LoggerFactory)
+            {
+                Icon = RandomImage,
+                Command = EmptyCommand,
+            },
+            new MenuItem("id_3_1", "Menu3_1", LoggerFactory, "id_1")
+            {
+                Icon = RandomImage,
+                Command = EmptyCommand,
+            },
+            new MenuItem("id_3_2", "Menu3_2", LoggerFactory, "id_1")
+            {
+                Icon = RandomImage,
+                Command = EmptyCommand,
+            },
+            new MenuItem("id_3_3", "Menu3_3", LoggerFactory, "id_1")
+            {
+                Icon = RandomImage,
+                Command = EmptyCommand,
+            },
+        ]);
 
     public static NotifyCollectionChangedSynchronizedViewList<
         ObservableTreeNode<IMenuItem, NavigationId>

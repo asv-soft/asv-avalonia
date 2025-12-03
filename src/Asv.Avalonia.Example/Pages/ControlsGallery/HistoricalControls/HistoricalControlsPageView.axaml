@@ -1,88 +1,154 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:example="clr-namespace:Asv.Avalonia.Example"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Example.HistoricalControlsPageView"
-             x:DataType="example:HistoricalControlsPageViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.Example.HistoricalControlsPageView"
+    x:DataType="example:HistoricalControlsPageViewModel"
+>
     <Design.DataContext>
         <example:HistoricalControlsPageViewModel />
     </Design.DataContext>
 
     <DockPanel Margin="16">
-        <Border DockPanel.Dock="Top"
-                Padding="16"
-                Background="{DynamicResource SystemRegionBrush}"
-                CornerRadius="6"
-                Margin="0,0,0,12">
+        <Border
+            DockPanel.Dock="Top"
+            Padding="16"
+            Background="{DynamicResource SystemRegionBrush}"
+            CornerRadius="6"
+            Margin="0,0,0,12"
+        >
             <StackPanel Spacing="6">
-                <TextBlock Text="{x:Static example:RS.HistoricalControlsPageViewModel_Title}"
-                           FontSize="18"
-                           FontWeight="SemiBold" />
-                <TextBlock Text="{x:Static example:RS.HistoricalControlsPageView_Description}"
-                           TextWrapping="Wrap"
-                           Opacity="0.85" />
+                <TextBlock
+                    Text="{x:Static example:RS.HistoricalControlsPageViewModel_Title}"
+                    FontSize="18"
+                    FontWeight="SemiBold"
+                />
+                <TextBlock
+                    Text="{x:Static example:RS.HistoricalControlsPageView_Description}"
+                    TextWrapping="Wrap"
+                    Opacity="0.85"
+                />
             </StackPanel>
         </Border>
 
         <Grid ColumnDefinitions="*,16,*" HorizontalAlignment="Stretch">
-            <Border Grid.Column="0"
-                    Padding="16"
-                    Background="{DynamicResource SystemRegionBrush}"
-                    CornerRadius="6">
+            <Border
+                Grid.Column="0"
+                Padding="16"
+                Background="{DynamicResource SystemRegionBrush}"
+                CornerRadius="6"
+            >
                 <StackPanel Spacing="10">
-                    <TextBlock Classes="h2" Text="{x:Static example:RS.HistoricalControlsPageView_Basic}" />
-                    <Grid ColumnDefinitions="Auto,8,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
-                        <TextBlock Grid.Row="0" Grid.Column="0"
-                                   Text="{x:Static example:RS.HistoricalControlsPageView_Unit}"
-                                   VerticalAlignment="Center" />
-                        <TextBox Grid.Row="0" Grid.Column="2"
-                                 Text="{Binding Speed.ViewValue.Value, UpdateSourceTrigger=LostFocus}" />
+                    <TextBlock
+                        Classes="h2"
+                        Text="{x:Static example:RS.HistoricalControlsPageView_Basic}"
+                    />
+                    <Grid
+                        ColumnDefinitions="Auto,8,*"
+                        RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                        RowSpacing="8"
+                    >
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_Unit}"
+                            VerticalAlignment="Center"
+                        />
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Text="{Binding Speed.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                        />
 
-                        <TextBlock Grid.Row="1" Grid.Column="0"
-                                   Text="{x:Static example:RS.HistoricalControlsPageView_String}"
-                                   VerticalAlignment="Center" />
-                        <TextBox Grid.Row="1" Grid.Column="2"
-                                 Text="{Binding StringPropWithoutValidation.ViewValue.Value, UpdateSourceTrigger=LostFocus}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_String}"
+                            VerticalAlignment="Center"
+                        />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Text="{Binding StringPropWithoutValidation.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                        />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0"
-                                   Text="{x:Static example:RS.HistoricalControlsPageView_Toggle}"
-                                   VerticalAlignment="Center" />
-                        <Button Grid.Row="2" Grid.Column="2"
-                                Content="{Binding IsTurnedOn.ViewValue.Value}"
-                                Command="{CompiledBinding TurnOn}" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_Toggle}"
+                            VerticalAlignment="Center"
+                        />
+                        <Button
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            Content="{Binding IsTurnedOn.ViewValue.Value}"
+                            Command="{CompiledBinding TurnOn}"
+                        />
 
-                        <TextBlock Grid.Row="3" Grid.Column="0"
-                                   Text="{x:Static example:RS.HistoricalControlsPageView_GeoPoint}"
-                                   VerticalAlignment="Center" />
-                        <Grid Grid.Row="3" Grid.Column="2" ColumnDefinitions="*,*,*" ColumnSpacing="8">
-                            <TextBox Grid.Column="0" HorizontalAlignment="Stretch"
-                                     Text="{Binding GeoPointProperty.Latitude.ViewValue.Value, UpdateSourceTrigger=LostFocus}" />
-                            <TextBox Grid.Column="1" HorizontalAlignment="Stretch"
-                                     Text="{Binding GeoPointProperty.Longitude.ViewValue.Value, UpdateSourceTrigger=LostFocus}" />
-                            <TextBox Grid.Column="2" HorizontalAlignment="Stretch"
-                                     Text="{Binding GeoPointProperty.Altitude.ViewValue.Value, UpdateSourceTrigger=LostFocus}" />
+                        <TextBlock
+                            Grid.Row="3"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_GeoPoint}"
+                            VerticalAlignment="Center"
+                        />
+                        <Grid
+                            Grid.Row="3"
+                            Grid.Column="2"
+                            ColumnDefinitions="*,*,*"
+                            ColumnSpacing="8"
+                        >
+                            <TextBox
+                                Grid.Column="0"
+                                HorizontalAlignment="Stretch"
+                                Text="{Binding GeoPointProperty.Latitude.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                            />
+                            <TextBox
+                                Grid.Column="1"
+                                HorizontalAlignment="Stretch"
+                                Text="{Binding GeoPointProperty.Longitude.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                            />
+                            <TextBox
+                                Grid.Column="2"
+                                HorizontalAlignment="Stretch"
+                                Text="{Binding GeoPointProperty.Altitude.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                            />
                         </Grid>
-                        
-                        <TextBlock Grid.Row="4" Grid.Column="0"
-                                   Text="{x:Static example:RS.HistoricalControlsPageView_Enum}"
-                                   VerticalAlignment="Center" />
-                        <Grid Grid.Row="4" Grid.Column="2" ColumnDefinitions="*,*" ColumnSpacing="8">
-                            <ComboBox Grid.Column="0"
-                                      ItemsSource="{Binding TagTypeProp.EnumItems}"
-                                      SelectedItem="{Binding TagTypeProp.ViewValue.Value, Mode=TwoWay}"
-                                      HorizontalAlignment="Stretch">
+
+                        <TextBlock
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_Enum}"
+                            VerticalAlignment="Center"
+                        />
+                        <Grid
+                            Grid.Row="4"
+                            Grid.Column="2"
+                            ColumnDefinitions="*,*"
+                            ColumnSpacing="8"
+                        >
+                            <ComboBox
+                                Grid.Column="0"
+                                ItemsSource="{Binding TagTypeProp.EnumItems}"
+                                SelectedItem="{Binding TagTypeProp.ViewValue.Value, Mode=TwoWay}"
+                                HorizontalAlignment="Stretch"
+                            >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding}" VerticalAlignment="Center" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <ComboBox Grid.Column="1"
-                                      ItemsSource="{Binding AsvColorKindProp.EnumItems}"
-                                      SelectedItem="{Binding AsvColorKindProp.ViewValue.Value, Mode=TwoWay}"
-                                      HorizontalAlignment="Stretch">
+                            <ComboBox
+                                Grid.Column="1"
+                                ItemsSource="{Binding AsvColorKindProp.EnumItems}"
+                                SelectedItem="{Binding AsvColorKindProp.ViewValue.Value, Mode=TwoWay}"
+                                HorizontalAlignment="Stretch"
+                            >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <TextBlock Text="{Binding}" VerticalAlignment="Center" />
@@ -94,28 +160,47 @@
                 </StackPanel>
             </Border>
 
-            <Border Grid.Column="2"
-                    Padding="16"
-                    Background="{DynamicResource SystemRegionBrush}"
-                    CornerRadius="6">
+            <Border
+                Grid.Column="2"
+                Padding="16"
+                Background="{DynamicResource SystemRegionBrush}"
+                CornerRadius="6"
+            >
                 <StackPanel Spacing="10">
-                    <TextBlock Classes="h2" Text="{x:Static example:RS.HistoricalControlsPageView_Validation}" />
+                    <TextBlock
+                        Classes="h2"
+                        Text="{x:Static example:RS.HistoricalControlsPageView_Validation}"
+                    />
                     <Grid ColumnDefinitions="Auto,8,*" RowDefinitions="Auto,Auto" RowSpacing="8">
-                        <TextBlock Grid.Row="0" Grid.Column="0"
-                                   Text="{x:Static example:RS.HistoricalControlsPageView_Rules_One}"
-                                   VerticalAlignment="Center" />
-                        <TextBox Grid.Row="0" Grid.Column="2"
-                                 Text="{Binding StringPropWithOneValidation.ViewValue.Value, UpdateSourceTrigger=LostFocus}" />
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_Rules_One}"
+                            VerticalAlignment="Center"
+                        />
+                        <TextBox
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Text="{Binding StringPropWithOneValidation.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                        />
 
-                        <TextBlock Grid.Row="1" Grid.Column="0"
-                                   Text="{x:Static example:RS.HistoricalControlsPageView_Rules_Many}"
-                                   VerticalAlignment="Center" />
-                        <TextBox Grid.Row="1" Grid.Column="2"
-                                 Text="{Binding StringPropWithManyValidations.ViewValue.Value, UpdateSourceTrigger=LostFocus}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_Rules_Many}"
+                            VerticalAlignment="Center"
+                        />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="2"
+                            Text="{Binding StringPropWithManyValidations.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                        />
                     </Grid>
-                    <TextBlock Text="{x:Static example:RS.HistoricalControlsPageView_Rules_Description}"
-                               TextWrapping="Wrap"
-                               Opacity="0.75" />
+                    <TextBlock
+                        Text="{x:Static example:RS.HistoricalControlsPageView_Rules_Description}"
+                        TextWrapping="Wrap"
+                        Opacity="0.75"
+                    />
                 </StackPanel>
             </Border>
         </Grid>

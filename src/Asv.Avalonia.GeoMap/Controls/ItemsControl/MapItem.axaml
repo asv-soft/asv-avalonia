@@ -1,90 +1,116 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia.GeoMap"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia.GeoMap"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+>
     <Design.PreviewWith>
         <WrapPanel Width="200" Height="100">
-            <controls:MapItem Rotation="0" IsSelected="True" CenterY="{controls:VerticalOffset Bottom, 3}" >
-                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker"  />
-            </controls:MapItem>    
-            <controls:MapItem Rotation="0" CenterY="{controls:VerticalOffset Bottom, 3}" >
-                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker"  />
+            <controls:MapItem
+                Rotation="0"
+                IsSelected="True"
+                CenterY="{controls:VerticalOffset Bottom, 3}"
+            >
+                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker" />
             </controls:MapItem>
-            <controls:MapItem Rotation="45" CenterX="{controls:HorizontalOffset Center}" CenterY="{controls:VerticalOffset Center}" >
-                <avalonia:MaterialIcon Width="40" Height="40" Kind="Navigation"  />
+            <controls:MapItem Rotation="0" CenterY="{controls:VerticalOffset Bottom, 3}">
+                <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker" />
+            </controls:MapItem>
+            <controls:MapItem
+                Rotation="45"
+                CenterX="{controls:HorizontalOffset Center}"
+                CenterY="{controls:VerticalOffset Center}"
+            >
+                <avalonia:MaterialIcon Width="40" Height="40" Kind="Navigation" />
             </controls:MapItem>
         </WrapPanel>
-        
     </Design.PreviewWith>
-    
+
     <Style Selector="controls|MapItem">
-        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="Focusable" Value="True" />
         <Setter Property="Pen">
-            <Pen Brush="Blue" Thickness="1"/>
+            <Pen Brush="Blue" Thickness="1" />
         </Setter>
         <Style Selector="^ Path">
-            <Setter Property="StrokeThickness" Value="0.5"/>
-            <Setter Property="Stroke" Value="BlueViolet"/>
+            <Setter Property="StrokeThickness" Value="0.5" />
+            <Setter Property="Stroke" Value="BlueViolet" />
         </Style>
         <Style Selector="^:pointerover Path">
-            <Setter Property="StrokeThickness" Value="1"/>
-            <Setter Property="Stroke" Value="BlueViolet"/>
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="BlueViolet" />
         </Style>
         <Style Selector="^:selected /template/ Rectangle#PART_Selection">
-            <Setter Property="Stroke" Value="Violet"/>
-            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="Stroke" Value="Violet" />
+            <Setter Property="StrokeThickness" Value="1" />
         </Style>
         <Style Selector="^:pointerover:not(:selected) /template/ Rectangle#PART_Selection">
-            <Setter Property="StrokeDashArray" Value="5, 2"/>
-            <Setter Property="Stroke" Value="Violet"/>
-            <Setter Property="StrokeThickness" Value="1"/>
+            <Setter Property="StrokeDashArray" Value="5, 2" />
+            <Setter Property="Stroke" Value="Violet" />
+            <Setter Property="StrokeThickness" Value="1" />
         </Style>
         <Style Selector="^:pointerover:selected /template/ Rectangle#PART_Selection">
-            <Setter Property="StrokeDashArray" Value="{x:Null}"/>
-            <Setter Property="Stroke" Value="Violet"/>
-            <Setter Property="StrokeThickness" Value="2"/>
+            <Setter Property="StrokeDashArray" Value="{x:Null}" />
+            <Setter Property="Stroke" Value="Violet" />
+            <Setter Property="StrokeThickness" Value="2" />
         </Style>
         <!-- Set Defaults -->
-        <Setter Property="controls:MapCanvas.Location" Value="{Binding Location, RelativeSource={RelativeSource Self}}"/>
-        <Setter Property="controls:MapCanvas.CenterX" Value="{Binding CenterX, RelativeSource={RelativeSource Self}}"/>
-        <Setter Property="controls:MapCanvas.CenterY" Value="{Binding CenterY, RelativeSource={RelativeSource Self}}"/>
+        <Setter
+            Property="controls:MapCanvas.Location"
+            Value="{Binding Location, RelativeSource={RelativeSource Self}}"
+        />
+        <Setter
+            Property="controls:MapCanvas.CenterX"
+            Value="{Binding CenterX, RelativeSource={RelativeSource Self}}"
+        />
+        <Setter
+            Property="controls:MapCanvas.CenterY"
+            Value="{Binding CenterY, RelativeSource={RelativeSource Self}}"
+        />
         <Setter Property="Template">
             <ControlTemplate>
                 <Panel>
-                    <ContentPresenter Name="PART_ContentPresenter"
-                                      Background="{TemplateBinding Background}"
-                                      BorderBrush="{TemplateBinding BorderBrush}"
-                                      BorderThickness="{TemplateBinding BorderThickness}"
-                                      CornerRadius="{TemplateBinding CornerRadius}"
-                                      ContentTemplate="{TemplateBinding ContentTemplate}"
-                                      Content="{TemplateBinding Content}"
-                                      Padding="{TemplateBinding Padding}"
-                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                      RenderTransformOrigin="0,0">
-                        
+                    <ContentPresenter
+                        Name="PART_ContentPresenter"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        Content="{TemplateBinding Content}"
+                        Padding="{TemplateBinding Padding}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        RenderTransformOrigin="0,0"
+                    >
                         <ContentPresenter.RenderTransform>
-                            <RotateTransform CenterX="{Binding RotationCenterX, RelativeSource={RelativeSource TemplatedParent}}" 
-                                             CenterY="{Binding RotationCenterY, RelativeSource={RelativeSource TemplatedParent}}"
-                                             Angle="{Binding Rotation, RelativeSource={RelativeSource TemplatedParent}}"/>
+                            <RotateTransform
+                                CenterX="{Binding RotationCenterX, RelativeSource={RelativeSource TemplatedParent}}"
+                                CenterY="{Binding RotationCenterY, RelativeSource={RelativeSource TemplatedParent}}"
+                                Angle="{Binding Rotation, RelativeSource={RelativeSource TemplatedParent}}"
+                            />
                         </ContentPresenter.RenderTransform>
                     </ContentPresenter>
-                    <Rectangle x:Name="PART_Selection" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-                    
+                    <Rectangle
+                        x:Name="PART_Selection"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                    />
+
                     <!--<TextBlock FontSize="8" Text="{Binding RotationCenterX, RelativeSource={RelativeSource TemplatedParent}}"/>
                     <TextBlock FontSize="8" HorizontalAlignment="Right" Text="{Binding RotationCenterY, RelativeSource={RelativeSource TemplatedParent}}"/>-->
-                    
+
                     <Canvas HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                        <Ellipse Stroke="Violet" StrokeThickness="1"
-                                               Canvas.Left="{Binding RotationCenterX, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static avalonia1:AddDoubleConverter.Instance}, ConverterParameter=-3}"
-                                               Canvas.Top="{Binding RotationCenterY, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static avalonia1:AddDoubleConverter.Instance}, ConverterParameter=-3}"
-                                               Width="6" Height="6"
-                                               />
-                        
+                        <Ellipse
+                            Stroke="Violet"
+                            StrokeThickness="1"
+                            Canvas.Left="{Binding RotationCenterX, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static avalonia1:AddDoubleConverter.Instance}, ConverterParameter=-3}"
+                            Canvas.Top="{Binding RotationCenterY, RelativeSource={RelativeSource TemplatedParent}, Converter={x:Static avalonia1:AddDoubleConverter.Instance}, ConverterParameter=-3}"
+                            Width="6"
+                            Height="6"
+                        />
                     </Canvas>
                 </Panel>
-                
             </ControlTemplate>
         </Setter>
     </Style>

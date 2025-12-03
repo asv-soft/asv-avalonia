@@ -79,16 +79,14 @@ public static class ContainerConfigurationMixin
         }
         else
         {
-            exceptionTypes.AddRange(
-                [
-                    typeof(LogViewerViewModel),
-                    typeof(LogViewerView),
-                    typeof(HomePageLogViewerExtension),
-                    typeof(OpenLogViewerCommand),
-                    typeof(ILogReaderService),
-                    typeof(LogReaderService),
-                ]
-            );
+            exceptionTypes.AddRange([
+                typeof(LogViewerViewModel),
+                typeof(LogViewerView),
+                typeof(HomePageLogViewerExtension),
+                typeof(OpenLogViewerCommand),
+                typeof(ILogReaderService),
+                typeof(LogReaderService),
+            ]);
         }
 
         var systemTypes = typeof(SystemModule).Assembly.GetTypes().Except(exceptionTypes);

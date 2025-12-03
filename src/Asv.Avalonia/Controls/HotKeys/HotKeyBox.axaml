@@ -1,39 +1,41 @@
 ﻿<Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:Asv.Avalonia">
+    xmlns:local="clr-namespace:Asv.Avalonia"
+>
     <Design.PreviewWith>
         <Grid ColumnDefinitions="*,8,*" Height="70">
             <ThemeVariantScope Grid.Column="0" RequestedThemeVariant="Dark">
-                <Border Padding="20" 
-                        Background="{DynamicResource SystemBaseHighColor}">
-                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C;A"/>
+                <Border Padding="20" Background="{DynamicResource SystemBaseHighColor}">
+                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C;A" />
                 </Border>
             </ThemeVariantScope>
-        
+
             <ThemeVariantScope Grid.Column="2" RequestedThemeVariant="Light">
-                <Border Padding="20" 
-                        Background="{DynamicResource SystemBaseHighColor}">
-                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C;A"/>
+                <Border Padding="20" Background="{DynamicResource SystemBaseHighColor}">
+                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C;A" />
                 </Border>
             </ThemeVariantScope>
         </Grid>
-        
     </Design.PreviewWith>
 
     <Style Selector="local|HotKeyBox">
-        <Setter Property="Focusable" Value="True"/>
+        <Setter Property="Focusable" Value="True" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Border Padding="6"
-                        CornerRadius="4"
-                        BorderThickness="2"
-                        BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
-                        Background="{DynamicResource SystemBaseHighColor}">
-                    <TextBlock x:Name="PART_Text"
-                               Foreground="{DynamicResource SystemAltHighColor}"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"/>
+                <Border
+                    Padding="6"
+                    CornerRadius="4"
+                    BorderThickness="2"
+                    BorderBrush="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                    Background="{DynamicResource SystemBaseHighColor}"
+                >
+                    <TextBlock
+                        x:Name="PART_Text"
+                        Foreground="{DynamicResource SystemAltHighColor}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                    />
                 </Border>
             </ControlTemplate>
         </Setter>

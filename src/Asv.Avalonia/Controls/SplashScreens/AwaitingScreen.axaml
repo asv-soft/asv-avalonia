@@ -1,17 +1,31 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:avalonia1="clr-namespace:Asv.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia"
+>
     <Design.PreviewWith>
         <Grid ColumnDefinitions="*,*">
             <ThemeVariantScope Grid.Column="0" RequestedThemeVariant="Dark">
                 <Border Background="{DynamicResource SystemRegionBrush}">
-                    <avalonia1:AwaitingScreen Header="Connecting" Description="Connect to the device..." Background="{DynamicResource SystemRegionBrush}" Width="500" Height="500" />    
+                    <avalonia1:AwaitingScreen
+                        Header="Connecting"
+                        Description="Connect to the device..."
+                        Background="{DynamicResource SystemRegionBrush}"
+                        Width="500"
+                        Height="500"
+                    />
                 </Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="1" RequestedThemeVariant="Light">
                 <Border Background="{DynamicResource SystemRegionBrush}">
-                    <avalonia1:AwaitingScreen Header="Connecting" Description="Connect to the device..." Background="{DynamicResource SystemRegionBrush}" Width="500" Height="500" />    
+                    <avalonia1:AwaitingScreen
+                        Header="Connecting"
+                        Description="Connect to the device..."
+                        Background="{DynamicResource SystemRegionBrush}"
+                        Width="500"
+                        Height="500"
+                    />
                 </Border>
             </ThemeVariantScope>
         </Grid>
@@ -19,38 +33,69 @@
 
     <Style Selector="avalonia1|AwaitingScreen">
         <!-- Set Defaults -->
-        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="Background" Value="{DynamicResource SystemRegionBrush}"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="{DynamicResource SystemRegionBrush}" />
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid VerticalAlignment="Center" HorizontalAlignment="Center" ColumnDefinitions="Auto,8,*" RowDefinitions="Auto,4,Auto,15,*">
-                        <TextBlock Grid.Column="2" Grid.Row="0" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="{TemplateBinding Header}"/>
-                        <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{TemplateBinding Description}"/>
-                        <avalonia:MaterialIcon 
-                            Foreground="{DynamicResource AsvForegroundSuccessBrush}" 
-                            Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" 
-                            Kind="{TemplateBinding Icon}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="55" Height="55">
-                            <avalonia:MaterialIcon.Styles>
-                                <Style Selector="avalonia|MaterialIcon">
-                                    <Style.Animations>
-                                        <Animation IterationCount="Infinite" Duration="0:0:3"> 
-                                            <KeyFrame Cue="0%">
-                                                <Setter Property="Opacity" Value="0.1"/>
-                                            </KeyFrame>
-                                            <KeyFrame Cue="50%">
-                                                <Setter Property="Opacity" Value="1.0"/>
-                                            </KeyFrame>
-                                            <KeyFrame Cue="100%">
-                                                <Setter Property="Opacity" Value="0.1"/>
-                                            </KeyFrame>
-                                        </Animation>
-                                    </Style.Animations>
-                                </Style>
-                            </avalonia:MaterialIcon.Styles>
-                        </avalonia:MaterialIcon>
-                        <ProgressBar VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" IsIndeterminate="True"/>    
-                    </Grid>
+                <Grid
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    ColumnDefinitions="Auto,8,*"
+                    RowDefinitions="Auto,4,Auto,15,*"
+                >
+                    <TextBlock
+                        Grid.Column="2"
+                        Grid.Row="0"
+                        FontSize="30"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Text="{TemplateBinding Header}"
+                    />
+                    <TextBlock
+                        Grid.Column="2"
+                        Grid.Row="2"
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Left"
+                        Text="{TemplateBinding Description}"
+                    />
+                    <avalonia:MaterialIcon
+                        Foreground="{DynamicResource AsvForegroundSuccessBrush}"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Grid.RowSpan="5"
+                        Kind="{TemplateBinding Icon}"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Width="55"
+                        Height="55"
+                    >
+                        <avalonia:MaterialIcon.Styles>
+                            <Style Selector="avalonia|MaterialIcon">
+                                <Style.Animations>
+                                    <Animation IterationCount="Infinite" Duration="0:0:3">
+                                        <KeyFrame Cue="0%">
+                                            <Setter Property="Opacity" Value="0.1" />
+                                        </KeyFrame>
+                                        <KeyFrame Cue="50%">
+                                            <Setter Property="Opacity" Value="1.0" />
+                                        </KeyFrame>
+                                        <KeyFrame Cue="100%">
+                                            <Setter Property="Opacity" Value="0.1" />
+                                        </KeyFrame>
+                                    </Animation>
+                                </Style.Animations>
+                            </Style>
+                        </avalonia:MaterialIcon.Styles>
+                    </avalonia:MaterialIcon>
+                    <ProgressBar
+                        VerticalAlignment="Bottom"
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        IsIndeterminate="True"
+                    />
+                </Grid>
             </ControlTemplate>
         </Setter>
     </Style>

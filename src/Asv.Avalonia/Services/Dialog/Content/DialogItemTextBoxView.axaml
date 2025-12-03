@@ -1,16 +1,19 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="400"
-             x:Class="Asv.Avalonia.DialogItemTextBoxView"
-             x:DataType="avalonia:DialogItemTextBoxViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="400"
+    x:Class="Asv.Avalonia.DialogItemTextBoxView"
+    x:DataType="avalonia:DialogItemTextBoxViewModel"
+>
     <Design.DataContext>
         <avalonia:DialogItemTextBoxViewModel />
     </Design.DataContext>
     <StackPanel>
-        <TextBlock Text="{CompiledBinding Message}"/>
-        <TextBox Text="{CompiledBinding Input.Value}"/>
+        <TextBlock Text="{CompiledBinding Message}" />
+        <TextBox Text="{CompiledBinding Input.Value}" />
     </StackPanel>
 </UserControl>

@@ -1,27 +1,57 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-        xmlns:avalonia1="clr-namespace:Asv.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia"
+>
     <Design.PreviewWith>
         <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
             <ThemeVariantScope Grid.Column="0" Grid.Row="0" RequestedThemeVariant="Dark">
                 <Border Background="{DynamicResource SystemRegionBrush}">
-                    <avalonia1:ActionScreen IsExecuting="True" Header="Turn ON" Description="Turn on device" Background="{DynamicResource SystemRegionBrush}" Width="500" Height="250" />    
+                    <avalonia1:ActionScreen
+                        IsExecuting="True"
+                        Header="Turn ON"
+                        Description="Turn on device"
+                        Background="{DynamicResource SystemRegionBrush}"
+                        Width="500"
+                        Height="250"
+                    />
                 </Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="1" Grid.Row="0" RequestedThemeVariant="Light">
                 <Border Background="{DynamicResource SystemRegionBrush}">
-                    <avalonia1:ActionScreen IsExecuting="True"  Header="Turn ON" Description="Turn on device" Background="{DynamicResource SystemRegionBrush}" Width="500" Height="250" />    
+                    <avalonia1:ActionScreen
+                        IsExecuting="True"
+                        Header="Turn ON"
+                        Description="Turn on device"
+                        Background="{DynamicResource SystemRegionBrush}"
+                        Width="500"
+                        Height="250"
+                    />
                 </Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="0" Grid.Row="1" RequestedThemeVariant="Dark">
                 <Border Background="{DynamicResource SystemRegionBrush}">
-                    <avalonia1:ActionScreen IsExecuting="False" Header="Turn ON" Description="Turn on device" Background="{DynamicResource SystemRegionBrush}" Width="500" Height="250" />    
+                    <avalonia1:ActionScreen
+                        IsExecuting="False"
+                        Header="Turn ON"
+                        Description="Turn on device"
+                        Background="{DynamicResource SystemRegionBrush}"
+                        Width="500"
+                        Height="250"
+                    />
                 </Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="1" Grid.Row="1" RequestedThemeVariant="Light">
                 <Border Background="{DynamicResource SystemRegionBrush}">
-                    <avalonia1:ActionScreen IsExecuting="False"  Header="Turn ON" Description="Turn on device" Background="{DynamicResource SystemRegionBrush}" Width="500" Height="250" />    
+                    <avalonia1:ActionScreen
+                        IsExecuting="False"
+                        Header="Turn ON"
+                        Description="Turn on device"
+                        Background="{DynamicResource SystemRegionBrush}"
+                        Width="500"
+                        Height="250"
+                    />
                 </Border>
             </ThemeVariantScope>
         </Grid>
@@ -31,17 +61,54 @@
         <!-- Set Defaults -->
         <Setter Property="Template">
             <ControlTemplate>
-                <Button IsEnabled="{TemplateBinding IsExecuting, Converter={x:Static BoolConverters.Not}}" Command="{TemplateBinding Command}" CommandParameter="{TemplateBinding CommandParameter}" HorizontalAlignment="Center" VerticalAlignment="Center" >
-                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" ColumnDefinitions="Auto,8,*" RowDefinitions="Auto,4,Auto,15,*">
-                        <TextBlock Grid.Column="2" Grid.Row="0" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="{TemplateBinding Header}"/>
-                        <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{TemplateBinding Description}"/>
-                        <avalonia:MaterialIcon 
-                            Foreground="{DynamicResource AsvForegroundSuccessBrush}" 
-                            Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" 
-                            Kind="{TemplateBinding Icon}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="65" Height="65">
-                        </avalonia:MaterialIcon>
-                        <ProgressBar IsVisible="{TemplateBinding IsExecuting}" VerticalAlignment="Bottom" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" IsIndeterminate="True"/>    
-                    </Grid> 
+                <Button
+                    IsEnabled="{TemplateBinding IsExecuting, Converter={x:Static BoolConverters.Not}}"
+                    Command="{TemplateBinding Command}"
+                    CommandParameter="{TemplateBinding CommandParameter}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                >
+                    <Grid
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        ColumnDefinitions="Auto,8,*"
+                        RowDefinitions="Auto,4,Auto,15,*"
+                    >
+                        <TextBlock
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            FontSize="30"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Text="{TemplateBinding Header}"
+                        />
+                        <TextBlock
+                            Grid.Column="2"
+                            Grid.Row="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Text="{TemplateBinding Description}"
+                        />
+                        <avalonia:MaterialIcon
+                            Foreground="{DynamicResource AsvForegroundSuccessBrush}"
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.RowSpan="5"
+                            Kind="{TemplateBinding Icon}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Width="65"
+                            Height="65"
+                        ></avalonia:MaterialIcon>
+                        <ProgressBar
+                            IsVisible="{TemplateBinding IsExecuting}"
+                            VerticalAlignment="Bottom"
+                            Grid.Row="4"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="3"
+                            IsIndeterminate="True"
+                        />
+                    </Grid>
                 </Button>
             </ControlTemplate>
         </Setter>

@@ -1,6 +1,7 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
     <!-- Status colors -->
     <Color x:Key="AsvForegroundErrorColor">#A21E24</Color>
     <Color x:Key="AsvBackgroundErrorColor">#FDECEA</Color>
@@ -12,64 +13,84 @@
     <Color x:Key="AsvBackgroundUnknownColor">#F5F5F5</Color>
 
     <!-- INFO PALETTE – 20 colors (NO red/orange/yellow/green conflict) -->
-    <Color x:Key="AsvForegroundInfo1Color">#2553A3</Color>   <!-- Deep Blue -->
+    <Color x:Key="AsvForegroundInfo1Color">#2553A3</Color>
+    <!-- Deep Blue -->
     <Color x:Key="AsvBackgroundInfo1Color">#E7ECFC</Color>
 
-    <Color x:Key="AsvForegroundInfo2Color">#6E3E99</Color>   <!-- Purple -->
+    <Color x:Key="AsvForegroundInfo2Color">#6E3E99</Color>
+    <!-- Purple -->
     <Color x:Key="AsvBackgroundInfo2Color">#F2E9FA</Color>
 
-    <Color x:Key="AsvForegroundInfo3Color">#1E9898</Color>   <!-- Teal Cyan -->
+    <Color x:Key="AsvForegroundInfo3Color">#1E9898</Color>
+    <!-- Teal Cyan -->
     <Color x:Key="AsvBackgroundInfo3Color">#E5FAFA</Color>
 
-    <Color x:Key="AsvForegroundInfo4Color">#8E44AD</Color>   <!-- Violet -->
+    <Color x:Key="AsvForegroundInfo4Color">#8E44AD</Color>
+    <!-- Violet -->
     <Color x:Key="AsvBackgroundInfo4Color">#F1E8F9</Color>
 
-    <Color x:Key="AsvForegroundInfo5Color">#3498DB</Color>   <!-- Bright Sky Blue -->
+    <Color x:Key="AsvForegroundInfo5Color">#3498DB</Color>
+    <!-- Bright Sky Blue -->
     <Color x:Key="AsvBackgroundInfo5Color">#EBF4FD</Color>
 
-    <Color x:Key="AsvForegroundInfo6Color">#9B59B6</Color>   <!-- Amethyst -->
+    <Color x:Key="AsvForegroundInfo6Color">#9B59B6</Color>
+    <!-- Amethyst -->
     <Color x:Key="AsvBackgroundInfo6Color">#F3EAF9</Color>
 
-    <Color x:Key="AsvForegroundInfo7Color">#2980B9</Color>   <!-- Blue -->
+    <Color x:Key="AsvForegroundInfo7Color">#2980B9</Color>
+    <!-- Blue -->
     <Color x:Key="AsvBackgroundInfo7Color">#E8F0FA</Color>
 
-    <Color x:Key="AsvForegroundInfo8Color">#5f4b8b</Color>   <!-- Dark Lavender -->
+    <Color x:Key="AsvForegroundInfo8Color">#5f4b8b</Color>
+    <!-- Dark Lavender -->
     <Color x:Key="AsvBackgroundInfo8Color">#EEEBF7</Color>
 
-    <Color x:Key="AsvForegroundInfo9Color">#16A085</Color>   <!-- Turquoise -->
+    <Color x:Key="AsvForegroundInfo9Color">#16A085</Color>
+    <!-- Turquoise -->
     <Color x:Key="AsvBackgroundInfo9Color">#E5F8F6</Color>
 
-    <Color x:Key="AsvForegroundInfo10Color">#8e67c4</Color>  <!-- Soft Purple -->
+    <Color x:Key="AsvForegroundInfo10Color">#8e67c4</Color>
+    <!-- Soft Purple -->
     <Color x:Key="AsvBackgroundInfo10Color">#F1EDFA</Color>
 
-    <Color x:Key="AsvForegroundInfo11Color">#1ABC9C</Color>  <!-- Sea Green (cold tone) -->
+    <Color x:Key="AsvForegroundInfo11Color">#1ABC9C</Color>
+    <!-- Sea Green (cold tone) -->
     <Color x:Key="AsvBackgroundInfo11Color">#E5F9F7</Color>
 
-    <Color x:Key="AsvForegroundInfo12Color">#7F55B8</Color>  <!-- Indigo Purple -->
+    <Color x:Key="AsvForegroundInfo12Color">#7F55B8</Color>
+    <!-- Indigo Purple -->
     <Color x:Key="AsvBackgroundInfo12Color">#F0E9F9</Color>
 
-    <Color x:Key="AsvForegroundInfo13Color">#2E86C1</Color>  <!-- Ocean Blue -->
+    <Color x:Key="AsvForegroundInfo13Color">#2E86C1</Color>
+    <!-- Ocean Blue -->
     <Color x:Key="AsvBackgroundInfo13Color">#E9F2FC</Color>
 
-    <Color x:Key="AsvForegroundInfo14Color">#B33771</Color>  <!-- Deep Rose -->
+    <Color x:Key="AsvForegroundInfo14Color">#B33771</Color>
+    <!-- Deep Rose -->
     <Color x:Key="AsvBackgroundInfo14Color">#FAE8F2</Color>
 
-    <Color x:Key="AsvForegroundInfo15Color">#6C5CE7</Color>  <!-- Electric Violet -->
+    <Color x:Key="AsvForegroundInfo15Color">#6C5CE7</Color>
+    <!-- Electric Violet -->
     <Color x:Key="AsvBackgroundInfo15Color">#EFEBFC</Color>
 
-    <Color x:Key="AsvForegroundInfo16Color">#00A8CC</Color>  <!-- Bright Azure -->
+    <Color x:Key="AsvForegroundInfo16Color">#00A8CC</Color>
+    <!-- Bright Azure -->
     <Color x:Key="AsvBackgroundInfo16Color">#E5F5FC</Color>
 
-    <Color x:Key="AsvForegroundInfo17Color">#9C6ADE</Color>  <!-- Light Purple -->
+    <Color x:Key="AsvForegroundInfo17Color">#9C6ADE</Color>
+    <!-- Light Purple -->
     <Color x:Key="AsvBackgroundInfo17Color">#F3EDFC</Color>
 
-    <Color x:Key="AsvForegroundInfo18Color">#22A7A7</Color>  <!-- Cool Teal -->
+    <Color x:Key="AsvForegroundInfo18Color">#22A7A7</Color>
+    <!-- Cool Teal -->
     <Color x:Key="AsvBackgroundInfo18Color">#E5FBFB</Color>
 
-    <Color x:Key="AsvForegroundInfo19Color">#4D5DAA</Color>  <!-- Navy Blue -->
+    <Color x:Key="AsvForegroundInfo19Color">#4D5DAA</Color>
+    <!-- Navy Blue -->
     <Color x:Key="AsvBackgroundInfo19Color">#E9EBF8</Color>
 
-    <Color x:Key="AsvForegroundInfo20Color">#A55EEA</Color>  <!-- Vivid Orchid -->
+    <Color x:Key="AsvForegroundInfo20Color">#A55EEA</Color>
+    <!-- Vivid Orchid -->
     <Color x:Key="AsvBackgroundInfo20Color">#F5EDFE</Color>
 
     <Color x:Key="AsvPopupCommonColor">#C3C3C3</Color>

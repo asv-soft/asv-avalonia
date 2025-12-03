@@ -1,163 +1,254 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                    xmlns:asv="clr-namespace:Asv.Avalonia"
-                    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-                    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:asv="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+>
     <Design.PreviewWith>
         <asv:ItemsList />
     </Design.PreviewWith>
-    
+
     <ControlTheme x:Key="{x:Type asv:ItemsList}" TargetType="asv:ItemsList">
         <Setter Property="Template">
             <ControlTemplate>
                 <DockPanel>
                     <DockPanel DockPanel.Dock="Top">
-                        <TextBlock Margin="4" Classes="h1" Text="{x:Static asv:RS.HomePageView_DeviceBrowser_Title}" />
+                        <TextBlock
+                            Margin="4"
+                            Classes="h1"
+                            Text="{x:Static asv:RS.HomePageView_DeviceBrowser_Title}"
+                        />
                     </DockPanel>
-                    
+
                     <Grid ColumnDefinitions="*,10,2*">
-                        <ListBox x:Name="PART_DeviceList"
-                                 Background="Transparent"
-                                 ItemsSource="{TemplateBinding ItemsSource}"
-                                 CornerRadius="{StaticResource ControlCornerRadius}"
-                                 Grid.Column="0">
+                        <ListBox
+                            x:Name="PART_DeviceList"
+                            Background="Transparent"
+                            ItemsSource="{TemplateBinding ItemsSource}"
+                            CornerRadius="{StaticResource ControlCornerRadius}"
+                            Grid.Column="0"
+                        >
                             <ListBox.ItemTemplate>
                                 <DataTemplate DataType="asv:HomePageItemDecorator">
                                     <Grid RowDefinitions="25, 0, *" ColumnDefinitions="40, 8, *">
-                                        <avalonia:MaterialIcon Classes="big "
-                                                               asv:AsvPallete.Color="{Binding HomePageItem.IconColor}"
-                                                               Kind="{Binding HomePageItem.Icon}" 
-                                                               Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
-                                        <TextBlock Classes="h1"
-                                                   Text="{Binding HomePageItem.Header}"
-                                                   VerticalAlignment="Bottom" 
-                                                   Grid.Row="0" Grid.Column="2"/>
-                                        <TextBlock Classes="description"
-                                                   Text="{Binding HomePageItem.Description}"
-                                                   VerticalAlignment="Top" 
-                                                   Grid.Row="2" Grid.Column="2"/>
+                                        <avalonia:MaterialIcon
+                                            Classes="big "
+                                            asv:AsvPallete.Color="{Binding HomePageItem.IconColor}"
+                                            Kind="{Binding HomePageItem.Icon}"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.RowSpan="3"
+                                        />
+                                        <TextBlock
+                                            Classes="h1"
+                                            Text="{Binding HomePageItem.Header}"
+                                            VerticalAlignment="Bottom"
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                        />
+                                        <TextBlock
+                                            Classes="description"
+                                            Text="{Binding HomePageItem.Description}"
+                                            VerticalAlignment="Top"
+                                            Grid.Row="2"
+                                            Grid.Column="2"
+                                        />
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
 
-                        <Rectangle MaxHeight="100"
-                                   Fill="{DynamicResource ButtonForegroundDisabled}"
-                                   Width="1"
-                                   VerticalAlignment="Stretch" 
-                                   Grid.Column="1" Grid.Row="0"/>
-                        <avalonia:MaterialIcon Width="15" Height="15"
-                                               Kind="UnfoldMoreVertical"
-                                               Foreground="{DynamicResource  ButtonForegroundDisabled}" 
-                                               Grid.Row="0" Grid.Column="1"/>
-                        
-                        <GridSplitter Width="10"
-                                      VerticalAlignment="Stretch"
-                                      Background="Transparent"
-                                      IsHitTestVisible="True"
-                                      ResizeBehavior="PreviousAndNext" 
-                                      Grid.Column="1" Grid.Row="0"/>
+                        <Rectangle
+                            MaxHeight="100"
+                            Fill="{DynamicResource ButtonForegroundDisabled}"
+                            Width="1"
+                            VerticalAlignment="Stretch"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                        />
+                        <avalonia:MaterialIcon
+                            Width="15"
+                            Height="15"
+                            Kind="UnfoldMoreVertical"
+                            Foreground="{DynamicResource  ButtonForegroundDisabled}"
+                            Grid.Row="0"
+                            Grid.Column="1"
+                        />
+
+                        <GridSplitter
+                            Width="10"
+                            VerticalAlignment="Stretch"
+                            Background="Transparent"
+                            IsHitTestVisible="True"
+                            ResizeBehavior="PreviousAndNext"
+                            Grid.Column="1"
+                            Grid.Row="0"
+                        />
 
                         <ScrollViewer Grid.Column="2">
                             <Panel>
-                                <StackPanel DataContext="{Binding ElementName=PART_DeviceList}"
-                                            IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}"
-                                            Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center"
-                                            Spacing="8">
+                                <StackPanel
+                                    DataContext="{Binding ElementName=PART_DeviceList}"
+                                    IsVisible="{Binding SelectedItem, Converter={x:Static ObjectConverters.IsNull}}"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Spacing="8"
+                                >
                                     <avalonia:MaterialIcon Kind="ArrowBack" />
-                                    <TextBlock VerticalAlignment="Center"
-                                               Text="{x:Static asv:RS.HomePageView_DeviceBrowser_NoneText}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Text="{x:Static asv:RS.HomePageView_DeviceBrowser_NoneText}"
+                                    />
                                 </StackPanel>
-                                <DockPanel IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}"
-                                           DataContext="{Binding SelectedItem, ElementName=PART_DeviceList}"
-                                           x:DataType="asv:HomePageItemDecorator">
-                                    <Grid DockPanel.Dock="Top" RowDefinitions="25, 4, *" ColumnDefinitions="40, 8, *">
-                                        <avalonia:MaterialIcon Classes="big accent"
-                                                               Kind="{Binding HomePageItem.Icon}" 
-                                                               Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
-                                        <TextBlock Classes="h3"
-                                                   Text="{Binding HomePageItem.Header}"
-                                                   VerticalAlignment="Bottom" 
-                                                   Grid.Row="0" Grid.Column="2"/>
-                                        <TextBlock Classes="description"
-                                                   Text="{Binding HomePageItem.Description}"
-                                                   VerticalAlignment="Top" 
-                                                   Grid.Row="2" Grid.Column="2"/>
+                                <DockPanel
+                                    IsVisible="{Binding Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    DataContext="{Binding SelectedItem, ElementName=PART_DeviceList}"
+                                    x:DataType="asv:HomePageItemDecorator"
+                                >
+                                    <Grid
+                                        DockPanel.Dock="Top"
+                                        RowDefinitions="25, 4, *"
+                                        ColumnDefinitions="40, 8, *"
+                                    >
+                                        <avalonia:MaterialIcon
+                                            Classes="big accent"
+                                            Kind="{Binding HomePageItem.Icon}"
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.RowSpan="3"
+                                        />
+                                        <TextBlock
+                                            Classes="h3"
+                                            Text="{Binding HomePageItem.Header}"
+                                            VerticalAlignment="Bottom"
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                        />
+                                        <TextBlock
+                                            Classes="description"
+                                            Text="{Binding HomePageItem.Description}"
+                                            VerticalAlignment="Top"
+                                            Grid.Row="2"
+                                            Grid.Column="2"
+                                        />
                                     </Grid>
-                                    <Separator DockPanel.Dock="Top"
-                                               Padding="0"
-                                               Margin="4"
-                                               HorizontalAlignment="Stretch" />
-                                    <ItemsControl Margin="0,20,0,20"
-                                                  DockPanel.Dock="Top"
-                                                  ItemsSource="{Binding PropertiesView}"
-                                                  Grid.IsSharedSizeScope="True">
+                                    <Separator
+                                        DockPanel.Dock="Top"
+                                        Padding="0"
+                                        Margin="4"
+                                        HorizontalAlignment="Stretch"
+                                    />
+                                    <ItemsControl
+                                        Margin="0,20,0,20"
+                                        DockPanel.Dock="Top"
+                                        ItemsSource="{Binding PropertiesView}"
+                                        Grid.IsSharedSizeScope="True"
+                                    >
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <WrapPanel Orientation="Horizontal" VerticalAlignment="Top"/>
+                                                <WrapPanel
+                                                    Orientation="Horizontal"
+                                                    VerticalAlignment="Top"
+                                                />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
-                                        
+
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
                                                 <Border
                                                     BorderBrush="{DynamicResource SystemListMediumColor}"
                                                     BorderThickness="0,0,1,0"
-                                                    Padding="0,0,8,0" 
-                                                    Margin="0,0,8,0"  
+                                                    Padding="0,0,8,0"
+                                                    Margin="0,0,8,0"
                                                 >
-                                                <Grid>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="20" />
-                                                        <ColumnDefinition Width="8" />
-                                                        <ColumnDefinition SharedSizeGroup="Key" Width="Auto" />
-                                                        <ColumnDefinition Width="8" />
-                                                        <ColumnDefinition SharedSizeGroup="Value" Width="Auto" />
-                                                        <ColumnDefinition Width="20" />
-                                                    </Grid.ColumnDefinitions>
-                                                    <avalonia:MaterialIcon Classes="small"
-                                                                           Kind="{Binding Icon}"
-                                                                           VerticalAlignment="Center" 
-                                                                           Grid.Column="0"/>
-                                                    <TextBlock Text="{Binding Header}"
-                                                               VerticalAlignment="Center" 
-                                                               Grid.Column="2"/>
-                                                    <TextBlock Text="{Binding Description}"
-                                                               VerticalAlignment="Center" 
-                                                               Grid.Column="4"/>
-                                                </Grid>
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="20" />
+                                                            <ColumnDefinition Width="8" />
+                                                            <ColumnDefinition
+                                                                SharedSizeGroup="Key"
+                                                                Width="Auto"
+                                                            />
+                                                            <ColumnDefinition Width="8" />
+                                                            <ColumnDefinition
+                                                                SharedSizeGroup="Value"
+                                                                Width="Auto"
+                                                            />
+                                                            <ColumnDefinition Width="20" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <avalonia:MaterialIcon
+                                                            Classes="small"
+                                                            Kind="{Binding Icon}"
+                                                            VerticalAlignment="Center"
+                                                            Grid.Column="0"
+                                                        />
+                                                        <TextBlock
+                                                            Text="{Binding Header}"
+                                                            VerticalAlignment="Center"
+                                                            Grid.Column="2"
+                                                        />
+                                                        <TextBlock
+                                                            Text="{Binding Description}"
+                                                            VerticalAlignment="Center"
+                                                            Grid.Column="4"
+                                                        />
+                                                    </Grid>
                                                 </Border>
                                             </DataTemplate>
                                         </ItemsControl.ItemTemplate>
                                     </ItemsControl>
-                                    
-                                    <ItemsControl DockPanel.Dock="Top" ItemsSource="{Binding ActionsView}">
+
+                                    <ItemsControl
+                                        DockPanel.Dock="Top"
+                                        ItemsSource="{Binding ActionsView}"
+                                    >
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
-                                                <WrapPanel ItemWidth="250" Orientation="Horizontal" />
+                                                <WrapPanel
+                                                    ItemWidth="250"
+                                                    Orientation="Horizontal"
+                                                />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
                                         <ItemsControl.ItemTemplate>
                                             <DataTemplate>
-                                                <Button HorizontalAlignment="Stretch"
-                                                        Margin="4"
-                                                        Command="{Binding Command}"
-                                                        CommandParameter="{Binding CommandParameter}">
-                                                    <Grid RowDefinitions="25, 2, *"
-                                                          ColumnDefinitions="40, 8, *">
-                                                        <avalonia:MaterialIcon Classes="big accent"
-                                                                               Kind="{Binding Icon}" 
-                                                                               Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"/>
-                                                        <TextBlock Classes="h3"
-                                                                   Text="{Binding Header}"
-                                                                   VerticalAlignment="Bottom" 
-                                                                   Grid.Row="0" Grid.Column="2"/>
-                                                        <TextBlock Classes="description"
-                                                                   Text="{Binding Description}"
-                                                                   VerticalAlignment="Top" 
-                                                                   Grid.Row="2" Grid.Column="2"/>
+                                                <Button
+                                                    HorizontalAlignment="Stretch"
+                                                    Margin="4"
+                                                    Command="{Binding Command}"
+                                                    CommandParameter="{Binding CommandParameter}"
+                                                >
+                                                    <Grid
+                                                        RowDefinitions="25, 2, *"
+                                                        ColumnDefinitions="40, 8, *"
+                                                    >
+                                                        <avalonia:MaterialIcon
+                                                            Classes="big accent"
+                                                            Kind="{Binding Icon}"
+                                                            Grid.Row="0"
+                                                            Grid.Column="0"
+                                                            Grid.RowSpan="3"
+                                                        />
+                                                        <TextBlock
+                                                            Classes="h3"
+                                                            Text="{Binding Header}"
+                                                            VerticalAlignment="Bottom"
+                                                            Grid.Row="0"
+                                                            Grid.Column="2"
+                                                        />
+                                                        <TextBlock
+                                                            Classes="description"
+                                                            Text="{Binding Description}"
+                                                            VerticalAlignment="Top"
+                                                            Grid.Row="2"
+                                                            Grid.Column="2"
+                                                        />
                                                     </Grid>
                                                 </Button>
                                             </DataTemplate>

@@ -1,87 +1,236 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
     <!-- ====================== STATUS BRUSHES ====================== -->
-    <SolidColorBrush x:Key="AsvForegroundErrorBrush"      Color="{DynamicResource AsvForegroundErrorColor}" />
-    <SolidColorBrush x:Key="AsvBackgroundErrorBrush"      Color="{DynamicResource AsvBackgroundErrorColor}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundErrorBrush"
+        Color="{DynamicResource AsvForegroundErrorColor}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundErrorBrush"
+        Color="{DynamicResource AsvBackgroundErrorColor}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundWarningBrush"    Color="{DynamicResource AsvForegroundWarningColor}" />
-    <SolidColorBrush x:Key="AsvBackgroundWarningBrush"    Color="{DynamicResource AsvBackgroundWarningColor}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundWarningBrush"
+        Color="{DynamicResource AsvForegroundWarningColor}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundWarningBrush"
+        Color="{DynamicResource AsvBackgroundWarningColor}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundSuccessBrush"    Color="{DynamicResource AsvForegroundSuccessColor}" />
-    <SolidColorBrush x:Key="AsvBackgroundSuccessBrush"    Color="{DynamicResource AsvBackgroundSuccessColor}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundSuccessBrush"
+        Color="{DynamicResource AsvForegroundSuccessColor}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundSuccessBrush"
+        Color="{DynamicResource AsvBackgroundSuccessColor}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundUnknownBrush"    Color="{DynamicResource AsvForegroundUnknownColor}" />
-    <SolidColorBrush x:Key="AsvForegroundUnknownBrushWithTransparency"
-                     Color="{DynamicResource AsvForegroundUnknownColor}"
-                     Opacity="0.5" />
-    <SolidColorBrush x:Key="AsvBackgroundUnknownBrush"    Color="{DynamicResource AsvBackgroundUnknownColor}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundUnknownBrush"
+        Color="{DynamicResource AsvForegroundUnknownColor}"
+    />
+    <SolidColorBrush
+        x:Key="AsvForegroundUnknownBrushWithTransparency"
+        Color="{DynamicResource AsvForegroundUnknownColor}"
+        Opacity="0.5"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundUnknownBrush"
+        Color="{DynamicResource AsvBackgroundUnknownColor}"
+    />
 
     <!-- ====================== INFO PALETTE BRUSHES (1–20) ====================== -->
     <!-- Use these brushes in ScottPlot, legends, zone highlights, etc. -->
 
-    <SolidColorBrush x:Key="AsvForegroundInfo1Brush"   Color="{DynamicResource AsvForegroundInfo1Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo1Brush"   Color="{DynamicResource AsvBackgroundInfo1Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo1Brush"
+        Color="{DynamicResource AsvForegroundInfo1Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo1Brush"
+        Color="{DynamicResource AsvBackgroundInfo1Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo2Brush"   Color="{DynamicResource AsvForegroundInfo2Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo2Brush"   Color="{DynamicResource AsvBackgroundInfo2Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo2Brush"
+        Color="{DynamicResource AsvForegroundInfo2Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo2Brush"
+        Color="{DynamicResource AsvBackgroundInfo2Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo3Brush"   Color="{DynamicResource AsvForegroundInfo3Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo3Brush"   Color="{DynamicResource AsvBackgroundInfo3Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo3Brush"
+        Color="{DynamicResource AsvForegroundInfo3Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo3Brush"
+        Color="{DynamicResource AsvBackgroundInfo3Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo4Brush"   Color="{DynamicResource AsvForegroundInfo4Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo4Brush"   Color="{DynamicResource AsvBackgroundInfo4Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo4Brush"
+        Color="{DynamicResource AsvForegroundInfo4Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo4Brush"
+        Color="{DynamicResource AsvBackgroundInfo4Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo5Brush"   Color="{DynamicResource AsvForegroundInfo5Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo5Brush"   Color="{DynamicResource AsvBackgroundInfo5Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo5Brush"
+        Color="{DynamicResource AsvForegroundInfo5Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo5Brush"
+        Color="{DynamicResource AsvBackgroundInfo5Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo6Brush"   Color="{DynamicResource AsvForegroundInfo6Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo6Brush"   Color="{DynamicResource AsvBackgroundInfo6Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo6Brush"
+        Color="{DynamicResource AsvForegroundInfo6Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo6Brush"
+        Color="{DynamicResource AsvBackgroundInfo6Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo7Brush"   Color="{DynamicResource AsvForegroundInfo7Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo7Brush"   Color="{DynamicResource AsvBackgroundInfo7Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo7Brush"
+        Color="{DynamicResource AsvForegroundInfo7Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo7Brush"
+        Color="{DynamicResource AsvBackgroundInfo7Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo8Brush"   Color="{DynamicResource AsvForegroundInfo8Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo8Brush"   Color="{DynamicResource AsvBackgroundInfo8Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo8Brush"
+        Color="{DynamicResource AsvForegroundInfo8Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo8Brush"
+        Color="{DynamicResource AsvBackgroundInfo8Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo9Brush"   Color="{DynamicResource AsvForegroundInfo9Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo9Brush"   Color="{DynamicResource AsvBackgroundInfo9Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo9Brush"
+        Color="{DynamicResource AsvForegroundInfo9Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo9Brush"
+        Color="{DynamicResource AsvBackgroundInfo9Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo10Brush"  Color="{DynamicResource AsvForegroundInfo10Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo10Brush"  Color="{DynamicResource AsvBackgroundInfo10Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo10Brush"
+        Color="{DynamicResource AsvForegroundInfo10Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo10Brush"
+        Color="{DynamicResource AsvBackgroundInfo10Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo11Brush"  Color="{DynamicResource AsvForegroundInfo11Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo11Brush"  Color="{DynamicResource AsvBackgroundInfo11Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo11Brush"
+        Color="{DynamicResource AsvForegroundInfo11Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo11Brush"
+        Color="{DynamicResource AsvBackgroundInfo11Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo12Brush"  Color="{DynamicResource AsvForegroundInfo12Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo12Brush"  Color="{DynamicResource AsvBackgroundInfo12Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo12Brush"
+        Color="{DynamicResource AsvForegroundInfo12Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo12Brush"
+        Color="{DynamicResource AsvBackgroundInfo12Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo13Brush"  Color="{DynamicResource AsvForegroundInfo13Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo13Brush"  Color="{DynamicResource AsvBackgroundInfo13Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo13Brush"
+        Color="{DynamicResource AsvForegroundInfo13Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo13Brush"
+        Color="{DynamicResource AsvBackgroundInfo13Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo14Brush"  Color="{DynamicResource AsvForegroundInfo14Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo14Brush"  Color="{DynamicResource AsvBackgroundInfo14Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo14Brush"
+        Color="{DynamicResource AsvForegroundInfo14Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo14Brush"
+        Color="{DynamicResource AsvBackgroundInfo14Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo15Brush"  Color="{DynamicResource AsvForegroundInfo15Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo15Brush"  Color="{DynamicResource AsvBackgroundInfo15Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo15Brush"
+        Color="{DynamicResource AsvForegroundInfo15Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo15Brush"
+        Color="{DynamicResource AsvBackgroundInfo15Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo16Brush"  Color="{DynamicResource AsvForegroundInfo16Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo16Brush"  Color="{DynamicResource AsvBackgroundInfo16Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo16Brush"
+        Color="{DynamicResource AsvForegroundInfo16Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo16Brush"
+        Color="{DynamicResource AsvBackgroundInfo16Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo17Brush"  Color="{DynamicResource AsvForegroundInfo17Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo17Brush"  Color="{DynamicResource AsvBackgroundInfo17Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo17Brush"
+        Color="{DynamicResource AsvForegroundInfo17Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo17Brush"
+        Color="{DynamicResource AsvBackgroundInfo17Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo18Brush"  Color="{DynamicResource AsvForegroundInfo18Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo18Brush"  Color="{DynamicResource AsvBackgroundInfo18Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo18Brush"
+        Color="{DynamicResource AsvForegroundInfo18Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo18Brush"
+        Color="{DynamicResource AsvBackgroundInfo18Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo19Brush"  Color="{DynamicResource AsvForegroundInfo19Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo19Brush"  Color="{DynamicResource AsvBackgroundInfo19Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo19Brush"
+        Color="{DynamicResource AsvForegroundInfo19Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo19Brush"
+        Color="{DynamicResource AsvBackgroundInfo19Color}"
+    />
 
-    <SolidColorBrush x:Key="AsvForegroundInfo20Brush"  Color="{DynamicResource AsvForegroundInfo20Color}" />
-    <SolidColorBrush x:Key="AsvBackgroundInfo20Brush"  Color="{DynamicResource AsvBackgroundInfo20Color}" />
+    <SolidColorBrush
+        x:Key="AsvForegroundInfo20Brush"
+        Color="{DynamicResource AsvForegroundInfo20Color}"
+    />
+    <SolidColorBrush
+        x:Key="AsvBackgroundInfo20Brush"
+        Color="{DynamicResource AsvBackgroundInfo20Color}"
+    />
 
     <!-- ====================== OTHER BRUSHES ====================== -->
-    <SolidColorBrush x:Key="AsvPopupCommonBrush"           Color="{DynamicResource AsvPopupCommonColor}" />
-    <SolidColorBrush x:Key="AsvSmokeFillColorDefaultBrush" Color="{DynamicResource AsvSmokeFillColorDefault}" />
-
+    <SolidColorBrush x:Key="AsvPopupCommonBrush" Color="{DynamicResource AsvPopupCommonColor}" />
+    <SolidColorBrush
+        x:Key="AsvSmokeFillColorDefaultBrush"
+        Color="{DynamicResource AsvSmokeFillColorDefault}"
+    />
 </ResourceDictionary>

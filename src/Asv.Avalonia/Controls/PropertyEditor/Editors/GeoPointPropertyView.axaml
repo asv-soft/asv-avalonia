@@ -1,59 +1,69 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.GeoPointPropertyView"
-             x:DataType="avalonia:GeoPointPropertyViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.GeoPointPropertyView"
+    x:DataType="avalonia:GeoPointPropertyViewModel"
+>
     <Design.DataContext>
-        <avalonia:GeoPointPropertyViewModel/>
+        <avalonia:GeoPointPropertyViewModel />
     </Design.DataContext>
     <ToolTip.Tip>
-        <StackPanel Spacing="8" IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
-            <TextBlock Classes="h1" Text="{Binding Header}"/>
-            <TextBlock Classes="description" Text="{Binding Description}"/>
+        <StackPanel
+            Spacing="8"
+            IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+        >
+            <TextBlock Classes="h1" Text="{Binding Header}" />
+            <TextBlock Classes="description" Text="{Binding Description}" />
         </StackPanel>
     </ToolTip.Tip>
     <StackPanel Spacing="4">
-        <avalonia:UnitPropertyView DataContext="{Binding Latitude}"/>
-        <avalonia:UnitPropertyView DataContext="{Binding Longitude}"/>
-        <avalonia:UnitPropertyView DataContext="{Binding Altitude}"/>
-        <Button  Padding="0" HorizontalAlignment="Stretch" Theme="{StaticResource  TransparentButton}">
-                <avalonia1:MaterialIcon Kind="DotsHorizontal"/>
-                <Button.Flyout>
-                    <Flyout>
-                        <Grid RowDefinitions="30,4,30,4,30" ColumnDefinitions="30,4,30,4,30">
-                            <Button Grid.Row="0" Grid.Column="0" Command="{Binding MoveTopLeft}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanTopLeft"/>
-                            </Button>
-                            <Button Grid.Row="0" Grid.Column="2" Command="{Binding MoveUp}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanUp"/>
-                            </Button>
-                            <Button Grid.Row="0" Grid.Column="4" Command="{Binding MoveTopRight}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanTopRight"/>
-                            </Button>
-                            <Button Grid.Row="2" Grid.Column="0" Command="{Binding MoveLeft}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanLeft"/>
-                            </Button>
-                           
-                            <Button Grid.Row="2" Grid.Column="4" Command="{Binding MoveRight}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanRight"/>
-                            </Button>
-                            <Button Grid.Row="4" Grid.Column="0" Command="{Binding MoveBottomLeft}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanBottomLeft"/>
-                            </Button>
-                            <Button Grid.Row="4" Grid.Column="2" Command="{Binding MoveDown}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanDown"/>
-                            </Button>
-                            <Button Grid.Row="4" Grid.Column="4" Command="{Binding MoveBottomRight}">
-                                <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanBottomRight"/>
-                            </Button>
-                        </Grid>
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
+        <avalonia:UnitPropertyView DataContext="{Binding Latitude}" />
+        <avalonia:UnitPropertyView DataContext="{Binding Longitude}" />
+        <avalonia:UnitPropertyView DataContext="{Binding Altitude}" />
+        <Button
+            Padding="0"
+            HorizontalAlignment="Stretch"
+            Theme="{StaticResource  TransparentButton}"
+        >
+            <avalonia1:MaterialIcon Kind="DotsHorizontal" />
+            <Button.Flyout>
+                <Flyout>
+                    <Grid RowDefinitions="30,4,30,4,30" ColumnDefinitions="30,4,30,4,30">
+                        <Button Grid.Row="0" Grid.Column="0" Command="{Binding MoveTopLeft}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanTopLeft" />
+                        </Button>
+                        <Button Grid.Row="0" Grid.Column="2" Command="{Binding MoveUp}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanUp" />
+                        </Button>
+                        <Button Grid.Row="0" Grid.Column="4" Command="{Binding MoveTopRight}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanTopRight" />
+                        </Button>
+                        <Button Grid.Row="2" Grid.Column="0" Command="{Binding MoveLeft}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanLeft" />
+                        </Button>
+
+                        <Button Grid.Row="2" Grid.Column="4" Command="{Binding MoveRight}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanRight" />
+                        </Button>
+                        <Button Grid.Row="4" Grid.Column="0" Command="{Binding MoveBottomLeft}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanBottomLeft" />
+                        </Button>
+                        <Button Grid.Row="4" Grid.Column="2" Command="{Binding MoveDown}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanDown" />
+                        </Button>
+                        <Button Grid.Row="4" Grid.Column="4" Command="{Binding MoveBottomRight}">
+                            <avalonia1:MaterialIcon Width="20" Height="20" Kind="PanBottomRight" />
+                        </Button>
+                    </Grid>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
     </StackPanel>
-    
 </UserControl>

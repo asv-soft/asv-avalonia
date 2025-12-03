@@ -9,85 +9,119 @@
     d:DesignWidth="800"
     d:DesignHeight="450"
     x:Class="Asv.Avalonia.Example.DialogControlsPageView"
-    x:DataType="example:DialogControlsPageViewModel">
+    x:DataType="example:DialogControlsPageViewModel"
+>
     <Design.DataContext>
         <example:DialogControlsPageViewModel />
     </Design.DataContext>
 
     <UserControl.Styles>
-        <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/ContentDialogMini/ContentDialogMini.axaml"/>
+        <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/ContentDialogMini/ContentDialogMini.axaml" />
     </UserControl.Styles>
 
     <DockPanel Margin="12">
         <!-- Main header -->
-        <example:HeaderBlock DockPanel.Dock="Top"
-                             TitleH1="{x:Static example:RS.DialogControlsPageViewModel_Title}"
-                             Description="{x:Static example:RS.DialogControlsPageView_Description}"/>
+        <example:HeaderBlock
+            DockPanel.Dock="Top"
+            TitleH1="{x:Static example:RS.DialogControlsPageViewModel_Title}"
+            Description="{x:Static example:RS.DialogControlsPageView_Description}"
+        />
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <example:ExampleBlocksGrid ColumnSpacing="12">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="3*" MinWidth="200"/>
-                    <ColumnDefinition Width="*" MinWidth="120"/>
-                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="3*" MinWidth="200" />
+                    <ColumnDefinition Width="*" MinWidth="120" />
+                    <ColumnDefinition Width="2*" />
                 </Grid.ColumnDefinitions>
 
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/> <!-- Custom dialog header -->
-                    <RowDefinition Height="Auto"/> <!-- Custom dialog block -->
-                    <RowDefinition Height="Auto"/> <!-- Ready dialog prefabs header -->
-                    <RowDefinition Height="Auto"/> <!-- Custom dialogs header -->
-                    <RowDefinition Height="Auto"/> <!-- Yes/no dialog -->
-                    <RowDefinition Height="Auto"/> <!-- Save/cancel dialog -->
-                    <RowDefinition Height="Auto"/> <!-- Input dialog -->
-                    <RowDefinition Height="Auto"/> <!-- HotKey capture dialog -->
-                    <RowDefinition Height="Auto"/> <!-- GeoPoint dialog -->
-                    <RowDefinition Height="Auto"/> <!-- System dialogs header -->
-                    <RowDefinition Height="Auto"/> <!-- Open file dialog -->
-                    <RowDefinition Height="Auto"/> <!-- Save file dialog -->
-                    <RowDefinition Height="Auto"/> <!-- Select folder dialog -->
-                    <RowDefinition Height="Auto"/> <!-- Observe folder dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Custom dialog header -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Custom dialog block -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Ready dialog prefabs header -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Custom dialogs header -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Yes/no dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Save/cancel dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Input dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- HotKey capture dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- GeoPoint dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- System dialogs header -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Open file dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Save file dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Select folder dialog -->
+                    <RowDefinition Height="Auto" />
+                    <!-- Observe folder dialog -->
                 </Grid.RowDefinitions>
 
                 <!-- Custom dialog header -->
-                <example:HeaderBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" 
-                                     TitleH2="{x:Static example:RS.DialogControlsPageView_ContentDialog_Header}"
-                                     Description="{x:Static example:RS.DialogControlsPageView_ContentDialog_Description}"/>
+                <example:HeaderBlock
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    TitleH2="{x:Static example:RS.DialogControlsPageView_ContentDialog_Header}"
+                    Description="{x:Static example:RS.DialogControlsPageView_ContentDialog_Description}"
+                />
 
                 <!-- Custom dialog block -->
-                <example:BaseExampleBlock 
-                    Grid.Row="1" Grid.Column="0"
-                    Background="{DynamicResource SystemControlFocusVisualSecondaryBrush}">
+                <example:BaseExampleBlock
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Background="{DynamicResource SystemControlFocusVisualSecondaryBrush}"
+                >
                     <ScrollViewer HorizontalScrollBarVisibility="Auto">
                         <StackPanel Spacing="8" VerticalAlignment="Center">
                             <TextBlock Text="{x:Static example:RS.DialogControlsPageView_ContentDialog_Title}" />
-                            <TextBox Text="{Binding CustomDialogTitle.ViewValue.Value, Mode=TwoWay}"/>
+                            <TextBox Text="{Binding CustomDialogTitle.ViewValue.Value, Mode=TwoWay}" />
                             <TextBlock Text="{x:Static example:RS.DialogControlsPageView_ContentDialog_Content}" />
                             <TabControl>
-                                <TabItem Header="{x:Static example:RS.DialogControlsPageView_ContentDialog_TextContent}"
-                                         IsSelected="{Binding !IsCustomDialogImageContent.ViewValue.Value, Mode=TwoWay}">
+                                <TabItem
+                                    Header="{x:Static example:RS.DialogControlsPageView_ContentDialog_TextContent}"
+                                    IsSelected="{Binding !IsCustomDialogImageContent.ViewValue.Value, Mode=TwoWay}"
+                                >
                                     <TextBox
                                         Text="{Binding CustomDialogMessage.ViewValue.Value, Mode=TwoWay}"
                                         AcceptsReturn="True"
-                                        TextWrapping="Wrap" />
+                                        TextWrapping="Wrap"
+                                    />
                                 </TabItem>
-                                <TabItem Header="{x:Static example:RS.DialogControlsPageView_ContentDialog_ImageContent}"
-                                         IsSelected="{Binding IsCustomDialogImageContent.ViewValue.Value, Mode=TwoWay}">
+                                <TabItem
+                                    Header="{x:Static example:RS.DialogControlsPageView_ContentDialog_ImageContent}"
+                                    IsSelected="{Binding IsCustomDialogImageContent.ViewValue.Value, Mode=TwoWay}"
+                                >
                                     <StackPanel Spacing="4" Orientation="Horizontal">
                                         <Button
                                             HorizontalAlignment="Center"
                                             VerticalAlignment="Center"
                                             Command="{Binding OpenImageForCustomDialogAsyncCommand}"
-                                            Content="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Title}" />
-                                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                            Content="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Title}"
+                                        />
+                                        <Grid
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                        >
                                             <TextBlock
                                                 Text="{Binding CustomDialogImagePath.ViewValue.Value, Converter={x:Static example:PathToFileNameConverter.Instance}}"
-                                                TextWrapping="Wrap"/>
+                                                TextWrapping="Wrap"
+                                            />
                                             <TextBlock
                                                 Text="{x:Static example:RS.DialogControlsPageView_ContentDialog_ImageContent_Select}"
                                                 IsVisible="{Binding CustomDialogImagePath.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                                 TextWrapping="Wrap"
-                                                Classes="unknown"/>
+                                                Classes="unknown"
+                                            />
                                         </Grid>
                                     </StackPanel>
                                 </TabItem>
@@ -97,335 +131,485 @@
                                 ColumnDefinitions="*,*"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
-                                ColumnSpacing="4">
+                                ColumnSpacing="4"
+                            >
                                 <Grid ColumnDefinitions="Auto,7*" Grid.Column="0" ColumnSpacing="2">
-                                    <CheckBox Grid.Column="0"
-                                              HorizontalAlignment="Center"
-                                              IsChecked="{Binding IsCustomDialogPrimaryButtonEnabled.ViewValue.Value, Mode=TwoWay}"/>
-                                    <TextBox Grid.Column="1"
-                                             IsEnabled="{Binding IsCustomDialogPrimaryButtonEnabled.ViewValue.Value}"
-                                             Text="{Binding CustomDialogPrimaryButtonText.ViewValue.Value, Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        IsChecked="{Binding IsCustomDialogPrimaryButtonEnabled.ViewValue.Value, Mode=TwoWay}"
+                                    />
+                                    <TextBox
+                                        Grid.Column="1"
+                                        IsEnabled="{Binding IsCustomDialogPrimaryButtonEnabled.ViewValue.Value}"
+                                        Text="{Binding CustomDialogPrimaryButtonText.ViewValue.Value, Mode=TwoWay}"
+                                    />
                                 </Grid>
 
                                 <Grid ColumnDefinitions="Auto,7*" Grid.Column="1" ColumnSpacing="2">
-                                    <CheckBox Grid.Column="0"
-                                              HorizontalAlignment="Center"
-                                              IsChecked="{Binding IsCustomDialogSecondaryButtonEnabled.ViewValue.Value, Mode=TwoWay}"/>
-                                    <TextBox Grid.Column="1"
-                                             IsEnabled="{Binding IsCustomDialogSecondaryButtonEnabled.ViewValue.Value}"
-                                             Text="{Binding CustomDialogSecondaryButtonText.ViewValue.Value, Mode=TwoWay}" />
+                                    <CheckBox
+                                        Grid.Column="0"
+                                        HorizontalAlignment="Center"
+                                        IsChecked="{Binding IsCustomDialogSecondaryButtonEnabled.ViewValue.Value, Mode=TwoWay}"
+                                    />
+                                    <TextBox
+                                        Grid.Column="1"
+                                        IsEnabled="{Binding IsCustomDialogSecondaryButtonEnabled.ViewValue.Value}"
+                                        Text="{Binding CustomDialogSecondaryButtonText.ViewValue.Value, Mode=TwoWay}"
+                                    />
                                 </Grid>
                             </Grid>
                         </StackPanel>
                     </ScrollViewer>
                 </example:BaseExampleBlock>
-                <example:ActionExampleBlock 
-                    Grid.Row="1" Grid.Column="1" 
+                <example:ActionExampleBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
                     ButtonCommand="{Binding ShowCustomDialogCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"/>
-                <example:PreviewExampleBlock 
-                    Grid.Row="1" 
-                    Grid.Column="2" 
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="1"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetCustomResultCommand}">
+                    RestoreCommand="{Binding ResetCustomResultCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <example:ContentDialogMini 
+                        <example:ContentDialogMini
                             DialogResult="{Binding CustomDialogResult.ViewValue.Value}"
-                            Width="100" Height="100"
-                            VerticalAlignment="Center" HorizontalAlignment="Center"
-                            IsImageContentType="{Binding IsCustomDialogImageContent.ViewValue.Value}"/>
+                            Width="100"
+                            Height="100"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                            IsImageContentType="{Binding IsCustomDialogImageContent.ViewValue.Value}"
+                        />
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
                 <!-- Ready dialog prefabs header -->
-                <example:HeaderBlock 
-                    Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" 
+                <example:HeaderBlock
+                    Grid.Row="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
                     TitleH2="{x:Static example:RS.DialogControlsPageView_Prefabs_Header}"
-                    Description="{x:Static example:RS.DialogControlsPageView_Prefabs_Description}"/>
+                    Description="{x:Static example:RS.DialogControlsPageView_Prefabs_Description}"
+                />
 
                 <!-- Custom dialogs header -->
-                <example:HeaderBlock 
-                    Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3" 
-                    TitleH3="{x:Static example:RS.DialogControlsPageView_Custom_Title}"/>
+                <example:HeaderBlock
+                    Grid.Row="3"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
+                    TitleH3="{x:Static example:RS.DialogControlsPageView_Custom_Title}"
+                />
 
                 <!-- Yes/no dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="4" Grid.Column="0"
+                <example:AboutExampleBlock
+                    Grid.Row="4"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_YesOrNoPrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_YesOrNoPrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="4" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_YesOrNoPrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="4"
+                    Grid.Column="1"
                     ButtonCommand="{Binding YesOrNoCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}" />
-                <example:PreviewExampleBlock 
-                    Grid.Row="4" Grid.Column="2" 
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="4"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetYerOrNoCommand}">
+                    RestoreCommand="{Binding ResetYerOrNoCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center"
-                                    HorizontalAlignment="Center">
-                            <example:BoolIndicator Value="{Binding YesOrNoDialogResult.ViewValue.Value, Converter={x:Static example:ConfirmationStatusToBoolConverter.Instance}}"
-                                                   IconSize="40"/>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
+                            <example:BoolIndicator
+                                Value="{Binding YesOrNoDialogResult.ViewValue.Value, Converter={x:Static example:ConfirmationStatusToBoolConverter.Instance}}"
+                                IconSize="40"
+                            />
                         </StackPanel>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
                 <!-- Save/cancel dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="5" Grid.Column="0" 
+                <example:AboutExampleBlock
+                    Grid.Row="5"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_SavePrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_SavePrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="5" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_SavePrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="5"
+                    Grid.Column="1"
                     ButtonCommand="{Binding SaveCancelCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"/>
-                <example:PreviewExampleBlock 
-                    Grid.Row="5" Grid.Column="2" 
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="5"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetSaveCancelResultCommand}">
+                    RestoreCommand="{Binding ResetSaveCancelResultCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <StackPanel Orientation="Horizontal" 
-                                    Spacing="4" 
-                                    VerticalAlignment="Center"
-                                    HorizontalAlignment="Center">
-                            <example:BoolIndicator Value="{Binding SaveCancelDialogResult.ViewValue.Value, Converter={x:Static example:ConfirmationStatusToBoolConverter.Instance}}"
-                                                   IconSize="40"/>
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Spacing="4"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
+                            <example:BoolIndicator
+                                Value="{Binding SaveCancelDialogResult.ViewValue.Value, Converter={x:Static example:ConfirmationStatusToBoolConverter.Instance}}"
+                                IconSize="40"
+                            />
                         </StackPanel>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
                 <!-- Input dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="6" Grid.Column="0" 
+                <example:AboutExampleBlock
+                    Grid.Row="6"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_InputPrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_InputPrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="6" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_InputPrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="6"
+                    Grid.Column="1"
                     ButtonCommand="{Binding ShowInputCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"/>
-                <example:PreviewExampleBlock 
-                    Grid.Row="6" Grid.Column="2" 
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="6"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetShowInputResultCommand}">
+                    RestoreCommand="{Binding ResetShowInputResultCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <Border Classes="BlockInnerStyle"  
-                                VerticalAlignment="Center" 
-                                HorizontalAlignment="Center">
+                        <Border
+                            Classes="BlockInnerStyle"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
                             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <TextBlock
                                     Text="{Binding ShowInputDialogResult.ViewValue.Value}"
-                                    TextWrapping="Wrap" />
+                                    TextWrapping="Wrap"
+                                />
                                 <TextBlock
                                     Text="{x:Static example:RS.DialogControlsPageView_InputPrefab_Placeholder}"
                                     IsVisible="{Binding ShowInputDialogResult.ViewValue.Value,
                                     Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                     TextWrapping="Wrap"
-                                    Classes="unknown"/>
+                                    Classes="unknown"
+                                />
                             </Grid>
                         </Border>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
                 <!-- HotKey capture dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="7" Grid.Column="0" 
+                <example:AboutExampleBlock
+                    Grid.Row="7"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_HotKeyCapturePrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_HotKeyCapturePrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="7" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_HotKeyCapturePrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="7"
+                    Grid.Column="1"
                     ButtonCommand="{Binding ShowHotKeyCaptureCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"/>
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"
+                />
                 <example:PreviewExampleBlock
-                    Grid.Row="7" Grid.Column="2" 
+                    Grid.Row="7"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetShowHotKeyResultCommand}">
+                    RestoreCommand="{Binding ResetShowHotKeyResultCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <Border Classes="BlockInnerStyle"  
-                                VerticalAlignment="Center" 
-                                HorizontalAlignment="Center">
-                            <asv:HotKeyBox MinWidth="100" VerticalAlignment="Center" HorizontalAlignment="Center"
-                                           HotKey="{Binding ShowHotKeyCaptureDialogResult.ViewValue.Value, Converter={x:Static example:StringToHotKeyConverter.Instance}}" 
-                                           AutoFocus="False"/>
+                        <Border
+                            Classes="BlockInnerStyle"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
+                            <asv:HotKeyBox
+                                MinWidth="100"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                HotKey="{Binding ShowHotKeyCaptureDialogResult.ViewValue.Value, Converter={x:Static example:StringToHotKeyConverter.Instance}}"
+                                AutoFocus="False"
+                            />
                         </Border>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
                 <!-- GeoPoint dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="8" Grid.Column="0" 
+                <example:AboutExampleBlock
+                    Grid.Row="8"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_GeoPointPrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_GeoPointPrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="8" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_GeoPointPrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="8"
+                    Grid.Column="1"
                     ButtonCommand="{Binding OpenGeoPointDialogCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"/>
-                <example:PreviewExampleBlock 
-                    Grid.Row="8" 
-                    Grid.Column="2" 
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_ContentDialog_Open}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="8"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetOpenGeoPointResultCommand}">
+                    RestoreCommand="{Binding ResetOpenGeoPointResultCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <Border Classes="BlockInnerStyle"
-                                    VerticalAlignment="Center" 
-                                    HorizontalAlignment="Center">
-                                <Grid ColumnDefinitions="*,*,*" RowDefinitions="*,*,*" ColumnSpacing="4" RowSpacing="4"
-                                      HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                                    <TextBlock Grid.Column="0" Grid.Row="0"
-                                               Text="{x:Static asv:RS.Longitude_Name}"
-                                               VerticalAlignment="Center" />
-                                    <TextBox Grid.Column="1" Grid.Row="0"
-                                             Text="{Binding GeoPointDialogResult.Longitude.ViewValue.Value, Mode=TwoWay}" />
-                                    <TextBlock Grid.Column="2" Grid.Row="0"
-                                               Text="{Binding LonUnitName.Value}"
-                                               VerticalAlignment="Center" />
+                        <Border
+                            Classes="BlockInnerStyle"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
+                            <Grid
+                                ColumnDefinitions="*,*,*"
+                                RowDefinitions="*,*,*"
+                                ColumnSpacing="4"
+                                RowSpacing="4"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                            >
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Text="{x:Static asv:RS.Longitude_Name}"
+                                    VerticalAlignment="Center"
+                                />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Grid.Row="0"
+                                    Text="{Binding GeoPointDialogResult.Longitude.ViewValue.Value, Mode=TwoWay}"
+                                />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Grid.Row="0"
+                                    Text="{Binding LonUnitName.Value}"
+                                    VerticalAlignment="Center"
+                                />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="1"
-                                               Text="{x:Static asv:RS.Latitude_Name}"
-                                               VerticalAlignment="Center" />
-                                    <TextBox Grid.Column="1" Grid.Row="1"
-                                             Text="{Binding GeoPointDialogResult.Latitude.ViewValue.Value, Mode=TwoWay}" />
-                                    <TextBlock Grid.Column="2" Grid.Row="1"
-                                               Text="{Binding LatUnitName.Value}"
-                                               VerticalAlignment="Center" />
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Grid.Row="1"
+                                    Text="{x:Static asv:RS.Latitude_Name}"
+                                    VerticalAlignment="Center"
+                                />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    Text="{Binding GeoPointDialogResult.Latitude.ViewValue.Value, Mode=TwoWay}"
+                                />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Grid.Row="1"
+                                    Text="{Binding LatUnitName.Value}"
+                                    VerticalAlignment="Center"
+                                />
 
-                                    <TextBlock Grid.Column="0" Grid.Row="2"
-                                               Text="{x:Static asv:RS.Altitude_Name}"
-                                               VerticalAlignment="Center" />
-                                    <TextBox Grid.Column="1" Grid.Row="2"
-                                             Text="{Binding GeoPointDialogResult.Altitude.ViewValue.Value, Mode=TwoWay}" />
-                                    <TextBlock Grid.Column="2" Grid.Row="2"
-                                               Text="{Binding AltUnitName.Value}"
-                                               VerticalAlignment="Center" />
-                                </Grid>
-                            </Border>
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Grid.Row="2"
+                                    Text="{x:Static asv:RS.Altitude_Name}"
+                                    VerticalAlignment="Center"
+                                />
+                                <TextBox
+                                    Grid.Column="1"
+                                    Grid.Row="2"
+                                    Text="{Binding GeoPointDialogResult.Altitude.ViewValue.Value, Mode=TwoWay}"
+                                />
+                                <TextBlock
+                                    Grid.Column="2"
+                                    Grid.Row="2"
+                                    Text="{Binding AltUnitName.Value}"
+                                    VerticalAlignment="Center"
+                                />
+                            </Grid>
+                        </Border>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
                 <!-- System dialogs header -->
-                <example:HeaderBlock 
-                    Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" 
+                <example:HeaderBlock
+                    Grid.Row="9"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="3"
                     TitleH3="{x:Static example:RS.DialogControlsPageView_System_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_System_Note}"/>
+                    Description="{x:Static example:RS.DialogControlsPageView_System_Note}"
+                />
 
                 <!-- Open file dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="10" Grid.Column="0"
+                <example:AboutExampleBlock
+                    Grid.Row="10"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="10" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="10"
+                    Grid.Column="1"
                     ButtonCommand="{Binding OpenFileCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Title}" />
-                <example:PreviewExampleBlock 
-                    Grid.Row="10" Grid.Column="2" 
-                    VerticalAlignment="Stretch" 
-                    RestoreCommand="{Binding ResetOpenFileCommand}">
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Title}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="10"
+                    Grid.Column="2"
+                    VerticalAlignment="Stretch"
+                    RestoreCommand="{Binding ResetOpenFileCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <Border Classes="BlockInnerStyle"  
-                                VerticalAlignment="Center" 
-                                HorizontalAlignment="Center">
+                        <Border
+                            Classes="BlockInnerStyle"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
                             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <TextBlock
                                     Text="{Binding OpenFileDialogResult.ViewValue.Value}"
-                                    TextWrapping="Wrap"/>
+                                    TextWrapping="Wrap"
+                                />
                                 <TextBlock
                                     Text="/path/to/file.txt"
                                     IsVisible="{Binding OpenFileDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                     TextWrapping="Wrap"
-                                    Classes="unknown"/>
+                                    Classes="unknown"
+                                />
                             </Grid>
                         </Border>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
-                
+
                 <!-- Save file dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="11" Grid.Column="0"
+                <example:AboutExampleBlock
+                    Grid.Row="11"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="11" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="11"
+                    Grid.Column="1"
                     ButtonCommand="{Binding SaveFileCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Title}" />
-                <example:PreviewExampleBlock 
-                     Grid.Row="11" Grid.Column="2" 
-                     VerticalAlignment="Stretch"
-                     RestoreCommand="{Binding ResetSaveFileCommand}">
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Title}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="11"
+                    Grid.Column="2"
+                    VerticalAlignment="Stretch"
+                    RestoreCommand="{Binding ResetSaveFileCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <Border Classes="BlockInnerStyle" VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <Border
+                            Classes="BlockInnerStyle"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
                             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <TextBlock
                                     Text="{Binding SaveFileDialogResult.ViewValue.Value}"
-                                    TextWrapping="Wrap"/>
+                                    TextWrapping="Wrap"
+                                />
                                 <TextBlock
                                     Text="/path/to/file.txt"
                                     IsVisible="{Binding SaveFileDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
                                     TextWrapping="Wrap"
-                                    Classes="unknown"/>
+                                    Classes="unknown"
+                                />
                             </Grid>
                         </Border>
                     </example:PreviewExampleBlock.PreviewContent>
-                </example:PreviewExampleBlock >
+                </example:PreviewExampleBlock>
 
                 <!-- Select folder dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="12" Grid.Column="0"
+                <example:AboutExampleBlock
+                    Grid.Row="12"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="12" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="12"
+                    Grid.Column="1"
                     ButtonCommand="{Binding SelectFolderCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Title}" />
-                <example:PreviewExampleBlock 
-                    Grid.Row="12" Grid.Column="2" 
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Title}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="12"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetSelectFolderCommand}">
+                    RestoreCommand="{Binding ResetSelectFolderCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <Border Classes="BlockInnerStyle"  
-                            VerticalAlignment="Center" 
-                            HorizontalAlignment="Center">
-                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock
-                                        Text="{Binding SelectFolderDialogResult.ViewValue.Value}"
-                                        TextWrapping="Wrap"/>
-                                    <TextBlock
-                                        Text="/path/to/folder/"
-                                        IsVisible="{Binding SelectFolderDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                        TextWrapping="Wrap"
-                                        Classes="unknown"/>
-                                </Grid>
-                            </Border>
+                        <Border
+                            Classes="BlockInnerStyle"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
+                            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock
+                                    Text="{Binding SelectFolderDialogResult.ViewValue.Value}"
+                                    TextWrapping="Wrap"
+                                />
+                                <TextBlock
+                                    Text="/path/to/folder/"
+                                    IsVisible="{Binding SelectFolderDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    TextWrapping="Wrap"
+                                    Classes="unknown"
+                                />
+                            </Grid>
+                        </Border>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
                 <!-- Observe folder dialog -->
-                <example:AboutExampleBlock 
-                    Grid.Row="13" Grid.Column="0"
+                <example:AboutExampleBlock
+                    Grid.Row="13"
+                    Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Title}"
-                    Description="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Description}"/>
-                <example:ActionExampleBlock 
-                    Grid.Row="13" Grid.Column="1" 
+                    Description="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="13"
+                    Grid.Column="1"
                     ButtonCommand="{Binding ObserveFolderCommand}"
-                    ButtonText="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Title}" />
-                <example:PreviewExampleBlock 
-                    Grid.Row="13" Grid.Column="2" 
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Title}"
+                />
+                <example:PreviewExampleBlock
+                    Grid.Row="13"
+                    Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetObserveFolderCommand}">
+                    RestoreCommand="{Binding ResetObserveFolderCommand}"
+                >
                     <example:PreviewExampleBlock.PreviewContent>
-                        <Border Classes="BlockInnerStyle"  
-                                VerticalAlignment="Center" 
-                                HorizontalAlignment="Center">
-                                <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
-                                    <TextBlock
-                                        Text="{Binding ObserveFolderDialogResult.ViewValue.Value}"
-                                        TextWrapping="Wrap"/>
-                                    <TextBlock
-                                        Text="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_PlaceHolder}"
-                                        IsVisible="{Binding ObserveFolderDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                        TextWrapping="Wrap"
-                                        Classes="unknown"/>
-                                </Grid>
-                            </Border>
+                        <Border
+                            Classes="BlockInnerStyle"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"
+                        >
+                            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <TextBlock
+                                    Text="{Binding ObserveFolderDialogResult.ViewValue.Value}"
+                                    TextWrapping="Wrap"
+                                />
+                                <TextBlock
+                                    Text="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_PlaceHolder}"
+                                    IsVisible="{Binding ObserveFolderDialogResult.ViewValue.Value, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                    TextWrapping="Wrap"
+                                    Classes="unknown"
+                                />
+                            </Grid>
+                        </Border>
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
             </example:ExampleBlocksGrid>

@@ -1,13 +1,17 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:asv="clr-namespace:Asv.Avalonia"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="700" d:DesignHeight="450"
-             x:DataType="asv:SettingsCommandListViewModel"
-             x:CompileBindings="True"
-             x:Class="Asv.Avalonia.SettingsCommandListView">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:asv="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="700"
+    d:DesignHeight="450"
+    x:DataType="asv:SettingsCommandListViewModel"
+    x:CompileBindings="True"
+    x:Class="Asv.Avalonia.SettingsCommandListView"
+>
     <Design.DataContext>
         <asv:SettingsCommandListViewModel />
     </Design.DataContext>
@@ -18,29 +22,35 @@
 
     <Grid RowDefinitions="Auto,Auto,*">
         <Grid Grid.Row="0" ColumnDefinitions="4*,*">
-            <asv:SearchBoxView Grid.Column="0"
-                               MaxHeight="40"
-                               Margin="8"
-                               DataContext="{Binding Search}"
-                               VerticalContentAlignment="Center" />
-            <Button Grid.Column="1"
-                    MaxHeight="40"
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Center"
-                    Content="{x:Static asv:RS.SettingsCommandListView_ResetButton_Content}"
-                    Command="{Binding ResetAllHotKeys}" />
+            <asv:SearchBoxView
+                Grid.Column="0"
+                MaxHeight="40"
+                Margin="8"
+                DataContext="{Binding Search}"
+                VerticalContentAlignment="Center"
+            />
+            <Button
+                Grid.Column="1"
+                MaxHeight="40"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                Content="{x:Static asv:RS.SettingsCommandListView_ResetButton_Content}"
+                Command="{Binding ResetAllHotKeys}"
+            />
         </Grid>
 
         <Grid Grid.Row="1" ColumnDefinitions="*,*,*,*,*">
-            <ComboBox Grid.Column="0"
-                      MaxHeight="40"
-                      Margin="8"
-                      ItemsSource="{Binding CommandSortingType.EnumItems}"
-                      SelectedItem="{Binding CommandSortingType.ViewValue.Value}"
-                      HorizontalAlignment="Stretch"
-                      VerticalAlignment="Center"
-                      HorizontalContentAlignment="Center"
-                      VerticalContentAlignment="Center">
+            <ComboBox
+                Grid.Column="0"
+                MaxHeight="40"
+                Margin="8"
+                ItemsSource="{Binding CommandSortingType.EnumItems}"
+                SelectedItem="{Binding CommandSortingType.ViewValue.Value}"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+            >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock Text="{Binding Converter={StaticResource CommandsSortingTypeConverter}}" />
@@ -49,23 +59,29 @@
             </ComboBox>
         </Grid>
 
-        <DataGrid Grid.Row="2" ItemsSource="{Binding Items}"
-                  Focusable="False"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="False"
-                  ColumnWidth="Auto"
-                  CanUserResizeColumns="True"
-                  SelectionMode="Single"
-                  SelectedItem="{CompiledBinding SelectedItem.Value, Mode=TwoWay}">
+        <DataGrid
+            Grid.Row="2"
+            ItemsSource="{Binding Items}"
+            Focusable="False"
+            AutoGenerateColumns="False"
+            IsReadOnly="False"
+            ColumnWidth="Auto"
+            CanUserResizeColumns="True"
+            SelectionMode="Single"
+            SelectedItem="{CompiledBinding SelectedItem.Value, Mode=TwoWay}"
+        >
             <DataGrid.Columns>
                 <!-- Conflict indicator icon -->
                 <DataGridTemplateColumn Width="40">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <avalonia:MaterialIcon Kind="AlertCircle"
-                                                   Width="20" Height="20"
-                                                   Foreground="{DynamicResource AsvForegroundWarningColor}"
-                                                   IsVisible="{Binding HasConflict.Value}" />
+                            <avalonia:MaterialIcon
+                                Kind="AlertCircle"
+                                Width="20"
+                                Height="20"
+                                Foreground="{DynamicResource AsvForegroundWarningColor}"
+                                IsVisible="{Binding HasConflict.Value}"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -80,67 +96,85 @@
                 </DataGridTemplateColumn>
 
                 <!-- Command name -->
-                <DataGridTemplateColumn Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Command_Header}"
-                                        Width="*"
-                                        CanUserSort="True"
-                                        CustomSortComparer="{x:Static asv:CommandNameSortComparer.Instance}">
+                <DataGridTemplateColumn
+                    Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Command_Header}"
+                    Width="*"
+                    CanUserSort="True"
+                    CustomSortComparer="{x:Static asv:CommandNameSortComparer.Instance}"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <SelectableTextBlock SelectionStart="{Binding NameSelection.Start}"
-                                                 SelectionEnd="{Binding NameSelection.Stop}"
-                                                 Text="{Binding Name}"
-                                                 VerticalAlignment="Center"
-                                                 IsHitTestVisible="False" />
+                            <SelectableTextBlock
+                                SelectionStart="{Binding NameSelection.Start}"
+                                SelectionEnd="{Binding NameSelection.Stop}"
+                                Text="{Binding Name}"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <!-- Command description -->
-                <DataGridTemplateColumn Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Description_Header}"
-                                        Width="2*"
-                                        CanUserSort="True"
-                                        CustomSortComparer="{x:Static asv:CommandDescriptionSortComparer.Instance}">
+                <DataGridTemplateColumn
+                    Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Description_Header}"
+                    Width="2*"
+                    CanUserSort="True"
+                    CustomSortComparer="{x:Static asv:CommandDescriptionSortComparer.Instance}"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <SelectableTextBlock SelectionStart="{Binding DescriptionSelection.Start}"
-                                                 SelectionEnd="{Binding DescriptionSelection.Stop}"
-                                                 Text="{Binding Description}"
-                                                 VerticalAlignment="Center" 
-                                                 IsHitTestVisible="False"/>
+                            <SelectableTextBlock
+                                SelectionStart="{Binding DescriptionSelection.Start}"
+                                SelectionEnd="{Binding DescriptionSelection.Stop}"
+                                Text="{Binding Description}"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <!-- User hot‑key (editable) -->
-                <DataGridTemplateColumn Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_CustomHotKey_Header}"
-                                        Width="*">
+                <DataGridTemplateColumn
+                    Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_CustomHotKey_Header}"
+                    Width="*"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <!-- Normal editable hotkey -->
-                                <StackPanel Orientation="Horizontal"
-                                            IsVisible="{CompiledBinding IsHotkeyConfigurable}">
-                                    <Button VerticalAlignment="Center"
-                                            Margin="0 0 5 0"
-                                            Width="30" Height="30"
-                                            Command="{Binding EditCommand}"
-                                            IsEnabled="{CompiledBinding IsSelected.Value}">
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    IsVisible="{CompiledBinding IsHotkeyConfigurable}"
+                                >
+                                    <Button
+                                        VerticalAlignment="Center"
+                                        Margin="0 0 5 0"
+                                        Width="30"
+                                        Height="30"
+                                        Command="{Binding EditCommand}"
+                                        IsEnabled="{CompiledBinding IsSelected.Value}"
+                                    >
                                         <avalonia:MaterialIcon Kind="Pencil" />
                                     </Button>
-                                    <SelectableTextBlock 
+                                    <SelectableTextBlock
                                         SelectionStart="{Binding EditedHotKeySelection.Start}"
                                         SelectionEnd="{Binding EditedHotKeySelection.Stop}"
                                         Text="{Binding EditedHotKey.ViewValue.Value}"
                                         VerticalAlignment="Center"
-                                        IsHitTestVisible="False" />
+                                        IsHitTestVisible="False"
+                                    />
                                 </StackPanel>
 
                                 <!-- Cannot edit -->
-                                <Border HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        Margin="2"
-                                        IsVisible="{CompiledBinding IsHotkeyConfigurable, Converter={x:Static BoolConverters.Not}}"
-                                        Classes="diagonalStripe" />
+                                <Border
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Margin="2"
+                                    IsVisible="{CompiledBinding IsHotkeyConfigurable, Converter={x:Static BoolConverters.Not}}"
+                                    Classes="diagonalStripe"
+                                />
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -149,41 +183,49 @@
                 <!-- Default hot‑key -->
                 <DataGridTemplateColumn
                     Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_DefaultHotKey_Header}"
-                    Width="*">
+                    Width="*"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
                                 <!-- Normal default hotkey -->
-                                <SelectableTextBlock 
+                                <SelectableTextBlock
                                     SelectionStart="{Binding DefaultHotKeySelection.Start}"
                                     SelectionEnd="{Binding DefaultHotKeySelection.Stop}"
                                     Text="{Binding DefaultHotKey}"
                                     IsVisible="{CompiledBinding IsHotkeyConfigurable}"
                                     VerticalAlignment="Center"
-                                    IsHitTestVisible="False"/>
+                                    IsHitTestVisible="False"
+                                />
 
                                 <!-- Cannot edit -->
-                                <Border HorizontalAlignment="Stretch"
-                                        VerticalAlignment="Stretch"
-                                        Margin="2"
-                                        IsVisible="{CompiledBinding IsHotkeyConfigurable, Converter={x:Static BoolConverters.Not}}"
-                                        Classes="diagonalStripe" />
+                                <Border
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Margin="2"
+                                    IsVisible="{CompiledBinding IsHotkeyConfigurable, Converter={x:Static BoolConverters.Not}}"
+                                    Classes="diagonalStripe"
+                                />
                             </Grid>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
                 <!-- Command source -->
-                <DataGridTemplateColumn Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Source_Header}"
-                                        Width="*"
-                                        CanUserSort="False">
+                <DataGridTemplateColumn
+                    Header="{x:Static asv:RS.SettingsCommandListView_DataGrid_Source_Header}"
+                    Width="*"
+                    CanUserSort="False"
+                >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <SelectableTextBlock SelectionStart="{Binding SourceSelection.Start}"
-                                                 SelectionEnd="{Binding SourceSelection.Stop}"
-                                                 Text="{Binding Source}"
-                                                 VerticalAlignment="Center" 
-                                                 IsHitTestVisible="False"/>
+                            <SelectableTextBlock
+                                SelectionStart="{Binding SourceSelection.Start}"
+                                SelectionEnd="{Binding SourceSelection.Stop}"
+                                Text="{Binding Source}"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False"
+                            />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
