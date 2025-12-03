@@ -1,11 +1,13 @@
-﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:avalonia="clr-namespace:Asv.Avalonia"
-                    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+﻿<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
     <Design.PreviewWith>
         <Border Width="350" Height="400">
-            <avalonia:DockTabControl  CornerRadius="10" BorderBrush="Red" BorderThickness="1">
-                <TabItem  Header="Arch">
+            <avalonia:DockTabControl CornerRadius="10" BorderBrush="Red" BorderThickness="1">
+                <TabItem Header="Arch">
                     <Border Background="AntiqueWhite" Height="100">
                         <TextBlock Text="Content" Foreground="Black" FontSize="20" />
                     </Border>
@@ -40,68 +42,77 @@
     <ControlTheme x:Key="{x:Type avalonia:DockTabControl}" TargetType="avalonia:DockTabControl">
         <Setter Property="Template">
             <ControlTemplate>
-                <DockPanel >
-                        <DockPanel  x:Name="PART_TabStripDockPanel" Margin="{TemplateBinding Padding}" DockPanel.Dock="Top" >
-                            <Button Padding="2" DockPanel.Dock="Left" Theme="{StaticResource TransparentButton}" 
-                                    Command="{Binding ElementName=TabScrollViewer, Path=PageLeft}">
-                                <Button.IsVisible>
-                                    <MultiBinding Converter="{x:Static avalonia:CanScrollLeftConverter.Instance}">
-                                        <Binding ElementName="TabScrollViewer" Path="Offset.X"/>
-                                        <Binding ElementName="TabScrollViewer" Path="Viewport.Width"/>
-                                        <Binding ElementName="TabScrollViewer" Path="Extent.Width"/>
-                                    </MultiBinding>
-                                </Button.IsVisible>
-                                <avalonia1:MaterialIcon Classes="small unknown" Kind="MenuLeft"/>
-                            </Button>
-                            <Button
-                                Padding="2" DockPanel.Dock="Right" Theme="{StaticResource TransparentButton}" 
-                                    Command="{Binding ElementName=TabScrollViewer, Path=PageRight}">
-                                <Button.IsVisible>
-                                    <MultiBinding Converter="{x:Static avalonia:CanScrollRightConverter.Instance}">
-                                        <Binding ElementName="TabScrollViewer" Path="Offset.X"/>
-                                        <Binding ElementName="TabScrollViewer" Path="Viewport.Width"/>
-                                        <Binding ElementName="TabScrollViewer" Path="Extent.Width"/>
-                                    </MultiBinding>
-                                </Button.IsVisible>
-                                <avalonia1:MaterialIcon Classes="small unknown" Kind="MenuRight"/>
-                            </Button>
-                            <ScrollViewer 
-                                HorizontalScrollBarVisibility="Hidden"
-                                VerticalScrollBarVisibility="Disabled"
-                                x:Name="TabScrollViewer"
-                                avalonia:WindowHelper.EnableDrag="True"
-                                avalonia:WindowHelper.DoubleTappedWindowState="True"
-                            
-                                Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}">
-                            
-                                <ItemsPresenter Name="PART_ItemsPresenter" />
-                            
-                            </ScrollViewer>
-                        </DockPanel>
-                        
-                        <Border 
-                            Margin="0,4,0,0"
-                            Background="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}" 
-                            BorderBrush="{TemplateBinding BorderBrush }"
-                            CornerRadius="{TemplateBinding CornerRadius}"
-                            >
-                            <ContentPresenter  DockPanel.Dock="Bottom" Name="PART_SelectedContentHost"
-                                              MinWidth="100"
-                                              
-                                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              Content="{TemplateBinding SelectedContent}"
-                                              ContentTemplate="{TemplateBinding SelectedContentTemplate}" />
-                        </Border>
-                        
+                <DockPanel>
+                    <DockPanel
+                        x:Name="PART_TabStripDockPanel"
+                        Margin="{TemplateBinding Padding}"
+                        DockPanel.Dock="Top"
+                    >
+                        <Button
+                            Padding="2"
+                            DockPanel.Dock="Left"
+                            Theme="{StaticResource TransparentButton}"
+                            Command="{Binding ElementName=TabScrollViewer, Path=PageLeft}"
+                        >
+                            <Button.IsVisible>
+                                <MultiBinding Converter="{x:Static avalonia:CanScrollLeftConverter.Instance}">
+                                    <Binding ElementName="TabScrollViewer" Path="Offset.X" />
+                                    <Binding ElementName="TabScrollViewer" Path="Viewport.Width" />
+                                    <Binding ElementName="TabScrollViewer" Path="Extent.Width" />
+                                </MultiBinding>
+                            </Button.IsVisible>
+                            <avalonia1:MaterialIcon Classes="small unknown" Kind="MenuLeft" />
+                        </Button>
+                        <Button
+                            Padding="2"
+                            DockPanel.Dock="Right"
+                            Theme="{StaticResource TransparentButton}"
+                            Command="{Binding ElementName=TabScrollViewer, Path=PageRight}"
+                        >
+                            <Button.IsVisible>
+                                <MultiBinding Converter="{x:Static avalonia:CanScrollRightConverter.Instance}">
+                                    <Binding ElementName="TabScrollViewer" Path="Offset.X" />
+                                    <Binding ElementName="TabScrollViewer" Path="Viewport.Width" />
+                                    <Binding ElementName="TabScrollViewer" Path="Extent.Width" />
+                                </MultiBinding>
+                            </Button.IsVisible>
+                            <avalonia1:MaterialIcon Classes="small unknown" Kind="MenuRight" />
+                        </Button>
+                        <ScrollViewer
+                            HorizontalScrollBarVisibility="Hidden"
+                            VerticalScrollBarVisibility="Disabled"
+                            x:Name="TabScrollViewer"
+                            avalonia:WindowHelper.EnableDrag="True"
+                            avalonia:WindowHelper.DoubleTappedWindowState="True"
+                            Width="{Binding Width, RelativeSource={RelativeSource TemplatedParent}}"
+                        >
+                            <ItemsPresenter Name="PART_ItemsPresenter" />
+                        </ScrollViewer>
                     </DockPanel>
+
+                    <Border
+                        Margin="0,4,0,0"
+                        Background="{DynamicResource SystemControlPageBackgroundChromeLowBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush }"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                    >
+                        <ContentPresenter
+                            DockPanel.Dock="Bottom"
+                            Name="PART_SelectedContentHost"
+                            MinWidth="100"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Content="{TemplateBinding SelectedContent}"
+                            ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                        />
+                    </Border>
+                </DockPanel>
             </ControlTemplate>
         </Setter>
         <Style Selector="^[TabStripPlacement=Top] /template/ ItemsPresenter#PART_ItemsPresenter > StackPanel">
             <Setter Property="Orientation" Value="Horizontal" />
             <Setter Property="Margin" Value="0" />
         </Style>
-        
     </ControlTheme>
 </ResourceDictionary>

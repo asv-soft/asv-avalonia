@@ -1,92 +1,110 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui" 
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
-             mc:Ignorable="d" 
-             d:DesignWidth="800" 
-             d:DesignHeight="450" 
-             x:CompileBindings="True" 
-             x:DataType="plugins:SettingsPluginsSourcesViewModel" 
-             x:Class="Asv.Avalonia.Plugins.SettingsPluginsSourcesView">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:CompileBindings="True"
+    x:DataType="plugins:SettingsPluginsSourcesViewModel"
+    x:Class="Asv.Avalonia.Plugins.SettingsPluginsSourcesView"
+>
     <Design.DataContext>
         <plugins:SettingsPluginsSourcesViewModel />
     </Design.DataContext>
-    
+
     <DataGrid
-              Focusable="False"
-              AutoGenerateColumns="False"
-              IsReadOnly="False"
-              ColumnWidth="Auto"
-              CanUserResizeColumns="True"
-              SelectionMode="Single"
-              ItemsSource="{Binding Items}" 
-              SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}">
+        Focusable="False"
+        AutoGenerateColumns="False"
+        IsReadOnly="False"
+        ColumnWidth="Auto"
+        CanUserResizeColumns="True"
+        SelectionMode="Single"
+        ItemsSource="{Binding Items}"
+        SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}"
+    >
         <DataGrid.Columns>
             <DataGridTemplateColumn Width="Auto">
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
-                        <avalonia:MaterialIcon 
-                            Margin="4,4,8,4" 
-                            HorizontalAlignment="Center" 
+                        <avalonia:MaterialIcon
+                            Margin="4,4,8,4"
+                            HorizontalAlignment="Center"
                             VerticalAlignment="Center"
-                            Width="35" 
-                            Height="35" 
-                            Kind="Web" />
+                            Width="35"
+                            Height="35"
+                            Kind="Web"
+                        />
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-                
-            <DataGridTextColumn 
+
+            <DataGridTextColumn
                 Width="Auto"
-                IsReadOnly="True" 
-                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_NameColumn_Header}" 
-                Binding="{Binding Name}"/>
-            <DataGridTextColumn 
-                Width="*" 
-                IsReadOnly="True" 
-                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_UriColumn_Header}" 
-                Binding="{Binding SourceUri}"/>
-                
-            <DataGridTemplateColumn Width="Auto" Header="{x:Static plugins:RS.SettingsPluginsSourcesView_EditColumn_Header}">
+                IsReadOnly="True"
+                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_NameColumn_Header}"
+                Binding="{Binding Name}"
+            />
+            <DataGridTextColumn
+                Width="*"
+                IsReadOnly="True"
+                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_UriColumn_Header}"
+                Binding="{Binding SourceUri}"
+            />
+
+            <DataGridTemplateColumn
+                Width="Auto"
+                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_EditColumn_Header}"
+            >
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
-                            Theme="{DynamicResource TransparentButton}" 
-                            Command="{Binding Edit}" 
+                            Theme="{DynamicResource TransparentButton}"
+                            Command="{Binding Edit}"
                             CommandParameter="{Binding}"
-                            IsEnabled="{Binding $parent[DataGridRow].IsSelected}">
-                            <avalonia:MaterialIcon Width="18" 
-                                                   Height="18" 
-                                                   Kind="Pencil" 
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="Green" />
+                            IsEnabled="{Binding $parent[DataGridRow].IsSelected}"
+                        >
+                            <avalonia:MaterialIcon
+                                Width="18"
+                                Height="18"
+                                Kind="Pencil"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="Green"
+                            />
                         </Button>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>
             </DataGridTemplateColumn>
-                
-            <DataGridTemplateColumn Width="Auto" Header="{x:Static plugins:RS.SettingsPluginsSourcesView_DeleteColumn_Header}">
+
+            <DataGridTemplateColumn
+                Width="Auto"
+                Header="{x:Static plugins:RS.SettingsPluginsSourcesView_DeleteColumn_Header}"
+            >
                 <DataGridTemplateColumn.CellTemplate>
                     <DataTemplate>
                         <Button
                             VerticalAlignment="Center"
                             HorizontalAlignment="Center"
-                            Theme="{DynamicResource TransparentButton}" 
-                            Command="{Binding Remove}" 
+                            Theme="{DynamicResource TransparentButton}"
+                            Command="{Binding Remove}"
                             CommandParameter="{Binding}"
                             IsEnabled="{Binding $parent[DataGridRow].IsSelected}"
-                            MinWidth="35">
-                            <avalonia:MaterialIcon Width="18" 
-                                                   Height="18" 
-                                                   Kind="Remove" 
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   Foreground="Red" />
+                            MinWidth="35"
+                        >
+                            <avalonia:MaterialIcon
+                                Width="18"
+                                Height="18"
+                                Kind="Remove"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Foreground="Red"
+                            />
                         </Button>
                     </DataTemplate>
                 </DataGridTemplateColumn.CellTemplate>

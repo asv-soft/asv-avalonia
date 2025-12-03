@@ -1,45 +1,66 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="200"
-             x:Class="Asv.Avalonia.SingleRttBoxView"
-             x:DataType="avalonia:SingleRttBoxViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="200"
+    x:Class="Asv.Avalonia.SingleRttBoxView"
+    x:DataType="avalonia:SingleRttBoxViewModel"
+>
     <Design.DataContext>
         <avalonia:SingleRttBoxViewModel />
     </Design.DataContext>
-    <avalonia:RttBox IsUpdated="{Binding IsUpdated}" 
-                     Padding="4" 
-                     HorizontalContentAlignment="Stretch"
-                     Icon="{Binding Icon}" 
-                     Header="{Binding Header}" 
-                     IsNetworkError="{Binding IsNetworkError}"
-                     SmallHeader="{Binding ShortHeader}"
-                     avalonia:AsvPallete.Color="{Binding Status}">
+    <avalonia:RttBox
+        IsUpdated="{Binding IsUpdated}"
+        Padding="4"
+        HorizontalContentAlignment="Stretch"
+        Icon="{Binding Icon}"
+        Header="{Binding Header}"
+        IsNetworkError="{Binding IsNetworkError}"
+        SmallHeader="{Binding ShortHeader}"
+        avalonia:AsvPallete.Color="{Binding Status}"
+    >
         <avalonia:RttBox.SmallContent>
-            <TextBlock VerticalAlignment="Center"  Margin="0,0,4,0">
-                <Run Text="{Binding ValueString}"/>
-                <Run Text="{Binding Units}" Foreground="{DynamicResource AsvForegroundUnknownBrush}" />
+            <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">
+                <Run Text="{Binding ValueString}" />
+                <Run
+                    Text="{Binding Units}"
+                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                />
             </TextBlock>
         </avalonia:RttBox.SmallContent>
         <StackPanel>
             <DockPanel>
-                <TextBlock HorizontalAlignment="Right" VerticalAlignment="Bottom" DockPanel.Dock="Right" FontSize="20" Foreground="{DynamicResource AsvForegroundUnknownBrush}" Text="{Binding Units}"/>
+                <TextBlock
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Bottom"
+                    DockPanel.Dock="Right"
+                    FontSize="20"
+                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                    Text="{Binding Units}"
+                />
                 <TextBlock Padding="0" Text="{Binding ValueString}" HorizontalAlignment="Center" />
             </DockPanel>
-            <ProgressBar 
-                IsVisible="{Binding ProgressStatus, Converter={x:Static ObjectConverters.IsNotNull}}" 
-                Margin="4,2" 
-                Minimum="0" 
-                Maximum="1" 
+            <ProgressBar
+                IsVisible="{Binding ProgressStatus, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Margin="4,2"
+                Minimum="0"
+                Maximum="1"
                 Value="{Binding Progress}"
-                IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}" 
+                IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}"
                 avalonia:AsvPallete.Color="{Binding ProgressStatus}"
-                />
-            <TextBlock Margin="0,4,0,0"  HorizontalAlignment="Left" Foreground="{DynamicResource AsvForegroundUnknownBrush}" FontSize="15" IsVisible="{Binding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}" Text="{Binding StatusText}"/>
+            />
+            <TextBlock
+                Margin="0,4,0,0"
+                HorizontalAlignment="Left"
+                Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                FontSize="15"
+                IsVisible="{Binding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Text="{Binding StatusText}"
+            />
         </StackPanel>
-        
-        
     </avalonia:RttBox>
 </UserControl>

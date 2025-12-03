@@ -1,51 +1,76 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:avalonia1="clr-namespace:Asv.Avalonia"
-             mc:Ignorable="d" 
-             x:Class="Asv.Avalonia.SearchBoxView"
-             x:DataType="avalonia1:SearchBoxViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    x:Class="Asv.Avalonia.SearchBoxView"
+    x:DataType="avalonia1:SearchBoxViewModel"
+>
     <Design.DataContext>
-        <avalonia1:SearchBoxViewModel/>
+        <avalonia1:SearchBoxViewModel />
     </Design.DataContext>
     <Panel>
-        <TextBox MinWidth="200" Padding="0" VerticalContentAlignment="Center" 
-                 avalonia1:NavigationHelper.IsFocused ="{Binding Text.IsFocused, Mode=OneWay}"
-                 GotFocus="InputElement_OnGotFocus"
-                 Text="{Binding Text.ViewValue.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                 Watermark="{x:Static avalonia1:RS.SearchBoxView_MainTextBox_Watermark}"
-                 MinHeight="0" Height="25" >
+        <TextBox
+            MinWidth="200"
+            Padding="0"
+            VerticalContentAlignment="Center"
+            avalonia1:NavigationHelper.IsFocused="{Binding Text.IsFocused, Mode=OneWay}"
+            GotFocus="InputElement_OnGotFocus"
+            Text="{Binding Text.ViewValue.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            Watermark="{x:Static avalonia1:RS.SearchBoxView_MainTextBox_Watermark}"
+            MinHeight="0"
+            Height="25"
+        >
             <TextBox.KeyBindings>
-                <KeyBinding Gesture="Escape" Command="{Binding ClearCommandCall}"/> <!-- TODO: Remove when clear hotkey fixed  -->
+                <KeyBinding Gesture="Escape" Command="{Binding ClearCommandCall}" />
+                <!-- TODO: Remove when clear hotkey fixed  -->
             </TextBox.KeyBindings>
             <TextBox.InnerLeftContent>
-                <avalonia:MaterialIcon Kind="Magnify" Width="20" Height="20" Margin="4,0"/>
+                <avalonia:MaterialIcon Kind="Magnify" Width="20" Height="20" Margin="4,0" />
             </TextBox.InnerLeftContent>
             <TextBox.InnerRightContent>
                 <Panel>
-                    <Button IsVisible="{Binding IsExecuting.Value}"
-                            Command="{Binding Cancel}"
-                            Padding="0" Theme="{StaticResource TransparentButton}">
-                        <avalonia:MaterialIcon Kind="Cancel" Width="20" Height="20" Margin="4,0"/>
-                    </Button>    
-                    <Button IsVisible="{Binding !IsExecuting.Value}" 
-                            Command="{Binding Refresh}" 
-                            Padding="0" Theme="{StaticResource TransparentButton}">
-                        <avalonia:MaterialIcon Kind="CircleArrows" Width="20" Height="20" Margin="4,0"/>
+                    <Button
+                        IsVisible="{Binding IsExecuting.Value}"
+                        Command="{Binding Cancel}"
+                        Padding="0"
+                        Theme="{StaticResource TransparentButton}"
+                    >
+                        <avalonia:MaterialIcon Kind="Cancel" Width="20" Height="20" Margin="4,0" />
+                    </Button>
+                    <Button
+                        IsVisible="{Binding !IsExecuting.Value}"
+                        Command="{Binding Refresh}"
+                        Padding="0"
+                        Theme="{StaticResource TransparentButton}"
+                    >
+                        <avalonia:MaterialIcon
+                            Kind="CircleArrows"
+                            Width="20"
+                            Height="20"
+                            Margin="4,0"
+                        />
                     </Button>
                 </Panel>
             </TextBox.InnerRightContent>
         </TextBox>
-        <ProgressBar MinWidth="0"
-                     IsVisible="{Binding IsExecuting.Value}" 
-                     Background="Transparent" Margin="0,0,30,0" 
-                     Height="20" Opacity="0.5" VerticalAlignment="Center" HorizontalAlignment="Stretch" 
-                     Minimum="0" Maximum="1"
-                     IsIndeterminate="{Binding Progress.Value, 
+        <ProgressBar
+            MinWidth="0"
+            IsVisible="{Binding IsExecuting.Value}"
+            Background="Transparent"
+            Margin="0,0,30,0"
+            Height="20"
+            Opacity="0.5"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Stretch"
+            Minimum="0"
+            Maximum="1"
+            IsIndeterminate="{Binding Progress.Value, 
                      Converter={x:Static avalonia1:DoubleTrueIfNanConverter.Instance}}"
-                     Value="{Binding Progress.Value}"/>
+            Value="{Binding Progress.Value}"
+        />
     </Panel>
-    
 </UserControl>

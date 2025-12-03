@@ -1,45 +1,78 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.GeoPointRttBoxView"
-             HorizontalAlignment="Stretch"
-             HorizontalContentAlignment="Stretch"
-             x:DataType="avalonia:GeoPointRttBoxViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.GeoPointRttBoxView"
+    HorizontalAlignment="Stretch"
+    HorizontalContentAlignment="Stretch"
+    x:DataType="avalonia:GeoPointRttBoxViewModel"
+>
     <Design.DataContext>
         <avalonia:GeoPointRttBoxViewModel />
     </Design.DataContext>
-    <avalonia:RttBox IsUpdated="{Binding IsUpdated}" 
-                     Padding="4" 
-                     FontSize="18" 
-                     IsNetworkError="{Binding IsNetworkError}"
-                     HorizontalContentAlignment="Stretch"
-                     Icon="{Binding Icon}" 
-                     Header="{Binding Header}" 
-                     SmallContent="{Binding ShortStatusText}"
-                     SmallHeader="{Binding ShortHeader}"
-                     avalonia:AsvPallete.Color="{Binding Status}"
-                     >
+    <avalonia:RttBox
+        IsUpdated="{Binding IsUpdated}"
+        Padding="4"
+        FontSize="18"
+        IsNetworkError="{Binding IsNetworkError}"
+        HorizontalContentAlignment="Stretch"
+        Icon="{Binding Icon}"
+        Header="{Binding Header}"
+        SmallContent="{Binding ShortStatusText}"
+        SmallHeader="{Binding ShortHeader}"
+        avalonia:AsvPallete.Color="{Binding Status}"
+    >
         <Grid RowDefinitions="*,*,*,4,Auto,4,Auto" ColumnDefinitions="Auto,5,*">
-            <TextBlock FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}"  Grid.Column="0"  Grid.Row="0" Text="Lat"/>
-            <TextBlock FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}"  Grid.Column="0"  Grid.Row="1" Text="Lon"/>
-            <TextBlock FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}"  Grid.Column="0"  Grid.Row="2" Text="Alt"/>
-            <SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding LatitudeString}"/>
-            <SelectableTextBlock Grid.Column="2" Grid.Row="1" Text="{Binding LongitudeString}"/>
-            <SelectableTextBlock Grid.Column="2" Grid.Row="2" Text="{Binding AltitudeString}"/>
-            
+            <TextBlock
+                FontSize="15"
+                Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                Grid.Column="0"
+                Grid.Row="0"
+                Text="Lat"
+            />
+            <TextBlock
+                FontSize="15"
+                Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                Grid.Column="0"
+                Grid.Row="1"
+                Text="Lon"
+            />
+            <TextBlock
+                FontSize="15"
+                Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                Grid.Column="0"
+                Grid.Row="2"
+                Text="Alt"
+            />
+            <SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding LatitudeString}" />
+            <SelectableTextBlock Grid.Column="2" Grid.Row="1" Text="{Binding LongitudeString}" />
+            <SelectableTextBlock Grid.Column="2" Grid.Row="2" Text="{Binding AltitudeString}" />
+
             <ProgressBar
-                Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="4"
-                IsVisible="{Binding ProgressStatus, Converter={x:Static ObjectConverters.IsNotNull}}" 
-                Minimum="0" 
-                Maximum="1" 
+                Grid.ColumnSpan="3"
+                Grid.Column="0"
+                Grid.Row="4"
+                IsVisible="{Binding ProgressStatus, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Minimum="0"
+                Maximum="1"
                 Value="{Binding Progress}"
-                IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}" 
+                IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}"
                 avalonia:AsvPallete.Color="{Binding ProgressStatus}"
-                />
-            <TextBlock Foreground="{DynamicResource AsvForegroundUnknownBrush}" FontSize="15" IsVisible="{Binding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}" Grid.ColumnSpan="3" Grid.Column="0"  Grid.Row="6" Text="{Binding StatusText}"/>
+            />
+            <TextBlock
+                Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                FontSize="15"
+                IsVisible="{Binding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}"
+                Grid.ColumnSpan="3"
+                Grid.Column="0"
+                Grid.Row="6"
+                Text="{Binding StatusText}"
+            />
         </Grid>
     </avalonia:RttBox>
 </UserControl>

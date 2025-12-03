@@ -1,7 +1,9 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:control="clr-namespace:Asv.Avalonia"
-                    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:control="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
     <Design.PreviewWith>
         <Border IsHitTestVisible="False">
             <control:DockTabStripItem>
@@ -12,20 +14,35 @@
         </Border>
     </Design.PreviewWith>
     <DataTemplate x:Key="DockTabStripItemHeaderTemplate" x:DataType="control:IPage">
-        <StackPanel Background="Transparent" Orientation="Horizontal" Spacing="4" Margin="8,4,4,4" >
-            <avalonia:MaterialIcon Width="16" Height="16"  Kind="{Binding Icon}" control:AsvPallete.Color="{Binding IconColor}" />
+        <StackPanel Background="Transparent" Orientation="Horizontal" Spacing="4" Margin="8,4,4,4">
+            <avalonia:MaterialIcon
+                Width="16"
+                Height="16"
+                Kind="{Binding Icon}"
+                control:AsvPallete.Color="{Binding IconColor}"
+            />
             <TextBlock FontSize="14" VerticalAlignment="Center" Text="{Binding Title}" />
-            <avalonia:MaterialIcon IsVisible="{Binding !!Status}" Width="16" Height="16"  Kind="{Binding Status}" control:AsvPallete.Color="{Binding StatusColor}" />
-            <Button CornerRadius="10" Theme="{StaticResource TransparentButton}" Command="{Binding TryClose}" Padding="0">
+            <avalonia:MaterialIcon
+                IsVisible="{Binding !!Status}"
+                Width="16"
+                Height="16"
+                Kind="{Binding Status}"
+                control:AsvPallete.Color="{Binding StatusColor}"
+            />
+            <Button
+                CornerRadius="10"
+                Theme="{StaticResource TransparentButton}"
+                Command="{Binding TryClose}"
+                Padding="0"
+            >
                 <avalonia:MaterialIcon Width="16" Height="16" Classes="unknown" Kind="Close" />
             </Button>
-        </StackPanel>    
+        </StackPanel>
     </DataTemplate>
     <ControlTheme x:Key="{x:Type control:DockTabStripItem}" TargetType="control:DockTabStripItem">
-        <Setter Property="ContentTemplate" Value="{StaticResource DockTabStripItemHeaderTemplate}" />
-        
+        <Setter
+            Property="ContentTemplate"
+            Value="{StaticResource DockTabStripItemHeaderTemplate}"
+        />
     </ControlTheme>
-    
-    
-    
 </ResourceDictionary>

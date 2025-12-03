@@ -25,22 +25,20 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         : this(NullPluginManager.Instance, DesignTime.Navigation, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
-        var items = new ObservableList<IPluginServerInfo>(
-            [
-                new SourceInfo(
-                    new SourceRepository(
-                        new PackageSource("https://api.nuget.org/v3/index.json", "test", true),
-                        [new PluginResourceProvider()]
-                    )
-                ),
-                new SourceInfo(
-                    new SourceRepository(
-                        new PackageSource("https://test.com", "test", true),
-                        [new PluginResourceProvider()]
-                    )
-                ),
-            ]
-        );
+        var items = new ObservableList<IPluginServerInfo>([
+            new SourceInfo(
+                new SourceRepository(
+                    new PackageSource("https://api.nuget.org/v3/index.json", "test", true),
+                    [new PluginResourceProvider()]
+                )
+            ),
+            new SourceInfo(
+                new SourceRepository(
+                    new PackageSource("https://test.com", "test", true),
+                    [new PluginResourceProvider()]
+                )
+            ),
+        ]);
         Items = items
             .ToNotifyCollectionChanged(x => new PluginsSourceViewModel(
                 x,

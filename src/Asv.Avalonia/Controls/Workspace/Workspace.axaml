@@ -1,68 +1,78 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalonia="clr-namespace:Asv.Avalonia"
-        >
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+>
     <Design.PreviewWith>
         <Panel Width="1024" Height="500" Background="Gray">
-            <avalonia:Workspace BorderThickness="3" >
+            <avalonia:Workspace BorderThickness="3">
                 <avalonia:WorkspaceItem Header="HEADER1" Position="Right">
                     <StackPanel>
-                        <TextBlock Text="AAAA"/>
+                        <TextBlock Text="AAAA" />
                         <TextBox></TextBox>
                     </StackPanel>
                 </avalonia:WorkspaceItem>
                 <avalonia:WorkspaceItem Header="HEADER2" Position="Right">
                     <StackPanel>
-                        <TextBlock Text="AAAA"/>
+                        <TextBlock Text="AAAA" />
                         <TextBox></TextBox>
                     </StackPanel>
                 </avalonia:WorkspaceItem>
                 <avalonia:WorkspaceItem Header="HEADER2" Position="Left">
                     <StackPanel>
-                        <TextBlock Text="AAAA"/>
+                        <TextBlock Text="AAAA" />
                         <TextBox></TextBox>
                     </StackPanel>
                 </avalonia:WorkspaceItem>
                 <avalonia:WorkspaceItem Header="HEADER3" Position="Bottom">
                     <StackPanel>
-                        <TextBlock Text="AAAA"/>
+                        <TextBlock Text="AAAA" />
                         <TextBox></TextBox>
                     </StackPanel>
                 </avalonia:WorkspaceItem>
                 <avalonia:WorkspaceItem Header="HEADER4" Position="Bottom">
                     <StackPanel>
-                        <TextBlock Text="AAAA"/>
+                        <TextBlock Text="AAAA" />
                         <TextBox></TextBox>
                     </StackPanel>
                 </avalonia:WorkspaceItem>
-                
-                <avalonia:WorkspaceItem Header="Central" Position="Center" HorizontalAlignment="Stretch">
-                    <Border  BorderThickness="1" BorderBrush="Red" Margin="4">
+
+                <avalonia:WorkspaceItem
+                    Header="Central"
+                    Position="Center"
+                    HorizontalAlignment="Stretch"
+                >
+                    <Border BorderThickness="1" BorderBrush="Red" Margin="4">
                         <DockPanel>
-                            <TextBlock DockPanel.Dock="Top" Text="AAAA"/>
+                            <TextBlock DockPanel.Dock="Top" Text="AAAA" />
                             <TextBox></TextBox>
-                        </DockPanel>    
+                        </DockPanel>
                     </Border>
-                    
                 </avalonia:WorkspaceItem>
-                <avalonia:WorkspaceItem Header="Central" Position="Center" HorizontalAlignment="Stretch">
-                    <Border  BorderThickness="1" BorderBrush="Red" Margin="4">
+                <avalonia:WorkspaceItem
+                    Header="Central"
+                    Position="Center"
+                    HorizontalAlignment="Stretch"
+                >
+                    <Border BorderThickness="1" BorderBrush="Red" Margin="4">
                         <DockPanel>
-                            <TextBlock DockPanel.Dock="Top" Text="AAAA"/>
+                            <TextBlock DockPanel.Dock="Top" Text="AAAA" />
                             <TextBox></TextBox>
-                        </DockPanel>    
+                        </DockPanel>
                     </Border>
-                    
                 </avalonia:WorkspaceItem>
             </avalonia:Workspace>
         </Panel>
     </Design.PreviewWith>
-    <Style Selector="avalonia|Workspace" >
+    <Style Selector="avalonia|Workspace">
         <Style Selector="^ GridSplitter:pointerover">
-            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+            <Setter
+                Property="Background"
+                Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+            />
         </Style>
         <Style Selector="^ GridSplitter">
-            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent" />
         </Style>
         <!-- Set Defaults -->
         <Setter Property="ItemsPanel">
@@ -72,9 +82,11 @@
         </Setter>
         <Setter Property="Template">
             <ControlTemplate>
-                <ItemsPresenter Name="PART_ItemsPresenter"
-                                ItemsPanel="{TemplateBinding ItemsPanel}"
-                                Margin="{TemplateBinding Padding}"/>
+                <ItemsPresenter
+                    Name="PART_ItemsPresenter"
+                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                    Margin="{TemplateBinding Padding}"
+                />
             </ControlTemplate>
         </Setter>
     </Style>

@@ -1,31 +1,37 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
     <Design.PreviewWith>
         <Border Padding="20" Width="500" Height="300">
-            <map:MapItemsControl CenterMap="{map:GeoPoint 53,53}" >
-                <map:MapItem Location="{map:GeoPoint 53,53}"
-                                      Rotation="45"
-                                      CenterX="{map:HorizontalOffset Center}"
-                                      CenterY="{map:VerticalOffset Center}">
-                    <avalonia:MaterialIcon Foreground="BlueViolet" Width="40" Height="40" Kind="Navigation" />
+            <map:MapItemsControl CenterMap="{map:GeoPoint 53,53}">
+                <map:MapItem
+                    Location="{map:GeoPoint 53,53}"
+                    Rotation="45"
+                    CenterX="{map:HorizontalOffset Center}"
+                    CenterY="{map:VerticalOffset Center}"
+                >
+                    <avalonia:MaterialIcon
+                        Foreground="BlueViolet"
+                        Width="40"
+                        Height="40"
+                        Kind="Navigation"
+                    />
                 </map:MapItem>
-                <map:MapItem Location="{map:GeoPoint 53,53.4}"
-                                      CenterX="{map:HorizontalOffset Center}"
-                                      CenterY="{map:VerticalOffset Bottom}">
-                    <avalonia:MaterialIcon  Width="40" Height="40" Kind="MapMarker" />
+                <map:MapItem
+                    Location="{map:GeoPoint 53,53.4}"
+                    CenterX="{map:HorizontalOffset Center}"
+                    CenterY="{map:VerticalOffset Bottom}"
+                >
+                    <avalonia:MaterialIcon Width="40" Height="40" Kind="MapMarker" />
                 </map:MapItem>
-        
             </map:MapItemsControl>
         </Border>
     </Design.PreviewWith>
-    
-    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/ItemsControl/MapItem.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/ItemsControl/MapItemsControl.axaml"/>
-    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/Attitude/Attitude.axaml"/>
-    
-   
-    
-    
+
+    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/ItemsControl/MapItem.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/ItemsControl/MapItemsControl.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/Attitude/Attitude.axaml" />
 </Styles>

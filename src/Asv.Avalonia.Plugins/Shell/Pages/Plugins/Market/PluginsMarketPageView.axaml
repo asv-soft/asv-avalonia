@@ -1,50 +1,75 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
-             xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="1600" d:DesignHeight="450"
-             x:CompileBindings="True"
-             x:DataType="plugins:PluginsMarketPageViewModel"
-             x:Class="Asv.Avalonia.Plugins.PluginsMarketPageView">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:plugins="clr-namespace:Asv.Avalonia.Plugins"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="1600"
+    d:DesignHeight="450"
+    x:CompileBindings="True"
+    x:DataType="plugins:PluginsMarketPageViewModel"
+    x:Class="Asv.Avalonia.Plugins.PluginsMarketPageView"
+>
     <Design.DataContext>
         <plugins:PluginsMarketPageViewModel />
     </Design.DataContext>
-    <Grid
-        ColumnDefinitions="2*,5,3*"
-        RowDefinitions="Auto,5,*">
+    <Grid ColumnDefinitions="2*,5,3*" RowDefinitions="Auto,5,*">
         <DockPanel Margin="4 4 4 0">
             <StackPanel DockPanel.Dock="Right" Margin="12, 0, 0, 0" Orientation="Horizontal">
-                <ToggleSwitch IsChecked="{Binding IsShowOnlyVerified.ViewValue.Value}"
-                              OnContent="" 
-                              OffContent=""/>
-                <TextBlock VerticalAlignment="Center"
-                           Text="{x:Static plugins:RS.PluginsMarketPageView_ToggleSwitch_OnlyVerified}" />
+                <ToggleSwitch
+                    IsChecked="{Binding IsShowOnlyVerified.ViewValue.Value}"
+                    OnContent=""
+                    OffContent=""
+                />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{x:Static plugins:RS.PluginsMarketPageView_ToggleSwitch_OnlyVerified}"
+                />
             </StackPanel>
-            
-            <avalonia1:SearchBoxView 
+
+            <avalonia1:SearchBoxView
                 Background="Transparent"
                 CornerRadius="0"
-                BorderThickness="0" 
+                BorderThickness="0"
                 DataContext="{Binding Search}"
             />
         </DockPanel>
 
-        <Rectangle Grid.Column="0" Grid.Row="1" Fill="{DynamicResource ButtonBorderBrush}" Height="1"
-                   HorizontalAlignment="Stretch" />
-        <Rectangle Grid.Column="1" Grid.Row="0" Grid.RowSpan="3" Fill="{DynamicResource ButtonBorderBrush}" Width="1"
-                   VerticalAlignment="Stretch" />
-        <avalonia:MaterialIcon Grid.Row="0" Grid.RowSpan="3" Width="15" Height="15" Grid.Column="1"
-                               Kind="UnfoldMoreVertical" Foreground="{DynamicResource ButtonBorderBrush}" />
-        <ListBox 
-            Margin="4" 
+        <Rectangle
+            Grid.Column="0"
+            Grid.Row="1"
+            Fill="{DynamicResource ButtonBorderBrush}"
+            Height="1"
+            HorizontalAlignment="Stretch"
+        />
+        <Rectangle
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Fill="{DynamicResource ButtonBorderBrush}"
+            Width="1"
+            VerticalAlignment="Stretch"
+        />
+        <avalonia:MaterialIcon
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Width="15"
+            Height="15"
+            Grid.Column="1"
+            Kind="UnfoldMoreVertical"
+            Foreground="{DynamicResource ButtonBorderBrush}"
+        />
+        <ListBox
+            Margin="4"
             Grid.Row="2"
-            Grid.Column="0" 
+            Grid.Column="0"
             CornerRadius="{StaticResource ControlCornerRadius}"
             ItemsSource="{Binding PluginsView}"
-            SelectedItem="{Binding SelectedPlugin.Value}">
+            SelectedItem="{Binding SelectedPlugin.Value}"
+        >
             <ListBox.Styles>
                 <Style Selector="ListBoxItem">
                     <Setter Property="Padding" Value="4" />
@@ -54,25 +79,54 @@
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
-                        <avalonia:MaterialIcon Margin="4" HorizontalAlignment="Left" Grid.RowSpan="2" Width="40"
-                                               Height="40" Kind="Package" />
+                        <avalonia:MaterialIcon
+                            Margin="4"
+                            HorizontalAlignment="Left"
+                            Grid.RowSpan="2"
+                            Width="40"
+                            Height="40"
+                            Kind="Package"
+                        />
                         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
-                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource BodyStrongTextBlockStyle}"
-                                       Margin="0,0,4,0" Text="{Binding Name}" />
-                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource CaptionTextBlockStyle}"
-                                       Foreground="{DynamicResource SystemAccentColorLight2}" Text="[" />
-                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource CaptionTextBlockStyle}"
-                                       Foreground="{DynamicResource SystemAccentColorLight2}"
-                                       Text="{Binding SourceName}" />
-                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource CaptionTextBlockStyle}"
-                                       Foreground="{DynamicResource SystemAccentColorLight2}" Text="]" />
-                            <avalonia:MaterialIcon Height="15" Kind="Verified" Margin="5 0"
-                                                   IsVisible="{Binding IsVerified}"
-                                                   Foreground="{DynamicResource SystemAccentColorLight1}" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Theme="{DynamicResource BodyStrongTextBlockStyle}"
+                                Margin="0,0,4,0"
+                                Text="{Binding Name}"
+                            />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Theme="{DynamicResource CaptionTextBlockStyle}"
+                                Foreground="{DynamicResource SystemAccentColorLight2}"
+                                Text="["
+                            />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Theme="{DynamicResource CaptionTextBlockStyle}"
+                                Foreground="{DynamicResource SystemAccentColorLight2}"
+                                Text="{Binding SourceName}"
+                            />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Theme="{DynamicResource CaptionTextBlockStyle}"
+                                Foreground="{DynamicResource SystemAccentColorLight2}"
+                                Text="]"
+                            />
+                            <avalonia:MaterialIcon
+                                Height="15"
+                                Kind="Verified"
+                                Margin="5 0"
+                                IsVisible="{Binding IsVerified}"
+                                Foreground="{DynamicResource SystemAccentColorLight1}"
+                            />
                         </StackPanel>
-                        <TextBlock Grid.Row="1" Grid.Column="1" Theme="{DynamicResource CaptionTextBlockStyle}"
-                                   Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
-                                   Text="{Binding Author}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Theme="{DynamicResource CaptionTextBlockStyle}"
+                            Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
+                            Text="{Binding Author}"
+                        />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -80,125 +134,239 @@
         <Panel Margin="8" VerticalAlignment="Stretch" Grid.Row="0" Grid.RowSpan="3" Grid.Column="2">
             <Panel IsVisible="{Binding SelectedPlugin.Value, Converter={x:Static ObjectConverters.IsNotNull}}">
                 <DockPanel DataContext="{Binding SelectedPlugin.Value}">
-                    <Grid DockPanel.Dock="Top" RowDefinitions="*,*,Auto" RowSpacing="15" ColumnDefinitions="*">
-                        <TextBlock Grid.Row="0" Grid.Column="0"
-                                   Theme="{DynamicResource SubtitleTextBlockStyle}" Text="{Binding Name}" />
-                        <StackPanel Orientation="Horizontal" Spacing="8" Grid.Row="1" Grid.Column="0">
-                            <TextBlock Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
-                                       Theme="{DynamicResource BodyTextBlockStyle}" Text="{Binding SourceName}" />
-                            <TextBlock Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
-                                       Theme="{DynamicResource BodyTextBlockStyle}" Text="|" />
-                            <TextBlock Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
-                                       Theme="{DynamicResource BodyTextBlockStyle}" Text="{Binding Author}" />
+                    <Grid
+                        DockPanel.Dock="Top"
+                        RowDefinitions="*,*,Auto"
+                        RowSpacing="15"
+                        ColumnDefinitions="*"
+                    >
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Theme="{DynamicResource SubtitleTextBlockStyle}"
+                            Text="{Binding Name}"
+                        />
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Spacing="8"
+                            Grid.Row="1"
+                            Grid.Column="0"
+                        >
+                            <TextBlock
+                                Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
+                                Theme="{DynamicResource BodyTextBlockStyle}"
+                                Text="{Binding SourceName}"
+                            />
+                            <TextBlock
+                                Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
+                                Theme="{DynamicResource BodyTextBlockStyle}"
+                                Text="|"
+                            />
+                            <TextBlock
+                                Foreground="{DynamicResource AccentTextFillColorDisabledBrush}"
+                                Theme="{DynamicResource BodyTextBlockStyle}"
+                                Text="{Binding Author}"
+                            />
                         </StackPanel>
-                        
-                        <Grid Grid.Row="2" Grid.Column="0" ColumnDefinitions="Auto, Auto, Auto" ColumnSpacing="4">
-                            <Button Grid.Column="0"
-                                    Classes="accent"
+
+                        <Grid
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            ColumnDefinitions="Auto, Auto, Auto"
+                            ColumnSpacing="4"
+                        >
+                            <Button
+                                Grid.Column="0"
+                                Classes="accent"
+                                IsVisible="{Binding !IsInstalled.Value}"
+                                IsEnabled="{CompiledBinding !Install.IsExecuting.Value}"
+                                Command="{CompiledBinding Install.Command}"
+                                Content="{x:Static plugins:RS.PluginsMarketPageView_Install}"
+                            />
+                            <Button
+                                Grid.Column="0"
+                                DockPanel.Dock="Right"
+                                IsVisible="{Binding IsInstalled.Value}"
+                                IsEnabled="{Binding !IsUninstalled.ViewValue.Value}"
+                                Command="{Binding Uninstall}"
+                                Content="{x:Static plugins:RS.InstalledPluginsPageView_Uninstall}"
+                            />
+                            <ProgressBar
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Maximum="1"
+                                IsVisible="{CompiledBinding Install.IsExecuting.Value}"
+                                Value="{CompiledBinding Install.Progress.Value}"
+                            />
+                            <StackPanel
+                                Orientation="Horizontal"
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                IsVisible="{CompiledBinding !Install.IsExecuting.Value}"
+                            >
+                                <TextBlock
                                     IsVisible="{Binding !IsInstalled.Value}"
-                                    IsEnabled="{CompiledBinding !Install.IsExecuting.Value}"
-                                    Command="{CompiledBinding Install.Command}"
-                                    Content="{x:Static plugins:RS.PluginsMarketPageView_Install}" 
-                            />
-                            <Button Grid.Column="0"
-                                    DockPanel.Dock="Right"
-                                    IsVisible="{Binding IsInstalled.Value}" 
-                                    IsEnabled="{Binding !IsUninstalled.ViewValue.Value}"
-                                    Command="{Binding Uninstall}"
-                                    Content="{x:Static plugins:RS.InstalledPluginsPageView_Uninstall}" />
-                            <ProgressBar Grid.Row="0" Grid.Column="1"
-                                         Maximum="1"
-                                         IsVisible="{CompiledBinding Install.IsExecuting.Value}"
-                                         Value="{CompiledBinding Install.Progress.Value}"
-                            />
-                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1" IsVisible="{CompiledBinding !Install.IsExecuting.Value}" >
-                                <TextBlock IsVisible="{Binding !IsInstalled.Value}"
-                                           Theme="{DynamicResource BodyStrongTextBlockStyle}" Text="{Binding LastVersion}"
-                                           VerticalAlignment="Center" />
-                                <TextBlock IsVisible="{Binding IsInstalled.Value}"
-                                           Theme="{DynamicResource BodyStrongTextBlockStyle}" Text="{Binding LocalVersion}"
-                                           VerticalAlignment="Center" />
+                                    Theme="{DynamicResource BodyStrongTextBlockStyle}"
+                                    Text="{Binding LastVersion}"
+                                    VerticalAlignment="Center"
+                                />
+                                <TextBlock
+                                    IsVisible="{Binding IsInstalled.Value}"
+                                    Theme="{DynamicResource BodyStrongTextBlockStyle}"
+                                    Text="{Binding LocalVersion}"
+                                    VerticalAlignment="Center"
+                                />
                             </StackPanel>
-                            <ComboBox 
-                                Grid.Row="0" 
-                                Grid.Column="2" 
+                            <ComboBox
+                                Grid.Row="0"
+                                Grid.Column="2"
                                 IsVisible="{CompiledBinding !Install.IsExecuting.Value}"
                                 ItemsSource="{Binding PluginVersionsView}"
                                 PlaceholderText="{x:Static plugins:RS.InstalledPluginsPageView_AllVersions}"
                                 VerticalAlignment="Center"
-                                SelectedItem="{Binding SelectedVersion.Value}">
+                                SelectedItem="{Binding SelectedVersion.Value}"
+                            >
                                 <ComboBox.ItemTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding }"/>
+                                        <TextBlock Text="{Binding }" />
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <Button Grid.Row="0" Grid.Column="2"
-                                    IsVisible="{CompiledBinding Install.IsExecuting.Value}"
-                                    Command="{CompiledBinding Install.Cancel}">
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                IsVisible="{CompiledBinding Install.IsExecuting.Value}"
+                                Command="{CompiledBinding Install.Cancel}"
+                            >
                                 <avalonia:MaterialIcon Kind="Cancel" />
                             </Button>
                         </Grid>
                     </Grid>
-                    
-                    <avalonia1:InfoBar IsVisible="{Binding IsUninstalled.ViewValue.Value}" DockPanel.Dock="Top"
-                                      Title="{x:Static plugins:RS.InstalledPluginsPageView_UninstalledMessageTitle}"
-                                      IsOpen="True" IsIconVisible="True" Severity="Warning" IsClosable="False"
-                                      Message="{x:Static plugins:RS.InstalledPluginsPageView_UninstalledMessage}">
+
+                    <avalonia1:InfoBar
+                        IsVisible="{Binding IsUninstalled.ViewValue.Value}"
+                        DockPanel.Dock="Top"
+                        Title="{x:Static plugins:RS.InstalledPluginsPageView_UninstalledMessageTitle}"
+                        IsOpen="True"
+                        IsIconVisible="True"
+                        Severity="Warning"
+                        IsClosable="False"
+                        Message="{x:Static plugins:RS.InstalledPluginsPageView_UninstalledMessage}"
+                    >
                         <avalonia1:InfoBar.ActionButton>
-                            <Button Command="{Binding CancelUninstall}"
-                                    Content="{x:Static plugins:RS.InstalledPluginsPageView_CancelUninstall}" />
+                            <Button
+                                Command="{Binding CancelUninstall}"
+                                Content="{x:Static plugins:RS.InstalledPluginsPageView_CancelUninstall}"
+                            />
                         </avalonia1:InfoBar.ActionButton>
                     </avalonia1:InfoBar>
-                    <Border IsVisible="{Binding IsVerified}" DockPanel.Dock="Top" Padding="0,10,0,10">
+                    <Border
+                        IsVisible="{Binding IsVerified}"
+                        DockPanel.Dock="Top"
+                        Padding="0,10,0,10"
+                    >
                         <StackPanel Orientation="Horizontal">
-                            <avalonia:MaterialIcon VerticalAlignment="Center" Height="15" Kind="Verified" Margin="5 0"
-                                                   IsVisible="{Binding IsVerified}"
-                                                   Foreground="{DynamicResource SystemAccentColorLight1}" />
-                            <TextBlock VerticalAlignment="Center" Theme="{DynamicResource BodyTextBlockStyle}" Text="{x:Static plugins:RS.PluginsMarketPageView_InfoBar_IsVerified_Message}"/>
-                        </StackPanel>    
+                            <avalonia:MaterialIcon
+                                VerticalAlignment="Center"
+                                Height="15"
+                                Kind="Verified"
+                                Margin="5 0"
+                                IsVisible="{Binding IsVerified}"
+                                Foreground="{DynamicResource SystemAccentColorLight1}"
+                            />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Theme="{DynamicResource BodyTextBlockStyle}"
+                                Text="{x:Static plugins:RS.PluginsMarketPageView_InfoBar_IsVerified_Message}"
+                            />
+                        </StackPanel>
                     </Border>
-                    
+
                     <TabControl>
-                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsPageView_Tab_Description}">
-                            <TextBlock Text="{Binding Description}" TextWrapping="WrapWithOverflow" />
+                        <TabItem
+                            FontSize="18"
+                            Header="{x:Static plugins:RS.InstalledPluginsPageView_Tab_Description}"
+                        >
+                            <TextBlock
+                                Text="{Binding Description}"
+                                TextWrapping="WrapWithOverflow"
+                            />
                         </TabItem>
-                        <TabItem FontSize="18" Header="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo}">
+                        <TabItem
+                            FontSize="18"
+                            Header="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo}"
+                        >
                             <StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_Author}"
-                                           FontWeight="Bold"/>
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Author}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_DownloadCount}"
-                                           FontWeight="Bold"/>
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding DownloadCount}"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_Tags}"
-                                           FontWeight="Bold"/>
-                                <TextBlock TextWrapping="WrapWithOverflow" Text="{Binding Tags}"/>
-                            </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                    <TextBlock
+                                        TextWrapping="WrapWithOverflow"
+                                        Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_Author}"
+                                        FontWeight="Bold"
+                                    />
+                                    <TextBlock
+                                        TextWrapping="WrapWithOverflow"
+                                        Text="{Binding Author}"
+                                    />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                    <TextBlock
+                                        TextWrapping="WrapWithOverflow"
+                                        Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_DownloadCount}"
+                                        FontWeight="Bold"
+                                    />
+                                    <TextBlock
+                                        TextWrapping="WrapWithOverflow"
+                                        Text="{Binding DownloadCount}"
+                                    />
+                                </StackPanel>
+                                <StackPanel Orientation="Horizontal" Margin="0 0 0 5">
+                                    <TextBlock
+                                        TextWrapping="WrapWithOverflow"
+                                        Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_Tags}"
+                                        FontWeight="Bold"
+                                    />
+                                    <TextBlock
+                                        TextWrapping="WrapWithOverflow"
+                                        Text="{Binding Tags}"
+                                    />
+                                </StackPanel>
                                 <StackPanel>
-                                    <TextBlock Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_Dependencies}"
-                                               FontWeight="Bold"/>
-                                    <ItemsControl ItemsSource="{Binding Dependencies}" Margin="10 0 0 0"/>
+                                    <TextBlock
+                                        Text="{x:Static plugins:RS.InstalledPluginsPageView_Tab_AdditionalInfo_Dependencies}"
+                                        FontWeight="Bold"
+                                    />
+                                    <ItemsControl
+                                        ItemsSource="{Binding Dependencies}"
+                                        Margin="10 0 0 0"
+                                    />
                                 </StackPanel>
                             </StackPanel>
                         </TabItem>
                     </TabControl>
                 </DockPanel>
             </Panel>
-            <StackPanel IsVisible="{Binding SelectedPlugin.Value, Converter={x:Static ObjectConverters.IsNull}}"
-                        HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
-                <avalonia:MaterialIcon Width="25" Height="25" Kind="ArrowLeft"
-                                       Foreground="{DynamicResource ButtonForegroundDisabled}" />
-                <TextBlock Foreground="{DynamicResource ButtonForegroundDisabled}" VerticalAlignment="Center"
-                           FontSize="15" TextWrapping="WrapWithOverflow" MaxWidth="400" Text="{x:Static plugins:RS.PluginsMarketPageView_SelectedPluginIsNull}" />
+            <StackPanel
+                IsVisible="{Binding SelectedPlugin.Value, Converter={x:Static ObjectConverters.IsNull}}"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                Orientation="Horizontal"
+                Spacing="8"
+            >
+                <avalonia:MaterialIcon
+                    Width="25"
+                    Height="25"
+                    Kind="ArrowLeft"
+                    Foreground="{DynamicResource ButtonForegroundDisabled}"
+                />
+                <TextBlock
+                    Foreground="{DynamicResource ButtonForegroundDisabled}"
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    TextWrapping="WrapWithOverflow"
+                    MaxWidth="400"
+                    Text="{x:Static plugins:RS.PluginsMarketPageView_SelectedPluginIsNull}"
+                />
             </StackPanel>
-
         </Panel>
-
     </Grid>
 </UserControl>

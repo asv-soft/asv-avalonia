@@ -1,99 +1,141 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:example="clr-namespace:Asv.Avalonia.Example"
-             xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Example.InfoBoxControlsPageView"
-             x:DataType="example:InfoBoxControlsPageViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.Example.InfoBoxControlsPageView"
+    x:DataType="example:InfoBoxControlsPageViewModel"
+>
     <Design.DataContext>
         <example:InfoBoxControlsPageViewModel />
     </Design.DataContext>
 
     <DockPanel Margin="16">
-        <Border DockPanel.Dock="Top"
-                Padding="16"
-                Background="{DynamicResource SystemRegionBrush}"
-                CornerRadius="6"
-                Margin="0,0,0,12">
+        <Border
+            DockPanel.Dock="Top"
+            Padding="16"
+            Background="{DynamicResource SystemRegionBrush}"
+            CornerRadius="6"
+            Margin="0,0,0,12"
+        >
             <StackPanel Spacing="6">
-                <TextBlock Text="{x:Static example:RS.InfoBoxControlsPageViewModel_Title}"
-                           FontSize="18"
-                           FontWeight="SemiBold" />
-                <TextBlock Text="{x:Static example:RS.InfoBoxControlsPageView_Description}"
-                           TextWrapping="Wrap"
-                           Opacity="0.85" />
+                <TextBlock
+                    Text="{x:Static example:RS.InfoBoxControlsPageViewModel_Title}"
+                    FontSize="18"
+                    FontWeight="SemiBold"
+                />
+                <TextBlock
+                    Text="{x:Static example:RS.InfoBoxControlsPageView_Description}"
+                    TextWrapping="Wrap"
+                    Opacity="0.85"
+                />
             </StackPanel>
         </Border>
 
         <Grid ColumnDefinitions="2*,16,*">
-            <Border Grid.Column="0"
-                    Padding="16"
-                    Background="{DynamicResource SystemRegionBrush}"
-                    CornerRadius="6">
+            <Border
+                Grid.Column="0"
+                Padding="16"
+                Background="{DynamicResource SystemRegionBrush}"
+                CornerRadius="6"
+            >
                 <Panel>
-                    <asv:InfoBar x:Name="InfoBarBasic"
-                                 Margin="0, 8, 8, 8"
-                                 IsOpen="True"
-                                 IsIconVisible="True"
-                                 IsClosable="False"
-                                 Severity="{Binding Severity.ViewValue.Value}"
-                                 Title="{Binding InfoBoxTitle.ViewValue.Value}"
-                                 Message="{Binding InfoBoxMessage.ViewValue.Value}" />
+                    <asv:InfoBar
+                        x:Name="InfoBarBasic"
+                        Margin="0, 8, 8, 8"
+                        IsOpen="True"
+                        IsIconVisible="True"
+                        IsClosable="False"
+                        Severity="{Binding Severity.ViewValue.Value}"
+                        Title="{Binding InfoBoxTitle.ViewValue.Value}"
+                        Message="{Binding InfoBoxMessage.ViewValue.Value}"
+                    />
 
-                    <asv:InfoBar x:Name="InfoBarAction"
-                                 Margin="0,64,8,8"
-                                 IsOpen="True"
-                                 IsIconVisible="True"
-                                 IsClosable="False"
-                                 Severity="{Binding Severity.ViewValue.Value}"
-                                 Title="{Binding InfoBoxTitle.ViewValue.Value}"
-                                 Message="{Binding InfoBoxMessage.ViewValue.Value}">
+                    <asv:InfoBar
+                        x:Name="InfoBarAction"
+                        Margin="0,64,8,8"
+                        IsOpen="True"
+                        IsIconVisible="True"
+                        IsClosable="False"
+                        Severity="{Binding Severity.ViewValue.Value}"
+                        Title="{Binding InfoBoxTitle.ViewValue.Value}"
+                        Message="{Binding InfoBoxMessage.ViewValue.Value}"
+                    >
                         <asv:InfoBar.ActionButton>
-                            <Button Content="{x:Static example:RS.InfoBoxControlsPageView_ActionButton_Title}" MinWidth="90" />
+                            <Button
+                                Content="{x:Static example:RS.InfoBoxControlsPageView_ActionButton_Title}"
+                                MinWidth="90"
+                            />
                         </asv:InfoBar.ActionButton>
                     </asv:InfoBar>
 
-                    <asv:InfoBar x:Name="InfoBarClosable"
-                                 Margin="0,120,8,8"
-                                 IsOpen="True"
-                                 IsIconVisible="True"
-                                 IsClosable="True"
-                                 Severity="{Binding Severity.ViewValue.Value}"
-                                 Title="{Binding InfoBoxTitle.ViewValue.Value}"
-                                 Message="{Binding InfoBoxMessage.ViewValue.Value}" />
+                    <asv:InfoBar
+                        x:Name="InfoBarClosable"
+                        Margin="0,120,8,8"
+                        IsOpen="True"
+                        IsIconVisible="True"
+                        IsClosable="True"
+                        Severity="{Binding Severity.ViewValue.Value}"
+                        Title="{Binding InfoBoxTitle.ViewValue.Value}"
+                        Message="{Binding InfoBoxMessage.ViewValue.Value}"
+                    />
                 </Panel>
             </Border>
 
-            <Border Grid.Column="2"
-                    Padding="16"
-                    Background="{DynamicResource SystemRegionBrush}"
-                    CornerRadius="6">
+            <Border
+                Grid.Column="2"
+                Padding="16"
+                Background="{DynamicResource SystemRegionBrush}"
+                CornerRadius="6"
+            >
                 <StackPanel Spacing="12">
                     <StackPanel Spacing="10">
-                        <TextBlock Text="{x:Static example:RS.InfoBoxControlsPageView_Examples}"
-                                   FontWeight="SemiBold" />
+                        <TextBlock
+                            Text="{x:Static example:RS.InfoBoxControlsPageView_Examples}"
+                            FontWeight="SemiBold"
+                        />
 
-                        <CheckBox Content="{x:Static example:RS.InfoBoxControlsPageView_Basic}"
-                                  IsChecked="{Binding #InfoBarBasic.IsOpen, Mode=TwoWay}" />
+                        <CheckBox
+                            Content="{x:Static example:RS.InfoBoxControlsPageView_Basic}"
+                            IsChecked="{Binding #InfoBarBasic.IsOpen, Mode=TwoWay}"
+                        />
 
-                        <CheckBox Content="{x:Static example:RS.InfoBoxControlsPageView_ActionButton}"
-                                  IsChecked="{Binding #InfoBarAction.IsOpen, Mode=TwoWay}" />
+                        <CheckBox
+                            Content="{x:Static example:RS.InfoBoxControlsPageView_ActionButton}"
+                            IsChecked="{Binding #InfoBarAction.IsOpen, Mode=TwoWay}"
+                        />
 
-                        <CheckBox Content="{x:Static example:RS.InfoBoxControlsPageView_Closable}"
-                                  IsChecked="{Binding #InfoBarClosable.IsOpen, Mode=TwoWay}" />
+                        <CheckBox
+                            Content="{x:Static example:RS.InfoBoxControlsPageView_Closable}"
+                            IsChecked="{Binding #InfoBarClosable.IsOpen, Mode=TwoWay}"
+                        />
                     </StackPanel>
 
-                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="8" ColumnSpacing="8">
-                        <TextBlock Grid.Row="0" Grid.Column="0"
-                                   Text="{x:Static example:RS.InfoBoxControlsPageView_Common_Severity}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right" />
-                        <ComboBox Grid.Row="0" Grid.Column="1"
-                                  ItemsSource="{Binding Severity.EnumItems}"
-                                  SelectedItem="{Binding Severity.ViewValue.Value, Mode=TwoWay}"
-                                  HorizontalAlignment="Stretch">
+                    <Grid
+                        ColumnDefinitions="Auto,*"
+                        RowDefinitions="Auto,Auto,Auto"
+                        RowSpacing="8"
+                        ColumnSpacing="8"
+                    >
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.InfoBoxControlsPageView_Common_Severity}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                        />
+                        <ComboBox
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            ItemsSource="{Binding Severity.EnumItems}"
+                            SelectedItem="{Binding Severity.ViewValue.Value, Mode=TwoWay}"
+                            HorizontalAlignment="Stretch"
+                        >
                             <ComboBox.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}" VerticalAlignment="Center" />
@@ -101,19 +143,31 @@
                             </ComboBox.ItemTemplate>
                         </ComboBox>
 
-                        <TextBlock Grid.Row="1" Grid.Column="0"
-                                   Text="{x:Static example:RS.InfoBoxControlsPageView_Common_Title}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right" />
-                        <TextBox Grid.Row="1" Grid.Column="1"
-                                 Text="{Binding InfoBoxTitle.ViewValue.Value}" />
+                        <TextBlock
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.InfoBoxControlsPageView_Common_Title}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                        />
+                        <TextBox
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Text="{Binding InfoBoxTitle.ViewValue.Value}"
+                        />
 
-                        <TextBlock Grid.Row="2" Grid.Column="0"
-                                   Text="{x:Static example:RS.InfoBoxControlsPageView_Common_Message}"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Right" />
-                        <TextBox Grid.Row="2" Grid.Column="1"
-                                 Text="{Binding InfoBoxMessage.ViewValue.Value}" />
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.InfoBoxControlsPageView_Common_Message}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"
+                        />
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="1"
+                            Text="{Binding InfoBoxMessage.ViewValue.Value}"
+                        />
                     </Grid>
                 </StackPanel>
             </Border>

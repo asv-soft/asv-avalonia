@@ -1,11 +1,15 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
-             x:Class="Asv.Avalonia.HomePageView"
-             x:DataType="asv:HomePageViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="1024"
+    d:DesignHeight="768"
+    x:Class="Asv.Avalonia.HomePageView"
+    x:DataType="asv:HomePageViewModel"
+>
     <Design.DataContext>
         <asv:HomePageViewModel />
     </Design.DataContext>
@@ -17,18 +21,22 @@
     <DockPanel Margin="40,2,40,0">
         <TextBlock DockPanel.Dock="Top" FontWeight="Thin" FontSize="60">
             <Run Text="{Binding AppInfo.Name}" />
-            <Run FontSize="35"
-                 Foreground="{DynamicResource  ButtonForegroundDisabled}"
-                 Text="{Binding AppInfo.Version, Converter={StaticResource VersionConverter}}" />
+            <Run
+                FontSize="35"
+                Foreground="{DynamicResource  ButtonForegroundDisabled}"
+                Text="{Binding AppInfo.Version, Converter={StaticResource VersionConverter}}"
+            />
         </TextBlock>
 
-        <TextBlock DockPanel.Dock="Top"
-                   Margin="0,-5,0,10"
-                   FontWeight="ExtraLight"
-                   FontSize="26"
-                   Foreground="{DynamicResource  ButtonForegroundDisabled}"
-                   Text="{Binding AppInfo.Description}" />
-        
+        <TextBlock
+            DockPanel.Dock="Top"
+            Margin="0,-5,0,10"
+            FontWeight="ExtraLight"
+            FontSize="26"
+            Foreground="{DynamicResource  ButtonForegroundDisabled}"
+            Text="{Binding AppInfo.Description}"
+        />
+
         <Grid RowDefinitions="Auto,*">
             <asv:ToolsList Grid.Row="0" Margin="0" ItemsSource="{Binding ToolsView}" />
             <asv:ItemsList Grid.Row="1" ItemsSource="{Binding ItemsView}" />

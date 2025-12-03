@@ -1,38 +1,69 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:io="clr-namespace:Asv.Avalonia.IO"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.IO.TcpPortView"
-             x:DataType="io:TcpPortViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:io="clr-namespace:Asv.Avalonia.IO"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="400"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.IO.TcpPortView"
+    x:DataType="io:TcpPortViewModel"
+>
     <Design.DataContext>
-        <io:TcpPortViewModel/>
+        <io:TcpPortViewModel />
     </Design.DataContext>
     <DockPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Margin="8">
         <DockPanel DockPanel.Dock="Top">
-            <TextBlock Classes="h2" Text="{x:Static io:RS.PortView_Title}"/>
-            <Separator/>
+            <TextBlock Classes="h2" Text="{x:Static io:RS.PortView_Title}" />
+            <Separator />
         </DockPanel>
-        <Border Margin="4" DockPanel.Dock="Top"  >
-            <SelectableTextBlock Classes="description" Text="{Binding ConnectionString}"/>    
+        <Border Margin="4" DockPanel.Dock="Top">
+            <SelectableTextBlock Classes="description" Text="{Binding ConnectionString}" />
         </Border>
-        <Grid IsVisible="{Binding HasChanges.Value}" DockPanel.Dock="Bottom" HorizontalAlignment="Left" ColumnDefinitions="*,8,*">
-            <Button Width="150" HorizontalAlignment="Stretch" Grid.Column="0" Command="{Binding SaveChangesCommand}">
+        <Grid
+            IsVisible="{Binding HasChanges.Value}"
+            DockPanel.Dock="Bottom"
+            HorizontalAlignment="Left"
+            ColumnDefinitions="*,8,*"
+        >
+            <Button
+                Width="150"
+                HorizontalAlignment="Stretch"
+                Grid.Column="0"
+                Command="{Binding SaveChangesCommand}"
+            >
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <avalonia:MaterialIcon Foreground="{DynamicResource AsvForegroundSuccessBrush}" Kind="Tick"/>
-                    <TextBlock VerticalAlignment="Center" Text="{x:Static io:RS.PortView_ButtonContent_Save}"/>
+                    <avalonia:MaterialIcon
+                        Foreground="{DynamicResource AsvForegroundSuccessBrush}"
+                        Kind="Tick"
+                    />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{x:Static io:RS.PortView_ButtonContent_Save}"
+                    />
                 </StackPanel>
             </Button>
-            <Button  Width="150" HorizontalAlignment="Stretch" Grid.Column="2"  Command="{Binding CancelChangesCommand}">
+            <Button
+                Width="150"
+                HorizontalAlignment="Stretch"
+                Grid.Column="2"
+                Command="{Binding CancelChangesCommand}"
+            >
                 <StackPanel Orientation="Horizontal" Spacing="4">
-                    <avalonia:MaterialIcon Foreground="{DynamicResource AsvForegroundWarningBrush}" Kind="Cancel"/>
-                    <TextBlock VerticalAlignment="Center" Text="{x:Static io:RS.PortView_ButtonContent_Cancel}"/>
+                    <avalonia:MaterialIcon
+                        Foreground="{DynamicResource AsvForegroundWarningBrush}"
+                        Kind="Cancel"
+                    />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{x:Static io:RS.PortView_ButtonContent_Cancel}"
+                    />
                 </StackPanel>
-            </Button>    
+            </Button>
         </Grid>
-        
+
         <Grid Margin="8" HorizontalAlignment="Left" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />
@@ -43,40 +74,67 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition Height="5"/>
+                <RowDefinition Height="5" />
                 <RowDefinition />
-                <RowDefinition Height="5"/>
+                <RowDefinition Height="5" />
                 <RowDefinition />
-                <RowDefinition Height="5"/>
+                <RowDefinition Height="5" />
                 <RowDefinition />
             </Grid.RowDefinitions>
-            
-            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="0" Kind="TagTextOutline"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="0" Text="{x:Static io:RS.TcpPortView_Text_Name}"/>
-            <TextBox Grid.Column="4" Grid.Row="0" Text="{Binding Name.Value}"/>
-            
-            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="IpNetwork"/>
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="2" Text="{x:Static io:RS.TcpPortView_Text_Host}"/>
-            <AutoCompleteBox ValueMemberBinding="{Binding Key}" Grid.Row="2" Grid.Column="4" ItemsSource="{Binding Config.HostHistory}" Text="{Binding Host.Value}">
+
+            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="0" Kind="TagTextOutline" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Grid.Column="2"
+                Grid.Row="0"
+                Text="{x:Static io:RS.TcpPortView_Text_Name}"
+            />
+            <TextBox Grid.Column="4" Grid.Row="0" Text="{Binding Name.Value}" />
+
+            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="IpNetwork" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Grid.Column="2"
+                Grid.Row="2"
+                Text="{x:Static io:RS.TcpPortView_Text_Host}"
+            />
+            <AutoCompleteBox
+                ValueMemberBinding="{Binding Key}"
+                Grid.Row="2"
+                Grid.Column="4"
+                ItemsSource="{Binding Config.HostHistory}"
+                Text="{Binding Host.Value}"
+            >
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
-                            <Run Text="{Binding Key}"/>
-                            <Run Text="{Binding Value}"/>
+                            <Run Text="{Binding Key}" />
+                            <Run Text="{Binding Value}" />
                         </TextBlock>
                     </DataTemplate>
                 </AutoCompleteBox.ItemTemplate>
             </AutoCompleteBox>
-            
-            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="4" Kind="Counter"/>
-            
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="4" Text="{x:Static io:RS.TcpPortView_Text_PortNumber}"/>
-            <AutoCompleteBox ValueMemberBinding="{Binding Key}" Grid.Row="4" Grid.Column="4" ItemsSource="{Binding Config.PortHistory}" Text="{Binding PortNumber.Value}">
+
+            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="4" Kind="Counter" />
+
+            <TextBlock
+                VerticalAlignment="Center"
+                Grid.Column="2"
+                Grid.Row="4"
+                Text="{x:Static io:RS.TcpPortView_Text_PortNumber}"
+            />
+            <AutoCompleteBox
+                ValueMemberBinding="{Binding Key}"
+                Grid.Row="4"
+                Grid.Column="4"
+                ItemsSource="{Binding Config.PortHistory}"
+                Text="{Binding PortNumber.Value}"
+            >
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
-                            <Run Text="{Binding Key}"/>
-                            <Run Text="{Binding Value}"/>
+                            <Run Text="{Binding Key}" />
+                            <Run Text="{Binding Value}" />
                         </TextBlock>
                     </DataTemplate>
                 </AutoCompleteBox.ItemTemplate>

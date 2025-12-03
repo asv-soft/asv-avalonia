@@ -71,8 +71,7 @@ public sealed partial class HotKeyBox : TemplatedControl
                 }
                 return;
             }
-            case Key.Delete
-            or Key.Back:
+            case Key.Delete or Key.Back:
                 StopTimer();
                 HotKey = null;
                 ResetCore();

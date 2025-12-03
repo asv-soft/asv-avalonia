@@ -1,357 +1,639 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
     <Design.PreviewWith>
         <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" MaxWidth="900" Height="600">
             <ThemeVariantScope Grid.Column="0" Grid.Row="0" RequestedThemeVariant="Dark">
                 <Border Background="{DynamicResource SystemRegionBrush}">
                     <WrapPanel ItemWidth="200">
-                        <controls:RttBox IsNetworkError="True" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Header="Freq TX" Icon="Temperature" Margin="2" >
+                        <controls:RttBox
+                            IsNetworkError="True"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            Header="Freq TX"
+                            Icon="Temperature"
+                            Margin="2"
+                        >
                             <TextBlock Text="115.">
-                                <Run FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}" Text="456 654"/>
+                                <Run
+                                    FontSize="15"
+                                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                                    Text="456 654"
+                                />
                             </TextBlock>
                         </controls:RttBox>
-                        <controls:RttBox Classes="info1" IsUpdated="True" Header="Freq TX" Icon="Temperature" Margin="2" >
+                        <controls:RttBox
+                            Classes="info1"
+                            IsUpdated="True"
+                            Header="Freq TX"
+                            Icon="Temperature"
+                            Margin="2"
+                        >
                             <DockPanel>
-                                <ProgressBar 
+                                <ProgressBar
                                     IsIndeterminate="True"
-                                    MinWidth="10" 
-                                    Height="5" 
+                                    MinWidth="10"
+                                    Height="5"
                                     Foreground="{ReflectionBinding Foreground, RelativeSource={RelativeSource AncestorType=controls:RttBox}}"
-                                    CornerRadius="0" 
-                                    DockPanel.Dock="Bottom" 
-                                    Margin="2,0,0,2" 
-                                    HorizontalAlignment="Stretch">
-                                </ProgressBar>
+                                    CornerRadius="0"
+                                    DockPanel.Dock="Bottom"
+                                    Margin="2,0,0,2"
+                                    HorizontalAlignment="Stretch"
+                                ></ProgressBar>
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Grid ColumnDefinitions="*,4,Auto" RowDefinitions="*,0,*" >
-                                        <TextBlock Grid.RowSpan="3" FontWeight="Light" FontSize="30" Text="123.123" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="2"  FontSize="13"  Text="123.123" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="2"   FontSize="13"  Text="123.123" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                    <Grid ColumnDefinitions="*,4,Auto" RowDefinitions="*,0,*">
+                                        <TextBlock
+                                            Grid.RowSpan="3"
+                                            FontWeight="Light"
+                                            FontSize="30"
+                                            Text="123.123"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                        />
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            FontSize="13"
+                                            Text="123.123"
+                                            VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Center"
+                                        />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="2"
+                                            FontSize="13"
+                                            Text="123.123"
+                                            VerticalAlignment="Top"
+                                            HorizontalAlignment="Center"
+                                        />
                                     </Grid>
                                 </StackPanel>
-                                
                             </DockPanel>
-                            
                         </controls:RttBox>
-                        <controls:RttBox Classes="info2" IsUpdated="True" Header="Frequency Rx" Margin="2" Content="RTK Fixed"/>
-                        <controls:RttBox Classes="info3" IsUpdated="True" Header="DDM" Icon="Frequency" Margin="2" Content="15%"/>
-                        <controls:RttBox Classes="info4" IsUpdated="True" Header="Power" Content="15 dBm" Margin="2"/>
-                        <controls:RttBox IsUpdated="True" Classes="error" Header="Frequency TX" Icon="Temperature" Margin="2" Content="RTK Fixed" />    
-                        <controls:RttBox IsUpdated="True" Classes="warning" Header="Frequency Rx" Content="115.152331" FontSize="25" Margin="2"/>
-                        <controls:RttBox IsExpanded="False" Icon="Frequency" IsUpdated="True" SmallHeader="DDM" SmallContent="15%" Classes="unknown" Header="DDM" Content="15%" Margin="2"/>
+                        <controls:RttBox
+                            Classes="info2"
+                            IsUpdated="True"
+                            Header="Frequency Rx"
+                            Margin="2"
+                            Content="RTK Fixed"
+                        />
+                        <controls:RttBox
+                            Classes="info3"
+                            IsUpdated="True"
+                            Header="DDM"
+                            Icon="Frequency"
+                            Margin="2"
+                            Content="15%"
+                        />
+                        <controls:RttBox
+                            Classes="info4"
+                            IsUpdated="True"
+                            Header="Power"
+                            Content="15 dBm"
+                            Margin="2"
+                        />
+                        <controls:RttBox
+                            IsUpdated="True"
+                            Classes="error"
+                            Header="Frequency TX"
+                            Icon="Temperature"
+                            Margin="2"
+                            Content="RTK Fixed"
+                        />
+                        <controls:RttBox
+                            IsUpdated="True"
+                            Classes="warning"
+                            Header="Frequency Rx"
+                            Content="115.152331"
+                            FontSize="25"
+                            Margin="2"
+                        />
+                        <controls:RttBox
+                            IsExpanded="False"
+                            Icon="Frequency"
+                            IsUpdated="True"
+                            SmallHeader="DDM"
+                            SmallContent="15%"
+                            Classes="unknown"
+                            Header="DDM"
+                            Content="15%"
+                            Margin="2"
+                        />
                     </WrapPanel>
-                        
                 </Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="1" Grid.Row="0" RequestedThemeVariant="Light">
                 <Border Background="{DynamicResource SystemRegionBrush}">
                     <WrapPanel ItemWidth="150">
-                        <controls:RttBox Header="Freq TX" Icon="Temperature" Margin="2" >
+                        <controls:RttBox Header="Freq TX" Icon="Temperature" Margin="2">
                             <TextBlock Text="115.">
-                                <Run FontSize="15" Foreground="{DynamicResource AsvForegroundUnknownBrush}" Text="456 654"/>
+                                <Run
+                                    FontSize="15"
+                                    Foreground="{DynamicResource AsvForegroundUnknownBrush}"
+                                    Text="456 654"
+                                />
                             </TextBlock>
                         </controls:RttBox>
-                        <controls:RttBox Classes="info" IsUpdated="True" Header="Freq TX" Icon="Temperature" Margin="2" >
+                        <controls:RttBox
+                            Classes="info"
+                            IsUpdated="True"
+                            Header="Freq TX"
+                            Icon="Temperature"
+                            Margin="2"
+                        >
                             <DockPanel>
-                                <ProgressBar 
+                                <ProgressBar
                                     IsIndeterminate="True"
-                                    MinWidth="10" 
-                                    Height="5" 
+                                    MinWidth="10"
+                                    Height="5"
                                     Foreground="{ReflectionBinding Foreground, RelativeSource={RelativeSource AncestorType=controls:RttBox}}"
-                                    CornerRadius="0" 
-                                    DockPanel.Dock="Bottom" 
-                                    Margin="2,0,0,2" 
-                                    HorizontalAlignment="Stretch">
-                                </ProgressBar>
+                                    CornerRadius="0"
+                                    DockPanel.Dock="Bottom"
+                                    Margin="2,0,0,2"
+                                    HorizontalAlignment="Stretch"
+                                ></ProgressBar>
                                 <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                    <Grid ColumnDefinitions="*,4,Auto" RowDefinitions="*,0,*" >
-                                        <TextBlock Grid.RowSpan="3" FontWeight="Light" FontSize="30" Text="123.123" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Row="0" Grid.Column="2"  FontSize="13"  Text="123.123" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-                                        <TextBlock Grid.Row="2" Grid.Column="2"   FontSize="13"  Text="123.123" VerticalAlignment="Top" HorizontalAlignment="Center"/>
+                                    <Grid ColumnDefinitions="*,4,Auto" RowDefinitions="*,0,*">
+                                        <TextBlock
+                                            Grid.RowSpan="3"
+                                            FontWeight="Light"
+                                            FontSize="30"
+                                            Text="123.123"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Center"
+                                        />
+                                        <TextBlock
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            FontSize="13"
+                                            Text="123.123"
+                                            VerticalAlignment="Bottom"
+                                            HorizontalAlignment="Center"
+                                        />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Grid.Column="2"
+                                            FontSize="13"
+                                            Text="123.123"
+                                            VerticalAlignment="Top"
+                                            HorizontalAlignment="Center"
+                                        />
                                     </Grid>
                                 </StackPanel>
-                                
                             </DockPanel>
-                            
                         </controls:RttBox>
-                        <controls:RttBox IsNetworkError="True" Classes="info2" IsUpdated="True" Header="Frequency Rx" Margin="2" Content="RTK Fixed"/>
-                        <controls:RttBox Classes="info3" IsUpdated="True" Header="DDM" Icon="Frequency" Margin="2" Content="15%"/>
-                        <controls:RttBox Classes="info4" IsUpdated="True" Header="Power" Content="15 dBm" Margin="2"/>
-                        <controls:RttBox IsUpdated="True" Classes="error" Header="Frequency TX" Icon="Temperature" Margin="2" Content="RTK Fixed" />    
-                        <controls:RttBox IsUpdated="True" Classes="warning" Header="Frequency Rx" Content="115.152331" FontSize="25" Margin="2"/>
-                        <controls:RttBox IsExpanded="False" Icon="Frequency" IsUpdated="True" SmallHeader="DDM" SmallContent="15%" Classes="unknown" Header="DDM" Content="15%" Margin="2"/>
+                        <controls:RttBox
+                            IsNetworkError="True"
+                            Classes="info2"
+                            IsUpdated="True"
+                            Header="Frequency Rx"
+                            Margin="2"
+                            Content="RTK Fixed"
+                        />
+                        <controls:RttBox
+                            Classes="info3"
+                            IsUpdated="True"
+                            Header="DDM"
+                            Icon="Frequency"
+                            Margin="2"
+                            Content="15%"
+                        />
+                        <controls:RttBox
+                            Classes="info4"
+                            IsUpdated="True"
+                            Header="Power"
+                            Content="15 dBm"
+                            Margin="2"
+                        />
+                        <controls:RttBox
+                            IsUpdated="True"
+                            Classes="error"
+                            Header="Frequency TX"
+                            Icon="Temperature"
+                            Margin="2"
+                            Content="RTK Fixed"
+                        />
+                        <controls:RttBox
+                            IsUpdated="True"
+                            Classes="warning"
+                            Header="Frequency Rx"
+                            Content="115.152331"
+                            FontSize="25"
+                            Margin="2"
+                        />
+                        <controls:RttBox
+                            IsExpanded="False"
+                            Icon="Frequency"
+                            IsUpdated="True"
+                            SmallHeader="DDM"
+                            SmallContent="15%"
+                            Classes="unknown"
+                            Header="DDM"
+                            Content="15%"
+                            Margin="2"
+                        />
                     </WrapPanel>
                 </Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="0" Grid.Row="1" RequestedThemeVariant="Dark">
-                <Border Background="{DynamicResource SystemRegionBrush}">
-                    
-                </Border>
+                <Border Background="{DynamicResource SystemRegionBrush}"></Border>
             </ThemeVariantScope>
             <ThemeVariantScope Grid.Column="1" Grid.Row="1" RequestedThemeVariant="Light">
-                <Border Background="{DynamicResource SystemRegionBrush}">
-                   
-                </Border>
+                <Border Background="{DynamicResource SystemRegionBrush}"></Border>
             </ThemeVariantScope>
         </Grid>
-    
     </Design.PreviewWith>
     <Style Selector="controls|RttBox">
         <!-- Set Defaults -->
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="VerticalAlignment" Value="Top"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
-        <Setter Property="IconBrush" Value="{DynamicResource SystemControlBackgroundAccentBrush}"/>
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}"/>
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-        <Setter Property="MinWidth" Value="150"/>
-        <Setter Property="FontSize" Value="30"/>
-        <Setter Property="HeaderFontSize" Value="18"/>
-        <Setter Property="FontWeight" Value="Light"/>
-        
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="VerticalAlignment" Value="Top" />
+        <Setter
+            Property="BorderBrush"
+            Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+        />
+        <Setter Property="IconBrush" Value="{DynamicResource SystemControlBackgroundAccentBrush}" />
+        <Setter Property="BorderThickness" Value="2" />
+        <Setter Property="CornerRadius" Value="{StaticResource ControlCornerRadius}" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="MinWidth" Value="150" />
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="HeaderFontSize" Value="18" />
+        <Setter Property="FontWeight" Value="Light" />
+
         <Setter Property="Template">
             <ControlTemplate>
                 <Border
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     Background="{TemplateBinding Background}"
-                    CornerRadius="{TemplateBinding CornerRadius}">
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                >
                     <StackPanel>
-                            <DockPanel DockPanel.Dock="Top">
-                                <Border Name="HeaderBorder" DockPanel.Dock="Left" 
-                                        IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" 
-                                        Margin="-2,-2,0,0" VerticalAlignment="Top" 
-                                        BorderThickness="{TemplateBinding BorderThickness}"
-                                        Background="{TemplateBinding BorderBrush}" 
-                                        CornerRadius="5,0,5,0" >
-                                    <ToggleButton Width="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=2}" Height="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=2}" MinWidth="0" MinHeight="0" BorderThickness="0" IsEnabled="{TemplateBinding SupportSmallSize}" Margin="0" VerticalContentAlignment="Center" Padding="0" IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}" HorizontalAlignment="Stretch" Theme="{DynamicResource TransparentButton}">
-                                        <avalonia:MaterialIcon Foreground="{TemplateBinding IconBrush}"  Margin="4" Kind="{TemplateBinding Icon}" Width="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=-2}" Height="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=-2}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>                                        
-                                    </ToggleButton>
-                                </Border>
-                                <TextBlock Margin="4,0,0,0" IsVisible="{TemplateBinding IsExpanded, Converter={x:Static BoolConverters.Not}}" FontSize="{TemplateBinding HeaderFontSize}" DockPanel.Dock="Left" Text="{TemplateBinding SmallHeader}"/>
-                                 
-                                <Panel DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Top" >
-                                    <Ellipse Width="5" Height="5" Fill="{DynamicResource AsvForegroundSuccessBrush}" IsVisible="{TemplateBinding IsUpdated, Converter={x:Static ObjectConverters.IsNotNull}}" Opacity="0" Classes.fadeout="{TemplateBinding IsUpdated}" Margin="4,3,3,0" />
+                        <DockPanel DockPanel.Dock="Top">
+                            <Border
+                                Name="HeaderBorder"
+                                DockPanel.Dock="Left"
+                                IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                Margin="-2,-2,0,0"
+                                VerticalAlignment="Top"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                Background="{TemplateBinding BorderBrush}"
+                                CornerRadius="5,0,5,0"
+                            >
+                                <ToggleButton
+                                    Width="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=2}"
+                                    Height="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=2}"
+                                    MinWidth="0"
+                                    MinHeight="0"
+                                    BorderThickness="0"
+                                    IsEnabled="{TemplateBinding SupportSmallSize}"
+                                    Margin="0"
+                                    VerticalContentAlignment="Center"
+                                    Padding="0"
+                                    IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
+                                    HorizontalAlignment="Stretch"
+                                    Theme="{DynamicResource TransparentButton}"
+                                >
                                     <avalonia:MaterialIcon
-                                        ToolTip.Tip="{x:Static controls:RS.RttBox_NetworkError_ToolTip}"
-                                        IsVisible="{TemplateBinding IsNetworkError, Converter={x:Static ObjectConverters.IsNotNull}}" 
-                                        Opacity="0" Classes.blink="{TemplateBinding IsNetworkError}" 
-                                        Width="18" Height="18" Kind="CloseNetwork" 
-                                        Foreground="{DynamicResource AsvForegroundErrorBrush}" Margin="4,3,3,0"/>
-                                </Panel>
-                                
-                                <ContentPresenter Name="PART_SmallContentPresenter"
-                                                  DockPanel.Dock="Right"
-                                                  IsVisible="{TemplateBinding IsExpanded, Converter={x:Static BoolConverters.Not}}"
-                                                  Background="{TemplateBinding Background}"
-                                                  HorizontalAlignment="Right"
-                                                  HorizontalContentAlignment="Right"
-                                                  FontSize="{TemplateBinding HeaderFontSize}"
-                                                  Foreground="{TemplateBinding Foreground}"
-                                                  BorderBrush="{TemplateBinding BorderBrush}"
-                                                  ContentTemplate="{TemplateBinding SmallContentTemplate}"
-                                                  Content="{TemplateBinding SmallContent}"/>
-                                <TextBlock IsVisible="{TemplateBinding IsExpanded}" FontSize="{TemplateBinding HeaderFontSize}" VerticalAlignment="Center" Foreground="{TemplateBinding BorderBrush}" HorizontalAlignment="Center" Text="{TemplateBinding Header}"/>
-                            </DockPanel>
-                        <ContentPresenter Name="PART_ContentPresenter"
-                                          IsVisible="{TemplateBinding IsExpanded}"
-                                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Background="{TemplateBinding Background}"
-                                          FontSize="{TemplateBinding FontSize}"
-                                          Foreground="{TemplateBinding Foreground}"
-                                          BorderBrush="{TemplateBinding BorderBrush}"
-                                          ContentTemplate="{TemplateBinding ContentTemplate}"
-                                          Padding="{TemplateBinding Padding}"
-                                          Content="{TemplateBinding Content}">
-                        </ContentPresenter>
+                                        Foreground="{TemplateBinding IconBrush}"
+                                        Margin="4"
+                                        Kind="{TemplateBinding Icon}"
+                                        Width="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=-2}"
+                                        Height="{TemplateBinding HeaderFontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=-2}"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch"
+                                    />
+                                </ToggleButton>
+                            </Border>
+                            <TextBlock
+                                Margin="4,0,0,0"
+                                IsVisible="{TemplateBinding IsExpanded, Converter={x:Static BoolConverters.Not}}"
+                                FontSize="{TemplateBinding HeaderFontSize}"
+                                DockPanel.Dock="Left"
+                                Text="{TemplateBinding SmallHeader}"
+                            />
+
+                            <Panel
+                                DockPanel.Dock="Right"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                            >
+                                <Ellipse
+                                    Width="5"
+                                    Height="5"
+                                    Fill="{DynamicResource AsvForegroundSuccessBrush}"
+                                    IsVisible="{TemplateBinding IsUpdated, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Opacity="0"
+                                    Classes.fadeout="{TemplateBinding IsUpdated}"
+                                    Margin="4,3,3,0"
+                                />
+                                <avalonia:MaterialIcon
+                                    ToolTip.Tip="{x:Static controls:RS.RttBox_NetworkError_ToolTip}"
+                                    IsVisible="{TemplateBinding IsNetworkError, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Opacity="0"
+                                    Classes.blink="{TemplateBinding IsNetworkError}"
+                                    Width="18"
+                                    Height="18"
+                                    Kind="CloseNetwork"
+                                    Foreground="{DynamicResource AsvForegroundErrorBrush}"
+                                    Margin="4,3,3,0"
+                                />
+                            </Panel>
+
+                            <ContentPresenter
+                                Name="PART_SmallContentPresenter"
+                                DockPanel.Dock="Right"
+                                IsVisible="{TemplateBinding IsExpanded, Converter={x:Static BoolConverters.Not}}"
+                                Background="{TemplateBinding Background}"
+                                HorizontalAlignment="Right"
+                                HorizontalContentAlignment="Right"
+                                FontSize="{TemplateBinding HeaderFontSize}"
+                                Foreground="{TemplateBinding Foreground}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                ContentTemplate="{TemplateBinding SmallContentTemplate}"
+                                Content="{TemplateBinding SmallContent}"
+                            />
+                            <TextBlock
+                                IsVisible="{TemplateBinding IsExpanded}"
+                                FontSize="{TemplateBinding HeaderFontSize}"
+                                VerticalAlignment="Center"
+                                Foreground="{TemplateBinding BorderBrush}"
+                                HorizontalAlignment="Center"
+                                Text="{TemplateBinding Header}"
+                            />
+                        </DockPanel>
+                        <ContentPresenter
+                            Name="PART_ContentPresenter"
+                            IsVisible="{TemplateBinding IsExpanded}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            Background="{TemplateBinding Background}"
+                            FontSize="{TemplateBinding FontSize}"
+                            Foreground="{TemplateBinding Foreground}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                            Padding="{TemplateBinding Padding}"
+                            Content="{TemplateBinding Content}"
+                        ></ContentPresenter>
                     </StackPanel>
                 </Border>
             </ControlTemplate>
         </Setter>
         <Style Selector="^[IsExpanded=False] /template/ Border#HeaderBorder">
-            <Setter Property="CornerRadius" Value="0"/>
-            <Setter Property="Margin" Value="-1"/>
-            <Setter Property="Padding" Value="1"/>
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Margin" Value="-1" />
+            <Setter Property="Padding" Value="1" />
         </Style>
-        
-            <!-- ===================================================== -->
-            <!-- UNIVERSAL STATUS & INFO STYLES (with IconBrush support) -->
-            <!-- Applies to any control that has:                        -->
-            <!--   • Background, Foreground, BorderBrush, IconBrush      -->
-            <!-- ===================================================== -->
 
-            <!-- =============== STATUS COLORS =============== -->
-            <Style Selector="^.error">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundErrorBrush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundErrorBrush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundErrorBrush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <!-- ===================================================== -->
+        <!-- UNIVERSAL STATUS & INFO STYLES (with IconBrush support) -->
+        <!-- Applies to any control that has:                        -->
+        <!--   • Background, Foreground, BorderBrush, IconBrush      -->
+        <!-- ===================================================== -->
 
-            <Style Selector="^.warning">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundWarningBrush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundWarningBrush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundWarningBrush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <!-- =============== STATUS COLORS =============== -->
+        <Style Selector="^.error">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundErrorBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundErrorBrush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.success">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundSuccessBrush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundSuccessBrush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundSuccessBrush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.warning">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundWarningBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundWarningBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundWarningBrush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.unknown">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundUnknownBrush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundUnknownBrush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundUnknownBrush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.success">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundSuccessBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundSuccessBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundSuccessBrush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <!-- =============== INFO PALETTE – ALL 20 COLORS =============== -->
-            <Style Selector="^.info1">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo1Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo1Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo1Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.unknown">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundUnknownBrush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundUnknownBrush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info2">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo2Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo2Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo2Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <!-- =============== INFO PALETTE – ALL 20 COLORS =============== -->
+        <Style Selector="^.info1">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo1Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo1Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo1Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info3">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo3Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo3Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo3Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info2">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo2Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo2Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo2Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info4">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo4Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo4Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo4Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info3">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info5">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo5Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo5Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo5Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info4">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo4Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo4Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo4Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info6">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo6Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo6Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo6Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info5">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo5Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo5Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo5Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info7">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo7Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo7Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo7Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info6">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo6Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo6Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo6Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info8">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo8Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo8Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo8Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info7">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo7Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo7Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo7Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info9">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo9Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo9Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo9Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info8">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo8Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo8Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo8Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info10">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo10Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo10Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo10Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info9">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo9Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo9Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo9Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info11">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo11Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo11Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo11Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info10">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo10Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo10Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo10Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info12">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo12Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo12Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo12Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info11">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo11Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo11Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo11Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info13">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo13Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo13Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo13Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info12">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo12Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo12Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo12Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info14">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo14Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo14Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo14Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info13">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo13Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo13Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo13Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info15">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo15Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo15Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo15Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info14">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo14Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo14Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo14Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info16">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo16Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo16Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo16Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info15">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo15Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo15Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo15Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info17">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo17Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo17Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo17Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info16">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo16Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo16Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo16Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info18">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo18Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo18Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo18Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info17">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo17Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo17Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo17Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info19">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo19Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo19Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo19Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info18">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo18Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo18Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo18Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
 
-            <Style Selector="^.info20">
-                <Setter Property="Background"   Value="{DynamicResource AsvBackgroundInfo20Brush}" />
-                <Setter Property="BorderBrush"  Value="{DynamicResource AsvForegroundInfo20Brush}" />
-                <Setter Property="Foreground"   Value="{DynamicResource AsvForegroundInfo20Brush}" />
-                <Setter Property="IconBrush"    Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
-            </Style>
+        <Style Selector="^.info19">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo19Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo19Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo19Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
+
+        <Style Selector="^.info20">
+            <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo20Brush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundInfo20Brush}" />
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo20Brush}" />
+            <Setter
+                Property="IconBrush"
+                Value="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Style>
     </Style>
 </Styles>

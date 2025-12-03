@@ -1,47 +1,74 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:io="clr-namespace:Asv.Avalonia.IO"
-             xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="600" d:DesignHeight="300"
-             Height="25"
-             x:Class="Asv.Avalonia.IO.ConnectionRateStatusView"
-             x:DataType="io:ConnectionRateStatusViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:io="clr-namespace:Asv.Avalonia.IO"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="600"
+    d:DesignHeight="300"
+    Height="25"
+    x:Class="Asv.Avalonia.IO.ConnectionRateStatusView"
+    x:DataType="io:ConnectionRateStatusViewModel"
+>
     <Design.DataContext>
-        <io:ConnectionRateStatusViewModel/>
+        <io:ConnectionRateStatusViewModel />
     </Design.DataContext>
-    <Button VerticalAlignment="Bottom" Theme="{DynamicResource TransparentButton}" >
+    <Button VerticalAlignment="Bottom" Theme="{DynamicResource TransparentButton}">
         <Button.Styles>
             <Style Selector="FlyoutPresenter">
                 <Setter Property="MaxWidth" Value="1200" />
             </Style>
         </Button.Styles>
         <Button.Flyout>
-            <Flyout ShowMode="Transient" IsOpen="{Binding IsFlyoutOpen, Mode=OneWayToSource}" Placement="TopEdgeAlignedLeft">
+            <Flyout
+                ShowMode="Transient"
+                IsOpen="{Binding IsFlyoutOpen, Mode=OneWayToSource}"
+                Placement="TopEdgeAlignedLeft"
+            >
                 <StackPanel Spacing="4">
-                    <io:StatisticView
-                        DataContext="{Binding FullStatistic}"/>
-                    <Button HorizontalAlignment="Center" Classes="accent" Command="{Binding NavigateToSettings}">
+                    <io:StatisticView DataContext="{Binding FullStatistic}" />
+                    <Button
+                        HorizontalAlignment="Center"
+                        Classes="accent"
+                        Command="{Binding NavigateToSettings}"
+                    >
                         <StackPanel Orientation="Horizontal" Spacing="4">
-                            <avalonia:MaterialIcon Kind="Connection"/>
-                            <TextBlock VerticalAlignment="Center" Text="{x:Static io:RS.ConnectionRateStatusView_NavigationButton_Settings}"/>
+                            <avalonia:MaterialIcon Kind="Connection" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{x:Static io:RS.ConnectionRateStatusView_NavigationButton_Settings}"
+                            />
                         </StackPanel>
-                    </Button>    
+                    </Button>
                 </StackPanel>
-                
             </Flyout>
         </Button.Flyout>
         <StackPanel Orientation="Horizontal" Spacing="3">
-            <avalonia:MaterialIcon Kind="ArrowDownBold" Width="15" Height="15"
-                                   Foreground="{DynamicResource AsvForegroundSuccessBrush}" />
-            <TextBlock Classes="description" VerticalAlignment="Center" 
-                       Text="{Binding TotalRateInString}" />
-            <avalonia:MaterialIcon Kind="ArrowUpBold" Width="15" Height="15"
-                                   Foreground="{DynamicResource AsvForegroundErrorBrush}" />
-            <TextBlock Classes="description" VerticalAlignment="Center" 
-                       Text="{Binding TotalRateOutString}" />
-        </StackPanel>    
+            <avalonia:MaterialIcon
+                Kind="ArrowDownBold"
+                Width="15"
+                Height="15"
+                Foreground="{DynamicResource AsvForegroundSuccessBrush}"
+            />
+            <TextBlock
+                Classes="description"
+                VerticalAlignment="Center"
+                Text="{Binding TotalRateInString}"
+            />
+            <avalonia:MaterialIcon
+                Kind="ArrowUpBold"
+                Width="15"
+                Height="15"
+                Foreground="{DynamicResource AsvForegroundErrorBrush}"
+            />
+            <TextBlock
+                Classes="description"
+                VerticalAlignment="Center"
+                Text="{Binding TotalRateOutString}"
+            />
+        </StackPanel>
     </Button>
 </UserControl>

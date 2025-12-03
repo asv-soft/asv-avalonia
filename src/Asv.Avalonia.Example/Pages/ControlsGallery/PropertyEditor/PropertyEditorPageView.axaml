@@ -1,30 +1,33 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:example="clr-namespace:Asv.Avalonia.Example"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Example.PropertyEditorPageView"
-             x:DataType="example:PropertyEditorPageViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.Example.PropertyEditorPageView"
+    x:DataType="example:PropertyEditorPageViewModel"
+>
     <Design.DataContext>
-        <example:PropertyEditorPageViewModel/>
+        <example:PropertyEditorPageViewModel />
     </Design.DataContext>
     <Grid ColumnDefinitions="*,*">
         <DockPanel Grid.Column="0">
-            <TextBlock DockPanel.Dock="Top" Text="PropertyEditor"/>
-            <ContentControl MinWidth="250" Content="{Binding PropertyEditor}"/>
+            <TextBlock DockPanel.Dock="Top" Text="PropertyEditor" />
+            <ContentControl MinWidth="250" Content="{Binding PropertyEditor}" />
         </DockPanel>
-        
+
         <DockPanel LastChildFill="False" Grid.Column="1">
-            <TextBlock DockPanel.Dock="Top" Text="Latitude"/>
-            <TextBox DockPanel.Dock="Top" Text="{Binding Latitude.Value}"/>
-            <TextBlock DockPanel.Dock="Top" Text="Longitude"/>
-            <TextBox DockPanel.Dock="Top" Text="{Binding Longitude.Value}"/>
-            <TextBlock DockPanel.Dock="Top" Text="Altitude"/>
-            <TextBox DockPanel.Dock="Top" Text="{Binding Altitude.Value}"/>
-            <TextBlock DockPanel.Dock="Top" Text="GeoPoint"/>
-            <TextBlock DockPanel.Dock="Top" Text="{Binding GeoPoint.Value}"/>
+            <TextBlock DockPanel.Dock="Top" Text="Latitude" />
+            <TextBox DockPanel.Dock="Top" Text="{Binding Latitude.Value}" />
+            <TextBlock DockPanel.Dock="Top" Text="Longitude" />
+            <TextBox DockPanel.Dock="Top" Text="{Binding Longitude.Value}" />
+            <TextBlock DockPanel.Dock="Top" Text="Altitude" />
+            <TextBox DockPanel.Dock="Top" Text="{Binding Altitude.Value}" />
+            <TextBlock DockPanel.Dock="Top" Text="GeoPoint" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding GeoPoint.Value}" />
         </DockPanel>
     </Grid>
-    
 </UserControl>

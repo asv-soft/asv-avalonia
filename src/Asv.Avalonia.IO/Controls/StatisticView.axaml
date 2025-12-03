@@ -1,16 +1,25 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             xmlns:io="clr-namespace:Asv.Avalonia.IO"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.IO.StatisticView"
-             x:DataType="io:StatisticViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:io="clr-namespace:Asv.Avalonia.IO"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.IO.StatisticView"
+    x:DataType="io:StatisticViewModel"
+>
     <Design.DataContext>
-        <io:StatisticViewModel/>
+        <io:StatisticViewModel />
     </Design.DataContext>
-    <Grid ColumnSpacing="8" RowDefinitions="Auto,4,*" HorizontalAlignment="Left" VerticalAlignment="Top" >
+    <Grid
+        ColumnSpacing="8"
+        RowDefinitions="Auto,4,*"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+    >
         <Grid.ColumnDefinitions>
             <ColumnDefinition MinWidth="150" />
             <ColumnDefinition Width="4" />
@@ -18,113 +27,379 @@
             <ColumnDefinition Width="4" />
             <ColumnDefinition MinWidth="150" />
         </Grid.ColumnDefinitions>
-        <StackPanel Spacing="4" HorizontalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-            <avalonia:MaterialIcon  Width="16" Height="16" VerticalAlignment="Center" Classes="success"  Kind="ArrowDownBold"/>    
+        <StackPanel
+            Spacing="4"
+            HorizontalAlignment="Center"
+            Grid.ColumnSpan="2"
+            Grid.Row="0"
+            Grid.Column="0"
+            Orientation="Horizontal"
+        >
+            <avalonia:MaterialIcon
+                Width="16"
+                Height="16"
+                VerticalAlignment="Center"
+                Classes="success"
+                Kind="ArrowDownBold"
+            />
             <TextBlock Classes="description" Text="Received data"></TextBlock>
         </StackPanel>
-        
-        <StackPanel Spacing="4" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
-            <avalonia:MaterialIcon  Width="16" Height="16" VerticalAlignment="Center" Classes="error"  Kind="ArrowUpBold"/>    
+
+        <StackPanel
+            Spacing="4"
+            HorizontalAlignment="Center"
+            Grid.Row="0"
+            Grid.Column="2"
+            Orientation="Horizontal"
+        >
+            <avalonia:MaterialIcon
+                Width="16"
+                Height="16"
+                VerticalAlignment="Center"
+                Classes="error"
+                Kind="ArrowUpBold"
+            />
             <TextBlock Classes="description" Text="Transmitted data"></TextBlock>
         </StackPanel>
-        
-        <StackPanel Spacing="4" HorizontalAlignment="Center" Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="3" Orientation="Horizontal">
-            <avalonia:MaterialIcon  Width="16" Height="16" VerticalAlignment="Center" Classes="success"  Kind="CableData"/>    
+
+        <StackPanel
+            Spacing="4"
+            HorizontalAlignment="Center"
+            Grid.ColumnSpan="2"
+            Grid.Row="0"
+            Grid.Column="3"
+            Orientation="Horizontal"
+        >
+            <avalonia:MaterialIcon
+                Width="16"
+                Height="16"
+                VerticalAlignment="Center"
+                Classes="success"
+                Kind="CableData"
+            />
             <TextBlock Classes="description" Text="Protocols"></TextBlock>
         </StackPanel>
-        <Rectangle Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="6"
-                   Fill="{StaticResource SystemChromeDisabledLowColor}" Height="0.5" VerticalAlignment="Bottom" />
-        
+        <Rectangle
+            Grid.Column="0"
+            Grid.Row="1"
+            Grid.ColumnSpan="6"
+            Fill="{StaticResource SystemChromeDisabledLowColor}"
+            Height="0.5"
+            VerticalAlignment="Bottom"
+        />
+
         <Grid
             Grid.Row="2"
             Grid.Column="0"
-            
-            ColumnDefinitions="Auto,*" 
-            VerticalAlignment="Top" 
+            ColumnDefinitions="Auto,*"
+            VerticalAlignment="Top"
             RowDefinitions="*,*,*,*,*,*,*"
-            ColumnSpacing="4" RowSpacing="4">
-            
-            
-            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Total bytes"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding Rx}"/>
-        
-            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Byte rate"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding RxRate}"/>
-            
-            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Total messages"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding RxMessages}"/>
-        
-            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Messages rate"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding RxMessagesRate}"/>
-            
-            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Dropped"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding RxDropped}"/>
-            
-            <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Error"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding RxErrors}"/>
-            
-           
+            ColumnSpacing="4"
+            RowSpacing="4"
+        >
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Total bytes"
+            />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding Rx}"
+            />
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Byte rate"
+            />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding RxRate}"
+            />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Total messages"
+            />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding RxMessages}"
+            />
+
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Messages rate"
+            />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding RxMessagesRate}"
+            />
+
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Dropped"
+            />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding RxDropped}"
+            />
+
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Error"
+            />
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding RxErrors}"
+            />
         </Grid>
-        <Rectangle Grid.Column="1" Grid.Row="0" Grid.RowSpan="3"
-                   Fill="{StaticResource SystemChromeDisabledLowColor}" Width="0.5" VerticalAlignment="Stretch" />
-        <Grid  
-              Grid.Row="2"
-              Grid.Column="2"
-            ColumnDefinitions="Auto,*" 
-            VerticalAlignment="Top" 
+        <Rectangle
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Fill="{StaticResource SystemChromeDisabledLowColor}"
+            Width="0.5"
+            VerticalAlignment="Stretch"
+        />
+        <Grid
+            Grid.Row="2"
+            Grid.Column="2"
+            ColumnDefinitions="Auto,*"
+            VerticalAlignment="Top"
             RowDefinitions="*,*,*,*,*,*,*"
-            ColumnSpacing="4" RowSpacing="4">
-           
-            
-            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Total bytes"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding Tx}"/>
-        
-            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Byte rate"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding TxRate}"/>
-            
-            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Total messages"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding TxMessages}"/>
-        
-            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Messages rate"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding TxMessagesRate}"/>
-            
-            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Dropped"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding TxDropped}"/>
-            
-            <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Error"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding TxErrors}"/>
-           
+            ColumnSpacing="4"
+            RowSpacing="4"
+        >
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Total bytes"
+            />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding Tx}"
+            />
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Byte rate"
+            />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding TxRate}"
+            />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Total messages"
+            />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding TxMessages}"
+            />
+
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Messages rate"
+            />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding TxMessagesRate}"
+            />
+
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Dropped"
+            />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding TxDropped}"
+            />
+
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Error"
+            />
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding TxErrors}"
+            />
         </Grid>
-        <Rectangle Grid.Column="3" Grid.Row="0" Grid.RowSpan="3"
-                   Fill="{StaticResource SystemChromeDisabledLowColor}" Width="0.5" VerticalAlignment="Stretch" />
-        <Grid  
+        <Rectangle
+            Grid.Column="3"
+            Grid.Row="0"
+            Grid.RowSpan="3"
+            Fill="{StaticResource SystemChromeDisabledLowColor}"
+            Width="0.5"
+            VerticalAlignment="Stretch"
+        />
+        <Grid
             Grid.Row="2"
             Grid.Column="4"
-            ColumnDefinitions="Auto,*" 
-            VerticalAlignment="Top" 
+            ColumnDefinitions="Auto,*"
+            VerticalAlignment="Top"
             RowDefinitions="*,*,*,*,*,*,*"
-            ColumnSpacing="4" RowSpacing="4">
-           
-            
-            <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Bad CRC "/>
-            <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding BadCrcError}"/>
-        
-            <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Parsed bytes"/>
-            <TextBlock Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding ParsedBytes}"/>
-            
-            <TextBlock Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Parsed messages"/>
-            <TextBlock Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding ParsedPackets}"/>
-        
-            <TextBlock Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Message read not all data"/>
-            <TextBlock Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding MessageReadNotAllData}"/>
-            
-            <TextBlock Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Deserialize errors"/>
-            <TextBlock Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding DeserializeError}"/>
-            
-            <TextBlock Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Classes="description"  Text="Unknown messages"/>
-            <TextBlock Grid.Row="6" Grid.Column="1" VerticalAlignment="Center" Classes="description" Text="{Binding UnknownMessage}"/>
-           
+            ColumnSpacing="4"
+            RowSpacing="4"
+        >
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Bad CRC "
+            />
+            <TextBlock
+                Grid.Row="1"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding BadCrcError}"
+            />
+
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Parsed bytes"
+            />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding ParsedBytes}"
+            />
+
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Parsed messages"
+            />
+            <TextBlock
+                Grid.Row="3"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding ParsedPackets}"
+            />
+
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Message read not all data"
+            />
+            <TextBlock
+                Grid.Row="4"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding MessageReadNotAllData}"
+            />
+
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Deserialize errors"
+            />
+            <TextBlock
+                Grid.Row="5"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding DeserializeError}"
+            />
+
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="Unknown messages"
+            />
+            <TextBlock
+                Grid.Row="6"
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding UnknownMessage}"
+            />
         </Grid>
     </Grid>
-    
 </UserControl>

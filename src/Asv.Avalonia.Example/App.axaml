@@ -1,31 +1,31 @@
-<Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Asv.Avalonia.Example.App"
-             RequestedThemeVariant="Dark">
+<Application
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Asv.Avalonia.Example.App"
+    RequestedThemeVariant="Dark"
+>
     <Application.Styles>
         <StyleInclude Source="avares://Asv.Avalonia/Styling/Theme.axaml" />
         <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Theme.axaml" />
 
         <Style Selector="Border.BlockInnerStyle">
             <Setter Property="Padding" Value="12, 14, 12, 14" />
-            <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+            <Setter
+                Property="Background"
+                Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}"
+            />
             <Setter Property="CornerRadius" Value="6" />
         </Style>
     </Application.Styles>
-    
+
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude 
-                    Source="avares://Asv.Avalonia.Example/Controls/Blocks/BaseExampleBlock.axaml" />
-                <MergeResourceInclude 
-                    Source="avares://Asv.Avalonia.Example/Controls/Blocks/Header/HeaderBlock.axaml" />
-                <MergeResourceInclude
-                    Source="avares://Asv.Avalonia.Example/Controls/Blocks/Preview/PreviewExampleBlock.axaml" />
-                <MergeResourceInclude
-                    Source="avares://Asv.Avalonia.Example/Controls/Blocks/Action/ActionExampleBlock.axaml" />
-                <MergeResourceInclude
-                    Source="avares://Asv.Avalonia.Example/Controls/Blocks/About/AboutExampleBlock.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Controls/Blocks/BaseExampleBlock.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Controls/Blocks/Header/HeaderBlock.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Controls/Blocks/Preview/PreviewExampleBlock.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Controls/Blocks/Action/ActionExampleBlock.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Controls/Blocks/About/AboutExampleBlock.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

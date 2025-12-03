@@ -1,21 +1,33 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:example="clr-namespace:Asv.Avalonia.Example">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+>
     <Design.PreviewWith>
         <example:ActionExampleBlock ButtonText="Click" />
     </Design.PreviewWith>
-    
-    <ControlTheme x:Key="{x:Type example:ActionExampleBlock}"
-                  TargetType="example:ActionExampleBlock"
-                  BasedOn="{StaticResource {x:Type example:BaseExampleBlock}}">
-        <Setter Property="Background" Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}" />
+
+    <ControlTheme
+        x:Key="{x:Type example:ActionExampleBlock}"
+        TargetType="example:ActionExampleBlock"
+        BasedOn="{StaticResource {x:Type example:BaseExampleBlock}}"
+    >
+        <Setter
+            Property="Background"
+            Value="{DynamicResource SystemControlFocusVisualSecondaryBrush}"
+        />
         <Setter Property="Content">
             <Template>
-                <Button Command="{Binding ButtonCommand, RelativeSource={RelativeSource AncestorType=example:ActionExampleBlock}}"
-                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                        Margin="0,0,4,0">
-                    <TextBlock Text="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=example:ActionExampleBlock}}" 
-                               TextWrapping="WrapWithOverflow" />
+                <Button
+                    Command="{Binding ButtonCommand, RelativeSource={RelativeSource AncestorType=example:ActionExampleBlock}}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Margin="0,0,4,0"
+                >
+                    <TextBlock
+                        Text="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=example:ActionExampleBlock}}"
+                        TextWrapping="WrapWithOverflow"
+                    />
                 </Button>
             </Template>
         </Setter>

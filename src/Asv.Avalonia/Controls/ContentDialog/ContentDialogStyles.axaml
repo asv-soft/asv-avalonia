@@ -1,111 +1,140 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:ui="clr-namespace:Asv.Avalonia"
-                    x:CompileBindings="True">
+<ResourceDictionary
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ui="clr-namespace:Asv.Avalonia"
+    x:CompileBindings="True"
+>
     <Design.PreviewWith>
         <Border Padding="10">
-            <ui:ContentDialog Title="Title"
-                              Content="Content goes here"
-                              ui:VisualStateHelper.ForcedClassesProperty=":open"/>
+            <ui:ContentDialog
+                Title="Title"
+                Content="Content goes here"
+                ui:VisualStateHelper.ForcedClassesProperty=":open"
+            />
         </Border>
     </Design.PreviewWith>
-    
+
     <x:Double x:Key="ContentDialogMinWidth">320</x:Double>
     <x:Double x:Key="ContentDialogMaxWidth">548</x:Double>
     <x:Double x:Key="ContentDialogMinHeight">184</x:Double>
     <x:Double x:Key="ContentDialogMaxHeight">756</x:Double>
-    
+
     <x:Double x:Key="ContentDialogButtonSpacing">8</x:Double>
-    
+
     <Thickness x:Key="ContentDialogTitleMargin">0,0,0,12</Thickness>
     <Thickness x:Key="ContentDialogBorderWidth">1</Thickness>
     <Thickness x:Key="ContentDialogPadding">24</Thickness>
     <Thickness x:Key="ContentDialogSeparatorThickness">0,0,0,1</Thickness>
-    
+
     <ControlTheme x:Key="{x:Type ui:ContentDialog}" TargetType="ui:ContentDialog">
-        <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}"/>
-        <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}"/>
-        <Setter Property="BorderBrush" Value="{DynamicResource AsvBackgroundUnknownBrush}"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
+        <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AsvBackgroundUnknownBrush}" />
         <Setter Property="BorderThickness" Value="{DynamicResource ContentDialogBorderWidth}" />
         <Setter Property="CornerRadius" Value="{DynamicResource OverlayCornerRadius}" />
         <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border Name="Container">
-                    <Panel Name="LayoutRoot"
-                           Background="{DynamicResource AsvSmokeFillColorDefaultBrush}">
-                        <Border Name="BackgroundElement"
-                                Background="{TemplateBinding Background}"
-                                BorderThickness="{StaticResource ContentDialogBorderWidth}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                CornerRadius="{TemplateBinding CornerRadius}"
-                                MinWidth="{DynamicResource ContentDialogMinWidth}"
-                                MaxWidth="{DynamicResource ContentDialogMaxWidth}"
-                                MinHeight="{DynamicResource ContentDialogMinHeight}"
-                                MaxHeight="{DynamicResource ContentDialogMaxHeight}"
-                                HorizontalAlignment="Center"
-                                VerticalAlignment="Center" Margin="100"
-                                Effect="drop-shadow(0 8 32 #66000000)"
-                                BackgroundSizing="{TemplateBinding BackgroundSizing}">
+                    <Panel
+                        Name="LayoutRoot"
+                        Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
+                    >
+                        <Border
+                            Name="BackgroundElement"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{StaticResource ContentDialogBorderWidth}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            MinWidth="{DynamicResource ContentDialogMinWidth}"
+                            MaxWidth="{DynamicResource ContentDialogMaxWidth}"
+                            MinHeight="{DynamicResource ContentDialogMinHeight}"
+                            MaxHeight="{DynamicResource ContentDialogMaxHeight}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Margin="100"
+                            Effect="drop-shadow(0 8 32 #66000000)"
+                            BackgroundSizing="{TemplateBinding BackgroundSizing}"
+                        >
                             <!-- Even in WinUI, shadow is always black regardless of light/dark mode -->
 
                             <!-- if this border isn't here, dialog space displays outside of corner radius at top
                                  if we put ClipToBounds=True on BackgroundElement above, it clips the shadow -->
-                            <Border ClipToBounds="True"
-                                    CornerRadius="{TemplateBinding CornerRadius}">
-                                <Grid Name="DialogSpace" ClipToBounds="True"
-                                  RowDefinitions="*,Auto">
-                                    <ScrollViewer Name="ContentScrollViewer"
-                                                  HorizontalScrollBarVisibility="Disabled"
-                                                  VerticalScrollBarVisibility="Auto">
-                                        <Border Background="{DynamicResource AsvPopupCommonBrush}"
-                                                Padding="{DynamicResource ContentDialogPadding}"
-                                                BorderThickness="{StaticResource ContentDialogSeparatorThickness}"
-                                                BorderBrush="{DynamicResource AsvBackgroundUnknownBrush}">
-                                            <Grid RowDefinitions="Auto,*" >
+                            <Border
+                                ClipToBounds="True"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                            >
+                                <Grid
+                                    Name="DialogSpace"
+                                    ClipToBounds="True"
+                                    RowDefinitions="*,Auto"
+                                >
+                                    <ScrollViewer
+                                        Name="ContentScrollViewer"
+                                        HorizontalScrollBarVisibility="Disabled"
+                                        VerticalScrollBarVisibility="Auto"
+                                    >
+                                        <Border
+                                            Background="{DynamicResource AsvPopupCommonBrush}"
+                                            Padding="{DynamicResource ContentDialogPadding}"
+                                            BorderThickness="{StaticResource ContentDialogSeparatorThickness}"
+                                            BorderBrush="{DynamicResource AsvBackgroundUnknownBrush}"
+                                        >
+                                            <Grid RowDefinitions="Auto,*">
                                                 <Grid.Styles>
                                                     <!--Make sure text wrapping is on-->
                                                     <Style Selector="TextBlock">
-                                                        <Setter Property="TextWrapping" Value="Wrap"/>
+                                                        <Setter
+                                                            Property="TextWrapping"
+                                                            Value="Wrap"
+                                                        />
                                                     </Style>
                                                 </Grid.Styles>
-                                                <ContentControl Name="Title"
-                                                                Margin="{StaticResource ContentDialogTitleMargin}"
-                                                                Content="{TemplateBinding Title}"
-                                                                ContentTemplate="{TemplateBinding TitleTemplate}"
-                                                                FontSize="20"
-                                                                FontFamily="Default"
-                                                                FontWeight="SemiBold"
-                                                                Foreground="{TemplateBinding Foreground}"
-                                                                HorizontalAlignment="Left"
-                                                                VerticalAlignment="Top">
+                                                <ContentControl
+                                                    Name="Title"
+                                                    Margin="{StaticResource ContentDialogTitleMargin}"
+                                                    Content="{TemplateBinding Title}"
+                                                    ContentTemplate="{TemplateBinding TitleTemplate}"
+                                                    FontSize="20"
+                                                    FontFamily="Default"
+                                                    FontWeight="SemiBold"
+                                                    Foreground="{TemplateBinding Foreground}"
+                                                    HorizontalAlignment="Left"
+                                                    VerticalAlignment="Top"
+                                                >
                                                     <ContentControl.Template>
                                                         <ControlTemplate>
-                                                            <ContentPresenter Content="{TemplateBinding Content}"
-                                                                              ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                              Margin="{TemplateBinding Padding}"
-                                                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                                                            <ContentPresenter
+                                                                Content="{TemplateBinding Content}"
+                                                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                                Margin="{TemplateBinding Padding}"
+                                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                            />
                                                         </ControlTemplate>
                                                     </ContentControl.Template>
                                                 </ContentControl>
 
-                                                <ContentPresenter Name="Content"
-                                                                  ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                  Content="{TemplateBinding Content}"
-                                                                  FontSize="{StaticResource ControlContentThemeFontSize}"
-                                                                  FontFamily="{StaticResource ContentControlThemeFontFamily}"
-                                                                  Foreground="{TemplateBinding Foreground}"
-                                                                  Grid.Row="1"/>
+                                                <ContentPresenter
+                                                    Name="Content"
+                                                    ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                    Content="{TemplateBinding Content}"
+                                                    FontSize="{StaticResource ControlContentThemeFontSize}"
+                                                    FontFamily="{StaticResource ContentControlThemeFontFamily}"
+                                                    Foreground="{TemplateBinding Foreground}"
+                                                    Grid.Row="1"
+                                                />
                                             </Grid>
                                         </Border>
                                     </ScrollViewer>
 
-                                    <Border Padding="{StaticResource ContentDialogPadding}"
-                                            Grid.Row="1"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Bottom"
-                                            Background="{TemplateBinding Background}">
+                                    <Border
+                                        Padding="{StaticResource ContentDialogPadding}"
+                                        Grid.Row="1"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Bottom"
+                                        Background="{TemplateBinding Background}"
+                                    >
                                         <Grid Name="CommandSpace">
                                             <!--
                                             B/C we can't target Row/Column defs in Styles like WinUI
@@ -118,30 +147,37 @@
                                                 <ColumnDefinition Width="0.5*" />
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
-                                            <Button Name="PrimaryButton"
-                                                    Content="{TemplateBinding PrimaryButtonText}"
-                                                    IsEnabled="{TemplateBinding IsPrimaryButtonEnabled}"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Stretch"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    IsVisible="False" />
+                                            <Button
+                                                Name="PrimaryButton"
+                                                Content="{TemplateBinding PrimaryButtonText}"
+                                                IsEnabled="{TemplateBinding IsPrimaryButtonEnabled}"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                IsVisible="False"
+                                            />
 
-                                            <Button Name="SecondaryButton"
-                                                    Content="{TemplateBinding SecondaryButtonText}"
-                                                    IsEnabled="{TemplateBinding IsSecondaryButtonEnabled}"
-                                                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    IsVisible="False"  />
+                                            <Button
+                                                Name="SecondaryButton"
+                                                Content="{TemplateBinding SecondaryButtonText}"
+                                                IsEnabled="{TemplateBinding IsSecondaryButtonEnabled}"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                IsVisible="False"
+                                            />
 
-                                            <Button Name="CloseButton"
-                                                    Content="{TemplateBinding CloseButtonText}"
-                                                    HorizontalAlignment="Stretch"
-                                                    VerticalAlignment="Stretch"
-                                                    HorizontalContentAlignment="Center"
-                                                    VerticalContentAlignment="Center"
-                                                    IsVisible="False" />
+                                            <Button
+                                                Name="CloseButton"
+                                                Content="{TemplateBinding CloseButtonText}"
+                                                HorizontalAlignment="Stretch"
+                                                VerticalAlignment="Stretch"
+                                                HorizontalContentAlignment="Center"
+                                                VerticalContentAlignment="Center"
+                                                IsVisible="False"
+                                            />
                                         </Grid>
                                     </Border>
                                 </Grid>
@@ -157,10 +193,10 @@
             <Style.Animations>
                 <Animation Duration="00:00:00.167" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="Opacity" Value="1.0"/>
+                        <Setter Property="Opacity" Value="1.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="Opacity" Value="0.0"/>
+                        <Setter Property="Opacity" Value="0.0" />
                         <Setter Property="IsVisible" Value="False" />
                     </KeyFrame>
                 </Animation>
@@ -170,12 +206,12 @@
             <Style.Animations>
                 <Animation Duration="00:00:00.167" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.0"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.0"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.0" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%" KeySpline="0,0 0,1">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.05"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.05"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.05" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.05" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -183,19 +219,19 @@
 
         <!--Handle open dialog-->
         <Style Selector="^:open /template/ Panel#LayoutRoot">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Style.Animations>
-                 <!--Animation applies with priority of LocalValue
+                <!--Animation applies with priority of LocalValue
                  To overrule the IsVisible=False in :hidden, set
-                 IsVisible=True in BOTH KeyFrames here--> 
+                 IsVisible=True in BOTH KeyFrames here-->
                 <Animation Duration="00:00:00.250" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="IsVisible" Value="True"/>
-                        <Setter Property="Opacity" Value="0.0"/>
+                        <Setter Property="IsVisible" Value="True" />
+                        <Setter Property="Opacity" Value="0.0" />
                     </KeyFrame>
                     <KeyFrame Cue="100%">
-                        <Setter Property="IsVisible" Value="True"/>
-                        <Setter Property="Opacity" Value="1.0"/>
+                        <Setter Property="IsVisible" Value="True" />
+                        <Setter Property="Opacity" Value="1.0" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -204,12 +240,12 @@
             <Style.Animations>
                 <Animation Duration="00:00:00.250" FillMode="Forward">
                     <KeyFrame Cue="0%">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.05"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.05"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.05" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.05" />
                     </KeyFrame>
                     <KeyFrame Cue="100%" KeySpline="0,0 0,1">
-                        <Setter Property="ScaleTransform.ScaleX" Value="1.00"/>
-                        <Setter Property="ScaleTransform.ScaleY" Value="1.00"/>
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.00" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.00" />
                     </KeyFrame>
                 </Animation>
             </Style.Animations>
@@ -217,49 +253,49 @@
 
         <!--Handle showing smoke layer-->
         <Style Selector="^:nosmokelayer /template/ Panel#LayoutRoot">
-            <Setter Property="Background" Value="{x:Null}"/>
+            <Setter Property="Background" Value="{x:Null}" />
         </Style>
 
         <!--Handle FullDialogSizing-->
         <Style Selector="^:fullsize /template/ Border#BackgroundElement">
-            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch" />
         </Style>
-        
+
         <!-- Primary Button Only -->
         <Style Selector="^:primary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
         </Style>
         <Style Selector="^:primary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:primary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
 
         <!-- Secondary Button Only -->
         <Style Selector="^:secondary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:secondary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
         </Style>
         <Style Selector="^:secondary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
 
         <!-- Close Button Only -->
         <Style Selector="^:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:close /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
         </Style>
@@ -268,33 +304,33 @@
 
         <!-- Primary and Secondary -->
         <Style Selector="^:primary:secondary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
 
         <!-- Primary and Close Buttons -->
         <Style Selector="^:primary:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:close /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:primary:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
@@ -302,16 +338,16 @@
 
         <!-- Primary and Secondary Buttons -->
         <Style Selector="^:primary:secondary /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:primary:secondary /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
@@ -319,40 +355,39 @@
 
         <!-- Secondary and Close Buttons -->
         <Style Selector="^:secondary:close /template/ Button#Secondary">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:secondary:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="False"/>
+            <Setter Property="IsVisible" Value="False" />
         </Style>
         <Style Selector="^:secondary:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="2" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 0 0" />
         </Style>
-        
+
         <!-- All Buttons -->
         <Style Selector="^:primary:secondary:close /template/ Button#PrimaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="0" />
             <Setter Property="Grid.ColumnSpan" Value="1" />
             <Setter Property="Margin" Value="0 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary:close /template/ Button#SecondaryButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="1" />
             <Setter Property="Grid.ColumnSpan" Value="2" />
             <Setter Property="Margin" Value="4 0 4 0" />
         </Style>
         <Style Selector="^:primary:secondary:close /template/ Button#CloseButton">
-            <Setter Property="IsVisible" Value="True"/>
+            <Setter Property="IsVisible" Value="True" />
             <Setter Property="Grid.Column" Value="3" />
             <Setter Property="Grid.ColumnSpan" Value="1" />
             <Setter Property="Margin" Value="4 0 0 0" />
         </Style>
     </ControlTheme>
-
 </ResourceDictionary>

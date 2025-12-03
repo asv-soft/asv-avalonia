@@ -1,11 +1,13 @@
-<Styles xmlns="https://github.com/avaloniaui"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:asvavalonia="clr-namespace:Asv.Avalonia">
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:asvavalonia="clr-namespace:Asv.Avalonia"
+>
     <Style Selector="TextBox">
-        <Setter Property="IsUndoEnabled" Value="False"/>
+        <Setter Property="IsUndoEnabled" Value="False" />
     </Style>
-    
+
     <Style Selector="asvavalonia|ContentDialog TextBox">
-        <Setter Property="IsUndoEnabled" Value="True"/>            
+        <Setter Property="IsUndoEnabled" Value="True" />
     </Style>
 </Styles>

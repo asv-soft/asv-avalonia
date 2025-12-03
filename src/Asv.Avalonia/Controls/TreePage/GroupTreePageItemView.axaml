@@ -1,17 +1,21 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.GroupTreePageItemView"
-             x:Name="PART_Root"
-             x:DataType="avalonia:GroupTreePageItemViewModel">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.GroupTreePageItemView"
+    x:Name="PART_Root"
+    x:DataType="avalonia:GroupTreePageItemViewModel"
+>
     <Design.DataContext>
-        <avalonia:GroupTreePageItemViewModel/>
+        <avalonia:GroupTreePageItemViewModel />
     </Design.DataContext>
-    
+
     <ItemsControl HorizontalAlignment="Left" ItemsSource="{Binding Node.Items}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
@@ -20,18 +24,48 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <Button VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Command="{ReflectionBinding DataContext.NavigateCommand, ElementName=PART_Root}" MinWidth="250" Margin="4" CommandParameter="{Binding Base.NavigateTo}" >
-                    <Grid VerticalAlignment="Center" HorizontalAlignment="Center" ColumnDefinitions="Auto,8,*" RowDefinitions="Auto,4,Auto,15,*">
-                        <TextBlock Grid.Column="2" Grid.Row="0" FontSize="30" HorizontalAlignment="Left" VerticalAlignment="Bottom" Text="{Binding Base.Header}"/>
-                        <TextBlock Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding Base.Description}"/>
-                        <avalonia1:MaterialIcon 
-                            Grid.Column="0" Grid.Row="0" Grid.RowSpan="5" 
+                <Button
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Command="{ReflectionBinding DataContext.NavigateCommand, ElementName=PART_Root}"
+                    MinWidth="250"
+                    Margin="4"
+                    CommandParameter="{Binding Base.NavigateTo}"
+                >
+                    <Grid
+                        VerticalAlignment="Center"
+                        HorizontalAlignment="Center"
+                        ColumnDefinitions="Auto,8,*"
+                        RowDefinitions="Auto,4,Auto,15,*"
+                    >
+                        <TextBlock
+                            Grid.Column="2"
+                            Grid.Row="0"
+                            FontSize="30"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Text="{Binding Base.Header}"
+                        />
+                        <TextBlock
+                            Grid.Column="2"
+                            Grid.Row="2"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"
+                            Text="{Binding Base.Description}"
+                        />
+                        <avalonia1:MaterialIcon
+                            Grid.Column="0"
+                            Grid.Row="0"
+                            Grid.RowSpan="5"
                             Foreground="{DynamicResource AsvForegroundInfo2Brush}"
-                            Kind="{Binding Base.Icon}" HorizontalAlignment="Right" VerticalAlignment="Top" Width="65" Height="65">
-                        </avalonia1:MaterialIcon>
-                    </Grid> 
+                            Kind="{Binding Base.Icon}"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Width="65"
+                            Height="65"
+                        ></avalonia1:MaterialIcon>
+                    </Grid>
                 </Button>
-
             </DataTemplate>
         </ItemsControl.ItemTemplate>
     </ItemsControl>

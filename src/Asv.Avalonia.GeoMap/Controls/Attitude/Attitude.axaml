@@ -1,6 +1,8 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia.GeoMap">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia.GeoMap"
+>
     <Design.PreviewWith>
         <controls:Attitude Width="250" Height="250" />
     </Design.PreviewWith>
@@ -12,53 +14,93 @@
                 <Border
                     BorderBrush="{TemplateBinding BorderBrush}"
                     BorderThickness="{TemplateBinding BorderThickness}"
-                    CornerRadius="{TemplateBinding CornerRadius}">
+                    CornerRadius="{TemplateBinding CornerRadius}"
+                >
                     <Viewbox>
-                    <Canvas x:Name="Canvas" Width="1000" Height="1000">
-                        <Rectangle Canvas.Top="-500" Canvas.Left="-500" Width="2000" Height="2000">
-                            <Rectangle.RenderTransform>
-                                <TransformGroup>
-                                    <RotateTransform Angle="0"/>
-                                    <TranslateTransform Y="0"/>
-                                </TransformGroup>
-                            </Rectangle.RenderTransform>
-                            <Rectangle.Fill>
-                                <LinearGradientBrush StartPoint="50%,0%"
-                                                     EndPoint="50%,100%" Opacity="0.5">
-                                    <LinearGradientBrush.GradientStops>
-                                        <GradientStop Offset="0" Color="#4679ba"/>
-                                        <GradientStop Offset="0.5" Color="#a2acc5"/>
-                                        <GradientStop Offset="0.5" Color="#081b5d"/>
-                                        <GradientStop Offset="1" Color="#2e4469"/>
-                                    </LinearGradientBrush.GradientStops>
-                                </LinearGradientBrush>
-                            </Rectangle.Fill>
-                        </Rectangle> 
-                        <Border Canvas.Top="450" Canvas.Left="800" Width="200" Height="100" 
-                                BorderBrush="White" 
-                                BorderThickness="3" 
+                        <Canvas x:Name="Canvas" Width="1000" Height="1000">
+                            <Rectangle
+                                Canvas.Top="-500"
+                                Canvas.Left="-500"
+                                Width="2000"
+                                Height="2000"
+                            >
+                                <Rectangle.RenderTransform>
+                                    <TransformGroup>
+                                        <RotateTransform Angle="0" />
+                                        <TranslateTransform Y="0" />
+                                    </TransformGroup>
+                                </Rectangle.RenderTransform>
+                                <Rectangle.Fill>
+                                    <LinearGradientBrush
+                                        StartPoint="50%,0%"
+                                        EndPoint="50%,100%"
+                                        Opacity="0.5"
+                                    >
+                                        <LinearGradientBrush.GradientStops>
+                                            <GradientStop Offset="0" Color="#4679ba" />
+                                            <GradientStop Offset="0.5" Color="#a2acc5" />
+                                            <GradientStop Offset="0.5" Color="#081b5d" />
+                                            <GradientStop Offset="1" Color="#2e4469" />
+                                        </LinearGradientBrush.GradientStops>
+                                    </LinearGradientBrush>
+                                </Rectangle.Fill>
+                            </Rectangle>
+                            <Border
+                                Canvas.Top="450"
+                                Canvas.Left="800"
+                                Width="200"
+                                Height="100"
+                                BorderBrush="White"
+                                BorderThickness="3"
                                 CornerRadius="5"
-                                Background="Black">
-                            <Panel>
-                                <TextBlock Margin="30,0,0,0" VerticalAlignment="Center" FontSize="60" Text="9999"/>
-                                <Path HorizontalAlignment="Left" Width="20" Height="30" Stretch="Fill" Fill="White" Stroke="White" StrokeThickness="3">
-                                    <Path.Data>
-                                        <PathGeometry>
-                                            <PathFigure StartPoint="0,0">
-                                                <LineSegment Point="1,1"/>
-                                                <LineSegment Point="0,2"/>
-                                            </PathFigure>
-                                        </PathGeometry>
-                                    </Path.Data>
-                                </Path>
-                            </Panel>
-                        </Border>
-                        <Line Canvas.Left="500" Canvas.Top="450" StartPoint="0,0" EndPoint="0,100" StrokeThickness="3" Stroke="White"/>
-                        <Line Canvas.Left="450" Canvas.Top="500" StartPoint="0,0" EndPoint="100,0" StrokeThickness="3" Stroke="White"/>
-                    </Canvas>
-                </Viewbox>
+                                Background="Black"
+                            >
+                                <Panel>
+                                    <TextBlock
+                                        Margin="30,0,0,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="60"
+                                        Text="9999"
+                                    />
+                                    <Path
+                                        HorizontalAlignment="Left"
+                                        Width="20"
+                                        Height="30"
+                                        Stretch="Fill"
+                                        Fill="White"
+                                        Stroke="White"
+                                        StrokeThickness="3"
+                                    >
+                                        <Path.Data>
+                                            <PathGeometry>
+                                                <PathFigure StartPoint="0,0">
+                                                    <LineSegment Point="1,1" />
+                                                    <LineSegment Point="0,2" />
+                                                </PathFigure>
+                                            </PathGeometry>
+                                        </Path.Data>
+                                    </Path>
+                                </Panel>
+                            </Border>
+                            <Line
+                                Canvas.Left="500"
+                                Canvas.Top="450"
+                                StartPoint="0,0"
+                                EndPoint="0,100"
+                                StrokeThickness="3"
+                                Stroke="White"
+                            />
+                            <Line
+                                Canvas.Left="450"
+                                Canvas.Top="500"
+                                StartPoint="0,0"
+                                EndPoint="100,0"
+                                StrokeThickness="3"
+                                Stroke="White"
+                            />
+                        </Canvas>
+                    </Viewbox>
                 </Border>
-                
             </ControlTemplate>
         </Setter>
     </Style>

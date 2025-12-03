@@ -80,7 +80,7 @@ public class SerialPortViewModel : PortViewModel
     public BindableReactiveProperty<string?> BaudRate { get; }
 
     public IEnumerable<string> BaudRates { get; } =
-        ["9600", "19200", "38400", "57600", "115200", "230400", "460800", "921600"];
+    ["9600", "19200", "38400", "57600", "115200", "230400", "460800", "921600"];
 
     public bool IsVersion2
     {

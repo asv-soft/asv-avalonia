@@ -1,25 +1,33 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="250" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.PropertyEditorView"
-             x:DataType="avalonia:PropertyEditorViewModel">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.PropertyEditorView"
+    x:DataType="avalonia:PropertyEditorViewModel"
+>
     <Design.DataContext>
-        <avalonia:PropertyEditorViewModel/>
+        <avalonia:PropertyEditorViewModel />
     </Design.DataContext>
     <ItemsControl Margin="8" ItemsSource="{Binding Items}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <StackPanel Spacing="4"/>
+                <StackPanel Spacing="4" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <StackPanel Spacing="4">
-                    <TextBlock IsVisible="{Binding Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Classes="description" Text="{Binding Header}"/>
-                    <ContentControl Content="{Binding}"/>    
+                    <TextBlock
+                        IsVisible="{Binding Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                        Classes="description"
+                        Text="{Binding Header}"
+                    />
+                    <ContentControl Content="{Binding}" />
                 </StackPanel>
             </DataTemplate>
         </ItemsControl.ItemTemplate>

@@ -1,23 +1,29 @@
-﻿<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:avalonia="clr-namespace:Asv.Avalonia"
-             xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.TreePageView"
-             x:DataType="avalonia:IDesignTimeTreePage">
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.TreePageView"
+    x:DataType="avalonia:IDesignTimeTreePage"
+>
     <Design.DataContext>
         <avalonia:DesignTimeTreePageViewModel />
     </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="GridSplitter">
-            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Background" Value="Transparent" />
             <Style Selector="^:pointerover">
-                <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"/>
+                <Setter
+                    Property="Background"
+                    Value="{DynamicResource SystemControlBackgroundChromeMediumLowBrush}"
+                />
             </Style>
         </Style>
-        
     </UserControl.Styles>
     <Grid Name="PART_MainGrid">
         <Grid.RowDefinitions>
@@ -25,25 +31,41 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MaxWidth="{Binding IsMenuVisible, Converter={x:Static avalonia:ZeroDoubleIfFalseConverter.Instance}}" />
+            <ColumnDefinition
+                Width="Auto"
+                MaxWidth="{Binding IsMenuVisible, Converter={x:Static avalonia:ZeroDoubleIfFalseConverter.Instance}}"
+            />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
-        
-        <Button Margin="4,0,0,0" IsVisible="{Binding IsMenuVisible}" Command="{Binding HideMenuCommand}" HorizontalAlignment="Stretch" Grid.Column="0" Grid.Row="0" Background="Transparent" Padding="0">
-            <StackPanel Spacing="4"  Orientation="Horizontal" Margin="4">
-                <avalonia1:MaterialIcon Kind="{Binding Icon}"/>
-                <TextBlock VerticalAlignment="Center" Text="{Binding Title}"/>    
-            </StackPanel>    
+
+        <Button
+            Margin="4,0,0,0"
+            IsVisible="{Binding IsMenuVisible}"
+            Command="{Binding HideMenuCommand}"
+            HorizontalAlignment="Stretch"
+            Grid.Column="0"
+            Grid.Row="0"
+            Background="Transparent"
+            Padding="0"
+        >
+            <StackPanel Spacing="4" Orientation="Horizontal" Margin="4">
+                <avalonia1:MaterialIcon Kind="{Binding Icon}" />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+            </StackPanel>
         </Button>
-        
-        
-        <TreeView Margin="0,8,0,0" MinWidth="150"  Grid.Column="0" Grid.Row="1"
-                  IsVisible="{Binding IsMenuVisible}"
-                  AutoScrollToSelectedItem="True"
-                  SelectedItem="{Binding SelectedNode.Value, Mode=TwoWay}"
-                  SelectionMode="Single"
-                  ItemsSource="{Binding TreeView.Items}">
+
+        <TreeView
+            Margin="0,8,0,0"
+            MinWidth="150"
+            Grid.Column="0"
+            Grid.Row="1"
+            IsVisible="{Binding IsMenuVisible}"
+            AutoScrollToSelectedItem="True"
+            SelectedItem="{Binding SelectedNode.Value, Mode=TwoWay}"
+            SelectionMode="Single"
+            ItemsSource="{Binding TreeView.Items}"
+        >
             <TreeView.Styles>
                 <Style Selector="TreeViewItem" x:DataType="avalonia:TreePageMenuNode">
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
@@ -58,42 +80,84 @@
                             Margin="0,0,4,0"
                             DockPanel.Dock="Left"
                             Kind="{Binding Base.Icon}"
-                            Width="15" Height="15" />
+                            Width="15"
+                            Height="15"
+                        />
 
-                        <avalonia:Tag DockPanel.Dock="Right" IsVisible="{Binding !!.}"
-                                      VerticalAlignment="Center"
-                                      FontSize="10"
-                                      DataContext="{Binding Base.Status}"
-                                      Margin="4,4,4,4"
-                                      Key="{Binding Key}" 
-                                      Value="{Binding Value}" 
-                                      Icon="{Binding Icon}"
-                                      avalonia:AsvPallete.Color="{Binding Color}"
+                        <avalonia:Tag
+                            DockPanel.Dock="Right"
+                            IsVisible="{Binding !!.}"
+                            VerticalAlignment="Center"
+                            FontSize="10"
+                            DataContext="{Binding Base.Status}"
+                            Margin="4,4,4,4"
+                            Key="{Binding Key}"
+                            Value="{Binding Value}"
+                            Icon="{Binding Icon}"
+                            avalonia:AsvPallete.Color="{Binding Color}"
                         />
                         <TextBlock VerticalAlignment="Center" Text="{Binding Base.Header}" />
                     </DockPanel>
                 </TreeDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <Rectangle Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3"
-                   Fill="{StaticResource SystemChromeDisabledLowColor}" Height="0.5" VerticalAlignment="Bottom" />
-        
-        <GridSplitter IsVisible="{Binding IsMenuVisible}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
-                      Width="10" HorizontalAlignment="Stretch" />
-        
-        <Rectangle IsVisible="{Binding IsMenuVisible}" Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
-                   Fill="{StaticResource SystemChromeDisabledLowColor}" Width="0.5" VerticalAlignment="Stretch" />
-        
-        <ContentControl Margin="0,8,0,0" Grid.Column="2" Grid.Row="1" Content="{Binding SelectedPage.Value}" />
-        
-        <Button Grid.Row="0" Grid.Column="2" Height="100" Grid.RowSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" IsVisible="{Binding !IsMenuVisible}" Command="{Binding ShowMenuCommand}" Background="Transparent" Padding="0">
+        <Rectangle
+            Grid.Column="0"
+            Grid.Row="0"
+            Grid.ColumnSpan="3"
+            Fill="{StaticResource SystemChromeDisabledLowColor}"
+            Height="0.5"
+            VerticalAlignment="Bottom"
+        />
+
+        <GridSplitter
+            IsVisible="{Binding IsMenuVisible}"
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Width="10"
+            HorizontalAlignment="Stretch"
+        />
+
+        <Rectangle
+            IsVisible="{Binding IsMenuVisible}"
+            Grid.Column="1"
+            Grid.Row="0"
+            Grid.RowSpan="2"
+            Fill="{StaticResource SystemChromeDisabledLowColor}"
+            Width="0.5"
+            VerticalAlignment="Stretch"
+        />
+
+        <ContentControl
+            Margin="0,8,0,0"
+            Grid.Column="2"
+            Grid.Row="1"
+            Content="{Binding SelectedPage.Value}"
+        />
+
+        <Button
+            Grid.Row="0"
+            Grid.Column="2"
+            Height="100"
+            Grid.RowSpan="2"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Left"
+            IsVisible="{Binding !IsMenuVisible}"
+            Command="{Binding ShowMenuCommand}"
+            Background="Transparent"
+            Padding="0"
+        >
             <StackPanel Spacing="4" Orientation="Horizontal" Margin="4">
-                <avalonia1:MaterialIcon Kind="ChevronDoubleRight"/>
-            </StackPanel>    
+                <avalonia1:MaterialIcon Kind="ChevronDoubleRight" />
+            </StackPanel>
         </Button>
-        
+
         <DockPanel Grid.Column="2" Grid.Row="0" Margin="4">
-            <ItemsControl ItemsSource="{Binding SelectedPage.Value.MenuView.Items}" DockPanel.Dock="Right">
+            <ItemsControl
+                ItemsSource="{Binding SelectedPage.Value.MenuView.Items}"
+                DockPanel.Dock="Right"
+            >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
                         <StackPanel Orientation="Horizontal" />
@@ -101,22 +165,25 @@
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Button 
+                        <Button
                             VerticalContentAlignment="Center"
                             Command="{Binding Base.Command}"
                             CommandParameter="{Binding Base.CommandParameter}"
                             IsEnabled="{Binding Base.IsEnabled}"
-                            IsVisible="{Binding Base.IsVisible}">
+                            IsVisible="{Binding Base.IsVisible}"
+                        >
                             <StackPanel Orientation="Horizontal" Spacing="4">
-                                <avalonia1:MaterialIcon 
+                                <avalonia1:MaterialIcon
                                     Kind="{Binding Base.Icon}"
                                     IsVisible="{Binding Base.Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                    VerticalAlignment="Center"/>
-                                <TextBlock 
+                                    VerticalAlignment="Center"
+                                />
+                                <TextBlock
                                     Text="{Binding Base.Header}"
                                     IsVisible="{Binding Base.Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                     VerticalAlignment="Center"
-                                    Margin="0,-1.5,0,0"/>    
+                                    Margin="0,-1.5,0,0"
+                                />
                             </StackPanel>
                             <!--don't support flyouts yet-->
                             <!--<Button.Flyout>
@@ -145,12 +212,24 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal" Spacing="4">
-                            <avalonia1:MaterialIcon IsVisible="{Binding !IsFirst}" VerticalAlignment="Center"
-                                                    Width="18" Height="18" Kind="ChevronRight" />
-                            <avalonia1:MaterialIcon VerticalAlignment="Center"
-                                                    Width="18" Height="18" Kind="{Binding Item.Icon}" />
-                            <TextBlock FontSize="16" VerticalAlignment="Center"
-                                       Text="{Binding Item.Header}" />
+                            <avalonia1:MaterialIcon
+                                IsVisible="{Binding !IsFirst}"
+                                VerticalAlignment="Center"
+                                Width="18"
+                                Height="18"
+                                Kind="ChevronRight"
+                            />
+                            <avalonia1:MaterialIcon
+                                VerticalAlignment="Center"
+                                Width="18"
+                                Height="18"
+                                Kind="{Binding Item.Icon}"
+                            />
+                            <TextBlock
+                                FontSize="16"
+                                VerticalAlignment="Center"
+                                Text="{Binding Item.Header}"
+                            />
                         </StackPanel>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

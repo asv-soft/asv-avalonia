@@ -1,78 +1,173 @@
-﻿<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:Asv.Avalonia"
-        xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
     <Design.PreviewWith>
         <Grid ColumnDefinitions="*,8,*" Height="300">
             <ThemeVariantScope RequestedThemeVariant="Dark">
                 <StackPanel Background="{DynamicResource SystemBaseLowColor}" Spacing="4">
-                    <TextBlock HorizontalAlignment="Center" Text="LIGHT"/>
+                    <TextBlock HorizontalAlignment="Center" Text="LIGHT" />
                     <controls:GeoPointEditor Width="200" />
-                    <TextBlock HorizontalAlignment="Center" Text="LIGHT (READ ONLY)"/>
+                    <TextBlock HorizontalAlignment="Center" Text="LIGHT (READ ONLY)" />
                     <controls:GeoPointEditor IsReadOnly="True" Width="200" />
                 </StackPanel>
-                
             </ThemeVariantScope>
-            
+
             <ThemeVariantScope Grid.Column="2" RequestedThemeVariant="Light">
                 <StackPanel Background="{DynamicResource SystemBaseLowColor}" Spacing="4">
-                    <TextBlock HorizontalAlignment="Center" Text="LIGHT"/>
+                    <TextBlock HorizontalAlignment="Center" Text="LIGHT" />
                     <controls:GeoPointEditor Width="200" />
-                    <TextBlock HorizontalAlignment="Center" Text="LIGHT (READ ONLY)"/>
+                    <TextBlock HorizontalAlignment="Center" Text="LIGHT (READ ONLY)" />
                     <controls:GeoPointEditor IsReadOnly="True" Width="200" />
                 </StackPanel>
             </ThemeVariantScope>
         </Grid>
-        
     </Design.PreviewWith>
 
     <Style Selector="controls|GeoPointEditor">
         <!-- Set Defaults -->
-        <Setter Property="VerticalAlignment" Value="Top"/>
+        <Setter Property="VerticalAlignment" Value="Top" />
         <Setter Property="Template">
             <ControlTemplate>
                 <StackPanel Spacing="4">
-                    <TextBox x:Name="PART_Lat" IsReadOnly="{TemplateBinding IsReadOnly}" HorizontalContentAlignment="Left" Text="{TemplateBinding Latitude}" >
+                    <TextBox
+                        x:Name="PART_Lat"
+                        IsReadOnly="{TemplateBinding IsReadOnly}"
+                        HorizontalContentAlignment="Left"
+                        Text="{TemplateBinding Latitude}"
+                    >
                         <TextBox.InnerLeftContent>
-                            <TextBlock MinWidth="20" VerticalAlignment="Center" Margin="4,0" Classes="description" Foreground="{DynamicResource TextFillColorDisabledBrush}" Text="Lat"/>
+                            <TextBlock
+                                MinWidth="20"
+                                VerticalAlignment="Center"
+                                Margin="4,0"
+                                Classes="description"
+                                Foreground="{DynamicResource TextFillColorDisabledBrush}"
+                                Text="Lat"
+                            />
                         </TextBox.InnerLeftContent>
                         <TextBox.InnerRightContent>
-                            <Grid IsVisible="{Binding IsReadOnly, ElementName=PART_Lat, Converter={x:Static BoolConverters.Not}}" ColumnDefinitions="20,4,20">
-                                <Button Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Theme="{StaticResource TransparentButton}">
-                                    <avalonia:MaterialIcon Width="15" Height="15" Kind="ArrowLeft"/>
-                                </Button>    
-                                <Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Theme="{StaticResource TransparentButton}">
-                                    <avalonia:MaterialIcon Width="15" Height="15" Kind="ArrowRight"/>
+                            <Grid
+                                IsVisible="{Binding IsReadOnly, ElementName=PART_Lat, Converter={x:Static BoolConverters.Not}}"
+                                ColumnDefinitions="20,4,20"
+                            >
+                                <Button
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Theme="{StaticResource TransparentButton}"
+                                >
+                                    <avalonia:MaterialIcon
+                                        Width="15"
+                                        Height="15"
+                                        Kind="ArrowLeft"
+                                    />
+                                </Button>
+                                <Button
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Theme="{StaticResource TransparentButton}"
+                                >
+                                    <avalonia:MaterialIcon
+                                        Width="15"
+                                        Height="15"
+                                        Kind="ArrowRight"
+                                    />
                                 </Button>
                             </Grid>
                         </TextBox.InnerRightContent>
-                    </TextBox>  
-                    <TextBox x:Name="PART_Lon" IsReadOnly="{TemplateBinding IsReadOnly}" HorizontalContentAlignment="Left" Text="{TemplateBinding Longitude}" >
+                    </TextBox>
+                    <TextBox
+                        x:Name="PART_Lon"
+                        IsReadOnly="{TemplateBinding IsReadOnly}"
+                        HorizontalContentAlignment="Left"
+                        Text="{TemplateBinding Longitude}"
+                    >
                         <TextBox.InnerLeftContent>
-                            <TextBlock MinWidth="20" VerticalAlignment="Center" Margin="4,0" Classes="description" Foreground="{DynamicResource TextFillColorDisabledBrush}" Text="Lon"/>
+                            <TextBlock
+                                MinWidth="20"
+                                VerticalAlignment="Center"
+                                Margin="4,0"
+                                Classes="description"
+                                Foreground="{DynamicResource TextFillColorDisabledBrush}"
+                                Text="Lon"
+                            />
                         </TextBox.InnerLeftContent>
                         <TextBox.InnerRightContent>
-                            <Grid IsVisible="{Binding IsReadOnly, ElementName=PART_Lon, Converter={x:Static BoolConverters.Not}}" ColumnDefinitions="20,4,20">
-                                <Button Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Theme="{StaticResource TransparentButton}">
-                                    <avalonia:MaterialIcon Width="15" Height="15" Kind="ArrowUp"/>
-                                </Button>    
-                                <Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Theme="{StaticResource TransparentButton}">
-                                    <avalonia:MaterialIcon Width="15" Height="15" Kind="ArrowDown"/>
+                            <Grid
+                                IsVisible="{Binding IsReadOnly, ElementName=PART_Lon, Converter={x:Static BoolConverters.Not}}"
+                                ColumnDefinitions="20,4,20"
+                            >
+                                <Button
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Theme="{StaticResource TransparentButton}"
+                                >
+                                    <avalonia:MaterialIcon Width="15" Height="15" Kind="ArrowUp" />
+                                </Button>
+                                <Button
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Theme="{StaticResource TransparentButton}"
+                                >
+                                    <avalonia:MaterialIcon
+                                        Width="15"
+                                        Height="15"
+                                        Kind="ArrowDown"
+                                    />
                                 </Button>
                             </Grid>
                         </TextBox.InnerRightContent>
-                    </TextBox> 
-                    <TextBox x:Name="PART_Alt" IsReadOnly="{TemplateBinding IsReadOnly}" HorizontalContentAlignment="Left" Text="{TemplateBinding Altitude}" >
+                    </TextBox>
+                    <TextBox
+                        x:Name="PART_Alt"
+                        IsReadOnly="{TemplateBinding IsReadOnly}"
+                        HorizontalContentAlignment="Left"
+                        Text="{TemplateBinding Altitude}"
+                    >
                         <TextBox.InnerLeftContent>
-                            <TextBlock MinWidth="20" VerticalAlignment="Center" Margin="4,0" Classes="description" Foreground="{DynamicResource TextFillColorDisabledBrush}" Text="Alt"/>
+                            <TextBlock
+                                MinWidth="20"
+                                VerticalAlignment="Center"
+                                Margin="4,0"
+                                Classes="description"
+                                Foreground="{DynamicResource TextFillColorDisabledBrush}"
+                                Text="Alt"
+                            />
                         </TextBox.InnerLeftContent>
                         <TextBox.InnerRightContent>
-                            <Grid IsVisible="{Binding IsReadOnly, ElementName=PART_Alt, Converter={x:Static BoolConverters.Not}}" ColumnDefinitions="20,4,20">
-                                <Button Grid.Column="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Theme="{StaticResource TransparentButton}">
-                                    <avalonia:MaterialIcon Width="15" Height="15" Kind="ChevronTripleUp"/>
-                                </Button>    
-                                <Button Grid.Column="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Theme="{StaticResource TransparentButton}">
-                                    <avalonia:MaterialIcon Width="15" Height="15" Kind="ChevronTripleDown"/>
+                            <Grid
+                                IsVisible="{Binding IsReadOnly, ElementName=PART_Alt, Converter={x:Static BoolConverters.Not}}"
+                                ColumnDefinitions="20,4,20"
+                            >
+                                <Button
+                                    Grid.Column="0"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Theme="{StaticResource TransparentButton}"
+                                >
+                                    <avalonia:MaterialIcon
+                                        Width="15"
+                                        Height="15"
+                                        Kind="ChevronTripleUp"
+                                    />
+                                </Button>
+                                <Button
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Theme="{StaticResource TransparentButton}"
+                                >
+                                    <avalonia:MaterialIcon
+                                        Width="15"
+                                        Height="15"
+                                        Kind="ChevronTripleDown"
+                                    />
                                 </Button>
                             </Grid>
                         </TextBox.InnerRightContent>
