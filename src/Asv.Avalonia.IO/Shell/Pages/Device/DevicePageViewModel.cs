@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -28,6 +29,10 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
+
+        IsDeviceInitialized = _deviceCore
+            .IsDeviceInitialized.ToReadOnlyBindableReactiveProperty()
+            .DisposeItWith(Disposable);
     }
 
     protected override void InternalInitArgs(NameValueCollection args)
@@ -52,8 +57,7 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
     }
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
-    public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized =>
-        _deviceCore.IsDeviceInitialized.ToReadOnlyBindableReactiveProperty();
+    public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized { get; }
     public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
     public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }
