@@ -825,7 +825,4 @@
     <data name="ChangeIntPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that changes the value of a historical property of type int</value>
     </data>
-    <data name="ValidationException_Unknown_Message" xml:space="preserve">
-        <value>Validation failed</value>
-    </data>
 </root>

@@ -1640,11 +1640,5 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("ChangeIntPropertyCommand_CommandInfo_Description", resourceCulture);
             }
         }
-        
-        public static string ValidationException_Unknown_Message {
-            get {
-                return ResourceManager.GetString("ValidationException_Unknown_Message", resourceCulture);
-            }
-        }
     }
 }

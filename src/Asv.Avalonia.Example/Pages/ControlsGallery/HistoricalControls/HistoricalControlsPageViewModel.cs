@@ -121,7 +121,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     if (v?.Contains('s', StringComparison.InvariantCultureIgnoreCase) ?? false)
                     {
                         return ValidationResult.FailFromErrorMessage(
-                            "StringPropWithManyValidations should not contain 's'",
+                            "Property should not contain 's'",
                             RS.HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS
                         );
                     }

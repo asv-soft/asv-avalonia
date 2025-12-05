@@ -1,8 +1,5 @@
-﻿using Asv.Common;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Input;
-using R3;
 
 namespace Asv.Avalonia.GeoMap;
 

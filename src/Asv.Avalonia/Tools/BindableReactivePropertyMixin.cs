@@ -26,9 +26,8 @@ public static class BindableReactivePropertyMixin
                 if (!result.IsSuccess)
                 {
                     prop.OnErrorResume(
-                        result.ValidationException?.GetExceptionWithLocalization()
-                            ?? result.ValidationException
-                            ?? new Exception(RS.ValidationException_Unknown_Message)
+                        result.ValidationException?.GetExceptionWithLocalizationOrSelf()
+                            ?? new UnknownValidationException()
                     );
                 }
 
