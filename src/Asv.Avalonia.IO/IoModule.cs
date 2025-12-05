@@ -35,34 +35,32 @@ public static class ContainerConfigurationMixin
         }
         else if (!options.IsDeviceFeatureEnabled)
         {
-            exceptionTypes.AddRange(
-                [
-                    typeof(HomePageDeviceListExtension),
-                    typeof(SettingsPageExtension),
-                    typeof(SettingsConnectionView),
-                    typeof(SettingsConnectionViewModel),
-                    typeof(PortView),
-                    typeof(SerialPortView),
-                    typeof(SerialPortViewModel),
-                    typeof(SettingsConnectionSerialPortExtension),
-                    typeof(TcpPortView),
-                    typeof(TcpPortViewModel),
-                    typeof(SettingsConnectionTcpPortExtension),
-                    typeof(TcpServerPortView),
-                    typeof(TcpServerPortViewModel),
-                    typeof(SettingsConnectionTcpServerPortExtension),
-                    typeof(UdpPortView),
-                    typeof(UdpPortViewModel),
-                    typeof(SettingsConnectionUdpPortExtension),
-                    typeof(ConnectionRateStatusView),
-                    typeof(ConnectionRateStatusViewModel),
-                    typeof(PortCrudCommand),
-                    typeof(IDeviceManager),
-                    typeof(DeviceManager),
-                    typeof(StatisticView),
-                    typeof(StatisticViewModel),
-                ]
-            );
+            exceptionTypes.AddRange([
+                typeof(HomePageDeviceListExtension),
+                typeof(SettingsPageExtension),
+                typeof(SettingsConnectionView),
+                typeof(SettingsConnectionViewModel),
+                typeof(PortView),
+                typeof(SerialPortView),
+                typeof(SerialPortViewModel),
+                typeof(SettingsConnectionSerialPortExtension),
+                typeof(TcpPortView),
+                typeof(TcpPortViewModel),
+                typeof(SettingsConnectionTcpPortExtension),
+                typeof(TcpServerPortView),
+                typeof(TcpServerPortViewModel),
+                typeof(SettingsConnectionTcpServerPortExtension),
+                typeof(UdpPortView),
+                typeof(UdpPortViewModel),
+                typeof(SettingsConnectionUdpPortExtension),
+                typeof(ConnectionRateStatusView),
+                typeof(ConnectionRateStatusViewModel),
+                typeof(PortCrudCommand),
+                typeof(IDeviceManager),
+                typeof(DeviceManager),
+                typeof(StatisticView),
+                typeof(StatisticViewModel),
+            ]);
         }
 
         var iOTypes = typeof(IoModule).Assembly.GetTypes().Except(exceptionTypes);
