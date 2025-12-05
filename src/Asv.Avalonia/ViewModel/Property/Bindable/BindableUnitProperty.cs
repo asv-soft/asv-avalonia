@@ -47,9 +47,14 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
     {
         var result = Unit.CurrentUnitItem.CurrentValue.ValidateValue(userValue);
 
-        return result.IsSuccess
-            ? ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue))
-            : result.ValidationException?.GetExceptionWithLocalizationOrSelf();
+        if (result.IsSuccess)
+        {
+            var resultSi = ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue));
+            return resultSi;
+        }
+
+        Logger.LogError(result.ValidationException, "Validation error");
+        return result.ValidationException?.GetExceptionWithLocalizationOrSelf();
     }
 
     protected virtual Exception? ValidateSiValue(double siValue)

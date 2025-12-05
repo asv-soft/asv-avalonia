@@ -53,6 +53,7 @@ public sealed class HistoricalStringProperty
             var res = rule(userValue);
             if (!res.IsSuccess)
             {
+                Logger.LogError(res.ValidationException, "Validation error");
                 return res.ValidationException?.GetExceptionWithLocalizationOrSelf();
             }
         }
