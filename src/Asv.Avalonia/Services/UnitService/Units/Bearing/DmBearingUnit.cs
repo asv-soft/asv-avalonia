@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 [ExportUnitItem(BearingBase.Id)]
 [Shared]
 [method: ImportingConstructor]
-public sealed class DMBearingUnit() : UnitItemBase(1)
+public sealed class DmBearingUnit() : UnitItemBase(1)
 {
     public const string Id = $"{BearingBase.Id}.dm";
 
@@ -33,42 +33,7 @@ public sealed class DMBearingUnit() : UnitItemBase(1)
             return ValidationResult.FailAsNullOrWhiteSpace;
         }
 
-        var msg = AngleDm.GetErrorMessage(value);
-
-        if (msg is not null)
-        {
-            return new ValidationResult
-            {
-                IsSuccess = false,
-                ValidationException = new UnitException(msg),
-            };
-        }
-
-        return ValidationResult.Success;
-    }
-
-    public override ValidationResultWrapper ValidateValueLocalized(string? value)
-    {
-        var result = ValidateValue(value);
-
-        if (result.IsSuccess)
-        {
-            return new ValidationResultWrapper { Validation = result };
-        }
-
-        if (
-            result.ValidationException?.Message
-            != IsNullOrWhiteSpaceValidationException.Instance.Message
-        )
-        {
-            return new ValidationResultWrapper
-            {
-                Validation = result,
-                LocalizedErrorText = RS.ValidationResult_ErrorText_AngleDmErrorMessage,
-            };
-        }
-
-        return base.ValidateValueLocalized(value);
+        return AngleDm.ValidateValue(value);
     }
 
     /// <summary>

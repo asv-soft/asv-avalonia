@@ -36,6 +36,7 @@ public sealed class SourceDialogViewModel : DialogViewModelBase
                     {
                         IsSuccess = false,
                         ValidationException = new ValidationException(
+                            "Name should not be null or empty",
                             RS.SourceDialogViewModel_NameValidation_NameIsRequired
                         ),
                     };
@@ -56,6 +57,7 @@ public sealed class SourceDialogViewModel : DialogViewModelBase
                     {
                         IsSuccess = false,
                         ValidationException = new ValidationException(
+                            "SourceUri should not be null or empty",
                             RS.SourceDialogViewModel_SourceUriValidation_SourceUriIsRequired
                         ),
                     };

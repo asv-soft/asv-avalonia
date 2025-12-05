@@ -16,34 +16,7 @@ public abstract class LongitudeUnitItemBase() : UnitItemBase(1)
             return ValidationResult.FailAsNullOrWhiteSpace;
         }
 
-        var msg = GeoPointLongitude.GetErrorMessage(value);
-
-        if (msg is not null)
-        {
-            return new ValidationResult
-            {
-                IsSuccess = false,
-                ValidationException = new UnitException(msg),
-            };
-        }
-
-        return ValidationResult.Success;
-    }
-
-    public override ValidationResultWrapper ValidateValueLocalized(string? value)
-    {
-        var result = ValidateValue(value);
-
-        if (result.IsSuccess)
-        {
-            return new ValidationResultWrapper { Validation = result };
-        }
-
-        return new ValidationResultWrapper
-        {
-            Validation = result,
-            LocalizedErrorText = RS.ValidationResult_ErrorText_LongitudeErrorMessage,
-        };
+        return GeoPointLongitude.ValidateValue(value);
     }
 
     public override double Parse(string? value)

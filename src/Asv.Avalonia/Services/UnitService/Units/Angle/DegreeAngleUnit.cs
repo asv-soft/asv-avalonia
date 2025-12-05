@@ -33,30 +33,6 @@ public sealed class DegreeAngleUnit() : UnitItemBase(1)
             : Angle.ValidateValue(value);
     }
 
-    public override ValidationResultWrapper ValidateValueLocalized(string? value)
-    {
-        var result = ValidateValue(value);
-
-        if (result.IsSuccess)
-        {
-            return new ValidationResultWrapper { Validation = result };
-        }
-
-        if (
-            result.ValidationException?.Message
-            != IsNullOrWhiteSpaceValidationException.Instance.Message
-        )
-        {
-            return new ValidationResultWrapper
-            {
-                Validation = result,
-                LocalizedErrorText = RS.ValidationResult_ErrorText_AngleErrorMessage,
-            };
-        }
-
-        return base.ValidateValueLocalized(value);
-    }
-
     /// <summary>
     /// Method is unusable for this unit item.
     /// </summary>
