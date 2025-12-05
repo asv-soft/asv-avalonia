@@ -149,4 +149,7 @@
     <data name="StatisticView_Table_TransmittedData_Title" xml:space="preserve">
         <value>Переданные данные</value>
     </data>
+    <data name="SerialPortView_Text_Driver" xml:space="preserve">
+        <value>Драйвер</value>
+    </data>
 </root>
