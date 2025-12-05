@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -10,6 +11,8 @@ namespace Asv.Avalonia;
 [ExportViewFor<UnitPropertyViewModel>]
 public partial class UnitPropertyView : UserControl
 {
+    private IDisposable? _gotFocusDelayTimer;
+
     public UnitPropertyView()
     {
         InitializeComponent();
@@ -17,6 +20,7 @@ public partial class UnitPropertyView : UserControl
 
     private void PART_ValueTextBox_OnLostFocus(object? sender, RoutedEventArgs e)
     {
+        _gotFocusDelayTimer?.Dispose();
         if (this.DataContext is UnitPropertyViewModel { IsInEditMode: true } prop)
         {
             prop.CommitValue();
@@ -27,7 +31,7 @@ public partial class UnitPropertyView : UserControl
     {
         if (sender is TextBox textBox)
         {
-            Observable.TimerFrame(1).Subscribe(_ => textBox.SelectAll());
+            _gotFocusDelayTimer = Observable.TimerFrame(1).Subscribe(_ => textBox.SelectAll());
         }
     }
 }

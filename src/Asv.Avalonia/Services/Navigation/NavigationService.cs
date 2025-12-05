@@ -3,6 +3,7 @@ using System.Diagnostics;
 using Asv.Common;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -43,6 +44,10 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         // global event handlers for focus IRoutable controls
         InputElement
             .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
+            .AddTo(ref dispose);
+
+        InputElement
+            .PointerPressedEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
             .AddTo(ref dispose);
 
         Backward = new ReactiveCommand((_, _) => BackwardAsync()).AddTo(ref dispose);
@@ -138,20 +143,22 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         FocusControlChanged(routable);
     }
 
-    private void GotFocusHandler(TopLevel top, GotFocusEventArgs args)
+    private void GotFocusHandler(TopLevel top, RoutedEventArgs args)
     {
-        Debug.WriteLine($"GotFocusHandler: {args.Source}");
         if (args.Source is not Control source)
         {
             return;
         }
-
         var control = source;
         while (control != null)
         {
             if (control.DataContext is IRoutable routable)
             {
-                Debug.WriteLine($"GotFocusHandler: {routable.GetPathToRoot()}");
+                // this need for ignore root shell when focus changed
+                if (routable is IShell)
+                {
+                    return;
+                }
                 FocusControlChanged(routable);
                 break;
             }
