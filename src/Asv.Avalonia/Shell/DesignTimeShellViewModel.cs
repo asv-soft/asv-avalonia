@@ -16,6 +16,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         )
     {
         DesignTime.ThrowIfNotDesignMode();
+        StatusItems.Add(new NavigationStatusItemViewModel());
 
         int cnt = 0;
         ErrorState = ShellErrorState.Error;

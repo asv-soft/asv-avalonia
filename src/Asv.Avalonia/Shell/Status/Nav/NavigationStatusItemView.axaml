@@ -14,23 +14,48 @@
     <Design.DataContext>
         <avalonia:NavigationStatusItemViewModel />
     </Design.DataContext>
-    <ItemsControl ItemsSource="{Binding Items}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <StackPanel Orientation="Horizontal" Spacing="4" />
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <StackPanel Orientation="Horizontal">
-                    <avalonia1:MaterialIcon
-                        VerticalAlignment="Center"
-                        Classes="smallest"
-                        Kind="ChevronRight"
-                    />
-                    <TextBlock VerticalAlignment="Center" Classes="description" Text="{Binding }" />
-                </StackPanel>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <StackPanel Orientation="Horizontal" Spacing="8">
+        <ItemsControl ItemsSource="{Binding Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="4" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <avalonia1:MaterialIcon
+                            VerticalAlignment="Center"
+                            Classes="smallest"
+                            Kind="ChevronRight"
+                        />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Classes="description"
+                            Text="{Binding }"
+                        />
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock
+            Classes="description"
+            VerticalAlignment="Center"
+            Text="|"
+            IsVisible="{Binding !!CommandInfo}"
+        />
+        <TextBlock
+            Text="{Binding CommandInfo.Name}"
+            DockPanel.Dock="Right"
+            IsVisible="{Binding !!CommandInfo}"
+            VerticalAlignment="Center"
+            Classes="description"
+        />
+        <TextBlock
+            Classes="description"
+            VerticalAlignment="Center"
+            Text="{Binding CommandHotKey}"
+            IsVisible="{Binding !!CommandHotKey}"
+        />
+    </StackPanel>
 </UserControl>

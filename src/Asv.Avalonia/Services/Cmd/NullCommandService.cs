@@ -18,6 +18,12 @@ public class NullCommandService : ICommandService
     }
 
     public static ICommandService Instance { get; } = new NullCommandService();
+
+    public ICommandInfo? GetCommandInfo(string commandId)
+    {
+        return null;
+    }
+
     public IEnumerable<ICommandInfo> Commands { get; }
 
     public ICommandHistory CreateHistory(IRoutable? owner)

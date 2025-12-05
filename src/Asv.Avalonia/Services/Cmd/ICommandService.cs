@@ -4,6 +4,7 @@ namespace Asv.Avalonia;
 
 public interface ICommandService : IExportable
 {
+    ICommandInfo? GetCommandInfo(string commandId);
     IEnumerable<ICommandInfo> Commands { get; }
     ICommandHistory CreateHistory(IRoutable? owner);
     ValueTask Execute(

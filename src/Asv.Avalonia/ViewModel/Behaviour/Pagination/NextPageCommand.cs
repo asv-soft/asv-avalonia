@@ -9,16 +9,15 @@ public class NextPageCommand : ContextCommand<ISupportPagination>
 {
     public const string Id = $"{BaseId}.page.next";
 
-    public static ICommandInfo StaticInfo =>
-        new CommandInfo
-        {
-            Id = Id,
-            Name = RS.NextPageCommand_CommandInfo_Name,
-            Description = RS.NextPageCommand_CommandInfo_Description,
-            Icon = MaterialIconKind.ArrowRightBold,
-            DefaultHotKey = "Ctrl+Right",
-            Source = SystemModule.Instance,
-        };
+    public static readonly ICommandInfo StaticInfo = new CommandInfo
+    {
+        Id = Id,
+        Name = RS.NextPageCommand_CommandInfo_Name,
+        Description = RS.NextPageCommand_CommandInfo_Description,
+        Icon = MaterialIconKind.ArrowRightBold,
+        DefaultHotKey = "Ctrl+Right",
+        Source = SystemModule.Instance,
+    };
 
     public static ValueTask ExecuteAtContext(IRoutable context)
     {

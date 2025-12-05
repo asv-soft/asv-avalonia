@@ -329,6 +329,11 @@ public class CommandService : AsyncDisposableOnce, ICommandService
         }
     }
 
+    public ICommandInfo? GetCommandInfo(string commandId)
+    {
+        return _commands.TryGetValue(commandId, out var factory) ? factory.Info : null;
+    }
+
     public IEnumerable<ICommandInfo> Commands => _commands.Values.Select(x => x.Info);
 
     public ICommandHistory CreateHistory(IRoutable? owner)
