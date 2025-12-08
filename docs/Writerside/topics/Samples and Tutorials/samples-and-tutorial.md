@@ -2,7 +2,7 @@
 
 This section contains samples and tutorials for users.
 It will help you become more familiar with the framework.
-If you want to learn the basics first, check out **Get Started**.
+If you want to learn the basics first, check out [Get Started](project-setup.md).
 
 ## Sample app
 

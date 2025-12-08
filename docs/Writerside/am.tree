@@ -10,7 +10,11 @@
     <toc-element topic="what-is-asv-avalonia.md"/>
     <toc-element topic="supported-platforms.md"/>
     <toc-element toc-title="Get Started">
-        <toc-element topic="install.md"/>
+        <toc-element topic="project-setup.md"/>
+        <toc-element toc-title="Test Drive">
+            <toc-element topic="pages.md"/>
+            <toc-element topic="customizing-page.md"/>
+        </toc-element>
     </toc-element>
     <toc-element topic="samples-and-tutorial.md">
         <toc-element topic="how-to-create-module.md"/>
