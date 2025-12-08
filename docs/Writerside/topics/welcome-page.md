@@ -20,7 +20,7 @@ helpers, and more), as well as an example application that demonstrates real usa
 
 Here are a few ways to begin:
 
-- Follow the [Get Started guide](install.md) to build your first small app.
+- Follow the [Get Started guide](project-setup.md) to build your first small app.
 - Look at the [example application](https://github.com/asv-soft/asv-avalonia/tree/main/src/Asv.Avalonia.Example) to see
   real usage.
 - Explore the rest of the documentation at your own pace.
