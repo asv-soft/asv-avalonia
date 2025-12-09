@@ -16,18 +16,7 @@ public abstract class LongitudeUnitItemBase() : UnitItemBase(1)
             return ValidationResult.FailAsNullOrWhiteSpace;
         }
 
-        var msg = GeoPointLongitude.GetErrorMessage(value);
-
-        if (msg is not null)
-        {
-            return new ValidationResult
-            {
-                IsSuccess = false,
-                ValidationException = new UnitException(msg),
-            };
-        }
-
-        return ValidationResult.Success;
+        return GeoPointLongitude.ValidateValue(value);
     }
 
     public override double Parse(string? value)

@@ -60,9 +60,9 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
         : base(id, loggerFactory, networkErrorTimeout)
     {
         _itemsSource = new ObservableList<KeyValueViewModel>();
-        Items = _itemsSource.ToNotifyCollectionChangedSlim(
-            SynchronizationContextCollectionEventDispatcher.Current
-        );
+        Items = _itemsSource
+            .ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<KeyValueViewModel> Items { get; }

@@ -122,10 +122,15 @@
             />
 
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="6" Kind="Bluetooth" />
-            <TextBlock VerticalAlignment="Center" Grid.Column="2" Grid.Row="6" Text="Driver" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Grid.Column="2"
+                Grid.Row="6"
+                Text="{x:Static io:RS.SerialPortView_Text_Driver}"
+            />
             <ToggleSwitch
-                OnContent="Version 2"
-                OffContent="Version 1"
+                OnContent="{x:Static io:RS.SerialPortView_ToggleSwitch_Version2}"
+                OffContent="{x:Static io:RS.SerialPortView_ToggleSwitch_Version1}"
                 Grid.Row="6"
                 Grid.Column="4"
                 IsChecked="{Binding IsVersion2}"

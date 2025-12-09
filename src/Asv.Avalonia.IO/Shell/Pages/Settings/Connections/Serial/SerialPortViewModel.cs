@@ -13,9 +13,9 @@ namespace Asv.Avalonia.IO;
 [Export(SerialProtocolPort.Scheme, typeof(IPortViewModel))]
 public class SerialPortViewModel : PortViewModel
 {
-    private readonly ILoggerFactory _loggerFactory;
-    private readonly ObservableList<string> _portSource;
     public const MaterialIconKind DefaultIcon = MaterialIconKind.SerialPort;
+
+    private readonly ObservableList<string> _portSource;
 
     public SerialPortViewModel()
     {
@@ -25,10 +25,13 @@ public class SerialPortViewModel : PortViewModel
     }
 
     [ImportingConstructor]
-    public SerialPortViewModel(ILoggerFactory loggerFactory, TimeProvider timeProvider)
-        : base($"{SerialProtocolPort.Scheme}-editor", loggerFactory, timeProvider)
+    public SerialPortViewModel(
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : base($"{SerialProtocolPort.Scheme}-editor", unitService, loggerFactory, timeProvider)
     {
-        _loggerFactory = loggerFactory;
         Icon = DefaultIcon;
 
         AddToValidation(PortName = new BindableReactiveProperty<string?>(), ValidatePortName);
@@ -47,19 +50,19 @@ public class SerialPortViewModel : PortViewModel
 
     private static Exception? ValidateBaudRate(string? arg)
     {
-        if (arg == null)
+        if (arg is null)
         {
-            return new Exception("Baud rate is required");
+            return new Exception(RS.SerialPortViewModel_ValidationException_BaudRateIsNull);
         }
 
-        if (int.TryParse(arg, out int baudRate) == false)
+        if (!int.TryParse(arg, out var baudRate))
         {
-            return new Exception("Invalid baud rate: must be a number");
+            return new Exception(RS.SerialPortViewModel_ValidationException_BaudRateNaN);
         }
 
         if (baudRate < 0)
         {
-            return new Exception("Invalid baud rate: must be a positive number");
+            return new Exception(RS.SerialPortViewModel_ValidationException_BaudRateNegative);
         }
 
         return null;

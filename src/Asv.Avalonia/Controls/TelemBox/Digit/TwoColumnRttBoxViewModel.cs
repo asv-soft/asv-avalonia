@@ -42,8 +42,8 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
                 }
                 if (Random.Shared.NextDouble() > 0.9)
                 {
-                    Left.ValueString = Asv.Avalonia.Units.NotAvailableString;
-                    Right.ValueString = Asv.Avalonia.Units.NotAvailableString;
+                    Left.ValueString = Units.NotAvailableString;
+                    Right.ValueString = Units.NotAvailableString;
                 }
                 else
                 {

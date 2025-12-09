@@ -113,19 +113,17 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                     {
                         return ValidationResult.FailAsNullOrWhiteSpace;
                     }
+
                     return ValidationResult.Success;
                 },
                 v =>
                 {
                     if (v?.Contains('s', StringComparison.InvariantCultureIgnoreCase) ?? false)
                     {
-                        return new ValidationResult
-                        {
-                            IsSuccess = false,
-                            ValidationException = new ValidationException(
-                                "Value shouldn't contain \'s\'"
-                            ),
-                        };
+                        return ValidationResult.FailFromErrorMessage(
+                            "Property should not contain 's'",
+                            RS.HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS
+                        );
                     }
 
                     return ValidationResult.Success;

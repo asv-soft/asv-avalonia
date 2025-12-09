@@ -6,11 +6,9 @@
     xmlns:asv="clr-namespace:Asv.Avalonia"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="800"
-    d:DesignHeight="450"
 >
     <Design.PreviewWith>
-        <asv:ToolsList />
+        <asv:ToolsList Width="500" Height="500" />
     </Design.PreviewWith>
 
     <ControlTheme x:Key="{x:Type asv:ToolsList}" TargetType="asv:ToolsList">

@@ -1,7 +1,5 @@
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.IO.Ports;
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
@@ -13,6 +11,7 @@ namespace Asv.Avalonia.IO;
 
 public class PortViewModel : RoutableViewModel, IPortViewModel
 {
+    private readonly IUnitService _unitService;
     private readonly List<INotifyDataErrorInfo> _validateProperties = new();
     private readonly BindableReactiveProperty<bool> _hasChanges;
     private readonly BindableReactiveProperty<bool> _hasValidationError;
@@ -21,9 +20,12 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
     private readonly IncrementalRateCounter _txBytes;
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
+    private readonly IUnit _frequencyUnit;
+
+    private const int MaxPortNameLength = 50;
 
     public PortViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, TimeProvider.System)
+        : this(DesignTime.Id, DesignTime.UnitService, DesignTime.LoggerFactory, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         InitArgs(Guid.NewGuid().ToString());
@@ -73,11 +75,20 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         EndpointsView = source.ToNotifyCollectionChangedSlim();
     }
 
-    public PortViewModel(NavigationId id, ILoggerFactory loggerFactory, TimeProvider timeProvider)
+    public PortViewModel(
+        NavigationId id,
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
         : base(id, loggerFactory)
     {
         LoggerFactory = loggerFactory;
         TimeProvider = timeProvider;
+        _unitService = unitService;
+        _frequencyUnit =
+            unitService.Units[FrequencyBase.Id]
+            ?? throw new UnitException($"Unit {FrequencyBase.Id} was not found");
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
@@ -143,12 +154,38 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         );
     }
 
-    protected ILoggerFactory LoggerFactory { get; }
-    protected TimeProvider TimeProvider { get; }
+    public IReadOnlyBindableReactiveProperty<bool> HasValidationError => _hasValidationError;
 
-    protected virtual EndpointViewModel EndpointFactory(IProtocolEndpoint arg)
+    public IReadOnlyBindableReactiveProperty<bool> HasChanges => _hasChanges;
+
+    public BindableReactiveProperty<string> Name { get; }
+
+    public string? ConnectionString
     {
-        return new EndpointViewModel(arg, LoggerFactory, TimeProvider);
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public NotifyCollectionChangedSynchronizedViewList<TagViewModel> TagsView { get; }
+
+    public ProtocolPortStatus Status
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public MaterialIconKind? Icon
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public BindableReactiveProperty<bool> IsEnabled { get; }
+
+    public bool IsSelected
+    {
+        get;
+        set => SetField(ref field, value);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<EndpointViewModel> EndpointsView { get; }
@@ -168,79 +205,14 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         set => SetField(ref field, value);
     }
 
-    private ValueTask ChangeEnabled(bool isEnabled, CancellationToken cancel)
-    {
-        if (isEnabled)
-        {
-            Port?.Enable();
-            StatusMessage = null;
-        }
-        else
-        {
-            Port?.Disable();
-            StatusMessage = "Disabled";
-        }
-
-        return ValueTask.CompletedTask;
-    }
-
     public ReactiveCommand CancelChangesCommand { get; }
-
-    private ValueTask CancelChanges(Unit arg1, CancellationToken arg2)
-    {
-        if (Port == null)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        InternalLoadChanges(Port.Config);
-        ResetChanges();
-        return ValueTask.CompletedTask;
-    }
-
     public ReactiveCommand SaveChangesCommand { get; }
-
-    private async void SaveChanges(object? state)
-    {
-        try
-        {
-            Debug.Assert(Port != null, "Port should not be null when saving changes");
-            var cfg = (ProtocolPortConfig)Port.Config.Clone();
-            InternalSaveChanges(cfg);
-            await PortCrudCommand.ExecuteChange(this, Port.Id, cfg);
-        }
-        catch (Exception e)
-        {
-            // TODO handle exception
-        }
-    }
-
     public ReactiveCommand RemovePortCommand { get; }
-
-    private ValueTask RemovePort(Unit arg1, CancellationToken arg2)
-    {
-        Debug.Assert(Port != null, "Port should not be null when removing port");
-        return PortCrudCommand.ExecuteRemove(this, Port.Id);
-    }
-
     public IProtocolPort? Port { get; private set; }
 
-    protected virtual void InternalSaveChanges(ProtocolPortConfig config)
-    {
-        ConnectionString = config.AsUri().ToString();
-        config.IsEnabled = IsEnabled.Value;
-        config.Name = Name.Value;
-    }
-
-    protected virtual void InternalLoadChanges(ProtocolPortConfig config)
-    {
-        IsEnabled.Value = config.IsEnabled;
-        if (config.Name != null)
-        {
-            Name.Value = config.Name;
-        }
-        ConnectionString = config.AsUri().ToString();
-    }
+    protected ILoggerFactory LoggerFactory { get; }
+    protected TimeProvider TimeProvider { get; }
+    protected ObservableList<TagViewModel> TagsSource { get; } = [];
 
     public virtual void Init(IProtocolPort protocolPort)
     {
@@ -263,32 +235,31 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         _endpoints.AddRange(_endpoints);
     }
 
-    private void UpdatePortStatus(ProtocolPortStatus status)
+    public override IEnumerable<IRoutable> GetRoutableChildren()
     {
-        Status = status;
-        StatusMessage = Status switch
-        {
-            ProtocolPortStatus.Connected => "Connected",
-            ProtocolPortStatus.Disconnected => "Disconnected",
-            ProtocolPortStatus.InProgress => "Connecting...",
-            ProtocolPortStatus.Error => Port?.Error.CurrentValue?.Message ?? "Error",
-            _ => null,
-        };
+        return [];
     }
 
-    private void UpdateStatistic(Unit unit)
+    protected virtual EndpointViewModel EndpointFactory(IProtocolEndpoint arg)
     {
-        var rxBytes = DataFormatter.ByteRate.Print(
-            _rxBytes.Calculate(Port?.Statistic.RxBytes ?? 0)
-        );
-        var txBytes = DataFormatter.ByteRate.Print(
-            _txBytes.Calculate(Port?.Statistic.TxBytes ?? 0)
-        );
-        var rxPackets = _rxPackets.Calculate(Port?.Statistic.RxMessages ?? 0).ToString("F1");
-        var txPackets = _txPackets.Calculate(Port?.Statistic.TxMessages ?? 0).ToString("F1");
-        RxTag.Value = $"{rxBytes} / {rxPackets} Hz";
-        TxTag.Value = $"{txBytes} / {txPackets} Hz";
-        EndpointsView.ForEach(x => x.UpdateStatistic());
+        return new EndpointViewModel(arg, _unitService, LoggerFactory, TimeProvider);
+    }
+
+    protected virtual void InternalSaveChanges(ProtocolPortConfig config)
+    {
+        ConnectionString = config.AsUri().ToString();
+        config.IsEnabled = IsEnabled.Value;
+        config.Name = Name.Value;
+    }
+
+    protected virtual void InternalLoadChanges(ProtocolPortConfig config)
+    {
+        IsEnabled.Value = config.IsEnabled;
+        if (config.Name != null)
+        {
+            Name.Value = config.Name;
+        }
+        ConnectionString = config.AsUri().ToString();
     }
 
     protected void AddToValidation<T>(
@@ -306,17 +277,44 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
             )
             .Subscribe(UpdateValidationStatus)
             .DisposeItWith(Disposable);
-        validateProperty.Subscribe(x => _hasChanges.Value = true).DisposeItWith(Disposable);
+        validateProperty.Subscribe(_ => _hasChanges.Value = true).DisposeItWith(Disposable);
+    }
+
+    private void UpdatePortStatus(ProtocolPortStatus status)
+    {
+        Status = status;
+        StatusMessage = Status switch
+        {
+            ProtocolPortStatus.Connected => RS.PortViewModel_ProtocolPortStatus_Connected,
+            ProtocolPortStatus.Disconnected => RS.PortViewModel_ProtocolPortStatus_Disconected,
+            ProtocolPortStatus.InProgress => RS.PortViewModel_ProtocolPortStatus_InProgress,
+            ProtocolPortStatus.Error => Port?.Error.CurrentValue?.Message is null
+                ? RS.PortViewModel_ProtocolPortStatus_Error
+                : $"{RS.PortViewModel_ProtocolPortStatus_Error}: {Port?.Error.CurrentValue?.Message}",
+            _ => null,
+        };
+    }
+
+    private void UpdateStatistic(Unit unit)
+    {
+        var rxBytes = DataFormatter.ByteRate.Print(
+            _rxBytes.Calculate(Port?.Statistic.RxBytes ?? 0)
+        );
+        var txBytes = DataFormatter.ByteRate.Print(
+            _txBytes.Calculate(Port?.Statistic.TxBytes ?? 0)
+        );
+        var rxPackets = _rxPackets.Calculate(Port?.Statistic.RxMessages ?? 0).ToString("F1");
+        var txPackets = _txPackets.Calculate(Port?.Statistic.TxMessages ?? 0).ToString("F1");
+        var gzUnitSymbol = _frequencyUnit.AvailableUnits[HertzFrequencyUnit.Id].Symbol;
+        RxTag.Value = $"{rxBytes} / {rxPackets} {gzUnitSymbol}";
+        TxTag.Value = $"{txBytes} / {txPackets} {gzUnitSymbol}";
+        EndpointsView.ForEach(x => x.UpdateStatistic());
     }
 
     private void UpdateValidationStatus((object? sender, DataErrorsChangedEventArgs e) valueTuple)
     {
         _hasValidationError.Value = _validateProperties.Any(x => x.HasErrors);
     }
-
-    public IReadOnlyBindableReactiveProperty<bool> HasValidationError => _hasValidationError;
-
-    public IReadOnlyBindableReactiveProperty<bool> HasChanges => _hasChanges;
 
     private void ResetChanges()
     {
@@ -327,52 +325,66 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
     {
         if (string.IsNullOrWhiteSpace(arg))
         {
-            return new Exception("Port name is required");
+            return new Exception(RS.PortViewModel_ValidationException_IsNullOrWhiteSpace);
         }
 
-        if (arg.Length > 50)
+        if (arg.Length > MaxPortNameLength)
         {
-            return new Exception("Port name is too long. Max length is 50 characters");
+            return new Exception(
+                string.Format(RS.PortViewModel_ValidationException_TooLong, MaxPortNameLength)
+            );
         }
 
         return null;
     }
 
-    public BindableReactiveProperty<string> Name { get; }
-
-    public string? ConnectionString
+    private ValueTask ChangeEnabled(bool isEnabled, CancellationToken cancel)
     {
-        get;
-        set => SetField(ref field, value);
+        if (isEnabled)
+        {
+            Port?.Enable();
+            StatusMessage = null;
+        }
+        else
+        {
+            Port?.Disable();
+            StatusMessage = RS.PortViewModel_StatusMessage_Disabled;
+        }
+
+        return ValueTask.CompletedTask;
     }
 
-    protected ObservableList<TagViewModel> TagsSource { get; } = [];
-
-    public NotifyCollectionChangedSynchronizedViewList<TagViewModel> TagsView { get; }
-
-    public ProtocolPortStatus Status
+    private ValueTask CancelChanges(Unit arg1, CancellationToken arg2)
     {
-        get;
-        set => SetField(ref field, value);
+        if (Port is null)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        InternalLoadChanges(Port.Config);
+        ResetChanges();
+        return ValueTask.CompletedTask;
     }
 
-    public MaterialIconKind? Icon
+    private async void SaveChanges(object? state)
     {
-        get;
-        set => SetField(ref field, value);
+        try
+        {
+            Debug.Assert(Port != null, "Port should not be null when saving changes");
+            var cfg = (ProtocolPortConfig)Port.Config.Clone();
+            InternalSaveChanges(cfg);
+            await PortCrudCommand.ExecuteChange(this, Port.Id, cfg);
+        }
+        catch (Exception e)
+        {
+            // TODO handle exception
+        }
     }
 
-    public BindableReactiveProperty<bool> IsEnabled { get; }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    private ValueTask RemovePort(Unit arg1, CancellationToken arg2)
     {
-        return [];
-    }
-
-    public bool IsSelected
-    {
-        get;
-        set => SetField(ref field, value);
+        Debug.Assert(Port != null, "Port should not be null when removing port");
+        return PortCrudCommand.ExecuteRemove(this, Port.Id);
     }
 
     public IExportInfo Source => IoModule.Instance;

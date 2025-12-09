@@ -7,12 +7,13 @@ public class TcpServerEndpointViewModel : EndpointViewModel
 {
     public TcpServerEndpointViewModel(
         IProtocolEndpoint protocolEndpoint,
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base(protocolEndpoint, loggerFactory, timeProvider)
+        : base(protocolEndpoint, unitService, loggerFactory, timeProvider)
     {
         Header =
-            $"Address {((TcpServerSocketProtocolEndpoint)protocolEndpoint).Socket.RemoteEndPoint}";
+            $"{RS.TcpServerEndpointViewModel_Header} {((TcpServerSocketProtocolEndpoint)protocolEndpoint).Socket.RemoteEndPoint}";
     }
 }

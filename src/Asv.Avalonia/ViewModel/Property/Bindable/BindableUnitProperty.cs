@@ -46,10 +46,15 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
     protected override Exception? ValidateUserValue(string? userValue)
     {
         var result = Unit.CurrentUnitItem.CurrentValue.ValidateValue(userValue);
-        return result.IsSuccess
-                ? ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue))
-            : result.IsSuccess ? null
-            : result.ValidationException;
+
+        if (result.IsSuccess)
+        {
+            var resultSi = ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue));
+            return resultSi;
+        }
+
+        Logger.LogError(result.ValidationException, "Validation error");
+        return result.ValidationException?.GetExceptionWithLocalizationOrSelf();
     }
 
     protected virtual Exception? ValidateSiValue(double siValue)

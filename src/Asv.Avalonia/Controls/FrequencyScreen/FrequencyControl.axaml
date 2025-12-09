@@ -17,12 +17,6 @@
                     ColumnDefinitions="*,5,*,5,*,5,*"
                 >
                     <TextBlock Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" Text="Frequency" />
-                    <!--<MaskedTextBox x:Name="PART_FrequencyTextBox" Margin="0,5,0,5"
-                                   Mask="000.000 000"
-                                   FontSize="20"
-                                   Background="Transparent"
-                                   BorderBrush="Transparent"
-                                   Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="7" Text="{TemplateBinding Value}"/>-->
                     <TextBox
                         x:Name="PART_FrequencyTextBox"
                         Margin="0,5,0,5"

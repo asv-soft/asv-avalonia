@@ -27,13 +27,13 @@
     <data name="SettingsPageExtension_TreePage_Title" xml:space="preserve">
         <value>Connection</value>
     </data>
-    <data name="TcpPortView_Text_PortNumber" xml:space="preserve">
+    <data name="PortView_Text_PortNumber" xml:space="preserve">
         <value>Port</value>
     </data>
-    <data name="TcpPortView_Text_Host" xml:space="preserve">
+    <data name="PortView_Text_Host" xml:space="preserve">
         <value>Address</value>
     </data>
-    <data name="TcpPortView_Text_Name" xml:space="preserve">
+    <data name="PortView_Text_Name" xml:space="preserve">
         <value>Title</value>
     </data>
     <data name="PortView_ButtonContent_Save" xml:space="preserve">
@@ -84,25 +84,19 @@
     <data name="HomePageDeviceItem_Info_Link" xml:space="preserve">
         <value>Status</value>
     </data>
-    <data name="OpenSettingsCommand_Action_Title" xml:space="preserve">
-        <value>Settings</value>
-    </data>
-    <data name="OpenSettingsCommand_Action_Description" xml:space="preserve">
-        <value>Open Settings</value>
-    </data>
-    <data name="TcpServerPortView_RemoteHost_On" xml:space="preserve">
+    <data name="UdpPortView_RemoteHost_On" xml:space="preserve">
         <value>Remote host\port</value>
     </data>
-    <data name="TcpServerPortView_RemoteHost_Off" xml:space="preserve">
+    <data name="UdpPortView_RemoteHost_Off" xml:space="preserve">
         <value>Filter by remote host\port</value>
     </data>
-    <data name="TcpServerPortView_RemoteAddress" xml:space="preserve">
+    <data name="UdpPortView_RemoteAddress" xml:space="preserve">
         <value>Remote address</value>
     </data>
-    <data name="TcpServerPortView_RemotePort" xml:space="preserve">
+    <data name="UdpPortView_RemotePort" xml:space="preserve">
         <value>Remote port</value>
     </data>
-    <data name="TcpServerPortView_ConnectionsList_Header" xml:space="preserve">
+    <data name="UdpPortView_Connections_Header" xml:space="preserve">
         <value>Connections</value>
     </data>
     <data name="SettingsConnectionView_Panel_NoConnections" xml:space="preserve">
@@ -116,5 +110,122 @@
     </data>
     <data name="ConnectionRateStatusView_NavigationButton_Settings" xml:space="preserve">
         <value>Go to settings</value>
+    </data>
+    <data name="StatisticView_Row_TotalBytes_Text" xml:space="preserve">
+        <value>Total bytes</value>
+    </data>
+    <data name="StatisticView_Row_ByteRate_Text" xml:space="preserve">
+        <value>Byte rate</value>
+    </data>
+    <data name="StatisticView_Row_TotalMessages_Text" xml:space="preserve">
+        <value>Total messages</value>
+    </data>
+    <data name="StatisticView_Row_MessagesRate_Text" xml:space="preserve">
+        <value>Messages rate</value>
+    </data>
+    <data name="StatisticView_Row_Dropped_Text" xml:space="preserve">
+        <value>Dropped</value>
+    </data>
+    <data name="StatisticView_Row_Error_Text" xml:space="preserve">
+        <value>Errors</value>
+    </data>
+    <data name="StatisticView_Row_BadCrc_Text" xml:space="preserve">
+        <value>Bad CRC</value>
+    </data>
+    <data name="StatisticView_Row_ParsedBytes_Text" xml:space="preserve">
+        <value>Parsed bytes</value>
+    </data>
+    <data name="StatisticView_Row_ParsedMessages_Text" xml:space="preserve">
+        <value>Parsed messages</value>
+    </data>
+    <data name="StatisticView_Row_MessageReadNotAllData_Text" xml:space="preserve">
+        <value>Messages read not all data</value>
+    </data>
+    <data name="StatisticView_Row_DeserializeErrors_Text" xml:space="preserve">
+        <value>Deserialization errors</value>
+    </data>
+    <data name="StatisticView_Row_UnknownMessages_Text" xml:space="preserve">
+        <value>Unknown messages</value>
+    </data>
+    <data name="StatisticView_Table_ReceivedData_Title" xml:space="preserve">
+        <value>Received data</value>
+    </data>
+    <data name="StatisticView_Table_TransmittedData_Title" xml:space="preserve">
+        <value>Transmitted data</value>
+    </data>
+    <data name="StatisticView_Table_Protocols_Title" xml:space="preserve">
+        <value>Protocols</value>
+    </data>
+    <data name="SerialPortView_Text_Driver" xml:space="preserve">
+        <value>Driver</value>
+    </data>
+    <data name="SerialPortViewModel_ValidationException_BaudRateIsNull" xml:space="preserve">
+        <value>Baud rate is required</value>
+    </data>
+    <data name="SerialPortViewModel_ValidationException_BaudRateNaN" xml:space="preserve">
+        <value>Invalid baud rate: must be a number</value>
+    </data>
+    <data name="SerialPortViewModel_ValidationException_BaudRateNegative" xml:space="preserve">
+        <value>Invalid baud rate: must be a positive number</value>
+    </data>
+    <data name="SerialPortView_ToggleSwitch_Version2" xml:space="preserve">
+        <value>Version 2</value>
+    </data>
+    <data name="SerialPortView_ToggleSwitch_Version1" xml:space="preserve">
+        <value>Version 1</value>
+    </data>
+    <data name="SettingsConnectionSerialPortExtension_DefaultConfig_Name" xml:space="preserve">
+        <value>New Serial</value>
+    </data>
+    <data name="SettingsConnectionTcpPortExtension_DefaultConfig_Name" xml:space="preserve">
+        <value>New TCP client</value>
+    </data>
+    <data name="SettingsConnectionTcpServerPortExtension_MenuItem_Header" xml:space="preserve">
+        <value>TCP Server</value>
+    </data>
+    <data name="SettingsConnectionTcpServerPortExtension_DefaultConfig_Name" xml:space="preserve">
+        <value>New TCP server</value>
+    </data>
+    <data name="TcpServerEndpointViewModel_Header" xml:space="preserve">
+        <value>Address</value>
+    </data>
+    <data name="TcpServerPortView_Connections_Header" xml:space="preserve">
+        <value>Connections</value>
+    </data>
+    <data name="UdpEndpointViewModel_Header" xml:space="preserve">
+        <value>Address</value>
+    </data>
+    <data name="TcpServerPortViewModel_TagViewModel_Value" xml:space="preserve">
+        <value>TCP Server</value>
+    </data>
+    <data name="SettingsConnectionUdpPortExtension_MenuItem_Header" xml:space="preserve">
+        <value>UDP</value>
+    </data>
+    <data name="SettingsConnectionUdpPortExtension_DefaultConfig_Name" xml:space="preserve">
+        <value>New UDP</value>
+    </data>
+    <data name="UdpPortViewModel_TagViewModel_Value" xml:space="preserve">
+        <value>UDP</value>
+    </data>
+    <data name="PortViewModel_StatusMessage_Disabled" xml:space="preserve">
+        <value>Disabled</value>
+    </data>
+    <data name="PortViewModel_ProtocolPortStatus_Connected" xml:space="preserve">
+        <value>Connected</value>
+    </data>
+    <data name="PortViewModel_ProtocolPortStatus_InProgress" xml:space="preserve">
+        <value>Connecting...</value>
+    </data>
+    <data name="PortViewModel_ProtocolPortStatus_Disconected" xml:space="preserve">
+        <value>Disconnected</value>
+    </data>
+    <data name="PortViewModel_ProtocolPortStatus_Error" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="PortViewModel_ValidationException_IsNullOrWhiteSpace" xml:space="preserve">
+        <value>Port name is required</value>
+    </data>
+    <data name="PortViewModel_ValidationException_TooLong" xml:space="preserve">
+        <value>Port name is too long. Max length is {0} characters</value>
     </data>
 </root>

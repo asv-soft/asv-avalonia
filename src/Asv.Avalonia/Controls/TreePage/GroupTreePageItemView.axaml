@@ -6,8 +6,6 @@
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
     xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="800"
-    d:DesignHeight="450"
     x:Class="Asv.Avalonia.GroupTreePageItemView"
     x:Name="PART_Root"
     x:DataType="avalonia:GroupTreePageItemViewModel"
