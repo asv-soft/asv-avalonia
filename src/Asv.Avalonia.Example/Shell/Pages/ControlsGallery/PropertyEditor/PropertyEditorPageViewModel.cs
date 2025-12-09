@@ -76,6 +76,19 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Description = "Geo Point description",
                     Icon = MaterialIconKind.Earth,
                 },
+                new UnitPropertyViewModel(
+                    "time",
+                    Time,
+                    unit[TimeSpanBase.Id] ?? throw new ArgumentNullException(),
+                    loggerFactory
+                )
+                {
+                    Parent = this,
+                    Header = "Time",
+                    ShortName = "Time",
+                    Description = "Time description",
+                    Icon = MaterialIconKind.Timelapse,
+                },
             },
         };
 
@@ -101,6 +114,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public BindableReactiveProperty<double> Longitude { get; } = new();
 
     public BindableReactiveProperty<GeoPoint> GeoPoint { get; } = new();
+    public BindableReactiveProperty<double> Time { get; } = new();
 
     public PropertyEditorViewModel PropertyEditor { get; }
 
