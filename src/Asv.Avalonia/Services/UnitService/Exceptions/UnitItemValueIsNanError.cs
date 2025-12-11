@@ -1,3 +1,3 @@
 namespace Asv.Avalonia;
 
-public sealed class UnitItemValueIsNanError() : UnitException("Value is not a number") { }
+public sealed class UnitItemValueIsNaNError() : UnitException("Value is not a number") { }

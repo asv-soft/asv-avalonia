@@ -27,6 +27,9 @@
     <data name="ThemeService_Light" xml:space="preserve">
         <value>Светлая</value>
     </data>
+    <data name="ThemeService_System" xml:space="preserve">
+        <value>Системная</value>
+    </data>
     <data name="SettingsAppearanceView_AppTheme_Title" xml:space="preserve">
         <value>Тема приложения</value>
     </data>
@@ -76,6 +79,17 @@
     <data name="RedoCommand_CommandInfo_Description" xml:space="preserve">
         <value>Повторить последнее действие</value>
     </data>
+    <data name="SettingsKeyMapView_Header_Name" xml:space="preserve">
+        <value>Имя</value>
+    </data>
+    <data name="SettingsKeyMapView_Header_Description" xml:space="preserve">
+        <value>Описание</value>
+    </data>
+   
+    <data name="SettingsKeyMapView_Header_DefaultHotKey" xml:space="preserve">
+        <value>Горячая клавиша по умолчанию</value>
+    </data>
+    
     <data name="HomePageViewModel_Title" xml:space="preserve">
         <value>Домашняя страница</value>
     </data>
@@ -490,6 +504,21 @@
     <data name="LanguageProperty_RestartDialog_Message" xml:space="preserve">
         <value>Чтобы изменения вступили в силу, требуется перезапустить приложение</value>
     </data>
+    <data name="Unit_Terabyte_Abbreviation" xml:space="preserve">
+        <value>ТБ</value>
+    </data>
+    <data name="Unit_Megabyte_Abbreviation" xml:space="preserve">
+        <value>МБ</value>
+    </data>
+    <data name="Unit_Kilobyte_Abbreviation" xml:space="preserve">
+        <value>КБ</value>
+    </data>
+    <data name="Unit_Gigabyte_Abbreviation" xml:space="preserve">
+        <value>ГБ</value>
+    </data>
+    <data name="Unit_Byte_Abbreviation" xml:space="preserve">
+        <value>байт</value>
+    </data>
     <data name="ChangeStringPropertyCommand_CommandInfo_Name" xml:space="preserve">
         <value>Изменить свойство типа стринг</value>
     </data>
@@ -604,8 +633,23 @@
     <data name="OpenHomePageCommand_CommandInfo_Name" xml:space="preserve">
         <value>Команда, которая открывает домашнюю страницу</value>
     </data>
+    <data name="SettingsCommandListView_SearchBar_Watermark" xml:space="preserve">
+        <value>Поиск</value>
+    </data>
     <data name="SettingsCommandListView_ResetButton_Content" xml:space="preserve">
         <value>Сбросить всё</value>
+    </data>
+    <data name="SettingsCommandListView_HotKey_Header" xml:space="preserve">
+        <value>Горячая клавиша</value>
+    </data>
+    <data name="SettingsCommandListView_Name_Header" xml:space="preserve">
+        <value>Команда</value>
+    </data>
+    <data name="SettingsCommandListView_Description_Header" xml:space="preserve">
+        <value>Описание</value>
+    </data>
+    <data name="SettingsCommandListView_Source_Header" xml:space="preserve">
+        <value>Источник</value>
     </data>
     <data name="SettingsCommandListView_DataGrid_Command_Header" xml:space="preserve">
         <value>Название</value>
@@ -825,5 +869,56 @@
     </data>
     <data name="ValidationException_Unknown_Message" xml:space="preserve">
         <value>Валидация провалилась</value>
+    </data>
+    <data name="Second_UnitItem_Name" xml:space="preserve">
+        <value>Секунда</value>
+    </data>
+    <data name="Second_TimeSpan_Description" xml:space="preserve">
+        <value>Время в секундах</value>
+    </data>
+    <data name="Second_UnitItem_Symbol" xml:space="preserve">
+        <value>сек</value>
+    </data>
+    <data name="Minute_UnitItem_Name" xml:space="preserve">
+        <value>Минута</value>
+    </data>
+    <data name="Minute_TimeSpan_Description" xml:space="preserve">
+        <value>Время в минутах</value>
+    </data>
+    <data name="Minute_UnitItem_Symbol" xml:space="preserve">
+        <value>мин</value>
+    </data>
+    <data name="Hour_UnitItem_Name" xml:space="preserve">
+        <value>Час</value>
+    </data>
+    <data name="Hour_TimeSpan_Description" xml:space="preserve">
+        <value>Время в часах</value>
+    </data>
+    <data name="Hour_UnitItem_Symbol" xml:space="preserve">
+        <value>ч</value>
+    </data>
+    <data name="HourMinuteSecond_TimeSpan_Description" xml:space="preserve">
+        <value>Длительность в ч:м:с</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>ч:м:с</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_Name" xml:space="preserve">
+        <value>Часы, минуты и секунды</value>
+    </data>
+    <data name="TimeSpan_Name" xml:space="preserve">
+        <value>Длительность</value>
+    </data>
+    <data name="TimeSpan_Description" xml:space="preserve">
+        <value>Единица измерения времени</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_InvalidFormatException" xml:space="preserve">
+        <value>Неверный формат. Ожидался 'чч{0}мм{0}сс'</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_UnspecifiedTimeException" xml:space="preserve">
+        <value>Укажите полное время (часы, минуты, секунды)</value>
+    </data>
+    <data name="UnitException_UnitItemValueIsNan_Message" xml:space="preserve">
+        <value>Значение не является числом</value>
     </data>
 </root>

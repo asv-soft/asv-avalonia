@@ -825,4 +825,55 @@
     <data name="ChangeIntPropertyCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that changes the value of a historical property of type int</value>
     </data>
+    <data name="Second_UnitItem_Name" xml:space="preserve">
+        <value>Second</value>
+    </data>
+    <data name="Second_TimeSpan_Description" xml:space="preserve">
+        <value>Time in seconds</value>
+    </data>
+    <data name="Second_UnitItem_Symbol" xml:space="preserve">
+        <value>sec</value>
+    </data>
+    <data name="Minute_UnitItem_Name" xml:space="preserve">
+        <value>Minute</value>
+    </data>
+    <data name="Minute_TimeSpan_Description" xml:space="preserve">
+        <value>Time in minutes</value>
+    </data>
+    <data name="Minute_UnitItem_Symbol" xml:space="preserve">
+        <value>min</value>
+    </data>
+    <data name="Hour_UnitItem_Name" xml:space="preserve">
+        <value>Hour</value>
+    </data>
+    <data name="Hour_TimeSpan_Description" xml:space="preserve">
+        <value>Time in hours</value>
+    </data>
+    <data name="Hour_UnitItem_Symbol" xml:space="preserve">
+        <value>hr</value>
+    </data>
+    <data name="HourMinuteSecond_TimeSpan_Description" xml:space="preserve">
+        <value>Duration in h:m:s</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>h:m:s</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_Name" xml:space="preserve">
+        <value>Hours, minutes and seconds</value>
+    </data>
+    <data name="TimeSpan_Name" xml:space="preserve">
+        <value>Duration</value>
+    </data>
+    <data name="TimeSpan_Description" xml:space="preserve">
+        <value>Duration unit</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_InvalidFormatException" xml:space="preserve">
+        <value>Invalid format. Expected 'hh{0}mm{0}ss'</value>
+    </data>
+    <data name="HourMinuteSecond_UnitItem_UnspecifiedTimeException" xml:space="preserve">
+        <value>All time components (hours, minutes, seconds) must be specified</value>
+    </data>
+    <data name="UnitException_UnitItemValueIsNan_Message" xml:space="preserve">
+        <value>Value is not a number</value>
+    </data>
 </root>
