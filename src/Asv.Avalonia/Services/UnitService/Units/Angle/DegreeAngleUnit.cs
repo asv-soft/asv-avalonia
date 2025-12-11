@@ -28,9 +28,16 @@ public sealed class DegreeAngleUnit() : UnitItemBase(1)
 
     public override ValidationResult ValidateValue(string? value)
     {
-        return string.IsNullOrWhiteSpace(value)
-            ? ValidationResult.FailAsNullOrWhiteSpace
-            : Angle.ValidateValue(value);
+        var result = Angle.ValidateValue(value);
+        if (result.IsSuccess)
+        {
+            return result;
+        }
+
+        return new UnitException(
+            result.ValidationException?.Message,
+            result.ValidationException?.LocalizedMessage
+        );
     }
 
     /// <summary>

@@ -18,7 +18,16 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
 
     public virtual ValidationResult ValidateValue(string? value)
     {
-        return InvariantNumberParser.TryParse(value, out double _);
+        var result = InvariantNumberParser.TryParse(value, out double _);
+        if (result.IsSuccess)
+        {
+            return result;
+        }
+
+        return new UnitException(
+            result.ValidationException?.Message,
+            result.ValidationException?.LocalizedMessage
+        );
     }
 
     public virtual double Parse(string? value)

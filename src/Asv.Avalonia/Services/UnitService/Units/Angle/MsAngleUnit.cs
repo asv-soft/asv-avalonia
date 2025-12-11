@@ -28,12 +28,16 @@ public sealed class MsAngleUnit() : UnitItemBase(1)
 
     public override ValidationResult ValidateValue(string? value)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        var result = AngleMs.ValidateValue(value);
+        if (result.IsSuccess)
         {
-            return ValidationResult.FailAsNullOrWhiteSpace;
+            return result;
         }
 
-        return AngleMs.ValidateValue(value);
+        return new UnitException(
+            result.ValidationException?.Message,
+            result.ValidationException?.LocalizedMessage
+        );
     }
 
     /// <summary>
