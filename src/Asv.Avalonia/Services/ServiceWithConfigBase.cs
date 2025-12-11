@@ -7,7 +7,7 @@ namespace Asv.Avalonia
         where TConfig : new()
     {
         private readonly IConfiguration _cfgService;
-        private readonly object _sync = new();
+        private readonly Lock _sync = new();
         private readonly TConfig _config;
 
         protected ServiceWithConfigBase(IConfiguration cfg)
@@ -20,7 +20,7 @@ namespace Asv.Avalonia
             Func<TConfig, TConfigValue> getProperty
         )
         {
-            lock (_sync)
+            using (_sync.EnterScope())
             {
                 return getProperty(_config);
             }
@@ -28,7 +28,7 @@ namespace Asv.Avalonia
 
         protected void InternalSaveConfig(Action<TConfig> changeCallback)
         {
-            lock (_sync)
+            using (_sync.EnterScope())
             {
                 changeCallback(_config);
                 _cfgService.Set(_config);

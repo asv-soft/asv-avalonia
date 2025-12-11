@@ -24,6 +24,15 @@ public class NullUnitService : IUnitService
         DesignTime.Configuration,
         [new DegreeAngleUnit(), new DmsAngleUnit()]
     );
+    private readonly IUnit _frequency = new FrequencyBase(
+        DesignTime.Configuration,
+        [
+            new HertzFrequencyUnit(),
+            new GigahertzFrequencyUnit(),
+            new MegahertzFrequencyUnit(),
+            new KilohertzFrequencyUnit(),
+        ]
+    );
 
     private NullUnitService()
     {
@@ -34,6 +43,7 @@ public class NullUnitService : IUnitService
                 new(_latitude.UnitId, _latitude),
                 new(_longitude.UnitId, _longitude),
                 new(_angle.UnitId, _angle),
+                new(_frequency.UnitId, _frequency),
             }
         );
     }

@@ -14,8 +14,11 @@ public class EndpointViewModel : HeadlinedViewModel
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
 
+    private readonly IUnit _frequencyUnit;
+
     private EndpointViewModel(
         NavigationId id,
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
@@ -25,7 +28,11 @@ public class EndpointViewModel : HeadlinedViewModel
         _txBytes = new IncrementalRateCounter(5, timeProvider);
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
         _txPackets = new IncrementalRateCounter(5, timeProvider);
+        _frequencyUnit =
+            unitService.Units[FrequencyBase.Id]
+            ?? throw new UnitException($"Unit {FrequencyBase.Id} was not found");
         Icon = MaterialIconKind.SwapVertical;
+        TagsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         TagsView = TagsSource
             .ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
@@ -48,7 +55,7 @@ public class EndpointViewModel : HeadlinedViewModel
     }
 
     internal EndpointViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, TimeProvider.System)
+        : this(DesignTime.Id, DesignTime.UnitService, DesignTime.LoggerFactory, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         Header = "127.0.0.1:7574";
@@ -56,10 +63,11 @@ public class EndpointViewModel : HeadlinedViewModel
 
     public EndpointViewModel(
         IProtocolEndpoint protocolEndpoint,
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : this(protocolEndpoint.Id, loggerFactory, timeProvider)
+        : this(protocolEndpoint.Id, unitService, loggerFactory, timeProvider)
     {
         _protocolEndpoint = protocolEndpoint;
         Header = protocolEndpoint.Id;
@@ -79,8 +87,9 @@ public class EndpointViewModel : HeadlinedViewModel
         var txPackets = _txPackets
             .Calculate(_protocolEndpoint?.Statistic.TxMessages ?? 0)
             .ToString("F1");
-        RxTag.Value = $"{rxBytes} / {rxPackets} Hz";
-        TxTag.Value = $"{txBytes} / {txPackets} Hz";
+        var gzUnitSymbol = _frequencyUnit.AvailableUnits[HertzFrequencyUnit.Id].Symbol;
+        RxTag.Value = $"{rxBytes} / {rxPackets} {gzUnitSymbol}";
+        TxTag.Value = $"{txBytes} / {txPackets} {gzUnitSymbol}";
     }
 
     public TagViewModel RxTag { get; }

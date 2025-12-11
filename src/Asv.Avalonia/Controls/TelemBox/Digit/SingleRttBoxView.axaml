@@ -5,8 +5,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="250"
-    d:DesignHeight="200"
     x:Class="Asv.Avalonia.SingleRttBoxView"
     x:DataType="avalonia:SingleRttBoxViewModel"
 >

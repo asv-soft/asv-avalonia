@@ -19,8 +19,10 @@ public class TcpServerPortViewModelConfig
 [Export(TcpServerProtocolPort.Scheme, typeof(IPortViewModel))]
 public class TcpServerPortViewModel : PortViewModel
 {
-    private readonly IConfiguration _cfgSvc;
     public const MaterialIconKind DefaultIcon = MaterialIconKind.DownloadNetworkOutline;
+
+    private readonly IConfiguration _cfgSvc;
+    private readonly IUnitService _unitService;
 
     public TcpServerPortViewModel()
     {
@@ -32,13 +34,15 @@ public class TcpServerPortViewModel : PortViewModel
 
     [ImportingConstructor]
     public TcpServerPortViewModel(
+        IUnitService unitService,
         IConfiguration cfgSvc,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{TcpServerProtocolPort.Scheme}-editor", loggerFactory, timeProvider)
+        : base($"{TcpServerProtocolPort.Scheme}-editor", unitService, loggerFactory, timeProvider)
     {
         _cfgSvc = cfgSvc;
+        _unitService = unitService;
         Icon = DefaultIcon;
         Config = _cfgSvc.Get<TcpServerPortViewModelConfig>();
         AddToValidation(Host = new BindableReactiveProperty<string>(), HostValidate);
@@ -91,12 +95,12 @@ public class TcpServerPortViewModel : PortViewModel
     private void UpdateTags(TcpServerProtocolPortConfig config)
     {
         ConfigTag.Value = $"{config.Host}:{config.Port}";
-        TypeTag.Value = "TCP Server";
+        TypeTag.Value = RS.TcpServerPortViewModel_TagViewModel_Value;
         TypeTag.Color = AsvColorKind.Info3;
     }
 
     protected override EndpointViewModel EndpointFactory(IProtocolEndpoint arg)
     {
-        return new TcpServerEndpointViewModel(arg, LoggerFactory, TimeProvider);
+        return new TcpServerEndpointViewModel(arg, _unitService, LoggerFactory, TimeProvider);
     }
 }

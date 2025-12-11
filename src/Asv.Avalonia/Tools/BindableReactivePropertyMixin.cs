@@ -23,10 +23,11 @@ public static class BindableReactivePropertyMixin
             async (v, _) =>
             {
                 var result = validationFunc(v);
-                if (result.IsSuccess == false)
+                if (!result.IsSuccess)
                 {
                     prop.OnErrorResume(
-                        result.ValidationException ?? new Exception("Validation failed")
+                        result.ValidationException?.GetExceptionWithLocalizationOrSelf()
+                            ?? new UnknownValidationException()
                     );
                 }
 

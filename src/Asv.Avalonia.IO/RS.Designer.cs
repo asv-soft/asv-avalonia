@@ -63,21 +63,21 @@ namespace Asv.Avalonia.IO {
             }
         }
         
-        public static string TcpPortView_Text_PortNumber {
+        public static string PortView_Text_PortNumber {
             get {
-                return ResourceManager.GetString("TcpPortView_Text_PortNumber", resourceCulture);
+                return ResourceManager.GetString("PortView_Text_PortNumber", resourceCulture);
             }
         }
         
-        public static string TcpPortView_Text_Host {
+        public static string PortView_Text_Host {
             get {
-                return ResourceManager.GetString("TcpPortView_Text_Host", resourceCulture);
+                return ResourceManager.GetString("PortView_Text_Host", resourceCulture);
             }
         }
         
-        public static string TcpPortView_Text_Name {
+        public static string PortView_Text_Name {
             get {
-                return ResourceManager.GetString("TcpPortView_Text_Name", resourceCulture);
+                return ResourceManager.GetString("PortView_Text_Name", resourceCulture);
             }
         }
         
@@ -177,45 +177,33 @@ namespace Asv.Avalonia.IO {
             }
         }
         
-        public static string OpenSettingsCommand_Action_Title {
+        public static string UdpPortView_RemoteHost_On {
             get {
-                return ResourceManager.GetString("OpenSettingsCommand_Action_Title", resourceCulture);
+                return ResourceManager.GetString("UdpPortView_RemoteHost_On", resourceCulture);
             }
         }
         
-        public static string OpenSettingsCommand_Action_Description {
+        public static string UdpPortView_RemoteHost_Off {
             get {
-                return ResourceManager.GetString("OpenSettingsCommand_Action_Description", resourceCulture);
+                return ResourceManager.GetString("UdpPortView_RemoteHost_Off", resourceCulture);
             }
         }
         
-        public static string TcpServerPortView_RemoteHost_On {
+        public static string UdpPortView_RemoteAddress {
             get {
-                return ResourceManager.GetString("TcpServerPortView_RemoteHost_On", resourceCulture);
+                return ResourceManager.GetString("UdpPortView_RemoteAddress", resourceCulture);
             }
         }
         
-        public static string TcpServerPortView_RemoteHost_Off {
+        public static string UdpPortView_RemotePort {
             get {
-                return ResourceManager.GetString("TcpServerPortView_RemoteHost_Off", resourceCulture);
+                return ResourceManager.GetString("UdpPortView_RemotePort", resourceCulture);
             }
         }
         
-        public static string TcpServerPortView_RemoteAddress {
+        public static string UdpPortView_Connections_Header {
             get {
-                return ResourceManager.GetString("TcpServerPortView_RemoteAddress", resourceCulture);
-            }
-        }
-        
-        public static string TcpServerPortView_RemotePort {
-            get {
-                return ResourceManager.GetString("TcpServerPortView_RemotePort", resourceCulture);
-            }
-        }
-        
-        public static string TcpServerPortView_ConnectionsList_Header {
-            get {
-                return ResourceManager.GetString("TcpServerPortView_ConnectionsList_Header", resourceCulture);
+                return ResourceManager.GetString("UdpPortView_Connections_Header", resourceCulture);
             }
         }
         
@@ -240,6 +228,240 @@ namespace Asv.Avalonia.IO {
         public static string ConnectionRateStatusView_NavigationButton_Settings {
             get {
                 return ResourceManager.GetString("ConnectionRateStatusView_NavigationButton_Settings", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_TotalBytes_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_TotalBytes_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_ByteRate_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_ByteRate_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_TotalMessages_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_TotalMessages_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_MessagesRate_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_MessagesRate_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_Dropped_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_Dropped_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_Error_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_Error_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_BadCrc_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_BadCrc_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_ParsedBytes_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_ParsedBytes_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_ParsedMessages_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_ParsedMessages_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_MessageReadNotAllData_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_MessageReadNotAllData_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_DeserializeErrors_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_DeserializeErrors_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Row_UnknownMessages_Text {
+            get {
+                return ResourceManager.GetString("StatisticView_Row_UnknownMessages_Text", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Table_ReceivedData_Title {
+            get {
+                return ResourceManager.GetString("StatisticView_Table_ReceivedData_Title", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Table_TransmittedData_Title {
+            get {
+                return ResourceManager.GetString("StatisticView_Table_TransmittedData_Title", resourceCulture);
+            }
+        }
+        
+        public static string StatisticView_Table_Protocols_Title {
+            get {
+                return ResourceManager.GetString("StatisticView_Table_Protocols_Title", resourceCulture);
+            }
+        }
+        
+        public static string SerialPortView_Text_Driver {
+            get {
+                return ResourceManager.GetString("SerialPortView_Text_Driver", resourceCulture);
+            }
+        }
+        
+        public static string SerialPortViewModel_ValidationException_BaudRateIsNull {
+            get {
+                return ResourceManager.GetString("SerialPortViewModel_ValidationException_BaudRateIsNull", resourceCulture);
+            }
+        }
+        
+        public static string SerialPortViewModel_ValidationException_BaudRateNaN {
+            get {
+                return ResourceManager.GetString("SerialPortViewModel_ValidationException_BaudRateNaN", resourceCulture);
+            }
+        }
+        
+        public static string SerialPortViewModel_ValidationException_BaudRateNegative {
+            get {
+                return ResourceManager.GetString("SerialPortViewModel_ValidationException_BaudRateNegative", resourceCulture);
+            }
+        }
+        
+        public static string SerialPortView_ToggleSwitch_Version2 {
+            get {
+                return ResourceManager.GetString("SerialPortView_ToggleSwitch_Version2", resourceCulture);
+            }
+        }
+        
+        public static string SerialPortView_ToggleSwitch_Version1 {
+            get {
+                return ResourceManager.GetString("SerialPortView_ToggleSwitch_Version1", resourceCulture);
+            }
+        }
+        
+        public static string SettingsConnectionSerialPortExtension_DefaultConfig_Name {
+            get {
+                return ResourceManager.GetString("SettingsConnectionSerialPortExtension_DefaultConfig_Name", resourceCulture);
+            }
+        }
+        
+        public static string SettingsConnectionTcpPortExtension_DefaultConfig_Name {
+            get {
+                return ResourceManager.GetString("SettingsConnectionTcpPortExtension_DefaultConfig_Name", resourceCulture);
+            }
+        }
+        
+        public static string SettingsConnectionTcpServerPortExtension_MenuItem_Header {
+            get {
+                return ResourceManager.GetString("SettingsConnectionTcpServerPortExtension_MenuItem_Header", resourceCulture);
+            }
+        }
+        
+        public static string SettingsConnectionTcpServerPortExtension_DefaultConfig_Name {
+            get {
+                return ResourceManager.GetString("SettingsConnectionTcpServerPortExtension_DefaultConfig_Name", resourceCulture);
+            }
+        }
+        
+        public static string TcpServerEndpointViewModel_Header {
+            get {
+                return ResourceManager.GetString("TcpServerEndpointViewModel_Header", resourceCulture);
+            }
+        }
+        
+        public static string TcpServerPortView_Connections_Header {
+            get {
+                return ResourceManager.GetString("TcpServerPortView_Connections_Header", resourceCulture);
+            }
+        }
+        
+        public static string UdpEndpointViewModel_Header {
+            get {
+                return ResourceManager.GetString("UdpEndpointViewModel_Header", resourceCulture);
+            }
+        }
+        
+        public static string TcpServerPortViewModel_TagViewModel_Value {
+            get {
+                return ResourceManager.GetString("TcpServerPortViewModel_TagViewModel_Value", resourceCulture);
+            }
+        }
+        
+        public static string SettingsConnectionUdpPortExtension_MenuItem_Header {
+            get {
+                return ResourceManager.GetString("SettingsConnectionUdpPortExtension_MenuItem_Header", resourceCulture);
+            }
+        }
+        
+        public static string SettingsConnectionUdpPortExtension_DefaultConfig_Name {
+            get {
+                return ResourceManager.GetString("SettingsConnectionUdpPortExtension_DefaultConfig_Name", resourceCulture);
+            }
+        }
+        
+        public static string UdpPortViewModel_TagViewModel_Value {
+            get {
+                return ResourceManager.GetString("UdpPortViewModel_TagViewModel_Value", resourceCulture);
+            }
+        }
+        
+        public static string PortViewModel_StatusMessage_Disabled {
+            get {
+                return ResourceManager.GetString("PortViewModel_StatusMessage_Disabled", resourceCulture);
+            }
+        }
+        
+        public static string PortViewModel_ProtocolPortStatus_Connected {
+            get {
+                return ResourceManager.GetString("PortViewModel_ProtocolPortStatus_Connected", resourceCulture);
+            }
+        }
+        
+        public static string PortViewModel_ProtocolPortStatus_InProgress {
+            get {
+                return ResourceManager.GetString("PortViewModel_ProtocolPortStatus_InProgress", resourceCulture);
+            }
+        }
+        
+        public static string PortViewModel_ProtocolPortStatus_Disconected {
+            get {
+                return ResourceManager.GetString("PortViewModel_ProtocolPortStatus_Disconected", resourceCulture);
+            }
+        }
+        
+        public static string PortViewModel_ProtocolPortStatus_Error {
+            get {
+                return ResourceManager.GetString("PortViewModel_ProtocolPortStatus_Error", resourceCulture);
+            }
+        }
+        
+        public static string PortViewModel_ValidationException_IsNullOrWhiteSpace {
+            get {
+                return ResourceManager.GetString("PortViewModel_ValidationException_IsNullOrWhiteSpace", resourceCulture);
+            }
+        }
+        
+        public static string PortViewModel_ValidationException_TooLong {
+            get {
+                return ResourceManager.GetString("PortViewModel_ValidationException_TooLong", resourceCulture);
             }
         }
     }

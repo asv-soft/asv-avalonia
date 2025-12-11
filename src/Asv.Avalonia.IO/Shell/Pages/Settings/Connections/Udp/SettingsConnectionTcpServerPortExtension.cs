@@ -12,12 +12,16 @@ public class SettingsConnectionUdpPortExtension(ILoggerFactory loggerFactory)
 {
     public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
     {
-        var menu = new MenuItem(UdpProtocolPort.Scheme, "UDP", loggerFactory);
+        var menu = new MenuItem(
+            UdpProtocolPort.Scheme,
+            RS.SettingsConnectionUdpPortExtension_MenuItem_Header,
+            loggerFactory
+        );
         menu.Icon = UdpPortViewModel.DefaultIcon;
         menu.Command = new BindableAsyncCommand(PortCrudCommand.Id, menu);
         var defaultConfig = UdpProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
-        defaultConfig.Name = "New UDP";
+        defaultConfig.Name = RS.SettingsConnectionUdpPortExtension_DefaultConfig_Name;
         menu.CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
         context.Menu.Add(menu);
     }

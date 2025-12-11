@@ -95,7 +95,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="0"
-                Text="{x:Static io:RS.TcpPortView_Text_Name}"
+                Text="{x:Static io:RS.PortView_Text_Name}"
             />
             <TextBox Grid.Column="4" Grid.Row="0" Text="{Binding Name.Value}" />
 
@@ -104,7 +104,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="2"
-                Text="{x:Static io:RS.TcpPortView_Text_Host}"
+                Text="{x:Static io:RS.PortView_Text_Host}"
             />
             <AutoCompleteBox
                 ValueMemberBinding="{Binding Key}"
@@ -128,7 +128,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="4"
-                Text="{x:Static io:RS.TcpPortView_Text_PortNumber}"
+                Text="{x:Static io:RS.PortView_Text_PortNumber}"
             />
             <AutoCompleteBox
                 ValueMemberBinding="{Binding Key}"
@@ -153,8 +153,8 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="5"
                 Grid.Row="6"
-                OffContent="{x:Static io:RS.TcpServerPortView_RemoteHost_Off}"
-                OnContent="{x:Static io:RS.TcpServerPortView_RemoteHost_On}"
+                OffContent="{x:Static io:RS.UdpPortView_RemoteHost_Off}"
+                OnContent="{x:Static io:RS.UdpPortView_RemoteHost_On}"
             />
 
             <avalonia:MaterialIcon Grid.Column="0" Grid.Row="8" Kind="IpNetwork" />
@@ -162,7 +162,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="8"
-                Text="{x:Static io:RS.TcpServerPortView_RemoteAddress}"
+                Text="{x:Static io:RS.UdpPortView_RemoteAddress}"
             />
             <AutoCompleteBox
                 IsEnabled="{Binding RemoteEnabled}"
@@ -187,7 +187,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="10"
-                Text="{x:Static io:RS.TcpServerPortView_RemotePort}"
+                Text="{x:Static io:RS.UdpPortView_RemotePort}"
             />
             <AutoCompleteBox
                 IsEnabled="{Binding RemoteEnabled}"
@@ -209,10 +209,7 @@
         </Grid>
 
         <DockPanel DockPanel.Dock="Top">
-            <TextBlock
-                Classes="h2"
-                Text="{x:Static io:RS.TcpServerPortView_ConnectionsList_Header}"
-            />
+            <TextBlock Classes="h2" Text="{x:Static io:RS.UdpPortView_Connections_Header}" />
             <Separator />
         </DockPanel>
 

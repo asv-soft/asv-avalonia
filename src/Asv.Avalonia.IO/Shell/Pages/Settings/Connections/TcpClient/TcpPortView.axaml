@@ -87,7 +87,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="0"
-                Text="{x:Static io:RS.TcpPortView_Text_Name}"
+                Text="{x:Static io:RS.PortView_Text_Name}"
             />
             <TextBox Grid.Column="4" Grid.Row="0" Text="{Binding Name.Value}" />
 
@@ -96,7 +96,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="2"
-                Text="{x:Static io:RS.TcpPortView_Text_Host}"
+                Text="{x:Static io:RS.PortView_Text_Host}"
             />
             <AutoCompleteBox
                 ValueMemberBinding="{Binding Key}"
@@ -121,7 +121,7 @@
                 VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="4"
-                Text="{x:Static io:RS.TcpPortView_Text_PortNumber}"
+                Text="{x:Static io:RS.PortView_Text_PortNumber}"
             />
             <AutoCompleteBox
                 ValueMemberBinding="{Binding Key}"

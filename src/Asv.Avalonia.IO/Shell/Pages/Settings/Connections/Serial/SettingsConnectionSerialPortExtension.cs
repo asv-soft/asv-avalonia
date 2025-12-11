@@ -21,7 +21,7 @@ public class SettingsConnectionSerialPortExtension(ILoggerFactory loggerFactory)
         menu.Command = new BindableAsyncCommand(PortCrudCommand.Id, menu);
         var defaultConfig = SerialProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
-        defaultConfig.Name = "New Serial";
+        defaultConfig.Name = RS.SettingsConnectionSerialPortExtension_DefaultConfig_Name;
         menu.CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
         context.Menu.Add(menu);
     }

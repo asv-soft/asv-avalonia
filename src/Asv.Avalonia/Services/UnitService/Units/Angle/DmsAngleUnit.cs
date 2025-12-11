@@ -33,18 +33,7 @@ public class DmsAngleUnit() : UnitItemBase(1)
             return ValidationResult.FailAsNullOrWhiteSpace;
         }
 
-        var msg = Angle.GetErrorMessage(value);
-
-        if (msg is not null)
-        {
-            return new ValidationResult
-            {
-                IsSuccess = false,
-                ValidationException = new UnitException(msg),
-            };
-        }
-
-        return ValidationResult.Success;
+        return Angle.ValidateValue(value);
     }
 
     /// <summary>

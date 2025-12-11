@@ -76,4 +76,10 @@
         <LastGenOutput>RS.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Dialogs\" />
+    </ItemGroup>
+    <ItemGroup>
+      <AdditionalFiles Include="Dialogs\GeoPointDialog\GeoPointDialogView.axaml" />
+    </ItemGroup>
 </Project>

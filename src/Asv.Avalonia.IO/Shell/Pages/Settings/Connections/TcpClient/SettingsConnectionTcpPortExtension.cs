@@ -21,7 +21,7 @@ public class SettingsConnectionTcpPortExtension(ILoggerFactory loggerFactory)
         menu.Command = new BindableAsyncCommand(PortCrudCommand.Id, menu);
         var defaultConfig = TcpClientProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
-        defaultConfig.Name = "New TCP client";
+        defaultConfig.Name = RS.SettingsConnectionTcpPortExtension_DefaultConfig_Name;
         menu.CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
         context.Menu.Add(menu);
     }
