@@ -39,7 +39,7 @@ public sealed class HmsTimeSpanUnit() : UnitItemBase(1)
 
     public override double Parse(string? value)
     {
-        var timeSpan = Parse(value, CultureInfo.InvariantCulture);
+        TryParse(value, out var timeSpan);
         return timeSpan.TotalSeconds;
     }
 

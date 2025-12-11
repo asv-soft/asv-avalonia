@@ -28,12 +28,16 @@ public class DmsAngleUnit() : UnitItemBase(1)
 
     public override ValidationResult ValidateValue(string? value)
     {
-        if (string.IsNullOrWhiteSpace(value))
+        var result = Angle.ValidateValue(value);
+        if (result.IsSuccess)
         {
-            return ValidationResult.FailAsNullOrWhiteSpace;
+            return result;
         }
 
-        return Angle.ValidateValue(value);
+        return new UnitException(
+            result.ValidationException?.Message,
+            result.ValidationException?.LocalizedMessage
+        );
     }
 
     /// <summary>

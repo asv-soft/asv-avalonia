@@ -20,9 +20,9 @@ public class SearchBoxViewModel
 {
     private readonly SearchDelegate _searchCallback;
 
-    private readonly BindableReactiveProperty<bool> _isExecuting;
-    private readonly BindableReactiveProperty<bool> _canExecute;
-    private readonly BindableReactiveProperty<double> _progress;
+    private readonly SynchronizedReactiveProperty<bool> _isExecuting;
+    private readonly SynchronizedReactiveProperty<bool> _canExecute;
+    private readonly SynchronizedReactiveProperty<double> _progress;
 
     private CancellationTokenSource? _cancellationTokenSource;
 
@@ -44,13 +44,16 @@ public class SearchBoxViewModel
 
         var text = new ReactiveProperty<string?>(string.Empty).DisposeItWith(Disposable);
         Text = new HistoricalStringProperty(nameof(Text), text, loggerFactory)
-        {
-            Parent = this,
-        }.DisposeItWith(Disposable);
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
-        _isExecuting = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        _canExecute = new BindableReactiveProperty<bool>(true).DisposeItWith(Disposable);
-        _progress = new BindableReactiveProperty<double>().DisposeItWith(Disposable);
+        _isExecuting = new SynchronizedReactiveProperty<bool>().DisposeItWith(Disposable);
+        _canExecute = new SynchronizedReactiveProperty<bool>(true).DisposeItWith(Disposable);
+        _progress = new SynchronizedReactiveProperty<double>().DisposeItWith(Disposable);
+
+        CanExecute = _canExecute.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
+        IsExecuting = _isExecuting.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
+        Progress = _progress.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
 
         var textValueObservable = Text.ViewValue.Skip(1);
 
@@ -77,65 +80,9 @@ public class SearchBoxViewModel
     }
 
     public HistoricalStringProperty Text { get; }
-
-    public void Query(string? text)
-    {
-        if (_isExecuting.Value)
-        {
-            Cancel();
-        }
-
-        InternalExecuteAsync(text ?? string.Empty).SafeFireAndForget(ErrorHandler);
-    }
-
-    public void Focus()
-    {
-        Text.Focus();
-    }
-
-    private void ErrorHandler(Exception err)
-    {
-        Logger.LogError(err, "Error in search '{NavigationId}': {ErrMessage}", Id, err.Message);
-        _isExecuting.Value = false;
-        _canExecute.Value = true;
-        _progress.Value = 1;
-    }
-
-    private async Task InternalExecuteAsync(string text)
-    {
-        _isExecuting.Value = true;
-        _canExecute.Value = false;
-        _progress.Value = double.NaN;
-        _cancellationTokenSource = new CancellationTokenSource();
-        try
-        {
-            await _searchCallback(text, this, _cancellationTokenSource.Token);
-        }
-        catch (OperationCanceledException)
-        {
-            return;
-        }
-        catch (Exception ex)
-        {
-            ErrorHandler(ex);
-            return;
-        }
-        finally
-        {
-            _isExecuting.Value = false;
-            _canExecute.Value = true;
-            _progress.Value = 1;
-            _cancellationTokenSource?.Dispose();
-            _cancellationTokenSource = null;
-        }
-    }
-
-    public IReadOnlyBindableReactiveProperty<bool> CanExecute =>
-        _canExecute.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
-    public IReadOnlyBindableReactiveProperty<bool> IsExecuting =>
-        _isExecuting.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
-    public IReadOnlyBindableReactiveProperty<double> Progress =>
-        _progress.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
+    public IReadOnlyBindableReactiveProperty<bool> CanExecute { get; }
+    public IReadOnlyBindableReactiveProperty<bool> IsExecuting { get; }
+    public IReadOnlyBindableReactiveProperty<double> Progress { get; }
 
     public void Cancel()
     {
@@ -171,6 +118,58 @@ public class SearchBoxViewModel
     {
         Focus();
         return base.Navigate(id);
+    }
+
+    public void Query(string? text)
+    {
+        if (_isExecuting.Value)
+        {
+            Cancel();
+        }
+
+        InternalExecuteAsync(text ?? string.Empty).SafeFireAndForget(ErrorHandler);
+    }
+
+    public void Focus()
+    {
+        Text.Focus();
+    }
+
+    private async Task InternalExecuteAsync(string text)
+    {
+        _isExecuting.Value = true;
+        _canExecute.Value = false;
+        _progress.Value = double.NaN;
+        _cancellationTokenSource = new CancellationTokenSource();
+        try
+        {
+            await _searchCallback(text, this, _cancellationTokenSource.Token);
+        }
+        catch (OperationCanceledException)
+        {
+            return;
+        }
+        catch (Exception ex)
+        {
+            ErrorHandler(ex);
+            return;
+        }
+        finally
+        {
+            _isExecuting.Value = false;
+            _canExecute.Value = true;
+            _progress.Value = 1;
+            _cancellationTokenSource?.Dispose();
+            _cancellationTokenSource = null;
+        }
+    }
+
+    private void ErrorHandler(Exception err)
+    {
+        Logger.LogError(err, "Error in search '{NavigationId}': {ErrMessage}", Id, err.Message);
+        _isExecuting.Value = false;
+        _canExecute.Value = true;
+        _progress.Value = 1;
     }
 
     public void Report(double value) => _progress.Value = value;

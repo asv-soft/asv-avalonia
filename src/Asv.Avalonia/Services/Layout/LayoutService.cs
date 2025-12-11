@@ -21,6 +21,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
     private readonly InMemoryConfiguration _cfgInMemory;
     private readonly ILogger<LayoutService> _logger;
     private readonly ConcurrentDictionary<string, object?> _cache = new();
+    private readonly Lock _lock = new();
 
     public const string LayoutFolder = "layouts.json";
 
@@ -38,29 +39,31 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         );
         _cfgInMemory = new InMemoryConfiguration(_logger);
 
-        _sub1 = _cfgInMemory.OnChanged.Subscribe(kvp =>
-        {
-            if (_cache.TryAdd(kvp.Key, kvp.Value))
+        _sub1 = _cfgInMemory
+            .OnChanged.Synchronize()
+            .Subscribe(kvp =>
             {
-                _logger.ZLogTrace(
-                    $"Configuration was cached for id = {kvp.Key}, type = {kvp.Value?.GetType()}"
-                );
-                return;
-            }
+                if (_cache.TryAdd(kvp.Key, kvp.Value))
+                {
+                    _logger.ZLogTrace(
+                        $"Configuration was cached for id = {kvp.Key}, type = {kvp.Value?.GetType()}"
+                    );
+                    return;
+                }
 
-            if (_cache.ContainsKey(kvp.Key))
-            {
-                _cache[kvp.Key] = kvp.Value;
-                _logger.ZLogTrace(
-                    $"Cached configuration was updated for id = {kvp.Key}, new type = {kvp.Value?.GetType()}"
-                );
-                return;
-            }
+                if (_cache.ContainsKey(kvp.Key))
+                {
+                    _cache[kvp.Key] = kvp.Value;
+                    _logger.ZLogTrace(
+                        $"Cached configuration was updated for id = {kvp.Key}, new type = {kvp.Value?.GetType()}"
+                    );
+                    return;
+                }
 
-            _logger.ZLogWarning(
-                $"Failed to cache configuration for id = {kvp.Key}, type = {kvp.Value?.GetType()}"
-            );
-        });
+                _logger.ZLogWarning(
+                    $"Failed to cache configuration for id = {kvp.Key}, type = {kvp.Value?.GetType()}"
+                );
+            });
     }
 
     public TPocoType Get<TPocoType>(IRoutable source, Lazy<TPocoType> defaultValue)
@@ -92,23 +95,29 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     public void FlushFromMemory(IReadOnlyCollection<IRoutable>? ignoreCollection = null)
     {
-        var keysToIgnore = ignoreCollection?.Select(GetKey).ToImmutableArray();
-        _logger.LogInformation("Started flushing the layout");
-        foreach (var kvp in _cache)
+        using (_lock.EnterScope())
         {
-            if (keysToIgnore?.Contains(kvp.Key) == true)
+            var keysToIgnore = ignoreCollection?.Select(GetKey).ToImmutableArray();
+            _logger.LogInformation("Started flushing the layout");
+            foreach (var kvp in _cache)
             {
-                _logger.LogInformation("Configuration flush was ignored for id = {Key}", kvp.Key);
-                continue;
+                if (keysToIgnore?.Contains(kvp.Key) == true)
+                {
+                    _logger.LogInformation(
+                        "Configuration flush was ignored for id = {Key}",
+                        kvp.Key
+                    );
+                    continue;
+                }
+
+                _cfg.Set(kvp.Key, kvp.Value);
+                _logger.ZLogTrace(
+                    $"Configuration was flushed for id = {kvp.Key}, type = {kvp.Value?.GetType()}"
+                );
             }
 
-            _cfg.Set(kvp.Key, kvp.Value);
-            _logger.ZLogTrace(
-                $"Configuration was flushed for id = {kvp.Key}, type = {kvp.Value?.GetType()}"
-            );
+            _logger.LogInformation("Finished flushing the layout");
         }
-
-        _logger.LogInformation("Finished flushing the layout");
     }
 
     #region View Logic
@@ -181,61 +190,73 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
     private TPocoType Get<TPocoType>(string key, Lazy<TPocoType> defaultValue)
         where TPocoType : class, new()
     {
-        if (_cfgInMemory.Exist(key))
+        using (_lock.EnterScope())
         {
-            _logger.ZLogTrace($"Get layout for {key} from memory");
-            return _cfgInMemory.Get(key, defaultValue);
-        }
+            if (_cfgInMemory.Exist(key))
+            {
+                _logger.ZLogTrace($"Get layout for {key} from memory");
+                return _cfgInMemory.Get(key, defaultValue);
+            }
 
-        _logger.ZLogTrace($"Get layout for {key} from file");
-        return _cfg.Get(key, defaultValue);
+            _logger.ZLogTrace($"Get layout for {key} from file");
+            return _cfg.Get(key, defaultValue);
+        }
     }
 
     private void SetInMemory<TPocoType>(string key, TPocoType value)
         where TPocoType : class, new()
     {
-        _logger.ZLogTrace($"Set layout for {key} in memory");
-        _cfgInMemory.Set(key, value);
+        using (_lock.EnterScope())
+        {
+            _logger.ZLogTrace($"Set layout for {key} in memory");
+            _cfgInMemory.Set(key, value);
+        }
     }
 
     private void RemoveFromMemory(string key)
     {
-        try
+        using (_lock.EnterScope())
         {
-            _cfgInMemory.Remove(key);
-            if (!_cache.TryRemove(key, out _))
+            try
             {
-                _logger.ZLogTrace($"Failed to remove layout config for id = {key} from cache");
-                return;
+                _cfgInMemory.Remove(key);
+                if (!_cache.TryRemove(key, out _))
+                {
+                    _logger.ZLogTrace($"Failed to remove layout config for id = {key} from cache");
+                    return;
+                }
             }
-        }
-        catch (Exception e)
-        {
-            _logger.ZLogError(
-                $"Failed to remove layout config for id = {key} from {nameof(InMemoryConfiguration)}",
-                e
-            );
-        }
+            catch (Exception e)
+            {
+                _logger.ZLogError(
+                    $"Failed to remove layout config for id = {key} from {nameof(InMemoryConfiguration)}",
+                    e
+                );
+            }
 
-        _logger.LogInformation("Removed layout config for id = {Key}", key);
+            _logger.LogInformation("Removed layout config for id = {Key}", key);
+        }
     }
 
     private void FlushFromMemory(string key)
     {
-        _logger.ZLogTrace($"Attempt to flush configuration for id = {key}");
-        if (_cache.TryGetValue(key, out var value))
+        using (_lock.EnterScope())
         {
-            _cfg.Set(key, value);
-            _logger.ZLogTrace(
-                $"Configuration was flushed for id = {key}, type = {value?.GetType()}"
+            _logger.ZLogTrace($"Attempt to flush configuration for id = {key}");
+            if (_cache.TryGetValue(key, out var value))
+            {
+                _cfg.Set(key, value);
+                _logger.ZLogTrace(
+                    $"Configuration was flushed for id = {key}, type = {value?.GetType()}"
+                );
+
+                return;
+            }
+
+            _logger.ZLogWarning(
+                $"Failed to flush configuration for id = {key}, type = {value?.GetType()}"
             );
-
-            return;
         }
-
-        _logger.ZLogWarning(
-            $"Failed to flush configuration for id = {key}, type = {value?.GetType()}"
-        );
     }
 
     private IRoutable FindRoutableDataContext(StyledElement source)
