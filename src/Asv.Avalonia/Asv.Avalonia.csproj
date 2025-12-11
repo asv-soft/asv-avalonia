@@ -89,6 +89,14 @@
         <Compile Update="Controls\Dock\DockControl.cs">
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Controls\Workspace\Widgets\Panels\StackPanelWidgetView.axaml.cs">
+          <DependentUpon>StackPanelWidgetView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Controls\Workspace\Widgets\Panels\WrapPanelWidgetView.axaml.cs">
+          <DependentUpon>WrapPanelWidgetView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

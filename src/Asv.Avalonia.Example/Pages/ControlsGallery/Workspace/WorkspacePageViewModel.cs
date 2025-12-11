@@ -108,7 +108,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
-            new WidgetPanelViewModel("rtt-box", loggerFactory)
+            new WrapPanelWidgetViewModel("rtt-box", loggerFactory)
             {
                 Position = WorkspaceDock.Right,
                 ItemsSource =
@@ -127,7 +127,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
-            new WidgetPanelViewModel("rtt-box2", loggerFactory)
+            new WrapPanelWidgetViewModel("rtt-box2", loggerFactory)
             {
                 Position = WorkspaceDock.Right,
                 ItemsSource =

@@ -18,7 +18,6 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         Header = header;
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
-
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }
 

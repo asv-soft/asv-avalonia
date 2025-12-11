@@ -4,10 +4,10 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor<WidgetPanelViewModel>]
-public partial class WidgetPanelView : UserControl
+[ExportViewFor<WrapPanelWidgetViewModel>]
+public partial class WrapPanelWidgetView : UserControl
 {
-    public WidgetPanelView()
+    public WrapPanelWidgetView()
     {
         InitializeComponent();
     }

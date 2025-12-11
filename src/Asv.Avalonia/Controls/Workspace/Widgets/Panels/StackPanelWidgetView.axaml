@@ -1,4 +1,4 @@
-<UserControl
+﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,17 +7,24 @@
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    x:Class="Asv.Avalonia.WidgetPanelView"
-    x:DataType="avalonia:WidgetPanelViewModel"
+    x:Class="Asv.Avalonia.StackPanelWidgetView"
+    x:DataType="avalonia:StackPanelWidgetViewModel"
 >
     <Design.DataContext>
-        <avalonia:WidgetPanelViewModel />
+        <avalonia:StackPanelWidgetViewModel />
     </Design.DataContext>
-    <ItemsControl ItemsSource="{Binding ItemsView}">
+    <ItemsControl Margin="8" ItemsSource="{Binding ItemsView}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <WrapPanel ItemSpacing="4" LineSpacing="4" />
+                <StackPanel Spacing="4" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
+        <ItemsControl.ItemTemplate>
+            <DataTemplate>
+                <StackPanel Spacing="4">
+                    <ContentControl Content="{Binding}" />
+                </StackPanel>
+            </DataTemplate>
+        </ItemsControl.ItemTemplate>
     </ItemsControl>
 </UserControl>
