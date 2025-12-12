@@ -1,9 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
-
+<?xml version="1.0" encoding="utf-8" ?>
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
         <xsd:element name="root" msdata:IsDataSet="true">
-            
+
         </xsd:element>
     </xsd:schema>
     <resheader name="resmimetype">
@@ -18,21 +17,21 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    
+
     <data name="ChangeLanguageCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change language</value>
     </data>
     <data name="ChangeLanguageCommand_CommandInfo_Description" xml:space="preserve">
         <value>Change application's language</value>
     </data>
-   
+
     <data name="SettingsAppearanceView_AppLanguage_Title" xml:space="preserve">
         <value>Application's language</value>
     </data>
     <data name="ThemeService_Dark" xml:space="preserve">
         <value>Dark</value>
     </data>
-   
+
     <data name="ThemeService_Light" xml:space="preserve">
         <value>Light</value>
     </data>
@@ -43,18 +42,24 @@
     <data name="SettingsAppearanceView_HubHeader_CommonSettings" xml:space="preserve">
         <value>Common Settings</value>
     </data>
-   
+
     <data name="SettingsUnitsView_Header_Name" xml:space="preserve">
         <value>Name</value>
     </data>
     <data name="SettingsUnitsView_Header_Description" xml:space="preserve">
         <value>Description</value></data>
-    
+
     <data name="SettingsUnitsView_Header_Selected" xml:space="preserve">
         <value>Selected</value>
     </data>
     <data name="SettingsUnitsView_Header_Default" xml:space="preserve">
         <value>Default</value>
+    </data>
+    <data name="SettingsUnitsView_Header_Reset" xml:space="preserve">
+        <value>Reset</value>
+    </data>
+    <data name="SettingsUnitsViewModel_Button_ResetAll" xml:space="preserve">
+        <value>Reset All</value>
     </data>
     <data name="Distance_Name" xml:space="preserve">
         <value>Distance</value>
@@ -65,11 +70,11 @@
     <data name="OpenDebugCommand_CommandInfo_Name" xml:space="preserve">
         <value>Open Debug Window</value>
     </data>
-   
+
     <data name="OpenDebugCommand_CommandInfo_Description" xml:space="preserve">
         <value>Open Debug Window</value>
     </data>
-   
+
     <data name="UndoCommand_CommandInfo_Name" xml:space="preserve">
         <value>Undo</value>
     </data>
@@ -115,7 +120,7 @@
     <data name="ShellView_WindowControlButton_Collapse" xml:space="preserve">
         <value>Collapse</value>
     </data>
-    
+
     <data name="ShellView_Toolbar_Open" xml:space="preserve">
         <value>Open</value>
     </data>
@@ -290,7 +295,7 @@
     <data name="Power_Name" xml:space="preserve">
         <value>Power</value>
     </data>
-   
+
     <data name="Power_Description" xml:space="preserve">
         <value>Power unit</value>
     </data>
@@ -875,6 +880,12 @@
     </data>
     <data name="UnitException_UnitItemValueIsNan_Message" xml:space="preserve">
         <value>Value is not a number</value>
+    </data>
+    <data name="ResetUnitsCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that resets units</value>
+    </data>
+    <data name="ResetUnitsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Reset units</value>
     </data>
     <data name="Percent_Throttle_Description" xml:space="preserve">
         <value>Throttle in percents</value>

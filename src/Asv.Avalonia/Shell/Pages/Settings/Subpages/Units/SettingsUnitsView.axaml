@@ -14,6 +14,7 @@
     <Design.DataContext>
         <avalonia:SettingsUnitsViewModel />
     </Design.DataContext>
+
     <DockPanel>
         <avalonia:SearchBoxView
             DockPanel.Dock="Top"
@@ -36,10 +37,10 @@
                 </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
-                <DataGridTemplateColumn CellStyleClasses="action">
+                <DataGridTemplateColumn CellStyleClasses="action" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <avalonia1:MaterialIcon Kind="{Binding Base.Icon}" />
+                            <avalonia1:MaterialIcon Kind="{Binding Base.Icon}" Classes="small" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
@@ -79,7 +80,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Selected}"
-                    MinWidth="150"
+                    Width="*"
                 >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -116,7 +117,7 @@
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn
                     Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Default}"
-                    MinWidth="150"
+                    Width="*"
                 >
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -130,6 +131,24 @@
                                 <Run Text="{Binding Base.InternationalSystemUnit.Symbol}" />
                                 <Run Text=" ]" />
                             </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn
+                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Reset}"
+                    Width="Auto"
+                    IsReadOnly="True"
+                >
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button
+                                Theme="{DynamicResource TransparentButton}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Command="{Binding ResetCommand}"
+                            >
+                                <avalonia1:MaterialIcon Kind="Restore" Classes="small" />
+                            </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
