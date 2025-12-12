@@ -160,4 +160,21 @@ Inherit this class from the page view model base and implement required componen
 
 Create a view for the cats page.
 
-![cats-page-base-view]()
+```XML
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:cats="clr-namespace:Asv.Avalonia.Module.Pages.Cats"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Asv.Avalonia.Module.Pages.Cats.CatsPageView"
+             x:DataType="cats:CatsPageViewModel">
+    <Grid>
+        <Image Source="avares://Asv.Avalonia.Module/Assets/cat.jpg"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
+    </Grid>
+</UserControl>
+```
+
+![base-view-for-cats](how-to-create-module-base-view-for-cats.png)
