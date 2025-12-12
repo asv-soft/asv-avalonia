@@ -1,5 +1,6 @@
 using System.Composition;
 using Asv.Common;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -18,6 +19,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
     public const string PageId = "units";
 
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
+    private readonly IUnitService _unitsService;
     private SettingsUnitsViewModelConfig? _config;
 
     public SettingsUnitsViewModel()
@@ -29,16 +31,18 @@ public class SettingsUnitsViewModel : SettingsSubPage
     [ImportingConstructor]
     public SettingsUnitsViewModel(
         ISearchService searchService,
-        IUnitService unit,
+        IUnitService unitsService,
         ILoggerFactory loggerFactory
     )
         : base(PageId, loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(searchService);
-        ArgumentNullException.ThrowIfNull(unit);
+        ArgumentNullException.ThrowIfNull(unitsService);
         ArgumentNullException.ThrowIfNull(loggerFactory);
 
-        var observableList = new ObservableList<IUnit>(unit.Units.Values);
+        _unitsService = unitsService;
+
+        var observableList = new ObservableList<IUnit>(unitsService.Units.Values);
         _view = observableList
             .CreateView(u => new MeasureUnitViewModel(u, searchService, loggerFactory))
             .DisposeItWith(Disposable);
@@ -58,7 +62,17 @@ public class SettingsUnitsViewModel : SettingsSubPage
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
+        ResetAllCommand = new ReactiveCommand(ResetAll).DisposeItWith(Disposable);
+
         Search.Refresh();
+
+        var menu = new MenuItem("reset", RS.SettingsUnitsViewModel_Button_ResetAll, loggerFactory)
+        {
+            Order = 1,
+            Icon = MaterialIconKind.Refresh,
+            Command = ResetAllCommand,
+        };
+        Menu.Add(menu);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
@@ -66,6 +80,8 @@ public class SettingsUnitsViewModel : SettingsSubPage
     public BindableReactiveProperty<MeasureUnitViewModel?> SelectedItem { get; }
 
     public SearchBoxViewModel Search { get; }
+
+    public ReactiveCommand ResetAllCommand { get; }
 
     private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
     {
@@ -86,6 +102,19 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
         progress.Report(1);
         return Task.CompletedTask;
+    }
+
+    private async ValueTask ResetAll(Unit arg, CancellationToken cancel)
+    {
+        var defaultUnitIds = _unitsService.Units.Select(kv =>
+        {
+            return KeyValuePair.Create<string, CommandArg>(
+                kv.Key,
+                CommandArg.CreateString(kv.Value.InternationalSystemUnit.UnitItemId)
+            );
+        });
+
+        await this.ExecuteCommand(ResetUnitsCommand.Id, new DictArg(defaultUnitIds), cancel);
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()
