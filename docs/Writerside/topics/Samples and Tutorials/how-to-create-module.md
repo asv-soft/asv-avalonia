@@ -1,3 +1,0 @@
-# How to create new module
-
-Start typing here...
