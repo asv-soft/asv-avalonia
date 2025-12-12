@@ -49,13 +49,15 @@
                             Grid.Row="2"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"
+                            FontSize="15"
+                            Classes="description"
                             Text="{Binding Base.Description}"
                         />
                         <avalonia1:MaterialIcon
                             Grid.Column="0"
                             Grid.Row="0"
                             Grid.RowSpan="5"
-                            Foreground="{DynamicResource AsvForegroundInfo2Brush}"
+                            avalonia:AsvPallete.Color="{Binding Base.IconColor}"
                             Kind="{Binding Base.Icon}"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"

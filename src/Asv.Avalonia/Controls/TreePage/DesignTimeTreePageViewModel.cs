@@ -180,7 +180,13 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
     protected override ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
     {
         var set = new SettingsAppearanceViewModel();
-        set.Menu.Add(new MenuItem("cmd0", "Command", DesignTime.LoggerFactory));
+        set.Menu.Add(
+            new MenuItem("cmd0", "Command", DesignTime.LoggerFactory)
+            {
+                Icon = MaterialIconKind.AccountCircle,
+                IconColor = AsvColorKind.Info1,
+            }
+        );
         set.Menu.Add(new MenuItem("cmd01", "Command1", DesignTime.LoggerFactory));
         set.Menu.Add(new MenuItem("cmd02", "Command2", DesignTime.LoggerFactory));
         set.Menu.Add(new MenuItem("cmd03", "Command3", DesignTime.LoggerFactory));

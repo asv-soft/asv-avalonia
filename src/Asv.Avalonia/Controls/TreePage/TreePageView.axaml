@@ -79,6 +79,7 @@
                         <avalonia1:MaterialIcon
                             Margin="0,0,4,0"
                             DockPanel.Dock="Left"
+                            avalonia:AsvPallete.Color="{Binding Base.IconColor}"
                             Kind="{Binding Base.Icon}"
                             Width="15"
                             Height="15"
@@ -149,7 +150,10 @@
             Padding="0"
         >
             <StackPanel Spacing="4" Orientation="Horizontal" Margin="4">
-                <avalonia1:MaterialIcon Kind="ChevronDoubleRight" />
+                <avalonia1:MaterialIcon
+                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                    Kind="ChevronDoubleRight"
+                />
             </StackPanel>
         </Button>
 
@@ -174,6 +178,7 @@
                         >
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <avalonia1:MaterialIcon
+                                    avalonia:AsvPallete.Color="{Binding Base.IconColor}"
                                     Kind="{Binding Base.Icon}"
                                     IsVisible="{Binding Base.Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                                     VerticalAlignment="Center"
@@ -223,6 +228,7 @@
                                 VerticalAlignment="Center"
                                 Width="18"
                                 Height="18"
+                                avalonia:AsvPallete.Color="{Binding Item.IconColor}"
                                 Kind="{Binding Item.Icon}"
                             />
                             <TextBlock

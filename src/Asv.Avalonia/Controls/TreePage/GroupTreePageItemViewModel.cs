@@ -22,6 +22,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
         )
         {
             Description = "This is a description for Item 1",
+            IconColor = AsvColorKind.Error | AsvColorKind.Blink,
         };
         var flatList = new ObservableList<ITreePage>
         {
@@ -36,6 +37,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
             )
             {
                 Description = "This is a description for Item 2",
+                IconColor = AsvColorKind.Error | AsvColorKind.Blink,
             },
             new TreePage(
                 "item3",
