@@ -921,4 +921,19 @@
     <data name="UnitException_UnitItemValueIsNan_Message" xml:space="preserve">
         <value>Значение не является числом</value>
     </data>
+    <data name="Percent_Throttle_Description" xml:space="preserve">
+        <value>Мощность в процентах</value>
+    </data>
+    <data name="Normalized_UnitItem_Name" xml:space="preserve">
+        <value>Нормализованное значение</value>
+    </data>
+    <data name="Normalized_Throttle_Description" xml:space="preserve">
+        <value>Нормализованная мощность</value>
+    </data>
+    <data name="Throttle_Name" xml:space="preserve">
+        <value>Мощность</value>
+    </data>
+    <data name="Throttle_Description" xml:space="preserve">
+        <value>Единица измерения мощности</value>
+    </data>
 </root>

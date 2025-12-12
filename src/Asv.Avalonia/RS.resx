@@ -876,4 +876,19 @@
     <data name="UnitException_UnitItemValueIsNan_Message" xml:space="preserve">
         <value>Value is not a number</value>
     </data>
+    <data name="Percent_Throttle_Description" xml:space="preserve">
+        <value>Throttle in percents</value>
+    </data>
+    <data name="Normalized_UnitItem_Name" xml:space="preserve">
+        <value>Normalized value</value>
+    </data>
+    <data name="Normalized_Throttle_Description" xml:space="preserve">
+        <value>Normalized throttle</value>
+    </data>
+    <data name="Throttle_Name" xml:space="preserve">
+        <value>Throttle</value>
+    </data>
+    <data name="Throttle_Description" xml:space="preserve">
+        <value>Throttle unit</value>
+    </data>
 </root>

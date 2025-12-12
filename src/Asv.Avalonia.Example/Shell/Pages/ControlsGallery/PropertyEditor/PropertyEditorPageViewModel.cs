@@ -89,6 +89,19 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Description = "Time description",
                     Icon = MaterialIconKind.Timelapse,
                 },
+                new UnitPropertyViewModel(
+                    "throttle",
+                    Throttle,
+                    unit[ThrottleBase.Id] ?? throw new ArgumentNullException(),
+                    loggerFactory
+                )
+                {
+                    Parent = this,
+                    Header = "Throttle",
+                    ShortName = "Throttle",
+                    Description = "Throttle description",
+                    Icon = MaterialIconKind.Signal,
+                },
             },
         };
 
@@ -115,6 +128,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     public BindableReactiveProperty<GeoPoint> GeoPoint { get; } = new();
     public BindableReactiveProperty<double> Time { get; } = new();
+    public BindableReactiveProperty<double> Throttle { get; } = new();
 
     public PropertyEditorViewModel PropertyEditor { get; }
 
