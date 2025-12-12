@@ -18,6 +18,9 @@
     </toc-element>
     <toc-element topic="samples-and-tutorial.md">
         <toc-element topic="how-to-create-module.md"/>
+        <toc-element topic="how-to-create-module-make-module-really-modular.md"/>
+        <toc-element topic="how-to-create-module-make-nuget.md"/>
+        <toc-element topic="how-to-create-module-source-code.md"/>
     </toc-element>
     <toc-element toc-title="Basic components">
         <toc-element topic="composition-view-locator.md"/>
