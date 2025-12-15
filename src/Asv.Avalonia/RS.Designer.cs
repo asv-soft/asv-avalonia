@@ -1662,6 +1662,24 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Normalized throttle.
+        /// </summary>
+        public static string Normalized_Throttle_Description {
+            get {
+                return ResourceManager.GetString("Normalized_Throttle_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Normalized value.
+        /// </summary>
+        public static string Normalized_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Normalized_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to N/A.
         /// </summary>
         public static string Not_Available {
@@ -1856,6 +1874,15 @@ namespace Asv.Avalonia {
         public static string Percent_Sdm_Description {
             get {
                 return ResourceManager.GetString("Percent_Sdm_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throttle in percents.
+        /// </summary>
+        public static string Percent_Throttle_Description {
+            get {
+                return ResourceManager.GetString("Percent_Throttle_Description", resourceCulture);
             }
         }
         
@@ -2450,6 +2477,24 @@ namespace Asv.Avalonia {
         public static string ThemeService_Light {
             get {
                 return ResourceManager.GetString("ThemeService_Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throttle unit.
+        /// </summary>
+        public static string Throttle_Description {
+            get {
+                return ResourceManager.GetString("Throttle_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Throttle.
+        /// </summary>
+        public static string Throttle_Name {
+            get {
+                return ResourceManager.GetString("Throttle_Name", resourceCulture);
             }
         }
         
