@@ -59,7 +59,9 @@ public sealed class CommandViewModel : RoutableViewModel
             .ViewValue.Subscribe(value =>
                 _svc.SetHotKey(
                     _base.Id,
-                    value == EmptyHotKey ? null : HotKeyInfo.Parse(value ?? string.Empty)
+                    value == EmptyHotKey || string.IsNullOrWhiteSpace(value)
+                        ? null
+                        : HotKeyInfo.Parse(value)
                 )
             )
             .DisposeItWith(Disposable);
@@ -69,6 +71,7 @@ public sealed class CommandViewModel : RoutableViewModel
 
     public MaterialIconKind Icon => _base.Icon;
     public string Name => _base.Name;
+    public string CommandId => _base.Id;
     public string Description => _base.Description;
     public string Source => _base.Source.ModuleName;
     public string? DefaultHotKey => _base.DefaultHotKey;
@@ -174,6 +177,20 @@ public sealed class CommandViewModel : RoutableViewModel
             || isSourceMatch
             || isDefaultHotkeyMatch
             || isEditedHotkeyMatch;
+    }
+
+    internal void SetHotKey(string? hotKey)
+    {
+        if (string.IsNullOrWhiteSpace(hotKey))
+        {
+            _svc.SetHotKey(_base.Id, null);
+            EditedHotKey.ModelValue.Value = EmptyHotKey;
+        }
+        else
+        {
+            _svc.SetHotKey(_base.Id, HotKeyInfo.Parse(hotKey));
+            EditedHotKey.ModelValue.Value = hotKey;
+        }
     }
 
     public override IEnumerable<IRoutable> GetRoutableChildren()

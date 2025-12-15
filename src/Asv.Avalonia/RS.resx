@@ -902,4 +902,10 @@
     <data name="Throttle_Description" xml:space="preserve">
         <value>Throttle unit</value>
     </data>
+    <data name="ResetCommandHotKeysCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Reset HotKeys</value>
+    </data>
+    <data name="ResetCommandHotKeysCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that resets all hotkeys</value>
+    </data>
 </root>
