@@ -25,6 +25,7 @@
 
         <DataGrid
             Focusable="False"
+            CanUserResizeColumns="True"
             ItemsSource="{Binding Items}"
             SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}"
         >
