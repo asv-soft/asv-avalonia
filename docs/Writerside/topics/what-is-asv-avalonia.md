@@ -92,7 +92,7 @@ Asv.Avalonia ships with specialized controls and helpers:
 
 Get your application running in minutes.
 
-* **Quick Start**: follow our [step-by-step tutorial](install.md) to build your first shell.
+* **Quick Start**: follow our [step-by-step tutorial](project-setup.md) to build your first shell.
 * **Explore the Code**: check out
   the [Asv.Avalonia.Example](https://github.com/asv-soft/asv-avalonia/tree/main/src/Asv.Avalonia.Example) to see a fully
   functional app.
