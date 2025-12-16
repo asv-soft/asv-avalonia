@@ -36,12 +36,16 @@ public class MeasureUnitViewModel : RoutableViewModel
         _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);
         _sub2 = item.CurrentUnitItem.Subscribe(OnChangeByModel);
         _internalChange = false;
+
+        ResetCommand = new ReactiveCommand(ResetImpl).DisposeItWith(Disposable);
     }
 
     public BindableReactiveProperty<IUnitItem> SelectedItem { get; }
     public IUnit Base { get; }
     public IReadOnlyBindableReactiveProperty<string> Name { get; }
     public IReadOnlyBindableReactiveProperty<string> Symbol { get; }
+
+    public ReactiveCommand ResetCommand { get; }
 
     public Selection NameSelection
     {
@@ -84,6 +88,18 @@ public class MeasureUnitViewModel : RoutableViewModel
         return [];
     }
 
+    internal async ValueTask ResetImpl(Unit arg, CancellationToken arg2)
+    {
+        if (Base.InternationalSystemUnit.UnitItemId == Base.CurrentUnitItem.Value.UnitItemId)
+        {
+            return;
+        }
+
+        _internalChange = true;
+        await ChangeMeasureUnitCommand.ExecuteCommand(this, Base, Base.InternationalSystemUnit);
+        _internalChange = false;
+    }
+
     private async ValueTask OnChangedByUser(IUnitItem userValue, CancellationToken cancel)
     {
         if (_internalChange)
@@ -93,7 +109,6 @@ public class MeasureUnitViewModel : RoutableViewModel
 
         _internalChange = true;
         await ChangeMeasureUnitCommand.ExecuteCommand(this, Base, userValue);
-
         _internalChange = false;
     }
 

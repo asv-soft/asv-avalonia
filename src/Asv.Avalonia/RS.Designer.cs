@@ -2031,6 +2031,24 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command that resets units.
+        /// </summary>
+        public static string ResetUnitsCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ResetUnitsCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset units.
+        /// </summary>
+        public static string ResetUnitsCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ResetUnitsCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command that restarts the application.
         /// </summary>
         public static string RestartApplicationCommand_Info_Description {
@@ -2328,11 +2346,29 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Reset.
+        /// </summary>
+        public static string SettingsUnitsView_Header_Reset {
+            get {
+                return ResourceManager.GetString("SettingsUnitsView_Header_Reset", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected.
         /// </summary>
         public static string SettingsUnitsView_Header_Selected {
             get {
                 return ResourceManager.GetString("SettingsUnitsView_Header_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset All.
+        /// </summary>
+        public static string SettingsUnitsViewModel_Button_ResetAll {
+            get {
+                return ResourceManager.GetString("SettingsUnitsViewModel_Button_ResetAll", resourceCulture);
             }
         }
         
