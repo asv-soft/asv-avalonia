@@ -2031,6 +2031,24 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command that resets all hotkeys.
+        /// </summary>
+        public static string ResetCommandHotKeysCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ResetCommandHotKeysCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reset HotKeys.
+        /// </summary>
+        public static string ResetCommandHotKeysCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ResetCommandHotKeysCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command that resets units.
         /// </summary>
         public static string ResetUnitsCommand_CommandInfo_Description {

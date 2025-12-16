@@ -1,6 +1,7 @@
 ﻿using System.Composition;
 using Asv.Common;
 using Avalonia.Threading;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -105,13 +106,43 @@ public class SettingsCommandListViewModel : SettingsSubPage
             })
             .DisposeItWith(Disposable);
         Search.Refresh();
+
+        ResetAllHotKeysCommand = new ReactiveCommand(ResetAllHotKeys).DisposeItWith(Disposable);
+
+        var menu = new MenuItem(
+            "reset",
+            RS.SettingsCommandListView_ResetButton_Content,
+            loggerFactory
+        )
+        {
+            Order = 1,
+            Icon = MaterialIconKind.Refresh,
+            Command = ResetAllHotKeysCommand,
+        };
+        Menu.Add(menu);
     }
+
+    public ReactiveCommand ResetAllHotKeysCommand { get; }
 
     public SearchBoxViewModel Search { get; }
     public BindableReactiveProperty<CommandViewModel?> SelectedItem { get; }
 
     public INotifyCollectionChangedSynchronizedViewList<CommandViewModel> Items { get; }
     public HistoricalEnumProperty<CommandSortingType> CommandSortingType { get; }
+
+    private async ValueTask ResetAllHotKeys(Unit arg, CancellationToken cancel)
+    {
+        var emptyCustomHotKeys = _commandsService.Commands.Select(kv =>
+        {
+            return KeyValuePair.Create(kv.Id, CommandArg.EmptyString);
+        });
+
+        await this.ExecuteCommand(
+            ResetCommandHotKeysCommand.Id,
+            new DictArg(emptyCustomHotKeys),
+            cancel
+        );
+    }
 
     private Task UpdateImpl(string? query, IProgress<double> progress, CancellationToken cancel)
     {
