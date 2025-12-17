@@ -10,7 +10,7 @@ namespace Asv.Avalonia.IO;
 public class SettingsConnectionTcpPortExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<ISettingsConnectionSubPage>
 {
-    public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
+    public void Extend(ISettingsConnectionSubPage context, DisposableBag contextDispose)
     {
         var menu = new MenuItem(
             TcpClientProtocolPort.Scheme,

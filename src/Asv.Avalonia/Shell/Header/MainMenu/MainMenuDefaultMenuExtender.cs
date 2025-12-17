@@ -10,7 +10,7 @@ public class MainMenuDefaultMenuExtender(
     [ImportMany(ExportMainMenuAttribute.Contract)] IEnumerable<IMenuItem> items
 ) : IExtensionFor<IShell>
 {
-    public void Extend(IShell context, CompositeDisposable contextDispose)
+    public void Extend(IShell context, DisposableBag contextDispose)
     {
         context.MainMenu.AddRange(
             items.Select(x =>

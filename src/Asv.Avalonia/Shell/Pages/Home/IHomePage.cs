@@ -22,9 +22,6 @@ public class HomePageItem : HeadlinedViewModel, IHomePageItem
     public HomePageItem(NavigationId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
-        Disposable.AddAction(() => Actions.Clear());
-        Disposable.AddAction(() => Info.Clear());
-
         Actions.SetRoutableParent(this).DisposeItWith(Disposable);
         Actions.DisposeRemovedItems().DisposeItWith(Disposable);
 
@@ -46,5 +43,16 @@ public class HomePageItem : HeadlinedViewModel, IHomePageItem
         {
             yield return action;
         }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            Actions.RemoveAll();
+            Info.RemoveAll();
+        }
+
+        base.Dispose(disposing);
     }
 }

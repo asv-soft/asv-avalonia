@@ -9,7 +9,7 @@ namespace Asv.Avalonia.Plugins;
 [method: ImportingConstructor]
 public class HomePagePluginsMarketExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
 {
-    public void Extend(IHomePage context, CompositeDisposable contextDispose)
+    public void Extend(IHomePage context, DisposableBag contextDispose)
     {
         context.Tools.Add(
             OpenPluginsMarketCommand

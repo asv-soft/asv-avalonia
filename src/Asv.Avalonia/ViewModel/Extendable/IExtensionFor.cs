@@ -15,7 +15,7 @@ public interface IExtensionFor<in T>
     /// </summary>
     /// <param name="context">The target object to extend.</param>
     /// <param name="contextDispose">Disposable collection, that disposed with context.</param>
-    void Extend(T context, CompositeDisposable contextDispose);
+    void Extend(T context, DisposableBag contextDispose);
 }
 
 /// <summary>

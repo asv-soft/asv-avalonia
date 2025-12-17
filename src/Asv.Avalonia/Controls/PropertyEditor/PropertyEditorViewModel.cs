@@ -25,7 +25,6 @@ public class PropertyEditorViewModel : RoutableViewModel
         _itemsSource.SetRoutableParent(this).DisposeItWith(Disposable);
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         Items = _itemsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
-        Disposable.AddAction(() => _itemsSource.ClearWithItemsDispose());
     }
 
     public ObservableList<IPropertyViewModel> ItemsSource => _itemsSource;
@@ -35,5 +34,14 @@ public class PropertyEditorViewModel : RoutableViewModel
     public override IEnumerable<IRoutable> GetRoutableChildren()
     {
         return _itemsSource;
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _itemsSource.ClearWithItemsDispose();
+        }
+        base.Dispose(disposing);
     }
 }

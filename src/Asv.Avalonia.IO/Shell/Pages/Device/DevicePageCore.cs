@@ -18,7 +18,7 @@ namespace Asv.Avalonia.IO;
 /// </remarks>
 public sealed class DevicePageCore : IDisposable
 {
-    private readonly CompositeDisposable _disposable = new();
+    private readonly DisposableBag _disposable = new();
     private readonly SynchronizedReactiveProperty<bool> _isDeviceInitialized = new();
     private readonly SynchronizedReactiveProperty<DeviceWrapper?> _target = new();
     private readonly Subject<Unit> _onDeviceDisconnecting = new();

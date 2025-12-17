@@ -1,6 +1,6 @@
 using System.Composition;
-using Asv.Common;
 using Microsoft.Extensions.Logging;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -9,7 +9,7 @@ namespace Asv.Avalonia;
 public sealed class HomePageLogViewerExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<IHomePage>
 {
-    public void Extend(IHomePage context, R3.CompositeDisposable contextDispose)
+    public void Extend(IHomePage context, DisposableBag contextDispose)
     {
         context.Tools.Add(
             OpenLogViewerCommand

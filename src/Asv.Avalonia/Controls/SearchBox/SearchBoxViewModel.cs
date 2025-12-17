@@ -75,8 +75,6 @@ public class SearchBoxViewModel
                 AwaitOperation.Parallel
             )
             .DisposeItWith(Disposable);
-
-        Disposable.AddAction(() => _cancellationTokenSource?.Cancel(false));
     }
 
     public HistoricalStringProperty Text { get; }
@@ -173,4 +171,14 @@ public class SearchBoxViewModel
     }
 
     public void Report(double value) => _progress.Value = value;
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _cancellationTokenSource?.Cancel(false);
+        }
+
+        base.Dispose(disposing);
+    }
 }

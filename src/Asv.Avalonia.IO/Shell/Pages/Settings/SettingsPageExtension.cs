@@ -11,7 +11,7 @@ namespace Asv.Avalonia.IO;
 [method: ImportingConstructor]
 public class SettingsPageExtension(ILoggerFactory loggerFactory) : IExtensionFor<ISettingsPage>
 {
-    public void Extend(ISettingsPage context, CompositeDisposable contextDispose)
+    public void Extend(ISettingsPage context, DisposableBag contextDispose)
     {
         context.Nodes.Add(
             new TreePage(

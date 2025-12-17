@@ -15,7 +15,7 @@ public class ShellLeftMenuExtenderExample : IExtensionFor<IShell>
         _loggerFactory = loggerFactory;
     }
 
-    public void Extend(IShell context, CompositeDisposable contextDispose)
+    public void Extend(IShell context, DisposableBag contextDispose)
     {
         context.LeftMenu.Add(
             new MenuItem("home", RS.ShellLeftMenuExtenderExample_HomeItem_Header, _loggerFactory)

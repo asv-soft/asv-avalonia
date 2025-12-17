@@ -101,7 +101,7 @@ public static class ObservableMixin
             .Where(x => x is TFilter)
             .Cast<TOrigin, TFilter>()
             .Subscribe(removeAction);
-        return new CompositeDisposable(sub1, sub2);
+        return Disposable.Combine(sub1, sub2);
     }
 
     public static IDisposable DisposeMany<TModel, TView>(this ISynchronizedView<TModel, TView> src)
@@ -112,7 +112,7 @@ public static class ObservableMixin
 
     public static ISynchronizedView<TModel, TView> DisposeMany<TModel, TView>(
         this ISynchronizedView<TModel, TView> src,
-        CompositeDisposable subscriptionDispose
+        DisposableBag subscriptionDispose
     )
         where TView : IDisposable
     {

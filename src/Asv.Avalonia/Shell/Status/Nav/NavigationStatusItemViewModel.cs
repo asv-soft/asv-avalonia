@@ -36,9 +36,9 @@ public class NavigationStatusItemViewModel : StatusItem
     {
         _source = new ObservableList<string>();
         Items = _source.ToNotifyCollectionChangedSlim();
-        nav.SelectedControl.Subscribe(OnChanged).AddTo(Disposable);
+        nav.SelectedControl.Subscribe(OnChanged).DisposeItWith(Disposable);
         _commandService = commandService;
-        commandService.OnCommand.Subscribe(OnCommand).AddTo(Disposable);
+        commandService.OnCommand.Subscribe(OnCommand).DisposeItWith(Disposable);
     }
 
     private void OnChanged(IRoutable? routable)

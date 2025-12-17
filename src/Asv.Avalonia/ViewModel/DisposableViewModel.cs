@@ -11,8 +11,8 @@ public class DisposableViewModel(NavigationId id, ILoggerFactory loggerFactory)
     : ViewModelBase(id: id, loggerFactory)
 {
     private volatile CancellationTokenSource? _cancel;
-    private volatile CompositeDisposable? _dispose;
-    private readonly object _sync = new();
+    private DisposableBag? _dispose;
+    private readonly Lock _sync = new();
 
     /// <summary>
     /// Gets a cancellation token that is linked to the disposal state of the view model.
@@ -27,7 +27,7 @@ public class DisposableViewModel(NavigationId id, ILoggerFactory loggerFactory)
                 return IsDisposed ? CancellationToken.None : _cancel.Token;
             }
 
-            lock (_sync)
+            using (_sync.EnterScope())
             {
                 if (_cancel != null)
                 {
@@ -41,26 +41,26 @@ public class DisposableViewModel(NavigationId id, ILoggerFactory loggerFactory)
     }
 
     /// <summary>
-    /// Gets a <see cref="CompositeDisposable"/> collection for managing disposable resources.
+    /// Gets a <see cref="DisposableBag"/> struct for managing disposable resources.
     /// This ensures that all registered disposables are cleaned up when the view model is disposed.
     /// </summary>
-    protected CompositeDisposable Disposable
+    protected DisposableBag Disposable
     {
         get
         {
-            if (_dispose != null)
+            if (_dispose is not null)
             {
-                return _dispose;
+                return _dispose.Value;
             }
 
-            lock (_sync)
+            using (_sync.EnterScope())
             {
-                if (_dispose != null)
+                if (_dispose is not null)
                 {
-                    return _dispose;
+                    return _dispose.Value;
                 }
 
-                var dispose = new CompositeDisposable();
+                var dispose = default(DisposableBag);
                 _dispose = dispose;
                 return dispose;
             }

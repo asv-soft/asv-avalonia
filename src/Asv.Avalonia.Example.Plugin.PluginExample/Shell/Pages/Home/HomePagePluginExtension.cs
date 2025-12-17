@@ -8,7 +8,7 @@ namespace Asv.Avalonia.Example.Plugin.PluginExample;
 [method: ImportingConstructor]
 public class HomePagePluginExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
 {
-    public void Extend(IHomePage context, CompositeDisposable contextDispose)
+    public void Extend(IHomePage context, DisposableBag contextDispose)
     {
         context.Tools.Add(
             OpenExamplePageCommand.StaticInfo.CreateAction(

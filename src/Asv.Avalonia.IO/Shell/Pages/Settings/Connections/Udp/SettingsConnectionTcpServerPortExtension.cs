@@ -10,7 +10,7 @@ namespace Asv.Avalonia.IO;
 public class SettingsConnectionUdpPortExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<ISettingsConnectionSubPage>
 {
-    public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
+    public void Extend(ISettingsConnectionSubPage context, DisposableBag contextDispose)
     {
         var menu = new MenuItem(
             UdpProtocolPort.Scheme,

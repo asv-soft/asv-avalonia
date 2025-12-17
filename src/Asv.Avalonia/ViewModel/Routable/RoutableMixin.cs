@@ -21,13 +21,13 @@ public static class RoutableMixin
         src.ForEach(item => item.Parent = parent);
         var sub1 = src.ObserveAdd().Subscribe(x => x.Value.View.Parent = parent);
         var sub2 = src.ObserveRemove().Subscribe(x => x.Value.View.Parent = null);
-        return new CompositeDisposable(sub1, sub2);
+        return Disposable.Combine(sub1, sub2);
     }
 
     public static ISynchronizedView<TModel, TView> SetRoutableParent<TModel, TView>(
         this ISynchronizedView<TModel, TView> src,
         IRoutable parent,
-        CompositeDisposable dispose
+        DisposableBag dispose
     )
         where TView : class, IRoutable
     {
@@ -40,7 +40,7 @@ public static class RoutableMixin
     public static INotifyCollectionChangedSynchronizedViewList<TView> SetRoutableParent<TView>(
         this INotifyCollectionChangedSynchronizedViewList<TView> src,
         IRoutable parent,
-        CompositeDisposable dispose
+        DisposableBag dispose
     )
         where TView : class, IRoutable
     {
@@ -60,7 +60,7 @@ public static class RoutableMixin
     public static TCollection SetRoutableParent<TCollection, TItem>(
         this TCollection src,
         IRoutable parent,
-        CompositeDisposable dispose
+        DisposableBag dispose
     )
         where TCollection : INotifyCollectionChanged, IEnumerable<TItem>
         where TItem : IRoutable
@@ -177,7 +177,7 @@ public static class RoutableMixin
         {
             routable.Parent = parent;
         }
-        return new CompositeDisposable(sub1, sub2);
+        return Disposable.Combine(sub1, sub2);
     }
 
     public static NavigationPath GetPathToRoot(this IRoutable src)

@@ -12,7 +12,7 @@ public class HomePageControlsGalleryPageExtension(ILoggerFactory loggerFactory)
     : AsyncDisposableOnce,
         IExtensionFor<IHomePage>
 {
-    public void Extend(IHomePage context, CompositeDisposable contextDispose)
+    public void Extend(IHomePage context, DisposableBag contextDispose)
     {
         context.Tools.Add(
             OpenControlsGalleryPageCommand

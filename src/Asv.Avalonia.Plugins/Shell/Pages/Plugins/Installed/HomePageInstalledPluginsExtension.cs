@@ -10,7 +10,7 @@ namespace Asv.Avalonia.Plugins;
 public class HomePageInstalledPluginsExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<IHomePage>
 {
-    public void Extend(IHomePage context, CompositeDisposable contextDispose)
+    public void Extend(IHomePage context, DisposableBag contextDispose)
     {
         context.Tools.Add(
             OpenInstalledPluginsCommand

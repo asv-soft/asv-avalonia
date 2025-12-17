@@ -10,7 +10,7 @@ namespace Asv.Avalonia.Example;
 public class ControlsGalleryPageExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<IControlsGalleryPage>
 {
-    public void Extend(IControlsGalleryPage context, CompositeDisposable contextDispose)
+    public void Extend(IControlsGalleryPage context, DisposableBag contextDispose)
     {
         context.Nodes.Add(
             new TreePage(

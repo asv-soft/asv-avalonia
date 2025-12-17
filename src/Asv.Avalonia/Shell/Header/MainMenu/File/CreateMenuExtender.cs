@@ -9,7 +9,7 @@ namespace Asv.Avalonia;
 public class CreateMenuExtender(IFileAssociationService svc, ILoggerFactory loggerFactory)
     : IExtensionFor<IShell>
 {
-    public void Extend(IShell context, CompositeDisposable contextDispose)
+    public void Extend(IShell context, DisposableBag contextDispose)
     {
         foreach (var file in svc.SupportedFiles.Where(x => x.CanCreate))
         {
