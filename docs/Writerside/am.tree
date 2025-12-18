@@ -25,7 +25,18 @@
     </toc-element>
     <toc-element toc-title="Basic components">
         <toc-element topic="composition-view-locator.md"/>
-        <toc-element topic="routable-viewmodel.md"/>
+        
+        <toc-element toc-title="View Models">
+            <toc-element topic="view-model-base.md"/>
+            <toc-element topic="disposable-view-model.md"/>
+            <toc-element toc-title="Routable">
+                <toc-element topic="routable-view-model.md"/>
+                <toc-element topic="extendable-view-model.md"/>
+                <toc-element topic="page-view-model.md"/>
+                <toc-element topic="tree-page-view-model.md"/>
+                <toc-element topic="headlined-view-model.md"/>
+            </toc-element>
+        </toc-element>
     </toc-element>
     <toc-element toc-title="Services">
         <toc-element topic="what-is-a-service.md"/>

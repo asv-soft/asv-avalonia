@@ -1,3 +1,0 @@
-# Routable Viewmodel
-
-Start typing here...
