@@ -26,6 +26,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     [ImportingConstructor]
@@ -60,24 +61,28 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 }
             }),
         };
+
         var showError = new MenuItem("action3", "Show error", loggerFactory)
         {
-            Command = new ReactiveCommand(x =>
-            {
-                this.RaiseShellInfoMessage(
-                    new ShellMessage(
-                        "Error",
-                        "This is test error message",
-                        ShellErrorState.Error,
-                        "This is description for test error message",
-                        MaterialIconKind.Cross,
-                        showAll.Command,
-                        null,
-                        commandTitle: "ShowAll",
-                        TimeSpan.FromSeconds(5)
-                    )
-                );
-            }),
+            Command = new ReactiveCommand(
+                async (_, cancel) =>
+                {
+                    await this.RaiseShellInfoMessage(
+                        new ShellMessage(
+                            "Error",
+                            "This is test error message",
+                            ShellErrorState.Error,
+                            "This is description for test error message",
+                            MaterialIconKind.Cross,
+                            showAll.Command,
+                            null,
+                            commandTitle: "ShowAll",
+                            TimeSpan.FromSeconds(5)
+                        ),
+                        cancel
+                    );
+                }
+            ),
         };
         Menu.Add(showAll);
         Menu.Add(hideAll);
@@ -202,26 +207,27 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public NotifyCollectionChangedSynchronizedViewList<IWorkspaceWidget> Items { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var item in _itemsSource)
         {
             yield return item;
         }
 
-        foreach (var item in base.GetRoutableChildren())
+        foreach (var item in base.GetChildren())
         {
             yield return item;
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         if (e is PageCloseAttemptEvent close)
         {
             close.AddRestriction(new Restriction(this, "Test restriction for close"));
         }
-        return base.InternalCatchEvent(e);
+
+        return ValueTask.CompletedTask;
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -119,7 +119,7 @@ public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
         return ValueTask.FromResult<IRoutable>(this);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

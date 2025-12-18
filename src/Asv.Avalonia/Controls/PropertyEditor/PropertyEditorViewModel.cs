@@ -33,7 +33,7 @@ public class PropertyEditorViewModel : RoutableViewModel
 
     public NotifyCollectionChangedSynchronizedViewList<IPropertyViewModel> Items { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return _itemsSource;
     }

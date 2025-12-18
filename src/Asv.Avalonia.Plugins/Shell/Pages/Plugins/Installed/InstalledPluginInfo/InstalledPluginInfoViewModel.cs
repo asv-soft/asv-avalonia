@@ -95,7 +95,7 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
         IsUninstalled.ViewValue.OnNext(true);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return IsUninstalled;
     }

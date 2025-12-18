@@ -1,4 +1,5 @@
 using Asv.Common;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -6,11 +7,14 @@ namespace Asv.Avalonia;
 /// Represents an event triggered when validation happens.
 /// </summary>
 /// <param name="source">.</param>
-/// <param name="sender">Object that was validated.</param>
+/// <param name="validatedObject">Object that was validated.</param>
 /// <param name="validationResult">Result of the validation.</param>
-public class ValidationEvent(IRoutable source, object sender, ValidationResult validationResult)
-    : AsyncRoutedEvent(source, RoutingStrategy.Direct)
+public class ValidationEvent(
+    IRoutable source,
+    object validatedObject,
+    ValidationResult validationResult
+) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Direct)
 {
-    public object Sender => sender;
+    public object ValidatedObject => validatedObject;
     public ValidationResult ValidationResult => validationResult;
 }

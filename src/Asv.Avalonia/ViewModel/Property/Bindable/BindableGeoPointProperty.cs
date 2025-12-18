@@ -96,7 +96,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
         Altitude.ForceValidate();
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return Latitude;
         yield return Longitude;

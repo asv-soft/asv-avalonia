@@ -36,7 +36,7 @@ public class HomePageItem : HeadlinedViewModel, IHomePageItem
     public ObservableList<IActionViewModel> Actions { get; } = [];
     public ObservableList<IHeadlinedViewModel> Info { get; } = [];
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var model in Actions)
         {

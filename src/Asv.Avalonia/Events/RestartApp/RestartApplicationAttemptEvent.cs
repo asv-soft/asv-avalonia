@@ -1,4 +1,6 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Common;
+
+namespace Asv.Avalonia;
 
 /// <summary>
 /// Represents an event triggered when an attempt is made to restart the application.
@@ -15,11 +17,12 @@ public class RestartApplicationAttemptEvent(IRoutable source)
 public static class RestartApplicationAttemptEventMixin
 {
     public static async ValueTask<IReadOnlyList<Restriction>> RequestRestartApplicationApproval(
-        this IRoutable src
+        this IRoutable src,
+        CancellationToken cancel = default
     )
     {
         var eve = new RestartApplicationAttemptEvent(src);
-        await src.Rise(eve);
+        await src.Rise(eve, cancel);
         return eve.Restrictions;
     }
 }

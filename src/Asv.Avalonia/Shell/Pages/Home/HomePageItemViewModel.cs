@@ -23,7 +23,7 @@ public class HomePageItemViewModel : RoutableViewModel
     public NotifyCollectionChangedSynchronizedViewList<IActionViewModel> ActionsView { get; }
     public NotifyCollectionChangedSynchronizedViewList<IHeadlinedViewModel> PropertiesView { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var model in PropertiesView)
         {

@@ -26,7 +26,7 @@ public class DialogItemTextBoxViewModel : DialogViewModelBase
     public BindableReactiveProperty<string?> Input { get; }
     public string? Message { get; set; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

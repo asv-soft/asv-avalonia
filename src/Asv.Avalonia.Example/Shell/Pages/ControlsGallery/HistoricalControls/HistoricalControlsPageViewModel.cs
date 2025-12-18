@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Composition;
+using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
@@ -159,6 +160,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
+
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public ReactiveCommand TurnOn { get; }
@@ -171,7 +174,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     public HistoricalEnumProperty<AsvColorKind> TagTypeProp { get; }
     public HistoricalEnumProperty<AsvColorKind> AsvColorKindProp { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return IsTurnedOn;
         yield return Speed;
@@ -182,13 +185,13 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         yield return TagTypeProp;
         yield return AsvColorKindProp;
 
-        foreach (var child in base.GetRoutableChildren())
+        foreach (var child in base.GetChildren())
         {
             yield return child;
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
@@ -242,7 +245,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
                 break;
         }
 
-        return base.InternalCatchEvent(e);
+        return ValueTask.CompletedTask;
     }
 
     public override IExportInfo Source => SystemModule.Instance;

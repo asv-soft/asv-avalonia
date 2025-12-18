@@ -134,7 +134,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         });
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var viewModel in _view)
         {

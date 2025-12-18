@@ -53,7 +53,7 @@ public class ThemeProperty : RoutableViewModel
     public IEnumerable<IThemeInfo> Items => _svc.Themes;
     public BindableReactiveProperty<IThemeInfo> SelectedItem { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

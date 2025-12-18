@@ -23,5 +23,5 @@ public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
 
     public BindableReactiveProperty<HotKeyInfo?> HotKey { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren() => [];
+    public override IEnumerable<IRoutable> GetChildren() => [];
 }

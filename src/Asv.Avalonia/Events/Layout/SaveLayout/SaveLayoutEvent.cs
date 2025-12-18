@@ -1,3 +1,5 @@
+using Asv.Common;
+
 namespace Asv.Avalonia;
 
 public enum FlushingStrategy
@@ -110,6 +112,9 @@ public static class SaveLayoutMixin
             return default;
         }
 
-        return src.Rise(new SaveLayoutEvent(src, layoutService, isFlushToFile, routingStrategy));
+        return src.Rise(
+            new SaveLayoutEvent(src, layoutService, isFlushToFile, routingStrategy),
+            cancel
+        );
     }
 }

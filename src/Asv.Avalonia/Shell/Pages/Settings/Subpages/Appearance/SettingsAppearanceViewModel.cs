@@ -44,12 +44,12 @@ public class SettingsAppearanceViewModel : SettingsSubPage
     public ThemeProperty Theme { get; }
     public LanguageProperty Language { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return Theme;
         yield return Language;
 
-        foreach (var child in base.GetRoutableChildren())
+        foreach (var child in base.GetChildren())
         {
             yield return child;
         }

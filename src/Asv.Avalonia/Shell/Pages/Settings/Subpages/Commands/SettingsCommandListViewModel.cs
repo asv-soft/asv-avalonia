@@ -121,6 +121,8 @@ public class SettingsCommandListViewModel : SettingsSubPage
             Command = ResetAllHotKeysCommand,
         };
         Menu.Add(menu);
+
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public ReactiveCommand ResetAllHotKeysCommand { get; }
@@ -203,7 +205,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
         Logger.LogInformation("All hot keys have been reset to default");
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return Search;
         yield return CommandSortingType;
@@ -213,13 +215,24 @@ public class SettingsCommandListViewModel : SettingsSubPage
             yield return item;
         }
 
-        foreach (var children in base.GetRoutableChildren())
+        foreach (var children in base.GetChildren())
         {
             yield return children;
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            SelectedItem.Value = null;
+            SelectedItem.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
+
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
@@ -255,18 +268,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
                 break;
         }
 
-        return base.InternalCatchEvent(e);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            SelectedItem.Value = null;
-            SelectedItem.Dispose();
-        }
-
-        base.Dispose(disposing);
+        return ValueTask.CompletedTask;
     }
 
     public override IExportInfo Source => SystemModule.Instance;

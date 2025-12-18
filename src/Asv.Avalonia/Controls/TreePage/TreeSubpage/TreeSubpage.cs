@@ -18,7 +18,7 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
 
-    public override IEnumerable<IRoutable> GetRoutableChildren() => Menu;
+    public override IEnumerable<IRoutable> GetChildren() => Menu;
 
     protected override void Dispose(bool disposing)
     {

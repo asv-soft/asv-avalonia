@@ -1,16 +1,22 @@
+using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class DialogViewModelBase(NavigationId id, ILoggerFactory loggerFactory)
-    : RoutableViewModel(id, loggerFactory)
+public abstract class DialogViewModelBase : RoutableViewModel
 {
     protected const string BaseId = "dialog";
 
     private readonly HashSet<IBindableReactiveProperty> _validationData = new(
         EqualityComparer<IBindableReactiveProperty>.Default
     );
+
+    protected DialogViewModelBase(NavigationId id, ILoggerFactory loggerFactory)
+        : base(id, loggerFactory)
+    {
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+    }
 
     public ReactiveProperty<bool> IsValid { get; } = new(true);
 
@@ -19,11 +25,11 @@ public abstract class DialogViewModelBase(NavigationId id, ILoggerFactory logger
         return;
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         if (e is ValidationEvent validation)
         {
-            if (validation.Sender is not IBindableReactiveProperty property)
+            if (validation.ValidatedObject is not IBindableReactiveProperty property)
             {
                 return ValueTask.CompletedTask;
             }
@@ -40,7 +46,7 @@ public abstract class DialogViewModelBase(NavigationId id, ILoggerFactory logger
             e.IsHandled = true;
         }
 
-        return base.InternalCatchEvent(e);
+        return ValueTask.CompletedTask;
     }
 
     protected override void Dispose(bool disposing)

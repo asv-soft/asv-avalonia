@@ -73,7 +73,7 @@ public class LanguageProperty : RoutableViewModel
         _internalChange = false;
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

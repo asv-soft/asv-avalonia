@@ -1,9 +1,11 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Common;
+
+namespace Asv.Avalonia;
 
 public abstract class AsyncRoutedEventWithRestrictionsBase(
     IRoutable source,
     RoutingStrategy routingStrategy
-) : AsyncRoutedEvent(source, routingStrategy)
+) : AsyncRoutedEvent<IRoutable>(source, routingStrategy)
 {
     private readonly List<Restriction> _restrictions = [];
 

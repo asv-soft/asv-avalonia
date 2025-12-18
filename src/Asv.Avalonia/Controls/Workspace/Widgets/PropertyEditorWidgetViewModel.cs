@@ -68,14 +68,14 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         set => SetField(ref field, value);
     } = true;
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var item in Menu)
         {
             yield return item;
         }
 
-        foreach (var item in base.GetRoutableChildren())
+        foreach (var item in base.GetChildren())
         {
             yield return item;
         }

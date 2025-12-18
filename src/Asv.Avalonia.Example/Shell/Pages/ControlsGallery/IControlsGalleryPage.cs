@@ -20,5 +20,5 @@ public abstract class ControlsGallerySubPage(NavigationId id, ILoggerFactory log
 {
     public override ValueTask Init(IControlsGalleryPage context) => ValueTask.CompletedTask;
 
-    public override IEnumerable<IRoutable> GetRoutableChildren() => Menu;
+    public override IEnumerable<IRoutable> GetChildren() => Menu;
 }

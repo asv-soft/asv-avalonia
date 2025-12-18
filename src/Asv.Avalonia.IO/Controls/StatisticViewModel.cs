@@ -185,7 +185,7 @@ public class StatisticViewModel : RoutableViewModel
         set => SetField(ref field, value);
     } = string.Empty;
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

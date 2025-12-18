@@ -90,14 +90,16 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         };
         Menu.Add(add);
         Menu.Add(refresh);
+
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<PluginsSourceViewModel> Items { get; }
     public BindableReactiveProperty<PluginsSourceViewModel?> SelectedItem { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
-        foreach (var child in base.GetRoutableChildren())
+        foreach (var child in base.GetChildren())
         {
             yield return child;
         }
@@ -124,7 +126,18 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            SelectedItem.Value = null;
+            SelectedItem.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
+
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
@@ -162,18 +175,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             }
         }
 
-        return base.InternalCatchEvent(e);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            SelectedItem.Value = null;
-            SelectedItem.Dispose();
-        }
-
-        base.Dispose(disposing);
+        return ValueTask.CompletedTask;
     }
 
     public override IExportInfo Source => PluginManagerModule.Instance;

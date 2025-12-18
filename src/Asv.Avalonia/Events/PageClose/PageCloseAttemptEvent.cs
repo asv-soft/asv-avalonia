@@ -1,4 +1,6 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Common;
+
+namespace Asv.Avalonia;
 
 /// <summary>
 /// Represents an event triggered when an attempt is made to close a page.
@@ -15,11 +17,12 @@ public class PageCloseAttemptEvent(IRoutable source)
 public static class PageCloseAttemptEventMixin
 {
     public static async ValueTask<IReadOnlyList<Restriction>> RequestChildCloseApproval(
-        this IPage src
+        this IPage src,
+        CancellationToken cancel = default
     )
     {
         var eve = new PageCloseAttemptEvent(src);
-        await src.Rise(eve);
+        await src.Rise(eve, cancel);
         return eve.Restrictions;
     }
 }

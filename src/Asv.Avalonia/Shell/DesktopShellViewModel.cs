@@ -1,6 +1,7 @@
 using System.Composition;
 using System.Runtime.InteropServices;
 using Asv.Cfg;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -52,47 +53,36 @@ public sealed class DesktopShellViewModel : ShellViewModel
 
         lifetime.MainWindow = wnd;
         lifetime.MainWindow.Show();
+
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
-    private void OnDragOver(object? sender, DragEventArgs e)
+    public void UpdateWindowStateUi(WindowState state)
     {
-        e.DragEffects = DragDropEffects.Copy;
-    }
-
-    private void OnFileDrop(object? sender, DragEventArgs e)
-    {
-        var selected = Navigation.SelectedControl.CurrentValue ?? this;
-        selected.Rise(new DesktopDragEvent(selected, args: e));
-    }
-
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
-    {
-        if (e is DesktopDragEvent eve)
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
         {
-            var files = eve.Args.DataTransfer.TryGetFiles();
-            if (files == null)
-            {
-                return ValueTask.CompletedTask;
-            }
-            foreach (var file in files)
-            {
-                var path = file.TryGetLocalPath();
-                if (Path.Exists(path))
-                {
-                    return _fileService.Open(path);
-                }
-            }
-        }
+            WindowSateIconKind.Value =
+                state == WindowState.FullScreen
+                    ? MaterialIconKind.CollapseAll
+                    : MaterialIconKind.Maximize;
 
-        if (e is DesktopPushArgsEvent argsEvent)
+            WindowStateHeader.Value =
+                state == WindowState.FullScreen
+                    ? RS.ShellView_WindowControlButton_Minimize
+                    : RS.ShellView_WindowControlButton_Maximize;
+        }
+        else
         {
-            if (argsEvent.Args.Tags.Count > 1)
-            {
-                return _fileService.Open(argsEvent.Args.Tags.Skip(1).First());
-            }
-        }
+            WindowSateIconKind.Value =
+                state == WindowState.Maximized
+                    ? MaterialIconKind.CollapseAll
+                    : MaterialIconKind.Maximize;
 
-        return base.InternalCatchEvent(e);
+            WindowStateHeader.Value =
+                state == WindowState.Maximized
+                    ? RS.ShellView_WindowControlButton_Minimize
+                    : RS.ShellView_WindowControlButton_Maximize;
+        }
     }
 
     protected override async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
@@ -164,31 +154,44 @@ public sealed class DesktopShellViewModel : ShellViewModel
         return base.CollapseAsync(cancellationToken);
     }
 
-    public void UpdateWindowStateUi(WindowState state)
+    private void OnDragOver(object? sender, DragEventArgs e)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
-        {
-            WindowSateIconKind.Value =
-                state == WindowState.FullScreen
-                    ? MaterialIconKind.CollapseAll
-                    : MaterialIconKind.Maximize;
+        e.DragEffects = DragDropEffects.Copy;
+    }
 
-            WindowStateHeader.Value =
-                state == WindowState.FullScreen
-                    ? RS.ShellView_WindowControlButton_Minimize
-                    : RS.ShellView_WindowControlButton_Maximize;
-        }
-        else
-        {
-            WindowSateIconKind.Value =
-                state == WindowState.Maximized
-                    ? MaterialIconKind.CollapseAll
-                    : MaterialIconKind.Maximize;
+    private void OnFileDrop(object? sender, DragEventArgs e)
+    {
+        var selected = Navigation.SelectedControl.CurrentValue ?? this;
+        selected.Rise(new DesktopDragEvent(selected, args: e));
+    }
 
-            WindowStateHeader.Value =
-                state == WindowState.Maximized
-                    ? RS.ShellView_WindowControlButton_Minimize
-                    : RS.ShellView_WindowControlButton_Maximize;
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    {
+        if (e is DesktopDragEvent eve)
+        {
+            var files = eve.Args.DataTransfer.TryGetFiles();
+            if (files == null)
+            {
+                return ValueTask.CompletedTask;
+            }
+            foreach (var file in files)
+            {
+                var path = file.TryGetLocalPath();
+                if (Path.Exists(path))
+                {
+                    return _fileService.Open(path);
+                }
+            }
         }
+
+        if (e is DesktopPushArgsEvent argsEvent)
+        {
+            if (argsEvent.Args.Tags.Count > 1)
+            {
+                return _fileService.Open(argsEvent.Args.Tags.Skip(1).First());
+            }
+        }
+
+        return ValueTask.CompletedTask;
     }
 }

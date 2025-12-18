@@ -193,7 +193,7 @@ public sealed class CommandViewModel : RoutableViewModel
         }
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return EditedHotKey;
     }

@@ -1,3 +1,5 @@
+using Asv.Common;
+
 namespace Asv.Avalonia;
 
 public sealed class LoadLayoutEvent(
@@ -20,7 +22,7 @@ public static class LoadLayoutMixin
             return ValueTask.CompletedTask;
         }
 
-        return src.Rise(new LoadLayoutEvent(src, layoutService, routingStrategy));
+        return src.Rise(new LoadLayoutEvent(src, layoutService, routingStrategy), cancel);
     }
 
     public static ValueTask RequestLoadLayoutForSelfOnly(
@@ -34,7 +36,7 @@ public static class LoadLayoutMixin
             return ValueTask.CompletedTask;
         }
 
-        return src.Rise(new LoadLayoutEvent(src, layoutService, RoutingStrategy.Direct));
+        return src.Rise(new LoadLayoutEvent(src, layoutService, RoutingStrategy.Direct), cancel);
     }
 
     public static async ValueTask<TConfig> HandleLoadLayoutAsync<TConfig>(

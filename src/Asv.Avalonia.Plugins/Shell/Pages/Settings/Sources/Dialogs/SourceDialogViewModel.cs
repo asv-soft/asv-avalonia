@@ -82,7 +82,7 @@ public sealed class SourceDialogViewModel : DialogViewModelBase
         _sub3.Disposable = IsValid.Subscribe(b => dialog.IsPrimaryButtonEnabled = b);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

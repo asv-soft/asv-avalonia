@@ -94,7 +94,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     public BindableReactiveProperty<InstalledPluginInfoViewModel?> SelectedPlugin { get; }
     public HistoricalBoolProperty IsShowOnlyVerified { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var viewModel in _view)
         {

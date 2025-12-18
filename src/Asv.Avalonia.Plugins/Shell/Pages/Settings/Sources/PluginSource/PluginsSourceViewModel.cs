@@ -36,7 +36,7 @@ public class PluginsSourceViewModel : RoutableViewModel
     public ICommand Edit { get; }
     public ICommand Remove { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

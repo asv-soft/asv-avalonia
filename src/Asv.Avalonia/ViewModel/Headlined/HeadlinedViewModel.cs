@@ -50,7 +50,7 @@ public class HeadlinedViewModel(NavigationId id, ILoggerFactory loggerFactory)
 
     public int Order { get; set; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }
