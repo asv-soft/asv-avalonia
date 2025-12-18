@@ -5,15 +5,12 @@ namespace Asv.Avalonia;
 
 public class LogMessageViewModel : RoutableViewModel
 {
-    private readonly ILoggerFactory _loggerFactory;
-
     public LogMessageViewModel(LogMessage @base, ILoggerFactory loggerFactory, IRoutable parent)
         : base(
             NavigationId.GenerateByHash(@base.Message, @base.Category, @base.Description),
             loggerFactory
         )
     {
-        _loggerFactory = loggerFactory;
         Base = @base;
         Parent = parent;
     }
@@ -42,7 +39,7 @@ public class LogMessageViewModel : RoutableViewModel
     public bool IsError => Base.LogLevel is LogLevel.Error or LogLevel.Critical;
     public string DateTime => Base.Timestamp.ToString("yy-MM-dd HH:mm:ss.fff");
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

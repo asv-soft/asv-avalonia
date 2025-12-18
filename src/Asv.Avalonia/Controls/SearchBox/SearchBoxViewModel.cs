@@ -109,7 +109,7 @@ public class SearchBoxViewModel
         await this.ExecuteCommand(ClearCommand.Id);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return Text;
     }

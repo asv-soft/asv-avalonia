@@ -39,7 +39,7 @@ public class ShellMessageViewModel : RoutableViewModel
     public object? CommandParam => _message.CommandParam;
     public string? Description => _message.Description;
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

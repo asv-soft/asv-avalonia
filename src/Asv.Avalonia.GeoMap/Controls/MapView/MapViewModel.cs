@@ -53,7 +53,7 @@ public class MapViewModel : RoutableViewModel, IMap
 
     public BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var item in AnchorsView)
         {

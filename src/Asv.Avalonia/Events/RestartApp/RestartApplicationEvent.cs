@@ -1,3 +1,5 @@
+using Asv.Common;
+
 namespace Asv.Avalonia;
 
 /// <summary>
@@ -5,7 +7,7 @@ namespace Asv.Avalonia;
 /// The shell must handle this event and determine whether the application should be restarted.
 /// </summary>
 public sealed class RestartApplicationEvent(IRoutable source)
-    : AsyncRoutedEvent(source, RoutingStrategy.Bubble) { }
+    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble) { }
 
 /// <summary>
 /// Provides an extension method for requesting an application's restart by raising a <see cref="RestartApplicationEvent"/>.
@@ -19,9 +21,10 @@ public static class RestartApplicationMixin
     /// The shell must handle this event and either allow or prevent the restart.
     /// </summary>
     /// <param name="src">The routable that wants to restart the app.</param>
+    /// <param name="cancel">Token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> representing an asynchronous operation.</returns>
-    public static ValueTask RequestRestart(this IRoutable src)
+    public static ValueTask RequestRestart(this IRoutable src, CancellationToken cancel = default)
     {
-        return src.Rise(new RestartApplicationEvent(src));
+        return src.Rise(new RestartApplicationEvent(src), cancel);
     }
 }

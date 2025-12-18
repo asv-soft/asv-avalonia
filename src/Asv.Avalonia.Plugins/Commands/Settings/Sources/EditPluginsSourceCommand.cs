@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
@@ -60,7 +61,8 @@ public sealed class EditPluginsSourceCommand(
                         viewModel.Username.Value,
                         viewModel.Password.Value
                     )
-                )
+                ),
+                cancel
             );
         }
 

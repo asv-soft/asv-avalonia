@@ -145,6 +145,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         CloseInfoMessageCommand = new ReactiveCommand<ShellMessageViewModel>(x =>
             _infoMessagesSource.Remove(x)
         ).DisposeItWith(Disposable);
+
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     #region Tools
@@ -192,7 +194,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 
                 if (reasons.Count != 0)
                 {
-                    await Navigation.GoTo(page.GetPathToRoot());
+                    await Navigation.GoTo(page.GetPathFromRoot());
 
                     var result = await _unsavedChangesDialogPrefab.ShowDialogAsync(
                         new UnsavedChangesDialogPayload
@@ -286,14 +288,14 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         return await base.Navigate(id);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren() => _pages;
+    public override IEnumerable<IRoutable> GetChildren() => _pages;
 
-    protected override async ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private async ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
             case ExecuteCommandEvent cmd:
-                await Cmd.Execute(cmd.CommandId, cmd.Source, cmd.CommandArg, cmd.Cancel);
+                await Cmd.Execute(cmd.CommandId, cmd.Sender, cmd.CommandArg, cmd.Cancel);
                 break;
             case RestartApplicationEvent:
                 Environment.Exit(0);
@@ -352,7 +354,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 saveLayoutToFileGlobalEvent.LayoutService.FlushFromMemory(ignore);
                 break;
             case LoadLayoutEvent loadLayoutEvent:
-                if (loadLayoutEvent.Source is not IShell)
+                if (loadLayoutEvent.Sender is not IShell)
                 {
                     return;
                 }
@@ -363,7 +365,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 ShowMessage(showInfoMessageEvent.Message);
                 break;
             default:
-                await base.InternalCatchEvent(e);
+                await ValueTask.CompletedTask;
                 break;
         }
     }
@@ -392,10 +394,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             {
                 navigationPathToGo = Pages
                     .FirstOrDefault(page => page.Id == _config.SelectedPageId)
-                    ?.GetPathToRoot();
+                    ?.GetPathFromRoot();
             }
 
-            navigationPathToGo ??= Pages.FirstOrDefault()?.GetPathToRoot();
+            navigationPathToGo ??= Pages.FirstOrDefault()?.GetPathFromRoot();
 
             if (navigationPathToGo is not null)
             {

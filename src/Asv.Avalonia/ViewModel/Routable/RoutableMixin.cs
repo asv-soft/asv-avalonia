@@ -180,9 +180,9 @@ public static class RoutableMixin
         return Disposable.Combine(sub1, sub2);
     }
 
-    public static NavigationPath GetPathToRoot(this IRoutable src)
+    public static NavigationPath GetPathFromRoot(this IRoutable src)
     {
-        return new NavigationPath(src.GetHierarchyFromRoot().Select(x => x.Id));
+        return new NavigationPath(src.GetPathFromRoot<IRoutable, NavigationId>());
     }
 
     public static async ValueTask<IRoutable> NavigateByPath(this IRoutable src, NavigationPath path)
@@ -198,95 +198,6 @@ public static class RoutableMixin
             src = await src.Navigate(path[index]);
             index++;
         }
-    }
-
-    /// <summary>
-    /// Retrieves the root <see cref="IRoutable"/> element in the hierarchy.
-    /// </summary>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
-    /// <returns>The root element in the hierarchy.</returns>
-    public static IRoutable GetRoot(this IRoutable src)
-    {
-        var root = src;
-        while (root.Parent != null)
-        {
-            root = root.Parent;
-        }
-
-        return root;
-    }
-
-    /// <summary>
-    /// Enumerates all ancestors from the current element up to the root.
-    /// </summary>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
-    /// <returns>An enumerable collection of ancestors up to the root.</returns>
-    public static IEnumerable<IRoutable> GetAncestorsToRoot(this IRoutable? src)
-    {
-        var current = src;
-        while (current is not null)
-        {
-            yield return current;
-            current = current.Parent;
-        }
-    }
-
-    /// <summary>
-    /// Enumerates all elements from the current element up to the specified target element.
-    /// </summary>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
-    /// <param name="target">The target <see cref="IRoutable"/> element.</param>
-    /// <returns>An enumerable collection of elements leading to the target.</returns>
-    public static IEnumerable<IRoutable> GetAncestorsTo(this IRoutable src, IRoutable target)
-    {
-        var current = src;
-        while (current is not null)
-        {
-            yield return current;
-            if (current == target)
-            {
-                break;
-            }
-
-            current = current.Parent;
-        }
-    }
-
-    /// <summary>
-    /// Enumerates all elements from the root down to the current element.
-    /// </summary>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
-    /// <returns>An enumerable collection of elements from the root to the current element.</returns>
-    public static IEnumerable<IRoutable> GetHierarchyFromRoot(this IRoutable src)
-    {
-        if (src.Parent != null)
-        {
-            foreach (var ancestor in src.Parent.GetHierarchyFromRoot())
-            {
-                yield return ancestor;
-            }
-        }
-
-        yield return src;
-    }
-
-    /// <summary>
-    /// Enumerates all elements from the specified target element down to the current element.
-    /// </summary>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
-    /// <param name="target">The target <see cref="IRoutable"/> element.</param>
-    /// <returns>An enumerable collection of elements from the target down to the current element.</returns>
-    public static IEnumerable<IRoutable> GetHierarchyFrom(this IRoutable src, IRoutable target)
-    {
-        if (src.Parent != null && src != target)
-        {
-            foreach (var ancestor in src.Parent.GetHierarchyFrom(target))
-            {
-                yield return ancestor;
-            }
-        }
-
-        yield return src;
     }
 
     /// <summary>

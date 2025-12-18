@@ -29,7 +29,7 @@ public class HomePageItemDecorator : ExtendableViewModel<IHomePageItem>
     public NotifyCollectionChangedSynchronizedViewList<IActionViewModel> ActionsView { get; }
     public NotifyCollectionChangedSynchronizedViewList<IHeadlinedViewModel> PropertiesView { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         // this is a decorator, it should not be routable
         throw new NotImplementedException();

@@ -1,4 +1,6 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Common;
+
+namespace Asv.Avalonia;
 
 public class SaveLayoutToFileGlobalAttemptEvent(IRoutable source)
     : AsyncRoutedEventWithRestrictionsBase(source, RoutingStrategy.Tunnel) { }
@@ -15,7 +17,7 @@ public static class SaveLayoutToFileGlobalAttemptMixin
         }
 
         var eve = new SaveLayoutToFileGlobalAttemptEvent(src);
-        await src.Rise(eve);
+        await src.Rise(eve, cancel);
         return eve.Restrictions;
     }
 }

@@ -1,11 +1,13 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Common;
+
+namespace Asv.Avalonia;
 
 /// <summary>
 /// Represents an event triggered by a page to notify its parent (IShell) that it requests closure.
 /// The shell must handle this event and determine whether the page should be closed.
 /// </summary>
 public class PageCloseRequestedEvent(IPage source)
-    : AsyncRoutedEvent(source, RoutingStrategy.Bubble)
+    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble)
 {
     public IPage Page => source;
 }
@@ -22,9 +24,10 @@ public static class PageCloseRequestMixin
     /// The shell must handle this event and either allow or prevent the closure.
     /// </summary>
     /// <param name="src">The page that is requesting to close.</param>
+    /// <param name="cancel">Token to cancel the operation.</param>
     /// <returns>A <see cref="ValueTask"/> representing an asynchronous operation.</returns>
-    public static ValueTask RequestClose(this IPage src)
+    public static ValueTask RequestClose(this IPage src, CancellationToken cancel = default)
     {
-        return src.Rise(new PageCloseRequestedEvent(src));
+        return src.Rise(new PageCloseRequestedEvent(src), cancel);
     }
 }

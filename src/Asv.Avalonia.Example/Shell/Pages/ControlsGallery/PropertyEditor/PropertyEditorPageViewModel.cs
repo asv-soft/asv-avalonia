@@ -113,10 +113,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         });
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return PropertyEditor;
-        foreach (var item in base.GetRoutableChildren())
+        foreach (var item in base.GetChildren())
         {
             yield return item;
         }

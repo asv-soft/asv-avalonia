@@ -79,7 +79,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
             return;
         }
 
-        var path = routable.GetPathToRoot();
+        var path = routable.GetPathFromRoot();
 
         if (_selectedControl.Value?.Id == routable.Id && _selectedControlPath.Value == path)
         {

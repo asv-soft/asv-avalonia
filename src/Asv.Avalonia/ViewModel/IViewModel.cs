@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using Asv.Common;
 
 namespace Asv.Avalonia;
 
@@ -7,14 +8,8 @@ namespace Asv.Avalonia;
 /// This interface provides a unique identifier, supports property change notifications,
 /// and ensures proper disposal of resources.
 /// </summary>
-public interface IViewModel : IDisposable, INotifyPropertyChanged
+public interface IViewModel : IDisposable, INotifyPropertyChanged, ISupportId<NavigationId>
 {
-    /// <summary>
-    /// Gets the unique identifier of the view model.
-    /// This can be used to differentiate instances within the application.
-    /// </summary>
-    NavigationId Id { get; }
-
     void InitArgs(string? args);
 
     /// <summary>

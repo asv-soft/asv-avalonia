@@ -88,9 +88,10 @@ public class SettingsConnectionViewModel
 
         deviceManager.Router.PortAdded.Subscribe(x => source.Add(x)).DisposeItWith(Disposable);
         deviceManager.Router.PortRemoved.Subscribe(x => source.Remove(x)).DisposeItWith(Disposable);
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var menu in Menu)
         {
@@ -101,6 +102,26 @@ public class SettingsConnectionViewModel
         {
             yield return model;
         }
+    }
+
+    public ValueTask Init(ISettingsPage context)
+    {
+        return ValueTask.CompletedTask;
+    }
+
+    protected override void AfterLoadExtensions()
+    {
+        // do nothing
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            View.CollectionChanged -= OnChanged;
+        }
+
+        base.Dispose(disposing);
     }
 
     private void OnChanged(object? sender, NotifyCollectionChangedEventArgs viewChangedEvent)
@@ -117,7 +138,7 @@ public class SettingsConnectionViewModel
                 )
                 {
                     var item = View.FirstOrDefault();
-                    _navigationService.GoTo(item?.GetPathToRoot() ?? this.GetPathToRoot());
+                    _navigationService.GoTo(item?.GetPathFromRoot() ?? this.GetPathFromRoot());
                 }
                 break;
             case NotifyCollectionChangedAction.Replace:
@@ -145,7 +166,7 @@ public class SettingsConnectionViewModel
         return viewModel;
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
@@ -172,26 +193,6 @@ public class SettingsConnectionViewModel
                 break;
         }
 
-        return base.InternalCatchEvent(e);
-    }
-
-    public ValueTask Init(ISettingsPage context)
-    {
         return ValueTask.CompletedTask;
-    }
-
-    protected override void AfterLoadExtensions()
-    {
-        // do nothing
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            View.CollectionChanged -= OnChanged;
-        }
-
-        base.Dispose(disposing);
     }
 }

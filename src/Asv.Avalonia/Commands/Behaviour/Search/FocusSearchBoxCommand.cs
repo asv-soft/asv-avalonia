@@ -27,14 +27,14 @@ public class FocusSearchBoxCommand : ContextCommand<IRoutable>
         CancellationToken cancel
     )
     {
-        var found = await TreeVisitorEvent.VisitAll<ISupportTextSearch>(context);
+        var found = await TreeVisitorEvent.VisitAll<ISupportTextSearch>(context, cancel);
         if (found.Count == 0)
         {
             return null;
         }
 
         // we assume that the ISearchBox with the longest path to root is the main search box
-        found.MaxItem(x => x.GetPathToRoot().Count)?.Focus();
+        found.MaxItem(x => x.GetPathFromRoot().Count)?.Focus();
         return null;
     }
 }

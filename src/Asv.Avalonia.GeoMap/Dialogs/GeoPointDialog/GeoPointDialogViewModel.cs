@@ -235,7 +235,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             );
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return MapViewModel;
         yield return GeoPointProperty;

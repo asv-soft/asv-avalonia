@@ -1,7 +1,9 @@
-﻿namespace Asv.Avalonia.Plugins;
+﻿using Asv.Common;
+
+namespace Asv.Avalonia.Plugins;
 
 public abstract class PluginsSourceEventBase(PluginsSourceViewModel source, IPluginServerInfo info)
-    : AsyncRoutedEvent(source, RoutingStrategy.Bubble)
+    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble)
 {
     public IPluginServerInfo ServerInfo => info;
 }

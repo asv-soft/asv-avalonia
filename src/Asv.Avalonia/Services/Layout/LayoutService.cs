@@ -184,7 +184,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     private string GetKey(IRoutable source)
     {
-        return NavigationId.NormalizeTypeId(source.GetPathToRoot().ToString());
+        return NavigationId.NormalizeTypeId(source.GetPathFromRoot().ToString());
     }
 
     private TPocoType Get<TPocoType>(string key, Lazy<TPocoType> defaultValue)

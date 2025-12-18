@@ -675,9 +675,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
-        foreach (var child in base.GetRoutableChildren())
+        foreach (var child in base.GetChildren())
         {
             yield return child;
         }
