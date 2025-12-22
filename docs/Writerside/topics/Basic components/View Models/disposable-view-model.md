@@ -9,8 +9,8 @@ extends [`ViewModelBase`](view-model-base.md) by adding essential tools for reso
 timers, and asynchronous operations.
 
 > Just like [`ViewModelBase`](view-model-base.md), you should rarely inherit from this class directly. Most of its
-> functionality is already included in higher-level classes like [`RoutableViewModel`](routable-view-model.md) or [
-`PageViewModel`](page-view-model.md).
+> functionality is already included in higher-level classes like [`RoutableViewModel`](routable-view-model.md) or
+> [`PageViewModel`](page-view-model.md).
 > {style="warning"}
 
 ## Core Components
@@ -41,3 +41,25 @@ specific order:
 1. Cancel: The `CancellationToken` is canceled, notifying all linked tasks to stop.
 2. Dispose Source: The `CancellationTokenSource` itself is disposed.
 3. Dispose Resources: The `CompositeDisposable` container is disposed, which in turn disposes of all registered objects.
+
+## API {collapsible="true" default-state="collapsed"}
+
+### [DisposableViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/DisposableViewModel.cs)
+
+Represents a base view model that supports disposable resources and cancellation handling.
+This class ensures proper cleanup of resources when the view model is disposed.
+
+| Property        | Type                  | Description                                                                                                                                                             |
+|-----------------|-----------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `DisposeCancel` | `CancellationToken`   | Gets a cancellation token that is linked to the disposal state of the view model. If the view model is disposed, the token is set to `CancellationToken.None`.          |
+| `Disposable`    | `CompositeDisposable` | Gets a `CompositeDisposable` collection for managing disposable resources. This ensures that all registered disposables are cleaned up when the view model is disposed. |
+
+| Method                    | Return Type | Description                                                                     |
+|---------------------------|-------------|---------------------------------------------------------------------------------|
+| `Dispose(bool disposing)` | `void`      | Releases unmanaged resources and cancels any pending operations when disposing. |
+
+#### `DisposableViewModel.Dispose(bool disposing)`
+
+| Parameter   | Type   | Description                                              |
+|-------------|--------|----------------------------------------------------------|
+| `disposing` | `bool` | `true` if disposing managed resources; otherwise, false. |

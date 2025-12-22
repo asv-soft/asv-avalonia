@@ -38,7 +38,7 @@ public class HelloWorldPageViewModel: PageViewModel<HelloWorldPageViewModel>
     // -- Required Overrides --
     
     // If this page contains other routable controls (e.g., a list with custom VMs), return them here
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }
