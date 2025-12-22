@@ -35,6 +35,7 @@
                 <toc-element topic="page-view-model.md"/>
                 <toc-element topic="tree-page-view-model.md"/>
                 <toc-element topic="headlined-view-model.md"/>
+                <toc-element topic="action-view-model.md"/>
             </toc-element>
         </toc-element>
     </toc-element>
