@@ -136,15 +136,14 @@ public BindableReactiveProperty<string?> Text { get; }
 > navigation and context handling.
 > {style="info"}
 
-We must also expose this property in `GetRoutableChildren` so the application knows this property exists for navigation
-purposes:
+We must also expose this property in `GetChildren` so the application knows this property exists for navigation purposes:
 
 ```C#
 public HistoricalStringProperty InputText { get; }
 public ReactiveCommand ResetTextCommand { get; }
 public ReactiveCommand SaveTextCommand { get; }
 
-public override IEnumerable<IRoutable> GetRoutableChildren()
+public override IEnumerable<IRoutable> GetChildren()
 {
     // Expose the property 
     yield return InputText;
@@ -645,7 +644,7 @@ public class HelloWorldPageViewModel: PageViewModel<HelloWorldPageViewModel>
     // -- Required Overrides --
 
     // If this page contains other routable controls (e.g., a list with custom VMs), return them here
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return InputText;
     }

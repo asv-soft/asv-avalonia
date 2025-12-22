@@ -249,7 +249,7 @@ public class CatsPageViewModel : PageViewModel<CatsPageViewModel>
         private init => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }
@@ -371,7 +371,7 @@ public class DogsPageViewModel : PageViewModel<DogsPageViewModel>
         private init => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }
