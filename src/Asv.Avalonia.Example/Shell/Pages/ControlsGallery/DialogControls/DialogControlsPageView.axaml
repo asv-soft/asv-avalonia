@@ -27,7 +27,11 @@
             Description="{x:Static example:RS.DialogControlsPageView_Description}"
         />
 
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ScrollViewer
+            VerticalScrollBarVisibility="Auto"
+            x:Name="MainScrollViewer"
+            ScrollChanged="MainScrollViewer_OnScrollChanged"
+        >
             <example:ExampleBlocksGrid ColumnSpacing="12">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="3*" MinWidth="200" />
