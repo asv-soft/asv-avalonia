@@ -1,5 +1,6 @@
 ﻿using System.Composition;
 using System.Reflection.Metadata;
+using Asv.Common;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
@@ -34,6 +35,6 @@ public class ForwardArgsToSelectedControlTask(
         {
             return default;
         }
-        return context.Rise(new DesktopPushArgsEvent(context, appArgs));
+        return context.Rise(new DesktopPushArgsEvent(context, appArgs), ct);
     }
 }

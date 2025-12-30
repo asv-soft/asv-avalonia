@@ -36,7 +36,7 @@ public sealed class HistoricalStringProperty
     public override ReactiveProperty<string?> ModelValue { get; }
     public override BindableReactiveProperty<string?> ViewValue { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

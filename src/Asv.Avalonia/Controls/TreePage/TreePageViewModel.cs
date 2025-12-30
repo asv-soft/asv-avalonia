@@ -58,6 +58,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             .WhereNotNull()
             .SubscribeAwait(async (p, ct) => await p.RequestLoadLayout(layoutService, ct))
             .DisposeItWith(Disposable);
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     #region Menu
@@ -134,7 +135,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         newPage.Parent = this;
         _selectedPage.Value = newPage;
 
-        var children = _selectedPage.Value.GetRoutableChildren();
+        var children = _selectedPage.Value.GetChildren();
         foreach (var child in children)
         {
             child.Parent = newPage;
@@ -144,7 +145,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return newPage;
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         foreach (var node in Nodes)
         {
@@ -169,7 +170,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return null;
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable owner, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
@@ -214,7 +215,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
                 break;
         }
 
-        return base.InternalCatchEvent(e);
+        return ValueTask.CompletedTask;
     }
 
     private void SetSelectedNodeFromConfig(TreePageViewModelConfig cfg)

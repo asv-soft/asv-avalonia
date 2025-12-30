@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Asv.Common;
 
 namespace Asv.Avalonia;
 
@@ -7,7 +8,7 @@ public class ExecuteCommandEvent(
     string commandId,
     CommandArg commandArg,
     CancellationToken cancel = default
-) : AsyncRoutedEvent(source, RoutingStrategy.Bubble)
+) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble)
 {
     public string CommandId { get; } = commandId;
     public CommandArg CommandArg { get; } = commandArg;
@@ -29,7 +30,7 @@ public static class ExecuteCommandEventMixin
             src.GetRoot() is IShell,
             "ExecuteCommand should be called from IShell or its children"
         );
-        return src.Rise(new ExecuteCommandEvent(src, commandId, commandArg, cancel));
+        return src.Rise(new ExecuteCommandEvent(src, commandId, commandArg, cancel), cancel);
     }
 
     public static ValueTask ExecuteCommand(
@@ -38,8 +39,6 @@ public static class ExecuteCommandEventMixin
         CancellationToken cancel = default
     )
     {
-        return src.Rise(
-            new ExecuteCommandEvent(src, commandId, CommandArg.Empty, CancellationToken.None)
-        );
+        return src.Rise(new ExecuteCommandEvent(src, commandId, CommandArg.Empty, cancel), cancel);
     }
 }

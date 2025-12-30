@@ -186,9 +186,38 @@ public class LogViewerViewModel
         Previous = new ReactiveCommand(_ => Commands.PreviousPage(this)).DisposeItWith(Disposable);
 
         Search.Refresh();
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public SearchBoxViewModel Search { get; }
+
+    public BindableReactiveProperty<int> Skip { get; }
+    public BindableReactiveProperty<int> Take { get; }
+
+    public INotifyCollectionChangedSynchronizedViewList<LogMessageViewModel> Items { get; }
+
+    public BindableReactiveProperty<string> FromToText { get; }
+    public BindableReactiveProperty<string> TextMessage { get; }
+
+    public ReactiveCommand Next { get; }
+    public ReactiveCommand Previous { get; }
+
+    public LogMessageViewModel SelectedItem
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public override IEnumerable<IRoutable> GetChildren()
+    {
+        yield return Search;
+        foreach (var item in Items)
+        {
+            yield return item;
+        }
+    }
+
+    protected override void AfterLoadExtensions() { }
 
     private async Task UpdateImpl(
         string? query,
@@ -303,7 +332,7 @@ public class LogViewerViewModel
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
@@ -337,35 +366,7 @@ public class LogViewerViewModel
                 break;
         }
 
-        return base.InternalCatchEvent(e);
-    }
-
-    public BindableReactiveProperty<int> Skip { get; }
-    public BindableReactiveProperty<int> Take { get; }
-
-    public override IEnumerable<IRoutable> GetRoutableChildren()
-    {
-        yield return Search;
-        foreach (var item in Items)
-        {
-            yield return item;
-        }
-    }
-
-    protected override void AfterLoadExtensions() { }
-
-    public INotifyCollectionChangedSynchronizedViewList<LogMessageViewModel> Items { get; }
-
-    public BindableReactiveProperty<string> FromToText { get; }
-    public BindableReactiveProperty<string> TextMessage { get; }
-
-    public ReactiveCommand Next { get; }
-    public ReactiveCommand Previous { get; }
-
-    public LogMessageViewModel SelectedItem
-    {
-        get;
-        set => SetField(ref field, value);
+        return ValueTask.CompletedTask;
     }
 
     public override IExportInfo Source => SystemModule.Instance;

@@ -74,6 +74,8 @@ public class SettingsUnitsViewModel : SettingsSubPage
             Command = ResetAllCommand,
         };
         Menu.Add(menu);
+
+        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
@@ -118,7 +120,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
         await this.ExecuteCommand(ResetUnitsCommand.Id, new DictArg(defaultUnitIds), cancel);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         yield return Search;
         foreach (var model in _view)
@@ -126,13 +128,13 @@ public class SettingsUnitsViewModel : SettingsSubPage
             yield return model;
         }
 
-        foreach (var child in base.GetRoutableChildren())
+        foreach (var child in base.GetChildren())
         {
             yield return child;
         }
     }
 
-    protected override ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         switch (e)
         {
@@ -171,7 +173,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
                 break;
         }
 
-        return base.InternalCatchEvent(e);
+        return ValueTask.CompletedTask;
     }
 
     protected override void Dispose(bool disposing)

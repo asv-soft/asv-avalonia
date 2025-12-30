@@ -136,7 +136,7 @@ public class CommandHistory : ICommandHistory
     {
         if (
             snapshot.OldValue != null
-            && snapshot.ContextPath.StartWith(HistoryOwner.GetPathToRoot())
+            && snapshot.ContextPath.StartWith(HistoryOwner.GetPathFromRoot())
         )
         {
             _undoStack.Push(snapshot);

@@ -1,3 +1,5 @@
+using Asv.Common;
+
 namespace Asv.Avalonia;
 
 public class SaveLayoutToFileGlobalEvent(IRoutable source, ILayoutService layoutService)
@@ -16,6 +18,6 @@ public static class SaveLayoutToFileGlobalMixin
             return default;
         }
 
-        return src.Rise(new SaveLayoutToFileGlobalEvent(src, layoutService));
+        return src.Rise(new SaveLayoutToFileGlobalEvent(src, layoutService), cancel);
     }
 }

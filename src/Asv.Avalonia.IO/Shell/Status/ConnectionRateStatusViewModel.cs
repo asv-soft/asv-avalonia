@@ -129,7 +129,7 @@ public class ConnectionRateStatusViewModel : StatusItem
         set => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

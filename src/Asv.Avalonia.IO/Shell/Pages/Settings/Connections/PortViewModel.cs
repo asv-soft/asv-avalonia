@@ -235,7 +235,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         _endpoints.AddRange(_endpoints);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

@@ -179,7 +179,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
         if (factory.CanExecute(context, param, out var target))
         {
             // we save here the path to the context, because it can be changed during command execution
-            var navPath = context.GetPathToRoot();
+            var navPath = context.GetPathFromRoot();
 
             var backup = await factory.Execute(target, param, cancel);
             var snapShot = new CommandSnapshot(factory.Info.Id, navPath, param, backup);

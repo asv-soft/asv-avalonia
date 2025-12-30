@@ -75,7 +75,7 @@ public sealed class HistoricalEnumProperty<TEnum>
         await this.ExecuteCommand(ChangeEnumPropertyCommand.Id, newValue, cancel);
     }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

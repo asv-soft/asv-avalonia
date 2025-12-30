@@ -1,4 +1,5 @@
 ﻿using System.Composition;
+using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -49,7 +50,7 @@ public class NavigationStatusItemViewModel : StatusItem
             return;
         }
 
-        foreach (var item in routable.GetHierarchyFromRoot())
+        foreach (var item in routable.GetHierarchyFromRoot().OfType<IRoutable>())
         {
             _source.Add(item.Id.Id);
         }
@@ -76,7 +77,7 @@ public class NavigationStatusItemViewModel : StatusItem
 
     public NotifyCollectionChangedSynchronizedViewList<string> Items { get; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }

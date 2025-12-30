@@ -24,7 +24,7 @@ public class DialogItemImageViewModel(ILoggerFactory loggerFactory)
 
     public required Bitmap Image { get; set; }
 
-    public override IEnumerable<IRoutable> GetRoutableChildren()
+    public override IEnumerable<IRoutable> GetChildren()
     {
         return [];
     }
