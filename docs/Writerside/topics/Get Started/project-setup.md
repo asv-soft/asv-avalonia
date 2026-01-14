@@ -65,51 +65,64 @@ So we can delete `MainWindow.axaml` and `MainWindow.axaml.cs`.
 
 ### 2. Configure Program.cs
 
-We need to set up the application host. Change your `Main` method (from `Program.cs` file) from this:
+We need to set up the application host. Change your `Program` class to this:
 
 ```C#
-public static void Main(string[] args) => BuildAvaloniaApp()
-    .StartWithClassicDesktopLifetime(args);
-```
-
-To this:
-
-```C#
-public static void Main(string[] args) 
+class Program
 {
-    var builder = AppHost.CreateBuilder(args);
-    var dataFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+    // yet and stuff might break.
+    [STAThread]
+    public static void Main(string[] args) 
+    {
+        var builder = AppHost.CreateBuilder(args);
+        var dataFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
-    builder
-        .UseAvalonia(BuildAvaloniaApp)
+        builder
+            .UseAvalonia(BuildAvaloniaApp)
         
-        // This setting defines where all app data (like a JSON user config) will be stored
-        .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
+            // This setting defines where all app data (like a JSON user config) will be stored
+            .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
         
-        // Here you can define some JSON config settings. For example, we set autosave to 1 second
-        .UseJsonUserConfig(opt => opt.WithAutoSave(TimeSpan.FromSeconds(1)))
+            // Here you can define some JSON config settings. For example, we set autosave to 1 second
+            .UseJsonUserConfig(opt => opt.WithAutoSave(TimeSpan.FromSeconds(1)))
         
-        // This defines the source of app data (app name, version, etc.). We use the current assembly
-        .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
+            // This defines the source of app data (app name, version, etc.). We use the current assembly
+            .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
         
-        // Here we set up the logging system
-        .UseLogging(options =>
-        {
-            options.WithLogToFile();
-            options.WithLogToConsole();
+            // Here we set up the logging system
+            .UseLogging(options =>
+            {
+                options.WithLogToFile();
+                options.WithLogToConsole();
             
-            // Optional: here you can enable Log viewer page
-            options.WithLogViewer();
-        });
+                // Optional: here you can enable Log viewer page
+                options.WithLogViewer();
+            });
 
-    using var host = builder.Build();
-    host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+        using var host = builder.Build();
+        host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+    }
+
+    // Avalonia configuration, don't remove; also used by visual designer.
+    public static AppBuilder BuildAvaloniaApp()
+    {
+        return AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace()
+            .UseR3();
+    }
 }
 ```
 
-What is happening here? We are setting up a container with dependencies required by the application.
-While most of them are required, you can configure options here, such as changing the settings folder path or logging
-behavior.
+What is happening here? In the `Main` method, we set up the application host and the container with all the necessary dependencies. 
+While most of them are required for the framework to work, here you can easily customize the behavior: 
+for example, change the folder for settings and logs, or enable/disable specific features like the Log Viewer.
+
+In the `BuildAvaloniaApp` method, we configure Avalonia itself. An important part here is `.UseR3()`, 
+which integrates the R3 reactive framework into the Avalonia lifecycle to handle reactive properties and commands correctly.
 
 ### 3. Configure App.axaml.cs
 

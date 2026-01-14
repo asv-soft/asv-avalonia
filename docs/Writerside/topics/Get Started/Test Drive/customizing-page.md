@@ -388,7 +388,8 @@ class Program
         return AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace();
+            .LogToTrace()
+            .UseR3();
     }
 }
 ```
