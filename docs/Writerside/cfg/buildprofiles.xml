@@ -6,7 +6,10 @@
     <variables></variables>
     <build-profile instance="am">
         <variables>
+            <primary-color>blue</primary-color>
+            <link-color>blue</link-color>
             <noindex-content>false</noindex-content>
+            <ignore-problems>MRK056</ignore-problems>
         </variables>
     </build-profile>
 
