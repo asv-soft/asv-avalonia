@@ -108,6 +108,12 @@ public class App : Application, IContainerHost, IShellHost
         return _container.TryGetExport(id, out value);
     }
 
+    public void Dispose()
+    {
+        _container.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
     public void SatisfyImports(object value)
     {
         _container.SatisfyImports(value);

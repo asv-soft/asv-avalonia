@@ -49,4 +49,9 @@ public class NullContainerHost : IContainerHost
     }
 
     public IExportInfo Source => SystemModule.Instance;
+
+    public void Dispose()
+    {
+        GC.SuppressFinalize(this);
+    }
 }
