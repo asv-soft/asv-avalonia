@@ -17,6 +17,7 @@
         </toc-element>
     </toc-element>
     <toc-element topic="samples-and-tutorial.md">
+        <toc-element topic="Recipe-Book-App.md" />
         <toc-element topic="how-to-create-module.md">
             <toc-element topic="how-to-create-module-make-module-really-modular.md"/>
             <toc-element topic="how-to-create-module-make-nuget.md"/>
