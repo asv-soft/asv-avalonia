@@ -17,6 +17,13 @@
         </toc-element>
     </toc-element>
     <toc-element topic="samples-and-tutorial.md">
+        <toc-element topic="recipe-book-app.md" >
+            <toc-element topic="recipe-book-app-dialogs-and-notifications.md" />
+            <toc-element topic="recipe-book-app-recipe-persistence.md" />
+            <toc-element topic="recipe-book-app-layout-persistence.md" />
+            <toc-element topic="recipe-book-app-search.md" />
+            <toc-element topic="recipe-book-app-source-code.md" />
+        </toc-element>
         <toc-element topic="how-to-create-module.md">
             <toc-element topic="how-to-create-module-make-module-really-modular.md"/>
             <toc-element topic="how-to-create-module-make-nuget.md"/>
@@ -25,7 +32,6 @@
     </toc-element>
     <toc-element toc-title="Basic components">
         <toc-element topic="composition-view-locator.md"/>
-        
         <toc-element toc-title="View Models">
             <toc-element topic="view-model-base.md"/>
             <toc-element topic="disposable-view-model.md"/>
