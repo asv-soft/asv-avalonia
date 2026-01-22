@@ -1,6 +1,6 @@
 ﻿namespace Asv.Avalonia;
 
-public interface IContainerHost : IExportable
+public interface IContainerHost : IExportable, IDisposable
 {
     T GetExport<T>(string contract)
         where T : IExportable;
