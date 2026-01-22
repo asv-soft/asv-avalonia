@@ -35,11 +35,7 @@ public class LocalPluginInfo : ILocalPluginInfo
             .FirstOrDefault(x => x.Id == apiPackageId);
         if (apiPackage != null && apiPackage.VersionRange.MinVersion != null)
         {
-            ApiVersion = new SemVersion(
-                apiPackage.VersionRange.MinVersion.Version.Major,
-                apiPackage.VersionRange.MinVersion.Version.Minor,
-                apiPackage.VersionRange.MinVersion.Version.Build
-            );
+            ApiVersion = SemVersion.Parse(apiPackage.VersionRange.MinVersion.OriginalVersion);
         }
         else
         {
