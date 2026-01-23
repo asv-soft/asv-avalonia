@@ -48,6 +48,8 @@
         <toc-element topic="what-is-a-service.md"/>
         <toc-element topic="command-service.md"/>
         <toc-element topic="navigation-service.md"/>
+        <toc-element topic="localization-service.md"/>
+        <toc-element topic="theme-service.md"/>
     </toc-element>
     <toc-element toc-title="Modules">
         <toc-element topic="what-is-a-module.md"/>
