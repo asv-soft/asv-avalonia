@@ -16,7 +16,7 @@
     </Design.DataContext>
 
     <UserControl.Styles>
-        <StyleInclude Source="avares://Asv.Avalonia.Example/Controls/ContentDialogMini/ContentDialogMini.axaml" />
+        <StyleInclude Source="avares://Asv.Avalonia.Example/Core/Controls/ContentDialogMini/ContentDialogMini.axaml" />
     </UserControl.Styles>
 
     <DockPanel Margin="12">

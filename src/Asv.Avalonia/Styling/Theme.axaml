@@ -43,14 +43,14 @@
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/Styles/TransparentButtonStyles.axaml" />
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Styling/Styles/TabStyles.axaml" />
 
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Items/ItemsListStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Tools/ToolsListStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/ContentDialog/ContentDialogStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/InfoBar/InfoBarStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/TabControl/DockTabControlStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/DockControlStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/Item/DockTabStripItemStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Controls/Dock/Item/DockTabItemStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Items/ItemsListStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Tools/ToolsListStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/ContentDialog/ContentDialogStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/InfoBar/InfoBarStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Dock/TabControl/DockTabControlStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Dock/DockControlStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Dock/Item/DockTabStripItemStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Dock/Item/DockTabItemStyles.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <ResourceDictionary.ThemeDictionaries>
@@ -101,17 +101,17 @@
     <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/TextBoxStyles.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Styling/Styles/PathStyles.axaml" />
 
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/Workspace.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Workspace/WorkspaceItem.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/BatteryIndicator.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/ConnectionQuality.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Indicators/GpsStatusIndicator.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/TelemBox.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/GeoPoint/GeoPointEditor.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/Tags/Tag.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/HotKeys/HotKeyBox.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/AwaitingScreen.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/SplashScreens/ActionScreen.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/TelemBox/RttBox.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Controls/FrequencyScreen/FrequencyControl.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Workspace/Workspace.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Workspace/WorkspaceItem.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/BatteryIndicator.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/ConnectionQuality.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/GpsStatusIndicator.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/TelemBox/TelemBox.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/GeoPoint/GeoPointEditor.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Tags/Tag.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/HotKeys/HotKeyBox.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/SplashScreens/AwaitingScreen.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/SplashScreens/ActionScreen.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/TelemBox/RttBox.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/FrequencyScreen/FrequencyControl.axaml" />
 </Styles>

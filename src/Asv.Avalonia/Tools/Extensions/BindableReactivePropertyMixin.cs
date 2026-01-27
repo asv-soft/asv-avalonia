@@ -20,7 +20,7 @@ public static class BindableReactivePropertyMixin
         }
 
         return prop.SubscribeAwait(
-            async (v, _) =>
+            async (v, ct) =>
             {
                 var result = validationFunc(v);
                 if (!result.IsSuccess)
@@ -31,7 +31,7 @@ public static class BindableReactivePropertyMixin
                     );
                 }
 
-                await source.Rise(new ValidationEvent(source, prop, result));
+                await source.Rise(new ValidationEvent(source, prop, result), ct);
             }
         );
     }

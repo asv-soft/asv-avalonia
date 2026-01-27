@@ -77,6 +77,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Core\" />
       <Folder Include="Shell\" />
       <Folder Include="Shell\Pages\Settings\" />
     </ItemGroup>
