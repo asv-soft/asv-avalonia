@@ -3,7 +3,7 @@
         <Nullable>enable</Nullable>
         <ApiVersion>1.0.0</ApiVersion>
         <TargetFramework>net10.0</TargetFramework>
-        <ProductVersion>1.0.4-dev.19</ProductVersion>
+        <ProductVersion>1.0.4-dev.20</ProductVersion>
         <AvaloniaVersion>11.3.10</AvaloniaVersion>
         <DotNetVersion>10.0.0</DotNetVersion>
         <R3Version>1.3.0</R3Version>

@@ -19,6 +19,7 @@ public delegate Task CommandExecuteDelegate<in TArg>(
     CancellationToken cancel
 );
 
+// TODO: add historical command support or remove if it is useless
 public class CancellableCommandWithProgress<TArg> : AsyncDisposableOnce, IProgress<double>
 {
     private readonly CommandExecuteDelegate<TArg> _execute;

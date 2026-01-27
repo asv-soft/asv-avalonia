@@ -86,17 +86,45 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>RS.resx</DependentUpon>
         </Compile>
-        <Compile Update="Controls\Dock\DockControl.cs">
-          <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Controls\Workspace\Widgets\Panels\StackPanelWidgetView.axaml.cs">
-          <DependentUpon>StackPanelWidgetView.axaml</DependentUpon>
-          <SubType>Code</SubType>
-        </Compile>
-        <Compile Update="Controls\Workspace\Widgets\Panels\WrapPanelWidgetView.axaml.cs">
-          <DependentUpon>WrapPanelWidgetView.axaml</DependentUpon>
-          <SubType>Code</SubType>
-        </Compile>
+        <Compile Remove="Commands\Behaviour\Clear\ISupportClear.cs" />
+        <Compile Remove="Commands\Behaviour\Search\FocusSearchBoxCommand.cs" />
+        <Compile Remove="Commands\Behaviour\Search\TextSearchCommand.cs" />
+        <Compile Remove="Commands\Behaviour\Cancel\CancelCommand.cs" />
+        <Compile Remove="Commands\Behaviour\Pagination\NextPageCommand.cs" />
+        <Compile Remove="Commands\Behaviour\Refresh\RefreshCommands.cs" />
+        <Compile Remove="Commands\Behaviour\Pagination\ISupportPagination.cs" />
+        <Compile Remove="Commands\Shell\Pages\Settings\OpenSettingsCommand.cs" />
+        <Compile Remove="Commands\ViewModel\Property\Historical\ChangeEnumPropertyCommand.cs" />
+        <Compile Remove="Commands\Shell\Pages\Settings\Units\ChangeCurrentUnitItemCommand.cs" />
+        <Compile Remove="Commands\ViewModel\Property\Historical\ChangeBoolPropertyCommand.cs" />
+        <Compile Remove="Commands\Shell\Pages\Settings\Appearance\ChangeThemeCommand.cs" />
+        <Compile Remove="Controls\TelemBox\Digit\DigitRttBoxViewModel.cs" />
+        <Compile Remove="Controls\Workspace\Widgets\PropertyEditorWidgetViewModel.cs" />
+        <Compile Remove="Controls\TelemBox\Digit\KeyValueViewModel.cs" />
+        <Compile Remove="Controls\Workspace\Widgets\WorkspaceWidget.cs" />
+        <Compile Remove="Services\Dialog\Prefabs\InputDialogPrefab.cs" />
+        <Compile Remove="Services\Dialog\Prefabs\OpenFileDialogPrefab.cs" />
+        <Compile Remove="Services\Dialog\Prefabs\SaveCancelDialogPrefab.cs" />
+        <Compile Remove="Services\Dialog\Prefabs\YesOrNoDialogPrefab.cs" />
+        <Compile Remove="Services\Dialog\Prefabs\Contracts\IDialogPrefab.cs" />
+        <Compile Remove="Services\Logger\Reader\LogReaderService.cs" />
+        <Compile Remove="Services\Search\SearchService.cs" />
+        <Compile Remove="Services\Search\ISearchService.cs" />
+        <Compile Remove="Services\AppStartup\IStartupTask.cs" />
+        <Compile Remove="Services\Navigation\NavigationService.cs" />
+        <Compile Remove="Services\UnitService\UnitService.cs" />
+        <Compile Remove="Services\UnitService\IUnit.cs" />
+        <Compile Remove="Services\UnitService\IUnitItem.cs" />
+        <Compile Remove="Services\UnitService\IUnitService.cs" />
+        <Compile Remove="Services\UnitService\NullUnitService.cs" />
+        <Compile Remove="Services\UnitService\Units\UnitItemBase.cs" />
+        <Compile Remove="Services\UnitService\Units\UnitBase.cs" />
+        <Compile Remove="Services\UnitService\Units\ExportUnitAttribute.cs" />
+        <Compile Remove="Services\UnitService\Units\Sdm\InPartsSdmUnit.cs" />
+        <Compile Remove="Services\UnitService\Units\Angle\DmsAngleUnit.cs" />
+        <Compile Remove="Services\UnitService\Units\Angle\MsAngleUnit.cs" />
+        <Compile Remove="Services\UnitService\Units\Angle\AngleBase.cs" />
+        <Compile Remove="Services\UnitService\Units\DdmGp\MicroAmpDdmGpUnit.cs" />
     </ItemGroup>
 
     <ItemGroup>
@@ -104,7 +132,55 @@
     </ItemGroup>
 
     <ItemGroup>
+      <AdditionalFiles Include="Core\Controls\ContentDialog\ContentDialogStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\DockControlStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\Item\DockTabItemStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\Item\DockTabStripItemStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\TabControl\DockTabControlStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\Window\DockWindow.axaml" />
+      <AdditionalFiles Include="Core\Controls\FrequencyScreen\FrequencyControl.axaml" />
+      <AdditionalFiles Include="Core\Controls\GeoPoint\GeoPointEditor.axaml" />
+      <AdditionalFiles Include="Core\Controls\HotKeys\HotKeyBox.axaml" />
+      <AdditionalFiles Include="Core\Controls\Indicators\BatteryIndicator.axaml" />
+      <AdditionalFiles Include="Core\Controls\Indicators\ConnectionQuality.axaml" />
+      <AdditionalFiles Include="Core\Controls\Indicators\GpsStatusIndicator.axaml" />
+      <AdditionalFiles Include="Core\Controls\InfoBar\InfoBarStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Items\ItemsListStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\GeoPointPropertyView.axaml" />
+      <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\UnitPropertyView.axaml" />
+      <AdditionalFiles Include="Core\Controls\PropertyEditor\PropertyEditorView.axaml" />
+      <AdditionalFiles Include="Core\Controls\SearchBox\SearchBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\SplashScreens\ActionScreen.axaml" />
+      <AdditionalFiles Include="Core\Controls\SplashScreens\AwaitingScreen.axaml" />
+      <AdditionalFiles Include="Core\Controls\Tags\Tag.axaml" />
+      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\KeyValueRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\SplitDigitRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\TwoColumnRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\TelemBox\Gnss\GeoPointRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\TelemBox\RttBox.axaml" />
+      <AdditionalFiles Include="Core\Controls\TelemBox\TelemBox.axaml" />
+      <AdditionalFiles Include="Core\Controls\Tools\ToolsListStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\TreePage\GroupTreePageItemView.axaml" />
+      <AdditionalFiles Include="Core\Controls\TreePage\TreePageView.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\Widgets\Panels\StackPanelWidgetView.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\Widgets\Panels\WrapPanelWidgetView.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\Workspace.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\WorkspaceItem.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemHotKeyCaptureView.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextBoxView.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextView.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemUnsavedChangesView.axaml" />
       <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Appearance\SettingsAppearanceView.axaml" />
       <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Units\SettingsUnitsView.axaml" />
+      <AdditionalFiles Include="Shell\Window\DebugWindow\DebugWindow.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Core\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
     </ItemGroup>
 </Project>
