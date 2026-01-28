@@ -191,7 +191,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         {
             try
             {
-                var reasons = await page.RequestChildCloseApproval();
+                var reasons = await page.RequestChildCloseApproval(cancellationToken);
 
                 if (reasons.Count != 0)
                 {
@@ -220,7 +220,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             }
         }
 
-        _pages.ClearWithItemsDispose();
         Container.Dispose();
 
         return true;
@@ -416,10 +415,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         finally
         {
             _sub1.Disposable = Pages
-                .ObserveAdd(CancellationToken.None)
+                .ObserveAdd(cancellationToken)
                 .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
             _sub2.Disposable = Pages
-                .ObserveRemove(CancellationToken.None)
+                .ObserveRemove(cancellationToken)
                 .Subscribe(_ => SaveLayoutToFile(loadLayoutEvent.LayoutService));
             _sub3.Disposable = SelectedPage.Subscribe(_ =>
                 SaveLayoutToFile(loadLayoutEvent.LayoutService)
@@ -524,10 +523,11 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     {
         if (disposing)
         {
-            _pages.ClearWithItemsDispose();
             _sub1.Dispose();
             _sub2.Dispose();
             _sub3.Dispose();
+
+            _pages.ClearWithItemsDispose();
         }
 
         base.Dispose(disposing);

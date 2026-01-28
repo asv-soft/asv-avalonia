@@ -31,7 +31,7 @@
         </Border>
     </Design.PreviewWith>
 
-    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/ItemsControl/MapItem.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/ItemsControl/MapItemsControl.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Controls/Attitude/Attitude.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Core/Controls/ItemsControl/MapItem.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Core/Controls/ItemsControl/MapItemsControl.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Core/Controls/Attitude/Attitude.axaml" />
 </Styles>

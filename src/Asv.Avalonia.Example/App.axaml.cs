@@ -111,6 +111,8 @@ public class App : Application, IContainerHost, IShellHost
     public void Dispose()
     {
         _container.Dispose();
+        Shell.Dispose();
+        _onShellLoaded.Dispose();
         GC.SuppressFinalize(this);
     }
 

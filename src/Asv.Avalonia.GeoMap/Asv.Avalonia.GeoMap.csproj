@@ -77,9 +77,12 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Dialogs\" />
+      <Folder Include="Core\" />
     </ItemGroup>
     <ItemGroup>
-      <AdditionalFiles Include="Dialogs\GeoPointDialog\GeoPointDialogView.axaml" />
+      <AdditionalFiles Include="Core\Controls\Attitude\Attitude.axaml" />
+      <AdditionalFiles Include="Core\Controls\ItemsControl\MapItem.axaml" />
+      <AdditionalFiles Include="Core\Controls\ItemsControl\MapItemsControl.axaml" />
+      <AdditionalFiles Include="Core\Controls\MapView\MapView.axaml" />
     </ItemGroup>
 </Project>

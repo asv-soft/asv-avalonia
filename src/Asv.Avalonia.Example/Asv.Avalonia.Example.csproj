@@ -62,13 +62,22 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
+      <Compile Remove="Controls\Blocks\BaseExampleBlock.axaml.cs" />
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Core\" />
       <Folder Include="Shell\" />
     </ItemGroup>
 
     <ItemGroup>
+      <AdditionalFiles Include="Core\Controls\Blocks\About\AboutExampleBlock.axaml" />
+      <AdditionalFiles Include="Core\Controls\Blocks\Action\ActionExampleBlock.axaml" />
+      <AdditionalFiles Include="Core\Controls\Blocks\BaseExampleBlock.axaml" />
+      <AdditionalFiles Include="Core\Controls\Blocks\Header\HeaderBlock.axaml" />
+      <AdditionalFiles Include="Core\Controls\Blocks\Preview\PreviewExampleBlock.axaml" />
+      <AdditionalFiles Include="Core\Controls\ContentDialogMini\ContentDialogMini.axaml" />
+      <AdditionalFiles Include="Core\Controls\DialogItemImageView\DialogItemImageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\ControlsGalleryPageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\DialogControls\DialogControlsPageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\HistoricalControls\HistoricalControlsPageView.axaml" />
@@ -76,5 +85,9 @@
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\MapControls\MapControlsPageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\PropertyEditor\PropertyEditorPageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\Workspace\WorkspacePageView.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AvaloniaXaml Remove="Controls\Blocks\BaseExampleBlock.axaml" />
     </ItemGroup>
 </Project>
