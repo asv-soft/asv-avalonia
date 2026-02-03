@@ -1,34 +1,37 @@
 ﻿using System.Diagnostics;
 using Asv.Common;
+using Asv.IO;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
-using ObservableExtensions = System.ObservableExtensions;
 
 namespace Asv.Avalonia;
 
 public class KeyValueRttBoxViewModel : RttBoxViewModel
 {
+    private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<KeyValueViewModel> _itemsSource;
 
     public KeyValueRttBoxViewModel()
+        : this(DesignTime.Id, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         ShortHeader = "Short";
         ShortValueString = "0.00";
-        ShortUnits = "ms";
+        ShortUnitSymbol = "ms";
         _itemsSource =
         [
-            new() { Header = "Power", Units = "dBm" },
-            new() { Header = "Rise time", Units = "ms" },
-            new() { Header = "Fall time", Units = "ms" },
+            new() { Header = "Power", UnitSymbol = "dBm" },
+            new() { Header = "Rise time", UnitSymbol = "ms" },
+            new() { Header = "Fall time", UnitSymbol = "ms" },
             new() { Header = "Status", ValueString = "Normal" },
             new() { Header = "Unknown" },
         ];
-        Items = _itemsSource.ToNotifyCollectionChangedSlim(
-            SynchronizationContextCollectionEventDispatcher.Current
-        );
+        _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
+        Items = _itemsSource
+            .ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
         Icon = MaterialIconKind.Radar;
         Header = "Common RTT";
 
@@ -49,7 +52,8 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
                 StatusText = Status.ToString();
                 ShortValueString = (Random.Shared.NextDouble() * 1000.0).ToString("F2");
                 Updated();
-            });
+            })
+            .DisposeItWith(Disposable);
     }
 
     public KeyValueRttBoxViewModel(
@@ -59,15 +63,18 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
     )
         : base(id, loggerFactory, networkErrorTimeout)
     {
-        _itemsSource = new ObservableList<KeyValueViewModel>();
+        _loggerFactory = loggerFactory;
+        _itemsSource = [];
+        _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         Items = _itemsSource
             .ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<KeyValueViewModel> Items { get; }
+    public ObservableList<KeyValueViewModel> ItemsSource => _itemsSource;
 
-    public KeyValueViewModel this[int index, string header, string? units]
+    public KeyValueViewModel this[int index, string header, string? unitSymbol]
     {
         get
         {
@@ -77,17 +84,21 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
             }
             while (index >= _itemsSource.Count)
             {
-                _itemsSource.Add(new KeyValueViewModel { Header = header, Units = units });
+                _itemsSource.Add(
+                    new KeyValueViewModel(_loggerFactory)
+                    {
+                        Header = header,
+                        UnitSymbol = unitSymbol,
+                    }
+                );
             }
 
             var item = _itemsSource[index];
             item.Header = header;
-            item.Units = units;
+            item.UnitSymbol = unitSymbol;
             return item;
         }
     }
-
-    public ObservableList<KeyValueViewModel> ItemsSource => _itemsSource;
 
     public string? ShortValueString
     {
@@ -95,7 +106,7 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
         set => SetField(ref field, value);
     }
 
-    public string? ShortUnits
+    public string? ShortUnitSymbol
     {
         get;
         set => SetField(ref field, value);
@@ -106,9 +117,21 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
         get;
         set => SetField(ref field, value);
     }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _itemsSource.RemoveAll();
+        }
+
+        base.Dispose(disposing);
+    }
 }
 
-public class KeyValueRttBoxViewModel<T> : KeyValueRttBoxViewModel
+public class KeyValueRttBoxViewModel<T>
+    : KeyValueRttBoxViewModel,
+        IUpdatableRttBoxViewModel<KeyValueRttBoxViewModel<T>, T>
 {
     private readonly TimeSpan? _networkErrorTimeout;
 

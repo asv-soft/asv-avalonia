@@ -12,21 +12,40 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
         IUnit latUnit,
         IUnit lonUnit,
         IUnit altUnit,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        Action<GeoPointPropertyOptions>? configureOptions = null
     )
-        : base(id, modelValue, latUnit, lonUnit, altUnit, loggerFactory)
+        : base(id, modelValue, latUnit, lonUnit, altUnit, loggerFactory, configureOptions)
     {
         base.Latitude.Dispose();
         base.Longitude.Dispose();
         base.Altitude.Dispose();
 
-        Latitude = new HistoricalUnitProperty(nameof(Latitude), ModelLat, latUnit, loggerFactory)
+        Latitude = new HistoricalUnitProperty(
+            nameof(Latitude),
+            ModelLat,
+            latUnit,
+            loggerFactory,
+            Options.LatitudeFormat
+        )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Longitude = new HistoricalUnitProperty(nameof(Longitude), ModelLon, lonUnit, loggerFactory)
+        Longitude = new HistoricalUnitProperty(
+            nameof(Longitude),
+            ModelLon,
+            lonUnit,
+            loggerFactory,
+            Options.LongitudeFormat
+        )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Altitude = new HistoricalUnitProperty(nameof(Altitude), ModelAlt, altUnit, loggerFactory)
+        Altitude = new HistoricalUnitProperty(
+            nameof(Altitude),
+            ModelAlt,
+            altUnit,
+            loggerFactory,
+            Options.AltitudeFormat
+        )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
     }
