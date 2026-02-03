@@ -5,9 +5,6 @@ using R3;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor<DigitRttBoxViewModel>]
-public class DigitRttBoxView : SingleRttBoxView { }
-
 public class DigitRttBoxViewModel : SingleRttBoxViewModel
 {
     private readonly TimeSpan? _networkErrorTimeout;
@@ -15,12 +12,12 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
     public DigitRttBoxViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
-        MeasureUnit = new MeterDistanceUnit();
+        MeasureUnit = DesignTime.UnitService.Units[DistanceBase.Id];
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
-        Units = MeasureUnit.Symbol;
+        UnitSymbol = MeasureUnit.CurrentUnitItem.CurrentValue.Symbol;
         FormatString = "## 000.000";
-        var sub = new Subject<double>();
+        var sub = new Subject<double>().DisposeItWith(Disposable);
         Observable<double> value = sub;
         int index = 0;
         int maxIndex = Enum.GetValues<AsvColorKind>().Length;
@@ -47,7 +44,8 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
                 Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Updated();
-            });
+            })
+            .DisposeItWith(Disposable);
         value
             .ThrottleLastFrame(1)
             .ObserveOnUIThreadDispatcher()
@@ -67,9 +65,14 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
     {
         _networkErrorTimeout = networkErrorTimeout;
         MeasureUnit =
-            units[unitId]?.CurrentUnitItem.CurrentValue
+            units[unitId]
             ?? throw new ArgumentException($"{unitId} unit not found in unit service");
-        Units = MeasureUnit.Symbol;
+        UnitSymbol = MeasureUnit.CurrentUnitItem.CurrentValue.Symbol;
+        MeasureUnit
+            .CurrentUnitItem.Synchronize()
+            .Subscribe(s => UnitSymbol = s.Symbol)
+            .DisposeItWith(Disposable);
+
         value
             .ThrottleLastFrame(1)
             .ObserveOnUIThreadDispatcher()
@@ -77,7 +80,7 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
             .DisposeItWith(Disposable);
     }
 
-    protected IUnitItem MeasureUnit { get; }
+    protected IUnit MeasureUnit { get; }
 
     public string? FormatString
     {
@@ -87,8 +90,8 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
 
     protected virtual void OnValueChanged(double value)
     {
-        ValueString = MeasureUnit.PrintFromSi(value, FormatString);
-        if (_networkErrorTimeout != null)
+        ValueString = MeasureUnit.CurrentUnitItem.Value.PrintFromSi(value, FormatString);
+        if (_networkErrorTimeout is not null)
         {
             Updated();
         }

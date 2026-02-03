@@ -29,9 +29,9 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
 
     protected override void OnValueChanged(double value)
     {
-        if (FractionDigits == null)
+        if (FractionDigits is null)
         {
-            MeasureUnit.PrintSplitString(
+            MeasureUnit.CurrentUnitItem.Value.PrintSplitString(
                 value,
                 FormatString,
                 out var intFormat,
@@ -42,7 +42,7 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
         }
         else
         {
-            MeasureUnit.PrintSplitString(
+            MeasureUnit.CurrentUnitItem.Value.PrintSplitString(
                 value,
                 FormatString,
                 FractionDigits.Value,
