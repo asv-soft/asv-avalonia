@@ -25,7 +25,7 @@
             <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">
                 <Run Text="{Binding ValueString}" />
                 <Run
-                    Text="{Binding Units}"
+                    Text="{Binding UnitSymbol}"
                     Foreground="{DynamicResource AsvForegroundUnknownBrush}"
                 />
             </TextBlock>
@@ -38,7 +38,7 @@
                     DockPanel.Dock="Right"
                     FontSize="20"
                     Foreground="{DynamicResource AsvForegroundUnknownBrush}"
-                    Text="{Binding Units}"
+                    Text="{Binding UnitSymbol}"
                 />
                 <TextBlock Padding="0" Text="{Binding ValueString}" HorizontalAlignment="Center" />
             </DockPanel>

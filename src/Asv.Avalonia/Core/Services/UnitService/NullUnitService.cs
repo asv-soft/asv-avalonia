@@ -8,6 +8,8 @@ public class NullUnitService : IUnitService
 
     #endregion
 
+    private readonly Lock _lock = new();
+
     private readonly IUnit _altitude = new AltitudeBase(
         DesignTime.Configuration,
         [new MeterAltitudeUnit(), new FeetAltitudeUnit()]
@@ -33,10 +35,16 @@ public class NullUnitService : IUnitService
             new KilohertzFrequencyUnit(),
         ]
     );
+    private readonly IUnit _meter = new DistanceBase(
+        DesignTime.Configuration,
+        [new MeterDistanceUnit(), new NauticalMileDistanceUnit()]
+    );
+
+    private readonly Dictionary<string, IUnit> _units;
 
     private NullUnitService()
     {
-        Units = new Dictionary<string, IUnit>(
+        _units = new Dictionary<string, IUnit>(
             new KeyValuePair<string, IUnit>[]
             {
                 new(_altitude.UnitId, _altitude),
@@ -44,9 +52,23 @@ public class NullUnitService : IUnitService
                 new(_longitude.UnitId, _longitude),
                 new(_angle.UnitId, _angle),
                 new(_frequency.UnitId, _frequency),
+                new(_meter.UnitId, _meter),
             }
         );
     }
 
-    public IReadOnlyDictionary<string, IUnit> Units { get; }
+    public IReadOnlyDictionary<string, IUnit> Units => _units;
+
+    public void Extend(IUnit unit)
+    {
+        using (_lock.EnterScope())
+        {
+            if (Units.ContainsKey(unit.UnitId))
+            {
+                return;
+            }
+
+            _units.TryAdd(unit.UnitId, unit);
+        }
+    }
 }

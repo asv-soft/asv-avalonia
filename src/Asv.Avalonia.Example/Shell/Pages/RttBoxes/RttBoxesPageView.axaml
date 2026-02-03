@@ -1,0 +1,50 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    mc:Ignorable="d"
+    x:Class="Asv.Avalonia.Example.RttBoxesPageView"
+    x:DataType="example:RttBoxesPageViewModel"
+>
+    <Design.DataContext>
+        <example:RttBoxesPageViewModel />
+    </Design.DataContext>
+    <WrapPanel
+        Orientation="Horizontal"
+        HorizontalAlignment="Left"
+        VerticalAlignment="Top"
+        ItemSpacing="4"
+        Width="700"
+    >
+        <Viewbox Height="200" Width="200" VerticalAlignment="Top">
+            <avalonia:KeyValueRttBoxView DataContext="{CompiledBinding KeyValueRttBoxViewModel}" />
+        </Viewbox>
+        <Viewbox Height="200" Width="200" VerticalAlignment="Top">
+            <avalonia:GeoPointRttBoxView DataContext="{CompiledBinding GeoPointRttBoxViewModel}" />
+        </Viewbox>
+        <Viewbox Height="200" Width="200" VerticalAlignment="Top">
+            <avalonia:SplitDigitRttBoxView DataContext="{CompiledBinding SplitDigitRttBoxViewModel}" />
+        </Viewbox>
+        <Viewbox Height="200" Width="200" VerticalAlignment="Top">
+            <avalonia:SingleRttBoxView DataContext="{CompiledBinding SingleRttBoxViewModel}" />
+        </Viewbox>
+        <Viewbox Height="200" Width="200" VerticalAlignment="Top">
+            <avalonia:TwoColumnRttBoxView DataContext="{CompiledBinding TwoColumnRttBoxViewModel}" />
+        </Viewbox>
+        <Viewbox Height="200" Width="200" VerticalAlignment="Top">
+            <avalonia:RttBox
+                avalonia:AsvPallete.Color="Info1"
+                Icon="{CompiledBinding Icon}"
+                Header="{CompiledBinding Header}"
+                IsNetworkError="{CompiledBinding IsNetworkError}"
+                SmallHeader="{CompiledBinding ShortHeader}"
+                DataContext="{CompiledBinding RttBoxViewModel}"
+            >
+                <TextBlock Text="123.29" avalonia:AsvPallete.Color="Unknown" />
+            </avalonia:RttBox>
+        </Viewbox>
+    </WrapPanel>
+</UserControl>

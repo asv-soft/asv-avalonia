@@ -125,6 +125,14 @@
         <Compile Remove="Services\UnitService\Units\Angle\MsAngleUnit.cs" />
         <Compile Remove="Services\UnitService\Units\Angle\AngleBase.cs" />
         <Compile Remove="Services\UnitService\Units\DdmGp\MicroAmpDdmGpUnit.cs" />
+        <Compile Update="Core\Controls\RttBox\Digit\Split\SplitDigitRttBoxView.axaml.cs">
+          <DependentUpon>SplitDigitRttBoxView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Core\Controls\RttBox\Gnss\GeoPoint\GeoPointRttBoxView.axaml.cs">
+          <DependentUpon>GeoPointRttBoxView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -149,17 +157,14 @@
       <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\GeoPointPropertyView.axaml" />
       <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\UnitPropertyView.axaml" />
       <AdditionalFiles Include="Core\Controls\PropertyEditor\PropertyEditorView.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\KeyValue\KeyValueRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\Single\SingleRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\TwoColumn\TwoColumnRttBoxView.axaml" />
       <AdditionalFiles Include="Core\Controls\SearchBox\SearchBoxView.axaml" />
       <AdditionalFiles Include="Core\Controls\SplashScreens\ActionScreen.axaml" />
       <AdditionalFiles Include="Core\Controls\SplashScreens\AwaitingScreen.axaml" />
       <AdditionalFiles Include="Core\Controls\Tags\Tag.axaml" />
-      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\KeyValueRttBoxView.axaml" />
-      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
-      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\SplitDigitRttBoxView.axaml" />
-      <AdditionalFiles Include="Core\Controls\TelemBox\Digit\TwoColumnRttBoxView.axaml" />
-      <AdditionalFiles Include="Core\Controls\TelemBox\Gnss\GeoPointRttBoxView.axaml" />
-      <AdditionalFiles Include="Core\Controls\TelemBox\RttBox.axaml" />
-      <AdditionalFiles Include="Core\Controls\TelemBox\TelemBox.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\RttBox.axaml" />
       <AdditionalFiles Include="Core\Controls\Tools\ToolsListStyles.axaml" />
       <AdditionalFiles Include="Core\Controls\TreePage\GroupTreePageItemView.axaml" />
       <AdditionalFiles Include="Core\Controls\TreePage\TreePageView.axaml" />

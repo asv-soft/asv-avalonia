@@ -20,6 +20,7 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
         : base(id, loggerFactory)
     {
         Unit = unit;
+
         _format = format;
 
         ModelValue = modelValue;
@@ -89,7 +90,9 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
         }
 
         _internalChange = true;
-        ViewValue.OnNext(Unit.CurrentUnitItem.CurrentValue.PrintFromSi(modelValue, _format));
+        var stringValue = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(modelValue, _format);
+
+        ViewValue.OnNext(stringValue);
         _internalChange = false;
     }
 
