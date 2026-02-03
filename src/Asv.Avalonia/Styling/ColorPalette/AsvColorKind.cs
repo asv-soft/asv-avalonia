@@ -10,6 +10,7 @@ namespace Asv.Avalonia;
 /// Visual color/status kinds for UI elements.
 /// Supports [Flags] — multiple kinds can be combined.
 /// CSS class name = enum member name in lowercase (e.g. Info7 → "info7").
+/// <remarks> Search for a color palette to look up colors</remarks>
 /// </summary>
 [Flags]
 public enum AsvColorKind : ulong
