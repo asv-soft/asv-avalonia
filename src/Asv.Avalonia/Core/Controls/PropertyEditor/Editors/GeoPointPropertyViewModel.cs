@@ -66,7 +66,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
             Parent = this,
             ShortName = RS.Latitude_ShortName,
             Icon = MaterialIconKind.Latitude,
-        };
+        }.DisposeItWith(Disposable);
         Longitude = new UnitPropertyViewModel(
             nameof(Longitude),
             _longitude,
@@ -78,7 +78,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
             Parent = this,
             ShortName = RS.Longitude_ShortName,
             Icon = MaterialIconKind.Longitude,
-        };
+        }.DisposeItWith(Disposable);
         Altitude = new UnitPropertyViewModel(
             nameof(Altitude),
             _altitude,
@@ -90,7 +90,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
             Parent = this,
             ShortName = RS.Altitude_ShortName,
             Icon = MaterialIconKind.Altimeter,
-        };
+        }.DisposeItWith(Disposable);
     }
 
     public override IEnumerable<IRoutable> GetChildren()
