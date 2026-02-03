@@ -12,8 +12,6 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public int? FractionDigits { get; set; }
-
     public SplitDigitRttBoxViewModel(
         NavigationId id,
         ILoggerFactory loggerFactory,
@@ -27,11 +25,19 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
         _networkErrorTimeout = networkErrorTimeout;
     }
 
+    public int? FractionDigits { get; init; }
+
+    public string? FracString
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+
     protected override void OnValueChanged(double value)
     {
-        if (FractionDigits == null)
+        if (FractionDigits is null)
         {
-            MeasureUnit.PrintSplitString(
+            MeasureUnit.CurrentUnitItem.Value.PrintSplitString(
                 value,
                 FormatString,
                 out var intFormat,
@@ -42,7 +48,7 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
         }
         else
         {
-            MeasureUnit.PrintSplitString(
+            MeasureUnit.CurrentUnitItem.Value.PrintSplitString(
                 value,
                 FormatString,
                 FractionDigits.Value,
@@ -57,11 +63,5 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
         {
             Updated();
         }
-    }
-
-    public string? FracString
-    {
-        get;
-        set => SetField(ref field, value);
     }
 }
