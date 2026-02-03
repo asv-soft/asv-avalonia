@@ -23,7 +23,7 @@ public class RttBoxViewModel : RoutableViewModel
         : base(id, loggerFactory)
     {
         _timeProvider = TimeProvider.System;
-        if (networkErrorTimeout != null)
+        if (networkErrorTimeout is not null)
         {
             _timeProvider.CreateTimer(
                 CheckNetworkTimeout,
@@ -36,7 +36,16 @@ public class RttBoxViewModel : RoutableViewModel
 
     private void CheckNetworkTimeout(object? state)
     {
-        var timeout = (TimeSpan)state!;
+        if (state is null)
+        {
+            return;
+        }
+
+        if (state is not TimeSpan timeout)
+        {
+            throw new Exception($"{state} is not a {nameof(TimeSpan)}");
+        }
+
         IsNetworkError = _timeProvider.GetElapsedTime(_lastUpdate) > timeout;
     }
 

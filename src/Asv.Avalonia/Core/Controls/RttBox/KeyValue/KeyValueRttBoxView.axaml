@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
     mc:Ignorable="d"
+    Width="220"
     x:Class="Asv.Avalonia.KeyValueRttBoxView"
     x:DataType="avalonia:KeyValueRttBoxViewModel"
 >
@@ -31,7 +32,7 @@
             <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">
                 <Run Text="{Binding ShortValueString}" />
                 <Run
-                    Text="{Binding ShortUnits}"
+                    Text="{Binding ShortUnitSymbol}"
                     Foreground="{DynamicResource AsvForegroundUnknownBrush}"
                 />
             </TextBlock>
@@ -72,12 +73,12 @@
                             />
                             <TextBlock
                                 Grid.Column="4"
-                                IsVisible="{Binding Units, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                IsVisible="{Binding UnitSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 FontSize="15"
                                 Foreground="{DynamicResource AsvForegroundUnknownBrush}"
-                                Text="{Binding Units}"
+                                Text="{Binding UnitSymbol}"
                             />
                         </Grid>
                     </DataTemplate>

@@ -33,6 +33,10 @@ public class NullUnitService : IUnitService
             new KilohertzFrequencyUnit(),
         ]
     );
+    private readonly IUnit _meter = new DistanceBase(
+        DesignTime.Configuration,
+        [new MeterDistanceUnit(), new NauticalMileDistanceUnit()]
+    );
 
     private NullUnitService()
     {
@@ -44,6 +48,7 @@ public class NullUnitService : IUnitService
                 new(_longitude.UnitId, _longitude),
                 new(_angle.UnitId, _angle),
                 new(_frequency.UnitId, _frequency),
+                new(_meter.UnitId, _meter),
             }
         );
     }

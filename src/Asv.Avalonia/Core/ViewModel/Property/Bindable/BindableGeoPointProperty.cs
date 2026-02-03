@@ -4,8 +4,16 @@ using R3;
 
 namespace Asv.Avalonia;
 
+public class GeoPointPropertyOptions
+{
+    public string? LatitudeFormat { get; set; }
+    public string? LongitudeFormat { get; set; }
+    public string? AltitudeFormat { get; set; }
+}
+
 public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
 {
+    protected readonly GeoPointPropertyOptions Options;
     protected readonly ReactiveProperty<double> ModelLat;
     protected readonly ReactiveProperty<double> ModelAlt;
     protected readonly ReactiveProperty<double> ModelLon;
@@ -16,10 +24,14 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
         IUnit latUnit,
         IUnit lonUnit,
         IUnit altUnit,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        Action<GeoPointPropertyOptions>? configureOptions = null
     )
         : base(id, loggerFactory)
     {
+        Options = new GeoPointPropertyOptions();
+        configureOptions?.Invoke(Options);
+
         ModelValue = modelValue;
 
         ModelLat = new ReactiveProperty<double>(modelValue.CurrentValue.Latitude).DisposeItWith(
@@ -65,13 +77,31 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
             })
             .DisposeItWith(Disposable);
 
-        Latitude = new BindableUnitProperty(nameof(Latitude), ModelLat, latUnit, loggerFactory)
+        Latitude = new BindableUnitProperty(
+            nameof(Latitude),
+            ModelLat,
+            latUnit,
+            loggerFactory,
+            Options.LatitudeFormat
+        )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Longitude = new BindableUnitProperty(nameof(Longitude), ModelLon, lonUnit, loggerFactory)
+        Longitude = new BindableUnitProperty(
+            nameof(Longitude),
+            ModelLon,
+            lonUnit,
+            loggerFactory,
+            Options.LongitudeFormat
+        )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Altitude = new BindableUnitProperty(nameof(Altitude), ModelAlt, altUnit, loggerFactory)
+        Altitude = new BindableUnitProperty(
+            nameof(Altitude),
+            ModelAlt,
+            altUnit,
+            loggerFactory,
+            Options.AltitudeFormat
+        )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 

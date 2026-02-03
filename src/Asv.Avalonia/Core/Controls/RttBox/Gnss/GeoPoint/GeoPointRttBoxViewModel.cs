@@ -8,13 +8,14 @@ namespace Asv.Avalonia;
 
 public class GeoPointRttBoxViewModel : RttBoxViewModel
 {
-    private readonly IUnitItem _latitudeUnit;
-    private readonly IUnitItem _longitudeUnit;
-    private readonly IUnitItem _altitudeUnit;
+    private readonly ReactiveProperty<GeoPoint> _location;
+    private readonly IUnit _latitudeUnit;
+    private readonly IUnit _longitudeUnit;
+    private readonly IUnit _altitudeUnit;
 
     public GeoPointRttBoxViewModel()
+        : this(DesignTime.Id, DesignTime.LoggerFactory, NullUnitService.Instance, null)
     {
-        Location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
         DesignTime.ThrowIfNotDesignMode();
         var start = new GeoPoint(55.75, 37.6173, 250.0); // Moscow coordinates
         var index = 0;
@@ -38,17 +39,12 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
                 ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Progress = Random.Shared.NextDouble();
                 StatusText = Status.ToString();
-                Location.OnNext(point);
+                GeoPointProperty.ModelValue.Value = point;
                 Updated();
             });
-        _latitudeUnit = new DmsLatitudeUnit();
-        _longitudeUnit = new DmsLongitudeUnit();
-        _altitudeUnit = new MeterAltitudeUnit();
         Header = "UAV position";
         ShortHeader = "UAV";
         Icon = MaterialIconKind.AddressMarker;
-
-        Location.Subscribe(OnValueChanged).DisposeItWith(Disposable);
     }
 
     public GeoPointRttBoxViewModel(
@@ -59,63 +55,31 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
     )
         : base(id, loggerFactory, networkErrorTimeout)
     {
-        Location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
+        _location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
         _latitudeUnit =
-            units[LatitudeBase.Id]?.CurrentUnitItem.CurrentValue
+            units[LatitudeBase.Id]
             ?? throw new ArgumentException("Latitude unit not found in unit service");
         _longitudeUnit =
-            units[LongitudeBase.Id]?.CurrentUnitItem.CurrentValue
+            units[LongitudeBase.Id]
             ?? throw new ArgumentException("Longitude unit not found in unit service");
         _altitudeUnit =
-            units[AltitudeBase.Id]?.CurrentUnitItem.CurrentValue
+            units[AltitudeBase.Id]
             ?? throw new ArgumentException("Altitude unit not found in unit service");
-
-        Location.Subscribe(OnValueChanged).DisposeItWith(Disposable);
+        GeoPointProperty = new BindableGeoPointProperty(
+            nameof(GeoPointProperty),
+            _location,
+            _latitudeUnit,
+            _longitudeUnit,
+            _altitudeUnit,
+            loggerFactory,
+            options =>
+            {
+                options.AltitudeFormat = "F2";
+            }
+        ).DisposeItWith(Disposable);
     }
 
-    public static string NotAvailableString => RS.Not_Available;
-    public ReactiveProperty<GeoPoint> Location { get; }
-
-    private void OnValueChanged(GeoPoint geoPoint)
-    {
-        if (
-            double.IsNaN(geoPoint.Latitude)
-            || double.IsNaN(geoPoint.Longitude)
-            || double.IsNaN(geoPoint.Altitude)
-        )
-        {
-            LatitudeString = NotAvailableString;
-            LongitudeString = NotAvailableString;
-            AltitudeString = NotAvailableString;
-        }
-        else
-        {
-            LatitudeString = _latitudeUnit.PrintFromSi(geoPoint.Latitude);
-            LongitudeString = _longitudeUnit.PrintFromSi(geoPoint.Longitude);
-            AltitudeString = _altitudeUnit.PrintWithUnits(
-                _altitudeUnit.FromSi(geoPoint.Altitude),
-                "F2"
-            );
-        }
-    }
-
-    public string? AltitudeString
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public string? LongitudeString
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public string? LatitudeString
-    {
-        get;
-        set => SetField(ref field, value);
-    }
+    public BindableGeoPointProperty GeoPointProperty { get; }
 
     public string? StatusText
     {
@@ -157,7 +121,7 @@ public class GeoPointRttBoxViewModel<T> : GeoPointRttBoxViewModel
     {
         Debug.Assert(UpdateAction != null, "UpdateAction must be set");
         UpdateAction(this, value);
-        if (_networkErrorTimeout != null)
+        if (_networkErrorTimeout is not null)
         {
             Updated();
         }
