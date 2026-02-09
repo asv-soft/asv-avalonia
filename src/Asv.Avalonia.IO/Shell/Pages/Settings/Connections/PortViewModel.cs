@@ -87,8 +87,8 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         TimeProvider = timeProvider;
         _unitService = unitService;
         _frequencyUnit =
-            unitService.Units[FrequencyBase.Id]
-            ?? throw new UnitException($"Unit {FrequencyBase.Id} was not found");
+            unitService.Units[FrequencyUnit.Id]
+            ?? throw new UnitException($"Unit {FrequencyUnit.Id} was not found");
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
@@ -305,7 +305,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         );
         var rxPackets = _rxPackets.Calculate(Port?.Statistic.RxMessages ?? 0).ToString("F1");
         var txPackets = _txPackets.Calculate(Port?.Statistic.TxMessages ?? 0).ToString("F1");
-        var gzUnitSymbol = _frequencyUnit.AvailableUnits[HertzFrequencyUnit.Id].Symbol;
+        var gzUnitSymbol = _frequencyUnit.AvailableUnits[FrequencyHertzUnitItem.Id].Symbol;
         RxTag.Value = $"{rxBytes} / {rxPackets} {gzUnitSymbol}";
         TxTag.Value = $"{txBytes} / {txPackets} {gzUnitSymbol}";
         EndpointsView.ForEach(x => x.UpdateStatistic());

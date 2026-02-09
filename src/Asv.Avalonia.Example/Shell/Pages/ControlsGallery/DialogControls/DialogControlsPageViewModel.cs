@@ -109,9 +109,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         #region Units
 
-        var latUnit = unitService.Units[LatitudeBase.Id];
-        var lonUnit = unitService.Units[LongitudeBase.Id];
-        var altUnit = unitService.Units[AltitudeBase.Id];
+        var latUnit = unitService.Units[LatitudeUnit.Id];
+        var lonUnit = unitService.Units[LongitudeUnit.Id];
+        var altUnit = unitService.Units[AltitudeUnit.Id];
 
         LonUnitName = lonUnit
             .CurrentUnitItem.Select(item => item.Symbol)

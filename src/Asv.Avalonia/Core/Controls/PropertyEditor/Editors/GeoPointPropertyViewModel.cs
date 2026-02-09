@@ -58,7 +58,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         Latitude = new UnitPropertyViewModel(
             nameof(Latitude),
             _latitude,
-            unitService[LatitudeBase.Id] ?? throw new NullReferenceException("Latitude Unit"),
+            unitService[LatitudeUnit.Id] ?? throw new NullReferenceException("Latitude Unit"),
             loggerFactory,
             "F7"
         )
@@ -70,7 +70,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         Longitude = new UnitPropertyViewModel(
             nameof(Longitude),
             _longitude,
-            unitService[LongitudeBase.Id] ?? throw new NullReferenceException("Longitude Unit"),
+            unitService[LongitudeUnit.Id] ?? throw new NullReferenceException("Longitude Unit"),
             loggerFactory,
             "F7"
         )
@@ -82,7 +82,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         Altitude = new UnitPropertyViewModel(
             nameof(Altitude),
             _altitude,
-            unitService[AltitudeBase.Id] ?? throw new NullReferenceException("Altitude Unit"),
+            unitService[AltitudeUnit.Id] ?? throw new NullReferenceException("Altitude Unit"),
             loggerFactory,
             "F2"
         )

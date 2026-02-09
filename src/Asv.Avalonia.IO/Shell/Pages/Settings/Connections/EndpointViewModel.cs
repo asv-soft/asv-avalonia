@@ -29,8 +29,8 @@ public class EndpointViewModel : HeadlinedViewModel
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
         _txPackets = new IncrementalRateCounter(5, timeProvider);
         _frequencyUnit =
-            unitService.Units[FrequencyBase.Id]
-            ?? throw new UnitException($"Unit {FrequencyBase.Id} was not found");
+            unitService.Units[FrequencyUnit.Id]
+            ?? throw new UnitException($"Unit {FrequencyUnit.Id} was not found");
         Icon = MaterialIconKind.SwapVertical;
         TagsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         TagsView = TagsSource
@@ -87,7 +87,7 @@ public class EndpointViewModel : HeadlinedViewModel
         var txPackets = _txPackets
             .Calculate(_protocolEndpoint?.Statistic.TxMessages ?? 0)
             .ToString("F1");
-        var gzUnitSymbol = _frequencyUnit.AvailableUnits[HertzFrequencyUnit.Id].Symbol;
+        var gzUnitSymbol = _frequencyUnit.AvailableUnits[FrequencyHertzUnitItem.Id].Symbol;
         RxTag.Value = $"{rxBytes} / {rxPackets} {gzUnitSymbol}";
         TxTag.Value = $"{txBytes} / {txPackets} {gzUnitSymbol}";
     }

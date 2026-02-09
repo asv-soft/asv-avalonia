@@ -8,29 +8,29 @@ public class NullUnitService : IUnitService
 
     #endregion
 
-    private readonly IUnit _altitude = new AltitudeBase(
+    private readonly IUnit _altitude = new AltitudeUnit(
         DesignTime.Configuration,
-        [new MeterAltitudeUnit(), new FeetAltitudeUnit()]
+        [new AltitudeMeterUnitItem(), new AltitudeFeetUnitItem()]
     );
-    private readonly IUnit _latitude = new LatitudeBase(
+    private readonly IUnit _latitude = new LatitudeUnit(
         DesignTime.Configuration,
-        [new DmsLatitudeUnit(), new DegreeLatitudeUnit()]
+        [new LatitudeDmsUnitItem(), new LatitudeDegreeUnitItem()]
     );
-    private readonly IUnit _longitude = new LongitudeBase(
+    private readonly IUnit _longitude = new LongitudeUnit(
         DesignTime.Configuration,
-        [new DmsLongitudeUnit(), new DegreeLongitudeUnit()]
+        [new LongitudeDmsUnitItem(), new LongitudeDegreeUnitItem()]
     );
-    private readonly IUnit _angle = new AngleBase(
+    private readonly IUnit _angle = new AngleUnit(
         DesignTime.Configuration,
-        [new DegreeAngleUnit(), new DmsAngleUnit()]
+        [new AngleDegreeUnitItem(), new AngleDmsUnitItem()]
     );
-    private readonly IUnit _frequency = new FrequencyBase(
+    private readonly IUnit _frequency = new FrequencyUnit(
         DesignTime.Configuration,
         [
-            new HertzFrequencyUnit(),
-            new GigahertzFrequencyUnit(),
-            new MegahertzFrequencyUnit(),
-            new KilohertzFrequencyUnit(),
+            new FrequencyHertzUnitItem(),
+            new FrequencyGigahertzUnitItem(),
+            new FrequencyMegahertzUnitItem(),
+            new FrequencyKilohertzUnitItem(),
         ]
     );
 

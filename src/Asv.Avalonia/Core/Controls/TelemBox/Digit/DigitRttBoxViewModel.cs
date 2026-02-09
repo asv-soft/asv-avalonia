@@ -15,7 +15,7 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
     public DigitRttBoxViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
-        MeasureUnit = new MeterDistanceUnit();
+        MeasureUnit = new DistanceMeterUnitItem();
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
         Units = MeasureUnit.Symbol;

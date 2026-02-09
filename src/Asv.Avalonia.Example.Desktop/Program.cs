@@ -44,7 +44,8 @@ sealed class Program
             {
                 options.WithApiPackage("Asv.Avalonia.Example.Api", SemVersion.Parse("1.0.0"));
                 options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
-            });
+            })
+            .UseUnitService();
 
         using var host = builder.Build();
         host.ExitIfNotFirstInstance();

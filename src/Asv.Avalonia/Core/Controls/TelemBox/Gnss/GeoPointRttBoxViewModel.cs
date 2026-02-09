@@ -41,9 +41,9 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
                 Location.OnNext(point);
                 Updated();
             });
-        _latitudeUnit = new DmsLatitudeUnit();
-        _longitudeUnit = new DmsLongitudeUnit();
-        _altitudeUnit = new MeterAltitudeUnit();
+        _latitudeUnit = new LatitudeDmsUnitItem();
+        _longitudeUnit = new LongitudeDmsUnitItem();
+        _altitudeUnit = new AltitudeMeterUnitItem();
         Header = "UAV position";
         ShortHeader = "UAV";
         Icon = MaterialIconKind.AddressMarker;
@@ -61,13 +61,13 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
     {
         Location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
         _latitudeUnit =
-            units[LatitudeBase.Id]?.CurrentUnitItem.CurrentValue
+            units[LatitudeUnit.Id]?.CurrentUnitItem.CurrentValue
             ?? throw new ArgumentException("Latitude unit not found in unit service");
         _longitudeUnit =
-            units[LongitudeBase.Id]?.CurrentUnitItem.CurrentValue
+            units[LongitudeUnit.Id]?.CurrentUnitItem.CurrentValue
             ?? throw new ArgumentException("Longitude unit not found in unit service");
         _altitudeUnit =
-            units[AltitudeBase.Id]?.CurrentUnitItem.CurrentValue
+            units[AltitudeUnit.Id]?.CurrentUnitItem.CurrentValue
             ?? throw new ArgumentException("Altitude unit not found in unit service");
 
         Location.Subscribe(OnValueChanged).DisposeItWith(Disposable);

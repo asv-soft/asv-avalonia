@@ -26,7 +26,7 @@ public static class ContainerConfigurationMixin
     )
     {
         containerConfiguration.WithExport(TimeProvider.System);
-
+        containerConfiguration.WithExport(AppHost.Instance.GetService<IUnitService>());
         if (Design.IsDesignMode)
         {
             containerConfiguration

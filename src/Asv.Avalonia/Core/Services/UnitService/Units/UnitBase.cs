@@ -36,6 +36,7 @@ public abstract class UnitBase : IUnit
 
     public IReadOnlyDictionary<string, IUnitItem> AvailableUnits => _items;
     public abstract MaterialIconKind Icon { get; }
+
     public abstract string Name { get; }
     public abstract string Description { get; }
     public abstract string UnitId { get; }

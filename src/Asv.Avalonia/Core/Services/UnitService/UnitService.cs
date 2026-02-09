@@ -3,13 +3,10 @@ using System.Composition;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(IUnitService))]
-[Shared]
 public class UnitService : IUnitService
 {
     private readonly ImmutableSortedDictionary<string, IUnit> _units;
 
-    [ImportingConstructor]
     public UnitService([ImportMany] IEnumerable<IUnit> items)
     {
         var builder = ImmutableSortedDictionary.CreateBuilder<string, IUnit>();

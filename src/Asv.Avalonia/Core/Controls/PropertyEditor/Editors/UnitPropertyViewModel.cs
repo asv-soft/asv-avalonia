@@ -20,9 +20,9 @@ public class UnitPropertyViewModel
         : this(
             DesignTime.Id.ToString(),
             new BindableReactiveProperty<double>(),
-            new AltitudeBase(
+            new AltitudeUnit(
                 DesignTime.Configuration,
-                [new MeterAltitudeUnit(), new FeetAltitudeUnit()]
+                [new AltitudeMeterUnitItem(), new AltitudeFeetUnitItem()]
             ),
             DesignTime.LoggerFactory
         )

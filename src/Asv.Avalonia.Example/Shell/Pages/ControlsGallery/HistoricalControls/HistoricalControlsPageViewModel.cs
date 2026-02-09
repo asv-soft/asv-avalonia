@@ -49,10 +49,10 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     public HistoricalControlsPageViewModel(IUnitService unit, ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {
-        var un = unit.Units[VelocityBase.Id];
-        var latUnit = unit.Units[LatitudeBase.Id];
-        var lonUnit = unit.Units[LongitudeBase.Id];
-        var altUnit = unit.Units[AltitudeBase.Id];
+        var un = unit.Units[VelocityUnit.Id];
+        var latUnit = unit.Units[LatitudeUnit.Id];
+        var lonUnit = unit.Units[LongitudeUnit.Id];
+        var altUnit = unit.Units[AltitudeUnit.Id];
 
         _speed = new ReactiveProperty<double>(double.NaN).DisposeItWith(Disposable);
         _isTurnedOn = new ReactiveProperty<bool>().DisposeItWith(Disposable);

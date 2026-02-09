@@ -33,7 +33,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 new UnitPropertyViewModel(
                     "lat",
                     Latitude,
-                    unit[LatitudeBase.Id] ?? throw new ArgumentNullException(),
+                    unit[LatitudeUnit.Id] ?? throw new ArgumentNullException(),
                     loggerFactory
                 )
                 {
@@ -46,7 +46,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 new UnitPropertyViewModel(
                     "lon",
                     Longitude,
-                    unit[LongitudeBase.Id] ?? throw new ArgumentNullException(),
+                    unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
                     loggerFactory
                 )
                 {
@@ -59,7 +59,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 new UnitPropertyViewModel(
                     "alt",
                     Altitude,
-                    unit[AltitudeBase.Id] ?? throw new ArgumentNullException(),
+                    unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
                     loggerFactory
                 )
                 {
@@ -79,7 +79,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 new UnitPropertyViewModel(
                     "time",
                     Time,
-                    unit[TimeSpanBase.Id] ?? throw new ArgumentNullException(),
+                    unit[TimeSpanUnit.Id] ?? throw new ArgumentNullException(),
                     loggerFactory
                 )
                 {
@@ -92,7 +92,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 new UnitPropertyViewModel(
                     "throttle",
                     Throttle,
-                    unit[ThrottleBase.Id] ?? throw new ArgumentNullException(),
+                    unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
                     loggerFactory
                 )
                 {

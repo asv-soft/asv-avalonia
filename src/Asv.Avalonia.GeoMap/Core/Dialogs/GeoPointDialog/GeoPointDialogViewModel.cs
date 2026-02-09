@@ -25,11 +25,11 @@ public class GeoPointDialogViewModel : DialogViewModelBase
     public GeoPointDialogViewModel(ILoggerFactory loggerFactory, IUnitService unitService)
         : base(DialogId, loggerFactory)
     {
-        var latUnit = unitService.Units[LatitudeBase.Id];
-        var lonUnit = unitService.Units[LongitudeBase.Id];
-        var altUnit = unitService.Units[AltitudeBase.Id];
+        var latUnit = unitService.Units[LatitudeUnit.Id];
+        var lonUnit = unitService.Units[LongitudeUnit.Id];
+        var altUnit = unitService.Units[AltitudeUnit.Id];
 
-        _distanceUnit = unitService.Units[DistanceBase.Id];
+        _distanceUnit = unitService.Units[DistanceUnit.Id];
 
         _geoPointProperty = new ReactiveProperty<GeoPoint>(GeoPoint.Zero).DisposeItWith(Disposable);
         GeoPointProperty = new BindableGeoPointProperty(
