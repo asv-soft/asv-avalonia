@@ -178,6 +178,7 @@
 
     <ItemGroup>
       <Folder Include="Core\" />
+      <Folder Include="Core\Services\UnitService\" />
     </ItemGroup>
 
     <ItemGroup>

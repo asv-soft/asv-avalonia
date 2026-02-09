@@ -2,6 +2,7 @@ using System;
 using System.Composition;
 using System.Composition.Convention;
 using System.Composition.Hosting;
+using System.Diagnostics.Metrics;
 using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.IO;
@@ -36,7 +37,13 @@ public class App : Application, IContainerHost, IShellHost
 
         _container = containerCfg.CreateContainer();
 
-        DataTemplates.Add(new CompositionViewLocator(_container));
+        DataTemplates.Add(
+            new CompositionViewLocator(
+                _container,
+                AppHost.Instance.Services,
+                AppHost.Instance.GetService<IMeterFactory>()
+            )
+        );
 
         if (!Design.IsDesignMode)
         {
