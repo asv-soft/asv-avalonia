@@ -6,14 +6,19 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class SingleRttBoxViewModel : RttBoxViewModel
+public class TwoColumnRttBoxViewModel : RttBoxViewModel
 {
-    public SingleRttBoxViewModel()
+    public TwoColumnRttBoxViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
+        Left = new KeyValueViewModel().DisposeItWith(Disposable);
+        Right = new KeyValueViewModel().DisposeItWith(Disposable);
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
-        Units = "mm";
+        Left.Header = "Left";
+        Right.Header = "Right";
+        Left.UnitSymbol = "mm";
+        Right.UnitSymbol = "km/h";
         int index = 0;
         int maxIndex = Enum.GetValues<AsvColorKind>().Length;
         Observable
@@ -27,41 +32,51 @@ public class SingleRttBoxViewModel : RttBoxViewModel
                 }
 
                 Progress = Random.Shared.NextDouble();
-                if (Random.Shared.NextDouble() > 0.9)
+                if (Random.Shared.NextDouble() > 0.8)
                 {
-                    ValueString = Asv.Avalonia.Units.NotAvailableString;
-                    StatusText = "No data";
+                    Left.Header = null;
+                    Right.Header = null;
                 }
                 else
                 {
-                    ValueString = (Random.Shared.Next(-6553500, 6553500) / 100.0).ToString("F2");
-                    StatusText = null;
+                    Left.Header = "Left";
+                    Right.Header = "Right";
+                }
+                if (Random.Shared.NextDouble() > 0.9)
+                {
+                    Left.ValueString = Units.NotAvailableString;
+                    Right.ValueString = Units.NotAvailableString;
+                }
+                else
+                {
+                    Right.ValueString = (Random.Shared.Next(-6553500, 6553500) / 100.0).ToString(
+                        "F2"
+                    );
+                    Left.ValueString = (Random.Shared.Next(-6553500, 6553500) / 100.0).ToString(
+                        "F2"
+                    );
                 }
 
                 Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Updated();
-            });
+            })
+            .DisposeItWith(Disposable);
     }
 
-    public SingleRttBoxViewModel(
+    public TwoColumnRttBoxViewModel(
         NavigationId id,
         ILoggerFactory loggerFactory,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory, networkErrorTimeout) { }
-
-    public string? Units
+        : base(id, loggerFactory, networkErrorTimeout)
     {
-        get;
-        set => SetField(ref field, value);
+        Left = new KeyValueViewModel(loggerFactory).DisposeItWith(Disposable);
+        Right = new KeyValueViewModel(loggerFactory).DisposeItWith(Disposable);
     }
 
-    public string? ValueString
-    {
-        get;
-        set => SetField(ref field, value);
-    }
+    public KeyValueViewModel Left { get; }
+    public KeyValueViewModel Right { get; }
 
     public string? StatusText
     {
@@ -70,11 +85,13 @@ public class SingleRttBoxViewModel : RttBoxViewModel
     }
 }
 
-public class SingleRttBoxViewModel<T> : SingleRttBoxViewModel
+public class TwoColumnRttBoxViewModel<T>
+    : TwoColumnRttBoxViewModel,
+        IUpdatableRttBoxViewModel<TwoColumnRttBoxViewModel<T>, T>
 {
     private readonly TimeSpan? _networkErrorTimeout;
 
-    public SingleRttBoxViewModel(
+    public TwoColumnRttBoxViewModel(
         NavigationId id,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
@@ -90,7 +107,7 @@ public class SingleRttBoxViewModel<T> : SingleRttBoxViewModel
             .DisposeItWith(Disposable);
     }
 
-    public required Action<SingleRttBoxViewModel<T>, T> UpdateAction { get; init; }
+    public required Action<TwoColumnRttBoxViewModel<T>, T> UpdateAction { get; init; }
 
     private void OnValueChanged(T value)
     {

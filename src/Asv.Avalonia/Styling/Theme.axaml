@@ -106,12 +106,11 @@
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/BatteryIndicator.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/ConnectionQuality.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/GpsStatusIndicator.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/TelemBox/TelemBox.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/GeoPoint/GeoPointEditor.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Tags/Tag.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/HotKeys/HotKeyBox.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/SplashScreens/AwaitingScreen.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/SplashScreens/ActionScreen.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/TelemBox/RttBox.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/RttBox/RttBox.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/FrequencyScreen/FrequencyControl.axaml" />
 </Styles>

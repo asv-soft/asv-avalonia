@@ -63,7 +63,8 @@ public sealed class UnitsBuilder
             .RegisterTemperature()
             .RegisterTimeSpan()
             .RegisterVelocity()
-            .RegisterVoltage();
+            .RegisterVoltage()
+            .RegisterPower();
     }
 }
 

@@ -34,7 +34,7 @@
                     <Run Text="{Binding ValueString}" />
                     <Run
                         FontSize="12"
-                        Text="{Binding Units}"
+                        Text="{Binding UnitSymbol}"
                         Foreground="{DynamicResource AsvForegroundUnknownBrush}"
                     />
                 </TextBlock>
@@ -55,7 +55,7 @@
                     <Run Text="{Binding ValueString}" />
                     <Run
                         FontSize="12"
-                        Text="{Binding Units}"
+                        Text="{Binding UnitSymbol}"
                         Foreground="{DynamicResource AsvForegroundUnknownBrush}"
                     />
                 </TextBlock>
@@ -84,14 +84,14 @@
                 />
                 <TextBlock
                     DataContext="{Binding Left}"
-                    IsVisible="{Binding Units, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    IsVisible="{Binding UnitSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
                     Grid.Column="0"
                     Grid.Row="4"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     FontSize="15"
                     Foreground="{DynamicResource AsvForegroundUnknownBrush}"
-                    Text="{Binding Units}"
+                    Text="{Binding UnitSymbol}"
                 />
                 <Rectangle
                     Grid.Column="1"
@@ -122,14 +122,14 @@
                 />
                 <TextBlock
                     DataContext="{Binding Right}"
-                    IsVisible="{Binding Units, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    IsVisible="{Binding UnitSymbol, Converter={x:Static ObjectConverters.IsNotNull}}"
                     Grid.Column="2"
                     Grid.Row="4"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Top"
                     FontSize="15"
                     Foreground="{DynamicResource AsvForegroundUnknownBrush}"
-                    Text="{Binding Units}"
+                    Text="{Binding UnitSymbol}"
                 />
                 <ProgressBar
                     Grid.Column="0"

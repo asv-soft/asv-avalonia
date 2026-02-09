@@ -1,3 +1,4 @@
+﻿using System.Diagnostics;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -5,23 +6,14 @@ using R3;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor<DigitRttBoxViewModel>]
-public class DigitRttBoxView : SingleRttBoxView { }
-
-public class DigitRttBoxViewModel : SingleRttBoxViewModel
+public class SingleRttBoxViewModel : RttBoxViewModel
 {
-    private readonly TimeSpan? _networkErrorTimeout;
-
-    public DigitRttBoxViewModel()
+    public SingleRttBoxViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
-        MeasureUnit = new DistanceMeterUnitItem();
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
-        Units = MeasureUnit.Symbol;
-        FormatString = "## 000.000";
-        var sub = new Subject<double>();
-        Observable<double> value = sub;
+        UnitSymbol = "mm";
         int index = 0;
         int maxIndex = Enum.GetValues<AsvColorKind>().Length;
         Observable
@@ -37,57 +29,76 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
                 Progress = Random.Shared.NextDouble();
                 if (Random.Shared.NextDouble() > 0.9)
                 {
-                    sub.OnNext(double.NaN);
+                    ValueString = Asv.Avalonia.Units.NotAvailableString;
+                    StatusText = "No data";
                 }
                 else
                 {
-                    sub.OnNext(Random.Shared.Next(-6553500, 6553500) / 100.0);
+                    ValueString = (Random.Shared.Next(-6553500, 6553500) / 100.0).ToString("F2");
+                    StatusText = null;
                 }
 
                 Status = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 ProgressStatus = Enum.GetValues<AsvColorKind>()[index++ % maxIndex];
                 Updated();
-            });
-        value
-            .ThrottleLastFrame(1)
-            .ObserveOnUIThreadDispatcher()
-            .Subscribe(OnValueChanged)
+            })
             .DisposeItWith(Disposable);
     }
 
-    public DigitRttBoxViewModel(
+    public SingleRttBoxViewModel(
         NavigationId id,
         ILoggerFactory loggerFactory,
-        IUnitService units,
-        string unitId,
-        Observable<double> value,
-        TimeSpan? networkErrorTimeout
+        TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory, networkErrorTimeout)
-    {
-        _networkErrorTimeout = networkErrorTimeout;
-        MeasureUnit =
-            units[unitId]?.CurrentUnitItem.CurrentValue
-            ?? throw new ArgumentException($"{unitId} unit not found in unit service");
-        Units = MeasureUnit.Symbol;
-        value
-            .ThrottleLastFrame(1)
-            .ObserveOnUIThreadDispatcher()
-            .Subscribe(OnValueChanged)
-            .DisposeItWith(Disposable);
-    }
+        : base(id, loggerFactory, networkErrorTimeout) { }
 
-    protected IUnitItem MeasureUnit { get; }
-
-    public string? FormatString
+    public string? UnitSymbol
     {
         get;
         set => SetField(ref field, value);
     }
 
-    protected virtual void OnValueChanged(double value)
+    public string? ValueString
     {
-        ValueString = MeasureUnit.PrintFromSi(value, FormatString);
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public string? StatusText
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+}
+
+public class SingleRttBoxViewModel<T>
+    : SingleRttBoxViewModel,
+        IUpdatableRttBoxViewModel<SingleRttBoxViewModel<T>, T>
+{
+    private readonly TimeSpan? _networkErrorTimeout;
+
+    public SingleRttBoxViewModel(
+        NavigationId id,
+        ILoggerFactory loggerFactory,
+        Observable<T> valueStream,
+        TimeSpan? networkErrorTimeout
+    )
+        : base(id, loggerFactory, networkErrorTimeout)
+    {
+        _networkErrorTimeout = networkErrorTimeout;
+        valueStream
+            .ThrottleLastFrame(1)
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(OnValueChanged)
+            .DisposeItWith(Disposable);
+    }
+
+    public required Action<SingleRttBoxViewModel<T>, T> UpdateAction { get; init; }
+
+    private void OnValueChanged(T value)
+    {
+        Debug.Assert(UpdateAction != null, "UpdateAction must be set");
+        UpdateAction(this, value);
         if (_networkErrorTimeout != null)
         {
             Updated();
