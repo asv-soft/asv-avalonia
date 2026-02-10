@@ -43,7 +43,7 @@ public class CompositionViewLocator : IDataTemplate
 
         while (viewModelType != null)
         {
-            var viewModelContract = ControlsMixin.GetKeyForType(viewModelType);
+            var viewModelContract = ControlsMixin.GetServiceKeyForView(viewModelType);
 
             var obj = _svc.GetKeyedService<Control>(viewModelContract);
             if (obj != null)
@@ -66,7 +66,7 @@ public class CompositionViewLocator : IDataTemplate
             // try to find view by implemented interfaces
             foreach (var @interface in viewModelType.GetInterfaces())
             {
-                viewModelContract = ControlsMixin.GetKeyForType(@interface);
+                viewModelContract = ControlsMixin.GetServiceKeyForView(@interface);
                 obj = _svc.GetKeyedService<Control>(viewModelContract);
                 if (obj != null)
                 {

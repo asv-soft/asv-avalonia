@@ -26,6 +26,16 @@ public class App : Application, IContainerHost, IShellHost
         var conventions = new ConventionBuilder();
         var containerCfg = new ContainerConfiguration();
 
+        if (Design.IsDesignMode)
+        {
+            var builder = AppHost.CreateBuilder([]);
+            builder
+                .UseInMemoryConfig()
+                .UseControls()
+                .UseUnitService();
+            builder.Build();
+        }
+        
         containerCfg
             .WithDependenciesFromSystemModule()
             .WithDependenciesFromIoModule()

@@ -4,7 +4,8 @@ public static class WorkspaceMixin
 {
     public static ControlsHostBuilder RegisterWorkspace(this ControlsHostBuilder builder)
     {
-        builder.Register<StackPanelWidgetViewModel, StackPanelWidgetView>();
-        return builder;
+        return builder
+            .Register<StackPanelWidgetViewModel, StackPanelWidgetView>()
+            .Register<WrapPanelWidgetViewModel, WrapPanelWidgetView>();
     }
 }
