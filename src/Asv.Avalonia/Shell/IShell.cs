@@ -34,6 +34,7 @@ public enum ShellErrorState
 public interface IShell : IRoutable
 {
     string Title { get; set; }
+    Observable<Unit> OnClose { get; }
     ShellErrorState ErrorState { get; set; }
     ObservableList<IMenuItem> MainMenu { get; }
     IReadOnlyObservableList<IPage> Pages { get; }

@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Composition.Hosting;
 using System.Diagnostics;
 using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;
@@ -23,6 +22,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
 {
     private const int MaxInfoBarMessages = 3;
 
+    private readonly Subject<Unit> _onCloseEvent;
     private readonly ObservableList<IPage> _pages;
     private readonly ObservableList<ShellMessageViewModel> _infoMessagesSource;
     private readonly UnsavedChangesDialogPrefab _unsavedChangesDialogPrefab;
@@ -62,6 +62,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             Disposable
         );
         WindowStateHeader = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+
+        _onCloseEvent = new Subject<Unit>().DisposeItWith(Disposable);
 
         _pages = new ObservableList<IPage>();
         _pages.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -184,6 +186,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     #region Close
     public ReactiveCommand Close { get; }
 
+    public Observable<Unit> OnClose => _onCloseEvent;
+
     protected virtual async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
@@ -220,7 +224,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             }
         }
 
-        Container.Dispose();
+        _onCloseEvent.OnNext(Unit.Default);
 
         return true;
     }
