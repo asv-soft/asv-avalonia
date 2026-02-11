@@ -4,9 +4,13 @@ This section contains samples and tutorials for users.
 It will help you become more familiar with the framework.
 If you want to learn the basics first, check out [Get Started](project-setup.md).
 
-## Sample app
+### Sample application
 
-Coming soon...
+Create a full-featured Recipe Book application to master the core capabilities of Asv.Avalonia.
+In this tutorial, you will implement specific business logic with Undo/Redo support, handle user input via modal dialogs,
+display notifications, and use the Layout Service to persist user preferences.
+
+Start the [tutorial](recipe-book-app.md)
 
 ### How to create a module
 
