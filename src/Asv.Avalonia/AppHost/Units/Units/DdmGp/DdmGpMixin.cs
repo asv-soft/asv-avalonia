@@ -2,7 +2,7 @@
 
 public static class DdmGpMixin
 {
-    public static UnitsBuilder RegisterDdmGp(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterDdmGp(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<DdmGpUnit>(DdmGpUnit.Id)

@@ -2,7 +2,7 @@
 
 public static class PowerMixin
 {
-    public static UnitsBuilder RegisterPower(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterPower(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder.AddUnit<PowerUnit>(PowerUnit.Id).AddItem<PowerDbmUnitItem>();
         return builder;

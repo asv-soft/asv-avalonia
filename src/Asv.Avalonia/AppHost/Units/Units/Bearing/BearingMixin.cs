@@ -2,7 +2,7 @@
 
 public static class BearingMixin
 {
-    public static UnitsBuilder RegisterBearing(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterBearing(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<BearingUnit>(BearingUnit.Id)

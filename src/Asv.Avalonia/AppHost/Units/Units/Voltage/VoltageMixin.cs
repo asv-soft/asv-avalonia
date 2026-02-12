@@ -2,7 +2,7 @@
 
 public static class VoltageMixin
 {
-    public static UnitsBuilder RegisterVoltage(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterVoltage(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<VoltageUnit>(VoltageUnit.Id)

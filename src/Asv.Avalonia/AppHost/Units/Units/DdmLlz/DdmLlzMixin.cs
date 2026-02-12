@@ -2,7 +2,7 @@
 
 public static class DdmLlzMixin
 {
-    public static UnitsBuilder RegisterDdmLlz(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterDdmLlz(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<DdmLlzUnit>(DdmLlzUnit.Id)

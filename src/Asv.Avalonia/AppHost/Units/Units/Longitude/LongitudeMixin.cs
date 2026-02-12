@@ -2,7 +2,7 @@
 
 public static class LongitudeMixin
 {
-    public static UnitsBuilder RegisterLongitude(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterLongitude(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<LongitudeUnit>(LongitudeUnit.Id)

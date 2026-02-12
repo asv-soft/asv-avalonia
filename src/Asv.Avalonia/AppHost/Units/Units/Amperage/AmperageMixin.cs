@@ -2,7 +2,7 @@
 
 public static class AmperageMixin
 {
-    public static UnitsBuilder RegisterAmperage(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterAmperage(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<AmperageUnit>(AmperageUnit.Id)

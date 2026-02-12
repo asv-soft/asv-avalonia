@@ -9,6 +9,16 @@ namespace Asv.Avalonia;
 
 public class CompositionViewLocator : IDataTemplate
 {
+    #region Static
+
+    public static string GetServiceKeyForView(Type type) =>
+        type.FullName ?? throw new ArgumentException("type is null", nameof(type));
+
+    public static string GetServiceKeyForView<T>() =>
+        typeof(T).FullName ?? throw new ArgumentException("type is null", typeof(T).Name);
+
+    #endregion
+    
     private const string MetricBaseName = "asv.avalonia.viewlocator";
     private readonly CompositionHost _container;
 
@@ -43,7 +53,7 @@ public class CompositionViewLocator : IDataTemplate
 
         while (viewModelType != null)
         {
-            var viewModelContract = ControlsMixin.GetServiceKeyForView(viewModelType);
+            var viewModelContract = GetServiceKeyForView(viewModelType);
 
             var obj = _svc.GetKeyedService<Control>(viewModelContract);
             if (obj != null)
@@ -66,7 +76,7 @@ public class CompositionViewLocator : IDataTemplate
             // try to find view by implemented interfaces
             foreach (var @interface in viewModelType.GetInterfaces())
             {
-                viewModelContract = ControlsMixin.GetServiceKeyForView(@interface);
+                viewModelContract = GetServiceKeyForView(@interface);
                 obj = _svc.GetKeyedService<Control>(viewModelContract);
                 if (obj != null)
                 {

@@ -36,7 +36,7 @@ public class NullUnitService : IUnitService
     );
     private readonly IUnit _meter = new DistanceUnit(
         DesignTime.Configuration,
-        [new DistanceMeterUnitItem(), new DistanceMeterUnitItem()]
+        [new DistanceMeterUnitItem(), new DistanceNauticalMileUnitItem()]
     );
 
     private readonly Dictionary<string, IUnit> _units;
@@ -44,15 +44,14 @@ public class NullUnitService : IUnitService
     private NullUnitService()
     {
         _units = new Dictionary<string, IUnit>(
-            new KeyValuePair<string, IUnit>[]
-            {
+            [
                 new(_altitude.UnitId, _altitude),
                 new(_latitude.UnitId, _latitude),
                 new(_longitude.UnitId, _longitude),
                 new(_angle.UnitId, _angle),
                 new(_frequency.UnitId, _frequency),
-                new(_meter.UnitId, _meter),
-            }
+                new(_meter.UnitId, _meter)
+            ]
         );
     }
 

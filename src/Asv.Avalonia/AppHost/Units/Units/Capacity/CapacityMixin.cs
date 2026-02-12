@@ -2,7 +2,7 @@
 
 public static class CapacityMixin
 {
-    public static UnitsBuilder RegisterCapacity(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterCapacity(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<CapacityUnit>(CapacityUnit.Id)

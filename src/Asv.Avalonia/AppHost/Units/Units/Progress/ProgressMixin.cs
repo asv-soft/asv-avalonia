@@ -2,7 +2,7 @@
 
 public static class ProgressMixin
 {
-    public static UnitsBuilder RegisterProgress(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterProgress(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<ProgressUnit>(ProgressUnit.Id)

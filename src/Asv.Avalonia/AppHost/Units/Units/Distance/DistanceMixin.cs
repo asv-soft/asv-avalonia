@@ -2,7 +2,7 @@
 
 public static class DistanceMixin
 {
-    public static UnitsBuilder RegisterDistance(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterDistance(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<DistanceUnit>(DistanceUnit.Id)

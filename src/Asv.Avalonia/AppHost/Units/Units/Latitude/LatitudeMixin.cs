@@ -2,7 +2,7 @@
 
 public static class LatitudeMixin
 {
-    public static UnitsBuilder RegisterLatitude(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterLatitude(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<LatitudeUnit>(LatitudeUnit.Id)

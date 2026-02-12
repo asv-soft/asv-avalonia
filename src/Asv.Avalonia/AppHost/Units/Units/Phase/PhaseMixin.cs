@@ -2,7 +2,7 @@
 
 public static class PhaseMixin
 {
-    public static UnitsBuilder RegisterPhase(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterPhase(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<PhaseUnit>(PhaseUnit.Id)

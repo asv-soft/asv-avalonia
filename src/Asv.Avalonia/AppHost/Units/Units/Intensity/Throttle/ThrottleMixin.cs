@@ -2,7 +2,7 @@
 
 public static class ThrottleMixin
 {
-    public static UnitsBuilder RegisterThrottle(this UnitsBuilder builder)
+    public static  UnitsHostBuilderMixin.Builder RegisterThrottle(this  UnitsHostBuilderMixin.Builder builder)
     {
         builder
             .AddUnit<ThrottleUnit>(ThrottleUnit.Id)
