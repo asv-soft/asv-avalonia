@@ -7,6 +7,8 @@ namespace Asv.Avalonia;
 
 public interface IDesignTimeTreePage : IPage
 {
+    MaterialIconKind? TreeHeaderIcon { get; }
+    string? TreeHeader { get; }
     ObservableTree<ITreePage, NavigationId> TreeView { get; }
     BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?> SelectedNode { get; }
     BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
