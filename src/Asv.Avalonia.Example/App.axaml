@@ -21,11 +21,11 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/BaseExampleBlock.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/Header/HeaderBlock.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/Preview/PreviewExampleBlock.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/Action/ActionExampleBlock.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/About/AboutExampleBlock.axaml" />
+                <ResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/BaseExampleBlock.axaml" />
+                <ResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/Header/HeaderBlock.axaml" />
+                <ResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/Preview/PreviewExampleBlock.axaml" />
+                <ResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/Action/ActionExampleBlock.axaml" />
+                <ResourceInclude Source="avares://Asv.Avalonia.Example/Core/Controls/Blocks/About/AboutExampleBlock.axaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

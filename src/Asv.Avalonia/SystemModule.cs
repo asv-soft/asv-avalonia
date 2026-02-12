@@ -26,7 +26,6 @@ public static class ContainerConfigurationMixin
     )
     {
         containerConfiguration.WithExport(TimeProvider.System);
-        containerConfiguration.WithExport(AppHost.Instance.GetService<IUnitService>());
         if (Design.IsDesignMode)
         {
             containerConfiguration
@@ -41,6 +40,11 @@ public static class ContainerConfigurationMixin
         }
 
         var exceptionTypes = new List<Type>();
+        if (AppHost.Instance.GetService<IUnitService>() is { } unitService)
+        {
+            containerConfiguration.WithExport(unitService);
+        }
+
         if (AppHost.Instance.GetServiceOrDefault<IConfiguration>() is { } configuration)
         {
             containerConfiguration.WithExport(configuration);
