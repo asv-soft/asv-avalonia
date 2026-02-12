@@ -14,6 +14,7 @@
         <avalonia:GeoPointRttBoxViewModel />
     </Design.DataContext>
     <avalonia:RttBox
+        Margin="3"
         IsUpdated="{Binding IsUpdated}"
         Padding="4"
         FontSize="18"
@@ -47,9 +48,20 @@
                 Grid.Row="2"
                 Text="{x:Static avalonia:RS.Altitude_ShortName}"
             />
-            <SelectableTextBlock Grid.Column="2" Grid.Row="0" Text="{Binding LatitudeString}" />
-            <SelectableTextBlock Grid.Column="2" Grid.Row="1" Text="{Binding LongitudeString}" />
-            <SelectableTextBlock Grid.Column="2" Grid.Row="2" Text="{Binding AltitudeString}" />
+            <SelectableTextBlock
+                Grid.Column="2"
+                Grid.Row="0"
+                Text="{Binding GeoPointProperty.Latitude.ViewValue.Value}"
+            />
+            <SelectableTextBlock
+                Grid.Column="2"
+                Grid.Row="1"
+                Text="{Binding GeoPointProperty.Longitude.ViewValue.Value}"
+            />
+            <StackPanel Orientation="Horizontal" Spacing="2" Grid.Column="2" Grid.Row="2">
+                <SelectableTextBlock Text="{Binding GeoPointProperty.Altitude.ViewValue.Value}" />
+                <SelectableTextBlock Text="{Binding GeoPointProperty.Altitude.Unit.CurrentUnitItem.Value.Symbol}" />
+            </StackPanel>
 
             <ProgressBar
                 Grid.ColumnSpan="3"

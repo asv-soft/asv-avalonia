@@ -69,6 +69,17 @@ public class ControlsGalleryPageExtension(ILoggerFactory loggerFactory)
 
         context.Nodes.Add(
             new TreePage(
+                RttBoxesPageViewModel.PageId,
+                "Rtt boxes",
+                RttBoxesPageViewModel.PageIcon,
+                RttBoxesPageViewModel.PageId,
+                NavigationId.Empty,
+                loggerFactory
+            ).DisposeItWith(contextDispose)
+        );
+
+        context.Nodes.Add(
+            new TreePage(
                 WorkspacePageViewModel.PageId,
                 "Workspace",
                 WorkspacePageViewModel.PageIcon,
