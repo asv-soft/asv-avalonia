@@ -7,6 +7,7 @@ public class NullUnitService : IUnitService
     public static NullUnitService Instance { get; } = new();
 
     #endregion
+
     private readonly Lock _lock = new();
 
     private readonly IUnit _altitude = new AltitudeUnit(
@@ -36,7 +37,7 @@ public class NullUnitService : IUnitService
     );
     private readonly IUnit _meter = new DistanceUnit(
         DesignTime.Configuration,
-        [new DistanceMeterUnitItem(), new DistanceMeterUnitItem()]
+        [new DistanceMeterUnitItem(), new DistanceNauticalMileUnitItem()]
     );
 
     private readonly Dictionary<string, IUnit> _units;
