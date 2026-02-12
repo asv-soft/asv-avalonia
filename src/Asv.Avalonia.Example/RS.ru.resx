@@ -351,4 +351,7 @@
     <data name="HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS" xml:space="preserve">
         <value>Значение не должно содержать букву 's'</value>
     </data>
+    <data name="ControlsGalleryPageViewModel_TreeHeader" xml:space="preserve">
+        <value>Контролы</value>
+    </data>
 </root>
