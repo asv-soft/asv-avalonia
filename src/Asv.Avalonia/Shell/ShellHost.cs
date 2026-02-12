@@ -1,7 +1,5 @@
 using System.Composition;
-using System.Composition.Convention;
 using System.Composition.Hosting;
-using System.Reflection;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -14,28 +12,20 @@ namespace Asv.Avalonia;
 /// Provides a base class for Avalonia applications with built-in MEF dependency injection,
 /// shell management, and application lifecycle orchestration.
 /// </summary>
-public abstract class AppBase : Application, IContainerHost, IShellHost, IDisposable
+public abstract class ShellHost : Application, IContainerHost, IShellHost
 {
     private readonly IAppStartupService? _appStartupService;
     private readonly CompositionHost _container;
     private readonly Subject<IShell> _onShellLoaded = new();
     private IDisposable? _onCloseSubscription;
+    private volatile int _isDisposed;
 
-    protected AppBase(ContainerConfiguration containerCfg)
+    protected ShellHost(Action<ContainerConfiguration> containerCfgOptions)
     {
-        containerCfg.WithDefaultConventions(new ConventionBuilder());
-        containerCfg.WithExport<IDataTemplateHost>(this).WithExport<IShellHost>(this);
+        var containerCfg = new ContainerConfiguration();
+        containerCfgOptions(containerCfg);
+        WithDependenciesFromTheApp(containerCfg, this);
 
-        if (Design.IsDesignMode)
-        {
-            containerCfg.WithExport(NullContainerHost.Instance);
-        }
-        else
-        {
-            containerCfg.WithExport<IContainerHost>(this);
-        }
-
-        // TODO (from Asv.Drones): load plugin manager before creating container
         _container = containerCfg.CreateContainer();
 
         DataTemplates.Add(new CompositionViewLocator(_container));
@@ -80,12 +70,7 @@ public abstract class AppBase : Application, IContainerHost, IShellHost, IDispos
             throw new Exception("Unknown platform");
         }
 
-        _onCloseSubscription = Shell
-            .OnClose.Synchronize()
-            .Subscribe(_ =>
-            {
-                Dispose();
-            });
+        _onCloseSubscription = Shell.OnClose.Synchronize().Subscribe(_ => Dispose());
 
         base.OnFrameworkInitializationCompleted();
 
@@ -147,37 +132,38 @@ public abstract class AppBase : Application, IContainerHost, IShellHost, IDispos
     /// </remarks>
     protected abstract void LoadXaml();
 
-    public IExportInfo Source => SystemModule.Instance;
-
-    #region Dispose
-
-    public void Dispose()
+    private void Dispose()
     {
-        Dispose(true);
+        if (Interlocked.CompareExchange(ref _isDisposed, 1, 0) == 1)
+        {
+            return;
+        }
+
+        _onCloseSubscription?.Dispose();
+        _onShellLoaded.Dispose();
+        Shell.Dispose();
+        _container.Dispose();
         GC.SuppressFinalize(this);
     }
 
-    protected virtual void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _onCloseSubscription?.Dispose();
-            _onShellLoaded.Dispose();
-            Shell.Dispose();
-            _container.Dispose();
-        }
-    }
-
-    #endregion
-}
-
-public static class ContainerConfigurationExtensions
-{
-    public static ContainerConfiguration WithDependenciesFromTheAssembly(
-        this ContainerConfiguration containerConfiguration,
-        Assembly assembly
+    private static void WithDependenciesFromTheApp(
+        in ContainerConfiguration containerConfiguration,
+        ShellHost app
     )
     {
-        return containerConfiguration.WithAssembly(assembly);
+        containerConfiguration.WithExport<IDataTemplateHost>(app).WithExport<IShellHost>(app);
+
+        if (Design.IsDesignMode)
+        {
+            containerConfiguration.WithExport(NullContainerHost.Instance);
+        }
+        else
+        {
+            containerConfiguration.WithExport<IContainerHost>(app);
+        }
+
+        containerConfiguration.WithAssemblies([app.GetType().Assembly]);
     }
+
+    public IExportInfo Source => SystemModule.Instance;
 }

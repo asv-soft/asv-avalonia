@@ -1,5 +1,3 @@
-using System.Composition.Hosting;
-using System.Reflection;
 using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.IO;
@@ -8,18 +6,17 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Example;
 
-public class App : AppBase
+public class App : ShellHost
 {
     public App()
-        : base(
-            new ContainerConfiguration()
-                .WithDependenciesFromSystemModule()
-                .WithDependenciesFromIoModule()
-                .WithDependenciesFromPluginManagerModule()
-                .WithDependenciesFromGeoMapModule()
-                .WithDependenciesFromApi()
-                .WithDependenciesFromTheAssembly(Assembly.GetExecutingAssembly())
-        ) { }
+        : base(cfg =>
+        {
+            cfg.WithDependenciesFromSystemModule();
+            cfg.WithDependenciesFromIoModule();
+            cfg.WithDependenciesFromPluginManagerModule();
+            cfg.WithDependenciesFromGeoMapModule();
+            cfg.WithDependenciesFromApi();
+        }) { }
 
     protected override void LoadXaml()
     {
