@@ -2,7 +2,7 @@ using Avalonia;
 
 namespace Asv.Avalonia.Example;
 
-public partial class AboutExampleBlock : BaseExampleBlock
+public partial class AboutExampleBlock
 {
     public static readonly StyledProperty<string?> TitleProperty = AvaloniaProperty.Register<
         AboutExampleBlock,

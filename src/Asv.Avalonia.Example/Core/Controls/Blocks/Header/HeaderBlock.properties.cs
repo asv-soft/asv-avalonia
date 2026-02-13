@@ -1,9 +1,8 @@
 using Avalonia;
-using Avalonia.Controls;
 
 namespace Asv.Avalonia.Example;
 
-public partial class HeaderBlock : BaseExampleBlock
+public partial class HeaderBlock
 {
     public static readonly StyledProperty<string?> TitleH1Property = AvaloniaProperty.Register<
         HeaderBlock,

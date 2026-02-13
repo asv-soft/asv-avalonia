@@ -3,7 +3,7 @@ using Avalonia;
 
 namespace Asv.Avalonia.Example;
 
-public partial class ActionExampleBlock : BaseExampleBlock
+public partial class ActionExampleBlock
 {
     public static readonly StyledProperty<string?> ButtonTextProperty = AvaloniaProperty.Register<
         ActionExampleBlock,

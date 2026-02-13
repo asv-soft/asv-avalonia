@@ -10,6 +10,6 @@
     x:Class="Asv.Avalonia.Example.Plugin.PluginExample.ExamplePageView"
     x:DataType="example:ExamplePageViewModel"
 >
-    Plugin version: v1.0.3-example.2
+    Example page for the plugin
 </UserControl
 >

@@ -2,7 +2,7 @@
 
 public abstract class AsyncCommand : IAsyncCommand
 {
-    protected const string BaseId = "cmd";
+    public const string BaseId = "cmd";
     public abstract ICommandInfo Info { get; }
     public abstract bool CanExecute(
         IRoutable context,
