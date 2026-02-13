@@ -12,7 +12,7 @@ public static class UserConfigMixin
         builder.Services.AddSingleton<IConfiguration, InMemoryConfiguration>();
         return builder;
     }
-    
+
     public static IHostApplicationBuilder UseJsonUserConfig(
         this IHostApplicationBuilder builder,
         Action<UserJsonConfigurationBuilder>? configure = null

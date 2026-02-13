@@ -2,7 +2,7 @@ namespace Asv.Avalonia;
 
 public static class RttBoxHostBuilderMixin
 {
-    public static ControlsHostBuilder.Builder RttBox(this ControlsHostBuilder.Builder builder)
+    public static AppHostControls.Builder RegisterRttBox(this AppHostControls.Builder builder)
     {
         return builder
             .RegisterViewFor<KeyValueRttBoxViewModel, KeyValueRttBoxView>()

@@ -3,8 +3,6 @@ using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
-
-
 public static class UnitsHostBuilderMixin
 {
     public static IHostApplicationBuilder UseUnitService(
@@ -25,7 +23,7 @@ public static class UnitsHostBuilderMixin
 
         return builder;
     }
-    
+
     public sealed class Builder
     {
         private readonly IHostApplicationBuilder _builder;
@@ -88,5 +86,3 @@ public static class UnitsHostBuilderMixin
         }
     }
 }
-
-

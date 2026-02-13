@@ -43,16 +43,14 @@ public class NullUnitService : IUnitService
 
     private NullUnitService()
     {
-        _units = new Dictionary<string, IUnit>(
-            [
-                new(_altitude.UnitId, _altitude),
-                new(_latitude.UnitId, _latitude),
-                new(_longitude.UnitId, _longitude),
-                new(_angle.UnitId, _angle),
-                new(_frequency.UnitId, _frequency),
-                new(_meter.UnitId, _meter)
-            ]
-        );
+        _units = new Dictionary<string, IUnit>([
+            new(_altitude.UnitId, _altitude),
+            new(_latitude.UnitId, _latitude),
+            new(_longitude.UnitId, _longitude),
+            new(_angle.UnitId, _angle),
+            new(_frequency.UnitId, _frequency),
+            new(_meter.UnitId, _meter),
+        ]);
     }
 
     public IReadOnlyDictionary<string, IUnit> Units => _units;

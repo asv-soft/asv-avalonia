@@ -2,7 +2,9 @@
 
 public static class FieldStrengthMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterFieldStrength(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterFieldStrength(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<FieldStrengthUnit>(FieldStrengthUnit.Id)

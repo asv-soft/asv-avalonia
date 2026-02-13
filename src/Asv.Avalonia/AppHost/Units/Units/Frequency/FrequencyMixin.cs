@@ -2,7 +2,9 @@
 
 public static class FrequencyMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterFrequency(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterFrequency(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<FrequencyUnit>(FrequencyUnit.Id)

@@ -29,13 +29,10 @@ public class App : Application, IContainerHost, IShellHost
         if (Design.IsDesignMode)
         {
             var builder = AppHost.CreateBuilder([]);
-            builder
-                .UseInMemoryConfig()
-                .UseControls()
-                .UseUnitService();
+            builder.UseInMemoryConfig().UseControls().UseUnitService();
             builder.Build();
         }
-        
+
         containerCfg
             .WithDependenciesFromSystemModule()
             .WithDependenciesFromIoModule()

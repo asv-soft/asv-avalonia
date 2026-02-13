@@ -2,7 +2,9 @@
 
 public static class TimeSpanMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterTimeSpan(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterTimeSpan(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<TimeSpanUnit>(TimeSpanUnit.Id)

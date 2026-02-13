@@ -1,8 +1,8 @@
 ﻿namespace Asv.Avalonia;
 
-public static class WorkspaceHostBuilder
+public static class AppHostControlsWorkspace
 {
-    public static ControlsHostBuilder.Builder RegisterWorkspace(this ControlsHostBuilder.Builder builder)
+    public static AppHostControls.Builder RegisterWorkspace(this AppHostControls.Builder builder)
     {
         return builder
             .RegisterViewFor<StackPanelWidgetViewModel, StackPanelWidgetView>()

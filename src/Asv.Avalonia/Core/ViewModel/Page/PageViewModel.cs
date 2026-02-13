@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -24,7 +25,6 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         Title = id.ToString();
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
-
         _unsavedChangesDialogPrefab = dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
     }
 

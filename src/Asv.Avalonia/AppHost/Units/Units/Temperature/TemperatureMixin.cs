@@ -2,7 +2,9 @@
 
 public static class TemperatureMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterTemperature(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterTemperature(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<TemperatureUnit>(TemperatureUnit.Id)

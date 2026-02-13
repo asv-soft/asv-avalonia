@@ -2,7 +2,9 @@
 
 public static class VelocityMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterVelocity(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterVelocity(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<VelocityUnit>(VelocityUnit.Id)

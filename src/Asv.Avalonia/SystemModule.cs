@@ -39,7 +39,7 @@ public static class ContainerConfigurationMixin
 
             return containerConfiguration.WithAssemblies([typeof(SystemModule).Assembly]);
         }
-        
+
         containerConfiguration.WithExport(AppHost.Instance.GetService<IUnitService>());
 
         var exceptionTypes = new List<Type>();

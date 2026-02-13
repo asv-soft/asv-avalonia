@@ -2,7 +2,9 @@
 
 public static class AltitudeMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterAltitude(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterAltitude(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<AltitudeUnit>(AltitudeUnit.Id)

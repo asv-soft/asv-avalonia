@@ -18,7 +18,7 @@ public class CompositionViewLocator : IDataTemplate
         typeof(T).FullName ?? throw new ArgumentException("type is null", typeof(T).Name);
 
     #endregion
-    
+
     private const string MetricBaseName = "asv.avalonia.viewlocator";
     private readonly CompositionHost _container;
 

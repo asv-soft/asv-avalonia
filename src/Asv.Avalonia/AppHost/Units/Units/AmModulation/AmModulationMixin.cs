@@ -2,7 +2,9 @@
 
 public static class AmModulationMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterAmModulation(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterAmModulation(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<AmModulationUnit>(AmModulationUnit.Id)

@@ -4,9 +4,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
-
-
-public static class ControlsHostBuilder
+public static class AppHostControls
 {
     public static IHostApplicationBuilder UseControls(
         this IHostApplicationBuilder builder,
@@ -24,26 +22,22 @@ public static class ControlsHostBuilder
         }
         return builder;
     }
-    
+
     public class Builder(IHostApplicationBuilder builder)
     {
-        public void RegisterDefault()
+        public Builder RegisterDefault()
         {
-            this.RegisterWorkspace()
-                .RegisterTreePage()
-                .RttBox();
+            return this.RegisterWorkspace().RegisterTreePage().RegisterRttBox();
         }
 
         public Builder RegisterViewFor<TViewModel, TView>()
             where TView : Control
             where TViewModel : IViewModel
         {
-            builder.Services.AddKeyedTransient<Control>(
+            builder.Services.AddKeyedTransient<Control, TView>(
                 CompositionViewLocator.GetServiceKeyForView(typeof(TViewModel))
             );
             return this;
         }
     }
 }
-
-

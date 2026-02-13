@@ -2,7 +2,9 @@
 
 public static class SdmUnitMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterSdm(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterSdm(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<SdmUnit>(SdmUnit.Id)

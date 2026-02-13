@@ -2,7 +2,9 @@
 
 public static class AngleMixin
 {
-    public static  UnitsHostBuilderMixin.Builder RegisterAngle(this  UnitsHostBuilderMixin.Builder builder)
+    public static UnitsHostBuilderMixin.Builder RegisterAngle(
+        this UnitsHostBuilderMixin.Builder builder
+    )
     {
         builder
             .AddUnit<AngleUnit>(AngleUnit.Id)
