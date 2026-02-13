@@ -1,5 +1,7 @@
 ﻿using System.Composition;
+using Asv.Avalonia.Example.Api;
 using Asv.Cfg;
+using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -9,12 +11,7 @@ namespace Asv.Avalonia.Example.Plugin.PluginExample;
 public interface IExamplePageViewModel : IPage { }
 
 [ExportPage(PageId)]
-[method: ImportingConstructor]
-public class ExamplePageViewModel(
-    ICommandService cmd,
-    ILoggerFactory loggerFactory,
-    IDialogService dialogService
-) : PageViewModel<IExamplePageViewModel>(PageId, cmd, loggerFactory, dialogService)
+public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>
 {
     public const string PageId = "example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Earth;
@@ -24,6 +21,14 @@ public class ExamplePageViewModel(
     {
         DesignTime.ThrowIfNotDesignMode();
     }
+
+    [ImportingConstructor]
+    public ExamplePageViewModel(
+        ICommandService cmd,
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService
+    )
+        : base(PageId, cmd, loggerFactory, dialogService) { }
 
     public override IEnumerable<IRoutable> GetChildren()
     {

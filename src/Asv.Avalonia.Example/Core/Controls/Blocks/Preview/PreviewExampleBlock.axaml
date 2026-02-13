@@ -1,8 +1,8 @@
 <ResourceDictionary
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:example="clr-namespace:Asv.Avalonia.Example"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
 >
     <Design.PreviewWith>
         <example:PreviewExampleBlock Height="140">
