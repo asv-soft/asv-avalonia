@@ -31,9 +31,10 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         IContainerHost container,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(id, cmd, loggerFactory, dialogService)
+        : base(id, cmd, loggerFactory, dialogService, ext)
     {
         _container = container;
         _loggerFactory = loggerFactory;

@@ -21,7 +21,8 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
             NullAppInfo.Instance,
             NullContainerHost.Instance,
             DesignTime.LoggerFactory,
-            DesignTime.DialogService
+            DesignTime.DialogService,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -43,7 +44,11 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 
         for (int i = 0; i < 5; i++)
         {
-            var d = new HomePageItem($"dev{i}", DesignTime.LoggerFactory)
+            var d = new HomePageItem(
+                $"dev{i}",
+                DesignTime.LoggerFactory,
+                DesignTime.ExtensionService
+            )
             {
                 Icon = MaterialIconKind.Drone,
                 Header = $"Device {i}",
@@ -100,9 +105,10 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         IAppInfo appInfo,
         IContainerHost container,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(PageId, cmd, loggerFactory, dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         AppInfo = appInfo;
         Icon = PageIcon;
@@ -117,7 +123,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         Items = [];
 
         ItemsList = Items
-            .CreateView(x => new HomePageItemDecorator(x, container, loggerFactory))
+            .CreateView(x => new HomePageItemDecorator(x, container, loggerFactory, ext))
             .DisposeItWith(Disposable);
 
         ItemsList.DisposeMany().DisposeItWith(Disposable);

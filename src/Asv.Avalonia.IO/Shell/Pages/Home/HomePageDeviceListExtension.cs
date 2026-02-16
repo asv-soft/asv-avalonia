@@ -11,15 +11,21 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 {
     private readonly IDeviceManager _svc;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly IExtensionService _ext;
 
     [ImportingConstructor]
-    public HomePageDeviceListExtension(IDeviceManager svc, ILoggerFactory loggerFactory)
+    public HomePageDeviceListExtension(
+        IDeviceManager svc,
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
+    )
     {
         ArgumentNullException.ThrowIfNull(svc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
 
         _svc = svc;
         _loggerFactory = loggerFactory;
+        _ext = ext;
     }
 
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
@@ -35,6 +41,6 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 
     private HomePageDeviceItem TryAdd(IClientDevice device)
     {
-        return new HomePageDeviceItem(device, _svc, _loggerFactory);
+        return new HomePageDeviceItem(device, _svc, _loggerFactory, _ext);
     }
 }

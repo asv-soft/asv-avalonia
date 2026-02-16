@@ -12,7 +12,8 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
             ShellId,
             NullContainerHost.Instance,
             DesignTime.LoggerFactory,
-            DesignTime.Configuration
+            DesignTime.Configuration,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();

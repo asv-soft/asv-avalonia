@@ -26,7 +26,8 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
             DesignTime.CommandService,
             NullPluginManager.Instance,
             DesignTime.LoggerFactory,
-            NullDialogService.Instance
+            NullDialogService.Instance,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -38,9 +39,10 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(PageId, cmd, loggerFactory, dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         Title = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;

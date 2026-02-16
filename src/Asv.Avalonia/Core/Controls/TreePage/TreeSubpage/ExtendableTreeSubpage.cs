@@ -10,8 +10,12 @@ public abstract class ExtendableTreeSubpage<TSubContext>
         ITreeSubpage
     where TSubContext : class, ITreeSubpage
 {
-    protected ExtendableTreeSubpage(NavigationId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    protected ExtendableTreeSubpage(
+        NavigationId id,
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
+    )
+        : base(id, loggerFactory, ext)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -32,8 +36,12 @@ public abstract class ExtendableTreeSubpage<TContext, TSubContext>
     where TSubContext : class, ITreeSubpage
     where TContext : class, IPage
 {
-    protected ExtendableTreeSubpage(NavigationId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    protected ExtendableTreeSubpage(
+        NavigationId id,
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
+    )
+        : base(id, loggerFactory, ext)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);

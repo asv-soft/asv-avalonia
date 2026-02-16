@@ -42,7 +42,8 @@ public class SettingsConnectionViewModel
             NullDeviceManager.Instance,
             DesignTime.Navigation,
             NullContainerHost.Instance,
-            DesignTime.LoggerFactory
+            DesignTime.LoggerFactory,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -63,9 +64,10 @@ public class SettingsConnectionViewModel
         IDeviceManager deviceManager,
         INavigationService navigationService,
         IContainerHost containerHost,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
     )
-        : base(SubPageId, loggerFactory)
+        : base(SubPageId, loggerFactory, ext)
     {
         _navigationService = navigationService;
         _containerHost = containerHost;

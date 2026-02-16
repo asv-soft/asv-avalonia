@@ -11,9 +11,10 @@ public class HomePageDeviceItem : HomePageItem
     public HomePageDeviceItem(
         IClientDevice device,
         IDeviceManager deviceManager,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
     )
-        : base(NavigationId.NormalizeTypeId(device.Id.AsString()), loggerFactory)
+        : base(NavigationId.NormalizeTypeId(device.Id.AsString()), loggerFactory, ext)
     {
         Device = device;
         Icon = deviceManager.GetIcon(device.Id);

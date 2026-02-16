@@ -11,10 +11,15 @@ public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
     where TContext : class, IMapAnchor
 {
     public MapAnchor(NavigationId id, ILoggerFactory loggerFactory)
-        : this(id, loggerFactory, GeoPoint.Zero) { }
+        : this(id, loggerFactory, NullExtensionService.Instance, GeoPoint.Zero) { }
 
-    public MapAnchor(NavigationId id, ILoggerFactory loggerFactory, GeoPoint? location = null)
-        : base(id, loggerFactory)
+    public MapAnchor(
+        NavigationId id,
+        ILoggerFactory loggerFactory,
+        IExtensionService ext,
+        GeoPoint? location = null
+    )
+        : base(id, loggerFactory, ext)
     {
         Title = id.ToString();
         Polygon = new ObservableList<GeoPoint>();

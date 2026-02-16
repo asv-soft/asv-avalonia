@@ -25,7 +25,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
             DesignTime.ContainerHost,
             NullLayoutService.Instance,
             DesignTime.LoggerFactory,
-            DesignTime.DialogService
+            DesignTime.DialogService,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();

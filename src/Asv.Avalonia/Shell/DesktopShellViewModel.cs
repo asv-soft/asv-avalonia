@@ -26,9 +26,10 @@ public sealed class DesktopShellViewModel : ShellViewModel
         IFileAssociationService fileService,
         IConfiguration cfg,
         IContainerHost ioc,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
     )
-        : base(ShellId, ioc, loggerFactory, cfg)
+        : base(ShellId, ioc, loggerFactory, cfg, ext)
     {
         _fileService = fileService;
 

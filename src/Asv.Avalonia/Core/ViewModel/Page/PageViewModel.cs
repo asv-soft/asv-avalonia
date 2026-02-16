@@ -16,9 +16,10 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         NavigationId id,
         ICommandService cmd,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(id, loggerFactory)
+        : base(id, loggerFactory, ext)
     {
         History = cmd.CreateHistory(this);
         Icon = MaterialIconKind.Window;

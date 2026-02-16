@@ -40,7 +40,8 @@ public class LogViewerViewModel
             DesignTime.Id,
             NullCommandService.Instance,
             DesignTime.LoggerFactory,
-            DesignTime.DialogService
+            DesignTime.DialogService,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -151,9 +152,10 @@ public class LogViewerViewModel
         ILogReaderService logReaderService,
         ISearchService search,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(PageId, cmd, loggerFactory, dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         _logReaderService = logReaderService;
         _search = search;

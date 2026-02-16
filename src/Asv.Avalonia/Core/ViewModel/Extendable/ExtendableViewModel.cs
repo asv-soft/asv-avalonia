@@ -1,4 +1,6 @@
 using System.Composition;
+using Asv.Common;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ZLogger;
 
@@ -12,7 +14,7 @@ namespace Asv.Avalonia;
 /// The interface type that the implementing class must inherit from.
 /// </typeparam>
 public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
-    where TSelfInterface : class
+    where TSelfInterface : class, ISupportId<NavigationId>
 {
     /// <summary>
     /// Initializes a new instance of the <see cref="ExtendableViewModel{TSelfInterface}"/> class.
@@ -20,8 +22,21 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
     /// <param name="id">A unique identifier for the view model.</param>
     /// <param name="layoutService"> Service used to save layout.</param>
     /// <param name="loggerFactory"> The factory used to create loggers for error handling and debugging.</param>
-    protected ExtendableViewModel(NavigationId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory) { }
+    /// <param name="ext"> The extension service used to load and apply extensions to the view model.</param>
+    protected ExtendableViewModel(
+        NavigationId id,
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
+    )
+        : base(id, loggerFactory)
+    {
+        var self =
+            this as TSelfInterface
+            ?? throw new Exception(
+                $"The class {GetType().FullName} does not implement {typeof(TSelfInterface).FullName}"
+            );
+        ext.Extend<TSelfInterface>(self, id.Id, Disposable);
+    }
 
     /// <summary>
     /// Gets the current instance as <typeparamref name="TSelfInterface"/> or throws an exception if not implemented.
@@ -32,14 +47,10 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
     /// </exception>
     protected virtual TSelfInterface GetContext()
     {
-        if (this is TSelfInterface context)
-        {
-            return context;
-        }
-
-        throw new Exception(
-            $"The class {GetType().FullName} does not implement {typeof(TSelfInterface).FullName}"
-        );
+        return this as TSelfInterface
+            ?? throw new Exception(
+                $"The class {GetType().FullName} does not implement {typeof(TSelfInterface).FullName}"
+            );
     }
 
     /// <summary>

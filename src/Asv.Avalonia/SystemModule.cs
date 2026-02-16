@@ -41,6 +41,7 @@ public static class ContainerConfigurationMixin
         }
 
         containerConfiguration.WithExport(AppHost.Instance.GetService<IUnitService>());
+        containerConfiguration.WithExport(AppHost.Instance.GetService<IExtensionService>());
 
         var exceptionTypes = new List<Type>();
         if (AppHost.Instance.GetServiceOrDefault<IConfiguration>() is { } configuration)

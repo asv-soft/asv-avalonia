@@ -4,12 +4,13 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class HomePageItemDecorator : ExtendableViewModel<IHomePageItem>
+public class HomePageItemDecorator : RoutableViewModel
 {
     public HomePageItemDecorator(
         IHomePageItem homePageItem,
         IContainerHost container,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
     )
         : base($"decorator_{homePageItem.Id}", loggerFactory)
     {
@@ -39,15 +40,5 @@ public class HomePageItemDecorator : ExtendableViewModel<IHomePageItem>
     {
         // this is a decorator, it should not be routable
         throw new NotImplementedException();
-    }
-
-    protected override IHomePageItem GetContext()
-    {
-        return HomePageItem;
-    }
-
-    protected override void AfterLoadExtensions()
-    {
-        // do nothing
     }
 }

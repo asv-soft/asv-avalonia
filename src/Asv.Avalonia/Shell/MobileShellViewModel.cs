@@ -13,9 +13,10 @@ public sealed class MobileShellViewModel : ShellViewModel
     public MobileShellViewModel(
         IConfiguration cfg,
         IContainerHost containerHost,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IExtensionService ext
     )
-        : base(ShellId, containerHost, loggerFactory, cfg)
+        : base(ShellId, containerHost, loggerFactory, cfg, ext)
     {
         // do nothing
     }

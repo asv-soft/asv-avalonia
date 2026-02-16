@@ -26,7 +26,8 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
             DesignTime.CommandService,
             NullPluginManager.Instance,
             NullLoggerFactory.Instance,
-            DesignTime.DialogService
+            DesignTime.DialogService,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -38,9 +39,10 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         ICommandService cmd,
         IPluginManager manager,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(PageId, cmd, loggerFactory, dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         ArgumentNullException.ThrowIfNull(cmd);
         ArgumentNullException.ThrowIfNull(manager);

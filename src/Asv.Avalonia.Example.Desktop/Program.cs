@@ -7,6 +7,7 @@ using Asv.Avalonia.Plugins;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example.Desktop;
@@ -46,7 +47,10 @@ sealed class Program
                 options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
             })
             .UseUnitService()
-            .UseControls();
+            .UseControls()
+            .UseExtensions()
+            // Example add new extension
+            .Services.AddTransient<IExtensionFor<IHomePageItem>, DeviceActionExample>();
 
         using var host = builder.Build();
         host.ExitIfNotFirstInstance();

@@ -21,9 +21,10 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         IContainerHost container,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(id, cmd, container, layoutService, loggerFactory, dialogService)
+        : base(id, cmd, container, layoutService, loggerFactory, dialogService, ext)
     {
         _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;

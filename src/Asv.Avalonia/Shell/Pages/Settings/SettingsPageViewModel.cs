@@ -19,7 +19,8 @@ public class SettingsPageViewModel
             NullContainerHost.Instance,
             NullLayoutService.Instance,
             DesignTime.LoggerFactory,
-            DesignTime.DialogService
+            DesignTime.DialogService,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -33,9 +34,10 @@ public class SettingsPageViewModel
         IContainerHost host,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(PageId, svc, host, layoutService, loggerFactory, dialogService)
+        : base(PageId, svc, host, layoutService, loggerFactory, dialogService, ext)
     {
         Title = RS.SettingsPageViewModel_Title;
         Icon = PageIcon;

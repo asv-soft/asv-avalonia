@@ -40,9 +40,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         NavigationId id,
         IContainerHost ioc,
         ILoggerFactory loggerFactory,
-        IConfiguration cfg
+        IConfiguration cfg,
+        IExtensionService ext
     )
-        : base(id, loggerFactory)
+        : base(id, loggerFactory, ext)
     {
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);

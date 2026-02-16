@@ -269,6 +269,7 @@ public static class DesignTime
     public static NavigationId Id => NavigationId.GenerateRandom();
     public static ICommand EmptyCommand = new ReactiveCommand();
     public static IDialogService DialogService => NullDialogService.Instance;
+    public static IExtensionService ExtensionService => NullExtensionService.Instance;
 
     public static void ThrowIfNotDesignMode()
     {
