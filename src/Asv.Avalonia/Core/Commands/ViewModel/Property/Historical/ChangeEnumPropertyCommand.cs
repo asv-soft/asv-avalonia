@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ChangeEnumPropertyCommand : ContextCommand<IHistoricalProperty<Enum>>
 {
     #region Static
@@ -18,7 +15,6 @@ public class ChangeEnumPropertyCommand : ContextCommand<IHistoricalProperty<Enum
         Description = RS.ChangeEnumPropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;

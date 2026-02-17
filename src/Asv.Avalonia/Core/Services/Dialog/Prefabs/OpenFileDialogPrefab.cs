@@ -1,4 +1,3 @@
-using System.Composition;
 using Avalonia.Platform.Storage;
 
 namespace Asv.Avalonia;
@@ -27,9 +26,6 @@ public sealed class OpenFileDialogPayload
 /// <summary>
 /// Dialog to select a file.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class OpenFileDialogDesktopPrefab(IShellHost host)
     : IDialogPrefab<OpenFileDialogPayload, string?>
 {

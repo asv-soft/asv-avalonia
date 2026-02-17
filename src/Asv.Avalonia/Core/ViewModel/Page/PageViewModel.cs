@@ -110,6 +110,4 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     }
 
     #endregion
-
-    public abstract IExportInfo Source { get; }
 }

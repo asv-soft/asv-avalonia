@@ -1,4 +1,3 @@
-using System.Composition.Hosting;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using Avalonia.Controls;
@@ -7,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
 
-public class CompositionViewLocator : IDataTemplate
+public class ViewLocator : IDataTemplate
 {
     #region Static
 
@@ -20,22 +19,14 @@ public class CompositionViewLocator : IDataTemplate
     #endregion
 
     private const string MetricBaseName = "asv.avalonia.viewlocator";
-    private readonly CompositionHost _container;
 
     private readonly IServiceProvider _svc;
     private readonly Counter<int> _meterBuildCall;
     private readonly Histogram<double> _hist;
-    private KeyValuePair<string, object?> _mefTag = new("IoC", "MEF2");
-    private KeyValuePair<string, object?> _serviceProviderTag = new("IoC", "ServiceProvider");
 
-    public CompositionViewLocator(
-        CompositionHost container,
-        IServiceProvider svc,
-        IMeterFactory meterFactory
-    )
+    public ViewLocator(IServiceProvider svc, IMeterFactory meterFactory)
     {
         _svc = svc;
-        _container = container ?? throw new ArgumentNullException(nameof(container));
         var meter = meterFactory.Create(MetricBaseName);
         _meterBuildCall = meter.CreateCounter<int>("build_call");
         _hist = meter.CreateHistogram<double>("build_duration_ms");
@@ -59,18 +50,9 @@ public class CompositionViewLocator : IDataTemplate
             if (obj != null)
             {
                 sw.Stop();
-                _meterBuildCall.Add(1, _serviceProviderTag);
-                _hist.Record(sw.Elapsed.TotalMilliseconds, _serviceProviderTag);
+                _meterBuildCall.Add(1);
+                _hist.Record(sw.Elapsed.TotalMilliseconds);
                 return obj;
-            }
-
-            // try to find view by attribute
-            if (_container.TryGetExport<Control>(viewModelContract, out var control))
-            {
-                sw.Stop();
-                _meterBuildCall.Add(1, _mefTag);
-                _hist.Record(sw.Elapsed.TotalMilliseconds, _mefTag);
-                return control;
             }
 
             // try to find view by implemented interfaces
@@ -81,28 +63,11 @@ public class CompositionViewLocator : IDataTemplate
                 if (obj != null)
                 {
                     sw.Stop();
-                    _meterBuildCall.Add(1, _serviceProviderTag);
-                    _hist.Record(sw.Elapsed.TotalMilliseconds, _serviceProviderTag);
+                    _meterBuildCall.Add(1);
+                    _hist.Record(sw.Elapsed.TotalMilliseconds);
                     return obj;
                 }
-
-                if (_container.TryGetExport<Control>(viewModelContract, out var ifcControl))
-                {
-                    sw.Stop();
-                    _meterBuildCall.Add(1, _mefTag);
-                    _hist.Record(sw.Elapsed.TotalMilliseconds, _mefTag);
-                    return ifcControl;
-                }
             }
-
-            /*// try default Avalonia behaviour: rename and try to find view
-            var type = Type.GetType(viewModelContract.Replace("ViewModel", "View"));
-            if (type != null)
-            {
-                // ReSharper disable once NullableWarningSuppressionIsUsed
-                var ctrl = Activator.CreateInstance(type) as Control;
-                return ctrl ?? new TextBlock { Text = data.GetType().FullName };
-            }*/
 
             // try to find view for parent class
             viewModelType = viewModelType.BaseType;

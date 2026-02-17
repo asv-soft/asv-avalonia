@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public interface IDialogService : IExportable
+public interface IDialogService
 {
     public T GetDialogPrefab<T>()
         where T : class, ICustomDialog;

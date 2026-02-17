@@ -1,4 +1,3 @@
-using System.Composition;
 using Avalonia.Platform.Storage;
 
 namespace Asv.Avalonia;
@@ -32,9 +31,6 @@ public sealed class SaveFileDialogPayload
 /// <summary>
 /// Dialog to save a file.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class SaveFileDialogDesktopPrefab(IShellHost host)
     : IDialogPrefab<SaveFileDialogPayload, string?>
 {

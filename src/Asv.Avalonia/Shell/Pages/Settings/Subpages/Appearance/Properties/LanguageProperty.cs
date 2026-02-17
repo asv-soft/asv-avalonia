@@ -1,4 +1,3 @@
-using System.Composition;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -21,7 +20,6 @@ public class LanguageProperty : RoutableViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public LanguageProperty(
         ILocalizationService svc,
         IDialogService dialog,

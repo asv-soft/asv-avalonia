@@ -2,7 +2,7 @@ using Avalonia;
 
 namespace Asv.Avalonia;
 
-public interface ILayoutService : IExportable
+public interface ILayoutService
 {
     TPocoType Get<TPocoType>(IRoutable source)
         where TPocoType : class, new() => Get(source, new Lazy<TPocoType>());

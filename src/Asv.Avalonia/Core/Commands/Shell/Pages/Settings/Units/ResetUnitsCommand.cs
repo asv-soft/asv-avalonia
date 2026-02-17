@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ResetUnitsCommand : ContextCommand<SettingsUnitsViewModel, DictArg>
 {
     public const string Id = $"{BaseId}.settings.unit.reset";
@@ -16,7 +13,6 @@ public class ResetUnitsCommand : ContextCommand<SettingsUnitsViewModel, DictArg>
         Description = RS.ResetUnitsCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Refresh,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;

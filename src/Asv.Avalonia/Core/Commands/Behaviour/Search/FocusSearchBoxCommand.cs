@@ -1,11 +1,8 @@
-using System.Composition;
 using Asv.Common;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class FocusSearchBoxCommand : ContextCommand<IRoutable>
 {
     public const string Id = $"{BaseId}.search.focus";
@@ -18,7 +15,6 @@ public class FocusSearchBoxCommand : ContextCommand<IRoutable>
             Description = RS.FocusSearchBoxCommand_CommandInfo_Description,
             Icon = MaterialIconKind.Search,
             DefaultHotKey = "Ctrl+F",
-            Source = SystemModule.Instance,
         };
 
     protected override async ValueTask<CommandArg?> InternalExecute(

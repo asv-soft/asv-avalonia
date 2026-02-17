@@ -50,6 +50,4 @@ public sealed class NullNavigationService : INavigationService
     }
 
     public ReactiveCommand GoHome { get; } = new();
-
-    public IExportInfo Source => SystemModule.Instance;
 }

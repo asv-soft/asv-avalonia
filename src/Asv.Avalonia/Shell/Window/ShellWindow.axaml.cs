@@ -1,4 +1,3 @@
-using System.Composition;
 using Avalonia;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
@@ -8,8 +7,7 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-[Export]
-public partial class ShellWindow : Window, IExportable
+public partial class ShellWindow : Window
 {
     private readonly ILayoutService? _layoutService;
     private readonly Subject<Unit>? _savePosition;
@@ -36,7 +34,6 @@ public partial class ShellWindow : Window, IExportable
         });
     }
 
-    [ImportingConstructor]
     public ShellWindow(ILayoutService layoutService, ILoggerFactory logger)
     {
         InitializeComponent();
@@ -187,6 +184,4 @@ public partial class ShellWindow : Window, IExportable
 
         _savePosition?.OnNext(Unit.Default);
     }
-
-    public IExportInfo Source => SystemModule.Instance;
 }

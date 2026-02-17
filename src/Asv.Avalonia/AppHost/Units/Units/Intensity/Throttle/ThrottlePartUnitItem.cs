@@ -1,6 +1,4 @@
-﻿using System.Composition;
-
-namespace Asv.Avalonia;
+﻿namespace Asv.Avalonia;
 
 public sealed class ThrottlePartUnitItem() : IntensityUnitItemBase(-1, 1, 0.01)
 {

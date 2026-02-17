@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Composition;
 using Asv.Common;
 using Avalonia.Controls;
 using Material.Icons;
@@ -22,7 +21,6 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         Parent = DesignTime.Shell;
     }
 
-    [ImportingConstructor]
     public RttBoxesPageViewModel(IUnitService unitService, ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {

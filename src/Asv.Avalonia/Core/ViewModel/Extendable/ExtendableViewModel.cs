@@ -1,5 +1,5 @@
-using System.Composition;
 using Asv.Common;
+using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ZLogger;
@@ -35,7 +35,22 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
             ?? throw new Exception(
                 $"The class {GetType().FullName} does not implement {typeof(TSelfInterface).FullName}"
             );
-        ext.Extend<TSelfInterface>(self, id.Id, Disposable);
+
+        // we load extensions on the UI thread to avoid deadlocks
+        Dispatcher.UIThread.Post(
+            () =>
+            {
+                if (IsDisposed)
+                {
+                    return;
+                }
+
+                ext.Extend(self, id.Id, Disposable);
+
+                AfterLoadExtensions();
+            },
+            DispatcherPriority.Background
+        );
     }
 
     /// <summary>
@@ -51,55 +66,6 @@ public abstract class ExtendableViewModel<TSelfInterface> : RoutableViewModel
             ?? throw new Exception(
                 $"The class {GetType().FullName} does not implement {typeof(TSelfInterface).FullName}"
             );
-    }
-
-    /// <summary>
-    /// Gets or sets a collection of extensions that enhance the functionality of the view model.
-    /// Extensions are lazily imported using MEF2.
-    /// </summary>
-    [ImportMany]
-    public IEnumerable<Lazy<IExtensionFor<TSelfInterface>>>? Extensions { get; set; }
-
-    /// <summary>
-    /// Called when MEF2 has completed importing dependencies.
-    /// This method initializes and applies all available extensions to the current instance.
-    /// </summary>
-    [OnImportsSatisfied]
-    public void Init()
-    {
-        try
-        {
-            if (Extensions != null)
-            {
-                var context = GetContext();
-                foreach (var extension in Extensions)
-                {
-                    try
-                    {
-                        extension.Value.Extend(context, Disposable);
-                        if (extension.Value is IDisposable disposable)
-                        {
-                            Disposable.Add(disposable);
-                        }
-
-                        Logger.ZLogTrace($"Applying extension {extension} to {this}");
-                    }
-                    catch (Exception e)
-                    {
-                        Logger.ZLogError(
-                            e,
-                            $"Error while loading extension {extension.Value.GetType().FullName} for {GetType().FullName}"
-                        );
-                    }
-                }
-            }
-
-            AfterLoadExtensions();
-        }
-        catch (Exception e)
-        {
-            Logger.ZLogError(e, $"Error while loading extensions for {this}: {e.Message}");
-        }
     }
 
     /// <summary>

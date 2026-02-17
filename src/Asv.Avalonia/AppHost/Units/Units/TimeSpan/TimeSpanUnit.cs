@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 

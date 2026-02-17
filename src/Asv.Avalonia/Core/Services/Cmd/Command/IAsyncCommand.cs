@@ -1,11 +1,9 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 /// <summary>
 /// Defines an asynchronous command that can be executed within a routable context.
 /// </summary>
-public interface IAsyncCommand : IExportable
+public interface IAsyncCommand
 {
     /// <summary>
     /// Gets metadata information about the command.
@@ -49,6 +47,3 @@ public interface IAsyncCommand<TArg> : IAsyncCommand
         CancellationToken cancel = default
     );
 }
-
-[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-public class ExportCommandAttribute() : ExportAttribute(typeof(IAsyncCommand)) { }

@@ -1,16 +1,12 @@
 using System.Collections.Immutable;
-using System.Composition;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(IFileAssociationService))]
-[Shared]
 public class FileAssociationService : IFileAssociationService
 {
     private readonly ImmutableArray<IFileHandler> _handlers;
 
-    [ImportingConstructor]
-    public FileAssociationService([ImportMany] IEnumerable<IFileHandler> handlers)
+    public FileAssociationService(IEnumerable<IFileHandler> handlers)
     {
         _handlers = [.. handlers.OrderBy(x => x.Priority)];
 

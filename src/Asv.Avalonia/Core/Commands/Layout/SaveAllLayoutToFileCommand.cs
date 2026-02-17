@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public sealed class SaveAllLayoutToFileCommand : ContextCommand<IRoutable>
 {
     #region Static
@@ -18,14 +15,12 @@ public sealed class SaveAllLayoutToFileCommand : ContextCommand<IRoutable>
         Description = RS.SaveAllLayoutToFileCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ContentSaveAll,
         DefaultHotKey = "Ctrl+Alt+L",
-        Source = SystemModule.Instance,
     };
 
     #endregion
 
     private readonly ILayoutService _layoutService;
 
-    [ImportingConstructor]
     public SaveAllLayoutToFileCommand(ILayoutService layoutService)
     {
         _layoutService = layoutService;

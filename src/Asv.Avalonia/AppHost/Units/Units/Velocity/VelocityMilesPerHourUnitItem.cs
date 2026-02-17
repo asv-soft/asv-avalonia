@@ -1,5 +1,3 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 public sealed class VelocityMilesPerHourUnitItem() : UnitItemBase(2.236936)

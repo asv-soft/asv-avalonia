@@ -22,6 +22,4 @@ public class NullDialogService : IDialogService
         dialog = null;
         return true;
     }
-
-    public IExportInfo Source => SystemModule.Instance;
 }

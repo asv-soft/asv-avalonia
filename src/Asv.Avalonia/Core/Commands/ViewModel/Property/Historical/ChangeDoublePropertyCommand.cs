@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<double>>
 {
     #region Static
@@ -18,7 +15,6 @@ public class ChangeDoublePropertyCommand : ContextCommand<IHistoricalProperty<do
         Description = RS.ChangeDoublePropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;

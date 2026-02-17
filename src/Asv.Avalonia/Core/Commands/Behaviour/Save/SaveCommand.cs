@@ -1,10 +1,7 @@
-﻿using System.Composition;
-using Material.Icons;
+﻿using Material.Icons;
 
 namespace Asv.Avalonia.Save;
 
-[ExportCommand]
-[Shared]
 public class SaveCommand : ContextCommand<ISupportSave>
 {
     public const string Id = $"{BaseId}.save";
@@ -17,7 +14,6 @@ public class SaveCommand : ContextCommand<ISupportSave>
             Description = RS.SaveCommand_CommandInfo_Description,
             Icon = MaterialIconKind.FloppyDisc,
             DefaultHotKey = "Ctrl+S",
-            Source = SystemModule.Instance,
         };
 
     protected override ValueTask<CommandArg?> InternalExecute(

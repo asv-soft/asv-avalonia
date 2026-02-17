@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Composition;
 
 namespace Asv.Avalonia;
 
@@ -7,7 +6,7 @@ public class UnitService : IUnitService
 {
     private readonly ImmutableSortedDictionary<string, IUnit> _units;
 
-    public UnitService([ImportMany] IEnumerable<IUnit> items)
+    public UnitService(IEnumerable<IUnit> items)
     {
         var builder = ImmutableSortedDictionary.CreateBuilder<string, IUnit>();
         foreach (var item in items.OrderBy(x => x.Name))

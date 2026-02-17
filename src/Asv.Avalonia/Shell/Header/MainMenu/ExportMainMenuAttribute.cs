@@ -1,6 +1,4 @@
-﻿using System.Composition;
-
-namespace Asv.Avalonia;
+﻿namespace Asv.Avalonia;
 
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 public class ExportMainMenuAttribute() : ExportAttribute(Contract, typeof(IMenuItem))

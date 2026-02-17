@@ -1,9 +1,5 @@
-﻿using System.Composition;
+﻿namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
-namespace Asv.Avalonia.Example.Plugin.PluginExample;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenExamplePageCommand(INavigationService nav)
     : OpenPageCommandBase(ExamplePageViewModel.PageId, nav)
 {

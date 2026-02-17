@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ResetCommandHotKeysCommand : ContextCommand<SettingsCommandListViewModel, DictArg>
 {
     public const string Id = $"{BaseId}.settings.hotkeys.reset";
@@ -16,7 +13,6 @@ public class ResetCommandHotKeysCommand : ContextCommand<SettingsCommandListView
         Description = RS.ResetCommandHotKeysCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Refresh,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;

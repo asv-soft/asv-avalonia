@@ -1,12 +1,8 @@
-﻿using System.Composition;
-using Asv.IO;
+﻿using Asv.IO;
 using Material.Icons;
 
 namespace Asv.Avalonia.IO;
 
-[ExportCommand]
-[Shared]
-[method: ImportingConstructor]
 public class PortCrudCommand(IDeviceManager manager) : StatelessCrudCommand<StringArg>
 {
     #region Static

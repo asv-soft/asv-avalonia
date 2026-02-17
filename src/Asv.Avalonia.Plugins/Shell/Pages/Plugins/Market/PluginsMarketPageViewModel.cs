@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Avalonia.Threading;
@@ -34,7 +33,6 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         _plugins.Add(NullPluginSearchInfo.Instance);
     }
 
-    [ImportingConstructor]
     public PluginsMarketPageViewModel(
         ICommandService cmd,
         IPluginManager manager,

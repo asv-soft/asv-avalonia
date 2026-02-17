@@ -1,9 +1,5 @@
-﻿using System.Composition;
+﻿namespace Asv.Avalonia;
 
-namespace Asv.Avalonia;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenLogViewerCommand(INavigationService nav)
     : OpenPageCommandBase(LogViewerViewModel.PageId, nav)
 {
@@ -18,7 +14,7 @@ public class OpenLogViewerCommand(INavigationService nav)
         Description = RS.LogViewer_CommandInfo_Description,
         Icon = LogViewerViewModel.PageIcon,
         IconColor = LogViewerViewModel.PageIconColor,
-        Source = SystemModule.Instance,
+
         DefaultHotKey = "Ctrl+Shift+L",
     };
 

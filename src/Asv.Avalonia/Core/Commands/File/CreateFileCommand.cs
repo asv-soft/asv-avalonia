@@ -1,12 +1,8 @@
-using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
-[method: ImportingConstructor]
 public class CreateFileCommand(
     IFileAssociationService svc,
     IDialogService dialogs,
@@ -30,7 +26,6 @@ public class CreateFileCommand(
         Description = RS.CreateFileCommand_CommandInfo_Description,
         Icon = MaterialIconKind.FilePlus,
         DefaultHotKey = "Ctrl+N",
-        Source = SystemModule.Instance,
     };
 
     #endregion

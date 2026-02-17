@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using System.IO.Ports;
+﻿using System.IO.Ports;
 using System.Text;
 using Asv.Common;
 using Asv.IO;
@@ -24,7 +23,6 @@ public class SerialPortViewModel : PortViewModel
         ConnectionString = SerialProtocolPortConfig.CreateDefault().AsUri().ToString();
     }
 
-    [ImportingConstructor]
     public SerialPortViewModel(
         IUnitService unitService,
         ILoggerFactory loggerFactory,

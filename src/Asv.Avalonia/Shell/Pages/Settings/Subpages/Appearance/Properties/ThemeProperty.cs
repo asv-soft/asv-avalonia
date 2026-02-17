@@ -1,4 +1,3 @@
-using System.Composition;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -18,7 +17,6 @@ public class ThemeProperty : RoutableViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public ThemeProperty(IThemeService svc, ILoggerFactory loggerFactory)
         : base(ViewModelId, loggerFactory)
     {

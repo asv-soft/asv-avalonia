@@ -1,9 +1,5 @@
-﻿using System.Composition;
+﻿namespace Asv.Avalonia;
 
-namespace Asv.Avalonia;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenSettingsCommand(INavigationService nav)
     : OpenPageCommandBase(SettingsPageViewModel.PageId, nav)
 {
@@ -19,7 +15,6 @@ public class OpenSettingsCommand(INavigationService nav)
         Icon = SettingsPageViewModel.PageIcon,
         IconColor = SettingsPageViewModel.PageIconColor,
         DefaultHotKey = "Ctrl+Shift+S",
-        Source = SystemModule.Instance,
     };
 
     #endregion

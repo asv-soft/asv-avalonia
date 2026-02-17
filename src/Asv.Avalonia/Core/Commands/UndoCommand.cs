@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class UndoCommand : ContextCommand<IShell>
 {
     public const string Id = $"{BaseId}.global.undo";
@@ -17,7 +14,6 @@ public class UndoCommand : ContextCommand<IShell>
             Description = RS.UndoCommand_CommandInfo_Description,
             Icon = MaterialIconKind.UndoVariant,
             DefaultHotKey = "Ctrl+Z",
-            Source = SystemModule.Instance,
         };
 
     public override ICommandInfo Info => StaticInfo;

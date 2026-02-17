@@ -1,11 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
-[method: ImportingConstructor]
 public sealed class ChangeMeasureUnitCommand(IUnitService svc) : StatelessCrudCommand<StringArg>
 {
     #region Static
@@ -19,7 +15,6 @@ public sealed class ChangeMeasureUnitCommand(IUnitService svc) : StatelessCrudCo
         Description = RS.ChangeCurrentUnitItemCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Settings,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public static ValueTask ExecuteCommand(IRoutable context, IUnit command, IUnitItem userValue)

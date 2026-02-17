@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,7 +15,6 @@ public sealed class ProgressUnit : UnitBase
     private readonly ProgressConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
-    [ImportingConstructor]
     public ProgressUnit(IConfiguration cfgSvc, [FromKeyedServices(Id)] IEnumerable<IUnitItem> items)
         : base(items)
     {

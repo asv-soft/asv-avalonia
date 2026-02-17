@@ -10,5 +10,4 @@ public class CommandInfo : ICommandInfo
     public required MaterialIconKind Icon { get; init; }
     public AsvColorKind IconColor { get; set; }
     public required HotKeyInfo? DefaultHotKey { get; init; }
-    public required IExportInfo Source { get; init; }
 }

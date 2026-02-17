@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Threading.Tasks;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.InfoMessage;
@@ -29,7 +28,6 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
-    [ImportingConstructor]
     public WorkspacePageViewModel(ILoggerFactory loggerFactory, IUnitService unitService)
         : base(PageId, loggerFactory)
     {

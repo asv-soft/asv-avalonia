@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -7,7 +6,6 @@ using R3;
 
 namespace Asv.Avalonia;
 
-[ExportStatusItem]
 public class NavigationStatusItemViewModel : StatusItem
 {
     private readonly ObservableList<string> _source;
@@ -27,7 +25,6 @@ public class NavigationStatusItemViewModel : StatusItem
         _source.Add("element1");
     }
 
-    [ImportingConstructor]
     public NavigationStatusItemViewModel(
         ILoggerFactory loggerFactory,
         INavigationService nav,

@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Avalonia.Threading;
@@ -34,7 +33,6 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
         IsShowOnlyVerified.ModelValue.Value = false;
     }
 
-    [ImportingConstructor]
     public InstalledPluginsPageViewModel(
         ICommandService cmd,
         IPluginManager manager,

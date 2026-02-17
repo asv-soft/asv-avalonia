@@ -1,21 +1,16 @@
-using System.Composition;
 using System.Runtime.CompilerServices;
 using System.Text;
 using DotNext.Collections.Generic;
-using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(ILogReaderService))]
-[Shared]
-public class LogReaderService : ILogReaderService, IExportable
+public class LogReaderService : ILogReaderService
 {
     private static readonly JsonSerializer Serializer = new();
 
     private readonly string _logsFolder;
 
-    [ImportingConstructor]
     public LogReaderService(LogToFileOptions options)
     {
         _logsFolder = options.Folder;
@@ -57,6 +52,4 @@ public class LogReaderService : ILogReaderService, IExportable
             }
         }
     }
-
-    public IExportInfo Source => SystemModule.Instance;
 }

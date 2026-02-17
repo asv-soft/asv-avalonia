@@ -1,4 +1,3 @@
-using System.Composition;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -22,9 +21,6 @@ public sealed class UnsavedChangesDialogPayload
 /// <summary>
 /// Dialog that shows unsaved changes of the app.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class UnsavedChangesDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
     : IDialogPrefab<UnsavedChangesDialogPayload, bool>
 {

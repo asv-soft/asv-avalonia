@@ -1,10 +1,7 @@
-﻿using System.Composition;
-using Material.Icons;
+﻿using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class RefreshCommand : ContextCommand<ISupportRefresh>
 {
     public const string Id = $"{BaseId}.refresh";
@@ -17,7 +14,6 @@ public class RefreshCommand : ContextCommand<ISupportRefresh>
             Description = RS.RefreshCommand_CommandInfo_Description,
             Icon = MaterialIconKind.Refresh,
             DefaultHotKey = "F5",
-            Source = SystemModule.Instance,
         };
 
     protected override ValueTask<CommandArg?> InternalExecute(

@@ -1,5 +1,3 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 public sealed class PhaseRadianUnitItem() : UnitItemBase(180.0 / Math.PI)

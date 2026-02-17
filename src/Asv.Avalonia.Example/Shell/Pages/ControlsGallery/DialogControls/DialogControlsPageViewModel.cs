@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.GeoMap;
@@ -95,7 +94,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public DialogControlsPageViewModel(
         ILoggerFactory loggerFactory,
         IDialogService dialogService,

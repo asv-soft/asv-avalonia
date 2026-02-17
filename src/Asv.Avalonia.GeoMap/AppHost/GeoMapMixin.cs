@@ -12,6 +12,10 @@ public static class GeoMapMixin
             .Bind(builder.Configuration.GetSection(GeoMapOptions.Section));
 
         builder.Services.AddSingleton<ITileLoader, TileLoader>();
+
+        builder
+            .RegisterViewFor<GeoPointDialogViewModel, GeoPointDialogView>()
+            .RegisterViewFor<MapWidget, MapWidgetView>();
         var subBuilder = new GeoMapBuilder();
         subBuilder.Build(options);
         return builder;

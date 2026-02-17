@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class RedoCommand : ContextCommand<IShell>
 {
     public const string Id = $"{BaseId}.global.redo";
@@ -17,7 +14,6 @@ public class RedoCommand : ContextCommand<IShell>
             Description = RS.RedoCommand_CommandInfo_Description,
             Icon = MaterialIconKind.RedoVariant,
             DefaultHotKey = "Ctrl+Y",
-            Source = SystemModule.Instance,
         };
 
     public override ICommandInfo Info => StaticInfo;

@@ -1,5 +1,4 @@
 ﻿using System.Buffers;
-using System.Composition;
 using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Asv.Common;
@@ -56,7 +55,6 @@ public class ConnectionRateStatusViewModel : StatusItem
             });
     }
 
-    [ImportingConstructor]
     public ConnectionRateStatusViewModel(
         IDeviceManager deviceManager,
         IUnitService unitService,

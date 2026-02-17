@@ -1,4 +1,3 @@
-using System.Composition;
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
@@ -14,7 +13,6 @@ public class SettingsUnitsViewModelConfig
     public string SelectedItemId { get; set; } = string.Empty;
 }
 
-[ExportSettings(PageId)]
 public class SettingsUnitsViewModel : SettingsSubPage
 {
     public const string PageId = "units";
@@ -29,7 +27,6 @@ public class SettingsUnitsViewModel : SettingsSubPage
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public SettingsUnitsViewModel(
         ISearchService searchService,
         IUnitService unitsService,
@@ -186,6 +183,4 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
         base.Dispose(disposing);
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

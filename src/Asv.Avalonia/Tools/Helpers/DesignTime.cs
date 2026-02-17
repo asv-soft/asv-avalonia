@@ -283,13 +283,11 @@ public static class DesignTime
     public static AsvColorKind RandomColor => RandomEnum<AsvColorKind>();
 
     public static IShell Shell => DesignTimeShellViewModel.Instance;
-    public static IAppStartupService AppStartupService => NullAppStartupService.Instance;
     public static IConfiguration Configuration { get; } = new InMemoryConfiguration();
     public static ILoggerFactory LoggerFactory => NullLoggerFactory.Instance;
     public static IShellHost ShellHost => NullShellHost.Instance;
     public static INavigationService Navigation => NullNavigationService.Instance;
     public static IUnitService UnitService => NullUnitService.Instance;
-    public static IContainerHost ContainerHost => NullContainerHost.Instance;
     public static IThemeService ThemeService => NullThemeService.Instance;
     public static ILocalizationService LocalizationService => NullLocalizationService.Instance;
     public static ILogReaderService LogReaderService => NullLogReaderService.Instance;

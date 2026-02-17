@@ -1,5 +1,3 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 public sealed class PhaseDegreeUnitItem() : UnitItemBase(1)

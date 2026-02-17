@@ -1,4 +1,3 @@
-using System.Composition;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -8,7 +7,6 @@ public sealed class ViewSaveMenu : MenuItem
 {
     public const string MenuId = $"{ViewMenu.MenuId}.save";
 
-    [ImportingConstructor]
     public ViewSaveMenu(ILoggerFactory loggerFactory, ICommandService cmd)
         : base(MenuId, RS.ViewSaveMenu_Header, loggerFactory, ViewMenu.MenuId)
     {

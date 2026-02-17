@@ -5,15 +5,37 @@ namespace Asv.Avalonia;
 
 public static class ExtensionsMixin
 {
-    public static IHostApplicationBuilder UseExtensions(this IHostApplicationBuilder builder)
+    extension(IHostApplicationBuilder builder)
     {
-        builder.Services.AddSingleton<IExtensionService, ExtensionService>();
-        return builder;
+        public IHostApplicationBuilder UseExtensions()
+        {
+            builder.Services.AddSingleton<IExtensionService, ExtensionService>();
+            return builder;
+        }
+
+        public IHostApplicationBuilder UseNullExtension()
+        {
+            builder.Services.AddSingleton(NullExtensionService.Instance);
+            return builder;
+        }
+
+        public Builder Extensions => new(builder);
     }
 
-    public static IHostApplicationBuilder UseNullExtension(this IHostApplicationBuilder builder)
+    public class Builder(IHostApplicationBuilder builder)
     {
-        builder.Services.AddSingleton(NullExtensionService.Instance);
-        return builder;
+        public Builder Register<TContext, TExtension>()
+            where TExtension : class, IExtensionFor<TContext>
+        {
+            builder.Services.AddTransient<IExtensionFor<TContext>, TExtension>();
+            return this;
+        }
+
+        public Builder Register<TContext, TExtension>(string key)
+            where TExtension : class, IExtensionFor<TContext>
+        {
+            builder.Services.AddKeyedTransient<IExtensionFor<TContext>, TExtension>(key);
+            return this;
+        }
     }
 }

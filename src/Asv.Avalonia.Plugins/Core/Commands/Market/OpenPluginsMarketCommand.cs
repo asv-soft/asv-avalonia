@@ -1,9 +1,5 @@
-﻿using System.Composition;
+﻿namespace Asv.Avalonia.Plugins;
 
-namespace Asv.Avalonia.Plugins;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public sealed class OpenPluginsMarketCommand(INavigationService nav)
     : OpenPageCommandBase(PluginsMarketPageViewModel.PageId, nav)
 {

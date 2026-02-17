@@ -26,8 +26,6 @@ public abstract class ExtendableTreeSubpage<TSubContext>
     public ObservableList<IMenuItem> Menu { get; } = [];
 
     public override IEnumerable<IRoutable> GetChildren() => Menu;
-
-    public abstract IExportInfo Source { get; }
 }
 
 public abstract class ExtendableTreeSubpage<TContext, TSubContext>
@@ -50,7 +48,6 @@ public abstract class ExtendableTreeSubpage<TContext, TSubContext>
 
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
-    public abstract IExportInfo Source { get; }
     public abstract ValueTask Init(TContext context);
 
     public override IEnumerable<IRoutable> GetChildren() => Menu;

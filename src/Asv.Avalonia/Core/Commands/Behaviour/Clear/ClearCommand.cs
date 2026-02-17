@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ClearCommand : ContextCommand<ISupportClear>
 {
     public const string Id = $"{BaseId}.clear";
@@ -17,7 +14,6 @@ public class ClearCommand : ContextCommand<ISupportClear>
             Description = RS.ClearCommand_CommandInfo_Description,
             Icon = MaterialIconKind.Clear,
             DefaultHotKey = "Ctrl+Escape", // TODO: fix hotkey
-            Source = SystemModule.Instance,
         };
 
     protected override ValueTask<CommandArg?> InternalExecute(

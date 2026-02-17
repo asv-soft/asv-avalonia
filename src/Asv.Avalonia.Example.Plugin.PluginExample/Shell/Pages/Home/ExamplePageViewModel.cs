@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -9,7 +8,6 @@ namespace Asv.Avalonia.Example.Plugin.PluginExample;
 public interface IExamplePageViewModel : IPage { }
 
 [ExportPage(PageId)]
-[method: ImportingConstructor]
 public class ExamplePageViewModel(
     ICommandService cmd,
     ILoggerFactory loggerFactory,

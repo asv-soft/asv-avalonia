@@ -1,5 +1,6 @@
 using Asv.Common;
 using Asv.IO;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -19,7 +20,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 {
     private readonly ILayoutService _layoutService;
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
-    private readonly IContainerHost _container;
+    private readonly IServiceProvider _container;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
@@ -28,7 +29,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     protected TreePageViewModel(
         NavigationId id,
         ICommandService cmd,
-        IContainerHost container,
+        IServiceProvider container,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
@@ -161,14 +162,15 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     protected virtual async ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
     {
-        if (_container.TryGetExport<TSubPage>(id.Id, out var page))
+        var page = _container.GetKeyedService<TSubPage>(id.Id);
+        if (page == null)
         {
-            page.InitArgs(id.Args);
-            await page.Init(GetContext());
-            return page;
+            return null;
         }
 
-        return null;
+        page.InitArgs(id.Args);
+        await page.Init(GetContext());
+        return page;
     }
 
     private ValueTask InternalCatchEvent(IRoutable owner, AsyncRoutedEvent<IRoutable> e)

@@ -3,7 +3,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IPage : IRoutable, IExportable
+public interface IPage : IRoutable
 {
     MaterialIconKind Icon { get; }
     AsvColorKind IconColor { get; }

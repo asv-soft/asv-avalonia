@@ -1,9 +1,5 @@
-using System.Composition;
-
 namespace Asv.Avalonia.Example;
 
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenControlsGalleryPageCommand(INavigationService nav)
     : OpenPageCommandBase(ControlsGalleryPageViewModel.PageId, nav)
 {
@@ -21,7 +17,6 @@ public class OpenControlsGalleryPageCommand(INavigationService nav)
         Icon = ControlsGalleryPageViewModel.PageIcon,
         IconColor = ControlsGalleryPageViewModel.PageIconColor,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     #endregion

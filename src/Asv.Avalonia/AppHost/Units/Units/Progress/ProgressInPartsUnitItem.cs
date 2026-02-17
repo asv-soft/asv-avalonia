@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 
 namespace Asv.Avalonia;
 

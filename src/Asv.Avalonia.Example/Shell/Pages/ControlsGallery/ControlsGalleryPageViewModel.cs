@@ -1,4 +1,3 @@
-using System.Composition;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -27,7 +26,6 @@ public class ControlsGalleryPageViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public ControlsGalleryPageViewModel(
         ICommandService cmd,
         IContainerHost containerHost,

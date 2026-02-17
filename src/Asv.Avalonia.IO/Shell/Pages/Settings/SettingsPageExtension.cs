@@ -1,4 +1,3 @@
-using System.Composition;
 using Asv.Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,7 +7,6 @@ using R3;
 namespace Asv.Avalonia.IO;
 
 [ExportExtensionFor<ISettingsPage>]
-[method: ImportingConstructor]
 public class SettingsPageExtension(ILoggerFactory loggerFactory) : IExtensionFor<ISettingsPage>
 {
     public void Extend(ISettingsPage context, CompositeDisposable contextDispose)

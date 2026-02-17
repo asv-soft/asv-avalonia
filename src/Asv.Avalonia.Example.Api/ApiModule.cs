@@ -1,5 +1,4 @@
-﻿using System.Composition.Hosting;
-using Asv.Avalonia.GeoMap;
+﻿using Asv.Avalonia.GeoMap;
 
 namespace Asv.Avalonia.Example.Api;
 

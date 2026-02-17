@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Composition;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Asv.IO;
@@ -20,7 +19,6 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public MapControlsPageViewModel(ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {

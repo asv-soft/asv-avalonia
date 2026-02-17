@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Composition;
 using Asv.Cfg;
 using Asv.Common;
 using Avalonia;
@@ -17,8 +16,6 @@ public class ThemeServiceConfig
     public bool IsCompact { get; set; } = false;
 }
 
-[Export(typeof(IThemeService))]
-[Shared]
 public class ThemeService : AsyncDisposableOnce, IThemeService
 {
     public const string DarkTheme = "dark";
@@ -31,7 +28,6 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
     private readonly ILogger<ThemeService> _logger;
     private readonly IDisposable _sub2;
 
-    [ImportingConstructor]
     public ThemeService(IConfiguration cfgSvc, ILoggerFactory loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);

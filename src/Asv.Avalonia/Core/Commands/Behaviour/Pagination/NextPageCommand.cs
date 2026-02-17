@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class NextPageCommand : ContextCommand<ISupportPagination>
 {
     public const string Id = $"{BaseId}.page.next";
@@ -16,7 +13,6 @@ public class NextPageCommand : ContextCommand<ISupportPagination>
         Description = RS.NextPageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ArrowRightBold,
         DefaultHotKey = "Ctrl+Right",
-        Source = SystemModule.Instance,
     };
 
     public static ValueTask ExecuteAtContext(IRoutable context)

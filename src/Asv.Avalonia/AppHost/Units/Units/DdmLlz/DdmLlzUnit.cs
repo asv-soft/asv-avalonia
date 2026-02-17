@@ -1,4 +1,3 @@
-using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,10 +21,7 @@ public sealed class DdmLlzUnit : UnitBase
     private readonly DdmLlzConfig? _config;
     private readonly IConfiguration _cfgSvc;
 
-    public DdmLlzUnit(
-        [Import] IConfiguration cfgSvc,
-        [FromKeyedServices(Id)] IEnumerable<IUnitItem> items
-    )
+    public DdmLlzUnit(IConfiguration cfgSvc, [FromKeyedServices(Id)] IEnumerable<IUnitItem> items)
         : base(items)
     {
         ArgumentNullException.ThrowIfNull(cfgSvc);

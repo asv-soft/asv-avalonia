@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class PaginationCommand : ContextCommand<ISupportPagination, ListArg>
 {
     public const string Id = $"{BaseId}.page.pagination";
@@ -16,7 +13,6 @@ public class PaginationCommand : ContextCommand<ISupportPagination, ListArg>
         Description = RS.PaginationCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ViewList,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;

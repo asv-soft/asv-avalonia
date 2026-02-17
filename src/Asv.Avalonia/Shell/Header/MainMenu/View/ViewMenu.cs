@@ -1,4 +1,3 @@
-using System.Composition;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
@@ -9,7 +8,6 @@ public class ViewMenu : MenuItem
 {
     public const string MenuId = $"{ExportMainMenuAttribute.Contract}.view";
 
-    [method: ImportingConstructor]
     public ViewMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ShellView_Toolbar_View, loggerFactory)
     {

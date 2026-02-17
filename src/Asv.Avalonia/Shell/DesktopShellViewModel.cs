@@ -1,4 +1,3 @@
-using System.Composition;
 using System.Runtime.InteropServices;
 using Asv.Cfg;
 using Asv.Common;
@@ -8,24 +7,23 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Platform.Storage;
 using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
 public class DesktopShellViewModelConfig : ShellViewModelConfig { }
 
-[Export(ShellId, typeof(IShell))]
 public sealed class DesktopShellViewModel : ShellViewModel
 {
     public const string ShellId = "shell.desktop";
 
     private readonly IFileAssociationService _fileService;
 
-    [ImportingConstructor]
     public DesktopShellViewModel(
         IFileAssociationService fileService,
         IConfiguration cfg,
-        IContainerHost ioc,
+        IServiceProvider ioc,
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
@@ -33,7 +31,7 @@ public sealed class DesktopShellViewModel : ShellViewModel
     {
         _fileService = fileService;
 
-        var wnd = ioc.GetExport<ShellWindow>();
+        var wnd = ioc.GetRequiredService<ShellWindow>();
         wnd.DataContext = this;
         if (
             Application.Current?.ApplicationLifetime

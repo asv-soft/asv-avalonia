@@ -1,10 +1,8 @@
-using System.Composition;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-[ExportPage(PageId)]
 public class SettingsPageViewModel
     : TreePageViewModel<ISettingsPage, ISettingsSubPage>,
         ISettingsPage
@@ -16,7 +14,7 @@ public class SettingsPageViewModel
     public SettingsPageViewModel()
         : this(
             DesignTime.CommandService,
-            NullContainerHost.Instance,
+            AppHost.Instance.Services,
             NullLayoutService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
@@ -28,10 +26,9 @@ public class SettingsPageViewModel
         Icon = PageIcon;
     }
 
-    [ImportingConstructor]
     public SettingsPageViewModel(
         ICommandService svc,
-        IContainerHost host,
+        IServiceProvider host,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
@@ -43,6 +40,4 @@ public class SettingsPageViewModel
         Icon = PageIcon;
         IconColor = PageIconColor;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

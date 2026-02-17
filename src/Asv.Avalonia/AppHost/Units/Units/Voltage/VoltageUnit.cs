@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -17,7 +16,6 @@ public sealed class VoltageUnit : UnitBase
 
     public const string Id = "voltage";
 
-    [ImportingConstructor]
     public VoltageUnit(IConfiguration cfgSvc, [FromKeyedServices(Id)] IEnumerable<IUnitItem> items)
         : base(items)
     {

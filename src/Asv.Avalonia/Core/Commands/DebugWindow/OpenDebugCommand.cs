@@ -1,12 +1,9 @@
-using System.Composition;
 using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
-[method: ImportingConstructor]
-public class OpenDebugWindowCommand(ExportFactory<IDebugWindow> factory) : StatelessCommand
+public class OpenDebugWindowCommand(IServiceProvider factory) : StatelessCommand
 {
     #region Static
 
@@ -19,7 +16,6 @@ public class OpenDebugWindowCommand(ExportFactory<IDebugWindow> factory) : State
         Description = RS.OpenDebugCommand_CommandInfo_Description,
         Icon = MaterialIconKind.WindowOpenVariant,
         DefaultHotKey = "Ctrl+D",
-        Source = SystemModule.Instance,
     };
 
     #endregion
@@ -31,7 +27,11 @@ public class OpenDebugWindowCommand(ExportFactory<IDebugWindow> factory) : State
         CancellationToken cancel
     )
     {
-        var wnd = new DebugWindow { DataContext = factory.CreateExport().Value, Topmost = true };
+        var wnd = new DebugWindow
+        {
+            DataContext = factory.GetService<IDebugWindow>(),
+            Topmost = true,
+        };
         wnd.Show();
         return ValueTask.FromResult<CommandArg?>(null);
     }

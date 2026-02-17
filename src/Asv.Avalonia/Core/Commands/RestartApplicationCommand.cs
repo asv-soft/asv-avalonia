@@ -1,11 +1,8 @@
-using System.Composition;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public sealed class RestartApplicationCommand : ContextCommand<IRoutable>
 {
     #region Static
@@ -19,7 +16,6 @@ public sealed class RestartApplicationCommand : ContextCommand<IRoutable>
         Description = RS.RestartApplicationCommand_Info_Description,
         Icon = MaterialIconKind.Restart,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     #endregion

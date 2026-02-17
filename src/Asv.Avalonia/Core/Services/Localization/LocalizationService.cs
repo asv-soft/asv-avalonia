@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Composition;
 using System.Globalization;
 using Asv.Cfg;
 using R3;
@@ -33,8 +32,6 @@ public class LocalizationServiceConfig
     public string? CurrentLanguage { get; set; }
 }
 
-[Export(typeof(ILocalizationService))]
-[Shared]
 public class LocalizationService
     : ServiceWithConfigBase<LocalizationServiceConfig>,
         ILocalizationService
@@ -48,7 +45,6 @@ public class LocalizationService
     public SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
     public IEnumerable<ILanguageInfo> AvailableLanguages => _languages;
 
-    [ImportingConstructor]
     public LocalizationService(IConfiguration cfgSvc)
         : base(cfgSvc)
     {

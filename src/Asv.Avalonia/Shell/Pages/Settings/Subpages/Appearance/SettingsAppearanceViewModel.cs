@@ -1,10 +1,8 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-[ExportSettings(PageId)]
 public class SettingsAppearanceViewModel : SettingsSubPage
 {
     public const string PageId = "appearance";
@@ -24,7 +22,6 @@ public class SettingsAppearanceViewModel : SettingsSubPage
 
     #endregion
 
-    [ImportingConstructor]
     public SettingsAppearanceViewModel(
         IThemeService themeService,
         ILocalizationService localizationService,
@@ -54,6 +51,4 @@ public class SettingsAppearanceViewModel : SettingsSubPage
             yield return child;
         }
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

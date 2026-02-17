@@ -1,4 +1,3 @@
-using System.Composition;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -22,9 +21,6 @@ public sealed class SaveCancelDialogPayload
 /// <summary>
 /// Dialog with options to Save, Don't Save, or Cancel.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class SaveCancelDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
     : IDialogPrefab<SaveCancelDialogPayload, bool>
 {

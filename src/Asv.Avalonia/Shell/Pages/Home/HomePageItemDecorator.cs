@@ -6,12 +6,7 @@ namespace Asv.Avalonia;
 
 public class HomePageItemDecorator : RoutableViewModel
 {
-    public HomePageItemDecorator(
-        IHomePageItem homePageItem,
-        IContainerHost container,
-        ILoggerFactory loggerFactory,
-        IExtensionService ext
-    )
+    public HomePageItemDecorator(IHomePageItem homePageItem, ILoggerFactory loggerFactory)
         : base($"decorator_{homePageItem.Id}", loggerFactory)
     {
         homePageItem.Parent = this;
@@ -23,7 +18,6 @@ public class HomePageItemDecorator : RoutableViewModel
         PropertiesView = homePageItem
             .Info.ToNotifyCollectionChangedSlim()
             .DisposeItWith(Disposable);
-        container.SatisfyImports(this);
     }
 
     public IHomePageItem HomePageItem { get; }

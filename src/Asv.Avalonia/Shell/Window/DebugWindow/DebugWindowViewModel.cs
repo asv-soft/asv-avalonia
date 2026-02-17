@@ -1,11 +1,9 @@
-﻿using System.Composition;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(IDebugWindow))]
 public class DebugWindowViewModel : ViewModelBase, IDebugWindow
 {
     public const string ModelId = "DebugWindow";
@@ -19,7 +17,6 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
             DesignTime.LoggerFactory
         ) { }
 
-    [ImportingConstructor]
     public DebugWindowViewModel(
         INavigationService nav,
         IShellHost host,

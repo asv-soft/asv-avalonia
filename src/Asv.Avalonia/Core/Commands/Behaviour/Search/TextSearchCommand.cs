@@ -1,10 +1,7 @@
-﻿using System.Composition;
-using Material.Icons;
+﻿using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class TextSearchCommand : ContextCommand<ISupportTextSearch, StringArg>
 {
     public const string Id = $"{BaseId}.search.text";
@@ -17,7 +14,6 @@ public class TextSearchCommand : ContextCommand<ISupportTextSearch, StringArg>
             Description = RS.TextSearchCommand_CommandInfo_Description,
             Icon = MaterialIconKind.Search,
             DefaultHotKey = null,
-            Source = SystemModule.Instance,
         };
 
     public override ValueTask<StringArg?> InternalExecute(

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.Composition;
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
@@ -59,7 +58,6 @@ public class SettingsConnectionViewModel
         View = source.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
 
-    [ImportingConstructor]
     public SettingsConnectionViewModel(
         IDeviceManager deviceManager,
         INavigationService navigationService,
@@ -155,7 +153,7 @@ public class SettingsConnectionViewModel
     private IPortViewModel CreatePort(IProtocolPort protocolPort)
     {
         if (
-            !_containerHost.TryGetExport<IPortViewModel>(
+            !_containerHost.TryGetService<IPortViewModel>(
                 protocolPort.TypeInfo.Scheme,
                 out var viewModel
             )

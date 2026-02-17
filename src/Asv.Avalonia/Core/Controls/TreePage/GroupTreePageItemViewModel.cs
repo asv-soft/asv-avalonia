@@ -77,6 +77,5 @@ public class GroupTreePageItemViewModel : TreeSubpage
     }
 
     public ObservableTreeNode<ITreePage, NavigationId> Node { get; }
-    public override IExportInfo Source => SystemModule.Instance;
     public ReactiveCommand<NavigationId> NavigateCommand { get; }
 }

@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ChangeThemeFreeCommand : StatelessCommand
 {
     #region Static
@@ -17,13 +14,11 @@ public class ChangeThemeFreeCommand : StatelessCommand
         Description = RS.ChangeThemeCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ThemeLightDark,
         DefaultHotKey = "Ctrl+T",
-        Source = SystemModule.Instance,
     };
 
     #endregion
     private readonly IThemeService _svc;
 
-    [ImportingConstructor]
     public ChangeThemeFreeCommand(IThemeService svc)
     {
         ArgumentNullException.ThrowIfNull(svc);

@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
@@ -8,7 +7,6 @@ public class EditUndoMenu : MenuItem
 {
     public const string MenuId = $"{EditMenu.MenuId}.undo";
 
-    [ImportingConstructor]
     public EditUndoMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.UndoCommand_CommandInfo_Name, loggerFactory, EditMenu.MenuId)
     {

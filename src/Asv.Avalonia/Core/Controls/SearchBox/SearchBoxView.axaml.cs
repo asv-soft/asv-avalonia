@@ -4,7 +4,6 @@ using R3;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor(typeof(SearchBoxViewModel))]
 public partial class SearchBoxView : UserControl
 {
     public SearchBoxView()

@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 /// <summary>
 /// Represents a navigation service for handling application navigation, navigation history, and focus management.
 /// </summary>
-public interface INavigationService : IExportable
+public interface INavigationService
 {
     /// <summary>
     /// Gets the observable collection representing the backward navigation history.

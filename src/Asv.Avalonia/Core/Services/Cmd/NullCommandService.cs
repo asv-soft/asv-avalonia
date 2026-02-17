@@ -70,5 +70,4 @@ public class NullCommandService : ICommandService
     }
 
     public Observable<CommandSnapshot> OnCommand { get; } = new Subject<CommandSnapshot>();
-    public IExportInfo Source => SystemModule.Instance;
 }

@@ -1,9 +1,7 @@
-﻿using System.Composition;
-using Material.Icons;
+﻿using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
 public class OpenHomePageCommand : StatelessCommand
 {
     private readonly INavigationService _nav;
@@ -19,12 +17,11 @@ public class OpenHomePageCommand : StatelessCommand
         Description = RS.OpenHomePageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Home,
         DefaultHotKey = "Ctrl+H",
-        Source = SystemModule.Instance,
     };
 
     #endregion
 
-    [ImportingConstructor]
+
     public OpenHomePageCommand(INavigationService nav)
     {
         _nav = nav;

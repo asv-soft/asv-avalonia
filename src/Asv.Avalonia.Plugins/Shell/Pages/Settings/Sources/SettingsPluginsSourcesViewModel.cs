@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 using Asv.IO;
 using Avalonia.Threading;
 using Material.Icons;
@@ -49,7 +48,6 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             .DisposeItWith(Disposable);
     }
 
-    [ImportingConstructor]
     public SettingsPluginsSourcesViewModel(
         IPluginManager pluginManager,
         INavigationService navigationService,

@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
@@ -8,7 +7,6 @@ public class ToolsHomeMenu : MenuItem
 {
     public const string MenuId = $"{ToolsMenu.MenuId}.home";
 
-    [ImportingConstructor]
     public ToolsHomeMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ToolsMenu_Home, loggerFactory, ToolsMenu.MenuId)
     {

@@ -1,4 +1,3 @@
-using System.Composition;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -22,9 +21,6 @@ public sealed class InputDialogPayload
 /// <summary>
 /// Dialog for entering user's string.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class InputDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
     : IDialogPrefab<InputDialogPayload, string?>
 {

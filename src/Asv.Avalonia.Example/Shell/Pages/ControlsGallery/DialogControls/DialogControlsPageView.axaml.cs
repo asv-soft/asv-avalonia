@@ -1,4 +1,3 @@
-using System.Composition;
 using Avalonia;
 using Avalonia.Controls;
 
@@ -22,7 +21,6 @@ public partial class DialogControlsPageView : UserControl
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public DialogControlsPageView(ILayoutService layoutService)
     {
         _layoutService = layoutService;

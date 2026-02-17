@@ -1,4 +1,3 @@
-using System.Composition.Hosting;
 using Avalonia.Controls;
 using Microsoft.Extensions.Options;
 

@@ -1,11 +1,11 @@
 using System.Collections.Immutable;
-using System.Composition.Hosting;
 using System.Diagnostics;
 using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -31,14 +31,14 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     private bool _isLoaded;
     private int _saveLayoutInProgress;
 
-    protected readonly IContainerHost Container;
+    protected readonly IServiceProvider Container;
     protected readonly ILoggerFactory LoggerFactory;
     protected readonly ICommandService Cmd;
     protected readonly IDialogService DialogService;
 
     protected ShellViewModel(
         NavigationId id,
-        IContainerHost ioc,
+        IServiceProvider ioc,
         ILoggerFactory loggerFactory,
         IConfiguration cfg,
         IExtensionService ext
@@ -52,10 +52,10 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         Cfg = cfg;
         Container = ioc;
         LoggerFactory = loggerFactory;
-        LayoutService = ioc.GetExport<ILayoutService>();
-        DialogService = ioc.GetExport<IDialogService>();
-        Cmd = ioc.GetExport<ICommandService>();
-        Navigation = ioc.GetExport<INavigationService>();
+        LayoutService = ioc.GetRequiredService<ILayoutService>();
+        DialogService = ioc.GetRequiredService<IDialogService>();
+        Cmd = ioc.GetRequiredService<ICommandService>();
+        Navigation = ioc.GetRequiredService<INavigationService>();
 
         _unsavedChangesDialogPrefab = DialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
 
@@ -220,9 +220,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 );
             }
         }
-
-        Container.Dispose();
-
         return true;
     }
 
@@ -270,15 +267,17 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         var page = _pages.FirstOrDefault(x => x.Id == id);
         if (page is null)
         {
-            if (Container.TryGetExport<IPage>(id.Id, out page))
+            page = Container.GetKeyedService<IPage>(id.Id);
+            if (page is not null)
             {
                 page.InitArgs(id.Args);
                 _pages.Add(page);
 
                 SelectedPage.Value = page;
+                return page;
             }
 
-            return page;
+            return this;
         }
 
         if (page.Id == SelectedPage.Value?.Id)

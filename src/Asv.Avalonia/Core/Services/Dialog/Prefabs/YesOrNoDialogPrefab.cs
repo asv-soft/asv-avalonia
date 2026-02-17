@@ -1,4 +1,3 @@
-using System.Composition;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -22,9 +21,6 @@ public sealed class YesOrNoDialogPayload
 /// <summary>
 /// Dialog that shows yes or no options.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class YesOrNoDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
     : IDialogPrefab<YesOrNoDialogPayload, bool>
 {

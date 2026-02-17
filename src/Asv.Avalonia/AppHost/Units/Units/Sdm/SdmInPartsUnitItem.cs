@@ -1,6 +1,4 @@
-﻿using System.Composition;
-
-namespace Asv.Avalonia;
+﻿namespace Asv.Avalonia;
 
 public sealed class SdmInPartsUnitItem() : UnitItemBase(1)
 {

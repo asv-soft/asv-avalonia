@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Asv.Common;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -12,8 +11,6 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(INavigationService))]
-[Shared]
 public class NavigationService : AsyncDisposableOnce, INavigationService
 {
     private readonly IShellHost _host;
@@ -24,7 +21,6 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
     private readonly ObservableStack<NavigationPath> _forwardStack = new();
     private readonly ILogger<NavigationService> _logger;
 
-    [ImportingConstructor]
     public NavigationService(
         IShellHost host,
         ILayoutService layoutService,
@@ -251,6 +247,4 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
     public ReactiveCommand GoHome { get; }
 
     #endregion
-
-    public IExportInfo Source => SystemModule.Instance;
 }

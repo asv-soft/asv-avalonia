@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
@@ -12,9 +11,6 @@ public sealed class HotKeyCaptureDialogPayload
     public HotKeyInfo? CurrentHotKey { get; init; }
 }
 
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class HotKeyCaptureDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
     : IDialogPrefab<HotKeyCaptureDialogPayload, HotKeyInfo?>
 {

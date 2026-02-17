@@ -1,5 +1,3 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 public sealed class FrequencyGigahertzUnitItem() : UnitItemBase(0.000000001)

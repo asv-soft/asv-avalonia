@@ -1,5 +1,4 @@
 ﻿using System.Collections.Immutable;
-using System.Composition;
 using System.Diagnostics;
 using System.IO.Compression;
 using System.Reflection;

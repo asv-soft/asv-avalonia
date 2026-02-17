@@ -2,7 +2,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface ICommandInfo : IExportable
+public interface ICommandInfo
 {
     string Id { get; init; }
     string Name { get; init; }

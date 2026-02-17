@@ -1,5 +1,3 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 public sealed class DdmGpInPartsUnitItem() : UnitItemBase(1)

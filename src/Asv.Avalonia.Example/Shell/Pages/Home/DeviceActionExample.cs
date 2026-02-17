@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 

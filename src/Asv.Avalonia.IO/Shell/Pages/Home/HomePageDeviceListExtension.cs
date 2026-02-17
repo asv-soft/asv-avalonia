@@ -1,4 +1,3 @@
-using System.Composition;
 using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging;
@@ -13,7 +12,6 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
     private readonly ILoggerFactory _loggerFactory;
     private readonly IExtensionService _ext;
 
-    [ImportingConstructor]
     public HomePageDeviceListExtension(
         IDeviceManager svc,
         ILoggerFactory loggerFactory,

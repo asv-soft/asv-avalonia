@@ -10,7 +10,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
     public DesignTimeShellViewModel()
         : base(
             ShellId,
-            NullContainerHost.Instance,
+            AppHost.Instance.Services,
             DesignTime.LoggerFactory,
             DesignTime.Configuration,
             DesignTime.ExtensionService

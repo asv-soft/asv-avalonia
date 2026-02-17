@@ -1,5 +1,3 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 public sealed class DistanceNauticalMileUnitItem() : UnitItemBase(0.00053995680345572)

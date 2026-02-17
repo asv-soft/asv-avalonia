@@ -1,12 +1,8 @@
-﻿using System.Composition;
-using Material.Icons;
+﻿using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportCommand]
-[Shared]
-[method: ImportingConstructor]
 public sealed class AddPluginsSourceCommand(
     IPluginManager pluginManager,
     INavigationService navigationService,

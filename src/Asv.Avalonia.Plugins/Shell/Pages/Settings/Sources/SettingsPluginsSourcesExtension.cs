@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -7,7 +6,6 @@ using R3;
 namespace Asv.Avalonia.Plugins;
 
 [ExportExtensionFor<ISettingsPage>]
-[method: ImportingConstructor]
 public class SettingsPluginsSourcesExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<ISettingsPage>
 {

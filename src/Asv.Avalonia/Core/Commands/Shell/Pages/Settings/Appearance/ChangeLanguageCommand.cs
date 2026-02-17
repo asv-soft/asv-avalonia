@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ChangeLanguageFreeCommand : StatelessCommand
 {
     #region Static
@@ -18,14 +15,12 @@ public class ChangeLanguageFreeCommand : StatelessCommand
         Description = RS.ChangeLanguageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Translate,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     #endregion
 
     private readonly ILocalizationService _svc;
 
-    [ImportingConstructor]
     public ChangeLanguageFreeCommand(ILocalizationService svc)
     {
         ArgumentNullException.ThrowIfNull(svc);

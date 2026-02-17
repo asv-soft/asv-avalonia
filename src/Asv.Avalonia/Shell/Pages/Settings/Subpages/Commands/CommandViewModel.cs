@@ -73,7 +73,7 @@ public sealed class CommandViewModel : RoutableViewModel
     public string Name => _base.Name;
     public string CommandId => _base.Id;
     public string Description => _base.Description;
-    public string Source => _base.Source.ModuleName;
+    public string Source => "System"; // TODO: remove this column
     public string? DefaultHotKey => _base.DefaultHotKey;
     public bool IsHotkeyConfigurable => DefaultHotKey is not null;
     public HistoricalStringProperty EditedHotKey { get; }

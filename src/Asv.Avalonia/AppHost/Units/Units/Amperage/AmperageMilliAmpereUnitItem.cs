@@ -1,6 +1,4 @@
-﻿using System.Composition;
-
-namespace Asv.Avalonia;
+﻿namespace Asv.Avalonia;
 
 public sealed class AmperageMilliAmpereUnitItem() : UnitItemBase(1000)
 {

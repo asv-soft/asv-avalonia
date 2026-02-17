@@ -1,12 +1,10 @@
-﻿using System.Composition;
-using Asv.IO;
+﻿using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia.IO;
 
 [ExportExtensionFor<ISettingsConnectionSubPage>]
-[method: ImportingConstructor]
 public class SettingsConnectionSerialPortExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<ISettingsConnectionSubPage>
 {

@@ -8,7 +8,6 @@ using R3;
 
 namespace Asv.Avalonia;
 
-[ExportViewFor<UnitPropertyViewModel>]
 public partial class UnitPropertyView : UserControl
 {
     private IDisposable? _gotFocusDelayTimer;

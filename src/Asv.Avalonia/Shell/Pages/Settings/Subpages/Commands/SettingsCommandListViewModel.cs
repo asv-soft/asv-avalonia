@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 using Asv.IO;
 using Avalonia.Threading;
 using Material.Icons;
@@ -16,7 +15,6 @@ public sealed class SettingsCommandListViewModelConfig
     public CommandSortingType CommandSortingType { get; set; } = CommandSortingType.All;
 }
 
-[ExportSettings(PageId)]
 public class SettingsCommandListViewModel : SettingsSubPage
 {
     public const string PageId = "hotkeys";
@@ -39,7 +37,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public SettingsCommandListViewModel(
         ICommandService commandsService,
         ILoggerFactory loggerFactory,
@@ -270,6 +267,4 @@ public class SettingsCommandListViewModel : SettingsSubPage
 
         return ValueTask.CompletedTask;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

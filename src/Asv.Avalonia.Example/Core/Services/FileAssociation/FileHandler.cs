@@ -1,12 +1,10 @@
 using System.Collections.Generic;
-using System.Composition;
 using System.Threading.Tasks;
 using Material.Icons;
 
 namespace Asv.Avalonia.Example;
 
 [Export(typeof(IFileHandler))]
-[Shared]
 public class FileHandler : IFileHandler
 {
     private static readonly FileTypeInfo[] StaticTypes =
@@ -15,7 +13,6 @@ public class FileHandler : IFileHandler
         new("test2", "Record file", "rec", true, true, MaterialIconKind.Record),
     ];
 
-    [ImportingConstructor]
     public FileHandler() { }
 
     public int Priority => 0;

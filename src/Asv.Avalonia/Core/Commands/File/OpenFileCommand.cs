@@ -1,4 +1,3 @@
-using System.Composition;
 using Asv.Cfg;
 using Material.Icons;
 
@@ -9,9 +8,6 @@ public class FileCommandConfig
     public string? LastDirectory { get; set; }
 }
 
-[ExportCommand]
-[Shared]
-[method: ImportingConstructor]
 public class OpenFileCommand(
     IFileAssociationService svc,
     IDialogService dialogs,
@@ -35,7 +31,6 @@ public class OpenFileCommand(
         Description = RS.OpenFileCommand_CommandInfo_Description,
         Icon = MaterialIconKind.File,
         DefaultHotKey = "Ctrl+O",
-        Source = SystemModule.Instance,
     };
 
     #endregion

@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ChangeIntPropertyCommand : ContextCommand<IHistoricalProperty<int>, IntArg>
 {
     #region Static
@@ -18,7 +15,6 @@ public class ChangeIntPropertyCommand : ContextCommand<IHistoricalProperty<int>,
         Description = RS.ChangeIntPropertyCommand_CommandInfo_Description,
         Icon = MaterialIconKind.PropertyTag,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;

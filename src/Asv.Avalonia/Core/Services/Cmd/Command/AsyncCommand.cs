@@ -15,7 +15,6 @@ public abstract class AsyncCommand : IAsyncCommand
         CommandArg newValue,
         CancellationToken cancel = default
     );
-    public IExportInfo Source => Info.Source;
 
     public override string ToString()
     {

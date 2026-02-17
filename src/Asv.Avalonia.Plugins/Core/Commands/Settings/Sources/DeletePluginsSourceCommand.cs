@@ -1,11 +1,8 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 using Material.Icons;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportCommand]
-[Shared]
 public sealed class DeletePluginsSourceCommand : ContextCommand<PluginsSourceViewModel>
 {
     #region Static
@@ -26,7 +23,6 @@ public sealed class DeletePluginsSourceCommand : ContextCommand<PluginsSourceVie
 
     private readonly YesOrNoDialogPrefab _yesOrNoDialogPrefab;
 
-    [ImportingConstructor]
     public DeletePluginsSourceCommand(IDialogService dialogService)
     {
         ArgumentNullException.ThrowIfNull(dialogService);

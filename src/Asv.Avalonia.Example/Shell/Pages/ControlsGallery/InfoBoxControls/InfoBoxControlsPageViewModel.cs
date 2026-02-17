@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Composition;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -25,7 +24,6 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public InfoBoxControlsPageViewModel(ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {

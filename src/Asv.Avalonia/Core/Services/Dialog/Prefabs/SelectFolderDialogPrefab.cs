@@ -1,4 +1,3 @@
-using System.Composition;
 using Avalonia.Platform.Storage;
 
 namespace Asv.Avalonia;
@@ -22,9 +21,6 @@ public sealed class SelectFolderDialogPayload
 /// <summary>
 /// Dialog to select a folder.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class SelectFolderDialogDesktopPrefab(IShellHost host)
     : IDialogPrefab<SelectFolderDialogPayload, string?>
 {

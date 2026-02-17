@@ -1,4 +1,3 @@
-using System.Composition;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using R3;
@@ -24,8 +23,6 @@ public sealed class ObserveFolderDialogPayload
 /// <summary>
 /// Dialog to observe a folder.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
 public sealed class ObserveFolderDialogPrefab : IDialogPrefab<ObserveFolderDialogPayload, Unit>
 {
     public Task<Unit> ShowDialogAsync(ObserveFolderDialogPayload dialogPayload)

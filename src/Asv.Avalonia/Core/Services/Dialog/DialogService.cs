@@ -1,16 +1,12 @@
 using System.Collections.Immutable;
-using System.Composition;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(IDialogService))]
-[Shared]
 public sealed class DialogService : IDialogService
 {
     private readonly ImmutableDictionary<string, ICustomDialog> _units;
 
-    [ImportingConstructor]
-    public DialogService([ImportMany] IEnumerable<ICustomDialog> items)
+    public DialogService(IEnumerable<ICustomDialog> items)
     {
         var builder = ImmutableDictionary.CreateBuilder<string, ICustomDialog>();
         foreach (var item in items)
@@ -53,6 +49,4 @@ public sealed class DialogService : IDialogService
             return false;
         }
     }
-
-    public IExportInfo Source => SystemModule.Instance;
 }

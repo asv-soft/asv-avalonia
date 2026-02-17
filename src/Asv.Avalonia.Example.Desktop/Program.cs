@@ -47,10 +47,24 @@ sealed class Program
                 options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
             })
             .UseUnitService()
-            .UseControls()
+            .UseDefaultControls()
             .UseExtensions()
-            // Example add new extension
-            .Services.AddTransient<IExtensionFor<IHomePageItem>, DeviceActionExample>();
+            .UseDesktopShell(configure =>
+            {
+                configure.Pages.UseDefaultHomePage().UseSettingsPage().UseLogViewerPage();
+                configure.Status.UseNavigationStatus();
+            })
+            .UseViewLocator()
+            .UseThemeService()
+            .UseSearchService()
+            .UseNavigationService()
+            .UseLogReaderService()
+            .UseLocalizationService()
+            .UseFileAssociation()
+            .UseDialogs()
+            .UseCommands();
+
+        builder.Extensions.Register<IHomePageItem, DeviceActionExample>();
 
         using var host = builder.Build();
         host.ExitIfNotFirstInstance();
@@ -58,8 +72,31 @@ sealed class Program
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder
+    public static AppBuilder BuildAvaloniaApp()
+    {
+        if (Design.IsDesignMode)
+        {
+            var builder = AppHost.CreateBuilder([]);
+            builder
+                .UseInMemoryConfig()
+                .UseDefaultControls()
+                .UseUnitService()
+                .UseNullExtension()
+                .UseViewLocator()
+                .UseDesingTimeThemeService()
+                .UseDesignTimeSearchService()
+                .UseDesignTimeShell()
+                .UseDesignTimeNavigationService()
+                .UseDesignTimeLogReaderService()
+                .UseDesignTimeLocalizationService()
+                .UseDesignTimeLayoutService()
+                .UseDesignTimeFileAssociation()
+                .UseDesignTimeDialogs()
+                .UseDesignTimeCommands();
+
+            builder.Build();
+        }
+        return AppBuilder
             .Configure<App>()
             .UsePlatformDetect()
             .With(new Win32PlatformOptions { OverlayPopups = true }) // Windows
@@ -68,4 +105,5 @@ sealed class Program
             .WithInterFont()
             .LogToTrace()
             .UseR3();
+    }
 }

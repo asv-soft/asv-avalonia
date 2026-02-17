@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Asv.Common;
 using Avalonia.Threading;
 using Material.Icons;
@@ -18,7 +17,6 @@ public class LogViewerViewModelConfig
 
 public interface ILogViewerViewModel : IPage { }
 
-[ExportPage(PageId)]
 public class LogViewerViewModel
     : PageViewModel<ILogViewerViewModel>,
         ILogViewerViewModel,
@@ -146,7 +144,6 @@ public class LogViewerViewModel
         );
     }
 
-    [ImportingConstructor]
     public LogViewerViewModel(
         ICommandService cmd,
         ILogReaderService logReaderService,
@@ -370,6 +367,4 @@ public class LogViewerViewModel
 
         return ValueTask.CompletedTask;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

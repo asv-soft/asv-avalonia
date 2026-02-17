@@ -1,10 +1,7 @@
-﻿using System.Composition;
-using Material.Icons;
+﻿using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class ClosePageCommand : ContextCommand<IPage>
 {
     #region Static
@@ -18,7 +15,6 @@ public class ClosePageCommand : ContextCommand<IPage>
         Description = RS.ClosePageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.CloseBold,
         DefaultHotKey = "Ctrl+Q",
-        Source = SystemModule.Instance,
     };
 
     #endregion

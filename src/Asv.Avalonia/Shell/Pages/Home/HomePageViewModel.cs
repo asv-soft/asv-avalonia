@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
@@ -8,7 +7,6 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-[ExportPage(PageId)]
 public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 {
     public const string PageId = "home";
@@ -19,7 +17,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         : this(
             NullCommandService.Instance,
             NullAppInfo.Instance,
-            NullContainerHost.Instance,
+            AppHost.Instance.Services,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
             DesignTime.ExtensionService
@@ -99,11 +97,10 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         }
     }
 
-    [ImportingConstructor]
     public HomePageViewModel(
         ICommandService cmd,
         IAppInfo appInfo,
-        IContainerHost container,
+        IServiceProvider container,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
@@ -123,7 +120,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         Items = [];
 
         ItemsList = Items
-            .CreateView(x => new HomePageItemDecorator(x, container, loggerFactory, ext))
+            .CreateView(x => new HomePageItemDecorator(x, loggerFactory))
             .DisposeItWith(Disposable);
 
         ItemsList.DisposeMany().DisposeItWith(Disposable);
@@ -165,6 +162,4 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
     {
         // do nothing
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

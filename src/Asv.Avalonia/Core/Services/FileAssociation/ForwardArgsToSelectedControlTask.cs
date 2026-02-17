@@ -1,31 +1,19 @@
-﻿using System.Composition;
-using System.Reflection.Metadata;
+﻿using System.Reflection.Metadata;
 using Asv.Common;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using R3;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(IStartupTask))]
-[Shared]
-[method: ImportingConstructor]
 public class ForwardArgsToSelectedControlTask(
+    ISoloRunFeature soloRunFeature,
     IFileAssociationService svc,
     INavigationService navigationService,
     IShellHost shellHost
-) : StartupTask
+) : IHostedService
 {
-    public override void AppCtor()
-    {
-        if (!Design.IsDesignMode)
-        {
-            AppHost
-                .Instance.Services.GetRequiredService<ISoloRunFeature>()
-                .Args.SubscribeAwait(HandleEvent);
-        }
-    }
-
     private ValueTask HandleEvent(AppArgs appArgs, CancellationToken ct)
     {
         var context = navigationService.SelectedControl.CurrentValue ?? shellHost.Shell;
@@ -36,5 +24,19 @@ public class ForwardArgsToSelectedControlTask(
             return default;
         }
         return context.Rise(new DesktopPushArgsEvent(context, appArgs), ct);
+    }
+
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        if (!Design.IsDesignMode)
+        {
+            soloRunFeature.Args.SubscribeAwait(HandleEvent);
+        }
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }

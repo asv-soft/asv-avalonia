@@ -29,8 +29,6 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
 
         base.Dispose(disposing);
     }
-
-    public abstract IExportInfo Source { get; }
 }
 
 public abstract class TreeSubpage<TContext>(NavigationId id, ILoggerFactory loggerFactory)

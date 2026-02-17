@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Common;
+﻿using Asv.Common;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.GeoMap;
@@ -15,9 +14,6 @@ public sealed class GeoPointDialogPayload
 /// <summary>
 ///     Dialog for entering users's Geopoint.
 /// </summary>
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class GeoPointDialogPrefab(
     INavigationService nav,
     ILoggerFactory loggerFactory,

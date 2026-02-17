@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Composition;
 using System.Diagnostics;
 using Asv.Cfg;
 using Asv.Common;
@@ -17,8 +16,6 @@ public class CommandServiceConfig
     public Dictionary<string, string?> HotKeys { get; set; } = new();
 }
 
-[Export(typeof(ICommandService))]
-[Shared]
 public class CommandService : AsyncDisposableOnce, ICommandService
 {
     private readonly INavigationService _nav;
@@ -35,12 +32,11 @@ public class CommandService : AsyncDisposableOnce, ICommandService
     private readonly Subject<HotKeyInfo> _hotKeySubject;
     private readonly ReactiveProperty<bool> _isHotKeyRecognitionEnabled;
 
-    [ImportingConstructor]
     public CommandService(
         INavigationService nav,
         IConfiguration cfg,
         IAppPath path,
-        [ImportMany] IEnumerable<IAsyncCommand> factories,
+        IEnumerable<IAsyncCommand> factories,
         ILoggerFactory loggerFactory
     )
     {
@@ -445,6 +441,4 @@ public class CommandService : AsyncDisposableOnce, ICommandService
 
         base.Dispose(disposing);
     }
-
-    public IExportInfo Source => SystemModule.Instance;
 }

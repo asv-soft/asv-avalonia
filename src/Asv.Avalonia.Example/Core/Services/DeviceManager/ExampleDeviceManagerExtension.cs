@@ -1,21 +1,15 @@
 using System;
-using System.Composition;
-using Asv.Avalonia;
 using Asv.Avalonia.IO;
-using Asv.Cfg;
 using Asv.IO;
 using Asv.IO.Device;
-using Avalonia.Media;
 using Material.Icons;
 using R3;
 
 namespace Asv.Avalonia.Example;
 
 [Export(typeof(IDeviceManagerExtension))]
-[Shared]
 public class ExampleDeviceManagerExtension : IDeviceManagerExtension
 {
-    [ImportingConstructor]
     public ExampleDeviceManagerExtension() { }
 
     public void Configure(IProtocolBuilder builder)

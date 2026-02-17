@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
-using System.Composition;
 using Asv.Cfg;
 using Asv.Common;
 using Avalonia;
@@ -12,8 +11,6 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-[Export(typeof(ILayoutService))]
-[Shared]
 public class LayoutService : AsyncDisposableOnce, ILayoutService
 {
     private const string ViewIdPart = "_view";
@@ -25,7 +22,6 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     public const string LayoutFolder = "layouts.json";
 
-    [ImportingConstructor]
     public LayoutService(IAppPath path, ILoggerFactory loggerFactory)
     {
         _logger = loggerFactory.CreateLogger<LayoutService>();
@@ -305,6 +301,4 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
     }
 
     #endregion
-
-    public IExportInfo Source => SystemModule.Instance;
 }

@@ -1,12 +1,7 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
-[Export(typeof(ISearchService))]
-[Shared]
 public class SearchService : ISearchService
 {
-    [ImportingConstructor]
     public SearchService() { }
 
     public bool Match(string? text, string? query, out Selection match)

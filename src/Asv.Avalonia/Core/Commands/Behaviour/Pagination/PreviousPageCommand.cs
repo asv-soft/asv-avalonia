@@ -1,10 +1,7 @@
-using System.Composition;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-[ExportCommand]
-[Shared]
 public class PreviousPageCommand : ContextCommand<ISupportPagination>
 {
     public const string Id = $"{BaseId}.page.back";
@@ -16,7 +13,6 @@ public class PreviousPageCommand : ContextCommand<ISupportPagination>
         Description = RS.PreviousPageCommand_CommandInfo_Description,
         Icon = MaterialIconKind.ArrowLeftBold,
         DefaultHotKey = "Ctrl+Left",
-        Source = SystemModule.Instance,
     };
     public override ICommandInfo Info => StaticInfo;
 

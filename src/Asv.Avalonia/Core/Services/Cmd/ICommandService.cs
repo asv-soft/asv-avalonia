@@ -2,7 +2,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public interface ICommandService : IExportable
+public interface ICommandService
 {
     ICommandInfo? GetCommandInfo(string commandId);
     IEnumerable<ICommandInfo> Commands { get; }

@@ -1,4 +1,3 @@
-using System.Composition;
 using System.Globalization;
 using Asv.Common;
 

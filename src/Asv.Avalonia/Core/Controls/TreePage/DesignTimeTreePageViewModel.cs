@@ -174,8 +174,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 DesignTime.LoggerFactory
             )
         );
-
-        Init();
     }
 
     protected override ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
@@ -193,6 +191,4 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
         set.Menu.Add(new MenuItem("cmd03", "Command3", DesignTime.LoggerFactory));
         return ValueTask.FromResult<ITreeSubpage?>(set);
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

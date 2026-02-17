@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Composition;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -21,7 +20,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         Parent = DesignTime.Shell;
     }
 
-    [ImportingConstructor]
     public PropertyEditorPageViewModel(IUnitService unit, ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {

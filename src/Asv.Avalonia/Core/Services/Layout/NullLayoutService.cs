@@ -82,6 +82,4 @@ public sealed class NullLayoutService : ILayoutService
     {
         return;
     }
-
-    public IExportInfo Source => SystemModule.Instance;
 }

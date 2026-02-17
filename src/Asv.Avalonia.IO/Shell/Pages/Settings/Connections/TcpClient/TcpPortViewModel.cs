@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Asv.IO;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -35,7 +34,6 @@ public class TcpPortViewModel : PortViewModel
         ConnectionString = TcpClientProtocolPortConfig.CreateDefault().AsUri().ToString();
     }
 
-    [ImportingConstructor]
     public TcpPortViewModel(
         IConfiguration cfgSvc,
         IUnitService unitService,

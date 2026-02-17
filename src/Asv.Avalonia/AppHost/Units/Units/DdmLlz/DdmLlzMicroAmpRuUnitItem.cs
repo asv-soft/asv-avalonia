@@ -1,5 +1,3 @@
-using System.Composition;
-
 namespace Asv.Avalonia;
 
 public sealed class DdmLlzMicroAmpRuUnitItem() : UnitItemBase(250 / 0.155)

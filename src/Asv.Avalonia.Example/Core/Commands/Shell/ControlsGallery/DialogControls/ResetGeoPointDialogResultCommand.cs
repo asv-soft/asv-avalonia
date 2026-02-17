@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
@@ -28,8 +27,6 @@ public static class ResetGeoPointDialogResultCommandArg
         );
 }
 
-[ExportCommand]
-[Shared]
 public class ResetGeoPointDialogResultCommand : ContextCommand<DialogControlsPageViewModel>
 {
     #region Static
@@ -43,7 +40,6 @@ public class ResetGeoPointDialogResultCommand : ContextCommand<DialogControlsPag
         Description = RS.ResetGeoPointDialogResultCommand_CommandInfo_Description,
         Icon = MaterialIconKind.LockReset,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     #endregion

@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Composition;
-using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Material.Icons;
@@ -45,7 +43,6 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    [ImportingConstructor]
     public HistoricalControlsPageViewModel(IUnitService unit, ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {

@@ -1,5 +1,4 @@
-﻿using System.Composition;
-using Asv.Cfg;
+﻿using Asv.Cfg;
 using Asv.IO;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -31,7 +30,6 @@ public class UdpPortViewModel : PortViewModel
         ConnectionString = UdpProtocolPortConfig.CreateDefault().AsUri().ToString();
     }
 
-    [ImportingConstructor]
     public UdpPortViewModel(
         IConfiguration cfgSvc,
         IUnitService unitService,

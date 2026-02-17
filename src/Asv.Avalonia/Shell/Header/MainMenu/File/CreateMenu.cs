@@ -1,4 +1,3 @@
-using System.Composition;
 using System.Reactive.Disposables;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -10,7 +9,6 @@ public class CreateMenu : MenuItem
 {
     public const string MenuId = $"{ExportMainMenuAttribute.Contract}.create";
 
-    [ImportingConstructor]
     public CreateMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.CreateMenu_Header, loggerFactory)
     {
