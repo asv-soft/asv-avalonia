@@ -11,7 +11,7 @@ public static class ExtensionsMixin
         return builder;
     }
 
-    public static IHostApplicationBuilder UserNullExtension(this IHostApplicationBuilder builder)
+    public static IHostApplicationBuilder UseNullExtension(this IHostApplicationBuilder builder)
     {
         builder.Services.AddSingleton(NullExtensionService.Instance);
         return builder;

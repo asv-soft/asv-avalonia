@@ -29,7 +29,7 @@ public class App : Application, IContainerHost, IShellHost
         if (Design.IsDesignMode)
         {
             var builder = AppHost.CreateBuilder([]);
-            builder.UseInMemoryConfig().UseControls().UseUnitService().UserNullExtension();
+            builder.UseInMemoryConfig().UseControls().UseUnitService().UseNullExtension();
             builder.Build();
         }
 
