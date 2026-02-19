@@ -2,7 +2,6 @@
 
 namespace Asv.Avalonia;
 
-[ExportMainMenu]
 public class EditRedoMenu : MenuItem
 {
     public const string MenuId = $"{EditMenu.MenuId}.redo";

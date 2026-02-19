@@ -23,7 +23,7 @@ public class TileCacheStatistic(
     }
 }
 
-public interface ITileCache
+public interface ITileCache : IDisposable, IAsyncDisposable
 {
     Bitmap? this[TileKey key] { get; set; }
     TileCacheStatistic GetStatistic();

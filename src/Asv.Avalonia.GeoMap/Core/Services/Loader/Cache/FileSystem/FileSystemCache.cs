@@ -2,12 +2,15 @@
 using Asv.Common;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ZLogger;
 
 namespace Asv.Avalonia.GeoMap;
 
 public class FileSystemCacheConfig : TileCacheConfig
 {
+    public const string ConfigurationSection = "filesystemcache";
+
     public string FolderPath { get; set; } = "map";
 }
 
@@ -16,7 +19,7 @@ public class FileSystemCache : TileCache
     private readonly string _cacheDirectory;
     private readonly ILogger<FileSystemCache> _logger;
     private readonly LockByKeyExecutor<TileKey> _lock = new();
-    private readonly object _syncDir = new();
+    private readonly Lock _syncDir = new();
     private readonly Counter<int> _meterGet;
     private readonly Counter<int> _meterSet;
     private long _fileCount;
@@ -27,15 +30,15 @@ public class FileSystemCache : TileCache
     private const string TileFileExtension = "png";
 
     public FileSystemCache(
-        FileSystemCacheConfig config,
+        IOptions<FileSystemCacheConfig> config,
         ILoggerFactory factory,
         IMeterFactory meterFactory
     )
-        : base(config, factory)
+        : base(config.Value, factory)
     {
         _logger = factory.CreateLogger<FileSystemCache>();
-        _cacheDirectory = config.FolderPath;
-        _capacitySize = config.SizeLimitKb * 1024;
+        _cacheDirectory = config.Value.FolderPath;
+        _capacitySize = config.Value.SizeLimitKb * 1024;
         if (!Directory.Exists(_cacheDirectory))
         {
             _logger.ZLogInformation($"Create map cache directory: {_cacheDirectory}");
@@ -44,7 +47,7 @@ public class FileSystemCache : TileCache
 
         DirectoryHelper.GetDirectorySize(_cacheDirectory, ref _fileCount, ref _dirSizeInBytes);
 
-        var meter = meterFactory.Create(MapMetric.BaseName);
+        var meter = meterFactory.Create(GeoMapMixin.MetricName);
         _meterGet = meter.CreateCounter<int>("cache_file_get");
         _meterSet = meter.CreateCounter<int>("cache_file_set");
         meter.CreateObservableGauge("cache_file_count", () => _fileCount);

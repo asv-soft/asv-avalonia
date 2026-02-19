@@ -2,13 +2,14 @@
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ZLogger;
 
 namespace Asv.Avalonia.GeoMap;
 
 public class MemoryTileCacheConfig : TileCacheConfig
 {
-    public double ExpirationAfterSec { get; set; } = 30 * 60;
+    public const string ConfigurationSection = "fastcache";
 
     protected override IEnumerable<string> GetOptions()
     {
@@ -34,34 +35,34 @@ public class MemoryTileCache : TileCache
     private readonly ObservableGauge<long> _meterSize;
 
     public MemoryTileCache(
-        MemoryTileCacheConfig config,
+        IOptions<MemoryTileCacheConfig> config,
         ILoggerFactory factory,
         IMeterFactory meterFactory
     )
-        : base(config, factory)
+        : base(config.Value, factory)
     {
         ArgumentNullException.ThrowIfNull(config);
         ArgumentNullException.ThrowIfNull(factory);
 
-        _sizeLimitBytes = config.SizeLimitKb * 1024;
+        _sizeLimitBytes = config.Value.SizeLimitKb * 1024;
 
-        _expirationAfter = TimeSpan.FromSeconds(config.ExpirationAfterSec);
+        _expirationAfter = TimeSpan.FromSeconds(config.Value.ExpirationAfterSec);
         _logger = factory.CreateLogger<MemoryTileCache>();
         _logger.ZLogInformation($"{nameof(MemoryTileCache)} created with {config}");
         _cache = new MemoryCache(
             new MemoryCacheOptions
             {
                 ExpirationScanFrequency = TimeSpan.FromMicroseconds(
-                    config.ExpirationScanFrequencySec
+                    config.Value.ExpirationScanFrequencySec
                 ),
                 SizeLimit = _sizeLimitBytes,
-                CompactionPercentage = config.CompactionPercentage,
+                CompactionPercentage = config.Value.CompactionPercentage,
                 TrackLinkedCacheEntries = false,
                 TrackStatistics = true,
             }
         );
 
-        var meter = meterFactory.Create(MapMetric.BaseName);
+        var meter = meterFactory.Create(GeoMapMixin.MetricName);
         _meterGet = meter.CreateCounter<int>("cache_memory_get");
         _meterSet = meter.CreateCounter<int>("cache_memory_set");
         _meterClear = meter.CreateCounter<int>("cache_memory_evict");

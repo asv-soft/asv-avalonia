@@ -10,7 +10,6 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-[ExportStatusItem]
 public class ConnectionRateStatusViewModel : StatusItem
 {
     public const string NavId = $"{DefaultId}.connection_rate";

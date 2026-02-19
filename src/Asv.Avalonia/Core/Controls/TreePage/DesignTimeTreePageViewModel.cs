@@ -22,7 +22,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
         : base(
             DesignTime.Id,
             DesignTime.CommandService,
-            DesignTime.ContainerHost,
+            AppHost.Instance.Services,
             NullLayoutService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,

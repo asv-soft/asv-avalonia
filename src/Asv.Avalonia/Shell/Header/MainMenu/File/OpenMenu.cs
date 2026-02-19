@@ -2,10 +2,9 @@
 
 namespace Asv.Avalonia;
 
-[ExportMainMenu]
 public class OpenMenu : MenuItem
 {
-    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.open";
+    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.open";
 
     public OpenMenu(ILoggerFactory loggerFactory, ICommandService cmd)
         : base(MenuId, RS.ShellView_Toolbar_Open, loggerFactory)

@@ -7,6 +7,7 @@ using Asv.Common;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -27,8 +28,10 @@ public class MapServiceConfig
 
 public class TileLoader : AsyncDisposableWithCancel, ITileLoader
 {
-    private readonly MemoryTileCache _fastCache;
-    private readonly FileSystemCache _slowCache;
+    public const string FastTileCacheContract = "map.cache.fast";
+    public const string SlowTileCacheContract = "map.cache.slow";
+    private readonly ITileCache _fastCache;
+    private readonly ITileCache _slowCache;
     private readonly ConcurrentDictionary<int, Bitmap> _emptyBitmap;
     private readonly ConcurrentHashSet<TileKey> _localRequests;
     private readonly Channel<TileKey> _requestQueue;
@@ -43,12 +46,14 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     public TileLoader(
         ILoggerFactory loggerFactory,
         IConfiguration configProvider,
-        IMeterFactory meterFactory
+        IMeterFactory meterFactory,
+        [FromKeyedServices(FastTileCacheContract)] ITileCache fastCache,
+        [FromKeyedServices(SlowTileCacheContract)] ITileCache slowCache
     )
     {
         _logger = loggerFactory.CreateLogger<TileLoader>();
-        _fastCache = new MemoryTileCache(new MemoryTileCacheConfig(), loggerFactory, meterFactory);
-        _slowCache = new FileSystemCache(new FileSystemCacheConfig(), loggerFactory, meterFactory);
+        _fastCache = fastCache; // new MemoryTileCache(new MemoryTileCacheConfig(), loggerFactory, meterFactory);
+        _slowCache = slowCache; // new FileSystemCache(new FileSystemCacheConfig(), loggerFactory, meterFactory);
         _localRequests = new ConcurrentHashSet<TileKey>();
         _emptyBitmap = new ConcurrentDictionary<int, Bitmap>();
         var config = configProvider.Get<MapServiceConfig>();
@@ -71,7 +76,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             Task.Run(ProcessQueue);
         }
 
-        var meter = meterFactory.Create(MapMetric.BaseName);
+        var meter = meterFactory.Create(GeoMapMixin.MetricName);
         _meterReq = meter.CreateCounter<int>("loader_get");
         _meterQueue = meter.CreateCounter<int>("loader_queue_requests");
         _meterHttp = meter.CreateCounter<int>("loader_http_requests");

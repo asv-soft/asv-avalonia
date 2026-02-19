@@ -4,7 +4,6 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.IO;
 
-[ExportViewFor(typeof(ConnectionRateStatusViewModel))]
 public partial class ConnectionRateStatusView : UserControl
 {
     public ConnectionRateStatusView()

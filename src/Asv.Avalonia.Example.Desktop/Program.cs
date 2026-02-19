@@ -39,7 +39,7 @@ sealed class Program
                 options.WithLogViewer();
                 options.WithLogLevel(LogLevel.Trace);
             })
-            .UseAsvGeoMap()
+            .UseModuleGeoMap()
             .UseIo(opt => opt.WithDevices())
             .UsePluginManager(options =>
             {
@@ -52,7 +52,8 @@ sealed class Program
             .UseDesktopShell(configure =>
             {
                 configure.Pages.UseDefaultHomePage().UseSettingsPage().UseLogViewerPage();
-                configure.Status.UseNavigationStatus();
+                configure.Status.UseNavigationStatus().UseConnectionStatus();
+                configure.MainMenu.RegisterDefault();
             })
             .UseViewLocator()
             .UseThemeService()

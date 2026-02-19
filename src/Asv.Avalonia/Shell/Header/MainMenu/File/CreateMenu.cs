@@ -4,10 +4,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-[ExportMainMenu]
 public class CreateMenu : MenuItem
 {
-    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.create";
+    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.create";
 
     public CreateMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.CreateMenu_Header, loggerFactory)

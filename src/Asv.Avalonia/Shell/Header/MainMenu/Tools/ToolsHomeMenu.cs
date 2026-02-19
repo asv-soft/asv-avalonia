@@ -2,7 +2,6 @@
 
 namespace Asv.Avalonia;
 
-[ExportMainMenu]
 public class ToolsHomeMenu : MenuItem
 {
     public const string MenuId = $"{ToolsMenu.MenuId}.home";

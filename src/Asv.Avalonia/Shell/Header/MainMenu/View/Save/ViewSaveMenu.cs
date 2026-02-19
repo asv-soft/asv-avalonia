@@ -2,7 +2,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-[ExportMainMenu]
 public sealed class ViewSaveMenu : MenuItem
 {
     public const string MenuId = $"{ViewMenu.MenuId}.save";

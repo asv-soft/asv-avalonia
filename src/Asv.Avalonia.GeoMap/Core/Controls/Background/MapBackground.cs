@@ -30,13 +30,7 @@ public partial class MapBackground : Control
     public MapBackground()
     {
         IsDebug = true;
-        _tileLoader = Design.IsDesignMode
-            ? new TileLoader(
-                DesignTime.LoggerFactory,
-                DesignTime.Configuration,
-                new DefaultMeterFactory()
-            )
-            : AppHost.Instance.Services.GetRequiredService<ITileLoader>();
+        _tileLoader = AppHost.Instance.Services.GetRequiredService<ITileLoader>();
 
         DisposableBuilder disposeBuilder = new();
         _renderRequestSubject.AddTo(ref disposeBuilder);

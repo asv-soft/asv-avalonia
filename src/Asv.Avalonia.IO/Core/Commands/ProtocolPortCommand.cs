@@ -15,7 +15,6 @@ public class PortCrudCommand(IDeviceManager manager) : StatelessCrudCommand<Stri
         Description = RS.PortCrudCommand_CommandInfo_Description,
         Icon = MaterialIconKind.SerialPort,
         DefaultHotKey = null,
-        Source = IoModule.Instance,
     };
 
     public static ValueTask ExecuteRemove(IRoutable context, string portId)

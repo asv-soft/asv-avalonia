@@ -3,7 +3,6 @@ using R3;
 
 namespace Asv.Avalonia;
 
-[ExportExtensionFor<IShell>]
 public class CreateMenuExtender(IFileAssociationService svc, ILoggerFactory loggerFactory)
     : IExtensionFor<IShell>
 {

@@ -3,10 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-[ExportMainMenu]
 public class HelpMenu : MenuItem
 {
-    public const string MenuId = $"{ExportMainMenuAttribute.Contract}.help";
+    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.help";
 
     public HelpMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ShellView_Toolbar_Help, loggerFactory)

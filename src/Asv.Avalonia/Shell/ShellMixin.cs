@@ -8,10 +8,9 @@ public static class ShellMixin
 {
     extension(IHostApplicationBuilder builder)
     {
-        public ShellBuilder Shell => new(builder);
-
         private IHostApplicationBuilder UseShell(Action<ShellBuilder>? configure = null)
         {
+            builder.Extensions.Register<IShell, MainMenuDefaultMenuExtender>();
             return builder;
         }
 
@@ -41,6 +40,26 @@ public static class ShellMixin
             configure?.Invoke(new ShellBuilder(builder));
             return builder;
         }
+
+        public ShellBuilder Shell => new(builder);
+    }
+
+    public class ShellBuilder
+    {
+        private readonly IHostApplicationBuilder _builder;
+
+        public ShellBuilder(IHostApplicationBuilder builder)
+        {
+            _builder = builder;
+            Status = new StatusBuilder(this);
+            Pages = new PageBuilder(this);
+            MainMenu = new MainMenuBuilder(this);
+        }
+
+        public StatusBuilder Status { get; }
+        public PageBuilder Pages { get; }
+        public MainMenuBuilder MainMenu { get; }
+        public IHostApplicationBuilder Parent => _builder;
     }
 
     public class StatusBuilder(ShellBuilder builder)
@@ -76,19 +95,33 @@ public static class ShellMixin
         public ShellBuilder Parent => builder;
     }
 
-    public class ShellBuilder
+    public class MainMenuBuilder(ShellBuilder builder)
     {
-        private readonly IHostApplicationBuilder _builder;
-
-        public ShellBuilder(IHostApplicationBuilder builder)
+        public MainMenuBuilder Register<TMenuViewModel>()
+            where TMenuViewModel : class, IMenuItem
         {
-            _builder = builder;
-            Status = new StatusBuilder(this);
-            Pages = new PageBuilder(this);
+            builder.Parent.Services.AddKeyedTransient<IMenuItem, TMenuViewModel>(
+                MainMenuDefaultMenuExtender.Contract
+            );
+            return this;
         }
 
-        public StatusBuilder Status { get; }
-        public PageBuilder Pages { get; }
-        public IHostApplicationBuilder Parent => _builder;
+        public ShellBuilder Parent => builder;
+
+        public MainMenuBuilder RegisterDefault()
+        {
+            Parent.Parent.Extensions.Register<IShell, CreateMenuExtender>();
+            return Register<EditMenu>()
+                .Register<EditUndoMenu>()
+                .Register<EditRedoMenu>()
+                .Register<CreateMenu>()
+                .Register<OpenMenu>()
+                .Register<HelpMenu>()
+                .Register<ToolsMenu>()
+                .Register<ToolsHomeMenu>()
+                .Register<ToolsSettingsMenu>()
+                .Register<ViewSaveMenu>()
+                .Register<ViewSaveAllMenu>();
+        }
     }
 }
