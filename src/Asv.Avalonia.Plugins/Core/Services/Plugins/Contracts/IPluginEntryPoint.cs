@@ -1,10 +1,16 @@
-﻿namespace Asv.Avalonia.Plugins;
+﻿using Microsoft.Extensions.Hosting;
+
+namespace Asv.Avalonia.Plugins;
 
 /// <summary>
 /// This interface is used as the entry point when loading plugins
 /// </summary>
 public interface IPluginEntryPoint
 {
+    void Build(IHostApplicationBuilder builder)
+    {
+        
+    }
     /// <summary>
     /// Call when initializes the application Application.Initialize()
     /// Will be called before main window\activity is shown

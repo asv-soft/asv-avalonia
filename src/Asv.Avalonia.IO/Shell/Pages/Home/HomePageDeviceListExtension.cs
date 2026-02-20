@@ -5,7 +5,6 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-[ExportExtensionFor<IHomePage>]
 public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 {
     private readonly IDeviceManager _svc;

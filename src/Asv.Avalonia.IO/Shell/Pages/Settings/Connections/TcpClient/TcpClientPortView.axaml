@@ -8,11 +8,11 @@
     mc:Ignorable="d"
     d:DesignWidth="400"
     d:DesignHeight="450"
-    x:Class="Asv.Avalonia.IO.TcpPortView"
-    x:DataType="io:TcpPortViewModel"
+    x:Class="Asv.Avalonia.IO.TcpClientPortView"
+    x:DataType="io:TcpClientPortViewModel"
 >
     <Design.DataContext>
-        <io:TcpPortViewModel />
+        <io:TcpClientPortViewModel />
     </Design.DataContext>
     <DockPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Margin="8">
         <DockPanel DockPanel.Dock="Top">

@@ -18,7 +18,7 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         NavigationId id,
         IDeviceManager devices,
         ICommandService cmd,
-        IContainerHost container,
+        IServiceProvider container,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,

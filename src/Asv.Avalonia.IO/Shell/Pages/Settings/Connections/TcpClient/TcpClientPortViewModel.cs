@@ -20,13 +20,12 @@ public class TcpPortViewModelConfig
         };
 }
 
-[Export(TcpClientProtocolPort.Scheme, typeof(IPortViewModel))]
-public class TcpPortViewModel : PortViewModel
+public class TcpClientPortViewModel : PortViewModel
 {
     private readonly IConfiguration _cfgSvc;
     public const MaterialIconKind DefaultIcon = MaterialIconKind.UploadNetworkOutline;
 
-    public TcpPortViewModel()
+    public TcpClientPortViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
         Config = new TcpPortViewModelConfig();
@@ -34,7 +33,7 @@ public class TcpPortViewModel : PortViewModel
         ConnectionString = TcpClientProtocolPortConfig.CreateDefault().AsUri().ToString();
     }
 
-    public TcpPortViewModel(
+    public TcpClientPortViewModel(
         IConfiguration cfgSvc,
         IUnitService unitService,
         ILoggerFactory loggerFactory,

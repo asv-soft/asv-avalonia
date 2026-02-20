@@ -15,7 +15,6 @@ public class UdpPortViewModelConfig
         new() { { "7341", "Base station" } };
 }
 
-[Export(UdpProtocolPort.Scheme, typeof(IPortViewModel))]
 public class UdpPortViewModel : PortViewModel
 {
     public const MaterialIconKind DefaultIcon = MaterialIconKind.IpNetworkOutline;

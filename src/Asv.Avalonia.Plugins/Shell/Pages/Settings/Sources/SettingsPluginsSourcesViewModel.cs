@@ -11,7 +11,6 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportSettings(PageId)]
 public class SettingsPluginsSourcesViewModel : SettingsSubPage
 {
     public const string PageId = "plugins.sources";
@@ -175,6 +174,4 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
 
         return ValueTask.CompletedTask;
     }
-
-    public override IExportInfo Source => PluginManagerModule.Instance;
 }

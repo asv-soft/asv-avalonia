@@ -4,7 +4,7 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportExtensionFor<IHomePage>]
+
 public class HomePageInstalledPluginsExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<IHomePage>
 {

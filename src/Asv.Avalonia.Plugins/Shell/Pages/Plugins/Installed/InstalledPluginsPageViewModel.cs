@@ -9,7 +9,6 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportPage(PageId)]
 public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageViewModel>
 {
     public const string PageId = "plugins.installed";
@@ -182,6 +181,4 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
             Logger.LogError(e, "Error during manual plugin installation");
         }
     }
-
-    public override IExportInfo Source => PluginManagerModule.Instance;
 }

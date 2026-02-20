@@ -50,10 +50,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Shell\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <AdditionalFiles Include="Shell\Pages\Home\ExamplePageView.axaml" />
     </ItemGroup>
 

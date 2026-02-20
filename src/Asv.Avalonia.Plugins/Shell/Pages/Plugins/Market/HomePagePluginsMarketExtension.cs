@@ -4,7 +4,6 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportExtensionFor<IHomePage>]
 public class HomePagePluginsMarketExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)

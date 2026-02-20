@@ -26,23 +26,3 @@ public class Command1
         throw new NotImplementedException();
     }
 }
-
-public sealed class ApiModule : IExportInfo
-{
-    public const string Name = "Asv.Avalonia.Example.Api";
-    public static ApiModule Instance { get; } = new();
-
-    private ApiModule() { }
-
-    public string ModuleName => Name;
-}
-
-public static class ContainerConfigurationMixin
-{
-    public static ContainerConfiguration WithDependenciesFromApi(
-        this ContainerConfiguration containerConfiguration
-    )
-    {
-        return containerConfiguration.WithAssemblies([typeof(ApiModule).Assembly]);
-    }
-}

@@ -40,7 +40,7 @@ sealed class Program
                 options.WithLogLevel(LogLevel.Trace);
             })
             .UseModuleGeoMap()
-            .UseIo(opt => opt.WithDevices())
+            .UseModuleIo()
             .UsePluginManager(options =>
             {
                 options.WithApiPackage("Asv.Avalonia.Example.Api", SemVersion.Parse("1.0.0"));
@@ -49,12 +49,7 @@ sealed class Program
             .UseUnitService()
             .UseDefaultControls()
             .UseExtensions()
-            .UseDesktopShell(configure =>
-            {
-                configure.Pages.UseDefaultHomePage().UseSettingsPage().UseLogViewerPage();
-                configure.Status.UseNavigationStatus().UseConnectionStatus();
-                configure.MainMenu.RegisterDefault();
-            })
+            .UseDesktopShell()
             .UseViewLocator()
             .UseThemeService()
             .UseSearchService()
@@ -63,7 +58,8 @@ sealed class Program
             .UseLocalizationService()
             .UseFileAssociation()
             .UseDialogs()
-            .UseCommands();
+            .UseCommands()
+            .UsePlugins();
 
         builder.Extensions.Register<IHomePageItem, DeviceActionExample>();
 

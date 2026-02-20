@@ -2,6 +2,7 @@
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -13,7 +14,6 @@ public class SettingsConnectionViewModelConfig
     public string SelectedItemId { get; set; } = string.Empty;
 }
 
-[ExportSettings(SubPageId)]
 public class SettingsConnectionViewModel
     : ExtendableViewModel<ISettingsConnectionSubPage>,
         ISettingsConnectionSubPage
@@ -22,13 +22,12 @@ public class SettingsConnectionViewModel
     public const MaterialIconKind Icon = MaterialIconKind.Connection;
 
     private readonly INavigationService _navigationService;
-    private readonly IContainerHost _containerHost;
+    private readonly IServiceProvider _containerHost;
 
     private SettingsConnectionViewModelConfig? _config;
 
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
-    public IExportInfo Source => IoModule.Instance;
     public NotifyCollectionChangedSynchronizedViewList<IPortViewModel> View { get; }
     public IPortViewModel? SelectedItem
     {
@@ -40,7 +39,7 @@ public class SettingsConnectionViewModel
         : this(
             NullDeviceManager.Instance,
             DesignTime.Navigation,
-            NullContainerHost.Instance,
+            AppHost.Instance.Services,
             DesignTime.LoggerFactory,
             DesignTime.ExtensionService
         )
@@ -52,7 +51,7 @@ public class SettingsConnectionViewModel
             .Subscribe(x =>
             {
                 source.Add(new SerialPortViewModel { Name = { Value = "Serial name" } });
-                source.Add(new TcpPortViewModel { Name = { Value = "TCP Client name" } });
+                source.Add(new TcpClientPortViewModel { Name = { Value = "TCP Client name" } });
                 source.Add(new TcpServerPortViewModel { Name = { Value = "TCP Server name" } });
             });
         View = source.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
@@ -61,7 +60,7 @@ public class SettingsConnectionViewModel
     public SettingsConnectionViewModel(
         IDeviceManager deviceManager,
         INavigationService navigationService,
-        IContainerHost containerHost,
+        IServiceProvider containerHost,
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
@@ -152,12 +151,8 @@ public class SettingsConnectionViewModel
 
     private IPortViewModel CreatePort(IProtocolPort protocolPort)
     {
-        if (
-            !_containerHost.TryGetService<IPortViewModel>(
-                protocolPort.TypeInfo.Scheme,
-                out var viewModel
-            )
-        )
+        var viewModel = _containerHost.GetKeyedService<IPortViewModel>(protocolPort.TypeInfo.Scheme);
+        if (viewModel == null)
         {
             viewModel = new PortViewModel().SetRoutableParent(this);
         }

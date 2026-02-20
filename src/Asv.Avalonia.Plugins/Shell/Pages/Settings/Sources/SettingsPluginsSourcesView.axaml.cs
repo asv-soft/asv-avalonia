@@ -2,7 +2,6 @@
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportViewFor(typeof(SettingsPluginsSourcesViewModel))]
 public partial class SettingsPluginsSourcesView : UserControl
 {
     public SettingsPluginsSourcesView()

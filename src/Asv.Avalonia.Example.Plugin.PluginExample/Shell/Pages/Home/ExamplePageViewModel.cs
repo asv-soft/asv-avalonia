@@ -7,7 +7,6 @@ namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
 public interface IExamplePageViewModel : IPage { }
 
-[ExportPage(PageId)]
 public class ExamplePageViewModel(
     ICommandService cmd,
     ILoggerFactory loggerFactory,
@@ -36,5 +35,4 @@ public class ExamplePageViewModel(
 
     protected override void AfterLoadExtensions() { }
 
-    public override IExportInfo Source => PluginExampleInfo.Instance;
 }

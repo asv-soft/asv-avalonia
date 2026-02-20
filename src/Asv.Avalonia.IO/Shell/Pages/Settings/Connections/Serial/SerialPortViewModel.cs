@@ -9,7 +9,6 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-[Export(SerialProtocolPort.Scheme, typeof(IPortViewModel))]
 public class SerialPortViewModel : PortViewModel
 {
     public const MaterialIconKind DefaultIcon = MaterialIconKind.SerialPort;

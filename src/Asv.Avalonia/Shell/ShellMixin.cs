@@ -37,7 +37,8 @@ public static class ShellMixin
                 .AddTransient<IDebugWindow, DebugWindowViewModel>();
 
             builder.ViewLocator.RegisterViewFor<DebugWindowViewModel, DebugWindow>();
-            configure?.Invoke(new ShellBuilder(builder));
+            configure ??= b => b.RegisterDefault();
+            configure.Invoke(new ShellBuilder(builder));
             return builder;
         }
 
@@ -60,6 +61,19 @@ public static class ShellMixin
         public PageBuilder Pages { get; }
         public MainMenuBuilder MainMenu { get; }
         public IHostApplicationBuilder Parent => _builder;
+
+        public ShellBuilder RegisterDefault()
+        {
+            MainMenu
+                .UseDefault();
+            Status
+                .UseNavigationStatus();
+            Pages
+                .UseDefaultHomePage()
+                .UseSettingsPage()
+                .UseLogViewerPage(); 
+            return this;
+        }
     }
 
     public class StatusBuilder(ShellBuilder builder)
@@ -108,7 +122,7 @@ public static class ShellMixin
 
         public ShellBuilder Parent => builder;
 
-        public MainMenuBuilder RegisterDefault()
+        public MainMenuBuilder UseDefault()
         {
             Parent.Parent.Extensions.Register<IShell, CreateMenuExtender>();
             return Register<EditMenu>()

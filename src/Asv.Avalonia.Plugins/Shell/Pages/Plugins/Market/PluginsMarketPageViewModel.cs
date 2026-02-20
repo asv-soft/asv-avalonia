@@ -10,7 +10,6 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-[ExportPage(PageId)]
 public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewModel>
 {
     public const string PageId = "plugins.market";
@@ -146,6 +145,5 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     }
 
     protected override void AfterLoadExtensions() { }
-
-    public override IExportInfo Source => PluginManagerModule.Instance;
+   
 }

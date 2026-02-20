@@ -2,9 +2,9 @@
 
 namespace Asv.Avalonia.IO;
 
-public partial class SettingsConnectionView : UserControl
+public partial class TcpClientPortView : UserControl
 {
-    public SettingsConnectionView()
+    public TcpClientPortView()
     {
         InitializeComponent();
     }

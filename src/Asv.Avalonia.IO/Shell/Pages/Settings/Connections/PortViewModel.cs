@@ -386,6 +386,4 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         Debug.Assert(Port != null, "Port should not be null when removing port");
         return PortCrudCommand.ExecuteRemove(this, Port.Id);
     }
-
-    public IExportInfo Source => IoModule.Instance;
 }

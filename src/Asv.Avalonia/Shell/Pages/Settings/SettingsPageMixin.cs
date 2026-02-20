@@ -18,7 +18,7 @@ public static class SettingsPageMixin
             // register settings extension for easy extend settings tree menu
             builder.Parent.Parent.Extensions.Register<ISettingsPage, DefaultSettingsExtension>();
 
-            configure ??= b => b.AddDefaultSubPages();
+            configure ??= b => b.UseDefaultSettings();
             configure(new Builder(builder));
             return builder;
         }
@@ -28,14 +28,14 @@ public static class SettingsPageMixin
 
     public class Builder(ShellMixin.PageBuilder builder)
     {
-        public Builder AddDefaultSubPages()
+        public Builder UseDefaultSettings()
         {
-            return AddUnitsSettingsSubPage()
+            return UseUnitsSettings()
                 .AddAppearanceSettingsSubPage()
                 .AddCommandsSettingsSubPage();
         }
 
-        public Builder AddUnitsSettingsSubPage()
+        public Builder UseUnitsSettings()
         {
             return AddSubPage<SettingsUnitsViewModel, SettingsUnitsView>(
                 SettingsUnitsViewModel.PageId
@@ -83,5 +83,7 @@ public static class SettingsPageMixin
             );
             return this;
         }
+
+        public ShellMixin.PageBuilder Parent => builder;
     }
 }

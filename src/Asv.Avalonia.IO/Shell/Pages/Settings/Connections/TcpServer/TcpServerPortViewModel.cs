@@ -15,7 +15,6 @@ public class TcpServerPortViewModelConfig
         new() { { "7341", "Base station" } };
 }
 
-[Export(TcpServerProtocolPort.Scheme, typeof(IPortViewModel))]
 public class TcpServerPortViewModel : PortViewModel
 {
     public const MaterialIconKind DefaultIcon = MaterialIconKind.DownloadNetworkOutline;
