@@ -64,14 +64,9 @@ public static class ShellMixin
 
         public ShellBuilder RegisterDefault()
         {
-            MainMenu
-                .UseDefault();
-            Status
-                .UseNavigationStatus();
-            Pages
-                .UseDefaultHomePage()
-                .UseSettingsPage()
-                .UseLogViewerPage(); 
+            MainMenu.UseDefault();
+            Status.UseNavigationStatus();
+            Pages.UseDefaultHomePage().UseSettingsPage().UseLogViewerPage();
             return this;
         }
     }

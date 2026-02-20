@@ -34,5 +34,4 @@ public class ExamplePageViewModel(
     }
 
     protected override void AfterLoadExtensions() { }
-
 }

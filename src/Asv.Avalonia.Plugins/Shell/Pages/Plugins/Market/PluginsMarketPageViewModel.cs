@@ -145,5 +145,4 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     }
 
     protected override void AfterLoadExtensions() { }
-   
 }

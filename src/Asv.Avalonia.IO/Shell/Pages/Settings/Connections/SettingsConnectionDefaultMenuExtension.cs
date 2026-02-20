@@ -8,8 +8,9 @@ namespace Asv.Avalonia.IO;
 
 public class SettingsConnectionDefaultMenuExtension(
     ILoggerFactory loggerFactory,
-    [FromKeyedServices(SettingsConnectionDefaultMenuExtension.Contract)] IEnumerable<IMenuItem> menuItems)
-    : IExtensionFor<ISettingsConnectionSubPage>
+    [FromKeyedServices(SettingsConnectionDefaultMenuExtension.Contract)]
+        IEnumerable<IMenuItem> menuItems
+) : IExtensionFor<ISettingsConnectionSubPage>
 {
     public const string Contract = "settings.connection.menu";
 

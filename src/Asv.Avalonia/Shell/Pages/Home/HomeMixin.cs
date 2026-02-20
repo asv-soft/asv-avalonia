@@ -13,10 +13,10 @@ public static class HomeMixin
             builder.Register<HomePageViewModel, HomePageView>(HomePageViewModel.PageId);
             return builder;
         }
-        
+
         public Builder Home => new Builder(builder);
     }
-    
+
     public class Builder(ShellMixin.PageBuilder builder)
     {
         public Builder UseDefault()
@@ -25,17 +25,19 @@ public static class HomeMixin
             return this;
         }
 
-        public Builder RegisterExtension<TExtension>() 
+        public Builder RegisterExtension<TExtension>()
             where TExtension : class, IExtensionFor<IHomePage>
         {
             builder.Parent.Parent.Extensions.Register<IHomePage, TExtension>();
             return this;
         }
-        
-        public Builder RegisterTool<TActionViewModel>() 
+
+        public Builder RegisterTool<TActionViewModel>()
             where TActionViewModel : class, IActionViewModel
         {
-            builder.Parent.Parent.Services.AddKeyedTransient<IActionViewModel, TActionViewModel>(HomePageDefaultToolsExtension.Contract);
+            builder.Parent.Parent.Services.AddKeyedTransient<IActionViewModel, TActionViewModel>(
+                HomePageDefaultToolsExtension.Contract
+            );
             return this;
         }
     }

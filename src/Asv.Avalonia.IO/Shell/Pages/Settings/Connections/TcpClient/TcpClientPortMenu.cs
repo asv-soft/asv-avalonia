@@ -10,7 +10,8 @@ public class TcpClientPortMenu : MenuItem
         : base(
             TcpClientProtocolPort.Scheme,
             RS.SettingsConnectionTcpExtension_MenuItem_Header,
-            loggerFactory)
+            loggerFactory
+        )
     {
         Icon = TcpClientPortViewModel.DefaultIcon;
         Command = new BindableAsyncCommand(PortCrudCommand.Id, this);

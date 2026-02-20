@@ -151,7 +151,9 @@ public class SettingsConnectionViewModel
 
     private IPortViewModel CreatePort(IProtocolPort protocolPort)
     {
-        var viewModel = _containerHost.GetKeyedService<IPortViewModel>(protocolPort.TypeInfo.Scheme);
+        var viewModel = _containerHost.GetKeyedService<IPortViewModel>(
+            protocolPort.TypeInfo.Scheme
+        );
         if (viewModel == null)
         {
             viewModel = new PortViewModel().SetRoutableParent(this);

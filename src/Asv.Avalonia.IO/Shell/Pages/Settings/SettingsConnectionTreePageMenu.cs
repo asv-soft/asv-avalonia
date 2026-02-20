@@ -10,12 +10,11 @@ public class SettingsConnectionTreePageMenu : TreePage
 {
     public SettingsConnectionTreePageMenu(ILoggerFactory loggerFactory)
         : base(
-        SettingsConnectionViewModel.SubPageId,
-        RS.SettingsPageExtension_TreePage_Title,
-        SettingsConnectionViewModel.Icon,
-        SettingsConnectionViewModel.SubPageId,
-        NavigationId.Empty,
-        loggerFactory)
-    {
-    }    
+            SettingsConnectionViewModel.SubPageId,
+            RS.SettingsPageExtension_TreePage_Title,
+            SettingsConnectionViewModel.Icon,
+            SettingsConnectionViewModel.SubPageId,
+            NavigationId.Empty,
+            loggerFactory
+        ) { }
 }

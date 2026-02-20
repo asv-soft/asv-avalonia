@@ -15,7 +15,5 @@ public class SettingsPluginsTreePageMenu : TreePage
             SettingsPluginsSourcesViewModel.PageId,
             NavigationId.Empty,
             loggerFactory
-        )
-    {
-    }
+        ) { }
 }

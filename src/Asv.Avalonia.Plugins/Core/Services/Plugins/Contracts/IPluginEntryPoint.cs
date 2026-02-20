@@ -7,10 +7,8 @@ namespace Asv.Avalonia.Plugins;
 /// </summary>
 public interface IPluginEntryPoint
 {
-    void Build(IHostApplicationBuilder builder)
-    {
-        
-    }
+    void Build(IHostApplicationBuilder builder) { }
+
     /// <summary>
     /// Call when initializes the application Application.Initialize()
     /// Will be called before main window\activity is shown

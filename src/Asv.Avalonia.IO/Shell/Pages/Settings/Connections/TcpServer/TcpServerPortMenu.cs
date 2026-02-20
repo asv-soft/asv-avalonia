@@ -10,7 +10,8 @@ public class TcpServerPortMenu : MenuItem
         : base(
             TcpServerProtocolPort.Scheme,
             RS.SettingsConnectionTcpServerPortExtension_MenuItem_Header,
-            loggerFactory)
+            loggerFactory
+        )
     {
         Icon = TcpServerPortViewModel.DefaultIcon;
         Command = new BindableAsyncCommand(PortCrudCommand.Id, this);
@@ -20,4 +21,3 @@ public class TcpServerPortMenu : MenuItem
         CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
     }
 }
-

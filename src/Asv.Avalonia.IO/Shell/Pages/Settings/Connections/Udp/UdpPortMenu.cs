@@ -10,7 +10,8 @@ public class UdpPortMenu : MenuItem
         : base(
             UdpProtocolPort.Scheme,
             RS.SettingsConnectionUdpPortExtension_MenuItem_Header,
-            loggerFactory)
+            loggerFactory
+        )
     {
         Icon = UdpPortViewModel.DefaultIcon;
         Command = new BindableAsyncCommand(PortCrudCommand.Id, this);
@@ -20,4 +21,3 @@ public class UdpPortMenu : MenuItem
         CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
     }
 }
-

@@ -30,9 +30,7 @@ public static class SettingsPageMixin
     {
         public Builder UseDefaultSettings()
         {
-            return UseUnitsSettings()
-                .AddAppearanceSettingsSubPage()
-                .AddCommandsSettingsSubPage();
+            return UseUnitsSettings().AddAppearanceSettingsSubPage().AddCommandsSettingsSubPage();
         }
 
         public Builder UseUnitsSettings()

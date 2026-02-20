@@ -9,24 +9,35 @@ public static class IoMixin
 {
     extension(SettingsPageMixin.Builder builder)
     {
-        public SettingsPageMixin.Builder UseConnectionsSettings(Action<ConnectionSettingsBuilder>? configure = null)
+        public SettingsPageMixin.Builder UseConnectionsSettings(
+            Action<ConnectionSettingsBuilder>? configure = null
+        )
         {
             builder.Parent.Parent.Parent.Commands.Register<PortCrudCommand>();
-            
-            builder.Parent.Parent.Parent.ViewLocator.RegisterViewFor<PortViewModel, PortView>();
-            
-            builder.AddSubPage<SettingsConnectionViewModel, SettingsConnectionView, SettingsConnectionTreePageMenu>(
-                SettingsConnectionViewModel.SubPageId);
-            
-            builder.Parent.Parent.Parent.Extensions.Register<ISettingsConnectionSubPage, SettingsConnectionDefaultMenuExtension>();
 
-            builder.Parent.Parent.Parent.Extensions.Register<IHomePage, HomePageDeviceListExtension>();
-            
+            builder.Parent.Parent.Parent.ViewLocator.RegisterViewFor<PortViewModel, PortView>();
+
+            builder.AddSubPage<
+                SettingsConnectionViewModel,
+                SettingsConnectionView,
+                SettingsConnectionTreePageMenu
+            >(SettingsConnectionViewModel.SubPageId);
+
+            builder.Parent.Parent.Parent.Extensions.Register<
+                ISettingsConnectionSubPage,
+                SettingsConnectionDefaultMenuExtension
+            >();
+
+            builder.Parent.Parent.Parent.Extensions.Register<
+                IHomePage,
+                HomePageDeviceListExtension
+            >();
+
             configure ??= b => b.UseDefault();
             configure(new ConnectionSettingsBuilder(builder));
             return builder;
         }
-        
+
         public ConnectionSettingsBuilder Connections => new(builder);
     }
 
@@ -34,42 +45,51 @@ public static class IoMixin
     {
         public ConnectionSettingsBuilder UseDefault()
         {
-            return UseSerialPort()
-                .UseTcpClientPort()
-                .UseTcpServerPort()
-                .UseUdpPort();
+            return UseSerialPort().UseTcpClientPort().UseTcpServerPort().UseUdpPort();
         }
+
         public ConnectionSettingsBuilder UseUdpPort()
         {
             return UsePort<UdpPortViewModel, UdpPortView, UdpPortMenu>(UdpProtocolPort.Scheme);
         }
+
         public ConnectionSettingsBuilder UseSerialPort()
         {
-            return UsePort<SerialPortViewModel, SerialPortView, SerialPortMenu>(SerialProtocolPort.Scheme);
+            return UsePort<SerialPortViewModel, SerialPortView, SerialPortMenu>(
+                SerialProtocolPort.Scheme
+            );
         }
-        
+
         public ConnectionSettingsBuilder UseTcpClientPort()
         {
-            return UsePort<TcpClientPortViewModel, TcpClientPortView, TcpClientPortMenu>(TcpClientProtocolPort.Scheme);
+            return UsePort<TcpClientPortViewModel, TcpClientPortView, TcpClientPortMenu>(
+                TcpClientProtocolPort.Scheme
+            );
         }
-        
+
         public ConnectionSettingsBuilder UseTcpServerPort()
         {
-            return UsePort<TcpServerPortViewModel, TcpServerPortView, TcpServerPortMenu>(TcpServerProtocolPort.Scheme);
+            return UsePort<TcpServerPortViewModel, TcpServerPortView, TcpServerPortMenu>(
+                TcpServerProtocolPort.Scheme
+            );
         }
 
         public ConnectionSettingsBuilder UsePort<TViewModel, TView, TMenu>(string portScheme)
             where TViewModel : class, IPortViewModel
             where TView : Control
-            where TMenu : class, IMenuItem 
+            where TMenu : class, IMenuItem
         {
             builder.Parent.Parent.Parent.ViewLocator.RegisterViewFor<TViewModel, TView>();
-            builder.Parent.Parent.Parent.Services.AddKeyedTransient<IPortViewModel, TViewModel>(portScheme);
-            builder.Parent.Parent.Parent.Services.AddKeyedTransient<IMenuItem, TMenu>(SettingsConnectionDefaultMenuExtension.Contract);
+            builder.Parent.Parent.Parent.Services.AddKeyedTransient<IPortViewModel, TViewModel>(
+                portScheme
+            );
+            builder.Parent.Parent.Parent.Services.AddKeyedTransient<IMenuItem, TMenu>(
+                SettingsConnectionDefaultMenuExtension.Contract
+            );
             return this;
         }
     }
-    
+
     extension(ShellMixin.StatusBuilder builder)
     {
         public ShellMixin.StatusBuilder UseConnectionStatus()
@@ -80,10 +100,7 @@ public static class IoMixin
 
     extension(IHostApplicationBuilder builder)
     {
-        private void InternalUseIo()
-        {
-            
-        }
+        private void InternalUseIo() { }
 
         public IHostApplicationBuilder UseModuleIo(Action<Builder>? configure = null)
         {
