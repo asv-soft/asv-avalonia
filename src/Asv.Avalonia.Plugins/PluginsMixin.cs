@@ -42,7 +42,7 @@ public static class PluginsMixin
             return UseMarket().UseInstalled();
         }
 
-        private Builder UseInstalled()
+        private Builder UseMarket()
         {
             builder.Shell.Pages.Home.RegisterExtension<HomePagePluginsMarketExtension>();
             builder.Shell.Pages.Register<InstalledPluginsPageViewModel, InstalledPluginsPageView>(
@@ -53,7 +53,7 @@ public static class PluginsMixin
 
         public IHostApplicationBuilder Parent => builder;
 
-        public Builder UseMarket()
+        public Builder UseInstalled()
         {
             builder.Shell.Pages.Home.RegisterExtension<HomePageInstalledPluginsExtension>();
             builder.Shell.Pages.Register<PluginsMarketPageViewModel, PluginsMarketPageView>(

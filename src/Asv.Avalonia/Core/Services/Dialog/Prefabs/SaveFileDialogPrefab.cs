@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Avalonia.Platform.Storage;
 
 namespace Asv.Avalonia;
@@ -60,12 +61,14 @@ public sealed class SaveFileDialogDesktopPrefab(IShellHost host)
 
         if (!string.IsNullOrEmpty(dialogPayload.InitialDirectory))
         {
+            Debug.Assert(host.TopLevel != null, "host.TopLevel != null");
             options.SuggestedStartLocation =
                 await host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(
                     dialogPayload.InitialDirectory
                 );
         }
 
+        Debug.Assert(host.TopLevel != null, "host.TopLevel != null");
         var result = await host.TopLevel.StorageProvider.SaveFilePickerAsync(options);
         return result?.Path.AbsolutePath;
     }

@@ -1,4 +1,14 @@
+using Microsoft.Extensions.Options;
+
 namespace Asv.Avalonia.GeoMap;
+
+public class BingTileProviderOptions
+{
+    public const string ConfigurationSection = "Map:TileProviders:Bing";
+    public string ApiKey { get; set; } =
+        "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg";
+    public bool UseHighRes { get; set; } = false;
+}
 
 public class BingTileProvider : ITileProvider
 {
@@ -9,6 +19,12 @@ public class BingTileProvider : ITileProvider
     private readonly bool _useHighRes;
     public TileProviderInfo Info => StaticInfo;
     public IMapProjection Projection => WebMercatorProjection.Instance;
+
+    public BingTileProvider(IOptions<BingTileProviderOptions> apiKey)
+    {
+        _apiKey = apiKey.Value.ApiKey;
+        _useHighRes = apiKey.Value.UseHighRes;
+    }
 
     public BingTileProvider(string apiKey, bool useHighRes = false)
     {

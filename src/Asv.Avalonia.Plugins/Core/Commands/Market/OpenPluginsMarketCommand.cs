@@ -14,7 +14,6 @@ public sealed class OpenPluginsMarketCommand(INavigationService nav)
         Description = RS.OpenPluginsMarketCommand_CommandInfo_Description,
         Icon = PluginsMarketPageViewModel.PageIcon,
         DefaultHotKey = null,
-        Source = PluginManagerModule.Instance,
     };
 
     #endregion

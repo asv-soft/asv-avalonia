@@ -4,8 +4,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia.Example;
 
-[Export(typeof(IFileHandler))]
-public class FileHandler : IFileHandler
+public class ExampleFileHandler : IFileHandler
 {
     private static readonly FileTypeInfo[] StaticTypes =
     [
@@ -13,7 +12,7 @@ public class FileHandler : IFileHandler
         new("test2", "Record file", "rec", true, true, MaterialIconKind.Record),
     ];
 
-    public FileHandler() { }
+    public ExampleFileHandler() { }
 
     public int Priority => 0;
     public IEnumerable<FileTypeInfo> SupportedFiles => StaticTypes;

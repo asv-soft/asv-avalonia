@@ -16,7 +16,6 @@ public sealed class DeletePluginsSourceCommand : ContextCommand<PluginsSourceVie
         Description = RS.DeletePluginsSourceCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Delete,
         DefaultHotKey = null,
-        Source = PluginManagerModule.Instance,
     };
 
     #endregion

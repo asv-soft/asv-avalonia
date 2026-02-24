@@ -4,10 +4,8 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-[ExportExtensionFor<IHomePage>]
 public class HomePageControlsGalleryPageExtension(ILoggerFactory loggerFactory)
-    : AsyncDisposableOnce,
-        IExtensionFor<IHomePage>
+    : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {

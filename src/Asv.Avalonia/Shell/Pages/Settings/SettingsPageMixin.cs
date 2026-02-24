@@ -61,9 +61,7 @@ public static class SettingsPageMixin
             where TView : Control
         {
             builder.Parent.Parent.ViewLocator.RegisterViewFor<TViewModel, TView>();
-            builder.Parent.Parent.Services.AddKeyedTransient<ISettingsSubPage, TViewModel>(
-                SettingsPageViewModel.PageId
-            );
+            builder.Parent.Parent.Services.AddKeyedTransient<ISettingsSubPage, TViewModel>(pageId);
             return this;
         }
 
@@ -72,10 +70,7 @@ public static class SettingsPageMixin
             where TView : Control
             where TTreeMenu : class, ITreePage
         {
-            builder.Parent.Parent.ViewLocator.RegisterViewFor<TViewModel, TView>();
-            builder.Parent.Parent.Services.AddKeyedTransient<ISettingsSubPage, TViewModel>(
-                SettingsPageViewModel.PageId
-            );
+            AddSubPage<TViewModel, TView>(pageId);
             builder.Parent.Parent.Services.AddKeyedTransient<ITreePage, TTreeMenu>(
                 SettingsPageViewModel.PageId
             );

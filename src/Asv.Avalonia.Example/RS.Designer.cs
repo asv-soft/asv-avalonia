@@ -952,6 +952,15 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Property Editor.
+        /// </summary>
+        public static string PropertyEditorTreeMenu_PropertyEditorTreeMenu_Property_Editor {
+            get {
+                return ResourceManager.GetString("PropertyEditorTreeMenu_PropertyEditorTreeMenu_Property_Editor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Reset the geopoint dialog result.
         /// </summary>
         public static string ResetGeoPointDialogResultCommand_CommandInfo_Description {

@@ -88,7 +88,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
             return;
         }
 
-        if (path[0] != _host.Shell.Id)
+        if (path[0] != _host.Shell?.Id)
         {
             Debug.Assert(
                 false,
@@ -115,6 +115,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
             }
 
             _logger.ZLogInformation($"Navigate to '{string.Join(",", path)}'");
+            Debug.Assert(_host.Shell != null, "_host.Shell != null");
             var result = await _host.Shell.NavigateByPath(
                 path[0] == _host.Shell.Id ? path[1..] : path
             );

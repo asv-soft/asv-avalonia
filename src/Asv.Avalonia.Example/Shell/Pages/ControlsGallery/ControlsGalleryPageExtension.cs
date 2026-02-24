@@ -1,95 +1,29 @@
+using System.Collections.Generic;
 using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using R3;
 
 namespace Asv.Avalonia.Example;
 
-[ExportExtensionFor<IControlsGalleryPage>]
-public class ControlsGalleryPageExtension(ILoggerFactory loggerFactory)
-    : IExtensionFor<IControlsGalleryPage>
+public class ControlsGalleryPageExtension : IExtensionFor<IControlsGalleryPage>
 {
+    private readonly IEnumerable<ITreePage> _subPagesMenu;
+
+    public ControlsGalleryPageExtension(
+        [FromKeyedServices(Contract)] IEnumerable<ITreePage> subPagesMenu
+    )
+    {
+        _subPagesMenu = subPagesMenu;
+    }
+
+    public const string Contract = "controls-gallery-subpage";
+
     public void Extend(IControlsGalleryPage context, CompositeDisposable contextDispose)
     {
-        context.Nodes.Add(
-            new TreePage(
-                DialogControlsPageViewModel.PageId,
-                RS.DialogControlsPageViewModel_Title,
-                DialogControlsPageViewModel.PageIcon,
-                DialogControlsPageViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory
-            ).DisposeItWith(contextDispose)
-        );
-
-        context.Nodes.Add(
-            new TreePage(
-                HistoricalControlsPageViewModel.PageId,
-                RS.HistoricalControlsPageViewModel_Title,
-                HistoricalControlsPageViewModel.PageIcon,
-                HistoricalControlsPageViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory
-            ).DisposeItWith(contextDispose)
-        );
-
-        context.Nodes.Add(
-            new TreePage(
-                InfoBoxControlsPageViewModel.PageId,
-                RS.InfoBoxControlsPageViewModel_Title,
-                InfoBoxControlsPageViewModel.PageIcon,
-                InfoBoxControlsPageViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory
-            ).DisposeItWith(contextDispose)
-        );
-
-        context.Nodes.Add(
-            new TreePage(
-                MapControlsPageViewModel.PageId,
-                RS.MapControlsPageViewModel_Title,
-                MapControlsPageViewModel.PageIcon,
-                MapControlsPageViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory
-            ).DisposeItWith(contextDispose)
-        );
-
-        context.Nodes.Add(
-            new TreePage(
-                PropertyEditorPageViewModel.PageId,
-                "Property Editor",
-                PropertyEditorPageViewModel.PageIcon,
-                PropertyEditorPageViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory
-            ).DisposeItWith(contextDispose)
-        );
-
-        context.Nodes.Add(
-            new TreePage(
-                RttBoxesPageViewModel.PageId,
-                "Rtt boxes",
-                RttBoxesPageViewModel.PageIcon,
-                RttBoxesPageViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory
-            ).DisposeItWith(contextDispose)
-        );
-
-        context.Nodes.Add(
-            new TreePage(
-                WorkspacePageViewModel.PageId,
-                "Workspace",
-                WorkspacePageViewModel.PageIcon,
-                WorkspacePageViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory,
-                new TagViewModel("status", loggerFactory)
-                {
-                    Value = "Active",
-                    Color = AsvColorKind.Success | AsvColorKind.Blink,
-                }
-            ).DisposeItWith(contextDispose)
-        );
+        foreach (var treePage in _subPagesMenu)
+        {
+            context.Nodes.Add(treePage);
+            treePage.DisposeItWith(contextDispose);
+        }
     }
 }

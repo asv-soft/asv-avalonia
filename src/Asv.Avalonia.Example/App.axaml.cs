@@ -8,10 +8,8 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-public class App : Application, IShellHost
+public class App : Application
 {
-    private readonly Subject<IShell> _onShellLoaded = new();
-
     public App()
     {
         DataTemplates.Add(AppHost.Instance.Services.GetRequiredService<ViewLocator>());
@@ -24,25 +22,31 @@ public class App : Application, IShellHost
 
     public override void OnFrameworkInitializationCompleted()
     {
-        Shell = AppHost.Instance.GetService<IShell>();
+        var shellHost = AppHost.Instance.Services.GetRequiredService<IShellHost>();
+        var shell = AppHost.Instance.Services.GetRequiredService<IShell>();
 
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             if (desktop.MainWindow is TopLevel topLevel)
             {
-                TopLevel = topLevel;
+                shellHost.TopLevel = topLevel;
+                shellHost.Shell = shell;
             }
         }
         else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             if (singleViewPlatform.MainView is TopLevel topLevel)
             {
-                TopLevel = topLevel;
+                shellHost.TopLevel = topLevel;
+                shellHost.Shell = shell;
             }
         }
         else
         {
-            throw new Exception("Unknown platform");
+            if (Design.IsDesignMode == false)
+            {
+                throw new Exception("Unknown platform");
+            }
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -53,22 +57,7 @@ public class App : Application, IShellHost
 
     public void Dispose()
     {
-        Shell.Dispose();
         AppHost.Instance.Dispose();
-        _onShellLoaded.Dispose();
         GC.SuppressFinalize(this);
     }
-
-    public IShell Shell
-    {
-        get;
-        private set
-        {
-            field = value;
-            _onShellLoaded.OnNext(value);
-        }
-    }
-
-    public Observable<IShell> OnShellLoaded => _onShellLoaded;
-    public TopLevel TopLevel { get; private set; }
 }

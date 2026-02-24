@@ -351,4 +351,7 @@
     <data name="HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS" xml:space="preserve">
         <value>Значение не должно содержать букву 's'</value>
     </data>
+    <data name="PropertyEditorTreeMenu_PropertyEditorTreeMenu_Property_Editor" xml:space="preserve">
+        <value>Редактор свойств</value>
+    </data>
 </root>

@@ -8,7 +8,6 @@ public class DialogControlsPageViewConfig
     public Vector ScrollOffset { get; set; }
 }
 
-[ExportViewFor(typeof(DialogControlsPageViewModel))]
 public partial class DialogControlsPageView : UserControl
 {
     private readonly ILayoutService _layoutService;

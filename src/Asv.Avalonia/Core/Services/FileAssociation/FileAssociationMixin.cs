@@ -19,5 +19,17 @@ public static class FileAssociationMixin
             builder.Services.AddSingleton(NullFileAssociationService.Instance);
             return builder;
         }
+
+        public Builder FileAssociation => new Builder(builder);
+    }
+
+    public class Builder(IHostApplicationBuilder builder)
+    {
+        public Builder Register<TFileHandler>()
+            where TFileHandler : class, IFileHandler
+        {
+            builder.Services.AddSingleton<IFileHandler, TFileHandler>();
+            return this;
+        }
     }
 }

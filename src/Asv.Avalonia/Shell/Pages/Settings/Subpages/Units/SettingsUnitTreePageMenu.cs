@@ -7,10 +7,10 @@ public class SettingsUnitTreePageMenu : TreePage
 {
     public SettingsUnitTreePageMenu(ILoggerFactory loggerFactory)
         : base(
-            SettingsCommandListViewModel.PageId,
-            RS.SettingsCommandListViewModel_Name,
+            SettingsUnitsViewModel.PageId,
+            RS.SettingsUnitsViewModel_Name,
             MaterialIconKind.KeyboardSettings,
-            SettingsCommandListViewModel.PageId,
+            SettingsUnitsViewModel.PageId,
             NavigationId.Empty,
             loggerFactory
         ) { }

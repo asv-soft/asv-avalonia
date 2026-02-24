@@ -7,7 +7,6 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-[Export(typeof(IDeviceManagerExtension))]
 public class ExampleDeviceManagerExtension : IDeviceManagerExtension
 {
     public ExampleDeviceManagerExtension() { }

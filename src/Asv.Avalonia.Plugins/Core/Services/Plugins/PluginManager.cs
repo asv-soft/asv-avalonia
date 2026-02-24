@@ -263,7 +263,6 @@ public class PluginManager : IPluginManager
 
     public SemVersion ApiVersion { get; }
 
-    [Export]
     public IReadOnlyList<Assembly> PluginsAssemblies { get; }
 
     #region Servers

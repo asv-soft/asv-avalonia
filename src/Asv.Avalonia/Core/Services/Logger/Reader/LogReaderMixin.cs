@@ -7,8 +7,9 @@ public static class LogReaderMixin
 {
     extension(IHostApplicationBuilder builder)
     {
-        public IHostApplicationBuilder UseLogReaderService()
+        public IHostApplicationBuilder UseLogReaderService(LogToFileOptions options)
         {
+            builder.Services.AddSingleton(options);
             builder.Services.AddSingleton<ILogReaderService, LogReaderService>();
             return builder;
         }

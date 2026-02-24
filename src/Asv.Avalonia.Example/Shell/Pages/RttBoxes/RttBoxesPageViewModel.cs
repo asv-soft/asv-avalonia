@@ -8,7 +8,6 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-[ExportControlExamples(PageId)]
 public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "rtt-boxes";
@@ -348,6 +347,4 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         return viewModel;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

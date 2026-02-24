@@ -8,7 +8,6 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-[ExportControlExamples(PageId)]
 public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "info_box_controls";
@@ -75,6 +74,4 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
             yield return child;
         }
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

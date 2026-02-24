@@ -7,7 +7,6 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-[ExportControlExamples(PageId)]
 public class PropertyEditorPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "property-editor-example";
@@ -129,6 +128,4 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public BindableReactiveProperty<double> Throttle { get; } = new();
 
     public PropertyEditorViewModel PropertyEditor { get; }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

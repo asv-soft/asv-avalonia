@@ -12,7 +12,6 @@ using R3;
 
 namespace Asv.Avalonia.Example;
 
-[ExportControlExamples(PageId)]
 public class WorkspacePageViewModel : ControlsGallerySubPage
 {
     private readonly ILoggerFactory _loggerFactory;
@@ -227,6 +226,4 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
         return ValueTask.CompletedTask;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

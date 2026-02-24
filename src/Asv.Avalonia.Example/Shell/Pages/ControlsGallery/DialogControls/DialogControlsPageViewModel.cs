@@ -38,7 +38,6 @@ public class DialogControlsPageViewModelConfig
     public string? ObserveFolderDialogResult { get; set; }
 }
 
-[ExportControlExamples(PageId)]
 public class DialogControlsPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "dialog_controls";
@@ -829,6 +828,4 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         yield return SelectFolderDialogResult;
         yield return ObserveFolderDialogResult;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

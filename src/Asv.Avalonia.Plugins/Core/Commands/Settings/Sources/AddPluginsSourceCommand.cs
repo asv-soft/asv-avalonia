@@ -20,7 +20,6 @@ public sealed class AddPluginsSourceCommand(
         Description = RS.AddPluginsSourceCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Add,
         DefaultHotKey = null,
-        Source = PluginManagerModule.Instance,
     };
 
     #endregion

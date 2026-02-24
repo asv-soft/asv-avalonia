@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics;
+using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
@@ -26,6 +27,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
         : base(ModelId, loggerFactory)
     {
         SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty();
+        Debug.Assert(host.Shell != null, "host.Shell != null");
         _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x, loggerFactory));
         Pages = _pageView.ToNotifyCollectionChanged();
         BackwardStack = nav.BackwardStack.ToNotifyCollectionChanged();

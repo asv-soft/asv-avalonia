@@ -20,52 +20,61 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        var builder = AppHost.CreateBuilder(args);
-        var dataFolder =
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
+        try
+        {
+            var builder = AppHost.CreateBuilder(args);
+            var dataFolder =
+                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
-        builder
-            .UseAvalonia(BuildAvaloniaApp)
-            .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
-            .UseJsonUserConfig(opt =>
-                opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
-            )
-            .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-            .UseSoloRun(opt => opt.WithArgumentForwarding())
-            .UseLogging(options =>
-            {
-                options.WithLogToFile(Path.Combine(dataFolder, "data", "logs"));
-                options.WithLogToConsole();
-                options.WithLogViewer();
-                options.WithLogLevel(LogLevel.Trace);
-            })
-            .UseModuleGeoMap()
-            .UseModuleIo()
-            .UsePluginManager(options =>
-            {
-                options.WithApiPackage("Asv.Avalonia.Example.Api", SemVersion.Parse("1.0.0"));
-                options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
-            })
-            .UseUnitService()
-            .UseDefaultControls()
-            .UseExtensions()
-            .UseDesktopShell()
-            .UseViewLocator()
-            .UseThemeService()
-            .UseSearchService()
-            .UseNavigationService()
-            .UseLogReaderService()
-            .UseLocalizationService()
-            .UseFileAssociation()
-            .UseDialogs()
-            .UseCommands()
-            .UsePlugins();
+            builder
+                .UseSystemTimeProvider()
+                .UseShellHost()
+                .UseLayoutService()
+                .UseAvalonia(BuildAvaloniaApp)
+                .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
+                .UseJsonUserConfig(opt =>
+                    opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
+                )
+                .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
+                .UseSoloRun(opt => opt.WithArgumentForwarding())
+                .UseLogging(options =>
+                {
+                    options.WithLogToFile(Path.Combine(dataFolder, "data", "logs"));
+                    options.WithLogToConsole();
+                    options.WithLogViewer();
+                    options.WithLogLevel(LogLevel.Trace);
+                })
+                .UseLogReaderService(new LogToFileOptions(Path.Combine(dataFolder, "data", "logs")))
+                .UseModuleGeoMap()
+                .UseModuleIo()
+                .UsePluginManager(options =>
+                {
+                    options.WithApiPackage("Asv.Avalonia.Example.Api", SemVersion.Parse("1.0.0"));
+                    options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
+                })
+                .UseUnitService()
+                .UseDefaultControls()
+                .UseExtensions()
+                .UseDesktopShell()
+                .UseViewLocator()
+                .UseThemeService()
+                .UseSearchService()
+                .UseNavigationService()
+                .UseLocalizationService()
+                .UseFileAssociation()
+                .UseDialogs()
+                .UseCommands()
+                .UsePlugins()
+                .UseExample();
 
-        builder.Extensions.Register<IHomePageItem, DeviceActionExample>();
-
-        using var host = builder.Build();
-        host.ExitIfNotFirstInstance();
-        host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            using var host = builder.Build();
+            host.ExitIfNotFirstInstance();
+            host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+        }
+        catch (Exception e)
+        {
+            AppHost.HandleApplicationCrash(e);
+        }
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
@@ -89,7 +98,8 @@ sealed class Program
                 .UseDesignTimeLayoutService()
                 .UseDesignTimeFileAssociation()
                 .UseDesignTimeDialogs()
-                .UseDesignTimeCommands();
+                .UseDesignTimeCommands()
+                .UseDesignTimeShellHost();
 
             builder.Build();
         }

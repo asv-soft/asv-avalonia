@@ -1,10 +1,10 @@
+using System;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia.Example;
 
-[ExportPage(PageId)]
 public class ControlsGalleryPageViewModel
     : TreePageViewModel<IControlsGalleryPage, IControlsGallerySubPage>,
         IControlsGalleryPage
@@ -16,7 +16,7 @@ public class ControlsGalleryPageViewModel
     public ControlsGalleryPageViewModel()
         : this(
             DesignTime.CommandService,
-            DesignTime.ContainerHost,
+            AppHost.Instance.Services,
             NullLayoutService.Instance,
             NullLoggerFactory.Instance,
             DesignTime.DialogService,
@@ -28,7 +28,7 @@ public class ControlsGalleryPageViewModel
 
     public ControlsGalleryPageViewModel(
         ICommandService cmd,
-        IContainerHost containerHost,
+        IServiceProvider containerHost,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
@@ -40,8 +40,6 @@ public class ControlsGalleryPageViewModel
         Icon = PageIcon;
         IconColor = PageIconColor;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 
     public void ChangeStatus(MaterialIconKind? statusIcon, AsvColorKind color)
     {

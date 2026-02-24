@@ -7,10 +7,10 @@ public class SettingsCommandTreePageMenu : TreePage
 {
     public SettingsCommandTreePageMenu(ILoggerFactory loggerFactory)
         : base(
-            SettingsUnitsViewModel.PageId,
-            RS.SettingsUnitsViewModel_Name,
+            SettingsCommandListViewModel.PageId,
+            RS.SettingsCommandListViewModel_Name,
             MaterialIconKind.TemperatureCelsius,
-            SettingsUnitsViewModel.PageId,
+            SettingsCommandListViewModel.PageId,
             NavigationId.Empty,
             loggerFactory
         ) { }

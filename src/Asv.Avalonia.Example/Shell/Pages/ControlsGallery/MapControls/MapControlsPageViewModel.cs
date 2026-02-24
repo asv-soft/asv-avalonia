@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
-[ExportControlExamples(PageId)]
 public class MapControlsPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "map_controls";
@@ -45,6 +44,4 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
     }
 
     public MapViewModel MapViewModel { get; }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }

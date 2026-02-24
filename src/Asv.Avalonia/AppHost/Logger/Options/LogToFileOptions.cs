@@ -2,7 +2,7 @@ namespace Asv.Avalonia;
 
 public class LogToFileOptions
 {
-    public LogToFileOptions(string? folder, int? rollingSizeKb)
+    public LogToFileOptions(string? folder, int? rollingSizeKb = null)
     {
         if (folder is not null)
         {

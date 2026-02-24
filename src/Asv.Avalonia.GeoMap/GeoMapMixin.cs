@@ -51,6 +51,10 @@ public static class GeoMapMixin
             this.RegisterTileProvider<YandexTileProvider>()
                 .RegisterTileProvider<BingTileProvider>()
                 .RegisterTileProvider<EmptyTileProvider>();
+
+            builder
+                .Services.AddOptions<BingTileProviderOptions>()
+                .BindConfiguration(BingTileProviderOptions.ConfigurationSection);
         }
 
         public IHostApplicationBuilder Parent => builder;

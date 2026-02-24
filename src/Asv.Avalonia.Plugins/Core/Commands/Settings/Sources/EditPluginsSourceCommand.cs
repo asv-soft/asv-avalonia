@@ -20,7 +20,6 @@ public sealed class EditPluginsSourceCommand(
         Description = RS.EditPluginsSourceCommand_CommandInfo_Description,
         Icon = MaterialIconKind.Edit,
         DefaultHotKey = null,
-        Source = PluginManagerModule.Instance,
     };
 
     #endregion

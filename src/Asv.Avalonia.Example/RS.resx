@@ -359,4 +359,7 @@ Used to confirm saving information.
     <data name="HistoricalControlsPageViewModel_StringPropWithManyValidations_ValidationError_ShouldNotContainS" xml:space="preserve">
         <value>Value shouldn't contain 's'</value>
     </data>
+    <data name="PropertyEditorTreeMenu_PropertyEditorTreeMenu_Property_Editor" xml:space="preserve">
+        <value>Property Editor</value>
+    </data>
 </root>

@@ -20,7 +20,6 @@ public sealed class HistoricalControlsPageViewModelConfig
     public AsvColorKind AsvColorKindProp { get; set; } = AsvColorKind.Success;
 }
 
-[ExportControlExamples(PageId)]
 public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "historical_controls";
@@ -244,6 +243,4 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 
         return ValueTask.CompletedTask;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }
