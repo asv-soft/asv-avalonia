@@ -1,5 +1,6 @@
 using Asv.Common;
 using Asv.IO;
+using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -62,6 +63,22 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             .DisposeItWith(Disposable);
         Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
+
+    #region Header
+
+    public MaterialIconKind? TreeHeaderIcon
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public string? TreeHeader
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    #endregion
 
     #region Menu
 

@@ -50,8 +50,22 @@
             Padding="0"
         >
             <StackPanel Spacing="4" Orientation="Horizontal" Margin="4">
-                <avalonia1:MaterialIcon Kind="{Binding Icon}" />
-                <TextBlock VerticalAlignment="Center" Text="{Binding Title}" />
+                <avalonia1:MaterialIcon>
+                    <avalonia1:MaterialIcon.Kind>
+                        <MultiBinding Converter="{x:Static avalonia:CoalesceConverter.Instance}">
+                            <Binding Path="TreeHeaderIcon" />
+                            <Binding Path="Icon" />
+                        </MultiBinding>
+                    </avalonia1:MaterialIcon.Kind>
+                </avalonia1:MaterialIcon>
+                <TextBlock VerticalAlignment="Center">
+                    <TextBlock.Text>
+                        <MultiBinding Converter="{x:Static avalonia:CoalesceConverter.Instance}">
+                            <Binding Path="TreeHeader" />
+                            <Binding Path="Title" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
             </StackPanel>
         </Button>
 

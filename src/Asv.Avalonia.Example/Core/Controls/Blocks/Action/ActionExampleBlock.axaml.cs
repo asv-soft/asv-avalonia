@@ -1,3 +1,3 @@
 namespace Asv.Avalonia.Example;
 
-public partial class ActionExampleBlock : BaseExampleBlock { }
+public partial class ActionExampleBlock : Example.BaseExampleBlock { }

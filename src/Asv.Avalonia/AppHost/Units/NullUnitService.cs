@@ -7,6 +7,7 @@ public class NullUnitService : IUnitService
     public static NullUnitService Instance { get; } = new();
 
     #endregion
+
     private readonly Lock _lock = new();
 
     private readonly IUnit _altitude = new AltitudeUnit(

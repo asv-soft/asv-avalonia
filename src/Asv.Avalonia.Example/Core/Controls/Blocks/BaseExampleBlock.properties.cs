@@ -1,3 +1,4 @@
+using Asv.Avalonia.Example.Api;
 using Avalonia;
 using Avalonia.Media;
 
