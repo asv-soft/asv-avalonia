@@ -28,6 +28,7 @@ sealed class Program
 
             builder
                 .UseSystemTimeProvider()
+                .UseUnhandledExceptionsHandler()
                 .UseShellHost()
                 .UseLayoutService()
                 .UseAvalonia(BuildAvaloniaApp)
@@ -111,6 +112,10 @@ sealed class Program
             .With(new AvaloniaNativePlatformOptions { OverlayPopups = true }) // Mac
             .WithInterFont()
             .LogToTrace()
-            .UseR3();
+            .UseR3(x =>
+                AppHost
+                    .Instance.Services.GetRequiredService<IUnhandledExceptionHandler>()
+                    .R3UnhandledException(x)
+            );
     }
 }
