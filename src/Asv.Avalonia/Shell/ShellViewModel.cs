@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Composition.Hosting;
 using System.Diagnostics;
 using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;

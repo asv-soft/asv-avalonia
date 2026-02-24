@@ -43,7 +43,10 @@ public static class GeoMapMixin
             builder.Services.AddKeyedSingleton<ITileCache, MemoryTileCache>(
                 TileLoader.SlowTileCacheContract
             );
+
             builder.Services.AddSingleton<ITileLoader, TileLoader>();
+
+            builder.Dialogs.RegisterPrefab<GeoPointDialogPrefab>();
             builder
                 .ViewLocator.RegisterViewFor<GeoPointDialogViewModel, GeoPointDialogView>()
                 .RegisterViewFor<MapViewModel, MapView>()
