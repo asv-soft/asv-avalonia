@@ -22,55 +22,8 @@ sealed class Program
     {
         try
         {
-            var builder = AppHost.CreateBuilder(args);
-            var dataFolder =
-                Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-            builder
-                .UseSystemTimeProvider()
-                .UseUnhandledExceptionsHandler()
-                .UseShellHost()
-                .UseLayoutService()
-                .UseAvalonia(BuildAvaloniaApp)
-                .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
-                .UseJsonUserConfig(opt =>
-                    opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
-                )
-                .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-                .UseSoloRun(opt => opt.WithArgumentForwarding())
-                .UseLogging(options =>
-                {
-                    options.WithLogToFile(Path.Combine(dataFolder, "data", "logs"));
-                    options.WithLogToConsole();
-                    options.WithLogViewer();
-                    options.WithLogLevel(LogLevel.Trace);
-                })
-                .UseLogReaderService(new LogToFileOptions(Path.Combine(dataFolder, "data", "logs")))
-                .UseModuleGeoMap()
-                .UseModuleIo()
-                .UsePluginManager(options =>
-                {
-                    options.WithApiPackage("Asv.Avalonia.Example.Api", SemVersion.Parse("1.0.0"));
-                    options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
-                })
-                .UseUnitService()
-                .UseDefaultControls()
-                .UseExtensions()
-                .UseDesktopShell()
-                .UseViewLocator()
-                .UseThemeService()
-                .UseSearchService()
-                .UseNavigationService()
-                .UseLocalizationService()
-                .UseFileAssociation()
-                .UseDialogs()
-                .UseCommands()
-                .UsePlugins()
-                .UseExample();
-
-            using var host = builder.Build();
-            host.ExitIfNotFirstInstance();
-            host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
         }
         catch (Exception e)
         {
@@ -81,29 +34,6 @@ sealed class Program
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
     {
-        if (Design.IsDesignMode)
-        {
-            var builder = AppHost.CreateBuilder([]);
-            builder
-                .UseInMemoryConfig()
-                .UseDefaultControls()
-                .UseUnitService()
-                .UseNullExtension()
-                .UseViewLocator()
-                .UseDesingTimeThemeService()
-                .UseDesignTimeSearchService()
-                .UseDesignTimeShell()
-                .UseDesignTimeNavigationService()
-                .UseDesignTimeLogReaderService()
-                .UseDesignTimeLocalizationService()
-                .UseDesignTimeLayoutService()
-                .UseDesignTimeFileAssociation()
-                .UseDesignTimeDialogs()
-                .UseDesignTimeCommands()
-                .UseDesignTimeShellHost();
-
-            builder.Build();
-        }
         return AppBuilder
             .Configure<App>()
             .UsePlatformDetect()
@@ -112,10 +42,37 @@ sealed class Program
             .With(new AvaloniaNativePlatformOptions { OverlayPopups = true }) // Mac
             .WithInterFont()
             .LogToTrace()
-            .UseR3(x =>
-                AppHost
-                    .Instance.Services.GetRequiredService<IUnhandledExceptionHandler>()
-                    .R3UnhandledException(x)
-            );
+            .UseAsv(builder =>
+            {
+                builder
+                    .UseDefault()
+                    .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
+                    .UseAppPath(config => config.WithRelativeFolder("data"))
+                    .UseJsonUserConfig(opt =>
+                        opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
+                    )
+                    .UseSoloRun(opt => opt.WithArgumentForwarding())
+                    .UseLogging(options =>
+                    {
+                        options.WithLogToFile(Path.Combine("data", "logs"));
+                        options.WithLogToConsole();
+                        options.WithLogViewer();
+                        options.WithLogLevel(LogLevel.Trace);
+                    })
+                    .UseLogReaderService(new LogToFileOptions(Path.Combine("data", "logs")))
+                    .UsePluginManager(options =>
+                    {
+                        options.WithApiPackage(
+                            "Asv.Avalonia.Example.Api",
+                            SemVersion.Parse("1.0.0")
+                        );
+                        options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
+                    })
+                    .UseDesktopShell()
+                    .UseModulePlugins()
+                    .UseModuleGeoMap()
+                    .UseModuleIo()
+                    .UseExample();
+            });
     }
 }

@@ -25,7 +25,7 @@ public static class PluginsMixin
 
     extension(IHostApplicationBuilder builder)
     {
-        public IHostApplicationBuilder UsePlugins(Action<Builder>? configure = null)
+        public IHostApplicationBuilder UseModulePlugins(Action<Builder>? configure = null)
         {
             builder.Services.AddSingleton<IPluginManager, PluginManager>();
             configure ??= b => b.UseDefault();

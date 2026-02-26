@@ -1,8 +1,4 @@
-﻿using System.Diagnostics;
-using System.Reflection;
-using System.Text;
-using Asv.Common;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.Metrics;
 using Microsoft.Extensions.Hosting;
@@ -11,12 +7,12 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public class AppHost : AsyncDisposableWithCancel, IHost
+public static class AppHost
 {
-    #region Static
+    #region Singleton
 
-    private static AppHost? _instance;
-    public static AppHost Instance
+    private static IHost? _instance;
+    public static IHost Instance
     {
         get
         {
@@ -31,7 +27,11 @@ public class AppHost : AsyncDisposableWithCancel, IHost
         }
     }
 
-    public static Builder CreateBuilder(string[] args)
+    #endregion
+
+    #region Builder
+
+    public static Builder CreateBuilder()
     {
         if (_instance != null)
         {
@@ -41,49 +41,11 @@ public class AppHost : AsyncDisposableWithCancel, IHost
         }
 
         var builder = Host.CreateApplicationBuilder(
-            new HostApplicationBuilderSettings
-            {
-#if DEBUG
-                EnvironmentName = Environments.Development,
-#else
-                EnvironmentName = Environments.Production,
-#endif
-                Args = args,
-            }
+            new HostApplicationBuilderSettings { Args = Environment.GetCommandLineArgs() }
         );
-        builder.Logging.ClearProviders();
+
         return new Builder(builder);
     }
-
-    public static void HandleApplicationCrash(Exception e)
-    {
-        _instance
-            ?.Services.GetService<ILoggerFactory>()
-            ?.CreateLogger<AppHost>()
-            .ZLogCritical(e, $"Application crashed: {e.Message}");
-
-        var report = ExceptionReport.Build(e);
-        Console.WriteLine(report);
-        var dir = AppContext.BaseDirectory;
-    }
-
-    #endregion
-
-    private readonly IHost _host;
-
-    private AppHost(IHost host)
-    {
-        _host = host;
-        _instance = this;
-    }
-
-    public Task StartAsync(CancellationToken cancellationToken = default) =>
-        _host.StartAsync(cancellationToken);
-
-    public Task StopAsync(CancellationToken cancellationToken = default) =>
-        _host.StopAsync(cancellationToken);
-
-    public IServiceProvider Services => _host.Services;
 
     public class Builder : IHostApplicationBuilder
     {
@@ -110,6 +72,28 @@ public class AppHost : AsyncDisposableWithCancel, IHost
         public IMetricsBuilder Metrics => _ifcBuilder.Metrics;
         public IServiceCollection Services => _ifcBuilder.Services;
 
-        public IHost Build() => new AppHost(_originBuilder.Build());
+        public IHost Build()
+        {
+            if (_instance != null)
+            {
+                throw new InvalidOperationException(
+                    $"{nameof(AppHost)} already configured. Only one instance allowed."
+                );
+            }
+            return _instance = _originBuilder.Build();
+        }
+    }
+
+    #endregion
+
+    public static void HandleApplicationCrash(Exception e)
+    {
+        _instance
+            ?.Services.GetService<ILoggerFactory>()
+            ?.CreateLogger(nameof(AppHost))
+            .ZLogCritical(e, $"Application crashed: {e.Message}");
+
+        ExceptionReport.WriteToFile(AppContext.BaseDirectory, e, out var content);
+        Console.WriteLine(content);
     }
 }
