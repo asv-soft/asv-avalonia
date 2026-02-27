@@ -7,6 +7,7 @@ using Asv.Common;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
+using DotNext.Buffers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -111,11 +112,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                 var url = key.Provider.GetTileUrl(key);
                 if (string.IsNullOrWhiteSpace(url))
                 {
-                    tile = _emptyBitmap.GetOrAdd(
-                        key.Provider.TileSize,
-                        CreateEmptyBitmap,
-                        EmptyTileBrush.Value
-                    );
+                    continue;
                 }
                 else
                 {
@@ -127,17 +124,24 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                     try
                     {
                         _meterHttp.Add(1);
-                        var img = await _httpClient
-                            .GetByteArrayAsync(url, DisposeCancel)
+                        using var response = await _httpClient
+                            .GetAsync(url, HttpCompletionOption.ResponseHeadersRead, DisposeCancel)
                             .ConfigureAwait(false);
-                        tile = new Bitmap(new MemoryStream(img));
+                        response.EnsureSuccessStatusCode();
+
+                        var contentLength =
+                            response.Content.Headers.ContentLength.GetValueOrDefault(0);
+                        var minSize = (int)Math.Min(contentLength, 1 * 1024 * 1024); // лимит, например 4MB
+                        await response.Content.LoadIntoBufferAsync();
+                        await using var stream = await response.Content.ReadAsStreamAsync();
+                        tile = new Ref<Bitmap>(new Bitmap(stream));
                     }
                     finally
                     {
                         _remoteRequests.Remove(url);
                     }
                 }
-
+                tile.AddRef();
                 _slowCache[key] = tile;
                 _fastCache[key] = tile;
                 _onLoaded.OnNext(key);
@@ -154,28 +158,27 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         }
     }
 
-    public Bitmap this[TileKey key]
+    public void GetBitmap(TileKey key, Action<Bitmap> onLoaded)
     {
-        get
+        _meterReq.Add(1);
+        using var refBitmap = _fastCache[key];
+        if (refBitmap != null)
         {
-            _meterReq.Add(1);
-            var bitmap = _fastCache[key];
-            if (bitmap != null)
-            {
-                return bitmap;
-            }
-
-            if (_localRequests.Contains(key) == false)
-            {
-                _requestQueue.Writer.TryWrite(key);
-            }
-
-            return _emptyBitmap.GetOrAdd(
-                key.Provider.TileSize,
-                CreateEmptyBitmap,
-                EmptyTileBrush.Value
-            );
+            onLoaded(refBitmap.Value);
+            return;
         }
+
+        // we have no tile in fast cache => request it to load and return empty tile
+        if (_localRequests.Contains(key) == false)
+        {
+            _requestQueue.Writer.TryWrite(key);
+        }
+        var bitMap = _emptyBitmap.GetOrAdd(
+            key.Provider.TileSize,
+            CreateEmptyBitmap,
+            EmptyTileBrush.Value
+        );
+        onLoaded(bitMap);
     }
 
     private static Bitmap CreateEmptyBitmap(int size, IBrush brush)
@@ -187,6 +190,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     }
 
     public ReactiveProperty<IBrush> EmptyTileBrush { get; }
+
     public Observable<TileKey> OnLoaded => _onLoaded;
 
     protected override void Dispose(bool disposing)

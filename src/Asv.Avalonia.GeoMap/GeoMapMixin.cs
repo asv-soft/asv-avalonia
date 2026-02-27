@@ -40,10 +40,6 @@ public static class GeoMapMixin
                 .AddOptions<FileSystemCacheConfig>()
                 .BindConfiguration(FileSystemCacheConfig.ConfigurationSection);
 
-            builder.Services.AddKeyedSingleton<ITileCache, MemoryTileCache>(
-                TileLoader.SlowTileCacheContract
-            );
-
             builder.Services.AddSingleton<ITileLoader, TileLoader>();
 
             builder.Dialogs.RegisterPrefab<GeoPointDialogPrefab>();

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.Metrics;
+﻿using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using Asv.Common;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
@@ -52,7 +54,7 @@ public class MemoryTileCache : TileCache
         _cache = new MemoryCache(
             new MemoryCacheOptions
             {
-                ExpirationScanFrequency = TimeSpan.FromMicroseconds(
+                ExpirationScanFrequency = TimeSpan.FromSeconds(
                     config.Value.ExpirationScanFrequencySec
                 ),
                 SizeLimit = _sizeLimitBytes,
@@ -74,24 +76,26 @@ public class MemoryTileCache : TileCache
         );
     }
 
-    public override Bitmap? this[TileKey key]
+    protected override void SetBitmap(TileKey key, Ref<Bitmap>? value)
     {
-        get
+        if (value == null)
         {
-            _meterGet.Add(1);
-            return _cache.Get<Bitmap>(key);
+            _cache.Remove(key);
+            return;
         }
-        set
-        {
-            if (value == null)
-            {
-                _cache.Remove(key);
-                return;
-            }
+        _meterSet.Add(1);
+        _cache.Set(key, value, CreateOptions(value.Value));
+    }
 
-            _meterSet.Add(1);
-            _cache.Set(key, value, CreateOptions(value));
+    protected override Ref<Bitmap>? GetBitmap(TileKey key)
+    {
+        var bitmap = _cache.Get<Ref<Bitmap>>(key);
+        if (bitmap == null)
+        {
+            return null;
         }
+        bitmap.AddRef();
+        return bitmap;
     }
 
     public override TileCacheStatistic GetStatistic()
@@ -114,8 +118,8 @@ public class MemoryTileCache : TileCache
         {
             AbsoluteExpiration = null,
             AbsoluteExpirationRelativeToNow = null,
-            SlidingExpiration = _expirationAfter,
-            Priority = CacheItemPriority.Low,
+            SlidingExpiration = TimeSpan.FromSeconds(10),
+            Priority = CacheItemPriority.Normal,
             Size = value.PixelSize.Width * value.PixelSize.Height * 4,
         }.RegisterPostEvictionCallback(DisposeAfterEviction);
     }
@@ -127,12 +131,11 @@ public class MemoryTileCache : TileCache
         object? state
     )
     {
-        _logger.ZLogTrace($"Evict {key} {reason}");
-        if (value is IDisposable disposable)
-        {
-            _meterClear.Add(1);
-            disposable.Dispose();
-        }
+        _logger.ZLogTrace($"Remove memory cache item '{key}' cause '{reason}'");
+        var bitmap = value as Ref<Bitmap>;
+        Debug.Assert(bitmap != null, "Evicted value is not Bitmap");
+        SafeBitmapAction((TileKey)key, bitmap, (_, b) => b.Dispose());
+        _meterClear.Add(1);
     }
 
     #region Dispose
@@ -141,6 +144,7 @@ public class MemoryTileCache : TileCache
     {
         if (disposing)
         {
+            _cache.Clear();
             _cache.Dispose();
         }
 
@@ -149,6 +153,7 @@ public class MemoryTileCache : TileCache
 
     protected override async ValueTask DisposeAsyncCore()
     {
+        _cache.Clear();
         _cache.Dispose();
 
         await base.DisposeAsyncCore();

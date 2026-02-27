@@ -58,14 +58,9 @@ public class FileSystemCache : TileCache
         );
     }
 
-    public override Bitmap? this[TileKey key]
+    protected override void SetBitmap(TileKey key, Ref<Bitmap>? bitmap)
     {
-        get => _lock.Execute(key, key, GetBitmap);
-        set => _lock.Execute(key, key, value, SetBitmap);
-    }
-
-    private void SetBitmap(TileKey key, Bitmap? bitmap)
-    {
+        // TODO: add to queue and execute in background to avoid UI freeze
         _meterSet.Add(1);
         var tilePath = GetTileCachePath(key);
         if (bitmap == null)
@@ -84,7 +79,8 @@ public class FileSystemCache : TileCache
         {
             // ReSharper disable once InconsistentlySynchronizedField
             _logger.ZLogInformation($"Create tile file: {tilePath}");
-            bitmap.Save(tilePath);
+            bitmap.Value.Save(tilePath);
+            bitmap.Dispose();
             _fileCount++;
             var info = GetTileCachePath(key);
             _dirSizeInBytes += info.Length;
@@ -93,14 +89,14 @@ public class FileSystemCache : TileCache
         }
     }
 
-    private Bitmap? GetBitmap(TileKey key)
+    protected override Ref<Bitmap>? GetBitmap(TileKey key)
     {
         _meterGet.Add(1);
         var tilePath = GetTileCachePath(key);
         if (File.Exists(tilePath))
         {
             _totalHits++;
-            return new Bitmap(tilePath);
+            return new Ref<Bitmap>(new Bitmap(tilePath));
         }
         else
         {

@@ -60,6 +60,7 @@ public class TileCacheConfig
 public abstract class TileCache : AsyncDisposableOnce, ITileCache
 {
     private readonly IDisposable? _timer;
+    private readonly LockByKeyExecutor<TileKey> _lock = new();
 
     protected TileCache(TileCacheConfig config, ILoggerFactory factory)
     {
@@ -74,7 +75,24 @@ public abstract class TileCache : AsyncDisposableOnce, ITileCache
         }
     }
 
-    public abstract Bitmap? this[TileKey key] { get; set; }
+    public Ref<Bitmap>? this[TileKey key]
+    {
+        get => _lock.Execute(key, key, GetBitmap);
+        set => _lock.Execute(key, key, value, SetBitmap);
+    }
+
+    protected abstract void SetBitmap(TileKey key, Ref<Bitmap>? value);
+
+    protected abstract Ref<Bitmap>? GetBitmap(TileKey key);
+
+    protected void SafeBitmapAction(
+        TileKey key,
+        Ref<Bitmap> arg,
+        Action<TileKey, Ref<Bitmap>> action
+    )
+    {
+        _lock.Execute(key, key, arg, action);
+    }
 
     public virtual TileCacheStatistic GetStatistic()
     {

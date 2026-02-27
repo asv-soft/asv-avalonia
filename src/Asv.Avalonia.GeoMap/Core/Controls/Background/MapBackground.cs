@@ -100,12 +100,18 @@ public partial class MapBackground : Control
 
                 var px = (key.X * Provider.TileSize) + offset.X;
                 var py = (key.Y * Provider.TileSize) + offset.Y;
-                var tile = _tileLoader[key];
-                context.DrawImage(
-                    tile,
-                    new Rect(0, 0, Provider.TileSize, Provider.TileSize),
-                    new Rect(px, py, Provider.TileSize, Provider.TileSize)
+                _tileLoader.GetBitmap(
+                    key,
+                    bitmap =>
+                    {
+                        context.DrawImage(
+                            bitmap,
+                            new Rect(0, 0, Provider.TileSize, Provider.TileSize),
+                            new Rect(px, py, Provider.TileSize, Provider.TileSize)
+                        );
+                    }
                 );
+
                 if (IsDebug)
                 {
                     context.DrawRectangle(
