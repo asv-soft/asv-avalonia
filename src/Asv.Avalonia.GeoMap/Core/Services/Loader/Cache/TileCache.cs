@@ -75,20 +75,20 @@ public abstract class TileCache : AsyncDisposableOnce, ITileCache
         }
     }
 
-    public Ref<Bitmap>? this[TileKey key]
+    public Tile? this[TileKey key]
     {
         get => _lock.Execute(key, key, GetBitmap);
         set => _lock.Execute(key, key, value, SetBitmap);
     }
 
-    protected abstract void SetBitmap(TileKey key, Ref<Bitmap>? value);
+    protected abstract void SetBitmap(TileKey key, Tile? value);
 
-    protected abstract Ref<Bitmap>? GetBitmap(TileKey key);
+    protected abstract Tile? GetBitmap(TileKey key);
 
     protected void SafeBitmapAction(
         TileKey key,
-        Ref<Bitmap> arg,
-        Action<TileKey, Ref<Bitmap>> action
+        Tile arg,
+        Action<TileKey, Tile> action
     )
     {
         _lock.Execute(key, key, arg, action);

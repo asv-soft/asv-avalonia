@@ -76,7 +76,7 @@ public class MemoryTileCache : TileCache
         );
     }
 
-    protected override void SetBitmap(TileKey key, Ref<Bitmap>? value)
+    protected override void SetBitmap(TileKey key, Tile? value)
     {
         if (value == null)
         {
@@ -84,12 +84,12 @@ public class MemoryTileCache : TileCache
             return;
         }
         _meterSet.Add(1);
-        _cache.Set(key, value, CreateOptions(value.Value));
+        _cache.Set(key, value, CreateOptions(value));
     }
 
-    protected override Ref<Bitmap>? GetBitmap(TileKey key)
+    protected override Tile? GetBitmap(TileKey key)
     {
-        var bitmap = _cache.Get<Ref<Bitmap>>(key);
+        var bitmap = _cache.Get<Tile>(key);
         if (bitmap == null)
         {
             return null;
@@ -112,7 +112,7 @@ public class MemoryTileCache : TileCache
             );
     }
 
-    private MemoryCacheEntryOptions CreateOptions(Bitmap value)
+    private MemoryCacheEntryOptions CreateOptions(Tile value)
     {
         return new MemoryCacheEntryOptions
         {
@@ -120,7 +120,7 @@ public class MemoryTileCache : TileCache
             AbsoluteExpirationRelativeToNow = null,
             SlidingExpiration = TimeSpan.FromSeconds(10),
             Priority = CacheItemPriority.Normal,
-            Size = value.PixelSize.Width * value.PixelSize.Height * 4,
+            Size = value.DataSize,
         }.RegisterPostEvictionCallback(DisposeAfterEviction);
     }
 
@@ -132,7 +132,7 @@ public class MemoryTileCache : TileCache
     )
     {
         _logger.ZLogTrace($"Remove memory cache item '{key}' cause '{reason}'");
-        var bitmap = value as Ref<Bitmap>;
+        var bitmap = value as Tile;
         Debug.Assert(bitmap != null, "Evicted value is not Bitmap");
         SafeBitmapAction((TileKey)key, bitmap, (_, b) => b.Dispose());
         _meterClear.Add(1);

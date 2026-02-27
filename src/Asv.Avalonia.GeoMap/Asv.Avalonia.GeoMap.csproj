@@ -35,6 +35,7 @@
             CA1510,
             CA1851
         </WarningsAsErrors>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
     <ItemGroup>
         <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />

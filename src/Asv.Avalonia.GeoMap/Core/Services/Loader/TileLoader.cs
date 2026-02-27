@@ -43,6 +43,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     private readonly Counter<int> _meterReq;
     private readonly Counter<int> _meterQueue;
     private readonly Counter<int> _meterHttp;
+    private WriteableBitmap? _bitmap;
 
     public TileLoader(
         ILoggerFactory loggerFactory,
@@ -134,7 +135,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                         var minSize = (int)Math.Min(contentLength, 1 * 1024 * 1024); // лимит, например 4MB
                         await response.Content.LoadIntoBufferAsync();
                         await using var stream = await response.Content.ReadAsStreamAsync();
-                        tile = new Ref<Bitmap>(new Bitmap(stream));
+                        tile = new Tile(key, stream);
                     }
                     finally
                     {
@@ -161,10 +162,12 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     public void GetBitmap(TileKey key, Action<Bitmap> onLoaded)
     {
         _meterReq.Add(1);
-        using var refBitmap = _fastCache[key];
-        if (refBitmap != null)
+        using var tile = _fastCache[key];
+        if (tile != null)
         {
-            onLoaded(refBitmap.Value);
+            _bitmap ??= new WriteableBitmap(tile.PixelSize, tile.Dpi);
+            tile.Write(_bitmap);
+            onLoaded(_bitmap);
             return;
         }
 
