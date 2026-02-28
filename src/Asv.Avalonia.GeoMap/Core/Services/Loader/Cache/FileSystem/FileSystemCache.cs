@@ -32,6 +32,7 @@ public class FileSystemCache : TileCache
     private readonly int _capacitySize;
     private const string TileFileExtension = "png";
     private readonly Channel<Tile> _writerQueue;
+    private ConcurrentHashSet<string>? _folderCache;
 
     public FileSystemCache(
         IOptions<FileSystemCacheConfig> config,
@@ -132,18 +133,11 @@ public class FileSystemCache : TileCache
     {
         var providerName = key.Provider.Info.Id;
         var tileFolder = Path.Combine(_cacheDirectory, providerName, key.Zoom.ToString());
-        if (Directory.Exists(tileFolder) == false)
+        _folderCache ??= new ConcurrentHashSet<string>();
+        if (_folderCache.Add(tileFolder) == false)
         {
-            lock (_syncDir)
-            {
-                if (Directory.Exists(tileFolder) == false)
-                {
-                    _logger.ZLogInformation($"Create tile cache directory: {tileFolder}");
-                    Directory.CreateDirectory(tileFolder);
-                }
-            }
+            Directory.CreateDirectory(tileFolder);    
         }
-
         return Path.Combine(tileFolder, $"{key.X}_{key.Y}.{TileFileExtension}");
     }
 
