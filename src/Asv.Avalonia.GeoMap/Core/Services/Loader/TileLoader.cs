@@ -128,13 +128,16 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                             .GetAsync(url, HttpCompletionOption.ResponseHeadersRead, DisposeCancel)
                             .ConfigureAwait(false);
                         response.EnsureSuccessStatusCode();
-
                         var contentLength =
                             response.Content.Headers.ContentLength.GetValueOrDefault(0);
-                        var minSize = (int)Math.Min(contentLength, 1 * 1024 * 1024); // лимит, например 4MB
-                        await response.Content.LoadIntoBufferAsync();
                         await using var stream = await response.Content.ReadAsStreamAsync();
-                        tile = new Ref<Bitmap>(new Bitmap(stream));
+                        if (contentLength == 0)
+                        {
+                            await response.Content.LoadIntoBufferAsync();
+                            contentLength = stream.Length;
+                        }
+                        
+                        tile = Tile.Create(key, stream, (int)contentLength);
                     }
                     finally
                     {
@@ -158,38 +161,22 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         }
     }
 
-    public void GetBitmap(TileKey key, Action<Bitmap> onLoaded)
+    public ReactiveProperty<IBrush> EmptyTileBrush { get; }
+    public void Render(DrawingContext context, double x, double y, TileKey key)
     {
         _meterReq.Add(1);
         using var refBitmap = _fastCache[key];
         if (refBitmap != null)
         {
-            onLoaded(refBitmap.Value);
+            refBitmap.Render(context, x, y);
             return;
         }
-
-        // we have no tile in fast cache => request it to load and return empty tile
         if (_localRequests.Contains(key) == false)
         {
             _requestQueue.Writer.TryWrite(key);
         }
-        var bitMap = _emptyBitmap.GetOrAdd(
-            key.Provider.TileSize,
-            CreateEmptyBitmap,
-            EmptyTileBrush.Value
-        );
-        onLoaded(bitMap);
+        context.DrawRectangle(EmptyTileBrush.Value, null,  new Rect(x, y, key.Provider.TileSize, key.Provider.TileSize));
     }
-
-    private static Bitmap CreateEmptyBitmap(int size, IBrush brush)
-    {
-        var btm = new RenderTargetBitmap(new PixelSize(size, size));
-        using var ctx = btm.CreateDrawingContext(true);
-        ctx.FillRectangle(brush, new Rect(0, 0, size, size));
-        return btm;
-    }
-
-    public ReactiveProperty<IBrush> EmptyTileBrush { get; }
 
     public Observable<TileKey> OnLoaded => _onLoaded;
 

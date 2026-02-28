@@ -25,6 +25,6 @@ public class TileCacheStatistic(
 
 public interface ITileCache : IDisposable, IAsyncDisposable
 {
-    Ref<Bitmap>? this[TileKey key] { get; set; }
+    Tile? this[TileKey key] { get; set; }
     TileCacheStatistic GetStatistic();
 }

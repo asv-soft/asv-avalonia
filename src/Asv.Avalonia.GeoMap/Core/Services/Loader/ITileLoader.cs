@@ -6,7 +6,7 @@ namespace Asv.Avalonia.GeoMap;
 
 public interface ITileLoader
 {
-    void GetBitmap(TileKey key, Action<Bitmap> onLoaded);
     Observable<TileKey> OnLoaded { get; }
     ReactiveProperty<IBrush> EmptyTileBrush { get; }
+    void Render(DrawingContext context, double x, double y, TileKey key);
 }

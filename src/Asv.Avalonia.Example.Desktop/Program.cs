@@ -7,6 +7,7 @@ using Asv.Avalonia.Plugins;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Logging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 

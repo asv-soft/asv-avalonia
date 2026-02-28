@@ -100,7 +100,8 @@ public partial class MapBackground : Control
 
                 var px = (key.X * Provider.TileSize) + offset.X;
                 var py = (key.Y * Provider.TileSize) + offset.Y;
-                _tileLoader.GetBitmap(
+                _tileLoader.Render(context, px, py, key);
+                /*_tileLoader.GetBitmap(
                     key,
                     bitmap =>
                     {
@@ -110,7 +111,7 @@ public partial class MapBackground : Control
                             new Rect(px, py, Provider.TileSize, Provider.TileSize)
                         );
                     }
-                );
+                );*/
 
                 if (IsDebug)
                 {
