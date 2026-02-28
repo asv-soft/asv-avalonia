@@ -51,6 +51,7 @@ public sealed class Tile : IDisposable
 
         _value = new Bitmap(new MemoryStream(_compressed, 0, _compressedSize));
         Size = (_value.PixelSize.Width * _value.PixelSize.Height * 4) + _compressedSize;
+        Interlocked.Increment(ref _created);
     }
 
     public TileKey Key { get; }

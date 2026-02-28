@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.Metrics;
+using System.Threading.Channels;
 using Asv.Common;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
@@ -12,13 +13,15 @@ public class FileSystemCacheConfig : TileCacheConfig
     public const string ConfigurationSection = "filesystemcache";
 
     public string FolderPath { get; set; } = "map";
+    public int WriteQueueSize { get; set; } = 100;
+    
+    public int WriteParallelThreads { get; set; } = 1;
 }
 
 public class FileSystemCache : TileCache
 {
     private readonly string _cacheDirectory;
     private readonly ILogger<FileSystemCache> _logger;
-    private readonly LockByKeyExecutor<TileKey> _lock = new();
     private readonly Lock _syncDir = new();
     private readonly Counter<int> _meterGet;
     private readonly Counter<int> _meterSet;
@@ -28,6 +31,7 @@ public class FileSystemCache : TileCache
     private long _totalMiss;
     private readonly int _capacitySize;
     private const string TileFileExtension = "png";
+    private readonly Channel<Tile> _writerQueue;
 
     public FileSystemCache(
         IOptions<FileSystemCacheConfig> config,
@@ -56,14 +60,40 @@ public class FileSystemCache : TileCache
         _logger.ZLogInformation(
             $"Map cache directory: {_cacheDirectory}, files: {_fileCount}, size: {_dirSizeInBytes / (1024 * 1024):N} MB"
         );
+        
+        _writerQueue = Channel.CreateBounded<Tile>(
+            new BoundedChannelOptions(config.Value.WriteQueueSize)
+            {
+                FullMode = BoundedChannelFullMode.DropOldest,
+            }
+        );
+
+        for (var i = 0; i < config.Value.WriteParallelThreads; i++)
+        {
+            Task.Run(WriteQueue);
+        }
+    }
+
+    private async void WriteQueue()
+    {
+        await foreach (var tile in _writerQueue.Reader.ReadAllAsync(DisposeCancel))
+        {
+            _meterSet.Add(1);
+            var tilePath = GetTileCachePath(tile.Key);
+            
+            // ReSharper disable once InconsistentlySynchronizedField
+            _logger.ZLogInformation($"Create tile file: {tilePath}");
+            tile.Save(tilePath);
+            tile.Dispose();
+            _fileCount++;
+            var info = GetTileCachePath(tile.Key);
+            _dirSizeInBytes += info.Length;
+        }
     }
 
     protected override void SetBitmap(TileKey key, Tile? tile)
     {
-        // TODO: add to queue and execute in background to avoid UI freeze
-        _meterSet.Add(1);
-        var tilePath = GetTileCachePath(key);
-        if (tile == null)
+        /*if (tile == null)
         {
             var info = new FileInfo(tilePath);
             if (info.Exists)
@@ -74,19 +104,12 @@ public class FileSystemCache : TileCache
                 _fileCount--;
                 File.Delete(tilePath);
             }
-        }
-        else
+        }*/
+        if (tile == null)
         {
-            // ReSharper disable once InconsistentlySynchronizedField
-            _logger.ZLogInformation($"Create tile file: {tilePath}");
-            tile.Save(tilePath);
-            tile.Dispose();
-            _fileCount++;
-            var info = GetTileCachePath(key);
-            _dirSizeInBytes += info.Length;
-
-            // TODO: Check capacity and remove old files
+            return;
         }
+        _writerQueue.Writer.TryWrite(tile);
     }
 
     protected override Tile? GetBitmap(TileKey key)

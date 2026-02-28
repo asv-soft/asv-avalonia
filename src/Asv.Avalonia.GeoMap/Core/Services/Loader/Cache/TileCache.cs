@@ -57,7 +57,7 @@ public class TileCacheConfig
     }
 }
 
-public abstract class TileCache : AsyncDisposableOnce, ITileCache
+public abstract class TileCache : AsyncDisposableWithCancel, ITileCache
 {
     private readonly IDisposable? _timer;
     private readonly LockByKeyExecutor<TileKey> _lock = new();
