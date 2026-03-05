@@ -18,7 +18,7 @@ public class PluginInfoViewModel : RoutableViewModel
     private ILocalPluginInfo? _localInfo;
 
     public PluginInfoViewModel()
-        : this(NullPluginSearchInfo.Instance, NullPluginManager.Instance, DesignTime.LoggerFactory)
+        : this(NullPluginSearchInfo.Instance, NullPluginManager.Instance, NullPluginBootloader.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -26,6 +26,7 @@ public class PluginInfoViewModel : RoutableViewModel
     public PluginInfoViewModel(
         IPluginSearchInfo pluginInfo,
         IPluginManager manager,
+        IPluginBootloader bootloader,
         ILoggerFactory logFactory
     )
         : base(new NavigationId(ViewModelIdPart, pluginInfo.Id), logFactory)
@@ -58,7 +59,7 @@ public class PluginInfoViewModel : RoutableViewModel
         SourceName = pluginInfo.Source.Name;
         SourceUri = pluginInfo.Source.SourceUri;
         LastVersion = $"{pluginInfo.LastVersion} (API: {pluginInfo.ApiVersion})";
-        IsApiCompatible = pluginInfo.ApiVersion == manager.ApiVersion;
+        IsApiCompatible = pluginInfo.ApiVersion == bootloader.ApiVersion;
         LocalVersion =
             _localInfo != null ? $"{_localInfo?.Version} (API: {_localInfo?.ApiVersion})" : null;
         DownloadCount = pluginInfo.DownloadCount.ToString();

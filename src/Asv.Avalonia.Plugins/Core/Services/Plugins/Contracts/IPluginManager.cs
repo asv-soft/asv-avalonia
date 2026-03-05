@@ -7,9 +7,6 @@ namespace Asv.Avalonia.Plugins;
 public interface IPluginManager : IHostedService
 {
     IReadOnlyList<IPluginServerInfo> Servers { get; }
-    IEnumerable<ILocalPluginInfo> Installed { get; }
-    IReadOnlyList<Assembly> PluginsAssemblies { get; }
-    SemVersion ApiVersion { get; }
     void AddServer(PluginServer server);
     void RemoveServer(IPluginServerInfo server);
     Task<IReadOnlyList<IPluginSearchInfo>> Search(

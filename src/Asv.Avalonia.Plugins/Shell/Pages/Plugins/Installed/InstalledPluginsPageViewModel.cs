@@ -15,6 +15,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
 
     private readonly IPluginManager _manager;
+    private readonly IPluginBootloader _bootloader;
     private readonly OpenFileDialogDesktopPrefab _openFileDialog;
     private readonly ObservableList<ILocalPluginInfo> _plugins;
     private readonly ISynchronizedView<ILocalPluginInfo, InstalledPluginInfoViewModel> _view;
@@ -23,6 +24,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
+            NullPluginBootloader.Instance,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
             DesignTime.ExtensionService
@@ -35,6 +37,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     public InstalledPluginsPageViewModel(
         ICommandService cmd,
         IPluginManager manager,
+        IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
@@ -44,8 +47,9 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
         Title = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;
         _manager = manager;
+        _bootloader = bootloader;
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
-        _plugins = new ObservableList<ILocalPluginInfo>(_manager.Installed);
+        _plugins = new ObservableList<ILocalPluginInfo>(bootloader.Installed);
 
         Search = new SearchBoxViewModel(
             nameof(Search),
@@ -119,12 +123,12 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
             _plugins.RemoveAll();
             if (string.IsNullOrWhiteSpace(text) && !IsShowOnlyVerified.ViewValue.Value)
             {
-                _plugins.AddRange(_manager.Installed);
+                _plugins.AddRange(_bootloader.Installed);
                 return;
             }
 
             _plugins.AddRange(
-                _manager.Installed.Where(model =>
+                _bootloader.Installed.Where(model =>
                 {
                     var isOk = true;
                     if (!string.IsNullOrWhiteSpace(text))

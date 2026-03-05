@@ -5,6 +5,7 @@ using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using NuGet.Protocol.Plugins;
 using ObservableCollections;
 using R3;
 
@@ -23,6 +24,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         : this(
             DesignTime.CommandService,
             NullPluginManager.Instance,
+            NullPluginBootloader.Instance,
             NullLoggerFactory.Instance,
             DesignTime.DialogService,
             DesignTime.ExtensionService
@@ -35,6 +37,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     public PluginsMarketPageViewModel(
         ICommandService cmd,
         IPluginManager manager,
+        IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
@@ -64,7 +67,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         );
 
         _view = _plugins
-            .CreateView(info => new PluginInfoViewModel(info, _manager, loggerFactory))
+            .CreateView(info => new PluginInfoViewModel(info, _manager, bootloader, loggerFactory))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);

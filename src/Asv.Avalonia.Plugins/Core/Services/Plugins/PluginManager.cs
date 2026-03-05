@@ -22,6 +22,7 @@ public class PluginManager : IPluginManager
 {
     private readonly IList<Assembly> _assemblies;
     private readonly ILoggerFactory _loggerFactory;
+    private readonly IPluginBootloader _bootloader;
     private readonly ILogger<PluginManager> _logger;
     private readonly LoggerAdapter _nugetLogger;
     private readonly ReaderWriterLockSlim _repositoriesLock = new();
@@ -41,7 +42,8 @@ public class PluginManager : IPluginManager
     public PluginManager(
         IOptions<PluginManagerOptions> options,
         IConfiguration userConfig,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IPluginBootloader bootloader
     )
     {
         _assemblies = new List<Assembly>();
@@ -50,6 +52,7 @@ public class PluginManager : IPluginManager
         _nugetFolder = options.Value.NugetDirectory;
 
         _loggerFactory = loggerFactory;
+        _bootloader = bootloader;
         ApiVersion = SemVersion.Parse(options.Value.ApiVersion);
 
         _logger = loggerFactory.CreateLogger<PluginManager>();
@@ -170,97 +173,9 @@ public class PluginManager : IPluginManager
             NoCache = true,
             MaxAge = DateTimeOffset.MaxValue,
         };
-
-        // load all plugins
-        foreach (
-            var dir in Directory.EnumerateDirectories(
-                _sharedPluginFolder,
-                "*",
-                SearchOption.TopDirectoryOnly
-            )
-        )
-        {
-            if (!TryGetLocalPluginInfoByFolder(dir, out var info))
-            {
-                _logger.LogWarning($"Error read plugin info from {dir}. Delete it");
-                Directory.Delete(dir, true);
-                continue;
-            }
-
-            if (info == null)
-            {
-                continue;
-            }
-
-            if (info.IsUninstalled)
-            {
-                _logger.LogInformation(
-                    $"Plugin {info.PackageId} is marked as uninstalled. Delete it"
-                );
-                Directory.Delete(info.LocalFolder, true);
-                continue;
-            }
-
-            // check API version
-            if (info.ApiVersion.CompareByPrecedence(ApiVersion) != 0)
-            {
-                _logger.LogWarning(
-                    $"Plugin {info.PackageId} {info.Version} has different API version {info.ApiVersion} than application {ApiVersion}"
-                );
-                SetPluginStateByFolder(
-                    info.LocalFolder,
-                    x =>
-                    {
-                        x.IsLoaded = false;
-                        x.LoadingError =
-                            $"Plugin has different API version {info.ApiVersion} than application {ApiVersion}";
-                    }
-                );
-                continue;
-            }
-
-            try
-            {
-                _logger.LogInformation(
-                    $"Load plugin {info.PackageId} {info.Version} {info.LocalFolder}"
-                );
-                _pluginContexts.Add(
-                    new PluginAssemblyLoadContext(
-                        info.LocalFolder
-                    )
-                );
-                SetPluginStateByFolder(
-                    info.LocalFolder,
-                    x =>
-                    {
-                        x.IsLoaded = true;
-                        x.LoadingError = null;
-                    }
-                );
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(
-                    e,
-                    $"Error load plugin {info.PackageId} {info.Version} {info.LocalFolder}"
-                );
-                SetPluginStateByFolder(
-                    info.LocalFolder,
-                    x =>
-                    {
-                        x.IsLoaded = false;
-                        x.LoadingError = e.Message;
-                    }
-                );
-            }
-        }
-
-        PluginsAssemblies = _assemblies.ToImmutableList();
     }
 
     public SemVersion ApiVersion { get; }
-
-    public IReadOnlyList<Assembly> PluginsAssemblies { get; }
 
     #region Servers
 

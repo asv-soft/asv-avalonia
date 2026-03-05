@@ -73,7 +73,10 @@ sealed class Program
                     .UseDesktopShell()
                     .UseModulePlugins(configure =>
                     {
-                        configure.WithApiPackage(typeof(Command1).Assembly);
+                        configure
+                            .WithApiPackage(typeof(Command1).Assembly)
+                            .UseInstalled()
+                            ;
                     })
                     .UseModuleGeoMap()
                     .UseModuleIo()

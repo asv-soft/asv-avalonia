@@ -11,24 +11,7 @@ namespace Asv.Avalonia.Plugins;
 
 public static class PluginsMixin
 {
-    extension(SettingsPageMixin.Builder builder)
-    {
-        public SettingsPageMixin.Builder UsePluginsSettings()
-        {
-            builder.AddSubPage<
-                SettingsPluginsSourcesViewModel,
-                SettingsPluginsSourcesView,
-                SettingsPluginsTreePageMenu
-            >(SettingsPluginsSourcesViewModel.PageId);
-            builder.Parent.Parent.Parent.ViewLocator.RegisterViewFor<
-                SourceDialogViewModel,
-                SourceDialogView
-            >();
-
-            return builder;
-        }
-    }
-
+   
     extension(IHostApplicationBuilder builder)
     {
         public IHostApplicationBuilder UseModulePlugins(Action<Builder>? configure = null)
@@ -50,7 +33,6 @@ public static class PluginsMixin
     {
         public Builder UseDefault()
         {
-            builder.Shell.Pages.Settings.UsePluginsSettings();
             return UseMarket().UseInstalled();
         }
         
@@ -78,12 +60,23 @@ public static class PluginsMixin
         }
         
         public PluginBootloaderOptions Options => pluginOptions;
-        
-        private Builder UseMarket()
+
+        public Builder UseMarket()
         {
             builder.Shell.Pages.Home.UseExtension<HomePagePluginsMarketExtension>();
-            builder.Shell.Pages.Register<InstalledPluginsPageViewModel, InstalledPluginsPageView>(
-                InstalledPluginsPageViewModel.PageId
+            
+            builder.Commands.Register<OpenPluginsMarketCommand>();
+            builder.Shell.Pages.Settings.AddSubPage<
+                SettingsPluginsSourcesViewModel,
+                SettingsPluginsSourcesView,
+                SettingsPluginsTreePageMenu
+            >(SettingsPluginsSourcesViewModel.PageId);
+            builder.ViewLocator.RegisterViewFor<
+                SourceDialogViewModel,
+                SourceDialogView
+            >();
+            builder.Shell.Pages.Register<PluginsMarketPageViewModel, PluginsMarketPageView>(
+                PluginsMarketPageViewModel.PageId
             );
             return this;
         }
@@ -92,10 +85,12 @@ public static class PluginsMixin
 
         public Builder UseInstalled()
         {
-            builder.Shell.Pages.Home.UseExtension<HomePageInstalledPluginsExtension>();
-            builder.Shell.Pages.Register<PluginsMarketPageViewModel, PluginsMarketPageView>(
-                PluginsMarketPageViewModel.PageId
+            builder.Shell.Pages.Register<InstalledPluginsPageViewModel, InstalledPluginsPageView>(
+                InstalledPluginsPageViewModel.PageId
             );
+            builder.Shell.Pages.Home.UseExtension<HomePageInstalledPluginsExtension>();
+            
+            builder.Commands.Register<OpenInstalledPluginsCommand>();
             return this;
         }
     }
