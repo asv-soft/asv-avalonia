@@ -3,7 +3,7 @@
     <PropertyGroup>
         <FileVersion>$(ApiVersion)</FileVersion>
         <Version>$(ApiVersion)</Version>
-        <PackageVersion>$(ApiVersion)</PackageVersion>
+        <PackageVersion>1.0.1</PackageVersion>
         <TargetFramework>$(TargetFramework)</TargetFramework>
         <LangVersion>preview</LangVersion>
         <ImplicitUsings>enable</ImplicitUsings>

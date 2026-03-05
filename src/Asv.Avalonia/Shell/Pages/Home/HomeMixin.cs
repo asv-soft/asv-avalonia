@@ -25,7 +25,7 @@ public static class HomeMixin
             return this;
         }
 
-        public Builder RegisterExtension<TExtension>()
+        public Builder UseExtension<TExtension>()
             where TExtension : class, IExtensionFor<IHomePage>
         {
             builder.Parent.Parent.Extensions.Register<IHomePage, TExtension>();

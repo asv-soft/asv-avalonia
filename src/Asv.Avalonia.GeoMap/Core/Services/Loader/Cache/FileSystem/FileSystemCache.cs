@@ -77,19 +77,31 @@ public class FileSystemCache : TileCache
 
     private async void WriteQueue()
     {
-        await foreach (var tile in _writerQueue.Reader.ReadAllAsync(DisposeCancel))
+        try
         {
-            _meterSet.Add(1);
-            var tilePath = GetTileCachePath(tile.Key);
-            
-            // ReSharper disable once InconsistentlySynchronizedField
-            _logger.ZLogInformation($"Create tile file: {tilePath}");
-            tile.Save(tilePath);
-            tile.Dispose();
-            _fileCount++;
-            var info = GetTileCachePath(tile.Key);
-            _dirSizeInBytes += info.Length;
+            await foreach (var tile in _writerQueue.Reader.ReadAllAsync(DisposeCancel))
+            {
+                _meterSet.Add(1);
+                var tilePath = GetTileCachePath(tile.Key);
+
+                // ReSharper disable once InconsistentlySynchronizedField
+                _logger.ZLogInformation($"Create tile file: {tilePath}");
+                tile.Save(tilePath);
+                tile.Dispose();
+                _fileCount++;
+                var info = GetTileCachePath(tile.Key);
+                _dirSizeInBytes += info.Length;
+            }
         }
+        catch (OperationCanceledException e)
+        {
+            // this is normal when dispose
+        }
+        catch (Exception e)
+        {
+            _logger.ZLogError(e, $"Error write tile queue:{e.Message}");
+        }
+        
     }
 
     protected override void SetBitmap(TileKey key, Tile? tile)

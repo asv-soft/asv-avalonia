@@ -10,6 +10,7 @@ namespace Asv.Avalonia;
 public static class AppHostMixin
 {
     public const string DesignTimeEnvironmentName = "Design";
+    private const string PostConfigureCallbackKey = "PostConfigureCallback";
 
     extension(AppBuilder avaloniaBuilder)
     {
@@ -38,6 +39,34 @@ public static class AppHostMixin
     }
     extension(IHostApplicationBuilder builder)
     {
+        public void ExecutePostConfigureCallbacks()
+        {
+            if (builder.Properties.TryGetValue(PostConfigureCallbackKey, out var callback))
+            {
+                var list = (List<Action<IHostApplicationBuilder>>)callback;
+                foreach (var action in list)
+                {
+                    action(builder);
+                }
+                builder.Properties.Remove(PostConfigureCallbackKey);
+            }
+        }
+        public void AddPostConfigureCallbacks(Action<IHostApplicationBuilder> action)
+        {
+            if (builder.Properties.TryGetValue(PostConfigureCallbackKey, out var callback))
+            {
+                var list = (List<Action<IHostApplicationBuilder>>)callback;
+                list.Add(action);
+            }
+            else
+            {
+                builder.Properties[PostConfigureCallbackKey] = new List<Action<IHostApplicationBuilder>>
+                {
+                    action,
+                };
+            }
+        }
+        
         public bool IsDesignTimeEnvironment =>
             builder.Environment.EnvironmentName == DesignTimeEnvironmentName;
 

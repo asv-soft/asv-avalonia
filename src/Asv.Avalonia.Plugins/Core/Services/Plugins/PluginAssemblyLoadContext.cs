@@ -1,43 +1,27 @@
 ﻿using System.Reflection;
 using System.Runtime.Loader;
-using Microsoft.Extensions.Logging;
-using ZLogger;
 
 namespace Asv.Avalonia.Plugins;
 
-public class PluginAssemblyLoadContext : AssemblyLoadContext
+public class PluginAssemblyLoadContext(string pluginPath) : AssemblyLoadContext
 {
-    private readonly ILogger _logger;
-    private readonly string _pluginFolder;
-
-    public PluginAssemblyLoadContext(
-        string pluginPath,
-        string nugetPluginName,
-        IList<Assembly> containerCfg,
-        ILoggerFactory loggerFactory
-    )
+    public static PluginAssemblyLoadContext Create(string folder, string assemblyPrefix, IList<Assembly> assembyRegistry)
     {
-        _logger = loggerFactory.CreateLogger(Path.GetFileNameWithoutExtension(pluginPath));
-        _pluginFolder = Path.GetFullPath(pluginPath);
+        var context = new PluginAssemblyLoadContext(folder);
         foreach (
             var file in Directory.EnumerateFiles(
-                pluginPath,
-                nugetPluginName + "*.dll",
+                folder,
+                $"{assemblyPrefix}*.dll",
                 SearchOption.AllDirectories
             )
         )
         {
-            var fullPath = Path.GetFullPath(file);
-            try
-            {
-                containerCfg.Add(LoadFromAssemblyPath(fullPath));
-            }
-            catch (Exception e)
-            {
-                _logger.ZLogError(e, $"Error load plugin assembly {fullPath}");
-            }
+            assembyRegistry.Add(context.LoadFromAssemblyPath(Path.GetFullPath(file)));
         }
+        return context;
     }
+    
+    private readonly string _pluginFolder = Path.GetFullPath(pluginPath);
 
     protected override Assembly? Load(AssemblyName assemblyName)
     {
@@ -67,10 +51,8 @@ public class PluginAssemblyLoadContext : AssemblyLoadContext
             )
         )
         {
+            
             var fullPath = Path.GetFullPath(file);
-            _logger.ZLogInformation(
-                $"Load assembly '{assemblyName.Name}' from plugin folder {fullPath}"
-            );
             return LoadFromAssemblyPath(fullPath);
         }
 

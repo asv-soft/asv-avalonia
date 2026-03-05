@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.IO;
 using Asv.Avalonia.Plugins;
@@ -70,7 +71,10 @@ sealed class Program
                         options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
                     })
                     .UseDesktopShell()
-                    .UseModulePlugins()
+                    .UseModulePlugins(configure =>
+                    {
+                        configure.WithApiPackage(typeof(Command1).Assembly);
+                    })
                     .UseModuleGeoMap()
                     .UseModuleIo()
                     .UseExample();

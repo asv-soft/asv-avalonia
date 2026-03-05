@@ -1,16 +1,6 @@
 ﻿using Asv.Avalonia.Plugins;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
-public class PluginEntryPoint : IPluginEntryPoint
-{
-    public void Initialize()
-    {
-        throw new NotImplementedException();
-    }
 
-    public void OnFrameworkInitializationCompleted()
-    {
-        throw new NotImplementedException();
-    }
-}

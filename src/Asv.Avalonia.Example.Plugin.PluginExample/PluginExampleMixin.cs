@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Asv.Avalonia.Plugins;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
@@ -10,8 +11,16 @@ public static class PluginExampleMixin
         {
             builder.Shell.Pages.Register<HomePageViewModel, HomePageView>(HomePageViewModel.PageId);
             builder.Commands.Register<OpenExamplePageCommand>();
-            builder.Shell.Pages.Home.RegisterExtension<HomePagePluginExtension>();
+            builder.Shell.Pages.Home.UseExtension<HomePagePluginExtension>();
             return builder;
         }
+    }
+}
+
+public class PluginEntryPoint : IPluginAppBuilder
+{
+    public void Register(IHostApplicationBuilder builder)
+    {
+        builder.UsePluginExample();
     }
 }

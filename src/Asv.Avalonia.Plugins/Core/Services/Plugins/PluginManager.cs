@@ -226,10 +226,7 @@ public class PluginManager : IPluginManager
                 );
                 _pluginContexts.Add(
                     new PluginAssemblyLoadContext(
-                        info.LocalFolder,
-                        options.Value.NugetPluginPrefix,
-                        _assemblies,
-                        _loggerFactory
+                        info.LocalFolder
                     )
                 );
                 SetPluginStateByFolder(

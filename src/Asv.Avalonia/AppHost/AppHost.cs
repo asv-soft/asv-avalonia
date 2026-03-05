@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Avalonia;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.Metrics;
 using Microsoft.Extensions.Hosting;
@@ -29,9 +30,11 @@ public static class AppHost
 
     #endregion
 
+    
+    
     #region Builder
 
-    public static Builder CreateBuilder()
+    public static Builder CreateBuilder(HostApplicationBuilderSettings? settings = null)
     {
         if (_instance != null)
         {
@@ -39,10 +42,11 @@ public static class AppHost
                 $"{nameof(AppHost)} already configured. Only one instance allowed."
             );
         }
-
-        var builder = Host.CreateApplicationBuilder(
-            new HostApplicationBuilderSettings { Args = Environment.GetCommandLineArgs() }
-        );
+        settings ??= new HostApplicationBuilderSettings
+        {
+            Args = Environment.GetCommandLineArgs(),
+        };
+        var builder = Host.CreateApplicationBuilder(settings);
 
         return new Builder(builder);
     }
@@ -51,6 +55,7 @@ public static class AppHost
     {
         private readonly HostApplicationBuilder _originBuilder;
         private readonly IHostApplicationBuilder _ifcBuilder;
+        private const string PostConfigureCallbackKey = "PostConfigureCallback";
 
         internal Builder(HostApplicationBuilder originBuilder)
         {
@@ -71,7 +76,7 @@ public static class AppHost
         public ILoggingBuilder Logging => _ifcBuilder.Logging;
         public IMetricsBuilder Metrics => _ifcBuilder.Metrics;
         public IServiceCollection Services => _ifcBuilder.Services;
-
+        
         public IHost Build()
         {
             if (_instance != null)
@@ -80,12 +85,14 @@ public static class AppHost
                     $"{nameof(AppHost)} already configured. Only one instance allowed."
                 );
             }
+            _originBuilder.ExecutePostConfigureCallbacks();
             return _instance = _originBuilder.Build();
         }
     }
 
     #endregion
 
+ 
     public static void HandleApplicationCrash(Exception e)
     {
         _instance
