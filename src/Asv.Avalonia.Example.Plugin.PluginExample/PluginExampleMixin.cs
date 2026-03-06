@@ -1,4 +1,6 @@
 ﻿using Asv.Avalonia.Plugins;
+using Asv.Cfg;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia.Example.Plugin.PluginExample;

@@ -50,16 +50,8 @@ sealed class Program
             {
                 builder
                     .UseDefault()
-                    .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-                    .UseSoloRun(opt => opt.WithArgumentForwarding())
-                    .UseLogging(options =>
-                    {
-                        options.WithLogToFile(Path.Combine("data", "logs"));
-                        options.WithLogToConsole();
-                        options.WithLogViewer();
-                        options.WithLogLevel(LogLevel.Trace);
-                    })
-                    .UseLogReaderService(new LogToFileOptions(Path.Combine("data", "logs")))
+                    .UseOptionalLogViewer()
+                    .UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
                     .UsePluginManager(options =>
                     {
                         options.WithApiPackage(

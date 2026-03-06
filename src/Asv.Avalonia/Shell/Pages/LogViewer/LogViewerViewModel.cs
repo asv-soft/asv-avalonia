@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Threading;
 using Material.Icons;
@@ -150,6 +151,7 @@ public class LogViewerViewModel
         ISearchService search,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
+        IConfiguration cfg,
         IExtensionService ext
     )
         : base(PageId, cmd, loggerFactory, dialogService, ext)

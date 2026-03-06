@@ -8,12 +8,12 @@ public interface IAppInfo
     string Name { get; }
 
     /// <summary>
-    /// Application description.
+    /// Gets application description.
     /// </summary>
     string Description { get; }
 
     /// <summary>
-    /// Gets application version.
+    /// Gets an application version.
     /// </summary>
     string Version { get; }
 

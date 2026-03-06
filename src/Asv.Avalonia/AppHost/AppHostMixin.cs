@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ZLogger;
 
 namespace Asv.Avalonia;
 
@@ -77,7 +78,27 @@ public static class AppHostMixin
         public IHostApplicationBuilder UseDefault()
         {
             builder.Logging.ClearProviders();
+            builder.Logging.AddZLoggerConsole(options =>
+            {
+                options.IncludeScopes = true;
+                options.OutputEncodingToUtf8 = false;
+                options.UsePlainTextFormatter(formatter =>
+                {
+                    formatter.SetPrefixFormatter(
+                        $"{0:HH:mm:ss.fff} | {3:00} | ={1:short}= | {2, -40} ",
+                        (in template, in info) =>
+                            template.Format(
+                                info.Timestamp,
+                                info.LogLevel,
+                                info.Category,
+                                Environment.CurrentManagedThreadId
+                            )
+                    );
+                });
+            });
+            
             return builder
+                .UseAppInfo()
                 .UseJsonUserConfig()
                 .UseTimeProvider()
                 .UseThemeService()

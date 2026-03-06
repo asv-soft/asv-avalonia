@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public static class SoloRunFeatureMixin
 {
-    public static IHostApplicationBuilder UseSoloRun(
+    public static IHostApplicationBuilder UseOptionalSoloRun(
         this IHostApplicationBuilder builder,
         Action<SoloRunFeatureBuilder>? configure = null
     )

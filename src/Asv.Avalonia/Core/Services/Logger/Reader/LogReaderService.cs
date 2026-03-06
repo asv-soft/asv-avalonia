@@ -5,13 +5,20 @@ using Newtonsoft.Json;
 
 namespace Asv.Avalonia;
 
+public class LogReaderOptions
+{
+    public const string Section = "LogViewer";
+    public int RollingSizeKb { get; set; } = 50;
+    public string Folder { get; set; } = "logs";
+}
+
 public class LogReaderService : ILogReaderService
 {
     private static readonly JsonSerializer Serializer = new();
 
     private readonly string _logsFolder;
 
-    public LogReaderService(LogToFileOptions options)
+    public LogReaderService(LogReaderOptions options)
     {
         _logsFolder = options.Folder;
         ArgumentNullException.ThrowIfNull(_logsFolder);
@@ -21,8 +28,15 @@ public class LogReaderService : ILogReaderService
         [EnumeratorCancellation] CancellationToken cancel = default
     )
     {
-        await foreach (var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs").Order())
+        var result = new Stack<LogMessage>();
+        await foreach (var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs").OrderDescending())
         {
+            result.Clear();
+            if (cancel.IsCancellationRequested)
+            {
+                break;
+            }
+            
             await using var fs = new FileStream(
                 logFilePath,
                 FileMode.Open,
@@ -34,7 +48,7 @@ public class LogReaderService : ILogReaderService
             using var sr = new StreamReader(fs, Encoding.UTF8, true, 64 * 1024, true);
 
             var rdr = new JsonTextReader(sr) { SupportMultipleContent = true };
-
+            
             while (
                 !cancel.IsCancellationRequested && await rdr.ReadAsync(cancel).ConfigureAwait(false)
             )
@@ -47,9 +61,14 @@ public class LogReaderService : ILogReaderService
                 var item = Serializer.Deserialize<LogMessage>(rdr);
                 if (item is not null)
                 {
-                    yield return item;
+                    result.Push(item);
                 }
             }
+        }
+
+        foreach (var logMessage in result)
+        {
+            yield return logMessage;
         }
     }
 }

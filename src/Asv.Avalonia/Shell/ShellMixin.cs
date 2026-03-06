@@ -66,7 +66,7 @@ public static class ShellMixin
         {
             MainMenu.UseDefault();
             Status.UseNavigationStatus();
-            Pages.UseDefaultHomePage().UseSettingsPage().UseLogViewerPage();
+            Pages.UseDefaultHomePage().UseSettingsPage();
             return this;
         }
     }

@@ -14,6 +14,14 @@ public static class ServiceCollectionExtensions
         return services;
     }
     
+    public static IServiceCollection ReplaceSingleton<TService>(
+        this IServiceCollection services, TService service)
+        where TService : class
+    {
+        services.Replace(ServiceDescriptor.Singleton(service));
+        return services;
+    }
+    
     public static bool IsRegistered<T>(this IServiceCollection services)
         => services.Any(sd => sd.ServiceType == typeof(T));
 
