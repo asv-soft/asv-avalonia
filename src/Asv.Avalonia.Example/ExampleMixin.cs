@@ -10,7 +10,7 @@ public static class ExampleMixin
 {
     extension(IHostApplicationBuilder builder)
     {
-        public IHostApplicationBuilder UseExample(Action<Builder>? configure = null)
+        public IHostApplicationBuilder UseExampleApp(Action<Builder>? configure = null)
         {
             configure ??= b => b.UseDefault();
             configure(new Builder(builder));

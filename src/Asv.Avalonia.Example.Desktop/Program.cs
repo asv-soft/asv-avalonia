@@ -26,6 +26,8 @@ sealed class Program
         {
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            AppHost.Instance.StopAsync().GetAwaiter().GetResult();
+            AppHost.Instance.Dispose();
         }
         catch (Exception e)
         {
@@ -49,10 +51,6 @@ sealed class Program
                 builder
                     .UseDefault()
                     .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-                    .UseAppPath(config => config.WithRelativeFolder("data"))
-                    .UseJsonUserConfig(opt =>
-                        opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
-                    )
                     .UseSoloRun(opt => opt.WithArgumentForwarding())
                     .UseLogging(options =>
                     {
@@ -75,12 +73,12 @@ sealed class Program
                     {
                         configure
                             .WithApiPackage(typeof(Command1).Assembly)
-                            .UseInstalled()
-                            ;
+                            .UseOptionalInstalled() // register installed plugins page
+                            .UseOptionalMarket();   // register market plugins page
                     })
                     .UseModuleGeoMap()
                     .UseModuleIo()
-                    .UseExample();
+                    .UseExampleApp();
             });
     }
 }

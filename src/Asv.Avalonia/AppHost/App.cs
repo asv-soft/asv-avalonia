@@ -50,7 +50,6 @@ public class AsvApplication : Application
 
     public void Dispose()
     {
-        AppHost.Instance.Dispose();
         GC.SuppressFinalize(this);
     }
 }

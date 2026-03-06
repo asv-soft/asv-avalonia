@@ -5,6 +5,7 @@ using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -22,10 +23,10 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     public const string LayoutFolder = "layouts.json";
 
-    public LayoutService(IAppPath path, ILoggerFactory loggerFactory)
+    public LayoutService(IHostEnvironment path, ILoggerFactory loggerFactory)
     {
         _logger = loggerFactory.CreateLogger<LayoutService>();
-        var filePath = Path.Combine(path.UserDataFolder, LayoutFolder);
+        var filePath = Path.Combine(path.ContentRootPath, LayoutFolder);
         _cfg = new JsonOneFileConfiguration(
             filePath,
             true,

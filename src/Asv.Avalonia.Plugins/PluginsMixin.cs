@@ -33,7 +33,7 @@ public static class PluginsMixin
     {
         public Builder UseDefault()
         {
-            return UseMarket().UseInstalled();
+            return UseOptionalMarket().UseOptionalInstalled();
         }
         
         public Builder WithApiPackage(Assembly assembly)
@@ -61,7 +61,7 @@ public static class PluginsMixin
         
         public PluginBootloaderOptions Options => pluginOptions;
 
-        public Builder UseMarket()
+        public Builder UseOptionalMarket()
         {
             builder.Shell.Pages.Home.UseExtension<HomePagePluginsMarketExtension>();
             
@@ -83,7 +83,7 @@ public static class PluginsMixin
 
         public IHostApplicationBuilder Parent => builder;
 
-        public Builder UseInstalled()
+        public Builder UseOptionalInstalled()
         {
             builder.Shell.Pages.Register<InstalledPluginsPageViewModel, InstalledPluginsPageView>(
                 InstalledPluginsPageViewModel.PageId

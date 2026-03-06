@@ -6,8 +6,9 @@ namespace Asv.Avalonia;
 
 public class UserConfigurationOptions
 {
+    public const string SectionName = "UserConfiguration";
     public string FilePath { get; set; } = "user_settings.json";
-    public int AutoSaveMs { get; set; } = 0;
+    public int AutoSaveMs { get; set; } = 500;
 }
 
 public class UserJsonConfiguration : JsonOneFileConfiguration

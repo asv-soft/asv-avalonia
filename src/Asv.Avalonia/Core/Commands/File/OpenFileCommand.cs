@@ -1,5 +1,6 @@
 using Asv.Cfg;
 using Material.Icons;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
@@ -11,7 +12,7 @@ public class FileCommandConfig
 public class OpenFileCommand(
     IFileAssociationService svc,
     IDialogService dialogs,
-    IAppPath path,
+    IHostEnvironment path,
     IConfiguration config
 ) : StatelessCommand<EmptyArg, DictArg>
 {
@@ -97,7 +98,7 @@ public class OpenFileCommand(
 
         if (filePath == null)
         {
-            var lastDirectory = path.UserDataFolder;
+            var lastDirectory = path.ContentRootPath;
             var cfg = config.Get<FileCommandConfig>();
             if (cfg.LastDirectory != null && Directory.Exists(cfg.LastDirectory))
             {

@@ -1,5 +1,6 @@
 using System.Reflection;
 using Asv.Common;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia.Plugins;
@@ -117,12 +118,12 @@ public class PluginManagerBuilder
     )
     {
         return options.Configure(
-            (PluginManagerOptions config, IAppPath path) =>
+            (PluginManagerOptions config, IHostEnvironment path) =>
             {
-                config.PluginDirectory = Path.Combine(path.UserDataFolder, _relativePluginFolder);
-                config.NugetDirectory = Path.Combine(path.UserDataFolder, _relativeNugetFolder);
+                config.PluginDirectory = Path.Combine(path.ContentRootPath, _relativePluginFolder);
+                config.NugetDirectory = Path.Combine(path.ContentRootPath, _relativeNugetFolder);
                 config.NugetCacheDirectory = Path.Combine(
-                    path.UserDataFolder,
+                    path.ContentRootPath,
                     _relativeNugetCacheFolder
                 );
                 config.ApiVersion = _apiVersion.ToString();

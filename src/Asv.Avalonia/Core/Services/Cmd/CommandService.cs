@@ -4,6 +4,7 @@ using Asv.Cfg;
 using Asv.Common;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -28,14 +29,14 @@ public class CommandService : AsyncDisposableOnce, ICommandService
     private readonly IDisposable _disposeId;
     private readonly Subject<CommandSnapshot> _onCommand;
     private KeyGesture? _prevKeyGesture;
-    private readonly IAppPath _path;
+    private readonly IHostEnvironment _path;
     private readonly Subject<HotKeyInfo> _hotKeySubject;
     private readonly ReactiveProperty<bool> _isHotKeyRecognitionEnabled;
 
     public CommandService(
         INavigationService nav,
         IConfiguration cfg,
-        IAppPath path,
+        IHostEnvironment path,
         IEnumerable<IAsyncCommand> factories,
         ILoggerFactory loggerFactory
     )

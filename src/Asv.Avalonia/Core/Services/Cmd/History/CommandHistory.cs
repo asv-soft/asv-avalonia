@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -20,7 +21,7 @@ public class CommandHistory : ICommandHistory
     public CommandHistory(
         IRoutable? historyOwner,
         ICommandService cmd,
-        IAppPath path,
+        IHostEnvironment path,
         ILoggerFactory loggerFactory
     )
     {
@@ -29,7 +30,7 @@ public class CommandHistory : ICommandHistory
         ArgumentNullException.ThrowIfNull(loggerFactory);
         _logger = loggerFactory.CreateLogger<CommandHistory>();
         _cmd = cmd;
-        _historyFolder = Path.Combine(path.UserDataFolder, DefaultHistoryFolderName);
+        _historyFolder = Path.Combine(path.ContentRootPath, DefaultHistoryFolderName);
         if (!Directory.Exists(_historyFolder))
         {
             Directory.CreateDirectory(_historyFolder);

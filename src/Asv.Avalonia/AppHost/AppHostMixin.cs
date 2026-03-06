@@ -33,7 +33,11 @@ public static class AppHostMixin
             {
                 asvBuilder.ReplaceForDesignTime();
             }
-            avaloniaBuilder.AfterPlatformServicesSetup(_ => asvBuilder.Build());
+            avaloniaBuilder.AfterPlatformServicesSetup(_ =>
+            {
+                var host = asvBuilder.Build();
+                host.StartAsync().GetAwaiter().GetResult();
+            });
             return avaloniaBuilder;
         }
     }
@@ -74,6 +78,7 @@ public static class AppHostMixin
         {
             builder.Logging.ClearProviders();
             return builder
+                .UseJsonUserConfig()
                 .UseTimeProvider()
                 .UseThemeService()
                 .UseSearchService()

@@ -6,25 +6,36 @@ namespace Asv.Avalonia;
 
 public static class UserConfigMixin
 {
-    public static IHostApplicationBuilder UseInMemoryConfig(this IHostApplicationBuilder builder)
+    extension(IHostApplicationBuilder builder)
     {
-        var config = new InMemoryConfiguration();
-        builder.Services.AddSingleton<IConfiguration, InMemoryConfiguration>();
-        return builder;
+        public IHostApplicationBuilder UseJsonUserConfig(Action<Builder>? configure = null)
+        {
+            configure ??= (b) => b.UseDefault();
+            configure(new Builder(builder));
+            return builder;
+        }
     }
-
-    public static IHostApplicationBuilder UseJsonUserConfig(
-        this IHostApplicationBuilder builder,
-        Action<UserJsonConfigurationBuilder>? configure = null
-    )
+    
+    public class Builder(IHostApplicationBuilder builder)
     {
-        var config = new UserJsonConfigurationBuilder();
-        configure?.Invoke(config);
-        var options = builder
-            .Services.AddSingleton<IConfiguration, UserJsonConfiguration>()
-            .AddOptions<UserConfigurationOptions>()
-            .Bind(builder.Configuration);
-        config.Build(options);
-        return builder;
+        public void UseDefault()
+        {
+            UseJsonConfig();
+        }
+
+        public Builder UseJsonConfig()
+        {
+            builder
+                .Services.AddSingleton<IConfiguration, UserJsonConfiguration>()
+                .AddOptions<UserConfigurationOptions>()
+                .BindConfiguration(UserConfigurationOptions.SectionName);
+            return this;
+        }
+        
+        public Builder UseInMemoryConfig()
+        {
+            builder.Services.AddSingleton<IConfiguration, InMemoryConfiguration>();
+            return this;
+        }
     }
 }

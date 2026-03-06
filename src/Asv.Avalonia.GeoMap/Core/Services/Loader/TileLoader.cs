@@ -204,7 +204,8 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     protected override async ValueTask DisposeAsyncCore()
     {
         await _fastCache.DisposeAsync();
-        await _slowCache.DisposeAsync();
+        
+        //await _slowCache.DisposeAsync();
         await CastAndDispose(_localRequests);
         await CastAndDispose(_onLoaded);
         await CastAndDispose(_httpClient);

@@ -1,12 +1,13 @@
 using Asv.Cfg;
 using Material.Icons;
+using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
 public class CreateFileCommand(
     IFileAssociationService svc,
     IDialogService dialogs,
-    IAppPath path,
+    IHostEnvironment path,
     IConfiguration config
 ) : StatelessCommand<DictArg>
 {
@@ -101,7 +102,7 @@ public class CreateFileCommand(
             {
                 dialogTitle = titleArg.Value;
             }
-            var lastDirectory = path.UserDataFolder;
+            var lastDirectory = path.ContentRootPath;
             var cfg = config.Get<FileCommandConfig>();
             if (cfg.LastDirectory != null && Directory.Exists(cfg.LastDirectory))
             {

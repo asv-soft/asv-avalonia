@@ -2,6 +2,7 @@ using System.Windows.Input;
 using Asv.Cfg;
 using Avalonia.Controls;
 using Material.Icons;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using ObservableCollections;
@@ -293,8 +294,6 @@ public static class DesignTime
     public static ILogReaderService LogReaderService => NullLogReaderService.Instance;
     public static ICommandService CommandService => NullCommandService.Instance;
     public static IFileAssociationService FileAssociation => NullFileAssociationService.Instance;
-
-    public static IAppPath AppPath => NullAppPath.Instance;
     public static IAppInfo AppInfo => NullAppInfo.Instance;
 
     /// <summary>

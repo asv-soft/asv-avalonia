@@ -29,8 +29,6 @@ public static class AppHost
     }
 
     #endregion
-
-    
     
     #region Builder
 
@@ -91,7 +89,6 @@ public static class AppHost
     }
 
     #endregion
-
  
     public static void HandleApplicationCrash(Exception e)
     {
