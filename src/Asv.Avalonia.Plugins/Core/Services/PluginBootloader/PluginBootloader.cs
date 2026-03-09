@@ -28,22 +28,28 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
     private readonly List<Assembly> _pluginAssemblies = [];
     private List<ILocalPluginInfo> _info = [];
 
-    public PluginBootloader(
-        IOptions<PluginBootloaderOptions> options,
-        IHostEnvironment environment)
+    public PluginBootloader(IOptions<PluginBootloaderOptions> options, IHostEnvironment environment)
     {
-        _apiPackageId = options.Value.ApiPackageName ?? throw new InvalidOperationException(
-            $"ApiPackageName is required in {PluginBootloaderOptions.SectionName} configuration section"
-        );
-        var apiString = options.Value.ApiVersion ?? throw new InvalidOperationException(
-            $"ApiVersion is required in {PluginBootloaderOptions.SectionName} configuration section"
-        );
+        _apiPackageId =
+            options.Value.ApiPackageName
+            ?? throw new InvalidOperationException(
+                $"ApiPackageName is required in {PluginBootloaderOptions.SectionName} configuration section"
+            );
+        var apiString =
+            options.Value.ApiVersion
+            ?? throw new InvalidOperationException(
+                $"ApiVersion is required in {PluginBootloaderOptions.SectionName} configuration section"
+            );
         _apiVersion = SemVersion.Parse(apiString);
-        _assemblyPluginPrefix = options.Value.PluginAssemblyPrefix ?? throw new InvalidOperationException(
-            $"PluginAssemblyPrefix is required in {PluginBootloaderOptions.SectionName} configuration section"
+        _assemblyPluginPrefix =
+            options.Value.PluginAssemblyPrefix
+            ?? throw new InvalidOperationException(
+                $"PluginAssemblyPrefix is required in {PluginBootloaderOptions.SectionName} configuration section"
+            );
+
+        var relativeFolder = Path.GetFullPath(
+            Path.Combine(environment.ContentRootPath, options.Value.RelativeFolder)
         );
-        
-        var relativeFolder = Path.GetFullPath(Path.Combine(environment.ContentRootPath, options.Value.RelativeFolder));
         if (Directory.Exists(relativeFolder))
         {
             foreach (
@@ -57,7 +63,7 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
                 ProcessPluginFolder(dir);
             }
         }
-        
+
         if (options.Value.AdditionalFolderPerPlugin != null)
         {
             foreach (var absolutePath in options.Value.AdditionalFolderPerPlugin.Distinct())
@@ -67,12 +73,12 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
                 {
                     continue;
                 }
-                
+
                 ProcessPluginFolder(fullPath);
             }
         }
     }
-    
+
     public SemVersion ApiVersion => _apiVersion;
     public IEnumerable<ILocalPluginInfo> Installed => _info;
 
@@ -94,7 +100,9 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
             _info.Add(info);
             if (info.ApiVersion.CompareByPrecedence(_apiVersion) != 0)
             {
-                PluginState.Edit(folder, x =>
+                PluginState.Edit(
+                    folder,
+                    x =>
                     {
                         x.IsLoaded = false;
                         x.LoadingError =
@@ -103,7 +111,11 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
                 );
                 return;
             }
-            var context = PluginAssemblyLoadContext.Create(folder, _assemblyPluginPrefix, _pluginAssemblies);
+            var context = PluginAssemblyLoadContext.Create(
+                folder,
+                _assemblyPluginPrefix,
+                _pluginAssemblies
+            );
             _pluginContexts.Add(context);
         }
         catch (Exception e)
@@ -124,19 +136,24 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
 
         if (package.Length > 1)
         {
-            throw new Exception($"Find more than one package in folder {folder}: {string.Join(",", package)}");       
+            throw new Exception(
+                $"Find more than one package in folder {folder}: {string.Join(",", package)}"
+            );
         }
-        
+
         var state = PluginState.Read(folder);
         if (state == null)
         {
-            state = PluginState.Write(folder, new PluginState
-            {
-                IsLoaded = false,
-                LoadingError = null,
-                IsUninstalled = false,
-                InstalledFromSourceUri = new Uri(folder).ToString(),
-            });       
+            state = PluginState.Write(
+                folder,
+                new PluginState
+                {
+                    IsLoaded = false,
+                    LoadingError = null,
+                    IsUninstalled = false,
+                    InstalledFromSourceUri = new Uri(folder).ToString(),
+                }
+            );
         }
         Debug.Assert(state != null, nameof(state) + " != null");
         using var reader = new PackageArchiveReader(package[0]);
@@ -149,11 +166,16 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
         {
             try
             {
-                foreach (var pluginAppBuilder in assembly.GetTypes()
-                             .Where(t => typeof(IPluginAppBuilder).IsAssignableFrom(t) &&
-                                         t is { IsClass: true, IsAbstract: false })
-                             .Select(t => Activator.CreateInstance(t) as IPluginAppBuilder)
-                             .Where(p => p != null))
+                foreach (
+                    var pluginAppBuilder in assembly
+                        .GetTypes()
+                        .Where(t =>
+                            typeof(IPluginAppBuilder).IsAssignableFrom(t)
+                            && t is { IsClass: true, IsAbstract: false }
+                        )
+                        .Select(t => Activator.CreateInstance(t) as IPluginAppBuilder)
+                        .Where(p => p != null)
+                )
                 {
                     pluginAppBuilder?.Register(builder);
                 }
@@ -162,6 +184,6 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
             {
                 ExceptionReport.WriteToFile(assembly.Location, e, out _);
             }
-        }            
+        }
     }
 }

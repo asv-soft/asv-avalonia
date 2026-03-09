@@ -56,6 +56,7 @@ public static class AppHostMixin
                 builder.Properties.Remove(PostConfigureCallbackKey);
             }
         }
+
         public void AddPostConfigureCallbacks(Action<IHostApplicationBuilder> action)
         {
             if (builder.Properties.TryGetValue(PostConfigureCallbackKey, out var callback))
@@ -65,13 +66,15 @@ public static class AppHostMixin
             }
             else
             {
-                builder.Properties[PostConfigureCallbackKey] = new List<Action<IHostApplicationBuilder>>
+                builder.Properties[PostConfigureCallbackKey] = new List<
+                    Action<IHostApplicationBuilder>
+                >
                 {
                     action,
                 };
             }
         }
-        
+
         public bool IsDesignTimeEnvironment =>
             builder.Environment.EnvironmentName == DesignTimeEnvironmentName;
 
@@ -96,7 +99,7 @@ public static class AppHostMixin
                     );
                 });
             });
-            
+
             return builder
                 .UseAppInfo()
                 .UseJsonUserConfig()

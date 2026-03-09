@@ -5,15 +5,15 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-
-
 public static class LogReaderMixin
 {
     extension(IHostApplicationBuilder builder)
     {
         public IHostApplicationBuilder UseOptionalLogViewer(Action<Builder>? configure = null)
         {
-            var logReaderOptions = builder.Configuration.GetSection(LogReaderOptions.Section).Get<LogReaderOptions>() ?? new LogReaderOptions();
+            var logReaderOptions =
+                builder.Configuration.GetSection(LogReaderOptions.Section).Get<LogReaderOptions>()
+                ?? new LogReaderOptions();
             configure ??= x => x.UseDefault();
             var logReaderBuilder = new Builder(builder, logReaderOptions);
             configure.Invoke(logReaderBuilder);
@@ -24,11 +24,11 @@ public static class LogReaderMixin
                 options.UseJsonFormatter();
                 options.RollingSizeKB = logReaderOptions.RollingSizeKb;
             });
-            
+
             builder.Services.AddSingleton<ILogReaderService, LogReaderService>();
             builder.Services.AddSingleton(logReaderOptions);
             builder.Shell.Pages.UseLogViewerPage();
-            
+
             return builder;
         }
 
@@ -38,7 +38,7 @@ public static class LogReaderMixin
             return builder;
         }
     }
-    
+
     public class Builder(IHostApplicationBuilder builder, LogReaderOptions options)
     {
         public void UseDefault()
@@ -52,7 +52,7 @@ public static class LogReaderMixin
             ArgumentNullException.ThrowIfNull(logs);
             options.Folder = logs;
         }
-        
+
         private void WithRollingSizeKb(int rollingSizeKb)
         {
             options.RollingSizeKb = rollingSizeKb;

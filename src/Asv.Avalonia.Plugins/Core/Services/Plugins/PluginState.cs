@@ -6,13 +6,15 @@ namespace Asv.Avalonia.Plugins;
 public class PluginState
 {
     private const string PluginStateFileName = "__PLUGIN_STATE__";
-    
+
     public static PluginState? Read(string folder)
     {
         var stateFilePath = Path.Combine(folder, PluginStateFileName);
-        return !File.Exists(stateFilePath) ? null : JsonConvert.DeserializeObject<PluginState>(File.ReadAllText(stateFilePath));
+        return !File.Exists(stateFilePath)
+            ? null
+            : JsonConvert.DeserializeObject<PluginState>(File.ReadAllText(stateFilePath));
     }
-    
+
     public static PluginState Write(string folder, PluginState state)
     {
         var stateFilePath = Path.Combine(folder, PluginStateFileName);
@@ -30,7 +32,7 @@ public class PluginState
         edit(state);
         Write(folder, state);
     }
-    
+
     public bool IsUninstalled { get; set; }
     public bool IsLoaded { get; set; }
     public string? LoadingError { get; set; }

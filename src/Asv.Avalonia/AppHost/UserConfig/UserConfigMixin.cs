@@ -15,7 +15,7 @@ public static class UserConfigMixin
             return builder;
         }
     }
-    
+
     public class Builder(IHostApplicationBuilder builder)
     {
         public void UseDefault()
@@ -31,7 +31,7 @@ public static class UserConfigMixin
                 .BindConfiguration(UserConfigurationOptions.SectionName);
             return this;
         }
-        
+
         public Builder UseInMemoryConfig()
         {
             builder.Services.AddSingleton<IConfiguration, InMemoryConfiguration>();

@@ -11,20 +11,22 @@ namespace Asv.Avalonia.Plugins;
 
 public static class PluginsMixin
 {
-   
     extension(IHostApplicationBuilder builder)
     {
         public IHostApplicationBuilder UseModulePlugins(Action<Builder>? configure = null)
         {
             // we need to create bootloader before service configured
             // cause plugin may want to build or replace some Services
-            var pluginOptions = builder.Configuration.GetSection(PluginBootloaderOptions.SectionName).Get<PluginBootloaderOptions>() ??
-                                new PluginBootloaderOptions();
+            var pluginOptions =
+                builder
+                    .Configuration.GetSection(PluginBootloaderOptions.SectionName)
+                    .Get<PluginBootloaderOptions>()
+                ?? new PluginBootloaderOptions();
             configure ??= b => b.UseDefault();
             configure(new Builder(builder, pluginOptions));
             var loader = new PluginBootloader(Options.Create(pluginOptions), builder.Environment);
             builder.Services.AddSingleton<IPluginBootloader>(loader);
-            builder.AddPostConfigureCallbacks(builder => loader.InitPlugins(builder) );
+            builder.AddPostConfigureCallbacks(builder => loader.InitPlugins(builder));
             return builder;
         }
     }
@@ -35,11 +37,12 @@ public static class PluginsMixin
         {
             return UseOptionalMarket().UseOptionalInstalled();
         }
-        
+
         public Builder WithApiPackage(Assembly assembly)
         {
             ArgumentNullException.ThrowIfNull(assembly);
-            Options.ApiPackageName = assembly.GetName().Name ?? throw new InvalidOperationException();
+            Options.ApiPackageName =
+                assembly.GetName().Name ?? throw new InvalidOperationException();
             var attributes = assembly.GetCustomAttributes(
                 typeof(AssemblyInformationalVersionAttribute),
                 false
@@ -58,23 +61,20 @@ public static class PluginsMixin
 
             return this;
         }
-        
+
         public PluginBootloaderOptions Options => pluginOptions;
 
         public Builder UseOptionalMarket()
         {
             builder.Shell.Pages.Home.UseExtension<HomePagePluginsMarketExtension>();
-            
+
             builder.Commands.Register<OpenPluginsMarketCommand>();
             builder.Shell.Pages.Settings.AddSubPage<
                 SettingsPluginsSourcesViewModel,
                 SettingsPluginsSourcesView,
                 SettingsPluginsTreePageMenu
             >(SettingsPluginsSourcesViewModel.PageId);
-            builder.ViewLocator.RegisterViewFor<
-                SourceDialogViewModel,
-                SourceDialogView
-            >();
+            builder.ViewLocator.RegisterViewFor<SourceDialogViewModel, SourceDialogView>();
             builder.Shell.Pages.Register<PluginsMarketPageViewModel, PluginsMarketPageView>(
                 PluginsMarketPageViewModel.PageId
             );
@@ -89,7 +89,7 @@ public static class PluginsMixin
                 InstalledPluginsPageViewModel.PageId
             );
             builder.Shell.Pages.Home.UseExtension<HomePageInstalledPluginsExtension>();
-            
+
             builder.Commands.Register<OpenInstalledPluginsCommand>();
             return this;
         }

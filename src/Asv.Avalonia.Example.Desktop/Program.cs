@@ -66,7 +66,7 @@ sealed class Program
                         configure
                             .WithApiPackage(typeof(Command1).Assembly)
                             .UseOptionalInstalled() // register installed plugins page
-                            .UseOptionalMarket();   // register market plugins page
+                            .UseOptionalMarket(); // register market plugins page
                     })
                     .UseModuleGeoMap()
                     .UseModuleIo()

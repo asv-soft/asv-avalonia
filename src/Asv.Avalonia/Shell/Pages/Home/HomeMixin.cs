@@ -32,12 +32,19 @@ public static class HomeMixin
             return this;
         }
 
-        public Builder RegisterTool<TActionViewModel>()
+        public Builder UseTool<TActionViewModel>()
             where TActionViewModel : class, IActionViewModel
         {
             builder.Parent.Parent.Services.AddKeyedTransient<IActionViewModel, TActionViewModel>(
                 HomePageDefaultToolsExtension.Contract
             );
+            return this;
+        }
+
+        public Builder UseItemExtension<TExtension>()
+            where TExtension : class, IExtensionFor<IHomePageItem>
+        {
+            builder.Parent.Parent.Services.AddTransient<IExtensionFor<IHomePageItem>, TExtension>();
             return this;
         }
     }

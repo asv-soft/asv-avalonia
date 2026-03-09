@@ -173,7 +173,10 @@ public static class AppInfoMixin
 
         public Builder WithProductDescriptionFrom(Assembly assembly)
         {
-            var attributes = assembly.GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
+            var attributes = assembly.GetCustomAttributes(
+                typeof(AssemblyDescriptionAttribute),
+                false
+            );
 
             ArgumentNullException.ThrowIfNull(attributes);
             if (attributes.Length != 0)
