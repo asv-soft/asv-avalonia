@@ -18,7 +18,12 @@ public class PluginInfoViewModel : RoutableViewModel
     private ILocalPluginInfo? _localInfo;
 
     public PluginInfoViewModel()
-        : this(NullPluginSearchInfo.Instance, NullPluginManager.Instance, NullPluginBootloader.Instance, DesignTime.LoggerFactory)
+        : this(
+            NullPluginSearchInfo.Instance,
+            NullPluginManager.Instance,
+            NullPluginBootloader.Instance,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }

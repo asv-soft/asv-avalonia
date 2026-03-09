@@ -136,7 +136,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                             await response.Content.LoadIntoBufferAsync();
                             contentLength = stream.Length;
                         }
-                        
+
                         tile = Tile.Create(key, stream, (int)contentLength);
                     }
                     finally
@@ -162,6 +162,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     }
 
     public ReactiveProperty<IBrush> EmptyTileBrush { get; }
+
     public void Render(DrawingContext context, double x, double y, TileKey key)
     {
         _meterReq.Add(1);
@@ -175,7 +176,11 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         {
             _requestQueue.Writer.TryWrite(key);
         }
-        context.DrawRectangle(EmptyTileBrush.Value, null,  new Rect(x, y, key.Provider.TileSize, key.Provider.TileSize));
+        context.DrawRectangle(
+            EmptyTileBrush.Value,
+            null,
+            new Rect(x, y, key.Provider.TileSize, key.Provider.TileSize)
+        );
     }
 
     public Observable<TileKey> OnLoaded => _onLoaded;
@@ -204,7 +209,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     protected override async ValueTask DisposeAsyncCore()
     {
         await _fastCache.DisposeAsync();
-        
+
         //await _slowCache.DisposeAsync();
         await CastAndDispose(_localRequests);
         await CastAndDispose(_onLoaded);

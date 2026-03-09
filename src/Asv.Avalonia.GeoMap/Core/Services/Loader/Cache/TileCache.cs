@@ -85,11 +85,7 @@ public abstract class TileCache : AsyncDisposableWithCancel, ITileCache
 
     protected abstract Tile? GetBitmap(TileKey key);
 
-    protected void SafeBitmapAction(
-        TileKey key,
-        Tile arg,
-        Action<TileKey, Tile> action
-    )
+    protected void SafeBitmapAction(TileKey key, Tile arg, Action<TileKey, Tile> action)
     {
         _lock.Execute(key, key, arg, action);
     }

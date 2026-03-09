@@ -5,7 +5,11 @@ namespace Asv.Avalonia.Plugins;
 
 public class PluginAssemblyLoadContext(string pluginPath) : AssemblyLoadContext
 {
-    public static PluginAssemblyLoadContext Create(string folder, string assemblyPrefix, IList<Assembly> assembyRegistry)
+    public static PluginAssemblyLoadContext Create(
+        string folder,
+        string assemblyPrefix,
+        IList<Assembly> assembyRegistry
+    )
     {
         var context = new PluginAssemblyLoadContext(folder);
         foreach (
@@ -20,7 +24,7 @@ public class PluginAssemblyLoadContext(string pluginPath) : AssemblyLoadContext
         }
         return context;
     }
-    
+
     private readonly string _pluginFolder = Path.GetFullPath(pluginPath);
 
     protected override Assembly? Load(AssemblyName assemblyName)
@@ -51,7 +55,6 @@ public class PluginAssemblyLoadContext(string pluginPath) : AssemblyLoadContext
             )
         )
         {
-            
             var fullPath = Path.GetFullPath(file);
             return LoadFromAssemblyPath(fullPath);
         }

@@ -29,7 +29,7 @@ public static class AppHost
     }
 
     #endregion
-    
+
     #region Builder
 
     public static Builder CreateBuilder(HostApplicationBuilderSettings? settings = null)
@@ -40,10 +40,7 @@ public static class AppHost
                 $"{nameof(AppHost)} already configured. Only one instance allowed."
             );
         }
-        settings ??= new HostApplicationBuilderSettings
-        {
-            Args = Environment.GetCommandLineArgs(),
-        };
+        settings ??= new HostApplicationBuilderSettings { Args = Environment.GetCommandLineArgs() };
         var builder = Host.CreateApplicationBuilder(settings);
 
         return new Builder(builder);
@@ -74,7 +71,7 @@ public static class AppHost
         public ILoggingBuilder Logging => _ifcBuilder.Logging;
         public IMetricsBuilder Metrics => _ifcBuilder.Metrics;
         public IServiceCollection Services => _ifcBuilder.Services;
-        
+
         public IHost Build()
         {
             if (_instance != null)
@@ -89,7 +86,7 @@ public static class AppHost
     }
 
     #endregion
- 
+
     public static void HandleApplicationCrash(Exception e)
     {
         _instance

@@ -30,13 +30,13 @@ public sealed class Tile : IDisposable
     {
         return new Tile(key, stream, size);
     }
-    
+
     public static Tile Create(TileKey key, string path)
     {
         using var stream = File.OpenRead(path);
         return new Tile(key, stream, (int)stream.Length);
     }
-    
+
     private int _refCount = 1;
     private Bitmap _value;
     private readonly byte[] _compressed;
@@ -56,7 +56,7 @@ public sealed class Tile : IDisposable
 
     public TileKey Key { get; }
     public long Size { get; }
-    
+
     public void AddRef()
     {
         Interlocked.Increment(ref _refCount);
@@ -71,7 +71,7 @@ public sealed class Tile : IDisposable
     {
         context.DrawImage(_value, new Rect(x, y, _value.PixelSize.Width, _value.PixelSize.Height));
     }
-    
+
     public void Dispose()
     {
         if (Interlocked.Decrement(ref _refCount) == 0)
@@ -82,5 +82,4 @@ public sealed class Tile : IDisposable
             _value = null!;
         }
     }
-
 }

@@ -14,7 +14,7 @@ public class FileSystemCacheConfig : TileCacheConfig
 
     public string FolderPath { get; set; } = "map";
     public int WriteQueueSize { get; set; } = 100;
-    
+
     public int WriteParallelThreads { get; set; } = 1;
 }
 
@@ -61,7 +61,7 @@ public class FileSystemCache : TileCache
         _logger.ZLogInformation(
             $"Map cache directory: {_cacheDirectory}, files: {_fileCount}, size: {_dirSizeInBytes / (1024 * 1024):N} MB"
         );
-        
+
         _writerQueue = Channel.CreateBounded<Tile>(
             new BoundedChannelOptions(config.Value.WriteQueueSize)
             {
@@ -101,7 +101,6 @@ public class FileSystemCache : TileCache
         {
             _logger.ZLogError(e, $"Error write tile queue:{e.Message}");
         }
-        
     }
 
     protected override void SetBitmap(TileKey key, Tile? tile)
@@ -148,7 +147,7 @@ public class FileSystemCache : TileCache
         _folderCache ??= new ConcurrentHashSet<string>();
         if (_folderCache.Add(tileFolder) == false)
         {
-            Directory.CreateDirectory(tileFolder);    
+            Directory.CreateDirectory(tileFolder);
         }
         return Path.Combine(tileFolder, $"{key.X}_{key.Y}.{TileFileExtension}");
     }
