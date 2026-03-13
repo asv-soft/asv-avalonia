@@ -52,7 +52,7 @@ public partial class AnnotationLayer
         get => GetValue(AnnotationRadiusProperty);
         set => SetValue(AnnotationRadiusProperty, value);
     }
-    
+
     #endregion
 
     #region Source
