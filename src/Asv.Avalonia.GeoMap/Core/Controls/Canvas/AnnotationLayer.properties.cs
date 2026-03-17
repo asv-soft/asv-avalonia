@@ -44,6 +44,15 @@ public partial class AnnotationLayer
         set => SetValue(StrokeProperty, value);
     }
 
+    public static readonly StyledProperty<double> AnnotationRadiusProperty =
+        AvaloniaProperty.Register<AnnotationLayer, double>(nameof(AnnotationRadius), 50.0);
+
+    public double AnnotationRadius
+    {
+        get => GetValue(AnnotationRadiusProperty);
+        set => SetValue(AnnotationRadiusProperty, value);
+    }
+    
     #endregion
 
     #region Source

@@ -79,6 +79,7 @@
                     <controls:AnnotationLayer
                         x:Name="PART_AnnotationLayer"
                         ItemTemplate="{TemplateBinding AnnotationTemplate}"
+                        AnnotationRadius="{TemplateBinding AnnotationRadius}"
                         Source="{TemplateBinding}"
                     />
                     <controls:PolygonLayer x:Name="PART_PolygonLayer" Source="{TemplateBinding}" />

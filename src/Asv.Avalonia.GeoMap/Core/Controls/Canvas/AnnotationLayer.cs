@@ -173,7 +173,7 @@ public partial class AnnotationLayer : Canvas
 
                 var anchorPos = ConvertToScreen(location);
                 var initialDirection = GetInitialDirection(_annotations.Count);
-                var initialOffset = initialDirection * 50;
+                var initialOffset = initialDirection * AnnotationRadius;
 
                 var item = new MapAnnotation(child, annotation)
                 {
@@ -281,7 +281,7 @@ public partial class AnnotationLayer : Canvas
         const double repulsionStrength = 1000.0;
         const double attractionStrength = 0.1;
         const double damping = 0.9;
-        const double minDistance = 50.0;
+        double minDistance = AnnotationRadius;
         const double maxVelocity = 10.0; // Velocity limit to prevent jerky movement
         const double stabilizationThreshold = 0.1; // Stabilization threshold (in pixels)
 

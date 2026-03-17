@@ -18,6 +18,15 @@ public partial class MapItemsControl
         get => GetValue(AnnotationTemplateProperty);
         set => SetValue(AnnotationTemplateProperty, value);
     }
+    
+    public static readonly StyledProperty<double> AnnotationRadiusProperty =
+        AvaloniaProperty.Register<AnnotationLayer, double>(nameof(AnnotationRadius), 50.0);
+
+    public double AnnotationRadius
+    {
+        get => GetValue(AnnotationRadiusProperty);
+        set => SetValue(AnnotationRadiusProperty, value);
+    }
 
     #endregion
 
