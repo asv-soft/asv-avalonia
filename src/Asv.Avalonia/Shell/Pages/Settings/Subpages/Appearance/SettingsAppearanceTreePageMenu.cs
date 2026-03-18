@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class SettingAppearanceTreePageMenu : TreePage
+public class SettingsAppearanceTreePageMenu : TreePage
 {
-    public SettingAppearanceTreePageMenu(ILoggerFactory loggerFactory)
+    public SettingsAppearanceTreePageMenu(ILoggerFactory loggerFactory)
         : base(
             SettingsAppearanceViewModel.PageId,
             RS.SettingsAppearanceViewModel_Name,

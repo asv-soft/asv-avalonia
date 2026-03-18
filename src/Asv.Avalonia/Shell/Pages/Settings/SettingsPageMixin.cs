@@ -35,7 +35,7 @@ public static class SettingsPageMixin
 
         public Builder UseUnitsSettings()
         {
-            return AddSubPage<SettingsUnitsViewModel, SettingsUnitsView>(
+            return AddSubPage<SettingsUnitsViewModel, SettingsUnitsView, SettingsUnitTreePageMenu>(
                 SettingsUnitsViewModel.PageId
             );
         }
@@ -45,15 +45,17 @@ public static class SettingsPageMixin
             return AddSubPage<
                 SettingsAppearanceViewModel,
                 SettingsAppearanceView,
-                SettingAppearanceTreePageMenu
+                SettingsAppearanceTreePageMenu
             >(SettingsAppearanceViewModel.PageId);
         }
 
         public Builder AddCommandsSettingsSubPage()
         {
-            return AddSubPage<SettingsCommandListViewModel, SettingsCommandListView>(
-                SettingsCommandListViewModel.PageId
-            );
+            return AddSubPage<
+                SettingsCommandListViewModel,
+                SettingsCommandListView,
+                SettingsCommandTreePageMenu
+            >(SettingsCommandListViewModel.PageId);
         }
 
         public Builder AddSubPage<TViewModel, TView>(string pageId)
