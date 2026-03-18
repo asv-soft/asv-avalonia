@@ -1,54 +1,40 @@
-﻿using Asv.Common;
+using Asv.Common;
+using Asv.IO;
 using Microsoft.Extensions.Logging;
+using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class SettingsAppearanceViewModel : SettingsSubPage
+public class SettingsAppearanceViewModel
+    : ExtendableTreeSubpage<ISettingsAppearanceSubPage>,
+        ISettingsAppearanceSubPage
 {
     public const string PageId = "appearance";
 
-    #region DesignTime
-
     public SettingsAppearanceViewModel()
-        : this(
-            DesignTime.ThemeService,
-            DesignTime.LocalizationService,
-            NullDialogService.Instance,
-            DesignTime.LoggerFactory
-        )
+        : this(DesignTime.LoggerFactory, DesignTime.ExtensionService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    #endregion
-
-    public SettingsAppearanceViewModel(
-        IThemeService themeService,
-        ILocalizationService localizationService,
-        IDialogService dialog,
-        ILoggerFactory loggerFactory
-    )
-        : base(PageId, loggerFactory)
+    public SettingsAppearanceViewModel(ILoggerFactory loggerFactory, IExtensionService ext)
+        : base(PageId, loggerFactory, ext)
     {
-        Theme = new ThemeProperty(themeService, loggerFactory)
-            .SetRoutableParent(this)
-            .DisposeItWith(Disposable);
-        Language = new LanguageProperty(localizationService, dialog, loggerFactory)
-            .SetRoutableParent(this)
-            .DisposeItWith(Disposable);
+        Sections = [];
+        Sections.SetRoutableParent(this).DisposeItWith(Disposable);
+        Sections.DisposeRemovedItems().DisposeItWith(Disposable);
+
+        Views = Sections.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
 
-    public ThemeProperty Theme { get; }
-    public LanguageProperty Language { get; }
+    public ObservableList<ISettingsAppearanceSection> Sections { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public NotifyCollectionChangedSynchronizedViewList<ISettingsAppearanceSection> Views { get; }
+
+    public ValueTask Init(ISettingsPage context) => ValueTask.CompletedTask;
+
+    protected override void AfterLoadExtensions()
     {
-        yield return Theme;
-        yield return Language;
-
-        foreach (var child in base.GetChildren())
-        {
-            yield return child;
-        }
+        // do nothing
     }
 }

@@ -1,0 +1,78 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.CommonAppearanceSettingsSectionView"
+    x:DataType="avalonia:CommonAppearanceSettingsSectionViewModel"
+>
+    <Design.DataContext>
+        <avalonia:CommonAppearanceSettingsSectionViewModel />
+    </Design.DataContext>
+
+    <StackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Spacing="8" Margin="8">
+        <DockPanel>
+            <TextBlock
+                FontSize="{StaticResource HubHeaderThemeFontSize}"
+                Text="{x:Static avalonia:RS.SettingsAppearanceView_HubHeader_CommonSettings}"
+            />
+            <Separator />
+        </DockPanel>
+        <Grid Margin="20,0,0, 0" RowDefinitions="*,5,*">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition SharedSizeGroup="TitleGroup" Width="Auto" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition MinWidth="300" SharedSizeGroup="ValueGroup" />
+            </Grid.ColumnDefinitions>
+
+            <avalonia1:MaterialIcon Grid.Column="0" Grid.Row="0" Kind="Cog" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Grid.Column="2"
+                Grid.Row="0"
+                Text="{x:Static avalonia:RS.SettingsAppearanceView_AppTheme_Title}"
+            />
+            <ComboBox
+                Grid.Column="4"
+                Grid.Row="0"
+                DataContext="{Binding Theme}"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem.Value}"
+            >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name }" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <avalonia1:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="Translate" />
+            <TextBlock
+                VerticalAlignment="Center"
+                Grid.Column="2"
+                Grid.Row="2"
+                Text="{x:Static avalonia:RS.SettingsAppearanceView_AppLanguage_Title}"
+            />
+            <ComboBox
+                Grid.Column="4"
+                Grid.Row="2"
+                DataContext="{Binding Language}"
+                ItemsSource="{Binding Items}"
+                SelectedItem="{Binding SelectedItem.Value}"
+            >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+    </StackPanel>
+</UserControl>
