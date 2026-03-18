@@ -6,7 +6,7 @@ public sealed class ChangeMeasureUnitCommand(IUnitService svc) : StatelessCrudCo
 {
     #region Static
 
-    public const string Id = $"{BaseId}.settings.unit.change";
+    public const string Id = $"{BaseId}.change.unit";
 
     private static readonly ICommandInfo StaticInfo = new CommandInfo
     {

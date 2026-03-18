@@ -16,5 +16,11 @@
     </Design.DataContext>
     <Panel>
         <map:MapView DataContext="{Binding MapViewModel}" />
+        <map:TileProviderSelectorView
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="8"
+            DataContext="{Binding TileProviderSelectorViewModel}"
+        />
     </Panel>
 </UserControl>

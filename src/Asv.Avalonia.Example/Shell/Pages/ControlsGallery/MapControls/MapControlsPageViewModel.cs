@@ -15,15 +15,19 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
     public const MaterialIconKind PageIcon = MaterialIconKind.Map;
 
     public MapControlsPageViewModel()
-        : this(DesignTime.LoggerFactory)
+        : this(DesignTime.LoggerFactory, NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public MapControlsPageViewModel(ILoggerFactory loggerFactory)
+    public MapControlsPageViewModel(ILoggerFactory loggerFactory, IMapService mapService)
         : base(PageId, loggerFactory)
     {
-        MapViewModel = new MapViewModel("Map", loggerFactory)
+        TileProviderSelectorViewModel = new TileProviderSelectorViewModel(mapService, loggerFactory)
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+
+        MapViewModel = new MapViewModel("Map", loggerFactory, mapService)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 
@@ -64,6 +68,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
     public override IEnumerable<IRoutable> GetChildren()
     {
+        yield return TileProviderSelectorViewModel;
         yield return MapViewModel;
 
         foreach (var child in base.GetChildren())
@@ -72,5 +77,6 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
+    public TileProviderSelectorViewModel TileProviderSelectorViewModel { get; }
     public MapViewModel MapViewModel { get; }
 }

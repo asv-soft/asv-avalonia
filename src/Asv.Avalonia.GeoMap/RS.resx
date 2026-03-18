@@ -45,4 +45,10 @@
     <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
         <value>Map</value>
     </data>
+    <data name="ChangeTileProviderCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Change tile provider</value>
+    </data>
+    <data name="ChangeTileProviderCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that changes map tile provider</value>
+    </data>
 </root>

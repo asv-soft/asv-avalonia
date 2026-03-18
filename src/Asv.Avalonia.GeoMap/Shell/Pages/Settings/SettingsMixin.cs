@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+
 namespace Asv.Avalonia.GeoMap;
 
 public static class SettingsGeoMapMixin

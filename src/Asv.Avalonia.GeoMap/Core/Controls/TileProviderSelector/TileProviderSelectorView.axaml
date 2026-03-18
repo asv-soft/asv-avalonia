@@ -1,0 +1,27 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    x:Class="Asv.Avalonia.GeoMap.TileProviderSelectorView"
+    x:DataType="map:TileProviderSelectorViewModel"
+>
+    <Design.DataContext>
+        <map:TileProviderSelectorViewModel />
+    </Design.DataContext>
+    <ComboBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value}">
+        <ComboBox.SelectionBoxItemTemplate>
+            <DataTemplate>
+                <avalonia:MaterialIcon Kind="MapOutline" />
+            </DataTemplate>
+        </ComboBox.SelectionBoxItemTemplate>
+        <ComboBox.ItemTemplate>
+            <DataTemplate>
+                <TextBlock Text="{Binding Info.Name}" />
+            </DataTemplate>
+        </ComboBox.ItemTemplate>
+    </ComboBox>
+</UserControl>

@@ -98,5 +98,17 @@ namespace Asv.Avalonia.GeoMap {
                 return ResourceManager.GetString("SettingsGeoMapViewModel_Name", resourceCulture);
             }
         }
+        
+        public static string ChangeTileProviderCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ChangeTileProviderCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ChangeTileProviderCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ChangeTileProviderCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
     }
 }

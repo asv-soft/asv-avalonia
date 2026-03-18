@@ -17,12 +17,13 @@ public sealed class GeoPointDialogPayload
 public sealed class GeoPointDialogPrefab(
     INavigationService nav,
     ILoggerFactory loggerFactory,
-    IUnitService unitService
+    IUnitService unitService,
+    IMapService mapService
 ) : IDialogPrefab<GeoPointDialogPayload, GeoPoint?>
 {
     public async Task<GeoPoint?> ShowDialogAsync(GeoPointDialogPayload dialogPayload)
     {
-        using var vm = new GeoPointDialogViewModel(loggerFactory, unitService);
+        using var vm = new GeoPointDialogViewModel(loggerFactory, unitService, mapService);
 
         vm.SetInitialLocation(dialogPayload.InitialLocation);
 

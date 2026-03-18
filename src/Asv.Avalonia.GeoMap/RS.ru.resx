@@ -38,4 +38,10 @@
     <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
         <value>Карта</value>
     </data>
+    <data name="ChangeTileProviderCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Изменить провайдера карты</value>
+    </data>
+    <data name="ChangeTileProviderCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда, изменяющая провайдера карты</value>
+    </data>
 </root>

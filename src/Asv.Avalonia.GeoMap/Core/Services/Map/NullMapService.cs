@@ -13,8 +13,16 @@ public class NullMapService : IMapService
         EmptyTileBrush = new SynchronizedReactiveProperty<IBrush>(
             Brush.Parse(new TileLoaderConfig().EmptyTileBrush)
         );
+
+        CurrentProvider = new SynchronizedReactiveProperty<ITileProvider>(
+            EmptyTileProvider.Instance
+        );
+        AvailableProviders = [EmptyTileProvider.Instance];
     }
 
     public SynchronizedReactiveProperty<MapModeType> Mode { get; }
     public SynchronizedReactiveProperty<IBrush> EmptyTileBrush { get; }
+
+    public SynchronizedReactiveProperty<ITileProvider> CurrentProvider { get; }
+    public IReadOnlyList<ITileProvider> AvailableProviders { get; }
 }

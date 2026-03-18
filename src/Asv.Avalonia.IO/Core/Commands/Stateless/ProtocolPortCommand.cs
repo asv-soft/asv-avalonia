@@ -7,7 +7,7 @@ public class PortCrudCommand(IDeviceManager manager) : StatelessCrudCommand<Stri
 {
     #region Static
 
-    public const string Id = $"{BaseId}.port.change";
+    public const string Id = $"{BaseId}.change.port";
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,
