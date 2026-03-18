@@ -7,19 +7,26 @@ using Asv.Common;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using DotNext.Buffers;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapServiceConfig
+public enum MapModeType
+{
+    Mixed,
+    Online,
+    Offline,
+}
+
+public class TileLoaderConfig
 {
     public int RequestQueueSize { get; set; } = 100;
     public int RequestParallelThreads { get; set; } = Environment.ProcessorCount;
     public int RequestTimeoutMs { get; set; } = 5000;
     public string EmptyTileBrush { get; set; } = $"{Brushes.LightGreen}";
+    public MapModeType Mode { get; set; } = MapModeType.Mixed;
 
     public override string ToString()
     {
@@ -43,6 +50,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     private readonly Counter<int> _meterReq;
     private readonly Counter<int> _meterQueue;
     private readonly Counter<int> _meterHttp;
+    private readonly Lock _syncCfg = new();
 
     public TileLoader(
         ILoggerFactory loggerFactory,
@@ -57,8 +65,11 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         _slowCache = slowCache; // new FileSystemCache(new FileSystemCacheConfig(), loggerFactory, meterFactory);
         _localRequests = new ConcurrentHashSet<TileKey>();
         _emptyBitmap = new ConcurrentDictionary<int, Bitmap>();
-        var config = configProvider.Get<MapServiceConfig>();
-        EmptyTileBrush = new ReactiveProperty<IBrush>(Brush.Parse(config.EmptyTileBrush));
+        var config = configProvider.Get<TileLoaderConfig>();
+        CurrentMapMode = new SynchronizedReactiveProperty<MapModeType>(config.Mode);
+        EmptyTileBrush = new SynchronizedReactiveProperty<IBrush>(
+            Brush.Parse(config.EmptyTileBrush)
+        );
         _onLoaded = new();
         _httpClient = new HttpClient
         {
@@ -81,6 +92,54 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         _meterReq = meter.CreateCounter<int>("loader_get");
         _meterQueue = meter.CreateCounter<int>("loader_queue_requests");
         _meterHttp = meter.CreateCounter<int>("loader_http_requests");
+
+        _sub1 = CurrentMapMode
+            .Skip(1)
+            .Synchronize()
+            .Subscribe(mode =>
+            {
+                using (_syncCfg.EnterScope())
+                {
+                    config.Mode = mode;
+                    configProvider.Set(config);
+                }
+            });
+
+        _sub2 = EmptyTileBrush
+            .Skip(1)
+            .Synchronize()
+            .Subscribe(brush =>
+            {
+                using (_syncCfg.EnterScope())
+                {
+                    config.EmptyTileBrush = brush.ToString() ?? config.EmptyTileBrush;
+                    configProvider.Set(config);
+                }
+            });
+    }
+
+    public SynchronizedReactiveProperty<IBrush> EmptyTileBrush { get; }
+    public SynchronizedReactiveProperty<MapModeType> CurrentMapMode { get; }
+    public Observable<TileKey> OnLoaded => _onLoaded;
+
+    public void Render(DrawingContext context, double x, double y, TileKey key)
+    {
+        _meterReq.Add(1);
+        using var refBitmap = _fastCache[key];
+        if (refBitmap != null)
+        {
+            refBitmap.Render(context, x, y);
+            return;
+        }
+        if (!_localRequests.Contains(key))
+        {
+            _requestQueue.Writer.TryWrite(key);
+        }
+        context.DrawRectangle(
+            EmptyTileBrush.Value,
+            null,
+            new Rect(x, y, key.Provider.TileSize, key.Provider.TileSize)
+        );
     }
 
     private async Task ProcessQueue()
@@ -90,7 +149,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             _meterQueue.Add(1);
             try
             {
-                if (_localRequests.Add(key) == false)
+                if (!_localRequests.Add(key))
                 {
                     // already in progress => skip
                     continue;
@@ -109,50 +168,32 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                     continue;
                 }
 
-                var url = key.Provider.GetTileUrl(key);
-                if (string.IsNullOrWhiteSpace(url))
+                if (CurrentMapMode.Value == MapModeType.Offline)
                 {
                     continue;
                 }
-                else
+
+                tile = await DownloadTileAsync(key, DisposeCancel);
+
+                if (tile is null)
                 {
-                    if (_remoteRequests.Add(url) == false)
-                    {
-                        continue;
-                    }
-
-                    try
-                    {
-                        _meterHttp.Add(1);
-                        using var response = await _httpClient
-                            .GetAsync(url, HttpCompletionOption.ResponseHeadersRead, DisposeCancel)
-                            .ConfigureAwait(false);
-                        response.EnsureSuccessStatusCode();
-                        var contentLength =
-                            response.Content.Headers.ContentLength.GetValueOrDefault(0);
-                        await using var stream = await response.Content.ReadAsStreamAsync();
-                        if (contentLength == 0)
-                        {
-                            await response.Content.LoadIntoBufferAsync();
-                            contentLength = stream.Length;
-                        }
-
-                        tile = Tile.Create(key, stream, (int)contentLength);
-                    }
-                    finally
-                    {
-                        _remoteRequests.Remove(url);
-                    }
+                    continue;
                 }
+
                 tile.AddRef();
-                _slowCache[key] = tile;
+                if (CurrentMapMode.Value != MapModeType.Online)
+                {
+                    _slowCache[key] = tile;
+                }
+
                 _fastCache[key] = tile;
+
                 _onLoaded.OnNext(key);
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                _logger?.LogError(ex, $"Failed to load tile {key}");
+                _logger.LogError(ex, "Failed to load tile {key}", key);
             }
             finally
             {
@@ -161,34 +202,59 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         }
     }
 
-    public ReactiveProperty<IBrush> EmptyTileBrush { get; }
-
-    public void Render(DrawingContext context, double x, double y, TileKey key)
+    private async Task<Tile?> DownloadTileAsync(TileKey key, CancellationToken ct = default)
     {
-        _meterReq.Add(1);
-        using var refBitmap = _fastCache[key];
-        if (refBitmap != null)
+        var url = key.Provider.GetTileUrl(key);
+        if (string.IsNullOrWhiteSpace(url))
         {
-            refBitmap.Render(context, x, y);
-            return;
+            return null;
         }
-        if (_localRequests.Contains(key) == false)
+
+        if (!_remoteRequests.Add(url))
         {
-            _requestQueue.Writer.TryWrite(key);
+            return null;
         }
-        context.DrawRectangle(
-            EmptyTileBrush.Value,
-            null,
-            new Rect(x, y, key.Provider.TileSize, key.Provider.TileSize)
-        );
+
+        try
+        {
+            _meterHttp.Add(1);
+            using var response = await _httpClient
+                .GetAsync(url, HttpCompletionOption.ResponseHeadersRead, DisposeCancel)
+                .ConfigureAwait(false);
+            response.EnsureSuccessStatusCode();
+            var contentLength = response.Content.Headers.ContentLength ?? 0;
+            await using var stream = await response.Content.ReadAsStreamAsync(ct);
+            if (contentLength == 0)
+            {
+                await response.Content.LoadIntoBufferAsync(ct);
+                contentLength = stream.Length;
+            }
+
+            return Tile.Create(key, stream, (int)contentLength);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+            _logger.LogError(ex, "Failed to download tile from remote with key - {key}", key);
+            return null;
+        }
+        finally
+        {
+            _remoteRequests.Remove(url);
+        }
     }
 
-    public Observable<TileKey> OnLoaded => _onLoaded;
+    #region Disposable
+
+    private readonly IDisposable _sub1;
+    private readonly IDisposable _sub2;
 
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
+            _sub1.Dispose();
+            _sub2.Dispose();
             _fastCache.Dispose();
             _slowCache.Dispose();
             _localRequests.Dispose();
@@ -196,6 +262,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             _httpClient.Dispose();
             _remoteRequests.Dispose();
             EmptyTileBrush.Dispose();
+            CurrentMapMode.Dispose();
 
             foreach (var value in _emptyBitmap.Values)
             {
@@ -211,6 +278,9 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         await _fastCache.DisposeAsync();
 
         //await _slowCache.DisposeAsync();
+        await CastAndDispose(_sub1);
+        await CastAndDispose(_sub2);
+        await CastAndDispose(CurrentMapMode);
         await CastAndDispose(_localRequests);
         await CastAndDispose(_onLoaded);
         await CastAndDispose(_httpClient);
@@ -238,4 +308,6 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             }
         }
     }
+
+    #endregion
 }

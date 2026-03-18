@@ -7,6 +7,7 @@ namespace Asv.Avalonia.GeoMap;
 public interface ITileLoader
 {
     Observable<TileKey> OnLoaded { get; }
-    ReactiveProperty<IBrush> EmptyTileBrush { get; }
+    SynchronizedReactiveProperty<IBrush> EmptyTileBrush { get; }
+    SynchronizedReactiveProperty<MapModeType> CurrentMapMode { get; }
     void Render(DrawingContext context, double x, double y, TileKey key);
 }

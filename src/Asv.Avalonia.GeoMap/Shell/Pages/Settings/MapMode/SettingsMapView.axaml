@@ -1,0 +1,49 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:geoMap="clr-namespace:Asv.Avalonia.GeoMap"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.GeoMap.SettingsMapView"
+    x:DataType="geoMap:SettingsMapViewModel"
+>
+    <Design.DataContext>
+        <geoMap:SettingsMapViewModel />
+    </Design.DataContext>
+
+    <StackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Spacing="8" Margin="8">
+        <DockPanel>
+            <TextBlock FontSize="{StaticResource HubHeaderThemeFontSize}" Text="Map Settings" />
+            <Separator />
+        </DockPanel>
+        <Grid Margin="20,0,0, 0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition SharedSizeGroup="TitleGroup" Width="Auto" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition MinWidth="300" SharedSizeGroup="ValueGroup" />
+            </Grid.ColumnDefinitions>
+
+            <avalonia:MaterialIcon Grid.Column="0" VerticalAlignment="Center" Kind="MapOutline" />
+            <TextBlock VerticalAlignment="Center" Grid.Column="2" Text="Map mode" />
+            <ComboBox
+                VerticalAlignment="Center"
+                Grid.Column="4"
+                DataContext="{CompiledBinding MapModeProperty}"
+                ItemsSource="{CompiledBinding Items}"
+                SelectedItem="{CompiledBinding SelectedItem.Value}"
+            >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{CompiledBinding Name }" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+    </StackPanel>
+</UserControl>

@@ -77,9 +77,6 @@
       </EmbeddedResource>
     </ItemGroup>
     <ItemGroup>
-      <Folder Include="Core\" />
-    </ItemGroup>
-    <ItemGroup>
       <AdditionalFiles Include="Core\Controls\Attitude\Attitude.axaml" />
       <AdditionalFiles Include="Core\Controls\ItemsControl\MapItem.axaml" />
       <AdditionalFiles Include="Core\Controls\ItemsControl\MapItemsControl.axaml" />

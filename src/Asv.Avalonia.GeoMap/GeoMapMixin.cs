@@ -54,6 +54,9 @@ public static class GeoMapMixin
             builder
                 .Services.AddOptions<BingTileProviderOptions>()
                 .BindConfiguration(BingTileProviderOptions.ConfigurationSection);
+
+            // Add map settings
+            builder.Shell.Pages.Settings.UseMapSettings();
         }
 
         public IHostApplicationBuilder Parent => builder;
