@@ -128,6 +128,10 @@
           <DependentUpon>GeoPointRttBoxView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Shell\Pages\Settings\Subpages\Appearance\Sections\Common\CommonAppearanceSettingsSectionView.axaml.cs">
+          <DependentUpon>CommonAppearanceSettingsSectionView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -171,7 +175,6 @@
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextBoxView.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextView.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemUnsavedChangesView.axaml" />
-      <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Appearance\SettingsAppearanceView.axaml" />
       <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Units\SettingsUnitsView.axaml" />
       <AdditionalFiles Include="Shell\Window\DebugWindow\DebugWindow.axaml" />
     </ItemGroup>

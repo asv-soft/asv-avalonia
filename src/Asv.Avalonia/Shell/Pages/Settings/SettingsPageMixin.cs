@@ -42,10 +42,23 @@ public static class SettingsPageMixin
 
         public Builder AddAppearanceSettingsSubPage()
         {
+            Parent.Parent.Parent.ViewLocator.RegisterViewFor<
+                CommonAppearanceSettingsSectionViewModel,
+                CommonAppearanceSettingsSectionView
+            >();
+            Parent.Parent.Parent.Extensions.Register<
+                SettingsAppearanceViewModel,
+                SettingsAppearanceExtension
+            >();
+            Parent.Parent.Parent.Extensions.Register<
+                ISettingsAppearanceSubPage,
+                SettingsAppearanceExtension
+            >();
+
             return AddSubPage<
                 SettingsAppearanceViewModel,
                 SettingsAppearanceView,
-                SettingsAppearanceTreePageMenu
+                AppearanceSettingTreePageMenu
             >(SettingsAppearanceViewModel.PageId);
         }
 
