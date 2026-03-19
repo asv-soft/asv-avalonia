@@ -45,7 +45,7 @@ public partial class AnnotationLayer
     }
 
     public static readonly StyledProperty<double> AnnotationRadiusProperty =
-        AvaloniaProperty.Register<AnnotationLayer, double>(nameof(AnnotationRadius), 50.0);
+        AvaloniaProperty.Register<AnnotationLayer, double>(nameof(AnnotationRadius), 70.0);
 
     public double AnnotationRadius
     {

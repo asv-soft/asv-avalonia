@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Asv.IO;
+using Avalonia.Media;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -35,7 +36,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         MapViewModel.Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
 
         Observable
-            .Timer(TimeSpan.FromSeconds(3))
+            .Timer(TimeSpan.FromSeconds(1))
             .Subscribe(x =>
             {
                 var centerPoint = MapViewModel.CenterMap.Value;
@@ -43,12 +44,15 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
                 var path = new MapAnchor<IMapAnchor>("editanle-anchor-path", loggerFactory);
                 path.IsVisible = true;
+                path.IsPolygonClosed = true;
+                path.PolygonFill = SolidColorBrush.Parse("#80FFEBCD");
                 MapViewModel.Anchors.Add(path);
                 for (int i = 0; i < pointCount; i++)
                 {
                     var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}", loggerFactory);
                     anchor.Icon = MaterialIconKind.MapMarker;
                     anchor.Title = string.Empty;
+                    anchor.IsAnnotationVisible = true;
                     anchor.CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0);
                     anchor.Location = centerPoint.RadialPoint(1000, 360 / pointCount * i);
                     MapViewModel.Anchors.Add(anchor);

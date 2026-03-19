@@ -4,8 +4,6 @@
     xmlns:controls="using:Asv.Avalonia.GeoMap"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:avalonia1="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-    xmlns:system="clr-namespace:System;assembly=System.Runtime"
-    xmlns:generic="clr-namespace:System.Collections.Generic;assembly=System.Collections"
 >
     <Design.PreviewWith>
         <Panel Width="1000" Height="250">
@@ -88,7 +86,6 @@
                         ItemsPanel="{TemplateBinding ItemsPanel}"
                         Margin="{TemplateBinding Padding}"
                     />
-                    <TextBlock Text="{TemplateBinding DragState}" HorizontalAlignment="Center" />
                     <Canvas>
                         <Rectangle
                             Canvas.Left="{TemplateBinding SelectionLeft}"
@@ -96,8 +93,8 @@
                             Width="{TemplateBinding SelectionWidth}"
                             Height="{TemplateBinding SelectionHeight}"
                             IsVisible="{TemplateBinding DragState, Converter={x:Static avalonia1:EnumToBooleanConverter.Instance}, ConverterParameter=SelectRectangle }"
-                            Stroke="BlueViolet"
-                            StrokeThickness="2"
+                            Stroke="{TemplateBinding SelectionStroke}"
+                            StrokeThickness="{TemplateBinding SelectionStrokeThickness}"
                         />
                     </Canvas>
                 </Panel>

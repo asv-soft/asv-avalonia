@@ -8,19 +8,20 @@ namespace Asv.Avalonia.GeoMap;
 
 public interface IMapAnchor : IRoutable
 {
-    MaterialIconKind Icon { get; }
-    string Title { get; }
-    double Azimuth { get; }
-    BindableReactiveProperty<GeoPoint> ReactiveLocation { get; }
+    MaterialIconKind Icon { get; set; }
+    string Title { get; set; }
+    double Azimuth { get; set; }
     GeoPoint Location { get; set; }
-    double IconSize { get; }
-    AsvColorKind IconColor { get; }
-    HorizontalOffset CenterX { get; }
-    VerticalOffset CenterY { get; }
-    bool IsReadOnly { get; }
-    bool IsSelected { get; }
-    bool IsVisible { get; }
-    IPen? PolygonPen { get; }
-    bool IsPolygonClosed { get; }
+    double IconSize { get; set; }
+    AsvColorKind IconColor { get; set; }
+    HorizontalOffset CenterX { get; set; }
+    VerticalOffset CenterY { get; set; }
+    bool IsReadOnly { get; set; }
+    bool IsSelected { get; set; }
+    bool IsVisible { get; set; }
+    IPen? PolygonPen { get; set; }
+    IBrush? PolygonFill { get; set; }
+    bool IsPolygonClosed { get; set; }
+    bool IsAnnotationVisible { get; set; }
     NotifyCollectionChangedSynchronizedViewList<GeoPoint> PolygonView { get; }
 }

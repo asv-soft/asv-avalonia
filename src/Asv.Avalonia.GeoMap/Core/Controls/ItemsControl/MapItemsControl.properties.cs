@@ -1,6 +1,7 @@
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls.Templates;
+using Avalonia.Media;
 using Avalonia.Metadata;
 
 namespace Asv.Avalonia.GeoMap;
@@ -69,6 +70,27 @@ public partial class MapItemsControl
     {
         get;
         set => SetAndRaise(SelectionWidthProperty, ref field, value);
+    }
+
+    public static readonly StyledProperty<IBrush?> SelectionStrokeProperty =
+        AvaloniaProperty.Register<MapItemsControl, IBrush?>(
+            nameof(SelectionStroke),
+            Brushes.DarkViolet
+        );
+
+    public IBrush? SelectionStroke
+    {
+        get => GetValue(SelectionStrokeProperty);
+        set => SetValue(SelectionStrokeProperty, value);
+    }
+
+    public static readonly StyledProperty<double> SelectionStrokeThicknessProperty =
+        AvaloniaProperty.Register<MapItemsControl, double>(nameof(SelectionStrokeThickness), 2);
+
+    public double SelectionStrokeThickness
+    {
+        get => GetValue(SelectionStrokeThicknessProperty);
+        set => SetValue(SelectionStrokeThicknessProperty, value);
     }
 
     public static readonly DirectProperty<MapItemsControl, double> SelectionHeightProperty =

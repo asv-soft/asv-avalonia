@@ -103,51 +103,6 @@ public partial class AnnotationLayer : Canvas
         }
     }
 
-    /*private void SourceChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        Debug.Assert(Source != null, nameof(Source) + " != null");
-        if (e.Action == NotifyCollectionChangedAction.Reset)
-        {
-            Children.Clear();
-            foreach (var mapAnnotation in _annotations)
-            {
-                mapAnnotation.Dispose();
-            }
-            _annotations.Clear();
-            return;
-        }
-
-        if (e.NewItems != null)
-        {
-            foreach (var item in e.NewItems)
-            {
-                var container = item as MapItem ?? Source.ContainerFromItem(item) as MapItem;
-                if (container == null)
-                {
-                    continue;
-                }
-
-                container.PropertyChanged += ContainerOnPropertyChanged;
-                _renderRequestSubject.OnNext(Unit.Default);
-            }
-        }
-
-        if (e.OldItems != null)
-        {
-            foreach (var item in e.OldItems)
-            {
-                var container = item as MapItem ?? Source.ContainerFromItem(item) as MapItem;
-                if (container == null)
-                {
-                    continue;
-                }
-
-                container.PropertyChanged -= ContainerOnPropertyChanged;
-                _renderRequestSubject.OnNext(Unit.Default);
-            }
-        }
-    }*/
-
     private void ContainerOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property == MapItem.LocationProperty)
@@ -201,9 +156,8 @@ public partial class AnnotationLayer : Canvas
                 var initialDirection = GetInitialDirection(_annotations.Count);
                 var initialOffset = initialDirection * AnnotationRadius;
 
-                var item = new MapAnnotation(child, annotation)
+                var item = new MapAnnotation(child, annotation, connector)
                 {
-                    Connector = connector,
                     AnchorPoint = location,
                     ScreenPosition = anchorPos + initialOffset,
                 };
@@ -390,18 +344,34 @@ public class MapAnnotation : AsyncDisposableOnce
 {
     private readonly IDisposable _dispose;
 
-    public MapAnnotation(MapItem target, Control annotation)
+    public MapAnnotation(MapItem target, Control annotation, Line connector)
     {
         Target = target;
         Annotation = annotation;
+        Connector = connector;
+        target
+            .ObservePropertyChanged(x => x.IsAnnotationVisible)
+            .Subscribe(x =>
+            {
+                Connector.IsVisible = x;
+                Annotation.IsVisible = x;
+            });
+        Connector.IsVisible = Target.IsAnnotationVisible;
+        Annotation.IsVisible = Target.IsAnnotationVisible;
+
         _dispose = target
             .ObservePropertyChanged(x => x.IsSelected)
-            .Subscribe(x => Annotation.Classes.Set("active", x));
+            .Subscribe(x =>
+            {
+                Connector.Classes.Set("active", x);
+                Annotation.Classes.Set("active", x);
+            });
     }
 
     public MapItem Target { get; }
-    public Control Annotation { get; set; }
-    public Line Connector { get; set; }
+    public Control Annotation { get; }
+    public Line Connector { get; }
+
     public GeoPoint AnchorPoint { get; set; }
     public Point ScreenPosition { get; set; }
 

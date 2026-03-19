@@ -194,4 +194,17 @@ public partial class MapItem
     }
 
     #endregion
+
+    #region Annotation
+
+    public static readonly StyledProperty<bool> IsAnnotationVisibleProperty =
+        AvaloniaProperty.Register<MapItem, bool>(nameof(IsAnnotationVisible), true);
+
+    public bool IsAnnotationVisible
+    {
+        get => GetValue(IsAnnotationVisibleProperty);
+        set => SetValue(IsAnnotationVisibleProperty, value);
+    }
+
+    #endregion
 }

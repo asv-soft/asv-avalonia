@@ -62,6 +62,10 @@
                 <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
                 <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                 <Setter Property="Polygon" Value="{Binding PolygonView}" />
+                <Setter Property="IsAnnotationVisible" Value="{Binding IsAnnotationVisible}" />
+                <Setter Property="IsPolygonClosed" Value="{Binding IsPolygonClosed}" />
+                <Setter Property="Pen" Value="{Binding PolygonPen}"></Setter>
+                <Setter Property="Fill" Value="{Binding PolygonFill}"></Setter>
             </ControlTheme>
         </ItemsControl.ItemContainerTheme>
     </map:MapItemsControl>

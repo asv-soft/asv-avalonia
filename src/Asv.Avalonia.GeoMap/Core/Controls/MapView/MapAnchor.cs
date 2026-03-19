@@ -101,7 +101,19 @@ public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
         set => SetField(ref field, value);
     }
 
+    public IBrush? PolygonFill
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     public bool IsPolygonClosed
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public bool IsAnnotationVisible
     {
         get;
         set => SetField(ref field, value);
