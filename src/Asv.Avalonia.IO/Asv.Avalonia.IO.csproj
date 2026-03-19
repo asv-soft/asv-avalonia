@@ -78,6 +78,7 @@
 
     <ItemGroup>
       <Folder Include="Core\" />
+      <Folder Include="Core\Commands\Context\" />
     </ItemGroup>
 
     <ItemGroup>

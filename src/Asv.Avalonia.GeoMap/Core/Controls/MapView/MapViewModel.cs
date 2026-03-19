@@ -16,7 +16,7 @@ public interface IMap : IRoutable
 public class MapViewModel : RoutableViewModel, IMap
 {
     public MapViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory)
+        : this(DesignTime.Id, DesignTime.LoggerFactory, NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         var drone = new MapAnchor<IMapAnchor>(DesignTime.Id, DesignTime.LoggerFactory)
@@ -37,19 +37,26 @@ public class MapViewModel : RoutableViewModel, IMap
         );
     }
 
-    public MapViewModel(NavigationId id, ILoggerFactory loggerFactory)
+    public MapViewModel(NavigationId id, ILoggerFactory loggerFactory, IMapService mapService)
         : base(id, loggerFactory)
     {
         Anchors = new ObservableList<IMapAnchor>();
         Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
+
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);
         CenterMap = new BindableReactiveProperty<GeoPoint>(
             new GeoPoint(53.0, 53.0, 0)
         ).DisposeItWith(Disposable);
         Zoom = new BindableReactiveProperty<int>(10).DisposeItWith(Disposable);
+
+        CurrentProvider = mapService
+            .CurrentProvider.ToReadOnlyBindableReactiveProperty<ITileProvider>()
+            .DisposeItWith(Disposable);
     }
+
+    public IReadOnlyBindableReactiveProperty<ITileProvider> CurrentProvider { get; }
 
     public NotifyCollectionChangedSynchronizedViewList<IMapAnchor> AnchorsView { get; }
 

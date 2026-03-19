@@ -17,12 +17,16 @@ public class GeoPointDialogViewModel : DialogViewModelBase
     private bool _internalAnchorChange;
 
     public GeoPointDialogViewModel()
-        : this(NullLoggerFactory.Instance, NullUnitService.Instance)
+        : this(NullLoggerFactory.Instance, NullUnitService.Instance, NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public GeoPointDialogViewModel(ILoggerFactory loggerFactory, IUnitService unitService)
+    public GeoPointDialogViewModel(
+        ILoggerFactory loggerFactory,
+        IUnitService unitService,
+        IMapService mapService
+    )
         : base(DialogId, loggerFactory)
     {
         var latUnit = unitService.Units[LatitudeUnit.Id];
@@ -79,7 +83,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         };
         _anchor.SetRoutableParent(this);
 
-        MapViewModel = new MapViewModel(nameof(MapViewModel), loggerFactory)
+        MapViewModel = new MapViewModel(nameof(MapViewModel), loggerFactory, mapService)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 

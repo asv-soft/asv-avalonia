@@ -18,7 +18,7 @@ public class CreateFileCommand(
     public const string FilePathArgKey = "file";
     public const string FileTypeIdArgKey = "type";
 
-    public const string Id = $"{BaseId}.file.create";
+    public const string Id = $"{BaseId}.create.file";
 
     public static readonly ICommandInfo StaticInfo = new CommandInfo
     {

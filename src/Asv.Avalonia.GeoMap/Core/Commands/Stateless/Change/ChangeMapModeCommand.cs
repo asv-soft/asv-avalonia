@@ -6,7 +6,7 @@ public sealed class ChangeMapModeCommand : StatelessCommand<StringArg>
 {
     #region Static
 
-    public const string Id = $"{BaseId}.settings.map.mode";
+    public const string Id = $"{BaseId}.map.change.mode";
     internal static readonly ICommandInfo StaticInfo = new CommandInfo
     {
         Id = Id,

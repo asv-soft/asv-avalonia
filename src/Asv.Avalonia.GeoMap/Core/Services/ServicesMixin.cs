@@ -22,6 +22,7 @@ public static class ServicesMixin
 
         builder.Parent.Services.AddSingleton<IMapService, MapService>();
         builder.Parent.Services.AddSingleton<ITileLoader, TileLoader>();
+        builder.Parent.Services.AddSingleton<ITileProviderService, TileProviderService>();
 
         builder
             .RegisterTileProvider<YandexTileProvider>()

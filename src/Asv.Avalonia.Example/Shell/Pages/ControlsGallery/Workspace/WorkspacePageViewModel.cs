@@ -20,14 +20,18 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     public const MaterialIconKind PageIcon = MaterialIconKind.Table;
 
     public WorkspacePageViewModel()
-        : this(DesignTime.LoggerFactory, DesignTime.UnitService)
+        : this(DesignTime.LoggerFactory, DesignTime.UnitService, NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
         Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
-    public WorkspacePageViewModel(ILoggerFactory loggerFactory, IUnitService unitService)
+    public WorkspacePageViewModel(
+        ILoggerFactory loggerFactory,
+        IUnitService unitService,
+        IMapService mapService
+    )
         : base(PageId, loggerFactory)
     {
         _loggerFactory = loggerFactory;
@@ -149,7 +153,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
-            new MapWidget("map", loggerFactory)
+            new MapWidget("map", loggerFactory, mapService)
             {
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,
@@ -158,7 +162,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 IsExpanded = true,
                 CanExpand = true,
             },
-            new MapWidget("ma2p", loggerFactory)
+            new MapWidget("ma2p", loggerFactory, mapService)
             {
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,

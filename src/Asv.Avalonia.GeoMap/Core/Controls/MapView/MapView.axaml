@@ -18,9 +18,10 @@
     <map:MapItemsControl
         CenterMap="{Binding CenterMap.Value}"
         Zoom="{Binding Zoom.Value}"
-        SelectionMode="Multiple"
+        Provider="{Binding CurrentProvider.Value}"
         ItemsSource="{Binding AnchorsView}"
         SelectedItem="{Binding SelectedAnchor.Value}"
+        SelectionMode="Multiple"
     >
         <map:MapItemsControl.AnnotationTemplate>
             <DataTemplate>
