@@ -27,14 +27,49 @@ public partial class PolygonLayer : Control
         if (e.OldValue is { HasValue: true, Value: not null })
         {
             e.OldValue.Value.PropertyChanged -= SourcePropertyChanged;
-            e.OldValue.Value.ItemsView.CollectionChanged -= SourceCollectionChanged;
+            e.OldValue.Value.ContainerPrepared -= SourceContainerPrepared;
+            e.OldValue.Value.ContainerClearing -= SourceContainerClearing;
         }
 
         if (e.NewValue is { HasValue: true, Value: not null })
         {
             e.NewValue.Value.PropertyChanged += SourcePropertyChanged;
-            e.NewValue.Value.ItemsView.CollectionChanged += SourceCollectionChanged;
+            e.NewValue.Value.ContainerPrepared += SourceContainerPrepared;
+            e.NewValue.Value.ContainerClearing += SourceContainerClearing;
         }
+    }
+
+    private void SourceContainerClearing(object? sender, ContainerClearingEventArgs e)
+    {
+        var container = e.Container as MapItem;
+        if (container == null)
+        {
+            Debug.Assert(false, nameof(container) + " != null");
+            return;
+        }
+        if (container?.Polygon is INotifyCollectionChanged coll)
+        {
+            coll.CollectionChanged -= PolygonCollectionChanged;
+        }
+
+        _renderRequestSubject.OnNext(Unit.Default);
+    }
+
+    private void SourceContainerPrepared(object? sender, ContainerPreparedEventArgs e)
+    {
+        var container = e.Container as MapItem;
+        if (container == null)
+        {
+            Debug.Assert(false, nameof(container) + " != null");
+            return;
+        }
+
+        if (container?.Polygon is INotifyCollectionChanged coll)
+        {
+            coll.CollectionChanged += PolygonCollectionChanged;
+        }
+
+        _renderRequestSubject.OnNext(Unit.Default);
     }
 
     private void SourcePropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -52,48 +87,6 @@ public partial class PolygonLayer : Control
         if (e.Property == MapItemsControl.ProviderProperty)
         {
             _renderRequestSubject.OnNext(Unit.Default);
-        }
-    }
-
-    private void SourceCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
-    {
-        Debug.Assert(Source != null, nameof(Source) + " != null");
-        if (e.NewItems != null)
-        {
-            foreach (var item in e.NewItems)
-            {
-                var container = item as MapItem ?? Source.ContainerFromItem(item) as MapItem;
-                if (container?.Polygon == null)
-                {
-                    continue;
-                }
-
-                if (container?.Polygon is INotifyCollectionChanged coll)
-                {
-                    coll.CollectionChanged += PolygonCollectionChanged;
-                }
-
-                _renderRequestSubject.OnNext(Unit.Default);
-            }
-        }
-
-        if (e.OldItems != null)
-        {
-            foreach (var item in e.OldItems)
-            {
-                var container = item as MapItem ?? Source.ContainerFromItem(item) as MapItem;
-                if (container?.Polygon == null)
-                {
-                    continue;
-                }
-
-                if (container?.Polygon is INotifyCollectionChanged coll)
-                {
-                    coll.CollectionChanged -= PolygonCollectionChanged;
-                }
-
-                _renderRequestSubject.OnNext(Unit.Default);
-            }
         }
     }
 

@@ -16,7 +16,8 @@
         <map:MapViewModel />
     </Design.DataContext>
     <map:MapItemsControl
-        CenterMap="{map:GeoPoint 53, 53}"
+        CenterMap="{Binding CenterMap.Value}"
+        Zoom="{Binding Zoom.Value}"
         SelectionMode="Multiple"
         ItemsSource="{Binding AnchorsView}"
         SelectedItem="{Binding SelectedAnchor.Value}"
@@ -53,7 +54,7 @@
         </ItemsControl.ItemTemplate>
         <ItemsControl.ItemContainerTheme>
             <ControlTheme TargetType="map:MapItem" x:DataType="map:IMapAnchor">
-                <Setter Property="Location" Value="{Binding Location}" />
+                <Setter Property="Location" Value="{Binding Location, Mode=TwoWay}" />
                 <Setter Property="Rotation" Value="{Binding Azimuth}" />
                 <Setter Property="CenterX" Value="{Binding CenterX}" />
                 <Setter Property="CenterY" Value="{Binding CenterY}" />

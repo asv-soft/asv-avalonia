@@ -44,7 +44,7 @@ public static class HomeMixin
         public Builder UseItemExtension<TExtension>()
             where TExtension : class, IExtensionFor<IHomePageItem>
         {
-            builder.Parent.Parent.Services.AddTransient<IExtensionFor<IHomePageItem>, TExtension>();
+            builder.Parent.Parent.Extensions.Register<IHomePageItem, TExtension>();
             return this;
         }
     }

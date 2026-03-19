@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Asv.IO;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
+using R3;
 
 namespace Asv.Avalonia.Example;
 
@@ -28,9 +30,36 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         MapViewModel.Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         MapViewModel.Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
 
-        MapViewModel.Anchors.Add(
-            new MapAnchor<IMapAnchor>("1", loggerFactory) { Icon = MaterialIconKind.Navigation }
-        );
+        Observable
+            .Timer(TimeSpan.FromSeconds(3))
+            .Subscribe(x =>
+            {
+                var centerPoint = MapViewModel.CenterMap.Value;
+                var pointCount = 36;
+
+                var path = new MapAnchor<IMapAnchor>("editanle-anchor-path", loggerFactory);
+                path.IsVisible = true;
+                MapViewModel.Anchors.Add(path);
+                for (int i = 0; i < pointCount; i++)
+                {
+                    var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}", loggerFactory);
+                    anchor.Icon = MaterialIconKind.MapMarker;
+                    anchor.Title = string.Empty;
+                    anchor.CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0);
+                    anchor.Location = centerPoint.RadialPoint(1000, 360 / pointCount * i);
+                    MapViewModel.Anchors.Add(anchor);
+
+                    path.Polygon.Add(anchor.Location);
+                    var i1 = i;
+                    anchor
+                        .ObservePropertyChanged(x => x.Location)
+                        .Subscribe(location =>
+                        {
+                            path.Polygon[i1] = location;
+                        })
+                        .DisposeItWith(Disposable);
+                }
+            });
     }
 
     public override IEnumerable<IRoutable> GetChildren()

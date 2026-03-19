@@ -49,14 +49,40 @@ public partial class AnnotationLayer : Canvas
         if (e.OldValue is { HasValue: true, Value: not null })
         {
             e.OldValue.Value.PropertyChanged -= SourcePropertyChanged;
-            e.OldValue.Value.ItemsView.CollectionChanged -= SourceChanged;
+            e.OldValue.Value.ContainerPrepared -= SourceContainerPrepared;
+            e.OldValue.Value.ContainerClearing -= SourceContainerClearing;
         }
 
         if (e.NewValue is { HasValue: true, Value: not null })
         {
             e.NewValue.Value.PropertyChanged += SourcePropertyChanged;
-            e.NewValue.Value.ItemsView.CollectionChanged += SourceChanged;
+            e.NewValue.Value.ContainerPrepared += SourceContainerPrepared;
+            e.NewValue.Value.ContainerClearing += SourceContainerClearing;
         }
+    }
+
+    private void SourceContainerClearing(object? sender, ContainerClearingEventArgs e)
+    {
+        var container = e.Container as MapItem;
+        if (container == null)
+        {
+            Debug.Assert(false, nameof(container) + " != null");
+            return;
+        }
+        container.PropertyChanged -= ContainerOnPropertyChanged;
+        _renderRequestSubject.OnNext(Unit.Default);
+    }
+
+    private void SourceContainerPrepared(object? sender, ContainerPreparedEventArgs e)
+    {
+        var container = e.Container as MapItem;
+        if (container == null)
+        {
+            Debug.Assert(false, nameof(container) + " != null");
+            return;
+        }
+        container.PropertyChanged += ContainerOnPropertyChanged;
+        _renderRequestSubject.OnNext(Unit.Default);
     }
 
     private void SourcePropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -77,7 +103,7 @@ public partial class AnnotationLayer : Canvas
         }
     }
 
-    private void SourceChanged(object? sender, NotifyCollectionChangedEventArgs e)
+    /*private void SourceChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         Debug.Assert(Source != null, nameof(Source) + " != null");
         if (e.Action == NotifyCollectionChangedAction.Reset)
@@ -120,7 +146,7 @@ public partial class AnnotationLayer : Canvas
                 _renderRequestSubject.OnNext(Unit.Default);
             }
         }
-    }
+    }*/
 
     private void ContainerOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {

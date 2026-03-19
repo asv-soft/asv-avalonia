@@ -45,6 +45,10 @@ public class MapViewModel : RoutableViewModel, IMap
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);
+        CenterMap = new BindableReactiveProperty<GeoPoint>(
+            new GeoPoint(53.0, 53.0, 0)
+        ).DisposeItWith(Disposable);
+        Zoom = new BindableReactiveProperty<int>(10).DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IMapAnchor> AnchorsView { get; }
@@ -52,6 +56,8 @@ public class MapViewModel : RoutableViewModel, IMap
     public ObservableList<IMapAnchor> Anchors { get; }
 
     public BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
+    public BindableReactiveProperty<GeoPoint> CenterMap { get; }
+    public BindableReactiveProperty<int> Zoom { get; }
 
     public override IEnumerable<IRoutable> GetChildren()
     {

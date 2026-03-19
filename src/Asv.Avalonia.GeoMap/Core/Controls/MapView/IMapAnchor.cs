@@ -12,7 +12,7 @@ public interface IMapAnchor : IRoutable
     string Title { get; }
     double Azimuth { get; }
     BindableReactiveProperty<GeoPoint> ReactiveLocation { get; }
-    GeoPoint Location { get; }
+    GeoPoint Location { get; set; }
     double IconSize { get; }
     AsvColorKind IconColor { get; }
     HorizontalOffset CenterX { get; }

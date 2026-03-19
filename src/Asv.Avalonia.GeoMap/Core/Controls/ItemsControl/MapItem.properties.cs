@@ -43,7 +43,7 @@ public partial class MapItem
     public GeoPoint Location
     {
         get => GetValue(LocationProperty);
-        set => SetCurrentValue(LocationProperty, value);
+        set => SetValue(LocationProperty, value);
     }
 
     #endregion

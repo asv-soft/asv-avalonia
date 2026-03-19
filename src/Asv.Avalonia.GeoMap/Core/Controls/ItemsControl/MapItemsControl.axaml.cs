@@ -112,7 +112,13 @@ public partial class MapItemsControl : SelectingItemsControl
             {
                 DragState = DragState.DragSelection;
                 _selectedContainer = container;
-                Selection.Select(IndexFromContainer(container));
+                var index = IndexFromContainer(container);
+                if (Selection.IsSelected(index) == false)
+                {
+                    Selection.Clear();
+                }
+
+                Selection.Select(index);
             }
             else
             {
