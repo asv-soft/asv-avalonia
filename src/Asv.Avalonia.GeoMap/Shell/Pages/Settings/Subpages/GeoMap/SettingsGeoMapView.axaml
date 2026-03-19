@@ -16,7 +16,14 @@
     </Design.DataContext>
 
     <StackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Spacing="8" Margin="8">
-        <Grid Margin="20,0,0, 0" RowDefinitions="*,5,*">
+        <DockPanel>
+            <TextBlock
+                FontSize="{StaticResource HubHeaderThemeFontSize}"
+                Text="{x:Static geoMap:RS.SettingsGeoMapView_CommonSection_Title}"
+            />
+            <Separator />
+        </DockPanel>
+        <Grid Margin="20,0,0, 0" RowDefinitions="*,5,*,5,*,5,*">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="8" />
@@ -72,6 +79,63 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+        </Grid>
+        <DockPanel>
+            <TextBlock
+                FontSize="{StaticResource HubHeaderThemeFontSize}"
+                Text="{x:Static geoMap:RS.SettingsGeoMapView_ZoomSection_Title}"
+            />
+            <Separator />
+        </DockPanel>
+        <Grid Margin="20,0,0, 0" RowDefinitions="*,5,*">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="20" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition SharedSizeGroup="TitleGroup" Width="Auto" />
+                <ColumnDefinition Width="8" />
+                <ColumnDefinition MinWidth="300" SharedSizeGroup="ValueGroup" />
+            </Grid.ColumnDefinitions>
+            <avalonia:MaterialIcon
+                Grid.Row="0"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Kind="MagnifyMinusOutline"
+            />
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                Text="{x:Static geoMap:RS.SettingsGeoMapView_MinZoomProperty_Title}"
+            />
+            <ComboBox
+                Grid.Row="0"
+                Grid.Column="4"
+                VerticalAlignment="Center"
+                DataContext="{CompiledBinding MinMapZoom}"
+                ItemsSource="{CompiledBinding Items.Value}"
+                SelectedItem="{CompiledBinding SelectedItem.Value}"
+            />
+
+            <avalonia:MaterialIcon
+                Grid.Row="2"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                Kind="MagnifyPlusOutline"
+            />
+            <TextBlock
+                Grid.Row="2"
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                Text="{x:Static geoMap:RS.SettingsGeoMapView_MaxZoomProperty_Title}"
+            />
+            <ComboBox
+                Grid.Row="2"
+                Grid.Column="4"
+                VerticalAlignment="Center"
+                DataContext="{CompiledBinding MaxMapZoom}"
+                ItemsSource="{CompiledBinding Items.Value}"
+                SelectedItem="{CompiledBinding SelectedItem.Value}"
+            />
         </Grid>
     </StackPanel>
 </UserControl>

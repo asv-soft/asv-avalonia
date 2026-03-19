@@ -19,6 +19,8 @@
         CenterMap="{Binding CenterMap.Value}"
         Zoom="{Binding Zoom.Value}"
         Provider="{Binding CurrentProvider.Value}"
+        MinZoom="{Binding MinZoom.Value}"
+        MaxZoom="{Binding MaxZoom.Value}"
         ItemsSource="{Binding AnchorsView}"
         SelectedItem="{Binding SelectedAnchor.Value}"
         SelectionMode="Multiple"

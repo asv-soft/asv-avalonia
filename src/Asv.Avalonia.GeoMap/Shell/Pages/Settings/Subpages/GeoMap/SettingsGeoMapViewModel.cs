@@ -22,14 +22,24 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         MapProvider = new MapProviderProperty(loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
+        MinMapZoom = new MinMapZoomProperty(mapService, loggerFactory)
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+        MaxMapZoom = new MaxMapZoomProperty(mapService, loggerFactory)
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
     }
 
     public MapProviderProperty MapProvider { get; }
     public MapModeProperty MapMode { get; }
+    public MinMapZoomProperty MinMapZoom { get; }
+    public MaxMapZoomProperty MaxMapZoom { get; }
 
     public override IEnumerable<IRoutable> GetChildren()
     {
         yield return MapProvider;
         yield return MapMode;
+        yield return MinMapZoom;
+        yield return MaxMapZoom;
     }
 }

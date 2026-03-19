@@ -51,4 +51,28 @@
     <data name="ChangeTileProviderCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that changes map tile provider</value>
     </data>
+    <data name="ChangeMinZoomCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that changes minimum zoom level</value>
+    </data>
+    <data name="ChangeMaxZoomCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that changes maximum zoom level</value>
+    </data>
+    <data name="ChangeMinZoomCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Change min zoom</value>
+    </data>
+    <data name="ChangeMaxZoomCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Change max zoom</value>
+    </data>
+    <data name="SettingsGeoMapView_CommonSection_Title" xml:space="preserve">
+        <value>Common</value>
+    </data>
+    <data name="SettingsGeoMapView_ZoomSection_Title" xml:space="preserve">
+        <value>Zoom</value>
+    </data>
+    <data name="SettingsGeoMapView_MinZoomProperty_Title" xml:space="preserve">
+        <value>Min</value>
+    </data>
+    <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
+        <value>Max</value>
+    </data>
 </root>

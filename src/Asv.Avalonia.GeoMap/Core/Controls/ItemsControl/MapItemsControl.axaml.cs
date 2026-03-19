@@ -33,6 +33,20 @@ public partial class MapItemsControl : SelectingItemsControl
         SelectionChanged += OnSelectionChanged;
     }
 
+    #region Property events
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == MinZoomProperty || change.Property == MaxZoomProperty)
+        {
+            Zoom = Math.Clamp(Zoom, MinZoom, MaxZoom);
+        }
+    }
+
+    #endregion
+
     #region Selection
 
     private void OnSelectionChanged(object? sender, SelectionChangedEventArgs args)
@@ -292,11 +306,11 @@ public partial class MapItemsControl : SelectingItemsControl
                 )?.Location ?? CenterMap;
         }
 
-        if (e.Delta.Y > 0 && _zoom < 19)
+        if (e.Delta.Y > 0 && _zoom < MaxZoom)
         {
             newZoom++;
         }
-        else if (e.Delta.Y < 0 && _zoom > 1)
+        else if (e.Delta.Y < 0 && _zoom > MinZoom)
         {
             newZoom--;
         }
