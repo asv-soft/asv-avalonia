@@ -27,4 +27,22 @@
     <data name="GeoPointDialogViewModel_Anchor_Title" xml:space="preserve">
         <value>Point</value>
     </data>
+    <data name="MapModeProperty_MapModeInfo_Offline" xml:space="preserve">
+        <value>Offline</value>
+    </data>
+    <data name="MapModeProperty_MapModeInfo_Online" xml:space="preserve">
+        <value>Online</value>
+    </data>
+    <data name="MapModeProperty_MapModeInfo_Mixed" xml:space="preserve">
+        <value>Mixed</value>
+    </data>
+    <data name="SettingsGeoMapView_ModeProperty_Title" xml:space="preserve">
+        <value>Map mode</value>
+    </data>
+    <data name="SettingsGeoMapView_TileProviderProperty_Title" xml:space="preserve">
+        <value>Map provider</value>
+    </data>
+    <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
+        <value>Map</value>
+    </data>
 </root>

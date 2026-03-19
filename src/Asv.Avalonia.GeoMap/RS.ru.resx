@@ -20,4 +20,22 @@
     <data name="GeoPointDialogViewModel_Anchor_Title" xml:space="preserve">
         <value>Точка</value>
     </data>
+    <data name="MapModeProperty_MapModeInfo_Mixed" xml:space="preserve">
+        <value>Смешанный</value>
+    </data>
+    <data name="MapModeProperty_MapModeInfo_Offline" xml:space="preserve">
+        <value>Оффлайн</value>
+    </data>
+    <data name="MapModeProperty_MapModeInfo_Online" xml:space="preserve">
+        <value>Онлайн</value>
+    </data>
+    <data name="SettingsGeoMapView_ModeProperty_Title" xml:space="preserve">
+        <value>Режим работы карты</value>
+    </data>
+    <data name="SettingsGeoMapView_TileProviderProperty_Title" xml:space="preserve">
+        <value>Провайдер карты</value>
+    </data>
+    <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
+        <value>Карта</value>
+    </data>
 </root>

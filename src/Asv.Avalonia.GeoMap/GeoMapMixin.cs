@@ -26,37 +26,12 @@ public static class GeoMapMixin
     {
         public void RegisterDefault()
         {
-            builder
-                .Services.AddKeyedSingleton<ITileCache, MemoryTileCache>(
-                    TileLoader.FastTileCacheContract
-                )
-                .AddOptions<MemoryTileCacheConfig>()
-                .BindConfiguration(MemoryTileCacheConfig.ConfigurationSection);
+            builder.ModuleGeoMap.AddControls();
+            builder.ModuleGeoMap.AddDialogs();
+            builder.ModuleGeoMap.AddCommands();
+            builder.ModuleGeoMap.AddServices();
 
-            builder
-                .Services.AddKeyedSingleton<ITileCache, FileSystemCache>(
-                    TileLoader.SlowTileCacheContract
-                )
-                .AddOptions<FileSystemCacheConfig>()
-                .BindConfiguration(FileSystemCacheConfig.ConfigurationSection);
-
-            builder.Services.AddSingleton<ITileLoader, TileLoader>();
-
-            builder.Dialogs.RegisterPrefab<GeoPointDialogPrefab>();
-            builder
-                .ViewLocator.RegisterViewFor<GeoPointDialogViewModel, GeoPointDialogView>()
-                .RegisterViewFor<MapViewModel, MapView>()
-                .RegisterViewFor<MapWidget, MapWidgetView>();
-            this.RegisterTileProvider<YandexTileProvider>()
-                .RegisterTileProvider<BingTileProvider>()
-                .RegisterTileProvider<EmptyTileProvider>();
-
-            builder
-                .Services.AddOptions<BingTileProviderOptions>()
-                .BindConfiguration(BingTileProviderOptions.ConfigurationSection);
-
-            // Add map settings
-            builder.Shell.Pages.Settings.UseMapSettings();
+            builder.ModuleGeoMap.AddGeoMapSettingsSubPage();
         }
 
         public IHostApplicationBuilder Parent => builder;

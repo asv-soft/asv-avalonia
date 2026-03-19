@@ -1,24 +1,19 @@
-using Asv.Common;
+﻿using Asv.Common;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class GeoMapAppearanceSettingsSectionViewModel
-    : RoutableViewModel,
-        ISettingsAppearanceSection
+public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
 {
     public const string PageId = "geo-map";
 
-    public GeoMapAppearanceSettingsSectionViewModel()
+    public SettingsGeoMapViewModel()
         : this(NullMapService.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public GeoMapAppearanceSettingsSectionViewModel(
-        IMapService mapService,
-        ILoggerFactory loggerFactory
-    )
+    public SettingsGeoMapViewModel(IMapService mapService, ILoggerFactory loggerFactory)
         : base(PageId, loggerFactory)
     {
         MapMode = new MapModeProperty(mapService, loggerFactory)

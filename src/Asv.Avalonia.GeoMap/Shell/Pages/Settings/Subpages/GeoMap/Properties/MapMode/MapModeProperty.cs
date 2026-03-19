@@ -4,6 +4,10 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
+#pragma warning disable SA1313
+public record struct MapModeInfo(string Name, MapModeType Type);
+#pragma warning restore SA1313
+
 public class MapModeProperty : RoutableViewModel
 {
     public const string ViewModelId = "map.mode";
@@ -33,9 +37,9 @@ public class MapModeProperty : RoutableViewModel
 
     public IEnumerable<MapModeInfo> Items =>
         [
-            new("Online", MapModeType.Online),
-            new("Offline", MapModeType.Offline),
-            new("Mixed", MapModeType.Mixed),
+            new(RS.MapModeProperty_MapModeInfo_Online, MapModeType.Online),
+            new(RS.MapModeProperty_MapModeInfo_Offline, MapModeType.Offline),
+            new(RS.MapModeProperty_MapModeInfo_Mixed, MapModeType.Mixed),
         ];
 
     public BindableReactiveProperty<MapModeInfo> SelectedItem { get; }
