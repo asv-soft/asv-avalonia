@@ -7,9 +7,7 @@ public class MapProviderProperty : RoutableViewModel
 {
     public const string ViewModelId = "map-provider";
 
-    public MapProviderProperty( /* IMapProvider, */
-        ILoggerFactory loggerFactory
-    )
+    public MapProviderProperty(ILoggerFactory loggerFactory)
         : base(ViewModelId, loggerFactory)
     {
         SelectedItem = new BindableReactiveProperty<string>("yandex");

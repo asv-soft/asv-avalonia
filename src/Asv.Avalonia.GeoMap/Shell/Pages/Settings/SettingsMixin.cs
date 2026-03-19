@@ -1,27 +1,16 @@
-using Microsoft.Extensions.DependencyInjection;
-
 namespace Asv.Avalonia.GeoMap;
 
 public static class SettingsGeoMapMixin
 {
-    extension(SettingsPageMixin.Builder builder)
+    extension(GeoMapMixin.Builder builder)
     {
-        public SettingsPageMixin.Builder UseMapSettings()
+        public GeoMapMixin.Builder AddGeoMapSettingsSubPage()
         {
-            builder.Parent.Parent.Parent.Services.AddSingleton<IMapService, MapService>();
-            builder.Parent.Parent.Parent.Services.AddSingleton<
-                IAsyncCommand,
-                ChangeMapModeCommand
-            >();
-
-            builder.Parent.Parent.Parent.ViewLocator.RegisterViewFor<
-                GeoMapAppearanceSettingsSectionViewModel,
-                GeoMapAppearanceSettingsSectionView
-            >();
-            builder.Parent.Parent.Parent.Extensions.Register<
-                ISettingsAppearanceSubPage,
-                SettingsAppearanceExtension
-            >();
+            builder.Parent.Shell.Pages.Settings.AddSubPage<
+                SettingsGeoMapViewModel,
+                SettingsGeoMapView,
+                SettingsGeoMapTreePageMenu
+            >(SettingsGeoMapViewModel.PageId);
 
             return builder;
         }

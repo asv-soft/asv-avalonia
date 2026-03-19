@@ -1,26 +1,22 @@
-<UserControl
+﻿<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:geomap="clr-namespace:Asv.Avalonia.GeoMap"
+    xmlns:geoMap="clr-namespace:Asv.Avalonia.GeoMap"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="450"
-    x:Class="Asv.Avalonia.GeoMap.GeoMapAppearanceSettingsSectionView"
-    x:DataType="geomap:GeoMapAppearanceSettingsSectionViewModel"
+    x:Class="Asv.Avalonia.GeoMap.SettingsGeoMapView"
+    x:DataType="geoMap:SettingsGeoMapViewModel"
 >
     <Design.DataContext>
-        <geomap:GeoMapAppearanceSettingsSectionViewModel />
+        <geoMap:SettingsGeoMapViewModel />
     </Design.DataContext>
 
     <StackPanel Grid.IsSharedSizeScope="True" HorizontalAlignment="Stretch" Spacing="8" Margin="8">
-        <DockPanel>
-            <TextBlock FontSize="{StaticResource HubHeaderThemeFontSize}" Text="GeoMap" />
-            <Separator />
-        </DockPanel>
-        <Grid Margin="20,0,0, 0" RowDefinitions="*,5,*,5,*">
+        <Grid Margin="20,0,0, 0" RowDefinitions="*,5,*">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="8" />
@@ -33,9 +29,14 @@
                 Grid.Row="0"
                 Grid.Column="0"
                 VerticalAlignment="Center"
-                Kind="MapOutline"
+                Kind="LetterMBoxOutline"
             />
-            <TextBlock Grid.Row="0" VerticalAlignment="Center" Grid.Column="2" Text="Map mode" />
+            <TextBlock
+                Grid.Row="0"
+                Grid.Column="2"
+                VerticalAlignment="Center"
+                Text="{x:Static geoMap:RS.SettingsGeoMapView_ModeProperty_Title}"
+            />
             <ComboBox
                 Grid.Row="0"
                 Grid.Column="4"
@@ -51,12 +52,12 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
 
-            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="Map" />
+            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="MapOutline" />
             <TextBlock
-                VerticalAlignment="Center"
                 Grid.Column="2"
                 Grid.Row="2"
-                Text="Map provider"
+                VerticalAlignment="Center"
+                Text="{x:Static geoMap:RS.SettingsGeoMapView_TileProviderProperty_Title}"
             />
             <ComboBox
                 Grid.Column="4"
@@ -67,7 +68,7 @@
             >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding  }" />
+                        <TextBlock Text="{CompiledBinding }" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
