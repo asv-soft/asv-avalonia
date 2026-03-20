@@ -20,6 +20,18 @@
     <data name="GeoPointDialogViewModel_Anchor_Title" xml:space="preserve">
         <value>Точка</value>
     </data>
+    <data name="ChangeMaxZoomCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда изменяет максимальный зум</value>
+    </data>
+    <data name="ChangeMaxZoomCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Изменить максимальный зум</value>
+    </data>
+    <data name="ChangeMinZoomCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда изменяет минимальный зум</value>
+    </data>
+    <data name="ChangeMinZoomCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Изменить минимальный зум</value>
+    </data>
     <data name="MapModeProperty_MapModeInfo_Mixed" xml:space="preserve">
         <value>Смешанный</value>
     </data>
@@ -43,5 +55,17 @@
     </data>
     <data name="ChangeTileProviderCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, изменяющая провайдера карты</value>
+    </data>
+    <data name="SettingsGeoMapView_ZoomSection_Title" xml:space="preserve">
+        <value>Зум</value>
+    </data>
+    <data name="SettingsGeoMapView_CommonSection_Title" xml:space="preserve">
+        <value>Общие</value>
+    </data>
+    <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
+        <value>Минимальный</value>
+    </data>
+    <data name="SettingsGeoMapView_MinZoomProperty_Title" xml:space="preserve">
+        <value>Максимальный</value>
     </data>
 </root>

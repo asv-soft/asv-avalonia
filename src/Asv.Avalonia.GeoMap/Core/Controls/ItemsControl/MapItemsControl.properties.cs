@@ -190,8 +190,52 @@ public partial class MapItemsControl
     public int Zoom
     {
         get => _zoom;
-        set => SetAndRaise(ZoomProperty, ref _zoom, value);
+        set => SetAndRaise(ZoomProperty, ref _zoom, Math.Clamp(value, MinZoom, MaxZoom));
     }
+
+    #endregion
+
+    #region MinZoom
+
+    public static readonly DirectProperty<MapItemsControl, int> MinZoomProperty =
+        AvaloniaProperty.RegisterDirect<MapItemsControl, int>(
+            nameof(MinZoom),
+            o => o.MinZoom,
+            (o, v) => o.MinZoom = v
+        );
+
+    public int MinZoom
+    {
+        get;
+        set =>
+            SetAndRaise(
+                MinZoomProperty,
+                ref field,
+                Math.Clamp(value, IZoomService.MinZoomLevel, MaxZoom)
+            );
+    } = IZoomService.MinZoomLevel;
+
+    #endregion
+
+    #region MaxZoom
+
+    public static readonly DirectProperty<MapItemsControl, int> MaxZoomProperty =
+        AvaloniaProperty.RegisterDirect<MapItemsControl, int>(
+            nameof(MaxZoom),
+            o => o.MaxZoom,
+            (o, v) => o.MaxZoom = v
+        );
+
+    public int MaxZoom
+    {
+        get;
+        set =>
+            SetAndRaise(
+                MaxZoomProperty,
+                ref field,
+                Math.Clamp(value, MinZoom, IZoomService.MaxZoomLevel)
+            );
+    } = IZoomService.MaxZoomLevel;
 
     #endregion
 }

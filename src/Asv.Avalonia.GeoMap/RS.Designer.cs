@@ -110,5 +110,53 @@ namespace Asv.Avalonia.GeoMap {
                 return ResourceManager.GetString("ChangeTileProviderCommand_CommandInfo_Description", resourceCulture);
             }
         }
+        
+        public static string ChangeMinZoomCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ChangeMinZoomCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string ChangeMaxZoomCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("ChangeMaxZoomCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        public static string ChangeMinZoomCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ChangeMinZoomCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string ChangeMaxZoomCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("ChangeMaxZoomCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_CommonSection_Title {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_CommonSection_Title", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_ZoomSection_Title {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_ZoomSection_Title", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_MinZoomProperty_Title {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_MinZoomProperty_Title", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_MaxZoomProperty_Title {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_MaxZoomProperty_Title", resourceCulture);
+            }
+        }
     }
 }

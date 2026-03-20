@@ -6,6 +6,8 @@ public static class CommandsMixin
     {
         builder.Parent.Commands.Register<ChangeMapModeCommand>();
         builder.Parent.Commands.Register<ChangeTileProviderCommand>();
+        builder.Parent.Commands.Register<ChangeMinZoomCommand>();
+        builder.Parent.Commands.Register<ChangeMaxZoomCommand>();
 
         return builder;
     }
