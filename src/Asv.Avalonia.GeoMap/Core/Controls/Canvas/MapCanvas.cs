@@ -11,13 +11,6 @@ public partial class MapCanvas : Panel
         AffectsArrange<MapCanvas>(ProviderProperty, ZoomProperty, CenterMapProperty);
     }
 
-    public MapCanvas()
-    {
-        Provider = new BingTileProvider(
-            "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
-        );
-    }
-
     protected override Size MeasureOverride(Size availableSize)
     {
         availableSize = new Size(double.PositiveInfinity, double.PositiveInfinity);

@@ -3,7 +3,13 @@ namespace Asv.Avalonia.GeoMap;
 public class YandexTileProvider : ITileProvider
 {
     public const string Id = "Yandex";
-    public static readonly TileProviderInfo StaticInfo = new(Id, "Yandex");
+    public static readonly TileProviderInfo StaticInfo = new()
+    {
+        Id = Id,
+        NameCallback = () => RS.YandexTileProvider_Info_Name,
+        Group = TileProviderGroup.Yandex,
+    };
+
     public TileProviderInfo Info => StaticInfo;
     public IMapProjection Projection => WebMercatorProjection.Instance;
 

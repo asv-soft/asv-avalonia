@@ -75,4 +75,37 @@
     <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
         <value>Max</value>
     </data>
+    <data name="EditApiKeyDialogView_ApiKeyProperty_Title" xml:space="preserve">
+        <value>Map provider API Key</value>
+    </data>
+    <data name="TileProviderGroup_Other_Name" xml:space="preserve">
+        <value>Other</value>
+    </data>
+    <data name="TileProviderGroup_Yandex_Name" xml:space="preserve">
+        <value>Yandex</value>
+    </data>
+    <data name="TileProviderGroup_Bing_Name" xml:space="preserve">
+        <value>Bing</value>
+    </data>
+    <data name="BingTileProvider_Info_Name" xml:space="preserve">
+        <value>Default</value>
+    </data>
+    <data name="YandexTileProvider_Info_Name" xml:space="preserve">
+        <value>Default</value>
+    </data>
+    <data name="EmptyTileProvider_Info_Name" xml:space="preserve">
+        <value>Empty</value>
+    </data>
+    <data name="EditApiKeyDialogPrefab_Content_Title" xml:space="preserve">
+        <value>Edit API Key</value>
+    </data>
+    <data name="EditApiKeyDialogPrefab_Content_PrimaryButton" xml:space="preserve">
+        <value>Save</value>
+    </data>
+    <data name="SettingsGeoMapView_SetCurrentProvider_Tooltip" xml:space="preserve">
+        <value>Set as current</value>
+    </data>
+    <data name="SettingsGeoMapView_EditProviderApiKey_Tooltip" xml:space="preserve">
+        <value>Edit API Key</value>
+    </data>
 </root>

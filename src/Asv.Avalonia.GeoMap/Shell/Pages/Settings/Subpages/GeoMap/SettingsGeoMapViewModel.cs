@@ -8,18 +8,22 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     public const string PageId = "geo-map";
 
     public SettingsGeoMapViewModel()
-        : this(NullMapService.Instance, DesignTime.LoggerFactory)
+        : this(NullMapService.Instance, DesignTime.DialogService, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public SettingsGeoMapViewModel(IMapService mapService, ILoggerFactory loggerFactory)
+    public SettingsGeoMapViewModel(
+        IMapService mapService,
+        IDialogService dialogService,
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, loggerFactory)
     {
         MapMode = new MapModeProperty(mapService, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        MapProvider = new MapProviderProperty(loggerFactory)
+        MapProvider = new MapProviderProperty(mapService, dialogService, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         MinMapZoom = new MinMapZoomProperty(mapService, loggerFactory)

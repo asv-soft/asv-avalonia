@@ -1,12 +1,9 @@
 ﻿using System.Globalization;
-using Asv.Cfg;
-using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Media;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging.Abstractions;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
@@ -40,9 +37,6 @@ public partial class MapBackground : Control
             .AddTo(ref disposeBuilder);
         _tileLoader.OnLoaded.Subscribe(_ => RequestRenderLoop()).AddTo(ref disposeBuilder);
 
-        Provider = new BingTileProvider(
-            "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
-        );
         _disposeIt = disposeBuilder.Build();
 
         Zoom = 8;

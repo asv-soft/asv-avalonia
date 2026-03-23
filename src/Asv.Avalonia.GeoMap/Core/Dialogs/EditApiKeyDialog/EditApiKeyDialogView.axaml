@@ -1,0 +1,43 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:geoMap="clr-namespace:Asv.Avalonia.GeoMap"
+    mc:Ignorable="d"
+    d:DesignWidth="400"
+    x:Class="Asv.Avalonia.GeoMap.EditApiKeyDialogView"
+    x:DataType="geoMap:EditApiKeyDialogViewModel"
+>
+    <Design.DataContext>
+        <geoMap:EditApiKeyDialogViewModel />
+    </Design.DataContext>
+
+    <StackPanel Spacing="8">
+        <TextBox
+            Name="ApiKeyBox"
+            Watermark="{x:Static geoMap:RS.EditApiKeyDialogView_ApiKeyProperty_Title}"
+            PasswordChar="*"
+            Text="{CompiledBinding ApiKey.Value}"
+        >
+            <TextBox.InnerRightContent>
+                <ToggleButton
+                    Theme="{StaticResource TransparentButton}"
+                    IsChecked="{Binding #ApiKeyBox.RevealPassword}"
+                >
+                    <Panel>
+                        <avalonia:MaterialIcon
+                            Kind="Eye"
+                            IsVisible="{Binding !#ApiKeyBox.RevealPassword}"
+                        />
+                        <avalonia:MaterialIcon
+                            Kind="EyeOff"
+                            IsVisible="{Binding #ApiKeyBox.RevealPassword}"
+                        />
+                    </Panel>
+                </ToggleButton>
+            </TextBox.InnerRightContent>
+        </TextBox>
+    </StackPanel>
+</UserControl>

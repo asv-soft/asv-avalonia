@@ -28,8 +28,6 @@ public partial class MapBackground
 
     #region Provider
 
-    private ITileProvider _provider = EmptyTileProvider.Instance;
-
     public static readonly DirectProperty<MapBackground, ITileProvider> ProviderProperty =
         AvaloniaProperty.RegisterDirect<MapBackground, ITileProvider>(
             nameof(Provider),
@@ -40,9 +38,9 @@ public partial class MapBackground
 
     public ITileProvider Provider
     {
-        get => _provider;
-        set => SetAndRaise(ProviderProperty, ref _provider, value);
-    }
+        get;
+        set => SetAndRaise(ProviderProperty, ref field, value);
+    } = EmptyTileProvider.Instance;
 
     #endregion
 
