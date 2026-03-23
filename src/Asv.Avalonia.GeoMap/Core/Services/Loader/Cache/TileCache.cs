@@ -59,7 +59,6 @@ public class TileCacheConfig
 
 public abstract class TileCache : AsyncDisposableWithCancel, ITileCache
 {
-    private readonly IDisposable? _timer;
     private readonly LockByKeyExecutor<TileKey> _lock = new();
 
     protected TileCache(TileCacheConfig config, ILoggerFactory factory)
@@ -69,9 +68,10 @@ public abstract class TileCache : AsyncDisposableWithCancel, ITileCache
         var logger = factory.CreateLogger<TileCache>();
         if (config.PrintStatisticsToLogPeriodSec > 0)
         {
-            _timer = Observable
+            Observable
                 .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(config.PrintStatisticsToLogPeriodSec))
-                .Subscribe(_ => logger.ZLogInformation($"Stat: {GetStatistic()}"));
+                .Subscribe(_ => logger.ZLogInformation($"Stat: {GetStatistic()}"))
+                .RegisterTo(DisposeCancel);
         }
     }
 
@@ -93,29 +93,5 @@ public abstract class TileCache : AsyncDisposableWithCancel, ITileCache
     public virtual TileCacheStatistic GetStatistic()
     {
         return TileCacheStatistic.Empty;
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _timer?.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
-
-    protected override async ValueTask DisposeAsyncCore()
-    {
-        if (_timer is IAsyncDisposable timerAsyncDisposable)
-        {
-            await timerAsyncDisposable.DisposeAsync();
-        }
-        else
-        {
-            _timer?.Dispose();
-        }
-
-        await base.DisposeAsyncCore();
     }
 }

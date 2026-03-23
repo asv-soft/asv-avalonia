@@ -277,7 +277,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     {
         await _fastCache.DisposeAsync();
 
-        //await _slowCache.DisposeAsync();
+        await _slowCache.DisposeAsync();
         await CastAndDispose(_sub1);
         await CastAndDispose(_sub2);
         await CastAndDispose(CurrentMapMode);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Threading.Tasks;
 using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.IO;
@@ -27,7 +28,7 @@ sealed class Program
             BuildAvaloniaApp()
                 .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
             AppHost.Instance.StopAsync().GetAwaiter().GetResult();
-            AppHost.Instance.Dispose();
+            Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
         }
         catch (Exception e)
         {

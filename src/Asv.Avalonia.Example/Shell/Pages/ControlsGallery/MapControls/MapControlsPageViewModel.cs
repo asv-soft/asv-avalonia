@@ -52,7 +52,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
                     var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}", loggerFactory);
                     anchor.Icon = MaterialIconKind.MapMarker;
                     anchor.Title = string.Empty;
-                    anchor.IsAnnotationVisible = true;
+                    anchor.IsAnnotationVisible = false;
                     anchor.CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0);
                     anchor.Location = centerPoint.RadialPoint(1000, 360 / pointCount * i);
                     MapViewModel.Anchors.Add(anchor);
