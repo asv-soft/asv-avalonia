@@ -132,7 +132,6 @@ public partial class PolygonLayer : Control
         var zoom = Source.Zoom;
         var centerPixel = projection.Wgs84ToPixels(Source.CenterMap, zoom, tileSize);
         var offset = new Point(halfWidth - centerPixel.X, halfHeight - centerPixel.Y);
-        Debug.WriteLine("Polygon render");
 
         var rotationAngle = Source.Rotation; // Получаем угол поворота карты
 
