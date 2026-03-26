@@ -128,6 +128,7 @@ public static class AppHostMixin
                 .UseDesignTimeSearchService()
                 .UseDesignTimeShell()
                 .UseDesignTimeNavigationService()
+                .UseDesignTimeOptionalSoloRun()
                 .UseDesignTimeLogReaderService()
                 .UseDesignTimeLocalizationService()
                 .UseDesignTimeLayoutService()
