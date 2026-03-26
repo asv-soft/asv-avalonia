@@ -29,11 +29,10 @@ public class MapCompass : TemplatedControl
         });
     }
 
-    public static readonly StyledProperty<double> RotationProperty =
-        AvaloniaProperty.Register<MapCompass, double>(
-            nameof(Rotation),
-            defaultBindingMode: BindingMode.TwoWay
-        );
+    public static readonly StyledProperty<double> RotationProperty = AvaloniaProperty.Register<
+        MapCompass,
+        double
+    >(nameof(Rotation), defaultBindingMode: BindingMode.TwoWay);
 
     public double Rotation
     {

@@ -27,7 +27,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Margin="8"
-            />
+        />
         <map:TileProviderSelectorView
             HorizontalAlignment="Right"
             VerticalAlignment="Top"

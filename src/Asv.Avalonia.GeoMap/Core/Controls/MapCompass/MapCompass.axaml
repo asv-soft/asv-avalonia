@@ -30,11 +30,7 @@
                     ClipToBounds="True"
                 >
                     <Grid>
-                        <Ellipse
-                            Margin="6"
-                            Stroke="#40FFFFFF"
-                            StrokeThickness="1"
-                        />
+                        <Ellipse Margin="6" Stroke="#40FFFFFF" StrokeThickness="1" />
                         <Line
                             StartPoint="0,0"
                             EndPoint="0,8"
