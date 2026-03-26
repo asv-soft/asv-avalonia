@@ -100,14 +100,22 @@ public static class IoMixin
 
     extension(IHostApplicationBuilder builder)
     {
-        private void InternalUseIo() { }
-
         public IHostApplicationBuilder UseModuleIo(Action<Builder>? configure = null)
         {
-            builder.InternalUseIo();
             configure ??= (b) => b.RegisterDefault();
             configure(new Builder(builder));
+
+            // required services for io
             builder.Services.AddSingleton<IDeviceManager, DeviceManager>();
+            builder.Services.AddSingleton<IDeviceExplorer>(svc =>
+                svc.GetRequiredService<IDeviceManager>().Explorer
+            );
+            builder.Services.AddSingleton<IProtocolRouter>(svc =>
+                svc.GetRequiredService<IDeviceManager>().Router
+            );
+            builder.Services.AddSingleton<IProtocolFactory>(svc =>
+                svc.GetRequiredService<IDeviceManager>().ProtocolFactory
+            );
             return builder;
         }
 

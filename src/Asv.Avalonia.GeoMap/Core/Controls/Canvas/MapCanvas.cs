@@ -8,7 +8,12 @@ public partial class MapCanvas : Panel
     static MapCanvas()
     {
         AffectsParentArrange<MapCanvas>(LocationProperty);
-        AffectsArrange<MapCanvas>(ProviderProperty, ZoomProperty, CenterMapProperty);
+        AffectsArrange<MapCanvas>(
+            ProviderProperty,
+            ZoomProperty,
+            CenterMapProperty,
+            MapRotationProperty
+        );
     }
 
     protected override Size MeasureOverride(Size availableSize)
@@ -20,7 +25,7 @@ public partial class MapCanvas : Panel
             child.Measure(availableSize);
         }
 
-        return default;
+        return availableSize;
     }
 
     protected override Size ArrangeOverride(Size finalSize)
@@ -45,20 +50,36 @@ public partial class MapCanvas : Panel
         }
 
         var tileSize = Provider.TileSize;
-        var halfWidth = finalSize.Width * 0.5;
-        var halfHeight = finalSize.Height * 0.5;
         var projection = Provider.Projection;
-
+        var centerScreen = new Point(finalSize.Width * 0.5, finalSize.Height * 0.5);
         var centerPixel = projection.Wgs84ToPixels(CenterMap, Zoom, tileSize);
-        var offset = new Point(halfWidth - centerPixel.X, halfHeight - centerPixel.Y);
-        var pos = projection.Wgs84ToPixels(point.Value, Zoom, tileSize);
+        var offset = centerScreen - centerPixel;
+        var anchorPoint = projection.Wgs84ToPixels(point.Value, Zoom, tileSize) + offset;
 
-        pos += offset;
-        pos = new Point(
-            pos.X - offsetH.CalculateOffset(child.DesiredSize.Width),
-            pos.Y - offsetV.CalculateOffset(child.DesiredSize.Height)
+        if (MapRotation != 0)
+        {
+            anchorPoint = RotatePoint(anchorPoint, centerScreen, MapRotation);
+        }
+
+        var pos = new Point(
+            anchorPoint.X - offsetH.CalculateOffset(child.DesiredSize.Width),
+            anchorPoint.Y - offsetV.CalculateOffset(child.DesiredSize.Height)
         );
 
         child.Arrange(new Rect(pos, child.DesiredSize));
+    }
+
+    private static Point RotatePoint(Point point, Point center, double angle)
+    {
+        var radians = angle * Math.PI / 180.0;
+        var cosTheta = Math.Cos(radians);
+        var sinTheta = Math.Sin(radians);
+        var dx = point.X - center.X;
+        var dy = point.Y - center.Y;
+
+        return new Point(
+            (dx * cosTheta) - (dy * sinTheta) + center.X,
+            (dx * sinTheta) + (dy * cosTheta) + center.Y
+        );
     }
 }

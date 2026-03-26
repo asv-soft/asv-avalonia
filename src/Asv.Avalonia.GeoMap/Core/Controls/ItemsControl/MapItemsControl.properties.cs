@@ -8,6 +8,21 @@ namespace Asv.Avalonia.GeoMap;
 
 public partial class MapItemsControl
 {
+    #region Rotation
+
+    public static readonly StyledProperty<double> RotationProperty = AvaloniaProperty.Register<
+        MapItemsControl,
+        double
+    >(nameof(Rotation));
+
+    public double Rotation
+    {
+        get => GetValue(RotationProperty);
+        set => SetValue(RotationProperty, value);
+    }
+
+    #endregion
+
     #region ItemTemplate Property
 
     public static readonly StyledProperty<IDataTemplate?> AnnotationTemplateProperty =

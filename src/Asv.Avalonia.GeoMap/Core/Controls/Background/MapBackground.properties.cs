@@ -7,6 +7,21 @@ namespace Asv.Avalonia.GeoMap;
 
 public partial class MapBackground
 {
+    #region Rotation
+
+    public static readonly StyledProperty<double> RotationProperty = AvaloniaProperty.Register<
+        MapBackground,
+        double
+    >(nameof(Rotation));
+
+    public double Rotation
+    {
+        get => GetValue(RotationProperty);
+        set => SetValue(RotationProperty, value);
+    }
+
+    #endregion
+
     #region CenterMap
 
     private GeoPoint _centerMap;

@@ -7,12 +7,6 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public interface IMap : IRoutable
-{
-    ObservableList<IMapAnchor> Anchors { get; }
-    BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
-}
-
 public class MapViewModel : RoutableViewModel, IMap
 {
     public MapViewModel()
@@ -60,6 +54,8 @@ public class MapViewModel : RoutableViewModel, IMap
         ).DisposeItWith(Disposable);
         Zoom = new BindableReactiveProperty<int>(10).DisposeItWith(Disposable);
 
+        Rotation = new BindableReactiveProperty<double>(0.0).DisposeItWith(Disposable);
+
         CurrentProvider = mapService
             .CurrentProvider.ToReadOnlyBindableReactiveProperty<ITileProvider>()
             .DisposeItWith(Disposable);
@@ -71,6 +67,7 @@ public class MapViewModel : RoutableViewModel, IMap
 
     public ObservableList<IMapAnchor> Anchors { get; }
 
+    public BindableReactiveProperty<double> Rotation { get; }
     public BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
     public BindableReactiveProperty<GeoPoint> CenterMap { get; }
     public BindableReactiveProperty<int> Zoom { get; }

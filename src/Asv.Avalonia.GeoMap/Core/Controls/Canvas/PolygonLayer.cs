@@ -88,6 +88,11 @@ public partial class PolygonLayer : Control
         {
             _renderRequestSubject.OnNext(Unit.Default);
         }
+
+        if (e.Property == MapItemsControl.RotationProperty)
+        {
+            _renderRequestSubject.OnNext(Unit.Default);
+        }
     }
 
     public PolygonLayer()
@@ -127,7 +132,10 @@ public partial class PolygonLayer : Control
         var zoom = Source.Zoom;
         var centerPixel = projection.Wgs84ToPixels(Source.CenterMap, zoom, tileSize);
         var offset = new Point(halfWidth - centerPixel.X, halfHeight - centerPixel.Y);
-        Debug.WriteLine("Plygon render");
+        Debug.WriteLine("Polygon render");
+
+        var rotationAngle = Source.Rotation; // Получаем угол поворота карты
+
         foreach (var sourceItem in Source.GetRealizedContainers())
         {
             var child = sourceItem as MapItem;
@@ -146,11 +154,20 @@ public partial class PolygonLayer : Control
             var polygon = child.Polygon;
             using (var ctx = geometry.Open())
             {
-                var start = projection.Wgs84ToPixels(polygon[0], zoom, tileSize) + offset;
+                // Начальная точка полигона
+                var start = RotatePoint(
+                    projection.Wgs84ToPixels(polygon[0], zoom, tileSize) + offset,
+                    rotationAngle
+                );
                 ctx.BeginFigure(start, child.IsPolygonClosed);
-                foreach (var point in child.Polygon)
+
+                // Рисуем все остальные точки с учётом поворота
+                foreach (var point in polygon)
                 {
-                    var nextPoint = projection.Wgs84ToPixels(point, zoom, tileSize) + offset;
+                    var nextPoint = RotatePoint(
+                        projection.Wgs84ToPixels(point, zoom, tileSize) + offset,
+                        rotationAngle
+                    );
                     ctx.LineTo(nextPoint);
                 }
 
@@ -162,5 +179,23 @@ public partial class PolygonLayer : Control
 
             context.DrawGeometry(child.Fill, child.Pen, geometry);
         }
+    }
+
+    // Функция для поворота точки вокруг центра
+    private Point RotatePoint(Point point, double angle)
+    {
+        var radians = angle * Math.PI / 180.0; // Преобразуем угол в радианы
+        var cosTheta = Math.Cos(radians);
+        var sinTheta = Math.Sin(radians);
+
+        // Смещение точки относительно центра
+        var dx = point.X - (Bounds.Width / 2.0);
+        var dy = point.Y - (Bounds.Height / 2.0);
+
+        // Применяем поворот
+        var rotatedX = (dx * cosTheta) - (dy * sinTheta) + (Bounds.Width / 2.0);
+        var rotatedY = (dx * sinTheta) + (dy * cosTheta) + (Bounds.Height / 2.0);
+
+        return new Point(rotatedX, rotatedY);
     }
 }

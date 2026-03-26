@@ -16,6 +16,12 @@
     </Design.DataContext>
     <Panel>
         <map:MapView DataContext="{Binding MapViewModel}" />
+        <Slider
+            VerticalAlignment="Top"
+            Minimum="0"
+            Maximum="360"
+            Value="{Binding MapViewModel.Rotation.Value}"
+        />
         <map:TileProviderSelectorView
             HorizontalAlignment="Right"
             VerticalAlignment="Top"

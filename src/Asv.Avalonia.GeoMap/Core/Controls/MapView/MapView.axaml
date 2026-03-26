@@ -23,6 +23,7 @@
         MaxZoom="{Binding MaxZoom.Value}"
         ItemsSource="{Binding AnchorsView}"
         SelectedItem="{Binding SelectedAnchor.Value}"
+        Rotation="{Binding Rotation.Value}"
         SelectionMode="Multiple"
     >
         <map:MapItemsControl.AnnotationTemplate>

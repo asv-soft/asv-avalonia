@@ -60,6 +60,7 @@
                     x:Name="PART_MapCanvas"
                     Provider="{TemplateBinding Provider}"
                     CenterMap="{TemplateBinding CenterMap}"
+                    MapRotation="{TemplateBinding Rotation}"
                     Zoom="{TemplateBinding Zoom}"
                 />
             </ItemsPanelTemplate>
@@ -69,6 +70,7 @@
                 <Panel>
                     <controls:MapBackground
                         HorizontalAlignment="Stretch"
+                        Rotation="{TemplateBinding Rotation}"
                         IsDebug="False"
                         Zoom="{TemplateBinding Zoom}"
                         CenterMap="{TemplateBinding CenterMap}"

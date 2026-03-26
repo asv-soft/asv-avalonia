@@ -144,11 +144,7 @@ public partial class MapItemsControl : SelectingItemsControl
         var position = e.GetPosition(this);
         var delta = position - _lastMousePosition;
 
-        var centerScreen = new Point(Bounds.Width / 2, Bounds.Height / 2);
-        var offset =
-            centerScreen - Provider.Projection.Wgs84ToPixels(CenterMap, Zoom, Provider.TileSize);
-
-        UpdateCursorLocation(offset, position);
+        UpdateCursorLocation(position);
 
         if (Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)) < 5)
         {
@@ -168,7 +164,7 @@ public partial class MapItemsControl : SelectingItemsControl
                 break;
             case DragState.DragMap:
                 Cursor = new Cursor(StandardCursorType.SizeAll);
-                DragMapCenter(offset, delta, centerScreen);
+                DragMapCenter(delta);
                 break;
             case DragState.None:
             default:
@@ -238,19 +234,21 @@ public partial class MapItemsControl : SelectingItemsControl
         Selection.EndBatchUpdate();
     }
 
-    private void UpdateCursorLocation(Point offset, Point position)
+    private void UpdateCursorLocation(Point position)
     {
         CursorPosition = Provider.Projection.PixelsToWgs84(
-            position - offset,
+            GetMapPixel(position),
             Zoom,
             Provider.TileSize
         );
     }
 
-    private void DragMapCenter(Point offset, Point delta, Point center)
+    private void DragMapCenter(Point delta)
     {
+        var centerPixel = Provider.Projection.Wgs84ToPixels(CenterMap, Zoom, Provider.TileSize);
+        var mapDelta = RotateVector(delta, -Rotation);
         CenterMap = Provider.Projection.PixelsToWgs84(
-            center - offset - delta,
+            centerPixel - mapDelta,
             Zoom,
             Provider.TileSize
         );
@@ -258,6 +256,8 @@ public partial class MapItemsControl : SelectingItemsControl
 
     private void DragSelectedItems(Point delta)
     {
+        var mapDelta = RotateVector(delta, -Rotation);
+
         foreach (var item in Selection.SelectedItems)
         {
             if (item == null)
@@ -278,16 +278,38 @@ public partial class MapItemsControl : SelectingItemsControl
                     Zoom,
                     Provider.TileSize
                 );
-                var newPixelX = currentPixel.X + delta.X;
-                var newPixelY = currentPixel.Y + delta.Y;
                 var newLocation = Provider.Projection.PixelsToWgs84(
-                    new Point(newPixelX, newPixelY),
+                    currentPixel + mapDelta,
                     Zoom,
                     Provider.TileSize
                 );
                 ctrl.Location = newLocation;
             }
         }
+    }
+
+    private Point GetMapPixel(Point screenPoint)
+    {
+        var centerScreen = new Point(Bounds.Width * 0.5, Bounds.Height * 0.5);
+        var centerPixel = Provider.Projection.Wgs84ToPixels(CenterMap, Zoom, Provider.TileSize);
+        return centerPixel + RotateVector(screenPoint - centerScreen, -Rotation);
+    }
+
+    private static Point RotateVector(Point vector, double angle)
+    {
+        if (angle == 0)
+        {
+            return vector;
+        }
+
+        var radians = angle * Math.PI / 180.0;
+        var cosTheta = Math.Cos(radians);
+        var sinTheta = Math.Sin(radians);
+
+        return new Point(
+            (vector.X * cosTheta) - (vector.Y * sinTheta),
+            (vector.X * sinTheta) + (vector.Y * cosTheta)
+        );
     }
 
     protected override void OnPointerWheelChanged(PointerWheelEventArgs e)

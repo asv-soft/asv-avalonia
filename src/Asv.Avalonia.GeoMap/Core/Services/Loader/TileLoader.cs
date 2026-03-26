@@ -82,6 +82,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                 FullMode = BoundedChannelFullMode.DropOldest,
             }
         );
+        DisposeCancel.Register(() => _requestQueue.Writer.TryComplete());
 
         for (var i = 0; i < config.RequestParallelThreads; i++)
         {
@@ -263,7 +264,6 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             _remoteRequests.Dispose();
             EmptyTileBrush.Dispose();
             CurrentMapMode.Dispose();
-
             foreach (var value in _emptyBitmap.Values)
             {
                 value.Dispose();

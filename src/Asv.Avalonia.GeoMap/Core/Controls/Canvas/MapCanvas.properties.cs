@@ -54,6 +54,21 @@ public partial class MapCanvas
 
     #endregion
 
+    #region MapRotation
+
+    public static readonly StyledProperty<double> MapRotationProperty = AvaloniaProperty.Register<
+        MapCanvas,
+        double
+    >(nameof(MapRotation));
+
+    public double MapRotation
+    {
+        get => GetValue(MapRotationProperty);
+        set => SetValue(MapRotationProperty, value);
+    }
+
+    #endregion
+
     #region CenterMap
 
     public static readonly StyledProperty<GeoPoint> CenterMapProperty = AvaloniaProperty.Register<

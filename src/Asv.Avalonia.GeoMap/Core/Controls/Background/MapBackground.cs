@@ -20,7 +20,8 @@ public partial class MapBackground : Control
             BackgroundProperty,
             ZoomProperty,
             ProviderProperty,
-            CenterMapProperty
+            CenterMapProperty,
+            RotationProperty
         );
     }
 
@@ -57,91 +58,103 @@ public partial class MapBackground : Control
         var background = Background;
         if (background != null)
         {
-            var renderSize = Bounds.Size;
-            context.FillRectangle(background, new Rect(renderSize));
+            context.FillRectangle(background, new Rect(Bounds.Size));
         }
 
-        var centerPixel = Provider.Projection.Wgs84ToPixels(CenterMap, Zoom, Provider.TileSize);
-        var offset = new Point(
-            (Bounds.Width / 2) - centerPixel.X,
-            (Bounds.Height / 2) - centerPixel.Y
-        );
+        if (Provider is null)
+        {
+            return;
+        }
+
         var tileSize = Provider.TileSize;
         var zoom = Zoom;
-        var tiles = 1 << zoom;
+        var tilesCount = 1 << zoom;
 
-        var tilesX = (int)Math.Ceiling(Bounds.Width / tileSize) + 2;
-        var tilesY = (int)Math.Ceiling(Bounds.Height / tileSize) + 2;
+        var centerPixel = Provider.Projection.Wgs84ToPixels(CenterMap, zoom, tileSize);
+        var offset = new Point(
+            (Bounds.Width / 2.0) - centerPixel.X,
+            (Bounds.Height / 2.0) - centerPixel.Y
+        );
 
-        var startX = ((int)-offset.X / tileSize) - 1;
-        var startY = ((int)-offset.Y / tileSize) - 1;
+        var renderRadius =
+            Math.Sqrt((Bounds.Width * Bounds.Width) + (Bounds.Height * Bounds.Height)) / 2.0;
+        var renderSize = renderRadius * 2.0;
 
-        for (var x = startX; x < startX + tilesX; x++)
+        var tilesX = (int)Math.Ceiling(renderSize / tileSize) + 2;
+        var tilesY = (int)Math.Ceiling(renderSize / tileSize) + 2;
+
+        var centerScreenX = Bounds.Width / 2.0;
+        var centerScreenY = Bounds.Height / 2.0;
+
+        var startX = (int)Math.Floor((centerScreenX - renderRadius - offset.X) / tileSize) - 1;
+        var startY = (int)Math.Floor((centerScreenY - renderRadius - offset.Y) / tileSize) - 1;
+
+        // Сдвигаем координаты так, чтобы центр оказался в (0,0)
+        var matrix = Matrix.CreateTranslation(-centerScreenX, -centerScreenY);
+        matrix *= Matrix.CreateRotation(Rotation * Math.PI / 180.0);
+        matrix *= Matrix.CreateTranslation(centerScreenX, centerScreenY);
+
+        using (context.PushTransform(matrix))
         {
-            if (x < 0 || x > tiles)
+            for (var x = startX; x < startX + tilesX; x++)
             {
-                continue;
-            }
-
-            for (var y = startY; y < startY + tilesY; y++)
-            {
-                if (y < 0 || y > tiles)
+                if (x < 0 || x >= tilesCount)
                 {
                     continue;
                 }
 
-                var key = new TileKey(x, y, zoom, Provider);
-
-                var px = (key.X * Provider.TileSize) + offset.X;
-                var py = (key.Y * Provider.TileSize) + offset.Y;
-                _tileLoader.Render(context, px, py, key);
-                /*_tileLoader.GetBitmap(
-                    key,
-                    bitmap =>
+                for (var y = startY; y < startY + tilesY; y++)
+                {
+                    if (y < 0 || y >= tilesCount)
                     {
-                        context.DrawImage(
-                            bitmap,
-                            new Rect(0, 0, Provider.TileSize, Provider.TileSize),
-                            new Rect(px, py, Provider.TileSize, Provider.TileSize)
+                        continue;
+                    }
+
+                    var key = new TileKey(x, y, zoom, Provider);
+
+                    var px = (key.X * tileSize) + offset.X;
+                    var py = (key.Y * tileSize) + offset.Y;
+
+                    _tileLoader.Render(context, px, py, key);
+
+                    if (IsDebug)
+                    {
+                        context.DrawRectangle(
+                            Brushes.Transparent,
+                            new Pen(Brushes.Red),
+                            new Rect(px, py, tileSize, tileSize)
+                        );
+
+                        context.DrawText(
+                            new FormattedText(
+                                $"{x},{y}[{px:F0},{py:F0}]",
+                                CultureInfo.CurrentUICulture,
+                                FlowDirection.LeftToRight,
+                                Typeface.Default,
+                                12.0,
+                                Brushes.Violet
+                            ),
+                            new Point(px, py)
                         );
                     }
-                );*/
-
-                if (IsDebug)
-                {
-                    context.DrawRectangle(
-                        Brushes.Transparent,
-                        new Pen(Brushes.Red),
-                        new Rect(px, py, Provider.TileSize, Provider.TileSize)
-                    );
-                    context.DrawText(
-                        new FormattedText(
-                            $"{x},{y}[{px:F0},{py:F0}]",
-                            CultureInfo.CurrentUICulture,
-                            FlowDirection.LeftToRight,
-                            Typeface.Default,
-                            12.0,
-                            Brushes.Violet
-                        ),
-                        new Point(px, py)
-                    );
                 }
             }
-        }
 
-        if (IsDebug)
-        {
-            var center = Provider.Projection.Wgs84ToPixels(_centerMap, zoom, tileSize) + offset;
-            context.DrawLine(
-                new Pen(Brushes.Red, 2),
-                new Point(center.X - 25, center.Y),
-                new Point(center.X + 25, center.Y)
-            );
-            context.DrawLine(
-                new Pen(Brushes.Red, 2),
-                new Point(center.X, center.Y - 25),
-                new Point(center.X, center.Y + 25)
-            );
+            if (IsDebug)
+            {
+                var center = Provider.Projection.Wgs84ToPixels(CenterMap, zoom, tileSize) + offset;
+
+                context.DrawLine(
+                    new Pen(Brushes.Red, 2),
+                    new Point(center.X - 25, center.Y),
+                    new Point(center.X + 25, center.Y)
+                );
+                context.DrawLine(
+                    new Pen(Brushes.Red, 2),
+                    new Point(center.X, center.Y - 25),
+                    new Point(center.X, center.Y + 25)
+                );
+            }
         }
     }
 

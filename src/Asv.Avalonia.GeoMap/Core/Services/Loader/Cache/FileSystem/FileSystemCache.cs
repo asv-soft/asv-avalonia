@@ -69,6 +69,8 @@ public class FileSystemCache : TileCache
             }
         );
 
+        DisposeCancel.Register(() => _writerQueue.Writer.TryComplete());
+
         for (var i = 0; i < config.Value.WriteParallelThreads; i++)
         {
             Task.Run(WriteQueue);
