@@ -1,0 +1,32 @@
+<Solution>
+  <Folder Name="/Example/">
+    <Project Path="Asv.Avalonia.Example.Api/Asv.Avalonia.Example.Api.csproj" />
+    <Project Path="Asv.Avalonia.Example.Plugin.PluginExample/Asv.Avalonia.Example.Plugin.PluginExample.csproj" />
+    <Project Path="Asv.Avalonia.Example/Asv.Avalonia.Example.csproj" />
+  </Folder>
+  <Folder Name="/Example/Platforms/">
+    <Project Path="Asv.Avalonia.Example.Android/Asv.Avalonia.Example.Android.csproj" />
+    <Project Path="Asv.Avalonia.Example.Desktop/Asv.Avalonia.Example.Desktop.csproj" />
+    <Project Path="Asv.Avalonia.Example.iOS/Asv.Avalonia.Example.iOS.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../.csharpierignore" />
+    <File Path="../.github/workflows/docs.yml" />
+    <File Path="../.github/workflows/example-release-windows.yml" />
+    <File Path="../.github/workflows/plugin-example.yml" />
+    <File Path="../.github/workflows/release-debug-version.yml" />
+    <File Path="../.github/workflows/release.yml" />
+    <File Path="../.gitignore" />
+    <File Path="../LICENSE" />
+    <File Path="../README.md" />
+    <File Path=".aiassistant/rules/comments.md" />
+    <File Path="CodeStyle.ruleset" />
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Project Path="Asv.Avalonia.DC/Asv.Avalonia.DC.csproj" />
+  <Project Path="Asv.Avalonia.GeoMap/Asv.Avalonia.GeoMap.csproj" />
+  <Project Path="Asv.Avalonia.IO/Asv.Avalonia.IO.csproj" />
+  <Project Path="Asv.Avalonia.Plugins/Asv.Avalonia.Plugins.csproj" />
+  <Project Path="Asv.Avalonia.Test/Asv.Avalonia.Test.csproj" />
+  <Project Path="Asv.Avalonia/Asv.Avalonia.csproj" />
+</Solution>

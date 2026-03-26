@@ -87,7 +87,7 @@
                             <RotateTransform
                                 CenterX="{Binding RotationCenterX, RelativeSource={RelativeSource TemplatedParent}}"
                                 CenterY="{Binding RotationCenterY, RelativeSource={RelativeSource TemplatedParent}}"
-                                Angle="{Binding Rotation, RelativeSource={RelativeSource TemplatedParent}}"
+                                Angle="{Binding EffectiveRotation, RelativeSource={RelativeSource TemplatedParent}}"
                             />
                         </ContentPresenter.RenderTransform>
                     </ContentPresenter>

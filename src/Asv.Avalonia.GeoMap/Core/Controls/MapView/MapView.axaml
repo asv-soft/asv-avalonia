@@ -63,6 +63,7 @@
                 <Setter Property="CenterX" Value="{Binding CenterX}" />
                 <Setter Property="CenterY" Value="{Binding CenterY}" />
                 <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
+                <Setter Property="UseMapRotation" Value="{Binding UseMapRotation}" />
                 <Setter Property="IsVisible" Value="{Binding IsVisible}" />
                 <Setter Property="Polygon" Value="{Binding PolygonView}" />
                 <Setter Property="IsAnnotationVisible" Value="{Binding IsAnnotationVisible}" />

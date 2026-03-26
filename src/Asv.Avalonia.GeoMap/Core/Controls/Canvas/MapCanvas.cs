@@ -66,6 +66,7 @@ public partial class MapCanvas : Panel
             anchorPoint.Y - offsetV.CalculateOffset(child.DesiredSize.Height)
         );
 
+        SetRotation(child, MapRotation);
         child.Arrange(new Rect(pos, child.DesiredSize));
     }
 

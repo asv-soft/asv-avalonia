@@ -17,6 +17,7 @@ public interface IMapAnchor : IRoutable
     HorizontalOffset CenterX { get; set; }
     VerticalOffset CenterY { get; set; }
     bool IsReadOnly { get; set; }
+    bool UseMapRotation { get; set; }
     bool IsSelected { get; set; }
     bool IsVisible { get; set; }
     IPen? PolygonPen { get; set; }

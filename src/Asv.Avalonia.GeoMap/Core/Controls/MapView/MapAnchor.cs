@@ -83,6 +83,12 @@ public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
         set => SetField(ref field, value);
     }
 
+    public bool UseMapRotation
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     public bool IsSelected
     {
         get;

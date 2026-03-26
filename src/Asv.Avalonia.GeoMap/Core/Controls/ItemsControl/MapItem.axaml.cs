@@ -15,9 +15,16 @@ public partial class MapItem : ContentControl, ISelectable
     {
         SelectableMixin.Attach<MapItem>(IsSelectedProperty);
         PressedMixin.Attach<MapItem>();
-        CenterYProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapItem));
+        CenterXProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapItem));
         CenterYProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapItem));
         BoundsProperty.Changed.Subscribe(x => RecalculateRotation(x.Sender as MapItem));
+        RotationProperty.Changed.Subscribe(x => RecalculateEffectiveRotation(x.Sender as MapItem));
+        UseMapRotationProperty.Changed.Subscribe(x =>
+            RecalculateEffectiveRotation(x.Sender as MapItem)
+        );
+        MapCanvas.RotationProperty.Changed.Subscribe(x =>
+            RecalculateEffectiveRotation(x.Sender as MapItem)
+        );
     }
 
     private static void RecalculateRotation(MapItem? sender)
@@ -31,7 +38,21 @@ public partial class MapItem : ContentControl, ISelectable
         sender.RotationCenterY = sender.CenterY.CalculateOffset(sender.Bounds.Height);
     }
 
-    public MapItem() { }
+    private static void RecalculateEffectiveRotation(MapItem? sender)
+    {
+        if (sender == null)
+        {
+            return;
+        }
+
+        sender.EffectiveRotation =
+            sender.Rotation + (sender.UseMapRotation ? MapCanvas.GetRotation(sender) : 0.0);
+    }
+
+    public MapItem()
+    {
+        RecalculateEffectiveRotation(this);
+    }
 }
 
 public class GeoPointCollection : AvaloniaList<GeoPoint> { }

@@ -101,6 +101,11 @@ public partial class AnnotationLayer : Canvas
         {
             _renderRequestSubject.OnNext(Unit.Default);
         }
+
+        if (e.Property == MapItemsControl.RotationProperty)
+        {
+            _renderRequestSubject.OnNext(Unit.Default);
+        }
     }
 
     private void ContainerOnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
@@ -224,13 +229,14 @@ public partial class AnnotationLayer : Canvas
 
         var tileSize = Source.Provider.TileSize;
         var projection = Source.Provider.Projection;
+        var centerScreen = new Point(Source.Bounds.Width * 0.5, Source.Bounds.Height * 0.5);
         var centerPixel = projection.Wgs84ToPixels(Source.CenterMap, Source.Zoom, tileSize);
-        var offset = new Point(
-            (Source.Bounds.Width * 0.5) - centerPixel.X,
-            (Source.Bounds.Height * 0.5) - centerPixel.Y
-        );
+        var offset = centerScreen - centerPixel;
+        var screenPoint = projection.Wgs84ToPixels(geoPoint, Source.Zoom, tileSize) + offset;
 
-        return projection.Wgs84ToPixels(geoPoint, Source.Zoom, tileSize) + offset;
+        return Source.Rotation == 0
+            ? screenPoint
+            : RotatePoint(screenPoint, centerScreen, Source.Rotation);
     }
 
     private void UpdateVisuals()
@@ -337,6 +343,20 @@ public partial class AnnotationLayer : Canvas
         }
 
         UpdateVisuals();
+    }
+
+    private static Point RotatePoint(Point point, Point center, double angle)
+    {
+        var radians = angle * Math.PI / 180.0;
+        var cosTheta = Math.Cos(radians);
+        var sinTheta = Math.Sin(radians);
+        var dx = point.X - center.X;
+        var dy = point.Y - center.Y;
+
+        return new Point(
+            (dx * cosTheta) - (dy * sinTheta) + center.X,
+            (dx * sinTheta) + (dy * cosTheta) + center.Y
+        );
     }
 }
 

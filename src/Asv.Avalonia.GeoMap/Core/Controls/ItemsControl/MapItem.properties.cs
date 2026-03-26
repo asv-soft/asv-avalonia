@@ -101,6 +101,39 @@ public partial class MapItem
 
     #endregion
 
+    #region UseMapRotation
+
+    public static readonly StyledProperty<bool> UseMapRotationProperty = AvaloniaProperty.Register<
+        MapItem,
+        bool
+    >(nameof(UseMapRotation));
+
+    public bool UseMapRotation
+    {
+        get => GetValue(UseMapRotationProperty);
+        set => SetValue(UseMapRotationProperty, value);
+    }
+
+    #endregion
+
+    #region EffectiveRotation
+
+    private double _effectiveRotation;
+
+    public static readonly DirectProperty<MapItem, double> EffectiveRotationProperty =
+        AvaloniaProperty.RegisterDirect<MapItem, double>(
+            nameof(EffectiveRotation),
+            o => o.EffectiveRotation
+        );
+
+    public double EffectiveRotation
+    {
+        get => _effectiveRotation;
+        private set => SetAndRaise(EffectiveRotationProperty, ref _effectiveRotation, value);
+    }
+
+    #endregion
+
     #region IsReadOnly
 
     public static readonly StyledProperty<bool> IsReadOnlyProperty = AvaloniaProperty.Register<
