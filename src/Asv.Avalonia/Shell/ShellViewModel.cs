@@ -307,9 +307,14 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             case ExecuteCommandEvent cmd:
                 await Cmd.Execute(cmd.CommandId, cmd.Sender, cmd.CommandArg, cmd.Cancel);
                 break;
-            case RestartApplicationEvent:
-                Environment.Exit(0);
+            case RestartApplicationEvent restart:
+            {
+                using var sub = _onCloseEvent.Take(1).Subscribe(_ => RestartApplicationCommon());
+
+                await TryCloseAsync(restart.Cancel);
+
                 break;
+            }
             case PageCloseRequestedEvent close:
             {
                 Logger.ZLogInformation($"Close page [{close.Page.Id}]");
@@ -378,6 +383,28 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 await ValueTask.CompletedTask;
                 break;
         }
+    }
+
+    private void RestartApplicationCommon()
+    {
+        try
+        {
+            var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+            RestartApplication(args);
+        }
+        catch (Exception exception)
+        {
+            Logger.LogError(exception, "Failed to restart the application.");
+        }
+    }
+
+    protected virtual void RestartApplication(string[] args)
+    {
+        Logger.LogError(
+            "Restart is not supported by shell type {ShellType}. Arguments: {Args}",
+            GetType().Name,
+            string.Join(" ", args)
+        );
     }
 
     private async ValueTask InternalLoadLayoutEventHandler(
@@ -458,7 +485,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         catch (Exception e)
         {
             Logger.LogError(e, "Error saving layout: {EMessage}", e.Message);
-            Debug.Assert(false, $"Error saving layout: {e.Message}");
         }
         finally
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Avalonia.Controls;
+using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia;
 
@@ -26,6 +27,7 @@ public class SoloRunFeatureBuilder
     public SoloRunFeatureBuilder WithArgumentForwarding(string pipeName)
     {
         ArgumentNullException.ThrowIfNull(pipeName);
+
         _argumentForwarding = true;
         _pipeName = pipeName;
         return this;

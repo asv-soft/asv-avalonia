@@ -14,7 +14,7 @@ public class ForwardArgsToSelectedControlTask(
     IShellHost shellHost
 ) : IHostedService
 {
-    private ValueTask HandleEvent(AppArgs appArgs, CancellationToken ct)
+    private ValueTask HandleEvent(IAppArgs appArgs, CancellationToken ct)
     {
         var context = navigationService.SelectedControl.CurrentValue ?? shellHost.Shell;
 

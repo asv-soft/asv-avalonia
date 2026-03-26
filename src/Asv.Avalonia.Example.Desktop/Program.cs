@@ -52,7 +52,9 @@ sealed class Program
                 builder
                     .UseDefault()
                     .UseOptionalLogViewer()
-                    .UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
+                    .UseOptionalSoloRun(opt =>
+                        opt.WithArgumentForwarding().WithMutexName("Asv.Avalonia.Example.Desktop")
+                    )
                     .UsePluginManager(options =>
                     {
                         options.WithApiPackage(
