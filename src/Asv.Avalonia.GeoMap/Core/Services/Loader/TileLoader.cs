@@ -156,7 +156,8 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                     continue;
                 }
 
-                if (_fastCache[key] != null)
+                using var refBitmap = _fastCache[key];
+                if (refBitmap != null)
                 {
                     continue;
                 }

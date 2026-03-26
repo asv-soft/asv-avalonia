@@ -129,7 +129,8 @@ public partial class AnnotationLayer : Canvas
             {
                 return false;
             }
-
+            Children.Remove(a.Annotation);
+            Children.Remove(a.Connector);
             a.Dispose();
             return true;
         });
