@@ -309,15 +309,22 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 break;
             case RestartApplicationEvent:
             {
-                using var sub = _onCloseEvent
+                /* using var sub = _onCloseEvent // TODO: need to use solo run feature
                     .Take(1)
                     .Subscribe(_ =>
                     {
-                        var exePath = Environment.ProcessPath;
-                        var args = Environment.GetCommandLineArgs().Skip(1); // без имени exe
-
-                        if (!string.IsNullOrEmpty(exePath))
+                        try
                         {
+                            var exePath = Environment.ProcessPath;
+                            
+                            var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
+
+                            if (string.IsNullOrEmpty(exePath))
+                            {
+                                Logger.LogError("Failed to get path of the application");
+                                return;
+                            }
+                        
                             var psi = new ProcessStartInfo
                             {
                                 FileName = exePath,
@@ -330,8 +337,14 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                             }
 
                             Process.Start(psi);
+                            Logger.ZLogInformation($"Application restarted successfully with arguments: {string.Join(" ", args)} and path {exePath}.");
+                        }
+                        catch (Exception exception)
+                        {
+                            Logger.LogError(exception, "Failed to restart the application.");
                         }
                     });
+                */
 
                 await TryCloseAsync(CancellationToken.None);
 
