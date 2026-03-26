@@ -26,9 +26,6 @@ public partial class MapItemsControl : SelectingItemsControl
 
     public MapItemsControl()
     {
-        Provider = new BingTileProvider(
-            "Anqg-XzYo-sBPlzOWFHIcjC3F8s17P_O7L4RrevsHVg4fJk6g_eEmUBphtSn4ySg"
-        );
         SelectionMode = SelectionMode.Multiple;
         SelectionChanged += OnSelectionChanged;
     }

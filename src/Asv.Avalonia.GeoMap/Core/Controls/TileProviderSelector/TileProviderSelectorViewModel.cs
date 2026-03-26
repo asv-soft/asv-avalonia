@@ -1,5 +1,7 @@
 using Asv.Common;
+using Asv.IO;
 using Microsoft.Extensions.Logging;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
@@ -9,6 +11,7 @@ public class TileProviderSelectorViewModel : RoutableViewModel
     public const string ViewModelId = "tile-provider";
 
     private readonly IMapService _mapService;
+    private readonly ISynchronizedView<ITileProvider, TileProviderViewModel> _view;
     private bool _internalChange;
 
     public TileProviderSelectorViewModel()
@@ -21,31 +24,47 @@ public class TileProviderSelectorViewModel : RoutableViewModel
         : base(ViewModelId, loggerFactory)
     {
         _mapService = mapService;
-        SelectedItem = new BindableReactiveProperty<ITileProvider>(
-            mapService.CurrentProvider.Value
+
+        var itemsSource = new ObservableList<ITileProvider>(
+            mapService.AvailableProviders.OrderBy(p => p.Info.Group.Id)
+        );
+        _view = itemsSource
+            .CreateView(p => new TileProviderViewModel(p, loggerFactory))
+            .DisposeItWith(Disposable);
+        _view.DisposeMany().DisposeItWith(Disposable);
+        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        Items = _view
+            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
+
+        SelectedItem = new BindableReactiveProperty<TileProviderViewModel?>(
+            _view.FirstOrDefault(vm => vm.Provider == mapService.CurrentProvider.Value)
         ).DisposeItWith(Disposable);
 
         _internalChange = true;
         SelectedItem.SubscribeAwait(OnChangedByUser).DisposeItWith(Disposable);
         _mapService
-            .CurrentProvider.Synchronize()
+            .CurrentProvider.ObserveOnUIThreadDispatcher()
             .Subscribe(OnChangeByModel)
             .DisposeItWith(Disposable);
         _internalChange = false;
     }
 
-    public IReadOnlyList<ITileProvider> Items => _mapService.AvailableProviders;
-    public BindableReactiveProperty<ITileProvider> SelectedItem { get; }
+    public INotifyCollectionChangedSynchronizedViewList<TileProviderViewModel> Items { get; }
+    public BindableReactiveProperty<TileProviderViewModel?> SelectedItem { get; }
 
-    private async ValueTask OnChangedByUser(ITileProvider userValue, CancellationToken cancel)
+    private async ValueTask OnChangedByUser(
+        TileProviderViewModel? userValue,
+        CancellationToken cancel
+    )
     {
-        if (_internalChange)
+        if (_internalChange || userValue == null)
         {
             return;
         }
 
         _internalChange = true;
-        var newValue = new StringArg(userValue.Info.Id);
+        var newValue = new StringArg(userValue.Provider.Info.Id);
         await this.ExecuteCommand(ChangeTileProviderCommand.Id, newValue, cancel: cancel);
         _internalChange = false;
     }
@@ -53,12 +72,15 @@ public class TileProviderSelectorViewModel : RoutableViewModel
     private void OnChangeByModel(ITileProvider modelValue)
     {
         _internalChange = true;
-        SelectedItem.Value = modelValue;
+        SelectedItem.Value = _view.FirstOrDefault(vm => vm.Provider == modelValue);
         _internalChange = false;
     }
 
     public override IEnumerable<IRoutable> GetChildren()
     {
-        return [];
+        foreach (var tileProvider in _view)
+        {
+            yield return tileProvider;
+        }
     }
 }

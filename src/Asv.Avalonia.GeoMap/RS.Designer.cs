@@ -158,5 +158,71 @@ namespace Asv.Avalonia.GeoMap {
                 return ResourceManager.GetString("SettingsGeoMapView_MaxZoomProperty_Title", resourceCulture);
             }
         }
+        
+        public static string EditApiKeyDialogView_ApiKeyProperty_Title {
+            get {
+                return ResourceManager.GetString("EditApiKeyDialogView_ApiKeyProperty_Title", resourceCulture);
+            }
+        }
+        
+        public static string TileProviderGroup_Other_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_Other_Name", resourceCulture);
+            }
+        }
+        
+        public static string TileProviderGroup_Yandex_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_Yandex_Name", resourceCulture);
+            }
+        }
+        
+        public static string TileProviderGroup_Bing_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_Bing_Name", resourceCulture);
+            }
+        }
+        
+        public static string BingTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("BingTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string YandexTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("YandexTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string EmptyTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("EmptyTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string EditApiKeyDialogPrefab_Content_Title {
+            get {
+                return ResourceManager.GetString("EditApiKeyDialogPrefab_Content_Title", resourceCulture);
+            }
+        }
+        
+        public static string EditApiKeyDialogPrefab_Content_PrimaryButton {
+            get {
+                return ResourceManager.GetString("EditApiKeyDialogPrefab_Content_PrimaryButton", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_SetCurrentProvider_Tooltip {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_SetCurrentProvider_Tooltip", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_EditProviderApiKey_Tooltip {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_EditProviderApiKey_Tooltip", resourceCulture);
+            }
+        }
     }
 }

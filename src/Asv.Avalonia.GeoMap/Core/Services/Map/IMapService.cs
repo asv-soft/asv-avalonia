@@ -11,4 +11,7 @@ public interface IMapService
     public SynchronizedReactiveProperty<int> MaxZoom { get; }
     public SynchronizedReactiveProperty<ITileProvider> CurrentProvider { get; }
     public IReadOnlyList<ITileProvider> AvailableProviders { get; }
+
+    void SetProviderApiKey(string providerId, string? apiKey);
+    string? GetProviderApiKey(string providerId);
 }

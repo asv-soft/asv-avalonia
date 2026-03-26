@@ -6,7 +6,8 @@ namespace Asv.Avalonia.GeoMap;
 
 public class TileProviderServiceConfig
 {
-    public string CurrentProviderId { get; set; } = BingTileProvider.Id;
+    public string CurrentProviderId { get; set; } = YandexTileProvider.Id;
+    public Dictionary<string, string> ApiKeys { get; set; } = new();
 
     public override string ToString()
     {
@@ -17,6 +18,8 @@ public class TileProviderServiceConfig
 public class TileProviderService : ITileProviderService, IDisposable
 {
     private readonly Lock _syncCfg = new();
+    private readonly IConfiguration _configProvider;
+    private readonly TileProviderServiceConfig _config;
 
     public TileProviderService(
         IEnumerable<ITileProvider> providers,
@@ -24,20 +27,32 @@ public class TileProviderService : ITileProviderService, IDisposable
         ILogger<TileProviderService> logger
     )
     {
-        var config = configProvider.Get<TileProviderServiceConfig>();
+        _configProvider = configProvider;
+        _config = configProvider.Get<TileProviderServiceConfig>();
         var providerList = providers.ToList();
 
         AvailableProviders = providerList.AsReadOnly();
 
+        foreach (var provider in providerList)
+        {
+            if (
+                provider is IProtectedTileProvider apiKeyProvider
+                && _config.ApiKeys.TryGetValue(provider.Info.Id, out var savedKey)
+            )
+            {
+                apiKeyProvider.ApiKey = savedKey;
+            }
+        }
+
         var currentProvider = providerList.FirstOrDefault(p =>
-            p.Info.Id == config.CurrentProviderId
+            p.Info.Id == _config.CurrentProviderId
         );
 
         if (currentProvider == null)
         {
             logger.LogWarning(
                 "Current tile provider '{ProviderId}' not found. Falling back to first available provider",
-                config.CurrentProviderId
+                _config.CurrentProviderId
             );
             currentProvider = providerList.FirstOrDefault() ?? EmptyTileProvider.Instance;
         }
@@ -51,14 +66,50 @@ public class TileProviderService : ITileProviderService, IDisposable
             {
                 using (_syncCfg.EnterScope())
                 {
-                    config.CurrentProviderId = provider.Info.Id;
-                    configProvider.Set(config);
+                    _config.CurrentProviderId = provider.Info.Id;
+                    _configProvider.Set(_config);
                 }
             });
     }
 
     public IReadOnlyList<ITileProvider> AvailableProviders { get; }
     public SynchronizedReactiveProperty<ITileProvider> CurrentProvider { get; }
+
+    public void SetProviderApiKey(string providerId, string? apiKey)
+    {
+        var provider = AvailableProviders.FirstOrDefault(p => p.Info.Id == providerId);
+        if (provider is not IProtectedTileProvider apiKeyProvider)
+        {
+            return;
+        }
+
+        apiKeyProvider.ApiKey = apiKey;
+
+        using (_syncCfg.EnterScope())
+        {
+            if (apiKey != null)
+            {
+                _config.ApiKeys[providerId] = apiKey;
+            }
+            else
+            {
+                _config.ApiKeys.Remove(providerId);
+            }
+
+            _configProvider.Set(_config);
+        }
+    }
+
+    public string? GetProviderApiKey(string providerId)
+    {
+        var provider = AvailableProviders.FirstOrDefault(p => p.Info.Id == providerId);
+        if (provider is IProtectedTileProvider apiKeyProvider)
+        {
+            return apiKeyProvider.ApiKey;
+        }
+
+        return null;
+    }
 
     #region Disposable
 

@@ -6,6 +6,8 @@
     xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
+    d:DesignWidth="200"
+    d:DesignHeight="150"
     x:Class="Asv.Avalonia.GeoMap.TileProviderSelectorView"
     x:DataType="map:TileProviderSelectorViewModel"
 >
@@ -19,8 +21,12 @@
             </DataTemplate>
         </ComboBox.SelectionBoxItemTemplate>
         <ComboBox.ItemTemplate>
-            <DataTemplate>
-                <TextBlock Text="{Binding Info.Name}" />
+            <DataTemplate x:DataType="map:TileProviderViewModel">
+                <TextBlock>
+                    <Run Text="{CompiledBinding Group}" />
+                    <Run Text=" — " />
+                    <Run Text="{CompiledBinding Name}" />
+                </TextBlock>
             </DataTemplate>
         </ComboBox.ItemTemplate>
     </ComboBox>

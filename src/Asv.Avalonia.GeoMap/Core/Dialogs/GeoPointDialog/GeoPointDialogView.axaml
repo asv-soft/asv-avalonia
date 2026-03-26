@@ -31,6 +31,7 @@
                     SelectionMode="Single"
                     ItemsSource="{Binding MapViewModel.AnchorsView}"
                     SelectedItem="{Binding MapViewModel.SelectedAnchor.Value}"
+                    Provider="{Binding MapViewModel.CurrentProvider.Value}"
                     Width="220"
                     Height="220"
                 >

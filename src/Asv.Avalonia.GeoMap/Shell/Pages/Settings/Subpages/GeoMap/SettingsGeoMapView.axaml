@@ -5,6 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:geoMap="clr-namespace:Asv.Avalonia.GeoMap"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:asv-avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
     mc:Ignorable="d"
     d:DesignWidth="800"
     d:DesignHeight="450"
@@ -23,7 +24,7 @@
             />
             <Separator />
         </DockPanel>
-        <Grid Margin="20,0,0, 0" RowDefinitions="*,5,*,5,*,5,*">
+        <Grid Margin="20,0,0, 0" RowDefinitions="Auto">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="20" />
                 <ColumnDefinition Width="8" />
@@ -58,28 +59,117 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+        </Grid>
 
-            <avalonia:MaterialIcon Grid.Column="0" Grid.Row="2" Kind="MapOutline" />
+        <DockPanel>
             <TextBlock
-                Grid.Column="2"
-                Grid.Row="2"
-                VerticalAlignment="Center"
+                FontSize="{StaticResource HubHeaderThemeFontSize}"
                 Text="{x:Static geoMap:RS.SettingsGeoMapView_TileProviderProperty_Title}"
             />
-            <ComboBox
-                Grid.Column="4"
-                Grid.Row="2"
-                DataContext="{Binding  MapProvider}"
-                ItemsSource="{Binding Items}"
-                SelectedItem="{Binding SelectedItem.Value}"
-            >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{CompiledBinding }" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Grid>
+            <Separator />
+        </DockPanel>
+        <Border
+            Margin="20,0,0,0"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+            BorderThickness="1"
+            CornerRadius="4"
+            DataContext="{CompiledBinding MapProvider}"
+        >
+            <DockPanel>
+                <DockPanel.Styles>
+                    <Style Selector="Button:disabled avalonia|MaterialIcon">
+                        <Setter Property="Opacity" Value="0.3" />
+                    </Style>
+                </DockPanel.Styles>
+                <Border
+                    DockPanel.Dock="Top"
+                    Padding="4,2"
+                    Background="{DynamicResource SystemControlBackgroundListLowBrush}"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                    BorderThickness="0,0,0,1"
+                >
+                    <StackPanel Orientation="Horizontal" Spacing="2">
+                        <Button
+                            Theme="{DynamicResource TransparentButton}"
+                            ToolTip.Tip="{x:Static geoMap:RS.SettingsGeoMapView_SetCurrentProvider_Tooltip}"
+                            Command="{CompiledBinding SetCurrentCommand}"
+                            IsEnabled="{CompiledBinding IsSetCurrentEnabled.Value}"
+                            Padding="4"
+                        >
+                            <avalonia:MaterialIcon Kind="CheckOutline" Width="16" Height="16" />
+                        </Button>
+                        <Button
+                            Theme="{DynamicResource TransparentButton}"
+                            ToolTip.Tip="{x:Static geoMap:RS.SettingsGeoMapView_EditProviderApiKey_Tooltip}"
+                            Command="{CompiledBinding EditApiKeyCommand}"
+                            IsEnabled="{CompiledBinding IsEditApiKeyEnabled.Value}"
+                            Padding="4"
+                        >
+                            <avalonia:MaterialIcon Kind="Pencil" Width="16" Height="16" />
+                        </Button>
+                    </StackPanel>
+                </Border>
+                <ListBox
+                    MaxHeight="200"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ItemsSource="{CompiledBinding Items}"
+                    SelectedItem="{CompiledBinding SelectedItem.Value}"
+                    SelectionMode="Single"
+                >
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter
+                                Property="BorderBrush"
+                                Value="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                            />
+                            <Setter Property="BorderThickness" Value="0,0,0,1" />
+                        </Style>
+                    </ListBox.Styles>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate x:DataType="geoMap:TileProviderViewModel">
+                            <Grid ColumnDefinitions="Auto,8,*">
+                                <Panel
+                                    Grid.Column="0"
+                                    Width="20"
+                                    Height="20"
+                                    VerticalAlignment="Center"
+                                >
+                                    <avalonia:MaterialIcon
+                                        Width="20"
+                                        Height="20"
+                                        Kind="MapOutline"
+                                    />
+                                    <avalonia:MaterialIcon
+                                        Width="10"
+                                        Height="10"
+                                        Kind="CheckCircle"
+                                        Foreground="Green"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                    >
+                                        <avalonia:MaterialIcon.IsVisible>
+                                            <MultiBinding Converter="{x:Static asv-avalonia:EqualsMultiConverter.Instance}">
+                                                <Binding />
+                                                <Binding
+                                                    Path="DataContext.CurrentProvider.Value"
+                                                    RelativeSource="{RelativeSource AncestorType=ListBox}"
+                                                />
+                                            </MultiBinding>
+                                        </avalonia:MaterialIcon.IsVisible>
+                                    </avalonia:MaterialIcon>
+                                </Panel>
+                                <TextBlock Grid.Column="2" VerticalAlignment="Center">
+                                    <Run Text="{CompiledBinding Group}" />
+                                    <Run Text=" — " />
+                                    <Run Text="{CompiledBinding Name}" />
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </DockPanel>
+        </Border>
         <DockPanel>
             <TextBlock
                 FontSize="{StaticResource HubHeaderThemeFontSize}"

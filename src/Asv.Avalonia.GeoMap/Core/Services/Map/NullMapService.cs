@@ -27,4 +27,8 @@ public class NullMapService : IMapService
     public SynchronizedReactiveProperty<int> MaxZoom { get; }
     public SynchronizedReactiveProperty<ITileProvider> CurrentProvider { get; }
     public IReadOnlyList<ITileProvider> AvailableProviders { get; }
+
+    public void SetProviderApiKey(string providerId, string? apiKey) { }
+
+    public string? GetProviderApiKey(string providerId) => null;
 }

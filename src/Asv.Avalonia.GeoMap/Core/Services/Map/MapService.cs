@@ -28,10 +28,17 @@ public class MapService : AsyncDisposableOnce, IMapService
     public SynchronizedReactiveProperty<MapModeType> Mode => _tileLoader.CurrentMapMode;
     public SynchronizedReactiveProperty<IBrush> EmptyTileBrush => _tileLoader.EmptyTileBrush;
 
+    public SynchronizedReactiveProperty<int> MinZoom => _zoomService.MinZoom;
+    public SynchronizedReactiveProperty<int> MaxZoom => _zoomService.MaxZoom;
+
     public SynchronizedReactiveProperty<ITileProvider> CurrentProvider =>
         _tileProviderService.CurrentProvider;
     public IReadOnlyList<ITileProvider> AvailableProviders =>
         _tileProviderService.AvailableProviders;
-    public SynchronizedReactiveProperty<int> MinZoom => _zoomService.MinZoom;
-    public SynchronizedReactiveProperty<int> MaxZoom => _zoomService.MaxZoom;
+
+    public void SetProviderApiKey(string providerId, string? apiKey) =>
+        _tileProviderService.SetProviderApiKey(providerId, apiKey);
+
+    public string? GetProviderApiKey(string providerId) =>
+        _tileProviderService.GetProviderApiKey(providerId);
 }
