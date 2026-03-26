@@ -308,8 +308,35 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
                 await Cmd.Execute(cmd.CommandId, cmd.Sender, cmd.CommandArg, cmd.Cancel);
                 break;
             case RestartApplicationEvent:
-                Environment.Exit(0);
+            {
+                using var sub = _onCloseEvent
+                    .Take(1)
+                    .Subscribe(_ =>
+                    {
+                        var exePath = Environment.ProcessPath;
+                        var args = Environment.GetCommandLineArgs().Skip(1); // без имени exe
+
+                        if (!string.IsNullOrEmpty(exePath))
+                        {
+                            var psi = new ProcessStartInfo
+                            {
+                                FileName = exePath,
+                                UseShellExecute = false,
+                            };
+
+                            foreach (var arg in args)
+                            {
+                                psi.ArgumentList.Add(arg);
+                            }
+
+                            Process.Start(psi);
+                        }
+                    });
+
+                await TryCloseAsync(CancellationToken.None);
+
                 break;
+            }
             case PageCloseRequestedEvent close:
             {
                 Logger.ZLogInformation($"Close page [{close.Page.Id}]");
