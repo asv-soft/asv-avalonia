@@ -22,6 +22,12 @@
             Maximum="360"
             Value="{Binding MapViewModel.Rotation.Value}"
         />
+        <map:MapCompass
+            Rotation="{Binding MapViewModel.Rotation.Value}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="8"
+            />
         <map:TileProviderSelectorView
             HorizontalAlignment="Right"
             VerticalAlignment="Top"

@@ -1,0 +1,135 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia.GeoMap"
+>
+    <Design.PreviewWith>
+        <Canvas Width="240" Height="180" Background="#102030">
+            <controls:MapCompass
+                Width="72"
+                Height="72"
+                Canvas.Left="18"
+                Canvas.Top="18"
+                Rotation="35"
+            />
+        </Canvas>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|MapCompass">
+        <Setter Property="Width" Value="64" />
+        <Setter Property="Height" Value="64" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Width="{TemplateBinding Width}"
+                    Height="{TemplateBinding Height}"
+                    CornerRadius="999"
+                    Background="#CC13202B"
+                    BorderBrush="#99F3F7FA"
+                    BorderThickness="1"
+                    ClipToBounds="True"
+                >
+                    <Grid>
+                        <Ellipse
+                            Margin="6"
+                            Stroke="#40FFFFFF"
+                            StrokeThickness="1"
+                        />
+                        <Line
+                            StartPoint="0,0"
+                            EndPoint="0,8"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Margin="0,6,0,0"
+                            Stroke="#80FFFFFF"
+                            StrokeThickness="2"
+                        />
+                        <Line
+                            StartPoint="0,0"
+                            EndPoint="0,8"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Bottom"
+                            Margin="0,0,0,6"
+                            Stroke="#40FFFFFF"
+                            StrokeThickness="2"
+                        />
+                        <Line
+                            StartPoint="0,0"
+                            EndPoint="8,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="6,0,0,0"
+                            Stroke="#40FFFFFF"
+                            StrokeThickness="2"
+                        />
+                        <Line
+                            StartPoint="0,0"
+                            EndPoint="8,0"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Margin="0,0,6,0"
+                            Stroke="#40FFFFFF"
+                            StrokeThickness="2"
+                        />
+
+                        <Grid x:Name="PART_NeedleHost" RenderTransformOrigin="50%,50%">
+                            <Grid.RenderTransform>
+                                <RotateTransform />
+                            </Grid.RenderTransform>
+
+                            <Path
+                                Width="18"
+                                Height="26"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Margin="0,8,0,0"
+                                Fill="#F45D48"
+                                Stretch="Fill"
+                            >
+                                <Path.Data>
+                                    <PathGeometry Figures="M 9 0 L 18 26 L 9 20 L 0 26 Z" />
+                                </Path.Data>
+                            </Path>
+
+                            <Path
+                                Width="12"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Bottom"
+                                Margin="0,0,0,10"
+                                Fill="#C8E1EA"
+                                Stretch="Fill"
+                            >
+                                <Path.Data>
+                                    <PathGeometry Figures="M 6 18 L 12 0 L 6 4 L 0 0 Z" />
+                                </Path.Data>
+                            </Path>
+                        </Grid>
+
+                        <Border
+                            Width="16"
+                            Height="16"
+                            CornerRadius="8"
+                            Background="#EAF4F8"
+                            BorderBrush="#20303B"
+                            BorderThickness="2"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                        />
+
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Margin="0,10,0,0"
+                            FontSize="10"
+                            FontWeight="Bold"
+                            Foreground="#F8FBFF"
+                            Text="N"
+                            IsHitTestVisible="False"
+                        />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

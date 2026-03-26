@@ -78,6 +78,7 @@
     </ItemGroup>
     <ItemGroup>
       <AdditionalFiles Include="Core\Controls\Attitude\Attitude.axaml" />
+      <AdditionalFiles Include="Core\Controls\MapCompass\MapCompass.axaml" />
       <AdditionalFiles Include="Core\Controls\ItemsControl\MapItem.axaml" />
       <AdditionalFiles Include="Core\Controls\ItemsControl\MapItemsControl.axaml" />
       <AdditionalFiles Include="Core\Controls\MapView\MapView.axaml" />
