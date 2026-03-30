@@ -18,6 +18,7 @@
     <Style Selector="controls|MapCompass">
         <Setter Property="Width" Value="64" />
         <Setter Property="Height" Value="64" />
+        <Setter Property="DeadZone" Value="0" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border
@@ -29,7 +30,7 @@
                     BorderThickness="1"
                     ClipToBounds="True"
                 >
-                    <Grid>
+                    <Grid IsHitTestVisible="False">
                         <Ellipse Margin="6" Stroke="#40FFFFFF" StrokeThickness="1" />
                         <Line
                             StartPoint="0,0"

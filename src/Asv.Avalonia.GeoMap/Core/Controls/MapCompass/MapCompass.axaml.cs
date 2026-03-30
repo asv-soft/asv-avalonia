@@ -9,8 +9,6 @@ namespace Asv.Avalonia.GeoMap;
 
 public class MapCompass : TemplatedControl
 {
-    private const double CenterDeadZone = 16.0;
-
     private bool _isDragging;
     private bool _isNormalizingRotation;
     private double _dragStartAngle;
@@ -34,10 +32,21 @@ public class MapCompass : TemplatedControl
         double
     >(nameof(Rotation), defaultBindingMode: BindingMode.TwoWay);
 
+    public static readonly StyledProperty<double> DeadZoneProperty = AvaloniaProperty.Register<
+        MapCompass,
+        double
+    >(nameof(DeadZone), 0);
+
     public double Rotation
     {
         get => GetValue(RotationProperty);
         set => SetValue(RotationProperty, value);
+    }
+
+    public double DeadZone
+    {
+        get => GetValue(DeadZoneProperty);
+        set => SetValue(DeadZoneProperty, value);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -155,7 +164,8 @@ public class MapCompass : TemplatedControl
     {
         var center = new Point(Bounds.Width * 0.5, Bounds.Height * 0.5);
         var vector = position - center;
-        if (vector.LengthSquared() < CenterDeadZone * CenterDeadZone)
+        var deadZone = Math.Max(0, DeadZone);
+        if (vector.LengthSquared() < deadZone * deadZone)
         {
             angle = 0;
             return false;
