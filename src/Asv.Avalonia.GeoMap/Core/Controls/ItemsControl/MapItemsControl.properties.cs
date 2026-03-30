@@ -1,6 +1,7 @@
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Media;
 using Avalonia.Metadata;
 
@@ -13,12 +14,69 @@ public partial class MapItemsControl
     public static readonly StyledProperty<double> RotationProperty = AvaloniaProperty.Register<
         MapItemsControl,
         double
-    >(nameof(Rotation));
+    >(nameof(Rotation), defaultBindingMode: BindingMode.TwoWay);
 
     public double Rotation
     {
         get => GetValue(RotationProperty);
         set => SetValue(RotationProperty, value);
+    }
+
+    #endregion
+
+    #region Interaction
+
+    public static readonly StyledProperty<bool> EnableWheelZoomProperty = AvaloniaProperty.Register<
+        MapItemsControl,
+        bool
+    >(nameof(EnableWheelZoom), true);
+
+    public bool EnableWheelZoom
+    {
+        get => GetValue(EnableWheelZoomProperty);
+        set => SetValue(EnableWheelZoomProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> EnableTouchpadGesturesProperty =
+        AvaloniaProperty.Register<MapItemsControl, bool>(nameof(EnableTouchpadGestures), true);
+
+    public bool EnableTouchpadGestures
+    {
+        get => GetValue(EnableTouchpadGesturesProperty);
+        set => SetValue(EnableTouchpadGesturesProperty, value);
+    }
+
+    public static readonly StyledProperty<double> TouchpadZoomSensitivityProperty =
+        AvaloniaProperty.Register<MapItemsControl, double>(nameof(TouchpadZoomSensitivity), 0.75);
+
+    public double TouchpadZoomSensitivity
+    {
+        get => GetValue(TouchpadZoomSensitivityProperty);
+        set => SetValue(TouchpadZoomSensitivityProperty, Math.Abs(value));
+    }
+
+    public static readonly StyledProperty<double> TouchpadMagnifyStepThresholdProperty =
+        AvaloniaProperty.Register<MapItemsControl, double>(
+            nameof(TouchpadMagnifyStepThreshold),
+            0.55
+        );
+
+    public double TouchpadMagnifyStepThreshold
+    {
+        get => GetValue(TouchpadMagnifyStepThresholdProperty);
+        set => SetValue(TouchpadMagnifyStepThresholdProperty, value);
+    }
+
+    public static readonly StyledProperty<double> WheelDiscreteStepThresholdProperty =
+        AvaloniaProperty.Register<MapItemsControl, double>(
+            nameof(WheelDiscreteStepThreshold),
+            0.95
+        );
+
+    public double WheelDiscreteStepThreshold
+    {
+        get => GetValue(WheelDiscreteStepThresholdProperty);
+        set => SetValue(WheelDiscreteStepThresholdProperty, value);
     }
 
     #endregion

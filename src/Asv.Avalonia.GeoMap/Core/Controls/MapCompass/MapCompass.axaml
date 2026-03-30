@@ -19,6 +19,9 @@
         <Setter Property="Width" Value="64" />
         <Setter Property="Height" Value="64" />
         <Setter Property="DeadZone" Value="0" />
+        <Setter Property="EnableTouchpadGestures" Value="True" />
+        <Setter Property="MouseRotationSensitivity" Value="1.0" />
+        <Setter Property="TouchpadRotationSensitivity" Value="1.0" />
         <Setter Property="Template">
             <ControlTemplate>
                 <Border

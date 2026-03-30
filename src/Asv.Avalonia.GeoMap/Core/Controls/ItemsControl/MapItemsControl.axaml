@@ -48,6 +48,9 @@
     </Design.PreviewWith>
 
     <Style Selector="controls|MapItemsControl">
+        <Setter Property="EnableWheelZoom" Value="True" />
+        <Setter Property="EnableTouchpadGestures" Value="True" />
+        <Setter Property="WheelDiscreteStepThreshold" Value="0.95" />
         <Setter Property="AnnotationTemplate">
             <DataTemplate x:DataType="controls:MapItem">
                 <TextBlock Text="{Binding Location}"></TextBlock>
