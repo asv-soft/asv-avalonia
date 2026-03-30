@@ -26,6 +26,7 @@
             Rotation="{Binding MapViewModel.Rotation.Value}"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
+            DeadZone="0"
             Margin="8"
         />
         <map:TileProviderSelectorView
