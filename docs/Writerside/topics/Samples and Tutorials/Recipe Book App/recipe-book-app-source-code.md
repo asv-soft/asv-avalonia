@@ -1,191 +1,102 @@
 ﻿# Source code
 
-![final-structure](recipe-book-app-final-project-structure.png)
+```
+Asv.Avalonia.Samples.RecipeBook
+├── Dependencies/
+├── Assets/
+├── Commands/
+│   └── Recipes/
+│       └── OpenRecipePageCommand.cs
+├── Pages/
+│   ├── Events/
+│   │   └── RemoveIngredientEvent.cs
+│   ├── Ingredients/
+│   │   └── IngredientViewModel.cs
+│   └── Recipes/
+│       ├── Dialog/
+│       │   ├── RecipeEditDialogPrefab.cs
+│       │   ├── RecipeEditDialogView.axaml
+│       │   ├── RecipeEditDialogView.axaml.cs
+│       │   └── RecipeEditDialogViewModel.cs
+│       ├── HomePageRecipeExtension.cs
+│       ├── RecipePageView.axaml
+│       ├── RecipePageView.axaml.cs
+│       ├── RecipePageViewModel.cs
+│       └── RecipeViewModel.cs
+├── App.axaml
+├── App.axaml.cs
+├── app.manifest
+├── Asv.Avalonia.Samples.RecipeBook.csproj.DotSettings
+└── Program.cs
+```
 
 ```c#
-using Avalonia;
 using System;
-using System.IO;
-using System.Reflection;
-using Asv.Avalonia;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 
-namespace RecipeBook;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 sealed class Program
 {
+	[STAThread]
 	public static void Main(string[] args)
 	{
-		var builder = AppHost.CreateBuilder(args);
-		var dataFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-		builder
-			.UseAvalonia(BuildAvaloniaApp)
-
-			// This setting defines where all app data (like a JSON user config) will be stored
-			.UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
-
-			// Here you can define some JSON config settings. For example, we set autosave to 1 second
-			.UseJsonUserConfig(opt => opt.WithAutoSave(TimeSpan.FromSeconds(1)))
-
-			// This defines the source of app data (app name, version, etc.). We use the current assembly
-			.UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-
-			// Here we set up the logging system
-			.UseLogging(options =>
-			{
-				options.WithLogToFile();
-				options.WithLogToConsole();
-
-				// Optional: here you can enable Log viewer page
-				options.WithLogViewer();
-			});
-
-		using var host = builder.Build();
-		host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+		try
+		{
+			BuildAvaloniaApp()
+				.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+			AppHost.Instance.StopAsync().GetAwaiter().GetResult();
+			Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
+		}
+		catch (Exception e)
+		{
+			AppHost.HandleApplicationCrash(e);
+		}
 	}
 
-	// Avalonia configuration, don't remove; also used by visual designer.
-	public static AppBuilder BuildAvaloniaApp() =>
-		AppBuilder.Configure<App>()
+	public static AppBuilder BuildAvaloniaApp()
+		=> AppBuilder.Configure<App>()
 			.UsePlatformDetect()
 			.WithInterFont()
 			.LogToTrace()
-			.UseR3();
+			.UseAsv(builder =>
+			{
+				// Register recipe page
+				builder.Shell.Pages.Register<RecipePageViewModel, RecipePageView>(RecipePageViewModel.PageId);
+
+				// Register command
+				builder.Commands.Register<OpenRecipePageCommand>();
+
+				// Register home page extension
+				builder.Extensions.Register<IHomePage, HomePageRecipeExtension>();
+
+				// Register dialog prefab and its view
+				builder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
+				builder.ViewLocator.RegisterViewFor<RecipeEditDialogViewModel, RecipeEditDialogView>();
+
+				builder
+					.UseDefault()
+					.UseOptionalLogViewer()
+					.UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
+					.UseDesktopShell();
+			});
 }
 ```
 
 {collapsible="true" collapsed-title="Program.cs"}
 
 ```c#
-using System;
-using System.Composition;
-using System.Composition.Convention;
-using System.Composition.Hosting;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
-using Asv.Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
-using R3;
 
-namespace RecipeBook;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-public class App : Application, IContainerHost, IShellHost
+public class App : AsvApplication
 {
-	private readonly CompositionHost _container;
-	private readonly Subject<IShell> _onShellLoaded = new();
-	private IShell _shell;
-
-	public App()
-	{
-		var conventions = new ConventionBuilder();
-		var containerCfg = new ContainerConfiguration();
-
-		containerCfg
-			.WithDependenciesFromSystemModule()
-			.WithDependenciesFromTheApp(this)
-			.WithDefaultConventions(conventions);
-
-		_container = containerCfg.CreateContainer();
-
-		DataTemplates.Add(new CompositionViewLocator(_container));
-
-		if (!Design.IsDesignMode)
-			_container.GetExport<IAppStartupService>().AppCtor();
-	}
-
-	public T GetExport<T>()
-		where T : IExportable
-	{
-		return _container.GetExport<T>();
-	}
-
-	public T GetExport<T>(string contract)
-		where T : IExportable
-	{
-		return _container.GetExport<T>(contract);
-	}
-
-	public bool TryGetExport<T>(string id, out T value)
-		where T : IExportable
-	{
-		return _container.TryGetExport(id, out value);
-	}
-
-	public void SatisfyImports(object value)
-	{
-		_container.SatisfyImports(value);
-	}
-
-	public IExportInfo Source => SystemModule.Instance;
-
-	public IShell Shell
-	{
-		get => _shell;
-		private set
-		{
-			_shell = value;
-			_onShellLoaded.OnNext(value);
-		}
-	}
-
-	public Observable<IShell> OnShellLoaded => _onShellLoaded;
-	public TopLevel TopLevel { get; private set; }
-
 	public override void Initialize()
 	{
 		AvaloniaXamlLoader.Load(this);
-		if (!Design.IsDesignMode)
-			_container.GetExport<IAppStartupService>().Initialize();
-	}
-
-	public override void OnFrameworkInitializationCompleted()
-	{
-		if (Design.IsDesignMode)
-		{
-			Shell = DesignTimeShellViewModel.Instance;
-		}
-		else if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-		{
-			Shell = _container.GetExport<IShell>(DesktopShellViewModel.ShellId);
-			if (desktop.MainWindow is TopLevel topLevel)
-				TopLevel = topLevel;
-		}
-		else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-		{
-			Shell = _container.GetExport<IShell>(MobileShellViewModel.ShellId);
-			if (singleViewPlatform.MainView is TopLevel topLevel)
-				TopLevel = topLevel;
-		}
-		else
-		{
-			throw new Exception("Unknown platform");
-		}
-
-		base.OnFrameworkInitializationCompleted();
-#if DEBUG
-		this.AttachDevTools();
-#endif
-		if (!Design.IsDesignMode)
-			_container.GetExport<IAppStartupService>().OnFrameworkInitializationCompleted();
-	}
-}
-
-public static class ContainerConfigurationMixin
-{
-	public static ContainerConfiguration WithDependenciesFromTheApp(this ContainerConfiguration containerConfiguration,
-		App app)
-	{
-		containerConfiguration.WithExport<IDataTemplateHost>(app).WithExport<IShellHost>(app);
-
-		if (Design.IsDesignMode)
-			containerConfiguration.WithExport(NullContainerHost.Instance);
-		else
-			containerConfiguration.WithExport<IContainerHost>(app);
-
-		return containerConfiguration.WithAssemblies([app.GetType().Assembly]);
 	}
 }
 ```
@@ -195,7 +106,7 @@ public static class ContainerConfigurationMixin
 ```xml
 <Application xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 x:Class="RecipeBook.App"
+			 x:Class="Asv.Avalonia.Samples.RecipeBook.App"
 			 RequestedThemeVariant="Default">
 	<Application.Styles>
 		<StyleInclude Source="avares://Asv.Avalonia/Styling/Theme.axaml" />
@@ -211,12 +122,12 @@ public static class ContainerConfigurationMixin
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-	xmlns:pages="clr-namespace:RecipeBook.Pages"
+	xmlns:local="clr-namespace:Asv.Avalonia.Samples.RecipeBook"
 	mc:Ignorable="d"
 	d:DesignWidth="800"
 	d:DesignHeight="450"
-	x:Class="RecipeBook.Views.RecipePageView"
-	x:DataType="pages:RecipePageViewModel">
+	x:Class="Asv.Avalonia.Samples.RecipeBook.RecipePageView"
+	x:DataType="local:RecipePageViewModel">
     <Grid Margin="0,30,0,0">
 
         <Grid.ColumnDefinitions>
@@ -428,9 +339,8 @@ public static class ContainerConfigurationMixin
 using Asv.Avalonia;
 using Avalonia.Controls;
 
-namespace RecipeBook.Pages;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportViewFor(typeof(RecipePageViewModel))]
 public partial class RecipePageView : UserControl
 {
 	public RecipePageView()
@@ -447,12 +357,12 @@ public partial class RecipePageView : UserControl
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:dialogs="clr-namespace:RecipeBook.Pages.Recipes.Dialogs"
+	xmlns:local="clr-namespace:Asv.Avalonia.Samples.RecipeBook"
 	mc:Ignorable="d"
 	d:DesignWidth="800"
 	d:DesignHeight="450"
-	x:Class="RecipeBook.Pages.Recipes.Dialogs.RecipeEditDialogView"
-	x:DataType="dialogs:RecipeEditDialogViewModel">
+	x:Class="Asv.Avalonia.Samples.RecipeBook.RecipeEditDialogView"
+	x:DataType="local:RecipeEditDialogViewModel">
 
 	<StackPanel>
 		<TextBlock Text="Recipe Title" />
@@ -470,9 +380,8 @@ public partial class RecipePageView : UserControl
 using Asv.Avalonia;
 using Avalonia.Controls;
 
-namespace RecipeBook.Pages.Recipes.Dialogs;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportViewFor(typeof(RecipeEditDialogViewModel))]
 public partial class RecipeEditDialogView : UserControl
 {
 	public RecipeEditDialogView()
@@ -490,7 +399,7 @@ using System.Threading.Tasks;
 using Asv.Avalonia;
 using Asv.Common;
 
-namespace RecipeBook.Pages.Events;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public sealed class RemoveIngredientEvent(IRoutable source) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble);
 
@@ -506,14 +415,10 @@ public static class RemoveIngredientEventMixin
 {collapsible="true" collapsed-title="RemoveIngredientEvent.cs"}
 
 ```c#
-using System.Composition;
 using Asv.Avalonia;
-using RecipeBook.Pages;
 
-namespace RecipeBook.Commands.Recipes;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenRecipePageCommand(INavigationService nav)
 	: OpenPageCommandBase(RecipePageViewModel.PageId, nav)
 {
@@ -528,7 +433,6 @@ public class OpenRecipePageCommand(INavigationService nav)
 		Description = "Open recipes",
 		Icon = RecipePageViewModel.PageIcon,
 		DefaultHotKey = null,
-		Source = SystemModule.Instance,
 	};
 }
 ```
@@ -536,17 +440,12 @@ public class OpenRecipePageCommand(INavigationService nav)
 {collapsible="true" collapsed-title="OpenRecipePageCommand.cs"}
 
 ```c#
-using System.Composition;
-using Asv.Avalonia;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
-using RecipeBook.Commands.Recipes;
 
-namespace RecipeBook.Pages;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public class HomePageRecipeExtension(ILoggerFactory loggerFactory)
 	: AsyncDisposableOnce,
 		IExtensionFor<IHomePage>
@@ -572,13 +471,11 @@ public class HomePageRecipeExtension(ILoggerFactory loggerFactory)
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Asv.Avalonia;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
-using RecipeBook.Pages.Events;
 
-namespace RecipeBook.Pages.Ingredients;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public class IngredientViewModel : RoutableViewModel
 {
@@ -620,7 +517,7 @@ public class IngredientViewModel : RoutableViewModel
     
     private async ValueTask RemoveIngredientAsync(Unit unit, CancellationToken cancellationToken)
     {
-        await this.RemoveIngredient(cancellationToken);
+        await this.RequestRemoveIngredient(cancellationToken);
     }
 }
 ```
@@ -628,12 +525,10 @@ public class IngredientViewModel : RoutableViewModel
 {collapsible="true" collapsed-title="IngredientViewModel.cs"}
 
 ```c#
-using System.Composition;
 using System.Threading.Tasks;
-using Asv.Avalonia;
 using Microsoft.Extensions.Logging;
 
-namespace RecipeBook.Pages.Recipes.Dialogs;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public sealed class RecipeEditDialogPayload
 {
@@ -641,9 +536,6 @@ public sealed class RecipeEditDialogPayload
 	public required string Category { get; init; }
 }
 
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class RecipeEditDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
 	: IDialogPrefab<RecipeEditDialogPayload, RecipeEditDialogPayload?>
 {
@@ -681,12 +573,11 @@ public sealed class RecipeEditDialogPrefab(INavigationService nav, ILoggerFactor
 
 ```c#
 using System.Collections.Generic;
-using Asv.Avalonia;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace RecipeBook.Pages.Recipes.Dialogs;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public class RecipeEditDialogViewModel : DialogViewModelBase
 {
@@ -714,11 +605,9 @@ public class RecipeEditDialogViewModel : DialogViewModelBase
 ```c#
 using System;
 using System.Collections.Generic;
-using System.Composition;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Asv.Avalonia;
 using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
@@ -726,11 +615,8 @@ using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
-using RecipeBook.Pages.Ingredients;
-using RecipeBook.Pages.Recipes;
-using RecipeBook.Pages.Recipes.Dialogs;
 
-namespace RecipeBook.Pages;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public interface IRecipePageViewModel : IPage;
 
@@ -755,7 +641,6 @@ public record RecipeDto
 
 public record IngredientDto(string Id, string Name, string? Amount);
 
-[ExportPage(PageId)]
 public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipePageViewModel
 {
 	private readonly ILoggerFactory _loggerFactory;
@@ -770,10 +655,9 @@ public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipeP
 	private RecipePageViewModelLayoutConfig? _layoutConfig;
 	private readonly ISynchronizedView<RecipeViewModel, RecipeViewModel> _view;
 
-	[ImportingConstructor]
 	public RecipePageViewModel(ICommandService cmd, IConfiguration configuration, ILoggerFactory loggerFactory,
-		IDialogService dialogService)
-		: base(PageId, cmd, loggerFactory, dialogService)
+		IDialogService dialogService, IExtensionService ext)
+		: base(PageId, cmd, loggerFactory, dialogService, ext)
 	{
 		_loggerFactory = loggerFactory;
 
@@ -781,8 +665,6 @@ public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipeP
 
 		_recipes.SetRoutableParent(this).DisposeItWith(Disposable);
 		_recipes.DisposeRemovedItems().DisposeItWith(Disposable);
-
-		Recipes = _recipes.ToNotifyCollectionChanged().DisposeItWith(Disposable);
 
 		_recipeEditDialog = dialogService.GetDialogPrefab<RecipeEditDialogPrefab>();
 		CreateRecipeCommand = new ReactiveCommand(CreateRecipeAsync).DisposeItWith(Disposable);
@@ -802,7 +684,7 @@ public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipeP
 			.SetRoutableParent(this)
 			.DisposeItWith(Disposable);
 
-		_view = _recipes.CreateView(x => x);
+		_view = _recipes.CreateView(x => x).DisposeItWith(Disposable);
 		Recipes = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
 	}
 
@@ -940,7 +822,6 @@ public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipeP
         _configuration.Set(config);
 	}
 
-	public override IExportInfo Source => SystemModule.Instance;
 }
 ```
 
@@ -953,7 +834,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Asv.Avalonia;
 using Asv.Avalonia.InfoMessage;
 using Asv.Common;
 using Asv.IO;
@@ -961,10 +841,8 @@ using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
-using RecipeBook.Pages.Events;
-using RecipeBook.Pages.Ingredients;
 
-namespace RecipeBook.Pages.Recipes;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public class RecipeViewModel : RoutableViewModel
 {

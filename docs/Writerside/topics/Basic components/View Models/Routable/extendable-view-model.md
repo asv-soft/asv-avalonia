@@ -2,17 +2,17 @@
 
 ## Overview
 
-[`ExtendableViewModel<TSelfInterface>`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Extendable/ExtendableViewModel.cs)
+[`ExtendableViewModel<TSelfInterface>`](#extendableviewmodel-tselfinterface)
 is a generic abstract class that extends [`RoutableViewModel`](routable-view-model.md) and adds support for dynamic extensibility.
 It allows your view model to be extended with additional features.
 
 ## How It Works
 
-1. MEF2 discovers your view model and looks for implementations of `IExtensionFor<TSelfInterface>`.
-2. Each extension is instantiated and added to the `Extensions` collection.
-3. The `Init` method is called automatically. It invokes each extension's `Extend` method, passing your view model and
-   its disposable container.
-4. `AfterLoadExtensions` is called to allow for any final setup in your view model.
+1. The [`IExtensionService`](extension-service.md) discovers registered implementations of `IExtensionFor<TSelfInterface>` from the DI container.
+2. Each extension's `Extend` method is invoked, passing your view model and its disposable container.
+3. `AfterLoadExtensions` is called to allow for any final setup in your view model.
+
+Extensions are loaded on the UI thread (via `Dispatcher.UIThread.Post`) to avoid deadlocks.
 
 ## Core Components
 
@@ -37,31 +37,22 @@ This method is called when the extended view model is initialized.
 You can register your `IDisposable` objects with it. Additionally, if your extension class implements `IDisposable`, the
 view model will automatically register it to the `CompositeDisposable`.
 
-### Extensions Collection
+### Extension Registration
 
-The Extensions property contains all imported extensions for your view model:
+Each extension is registered through the `Extensions` builder available on the application host builder.
+Registration can happen in any place that has access to the builder — `Program.cs`, a dedicated module, a plugin entry point, etc.
 
 ```C#
-[ImportMany]
-public IEnumerable<Lazy<IExtensionFor<TSelfInterface>>>? Extensions { get; set; }
+builder.Extensions.Register<IHomePage, MyHomePageExtension>();
 ```
 
-These are automatically discovered and imported by MEF2 at startup.
+This registers `MyHomePageExtension` as a transient service implementing `IExtensionFor<IHomePage>` in the `IServiceCollection`.
+At runtime the DI container resolves all registered `IExtensionFor<IHomePage>` implementations and applies them to every `IHomePage` instance.
 
 ### Initialization and Loading
 
-The `Init` method is called automatically by MEF2 when all imports have been satisfied:
-
-```C#
-[OnImportsSatisfied]
-public void Init()
-{
-    // Extensions are loaded and applied here
-}
-```
-
-It iterates through extensions and calls the `Extend` method with your view model (returned by `GetContext`) and the
-view model's `CompositeDisposable`.
+Extensions are loaded automatically in the constructor of `ExtendableViewModel` via the `IExtensionService`.
+The service resolves all registered `IExtensionFor<TSelfInterface>` implementations and calls their `Extend` method.
 
 You must implement the abstract `AfterLoadExtensions` method to perform any initialization required after extensions are
 loaded:
@@ -80,8 +71,6 @@ Extension for `IHomePage` so your page is accessible from the home tools menu.
 These extensions look like this:
 
 ```C#
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public sealed class HomePageLogViewerExtension(ILoggerFactory loggerFactory)
     : IExtensionFor<IHomePage>
 {
@@ -117,39 +106,12 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 
 ## API {collapsible="true" default-state="collapsed"}
 
-### [ExtendableViewModel&lt;TSelfInterface&gt;](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Extendable/ExtendableViewModel.cs)
+### [ExtendableViewModel&lt;TSelfInterface&gt;](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/Extendable/ExtendableViewModel.cs)
 
-Represents a base class for a view model that supports extensibility using MEF2.
+Represents a base class for a view model that supports extensibility via the [`IExtensionService`](extension-service.md).
 This class provides a mechanism to load and apply extensions dynamically.
-
-| Property     | Type                                                | Description                                                                                                                          |
-|--------------|-----------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| `Extensions` | `IEnumerable<Lazy<IExtensionFor<TSelfInterface>>>?` | Gets or sets a collection of extensions that enhance the functionality of the view model. Extensions are lazily imported using MEF2. |
 
 | Method                  | Return Type      | Description                                                                                                                                               |
 |-------------------------|------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Init()`                | `void`           | Called when MEF2 has completed importing dependencies. This method initializes and applies all available extensions to the current instance.              |
 | `GetContext()`          | `TSelfInterface` | Gets the current instance as `TSelfInterface` or throws an exception if not implemented.                                                                  |
 | `AfterLoadExtensions()` | `void`           | Called after all extensions have been loaded and applied. Derived classes must implement this method to provide additional logic after extension loading. |
-
-### [IExtensionFor&lt;T&gt;](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Extendable/IExtensionFor.cs)
-
-Defines a contract for an extension that can be applied to a specific type `T`.
-This interface allows modular enhancements to be dynamically applied to existing objects.
-
-| Method                                                  | Return Type | Description                                       |
-|---------------------------------------------------------|-------------|---------------------------------------------------|
-| `Extend(T context, CompositeDisposable contextDispose)` | `void`      | Applies the extension logic to the given context. |
-
-#### `IExtensionFor<T>.Extend`
-
-| Parameter        | Type                  | Description                                        |
-|------------------|-----------------------|----------------------------------------------------|
-| `context`        | `T`                   | The target object to extend.                       |
-| `contextDispose` | `CompositeDisposable` | Disposable collection, that disposed with context. |
-
-### [ExportExtensionForAttribute&lt;T&gt;](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Extendable/IExtensionFor.cs)
-
-Marks a class as an exported extension for a specific type `T`.
-This attribute is used with the Managed Extensibility Framework (MEF2) to enable automatic
-discovery and composition of extensions.

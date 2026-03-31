@@ -25,31 +25,29 @@ Let's launch the project to verify the setup.
 
 ## Adding a Page
 
-Create the `RecipePageViewModel` and `RecipePageView` in `Pages` directory.
+Create the `RecipePageViewModel` and `RecipePageView` in `Pages/Recipes` directory.
 
 ```c#
 // RecipePageViewModel.cs
 
 using System.Collections.Generic;
-using System.Composition;
 using Asv.Avalonia;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
-namespace RecipeBook.ViewModels;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public interface IRecipePageViewModel : IPage;
 
-[ExportPage(PageId)]
 public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipePageViewModel
 {
-	private readonly ILoggerFactory _loggerFactory;
-	public const string PageId = "recipe_page";
+    public const string PageId = "recipe_page";
 	public const MaterialIconKind PageIcon = MaterialIconKind.ViewGallery;
+    
+	private readonly ILoggerFactory _loggerFactory;
 
-	[ImportingConstructor]
-	public RecipePageViewModel(ICommandService cmd, ILoggerFactory loggerFactory, IDialogService dialogService)
-		: base(PageId, cmd, loggerFactory, dialogService)
+	public RecipePageViewModel(ICommandService cmd, ILoggerFactory loggerFactory, IDialogService dialogService, IExtensionService ext)
+		: base(PageId, cmd, loggerFactory, dialogService, ext)
 	{
 		_loggerFactory = loggerFactory;
 	}
@@ -61,7 +59,6 @@ public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipeP
 
 	protected override void AfterLoadExtensions() { }
 
-	public override IExportInfo Source => SystemModule.Instance;
 }
 ```
 
@@ -75,12 +72,12 @@ a right editor area for the recipe description and ingredients.
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:pages="clr-namespace:RecipeBook.Pages"
+	xmlns:local="clr-namespace:Asv.Avalonia.Samples.RecipeBook"
 	mc:Ignorable="d"
 	d:DesignWidth="800"
 	d:DesignHeight="450"
-	x:Class="RecipeBook.Views.RecipePageView"
-	x:DataType="pages:RecipePageViewModel">
+	x:Class="Asv.Avalonia.Samples.RecipeBook.RecipePageView"
+	x:DataType="local:RecipePageViewModel">
 
 	<Grid Margin="0,30,0,0"
 		ColumnDefinitions="Auto,Auto,*">
@@ -106,18 +103,15 @@ a right editor area for the recipe description and ingredients.
 </UserControl>
 ```
 
-Add the necessary attributes for MEF2 registration in the code-behind file `RecipePageView.axaml.cs`.
+Create the code-behind file `RecipePageView.axaml.cs`.
 
 ```c#
 // RecipePageView.axaml.cs
 
-using Asv.Avalonia;
 using Avalonia.Controls;
-using RecipeBook.ViewModels;
 
-namespace RecipeBook.Views;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportViewFor(typeof(RecipePageViewModel))]
 public partial class RecipePageView : UserControl
 {
 	public RecipePageView()
@@ -132,17 +126,13 @@ Register the components using an extension method and add a command to open the 
 ```c#
 // HomePageRecipeExtension.cs
 
-using System.Composition;
 using Asv.Avalonia;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
-using RecipeBook.ViewModels.Commands;
 
-namespace RecipeBook.ViewModels;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public class HomePageRecipeExtension(ILoggerFactory loggerFactory)
 	: AsyncDisposableOnce,
 		IExtensionFor<IHomePage>
@@ -162,18 +152,15 @@ public class HomePageRecipeExtension(ILoggerFactory loggerFactory)
 }
 ```
 
-Implement the command to open the Recipe Book page. Put **OpenRecipePageCommand.cs** into **Commands** folder.
+Implement the command to open the Recipe Book page. Put **OpenRecipePageCommand.cs** into **Commands/Recipes** folder.
 
 ```c#
-// OpenRecipePageCommand.cs 
+// OpenRecipePageCommand.cs
 
-using System.Composition;
 using Asv.Avalonia;
 
-namespace RecipeBook.ViewModels.Commands;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenRecipePageCommand(INavigationService nav)
 	: OpenPageCommandBase(RecipePageViewModel.PageId, nav)
 {
@@ -188,14 +175,29 @@ public class OpenRecipePageCommand(INavigationService nav)
 		Description = "Open recipes",
 		Icon = RecipePageViewModel.PageIcon,
 		DefaultHotKey = null,
-		Source = SystemModule.Instance,
 	};
 }
 ```
 
-Project structure
+Current project structure:
 
-![solution](recipe-book-app-solution-1.png)
+```
+RecipeBook/
+├── Assets/
+├── Commands/
+│   └── Recipes/
+│       └── OpenRecipePageCommand.cs
+├── Pages/
+│   └── Recipes/ 
+│       ├── HomePageRecipeExtension.cs
+│       ├── RecipePageViewModel.cs
+│       ├── RecipePageView.axaml
+│       └── RecipePageView.axaml.cs
+├── App.axaml
+├── App.axaml.cs
+├── app.manifest
+└── Program.cs
+```
 
 ### Run App
 
@@ -213,7 +215,7 @@ Let's create the fundamental components of the Recipe Book: the recipe and its i
 We will utilize **Historical properties** to enable built-in **Undo/Redo** support. 
 
 Create the `IngredientViewModel`, which supports Undo/Redo operations for editing 
-the ingredient name and amount. Place this file in the **Pages** directory, alongside the other source files.
+the ingredient name and amount. Place this file in the **Pages/Ingredients** directory.
 
 ```c#
 // IngredientViewModel.cs
@@ -224,7 +226,7 @@ using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace RecipeBook.ViewModels;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public class IngredientViewModel : RoutableViewModel
 {
@@ -233,10 +235,10 @@ public class IngredientViewModel : RoutableViewModel
 	private ReactiveProperty<string?> _name;
 	private ReactiveProperty<string?> _amount;
 
-	public IngredientViewModel(string id, string amount, ILoggerFactory loggerFactory)
+	public IngredientViewModel(string id, string name, string amount, ILoggerFactory loggerFactory)
 		: base(new NavigationId(BaseId, id), loggerFactory)
 	{
-		_name = new ReactiveProperty<string?>(name);
+		_name = new ReactiveProperty<string?>(name).DisposeItWith(Disposable);
 		Name = new HistoricalStringProperty(
 				nameof(Name),
 				_name,
@@ -244,7 +246,7 @@ public class IngredientViewModel : RoutableViewModel
 			).SetRoutableParent(this)
 			.DisposeItWith(Disposable);
 
-		_amount = new ReactiveProperty<string?>(amount);
+		_amount = new ReactiveProperty<string?>(amount).DisposeItWith(Disposable);
 		Amount = new HistoricalStringProperty(
 				nameof(Amount),
 				_amount,
@@ -264,7 +266,7 @@ public class IngredientViewModel : RoutableViewModel
 }
 ```
 
-Define the `RecipeViewModel` in the **Recipes** directory to represent a recipe, including its title, category, and ingredient list.
+Define the `RecipeViewModel` in the **Pages/Recipes** directory to represent a recipe, including its title, category, and ingredient list.
 
 ```c#
 // RecipeViewModel.cs
@@ -277,7 +279,7 @@ using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
-namespace RecipeBook.ViewModels;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public class RecipeViewModel : RoutableViewModel
 {

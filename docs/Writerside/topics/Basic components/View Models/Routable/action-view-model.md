@@ -2,13 +2,13 @@
 
 ## Overview
 
-[`ActionViewModel`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Action/ActionViewModel.cs)
+[`ActionViewModel`](#actionviewmodel)
 is a view model that extends [`HeadlinedViewModel`](headlined-view-model.md) and adds action functionality. 
 It is often used for menu items that trigger [commands](command-service.md).
 
 ## API {collapsible="true" default-state="collapsed"}
 
-### [ActionViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Action/ActionViewModel.cs)
+### [ActionViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/Action/ActionViewModel.cs)
 
 Represents a view model that supports an actionable command, inheriting header, icon, and description properties.
 

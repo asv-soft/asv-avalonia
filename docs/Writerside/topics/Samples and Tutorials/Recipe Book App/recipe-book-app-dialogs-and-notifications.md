@@ -4,7 +4,7 @@
 
 We will use the `DialogPrefab` mechanism from **Asv.Avalonia** to create modal windows that can be invoked directly from the ViewModel.
 
-Place the `RecipeEditDialogViewModel` in the `Dialogs` directory of your project.
+Place the `RecipeEditDialogViewModel` in the `Pages/Recipes/Dialogs` directory of your project.
 
 ```c#
 // RecipeEditDialogViewModel.cs
@@ -15,7 +15,7 @@ using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace RecipeBook.ViewModels;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public class RecipeEditDialogViewModel : DialogViewModelBase
 {
@@ -43,12 +43,11 @@ Define `RecipeEditDialogPrefab` to handle data exchange with the dialog, enablin
 ```c#
 // RecipeEditDialogPrefab.cs
 
-using System.Composition;
 using System.Threading.Tasks;
 using Asv.Avalonia;
 using Microsoft.Extensions.Logging;
 
-namespace RecipeBook.ViewModels;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public sealed class RecipeEditDialogPayload
 {
@@ -56,9 +55,6 @@ public sealed class RecipeEditDialogPayload
 	public required string Category { get; init; }
 }
 
-[ExportDialogPrefab]
-[Shared]
-[method: ImportingConstructor]
 public sealed class RecipeEditDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
 	: IDialogPrefab<RecipeEditDialogPayload, RecipeEditDialogPayload?>
 {
@@ -101,12 +97,12 @@ Design the `RecipeEditDialogView` layout to allow users to input the recipe titl
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:viewModels="clr-namespace:RecipeBook.ViewModels"
+			 xmlns:local="clr-namespace:Asv.Avalonia.Samples.RecipeBook"
 			 mc:Ignorable="d"
 			 d:DesignWidth="800"
 			 d:DesignHeight="450"
-			 x:Class="RecipeBook.Views.RecipeEditDialogView"
-			 x:DataType="viewModels:RecipeEditDialogViewModel">
+			 x:Class="Asv.Avalonia.Samples.RecipeBook.RecipeEditDialogView"
+			 x:DataType="local:RecipeEditDialogViewModel">
 
 	<StackPanel>
 		<TextBlock Text="Recipe Title" />
@@ -123,11 +119,9 @@ Design the `RecipeEditDialogView` layout to allow users to input the recipe titl
 
 using Asv.Avalonia;
 using Avalonia.Controls;
-using RecipeBook.ViewModels;
 
-namespace RecipeBook.Views;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
-[ExportViewFor(typeof(RecipeEditDialogViewModel))]
 public partial class RecipeEditDialogView : UserControl
 {
 	public RecipeEditDialogView()
@@ -317,7 +311,7 @@ using System.Threading.Tasks;
 using Asv.Avalonia;
 using Asv.Common;
 
-namespace RecipeBook.Events;
+namespace Asv.Avalonia.Samples.RecipeBook;
 
 public sealed class RemoveIngredientEvent(IRoutable source) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble);
 

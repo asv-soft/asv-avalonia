@@ -7,8 +7,9 @@ located in `data` subdirectory of the application executable.
 First, add `IConfiguration` to the constructor arguments:
 
 ```c#
-	public RecipePageViewModel(ICommandService cmd, IConfiguration configuration, ILoggerFactory loggerFactory, IDialogService dialogService)
-		: base(PageId, cmd, loggerFactory, dialogService)
+	public RecipePageViewModel(ICommandService cmd, IConfiguration configuration, ILoggerFactory loggerFactory,
+		IDialogService dialogService, IExtensionService ext)
+		: base(PageId, cmd, loggerFactory, dialogService, ext)
 ```
 
 Add the configuration field to `RecipePageViewModel`:
