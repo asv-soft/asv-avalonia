@@ -16,6 +16,14 @@ public readonly record struct TileProviderGroup(string Id, Func<string> NameCall
         "Bing",
         () => RS.TileProviderGroup_Bing_Name
     );
+    public static readonly TileProviderGroup OpenStreetMap = new(
+        "OpenStreetMap",
+        () => RS.TileProviderGroup_OpenStreetMap_Name
+    );
+    public static readonly TileProviderGroup Google = new(
+        "Google",
+        () => RS.TileProviderGroup_Google_Name
+    );
 
     public bool Equals(TileProviderGroup other) => Id == other.Id;
 

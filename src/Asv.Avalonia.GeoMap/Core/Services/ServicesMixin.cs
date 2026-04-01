@@ -28,6 +28,11 @@ public static class ServicesMixin
         builder
             .RegisterTileProvider<YandexTileProvider>()
             .RegisterTileProvider<BingTileProvider>()
+            .RegisterTileProvider<OpenStreetMapTileProvider>()
+            .RegisterTileProvider<GoogleMapTileProvider>()
+            .RegisterTileProvider<GoogleSatelliteTileProvider>()
+            .RegisterTileProvider<GoogleHybridTileProvider>()
+            .RegisterTileProvider<GoogleTerrainTileProvider>()
             .RegisterTileProvider<EmptyTileProvider>();
 
         builder

@@ -200,7 +200,49 @@ namespace Asv.Avalonia.GeoMap {
                 return ResourceManager.GetString("EmptyTileProvider_Info_Name", resourceCulture);
             }
         }
-        
+
+        public static string TileProviderGroup_OpenStreetMap_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_OpenStreetMap_Name", resourceCulture);
+            }
+        }
+
+        public static string OpenStreetMapTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("OpenStreetMapTileProvider_Info_Name", resourceCulture);
+            }
+        }
+
+        public static string TileProviderGroup_Google_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_Google_Name", resourceCulture);
+            }
+        }
+
+        public static string GoogleMapTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("GoogleMapTileProvider_Info_Name", resourceCulture);
+            }
+        }
+
+        public static string GoogleSatelliteTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("GoogleSatelliteTileProvider_Info_Name", resourceCulture);
+            }
+        }
+
+        public static string GoogleHybridTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("GoogleHybridTileProvider_Info_Name", resourceCulture);
+            }
+        }
+
+        public static string GoogleTerrainTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("GoogleTerrainTileProvider_Info_Name", resourceCulture);
+            }
+        }
+
         public static string EditApiKeyDialogPrefab_Content_Title {
             get {
                 return ResourceManager.GetString("EditApiKeyDialogPrefab_Content_Title", resourceCulture);
