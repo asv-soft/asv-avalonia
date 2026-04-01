@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
@@ -20,14 +20,23 @@ public enum DragState
 
 public partial class MapItemsControl : SelectingItemsControl
 {
+    private Cursor? _handCursor;
+    private Cursor? _sizeAllCursor;
+    private Cursor? _crossCursor;
+
     private Point _lastMousePosition;
     private Point _startMousePosition;
+    private IPointer? _activePointer;
     private Control? _selectedContainer;
+    private double _touchpadZoomAccumulator;
 
     public MapItemsControl()
     {
         SelectionMode = SelectionMode.Multiple;
         SelectionChanged += OnSelectionChanged;
+
+        AddHandler(Gestures.PointerTouchPadGestureSwipeEvent, OnTouchPadGestureSwipe);
+        AddHandler(Gestures.PointerTouchPadGestureMagnifyEvent, OnTouchPadGestureMagnify);
     }
 
     #region Property events
@@ -39,6 +48,11 @@ public partial class MapItemsControl : SelectingItemsControl
         if (change.Property == MinZoomProperty || change.Property == MaxZoomProperty)
         {
             Zoom = Math.Clamp(Zoom, MinZoom, MaxZoom);
+        }
+
+        if (change.Property == TouchpadZoomSensitivityProperty && TouchpadZoomSensitivity < 0.0)
+        {
+            SetCurrentValue(TouchpadZoomSensitivityProperty, Math.Abs(TouchpadZoomSensitivity));
         }
     }
 
@@ -110,61 +124,75 @@ public partial class MapItemsControl : SelectingItemsControl
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
-        _startMousePosition = _lastMousePosition = e.GetPosition(this);
-        if (e.KeyModifiers == KeyModifiers.Shift)
-        {
-            UpdateSelectRectangle(_startMousePosition);
-            DragState = DragState.SelectRectangle;
-        }
-        else
-        {
-            var container = GetContainerFromEventSource(e.Source);
-            if (container != null)
-            {
-                DragState = DragState.DragSelection;
-                _selectedContainer = container;
-                var index = IndexFromContainer(container);
-                if (Selection.IsSelected(index) == false)
-                {
-                    Selection.Clear();
-                }
 
+        var position = e.GetPosition(this);
+        _startMousePosition = _lastMousePosition = position;
+        UpdateCursorLocation(position);
+
+        var properties = e.GetCurrentPoint(this).Properties;
+
+        if (!properties.IsLeftButtonPressed)
+        {
+            return;
+        }
+
+        switch (e.KeyModifiers)
+        {
+            case KeyModifiers.Shift:
+                BeginSelectionRectangleDrag(e.Pointer, position);
+                e.Handled = true;
+                return;
+            case KeyModifiers.Control
+                when GetContainerFromEventSource(e.Source) is { } selectionContainer:
+                BeginSelectionDrag(e.Pointer, position, selectionContainer);
+                e.Handled = true;
+                return;
+        }
+
+        BeginMapDrag(e.Pointer, position);
+
+        if (GetContainerFromEventSource(e.Source) is { } container)
+        {
+            var index = IndexFromContainer(container);
+            Selection.BeginBatchUpdate();
+            try
+            {
+                Selection.Clear();
                 Selection.Select(index);
             }
-            else
+            finally
             {
-                DragState = DragState.DragMap;
+                Selection.EndBatchUpdate();
             }
         }
+
+        e.Handled = true;
     }
 
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
-        var position = e.GetPosition(this);
-        var delta = position - _lastMousePosition;
 
+        var position = e.GetPosition(this);
         UpdateCursorLocation(position);
 
-        if (Math.Sqrt((delta.X * delta.X) + (delta.Y * delta.Y)) < 5)
+        if (DragState == DragState.None || _activePointer != e.Pointer)
         {
             return;
         }
 
-        _selectedContainer = null;
         switch (DragState)
         {
+            case DragState.DragMap:
+                DragMapCenter(position - _lastMousePosition);
+                break;
             case DragState.SelectRectangle:
                 UpdateSelectRectangle(position);
                 InvalidateVisual();
                 break;
             case DragState.DragSelection:
-                Cursor = new Cursor(StandardCursorType.Hand);
-                DragSelectedItems(delta);
-                break;
-            case DragState.DragMap:
-                Cursor = new Cursor(StandardCursorType.SizeAll);
-                DragMapCenter(delta);
+                DragSelectedItems(position - _lastMousePosition);
+                _selectedContainer = null;
                 break;
             case DragState.None:
             default:
@@ -172,66 +200,86 @@ public partial class MapItemsControl : SelectingItemsControl
         }
 
         _lastMousePosition = position;
+        e.Handled = true;
     }
 
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
-        ClearDragState();
+
+        if (_activePointer == e.Pointer)
+        {
+            ClearDragState(e.Pointer);
+            e.Handled = true;
+        }
     }
 
     protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
     {
         base.OnPointerCaptureLost(e);
-        ClearDragState();
+        ClearDragState(null);
     }
 
-    private void ClearDragState()
+    private void BeginMapDrag(IPointer pointer, Point position)
+    {
+        _activePointer = pointer;
+        _lastMousePosition = position;
+        DragState = DragState.DragMap;
+        UpdateCursorForDragState();
+        pointer.Capture(this);
+    }
+
+    private void BeginSelectionDrag(IPointer pointer, Point position, Control container)
+    {
+        _activePointer = pointer;
+        _lastMousePosition = position;
+        _selectedContainer = container;
+        DragState = DragState.DragSelection;
+        UpdateCursorForDragState();
+        pointer.Capture(this);
+
+        var index = IndexFromContainer(container);
+        if (!Selection.IsSelected(index))
+        {
+            Selection.Clear();
+            Selection.Select(index);
+        }
+    }
+
+    private void BeginSelectionRectangleDrag(IPointer pointer, Point position)
+    {
+        _activePointer = pointer;
+        _lastMousePosition = position;
+        _startMousePosition = position;
+        DragState = DragState.SelectRectangle;
+        UpdateCursorForDragState();
+        pointer.Capture(this);
+        UpdateSelectRectangle(position);
+    }
+
+    private void ClearDragState(IPointer? pointer)
     {
         if (_selectedContainer != null)
         {
             Selection.BeginBatchUpdate();
-            Selection.Clear();
-            Selection.Select(IndexFromContainer(_selectedContainer));
-            Selection.EndBatchUpdate();
+            try
+            {
+                Selection.Clear();
+                Selection.Select(IndexFromContainer(_selectedContainer));
+            }
+            finally
+            {
+                Selection.EndBatchUpdate();
+            }
+
+            _selectedContainer = null;
         }
 
         DragState = DragState.None;
-        Cursor = Cursor.Default;
+        UpdateCursorForDragState();
+        pointer?.Capture(null);
+        _activePointer = null;
         InvalidateVisual();
-    }
-
-    private void UpdateSelectRectangle(Point position)
-    {
-        SelectionWidth = Math.Abs(_startMousePosition.X - position.X);
-        SelectionHeight = Math.Abs(_startMousePosition.Y - position.Y);
-        SelectionLeft = SelectionLeft > position.X ? position.X : _startMousePosition.X;
-        SelectionTop = SelectionTop > position.Y ? position.Y : _startMousePosition.Y;
-        var rect = new Rect(SelectionLeft, SelectionTop, SelectionWidth, SelectionHeight);
-        Selection.BeginBatchUpdate();
-        Selection.Clear();
-        foreach (var item in Items)
-        {
-            if (item == null)
-            {
-                continue;
-            }
-
-            var control = ContainerFromItem(item) as MapItem;
-            if (control == null)
-            {
-                return;
-            }
-
-            if (rect.Intersects(control.Bounds))
-            {
-                control.IsSelected = true;
-                var index = IndexFromContainer(control);
-                Selection.Select(index);
-            }
-        }
-
-        Selection.EndBatchUpdate();
     }
 
     private void UpdateCursorLocation(Point position)
@@ -254,6 +302,46 @@ public partial class MapItemsControl : SelectingItemsControl
         );
     }
 
+    private void UpdateSelectRectangle(Point position)
+    {
+        SelectionWidth = Math.Abs(_startMousePosition.X - position.X);
+        SelectionHeight = Math.Abs(_startMousePosition.Y - position.Y);
+        SelectionLeft = Math.Min(_startMousePosition.X, position.X);
+        SelectionTop = Math.Min(_startMousePosition.Y, position.Y);
+
+        var rect = new Rect(SelectionLeft, SelectionTop, SelectionWidth, SelectionHeight);
+        Selection.BeginBatchUpdate();
+        try
+        {
+            Selection.Clear();
+            foreach (var item in Items)
+            {
+                if (item is null)
+                {
+                    continue;
+                }
+
+                if (ContainerFromItem(item) is not MapItem control)
+                {
+                    continue;
+                }
+
+                if (!rect.Intersects(control.Bounds))
+                {
+                    continue;
+                }
+
+                control.IsSelected = true;
+                var index = IndexFromContainer(control);
+                Selection.Select(index);
+            }
+        }
+        finally
+        {
+            Selection.EndBatchUpdate();
+        }
+    }
+
     private void DragSelectedItems(Point delta)
     {
         var mapDelta = RotateVector(delta, -Rotation);
@@ -265,26 +353,19 @@ public partial class MapItemsControl : SelectingItemsControl
                 continue;
             }
 
-            if (ContainerFromItem(item) is MapItem ctrl)
+            if (ContainerFromItem(item) is not MapItem ctrl || ctrl.IsReadOnly)
             {
-                if (ctrl.IsReadOnly)
-                {
-                    continue;
-                }
-
-                var location = ctrl.Location;
-                var currentPixel = Provider.Projection.Wgs84ToPixels(
-                    location,
-                    Zoom,
-                    Provider.TileSize
-                );
-                var newLocation = Provider.Projection.PixelsToWgs84(
-                    currentPixel + mapDelta,
-                    Zoom,
-                    Provider.TileSize
-                );
-                ctrl.Location = newLocation;
+                continue;
             }
+
+            var location = ctrl.Location;
+            var currentPixel = Provider.Projection.Wgs84ToPixels(location, Zoom, Provider.TileSize);
+            var newLocation = Provider.Projection.PixelsToWgs84(
+                currentPixel + mapDelta,
+                Zoom,
+                Provider.TileSize
+            );
+            ctrl.Location = newLocation;
         }
     }
 
@@ -315,7 +396,20 @@ public partial class MapItemsControl : SelectingItemsControl
     protected override void OnPointerWheelChanged(PointerWheelEventArgs e)
     {
         base.OnPointerWheelChanged(e);
-        var newZoom = _zoom;
+
+        UpdateCursorLocation(e.GetPosition(this));
+
+        if (EnableTouchpadGestures && IsLikelyTouchpadScroll(e))
+        {
+            e.Handled = true;
+            return;
+        }
+
+        if (!EnableWheelZoom)
+        {
+            return;
+        }
+
         if (Selection.SelectedItem != null)
         {
             CenterMap =
@@ -325,19 +419,137 @@ public partial class MapItemsControl : SelectingItemsControl
                 )?.Location ?? CenterMap;
         }
 
-        if (e.Delta.Y > 0 && _zoom < MaxZoom)
+        if (TryApplyZoomStepFromDelta(e.Delta.Y))
         {
-            newZoom++;
+            e.Handled = true;
         }
-        else if (e.Delta.Y < 0 && _zoom > MinZoom)
+    }
+
+    private bool IsLikelyTouchpadScroll(PointerWheelEventArgs e)
+    {
+        if (e.KeyModifiers.HasFlag(KeyModifiers.Control))
         {
-            newZoom--;
+            return false;
         }
 
-        if (newZoom != _zoom)
+        var absoluteX = Math.Abs(e.Delta.X);
+        var absoluteY = Math.Abs(e.Delta.Y);
+
+        if (absoluteX > 0.0)
         {
-            Zoom = newZoom;
+            return true;
         }
+
+        return absoluteY > 0.0 && absoluteY < WheelDiscreteStepThreshold;
+    }
+
+    private void OnTouchPadGestureSwipe(object? sender, PointerDeltaEventArgs e)
+    {
+        if (!EnableTouchpadGestures)
+        {
+            return;
+        }
+
+        // Swipe gestures are intentionally ignored to avoid map pan on touchpad scroll.
+        e.Handled = true;
+    }
+
+    private void OnTouchPadGestureMagnify(object? sender, PointerDeltaEventArgs e)
+    {
+        if (!EnableTouchpadGestures)
+        {
+            return;
+        }
+
+        var threshold = Math.Max(0.01, TouchpadMagnifyStepThreshold);
+        _touchpadZoomAccumulator += e.Delta.Y * TouchpadZoomSensitivity;
+
+        var zoomSteps = 0;
+        while (_touchpadZoomAccumulator >= threshold)
+        {
+            zoomSteps++;
+            _touchpadZoomAccumulator -= threshold;
+        }
+
+        while (_touchpadZoomAccumulator <= -threshold)
+        {
+            zoomSteps--;
+            _touchpadZoomAccumulator += threshold;
+        }
+
+        if (TryApplyZoomSteps(zoomSteps))
+        {
+            e.Handled = true;
+        }
+    }
+
+    private bool TryApplyZoomStepFromDelta(double delta)
+    {
+        if (delta > 0)
+        {
+            return TryApplyZoomSteps(1);
+        }
+
+        if (delta < 0)
+        {
+            return TryApplyZoomSteps(-1);
+        }
+
+        return false;
+    }
+
+    private bool TryApplyZoomSteps(int steps)
+    {
+        if (steps == 0)
+        {
+            return false;
+        }
+
+        var newZoom = Math.Clamp(_zoom + steps, MinZoom, MaxZoom);
+        if (newZoom == _zoom)
+        {
+            return false;
+        }
+
+        Zoom = newZoom;
+        return true;
+    }
+
+    private void UpdateCursorForDragState()
+    {
+        Cursor = DragState switch
+        {
+            DragState.DragMap => _sizeAllCursor ??= new Cursor(StandardCursorType.SizeAll),
+            DragState.DragSelection => _handCursor ??= new Cursor(StandardCursorType.Hand),
+            DragState.SelectRectangle => _crossCursor ??= new Cursor(StandardCursorType.Cross),
+            _ => Cursor.Default,
+        };
+    }
+
+    private static void DisposeAndResetCursor(ref Cursor? cursor)
+    {
+        cursor?.Dispose();
+        cursor = null;
+    }
+
+    #endregion
+
+    #region Dispose
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnDetachedFromVisualTree(e);
+
+        _activePointer?.Capture(null);
+        _activePointer = null;
+        _selectedContainer = null;
+        DragState = DragState.None;
+        Cursor = Cursor.Default;
+
+        // Ensure native cursor handles are released when control leaves visual tree.
+        DisposeAndResetCursor(ref _handCursor);
+        DisposeAndResetCursor(ref _sizeAllCursor);
+        DisposeAndResetCursor(ref _crossCursor);
     }
 
     #endregion
