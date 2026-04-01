@@ -365,4 +365,55 @@ Used to confirm saving information.
     <data name="ControlsGalleryPageViewModel_TreeHeader" xml:space="preserve">
         <value>Controls</value>
     </data>
+    <data name="OpenMapTestPageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Open map test</value>
+    </data>
+    <data name="OpenMapTestPageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that opens map test page</value>
+    </data>
+    <data name="OpenMapTestPageCommand_Action_Name" xml:space="preserve">
+        <value>Map test</value>
+    </data>
+    <data name="OpenMapTestPageCommand_Action_Description" xml:space="preserve">
+        <value>Open map test</value>
+    </data>
+    <data name="MapTestPageViewModel_Title" xml:space="preserve">
+        <value>Map test</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Editable" xml:space="preserve">
+        <value>Anchor {0}</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_LongText" xml:space="preserve">
+        <value>Very long annotation text to test clipping and overflow during map rotation</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Cluster" xml:space="preserve">
+        <value>Cluster item #{0} with some text</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Edge" xml:space="preserve">
+        <value>Edge {0} — far from center</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Offset" xml:space="preserve">
+        <value>Offset: {0}</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_RotatesWithMap" xml:space="preserve">
+        <value>Rotates WITH map</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_NoMapRotation" xml:space="preserve">
+        <value>Does NOT rotate with map</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_ExtremeAzimuth" xml:space="preserve">
+        <value>Azimuth=359.9°</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Center" xml:space="preserve">
+        <value>Exact center (pivot)</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Plane" xml:space="preserve">
+        <value>Plane</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_PlaneAzimuth" xml:space="preserve">
+        <value>Plane {0}°</value>
+    </data>
+    <data name="MapTestPageViewModel_HeavyPolygon" xml:space="preserve">
+        <value>Show 100K points polygon</value>
+    </data>
 </root>

@@ -22,10 +22,14 @@ public static class ExampleMixin
     {
         public IHostApplicationBuilder UseDefault()
         {
+#if DEBUG
+            builder.Shell.Pages.MapTest.UseDefault();
+#endif
             builder.Shell.Pages.ControlGallery.UseDefault();
             builder.Extensions.Register<IHomePageItem, DeviceActionExample>();
             builder.FileAssociation.Register<ExampleFileHandler>();
             builder.ModuleIo.RegisterDevice<ExampleDeviceManagerExtension>();
+
             return builder;
         }
     }
@@ -33,6 +37,7 @@ public static class ExampleMixin
     extension(ShellMixin.PageBuilder builder)
     {
         public ControlGalleryBuilder ControlGallery => new ControlGalleryBuilder(builder);
+        public MapTestBuilder MapTest => new MapTestBuilder(builder);
     }
 
     public class ControlGalleryBuilder(ShellMixin.PageBuilder builder)
@@ -147,6 +152,19 @@ public static class ExampleMixin
                 ControlsGalleryPageExtension.Contract
             );
             return UseSubPage<TViewModel, TView>(subPageId);
+        }
+    }
+
+    public class MapTestBuilder(ShellMixin.PageBuilder builder)
+    {
+        public MapTestBuilder UseDefault()
+        {
+            builder.Parent.Parent.Services.AddSingleton<IAsyncCommand, OpenMapTestPageCommand>();
+            builder.Parent.Parent.Extensions.Register<IHomePage, HomePageMapTestPageExtension>();
+            builder.Parent.Parent.Shell.Pages.Register<MapTestPageViewModel, MapTestPageView>(
+                MapTestPageViewModel.PageId
+            );
+            return this;
         }
     }
 }

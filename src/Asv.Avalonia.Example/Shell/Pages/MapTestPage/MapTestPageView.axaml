@@ -1,0 +1,45 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap;assembly=Asv.Avalonia.GeoMap"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:DataType="example:MapTestPageViewModel"
+    x:Class="Asv.Avalonia.Example.MapTestPageView"
+>
+    <Design.DataContext>
+        <example:MapTestPageViewModel />
+    </Design.DataContext>
+    <Panel>
+        <map:MapView DataContext="{Binding MapViewModel}" />
+        <map:MapCompass
+            Rotation="{Binding MapViewModel.Rotation.Value}"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom"
+            Margin="8"
+        />
+        <map:TileProviderSelectorView
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="8"
+            DataContext="{Binding TileProviderSelectorViewModel}"
+        />
+        <Border
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Margin="8"
+            Padding="8,4"
+            CornerRadius="4"
+            Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
+        >
+            <CheckBox
+                Content="{x:Static example:RS.MapTestPageViewModel_HeavyPolygon}"
+                IsChecked="{Binding IsHeavyPolygonVisible.Value}"
+            />
+        </Border>
+    </Panel>
+</UserControl>

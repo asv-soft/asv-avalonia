@@ -357,4 +357,55 @@
     <data name="ControlsGalleryPageViewModel_TreeHeader" xml:space="preserve">
         <value>Контролы</value>
     </data>
+    <data name="OpenMapTestPageCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Открыть карту для тестов</value>
+    </data>
+    <data name="OpenMapTestPageCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда, которая открывает карту для тестов</value>
+    </data>
+    <data name="OpenMapTestPageCommand_Action_Description" xml:space="preserve">
+        <value>Открыть карту для тестов</value>
+    </data>
+    <data name="OpenMapTestPageCommand_Action_Name" xml:space="preserve">
+        <value>Карта для тестов</value>
+    </data>
+    <data name="MapTestPageViewModel_Title" xml:space="preserve">
+        <value>Карта для тестов</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Editable" xml:space="preserve">
+        <value>Якорь {0}</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_LongText" xml:space="preserve">
+        <value>Очень длинный текст аннотации для проверки обрезки и переполнения при повороте карты</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Cluster" xml:space="preserve">
+        <value>Элемент кластера #{0} с текстом</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Edge" xml:space="preserve">
+        <value>Край {0} — далеко от центра</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Offset" xml:space="preserve">
+        <value>Смещение: {0}</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_RotatesWithMap" xml:space="preserve">
+        <value>Вращается С картой</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_NoMapRotation" xml:space="preserve">
+        <value>НЕ вращается с картой</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_ExtremeAzimuth" xml:space="preserve">
+        <value>Азимут=359.9°</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Center" xml:space="preserve">
+        <value>Точный центр (точка поворота)</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_Plane" xml:space="preserve">
+        <value>Самолёт</value>
+    </data>
+    <data name="MapTestPageViewModel_Anchor_PlaneAzimuth" xml:space="preserve">
+        <value>Самолёт {0}°</value>
+    </data>
+    <data name="MapTestPageViewModel_HeavyPolygon" xml:space="preserve">
+        <value>Показать полигон из 100К точек</value>
+    </data>
 </root>
