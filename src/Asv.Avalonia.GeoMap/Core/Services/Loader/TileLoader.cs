@@ -56,6 +56,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         ILoggerFactory loggerFactory,
         IConfiguration configProvider,
         IMeterFactory meterFactory,
+        IAppInfo appInfo,
         [FromKeyedServices(FastTileCacheContract)] ITileCache fastCache,
         [FromKeyedServices(SlowTileCacheContract)] ITileCache slowCache
     )
@@ -75,6 +76,9 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         {
             Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMs),
         };
+        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
+            $"Asv.Avalonia.GeoMap/{appInfo.Version}"
+        );
         _remoteRequests = new ConcurrentHashSet<string>();
         _requestQueue = Channel.CreateBounded<TileKey>(
             new BoundedChannelOptions(config.RequestQueueSize)

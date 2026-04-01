@@ -86,6 +86,27 @@
     <data name="EmptyTileProvider_Info_Name" xml:space="preserve">
         <value>Пустой</value>
     </data>
+    <data name="TileProviderGroup_OpenStreetMap_Name" xml:space="preserve">
+        <value>OpenStreetMap</value>
+    </data>
+    <data name="OpenStreetMapTileProvider_Info_Name" xml:space="preserve">
+        <value>Стандартный</value>
+    </data>
+    <data name="TileProviderGroup_Google_Name" xml:space="preserve">
+        <value>Google</value>
+    </data>
+    <data name="GoogleMapTileProvider_Info_Name" xml:space="preserve">
+        <value>Карта</value>
+    </data>
+    <data name="GoogleSatelliteTileProvider_Info_Name" xml:space="preserve">
+        <value>Спутник</value>
+    </data>
+    <data name="GoogleHybridTileProvider_Info_Name" xml:space="preserve">
+        <value>Гибрид</value>
+    </data>
+    <data name="GoogleTerrainTileProvider_Info_Name" xml:space="preserve">
+        <value>Рельеф</value>
+    </data>
     <data name="YandexTileProvider_Info_Name" xml:space="preserve">
         <value>Стандартный</value>
     </data>

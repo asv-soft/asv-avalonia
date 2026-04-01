@@ -96,6 +96,27 @@
     <data name="EmptyTileProvider_Info_Name" xml:space="preserve">
         <value>Empty</value>
     </data>
+    <data name="TileProviderGroup_OpenStreetMap_Name" xml:space="preserve">
+        <value>OpenStreetMap</value>
+    </data>
+    <data name="OpenStreetMapTileProvider_Info_Name" xml:space="preserve">
+        <value>Default</value>
+    </data>
+    <data name="TileProviderGroup_Google_Name" xml:space="preserve">
+        <value>Google</value>
+    </data>
+    <data name="GoogleMapTileProvider_Info_Name" xml:space="preserve">
+        <value>Map</value>
+    </data>
+    <data name="GoogleSatelliteTileProvider_Info_Name" xml:space="preserve">
+        <value>Satellite</value>
+    </data>
+    <data name="GoogleHybridTileProvider_Info_Name" xml:space="preserve">
+        <value>Hybrid</value>
+    </data>
+    <data name="GoogleTerrainTileProvider_Info_Name" xml:space="preserve">
+        <value>Terrain</value>
+    </data>
     <data name="EditApiKeyDialogPrefab_Content_Title" xml:space="preserve">
         <value>Edit API Key</value>
     </data>
