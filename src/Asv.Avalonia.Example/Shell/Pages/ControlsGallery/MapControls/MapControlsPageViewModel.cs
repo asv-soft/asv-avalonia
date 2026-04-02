@@ -44,6 +44,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         var path = new MapAnchor<IMapAnchor>("editanle-anchor-path", loggerFactory);
         path.IsVisible = true;
         path.IsPolygonClosed = true;
+        path.PolygonPen = new Pen(new SolidColorBrush(Colors.Black), 2);
         path.PolygonFill = SolidColorBrush.Parse("#80FFEBCD");
         MapViewModel.Anchors.Add(path);
         for (int i = 0; i < pointCount; i++)
@@ -80,7 +81,6 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         planeTrail.IsVisible = false;
         plane.IsReadOnly = true;
         planeTrail.IsPolygonClosed = false;
-        planeTrail.PolygonPen = new Pen(SolidColorBrush.Parse("#FF1E88E5"), 2);
         MapViewModel.Anchors.Add(planeTrail);
 
         var phase = 0.0;

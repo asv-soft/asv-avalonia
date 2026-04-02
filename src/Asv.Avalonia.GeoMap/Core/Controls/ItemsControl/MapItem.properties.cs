@@ -200,10 +200,12 @@ public partial class MapItem
 
     #region Pen
 
+    public static Pen DefaultPen { get; } = new Pen(Brushes.Blue, 1);
+
     public static readonly StyledProperty<IPen?> PenProperty = AvaloniaProperty.Register<
         MapItem,
         IPen?
-    >(nameof(Pen));
+    >(nameof(Pen), defaultValue: DefaultPen);
 
     public IPen? Pen
     {
