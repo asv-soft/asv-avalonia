@@ -105,7 +105,7 @@ public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
     {
         get;
         set => SetField(ref field, value);
-    }
+    } = MapItem.DefaultPen;
 
     public IBrush? PolygonFill
     {
