@@ -183,9 +183,21 @@ namespace Asv.Avalonia.GeoMap {
             }
         }
         
-        public static string BingTileProvider_Info_Name {
+        public static string BingHybridTileProvider_Info_Name {
             get {
-                return ResourceManager.GetString("BingTileProvider_Info_Name", resourceCulture);
+                return ResourceManager.GetString("BingHybridTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string BingRoadTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("BingRoadTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string BingSatelliteTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("BingSatelliteTileProvider_Info_Name", resourceCulture);
             }
         }
         
@@ -195,54 +207,192 @@ namespace Asv.Avalonia.GeoMap {
             }
         }
         
+        public static string YandexSatelliteTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("YandexSatelliteTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
         public static string EmptyTileProvider_Info_Name {
             get {
                 return ResourceManager.GetString("EmptyTileProvider_Info_Name", resourceCulture);
             }
         }
-
+        
         public static string TileProviderGroup_OpenStreetMap_Name {
             get {
                 return ResourceManager.GetString("TileProviderGroup_OpenStreetMap_Name", resourceCulture);
             }
         }
-
+        
         public static string OpenStreetMapTileProvider_Info_Name {
             get {
                 return ResourceManager.GetString("OpenStreetMapTileProvider_Info_Name", resourceCulture);
             }
         }
-
+        
         public static string TileProviderGroup_Google_Name {
             get {
                 return ResourceManager.GetString("TileProviderGroup_Google_Name", resourceCulture);
             }
         }
-
+        
         public static string GoogleMapTileProvider_Info_Name {
             get {
                 return ResourceManager.GetString("GoogleMapTileProvider_Info_Name", resourceCulture);
             }
         }
-
+        
         public static string GoogleSatelliteTileProvider_Info_Name {
             get {
                 return ResourceManager.GetString("GoogleSatelliteTileProvider_Info_Name", resourceCulture);
             }
         }
-
+        
         public static string GoogleHybridTileProvider_Info_Name {
             get {
                 return ResourceManager.GetString("GoogleHybridTileProvider_Info_Name", resourceCulture);
             }
         }
-
+        
         public static string GoogleTerrainTileProvider_Info_Name {
             get {
                 return ResourceManager.GetString("GoogleTerrainTileProvider_Info_Name", resourceCulture);
             }
         }
-
+        
+        public static string CyclOsmTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("CyclOsmTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string HotOsmTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("HotOsmTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string UmpTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("UmpTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ThunderforestLandscapeTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ThunderforestLandscapeTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ThunderforestCycleTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ThunderforestCycleTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ThunderforestTransportTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ThunderforestTransportTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ThunderforestOutdoorsTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ThunderforestOutdoorsTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ThunderforestTransportDarkTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ThunderforestTransportDarkTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ThunderforestAtlasTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ThunderforestAtlasTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string TileProviderGroup_ArcGis_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_ArcGis_Name", resourceCulture);
+            }
+        }
+        
+        public static string ArcGisWorldStreetTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ArcGisWorldStreetTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ArcGisWorldTopoTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ArcGisWorldTopoTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ArcGisWorldTerrainTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ArcGisWorldTerrainTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ArcGisWorldShadedReliefTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ArcGisWorldShadedReliefTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string ArcGisWorldPhysicalTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ArcGisWorldPhysicalTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string TileProviderGroup_Here_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_Here_Name", resourceCulture);
+            }
+        }
+        
+        public static string TileProviderGroup_Thunderforest_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_Thunderforest_Name", resourceCulture);
+            }
+        }
+        
+        public static string HereMapTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("HereMapTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string HereSatelliteTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("HereSatelliteTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string HereHybridTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("HereHybridTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string HereTerrainTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("HereTerrainTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
+        public static string WikiMapiaTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("WikiMapiaTileProvider_Info_Name", resourceCulture);
+            }
+        }
+        
         public static string EditApiKeyDialogPrefab_Content_Title {
             get {
                 return ResourceManager.GetString("EditApiKeyDialogPrefab_Content_Title", resourceCulture);
@@ -264,6 +414,12 @@ namespace Asv.Avalonia.GeoMap {
         public static string SettingsGeoMapView_EditProviderApiKey_Tooltip {
             get {
                 return ResourceManager.GetString("SettingsGeoMapView_EditProviderApiKey_Tooltip", resourceCulture);
+            }
+        }
+        
+        public static string ArcGisWorldImageryTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("ArcGisWorldImageryTileProvider_Info_Name", resourceCulture);
             }
         }
     }

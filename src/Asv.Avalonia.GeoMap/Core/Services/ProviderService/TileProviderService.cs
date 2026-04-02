@@ -6,7 +6,7 @@ namespace Asv.Avalonia.GeoMap;
 
 public class TileProviderServiceConfig
 {
-    public string CurrentProviderId { get; set; } = YandexTileProvider.Id;
+    public string CurrentProviderId { get; set; } = YandexMapTileProvider.Id;
     public Dictionary<string, string> ApiKeys { get; set; } = new();
 
     public override string ToString()

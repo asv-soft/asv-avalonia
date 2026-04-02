@@ -25,19 +25,42 @@ public static class ServicesMixin
         builder.Parent.Services.AddSingleton<ITileProviderService, TileProviderService>();
         builder.Parent.Services.AddSingleton<IZoomService, ZoomService>();
 
+        // TODO: handle auth errors gracefully
+        /*
         builder
-            .RegisterTileProvider<YandexTileProvider>()
-            .RegisterTileProvider<BingTileProvider>()
+            .RegisterTileProvider<ThunderforestLandscapeTileProvider>()
+            .RegisterTileProvider<ThunderforestCycleTileProvider>()
+            .RegisterTileProvider<ThunderforestTransportTileProvider>()
+            .RegisterTileProvider<ThunderforestOutdoorsTileProvider>()
+            .RegisterTileProvider<ThunderforestTransportDarkTileProvider>()
+            .RegisterTileProvider<ThunderforestAtlasTileProvider>();
+            .RegisterTileProvider<HereMapTileProvider>()
+            .RegisterTileProvider<HereSatelliteTileProvider>()
+            .RegisterTileProvider<HereHybridTileProvider>()
+            .RegisterTileProvider<HereTerrainTileProvider>() */
+
+        builder
+            .RegisterTileProvider<YandexMapTileProvider>()
+            .RegisterTileProvider<YandexSatelliteTileProvider>()
+            .RegisterTileProvider<BingHybridTileProvider>()
+            .RegisterTileProvider<BingRoadTileProvider>()
+            .RegisterTileProvider<BingSatelliteTileProvider>()
             .RegisterTileProvider<OpenStreetMapTileProvider>()
+            .RegisterTileProvider<CyclOsmTileProvider>()
+            .RegisterTileProvider<HotOsmTileProvider>()
+            .RegisterTileProvider<UmpTileProvider>()
             .RegisterTileProvider<GoogleMapTileProvider>()
             .RegisterTileProvider<GoogleSatelliteTileProvider>()
             .RegisterTileProvider<GoogleHybridTileProvider>()
             .RegisterTileProvider<GoogleTerrainTileProvider>()
+            .RegisterTileProvider<ArcGisWorldStreetTileProvider>()
+            .RegisterTileProvider<ArcGisWorldTopoTileProvider>()
+            .RegisterTileProvider<ArcGisWorldTerrainTileProvider>()
+            .RegisterTileProvider<ArcGisWorldShadedReliefTileProvider>()
+            .RegisterTileProvider<ArcGisWorldPhysicalTileProvider>()
+            .RegisterTileProvider<ArcGisWorldImageryTileProvider>()
+            .RegisterTileProvider<WikiMapiaTileProvider>()
             .RegisterTileProvider<EmptyTileProvider>();
-
-        builder
-            .Parent.Services.AddOptions<BingTileProviderOptions>()
-            .BindConfiguration(BingTileProviderOptions.ConfigurationSection);
 
         return builder;
     }
