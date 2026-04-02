@@ -129,6 +129,7 @@ public static class ShellMixin
                 .Register<ToolsMenu>()
                 .Register<ToolsHomeMenu>()
                 .Register<ToolsSettingsMenu>()
+                .Register<ViewMenu>()
                 .Register<ViewSaveMenu>()
                 .Register<ViewSaveAllMenu>();
         }
