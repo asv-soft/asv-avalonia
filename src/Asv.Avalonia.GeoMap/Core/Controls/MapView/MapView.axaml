@@ -16,14 +16,14 @@
         <map:MapViewModel />
     </Design.DataContext>
     <map:MapItemsControl
-        CenterMap="{Binding CenterMap.Value}"
-        Zoom="{Binding Zoom.Value}"
+        CenterMap="{Binding CenterMap.Value, Mode=TwoWay}"
+        Zoom="{Binding Zoom.Value, Mode=TwoWay}"
         Provider="{Binding CurrentProvider.Value}"
         MinZoom="{Binding MinZoom.Value}"
         MaxZoom="{Binding MaxZoom.Value}"
         ItemsSource="{Binding AnchorsView}"
-        SelectedItem="{Binding SelectedAnchor.Value}"
-        Rotation="{Binding Rotation.Value}"
+        SelectedItem="{Binding SelectedAnchor.Value, Mode=TwoWay}"
+        Rotation="{Binding Rotation.Value, Mode=TwoWay}"
         SelectionMode="Multiple"
     >
         <map:MapItemsControl.AnnotationTemplate>
