@@ -21,7 +21,6 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             Margin="8"
-            TouchpadRotationSensitivity="1"
         />
         <map:TileProviderSelectorView
             HorizontalAlignment="Right"
