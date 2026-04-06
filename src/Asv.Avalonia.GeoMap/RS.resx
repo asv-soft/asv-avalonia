@@ -87,11 +87,20 @@
     <data name="TileProviderGroup_Bing_Name" xml:space="preserve">
         <value>Bing</value>
     </data>
-    <data name="BingTileProvider_Info_Name" xml:space="preserve">
-        <value>Default</value>
+    <data name="BingHybridTileProvider_Info_Name" xml:space="preserve">
+        <value>Hybrid</value>
+    </data>
+    <data name="BingRoadTileProvider_Info_Name" xml:space="preserve">
+        <value>Road</value>
+    </data>
+    <data name="BingSatelliteTileProvider_Info_Name" xml:space="preserve">
+        <value>Satellite</value>
     </data>
     <data name="YandexTileProvider_Info_Name" xml:space="preserve">
         <value>Default</value>
+    </data>
+    <data name="YandexSatelliteTileProvider_Info_Name" xml:space="preserve">
+        <value>Satellite</value>
     </data>
     <data name="EmptyTileProvider_Info_Name" xml:space="preserve">
         <value>Empty</value>
@@ -117,6 +126,72 @@
     <data name="GoogleTerrainTileProvider_Info_Name" xml:space="preserve">
         <value>Terrain</value>
     </data>
+    <data name="CyclOsmTileProvider_Info_Name" xml:space="preserve">
+        <value>Cycle</value>
+    </data>
+    <data name="HotOsmTileProvider_Info_Name" xml:space="preserve">
+        <value>Humanitarian</value>
+    </data>
+    <data name="UmpTileProvider_Info_Name" xml:space="preserve">
+        <value>UMP Poland</value>
+    </data>
+    <data name="ThunderforestLandscapeTileProvider_Info_Name" xml:space="preserve">
+        <value>Landscape</value>
+    </data>
+    <data name="ThunderforestCycleTileProvider_Info_Name" xml:space="preserve">
+        <value>Cycle</value>
+    </data>
+    <data name="ThunderforestTransportTileProvider_Info_Name" xml:space="preserve">
+        <value>Transport</value>
+    </data>
+    <data name="ThunderforestOutdoorsTileProvider_Info_Name" xml:space="preserve">
+        <value>Outdoors</value>
+    </data>
+    <data name="ThunderforestTransportDarkTileProvider_Info_Name" xml:space="preserve">
+        <value>Transport Dark</value>
+    </data>
+    <data name="ThunderforestAtlasTileProvider_Info_Name" xml:space="preserve">
+        <value>Atlas</value>
+    </data>
+    <data name="TileProviderGroup_ArcGis_Name" xml:space="preserve">
+        <value>ArcGIS</value>
+    </data>
+    <data name="ArcGisWorldStreetTileProvider_Info_Name" xml:space="preserve">
+        <value>World Street</value>
+    </data>
+    <data name="ArcGisWorldTopoTileProvider_Info_Name" xml:space="preserve">
+        <value>World Topo</value>
+    </data>
+    <data name="ArcGisWorldTerrainTileProvider_Info_Name" xml:space="preserve">
+        <value>World Terrain</value>
+    </data>
+    <data name="ArcGisWorldShadedReliefTileProvider_Info_Name" xml:space="preserve">
+        <value>Shaded Relief</value>
+    </data>
+    <data name="ArcGisWorldPhysicalTileProvider_Info_Name" xml:space="preserve">
+        <value>World Physical</value>
+    </data>
+    <data name="TileProviderGroup_Here_Name" xml:space="preserve">
+        <value>HERE</value>
+    </data>
+    <data name="TileProviderGroup_Thunderforest_Name" xml:space="preserve">
+        <value>Thunderforest</value>
+    </data>
+    <data name="HereMapTileProvider_Info_Name" xml:space="preserve">
+        <value>Map</value>
+    </data>
+    <data name="HereSatelliteTileProvider_Info_Name" xml:space="preserve">
+        <value>Satellite</value>
+    </data>
+    <data name="HereHybridTileProvider_Info_Name" xml:space="preserve">
+        <value>Hybrid</value>
+    </data>
+    <data name="HereTerrainTileProvider_Info_Name" xml:space="preserve">
+        <value>Terrain</value>
+    </data>
+    <data name="WikiMapiaTileProvider_Info_Name" xml:space="preserve">
+        <value>WikiMapia</value>
+    </data>
     <data name="EditApiKeyDialogPrefab_Content_Title" xml:space="preserve">
         <value>Edit API Key</value>
     </data>
@@ -128,5 +203,8 @@
     </data>
     <data name="SettingsGeoMapView_EditProviderApiKey_Tooltip" xml:space="preserve">
         <value>Edit API Key</value>
+    </data>
+    <data name="ArcGisWorldImageryTileProvider_Info_Name" xml:space="preserve">
+        <value>World Imagery</value>
     </data>
 </root>

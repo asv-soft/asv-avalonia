@@ -24,6 +24,18 @@ public readonly record struct TileProviderGroup(string Id, Func<string> NameCall
         "Google",
         () => RS.TileProviderGroup_Google_Name
     );
+    public static readonly TileProviderGroup ArcGis = new(
+        "ArcGIS",
+        () => RS.TileProviderGroup_ArcGis_Name
+    );
+    public static readonly TileProviderGroup Here = new(
+        "HERE",
+        () => RS.TileProviderGroup_Here_Name
+    );
+    public static readonly TileProviderGroup Thunderforest = new(
+        "Thunderforest",
+        () => RS.TileProviderGroup_Thunderforest_Name
+    );
 
     public bool Equals(TileProviderGroup other) => Id == other.Id;
 
