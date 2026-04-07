@@ -6,8 +6,11 @@ namespace Asv.Avalonia;
 /// Represents an event triggered by a page to notify its parent (IShell) that it requests restart.
 /// The shell must handle this event and determine whether the application should be restarted.
 /// </summary>
-public sealed class RestartApplicationEvent(IRoutable source)
-    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble) { }
+public sealed class RestartApplicationEvent(IRoutable source, CancellationToken cancel = default)
+    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble)
+{
+    public CancellationToken Cancel { get; } = cancel;
+}
 
 /// <summary>
 /// Provides an extension method for requesting an application's restart by raising a <see cref="RestartApplicationEvent"/>.
@@ -25,6 +28,6 @@ public static class RestartApplicationMixin
     /// <returns>A <see cref="ValueTask"/> representing an asynchronous operation.</returns>
     public static ValueTask RequestRestart(this IRoutable src, CancellationToken cancel = default)
     {
-        return src.Rise(new RestartApplicationEvent(src), cancel);
+        return src.Rise(new RestartApplicationEvent(src, cancel), cancel);
     }
 }

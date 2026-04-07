@@ -6,5 +6,5 @@ namespace Asv.Avalonia;
 public interface ISoloRunFeature : IHostedService, IDisposable
 {
     bool IsFirstInstance { get; }
-    ReadOnlyReactiveProperty<AppArgs> Args { get; }
+    ReadOnlyReactiveProperty<IAppArgs> Args { get; }
 }

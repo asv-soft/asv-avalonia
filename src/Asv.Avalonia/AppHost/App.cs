@@ -36,7 +36,7 @@ public class AsvApplication : Application
         }
         else
         {
-            if (Design.IsDesignMode == false)
+            if (!Design.IsDesignMode)
             {
                 throw new Exception("Unknown platform");
             }
