@@ -36,6 +36,7 @@ public class TileLoaderConfig
 
 public class TileLoader : AsyncDisposableWithCancel, ITileLoader
 {
+    public const string HttpClientName = "TileLoader";
     public const string FastTileCacheContract = "map.cache.fast";
     public const string SlowTileCacheContract = "map.cache.slow";
     private readonly ITileCache _fastCache;
@@ -56,7 +57,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         ILoggerFactory loggerFactory,
         IConfiguration configProvider,
         IMeterFactory meterFactory,
-        IAppInfo appInfo,
+        IHttpClientFactory httpClientFactory,
         [FromKeyedServices(FastTileCacheContract)] ITileCache fastCache,
         [FromKeyedServices(SlowTileCacheContract)] ITileCache slowCache
     )
@@ -72,13 +73,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             Brush.Parse(config.EmptyTileBrush)
         );
         _onLoaded = new();
-        _httpClient = new HttpClient
-        {
-            Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMs),
-        };
-        _httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(
-            $"Asv.Avalonia.GeoMap/{appInfo.Version}"
-        );
+        _httpClient = httpClientFactory.CreateClient(HttpClientName);
         _remoteRequests = new ConcurrentHashSet<string>();
         _requestQueue = Channel.CreateBounded<TileKey>(
             new BoundedChannelOptions(config.RequestQueueSize)
@@ -265,7 +260,6 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             _slowCache.Dispose();
             _localRequests.Dispose();
             _onLoaded.Dispose();
-            _httpClient.Dispose();
             _remoteRequests.Dispose();
             EmptyTileBrush.Dispose();
             CurrentMapMode.Dispose();
@@ -288,7 +282,6 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         await CastAndDispose(CurrentMapMode);
         await CastAndDispose(_localRequests);
         await CastAndDispose(_onLoaded);
-        await CastAndDispose(_httpClient);
         await CastAndDispose(_remoteRequests);
         await CastAndDispose(EmptyTileBrush);
 
