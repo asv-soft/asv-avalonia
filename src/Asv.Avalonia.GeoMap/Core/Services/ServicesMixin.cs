@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Asv.Cfg;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia.GeoMap;
 
@@ -19,6 +20,19 @@ public static class ServicesMixin
             )
             .AddOptions<FileSystemCacheConfig>()
             .BindConfiguration(FileSystemCacheConfig.ConfigurationSection);
+
+        builder.Parent.Services.AddHttpClient(
+            TileLoader.HttpClientName,
+            (sp, client) =>
+            {
+                var config = sp.GetRequiredService<IConfiguration>().Get<TileLoaderConfig>();
+                var appInfo = sp.GetRequiredService<IAppInfo>();
+                client.Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMs);
+                client.DefaultRequestHeaders.UserAgent.ParseAdd(
+                    $"{typeof(GeoMapMixin).Namespace}/{appInfo.Version}"
+                );
+            }
+        );
 
         builder.Parent.Services.AddSingleton<IMapService, MapService>();
         builder.Parent.Services.AddSingleton<ITileLoader, TileLoader>();
