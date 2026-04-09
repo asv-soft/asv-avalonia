@@ -1,11 +1,11 @@
-﻿namespace Asv.Avalonia.GeoMap;
+namespace Asv.Avalonia.GeoMap;
 
 public interface ITileProvider
 {
     TileProviderInfo Info { get; }
     IMapProjection Projection { get; }
-    string? GetTileUrl(TileKey key);
     int TileSize { get; }
+    Task<Tile?> DownloadAsync(TileKey key, CancellationToken ct);
 }
 
 public interface IProtectedTileProvider : ITileProvider

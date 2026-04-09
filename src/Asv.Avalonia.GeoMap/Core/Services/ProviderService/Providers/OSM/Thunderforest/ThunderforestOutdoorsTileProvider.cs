@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class ThunderforestOutdoorsTileProvider : IProtectedTileProvider
+public class ThunderforestOutdoorsTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<ThunderforestOutdoorsTileProvider> logger,
+    TimeProvider timeProvider
+) : ProtectedHttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "ThunderforestOutdoors";
 
@@ -11,14 +17,11 @@ public class ThunderforestOutdoorsTileProvider : IProtectedTileProvider
         Group = TileProviderGroup.Thunderforest,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
-    public string? ApiKey { get; set; }
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         return $"https://api.thunderforest.com/outdoors/{key.Zoom}/{key.X}/{key.Y}.png?apikey={ApiKey}";
     }
-
-    public int TileSize => 256;
 }
