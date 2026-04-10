@@ -37,7 +37,7 @@ public static class AppHostMixin
             avaloniaBuilder.AfterPlatformServicesSetup(_ =>
             {
                 var host = asvBuilder.Build();
-                host.StartAsync().GetAwaiter().GetResult();
+                host.Start();
             });
             return avaloniaBuilder;
         }
