@@ -25,8 +25,8 @@ sealed class Program
     {
         try
         {
-            BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            var app = BuildAvaloniaApp();
+            app.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
             AppHost.Instance.StopAsync().GetAwaiter().GetResult();
             Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
         }

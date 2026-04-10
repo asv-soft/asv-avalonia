@@ -11,6 +11,11 @@ public static class LogReaderMixin
     {
         public IHostApplicationBuilder UseOptionalLogViewer(Action<Builder>? configure = null)
         {
+            if (builder.IsDesignTimeEnvironment)
+            {
+                return builder;
+            }
+
             var logReaderOptions =
                 builder.Configuration.GetSection(LogReaderOptions.Section).Get<LogReaderOptions>()
                 ?? new LogReaderOptions();
@@ -20,7 +25,7 @@ public static class LogReaderMixin
             builder.Logging.AddZLoggerRollingFile(options =>
             {
                 options.FilePathSelector = (dt, index) =>
-                    $"{logReaderOptions.Folder}/{dt:yyyy-MM-dd}_{index}.logs";
+                    Path.Combine($"{logReaderOptions.Folder}", $"{dt:yyyy-MM-dd}_{index}.logs");
                 options.UseJsonFormatter();
                 options.RollingSizeKB = logReaderOptions.RollingSizeKb;
             });

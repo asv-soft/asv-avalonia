@@ -33,7 +33,6 @@ public class LogReaderService : ILogReaderService
             var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs").OrderDescending()
         )
         {
-            result.Clear();
             if (cancel.IsCancellationRequested)
             {
                 break;
@@ -49,7 +48,7 @@ public class LogReaderService : ILogReaderService
             );
             using var sr = new StreamReader(fs, Encoding.UTF8, true, 64 * 1024, true);
 
-            var rdr = new JsonTextReader(sr) { SupportMultipleContent = true };
+            await using var rdr = new JsonTextReader(sr) { SupportMultipleContent = true };
 
             while (
                 !cancel.IsCancellationRequested && await rdr.ReadAsync(cancel).ConfigureAwait(false)
