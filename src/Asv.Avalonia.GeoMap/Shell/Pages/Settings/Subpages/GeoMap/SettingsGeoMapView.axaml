@@ -110,6 +110,8 @@
                     </StackPanel>
                 </Border>
                 <ListBox
+                    x:Name="ProvidersListBox"
+                    Loaded="OnProvidersListBoxLoaded"
                     MaxHeight="200"
                     Background="Transparent"
                     BorderThickness="0"

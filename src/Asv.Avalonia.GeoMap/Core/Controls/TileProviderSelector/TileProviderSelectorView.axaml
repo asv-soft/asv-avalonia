@@ -14,7 +14,12 @@
     <Design.DataContext>
         <map:TileProviderSelectorViewModel />
     </Design.DataContext>
-    <ComboBox ItemsSource="{Binding Items}" SelectedItem="{Binding SelectedItem.Value}">
+    <ComboBox
+        DropDownOpened="OnDropDownOpened"
+        x:Name="ProvidersComboBox"
+        ItemsSource="{Binding Items}"
+        SelectedItem="{Binding SelectedItem.Value}"
+    >
         <ComboBox.SelectionBoxItemTemplate>
             <DataTemplate>
                 <avalonia:MaterialIcon Kind="MapOutline" />
