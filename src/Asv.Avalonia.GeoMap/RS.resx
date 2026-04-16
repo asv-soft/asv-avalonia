@@ -87,6 +87,18 @@
     <data name="TileProviderGroup_Bing_Name" xml:space="preserve">
         <value>Bing</value>
     </data>
+    <data name="TileProviderGroup_AzureMaps_Name" xml:space="preserve">
+        <value>Azure Maps</value>
+    </data>
+    <data name="AzureMapsRoadTileProvider_Info_Name" xml:space="preserve">
+        <value>Road</value>
+    </data>
+    <data name="AzureMapsImageryTileProvider_Info_Name" xml:space="preserve">
+        <value>Satellite</value>
+    </data>
+    <data name="AzureMapsHybridTileProvider_Info_Name" xml:space="preserve">
+        <value>Hybrid</value>
+    </data>
     <data name="BingHybridTileProvider_Info_Name" xml:space="preserve">
         <value>Hybrid</value>
     </data>

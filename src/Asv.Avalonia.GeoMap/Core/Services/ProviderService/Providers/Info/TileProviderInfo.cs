@@ -36,6 +36,10 @@ public readonly record struct TileProviderGroup(string Id, Func<string> NameCall
         "Thunderforest",
         () => RS.TileProviderGroup_Thunderforest_Name
     );
+    public static readonly TileProviderGroup AzureMaps = new(
+        "AzureMaps",
+        () => RS.TileProviderGroup_AzureMaps_Name
+    );
 
     public bool Equals(TileProviderGroup other) => Id == other.Id;
 

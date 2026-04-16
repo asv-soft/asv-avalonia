@@ -51,7 +51,10 @@ public static class ServicesMixin
             .RegisterTileProvider<HereMapTileProvider>()
             .RegisterTileProvider<HereSatelliteTileProvider>()
             .RegisterTileProvider<HereHybridTileProvider>()
-            .RegisterTileProvider<HereTerrainTileProvider>() */
+            .RegisterTileProvider<HereTerrainTileProvider>()
+            .RegisterTileProvider<AzureMapsRoadTileProvider>()
+            .RegisterTileProvider<AzureMapsImageryTileProvider>()
+            .RegisterTileProvider<AzureMapsHybridTileProvider>() */
 
         builder
             .RegisterTileProvider<YandexMapTileProvider>()

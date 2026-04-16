@@ -422,5 +422,29 @@ namespace Asv.Avalonia.GeoMap {
                 return ResourceManager.GetString("ArcGisWorldImageryTileProvider_Info_Name", resourceCulture);
             }
         }
+
+        public static string TileProviderGroup_AzureMaps_Name {
+            get {
+                return ResourceManager.GetString("TileProviderGroup_AzureMaps_Name", resourceCulture);
+            }
+        }
+
+        public static string AzureMapsRoadTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("AzureMapsRoadTileProvider_Info_Name", resourceCulture);
+            }
+        }
+
+        public static string AzureMapsImageryTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("AzureMapsImageryTileProvider_Info_Name", resourceCulture);
+            }
+        }
+
+        public static string AzureMapsHybridTileProvider_Info_Name {
+            get {
+                return ResourceManager.GetString("AzureMapsHybridTileProvider_Info_Name", resourceCulture);
+            }
+        }
     }
 }
