@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using ZLogger;
 
 namespace Asv.Avalonia;
 
@@ -19,16 +18,7 @@ public static class LogReaderMixin
             var logReaderOptions =
                 builder.Configuration.GetSection(LogReaderOptions.Section).Get<LogReaderOptions>()
                 ?? new LogReaderOptions();
-            configure ??= x => x.UseDefault();
-            var logReaderBuilder = new Builder(builder, logReaderOptions);
-            configure.Invoke(logReaderBuilder);
-            builder.Logging.AddZLoggerRollingFile(options =>
-            {
-                options.FilePathSelector = (dt, index) =>
-                    Path.Combine($"{logReaderOptions.Folder}", $"{dt:yyyy-MM-dd}_{index}.logs");
-                options.UseJsonFormatter();
-                options.RollingSizeKB = logReaderOptions.RollingSizeKb;
-            });
+            configure?.Invoke(new Builder(logReaderOptions));
 
             builder.Services.AddSingleton<ILogReaderService, LogReaderService>();
             builder.Services.AddSingleton(logReaderOptions);
@@ -44,23 +34,18 @@ public static class LogReaderMixin
         }
     }
 
-    public class Builder(IHostApplicationBuilder builder, LogReaderOptions options)
+    public class Builder(LogReaderOptions options)
     {
-        public void UseDefault()
+        public Builder UseDefault()
         {
-            WithFolder("logs");
-            WithRollingSizeKb(50 * 1024);
+            return WithFolder("logs");
         }
 
-        private void WithFolder(string logs)
+        public Builder WithFolder(string folder)
         {
-            ArgumentNullException.ThrowIfNull(logs);
-            options.Folder = logs;
-        }
-
-        private void WithRollingSizeKb(int rollingSizeKb)
-        {
-            options.RollingSizeKb = rollingSizeKb;
+            ArgumentNullException.ThrowIfNull(folder);
+            options.Folder = folder;
+            return this;
         }
     }
 }
