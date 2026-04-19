@@ -29,7 +29,7 @@ public class LogReaderService : ILogReaderService
     )
     {
         var result = new Stack<LogMessage>();
-        await foreach (
+        foreach (
             var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs").OrderDescending()
         )
         {

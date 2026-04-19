@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;

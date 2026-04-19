@@ -7,7 +7,7 @@ namespace Asv.Avalonia;
 /// Represents a panel that arranges its items horizontally if there is available space, otherwise vertically.
 /// </summary>
 /// <remarks>
-/// This control is specific to the <see cref="Asv.Avalonia.InfoBar.InfoBar"/> and generally should not be used elsewhere
+/// This control is specific to the <see cref="InfoBar"/> and generally should not be used elsewhere
 /// </remarks>
 public partial class InfoBarPanel : Panel
 {

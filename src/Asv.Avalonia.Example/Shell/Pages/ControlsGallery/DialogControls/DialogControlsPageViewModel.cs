@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
+using Asv.Modeling;
 using Avalonia.Media.Imaging;
 using Material.Icons;
 using Microsoft.Extensions.Logging;

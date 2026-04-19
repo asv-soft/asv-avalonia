@@ -4,6 +4,7 @@ using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;

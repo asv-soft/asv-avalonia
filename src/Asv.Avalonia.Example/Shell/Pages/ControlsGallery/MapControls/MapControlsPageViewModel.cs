@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using Avalonia.Media;
 using Material.Icons;
 using Microsoft.Extensions.Logging;

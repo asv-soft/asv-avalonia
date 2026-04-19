@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using Asv.Common;
+using Asv.Modeling;
 
 namespace Asv.Avalonia;
 
