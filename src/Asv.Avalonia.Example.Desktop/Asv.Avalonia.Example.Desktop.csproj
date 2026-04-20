@@ -65,7 +65,7 @@
 
     <PropertyGroup>
         <DependencyCollectorOutputFileName Condition="'$(DependencyCollectorOutputFileName)' == ''">dependencies.json</DependencyCollectorOutputFileName>
-        <DependencyCollectorTargetFramework Condition="'$(DependencyCollectorTargetFramework)' == ''">net9.0</DependencyCollectorTargetFramework>
+        <DependencyCollectorTargetFramework Condition="'$(DependencyCollectorTargetFramework)' == ''">$(TargetFramework)</DependencyCollectorTargetFramework>
     </PropertyGroup>
 
     <Target Name="RunDependencyCollector" AfterTargets="Build" Condition="'$(DesignTimeBuild)' != 'true'">
