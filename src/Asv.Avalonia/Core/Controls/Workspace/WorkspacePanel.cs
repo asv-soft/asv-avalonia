@@ -223,6 +223,12 @@ public partial class WorkspacePanel : Panel
 
     private void RefreshChildren()
     {
+        var current = Children.ToHashSet();
+        RemoveStale(_leftPanel.Children, current);
+        RemoveStale(_rightPanel.Children, current);
+        RemoveStale(_centerPanel.Children, current);
+        RemoveStale(_bottomPanel, current);
+
         foreach (var control in Children)
         {
             var dock = GetDock(control);
@@ -325,6 +331,17 @@ public partial class WorkspacePanel : Panel
             else
             {
                 _centerPanel.Children[i].ClearValue(DockPanel.DockProperty);
+            }
+        }
+    }
+
+    private static void RemoveStale(IList<Control> panel, HashSet<Control> current)
+    {
+        for (var i = panel.Count - 1; i >= 0; i--)
+        {
+            if (!current.Contains(panel[i]))
+            {
+                panel.RemoveAt(i);
             }
         }
     }
