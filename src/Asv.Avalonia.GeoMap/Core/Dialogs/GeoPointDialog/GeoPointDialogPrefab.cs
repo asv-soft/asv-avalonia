@@ -25,7 +25,7 @@ public sealed class GeoPointDialogPrefab(
     {
         using var vm = new GeoPointDialogViewModel(loggerFactory, unitService, mapService);
 
-        vm.SetInitialLocation(dialogPayload.InitialLocation);
+        vm.CenterGeoPoint.Value = dialogPayload.InitialLocation;
 
         var dialogContent = new ContentDialog(vm, nav)
         {
