@@ -9,6 +9,8 @@ public class GoogleTerrainTileProvider : ITileProvider
         Id = Id,
         NameCallback = () => RS.GoogleTerrainTileProvider_Info_Name,
         Group = TileProviderGroup.Google,
+        MinZoom = 1,
+        MaxZoom = 15,
     };
 
     public TileProviderInfo Info => StaticInfo;

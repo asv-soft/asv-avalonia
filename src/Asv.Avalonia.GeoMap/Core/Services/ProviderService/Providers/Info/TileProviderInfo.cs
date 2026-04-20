@@ -50,4 +50,8 @@ public readonly record struct TileProviderInfo
     public required Func<string> NameCallback { get; init; }
     public string Name => NameCallback();
     public required TileProviderGroup Group { get; init; }
+    public int MinZoom { get; init; } = IZoomService.MinZoomLevel;
+    public int MaxZoom { get; init; } = IZoomService.MaxZoomLevel;
+
+    public TileProviderInfo() { }
 }

@@ -9,6 +9,8 @@ public class ArcGisWorldShadedReliefTileProvider : ITileProvider
         Id = Id,
         NameCallback = () => RS.ArcGisWorldShadedReliefTileProvider_Info_Name,
         Group = TileProviderGroup.ArcGis,
+        MinZoom = 1,
+        MaxZoom = 13,
     };
 
     public TileProviderInfo Info => StaticInfo;

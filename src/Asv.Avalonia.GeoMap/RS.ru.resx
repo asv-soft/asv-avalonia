@@ -63,10 +63,10 @@
         <value>Общие</value>
     </data>
     <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
-        <value>Минимальный</value>
+        <value>Максимальный</value>
     </data>
     <data name="SettingsGeoMapView_MinZoomProperty_Title" xml:space="preserve">
-        <value>Максимальный</value>
+        <value>Минимальный</value>
     </data>
     <data name="EditApiKeyDialogView_ApiKeyProperty_Title" xml:space="preserve">
         <value>API ключ провайдера карты</value>
@@ -112,12 +112,6 @@
     </data>
     <data name="GoogleTerrainTileProvider_Info_Name" xml:space="preserve">
         <value>Рельеф</value>
-    </data>
-    <data name="OpenSeaMapTileProvider_Info_Name" xml:space="preserve">
-        <value>Морская карта</value>
-    </data>
-    <data name="OpenTopoMapTileProvider_Info_Name" xml:space="preserve">
-        <value>Топо</value>
     </data>
     <data name="CyclOsmTileProvider_Info_Name" xml:space="preserve">
         <value>Велосипедная</value>
