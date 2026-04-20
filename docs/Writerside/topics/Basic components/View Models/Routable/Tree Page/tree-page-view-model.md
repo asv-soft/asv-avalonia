@@ -2,7 +2,7 @@
 
 ## Overview
 
-[`TreePageViewModel<TContext,TSubPage>`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Controls/TreePage/TreePageViewModel.cs) is an abstract class that powers *tree‑structured* pages in Asv.Avalonia. 
+[`TreePageViewModel<TContext,TSubPage>`](#treepageviewmodel-tcontext-tsubpage-itreepageviewmodel) is an abstract class that powers *tree‑structured* pages in Asv.Avalonia. 
 It builds on top of [`PageViewModel`](page-view-model.md) and adds:
 
 * A hierarchical **menu tree** (`TreeView`) that can be navigated.
@@ -21,7 +21,7 @@ The subpages displayed on the right are implemented using [`TreeSubpage`](tree-s
 
 1. User selects a node → `SelectedNode` changes.
 2. `SelectedNodeChanged` validates the navigation target, saves the current layout, and calls `Navigate(node.Base.NavigateTo)`.
-3. `Navigate` either retrieves an existing subpage from the MEF container (`CreateSubPage`) or builds a default page (`CreateDefaultPage`).
+3. `Navigate` either retrieves an existing subpage from the DI container (`CreateSubPage`) or builds a default page (`CreateDefaultPage`).
 4. The new subpage becomes the `SelectedPage`; the old subpage (if any) is disposed.
 
 ### Tree Structure
@@ -75,69 +75,84 @@ public interface ISettingsPage : IPage
 Next, create the [`SettingsPageViewModel`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Shell/Pages/Settings/SettingsPageViewModel.cs):
 
 ```C#
-[ExportPage(PageId)]
 public class SettingsPageViewModel
     : TreePageViewModel<ISettingsPage, ISettingsSubPage>,
         ISettingsPage
 {
     public const string PageId = "settings";
 
-    [ImportingConstructor]
     public SettingsPageViewModel(
         ICommandService svc,
-        IContainerHost host,
+        IServiceProvider host,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IExtensionService ext
     )
-        : base(PageId, svc, host, layoutService, loggerFactory, dialogService)
+        : base(PageId, svc, host, layoutService, loggerFactory, dialogService, ext)
     {
         Title = "Settings";
         Icon = MaterialIconKind.Cog;
     }
-
-    public override IExportInfo Source => SystemModule.Instance;
 }
 ```
 
-To add nodes to the tree view, use the extensions functionality. Create a [`SettingsExtension`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Shell/Pages/Settings/SettingsExtensions.cs) class:
+To add nodes to the tree view, use extensions. The [`DefaultSettingsExtension`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Shell/Pages/Settings/DefaultSettingsExtension.cs) resolves all `ITreePage` services keyed by the parent page ID and adds them to the tree:
 
 ```C#
-[ExportExtensionFor<ISettingsPage>]
-[method: ImportingConstructor]
-public class SettingsExtension(ILoggerFactory loggerFactory) : IExtensionFor<ISettingsPage>
+public class DefaultSettingsExtension(
+    [FromKeyedServices(SettingsPageViewModel.PageId)] IEnumerable<ITreePage> items
+) : IExtensionFor<ISettingsPage>
 {
     public void Extend(ISettingsPage context, CompositeDisposable contextDispose)
     {
-        context.Nodes.Add(
-            new TreePage(
-                SettingsAppearanceViewModel.PageId,
-                RS.SettingsAppearanceViewModel_Name,
-                MaterialIconKind.ThemeLightDark,
-                SettingsAppearanceViewModel.PageId,
-                NavigationId.Empty,
-                loggerFactory
-            ).DisposeItWith(contextDispose)
-        );
-
-        // Add more nodes as needed
+        foreach (var treePage in items)
+        {
+            context.Nodes.Add(treePage);
+            treePage.DisposeItWith(contextDispose);
+        }
     }
 }
 ```
 
-Here, we extend the `Nodes` property to register new pages in the tree.
+Tree menu nodes are registered as keyed services in the DI container (keyed by the parent page ID), so the extension automatically picks them up.
+
+### Registration
+
+All components must be registered in the builder chain. A typical registration for a tree page:
+
+```C#
+// Register the tree page itself
+builder.Shell.Pages.Register<SettingsPageViewModel, TreePageView>(SettingsPageViewModel.PageId);
+
+// Register the extension that adds a button to the home page
+builder.Extensions.Register<IHomePage, HomePageSettingsExtension>();
+```
+
+Subpages are registered as keyed transients along with their views and tree menu nodes:
+
+```C#
+// Register subpage, its view, and the tree menu node
+builder.Services.AddKeyedTransient<ISettingsSubPage, SettingsAppearanceViewModel>(
+    SettingsAppearanceViewModel.PageId);
+builder.ViewLocator.RegisterViewFor<SettingsAppearanceViewModel, SettingsAppearanceView>();
+builder.Services.AddKeyedTransient<ITreePage, AppearanceSettingTreePageMenu>(
+    SettingsPageViewModel.PageId);
+```
+
+In practice, mixin builders like `SettingsPageMixin` wrap this into a single call (e.g. `AddSubPage<TViewModel, TView, TTreeMenu>(pageId)`).
 
 For information on how to create subpages that are displayed when tree nodes are selected, see [`TreeSubpage`](tree-subpage.md).
 
 ## API {collapsible="true" default-state="collapsed"}
 
-### [ITreePageViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Controls/TreePage/ITreePageViewModel.cs)
+### [ITreePageViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/ITreePageViewModel.cs)
 
 | Property          | Type                                                                     | Description                                                     |
 |-------------------|--------------------------------------------------------------------------|-----------------------------------------------------------------|
 | `Nodes`           | `ObservableList<ITreePage>`                                              | Gets the collection of root nodes in the tree.                  |
 
-### [TreePageViewModel&lt;TContext, TSubPage&gt;: ITreePageViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Controls/TreePage/TreePageViewModel.cs)
+### [TreePageViewModel&lt;TContext, TSubPage&gt;: ITreePageViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreePageViewModel.cs)
 
 Represents a page with a tree-based navigation structure. Extends `PageViewModel<TContext>` and manages a tree menu with corresponding subpages.
 
@@ -156,7 +171,7 @@ Represents a page with a tree-based navigation structure. Extends `PageViewModel
 | `Navigate(NavigationId id)`      | `ValueTask<IRoutable>`     | Navigates to the subpage with the specified navigation ID.           |
 | `GetChildren()`                  | `IEnumerable<IRoutable>`   | Returns the root nodes as child routable elements.                   |
 | `CreateDefaultPage()`            | `ITreeSubpage?`            | Creates a default subpage when no specific subpage is found.         |
-| `CreateSubPage(NavigationId id)` | `ValueTask<ITreeSubpage?>` | Creates or retrieves a subpage from the MEF container by ID.         |
+| `CreateSubPage(NavigationId id)` | `ValueTask<ITreeSubpage?>` | Creates or retrieves a subpage from the DI container by ID.          |
 | `GetContext()`                   | `TContext`                 | Returns the context object for the page (typically the page itself). |
 | `AfterLoadExtensions()`          | `void`                     | Called after all extensions have been loaded.                        |
 | `Dispose(bool disposing)`        | `void`                     | Releases managed resources including the current subpage.            |

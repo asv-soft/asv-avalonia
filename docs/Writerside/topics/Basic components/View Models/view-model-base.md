@@ -2,15 +2,12 @@
 
 ## Overview
 
-[`ViewModelBase`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/ViewModelBase.cs) is the
-fundamental abstract class for all view models in the Asv.Avalonia framework. It implements the [
-`IViewModel`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/IViewModel.cs) interface and
-provides core features for property notification, resource management, and logging.
+[`ViewModelBase`](#viewmodelbase-iviewmodel) is the fundamental abstract class for all view models in the Asv.Avalonia framework. 
+It implements the [`IViewModel`](#iviewmodel) interface and provides core features for property notification, resource management, and logging.
 
 Key Features:
 
-- **Property Change Notifications**: implements [
-  `INotifyPropertyChanged`](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged?view=net-10.0).
+- **Property Change Notifications**: implements [`INotifyPropertyChanged`](https://learn.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged?view=net-10.0).
 - **Thread-Safe Disposal**: a robust disposal pattern ensuring resources are released exactly once.
 - **Navigation Support**: implements `ISupportId<NavigationId>` to support argument initialization and routing.
 
@@ -49,7 +46,7 @@ establishes the pattern for all derived classes:
 
 ## API {collapsible="true" default-state="collapsed"}
 
-### [IViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/IViewModel.cs)
+### [IViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/IViewModel.cs)
 
 Defines a base contract for all view models in the application.
 This interface provides a unique identifier, supports property change notifications,
@@ -63,7 +60,7 @@ and ensures proper disposal of resources.
 |--------------------------|-------------|-------------------------------------------------|
 | `InitArgs(string? args)` | `void`      | Initializes a navigation ID with the arguments. |
 
-### [ViewModelBase: IViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/ViewModelBase.cs)
+### [ViewModelBase: IViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/ViewModelBase.cs)
 
 Represents the base implementation of a view model that provides
 property change notifications and a proper disposal mechanism.

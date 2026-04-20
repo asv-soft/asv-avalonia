@@ -31,7 +31,7 @@
         </toc-element>
     </toc-element>
     <toc-element toc-title="Basic components">
-        <toc-element topic="composition-view-locator.md"/>
+        <toc-element topic="view-locator.md"/>
         <toc-element toc-title="View Models">
             <toc-element topic="view-model-base.md"/>
             <toc-element topic="disposable-view-model.md"/>
@@ -56,6 +56,7 @@
         <toc-element topic="navigation-service.md"/>
         <toc-element topic="localization-service.md"/>
         <toc-element topic="theme-service.md"/>
+        <toc-element topic="extension-service.md"/>
     </toc-element>
     <toc-element toc-title="Modules">
         <toc-element topic="what-is-a-module.md"/>

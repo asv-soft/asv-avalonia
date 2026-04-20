@@ -2,9 +2,7 @@
 
 ## Overview
 
-[
-`DisposableViewModel`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/DisposableViewModel.cs)
-extends [`ViewModelBase`](view-model-base.md) by adding essential tools for resource management: a
+[`DisposableViewModel`](#disposableviewmodel) extends [`ViewModelBase`](view-model-base.md) by adding essential tools for resource management: a
 `CancellationToken` and a `CompositeDisposable` container. It is designed to simplify the cleanup of subscriptions,
 timers, and asynchronous operations.
 
@@ -44,7 +42,7 @@ specific order:
 
 ## API {collapsible="true" default-state="collapsed"}
 
-### [DisposableViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/DisposableViewModel.cs)
+### [DisposableViewModel](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/DisposableViewModel.cs)
 
 Represents a base view model that supports disposable resources and cancellation handling.
 This class ensures proper cleanup of resources when the view model is disposed.

@@ -2,10 +2,10 @@
 
 ## Overview
 
-[`RoutableViewModel`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Routable/RoutableViewModel.cs)
+[`RoutableViewModel`](#routableviewmodel-iroutable)
 is the core abstract class for all view models that need to support navigation and hierarchical structure in the
 Asv.Avalonia framework. It extends [`DisposableViewModel`](disposable-view-model.md) and implements the
-[`IRoutable`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Routable/IRoutable.cs)
+[`IRoutable`](#iroutable)
 interface, providing:
 
 - **Hierarchical Structure**: Creates a tree of view models with parent-child relationships, providing the structure
@@ -85,7 +85,7 @@ The event object must extend `AsyncRoutedEvent` from the Asv.Common library, whi
 To handle routed events, you can create an `InternalCatchEvent` method:
 
 ```C#
-private ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
 {
     switch (e)
     {
@@ -116,7 +116,7 @@ The event propagation is controlled by the `RoutingStrategy` enum:
 
 ## Helper Methods (RoutableMixin)
 
-The [`RoutableMixin`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Routable/RoutableMixin.cs) class provides useful extension methods for working with `IRoutable` view models. For example:
+The [`RoutableMixin`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/Routable/RoutableMixin.cs) class provides useful extension methods for working with `IRoutable` view models. For example:
 
 ### Setting Parent for Collections
 
@@ -211,7 +211,8 @@ public class ParentPageViewModel : PageViewModel<ParentPageViewModel>
     public HelloWorldPageViewModel(
         ICommandService cmd, 
         ILoggerFactory loggerFactory, 
-        IDialogService dialogService) : base(PageId, cmd, loggerFactory, dialogService)
+        IDialogService dialogService,
+        IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         // ...
         
@@ -220,7 +221,7 @@ public class ParentPageViewModel : PageViewModel<ParentPageViewModel>
     
     // ...
 
-    private ValueTask InternalCatchEvent(AsyncRoutedEvent e)
+    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
     {
         if (e is ItemDeleteRequestedEvent deleteEvent)
         {
@@ -249,7 +250,7 @@ To ensure proper navigation, always:
 
 ## API {collapsible="true" default-state="collapsed"}
 
-### [IRoutable](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Routable/IRoutable.cs)
+### [IRoutable](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/Routable/IRoutable.cs)
 
 Represents a routable view model that supports navigation, hierarchical structure, and event propagation.
 This interface extends `IViewModel` to include routing-related functionalities.
@@ -264,7 +265,7 @@ This interface extends `IViewModel` to include routing-related functionalities.
 |-----------|----------------|-----------------------------------------------|
 | `id`      | `NavigationId` | The unique identifier of the target routable. |
 
-### [RoutableViewModel: IRoutable](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/ViewModel/Routable/RoutableViewModel.cs)
+### [RoutableViewModel: IRoutable](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/ViewModel/Routable/RoutableViewModel.cs)
 
 | Property | Type                                | Description                                                             |
 |----------|-------------------------------------|-------------------------------------------------------------------------|

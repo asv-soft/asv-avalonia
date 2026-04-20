@@ -10,7 +10,7 @@ Create a full-featured Recipe Book application to master the core capabilities o
 In this tutorial, you will implement specific business logic with Undo/Redo support, handle user input via modal dialogs,
 display notifications, and use the Layout Service to persist user preferences.
 
-Start the [tutorial](recipe-book-app.md)
+Start the [tutorial here](recipe-book-app.md).
 
 ### How to create a module
 
@@ -24,4 +24,4 @@ It covers the following topics:
 - Using the module in an app alongside other modules.
 
 This guide is the best way for developers to learn the basics of creating a module for Asv.Avalonia.
-Follow the guide [here](how-to-create-module.md)
+Follow the [guide here](how-to-create-module.md).

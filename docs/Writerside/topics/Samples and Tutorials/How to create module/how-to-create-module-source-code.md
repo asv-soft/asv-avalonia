@@ -1,54 +1,105 @@
 # Module example source code
 
-![image](how-to-create-module-final-structure.png)
+```
+Asv.Avalonia.Samples.CreateModule
+├── AppHost/
+│   ├── ModuleModuleMixin.cs
+│   ├── ModuleModuleOptions.cs
+│   └── ModuleModuleOptionsBuilder.cs
+├── Assets/
+│   ├── cat.jpg
+│   └── dog.jpg
+├── Core/
+│   └── Commands/
+│       ├── Cats/
+│       │   └── OpenCatsPageCommand.cs
+│       └── Dogs/
+│           └── OpenDogsPageCommand.cs
+├── Shell/
+│   └── Pages/
+│       ├── Cats/
+│       │   ├── CatsPageView.axaml
+│       │   ├── CatsPageView.axaml.cs
+│       │   ├── CatsPageViewModel.cs
+│       │   └── HomePageCatsPageExtension.cs
+│       └── Dogs/
+│           ├── DogsPageView.axaml
+│           ├── DogsPageView.axaml.cs
+│           ├── DogsPageViewModel.cs
+│           └── HomePageDogsPageExtension.cs
+```
 
 ## AppHost {collapsible="true"}
 
 ```c#
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
 public static class ModuleModuleMixin
 {
-    public static IHostApplicationBuilder UseModuleModule(
-        this IHostApplicationBuilder builder,
-        Action<ModuleModuleOptionsBuilder>? configure = null
-    )
+    extension(IHostApplicationBuilder builder)
     {
-        var options = builder
-            .Services.AddOptions<ModuleModuleOptions>()
-            .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
-        
-        var defaultOptions = builder
-            .Configuration.GetSection(ModuleModuleOptions.Section)
-            .Get<ModuleModuleOptions>();
-
-        var optionsBuilder = defaultOptions is null
-            ? new ModuleModuleOptionsBuilder()
-            : new ModuleModuleOptionsBuilder(defaultOptions);
-
-        if (configure is null)
+        public IHostApplicationBuilder UseModuleModule(
+            Action<ModuleModuleOptionsBuilder>? configure = null)
         {
+            var options = builder
+                .Services.AddOptions<ModuleModuleOptions>()
+                .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
+
+            var defaultOptions = builder
+                .Configuration.GetSection(ModuleModuleOptions.Section)
+                .Get<ModuleModuleOptions>();
+
+            var optionsBuilder = defaultOptions is null
+                ? new ModuleModuleOptionsBuilder()
+                : new ModuleModuleOptionsBuilder(defaultOptions);
+
+            if (configure is null)
+            {
+                return builder;
+            }
+
+            configure.Invoke(optionsBuilder);
+            optionsBuilder.Build(options);
+
+            var resolvedOptions = optionsBuilder.Resolve();
+
+            if (!resolvedOptions.IsEnabled)
+            {
+                return builder;
+            }
+
+            if (resolvedOptions.IsCatsPageEnabled)
+            {
+                builder.Shell.Pages.Register<CatsPageViewModel, CatsPageView>(CatsPageViewModel.PageId);
+                builder.Commands.Register<OpenCatsPageCommand>();
+                builder.Extensions.Register<IHomePage, HomePageCatsPageExtension>();
+            }
+
+            if (resolvedOptions.IsDogsPageEnabled)
+            {
+                builder.Shell.Pages.Register<DogsPageViewModel, DogsPageView>(DogsPageViewModel.PageId);
+                builder.Commands.Register<OpenDogsPageCommand>();
+                builder.Extensions.Register<IHomePage, HomePageDogsPageExtension>();
+            }
+
             return builder;
         }
-        
-        configure.Invoke(optionsBuilder);
-        optionsBuilder.Build(options);
-        return builder;
     }
 }
 ```
 {collapsible="true" collapsed-title="ModuleModuleMixin.cs"}
 
 ```c#
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
 public class ModuleModuleOptions
 {
-    public const string Section = "GeoMap";
+    public const string Section = "Module";
     public required bool IsEnabled { get; set; }
     public required bool IsDogsPageEnabled { get; set; }
     public required bool IsCatsPageEnabled { get; set; }
@@ -59,7 +110,7 @@ public class ModuleModuleOptions
 ```c#
 using Microsoft.Extensions.Options;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
 public class ModuleModuleOptionsBuilder
 {
@@ -73,7 +124,7 @@ public class ModuleModuleOptionsBuilder
         _isCatsPageEnabled = defaultOptions.IsCatsPageEnabled;
         _isDogsPageEnabled = defaultOptions.IsDogsPageEnabled;
     }
-    
+
     public ModuleModuleOptionsBuilder WithCats()
     {
         _isCatsPageEnabled = true;
@@ -85,7 +136,7 @@ public class ModuleModuleOptionsBuilder
         _isDogsPageEnabled = true;
         return this;
     }
-    
+
     internal OptionsBuilder<ModuleModuleOptions> Build(OptionsBuilder<ModuleModuleOptions> options)
     {
         return options.Configure(config =>
@@ -95,6 +146,16 @@ public class ModuleModuleOptionsBuilder
             config.IsEnabled = true;
         });
     }
+
+    internal ModuleModuleOptions Resolve()
+    {
+        return new ModuleModuleOptions
+        {
+            IsEnabled = true,
+            IsCatsPageEnabled = _isCatsPageEnabled,
+            IsDogsPageEnabled = _isDogsPageEnabled,
+        };
+    }
 }
 ```
 {collapsible="true" collapsed-title="ModuleModuleOptionsBuilder.cs"}
@@ -102,12 +163,8 @@ public class ModuleModuleOptionsBuilder
 ## Commands {collapsible="true"}
 
 ```C#
-using System.Composition;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-namespace Asv.Avalonia.Module;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenCatsPageCommand(INavigationService nav)
     : OpenPageCommandBase(CatsPageViewModel.PageId, nav)
 {
@@ -125,7 +182,6 @@ public class OpenCatsPageCommand(INavigationService nav)
         Icon = CatsPageViewModel.PageIcon,
         IconColor = CatsPageViewModel.PageIconColor,
         DefaultHotKey = null,
-        Source = ModuleModule.Instance,
     };
 
     #endregion
@@ -134,12 +190,8 @@ public class OpenCatsPageCommand(INavigationService nav)
 {collapsible="true" collapsed-title="OpenCatsPageCommand.cs"}
 
 ```c#
-using System.Composition;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-namespace Asv.Avalonia.Module;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenDogsPageCommand(INavigationService nav)
     : OpenPageCommandBase(DogsPageViewModel.PageId, nav)
 {
@@ -157,7 +209,6 @@ public class OpenDogsPageCommand(INavigationService nav)
         Icon = DogsPageViewModel.PageIcon,
         IconColor = DogsPageViewModel.PageIconColor,
         DefaultHotKey = null,
-        Source = ModuleModule.Instance,
     };
 
     #endregion
@@ -172,12 +223,12 @@ public class OpenDogsPageCommand(INavigationService nav)
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:module="clr-namespace:Asv.Avalonia.Module"
+             xmlns:local="clr-namespace:Asv.Avalonia.Samples.CreateModule"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Module.CatsPageView"
-             x:DataType="module:CatsPageViewModel">
+             x:Class="Asv.Avalonia.Samples.CreateModule.CatsPageView"
+             x:DataType="local:CatsPageViewModel">
     <Design.DataContext>
-        <module:CatsPageViewModel/>
+        <local:CatsPageViewModel/>
     </Design.DataContext>
     <Grid>
         <Image Source="{CompiledBinding SelectedImage}"
@@ -191,9 +242,8 @@ public class OpenDogsPageCommand(INavigationService nav)
 ```C#
 using Avalonia.Controls;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportViewFor<CatsPageViewModel>]
 public partial class CatsPageView : UserControl
 {
     public CatsPageView()
@@ -205,7 +255,8 @@ public partial class CatsPageView : UserControl
 {collapsible="true" collapsed-title="CatsPageView.axaml.cs"}
 
 ```C#
-using System.Composition;
+using System;
+using System.Collections.Generic;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
 using Avalonia.Platform;
@@ -213,33 +264,32 @@ using Asv.Common;
 using Avalonia.Media;
 using Material.Icons;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportPage(PageId)]
 public class CatsPageViewModel : PageViewModel<CatsPageViewModel>
 {
     public const string PageId = "cats";
-    public const MaterialIconKind PageIcon =  MaterialIconKind.Cat;
+    public const MaterialIconKind PageIcon = MaterialIconKind.Cat;
     public const AsvColorKind PageIconColor = AsvColorKind.Info3;
 
     public CatsPageViewModel()
-        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService)
+        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService, DesignTime.ExtensionService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
-    
-    [ImportingConstructor]
+
     public CatsPageViewModel(
-        ICommandService cmd, 
-        ILoggerFactory loggerFactory, 
-        IDialogService dialogService) 
-        : base(PageId, cmd, loggerFactory, dialogService)
+        ICommandService cmd,
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService,
+        IExtensionService ext)
+        : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         var stream = AssetLoader
-            .Open(new Uri("avares://Asv.Avalonia.Module/Assets/cat.jpg"))
+            .Open(new Uri("avares://Asv.Avalonia.Samples.CreateModule/Assets/cat.jpg"))
             .DisposeItWith(Disposable);
         var defaultPicture = new Bitmap(stream).DisposeItWith(Disposable);
-        
+
         SelectedImage = defaultPicture;
     }
 
@@ -258,22 +308,18 @@ public class CatsPageViewModel : PageViewModel<CatsPageViewModel>
     {
         // ignore
     }
-
-    public override IExportInfo Source => ModuleModule.Instance;
 }
+
 ```
 {collapsible="true" collapsed-title="CatsPageViewModel.cs"}
 
 ```c#
-using System.Composition;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public class HomePageCatsPageExtension(ILoggerFactory loggerFactory)
     : AsyncDisposableOnce,
         IExtensionFor<IHomePage>
@@ -298,12 +344,12 @@ public class HomePageCatsPageExtension(ILoggerFactory loggerFactory)
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:module="clr-namespace:Asv.Avalonia.Module"
+             xmlns:local="clr-namespace:Asv.Avalonia.Samples.CreateModule"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Module.DogsPageView"
-             x:DataType="module:DogsPageViewModel">
+             x:Class="Asv.Avalonia.Samples.CreateModule.DogsPageView"
+             x:DataType="local:DogsPageViewModel">
     <Design.DataContext>
-        <module:DogsPageViewModel/>
+        <local:DogsPageViewModel/>
     </Design.DataContext>
     <Grid>
         <Image Source="{CompiledBinding SelectedImage}"
@@ -315,7 +361,10 @@ public class HomePageCatsPageExtension(ILoggerFactory loggerFactory)
 {collapsible="true" collapsed-title="DogsPageView.axaml"}
 
 ```C#
-[ExportViewFor<DogsPageViewModel>]
+using Avalonia.Controls;
+
+namespace Asv.Avalonia.Samples.CreateModule;
+
 public partial class DogsPageView : UserControl
 {
     public DogsPageView()
@@ -327,7 +376,8 @@ public partial class DogsPageView : UserControl
 {collapsible="true" collapsed-title="DogsPageView.axaml.cs"}
 
 ```C#
-using System.Composition;
+using System;
+using System.Collections.Generic;
 using Asv.Common;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -335,36 +385,35 @@ using Avalonia.Platform;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportPage(PageId)]
 public class DogsPageViewModel : PageViewModel<DogsPageViewModel>
 {
     public const string PageId = "dogs";
-    public const MaterialIconKind PageIcon =  MaterialIconKind.Dog;
+    public const MaterialIconKind PageIcon = MaterialIconKind.Dog;
     public const AsvColorKind PageIconColor = AsvColorKind.Info7;
 
     public DogsPageViewModel()
-        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService)
+        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService, DesignTime.ExtensionService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
-    
-    [ImportingConstructor]
+
     public DogsPageViewModel(
-        ICommandService cmd, 
-        ILoggerFactory loggerFactory, 
-        IDialogService dialogService) 
-        : base(PageId, cmd, loggerFactory, dialogService)
+        ICommandService cmd,
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService,
+        IExtensionService ext)
+        : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         var stream = AssetLoader
-            .Open(new Uri("avares://Asv.Avalonia.Module/Assets/dog.jpg"))
+            .Open(new Uri("avares://Asv.Avalonia.Samples.CreateModule/Assets/dog.jpg"))
             .DisposeItWith(Disposable);
         var defaultPicture = new Bitmap(stream).DisposeItWith(Disposable);
 
         SelectedImage = defaultPicture;
     }
-    
+
     public IImage? SelectedImage
     {
         get;
@@ -380,22 +429,18 @@ public class DogsPageViewModel : PageViewModel<DogsPageViewModel>
     {
         // ignore
     }
-
-    public override IExportInfo Source => ModuleModule.Instance;
 }
+
 ```
 {collapsible="true" collapsed-title="DogsPageViewModel.cs"}
 
 ```C#
-using System.Composition; 
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public sealed class HomePageDogsPageExtension(ILoggerFactory loggerFactory)
     : AsyncDisposableOnce,
         IExtensionFor<IHomePage>
@@ -412,73 +457,3 @@ public sealed class HomePageDogsPageExtension(ILoggerFactory loggerFactory)
 }
 ```
 {collapsible="true" collapsed-title="HomePageDogsPageExtension.cs"}
-
-## ModuleModule {collapsible="true"}
-
-```c#
-using System.Composition.Hosting;
-using Avalonia.Controls;
-using Microsoft.Extensions.Options;
-
-namespace Asv.Avalonia.Module;
-
-public class ModuleModule : IExportInfo
-{
-    public const string Name = "Asv.Avalonia.Module";
-
-    private ModuleModule() { }
-    
-    public static IExportInfo Instance { get; } = new ModuleModule();
-
-    public string ModuleName => Name;
-}
-
-public static class ContainerConfigurationMixin
-{
-    public static ContainerConfiguration WithDependenciesFromModuleModule(
-        this ContainerConfiguration containerConfiguration
-    )
-    {
-        if (Design.IsDesignMode)
-        {
-            return containerConfiguration.WithAssemblies([typeof(ModuleModule).Assembly]);
-        }
-        
-        var exceptionTypes = new List<Type>();
-        var options = AppHost.Instance.GetService<IOptions<ModuleModuleOptions>>().Value;
-
-        if (!options.IsEnabled)
-        {
-            // if the module is disabled, we should remove all the dependencies from the export
-            exceptionTypes.AddRange(typeof(ModuleModule).Assembly.GetTypes());
-        }
-        else if (!options.IsDogsPageEnabled)
-        {
-            // if we disable the dogs page, we should remove all dependencies for this page
-            exceptionTypes.AddRange([
-                typeof(DogsPageView),
-                typeof(DogsPageViewModel),
-                typeof(HomePageDogsPageExtension),
-                typeof(OpenDogsPageCommand)
-            ]);
-        }
-        else if (!options.IsCatsPageEnabled)
-        {
-            // if we disable the cats page, we should remove all dependencies for this page
-            exceptionTypes.AddRange([
-                typeof(CatsPageView),
-                typeof(CatsPageViewModel),
-                typeof(HomePageCatsPageExtension),
-                typeof(OpenCatsPageCommand)
-            ]);
-        }
-
-        var typesToExport = typeof(ModuleModule).Assembly
-            .GetTypes()
-            .Except(exceptionTypes);
-
-        return containerConfiguration.WithParts(typesToExport);
-    }
-}
-```
-{collapsible="true" collapsed-title="ModuleModule.cs"}

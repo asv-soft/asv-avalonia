@@ -13,8 +13,8 @@ To use Asv.Avalonia effectively, it is helpful to understand its fundamental arc
 
 * **Hierarchical Tree of ViewModels:** This is the backbone of the framework. All logic is structured around a unified
   tree of ViewModels, ensuring a clear parent-child relationship across the entire application.
-* **App Builder & Configuration:** The framework uses an ASP.NET Core-like builder pattern combined with
-  `CompositionHost`. This allows for fine-grained configuration at startup—for example, you can easily disable standard
+* **App Builder & Configuration:** The framework uses an ASP.NET Core-like builder pattern with
+  `IServiceCollection`. This allows for fine-grained configuration at startup—for example, you can easily disable standard
   pages or swap out core services.
 * **Module System:** You can extend the framework functionality by [using modules](what-is-a-module.md). You can create
   your own module or use an existing one.

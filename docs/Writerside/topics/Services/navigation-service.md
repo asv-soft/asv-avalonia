@@ -2,7 +2,7 @@
 
 ## Overview
 
-The [`NavigationService`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Services/Navigation/NavigationService.cs) is a central infrastructural component of Asv.Avalonia responsible for page-based navigation and focus management. 
+The [`NavigationService`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Services/Navigation/NavigationService.cs) is a central infrastructural component of Asv.Avalonia responsible for page-based navigation and focus management. 
 It implements the [`INavigationService`](#inavigationservice) and is designed to work closely with the [`IRoutable`](routable-view-model.md) View Models.
 
 ## When to Use
@@ -38,7 +38,7 @@ The Navigation Service doesn't "render" views itself. Instead, it delegates the 
 
 This is the most complex part of the service.
 
-1. Manual Navigation: When calling `GoTo`, the service explicitly sets focus to the target ViewModel (if it implements [`ISupportFocus`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Commands/Behaviour/Focus/ISupportFocus.cs)).
+1. Manual Navigation: When calling `GoTo`, the service explicitly sets focus to the target ViewModel (if it implements [`ISupportFocus`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Commands/Context/Behaviour/Focus/ISupportFocus.cs)).
 
 2. User Interaction: If the user clicks on a textbox deep inside a page, the service catches this event, walks up the visual/logical tree to find the nearest `IRoutable` parent, and sets it as the `SelectedControl`.
 
@@ -49,8 +49,6 @@ This is the most complex part of the service.
 Many built-in commands use the Navigation Service to open pages:
 
 ```C#
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenSettingsCommand(INavigationService nav)
     : OpenPageCommandBase(SettingsPageViewModel.PageId, nav)
 {
@@ -69,7 +67,6 @@ public class OpenSettingsCommand(INavigationService nav)
         Icon = MaterialIconKind.Settings,
         IconColor = AsvColorKind.None,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     #endregion
@@ -87,7 +84,7 @@ await _navigationService.GoTo(new NavigationPath(SettingsPageViewModel.PageId));
 
 ## API {collapsible="true" default-state="collapsed"}
 
-### [INavigationService](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Services/Navigation/INavigationService.cs)
+### [INavigationService](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Services/Navigation/INavigationService.cs)
 
 Represents a navigation service for handling application navigation, navigation history, and focus management.
 

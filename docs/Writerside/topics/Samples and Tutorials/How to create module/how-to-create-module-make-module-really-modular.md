@@ -5,7 +5,7 @@ Currently, the module cannot do this, so we need to extend its capabilities.
 
 ## Adding AppHost extension
 
-Create an AppHost folder in the root directory of Asv.Avalonia.Module.
+Create an AppHost folder in the root directory of Asv.Avalonia.Samples.CreateModule.
 Inside this folder, add three files: ModuleModuleMixin, ModuleModuleOptionsBuilder, and ModuleModuleOptions.
 
 ### ModuleModuleOptions
@@ -16,7 +16,7 @@ These options will later be used by the builder.
 ```c#
 public class ModuleModuleOptions
 {
-    public const string Section = "GeoMap"; // Section for the IServiceCollection
+    public const string Section = "Module"; // Configuration section for the module
     public required bool IsEnabled { get; set; }
 }
 ```
@@ -43,53 +43,70 @@ This file extends the builder in Program.cs. We use this method to set up our mo
 ```c#
 public static class ModuleModuleMixin
 {
-    public static IHostApplicationBuilder UseModuleModule(this IHostApplicationBuilder builder)
+    extension(IHostApplicationBuilder builder)
     {
-        var options = builder
-            .Services.AddOptions<ModuleModuleOptions>()
-            .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
-        
-        var subBuilder = new ModuleModuleBuilder();
-        subBuilder.Build(options);
-        return builder;
+        public IHostApplicationBuilder UseModuleModule()
+        {
+            var options = builder
+                .Services.AddOptions<ModuleModuleOptions>()
+                .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
+
+            var optionsBuilder = new ModuleModuleOptionsBuilder();
+            optionsBuilder.Build(options);
+            return builder;
+        }
     }
 }
 ```
 
-## Adding useful extension
+## Updating the mixin to use options
 
-We want to provide users with the simplest and best possible experience.
-Therefore, we will create a useful, but completely optional, extension method.
-This method will have preconfigured exports for our Module.
-
-Go to the ModuleModule.cs and the following code:
+Now we need to update the module's mixin to conditionally register components based on the options:
 
 ```c#
-public static class ContainerConfigurationMixin
+public static class ModuleModuleMixin
 {
-    public static ContainerConfiguration WithDependenciesFromModuleModule(
-        this ContainerConfiguration containerConfiguration
-    )
+    extension(IHostApplicationBuilder builder)
     {
-        if (Design.IsDesignMode)
+        public IHostApplicationBuilder UseModuleModule(
+            Action<ModuleModuleOptionsBuilder>? configure = null)
         {
-            return containerConfiguration.WithAssemblies([typeof(ModuleModule).Assembly]);
+            var options = builder
+                .Services.AddOptions<ModuleModuleOptions>()
+                .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
+
+            var defaultOptions = builder
+                .Configuration.GetSection(ModuleModuleOptions.Section)
+                .Get<ModuleModuleOptions>();
+
+            var optionsBuilder = defaultOptions is null
+                ? new ModuleModuleOptionsBuilder()
+                : new ModuleModuleOptionsBuilder(defaultOptions);
+
+            if (configure is null)
+            {
+                return builder;
+            }
+
+            configure.Invoke(optionsBuilder);
+            optionsBuilder.Build(options);
+
+            var resolvedOptions = optionsBuilder.Resolve();
+
+            if (!resolvedOptions.IsEnabled)
+            {
+                return builder;
+            }
+
+            if (resolvedOptions.IsCatsPageEnabled)
+            {
+                builder.Shell.Pages.Register<CatsPageViewModel, CatsPageView>(CatsPageViewModel.PageId);
+                builder.Commands.Register<OpenCatsPageCommand>();
+                builder.Extensions.Register<IHomePage, HomePageCatsPageExtension>();
+            }
+
+            return builder;
         }
-        
-        var exceptionTypes = new List<Type>();
-        var options = AppHost.Instance.GetService<IOptions<ModuleModuleOptions>>().Value;
-
-        if (!options.IsEnabled)
-        {
-            // if the module is disabled, we should remove all the dependencies from the export
-            exceptionTypes.AddRange(typeof(ModuleModule).Assembly.GetTypes());
-        }
-
-        var typesToExport = typeof(ModuleModule).Assembly
-            .GetTypes()
-            .Except(exceptionTypes);
-
-        return containerConfiguration.WithParts(typesToExport);
     }
 }
 ```
@@ -98,27 +115,15 @@ public static class ContainerConfigurationMixin
 
 Now our module is fully modular, and we need to enable it in the application.
 
-Go to the Program.cs and add the following line to the builder:
+Go to `Program.cs` and add the following line to the builder:
 
 ```c#
-.UseModuleModule()
-```
-
-Then go to the App.axaml.cs and change
-
-```c#
-.WithAssemblies([typeof(ModuleModule).Assembly])
-```
-
-to
-
-```c#
-.WithDependenciesFromModuleModule()
+builder.UseModuleModule(opt => opt.WithCats());
 ```
 
 Run the application. You should see the Cats page.
 
-Now remove `UseModuleModule` from the builder, `.WithDependenciesFromModuleModule()` from App.axaml.cs, or both.
+Now remove `UseModuleModule` from the builder.
 Run the application again. The page should no longer be visible.
 
 If you did everything right, now your module meets our standards for modules.
@@ -151,12 +156,12 @@ You can copy the following code to the files:
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:module="clr-namespace:Asv.Avalonia.Module"
+             xmlns:local="clr-namespace:Asv.Avalonia.Samples.CreateModule"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Module.DogsPageView"
-             x:DataType="module:DogsPageViewModel">
+             x:Class="Asv.Avalonia.Samples.CreateModule.DogsPageView"
+             x:DataType="local:DogsPageViewModel">
     <Design.DataContext>
-        <module:DogsPageViewModel/>
+        <local:DogsPageViewModel/>
     </Design.DataContext>
     <Grid>
         <Image Source="{CompiledBinding SelectedImage}"
@@ -168,7 +173,6 @@ You can copy the following code to the files:
 {collapsible="true" collapsed-title="DogsPageView.axaml"}
 
 ```C#
-[ExportViewFor<DogsPageViewModel>]
 public partial class DogsPageView : UserControl
 {
     public DogsPageView()
@@ -180,7 +184,6 @@ public partial class DogsPageView : UserControl
 {collapsible="true" collapsed-title="DogsPageView.axaml.cs"}
 
 ```C#
-using System.Composition;
 using Asv.Common;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
@@ -188,9 +191,8 @@ using Avalonia.Platform;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportPage(PageId)]
 public class DogsPageViewModel : PageViewModel<DogsPageViewModel>
 {
     public const string PageId = "dogs";
@@ -198,20 +200,20 @@ public class DogsPageViewModel : PageViewModel<DogsPageViewModel>
     public const AsvColorKind PageIconColor = AsvColorKind.Info7;
 
     public DogsPageViewModel()
-        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService)
+        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService, DesignTime.ExtensionService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
     
-    [ImportingConstructor]
     public DogsPageViewModel(
-        ICommandService cmd, 
-        ILoggerFactory loggerFactory, 
-        IDialogService dialogService) 
-        : base(PageId, cmd, loggerFactory, dialogService)
+        ICommandService cmd,
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService,
+        IExtensionService ext)
+        : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         var stream = AssetLoader
-            .Open(new Uri("avares://Asv.Avalonia.Module/Assets/dog.jpg"))
+            .Open(new Uri("avares://Asv.Avalonia.Samples.CreateModule/Assets/dog.jpg"))
             .DisposeItWith(Disposable);
         var defaultPicture = new Bitmap(stream).DisposeItWith(Disposable);
 
@@ -234,21 +236,17 @@ public class DogsPageViewModel : PageViewModel<DogsPageViewModel>
         // ignore
     }
 
-    public override IExportInfo Source => ModuleModule.Instance;
 }
 ```
 {collapsible="true" collapsed-title="DogsPageViewModel.cs"}
 
 ```C#
-using System.Composition; 
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public sealed class HomePageDogsPageExtension(ILoggerFactory loggerFactory)
     : AsyncDisposableOnce,
         IExtensionFor<IHomePage>
@@ -267,12 +265,6 @@ public sealed class HomePageDogsPageExtension(ILoggerFactory loggerFactory)
 {collapsible="true" collapsed-title="HomePageDogsPageExtension.cs"}
 
 ```C#
-using System.Composition;
-
-namespace Asv.Avalonia.Module;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenDogsPageCommand(INavigationService nav)
     : OpenPageCommandBase(DogsPageViewModel.PageId, nav)
 {
@@ -290,7 +282,6 @@ public class OpenDogsPageCommand(INavigationService nav)
         Icon = DogsPageViewModel.PageIcon,
         IconColor = DogsPageViewModel.PageIconColor,
         DefaultHotKey = null,
-        Source = ModuleModule.Instance,
     };
 
     #endregion
@@ -346,83 +337,85 @@ public class ModuleModuleOptionsBuilder
             config.IsEnabled = true;
         });
     }
+
+    internal ModuleModuleOptions Resolve()
+    {
+        return new ModuleModuleOptions
+        {
+            IsEnabled = true,
+            IsCatsPageEnabled = _isCatsPageEnabled,
+            IsDogsPageEnabled = _isDogsPageEnabled,
+        };
+    }
 }
 ```
 
 ### Changing ModuleModuleMixin to use the new options
 
 We need to change the builder extension to use our new options.
-Here we will show you the advanced version of the builder extension that can take default options from the app.settings.json.
+Here we will show you the advanced version of the builder extension that can take default options from the `appsettings.json`.
+It also conditionally registers both cats and dogs pages based on the resolved options:
 
 ```c#
-public static IHostApplicationBuilder UseModuleModule(
-        this IHostApplicationBuilder builder,
-        Action<ModuleModuleOptionsBuilder>? configure = null 
-)
+public static class ModuleModuleMixin
 {
-    var options = builder
-        .Services.AddOptions<ModuleModuleOptions>()
-        .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
-        
-    var defaultOptions = builder
-        .Configuration.GetSection(ModuleModuleOptions.Section)
-        .Get<ModuleModuleOptions>();
-
-    var optionsBuilder = defaultOptions is null
-        ? new ModuleModuleOptionsBuilder()
-        : new ModuleModuleOptionsBuilder(defaultOptions);
-
-    if (configure is null)
+    extension(IHostApplicationBuilder builder)
     {
-        return builder;
+        public IHostApplicationBuilder UseModuleModule(
+            Action<ModuleModuleOptionsBuilder>? configure = null)
+        {
+            var options = builder
+                .Services.AddOptions<ModuleModuleOptions>()
+                .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
+
+            var defaultOptions = builder
+                .Configuration.GetSection(ModuleModuleOptions.Section)
+                .Get<ModuleModuleOptions>();
+
+            var optionsBuilder = defaultOptions is null
+                ? new ModuleModuleOptionsBuilder()
+                : new ModuleModuleOptionsBuilder(defaultOptions);
+
+            if (configure is null)
+            {
+                return builder;
+            }
+
+            configure.Invoke(optionsBuilder);
+            optionsBuilder.Build(options);
+
+            var resolvedOptions = optionsBuilder.Resolve();
+
+            if (!resolvedOptions.IsEnabled)
+            {
+                return builder;
+            }
+
+            if (resolvedOptions.IsCatsPageEnabled)
+            {
+                builder.Shell.Pages.Register<CatsPageViewModel, CatsPageView>(CatsPageViewModel.PageId);
+                builder.Services.AddSingleton<IAsyncCommand, OpenCatsPageCommand>();
+                builder.Extensions.Register<IHomePage, HomePageCatsPageExtension>();
+            }
+
+            if (resolvedOptions.IsDogsPageEnabled)
+            {
+                builder.Shell.Pages.Register<DogsPageViewModel, DogsPageView>(DogsPageViewModel.PageId);
+                builder.Commands.Register<OpenDogsPageCommand>();
+                builder.Extensions.Register<IHomePage, HomePageDogsPageExtension>();
+            }
+
+            return builder;
+        }
     }
-        
-    configure.Invoke(optionsBuilder);
-    optionsBuilder.Build(options);
-    return builder;
 }
-```
-
-### Extending useful extension
-
-Go to the ModuleModule.cs and add the following code:
-
-```c#
-... 
-// New code
-else if (!options.IsDogsPageEnabled)
-{
-    // if we disable the dogs page, we should remove all dependencies for this page
-    exceptionTypes.AddRange([
-            typeof(DogsPageView),
-            typeof(DogsPageViewModel),
-            typeof(HomePageDogsPageExtension),
-            typeof(OpenDogsPageCommand)
-        ]);
-}
-else if (!options.IsCatsPageEnabled)
-{
-    // if we disable the cats page, we should remove all dependencies for this page
-    exceptionTypes.AddRange([
-            typeof(CatsPageView),
-            typeof(CatsPageViewModel),
-            typeof(HomePageCatsPageExtension),
-            typeof(OpenCatsPageCommand)
-        ]);
-}
-//
-
-var typesToExport = typeof(ModuleModule).Assembly
-            .GetTypes()
-            .Except(exceptionTypes);
-...
 ```
 
 Now you can run the application and see that all pages are disabled.
-To enable them, modify the UseModuleModule call in Program.cs as follows:
+To enable them, modify the `UseModuleModule` call in `Program.cs` as follows:
 
 ```c#
-.UseModuleModule(opt => opt.WithCats().WithDogs())
+builder.UseModuleModule(opt => opt.WithCats().WithDogs());
 ```
 
 You should now see both pages.

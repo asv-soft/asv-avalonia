@@ -10,11 +10,11 @@ You can also take a look at the [final source code](#source-code) if you’d lik
 First, update the View Model `HelloWorldPageViewModel.cs`. We need to add a property to hold the text string.
 
 ```C#
-[ImportingConstructor]
 public HelloWorldPageViewModel(
-    ICommandService cmd, 
-    ILoggerFactory loggerFactory, 
-    IDialogService dialogService) : base(PageId, cmd, loggerFactory, dialogService)
+    ICommandService cmd,
+    ILoggerFactory loggerFactory,
+    IDialogService dialogService,
+    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
 {
     // Initialize it in the constructor
     Text = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
@@ -47,11 +47,11 @@ If you run the app now and type in the `TextBox`, the `TextBlock` will update in
 Now let's create a button to reset the text. Add a command property to the View Model:
 
 ```C#
-[ImportingConstructor]
 public HelloWorldPageViewModel(
-    ICommandService cmd, 
-    ILoggerFactory loggerFactory, 
-    IDialogService dialogService) : base(PageId, cmd, loggerFactory, dialogService)
+    ICommandService cmd,
+    ILoggerFactory loggerFactory,
+    IDialogService dialogService,
+    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
 {
     // Initialize it in the constructor
     ResetTextCommand = new ReactiveCommand(c =>
@@ -105,11 +105,11 @@ Update your View Model properties:
 // A new field
 private readonly ReactiveProperty<string?> _inputText;
 
-[ImportingConstructor]
 public HelloWorldPageViewModel(
-    ICommandService cmd, 
-    ILoggerFactory loggerFactory, 
-    IDialogService dialogService) : base(PageId, cmd, loggerFactory, dialogService)
+    ICommandService cmd,
+    ILoggerFactory loggerFactory,
+    IDialogService dialogService,
+    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
 {
     // Initialize them in the constructor
     _inputText = new ReactiveProperty<string?>().DisposeItWith(Disposable);
@@ -176,11 +176,11 @@ Save" action.
 First, rename our original `Text` property to `SavedText` in the View Model, and add a new command:
 
 ```C#
-[ImportingConstructor]
 public HelloWorldPageViewModel(
-    ICommandService cmd, 
-    ILoggerFactory loggerFactory, 
-    IDialogService dialogService) : base(PageId, cmd, loggerFactory, dialogService)
+    ICommandService cmd,
+    ILoggerFactory loggerFactory,
+    IDialogService dialogService,
+    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
 {
     // ...
 }
@@ -200,16 +200,12 @@ public ReactiveCommand ResetTextCommand { get; }
 To support Undo/Redo, we need to create a specific command class. Create a new file `ChangeSavedTextPropertyCommand.cs`:
 
 ```C#
-using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
-using Asv.Avalonia;
 using Material.Icons;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
-[ExportCommand]
-[Shared]
 // This is a context command. It is generic: <ContextType, ArgumentType>
 public class ChangeSavedTextPropertyCommand : ContextCommand<HelloWorldPageViewModel, StringArg>
 {
@@ -224,7 +220,6 @@ public class ChangeSavedTextPropertyCommand : ContextCommand<HelloWorldPageViewM
         Description = "Changes text",
         Icon = MaterialIconKind.PropertyTag,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;
@@ -260,11 +255,11 @@ Instead of changing the property directly, we now use `this.ExecuteCommand(...)`
 This routes the action through the Undo/Redo system.
 
 ```C#
-[ImportingConstructor]
 public HelloWorldPageViewModel(
-    ICommandService cmd, 
-    ILoggerFactory loggerFactory, 
-    IDialogService dialogService) : base(PageId, cmd, loggerFactory, dialogService)
+    ICommandService cmd,
+    ILoggerFactory loggerFactory,
+    IDialogService dialogService,
+    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
 {
     // ...
     
@@ -336,14 +331,12 @@ You can run the app again.
 ## Source code
 
 ```C#
-using Avalonia;
 using System;
-using System.IO;
-using System.Reflection;
-using Asv.Avalonia;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
 class Program
 {
@@ -353,174 +346,53 @@ class Program
     [STAThread]
     public static void Main(string[] args) 
     {
-        var builder = AppHost.CreateBuilder(args);
-        var dataFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-        builder
-            .UseAvalonia(BuildAvaloniaApp)
-        
-            // This setting defines where all app data (like a JSON user config) will be stored
-            .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
-        
-            // Here you can define some JSON config settings. For example, we set autosave to 1 second
-            .UseJsonUserConfig(opt => opt.WithAutoSave(TimeSpan.FromSeconds(1)))
-        
-            // This defines the source of app data (app name, version, etc.). We use the current assembly
-            .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-        
-            // Here we set up the logging system
-            .UseLogging(options =>
-            {
-                options.WithLogToFile();
-                options.WithLogToConsole();
-            
-                // Optional: here you can enable Log viewer page
-                options.WithLogViewer();
-            });
-
-        using var host = builder.Build();
-        host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            AppHost.Instance.StopAsync().GetAwaiter().GetResult();
+            Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
+        }
+        catch (Exception e)
+        {
+            AppHost.HandleApplicationCrash(e);
+        }
     }
 
     // Avalonia configuration, don't remove; also used by visual designer.
     public static AppBuilder BuildAvaloniaApp()
-    {
-        return AppBuilder.Configure<App>()
+        => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
-            .UseR3();
-    }
+            .UseAsv(builder =>
+            {
+                builder
+                    .UseDefault()
+                    .UseOptionalLogViewer()
+                    .UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
+                    .UseDesktopShell();
+                
+                builder.Shell.Pages.Register<HelloWorldPageViewModel, HelloWorldPage>(HelloWorldPageViewModel.PageId);
+                builder.Commands.Register<OpenHelloWorldPageCommand>();
+                builder.Commands.Register<ChangeSavedTextPropertyCommand>();
+                builder.Extensions.Register<IHomePage, HomePageHelloWorldPageExtension>();
+            });
 }
 ```
 
 {collapsible="true" collapsed-title="Program.cs"}
 
 ```C#
-using System;
-using System.Composition;
-using System.Composition.Convention;
-using System.Composition.Hosting;
-using Asv.Avalonia;
-using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Controls.Templates;
 using Avalonia.Markup.Xaml;
-using R3;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
-public class App : Application, IContainerHost, IShellHost
+public class App : AsvApplication
 {
-    private readonly CompositionHost _container;
-    private readonly Subject<IShell> _onShellLoaded = new();
-
-    public App()
-    {
-        var conventions = new ConventionBuilder();
-        var containerCfg = new ContainerConfiguration();
-
-        containerCfg
-            .WithDependenciesFromSystemModule()
-            .WithDependenciesFromTheApp(this)
-            .WithDefaultConventions(conventions);
-
-        _container = containerCfg.CreateContainer();
-
-        DataTemplates.Add(new CompositionViewLocator(_container));
-
-        if (!Design.IsDesignMode) _container.GetExport<IAppStartupService>().AppCtor();
-    }
-
-    public T GetExport<T>()
-        where T : IExportable
-    {
-        return _container.GetExport<T>();
-    }
-
-    public T GetExport<T>(string contract)
-        where T : IExportable
-    {
-        return _container.GetExport<T>(contract);
-    }
-
-    public bool TryGetExport<T>(string id, out T value)
-        where T : IExportable
-    {
-        return _container.TryGetExport(id, out value);
-    }
-
-    public void SatisfyImports(object value)
-    {
-        _container.SatisfyImports(value);
-    }
-
-    public IExportInfo Source => SystemModule.Instance;
-
-    public IShell Shell
-    {
-        get;
-        private set
-        {
-            field = value;
-            _onShellLoaded.OnNext(value);
-        }
-    }
-
-    public Observable<IShell> OnShellLoaded => _onShellLoaded;
-    public TopLevel TopLevel { get; private set; }
-
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-        if (!Design.IsDesignMode) _container.GetExport<IAppStartupService>().Initialize();
-    }
-
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (Design.IsDesignMode)
-        {
-            Shell = DesignTimeShellViewModel.Instance;
-        }
-        else if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            Shell = _container.GetExport<IShell>(DesktopShellViewModel.ShellId);
-            if (desktop.MainWindow is TopLevel topLevel) TopLevel = topLevel;
-        }
-        else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-        {
-            Shell = _container.GetExport<IShell>(MobileShellViewModel.ShellId);
-            if (singleViewPlatform.MainView is TopLevel topLevel) TopLevel = topLevel;
-        }
-        else
-        {
-            throw new Exception("Unknown platform");
-        }
-
-        base.OnFrameworkInitializationCompleted();
-#if DEBUG
-        this.AttachDevTools();
-#endif
-        if (!Design.IsDesignMode) _container.GetExport<IAppStartupService>().OnFrameworkInitializationCompleted();
-    }
-}
-
-public static class ContainerConfigurationMixin
-{
-    public static ContainerConfiguration WithDependenciesFromTheApp(
-        this ContainerConfiguration containerConfiguration,
-        App app
-    )
-    {
-        containerConfiguration.WithExport<IDataTemplateHost>(app).WithExport<IShellHost>(app);
-
-        if (Design.IsDesignMode)
-            containerConfiguration.WithExport(NullContainerHost.Instance);
-        else
-            containerConfiguration.WithExport<IContainerHost>(app);
-
-        return containerConfiguration.WithAssemblies([app.GetType().Assembly]);
     }
 }
 ```
@@ -530,7 +402,7 @@ public static class ContainerConfigurationMixin
 ```xml
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="AsvAvaloniaTest.App"
+             x:Class="Asv.Avalonia.Samples.GetStarted.App"
              RequestedThemeVariant="Default">
     <Application.Styles>
         <StyleInclude Source="avares://Asv.Avalonia/Styling/Theme.axaml" />
@@ -545,10 +417,10 @@ public static class ContainerConfigurationMixin
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:asvAvaloniaTest="clr-namespace:AsvAvaloniaTest"
+             xmlns:local="clr-namespace:Asv.Avalonia.Samples.GetStarted"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="AsvAvaloniaTest.HelloWorldPage"
-             x:DataType="asvAvaloniaTest:HelloWorldPageViewModel">
+             x:Class="Asv.Avalonia.Samples.GetStarted.HelloWorldPage"
+             x:DataType="local:HelloWorldPageViewModel">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10" Spacing="5">
         <TextBlock Text="{Binding SavedText.Value}"/>
         <StackPanel Orientation="Horizontal" Spacing="5">
@@ -564,13 +436,10 @@ public static class ContainerConfigurationMixin
 {collapsible="true" collapsed-title="HelloWorldPage.axaml"}
 
 ```C#
-using Asv.Avalonia;
 using Avalonia.Controls;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
-// Link this View to our ViewModel
-[ExportViewFor(typeof(HelloWorldPageViewModel))]
 public partial class HelloWorldPage : UserControl
 {
     public HelloWorldPage()
@@ -584,30 +453,26 @@ public partial class HelloWorldPage : UserControl
 
 ```C#
 using System.Collections.Generic;
-using System.Composition;
-using Asv.Avalonia;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
-// Export the page so the container can find it
 // The View Model must implement a basic page class (e.g., PageViewModel or TreePageViewModel)
-[ExportPage(PageId)]
 public class HelloWorldPageViewModel: PageViewModel<HelloWorldPageViewModel>
 {
     // A unique ID for the page, used for routing
     public const string PageId = "hello_world_page";
 
     private readonly ReactiveProperty<string?> _inputText;
-    
-    // You can request dependencies from the MEF container via the constructor
-    [ImportingConstructor]
+
+    // Dependencies are injected via the constructor from the IServiceCollection container
     public HelloWorldPageViewModel(
-        ICommandService cmd, 
-        ILoggerFactory loggerFactory, 
-        IDialogService dialogService) : base(PageId, cmd, loggerFactory, dialogService)
+        ICommandService cmd,
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService,
+        IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
     {
         SavedText = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
         
@@ -653,24 +518,18 @@ public class HelloWorldPageViewModel: PageViewModel<HelloWorldPageViewModel>
     protected override void AfterLoadExtensions()
     {
     }
-
-    public override IExportInfo Source  => SystemModule.Instance;
 }
 ```
 
 {collapsible="true" collapsed-title="HelloWorldPageViewModel.cs"}
 
 ```C#
-using System.Composition;
-using Asv.Avalonia;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public class HomePageHelloWorldPageExtension(ILoggerFactory loggerFactory)
     : AsyncDisposableOnce,
         IExtensionFor<IHomePage>
@@ -689,14 +548,10 @@ public class HomePageHelloWorldPageExtension(ILoggerFactory loggerFactory)
 {collapsible="true" collapsed-title="HomePageHelloWorldPageExtension.cs"}
 
 ```C#
-using System.Composition;
-using Asv.Avalonia;
 using Material.Icons;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenHelloWorldPageCommand(INavigationService nav)
     : OpenPageCommandBase(HelloWorldPageViewModel.PageId, nav)
 {
@@ -704,7 +559,7 @@ public class OpenHelloWorldPageCommand(INavigationService nav)
 
     #region Static
 
-    // An unique id for the command
+    // A unique id for the command
     public const string Id = $"{BaseId}.open.hello_world_page";
 
     // You can customize command metadata however you like
@@ -714,10 +569,8 @@ public class OpenHelloWorldPageCommand(INavigationService nav)
         Name = "Open HelloWorldPage",
         Description = "Opens HelloWorldPage",
         Icon = MaterialIconKind.Abacus, // The icon will be used in the tools list
-        Icon = MaterialIconKind.Abacus,
         IconColor = AsvColorKind.Info20,
         DefaultHotKey = null, // You can assign a hotkey to open this page from anywhere in the app
-        Source = SystemModule.Instance,
     };
 
     #endregion
@@ -727,16 +580,12 @@ public class OpenHelloWorldPageCommand(INavigationService nav)
 {collapsible="true" collapsed-title="OpenHelloWorldPageCommand.cs"}
 
 ```C#
-using System.Composition;
 using System.Threading;
 using System.Threading.Tasks;
-using Asv.Avalonia;
 using Material.Icons;
 
-namespace AsvAvaloniaTest;
+namespace Asv.Avalonia.Samples.GetStarted;
 
-[ExportCommand]
-[Shared]
 // This is a context command. It is generic: <ContextType, ArgumentType>
 public class ChangeSavedTextPropertyCommand : ContextCommand<HelloWorldPageViewModel, StringArg>
 {
@@ -751,7 +600,6 @@ public class ChangeSavedTextPropertyCommand : ContextCommand<HelloWorldPageViewM
         Description = "Changes text",
         Icon = MaterialIconKind.PropertyTag,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     public override ICommandInfo Info => StaticInfo;

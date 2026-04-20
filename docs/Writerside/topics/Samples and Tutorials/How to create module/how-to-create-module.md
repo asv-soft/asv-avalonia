@@ -32,17 +32,12 @@ Let's create a new C# project:
 
 ![create-project](how-to-create-module-create-project.png)
 
-![project](how-to-create-module-project.png)
-
 We will use a library template here to avoid unnecessary dependencies.
 
 ## Installing dependencies
 
-Go to your NuGet manager and install the following dependencies:
-
-![dependencies](how-to-create-module-dependencies.png)
-
-You need Asv.Avalonia v1.0.3+. We use a private version of our framework here.
+Go to your NuGet manager and install the `Asv.Avalonia` **2.0.0 or later**. This guide targets the new application host and DI container introduced 
+in 2.0.0 — earlier versions have a different API and the steps below will not work with them.
 
 ## Adding Demo project
 
@@ -55,61 +50,48 @@ You can create this project yourself with the help of [Get Started](project-setu
 
 We will show only the Program.cs:
 
-![demo-app-initial-structure](how-to-create-module-demo-app-initial-structure.png)
-
 ```C#
-using Avalonia;
 using System;
-using System.IO;
-using System.Reflection;
+using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls;
-using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.Module.Demo;
+namespace Asv.Avalonia.Samples.CreateModule.Demo;
 
 sealed class Program
 {
-    // Initialization code. Don't use any Avalonia, third-party APIs or any
-    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
-    // yet and stuff might break.
     [STAThread]
     public static void Main(string[] args)
     {
-        var builder = AppHost.CreateBuilder(args);
-        var dataFolder =
-            Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-        builder
-            .UseAvalonia(BuildAvaloniaApp)
-            .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
-            .UseJsonUserConfig(opt =>
-                opt.WithFileName("user_settings.json").WithAutoSave(TimeSpan.FromSeconds(1))
-            )
-            .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-            .UseSoloRun(opt => opt.WithArgumentForwarding())
-            .UseLogging(options =>
-            {
-                options.WithLogToFile(Path.Combine(dataFolder, "data", "logs"));
-                options.WithLogToConsole();
-                options.WithLogLevel(LogLevel.Trace);
-            });
-
-        using var host = builder.Build();
-        host.ExitIfNotFirstInstance();
-        host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            AppHost.Instance.StopAsync().GetAwaiter().GetResult();
+            Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
+        }
+        catch (Exception e)
+        {
+            AppHost.HandleApplicationCrash(e);
+        }
     }
 
-    // Avalonia configuration, don't remove; also used by visual designer.
-    public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder
-            .Configure<App>()
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .With(new Win32PlatformOptions { OverlayPopups = true }) // Windows
             .With(new X11PlatformOptions { OverlayPopups = true, UseDBusFilePicker = false }) // Unix/Linux
             .With(new AvaloniaNativePlatformOptions { OverlayPopups = true }) // Mac
             .WithInterFont()
             .LogToTrace()
-            .UseR3();
+            .UseAsv(builder =>
+            {
+                builder
+                    .UseDefault()
+                    .UseOptionalLogViewer()
+                    .UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
+                    .UseDesktopShell();
+            });
 }
 ```
 {collapsible="true" collapsed-title="Program.cs"}
@@ -118,7 +100,7 @@ Go to the `.csproj` file and add the following lines:
 
 ```xml
 <ItemGroup>
-    <ProjectReference Include="..\Asv.Avalonia.Module\Asv.Avalonia.Module.csproj" />
+    <ProjectReference Include="..\Asv.Avalonia.Samples.CreateModule\Asv.Avalonia.Samples.CreateModule.csproj" />
 </ItemGroup>
 ```
 
@@ -150,16 +132,57 @@ Now that we have planned everything, let's start building the MVP of our app.
 
 ### Adding a new page
 
-Add a new file with the name CatsPageViewModel.cs and class CatsPageViewModel:
+Add a new file with the name `CatsPageViewModel.cs` and class `CatsPageViewModel`:
 
-![cats-page](how-to-create-module-cats-page-initial.png)
+```
+Asv.Avalonia.Samples (solution)
+└── Asv.Avalonia.Samples.CreateModule/
+├── Assets/
+├── Shell/
+│   └── Pages/
+│       └── Cats/
+│           └── CatsPageViewModel.cs
+└── Asv.Avalonia.Module.csproj.DotSettings
+```
 
-> In this guide we will use the same structure that we use in the other projects in our company
+> In this guide we follow the same folder structure used in the main framework:
+> - `Shell/Pages/<PageName>/` — ViewModel, View, and home page extension for each page
+> - `Core/Commands/<PageName>/` — commands that open or operate on pages
+> - `AppHost/` — mixin, options, and options builder for the module
 > {style="info"}
 
 Inherit this class from the page view model base and implement required components.
 
-![required-components](how-to-create-module-required-components.png)
+```c#
+public class CatsPageViewModel : PageViewModel<CatsPageViewModel>
+{
+    public const string PageId = "cats";
+    
+    public CatsPageViewModel()
+        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService)
+    {
+        DesignTime.ThrowIfNotDesignMode();
+    ｝
+        
+    public CatsPageViewModel(
+        ICommandService cmd, 
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService)
+        : base(PageId, cmd, loggerFactory, dialogService)
+    {
+    }
+    
+    public override IEnumerable<IRoutable> GetRoutableChildren()
+    {
+        return [];
+    }
+    
+    protected override void AfterLoadExtensions()
+    {
+        // ignore
+    }
+}
+```
 
 Download any picture from the internet and put it in the assets folder.
 Create a view for the cats page.
@@ -169,19 +192,17 @@ Create a view for the cats page.
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:cats="clr-namespace:Asv.Avalonia.Module.Pages.Cats"
+             xmlns:local="clr-namespace:Asv.Avalonia.Samples.CreateModule"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Module.Pages.Cats.CatsPageView"
-             x:DataType="cats:CatsPageViewModel">
+             x:Class="Asv.Avalonia.Samples.CreateModule.CatsPageView"
+             x:DataType="local:CatsPageViewModel">
     <Grid>
-        <Image Source="avares://Asv.Avalonia.Module/Assets/cat.jpg"
+        <Image Source="avares://Asv.Avalonia.Samples.CreateModule/Assets/cat.jpg"
                HorizontalAlignment="Center"
                VerticalAlignment="Center"/>
     </Grid>
 </UserControl>
 ```
-
-![base-view-for-cats](how-to-create-module-base-view-for-cats.png)
 
 Now we take a picture with cats exactly from the Assets folder and put it in the axaml.
 In our plan we described that it would be nice to be able to change the picture.
@@ -191,7 +212,7 @@ Write the following code in the constructor:
 
 ```C#
 var stream = AssetLoader
-            .Open(new Uri("avares://Asv.Avalonia.Module/Assets/cat.jpg"))
+            .Open(new Uri("avares://Asv.Avalonia.Samples.CreateModule/Assets/cat.jpg"))
             .DisposeItWith(Disposable);
 var defaultPicture = new Bitmap(stream).DisposeItWith(Disposable);
         
@@ -215,12 +236,12 @@ Now we can use this property in the axaml:
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:module="clr-namespace:Asv.Avalonia.Module"
+             xmlns:local="clr-namespace:Asv.Avalonia.Samples.CreateModule"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Module.CatsPageView"
-             x:DataType="module:CatsPageViewModel">
+             x:Class="Asv.Avalonia.Samples.CreateModule.CatsPageView"
+             x:DataType="local:CatsPageViewModel">
     <Design.DataContext>
-        <module:CatsPageViewModel/>
+        <local:CatsPageViewModel/>
     </Design.DataContext>
     <Grid>
         <Image Source="{CompiledBinding SelectedImage}"
@@ -230,10 +251,10 @@ Now we can use this property in the axaml:
 </UserControl>
 ```
 
-### Preparing for the export
+### Registering components
 
 Now you can see the page in the design mode, but if you run the demo app you won't see the button to open the page.
-To make the page a part of the application we need to set up the export.
+To make the page a part of the application we need to register the components in the DI container.
 
 #### Creating an open page command
 
@@ -244,17 +265,11 @@ public const MaterialIconKind PageIcon =  MaterialIconKind.Cat;
 public const AsvColorKind PageIconColor = AsvColorKind.Info3;
 ```
 
-Create Commands folder in the Asv.Avalonia.Module folder
-In this folder create OpenCatsPageCommand.cs
+Create `Core/Commands/Cats/` folder path in the `Asv.Avalonia.Samples.CreateModule` project.
+In this folder create `OpenCatsPageCommand.cs`.
 
 Add the following code in the file:
 ```c#
-using System.Composition;
-
-namespace Asv.Avalonia.Module;
-
-[ExportCommand]
-[method: ImportingConstructor]
 public class OpenCatsPageCommand(INavigationService nav)
     : OpenPageCommandBase(CatsPageViewModel.PageId, nav)
 {
@@ -272,7 +287,6 @@ public class OpenCatsPageCommand(INavigationService nav)
         Icon = CatsPageViewModel.PageIcon,
         IconColor = CatsPageViewModel.PageIconColor,
         DefaultHotKey = null,
-        Source = SystemModule.Instance,
     };
 
     #endregion
@@ -281,17 +295,14 @@ public class OpenCatsPageCommand(INavigationService nav)
 
 #### Adding button to the home page
 
-In the Cats folder create a HomePageCatsPageExtension.cs file with the following content:
+In `Shell/Pages/Cats/` create `HomePageCatsPageExtension.cs` with the following content:
 ```c#
-using System.Composition;
 using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Module;
+namespace Asv.Avalonia.Samples.CreateModule;
 
-[ExportExtensionFor<IHomePage>]
-[method: ImportingConstructor]
 public class HomePageCatsPageExtension(ILoggerFactory loggerFactory)
     : AsyncDisposableOnce,
         IExtensionFor<IHomePage>
@@ -310,80 +321,37 @@ public class HomePageCatsPageExtension(ILoggerFactory loggerFactory)
 
 Now we are almost ready, and we need to make the most important step.
 
-#### Adding export info
+### Registering the module in the application
 
-In the root folder of the Asv.Avalonia.Module create cs file with the name ModuleModule.
-We usually call this file by adding Module word to the module's name. 
-In our case we call it ModuleModule.
-
-Implement IExportInfo interface
+All module components must be explicitly registered in the builder chain.
+Create an `AppHost/` folder in the module project and add `ModuleModuleMixin.cs` there:
 
 ```c#
-public class ModuleModule : IExportInfo
+public static class ModuleModuleMixin
 {
-    public string ModuleName { get; }
-}
-```
-
-Add name to the module and make this class simple singleton. 
-We use ExportInfo as an export point for the dependencies. 
-We also use such classes to mark components.
-
-```c#
-public class ModuleModule : IExportInfo
-{
-    public const string Name = "Asv.Avalonia.Module";
-
-    private ModuleModule() { }
-    
-    public static IExportInfo Instance { get; } = new ModuleModule();
-
-    public string ModuleName => Name;
-}
-```
-
-#### Marking components
-
-Go to the command and page to mark them as part of the Module.
-
-```c#
-// Open page command
-public static readonly ICommandInfo StaticInfo = new CommandInfo
+    extension(IHostApplicationBuilder builder)
     {
-        Id = Id,
-        Name = "Open cats page",
-        Description = "Command opens cats page",
-        Icon = CatsPageViewModel.PageIcon,
-        IconColor = CatsPageViewModel.PageIconColor,
-        DefaultHotKey = null,
-        Source = ModuleModule.Instance,
-    };
-```
+        public IHostApplicationBuilder UseModuleModule()
+        {
+            // Register the page and its view
+            builder.Shell.Pages.Register<CatsPageViewModel, CatsPageView>(CatsPageViewModel.PageId);
 
-```c#
-/// Page
-...
-    protected override void AfterLoadExtensions()
-    {
-        // ignore
+            // Register the command
+            builder.Commands.Register<OpenCatsPageCommand>();
+
+            // Register the home page extension
+            builder.Extensions.Register<IHomePage, HomePageCatsPageExtension>();
+
+            return builder;
+        }
     }
-
-    public override IExportInfo Source => ModuleModule.Instance;
 }
 ```
 
-![mvp-module](how-to-create-module-mvp-module.png)
-
-### Adding dependencies to the application
-
-Head to the App.axaml.cs extend container configuration builder:
+Then call it in `Program.cs`:
 
 ```c#
- containerCfg
-            .WithDependenciesFromSystemModule()
-            .WithDependenciesFromTheApp(this)
-            .WithAssemblies([typeof(ModuleModule).Assembly]) // Add this line
-            .WithDefaultConventions(conventions);
+builder.UseModuleModule();
 ```
 
 Now you can open the app and see our new Page in action:
@@ -393,4 +361,3 @@ Now you can open the app and see our new Page in action:
 ![page-with-cats-in-demo](how-to-create-module-page-with-cats-simple.png)
 
 The next step is to make the module more flexible.
-

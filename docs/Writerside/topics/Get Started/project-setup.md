@@ -10,7 +10,7 @@ This guide assumes that you are already familiar with the basics of Avalonia UI.
 This project depends on Avalonia UI, so please review
 the [Avalonia requirements](https://docs.avaloniaui.net/docs/overview/supported-platforms).
 
-The current version of Asv.Avalonia targets .NET 9.0.
+The current version of Asv.Avalonia targets .NET 10.0.
 The framework is cross-platform, so it supports Windows, macOS, Linux, and mobile (Android/iOS).
 
 > The only well-tested platform is Windows; mobile platforms have not been tested at all yet.
@@ -56,6 +56,10 @@ project directory:
 dotnet add package Asv.Avalonia
 ```
 
+> This guide requires **Asv.Avalonia 2.0.0 or later**. Version 2.0.0 introduced the new application host and DI container that all examples below depend on. 
+> Earlier versions have a different API and the steps will not work with them.
+> {style="warning"}
+
 Now we must modify our template to run the Asv.Avalonia shell.
 
 ### 1. Clean up the Template
@@ -76,192 +80,63 @@ class Program
     [STAThread]
     public static void Main(string[] args) 
     {
-        var builder = AppHost.CreateBuilder(args);
-        var dataFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty;
-
-        builder
-            .UseAvalonia(BuildAvaloniaApp)
-        
-            // This setting defines where all app data (like a JSON user config) will be stored
-            .UseAppPath(opt => opt.WithRelativeFolder(Path.Combine(dataFolder, "data")))
-        
-            // Here you can define some JSON config settings. For example, we set autosave to 1 second
-            .UseJsonUserConfig(opt => opt.WithAutoSave(TimeSpan.FromSeconds(1)))
-        
-            // This defines the source of app data (app name, version, etc.). We use the current assembly
-            .UseAppInfo(opt => opt.FillFromAssembly(typeof(App).Assembly))
-        
-            // Here we set up the logging system
-            .UseLogging(options =>
-            {
-                options.WithLogToFile();
-                options.WithLogToConsole();
-            
-                // Optional: here you can enable Log viewer page
-                options.WithLogViewer();
-            });
-
-        using var host = builder.Build();
-        host.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            AppHost.Instance.StopAsync().GetAwaiter().GetResult();
+            Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
+        }
+        catch (Exception e)
+        {
+            AppHost.HandleApplicationCrash(e);
+        }
     }
-
-    // Avalonia configuration, don't remove; also used by visual designer.
+    
     public static AppBuilder BuildAvaloniaApp()
-    {
-        return AppBuilder.Configure<App>()
+        => AppBuilder.Configure<App>()
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()
-            .UseR3();
-    }
+            .UseAsv(builder =>
+            {
+                builder
+                    .UseDefault()
+                    .UseOptionalLogViewer()
+                    .UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
+                    .UseDesktopShell();
+            });
 }
 ```
 
-What is happening here? In the `Main` method, we set up the application host and the container with all the necessary dependencies. 
-While most of them are required for the framework to work, here you can easily customize the behavior: 
-for example, change the folder for settings and logs, or enable/disable specific features like the Log Viewer.
+The `Main` method builds and starts the Avalonia application. After the window closes,
+it gracefully stops and disposes the `AppHost`. If anything goes wrong, `HandleApplicationCrash` logs the error.
 
-In the `BuildAvaloniaApp` method, we configure Avalonia itself. An important part here is `.UseR3()`, 
-which integrates the R3 reactive framework into the Avalonia lifecycle to handle reactive properties and commands correctly.
+In `BuildAvaloniaApp`, we configure Avalonia and initialize the framework via `.UseAsv(...)`.
+This call sets up the application host and internally integrates the R3 reactive framework.
+Inside the builder callback you can customize the application: enable or disable features
+like the Log Viewer or single-instance mode, and set up the desktop shell.
 
 ### 3. Configure App.axaml.cs
 
-Now, let's edit the `App.axaml.cs` code-behind file. Our App class should implement the following interfaces:
-
-```
-public class App : Application, IContainerHost, IShellHost
-```
-
-This implementation handles dependency injection and other tasks, such as running startup routines.
+Now, let's edit the `App.axaml.cs` code-behind file. Our App class should inherit from `AsvApplication`:
 
 ```C#
-public class App : Application, IContainerHost, IShellHost
+using Avalonia.Markup.Xaml;
+
+namespace Asv.Avalonia.Samples.GetStarted;
+
+public class App : AsvApplication
 {
-    private readonly CompositionHost _container;
-    private readonly Subject<IShell> _onShellLoaded = new();
-
-    public App()
-    {
-        var conventions = new ConventionBuilder();
-        var containerCfg = new ContainerConfiguration();
-
-        containerCfg
-            .WithDependenciesFromSystemModule()
-            .WithDependenciesFromTheApp(this)
-            .WithDefaultConventions(conventions);
-
-        _container = containerCfg.CreateContainer();
-
-        DataTemplates.Add(new CompositionViewLocator(_container));
-
-        if (!Design.IsDesignMode) _container.GetExport<IAppStartupService>().AppCtor();
-    }
-
-    public T GetExport<T>()
-        where T : IExportable
-    {
-        return _container.GetExport<T>();
-    }
-
-    public T GetExport<T>(string contract)
-        where T : IExportable
-    {
-        return _container.GetExport<T>(contract);
-    }
-
-    public bool TryGetExport<T>(string id, out T value)
-        where T : IExportable
-    {
-        return _container.TryGetExport(id, out value);
-    }
-
-    public void SatisfyImports(object value)
-    {
-        _container.SatisfyImports(value);
-    }
-
-    public IExportInfo Source => SystemModule.Instance;
-
-    public IShell Shell
-    {
-        get;
-        private set
-        {
-            field = value;
-            _onShellLoaded.OnNext(value);
-        }
-    }
-
-    public Observable<IShell> OnShellLoaded => _onShellLoaded;
-    public TopLevel TopLevel { get; private set; }
-
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
-        if (!Design.IsDesignMode) _container.GetExport<IAppStartupService>().Initialize();
-    }
-
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (Design.IsDesignMode)
-        {
-            Shell = DesignTimeShellViewModel.Instance;
-        }
-        else if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-        {
-            Shell = _container.GetExport<IShell>(DesktopShellViewModel.ShellId);
-            if (desktop.MainWindow is TopLevel topLevel) TopLevel = topLevel;
-        }
-        else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-        {
-            Shell = _container.GetExport<IShell>(MobileShellViewModel.ShellId);
-            if (singleViewPlatform.MainView is TopLevel topLevel) TopLevel = topLevel;
-        }
-        else
-        {
-            throw new Exception("Unknown platform");
-        }
-
-        base.OnFrameworkInitializationCompleted();
-#if DEBUG
-        this.AttachDevTools();
-#endif
-        if (!Design.IsDesignMode) _container.GetExport<IAppStartupService>().OnFrameworkInitializationCompleted();
-    }
-}
-
-public static class ContainerConfigurationMixin
-{
-    public static ContainerConfiguration WithDependenciesFromTheApp(
-        this ContainerConfiguration containerConfiguration,
-        App app
-    )
-    {
-        containerConfiguration.WithExport<IDataTemplateHost>(app).WithExport<IShellHost>(app);
-
-        if (Design.IsDesignMode)
-            containerConfiguration.WithExport(NullContainerHost.Instance);
-        else
-            containerConfiguration.WithExport<IContainerHost>(app);
-
-        return containerConfiguration.WithAssemblies([app.GetType().Assembly]);
     }
 }
 ```
 
-The important part is:
-
-```C#
-containerCfg
-    .WithDependenciesFromSystemModule()
-    .WithDependenciesFromTheApp(this)
-    .WithDefaultConventions(conventions);
-```
-
-Here we register dependencies from the
-builder ([DI container](https://learn.microsoft.com/dotnet/core/extensions/dependency-injection-usage)) and modules
-into [MEF](https://learn.microsoft.com/en-us/dotnet/framework/mef/), which are used in runtime.
-If you want to add other modules to the app, you need to register them here as well.
+`AsvApplication` handles dependency injection setup, view locator registration, shell initialization,
+and platform detection — so your `App` class only needs to load the XAML.
 
 ### 4. Configure Styles
 
@@ -270,7 +145,7 @@ Finally, include the Asv.Avalonia styles in your `App.axaml` file:
 ```xml
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="AsvAvaloniaTest.App"
+             x:Class="Asv.Avalonia.Samples.GetStarted.App"
              RequestedThemeVariant="Default">
    <Application.Styles>
       <StyleInclude Source="avares://Asv.Avalonia/Styling/Theme.axaml" />

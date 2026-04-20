@@ -99,7 +99,7 @@ Additionally, hide the right-hand editor panel until a recipe is selected.
 		<Grid RowDefinitions="Auto, *"
 			IsVisible="{Binding SelectedRecipe.Value, Converter={x:Static ObjectConverters.IsNotNull}}">
             ...
-        </Grid>>
+        </Grid>
     </Grid>
 </Border>
 ...
@@ -114,4 +114,4 @@ UI Overview
 
 ![final](recipe-book-app-final.png)
 
-You can find the complete source code for the module [here](recipe-book-app-source-code.md)
+You can find the complete source code for the tutorial [here](recipe-book-app-source-code.md)
