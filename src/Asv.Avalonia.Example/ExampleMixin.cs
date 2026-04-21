@@ -48,6 +48,10 @@ public static class ExampleMixin
                 IAsyncCommand,
                 OpenControlsGalleryPageCommand
             >();
+            builder.Parent.Parent.Services.AddSingleton<
+                IAsyncCommand,
+                ResetGeoPointDialogResultCommand
+            >();
             builder.Parent.Parent.Extensions.Register<
                 IHomePage,
                 HomePageControlsGalleryPageExtension

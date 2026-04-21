@@ -26,57 +26,27 @@
                 BorderThickness="1"
                 CornerRadius="4"
             >
-                <map:MapItemsControl
-                    CenterMap="{Binding GeoPointProperty.ModelValue.Value, Mode=OneTime}"
-                    SelectionMode="Single"
-                    ItemsSource="{Binding MapViewModel.AnchorsView}"
-                    SelectedItem="{Binding MapViewModel.SelectedAnchor.Value}"
-                    Provider="{Binding MapViewModel.CurrentProvider.Value}"
-                    Width="220"
-                    Height="220"
-                >
-                    <map:MapItemsControl.AnnotationTemplate>
-                        <DataTemplate>
-                            <Border
-                                BorderThickness="1"
-                                BorderBrush="{DynamicResource SystemRegionBrush}"
-                                x:Name="PART_Annotation"
-                                IsVisible="{Binding !!Title.Length}"
-                                Padding="3"
-                                CornerRadius="3"
-                                Background="{DynamicResource AsvBackgroundInfo2Color}"
-                            >
-                                <TextBlock Text="{ReflectionBinding Title}" />
-                            </Border>
-                        </DataTemplate>
-                    </map:MapItemsControl.AnnotationTemplate>
-                    <map:MapItemsControl.Styles>
-                        <Style Selector="Border.active">
-                            <Setter Property="BorderThickness" Value="5" />
-                        </Style>
-                    </map:MapItemsControl.Styles>
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <avalonia:MaterialIcon
-                                Width="{Binding IconSize}"
-                                Height="{Binding IconSize}"
-                                asv:AsvPallete.Color="{Binding IconColor}"
-                                Kind="{Binding Icon}"
-                            />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                    <ItemsControl.ItemContainerTheme>
-                        <ControlTheme TargetType="map:MapItem" x:DataType="map:IMapAnchor">
-                            <Setter Property="Location" Value="{Binding Location, Mode=TwoWay}" />
-                            <Setter Property="Rotation" Value="{Binding Azimuth}" />
-                            <Setter Property="CenterX" Value="{Binding CenterX}" />
-                            <Setter Property="CenterY" Value="{Binding CenterY}" />
-                            <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
-                            <Setter Property="IsVisible" Value="{Binding IsVisible}" />
-                            <Setter Property="Polygon" Value="{Binding PolygonView}" />
-                        </ControlTheme>
-                    </ItemsControl.ItemContainerTheme>
-                </map:MapItemsControl>
+                <Grid Width="220" Height="220">
+                    <map:MapItemsControl
+                        CenterMap="{CompiledBinding CenterGeoPoint.Value, Mode=TwoWay}"
+                        Provider="{CompiledBinding CurrentProvider.Value}"
+                    >
+                        <map:MapItemsControl.Styles>
+                            <Style Selector="Border.active">
+                                <Setter Property="BorderThickness" Value="5" />
+                            </Style>
+                        </map:MapItemsControl.Styles>
+                    </map:MapItemsControl>
+
+                    <avalonia:MaterialIcon
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsHitTestVisible="False"
+                        Classes="big"
+                        Opacity="0.75"
+                        Kind="Location"
+                    />
+                </Grid>
             </Border>
 
             <StackPanel
