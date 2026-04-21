@@ -8,7 +8,6 @@ namespace Asv.Avalonia;
 public class LogReaderOptions
 {
     public const string Section = "LogViewer";
-    public int RollingSizeKb { get; set; } = 50;
     public string Folder { get; set; } = "logs";
 }
 

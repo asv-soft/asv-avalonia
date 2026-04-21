@@ -51,6 +51,7 @@ sealed class Program
             {
                 builder
                     .UseDefault()
+                    .UseOptionalLogToFile()
                     .UseOptionalLogViewer()
                     .UseOptionalSoloRun(opt =>
                         opt.WithArgumentForwarding().WithMutexName("Asv.Avalonia.Example.Desktop")
