@@ -45,9 +45,13 @@ public partial class MapItemsControl : SelectingItemsControl
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == MinZoomProperty || change.Property == MaxZoomProperty)
+        if (
+            change.Property == MinZoomProperty
+            || change.Property == MaxZoomProperty
+            || change.Property == ProviderProperty // Some providers may have their own restrictions to the Zoom property
+        )
         {
-            Zoom = Math.Clamp(Zoom, MinZoom, MaxZoom);
+            SetCurrentValue(ZoomProperty, Zoom);
         }
 
         if (change.Property == TouchpadZoomSensitivityProperty && TouchpadZoomSensitivity < 0.0)

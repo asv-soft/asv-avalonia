@@ -9,6 +9,8 @@ public class WikiMapiaTileProvider : ITileProvider
         Id = Id,
         NameCallback = () => RS.WikiMapiaTileProvider_Info_Name,
         Group = TileProviderGroup.Other,
+        MinZoom = 1,
+        MaxZoom = 18,
     };
 
     public TileProviderInfo Info => StaticInfo;

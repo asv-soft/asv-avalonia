@@ -263,7 +263,16 @@ public partial class MapItemsControl
     public int Zoom
     {
         get => _zoom;
-        set => SetAndRaise(ZoomProperty, ref _zoom, Math.Clamp(value, MinZoom, MaxZoom));
+        set =>
+            SetAndRaise(
+                ZoomProperty,
+                ref _zoom,
+                Math.Clamp(
+                    Math.Clamp(value, MinZoom, MaxZoom),
+                    Provider.Info.MinZoom,
+                    Provider.Info.MaxZoom
+                )
+            );
     }
 
     #endregion

@@ -9,6 +9,8 @@ public class ArcGisWorldStreetTileProvider : ITileProvider
         Id = Id,
         NameCallback = () => RS.ArcGisWorldStreetTileProvider_Info_Name,
         Group = TileProviderGroup.ArcGis,
+        MinZoom = 1,
+        MaxZoom = 17,
     };
 
     public TileProviderInfo Info => StaticInfo;

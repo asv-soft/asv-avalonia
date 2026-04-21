@@ -9,6 +9,8 @@ public class UmpTileProvider : ITileProvider
         Id = Id,
         NameCallback = () => RS.UmpTileProvider_Info_Name,
         Group = TileProviderGroup.OpenStreetMap,
+        MinZoom = 1,
+        MaxZoom = 18,
     };
 
     public TileProviderInfo Info => StaticInfo;

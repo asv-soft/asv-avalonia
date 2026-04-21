@@ -9,6 +9,8 @@ public class ArcGisWorldPhysicalTileProvider : ITileProvider
         Id = Id,
         NameCallback = () => RS.ArcGisWorldPhysicalTileProvider_Info_Name,
         Group = TileProviderGroup.ArcGis,
+        MinZoom = 1,
+        MaxZoom = 8,
     };
 
     public TileProviderInfo Info => StaticInfo;
