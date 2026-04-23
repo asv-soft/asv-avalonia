@@ -1,18 +1,19 @@
 ﻿using Asv.Avalonia;
+using Asv.Modeling;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class MenuNode : ObservableTreeNode<IMenuItem, NavigationId>
+public class MenuNode : ObservableTreeNode<IMenuItem, NavId>
 {
     public MenuNode(
         IMenuItem baseItem,
         IReadOnlyObservableList<IMenuItem> source,
-        Func<IMenuItem, NavigationId> keySelector,
-        Func<IMenuItem, NavigationId> parentSelector,
+        Func<IMenuItem, NavId> keySelector,
+        Func<IMenuItem, NavId> parentSelector,
         IComparer<IMenuItem> comparer,
-        CreateNodeDelegate<IMenuItem, NavigationId> factory,
-        ObservableTreeNode<IMenuItem, NavigationId>? parentNode = null
+        CreateNodeDelegate<IMenuItem, NavId> factory,
+        ObservableTreeNode<IMenuItem, NavId>? parentNode = null
     )
         : base(baseItem, source, keySelector, parentSelector, comparer, factory, parentNode) { }
 }

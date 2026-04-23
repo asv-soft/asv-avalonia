@@ -4,10 +4,10 @@ using Asv.Modeling;
 namespace Asv.Avalonia;
 
 public abstract class LayoutEventBase(
-    IRoutable source,
+    IViewModel source,
     ILayoutService layoutService,
     RoutingStrategy routingStrategy
-) : AsyncRoutedEvent<IRoutable>(source, routingStrategy)
+) : AsyncRoutedEvent<IViewModel>(source, routingStrategy)
 {
     public const RoutingStrategy DefaultRoutingStrategy = RoutingStrategy.Tunnel;
     public ILayoutService LayoutService => layoutService;

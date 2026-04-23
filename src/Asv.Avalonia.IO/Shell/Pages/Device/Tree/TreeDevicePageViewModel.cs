@@ -16,7 +16,7 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
     private readonly DevicePageCore _deviceCore;
 
     protected TreeDevicePageViewModel(
-        NavigationId id,
+        NavId id,
         IDeviceManager devices,
         ICommandService cmd,
         IServiceProvider container,

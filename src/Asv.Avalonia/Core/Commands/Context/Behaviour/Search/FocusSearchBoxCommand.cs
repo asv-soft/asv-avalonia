@@ -3,7 +3,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class FocusSearchBoxCommand : ContextCommand<IRoutable>
+public class FocusSearchBoxCommand : ContextCommand<IViewModel>
 {
     public const string Id = $"{BaseId}.search.focus";
 
@@ -18,7 +18,7 @@ public class FocusSearchBoxCommand : ContextCommand<IRoutable>
         };
 
     protected override async ValueTask<CommandArg?> InternalExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg newValue,
         CancellationToken cancel
     )

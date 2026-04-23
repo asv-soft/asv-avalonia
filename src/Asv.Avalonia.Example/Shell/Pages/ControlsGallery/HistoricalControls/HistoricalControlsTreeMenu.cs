@@ -10,7 +10,7 @@ public class HistoricalControlsTreeMenu : TreePage
             RS.HistoricalControlsPageViewModel_Title,
             HistoricalControlsPageViewModel.PageIcon,
             HistoricalControlsPageViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

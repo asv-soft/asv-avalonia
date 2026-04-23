@@ -25,7 +25,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public WorkspacePageViewModel(
@@ -209,7 +209,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public NotifyCollectionChangedSynchronizedViewList<IWorkspaceWidget> Items { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var item in _itemsSource)
         {
@@ -222,7 +222,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         }
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         if (e is PageCloseAttemptEvent close)
         {

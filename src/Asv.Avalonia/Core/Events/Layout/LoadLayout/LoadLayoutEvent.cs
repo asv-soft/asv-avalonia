@@ -4,7 +4,7 @@ using Asv.Modeling;
 namespace Asv.Avalonia;
 
 public sealed class LoadLayoutEvent(
-    IRoutable source,
+    IViewModel source,
     ILayoutService layoutService,
     RoutingStrategy routingStrategy = RoutingStrategy.Tunnel
 ) : LayoutEventBase(source, layoutService, routingStrategy) { }
@@ -12,7 +12,7 @@ public sealed class LoadLayoutEvent(
 public static class LoadLayoutMixin
 {
     public static ValueTask RequestLoadLayout(
-        this IRoutable src,
+        this IViewModel src,
         ILayoutService layoutService,
         CancellationToken cancel = default,
         RoutingStrategy routingStrategy = RoutingStrategy.Tunnel
@@ -27,7 +27,7 @@ public static class LoadLayoutMixin
     }
 
     public static ValueTask RequestLoadLayoutForSelfOnly(
-        this IRoutable src,
+        this IViewModel src,
         ILayoutService layoutService,
         CancellationToken cancel = default
     )
@@ -41,7 +41,7 @@ public static class LoadLayoutMixin
     }
 
     public static async ValueTask<TConfig> HandleLoadLayoutAsync<TConfig>(
-        this IRoutable target,
+        this IViewModel target,
         LoadLayoutEvent e,
         Func<TConfig, CancellationToken, ValueTask> loadCallback,
         CancellationToken cancel = default
@@ -54,7 +54,7 @@ public static class LoadLayoutMixin
     }
 
     public static TConfig HandleLoadLayout<TConfig>(
-        this IRoutable target,
+        this IViewModel target,
         LoadLayoutEvent e,
         Action<TConfig> loadCallback
     )

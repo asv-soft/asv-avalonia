@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
 
@@ -15,7 +16,7 @@ public class MainMenuDefaultMenuExtender(
         context.MainMenu.AddRange(
             items.Select(x =>
             {
-                if (x.ParentId != NavigationId.Empty)
+                if (x.ParentId != NavId.Empty)
                 {
                     var parent = items.FirstOrDefault(item => item.Id == x.ParentId);
 

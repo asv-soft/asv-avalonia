@@ -1,10 +1,11 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class HomePageItemDecorator : RoutableViewModel
+public class HomePageItemDecorator : ViewModelBase
 {
     public HomePageItemDecorator(IHomePageItem homePageItem, ILoggerFactory loggerFactory)
         : base($"decorator_{homePageItem.Id}", loggerFactory)
@@ -24,13 +25,13 @@ public class HomePageItemDecorator : RoutableViewModel
     public NotifyCollectionChangedSynchronizedViewList<IActionViewModel> ActionsView { get; }
     public NotifyCollectionChangedSynchronizedViewList<IHeadlinedViewModel> PropertiesView { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         // this is a decorator, it should not be routable
         throw new NotImplementedException();
     }
 
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
+    public override ValueTask<IViewModel> Navigate(NavId id)
     {
         // this is a decorator, it should not be routable
         throw new NotImplementedException();

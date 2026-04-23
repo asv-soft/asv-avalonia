@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -13,7 +14,7 @@ public sealed class HistoricalEnumProperty<TEnum>
     private bool _internalChange;
 
     public HistoricalEnumProperty(
-        NavigationId id,
+        NavId id,
         ReactiveProperty<Enum> modelValue,
         ILoggerFactory loggerFactory
     )
@@ -75,7 +76,7 @@ public sealed class HistoricalEnumProperty<TEnum>
         await this.ExecuteCommand(ChangeEnumPropertyCommand.Id, newValue, cancel);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

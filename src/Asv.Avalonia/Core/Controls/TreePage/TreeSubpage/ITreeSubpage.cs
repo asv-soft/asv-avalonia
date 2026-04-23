@@ -2,7 +2,7 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public interface ITreeSubpage : IRoutable
+public interface ITreeSubpage : IViewModel
 {
     MenuTree MenuView { get; }
     ObservableList<IMenuItem> Menu { get; }

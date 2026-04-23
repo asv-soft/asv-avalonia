@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using Asv.Modeling;
+using Avalonia.Media;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
@@ -8,8 +9,8 @@ namespace Asv.Avalonia;
 /// Represents a base view model with a title (header) and an optional icon.
 /// This can be used as a foundation for view models that require a title and icon representation.
 /// </summary>
-public class HeadlinedViewModel(NavigationId id, ILoggerFactory loggerFactory)
-    : RoutableViewModel(id, loggerFactory),
+public class HeadlinedViewModel(string typeId, ILoggerFactory loggerFactory)
+    : ViewModelBase(typeId, default, loggerFactory),
         IHeadlinedViewModel
 {
     /// <summary>
@@ -50,7 +51,7 @@ public class HeadlinedViewModel(NavigationId id, ILoggerFactory loggerFactory)
 
     public int Order { get; set; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

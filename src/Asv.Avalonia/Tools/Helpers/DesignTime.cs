@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Asv.Cfg;
+using Asv.Modeling;
 using Avalonia.Controls;
 using Material.Icons;
 using Microsoft.Extensions.Hosting;
@@ -262,12 +263,12 @@ public static class DesignTime
         ]);
 
     public static NotifyCollectionChangedSynchronizedViewList<
-        ObservableTreeNode<IMenuItem, NavigationId>
+        ObservableTreeNode<IMenuItem, NavId>
     > MenuTreeItems => MenuTree.Items;
 
     public static MenuTree MenuTree => new(Menu);
 
-    public static NavigationId Id => NavigationId.GenerateRandom();
+    public static NavId Id => NavId.GenerateRandom();
     public static ICommand EmptyCommand = new ReactiveCommand();
     public static IDialogService DialogService => NullDialogService.Instance;
     public static IExtensionService ExtensionService => NullExtensionService.Instance;

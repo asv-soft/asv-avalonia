@@ -1,13 +1,13 @@
 ﻿namespace Asv.Avalonia;
 
 public abstract class ContextCommand<TContext, TArg> : ContextCommand<TContext>
-    where TContext : IRoutable
+    where TContext : IViewModel
     where TArg : CommandArg
 {
     public override bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     )
     {
         if (parameter is TArg)
@@ -41,14 +41,14 @@ public abstract class ContextCommand<TContext, TArg> : ContextCommand<TContext>
 }
 
 public abstract class ContextCommand<TContext, TArg1, TArg2> : ContextCommand<TContext>
-    where TContext : IRoutable
+    where TContext : IViewModel
     where TArg1 : CommandArg
     where TArg2 : CommandArg
 {
     public override bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     )
     {
         if (parameter is TArg1 or TArg2)
@@ -90,12 +90,12 @@ public abstract class ContextCommand<TContext, TArg1, TArg2> : ContextCommand<TC
 }
 
 public abstract class ContextCommand<TContext> : AsyncCommand
-    where TContext : IRoutable
+    where TContext : IViewModel
 {
     public override bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     )
     {
         var target = context.FindParentOfType<TContext>();
@@ -110,7 +110,7 @@ public abstract class ContextCommand<TContext> : AsyncCommand
     }
 
     public override ValueTask<CommandArg?> Execute(
-        IRoutable context,
+        IViewModel context,
         CommandArg newValue,
         CancellationToken cancel = default
     )

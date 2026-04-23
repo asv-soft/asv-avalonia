@@ -3,7 +3,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class LanguageProperty : RoutableViewModel
+public class LanguageProperty : ViewModelBase
 {
     public const string ViewModelId = "language.current";
 
@@ -71,7 +71,7 @@ public class LanguageProperty : RoutableViewModel
         _internalChange = false;
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

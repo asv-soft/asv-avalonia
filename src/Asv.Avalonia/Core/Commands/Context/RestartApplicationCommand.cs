@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public sealed class RestartApplicationCommand : ContextCommand<IRoutable>
+public sealed class RestartApplicationCommand : ContextCommand<IViewModel>
 {
     #region Static
 
@@ -23,7 +23,7 @@ public sealed class RestartApplicationCommand : ContextCommand<IRoutable>
     public override ICommandInfo Info => StaticInfo;
 
     protected override async ValueTask<CommandArg?> InternalExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg newValue,
         CancellationToken cancel
     )

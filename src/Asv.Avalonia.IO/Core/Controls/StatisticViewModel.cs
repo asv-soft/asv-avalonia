@@ -1,11 +1,12 @@
 ﻿using System.Reactive.Linq;
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.IO;
 
-public class StatisticViewModel : RoutableViewModel
+public class StatisticViewModel : ViewModelBase
 {
     private readonly IncrementalRateCounter _rxBytes;
     private readonly IncrementalRateCounter _txBytes;
@@ -38,7 +39,7 @@ public class StatisticViewModel : RoutableViewModel
     }
 
     public StatisticViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
@@ -185,7 +186,7 @@ public class StatisticViewModel : RoutableViewModel
         set => SetField(ref field, value);
     } = string.Empty;
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

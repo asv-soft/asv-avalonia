@@ -8,30 +8,30 @@ public sealed class NullLayoutService : ILayoutService
 
     private NullLayoutService() { }
 
-    public TPocoType Get<TPocoType>(IRoutable source, Lazy<TPocoType> defaultValue)
+    public TPocoType Get<TPocoType>(IViewModel source, Lazy<TPocoType> defaultValue)
         where TPocoType : class, new()
     {
         return defaultValue.Value;
     }
 
-    public void SetInMemory<TPocoType>(IRoutable source, TPocoType value)
+    public void SetInMemory<TPocoType>(IViewModel source, TPocoType value)
         where TPocoType : class, new()
     {
         return;
     }
 
-    public void SetToFile<TPocoType>(IRoutable source, TPocoType value)
+    public void SetToFile<TPocoType>(IViewModel source, TPocoType value)
         where TPocoType : class, new()
     {
         return;
     }
 
-    public void FlushFromMemory(IReadOnlyCollection<IRoutable>? keysToIgnore = null)
+    public void FlushFromMemory(IReadOnlyCollection<IViewModel>? keysToIgnore = null)
     {
         return;
     }
 
-    public void FlushFromMemory(IRoutable target)
+    public void FlushFromMemory(IViewModel target)
     {
         return;
     }
@@ -41,7 +41,7 @@ public sealed class NullLayoutService : ILayoutService
         return;
     }
 
-    public void RemoveFromMemoryViewModelAndView(IRoutable source)
+    public void RemoveFromMemoryViewModelAndView(IViewModel source)
     {
         return;
     }
@@ -63,7 +63,7 @@ public sealed class NullLayoutService : ILayoutService
         return;
     }
 
-    public void RemoveFromMemory(IRoutable source)
+    public void RemoveFromMemory(IViewModel source)
     {
         return;
     }
@@ -73,7 +73,7 @@ public sealed class NullLayoutService : ILayoutService
         return;
     }
 
-    public void FlushFromMemoryViewModelAndView(IRoutable target)
+    public void FlushFromMemoryViewModelAndView(IViewModel target)
     {
         return;
     }

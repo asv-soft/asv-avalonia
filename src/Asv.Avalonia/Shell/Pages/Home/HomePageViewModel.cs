@@ -106,7 +106,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, default, cmd, loggerFactory, dialogService, ext)
     {
         AppInfo = appInfo;
         Icon = PageIcon;
@@ -146,7 +146,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 
     public ObservableList<IActionViewModel> Tools { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var model in Tools)
         {

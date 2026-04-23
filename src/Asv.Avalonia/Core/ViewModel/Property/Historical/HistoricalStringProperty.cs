@@ -36,7 +36,7 @@ public sealed class HistoricalStringProperty
     public override ReactiveProperty<string?> ModelValue { get; }
     public override BindableReactiveProperty<string?> ViewValue { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }
@@ -53,7 +53,6 @@ public sealed class HistoricalStringProperty
             var res = rule(userValue);
             if (!res.IsSuccess)
             {
-                Logger.LogError(res.ValidationException, "Validation error");
                 return res.ValidationException?.GetExceptionWithLocalizationOrSelf();
             }
         }

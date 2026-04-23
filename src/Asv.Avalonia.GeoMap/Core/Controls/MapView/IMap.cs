@@ -4,7 +4,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public interface IMap : IRoutable
+public interface IMap : IViewModel
 {
     ObservableList<IMapAnchor> Anchors { get; }
     BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }

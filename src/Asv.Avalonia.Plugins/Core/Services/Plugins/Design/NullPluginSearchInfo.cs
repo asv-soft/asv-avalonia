@@ -10,7 +10,7 @@ public sealed class NullPluginSearchInfo : IPluginSearchInfo
     private NullPluginSearchInfo() { }
 
     public SemVersion ApiVersion => new(new Version());
-    public string PackageId => NavigationId.Empty.ToString();
+    public string PackageId => NavId.Empty.ToString();
     public string? Title => "Null Plugin info";
     public string? Description => "Null plugin info for design time";
     public string? Authors => "https://github.com/asv-soft";

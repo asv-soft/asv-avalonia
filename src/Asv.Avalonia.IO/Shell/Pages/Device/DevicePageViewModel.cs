@@ -1,6 +1,7 @@
 ﻿using System.Collections.Specialized;
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -12,7 +13,7 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
     private readonly DevicePageCore _deviceCore;
 
     protected DevicePageViewModel(
-        NavigationId id,
+        NavId id,
         IDeviceManager devices,
         ICommandService cmd,
         ILayoutService layoutService,

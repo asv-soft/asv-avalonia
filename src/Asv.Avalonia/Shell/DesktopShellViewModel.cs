@@ -56,7 +56,7 @@ public sealed class DesktopShellViewModel : ShellViewModel
         lifetime.MainWindow = wnd;
         lifetime.MainWindow.Show();
 
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public void UpdateWindowStateUi(WindowState state)
@@ -194,7 +194,7 @@ public sealed class DesktopShellViewModel : ShellViewModel
         selected.Rise(new DesktopDragEvent(selected, args: e));
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         if (e is DesktopDragEvent eve)
         {

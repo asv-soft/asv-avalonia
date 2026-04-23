@@ -11,7 +11,7 @@ public class SettingsGeoMapTreePageMenu : TreePage
             RS.SettingsGeoMapViewModel_Name,
             MaterialIconKind.Map,
             SettingsGeoMapViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

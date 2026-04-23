@@ -6,10 +6,10 @@ public interface ICommandService
 {
     ICommandInfo? GetCommandInfo(string commandId);
     IEnumerable<ICommandInfo> Commands { get; }
-    ICommandHistory CreateHistory(IRoutable? owner);
+    ICommandHistory CreateHistory(IViewModel? owner);
     ValueTask Execute(
         string commandId,
-        IRoutable context,
+        IViewModel context,
         CommandArg param,
         CancellationToken cancel = default
     );

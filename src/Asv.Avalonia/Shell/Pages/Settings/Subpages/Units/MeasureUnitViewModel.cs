@@ -4,7 +4,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class MeasureUnitViewModel : RoutableViewModel
+public class MeasureUnitViewModel : ViewModelBase
 {
     private readonly ISearchService _searchService;
     private bool _internalChange;
@@ -83,7 +83,7 @@ public class MeasureUnitViewModel : RoutableViewModel
         private set => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

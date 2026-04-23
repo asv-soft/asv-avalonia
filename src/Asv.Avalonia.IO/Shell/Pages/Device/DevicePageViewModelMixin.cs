@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using Asv.IO;
+using Asv.Modeling;
 
 namespace Asv.Avalonia.IO;
 
@@ -10,7 +11,7 @@ public static class DevicePageViewModelMixin
     public static CommandArg CreateOpenPageArgs(DeviceId id)
     {
         return new StringArg(
-            NavigationId.CreateArgs(
+            NavId.CreateArgs(
                 new KeyValuePair<string, string>(ArgsDeviceIdKey, id.AsString())
             )
         );

@@ -13,7 +13,7 @@ public enum ShellErrorState
     Error,
 }
 
-public interface IShell : IRoutable
+public interface IShell : IViewModel
 {
     string Title { get; set; }
     Observable<Unit> OnClose { get; }

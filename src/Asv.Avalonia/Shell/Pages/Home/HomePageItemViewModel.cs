@@ -4,7 +4,7 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class HomePageItemViewModel : RoutableViewModel
+public class HomePageItemViewModel : ViewModelBase
 {
     public HomePageItemViewModel(IHomePageItem homePageItem, ILoggerFactory loggerFactory)
         : base(homePageItem.Id, loggerFactory)
@@ -23,7 +23,7 @@ public class HomePageItemViewModel : RoutableViewModel
     public NotifyCollectionChangedSynchronizedViewList<IActionViewModel> ActionsView { get; }
     public NotifyCollectionChangedSynchronizedViewList<IHeadlinedViewModel> PropertiesView { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var model in PropertiesView)
         {

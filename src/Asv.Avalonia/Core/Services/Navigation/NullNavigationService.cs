@@ -1,4 +1,5 @@
-﻿using ObservableCollections;
+﻿using Asv.Modeling;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
@@ -11,8 +12,8 @@ public sealed class NullNavigationService : INavigationService
 
     public IShell Shell => DesignTimeShellViewModel.Instance;
 
-    public IObservableCollection<NavigationPath> BackwardStack { get; } =
-        new ObservableStack<NavigationPath>();
+    public IObservableCollection<NavPath> BackwardStack { get; } =
+        new ObservableStack<NavPath>();
 
     public ValueTask BackwardAsync()
     {
@@ -20,8 +21,8 @@ public sealed class NullNavigationService : INavigationService
     }
 
     public ReactiveCommand Backward { get; } = new();
-    public IObservableCollection<NavigationPath> ForwardStack { get; } =
-        new ObservableList<NavigationPath>();
+    public IObservableCollection<NavPath> ForwardStack { get; } =
+        new ObservableList<NavPath>();
 
     public ValueTask ForwardAsync()
     {
@@ -29,14 +30,14 @@ public sealed class NullNavigationService : INavigationService
     }
 
     public ReactiveCommand Forward { get; } = new();
-    public ReadOnlyReactiveProperty<IRoutable?> SelectedControl { get; } =
-        new ReactiveProperty<IRoutable?>();
-    public ReadOnlyReactiveProperty<NavigationPath> SelectedControlPath { get; } =
-        new ReactiveProperty<NavigationPath>();
+    public ReadOnlyReactiveProperty<IViewModel?> SelectedControl { get; } =
+        new ReactiveProperty<IViewModel?>();
+    public ReadOnlyReactiveProperty<NavPath> SelectedControlPath { get; } =
+        new ReactiveProperty<NavPath>();
 
-    public ValueTask<IRoutable> GoTo(NavigationPath path)
+    public ValueTask<IViewModel> GoTo(NavPath path)
     {
-        return ValueTask.FromResult<IRoutable>(Shell);
+        return ValueTask.FromResult<IViewModel>(Shell);
     }
 
     public ValueTask GoHomeAsync()
@@ -44,7 +45,7 @@ public sealed class NullNavigationService : INavigationService
         return ValueTask.CompletedTask;
     }
 
-    public void ForceFocus(IRoutable? routable)
+    public void ForceFocus(IViewModel? routable)
     {
         return;
     }

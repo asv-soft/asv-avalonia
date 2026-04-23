@@ -88,10 +88,10 @@ public class SettingsConnectionViewModel
 
         deviceManager.Router.PortAdded.Subscribe(x => source.Add(x)).DisposeItWith(Disposable);
         deviceManager.Router.PortRemoved.Subscribe(x => source.Remove(x)).DisposeItWith(Disposable);
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var menu in Menu)
         {
@@ -164,7 +164,7 @@ public class SettingsConnectionViewModel
         return viewModel;
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         switch (e)
         {

@@ -5,7 +5,7 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class InstalledPluginInfoViewModel : RoutableViewModel
+public class InstalledPluginInfoViewModel : ViewModelBase
 {
     public const string ViewModelIdPart = "plugin.installed";
 
@@ -20,7 +20,7 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
         IPluginManager manager,
         ILoggerFactory loggerFactory
     )
-        : base(new NavigationId(ViewModelIdPart, pluginInfo.Id), loggerFactory)
+        : base(new NavId(ViewModelIdPart, pluginInfo.Id), loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(pluginInfo);
         ArgumentNullException.ThrowIfNull(manager);
@@ -95,7 +95,7 @@ public class InstalledPluginInfoViewModel : RoutableViewModel
         IsUninstalled.ViewValue.OnNext(true);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return IsUninstalled;
     }

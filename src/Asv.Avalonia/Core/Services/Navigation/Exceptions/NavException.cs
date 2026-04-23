@@ -2,7 +2,7 @@
 
 public class NavException : Exception
 {
-    private static ValueTask<IRoutable>? _exception;
+    private static ValueTask<IViewModel>? _exception;
 
     public NavException() { }
 
@@ -17,9 +17,9 @@ public class NavException : Exception
         throw new NavException("Navigation path is empty");
     }
 
-    public static ValueTask<IRoutable> AsyncEmptyPathException()
+    public static ValueTask<IViewModel> AsyncEmptyPathException()
     {
-        _exception ??= ValueTask.FromException<IRoutable>(
+        _exception ??= ValueTask.FromException<IViewModel>(
             new NavException("Navigation path is empty")
         );
         return _exception.Value;

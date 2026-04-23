@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public interface ISupportClear : IRoutable
+public interface ISupportClear : IViewModel
 {
     void Clear();
 }

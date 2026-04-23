@@ -1,9 +1,10 @@
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class RttBoxViewModel : RoutableViewModel
+public class RttBoxViewModel : ViewModelBase
 {
     private readonly TimeProvider _timeProvider;
     private long _lastUpdate;
@@ -16,7 +17,7 @@ public class RttBoxViewModel : RoutableViewModel
     }
 
     public RttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         TimeSpan? networkErrorTimeout = null
     )
@@ -105,7 +106,7 @@ public class RttBoxViewModel : RoutableViewModel
         set => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

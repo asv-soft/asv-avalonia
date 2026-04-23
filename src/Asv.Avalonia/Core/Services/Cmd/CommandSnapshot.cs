@@ -1,4 +1,5 @@
 using Asv.IO;
+using Asv.Modeling;
 using Newtonsoft.Json;
 
 namespace Asv.Avalonia;
@@ -16,7 +17,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
 
     public CommandSnapshot(
         string commandId,
-        NavigationPath contextPath,
+        NavPath contextPath,
         CommandArg newValue,
         CommandArg? oldValue
     )
@@ -42,7 +43,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
         CommandId =
             reader.ReadAsString()
             ?? throw new JsonSerializationException($"{nameof(CommandId)} cannot be null.");
-        ContextPath = new NavigationPath(reader);
+        ContextPath = new NavPath(reader);
         _newValue =
             CommandArg.Create(reader)
             ?? throw new JsonSerializationException($"{nameof(_newValue)} cannot be null.");
@@ -55,7 +56,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
     }
 
     public string CommandId { get; private set; }
-    public NavigationPath ContextPath { get; private set; }
+    public NavPath ContextPath { get; private set; }
 
     public CommandArg NewValue => _newValue;
 
@@ -69,7 +70,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
     public void Deserialize(ref ReadOnlySpan<byte> buffer)
     {
         CommandId = BinSerialize.ReadString(ref buffer);
-        ContextPath = new NavigationPath(ref buffer);
+        ContextPath = new NavPath(ref buffer);
         _newValue = CommandArg.Create(ref buffer);
         if (BinSerialize.ReadBool(ref buffer))
         {

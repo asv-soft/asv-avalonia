@@ -10,7 +10,7 @@ public class WorkspaceTreeMenu : TreePage
             "Workspace",
             WorkspacePageViewModel.PageIcon,
             WorkspacePageViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory,
             new TagViewModel("status", loggerFactory)
             {

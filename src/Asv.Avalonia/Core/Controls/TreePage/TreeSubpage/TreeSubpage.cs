@@ -6,10 +6,10 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
+public abstract class TreeSubpage : ViewModelBase, ITreeSubpage
 {
-    protected TreeSubpage(NavigationId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    protected TreeSubpage(string typeId, ILoggerFactory loggerFactory)
+        : base(typeId, loggerFactory)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -19,7 +19,7 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
 
-    public override IEnumerable<IRoutable> GetChildren() => Menu;
+    public override IEnumerable<IViewModel> GetChildren() => Menu;
 
     protected override void Dispose(bool disposing)
     {
@@ -32,8 +32,8 @@ public abstract class TreeSubpage : RoutableViewModel, ITreeSubpage
     }
 }
 
-public abstract class TreeSubpage<TContext>(NavigationId id, ILoggerFactory loggerFactory)
-    : TreeSubpage(id, loggerFactory),
+public abstract class TreeSubpage<TContext>(string typeId, ILoggerFactory loggerFactory)
+    : TreeSubpage(typeId, loggerFactory),
         ITreeSubpage<TContext>
     where TContext : class, IPage
 {

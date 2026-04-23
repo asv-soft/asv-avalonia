@@ -4,7 +4,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public abstract class MapZoomPropertyBase : RoutableViewModel
+public abstract class MapZoomPropertyBase : ViewModelBase
 {
     private bool _internalChange;
 
@@ -48,7 +48,7 @@ public abstract class MapZoomPropertyBase : RoutableViewModel
 
     public BindableReactiveProperty<int> SelectedItem { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

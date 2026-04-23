@@ -58,7 +58,7 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
     }
 
     public KeyValueRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         TimeSpan? networkErrorTimeout = null
     )
@@ -137,7 +137,7 @@ public class KeyValueRttBoxViewModel<T>
     private readonly TimeSpan? _networkErrorTimeout;
 
     public KeyValueRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout

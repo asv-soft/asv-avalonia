@@ -8,7 +8,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapViewModel : RoutableViewModel, IMap
+public class MapViewModel : ViewModelBase, IMap
 {
     public MapViewModel()
         : this(DesignTime.Id, DesignTime.LoggerFactory, NullMapService.Instance)
@@ -32,7 +32,7 @@ public class MapViewModel : RoutableViewModel, IMap
         );
     }
 
-    public MapViewModel(NavigationId id, ILoggerFactory loggerFactory, IMapService mapService)
+    public MapViewModel(NavId id, ILoggerFactory loggerFactory, IMapService mapService)
         : base(id, loggerFactory)
     {
         Anchors = new ObservableList<IMapAnchor>();
@@ -76,7 +76,7 @@ public class MapViewModel : RoutableViewModel, IMap
     public IReadOnlyBindableReactiveProperty<int> MinZoom { get; }
     public IReadOnlyBindableReactiveProperty<int> MaxZoom { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var item in AnchorsView)
         {

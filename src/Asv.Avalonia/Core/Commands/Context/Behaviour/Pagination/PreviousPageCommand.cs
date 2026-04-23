@@ -16,7 +16,7 @@ public class PreviousPageCommand : ContextCommand<ISupportPagination>
     };
     public override ICommandInfo Info => StaticInfo;
 
-    public static ValueTask ExecuteAtContext(IRoutable context) =>
+    public static ValueTask ExecuteAtContext(IViewModel context) =>
         context.ExecuteCommand(Id, CommandArg.Empty);
 
     protected override async ValueTask<CommandArg?> InternalExecute(

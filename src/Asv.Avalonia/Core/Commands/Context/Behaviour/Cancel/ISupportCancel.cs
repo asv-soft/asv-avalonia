@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public interface ISupportCancel : IRoutable
+public interface ISupportCancel : IViewModel
 {
     void Cancel();
 }

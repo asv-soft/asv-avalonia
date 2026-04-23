@@ -1,6 +1,6 @@
 using System.Windows.Input;
+using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using R3;
 using ZLogger;
@@ -13,17 +13,21 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     private readonly UnsavedChangesDialogPrefab _unsavedChangesDialogPrefab;
 
     protected PageViewModel(
-        NavigationId id,
+        string typeId,
+        NavArgs args,
         ICommandService cmd,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(id, loggerFactory, ext)
+        : base(typeId, args, loggerFactory, ext)
     {
         History = cmd.CreateHistory(this);
+        
+        UndoHistory = new UndoHistory<IViewModel>(this, new JsonUndoHistoryStore())
+            .AddTo(ref DisposableBag);
         Icon = MaterialIconKind.Window;
-        Title = id.ToString();
+        Title = typeId;
         HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
         _unsavedChangesDialogPrefab = dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
@@ -93,6 +97,7 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
     }
 
     public ICommandHistory History { get; }
+    public IUndoHistory<IViewModel> UndoHistory { get; }
     public BindableReactiveProperty<bool> HasChanges { get; }
     public ICommand TryClose { get; }
 

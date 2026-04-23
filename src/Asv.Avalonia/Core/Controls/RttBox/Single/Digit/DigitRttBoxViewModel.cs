@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -54,7 +55,7 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
     }
 
     public DigitRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         IUnitService units,
         string unitId,

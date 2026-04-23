@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public interface ISupportFocus : IRoutable
+public interface ISupportFocus : IViewModel
 {
     void Focus();
 }

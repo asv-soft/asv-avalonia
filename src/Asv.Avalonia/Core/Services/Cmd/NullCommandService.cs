@@ -26,14 +26,14 @@ public class NullCommandService : ICommandService
 
     public IEnumerable<ICommandInfo> Commands { get; }
 
-    public ICommandHistory CreateHistory(IRoutable? owner)
+    public ICommandHistory CreateHistory(IViewModel? owner)
     {
         return NullCommandHistory.Instance;
     }
 
     public ValueTask Execute(
         string commandId,
-        IRoutable context,
+        IViewModel context,
         CommandArg param,
         CancellationToken cancel = default
     )

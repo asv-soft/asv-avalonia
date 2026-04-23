@@ -1,22 +1,23 @@
 ﻿using System.Windows.Input;
 using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class ShellMessageViewModel : RoutableViewModel
+public class ShellMessageViewModel : ViewModelBase
 {
     private readonly ShellMessage _message;
 
     public ShellMessageViewModel(
-        NavigationId id,
+        string typeId,
         ILoggerFactory loggerFactory,
         ReactiveCommand<ShellMessageViewModel> closeCommand,
         ShellMessage message
     )
-        : base(id, loggerFactory)
+        : base(typeId, default, loggerFactory)
     {
         _message = message;
         CloseCommand = closeCommand;
@@ -39,7 +40,7 @@ public class ShellMessageViewModel : RoutableViewModel
     public object? CommandParam => _message.CommandParam;
     public string? Description => _message.Description;
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

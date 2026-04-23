@@ -13,15 +13,15 @@ public class ContextCommand<TContext>
 }
 
 public class Command1
-    : ContextCommand<IRoutable>.WithArg<StringArg>,
-        ContextCommand<IRoutable>.WithArg<DoubleArg>
+    : ContextCommand<IViewModel>.WithArg<StringArg>,
+        ContextCommand<IViewModel>.WithArg<DoubleArg>
 {
-    public ValueTask Execute(IRoutable context, StringArg argument)
+    public ValueTask Execute(IViewModel context, StringArg argument)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask Execute(IRoutable context, DoubleArg argument)
+    public ValueTask Execute(IViewModel context, DoubleArg argument)
     {
         throw new NotImplementedException();
     }

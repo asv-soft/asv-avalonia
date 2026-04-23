@@ -10,7 +10,7 @@ public enum FlushingStrategy
 }
 
 public class SaveLayoutEvent(
-    IRoutable source,
+    IViewModel source,
     ILayoutService layoutService,
     bool isFlushToFile = false,
     RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy
@@ -22,7 +22,7 @@ public class SaveLayoutEvent(
 public static class SaveLayoutMixin
 {
     public static ValueTask RequestSaveLayout(
-        this IRoutable src,
+        this IViewModel src,
         ILayoutService layoutService,
         CancellationToken cancel = default,
         RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy
@@ -32,7 +32,7 @@ public static class SaveLayoutMixin
     }
 
     public static ValueTask RequestSaveLayoutToFile(
-        this IRoutable src,
+        this IViewModel src,
         ILayoutService layoutService,
         CancellationToken cancel = default,
         RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy
@@ -42,7 +42,7 @@ public static class SaveLayoutMixin
     }
 
     public static async ValueTask HandleSaveLayoutAsync<TConfig>(
-        this IRoutable target,
+        this IViewModel target,
         SaveLayoutEvent e,
         TConfig cfgToSave,
         Func<TConfig, CancellationToken, ValueTask> saveCallback,
@@ -56,7 +56,7 @@ public static class SaveLayoutMixin
     }
 
     public static void HandleSaveLayout<TConfig>(
-        this IRoutable target,
+        this IViewModel target,
         SaveLayoutEvent e,
         TConfig cfgToSave,
         Action<TConfig> saveCallback,
@@ -70,7 +70,7 @@ public static class SaveLayoutMixin
 
     private static void InternalHandleSaveLayout<TConfig>(
         SaveLayoutEvent e,
-        IRoutable target,
+        IViewModel target,
         TConfig cfg,
         FlushingStrategy flushingStrategy
     )
@@ -101,7 +101,7 @@ public static class SaveLayoutMixin
     }
 
     private static ValueTask InternalSaveLayout(
-        this IRoutable src,
+        this IViewModel src,
         ILayoutService layoutService,
         bool isFlushToFile,
         RoutingStrategy routingStrategy = LayoutEventBase.DefaultRoutingStrategy,

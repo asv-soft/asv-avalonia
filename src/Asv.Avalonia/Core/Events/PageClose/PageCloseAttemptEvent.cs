@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 /// This event allows page children to prevent closing by adding restrictions.
 /// If there are no restrictions, the page is allowed to close.
 /// </summary>
-public class PageCloseAttemptEvent(IRoutable source)
+public class PageCloseAttemptEvent(IViewModel source)
     : AsyncRoutedEventWithRestrictionsBase(source, RoutingStrategy.Tunnel) { }
 
 /// <summary>

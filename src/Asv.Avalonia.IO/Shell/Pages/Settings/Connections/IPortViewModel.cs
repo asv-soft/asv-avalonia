@@ -5,7 +5,7 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public interface IPortViewModel : IRoutable
+public interface IPortViewModel : IViewModel
 {
     BindableReactiveProperty<string> Name { get; }
     void Init(IProtocolPort protocolPort);

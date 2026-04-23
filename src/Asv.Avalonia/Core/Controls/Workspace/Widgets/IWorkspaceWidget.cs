@@ -3,7 +3,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IWorkspaceWidget : IRoutable
+public interface IWorkspaceWidget : IViewModel
 {
     MaterialIconKind? Icon { get; }
     AsvColorKind IconColor { get; }

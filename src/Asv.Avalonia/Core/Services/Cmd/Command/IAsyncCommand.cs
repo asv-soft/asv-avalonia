@@ -17,7 +17,7 @@ public interface IAsyncCommand
     /// <param name="parameter">The input parameter that may affect execution.</param>
     /// <param name="targetContext">If the command can be executed, this parameter should be set to the target context where the command will be executed.</param>
     /// <returns><c>true</c> if the command can be executed; otherwise, <c>false</c>.</returns>
-    bool CanExecute(IRoutable context, CommandArg parameter, out IRoutable targetContext);
+    bool CanExecute(IViewModel context, CommandArg parameter, out IViewModel targetContext);
 
     /// <summary>
     /// Executes the command asynchronously.
@@ -32,7 +32,7 @@ public interface IAsyncCommand
     /// when an undo action is triggered.
     /// </returns>
     ValueTask<CommandArg?> Execute(
-        IRoutable targetContext,
+        IViewModel targetContext,
         CommandArg newValue,
         CancellationToken cancel = default
     );
@@ -42,7 +42,7 @@ public interface IAsyncCommand<TArg> : IAsyncCommand
     where TArg : CommandArg
 {
     ValueTask<TArg?> Execute(
-        IRoutable targetContext,
+        IViewModel targetContext,
         TArg newValue,
         CancellationToken cancel = default
     );

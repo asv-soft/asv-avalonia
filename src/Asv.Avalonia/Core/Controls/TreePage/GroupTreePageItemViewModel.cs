@@ -1,4 +1,5 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -16,8 +17,8 @@ public class GroupTreePageItemViewModel : TreeSubpage
             "item1",
             "Item 1",
             MaterialIconKind.Abacus,
-            NavigationId.Empty,
-            NavigationId.Empty,
+            NavId.Empty,
+            NavId.Empty,
             DesignTime.LoggerFactory
         )
         {
@@ -31,7 +32,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
                 "item2",
                 "Item 2",
                 MaterialIconKind.Abacus,
-                NavigationId.Empty,
+                NavId.Empty,
                 root.Id,
                 DesignTime.LoggerFactory
             )
@@ -43,7 +44,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
                 "item3",
                 "Item 3",
                 MaterialIconKind.Abacus,
-                NavigationId.Empty,
+                NavId.Empty,
                 root.Id,
                 DesignTime.LoggerFactory
             )
@@ -51,31 +52,31 @@ public class GroupTreePageItemViewModel : TreeSubpage
                 Description = "This is a description for Item 3",
             },
         };
-        var tree = new ObservableTree<ITreePage, NavigationId>(
+        var tree = new ObservableTree<ITreePage, NavId>(
             flatList,
-            NavigationId.Empty,
+            NavId.Empty,
             x => x.Id,
             x => x.ParentId,
             TreePageComparer.Instance
         );
 
         Node = tree.Items[0];
-        NavigateCommand = new ReactiveCommand<NavigationId>(x => { }).DisposeItWith(Disposable);
+        NavigateCommand = new ReactiveCommand<NavId>(x => { }).DisposeItWith(Disposable);
     }
 
     public GroupTreePageItemViewModel(
-        ObservableTreeNode<ITreePage, NavigationId> node,
-        Func<NavigationId, ValueTask<IRoutable>> navigateCallback,
+        ObservableTreeNode<ITreePage, NavId> node,
+        Func<NavId, ValueTask<IViewModel>> navigateCallback,
         ILoggerFactory loggerFactory
     )
-        : base(NavigationId.GenerateRandom(), loggerFactory)
+        : base(NavId.GenerateRandom(), loggerFactory)
     {
         Node = node;
-        NavigateCommand = new ReactiveCommand<NavigationId>(x => navigateCallback(x)).DisposeItWith(
+        NavigateCommand = new ReactiveCommand<NavId>(x => navigateCallback(x)).DisposeItWith(
             Disposable
         );
     }
 
-    public ObservableTreeNode<ITreePage, NavigationId> Node { get; }
-    public ReactiveCommand<NavigationId> NavigateCommand { get; }
+    public ObservableTreeNode<ITreePage, NavId> Node { get; }
+    public ReactiveCommand<NavId> NavigateCommand { get; }
 }

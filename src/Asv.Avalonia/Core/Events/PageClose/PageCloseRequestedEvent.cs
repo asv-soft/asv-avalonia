@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 /// The shell must handle this event and determine whether the page should be closed.
 /// </summary>
 public class PageCloseRequestedEvent(IPage source)
-    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble)
+    : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Bubble)
 {
     public IPage Page => source;
 }

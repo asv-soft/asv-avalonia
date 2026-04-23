@@ -1,8 +1,9 @@
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public abstract class SettingsSubPage(NavigationId id, ILoggerFactory loggerFactory)
+public abstract class SettingsSubPage(NavId id, ILoggerFactory loggerFactory)
     : TreeSubpage<ISettingsPage>(id, loggerFactory),
         ISettingsSubPage
 {

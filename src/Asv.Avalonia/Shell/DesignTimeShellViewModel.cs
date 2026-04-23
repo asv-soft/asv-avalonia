@@ -41,7 +41,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         var file = new OpenMenu(DesignTime.LoggerFactory, DesignTime.CommandService);
         MainMenu.Add(file);
 
-        MainMenu.Add(new MenuItem("open", "Open", DesignTime.LoggerFactory, file.Id.Id));
+        MainMenu.Add(new MenuItem("open", "Open", DesignTime.LoggerFactory, file.Id.TypeId));
         MainMenu.Add(new EditMenu(DesignTime.LoggerFactory));
 
         var addLeft = true;

@@ -17,12 +17,12 @@ public class PortCrudCommand(IDeviceManager manager) : StatelessCrudCommand<Stri
         DefaultHotKey = null,
     };
 
-    public static ValueTask ExecuteRemove(IRoutable context, string portId)
+    public static ValueTask ExecuteRemove(IViewModel context, string portId)
     {
         return context.ExecuteCommand(Id, CommandArg.RemoveAction(portId));
     }
 
-    public static ValueTask ExecuteChange(IRoutable context, string portId, ProtocolPortConfig cfg)
+    public static ValueTask ExecuteChange(IViewModel context, string portId, ProtocolPortConfig cfg)
     {
         return context.ExecuteCommand(
             Id,

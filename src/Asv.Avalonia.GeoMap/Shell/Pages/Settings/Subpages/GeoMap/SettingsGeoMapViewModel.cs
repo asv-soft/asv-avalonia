@@ -39,7 +39,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     public MinMapZoomProperty MinMapZoom { get; }
     public MaxMapZoomProperty MaxMapZoom { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return MapProvider;
         yield return MapMode;

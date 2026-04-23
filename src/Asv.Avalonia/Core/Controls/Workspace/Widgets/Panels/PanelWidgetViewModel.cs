@@ -8,15 +8,15 @@ namespace Asv.Avalonia;
 
 public abstract class PanelWidgetViewModel : WorkspaceWidget
 {
-    protected PanelWidgetViewModel(NavigationId id, ILoggerFactory loggerFactory)
+    protected PanelWidgetViewModel(NavId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
-        ItemsSource = new ObservableList<IRoutable>();
+        ItemsSource = new ObservableList<IViewModel>();
         ItemsSource.SetRoutableParent(this).DisposeItWith(Disposable);
         ItemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         ItemsView = ItemsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
 
-    public ObservableList<IRoutable> ItemsSource { get; }
-    public NotifyCollectionChangedSynchronizedViewList<IRoutable> ItemsView { get; }
+    public ObservableList<IViewModel> ItemsSource { get; }
+    public NotifyCollectionChangedSynchronizedViewList<IViewModel> ItemsView { get; }
 }

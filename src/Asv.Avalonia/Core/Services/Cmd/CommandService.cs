@@ -168,7 +168,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
 
     private async ValueTask InternalExecute(
         IAsyncCommand factory,
-        IRoutable context,
+        IViewModel context,
         CommandArg param,
         CancellationToken cancel
     )
@@ -333,7 +333,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
 
     public IEnumerable<ICommandInfo> Commands => _commands.Values.Select(x => x.Info);
 
-    public ICommandHistory CreateHistory(IRoutable? owner)
+    public ICommandHistory CreateHistory(IViewModel? owner)
     {
         var history = new CommandHistory(owner, this, _path, _loggerFactory);
         return history;
@@ -341,7 +341,7 @@ public class CommandService : AsyncDisposableOnce, ICommandService
 
     public ValueTask Execute(
         string commandId,
-        IRoutable context,
+        IViewModel context,
         CommandArg param,
         CancellationToken cancel = default
     )

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 namespace Asv.Avalonia;
 
 public class CommonAppearanceSettingsSectionViewModel
-    : RoutableViewModel,
+    : ViewModelBase,
         ISettingsAppearanceSection
 {
     public const string PageId = "common";
@@ -39,7 +39,7 @@ public class CommonAppearanceSettingsSectionViewModel
     public ThemeProperty Theme { get; }
     public LanguageProperty Language { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Theme;
         yield return Language;

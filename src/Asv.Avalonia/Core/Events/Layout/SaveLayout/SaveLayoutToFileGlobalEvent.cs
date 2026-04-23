@@ -3,13 +3,13 @@ using Asv.Modeling;
 
 namespace Asv.Avalonia;
 
-public class SaveLayoutToFileGlobalEvent(IRoutable source, ILayoutService layoutService)
+public class SaveLayoutToFileGlobalEvent(IViewModel source, ILayoutService layoutService)
     : LayoutEventBase(source, layoutService, RoutingStrategy.Bubble) { }
 
 public static class SaveLayoutToFileGlobalMixin
 {
     public static ValueTask RequestSaveAllLayoutToFile(
-        this IRoutable src,
+        this IViewModel src,
         ILayoutService layoutService,
         CancellationToken cancel = default
     )

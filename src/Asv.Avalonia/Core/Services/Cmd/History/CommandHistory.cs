@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -19,7 +20,7 @@ public class CommandHistory : ICommandHistory
     private readonly ILogger<CommandHistory> _logger;
 
     public CommandHistory(
-        IRoutable? historyOwner,
+        IViewModel? historyOwner,
         ICommandService cmd,
         IHostEnvironment path,
         ILoggerFactory loggerFactory
@@ -58,9 +59,9 @@ public class CommandHistory : ICommandHistory
             .AddTo(ref dispose);
     }
 
-    private void GetFilePath(NavigationId navigationId, out string undoPath, out string redoPath)
+    private void GetFilePath(NavId NavId, out string undoPath, out string redoPath)
     {
-        var baseName = NavigationId.NormalizeTypeId(navigationId.ToString().ToLower());
+        var baseName = NavId.NormalizeTypeId(NavId.ToString().ToLower());
         undoPath = Path.Combine(_historyFolder, $"{baseName}{UndoPostfix}");
         redoPath = Path.Combine(_historyFolder, $"{baseName}{RedoPostfix}");
     }
@@ -88,10 +89,10 @@ public class CommandHistory : ICommandHistory
         }
     }
 
-    private void TryLoadHistoryFromFile(NavigationId navigationId)
+    private void TryLoadHistoryFromFile(NavId NavId)
     {
         // history id can be changed after full load of the history owner
-        GetFilePath(navigationId, out var undoPath, out var redoPath);
+        GetFilePath(NavId, out var undoPath, out var redoPath);
         try
         {
             if (File.Exists(undoPath))
@@ -145,7 +146,7 @@ public class CommandHistory : ICommandHistory
         }
     }
 
-    public IRoutable HistoryOwner { get; }
+    public IViewModel HistoryOwner { get; }
     public ReactiveCommand Undo { get; }
 
     public IObservableCollection<CommandSnapshot> UndoStack => _undoStack;

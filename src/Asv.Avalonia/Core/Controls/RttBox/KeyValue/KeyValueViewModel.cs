@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -10,7 +11,7 @@ public sealed class KeyValueViewModel : DisposableViewModel
         : this(DesignTime.LoggerFactory) { }
 
     public KeyValueViewModel(ILoggerFactory loggerFactory)
-        : base(new NavigationId(BaseIdPart, Guid.NewGuid().ToString()), loggerFactory) { }
+        : base(new NavId(BaseIdPart, Guid.NewGuid().ToString()), loggerFactory) { }
 
     public string? Header
     {

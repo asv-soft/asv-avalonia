@@ -302,9 +302,9 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
     private bool TrySetDataContext()
     {
-        if (Content is not IRoutable routableContent)
+        if (Content is not IViewModel routableContent)
         {
-            throw new Exception($"{nameof(Content)} is not {typeof(IRoutable)}");
+            throw new Exception($"{nameof(Content)} is not {typeof(IViewModel)}");
         }
 
         if (_lastFocus is not InputElement last)
@@ -313,7 +313,7 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
         }
 
         var attemptsCount = 0;
-        var routable = last.DataContext as IRoutable;
+        var routable = last.DataContext as IViewModel;
         var parent = last.Parent;
         while (routable is null)
         {
@@ -327,7 +327,7 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
                 return false;
             }
 
-            routable = parent.DataContext as IRoutable;
+            routable = parent.DataContext as IViewModel;
             parent = parent.Parent;
             attemptsCount++;
         }
@@ -513,8 +513,8 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
         _hotkeyDownVisual = null;
 
-        // Move focus to the previous IRoutable
-        if (DataContext is IRoutable routable)
+        // Move focus to the previous IViewModel
+        if (DataContext is IViewModel routable)
         {
             if (routable.Parent is null)
             {

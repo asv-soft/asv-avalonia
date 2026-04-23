@@ -63,7 +63,7 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
     public HistoricalStringProperty InfoBoxTitle { get; }
     public HistoricalStringProperty InfoBoxMessage { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Severity;
         yield return InfoBoxTitle;

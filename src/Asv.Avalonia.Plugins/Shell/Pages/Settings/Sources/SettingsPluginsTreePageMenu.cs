@@ -13,7 +13,7 @@ public class SettingsPluginsTreePageMenu : TreePage
             RS.SettingsPluginsSourcesViewModel_Name,
             MaterialIconKind.Cloud,
             SettingsPluginsSourcesViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

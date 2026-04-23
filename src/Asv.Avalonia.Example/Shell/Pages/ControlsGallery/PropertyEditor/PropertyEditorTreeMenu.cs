@@ -10,7 +10,7 @@ public class PropertyEditorTreeMenu : TreePage
             RS.PropertyEditorTreeMenu_PropertyEditorTreeMenu_Property_Editor,
             PropertyEditorPageViewModel.PageIcon,
             PropertyEditorPageViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Microsoft.Extensions.Logging;
@@ -14,12 +15,12 @@ namespace Asv.Avalonia
         )
             : base(id, loggerFactory)
         {
-            ParentId = parentId == null ? NavigationId.Empty : new NavigationId(parentId);
+            ParentId = parentId == null ? NavId.Empty : new NavId(parentId);
             Order = 0;
             Header = header;
         }
 
-        public NavigationId ParentId { get; }
+        public NavId ParentId { get; }
 
         public bool StaysOpenOnClick
         {
@@ -57,7 +58,7 @@ namespace Asv.Avalonia
             set => SetField(ref field, value);
         }
 
-        public override IEnumerable<IRoutable> GetChildren()
+        public override IEnumerable<IViewModel> GetChildren()
         {
             return [];
         }

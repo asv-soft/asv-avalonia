@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using Avalonia.Media;
 using Material.Icons;
 using ObservableCollections;
@@ -9,8 +10,8 @@ public interface IDesignTimeTreePage : IPage
 {
     MaterialIconKind? TreeHeaderIcon { get; }
     string? TreeHeader { get; }
-    ObservableTree<ITreePage, NavigationId> TreeView { get; }
-    BindableReactiveProperty<ObservableTreeNode<ITreePage, NavigationId>?> SelectedNode { get; }
+    ObservableTree<ITreePage, NavId> TreeView { get; }
+    BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?> SelectedNode { get; }
     BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
     bool IsMenuVisible { get; }
@@ -38,7 +39,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "Node1",
                 MaterialIconKind.Abacus,
                 "node1",
-                NavigationId.Empty,
+                NavId.Empty,
                 DesignTime.LoggerFactory
             )
             {
@@ -58,7 +59,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node2",
                 MaterialIconKind.Abacus,
                 "node2",
-                NavigationId.Empty,
+                NavId.Empty,
                 DesignTime.LoggerFactory
             )
         );
@@ -68,7 +69,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node3",
                 MaterialIconKind.Abacus,
                 "node3",
-                NavigationId.Empty,
+                NavId.Empty,
                 DesignTime.LoggerFactory
             )
         );
@@ -78,7 +79,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node4",
                 MaterialIconKind.Abacus,
                 "node4",
-                NavigationId.Empty,
+                NavId.Empty,
                 DesignTime.LoggerFactory
             )
         );
@@ -88,7 +89,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node5",
                 MaterialIconKind.Abacus,
                 "node5",
-                NavigationId.Empty,
+                NavId.Empty,
                 DesignTime.LoggerFactory
             )
             {
@@ -178,7 +179,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
         );
     }
 
-    protected override ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
+    protected override ValueTask<ITreeSubpage?> CreateSubPage(NavId id)
     {
         var set = new SettingsAppearanceViewModel();
         set.Menu.Add(

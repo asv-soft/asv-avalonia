@@ -10,7 +10,7 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public class PortViewModel : RoutableViewModel, IPortViewModel
+public class PortViewModel : ViewModelBase, IPortViewModel
 {
     private readonly IUnitService _unitService;
     private readonly List<INotifyDataErrorInfo> _validateProperties = new();
@@ -77,7 +77,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
     }
 
     public PortViewModel(
-        NavigationId id,
+        NavId id,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
@@ -236,7 +236,7 @@ public class PortViewModel : RoutableViewModel, IPortViewModel
         _endpoints.AddRange(_endpoints);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

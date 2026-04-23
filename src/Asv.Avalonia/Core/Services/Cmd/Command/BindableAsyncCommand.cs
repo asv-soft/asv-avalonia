@@ -2,7 +2,7 @@ using System.Windows.Input;
 
 namespace Asv.Avalonia;
 
-public class BindableAsyncCommand(string commandId, IRoutable owner) : ICommand
+public class BindableAsyncCommand(string commandId, IViewModel owner) : ICommand
 {
     public bool CanExecute(object? parameter)
     {

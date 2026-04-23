@@ -8,7 +8,7 @@ namespace Asv.Avalonia.GeoMap;
 public record struct MapModeInfo(string Name, MapModeType Type);
 #pragma warning restore SA1313
 
-public class MapModeProperty : RoutableViewModel
+public class MapModeProperty : ViewModelBase
 {
     public const string ViewModelId = "map.mode";
 
@@ -65,7 +65,7 @@ public class MapModeProperty : RoutableViewModel
         _internalChange = false;
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

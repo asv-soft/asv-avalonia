@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 /// This event allows the application to prevent restarting if needed.
 /// If there are no restrictions, the application is allowed to restart.
 /// </summary>
-public class RestartApplicationAttemptEvent(IRoutable source)
+public class RestartApplicationAttemptEvent(IViewModel source)
     : AsyncRoutedEventWithRestrictionsBase(source, RoutingStrategy.Bubble) { }
 
 /// <summary>
@@ -18,7 +18,7 @@ public class RestartApplicationAttemptEvent(IRoutable source)
 public static class RestartApplicationAttemptEventMixin
 {
     public static async ValueTask<IReadOnlyList<Restriction>> RequestRestartApplicationApproval(
-        this IRoutable src,
+        this IViewModel src,
         CancellationToken cancel = default
     )
     {

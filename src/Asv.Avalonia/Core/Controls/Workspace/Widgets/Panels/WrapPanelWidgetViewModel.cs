@@ -1,10 +1,11 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class WrapPanelWidgetViewModel(NavigationId id, ILoggerFactory loggerFactory)
+public class WrapPanelWidgetViewModel(NavId id, ILoggerFactory loggerFactory)
     : PanelWidgetViewModel(id, loggerFactory)
 {
     public WrapPanelWidgetViewModel()

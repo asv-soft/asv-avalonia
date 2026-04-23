@@ -1,13 +1,14 @@
+using Asv.Modeling;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class TreePageMenu : ObservableTree<ITreePage, NavigationId>
+public class TreePageMenu : ObservableTree<ITreePage, NavId>
 {
     public TreePageMenu(IReadOnlyObservableList<ITreePage> flatList)
         : base(
             flatList,
-            NavigationId.Empty,
+            NavId.Empty,
             x => x.Id,
             x => x.ParentId,
             TreePageComparer.Instance,

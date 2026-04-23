@@ -158,7 +158,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public ReactiveCommand TurnOn { get; }
@@ -171,7 +171,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     public HistoricalEnumProperty<AsvColorKind> TagTypeProp { get; }
     public HistoricalEnumProperty<AsvColorKind> AsvColorKindProp { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return IsTurnedOn;
         yield return Speed;
@@ -188,7 +188,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         switch (e)
         {

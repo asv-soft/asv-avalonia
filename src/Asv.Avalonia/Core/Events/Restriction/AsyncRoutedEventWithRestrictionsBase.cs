@@ -4,9 +4,9 @@ using Asv.Modeling;
 namespace Asv.Avalonia;
 
 public abstract class AsyncRoutedEventWithRestrictionsBase(
-    IRoutable source,
+    IViewModel source,
     RoutingStrategy routingStrategy
-) : AsyncRoutedEvent<IRoutable>(source, routingStrategy)
+) : AsyncRoutedEvent<IViewModel>(source, routingStrategy)
 {
     private readonly List<Restriction> _restrictions = [];
 
@@ -27,8 +27,8 @@ public abstract class AsyncRoutedEventWithRestrictionsBase(
     /// <summary>
     /// Adds a restriction from source.
     /// </summary>
-    /// <param name="source">Source of the restriction that has type <see cref="IRoutable"/>.</param>
-    public void AddRestriction(IRoutable source)
+    /// <param name="source">Source of the restriction that has type <see cref="IViewModel"/>.</param>
+    public void AddRestriction(IViewModel source)
     {
         _restrictions.Add(new Restriction(source));
     }
@@ -45,8 +45,8 @@ public abstract class AsyncRoutedEventWithRestrictionsBase(
     /// <summary>
     /// Add many restrictions from sources.
     /// </summary>
-    /// <param name="sources">Sources of the restrictions to add that have type <see cref="IRoutable"/>.</param>
-    public void AddRestrictions(IEnumerable<IRoutable> sources)
+    /// <param name="sources">Sources of the restrictions to add that have type <see cref="IViewModel"/>.</param>
+    public void AddRestrictions(IEnumerable<IViewModel> sources)
     {
         _restrictions.AddRange(sources.Select(r => new Restriction(r)));
     }

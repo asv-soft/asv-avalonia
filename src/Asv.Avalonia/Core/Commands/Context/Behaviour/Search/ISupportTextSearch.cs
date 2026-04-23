@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public interface ISupportTextSearch : IRoutable
+public interface ISupportTextSearch : IViewModel
 {
     void Query(string text);
     void Focus();

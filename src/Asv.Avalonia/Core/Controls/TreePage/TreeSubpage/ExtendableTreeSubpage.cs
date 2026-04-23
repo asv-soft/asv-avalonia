@@ -12,7 +12,7 @@ public abstract class ExtendableTreeSubpage<TSubContext>
     where TSubContext : class, ITreeSubpage
 {
     protected ExtendableTreeSubpage(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
@@ -26,7 +26,7 @@ public abstract class ExtendableTreeSubpage<TSubContext>
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
 
-    public override IEnumerable<IRoutable> GetChildren() => Menu;
+    public override IEnumerable<IViewModel> GetChildren() => Menu;
 }
 
 public abstract class ExtendableTreeSubpage<TContext, TSubContext>
@@ -36,7 +36,7 @@ public abstract class ExtendableTreeSubpage<TContext, TSubContext>
     where TContext : class, IPage
 {
     protected ExtendableTreeSubpage(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
@@ -51,5 +51,5 @@ public abstract class ExtendableTreeSubpage<TContext, TSubContext>
     public ObservableList<IMenuItem> Menu { get; } = [];
     public abstract ValueTask Init(TContext context);
 
-    public override IEnumerable<IRoutable> GetChildren() => Menu;
+    public override IEnumerable<IViewModel> GetChildren() => Menu;
 }

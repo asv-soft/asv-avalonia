@@ -1,4 +1,5 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -11,7 +12,7 @@ public delegate Task SearchDelegate(
 );
 
 public class SearchBoxViewModel
-    : RoutableViewModel,
+    : ViewModelBase,
         ISupportTextSearch,
         ISupportRefresh,
         ISupportCancel,
@@ -33,12 +34,12 @@ public class SearchBoxViewModel
     }
 
     public SearchBoxViewModel(
-        NavigationId id,
+        string typeId,
         ILoggerFactory loggerFactory,
         SearchDelegate searchCallback,
         TimeSpan? throttleTime = null
     )
-        : base(id, loggerFactory)
+        : base(typeId, default, loggerFactory)
     {
         _searchCallback = searchCallback;
 
@@ -91,7 +92,7 @@ public class SearchBoxViewModel
         _isExecuting.Value = false;
         _canExecute.Value = true;
         _progress.Value = 1;
-        Logger.LogWarning("Search '{NavigationId}' was cancelled", Id);
+        Logger.LogWarning("Search '{NavId}' was cancelled", Id);
     }
 
     public void Refresh()
@@ -109,12 +110,12 @@ public class SearchBoxViewModel
         await this.ExecuteCommand(ClearCommand.Id);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Text;
     }
 
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
+    public override ValueTask<IViewModel> Navigate(NavId id)
     {
         Focus();
         return base.Navigate(id);
@@ -166,7 +167,7 @@ public class SearchBoxViewModel
 
     private void ErrorHandler(Exception err)
     {
-        Logger.LogError(err, "Error in search '{NavigationId}': {ErrMessage}", Id, err.Message);
+        Logger.LogError(err, "Error in search '{NavId}': {ErrMessage}", Id, err.Message);
         _isExecuting.Value = false;
         _canExecute.Value = true;
         _progress.Value = 1;

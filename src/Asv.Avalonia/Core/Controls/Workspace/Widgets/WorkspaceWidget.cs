@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 
 public class WorkspaceWidget : HeadlinedViewModel, IWorkspaceWidget
 {
-    public WorkspaceWidget(NavigationId id, ILoggerFactory loggerFactory)
+    public WorkspaceWidget(NavId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
         Menu = [];
@@ -37,7 +37,7 @@ public class WorkspaceWidget : HeadlinedViewModel, IWorkspaceWidget
     public ObservableList<IMenuItem> Menu { get; }
     public MenuTree? MenuView { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var item in Menu)
         {

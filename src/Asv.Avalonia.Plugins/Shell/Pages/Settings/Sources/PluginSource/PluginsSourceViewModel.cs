@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Plugins;
 
-public class PluginsSourceViewModel : RoutableViewModel
+public class PluginsSourceViewModel : ViewModelBase
 {
     public const string ViewModelIdPart = "source";
 
@@ -18,7 +18,7 @@ public class PluginsSourceViewModel : RoutableViewModel
         INavigationService navigationService,
         ILoggerFactory loggerFactory
     )
-        : base(new NavigationId(ViewModelIdPart, pluginServerInfo.SourceUri), loggerFactory)
+        : base(new NavId(ViewModelIdPart, pluginServerInfo.SourceUri), loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(pluginServerInfo);
         ArgumentNullException.ThrowIfNull(navigationService);
@@ -36,7 +36,7 @@ public class PluginsSourceViewModel : RoutableViewModel
     public ICommand Edit { get; }
     public ICommand Remove { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using DotNext.Buffers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -12,7 +13,7 @@ namespace Asv.Avalonia.IO;
 
 public class ConnectionRateStatusViewModel : StatusItem
 {
-    public const string NavId = $"{DefaultId}.connection_rate";
+    public const string TypeId = "status_connection_rate";
 
     private readonly ILoggerFactory _loggerFactory;
     private readonly TimeProvider _timeProvider;
@@ -78,7 +79,7 @@ public class ConnectionRateStatusViewModel : StatusItem
         TimeProvider timeProvider,
         INavigationService nav
     )
-        : base(NavId, loggerFactory)
+        : base(TypeId, default, loggerFactory)
     {
         _loggerFactory = loggerFactory;
         _timeProvider = timeProvider;
@@ -99,7 +100,7 @@ public class ConnectionRateStatusViewModel : StatusItem
         get
         {
             return field ??= new StatisticViewModel(
-                $"{NavId}.statistic",
+                $"{TypeId}.statistic",
                 _loggerFactory,
                 _timeProvider
             );
@@ -126,7 +127,7 @@ public class ConnectionRateStatusViewModel : StatusItem
         set => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }
@@ -134,7 +135,7 @@ public class ConnectionRateStatusViewModel : StatusItem
     public void NavigateToSettings()
     {
         _nav.GoTo(
-                new NavigationPath(
+                new NavPath(
                     SettingsPageViewModel.PageId,
                     SettingsConnectionViewModel.SubPageId
                 )

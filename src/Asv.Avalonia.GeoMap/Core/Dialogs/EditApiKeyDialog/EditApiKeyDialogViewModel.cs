@@ -25,5 +25,5 @@ public sealed class EditApiKeyDialogViewModel : DialogViewModelBase
 
     public BindableReactiveProperty<string> ApiKey { get; }
 
-    public override IEnumerable<IRoutable> GetChildren() => [];
+    public override IEnumerable<IViewModel> GetChildren() => [];
 }

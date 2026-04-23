@@ -5,8 +5,8 @@ using R3;
 
 namespace Asv.Avalonia.InfoMessage;
 
-public class ShellMessageEvent(IRoutable source, ShellMessage message)
-    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble)
+public class ShellMessageEvent(IViewModel source, ShellMessage message)
+    : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Bubble)
 {
     public ShellMessage Message => message;
 }
@@ -14,7 +14,7 @@ public class ShellMessageEvent(IRoutable source, ShellMessage message)
 public static class ShellMessageEventMixin
 {
     public static ValueTask RaiseShellInfoMessage(
-        this IRoutable source,
+        this IViewModel source,
         ShellMessage message,
         CancellationToken cancel
     )
@@ -23,7 +23,7 @@ public static class ShellMessageEventMixin
     }
 
     public static ValueTask RaiseShellErrorMessage(
-        this IRoutable source,
+        this IViewModel source,
         string title,
         string message,
         Exception exception,

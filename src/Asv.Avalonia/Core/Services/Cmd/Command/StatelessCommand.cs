@@ -3,9 +3,9 @@ namespace Asv.Avalonia;
 public abstract class StatelessCommand : AsyncCommand
 {
     public override bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     )
     {
         targetContext = context;
@@ -13,7 +13,7 @@ public abstract class StatelessCommand : AsyncCommand
     }
 
     public override ValueTask<CommandArg?> Execute(
-        IRoutable context,
+        IViewModel context,
         CommandArg newValue,
         CancellationToken cancel = default
     )
@@ -31,9 +31,9 @@ public abstract class StatelessCommand<TArg> : StatelessCommand
     where TArg : CommandArg
 {
     public override bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     )
     {
         targetContext = context;
@@ -71,9 +71,9 @@ public abstract class StatelessCommand<TArg1, TArg2> : StatelessCommand
     where TArg2 : CommandArg
 {
     public override bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     )
     {
         targetContext = context;
@@ -114,9 +114,9 @@ public abstract class StatelessCommand<TArg1, TArg2, TArg3> : StatelessCommand
     where TArg3 : CommandArg
 {
     public override bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     )
     {
         targetContext = context;

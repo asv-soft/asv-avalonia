@@ -120,7 +120,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
         };
         Menu.Add(menu);
 
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public ReactiveCommand ResetAllHotKeysCommand { get; }
@@ -203,7 +203,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
         Logger.LogInformation("All hot keys have been reset to default");
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Search;
         yield return CommandSortingType;
@@ -230,7 +230,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
         base.Dispose(disposing);
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         switch (e)
         {

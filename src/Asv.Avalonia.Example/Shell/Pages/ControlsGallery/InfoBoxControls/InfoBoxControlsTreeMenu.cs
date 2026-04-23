@@ -10,7 +10,7 @@ public class InfoBoxControlsTreeMenu : TreePage
             RS.InfoBoxControlsPageViewModel_Title,
             InfoBoxControlsPageViewModel.PageIcon,
             InfoBoxControlsPageViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

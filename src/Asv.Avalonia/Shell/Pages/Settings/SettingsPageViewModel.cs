@@ -34,7 +34,7 @@ public class SettingsPageViewModel
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, svc, host, layoutService, loggerFactory, dialogService, ext)
+        : base(PageId, default, svc, host, layoutService, loggerFactory, dialogService, ext)
     {
         Title = RS.SettingsPageViewModel_Title;
         Icon = PageIcon;

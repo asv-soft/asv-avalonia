@@ -6,7 +6,7 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class PropertyEditorViewModel : RoutableViewModel
+public class PropertyEditorViewModel : ViewModelBase
 {
     private readonly ObservableList<IPropertyViewModel> _itemsSource;
 
@@ -20,7 +20,7 @@ public class PropertyEditorViewModel : RoutableViewModel
         Parent = DesignTime.Shell;
     }
 
-    public PropertyEditorViewModel(NavigationId id, ILoggerFactory loggerFactory)
+    public PropertyEditorViewModel(NavId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
         _itemsSource = new ObservableList<IPropertyViewModel>();
@@ -34,7 +34,7 @@ public class PropertyEditorViewModel : RoutableViewModel
 
     public NotifyCollectionChangedSynchronizedViewList<IPropertyViewModel> Items { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return _itemsSource;
     }

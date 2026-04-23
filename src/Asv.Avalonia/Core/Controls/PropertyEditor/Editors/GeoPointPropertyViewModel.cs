@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -25,7 +26,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
     }
 
     public GeoPointPropertyViewModel(
-        NavigationId id,
+        NavId id,
         ReactiveProperty<GeoPoint> modelValue,
         ILoggerFactory loggerFactory,
         IUnitService unitService
@@ -93,7 +94,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
         }.DisposeItWith(Disposable);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Latitude;
         yield return Longitude;

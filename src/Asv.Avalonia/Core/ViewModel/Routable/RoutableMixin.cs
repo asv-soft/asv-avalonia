@@ -8,16 +8,16 @@ using R3;
 namespace Asv.Avalonia;
 
 /// <summary>
-/// Provides extension methods for working with <see cref="IRoutable"/> components,
+/// Provides extension methods for working with <see cref="IViewModel"/> components,
 /// including navigation, hierarchy traversal, and event propagation.
 /// </summary>
 public static class RoutableMixin
 {
     public static IDisposable SetRoutableParent<TModel, TView>(
         this ISynchronizedView<TModel, TView> src,
-        IRoutable parent
+        IViewModel parent
     )
-        where TView : class, IRoutable
+        where TView : class, IViewModel
     {
         src.ForEach(item => item.Parent = parent);
         var sub1 = src.ObserveAdd().Subscribe(x => x.Value.View.Parent = parent);
@@ -27,10 +27,10 @@ public static class RoutableMixin
 
     public static ISynchronizedView<TModel, TView> SetRoutableParent<TModel, TView>(
         this ISynchronizedView<TModel, TView> src,
-        IRoutable parent,
+        IViewModel parent,
         CompositeDisposable dispose
     )
-        where TView : class, IRoutable
+        where TView : class, IViewModel
     {
         src.ForEach(item => item.Parent = parent);
         src.ObserveAdd().Subscribe(x => x.Value.View.Parent = parent).DisposeItWith(dispose);
@@ -40,10 +40,10 @@ public static class RoutableMixin
 
     public static INotifyCollectionChangedSynchronizedViewList<TView> SetRoutableParent<TView>(
         this INotifyCollectionChangedSynchronizedViewList<TView> src,
-        IRoutable parent,
+        IViewModel parent,
         CompositeDisposable dispose
     )
-        where TView : class, IRoutable
+        where TView : class, IViewModel
     {
         src.ForEach(item => item.Parent = parent);
         Observable
@@ -60,11 +60,11 @@ public static class RoutableMixin
 
     public static TCollection SetRoutableParent<TCollection, TItem>(
         this TCollection src,
-        IRoutable parent,
+        IViewModel parent,
         CompositeDisposable dispose
     )
         where TCollection : INotifyCollectionChanged, IEnumerable<TItem>
-        where TItem : IRoutable
+        where TItem : IViewModel
     {
         src.SetRoutableParent<TCollection, TItem>(parent).DisposeItWith(dispose);
         return src;
@@ -72,11 +72,11 @@ public static class RoutableMixin
 
     public static TCollection SetRoutableParent<TCollection, TItem>(
         this TCollection src,
-        IRoutable parent,
+        IViewModel parent,
         CancellationToken dispose
     )
         where TCollection : INotifyCollectionChanged, IEnumerable<TItem>
-        where TItem : IRoutable
+        where TItem : IViewModel
     {
         src.SetRoutableParent<TCollection, TItem>(parent).RegisterTo(dispose);
         return src;
@@ -84,10 +84,10 @@ public static class RoutableMixin
 
     public static IDisposable SetRoutableParent<TCollection, TItem>(
         this TCollection src,
-        IRoutable parent
+        IViewModel parent
     )
         where TCollection : INotifyCollectionChanged, IEnumerable<TItem>
-        where TItem : IRoutable
+        where TItem : IViewModel
     {
         src.ForEach(item => item.Parent = parent);
         return Observable
@@ -101,7 +101,7 @@ public static class RoutableMixin
 
     private static void HandleCollectionChanged(
         NotifyCollectionChangedEventArgs arg,
-        IRoutable parent
+        IViewModel parent
     )
     {
         switch (arg.Action)
@@ -110,7 +110,7 @@ public static class RoutableMixin
                 Debug.Assert(arg.NewItems != null, "arg.NewItems != null");
                 foreach (var item in arg.NewItems)
                 {
-                    if (item is IRoutable routable)
+                    if (item is IViewModel routable)
                     {
                         routable.Parent = parent;
                     }
@@ -121,7 +121,7 @@ public static class RoutableMixin
                 Debug.Assert(arg.OldItems != null, "arg.OldItems != null");
                 foreach (var item in arg.OldItems)
                 {
-                    if (item is IRoutable routable)
+                    if (item is IViewModel routable)
                     {
                         routable.Parent = null;
                         routable.Dispose();
@@ -134,7 +134,7 @@ public static class RoutableMixin
                 Debug.Assert(arg.NewItems != null, "arg.NewItems != null");
                 foreach (var item in arg.OldItems)
                 {
-                    if (item is IRoutable routable)
+                    if (item is IViewModel routable)
                     {
                         routable.Parent = null;
                         routable.Dispose();
@@ -143,7 +143,7 @@ public static class RoutableMixin
 
                 foreach (var item in arg.NewItems)
                 {
-                    if (item is IRoutable routable)
+                    if (item is IViewModel routable)
                     {
                         routable.Parent = parent;
                     }
@@ -159,8 +159,8 @@ public static class RoutableMixin
         }
     }
 
-    public static T SetRoutableParent<T>(this T src, IRoutable parent)
-        where T : class, IRoutable
+    public static T SetRoutableParent<T>(this T src, IViewModel parent)
+        where T : class, IViewModel
     {
         src.Parent = parent;
         return src;
@@ -168,9 +168,9 @@ public static class RoutableMixin
 
     public static IDisposable SetRoutableParent<T>(
         this IObservableCollection<T> src,
-        IRoutable parent
+        IViewModel parent
     )
-        where T : class, IRoutable
+        where T : class, IViewModel
     {
         var sub1 = src.ObserveAdd().Subscribe(x => x.Value.Parent = parent);
         var sub2 = src.ObserveRemove().Subscribe(x => x.Value.Parent = null);
@@ -181,12 +181,12 @@ public static class RoutableMixin
         return Disposable.Combine(sub1, sub2);
     }
 
-    public static NavigationPath GetPathFromRoot(this IRoutable src)
+    public static NavPath GetPathFromRoot(this IViewModel src)
     {
-        return new NavigationPath(src.GetPathFromRoot<IRoutable, NavigationId>());
+        return new NavPath(src.GetPathFromRoot<IViewModel, NavId>());
     }
 
-    public static async ValueTask<IRoutable> NavigateByPath(this IRoutable src, NavigationPath path)
+    public static async ValueTask<IViewModel> NavigateByPath(this IViewModel src, NavPath path)
     {
         var index = 0;
         while (true)
@@ -204,11 +204,11 @@ public static class RoutableMixin
     /// <summary>
     /// Finds the first parent of the current element that matches the specified type <typeparamref name="T"/>.
     /// </summary>
-    /// <typeparam name="T">The type of <see cref="IRoutable"/> to search for.</typeparam>
-    /// <param name="src">The starting <see cref="IRoutable"/> element.</param>
+    /// <typeparam name="T">The type of <see cref="IViewModel"/> to search for.</typeparam>
+    /// <param name="src">The starting <see cref="IViewModel"/> element.</param>
     /// <returns>The first matching parent of type <typeparamref name="T"/>, or <c>null</c> if none is found.</returns>
-    public static T? FindParentOfType<T>(this IRoutable? src)
-        where T : IRoutable
+    public static T? FindParentOfType<T>(this IViewModel? src)
+        where T : IViewModel
     {
         var current = src;
         while (current is not null)

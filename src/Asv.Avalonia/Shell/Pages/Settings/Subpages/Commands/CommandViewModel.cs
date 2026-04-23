@@ -1,11 +1,12 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class CommandViewModel : RoutableViewModel
+public sealed class CommandViewModel : ViewModelBase
 {
     public const string ViewModelBaseId = "hotkey";
     public const string EmptyHotKey = "-";
@@ -22,7 +23,7 @@ public sealed class CommandViewModel : RoutableViewModel
         IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
-        : base(new NavigationId(ViewModelBaseId, command.Id), loggerFactory)
+        : base(new NavId(ViewModelBaseId, command.Id), loggerFactory)
     {
         ArgumentNullException.ThrowIfNull(svc);
         ArgumentNullException.ThrowIfNull(searchService);
@@ -193,7 +194,7 @@ public sealed class CommandViewModel : RoutableViewModel
         }
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return EditedHotKey;
     }

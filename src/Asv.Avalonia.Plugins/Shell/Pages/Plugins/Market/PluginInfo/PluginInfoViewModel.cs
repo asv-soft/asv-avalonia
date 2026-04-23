@@ -9,7 +9,7 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class PluginInfoViewModel : RoutableViewModel
+public class PluginInfoViewModel : ViewModelBase
 {
     public const string ViewModelIdPart = "plugin";
 
@@ -35,7 +35,7 @@ public class PluginInfoViewModel : RoutableViewModel
         IPluginBootloader bootloader,
         ILoggerFactory logFactory
     )
-        : base(new NavigationId(ViewModelIdPart, pluginInfo.Id), logFactory)
+        : base(new NavId(ViewModelIdPart, pluginInfo.Id), logFactory)
     {
         _pluginInfo = pluginInfo;
         _manager = manager;
@@ -204,7 +204,7 @@ public class PluginInfoViewModel : RoutableViewModel
         });
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return IsUninstalled;
     }

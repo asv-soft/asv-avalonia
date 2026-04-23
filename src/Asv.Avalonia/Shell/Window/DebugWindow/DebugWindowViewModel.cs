@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -24,7 +25,7 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
         ICommandService cmd,
         ILoggerFactory loggerFactory
     )
-        : base(ModelId, loggerFactory)
+        : base(ModelId, default, loggerFactory)
     {
         SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty();
         Debug.Assert(host.Shell != null, "host.Shell != null");
@@ -35,14 +36,19 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
         HotKey = cmd.OnHotKey.ToReadOnlyBindableReactiveProperty();
     }
 
-    public NotifyCollectionChangedSynchronizedViewList<NavigationPath> ForwardStack { get; }
+    public NotifyCollectionChangedSynchronizedViewList<NavPath> ForwardStack { get; }
 
-    public NotifyCollectionChangedSynchronizedViewList<NavigationPath> BackwardStack { get; }
+    public NotifyCollectionChangedSynchronizedViewList<NavPath> BackwardStack { get; }
 
     public NotifyCollectionChangedSynchronizedViewList<DebugPageViewModel> Pages { get; }
-    public IReadOnlyBindableReactiveProperty<NavigationPath> SelectedControlPath { get; }
+    public IReadOnlyBindableReactiveProperty<NavPath> SelectedControlPath { get; }
 
     public IReadOnlyBindableReactiveProperty<HotKeyInfo> HotKey { get; }
+
+    public override IEnumerable<IViewModel> GetChildren()
+    {
+        return [];
+    }
 
     protected override void Dispose(bool disposing)
     {
@@ -54,13 +60,18 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
 }
 
 public class DebugPageViewModel(IPage page, ILoggerFactory loggerFactory)
-    : ViewModelBase(page.Id, loggerFactory)
+    : ViewModelBase(page.Id.TypeId, page.Id.Args, loggerFactory)
 {
     public NotifyCollectionChangedSynchronizedViewList<CommandSnapshot> RedoStack { get; } =
         page.History.RedoStack.ToNotifyCollectionChanged();
 
     public NotifyCollectionChangedSynchronizedViewList<CommandSnapshot> UndoStack { get; } =
         page.History.UndoStack.ToNotifyCollectionChanged();
+
+    public override IEnumerable<IViewModel> GetChildren()
+    {
+        return [];
+    }
 
     protected override void Dispose(bool disposing)
     {

@@ -10,7 +10,7 @@ public class NullExtensionService : IExtensionService
 
     public void Extend<TInterface>(
         TInterface owner,
-        string ownerKey,
+        string ownerTypeId,
         CompositeDisposable ownerDisposable
     )
     {
@@ -31,7 +31,7 @@ public class ExtensionService : IExtensionService
 
     public void Extend<TInterface>(
         TInterface owner,
-        string ownerKey,
+        string ownerTypeId,
         CompositeDisposable ownerDisposable
     )
     {
@@ -48,7 +48,7 @@ public class ExtensionService : IExtensionService
             }
 
             var keyedServices = _serviceProvider.GetKeyedServices<IExtensionFor<TInterface>>(
-                ownerKey
+                ownerTypeId
             );
             foreach (var extensionFor in keyedServices)
             {
@@ -63,7 +63,7 @@ public class ExtensionService : IExtensionService
         {
             _logger.LogError(
                 e,
-                $"Failed to extend {ownerKey} of type {typeof(TInterface).FullName}:{e.Message}"
+                $"Failed to extend {ownerTypeId} of type {typeof(TInterface).FullName}:{e.Message}"
             );
         }
     }

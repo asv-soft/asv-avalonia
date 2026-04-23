@@ -96,7 +96,7 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
         _internalChange = false;
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

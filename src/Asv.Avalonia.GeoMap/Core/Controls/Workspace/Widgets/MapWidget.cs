@@ -9,7 +9,7 @@ namespace Asv.Avalonia.GeoMap;
 
 public class MapWidget : MapViewModel, IWorkspaceWidget
 {
-    public MapWidget(NavigationId id, ILoggerFactory loggerFactory, IMapService mapService)
+    public MapWidget(NavId id, ILoggerFactory loggerFactory, IMapService mapService)
         : base(id, loggerFactory, mapService)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);

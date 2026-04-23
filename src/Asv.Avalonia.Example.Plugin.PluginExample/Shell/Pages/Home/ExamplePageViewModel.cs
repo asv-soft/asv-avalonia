@@ -30,7 +30,7 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>
     )
         : base(PageId, cmd, loggerFactory, dialogService, extensionService) { }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

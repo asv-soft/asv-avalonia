@@ -5,13 +5,13 @@ public abstract class AsyncCommand : IAsyncCommand
     public const string BaseId = "cmd";
     public abstract ICommandInfo Info { get; }
     public abstract bool CanExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg parameter,
-        out IRoutable targetContext
+        out IViewModel targetContext
     );
 
     public abstract ValueTask<CommandArg?> Execute(
-        IRoutable context,
+        IViewModel context,
         CommandArg newValue,
         CancellationToken cancel = default
     );

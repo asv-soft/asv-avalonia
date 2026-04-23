@@ -1,6 +1,6 @@
 ﻿namespace Asv.Avalonia;
 
-public interface ISupportRefresh : IRoutable
+public interface ISupportRefresh : IViewModel
 {
     void Refresh();
 }

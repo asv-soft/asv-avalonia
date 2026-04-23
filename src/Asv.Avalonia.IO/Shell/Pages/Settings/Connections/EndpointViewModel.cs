@@ -18,7 +18,7 @@ public class EndpointViewModel : HeadlinedViewModel
     private readonly IUnit _frequencyUnit;
 
     private EndpointViewModel(
-        NavigationId id,
+        NavId id,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider

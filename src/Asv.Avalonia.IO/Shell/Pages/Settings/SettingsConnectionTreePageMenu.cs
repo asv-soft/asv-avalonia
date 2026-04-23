@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,7 +15,7 @@ public class SettingsConnectionTreePageMenu : TreePage
             RS.SettingsPageExtension_TreePage_Title,
             SettingsConnectionViewModel.Icon,
             SettingsConnectionViewModel.SubPageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

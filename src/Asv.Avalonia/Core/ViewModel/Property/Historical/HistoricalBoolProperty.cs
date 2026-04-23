@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -12,7 +13,7 @@ public sealed class HistoricalBoolProperty
     private bool _internalChange;
 
     public HistoricalBoolProperty(
-        NavigationId id,
+        NavId id,
         ReactiveProperty<bool> modelValue,
         ILoggerFactory loggerFactory
     )
@@ -61,7 +62,7 @@ public sealed class HistoricalBoolProperty
         _internalChange = false;
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

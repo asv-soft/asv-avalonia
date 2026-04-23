@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -7,11 +8,11 @@ namespace Asv.Avalonia;
 public class TreePage : HeadlinedViewModel, ITreePage
 {
     public TreePage(
-        NavigationId id,
+        NavId id,
         string title,
         MaterialIconKind? icon,
-        NavigationId navigateTo,
-        NavigationId parentId,
+        NavId navigateTo,
+        NavId parentId,
         ILoggerFactory loggerFactory,
         TagViewModel? status = null
     )
@@ -24,9 +25,9 @@ public class TreePage : HeadlinedViewModel, ITreePage
         Status = status;
     }
 
-    public NavigationId NavigateTo { get; }
+    public NavId NavigateTo { get; }
     public ReactiveCommand NavigateCommand { get; }
-    public NavigationId ParentId { get; }
+    public NavId ParentId { get; }
 
     public TagViewModel? Status
     {

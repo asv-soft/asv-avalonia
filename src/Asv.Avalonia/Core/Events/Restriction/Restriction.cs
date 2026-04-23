@@ -11,7 +11,7 @@ public class Restriction
     /// </summary>
     /// <param name="source">The source of the restriction, typically a UI component or module.</param>
     /// <param name="message">(Optional) The message explaining why the action should be canceled.</param>
-    public Restriction(IRoutable source, string? message = null)
+    public Restriction(IViewModel source, string? message = null)
     {
         Source = source;
         Message = message;
@@ -20,7 +20,7 @@ public class Restriction
     /// <summary>
     /// Gets the source that asked for the cancellation.
     /// </summary>
-    public IRoutable Source { get; }
+    public IViewModel Source { get; }
 
     /// <summary>
     /// Gets the message explaining why the action should be canceled.

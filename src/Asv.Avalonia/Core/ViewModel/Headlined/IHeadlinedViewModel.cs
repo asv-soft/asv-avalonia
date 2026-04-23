@@ -3,7 +3,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IHeadlinedViewModel : IRoutable
+public interface IHeadlinedViewModel : IViewModel
 {
     /// <summary>
     /// Gets or sets the icon associated with the view model.

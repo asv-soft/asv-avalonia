@@ -10,11 +10,11 @@ namespace Asv.Avalonia.GeoMap;
 public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
     where TContext : class, IMapAnchor
 {
-    public MapAnchor(NavigationId id, ILoggerFactory loggerFactory)
+    public MapAnchor(NavId id, ILoggerFactory loggerFactory)
         : this(id, loggerFactory, NullExtensionService.Instance, GeoPoint.Zero) { }
 
     public MapAnchor(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         IExtensionService ext,
         GeoPoint? location = null
@@ -137,12 +137,12 @@ public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
         set => SetField(ref field, value);
     }
 
-    public override ValueTask<IRoutable> Navigate(NavigationId id)
+    public override ValueTask<IViewModel> Navigate(NavId id)
     {
-        return ValueTask.FromResult<IRoutable>(this);
+        return ValueTask.FromResult<IViewModel>(this);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

@@ -394,7 +394,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         GeoPointDialogResult.ForceValidate();
 
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public ReactiveCommand ShowCustomDialogCommand { get; }
@@ -720,7 +720,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         switch (e)
         {
@@ -802,7 +802,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         return ValueTask.CompletedTask;
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var child in base.GetChildren())
         {

@@ -3,14 +3,14 @@ using Asv.Modeling;
 
 namespace Asv.Avalonia;
 
-public class SaveLayoutToFileGlobalAttemptEvent(IRoutable source)
+public class SaveLayoutToFileGlobalAttemptEvent(IViewModel source)
     : AsyncRoutedEventWithRestrictionsBase(source, RoutingStrategy.Tunnel) { }
 
 public static class SaveLayoutToFileGlobalAttemptMixin
 {
     public static async ValueTask<
         IReadOnlyCollection<Restriction>
-    > RequestChildApprovalToSaveLayoutToFile(this IRoutable src, CancellationToken cancel = default)
+    > RequestChildApprovalToSaveLayoutToFile(this IViewModel src, CancellationToken cancel = default)
     {
         if (cancel.IsCancellationRequested)
         {

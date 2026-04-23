@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using Asv.Cfg;
 using Asv.Common;
+using Asv.Modeling;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.LogicalTree;
@@ -63,34 +64,34 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
             });
     }
 
-    public TPocoType Get<TPocoType>(IRoutable source, Lazy<TPocoType> defaultValue)
+    public TPocoType Get<TPocoType>(IViewModel source, Lazy<TPocoType> defaultValue)
         where TPocoType : class, new()
     {
         var key = GetKey(source);
         return Get(key, defaultValue);
     }
 
-    public void SetInMemory<TPocoType>(IRoutable source, TPocoType value)
+    public void SetInMemory<TPocoType>(IViewModel source, TPocoType value)
         where TPocoType : class, new()
     {
         var key = GetKey(source);
         SetInMemory(key, value);
     }
 
-    public void RemoveFromMemory(IRoutable source)
+    public void RemoveFromMemory(IViewModel source)
     {
         var key = GetKey(source);
         RemoveFromMemory(key);
     }
 
-    public void FlushFromMemory(IRoutable target)
+    public void FlushFromMemory(IViewModel target)
     {
         ArgumentNullException.ThrowIfNull(target);
         var key = GetKey(target);
         FlushFromMemory(key);
     }
 
-    public void FlushFromMemory(IReadOnlyCollection<IRoutable>? ignoreCollection = null)
+    public void FlushFromMemory(IReadOnlyCollection<IViewModel>? ignoreCollection = null)
     {
         using (_lock.EnterScope())
         {
@@ -149,7 +150,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     #region Combined logic
 
-    public void RemoveFromMemoryViewModelAndView(IRoutable source)
+    public void RemoveFromMemoryViewModelAndView(IViewModel source)
     {
         var keyForView = CreateViewKeyFromViewmodel(source);
         RemoveFromMemory(source);
@@ -163,7 +164,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         RemoveFromMemory(srcRoutable);
     }
 
-    public void FlushFromMemoryViewModelAndView(IRoutable target)
+    public void FlushFromMemoryViewModelAndView(IViewModel target)
     {
         var keyForView = CreateViewKeyFromViewmodel(target);
         FlushFromMemory(target);
@@ -179,9 +180,9 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     #endregion
 
-    private string GetKey(IRoutable source)
+    private string GetKey(IViewModel source)
     {
-        return NavigationId.NormalizeTypeId(source.GetPathFromRoot().ToString());
+        return NavId.NormalizeTypeId(source.GetPathFromRoot().ToString());
     }
 
     private TPocoType Get<TPocoType>(string key, Lazy<TPocoType> defaultValue)
@@ -256,12 +257,12 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         }
     }
 
-    private IRoutable FindRoutableDataContext(StyledElement source)
+    private IViewModel FindRoutableDataContext(StyledElement source)
     {
         var control = source;
         while (control is not null)
         {
-            if (control.DataContext is IRoutable routable)
+            if (control.DataContext is IViewModel routable)
             {
                 return routable;
             }
@@ -270,7 +271,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         }
 
         throw new InvalidOperationException(
-            $"No {nameof(IRoutable)} DataContext found in the logical tree of the provided StyledElement."
+            $"No {nameof(IViewModel)} DataContext found in the logical tree of the provided StyledElement."
         );
     }
 
@@ -279,7 +280,7 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
         return CreateViewKeyFromViewmodel(FindRoutableDataContext(source));
     }
 
-    private string CreateViewKeyFromViewmodel(IRoutable source)
+    private string CreateViewKeyFromViewmodel(IViewModel source)
     {
         return GetKey(source) + ViewIdPart;
     }

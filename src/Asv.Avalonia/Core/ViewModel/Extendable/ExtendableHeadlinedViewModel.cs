@@ -7,11 +7,12 @@ using Microsoft.Extensions.Logging;
 namespace Asv.Avalonia;
 
 public abstract class ExtendableHeadlinedViewModel<TSelfInterface>(
-    NavigationId id,
+    string typeId,
+    NavArgs args,
     ILoggerFactory loggerFactory,
     IExtensionService ext
-) : ExtendableViewModel<TSelfInterface>(id, loggerFactory, ext), IHeadlinedViewModel
-    where TSelfInterface : class, ISupportId<NavigationId>
+) : ExtendableViewModel<TSelfInterface>(typeId, args, loggerFactory, ext), IHeadlinedViewModel
+    where TSelfInterface : class, ISupportId<NavId>
 {
     public MaterialIconKind? Icon
     {

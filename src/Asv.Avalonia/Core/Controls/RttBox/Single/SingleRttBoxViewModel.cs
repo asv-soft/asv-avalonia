@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -46,7 +47,7 @@ public class SingleRttBoxViewModel : RttBoxViewModel
     }
 
     public SingleRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         TimeSpan? networkErrorTimeout = null
     )
@@ -78,7 +79,7 @@ public class SingleRttBoxViewModel<T>
     private readonly TimeSpan? _networkErrorTimeout;
 
     public SingleRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout

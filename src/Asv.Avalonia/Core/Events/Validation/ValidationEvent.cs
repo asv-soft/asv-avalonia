@@ -11,10 +11,10 @@ namespace Asv.Avalonia;
 /// <param name="validatedObject">Object that was validated.</param>
 /// <param name="validationResult">Result of the validation.</param>
 public class ValidationEvent(
-    IRoutable source,
+    IViewModel source,
     object validatedObject,
     ValidationResult validationResult
-) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Direct)
+) : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Direct)
 {
     public object ValidatedObject => validatedObject;
     public ValidationResult ValidationResult => validationResult;

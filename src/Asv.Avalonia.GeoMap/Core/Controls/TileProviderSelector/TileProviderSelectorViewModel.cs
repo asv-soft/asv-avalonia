@@ -7,7 +7,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class TileProviderSelectorViewModel : RoutableViewModel
+public class TileProviderSelectorViewModel : ViewModelBase
 {
     public const string ViewModelId = "tile-provider";
 
@@ -77,7 +77,7 @@ public class TileProviderSelectorViewModel : RoutableViewModel
         _internalChange = false;
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var tileProvider in _view)
         {

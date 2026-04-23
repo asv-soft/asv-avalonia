@@ -12,7 +12,7 @@ public sealed class NullDialogViewModel : DialogViewModelBase
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

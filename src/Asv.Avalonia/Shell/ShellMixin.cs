@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics;
+using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -96,7 +97,7 @@ public static class ShellMixin
             where TPageViewModel : class, IPage
             where TPageView : Control
         {
-            builder.Parent.Services.AddKeyedTransient<IPage, TPageViewModel>(pageId);
+            builder.Parent.ViewModel.Register<IPage, TPageViewModel>(pageId);
             builder.Parent.ViewLocator.RegisterViewFor<TPageViewModel, TPageView>();
             return this;
         }

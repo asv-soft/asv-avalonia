@@ -15,7 +15,7 @@ public class NextPageCommand : ContextCommand<ISupportPagination>
         DefaultHotKey = "Ctrl+Right",
     };
 
-    public static ValueTask ExecuteAtContext(IRoutable context)
+    public static ValueTask ExecuteAtContext(IViewModel context)
     {
         return context.ExecuteCommand(Id, CommandArg.Empty);
     }

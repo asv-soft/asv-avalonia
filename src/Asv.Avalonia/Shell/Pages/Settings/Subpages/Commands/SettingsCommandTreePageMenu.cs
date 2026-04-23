@@ -1,4 +1,5 @@
-﻿using Material.Icons;
+﻿using Asv.Modeling;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
@@ -11,7 +12,7 @@ public class SettingsCommandTreePageMenu : TreePage
             RS.SettingsCommandListViewModel_Name,
             MaterialIconKind.TemperatureCelsius,
             SettingsCommandListViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

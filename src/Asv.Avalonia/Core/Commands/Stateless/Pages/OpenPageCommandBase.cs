@@ -1,4 +1,6 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Modeling;
+
+namespace Asv.Avalonia;
 
 public abstract class OpenPageCommandBase(string pageId, INavigationService nav)
     : StatelessCommand<StringArg, EmptyArg>
@@ -8,7 +10,7 @@ public abstract class OpenPageCommandBase(string pageId, INavigationService nav)
         CancellationToken cancel
     )
     {
-        await nav.GoTo(new NavigationPath(new NavigationId(pageId)));
+        await nav.GoTo(new NavPath(new NavId(pageId)));
         return null;
     }
 
@@ -17,7 +19,7 @@ public abstract class OpenPageCommandBase(string pageId, INavigationService nav)
         CancellationToken cancel
     )
     {
-        await nav.GoTo(new NavigationPath(new NavigationId(pageId, newValue.Value)));
+        await nav.GoTo(new NavPath(new NavId(pageId, newValue.Value)));
         return null;
     }
 

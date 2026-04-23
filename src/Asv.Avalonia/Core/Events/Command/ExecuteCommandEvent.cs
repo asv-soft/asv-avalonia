@@ -5,11 +5,11 @@ using Asv.Modeling;
 namespace Asv.Avalonia;
 
 public class ExecuteCommandEvent(
-    IRoutable source,
+    IViewModel source,
     string commandId,
     CommandArg commandArg,
     CancellationToken cancel = default
-) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble)
+) : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Bubble)
 {
     public string CommandId { get; } = commandId;
     public CommandArg CommandArg { get; } = commandArg;
@@ -20,7 +20,7 @@ public class ExecuteCommandEvent(
 public static class ExecuteCommandEventMixin
 {
     public static ValueTask ExecuteCommand(
-        this IRoutable src,
+        this IViewModel src,
         string commandId,
         CommandArg commandArg,
         CancellationToken cancel = default
@@ -35,7 +35,7 @@ public static class ExecuteCommandEventMixin
     }
 
     public static ValueTask ExecuteCommand(
-        this IRoutable src,
+        this IViewModel src,
         string commandId,
         CancellationToken cancel = default
     )

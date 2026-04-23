@@ -18,7 +18,7 @@ public class DialogItemTextViewModel(ILoggerFactory loggerFactory)
 
     public required string Message { get; set; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

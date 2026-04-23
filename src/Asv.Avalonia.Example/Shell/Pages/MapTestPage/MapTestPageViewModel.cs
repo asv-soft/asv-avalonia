@@ -382,7 +382,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
     #endregion
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return TileProviderSelectorViewModel;
         yield return MapViewModel;

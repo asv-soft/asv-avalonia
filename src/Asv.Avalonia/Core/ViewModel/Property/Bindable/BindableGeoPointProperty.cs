@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -19,7 +20,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
     protected readonly ReactiveProperty<double> ModelLon;
 
     public BindableGeoPointProperty(
-        NavigationId id,
+        NavId id,
         ReactiveProperty<GeoPoint> modelValue,
         IUnit latUnit,
         IUnit lonUnit,
@@ -126,7 +127,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
         Altitude.ForceValidate();
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Latitude;
         yield return Longitude;

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Asv.Common;
+using Asv.Modeling;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -15,10 +16,10 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 {
     private readonly IShellHost _host;
     private readonly IDisposable _disposeIt;
-    private readonly ReactiveProperty<IRoutable?> _selectedControl;
-    private readonly ReactiveProperty<NavigationPath> _selectedControlPath;
-    private readonly ObservableStack<NavigationPath> _backwardStack = new();
-    private readonly ObservableStack<NavigationPath> _forwardStack = new();
+    private readonly ReactiveProperty<IViewModel?> _selectedControl;
+    private readonly ReactiveProperty<NavPath> _selectedControlPath;
+    private readonly ObservableStack<NavPath> _backwardStack = new();
+    private readonly ObservableStack<NavPath> _forwardStack = new();
     private readonly ILogger<NavigationService> _logger;
 
     public NavigationService(
@@ -33,11 +34,11 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         _host = host;
         var dispose = Disposable.CreateBuilder();
 
-        _selectedControl = new ReactiveProperty<IRoutable?>().AddTo(ref dispose);
-        _selectedControlPath = new ReactiveProperty<NavigationPath>().AddTo(ref dispose);
+        _selectedControl = new ReactiveProperty<IViewModel?>().AddTo(ref dispose);
+        _selectedControlPath = new ReactiveProperty<NavPath>().AddTo(ref dispose);
         _selectedControlPath.Subscribe(PushNavigation).AddTo(ref dispose);
 
-        // global event handlers for focus IRoutable controls
+        // global event handlers for focus IViewModel controls
         InputElement
             .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
             .AddTo(ref dispose);
@@ -60,14 +61,14 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         _disposeIt = dispose.Build();
     }
 
-    private void PushNavigation(NavigationPath navigationPath)
+    private void PushNavigation(NavPath NavPath)
     {
-        _logger.ZLogTrace($"Push navigation history: {navigationPath}");
-        _backwardStack.Push(navigationPath);
+        _logger.ZLogTrace($"Push navigation history: {NavPath}");
+        _backwardStack.Push(NavPath);
         _forwardStack.Clear();
     }
 
-    private void FocusControlChanged(IRoutable? routable)
+    private void FocusControlChanged(IViewModel? routable)
     {
         if (routable == null)
         {
@@ -104,7 +105,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         _selectedControlPath.Value = path;
     }
 
-    public async ValueTask<IRoutable> GoTo(NavigationPath path)
+    public async ValueTask<IViewModel> GoTo(NavPath path)
     {
         try
         {
@@ -116,8 +117,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
             _logger.ZLogInformation($"Navigate to '{string.Join(",", path)}'");
             Debug.Assert(_host.Shell != null, "_host.Shell != null");
-            var result = await _host.Shell.NavigateByPath(
-                path[0] == _host.Shell.Id ? path[1..] : path
+            var result = await RoutableMixin.NavigateByPath(_host.Shell, path[0] == _host.Shell.Id ? path[1..] : path
             );
             FocusControlChanged(result);
             if (result is ISupportFocus focus)
@@ -135,7 +135,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
     #region Focus
 
-    public void ForceFocus(IRoutable? routable)
+    public void ForceFocus(IViewModel? routable)
     {
         FocusControlChanged(routable);
     }
@@ -149,7 +149,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         var control = source;
         while (control != null)
         {
-            if (control.DataContext is IRoutable routable)
+            if (control.DataContext is IViewModel routable)
             {
                 // this need for ignore root shell when focus changed
                 if (routable is IShell)
@@ -160,13 +160,13 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
                 break;
             }
 
-            // Try to find IRoutable DataContext in logical parent
+            // Try to find IViewModel DataContext in logical parent
             control = control.GetLogicalParent() as Control;
         }
     }
 
-    public ReadOnlyReactiveProperty<IRoutable?> SelectedControl { get; }
-    public ReadOnlyReactiveProperty<NavigationPath> SelectedControlPath { get; }
+    public ReadOnlyReactiveProperty<IViewModel?> SelectedControl { get; }
+    public ReadOnlyReactiveProperty<NavPath> SelectedControlPath { get; }
 
     #endregion
 
@@ -174,7 +174,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
     public ReactiveCommand Forward { get; }
 
-    public IObservableCollection<NavigationPath> ForwardStack => _forwardStack;
+    public IObservableCollection<NavPath> ForwardStack => _forwardStack;
 
     public async ValueTask ForwardAsync()
     {
@@ -186,7 +186,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         }
     }
 
-    public IObservableCollection<NavigationPath> BackwardStack => _backwardStack;
+    public IObservableCollection<NavPath> BackwardStack => _backwardStack;
 
     public async ValueTask BackwardAsync()
     {
@@ -240,7 +240,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
     public async ValueTask GoHomeAsync()
     {
-        var home = await GoTo(new NavigationPath(HomePageViewModel.PageId));
+        var home = await GoTo(new NavPath(HomePageViewModel.PageId));
 
         FocusControlChanged(home);
     }

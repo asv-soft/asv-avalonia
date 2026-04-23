@@ -37,7 +37,8 @@ public class LogViewerViewModel
 
     public LogViewerViewModel()
         : base(
-            DesignTime.Id,
+            DesignTime.Id.TypeId,
+            default,
             NullCommandService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
@@ -155,7 +156,7 @@ public class LogViewerViewModel
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(PageId, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, default, cmd, loggerFactory, dialogService, ext)
     {
         _logReaderService = logReaderService;
         _search = search;
@@ -188,7 +189,7 @@ public class LogViewerViewModel
         Previous = new ReactiveCommand(_ => Commands.PreviousPage(this)).DisposeItWith(Disposable);
 
         Search.Refresh();
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public SearchBoxViewModel Search { get; }
@@ -210,7 +211,7 @@ public class LogViewerViewModel
         set => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Search;
         foreach (var item in Items)
@@ -334,7 +335,7 @@ public class LogViewerViewModel
         }
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         switch (e)
         {

@@ -3,7 +3,7 @@
 #pragma warning disable RCS1194
 public class CommandNotSupportedContextException(
     ICommandInfo commandInfo,
-    IRoutable originContext,
+    IViewModel originContext,
     Type supportedContext
 )
     : CommandBaseException(
@@ -11,7 +11,7 @@ public class CommandNotSupportedContextException(
         $"Command '{commandInfo.Id}' is not supported in the context '{originContext.GetType().Name}'. Expected context type: '{supportedContext.Name}'."
     ) { }
 
-public class CommandCannotExecuteException(ICommandInfo commandInfo, IRoutable originContext)
+public class CommandCannotExecuteException(ICommandInfo commandInfo, IViewModel originContext)
     : CommandBaseException(
         commandInfo,
         $"Command '{commandInfo.Id}' cannot be executed in the context of '{originContext.GetType().Name}'."

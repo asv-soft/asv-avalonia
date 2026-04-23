@@ -1,3 +1,3 @@
 namespace Asv.Avalonia;
 
-public interface ISettingsAppearanceSection : IRoutable { }
+public interface ISettingsAppearanceSection : IViewModel { }

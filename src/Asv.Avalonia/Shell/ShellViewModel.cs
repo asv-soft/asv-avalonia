@@ -5,6 +5,7 @@ using Asv.Cfg;
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
+using DotNext.Runtime.CompilerServices;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -39,13 +40,13 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     protected readonly IDialogService DialogService;
 
     protected ShellViewModel(
-        NavigationId id,
+        string typeId,
         IServiceProvider ioc,
         ILoggerFactory loggerFactory,
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(id, loggerFactory, ext)
+        : base(typeId, default, loggerFactory, ext)
     {
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
@@ -152,7 +153,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             _infoMessagesSource.Remove(x)
         ).DisposeItWith(Disposable);
 
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     #region Tools
@@ -271,22 +272,16 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     #endregion
 
     #region Routable
-    public override async ValueTask<IRoutable> Navigate(NavigationId id)
+    
+    public override async ValueTask<IViewModel> Navigate(NavId id)
     {
         var page = _pages.FirstOrDefault(x => x.Id == id);
         if (page is null)
         {
-            page = Container.GetKeyedService<IPage>(id.Id);
-            if (page is not null)
-            {
-                page.InitArgs(id.Args);
-                _pages.Add(page);
-
-                SelectedPage.Value = page;
-                return page;
-            }
-
-            return this;
+            page = Container.CreateViewModel<IPage>(id);
+            _pages.Add(page);
+            SelectedPage.Value = page;
+            return page;
         }
 
         if (page.Id == SelectedPage.Value?.Id)
@@ -299,9 +294,9 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         return await base.Navigate(id);
     }
 
-    public override IEnumerable<IRoutable> GetChildren() => _pages;
+    public override IEnumerable<IViewModel> GetChildren() => _pages;
 
-    private async ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private async ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         switch (e)
         {
@@ -424,22 +419,22 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             Logger.ZLogInformation($"Try to load layout: {string.Join(",", _config.Pages)}");
             foreach (var page in _config.Pages)
             {
-                await this.NavigateByPath(new NavigationPath(page));
+                await this.NavigateByPath(NavPath.Parse(page));
             }
 
-            NavigationPath? navigationPathToGo = null;
+            NavPath? NavPathToGo = null;
             if (_config.SelectedPageId is not null)
             {
-                navigationPathToGo = Pages
-                    .FirstOrDefault(page => page.Id == _config.SelectedPageId)
+                NavPathToGo = Pages
+                    .FirstOrDefault(page => page.Id.ToString() == _config.SelectedPageId)
                     ?.GetPathFromRoot();
             }
 
-            navigationPathToGo ??= Pages.FirstOrDefault()?.GetPathFromRoot();
+            NavPathToGo ??= Pages.FirstOrDefault()?.GetPathFromRoot();
 
-            if (navigationPathToGo is not null)
+            if (NavPathToGo is not null)
             {
-                await Navigation.GoTo(navigationPathToGo.Value);
+                await Navigation.GoTo(NavPathToGo.Value);
             }
 
             _isLoaded = true;
@@ -461,7 +456,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             );
             if (Pages.Count == 0)
             {
-                await this.NavigateByPath(new NavigationPath(HomePageViewModel.PageId));
+                await this.NavigateByPath(new NavPath(new NavId(HomePageViewModel.PageId)));
             }
         }
     }

@@ -14,7 +14,7 @@ public class NavigationStatusItemViewModel : StatusItem
     public const string StaticId = "nav-crumbs";
 
     public NavigationStatusItemViewModel()
-        : base(StaticId, DesignTime.LoggerFactory)
+        : base(StaticId, default, DesignTime.LoggerFactory)
     {
         _commandService = DesignTime.CommandService;
         _source = new ObservableList<string>();
@@ -31,7 +31,7 @@ public class NavigationStatusItemViewModel : StatusItem
         INavigationService nav,
         ICommandService commandService
     )
-        : base(StaticId, loggerFactory)
+        : base(StaticId, default, loggerFactory)
     {
         _source = new ObservableList<string>();
         Items = _source.ToNotifyCollectionChangedSlim();
@@ -40,7 +40,7 @@ public class NavigationStatusItemViewModel : StatusItem
         commandService.OnCommand.Subscribe(OnCommand).AddTo(Disposable);
     }
 
-    private void OnChanged(IRoutable? routable)
+    private void OnChanged(IViewModel? routable)
     {
         _source.Clear();
         if (routable == null)
@@ -48,9 +48,9 @@ public class NavigationStatusItemViewModel : StatusItem
             return;
         }
 
-        foreach (var item in routable.GetHierarchyFromRoot().OfType<IRoutable>())
+        foreach (var item in routable.GetHierarchyFromRoot().OfType<IViewModel>())
         {
-            _source.Add(item.Id.Id);
+            _source.Add(item.Id.TypeId);
         }
     }
 
@@ -75,7 +75,7 @@ public class NavigationStatusItemViewModel : StatusItem
 
     public NotifyCollectionChangedSynchronizedViewList<string> Items { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

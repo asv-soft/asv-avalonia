@@ -1,17 +1,17 @@
 ﻿using System.Reactive.Disposables;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public interface IStatusItem : IRoutable
+public interface IStatusItem : IViewModel
 {
     int Order { get; }
 }
 
-public abstract class StatusItem(NavigationId id, ILoggerFactory loggerFactory)
-    : RoutableViewModel(id, loggerFactory),
+public abstract class StatusItem(string typeId, NavArgs args, ILoggerFactory loggerFactory)
+    : ViewModelBase(typeId, args, loggerFactory),
         IStatusItem
 {
-    public const string DefaultId = "shell.status.item";
     public abstract int Order { get; }
 }

@@ -5,7 +5,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class DialogViewModelBase : RoutableViewModel
+public abstract class DialogViewModelBase : ViewModelBase
 {
     protected const string BaseId = "dialog";
 
@@ -13,10 +13,10 @@ public abstract class DialogViewModelBase : RoutableViewModel
         EqualityComparer<IBindableReactiveProperty>.Default
     );
 
-    protected DialogViewModelBase(NavigationId id, ILoggerFactory loggerFactory)
+    protected DialogViewModelBase(NavId id, ILoggerFactory loggerFactory)
         : base(id, loggerFactory)
     {
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public ReactiveProperty<bool> IsValid { get; } = new(true);
@@ -26,7 +26,7 @@ public abstract class DialogViewModelBase : RoutableViewModel
         return;
     }
 
-    private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         if (e is ValidationEvent validation)
         {

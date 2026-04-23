@@ -1,5 +1,6 @@
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -14,7 +15,7 @@ public class HomePageDeviceItem : HomePageItem
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
-        : base(NavigationId.NormalizeTypeId(device.Id.AsString()), loggerFactory, ext)
+        : base(NavId.NormalizeTypeId(device.Id.AsString()), loggerFactory, ext)
     {
         Device = device;
         Icon = deviceManager.GetIcon(device.Id);

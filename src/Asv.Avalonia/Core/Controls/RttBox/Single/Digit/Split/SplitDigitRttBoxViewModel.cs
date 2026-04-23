@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
@@ -13,7 +14,7 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
     }
 
     public SplitDigitRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         IUnitService units,
         string unitId,

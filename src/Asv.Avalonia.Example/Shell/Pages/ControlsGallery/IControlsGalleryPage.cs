@@ -14,11 +14,11 @@ public interface IControlsGalleryPage : IPage
 
 public interface IControlsGallerySubPage : ITreeSubpage<IControlsGalleryPage> { }
 
-public abstract class ControlsGallerySubPage(NavigationId id, ILoggerFactory loggerFactory)
+public abstract class ControlsGallerySubPage(NavId id, ILoggerFactory loggerFactory)
     : TreeSubpage<IControlsGalleryPage>(id, loggerFactory),
         IControlsGallerySubPage
 {
     public override ValueTask Init(IControlsGalleryPage context) => ValueTask.CompletedTask;
 
-    public override IEnumerable<IRoutable> GetChildren() => Menu;
+    public override IEnumerable<IViewModel> GetChildren() => Menu;
 }

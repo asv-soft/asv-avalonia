@@ -50,7 +50,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
     public TwoColumnRttBoxViewModel TwoColumnRttBoxViewModel { get; }
     public RttBoxViewModel RttBoxViewModel { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return GeoPointRttBoxViewModel;
         yield return SplitDigitRttBoxViewModel;

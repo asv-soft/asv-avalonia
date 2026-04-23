@@ -1,13 +1,15 @@
-﻿using Material.Icons;
+﻿using Asv.Modeling;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class LogMessageViewModel : RoutableViewModel
+public class LogMessageViewModel : ViewModelBase
 {
-    public LogMessageViewModel(LogMessage @base, ILoggerFactory loggerFactory, IRoutable parent)
+    public LogMessageViewModel(LogMessage @base, ILoggerFactory loggerFactory, IViewModel parent)
         : base(
-            NavigationId.GenerateByHash(@base.Message, @base.Category, @base.Description),
+            NavId.GenerateByHash(@base.Message, @base.Category, @base.Description).TypeId,
+            default,
             loggerFactory
         )
     {
@@ -39,7 +41,7 @@ public class LogMessageViewModel : RoutableViewModel
     public bool IsError => Base.LogLevel is LogLevel.Error or LogLevel.Critical;
     public string DateTime => Base.Timestamp.ToString("yy-MM-dd HH:mm:ss.fff");
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }
@@ -54,7 +56,7 @@ public class LogMessageViewModel : RoutableViewModel
         ISearchService search,
         string? query,
         ILoggerFactory loggerFactory,
-        IRoutable parent,
+        IViewModel parent,
         out LogMessageViewModel? msg
     )
     {

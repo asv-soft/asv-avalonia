@@ -1,8 +1,10 @@
-﻿namespace Asv.Avalonia;
+﻿using Asv.Modeling;
+
+namespace Asv.Avalonia;
 
 public interface ITreeViewModel : IViewModel
 {
-    NavigationId ParentId { get; }
+    NavId ParentId { get; }
     int Order { get; }
 }
 

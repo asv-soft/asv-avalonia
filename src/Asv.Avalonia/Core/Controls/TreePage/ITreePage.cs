@@ -1,11 +1,12 @@
+using Asv.Modeling;
 using R3;
 
 namespace Asv.Avalonia;
 
 public interface ITreePage : IHeadlinedViewModel
 {
-    NavigationId ParentId { get; }
+    NavId ParentId { get; }
     TagViewModel? Status { get; }
-    NavigationId NavigateTo { get; }
+    NavId NavigateTo { get; }
     ReactiveCommand NavigateCommand { get; }
 }

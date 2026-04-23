@@ -6,7 +6,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public interface IMapAnchor : IRoutable
+public interface IMapAnchor : IViewModel
 {
     MaterialIconKind Icon { get; set; }
     string Title { get; set; }

@@ -29,7 +29,8 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     private TreePageViewModelConfig? _config;
 
     protected TreePageViewModel(
-        NavigationId id,
+        string typeId,
+        NavArgs args,
         ICommandService cmd,
         IServiceProvider container,
         ILayoutService layoutService,
@@ -37,7 +38,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(id, cmd, loggerFactory, dialogService, ext)
+        : base(typeId, args, cmd, loggerFactory, dialogService, ext)
     {
         _container = container;
         _loggerFactory = loggerFactory;
@@ -48,7 +49,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         TreeView = new TreePageMenu(Nodes).DisposeItWith(Disposable);
         SelectedNode = new BindableReactiveProperty<ObservableTreeNode<
             ITreePage,
-            NavigationId
+            NavId
         >?>().DisposeItWith(Disposable);
         _selectedPage = new ReactiveProperty<ITreeSubpage?>().DisposeItWith(Disposable);
         SelectedPage = _selectedPage.ToBindableReactiveProperty().DisposeItWith(Disposable);
@@ -62,7 +63,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             .WhereNotNull()
             .SubscribeAwait(async (p, ct) => await p.RequestLoadLayout(layoutService, ct))
             .DisposeItWith(Disposable);
-        Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     #region Header
@@ -100,7 +101,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     #endregion
 
     private async ValueTask SelectedNodeChanged(
-        ObservableTreeNode<ITreePage, NavigationId>? node,
+        ObservableTreeNode<ITreePage, NavId>? node,
         CancellationToken cancel
     )
     {
@@ -131,7 +132,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             : null;
     }
 
-    public override async ValueTask<IRoutable> Navigate(NavigationId id)
+    public override async ValueTask<IViewModel> Navigate(NavId id)
     {
         if (SelectedPage.Value != null && SelectedPage.Value.Id == id)
         {
@@ -165,7 +166,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return newPage;
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var node in Nodes)
         {
@@ -178,7 +179,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
     }
 
-    protected virtual async ValueTask<ITreeSubpage?> CreateSubPage(NavigationId id)
+    protected virtual async ValueTask<ITreeSubpage?> CreateSubPage(NavId id)
     {
         var page = _container.GetKeyedService<TSubPage>(id.Id);
         if (page == null)
@@ -191,7 +192,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return page;
     }
 
-    private ValueTask InternalCatchEvent(IRoutable owner, AsyncRoutedEvent<IRoutable> e)
+    private ValueTask InternalCatchEvent(IViewModel owner, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
     {
         switch (e)
         {
@@ -271,13 +272,13 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             });
     }
 
-    public ObservableTree<ITreePage, NavigationId> TreeView { get; }
+    public ObservableTree<ITreePage, NavId> TreeView { get; }
     public BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
 
     public BindableReactiveProperty<ObservableTreeNode<
         ITreePage,
-        NavigationId
+        NavId
     >?> SelectedNode { get; }
     public ObservableList<ITreePage> Nodes { get; }
 

@@ -23,7 +23,7 @@ public class DialogItemUnsavedChangesViewModel(ILoggerFactory loggerFactory)
 
     public required IEnumerable<Restriction> Restrictions { get; init; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

@@ -6,13 +6,13 @@ using Xunit;
 
 namespace Asv.Avalonia.Test;
 
-[TestSubject(typeof(NavigationId))]
-public class NavigationIdTest
+[TestSubject(typeof(NavId))]
+public class NavIdTest
 {
     [Fact]
     public void Constructor_ValidTypeId_NoArgs()
     {
-        var id = new NavigationId("Test.Type");
+        var id = new NavId("Test.Type");
         Assert.Equal("Test.Type", id.Id);
         Assert.Null(id.Args);
     }
@@ -20,7 +20,7 @@ public class NavigationIdTest
     [Fact]
     public void Constructor_ValidTypeId_WithArgs()
     {
-        var id = new NavigationId("Test.Type", "param1");
+        var id = new NavId("Test.Type", "param1");
         Assert.Equal("Test.Type", id.Id);
         Assert.Equal("param1", id.Args);
     }
@@ -28,7 +28,7 @@ public class NavigationIdTest
     [Fact]
     public void ExplicitConstructor_ValidTypeId_WithArgs()
     {
-        NavigationId nav = "Test.Type?param1=sdsd";
+        NavId nav = "Test.Type?param1=sdsd";
         Assert.Equal("Test.Type", nav.Id);
         Assert.Equal("param1=sdsd", nav.Args);
     }
@@ -36,8 +36,8 @@ public class NavigationIdTest
     [Fact]
     public void Constructor_Throws_OnInvalidTypeId()
     {
-        Assert.Throws<ArgumentException>(() => new NavigationId("ТестРуc", "x"));
-        Assert.Throws<ArgumentException>(() => new NavigationId("a!b", "x"));
+        Assert.Throws<ArgumentException>(() => new NavId("ТестРуc", "x"));
+        Assert.Throws<ArgumentException>(() => new NavId("a!b", "x"));
     }
 
     [Theory]
@@ -48,19 +48,19 @@ public class NavigationIdTest
     [InlineData("id?", "id", null)]
     public void Parse_String_Works(string str, string expId, string? expArgs)
     {
-        NavigationId.Parse(str, out var id, out var args);
+        NavId.Parse(str, out var id, out var args);
         Assert.Equal(expId, id);
         Assert.Equal(expArgs, args);
 
-        var navi = (NavigationId)str;
+        var navi = (NavId)str;
         Assert.Equal(expId, navi.Id);
         Assert.Equal(expArgs, navi.Args);
     }
 
     [Fact]
-    public void ImplicitOperator_StringToNavigationId_Works()
+    public void ImplicitOperator_StringToNavId_Works()
     {
-        NavigationId id = "typeX?args";
+        NavId id = "typeX?args";
         Assert.Equal("typeX", id.Id);
         Assert.Equal("args", id.Args);
     }
@@ -68,7 +68,7 @@ public class NavigationIdTest
     [Fact]
     public void ToString_And_AppendTo_AreConsistent()
     {
-        var id = new NavigationId("abc.def", "zzz");
+        var id = new NavId("abc.def", "zzz");
         Assert.Equal("abc.def?zzz", id.ToString());
 
         var sb = new StringBuilder();
@@ -79,7 +79,7 @@ public class NavigationIdTest
     [Fact]
     public void ChangeArgs_CreatesNewInstanceWithArgs()
     {
-        var id = new NavigationId("id");
+        var id = new NavId("id");
         var changed = id.ChangeArgs("x");
         Assert.Equal("id", changed.Id);
         Assert.Equal("x", changed.Args);
@@ -88,8 +88,8 @@ public class NavigationIdTest
     [Fact]
     public void Equals_And_Comparison_AreCaseInsensitive()
     {
-        var id1 = new NavigationId("abc", "xYz");
-        var id2 = new NavigationId("ABC", "XyZ");
+        var id1 = new NavId("abc", "xYz");
+        var id2 = new NavId("ABC", "XyZ");
         Assert.True(id1 == id2);
         Assert.False(id1 != id2);
         Assert.True(id1.Equals(id2));
@@ -99,17 +99,17 @@ public class NavigationIdTest
     [Fact]
     public void GetHashCode_CaseInsensitive()
     {
-        var id1 = new NavigationId("aBc", "Arg");
-        var id2 = new NavigationId("AbC", "aRG");
+        var id1 = new NavId("aBc", "Arg");
+        var id2 = new NavId("AbC", "aRG");
         Assert.Equal(id1.GetHashCode(), id2.GetHashCode());
     }
 
     [Fact]
     public void CompareTo_SortsCorrectly()
     {
-        var a = new NavigationId("a");
-        var b = new NavigationId("b");
-        var a1 = new NavigationId("a", "1");
+        var a = new NavId("a");
+        var b = new NavId("b");
+        var a1 = new NavId("a", "1");
         Assert.True(a.CompareTo(b) < 0);
         Assert.True(a.CompareTo(a1) < 0);
         Assert.True(a1.CompareTo(a) > 0);
@@ -118,14 +118,14 @@ public class NavigationIdTest
     [Fact]
     public void NormalizeTypeId_ReplacesNonWord()
     {
-        var norm = NavigationId.NormalizeTypeId("abc!@#$%def-_.");
+        var norm = NavId.NormalizeTypeId("abc!@#$%def-_.");
         Assert.Equal("abc_____def___", norm);
     }
 
     [Fact]
     public void Serialization_Binary_Roundtrip()
     {
-        var id = new NavigationId("TestType", "SomeArgs");
+        var id = new NavId("TestType", "SomeArgs");
         var size = id.GetByteSize();
         var buffer = new byte[size];
         var wSpan = new Span<byte>(buffer);
@@ -133,14 +133,14 @@ public class NavigationIdTest
 
         var readBuffer = buffer.ToArray();
         var span = new ReadOnlySpan<byte>(readBuffer);
-        var id2 = new NavigationId(ref span);
+        var id2 = new NavId(ref span);
         Assert.Equal(id, id2);
     }
 
     [Fact]
     public void Serialization_Json_Roundtrip()
     {
-        var id = new NavigationId("jsonType", "arg1");
+        var id = new NavId("jsonType", "arg1");
         var sw = new StringWriter();
         using (var writer = new JsonTextWriter(sw))
         {
@@ -148,7 +148,7 @@ public class NavigationIdTest
         }
         var json = sw.ToString();
         using var reader = new JsonTextReader(new StringReader(json));
-        var id2 = new NavigationId(reader);
+        var id2 = new NavId(reader);
         Assert.Equal(id, id2);
     }
 
@@ -158,7 +158,7 @@ public class NavigationIdTest
         var sr = new StringReader("123");
         using var reader = new JsonTextReader(sr);
         reader.Read();
-        Assert.Throws<ArgumentNullException>(() => new NavigationId(reader));
+        Assert.Throws<ArgumentNullException>(() => new NavId(reader));
     }
 
     [Fact]
@@ -171,8 +171,8 @@ public class NavigationIdTest
             { "empty", "" },
         };
 
-        var id = new NavigationId("nav.test", args);
-        var parsedArgs = NavigationId.ParseArgs(id.Args);
+        var id = new NavId("nav.test", args);
+        var parsedArgs = NavId.ParseArgs(id.Args);
 
         Assert.Equal("nav.test", id.Id);
         Assert.Equal("value1", parsedArgs["key1"]);
@@ -184,7 +184,7 @@ public class NavigationIdTest
     public void ParseArgs_ParsesQueryStringCorrectly()
     {
         var query = "a=1&b=hello%20world&c=";
-        var args = NavigationId.ParseArgs(query);
+        var args = NavId.ParseArgs(query);
 
         Assert.Equal("1", args["a"]);
         Assert.Equal("hello world", args["b"]);
@@ -201,7 +201,7 @@ public class NavigationIdTest
             { "empty", "" },
         };
 
-        var query = NavigationId.CreateArgs(nvc);
+        var query = NavId.CreateArgs(nvc);
         Assert.Contains("k1=v1", query);
         Assert.Contains("key+with+space=value+with+space", query);
         Assert.Contains("empty=", query);
@@ -211,10 +211,10 @@ public class NavigationIdTest
     public void CreateArgs_EmptyOrNullCollection_ReturnsEmptyString()
     {
         var emptyArgs = new NameValueCollection();
-        Assert.Equal(string.Empty, NavigationId.CreateArgs(emptyArgs));
+        Assert.Equal(string.Empty, NavId.CreateArgs(emptyArgs));
 
         NameValueCollection? nullArgs = null;
-        Assert.Throws<NullReferenceException>(() => NavigationId.CreateArgs(nullArgs!));
+        Assert.Throws<NullReferenceException>(() => NavId.CreateArgs(nullArgs!));
     }
 
     [Fact]
@@ -222,8 +222,8 @@ public class NavigationIdTest
     {
         var input = new NameValueCollection { { "alpha", "beta" }, { "gamma", "delta" } };
 
-        var argsStr = NavigationId.CreateArgs(input);
-        var output = NavigationId.ParseArgs(argsStr);
+        var argsStr = NavId.CreateArgs(input);
+        var output = NavId.ParseArgs(argsStr);
 
         Assert.Equal("beta", output["alpha"]);
         Assert.Equal("delta", output["gamma"]);

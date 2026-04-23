@@ -3,16 +3,16 @@ using Asv.Modeling;
 
 namespace Asv.Avalonia;
 
-public abstract class TreeVisitorEvent(IRoutable source)
-    : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Tunnel)
+public abstract class TreeVisitorEvent(IViewModel source)
+    : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Tunnel)
 {
-    public abstract void Visit(IRoutable source);
+    public abstract void Visit(IViewModel source);
 
     public static async ValueTask<IReadOnlyList<TViewModel>> VisitAll<TViewModel>(
-        IRoutable context,
+        IViewModel context,
         CancellationToken cancel = default
     )
-        where TViewModel : IRoutable
+        where TViewModel : IViewModel
     {
         var root = context.GetRoot();
         var items = new List<TViewModel>();
@@ -22,11 +22,11 @@ public abstract class TreeVisitorEvent(IRoutable source)
     }
 }
 
-public class TreeVisitorEvent<TViewModel>(IRoutable source, Action<TViewModel> visitor)
+public class TreeVisitorEvent<TViewModel>(IViewModel source, Action<TViewModel> visitor)
     : TreeVisitorEvent(source)
-    where TViewModel : IRoutable
+    where TViewModel : IViewModel
 {
-    public override void Visit(IRoutable source)
+    public override void Visit(IViewModel source)
     {
         if (source is TViewModel target)
         {

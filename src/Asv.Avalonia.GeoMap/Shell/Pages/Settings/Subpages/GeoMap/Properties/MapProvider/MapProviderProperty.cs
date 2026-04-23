@@ -8,7 +8,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapProviderProperty : RoutableViewModel
+public class MapProviderProperty : ViewModelBase
 {
     public const string ViewModelId = "map-provider";
 
@@ -123,7 +123,7 @@ public class MapProviderProperty : RoutableViewModel
         }
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var tileProvider in _view)
         {

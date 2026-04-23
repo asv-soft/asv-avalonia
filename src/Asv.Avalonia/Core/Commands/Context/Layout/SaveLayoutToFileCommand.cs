@@ -2,7 +2,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public sealed class SaveLayoutToFileCommand : ContextCommand<IRoutable>
+public sealed class SaveLayoutToFileCommand : ContextCommand<IViewModel>
 {
     #region Static
 
@@ -29,7 +29,7 @@ public sealed class SaveLayoutToFileCommand : ContextCommand<IRoutable>
     public override ICommandInfo Info => StaticInfo;
 
     protected override async ValueTask<CommandArg?> InternalExecute(
-        IRoutable context,
+        IViewModel context,
         CommandArg newValue,
         CancellationToken cancel
     )

@@ -17,7 +17,7 @@ public sealed class ChangeMeasureUnitCommand(IUnitService svc) : StatelessCrudCo
         DefaultHotKey = null,
     };
 
-    public static ValueTask ExecuteCommand(IRoutable context, IUnit command, IUnitItem userValue)
+    public static ValueTask ExecuteCommand(IViewModel context, IUnit command, IUnitItem userValue)
     {
         return context.ExecuteCommand(
             Id,

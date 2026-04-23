@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +12,7 @@ public class AppearanceSettingTreePageMenu : TreePage
             RS.SettingsAppearanceViewModel_Name,
             MaterialIconKind.ThemeLightDark,
             SettingsAppearanceViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -7,7 +8,7 @@ namespace Asv.Avalonia;
 public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalProperty<GeoPoint>
 {
     public HistoricalGeoPointProperty(
-        NavigationId id,
+        NavId id,
         ReactiveProperty<GeoPoint> modelValue,
         IUnit latUnit,
         IUnit lonUnit,
@@ -61,7 +62,7 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
         Altitude.ForceValidate();
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Latitude;
         yield return Longitude;

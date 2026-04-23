@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public interface ICommandHistory : IDisposable
 {
-    IRoutable HistoryOwner { get; }
+    IViewModel HistoryOwner { get; }
     ReactiveCommand Undo { get; }
     ValueTask UndoAsync(CancellationToken cancel = default);
     IObservableCollection<CommandSnapshot> UndoStack { get; }

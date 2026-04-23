@@ -10,7 +10,7 @@ public class RttBoxesTreeMenu : TreePage
             "Rtt boxes",
             RttBoxesPageViewModel.PageIcon,
             RttBoxesPageViewModel.PageId,
-            NavigationId.Empty,
+            NavId.Empty,
             loggerFactory
         ) { }
 }

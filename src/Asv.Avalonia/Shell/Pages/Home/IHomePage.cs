@@ -21,8 +21,8 @@ public interface IHomePageItem : IHeadlinedViewModel
 
 public class HomePageItem : ExtendableHeadlinedViewModel<IHomePageItem>, IHomePageItem
 {
-    public HomePageItem(NavigationId id, ILoggerFactory loggerFactory, IExtensionService ext)
-        : base(id, loggerFactory, ext)
+    public HomePageItem(string typeId, ILoggerFactory loggerFactory, IExtensionService ext)
+        : base(typeId, default, loggerFactory, ext)
     {
         Disposable.AddAction(() => Actions.Clear());
         Disposable.AddAction(() => Info.Clear());
@@ -37,7 +37,7 @@ public class HomePageItem : ExtendableHeadlinedViewModel<IHomePageItem>, IHomePa
     public ObservableList<IActionViewModel> Actions { get; } = [];
     public ObservableList<IHeadlinedViewModel> Info { get; } = [];
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var model in Actions)
         {

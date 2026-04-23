@@ -1,4 +1,5 @@
-﻿using ObservableCollections;
+﻿using Asv.Modeling;
+using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
@@ -11,7 +12,7 @@ public interface INavigationService
     /// <summary>
     /// Gets the observable collection representing the backward navigation history.
     /// </summary>
-    IObservableCollection<NavigationPath> BackwardStack { get; }
+    IObservableCollection<NavPath> BackwardStack { get; }
 
     /// <summary>
     /// Navigates to the previous item in the backward navigation stack.
@@ -27,7 +28,7 @@ public interface INavigationService
     /// <summary>
     /// Gets the observable collection representing the forward navigation history.
     /// </summary>
-    IObservableCollection<NavigationPath> ForwardStack { get; }
+    IObservableCollection<NavPath> ForwardStack { get; }
 
     /// <summary>
     /// Navigates to the next item in the forward navigation stack.
@@ -41,23 +42,23 @@ public interface INavigationService
     ReactiveCommand Forward { get; }
 
     /// <summary>
-    /// Gets the currently selected (focused) <see cref="IRoutable"/>.
+    /// Gets the currently selected (focused) <see cref="IViewModel"/>.
     /// </summary>
-    ReadOnlyReactiveProperty<IRoutable?> SelectedControl { get; }
+    ReadOnlyReactiveProperty<IViewModel?> SelectedControl { get; }
 
     /// <summary>
-    /// Gets the <see cref="NavigationPath"/> of the currently selected control.
+    /// Gets the <see cref="NavPath"/> of the currently selected control.
     /// </summary>
-    ReadOnlyReactiveProperty<NavigationPath> SelectedControlPath { get; }
+    ReadOnlyReactiveProperty<NavPath> SelectedControlPath { get; }
 
     /// <summary>
     /// Navigates to the specified navigation path.
     /// </summary>
     /// <param name="path">Path to navigate to.</param>
     /// <returns>
-    /// A <see cref="ValueTask{TResult}"/> that represents an asynchronous operation, returning the navigated <see cref="IRoutable"/>.
+    /// A <see cref="ValueTask{TResult}"/> that represents an asynchronous operation, returning the navigated <see cref="IViewModel"/>.
     /// </returns>
-    ValueTask<IRoutable> GoTo(NavigationPath path);
+    ValueTask<IViewModel> GoTo(NavPath path);
 
     /// <summary>
     /// Navigates to the home page.
@@ -69,7 +70,7 @@ public interface INavigationService
     /// Forces focus change to the specified routable control.
     /// </summary>
     /// <param name="routable">Routable control to be set as currently focused.</param>
-    void ForceFocus(IRoutable? routable);
+    void ForceFocus(IViewModel? routable);
 
     /// <summary>
     /// Gets the <see cref="ReactiveCommand"/> that triggers navigation to the home page.

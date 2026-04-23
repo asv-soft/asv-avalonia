@@ -1,8 +1,9 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class StackPanelWidgetViewModel(NavigationId id, ILoggerFactory loggerFactory)
+public class StackPanelWidgetViewModel(NavId id, ILoggerFactory loggerFactory)
     : PanelWidgetViewModel(id, loggerFactory)
 {
     public StackPanelWidgetViewModel()

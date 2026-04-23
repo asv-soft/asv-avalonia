@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -48,7 +49,7 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
     }
 
     public GeoPointRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         IUnitService units,
         TimeSpan? networkErrorTimeout
@@ -101,7 +102,7 @@ public class GeoPointRttBoxViewModel<T>
     private readonly TimeSpan? _networkErrorTimeout;
 
     public GeoPointRttBoxViewModel(
-        NavigationId id,
+        NavId id,
         ILoggerFactory loggerFactory,
         IUnitService units,
         Observable<T> value,

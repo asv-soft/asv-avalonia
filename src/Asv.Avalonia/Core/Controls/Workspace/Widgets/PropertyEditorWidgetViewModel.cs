@@ -11,7 +11,7 @@ namespace Asv.Avalonia;
 public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspaceWidget
 {
     public PropertyEditorWidgetViewModel(
-        NavigationId id,
+        NavId id,
         string header,
         ILoggerFactory loggerFactory
     )
@@ -69,7 +69,7 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         set => SetField(ref field, value);
     } = true;
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         foreach (var item in Menu)
         {

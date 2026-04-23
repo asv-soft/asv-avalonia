@@ -9,7 +9,7 @@ public static class BindableReactivePropertyMixin
     public static IDisposable EnableValidationRoutable<T>(
         this BindableReactiveProperty<T> prop,
         Func<T, ValidationResult> validationFunc,
-        IRoutable source,
+        IViewModel source,
         bool isForceValidation = false
     )
     {

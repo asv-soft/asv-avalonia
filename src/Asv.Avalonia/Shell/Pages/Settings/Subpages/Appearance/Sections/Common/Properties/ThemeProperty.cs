@@ -3,7 +3,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class ThemeProperty : RoutableViewModel
+public class ThemeProperty : ViewModelBase
 {
     private readonly IThemeService _svc;
     private bool _internalChange;
@@ -51,7 +51,7 @@ public class ThemeProperty : RoutableViewModel
     public IEnumerable<IThemeInfo> Items => _svc.Themes;
     public BindableReactiveProperty<IThemeInfo> SelectedItem { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }

@@ -1,6 +1,6 @@
 using System.ComponentModel;
-using Asv.Common;
 using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
@@ -9,12 +9,14 @@ namespace Asv.Avalonia;
 /// This interface provides a unique identifier, supports property change notifications,
 /// and ensures proper disposal of resources.
 /// </summary>
-public interface IViewModel : IDisposable, INotifyPropertyChanged, ISupportId<NavigationId>
+public interface IViewModel
+    : IDisposable,
+        INotifyPropertyChanging,
+        INotifyPropertyChanged,
+        ISupportUndo<IViewModel>
 {
-    void InitArgs(string? args);
-
-    /// <summary>
-    /// Gets a value indicating whether the view model has been disposed.
-    /// </summary>
-    bool IsDisposed { get; }
+    
 }
+
+public delegate TViewModelInterface ViewModelFactory<out TViewModelInterface>(NavArgs args)
+    where TViewModelInterface : IViewModel;
