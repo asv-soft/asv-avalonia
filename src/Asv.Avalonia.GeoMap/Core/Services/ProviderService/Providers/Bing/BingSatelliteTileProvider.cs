@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class BingSatelliteTileProvider : ITileProvider
+public class BingSatelliteTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<BingSatelliteTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "BingSatellite";
 
@@ -11,10 +17,10 @@ public class BingSatelliteTileProvider : ITileProvider
         Group = TileProviderGroup.Bing,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         var quadKey = GetQuadKey(key);
         var server = (key.X + key.Y) % 4;
@@ -44,6 +50,4 @@ public class BingSatelliteTileProvider : ITileProvider
 
         return new string(quadKey);
     }
-
-    public int TileSize => 256;
 }

@@ -22,10 +22,10 @@ public static class ServicesMixin
             .BindConfiguration(FileSystemCacheConfig.ConfigurationSection);
 
         builder.Parent.Services.AddHttpClient(
-            TileLoader.HttpClientName,
+            HttpTileProvider.HttpClientName,
             (sp, client) =>
             {
-                var config = sp.GetRequiredService<IConfiguration>().Get<TileLoaderConfig>();
+                var config = sp.GetRequiredService<IConfiguration>().Get<HttpTileProviderConfig>();
                 var appInfo = sp.GetRequiredService<IAppInfo>();
                 client.Timeout = TimeSpan.FromMilliseconds(config.RequestTimeoutMs);
                 client.DefaultRequestHeaders.UserAgent.ParseAdd(
@@ -39,19 +39,17 @@ public static class ServicesMixin
         builder.Parent.Services.AddSingleton<ITileProviderService, TileProviderService>();
         builder.Parent.Services.AddSingleton<IZoomService, ZoomService>();
 
-        // TODO: handle auth errors gracefully
-        /*
         builder
             .RegisterTileProvider<ThunderforestLandscapeTileProvider>()
             .RegisterTileProvider<ThunderforestCycleTileProvider>()
             .RegisterTileProvider<ThunderforestTransportTileProvider>()
             .RegisterTileProvider<ThunderforestOutdoorsTileProvider>()
             .RegisterTileProvider<ThunderforestTransportDarkTileProvider>()
-            .RegisterTileProvider<ThunderforestAtlasTileProvider>();
+            .RegisterTileProvider<ThunderforestAtlasTileProvider>()
             .RegisterTileProvider<HereMapTileProvider>()
             .RegisterTileProvider<HereSatelliteTileProvider>()
             .RegisterTileProvider<HereHybridTileProvider>()
-            .RegisterTileProvider<HereTerrainTileProvider>() */
+            .RegisterTileProvider<HereTerrainTileProvider>();
 
         builder
             .RegisterTileProvider<YandexMapTileProvider>()

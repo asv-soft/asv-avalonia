@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class CyclOsmTileProvider : ITileProvider
+public class CyclOsmTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<CyclOsmTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "CyclOSM";
 
@@ -13,10 +19,10 @@ public class CyclOsmTileProvider : ITileProvider
 
     private static readonly string[] ServerLetters = ["a", "b", "c"];
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         var serverIndex = (key.X + key.Y) % ServerLetters.Length;
         if (serverIndex < 0)
@@ -27,6 +33,4 @@ public class CyclOsmTileProvider : ITileProvider
         var server = ServerLetters[serverIndex];
         return $"https://{server}.tile-cyclosm.openstreetmap.fr/cyclosm/{key.Zoom}/{key.X}/{key.Y}.png";
     }
-
-    public int TileSize => 256;
 }

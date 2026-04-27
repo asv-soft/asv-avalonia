@@ -422,5 +422,53 @@ namespace Asv.Avalonia.GeoMap {
                 return ResourceManager.GetString("ArcGisWorldImageryTileProvider_Info_Name", resourceCulture);
             }
         }
+        
+        public static string HttpTileProvider_Error_Unauthorized_Title {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_Unauthorized_Title", resourceCulture);
+            }
+        }
+        
+        public static string HttpTileProvider_Error_Unauthorized_Message {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_Unauthorized_Message", resourceCulture);
+            }
+        }
+        
+        public static string HttpTileProvider_Error_ServerError_Title {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_ServerError_Title", resourceCulture);
+            }
+        }
+        
+        public static string HttpTileProvider_Error_ServerError_Message {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_ServerError_Message", resourceCulture);
+            }
+        }
+        
+        public static string HttpTileProvider_Error_Timeout_Title {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_Timeout_Title", resourceCulture);
+            }
+        }
+        
+        public static string HttpTileProvider_Error_Timeout_Message {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_Timeout_Message", resourceCulture);
+            }
+        }
+        
+        public static string HttpTileProvider_Error_NetworkError_Title {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_NetworkError_Title", resourceCulture);
+            }
+        }
+        
+        public static string HttpTileProvider_Error_NetworkError_Message {
+            get {
+                return ResourceManager.GetString("HttpTileProvider_Error_NetworkError_Message", resourceCulture);
+            }
+        }
     }
 }

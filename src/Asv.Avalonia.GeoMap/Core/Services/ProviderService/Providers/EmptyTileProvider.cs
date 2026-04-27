@@ -5,6 +5,7 @@ public class EmptyTileProvider : ITileProvider
     public static ITileProvider Instance { get; } = new EmptyTileProvider();
 
     public const string Id = "Empty";
+
     public static readonly TileProviderInfo StaticInfo = new()
     {
         Id = Id,
@@ -14,11 +15,10 @@ public class EmptyTileProvider : ITileProvider
 
     public TileProviderInfo Info => StaticInfo;
     public IMapProjection Projection => WebMercatorProjection.Instance;
-
-    public string? GetTileUrl(TileKey position)
-    {
-        return null;
-    }
-
     public int TileSize => 256;
+
+    public Task<Tile?> DownloadAsync(TileKey key, CancellationToken ct)
+    {
+        return Task.FromResult<Tile?>(null);
+    }
 }

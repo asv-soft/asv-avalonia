@@ -399,7 +399,7 @@
                                     Text="{Binding Title}"
                                 />
                                 <TextBlock
-                                    MaxLines="3"
+                                    MaxLines="5"
                                     TextWrapping="WrapWithOverflow"
                                     Classes="description"
                                     x:Name="Message"

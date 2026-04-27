@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class YandexSatelliteTileProvider : ITileProvider
+public class YandexSatelliteTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<YandexSatelliteTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "YandexSatellite";
 
@@ -11,13 +17,11 @@ public class YandexSatelliteTileProvider : ITileProvider
         Group = TileProviderGroup.Yandex,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         return $"https://core-sat.maps.yandex.net/tiles?l=sat&x={key.X}&y={key.Y}&z={key.Zoom}";
     }
-
-    public int TileSize => 256;
 }
