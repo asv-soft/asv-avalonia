@@ -277,6 +277,7 @@ public partial class AnnotationLayer : Canvas
         const double boundaryStrength = 0.5;
         const double returnStrength = 0.15;
         const double maxStep = 24.0;
+        const double maxFrameOffsetChange = 10.0;
 
         var currentOffsets = _annotations
             .Select(x => EnsureMinimumOffset(x.ScreenOffset, x.PreferredDirection))
@@ -401,13 +402,9 @@ public partial class AnnotationLayer : Canvas
                 preferredDirections[index],
                 minVectorLength
             );
+            offset = LimitOffsetChange(item.ScreenOffset, offset, maxFrameOffsetChange);
             item.ScreenOffset = offset;
             item.ScreenPosition = anchorPositions[index] + offset;
-            item.PreferredDirection = GetDirection(
-                offset,
-                preferredDirections[index],
-                minVectorLength
-            );
         }
 
         UpdateVisuals();
@@ -459,13 +456,24 @@ public partial class AnnotationLayer : Canvas
     private static Point GetReturnForce(
         Point offset,
         Point preferredDirection,
-        double minDistance,
+        double targetDistance,
         double returnStrength
     )
     {
-        var distance = Math.Sqrt(offset.LengthSquared());
-        var targetOffset = preferredDirection * Math.Max(distance, minDistance);
+        var targetOffset = preferredDirection * targetDistance;
         return (targetOffset - offset) * returnStrength;
+    }
+
+    private static Point LimitOffsetChange(Point currentOffset, Point nextOffset, double maxChange)
+    {
+        var delta = nextOffset - currentOffset;
+        var distance = delta.Length();
+        if (distance <= maxChange)
+        {
+            return nextOffset;
+        }
+
+        return currentOffset + (delta.Normalize() * maxChange);
     }
 
     private static bool TryGetSeparationVector(
@@ -479,6 +487,8 @@ public partial class AnnotationLayer : Canvas
         out Point separation
     )
     {
+        const double tieEpsilon = 1.0;
+
         var dx = center1.X - center2.X;
         var dy = center1.Y - center2.Y;
         var overlapX = ((size1.Width + size2.Width) * 0.5) + padding - Math.Abs(dx);
@@ -498,7 +508,9 @@ public partial class AnnotationLayer : Canvas
         if (overlapX < overlapY)
         {
             var sign =
-                dx == 0 ? Math.Sign(fallbackDirection1.X - fallbackDirection2.X) : Math.Sign(dx);
+                Math.Abs(dx) < tieEpsilon
+                    ? Math.Sign(fallbackDirection1.X - fallbackDirection2.X)
+                    : Math.Sign(dx);
             if (sign == 0)
             {
                 sign = 1;
@@ -509,7 +521,9 @@ public partial class AnnotationLayer : Canvas
         }
 
         var ySign =
-            dy == 0 ? Math.Sign(fallbackDirection1.Y - fallbackDirection2.Y) : Math.Sign(dy);
+            Math.Abs(dy) < tieEpsilon
+                ? Math.Sign(fallbackDirection1.Y - fallbackDirection2.Y)
+                : Math.Sign(dy);
         if (ySign == 0)
         {
             ySign = 1;
