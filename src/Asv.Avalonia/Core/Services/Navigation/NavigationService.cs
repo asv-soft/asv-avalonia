@@ -117,7 +117,9 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
             _logger.ZLogInformation($"Navigate to '{string.Join(",", path)}'");
             Debug.Assert(_host.Shell != null, "_host.Shell != null");
-            var result = await RoutableMixin.NavigateByPath(_host.Shell, path[0] == _host.Shell.Id ? path[1..] : path
+            var result = await RoutableMixin.NavigateByPath(
+                _host.Shell,
+                path[0] == _host.Shell.Id ? new NavPath(path.Skip(1)) : path
             );
             FocusControlChanged(result);
             if (result is ISupportFocus focus)

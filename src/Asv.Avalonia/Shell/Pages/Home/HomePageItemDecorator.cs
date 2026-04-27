@@ -7,7 +7,7 @@ namespace Asv.Avalonia;
 public class HomePageItemDecorator : ViewModel
 {
     public HomePageItemDecorator(IHomePageItem homePageItem)
-        : base($"decorator_{homePageItem.Id}")
+        : base($"decorator")
     {
         homePageItem.Parent = this;
         HomePageItem = homePageItem;

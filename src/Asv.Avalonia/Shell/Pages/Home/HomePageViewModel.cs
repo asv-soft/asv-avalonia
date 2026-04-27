@@ -45,6 +45,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         {
             var d = new HomePageItem(
                 $"dev{i}",
+                NavArgs.Empty,
                 DesignTime.LoggerFactory,
                 DesignTime.ExtensionService
             )

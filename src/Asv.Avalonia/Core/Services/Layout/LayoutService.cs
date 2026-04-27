@@ -182,7 +182,12 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     private string GetKey(IViewModel source)
     {
-        return NavId.NormalizeTypeId(source.GetPathFromRoot().ToString());
+        return NormalizeId(source.GetPathFromRoot().ToString());
+    }
+
+    private static string NormalizeId(string id)
+    {
+        return string.Join("_", id.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries));
     }
 
     private TPocoType Get<TPocoType>(string key, Lazy<TPocoType> defaultValue)

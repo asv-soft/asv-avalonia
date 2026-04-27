@@ -19,7 +19,7 @@ public class DesktopShellViewModelConfig : ShellViewModelConfig { }
 
 public sealed class DesktopShellViewModel : ShellViewModel
 {
-    public const string ShellId = "shell.desktop";
+    public const string ShellId = "shell_desktop";
 
     private readonly IFileAssociationService _fileService;
 

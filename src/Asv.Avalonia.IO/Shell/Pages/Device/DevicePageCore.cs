@@ -76,11 +76,16 @@ public sealed class DevicePageCore : IDisposable
         _logger.ZLogTrace($"{nameof(_owner.Id)} init args: {args}");
         Debug.Assert(_devices != null, "_devices != null");
 
-        _targetDeviceId =
-            args[DevicePageViewModelMixin.ArgsDeviceIdKey]
-            ?? throw new ArgumentNullException(
+        _targetDeviceId = args
+            .FirstOrDefault(x => x.Key == DevicePageViewModelMixin.ArgsDeviceIdKey)
+            .Value;
+
+        if (_targetDeviceId is null)
+        {
+            throw new ArgumentNullException(
                 $"{DevicePageViewModelMixin.ArgsDeviceIdKey} argument is required"
             );
+        }
 
         _onDeviceDisconnecting
             .SubscribeAwait(

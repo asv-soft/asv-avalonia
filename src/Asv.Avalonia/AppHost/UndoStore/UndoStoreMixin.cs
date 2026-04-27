@@ -16,5 +16,11 @@ public static class UndoStoreMixin
                 .PostConfigure(configure);
             return builder;
         }
+        
+        public IHostApplicationBuilder UseDesignUndoStore()
+        {
+            builder.Services.AddSingleton<IUndoStoreService, NullUndoStoreService>();
+            return builder;
+        }
     }
 }

@@ -29,7 +29,12 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         ArgumentNullException.ThrowIfNull(loggerFactory);
         ArgumentNullException.ThrowIfNull(cmd);
 
-        _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
+        _deviceCore = new DevicePageCore(
+            devices,
+            layoutService,
+            loggerFactory.CreateLogger<DevicePageCore>(),
+            this
+        );
         _deviceCore.Init(context.NavArgs);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;

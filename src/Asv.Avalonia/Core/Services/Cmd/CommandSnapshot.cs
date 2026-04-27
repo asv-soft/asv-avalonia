@@ -43,8 +43,10 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
         CommandId =
             reader.ReadAsString()
             ?? throw new JsonSerializationException($"{nameof(CommandId)} cannot be null.");
-        
-        //ContextPath = new NavPath(reader);
+        ContextPath = NavPath.Parse(
+            reader.ReadAsString()
+                ?? throw new JsonSerializationException($"{nameof(ContextPath)} cannot be null.")
+        );
         _newValue =
             CommandArg.Create(reader)
             ?? throw new JsonSerializationException($"{nameof(_newValue)} cannot be null.");
@@ -71,7 +73,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
     public void Deserialize(ref ReadOnlySpan<byte> buffer)
     {
         CommandId = BinSerialize.ReadString(ref buffer);
-        ContextPath = new NavPath(ref buffer);
+        ContextPath = NavPath.Parse(BinSerialize.ReadString(ref buffer));
         _newValue = CommandArg.Create(ref buffer);
         if (BinSerialize.ReadBool(ref buffer))
         {
@@ -82,7 +84,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
     public void Serialize(ref Span<byte> buffer)
     {
         BinSerialize.WriteString(ref buffer, CommandId);
-        ContextPath.Serialize(ref buffer);
+        BinSerialize.WriteString(ref buffer, ContextPath.ToString());
         NewValue.Serialize(ref buffer);
         if (OldValue is null)
         {
@@ -98,7 +100,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
     public int GetByteSize()
     {
         return BinSerialize.GetSizeForString(CommandId)
-            + ContextPath.GetByteSize()
+            + BinSerialize.GetSizeForString(ContextPath.ToString())
             + NewValue.GetByteSize()
             + (OldValue is null ? sizeof(bool) : sizeof(bool) + OldValue.GetByteSize());
     }
@@ -107,7 +109,7 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
     {
         writer.WriteStartArray();
         writer.WriteValue(CommandId);
-        ContextPath.Serialize(writer);
+        writer.WriteValue(ContextPath.ToString());
         _newValue.Serialize(writer);
         if (_oldValue is not null)
         {

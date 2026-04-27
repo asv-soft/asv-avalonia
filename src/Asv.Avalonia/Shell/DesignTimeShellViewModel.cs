@@ -4,7 +4,7 @@ namespace Asv.Avalonia;
 
 public sealed class DesignTimeShellViewModel : ShellViewModel
 {
-    public const string ShellId = "shell.design";
+    public const string ShellId = "shell_design";
     public static DesignTimeShellViewModel Instance { get; } = new();
 
     public DesignTimeShellViewModel()

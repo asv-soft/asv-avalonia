@@ -15,7 +15,12 @@ public class HomePageDeviceItem : HomePageItem
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
-        : base("home_device_page", new NavArgs(new KeyValuePair<string, string>("dev",device.Id.ToString())), loggerFactory, ext)
+        : base(
+            "home_device_page",
+            new NavArgs(new KeyValuePair<string, string?>("dev", device.Id.ToString())),
+            loggerFactory,
+            ext
+        )
     {
         Device = device;
         Icon = deviceManager.GetIcon(device.Id);

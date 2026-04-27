@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 
 public sealed class MobileShellViewModel : ShellViewModel
 {
-    public const string ShellId = "shell.mobile";
+    public const string ShellId = "shell_mobile";
 
     public MobileShellViewModel(
         IServiceProvider containerHost,

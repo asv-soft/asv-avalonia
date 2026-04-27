@@ -34,7 +34,17 @@ public abstract class ViewModel : IViewModel
     
     public IUndoController Undo => _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
 
-    public NavId Id { get; }
+    public NavId Id { get; private set; }
+
+    protected void InitArgs(string typeId)
+    {
+        Id = new NavId(typeId);
+    }
+
+    protected void InitArgs(NavArgs args)
+    {
+        Id = new NavId(Id.TypeId, args);
+    }
 
     public IViewModel? Parent
     {

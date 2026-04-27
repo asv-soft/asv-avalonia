@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
@@ -53,11 +52,6 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
             SelectedPage.Value = null;
             SelectedNode.Value = null;
         });
-    }
-
-    protected override void InternalInitArgs(NameValueCollection args)
-    {
-        _deviceCore.Init(args);
     }
 
     protected abstract void AfterDeviceInitialized(

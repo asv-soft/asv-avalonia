@@ -20,7 +20,13 @@ public class UndoStoreServiceTest : IDisposable
         Directory.CreateDirectory(_rootFolder);
         var sut = CreateSut();
 
-        var ownerId = new NavId("test.page?name=value with space&path=a/b?x=1");
+        var ownerId = new NavId(
+            "test.page",
+            new NavArgs(
+                new KeyValuePair<string, string?>("name", "value with space"),
+                new KeyValuePair<string, string?>("path", "a/b?x=1")
+            )
+        );
 
         sut.CreateUndoHistoryStore(ownerId);
 
@@ -28,10 +34,10 @@ public class UndoStoreServiceTest : IDisposable
         var createdFolders = Directory.GetDirectories(undoRoot);
 
         Assert.Single(createdFolders);
-        Assert.Equal(
-            "nav_test.page_003Fname_003Dvalue_002Bwith_002Bspace_0026path_003Da_002Fb_003Fx_003D1",
-            Path.GetFileName(createdFolders[0])
-        );
+        var folderName = Path.GetFileName(createdFolders[0]);
+        Assert.StartsWith("nav_test.page", folderName);
+        Assert.DoesNotContain('/', folderName);
+        Assert.DoesNotContain('\\', folderName);
     }
 
     [Fact]

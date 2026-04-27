@@ -61,9 +61,14 @@ public class CommandHistory : ICommandHistory
 
     private void GetFilePath(NavId navId, out string undoPath, out string redoPath)
     {
-        var baseName = navId.NormalizeTypeId(navId.ToString().ToLower());
+        var baseName = NormalizeId(navId.ToString().ToLowerInvariant());
         undoPath = Path.Combine(_historyFolder, $"{baseName}{UndoPostfix}");
         redoPath = Path.Combine(_historyFolder, $"{baseName}{RedoPostfix}");
+    }
+
+    private static string NormalizeId(string id)
+    {
+        return string.Join("_", id.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries));
     }
 
     private void SaveHistoryToFile()
@@ -89,10 +94,10 @@ public class CommandHistory : ICommandHistory
         }
     }
 
-    private void TryLoadHistoryFromFile(NavId NavId)
+    private void TryLoadHistoryFromFile(NavId navId)
     {
         // history id can be changed after full load of the history owner
-        GetFilePath(NavId, out var undoPath, out var redoPath);
+        GetFilePath(navId, out var undoPath, out var redoPath);
         try
         {
             if (File.Exists(undoPath))
@@ -138,12 +143,30 @@ public class CommandHistory : ICommandHistory
     {
         if (
             snapshot.OldValue != null
-            && snapshot.ContextPath.StartWith(HistoryOwner.GetPathFromRoot())
+            && IsPathStartsWith(snapshot.ContextPath, HistoryOwner.GetPathFromRoot())
         )
         {
             _undoStack.Push(snapshot);
             _redoStack.Clear();
         }
+    }
+
+    private static bool IsPathStartsWith(NavPath path, NavPath prefix)
+    {
+        if (prefix.Count > path.Count)
+        {
+            return false;
+        }
+
+        for (var i = 0; i < prefix.Count; i++)
+        {
+            if (path[i] != prefix[i])
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public IViewModel HistoryOwner { get; }
