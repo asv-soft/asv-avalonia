@@ -8,6 +8,10 @@
         <variables>
             <primary-color>blue</primary-color>
             <link-color>blue</link-color>
+            <algolia-id>IUQ5975QLQ</algolia-id>
+            <algolia-index>asv.avalonia</algolia-index>
+            <algolia-api-key>1a0961eaed8cc41321e70c9c3d079e1f</algolia-api-key>
+            <algolia-show-logo>true</algolia-show-logo>
             <noindex-content>false</noindex-content>
             <ignore-problems>MRK056</ignore-problems>
         </variables>
