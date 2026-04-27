@@ -20,9 +20,10 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     private readonly ObservableList<IPluginServerInfo> _sources;
     private readonly ISynchronizedView<IPluginServerInfo, PluginsSourceViewModel> _view;
     private readonly INavigationService _navigationService;
+    private readonly ILogger<SettingsPluginsSourcesViewModel> _logger;
 
     public SettingsPluginsSourcesViewModel()
-        : this(NullPluginManager.Instance, DesignTime.Navigation, DesignTime.LoggerFactory)
+        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullPluginManager.Instance, DesignTime.Navigation, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         var items = new ObservableList<IPluginServerInfo>([
@@ -49,12 +50,13 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     }
 
     public SettingsPluginsSourcesViewModel(
+        ITreeSubPageContext<ISettingsPage> context,
         IPluginManager pluginManager,
         INavigationService navigationService,
-        ILoggerFactory loggerFactory
-    )
-        : base(PageId, loggerFactory)
+        ILoggerFactory loggerFactory)
+        : base(PageId, context)
     {
+        _logger = loggerFactory.CreateLogger<SettingsPluginsSourcesViewModel>();
         _pluginManager = pluginManager;
         _navigationService = navigationService;
         SelectedItem = new BindableReactiveProperty<PluginsSourceViewModel?>();
@@ -120,7 +122,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "Error to update info about plugin sources");
+            _logger.LogError(e, "Error to update info about plugin sources");
         }
     }
 
@@ -149,7 +151,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, "Error to update plugin server list");
+                    _logger.LogError(ex, "Error to update plugin server list");
                 }
 
                 break;
@@ -166,7 +168,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
                 }
                 catch (Exception ex)
                 {
-                    Logger.LogError(ex, "Error to remove plugin server");
+                    _logger.LogError(ex, "Error to remove plugin server");
                 }
 
                 break;

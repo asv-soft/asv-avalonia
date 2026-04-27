@@ -29,6 +29,6 @@ public class TreePageComparer : IComparer<ITreePage>
             return orderComparison;
         }
 
-        return x.Id.CompareTo(y.Id);
+        return string.CompareOrdinal(x.Id.TypeId, y.Id.TypeId);
     }
 }

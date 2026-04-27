@@ -34,13 +34,13 @@ public static class ExampleMixin
         }
     }
 
-    extension(ShellMixin.PageBuilder builder)
+    extension(PageMixin.Builder builder)
     {
         public ControlGalleryBuilder ControlGallery => new ControlGalleryBuilder(builder);
         public MapTestBuilder MapTest => new MapTestBuilder(builder);
     }
 
-    public class ControlGalleryBuilder(ShellMixin.PageBuilder builder)
+    public class ControlGalleryBuilder(PageMixin.Builder builder)
     {
         public ControlGalleryBuilder UseDefault()
         {
@@ -159,7 +159,7 @@ public static class ExampleMixin
         }
     }
 
-    public class MapTestBuilder(ShellMixin.PageBuilder builder)
+    public class MapTestBuilder(PageMixin.Builder builder)
     {
         public MapTestBuilder UseDefault()
         {

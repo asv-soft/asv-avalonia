@@ -23,6 +23,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
 
     public PluginsMarketPageViewModel()
         : this(
+            DesignTime.PageContext,
             DesignTime.CommandService,
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
@@ -36,6 +37,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     }
 
     public PluginsMarketPageViewModel(
+        IPageContext context,
         ICommandService cmd,
         IPluginManager manager,
         IPluginBootloader bootloader,
@@ -43,7 +45,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, context, cmd, loggerFactory, dialogService, ext)
     {
         ArgumentNullException.ThrowIfNull(cmd);
         ArgumentNullException.ThrowIfNull(manager);
@@ -58,8 +60,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         var isShowOnlyVerified = new ReactiveProperty<bool>(true).DisposeItWith(Disposable);
         IsShowOnlyVerified = new HistoricalBoolProperty(
             nameof(IsShowOnlyVerified),
-            isShowOnlyVerified,
-            loggerFactory
+            isShowOnlyVerified
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);

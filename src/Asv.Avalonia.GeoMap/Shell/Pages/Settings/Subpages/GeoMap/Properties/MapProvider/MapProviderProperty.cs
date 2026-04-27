@@ -8,7 +8,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapProviderProperty : ViewModelBase
+public class MapProviderProperty : ViewModel
 {
     public const string ViewModelId = "map-provider";
 
@@ -27,7 +27,7 @@ public class MapProviderProperty : ViewModelBase
         IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
-        : base(ViewModelId, loggerFactory)
+        : base(ViewModelId)
     {
         _mapService = mapService;
         _editApiKeyDialog = dialogService.GetDialogPrefab<EditApiKeyDialogPrefab>();
@@ -36,7 +36,7 @@ public class MapProviderProperty : ViewModelBase
             mapService.AvailableProviders.OrderBy(p => p.Info.Group.Id)
         );
         _view = itemsSource
-            .CreateView(p => new TileProviderViewModel(p, loggerFactory))
+            .CreateView(p => new TileProviderViewModel(p))
             .DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);

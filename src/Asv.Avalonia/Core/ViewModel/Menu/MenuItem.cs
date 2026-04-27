@@ -8,12 +8,12 @@ namespace Asv.Avalonia
     public class MenuItem : ActionViewModel, IMenuItem
     {
         public MenuItem(
-            string id,
+            string typeId,
             string header,
             ILoggerFactory loggerFactory,
             string? parentId = null
         )
-            : base(id, loggerFactory)
+            : base(typeId)
         {
             ParentId = parentId == null ? NavId.Empty : new NavId(parentId);
             Order = 0;

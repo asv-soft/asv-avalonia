@@ -24,7 +24,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         IUnitService unitService,
         IMapService mapService
     )
-        : base(DialogId, loggerFactory)
+        : base(DialogId)
     {
         var latUnit = unitService.Units[LatitudeUnit.Id];
         var lonUnit = unitService.Units[LongitudeUnit.Id];
@@ -187,7 +187,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .DisposeItWith(Disposable);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return GeoPointProperty;
     }

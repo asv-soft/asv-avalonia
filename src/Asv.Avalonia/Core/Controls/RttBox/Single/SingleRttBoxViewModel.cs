@@ -47,11 +47,10 @@ public class SingleRttBoxViewModel : RttBoxViewModel
     }
 
     public SingleRttBoxViewModel(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string typeId,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory, networkErrorTimeout) { }
+        : base(typeId, networkErrorTimeout) { }
 
     public string? UnitSymbol
     {
@@ -79,12 +78,12 @@ public class SingleRttBoxViewModel<T>
     private readonly TimeSpan? _networkErrorTimeout;
 
     public SingleRttBoxViewModel(
-        NavId id,
+        string typeId,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(typeId, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         valueStream

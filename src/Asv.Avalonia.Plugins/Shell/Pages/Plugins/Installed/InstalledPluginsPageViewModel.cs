@@ -20,33 +20,35 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     private readonly OpenFileDialogDesktopPrefab _openFileDialog;
     private readonly ObservableList<ILocalPluginInfo> _plugins;
     private readonly ISynchronizedView<ILocalPluginInfo, InstalledPluginInfoViewModel> _view;
+    private readonly ILogger<InstalledPluginsPageViewModel> _logger;
 
     public InstalledPluginsPageViewModel()
         : this(
+            DesignTime.PageContext,
             DesignTime.CommandService,
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
-            DesignTime.ExtensionService
-        )
+            DesignTime.ExtensionService)
     {
         DesignTime.ThrowIfNotDesignMode();
         IsShowOnlyVerified.ModelValue.Value = false;
     }
 
     public InstalledPluginsPageViewModel(
+        IPageContext context,
         ICommandService cmd,
         IPluginManager manager,
         IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        IExtensionService ext
-    )
-        : base(PageId, cmd, loggerFactory, dialogService, ext)
+        IExtensionService ext)
+        : base(PageId, context, cmd, loggerFactory, dialogService, ext)
     {
         Title = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;
+        _logger = loggerFactory.CreateLogger<InstalledPluginsPageViewModel>();
         _manager = manager;
         _bootloader = bootloader;
         _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
@@ -67,8 +69,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
         var isShowOnlyVerified = new ReactiveProperty<bool>(true).DisposeItWith(Disposable);
         IsShowOnlyVerified = new HistoricalBoolProperty(
             nameof(IsShowOnlyVerified),
-            isShowOnlyVerified,
-            loggerFactory
+            isShowOnlyVerified
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -167,7 +168,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
 
         if (string.IsNullOrWhiteSpace(pathToPlugin) || !NugetHelper.IsPathToNugetFile(pathToPlugin))
         {
-            Logger.LogWarning("Invalid path to plugin");
+            _logger.LogWarning("Invalid path to plugin");
             return;
         }
 
@@ -178,12 +179,12 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
                 new Progress<ProgressMessage>(m => progress.Report(m.Progress)),
                 cancel
             );
-            Logger.LogInformation("Plugin installed successfully");
+            _logger.LogInformation("Plugin installed successfully");
             Search.Refresh();
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "Error during manual plugin installation");
+            _logger.LogError(e, "Error during manual plugin installation");
         }
     }
 }

@@ -10,7 +10,7 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public class PortViewModel : ViewModelBase, IPortViewModel
+public class PortViewModel : ViewModel, IPortViewModel
 {
     private readonly IUnitService _unitService;
     private readonly List<INotifyDataErrorInfo> _validateProperties = new();
@@ -26,7 +26,7 @@ public class PortViewModel : ViewModelBase, IPortViewModel
     private const int MaxPortNameLength = 50;
 
     public PortViewModel()
-        : this(DesignTime.Id, DesignTime.UnitService, DesignTime.LoggerFactory, TimeProvider.System)
+        : this(DesignTime.Id.TypeId, DesignTime.UnitService, DesignTime.LoggerFactory, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         InitArgs(Guid.NewGuid().ToString());
@@ -47,20 +47,20 @@ public class PortViewModel : ViewModelBase, IPortViewModel
             })
             .DisposeItWith(Disposable);
         TagsSource.Add(
-            new TagViewModel("ip", DesignTime.LoggerFactory) { Key = "ip", Value = "127.0.0.1" }
+            new TagViewModel("ip") { Key = "ip", Value = "127.0.0.1" }
         );
         TagsSource.Add(
-            new TagViewModel("port", DesignTime.LoggerFactory) { Key = "port", Value = "7341" }
+            new TagViewModel("port") { Key = "port", Value = "7341" }
         );
         TagsSource.Add(
-            new TagViewModel("rx", DesignTime.LoggerFactory)
+            new TagViewModel("rx")
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 Value = "12kb",
             }
         );
         TagsSource.Add(
-            new TagViewModel("tx", DesignTime.LoggerFactory)
+            new TagViewModel("tx")
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 Value = "38kb",
@@ -77,12 +77,12 @@ public class PortViewModel : ViewModelBase, IPortViewModel
     }
 
     public PortViewModel(
-        NavId id,
+        string typeId,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base(id, loggerFactory)
+        : base(typeId)
     {
         LoggerFactory = loggerFactory;
         TimeProvider = timeProvider;
@@ -122,7 +122,7 @@ public class PortViewModel : ViewModelBase, IPortViewModel
         RemovePortCommand = new ReactiveCommand(RemovePort).DisposeItWith(Disposable);
 
         TagsSource.Add(
-            TypeTag = new TagViewModel("type", loggerFactory)
+            TypeTag = new TagViewModel("type")
             {
                 Color = AsvColorKind.Info1,
                 Key = null,
@@ -130,7 +130,7 @@ public class PortViewModel : ViewModelBase, IPortViewModel
         );
 
         TagsSource.Add(
-            ConfigTag = new TagViewModel("cfg", loggerFactory)
+            ConfigTag = new TagViewModel("cfg")
             {
                 Icon = null,
                 Color = AsvColorKind.Success,
@@ -138,7 +138,7 @@ public class PortViewModel : ViewModelBase, IPortViewModel
             }
         );
         TagsSource.Add(
-            RxTag = new TagViewModel("rx", loggerFactory)
+            RxTag = new TagViewModel("rx")
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 Color = AsvColorKind.Success,
@@ -146,7 +146,7 @@ public class PortViewModel : ViewModelBase, IPortViewModel
             }
         );
         TagsSource.Add(
-            TxTag = new TagViewModel("tx", loggerFactory)
+            TxTag = new TagViewModel("tx")
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 Color = AsvColorKind.Success,

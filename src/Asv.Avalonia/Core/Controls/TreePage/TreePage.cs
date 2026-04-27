@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 public class TreePage : HeadlinedViewModel, ITreePage
 {
     public TreePage(
-        NavId id,
+        string typeId,
         string title,
         MaterialIconKind? icon,
         NavId navigateTo,
@@ -16,7 +16,7 @@ public class TreePage : HeadlinedViewModel, ITreePage
         ILoggerFactory loggerFactory,
         TagViewModel? status = null
     )
-        : base(id, loggerFactory)
+        : base(typeId)
     {
         NavigateTo = navigateTo;
         ParentId = parentId;

@@ -1,11 +1,9 @@
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public abstract class SettingsSubPage(NavId id, ILoggerFactory loggerFactory)
-    : TreeSubpage<ISettingsPage>(id, loggerFactory),
+public abstract class SettingsSubPage(string typeId, ITreeSubPageContext<ISettingsPage> context)
+    : TreeSubpage<ISettingsPage>(typeId, context),
         ISettingsSubPage
 {
-    public override ValueTask Init(ISettingsPage context) => ValueTask.CompletedTask;
 }

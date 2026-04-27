@@ -38,6 +38,6 @@ public class TreeNodeComparer<T> : IComparer<T>
             return orderComparison;
         }
 
-        return x.Id.CompareTo(y.Id);
+        return string.CompareOrdinal(x.Id.TypeId, y.Id.TypeId);
     }
 }

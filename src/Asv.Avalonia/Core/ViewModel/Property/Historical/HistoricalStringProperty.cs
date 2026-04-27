@@ -18,7 +18,7 @@ public sealed class HistoricalStringProperty
         ILoggerFactory loggerFactory,
         IList<Func<string?, ValidationResult>>? validationRules = null
     )
-        : base(id, loggerFactory)
+        : base(id)
     {
         InternalInitValidationRules(validationRules);
 

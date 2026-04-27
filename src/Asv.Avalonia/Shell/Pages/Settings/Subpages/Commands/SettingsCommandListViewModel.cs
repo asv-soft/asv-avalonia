@@ -29,22 +29,22 @@ public class SettingsCommandListViewModel : SettingsSubPage
 
     public SettingsCommandListViewModel()
         : this(
+            NullTreeSubPageContext<SettingsPageViewModel>.Instance,
             DesignTime.CommandService,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
-            NullSearchService.Instance
-        )
+            NullSearchService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public SettingsCommandListViewModel(
+        ITreeSubPageContext<ISettingsPage> context,
         ICommandService commandsService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        ISearchService searchService
-    )
-        : base(PageId, loggerFactory)
+        ISearchService searchService)
+        : base(PageId, context)
     {
         _commandsService = commandsService;
 
@@ -80,8 +80,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
         ).DisposeItWith(Disposable);
         CommandSortingType = new HistoricalEnumProperty<CommandSortingType>(
             nameof(CommandSortingType),
-            _commandSortingType,
-            loggerFactory
+            _commandSortingType
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -199,8 +198,6 @@ public class SettingsCommandListViewModel : SettingsSubPage
             _itemsSource.AddRange(_commandsService.Commands);
             Search.Refresh();
         });
-
-        Logger.LogInformation("All hot keys have been reset to default");
     }
 
     public override IEnumerable<IViewModel> GetChildren()

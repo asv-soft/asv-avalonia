@@ -79,7 +79,7 @@ public class ConnectionRateStatusViewModel : StatusItem
         TimeProvider timeProvider,
         INavigationService nav
     )
-        : base(TypeId, default, loggerFactory)
+        : base(TypeId, default)
     {
         _loggerFactory = loggerFactory;
         _timeProvider = timeProvider;
@@ -101,7 +101,6 @@ public class ConnectionRateStatusViewModel : StatusItem
         {
             return field ??= new StatisticViewModel(
                 $"{TypeId}.statistic",
-                _loggerFactory,
                 _timeProvider
             );
         }
@@ -136,8 +135,8 @@ public class ConnectionRateStatusViewModel : StatusItem
     {
         _nav.GoTo(
                 new NavPath(
-                    SettingsPageViewModel.PageId,
-                    SettingsConnectionViewModel.SubPageId
+                    new NavId(SettingsPageViewModel.PageId),
+                    new NavId(SettingsConnectionViewModel.SubPageId)
                 )
             )
             .SafeFireAndForget();

@@ -38,7 +38,7 @@ public class LogViewerViewModel
     public LogViewerViewModel()
         : base(
             DesignTime.Id.TypeId,
-            default,
+            DesignTime.PageContext,
             NullCommandService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
@@ -63,7 +63,6 @@ public class LogViewerViewModel
                     "Design time log message",
                     "This is a design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                DesignTime.LoggerFactory,
                 this
             )
         );
@@ -76,7 +75,6 @@ public class LogViewerViewModel
                     "Design time log message 2",
                     "This is another design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                DesignTime.LoggerFactory,
                 this
             )
         );
@@ -89,7 +87,6 @@ public class LogViewerViewModel
                     "Design time log message 3",
                     "This is yet another design time log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                DesignTime.LoggerFactory,
                 this
             )
         );
@@ -102,7 +99,6 @@ public class LogViewerViewModel
                     "Design time log message 4",
                     "This is a debug log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                DesignTime.LoggerFactory,
                 this
             )
         );
@@ -115,7 +111,6 @@ public class LogViewerViewModel
                     "Design time log message 5",
                     "This is a critical log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                DesignTime.LoggerFactory,
                 this
             )
         );
@@ -128,7 +123,6 @@ public class LogViewerViewModel
                     "Design time log message 6",
                     "This is a trace log message for the Log Viewer. It will not be shown in the actual application."
                 ),
-                DesignTime.LoggerFactory,
                 this
             )
         );
@@ -141,13 +135,13 @@ public class LogViewerViewModel
                     "Design time log message 7",
                     "This is a log message with no specific level for the Log Viewer. It will not be shown in the actual application."
                 ),
-                DesignTime.LoggerFactory,
                 this
             )
         );
     }
 
     public LogViewerViewModel(
+        IPageContext context,
         ICommandService cmd,
         ILogReaderService logReaderService,
         ISearchService search,
@@ -156,7 +150,7 @@ public class LogViewerViewModel
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(PageId, default, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, context, cmd, loggerFactory, dialogService, ext)
     {
         _logReaderService = logReaderService;
         _search = search;

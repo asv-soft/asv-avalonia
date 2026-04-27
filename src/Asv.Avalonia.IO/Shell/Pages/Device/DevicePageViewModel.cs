@@ -13,7 +13,8 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
     private readonly DevicePageCore _deviceCore;
 
     protected DevicePageViewModel(
-        NavId id,
+        string id,
+        IPageContext context,
         IDeviceManager devices,
         ICommandService cmd,
         ILayoutService layoutService,
@@ -21,7 +22,7 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(id, cmd, loggerFactory, dialogService, ext)
+        : base(id, context, cmd, loggerFactory, dialogService, ext)
     {
         ArgumentNullException.ThrowIfNull(devices);
         ArgumentNullException.ThrowIfNull(layoutService);
@@ -29,6 +30,7 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         ArgumentNullException.ThrowIfNull(cmd);
 
         _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
+        _deviceCore.Init(context.NavArgs);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
 
@@ -37,10 +39,6 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
             .DisposeItWith(Disposable);
     }
 
-    protected override void InternalInitArgs(NameValueCollection args)
-    {
-        _deviceCore.Init(args);
-    }
 
     protected abstract void AfterDeviceInitialized(
         IClientDevice device,

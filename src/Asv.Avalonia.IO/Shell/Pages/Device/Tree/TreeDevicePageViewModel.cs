@@ -10,13 +10,14 @@ namespace Asv.Avalonia.IO;
 public abstract class TreeDevicePageViewModel<TContext, TSubPage>
     : TreePageViewModel<TContext, TSubPage>,
         IDevicePage
-    where TContext : class, IPage
-    where TSubPage : ITreeSubpage<TContext>
+    where TContext : class, ITreePageViewModel
+    where TSubPage : ITreeSubpage
 {
     private readonly DevicePageCore _deviceCore;
 
     protected TreeDevicePageViewModel(
-        NavId id,
+        string typeId,
+        IPageContext context,
         IDeviceManager devices,
         ICommandService cmd,
         IServiceProvider container,
@@ -25,9 +26,10 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(id, cmd, container, layoutService, loggerFactory, dialogService, ext)
+        : base(typeId, context, cmd, container, layoutService, loggerFactory, dialogService, ext)
     {
-        _deviceCore = new DevicePageCore(devices, layoutService, Logger, this);
+        _deviceCore = new DevicePageCore(devices, layoutService, loggerFactory.CreateLogger<DevicePageCore>(), this);
+        _deviceCore.Init(context.NavArgs);
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
         _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
         _deviceCore.OnDeviceInitialized += AfterDeviceInitializedBase;

@@ -16,7 +16,7 @@ public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
     }
 
     public DialogItemHotKeyCaptureViewModel(ILoggerFactory loggerFactory)
-        : base(DialogId, loggerFactory)
+        : base(DialogId)
     {
         HotKey = new BindableReactiveProperty<HotKeyInfo?>().DisposeItWith(Disposable);
     }

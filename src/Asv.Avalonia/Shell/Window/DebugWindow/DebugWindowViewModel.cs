@@ -6,7 +6,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class DebugWindowViewModel : ViewModelBase, IDebugWindow
+public class DebugWindowViewModel : ViewModel, IDebugWindow
 {
     public const string ModelId = "DebugWindow";
     private readonly ISynchronizedView<IPage, DebugPageViewModel> _pageView;
@@ -25,11 +25,11 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
         ICommandService cmd,
         ILoggerFactory loggerFactory
     )
-        : base(ModelId, default, loggerFactory)
+        : base(ModelId)
     {
         SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty();
         Debug.Assert(host.Shell != null, "host.Shell != null");
-        _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x, loggerFactory));
+        _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x));
         Pages = _pageView.ToNotifyCollectionChanged();
         BackwardStack = nav.BackwardStack.ToNotifyCollectionChanged();
         ForwardStack = nav.ForwardStack.ToNotifyCollectionChanged();
@@ -59,8 +59,8 @@ public class DebugWindowViewModel : ViewModelBase, IDebugWindow
     }
 }
 
-public class DebugPageViewModel(IPage page, ILoggerFactory loggerFactory)
-    : ViewModelBase(page.Id.TypeId, page.Id.Args, loggerFactory)
+public class DebugPageViewModel(IPage page)
+    : ViewModel(page.Id.TypeId, page.Id.Args)
 {
     public NotifyCollectionChangedSynchronizedViewList<CommandSnapshot> RedoStack { get; } =
         page.History.RedoStack.ToNotifyCollectionChanged();

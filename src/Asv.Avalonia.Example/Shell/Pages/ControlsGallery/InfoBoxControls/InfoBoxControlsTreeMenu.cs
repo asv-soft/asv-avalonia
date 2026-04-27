@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -9,7 +10,7 @@ public class InfoBoxControlsTreeMenu : TreePage
             InfoBoxControlsPageViewModel.PageId,
             RS.InfoBoxControlsPageViewModel_Title,
             InfoBoxControlsPageViewModel.PageIcon,
-            InfoBoxControlsPageViewModel.PageId,
+            new NavId(InfoBoxControlsPageViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

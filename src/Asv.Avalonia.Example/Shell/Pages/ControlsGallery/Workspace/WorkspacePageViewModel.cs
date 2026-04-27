@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.InfoMessage;
@@ -21,7 +22,11 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     public const MaterialIconKind PageIcon = MaterialIconKind.Table;
 
     public WorkspacePageViewModel()
-        : this(DesignTime.LoggerFactory, DesignTime.UnitService, NullMapService.Instance)
+        : this(
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance, 
+            DesignTime.LoggerFactory, 
+            DesignTime.UnitService, 
+            NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
@@ -29,12 +34,14 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     }
 
     public WorkspacePageViewModel(
+        ITreeSubPageContext<IControlsGalleryPage> context,
         ILoggerFactory loggerFactory,
         IUnitService unitService,
         IMapService mapService
     )
-        : base(PageId, loggerFactory)
+        : base(PageId, context)
     {
+        Init(context.Context);
         _loggerFactory = loggerFactory;
         var hideAll = new MenuItem("action1", "Hide all", loggerFactory)
         {
@@ -121,13 +128,13 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 Position = WorkspaceDock.Right,
                 ItemsSource =
                 {
-                    new SingleRttBoxViewModel("rtt-single-1", loggerFactory)
+                    new SingleRttBoxViewModel("rtt-single-1")
                     {
                         Header = "Single RTT 1",
                         ShortHeader = "RTT1",
                         ValueString = "15.25",
                     },
-                    new SingleRttBoxViewModel("rtt-single-2", loggerFactory)
+                    new SingleRttBoxViewModel("rtt-single-2")
                     {
                         Header = "Single RTT 2",
                         ShortHeader = "RTT2",
@@ -140,13 +147,13 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 Position = WorkspaceDock.Right,
                 ItemsSource =
                 {
-                    new SingleRttBoxViewModel("rtt-single-1", loggerFactory)
+                    new SingleRttBoxViewModel("rtt-single-1")
                     {
                         Header = "Single RTT 1",
                         ShortHeader = "RTT1",
                         ValueString = "15.25",
                     },
-                    new SingleRttBoxViewModel("rtt-single-2", loggerFactory)
+                    new SingleRttBoxViewModel("rtt-single-2")
                     {
                         Header = "Single RTT 2",
                         ShortHeader = "RTT2",
@@ -173,7 +180,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 CanExpand = true,
                 Anchors =
                 {
-                    new MapAnchor<IMapAnchor>("drone1", loggerFactory)
+                    new MapAnchor<IMapAnchor>("drone1")
                     {
                         Title = "Drone 1",
                         Location = new GeoPoint(53.0, 53.0, 100),
@@ -187,7 +194,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         Items = _itemsSource.ToNotifyCollectionChangedSlim();
     }
 
-    public override ValueTask Init(IControlsGalleryPage context)
+    public void Init(IControlsGalleryPage context)
     {
         var changeStatus = new MenuItem("action5", "Change status", _loggerFactory)
         {
@@ -204,7 +211,6 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             }),
         };
         Menu.Add(changeStatus);
-        return base.Init(context);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IWorkspaceWidget> Items { get; }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Asv.Modeling;
+using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -8,10 +9,10 @@ namespace Asv.Avalonia;
 
 /// <summary>
 /// Represents the base implementation of a view model that provides
-/// property change notifications and a proper disposal mechanism.
+/// property change notifications and a proper undo and disposal mechanism.
 /// This class is designed to be inherited by other view models.
 /// </summary>
-public abstract class ViewModelBase : IViewModel
+public abstract class ViewModel : IViewModel
 {
     private static readonly CompositeDisposable DisposedDisposable = CreateDisposedDisposable();
     private DisposableBag _disposableBag;
@@ -22,21 +23,13 @@ public abstract class ViewModelBase : IViewModel
     private CompositeDisposable? _dispose;
     private UndoController<IViewModel>? _undo;
 
-    protected ViewModelBase(string typeId, ILoggerFactory loggerFactory)
-        : this(typeId, default, loggerFactory)
-    {
-    }
-    
-    protected ViewModelBase(string typeId, NavArgs args, ILoggerFactory loggerFactory)
+    protected ViewModel(string typeId, NavArgs args = default)
     {
         Id = new NavId(typeId, args);
         Events = new RoutedEventController<IViewModel>(this).AddTo(ref DisposableBag);
         Events.Catch<TreeVisitorEvent>(e => e.Visit(this)).AddTo(ref DisposableBag);
-        Logger = loggerFactory.CreateLogger(GetType());
     }
 
-    protected ILogger Logger { get; }
-    
     public IRoutedEventController<IViewModel> Events { get; }
     
     public IUndoController Undo => _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
@@ -244,6 +237,44 @@ public abstract class ViewModelBase : IViewModel
     {
         return $"{GetType().Name}[{Id}]";
     }
+}
 
-    
+public abstract class ViewModel<TExtensionIfc> : ViewModel
+    where TExtensionIfc : class
+{
+    private readonly TExtensionIfc _self;
+
+    protected ViewModel(string typeId, NavArgs args, IExtensionService extensionService)
+        : base(typeId, args)
+    {
+        _self =
+            this as TExtensionIfc
+            ?? throw new Exception(
+                $"The class {GetType().FullName} does not implement {typeof(TExtensionIfc).FullName}"
+            );
+
+        // we load extensions on the UI thread to avoid deadlocks
+        Dispatcher.UIThread.Post(
+            () =>
+            {
+                if (IsDisposed)
+                {
+                    return;
+                }
+
+                extensionService.Extend(_self, Id.TypeId, Disposable);
+
+                AfterLoadExtensions();
+            },
+            DispatcherPriority.Background
+        );
+    }
+
+    protected TExtensionIfc Context => _self;
+
+    /// <summary>
+    /// Called after all extensions have been loaded and applied.
+    /// Derived classes must implement this method to provide additional logic after extension loading.
+    /// </summary>
+    protected abstract void AfterLoadExtensions();
 }

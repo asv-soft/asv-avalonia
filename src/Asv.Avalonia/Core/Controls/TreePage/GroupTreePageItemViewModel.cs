@@ -10,7 +10,7 @@ namespace Asv.Avalonia;
 public class GroupTreePageItemViewModel : TreeSubpage
 {
     public GroupTreePageItemViewModel()
-        : base(DesignTime.Id, DesignTime.LoggerFactory)
+        : base(DesignTime.Id.TypeId, default)
     {
         DesignTime.ThrowIfNotDesignMode();
         var root = new TreePage(
@@ -69,7 +69,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
         Func<NavId, ValueTask<IViewModel>> navigateCallback,
         ILoggerFactory loggerFactory
     )
-        : base(NavId.GenerateRandom(), loggerFactory)
+        : base(NavId.GenerateRandomAsString(), default)
     {
         Node = node;
         NavigateCommand = new ReactiveCommand<NavId>(x => navigateCallback(x)).DisposeItWith(

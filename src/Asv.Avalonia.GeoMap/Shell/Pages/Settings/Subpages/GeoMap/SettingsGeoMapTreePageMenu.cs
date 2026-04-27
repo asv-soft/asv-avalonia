@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +11,7 @@ public class SettingsGeoMapTreePageMenu : TreePage
             SettingsGeoMapViewModel.PageId,
             RS.SettingsGeoMapViewModel_Name,
             MaterialIconKind.Map,
-            SettingsGeoMapViewModel.PageId,
+            new NavId(SettingsGeoMapViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

@@ -2,11 +2,10 @@
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.IO;
 
-public class StatisticViewModel : ViewModelBase
+public class StatisticViewModel : ViewModel
 {
     private readonly IncrementalRateCounter _rxBytes;
     private readonly IncrementalRateCounter _txBytes;
@@ -14,7 +13,7 @@ public class StatisticViewModel : ViewModelBase
     private readonly IncrementalRateCounter _txPackets;
 
     public StatisticViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, TimeProvider.System)
+        : this(DesignTime.Id.TypeId, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         var stat = new Statistic();
@@ -39,11 +38,10 @@ public class StatisticViewModel : ViewModelBase
     }
 
     public StatisticViewModel(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string typeId,
         TimeProvider timeProvider
     )
-        : base(id, loggerFactory)
+        : base(typeId)
     {
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);

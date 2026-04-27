@@ -90,9 +90,9 @@ public static class IoMixin
         }
     }
 
-    extension(ShellMixin.StatusBuilder builder)
+    extension(StatusMixin.Builder builder)
     {
-        public ShellMixin.StatusBuilder UseConnectionStatus()
+        public StatusMixin.Builder UseConnectionStatus()
         {
             return builder.Register<ConnectionRateStatusViewModel, ConnectionRateStatusView>();
         }

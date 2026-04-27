@@ -4,14 +4,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class LogMessageViewModel : ViewModelBase
+public class LogMessageViewModel : ViewModel
 {
-    public LogMessageViewModel(LogMessage @base, ILoggerFactory loggerFactory, IViewModel parent)
-        : base(
-            NavId.GenerateByHash(@base.Message, @base.Category, @base.Description).TypeId,
-            default,
-            loggerFactory
-        )
+    public LogMessageViewModel(LogMessage @base, IViewModel parent)
+        : base(NavId.GenerateByHashAsString(@base.Message, @base.Category, @base.Description))
     {
         Base = @base;
         Parent = parent;
@@ -71,7 +67,7 @@ public class LogMessageViewModel : ViewModelBase
             return false;
         }
 
-        msg = new LogMessageViewModel(logMessage, loggerFactory, parent)
+        msg = new LogMessageViewModel(logMessage, parent)
         {
             MessageSelection = msgSelection,
             CategorySelection = catSelection,

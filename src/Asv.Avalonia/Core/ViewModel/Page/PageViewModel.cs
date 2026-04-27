@@ -7,35 +7,36 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, IPage
+public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
     where TContext : class, IPage
 {
     private readonly UnsavedChangesDialogPrefab _unsavedChangesDialogPrefab;
+    private readonly ILogger<PageViewModel<TContext>> _logger;
 
     protected PageViewModel(
         string typeId,
-        NavArgs args,
+        IPageContext context,
         ICommandService cmd,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(typeId, args, loggerFactory, ext)
+        : base(typeId, context.NavArgs, ext)
     {
         History = cmd.CreateHistory(this);
+        _logger = loggerFactory.CreateLogger<PageViewModel<TContext>>();
         
-        UndoHistory = new UndoHistory<IViewModel>(this, new JsonUndoHistoryStore())
+        UndoHistory = new UndoHistory<IViewModel>(this, context.UndoStore)
             .AddTo(ref DisposableBag);
         Icon = MaterialIconKind.Window;
         Title = typeId;
-        HasChanges = new BindableReactiveProperty<bool>(false);
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
         _unsavedChangesDialogPrefab = dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
     {
-        Logger.ZLogTrace($"Try close page {Title}[{Id}]");
+        _logger.ZLogTrace($"Try close page {Title}[{Id}]");
         try
         {
             if (!isForce)
@@ -50,7 +51,7 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
                             Title = RS.PageViewModel_CloseConfirmDialog_Title,
                         }
                     );
-                    Logger.ZLogTrace($"Try close page {Title}[{Id}] result: {result}");
+                    _logger.ZLogTrace($"Try close page {Title}[{Id}] result: {result}");
                     if (!result)
                     {
                         return;
@@ -62,7 +63,7 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         }
         catch (Exception e)
         {
-            Logger.ZLogError(e, $"Error on close page {Title}[{Id}]: {e.Message}");
+            _logger.ZLogError(e, $"Error on close page {Title}[{Id}]: {e.Message}");
         }
     }
 
@@ -98,7 +99,6 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
 
     public ICommandHistory History { get; }
     public IUndoHistory<IViewModel> UndoHistory { get; }
-    public BindableReactiveProperty<bool> HasChanges { get; }
     public ICommand TryClose { get; }
 
     #region Dispose
@@ -108,7 +108,6 @@ public abstract class PageViewModel<TContext> : ExtendableViewModel<TContext>, I
         if (disposing)
         {
             History.Dispose();
-            HasChanges.Dispose();
         }
 
         base.Dispose(disposing);

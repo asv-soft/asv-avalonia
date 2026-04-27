@@ -43,7 +43,8 @@ public sealed class CommandSnapshot : ISizedSpanSerializable, IJsonSerializable
         CommandId =
             reader.ReadAsString()
             ?? throw new JsonSerializationException($"{nameof(CommandId)} cannot be null.");
-        ContextPath = new NavPath(reader);
+        
+        //ContextPath = new NavPath(reader);
         _newValue =
             CommandArg.Create(reader)
             ?? throw new JsonSerializationException($"{nameof(_newValue)} cannot be null.");

@@ -9,7 +9,7 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class PluginInfoViewModel : ViewModelBase
+public class PluginInfoViewModel : ViewModel
 {
     public const string ViewModelIdPart = "plugin";
 
@@ -35,7 +35,7 @@ public class PluginInfoViewModel : ViewModelBase
         IPluginBootloader bootloader,
         ILoggerFactory logFactory
     )
-        : base(new NavId(ViewModelIdPart, pluginInfo.Id), logFactory)
+        : base(ViewModelIdPart, new NavArgs(new KeyValuePair<string, string>("id", pluginInfo.Id)))
     {
         _pluginInfo = pluginInfo;
         _manager = manager;
@@ -52,7 +52,7 @@ public class PluginInfoViewModel : ViewModelBase
         var isUninstalled = new ReactiveProperty<bool>(
             _localInfo?.IsUninstalled ?? false
         ).DisposeItWith(Disposable);
-        IsUninstalled = new HistoricalBoolProperty(nameof(IsUninstalled), isUninstalled, logFactory)
+        IsUninstalled = new HistoricalBoolProperty(nameof(IsUninstalled), isUninstalled)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         SelectedVersion = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(

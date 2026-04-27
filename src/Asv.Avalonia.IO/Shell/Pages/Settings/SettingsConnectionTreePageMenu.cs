@@ -14,7 +14,7 @@ public class SettingsConnectionTreePageMenu : TreePage
             SettingsConnectionViewModel.SubPageId,
             RS.SettingsPageExtension_TreePage_Title,
             SettingsConnectionViewModel.Icon,
-            SettingsConnectionViewModel.SubPageId,
+            new NavId(SettingsConnectionViewModel.SubPageId),
             NavId.Empty,
             loggerFactory
         ) { }

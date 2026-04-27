@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -9,10 +10,10 @@ public class WorkspaceTreeMenu : TreePage
             WorkspacePageViewModel.PageId,
             "Workspace",
             WorkspacePageViewModel.PageIcon,
-            WorkspacePageViewModel.PageId,
+            new NavId(WorkspacePageViewModel.PageId),
             NavId.Empty,
             loggerFactory,
-            new TagViewModel("status", loggerFactory)
+            new TagViewModel("status")
             {
                 Value = "Active",
                 Color = AsvColorKind.Success | AsvColorKind.Blink,

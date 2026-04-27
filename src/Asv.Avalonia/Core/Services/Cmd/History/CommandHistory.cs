@@ -59,9 +59,9 @@ public class CommandHistory : ICommandHistory
             .AddTo(ref dispose);
     }
 
-    private void GetFilePath(NavId NavId, out string undoPath, out string redoPath)
+    private void GetFilePath(NavId navId, out string undoPath, out string redoPath)
     {
-        var baseName = NavId.NormalizeTypeId(NavId.ToString().ToLower());
+        var baseName = navId.NormalizeTypeId(navId.ToString().ToLower());
         undoPath = Path.Combine(_historyFolder, $"{baseName}{UndoPostfix}");
         redoPath = Path.Combine(_historyFolder, $"{baseName}{RedoPostfix}");
     }

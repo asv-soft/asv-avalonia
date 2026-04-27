@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalProperty<GeoPoint>
 {
     public HistoricalGeoPointProperty(
-        NavId id,
+        string typeId,
         ReactiveProperty<GeoPoint> modelValue,
         IUnit latUnit,
         IUnit lonUnit,
@@ -16,7 +16,7 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
         ILoggerFactory loggerFactory,
         Action<GeoPointPropertyOptions>? configureOptions = null
     )
-        : base(id, modelValue, latUnit, lonUnit, altUnit, loggerFactory, configureOptions)
+        : base(typeId, modelValue, latUnit, lonUnit, altUnit, loggerFactory, configureOptions)
     {
         base.Latitude.Dispose();
         base.Longitude.Dispose();

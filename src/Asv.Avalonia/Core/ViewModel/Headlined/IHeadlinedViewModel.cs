@@ -1,9 +1,10 @@
+using Asv.Modeling;
 using Avalonia.Media;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IHeadlinedViewModel : IViewModel
+public interface IHeadlinedViewModel : IViewModel, ISupportOrder
 {
     /// <summary>
     /// Gets or sets the icon associated with the view model.
@@ -26,11 +27,6 @@ public interface IHeadlinedViewModel : IViewModel
     string? Description { get; set; }
 
     bool IsVisible { get; set; }
-
-    /// <summary>
-    /// Gets or sets the order of the view model.
-    /// </summary>
-    int Order { get; set; }
 }
 
 public class HeadlinedComparer : IComparer<IHeadlinedViewModel>

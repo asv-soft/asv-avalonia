@@ -1,11 +1,10 @@
 using Asv.Common;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class DialogViewModelBase : ViewModelBase
+public abstract class DialogViewModelBase : ViewModel
 {
     protected const string BaseId = "dialog";
 
@@ -13,8 +12,8 @@ public abstract class DialogViewModelBase : ViewModelBase
         EqualityComparer<IBindableReactiveProperty>.Default
     );
 
-    protected DialogViewModelBase(NavId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    protected DialogViewModelBase(string typeId)
+        : base(typeId)
     {
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }

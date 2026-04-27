@@ -11,7 +11,7 @@ public class AppearanceSettingTreePageMenu : TreePage
             SettingsAppearanceViewModel.PageId,
             RS.SettingsAppearanceViewModel_Name,
             MaterialIconKind.ThemeLightDark,
-            SettingsAppearanceViewModel.PageId,
+            new NavId(SettingsAppearanceViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

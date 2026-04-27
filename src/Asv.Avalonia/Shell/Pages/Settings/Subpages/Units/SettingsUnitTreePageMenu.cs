@@ -11,7 +11,7 @@ public class SettingsUnitTreePageMenu : TreePage
             SettingsUnitsViewModel.PageId,
             RS.SettingsUnitsViewModel_Name,
             MaterialIconKind.KeyboardSettings,
-            SettingsUnitsViewModel.PageId,
+            new NavId(SettingsUnitsViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

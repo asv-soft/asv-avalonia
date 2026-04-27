@@ -11,11 +11,11 @@ namespace Asv.Avalonia;
 public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspaceWidget
 {
     public PropertyEditorWidgetViewModel(
-        NavId id,
+        string id,
         string header,
         ILoggerFactory loggerFactory
     )
-        : base(id, loggerFactory)
+        : base(id)
     {
         Header = header;
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);

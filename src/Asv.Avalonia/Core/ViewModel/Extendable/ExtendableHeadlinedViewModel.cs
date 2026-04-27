@@ -11,7 +11,7 @@ public abstract class ExtendableHeadlinedViewModel<TSelfInterface>(
     NavArgs args,
     ILoggerFactory loggerFactory,
     IExtensionService ext
-) : ExtendableViewModel<TSelfInterface>(typeId, args, loggerFactory, ext), IHeadlinedViewModel
+) : ViewModel<TSelfInterface>(typeId, args, ext), IHeadlinedViewModel
     where TSelfInterface : class, ISupportId<NavId>
 {
     public MaterialIconKind? Icon

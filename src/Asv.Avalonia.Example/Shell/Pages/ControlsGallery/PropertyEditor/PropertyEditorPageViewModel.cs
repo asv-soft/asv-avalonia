@@ -13,16 +13,22 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public const MaterialIconKind PageIcon = MaterialIconKind.PropertyTag;
 
     public PropertyEditorPageViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
+            DesignTime.UnitService, 
+            DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
     }
 
-    public PropertyEditorPageViewModel(IUnitService unit, ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public PropertyEditorPageViewModel(
+        ITreeSubPageContext<IControlsGalleryPage> context,
+        IUnitService unit,
+        ILoggerFactory loggerFactory)
+        : base(PageId, context)
     {
-        PropertyEditor = new PropertyEditorViewModel("editor", loggerFactory)
+        PropertyEditor = new PropertyEditorViewModel("editor")
         {
             Parent = this,
             ItemsSource =

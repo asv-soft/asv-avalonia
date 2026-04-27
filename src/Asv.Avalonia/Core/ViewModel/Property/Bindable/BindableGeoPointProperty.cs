@@ -20,7 +20,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
     protected readonly ReactiveProperty<double> ModelLon;
 
     public BindableGeoPointProperty(
-        NavId id,
+        string typeId,
         ReactiveProperty<GeoPoint> modelValue,
         IUnit latUnit,
         IUnit lonUnit,
@@ -28,7 +28,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
         ILoggerFactory loggerFactory,
         Action<GeoPointPropertyOptions>? configureOptions = null
     )
-        : base(id, loggerFactory)
+        : base(typeId)
     {
         Options = new GeoPointPropertyOptions();
         configureOptions?.Invoke(Options);

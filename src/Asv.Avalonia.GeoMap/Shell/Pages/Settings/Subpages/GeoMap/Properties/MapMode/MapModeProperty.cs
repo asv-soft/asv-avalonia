@@ -8,7 +8,7 @@ namespace Asv.Avalonia.GeoMap;
 public record struct MapModeInfo(string Name, MapModeType Type);
 #pragma warning restore SA1313
 
-public class MapModeProperty : ViewModelBase
+public class MapModeProperty : ViewModel
 {
     public const string ViewModelId = "map.mode";
 
@@ -22,7 +22,7 @@ public class MapModeProperty : ViewModelBase
     }
 
     public MapModeProperty(IMapService mapService, ILoggerFactory loggerFactory)
-        : base(ViewModelId, loggerFactory)
+        : base(ViewModelId)
     {
         _mapService = mapService;
         SelectedItem = new BindableReactiveProperty<MapModeInfo>().DisposeItWith(Disposable);

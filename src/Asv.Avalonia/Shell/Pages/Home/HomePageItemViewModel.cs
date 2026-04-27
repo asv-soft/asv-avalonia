@@ -1,13 +1,12 @@
 using Asv.Common;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class HomePageItemViewModel : ViewModelBase
+public class HomePageItemViewModel : ViewModel
 {
-    public HomePageItemViewModel(IHomePageItem homePageItem, ILoggerFactory loggerFactory)
-        : base(homePageItem.Id, loggerFactory)
+    public HomePageItemViewModel(IHomePageItem homePageItem)
+        : base(homePageItem.Id.TypeId)
     {
         HomePageItem = homePageItem;
         ActionsView = homePageItem

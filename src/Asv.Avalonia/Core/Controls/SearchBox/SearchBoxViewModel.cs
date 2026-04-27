@@ -12,7 +12,7 @@ public delegate Task SearchDelegate(
 );
 
 public class SearchBoxViewModel
-    : ViewModelBase,
+    : ViewModel,
         ISupportTextSearch,
         ISupportRefresh,
         ISupportCancel,
@@ -26,9 +26,10 @@ public class SearchBoxViewModel
     private readonly SynchronizedReactiveProperty<double> _progress;
 
     private CancellationTokenSource? _cancellationTokenSource;
+    private readonly ILogger<SearchBoxViewModel> _logger;
 
     public SearchBoxViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, (_, _, _) => Task.CompletedTask)
+        : this(DesignTime.Id.TypeId, DesignTime.LoggerFactory, (_, _, _) => Task.CompletedTask)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -39,10 +40,10 @@ public class SearchBoxViewModel
         SearchDelegate searchCallback,
         TimeSpan? throttleTime = null
     )
-        : base(typeId, default, loggerFactory)
+        : base(typeId)
     {
         _searchCallback = searchCallback;
-
+        _logger = loggerFactory.CreateLogger<SearchBoxViewModel>();
         var text = new ReactiveProperty<string?>(string.Empty).DisposeItWith(Disposable);
         Text = new HistoricalStringProperty(nameof(Text), text, loggerFactory)
             .SetRoutableParent(this)
@@ -92,7 +93,7 @@ public class SearchBoxViewModel
         _isExecuting.Value = false;
         _canExecute.Value = true;
         _progress.Value = 1;
-        Logger.LogWarning("Search '{NavId}' was cancelled", Id);
+        _logger.LogWarning("Search '{NavId}' was cancelled", Id);
     }
 
     public void Refresh()
@@ -167,7 +168,7 @@ public class SearchBoxViewModel
 
     private void ErrorHandler(Exception err)
     {
-        Logger.LogError(err, "Error in search '{NavId}': {ErrMessage}", Id, err.Message);
+        _logger.LogError(err, "Error in search '{NavId}': {ErrMessage}", Id, err.Message);
         _isExecuting.Value = false;
         _canExecute.Value = true;
         _progress.Value = 1;

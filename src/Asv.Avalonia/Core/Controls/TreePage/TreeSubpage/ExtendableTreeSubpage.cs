@@ -1,22 +1,20 @@
 ﻿using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
 public abstract class ExtendableTreeSubpage<TSubContext>
-    : ExtendableViewModel<TSubContext>,
+    : ViewModel<TSubContext>,
         ITreeSubpage
     where TSubContext : class, ITreeSubpage
 {
     protected ExtendableTreeSubpage(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string id,
         IExtensionService ext
     )
-        : base(id, loggerFactory, ext)
+        : base(id, default, ext)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -30,17 +28,15 @@ public abstract class ExtendableTreeSubpage<TSubContext>
 }
 
 public abstract class ExtendableTreeSubpage<TContext, TSubContext>
-    : ExtendableViewModel<TSubContext>,
-        ITreeSubpage<TContext>
+    : ViewModel<TSubContext>, ITreeSubpage
     where TSubContext : class, ITreeSubpage
     where TContext : class, IPage
 {
     protected ExtendableTreeSubpage(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string id,
         IExtensionService ext
     )
-        : base(id, loggerFactory, ext)
+        : base(id, default, ext)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);

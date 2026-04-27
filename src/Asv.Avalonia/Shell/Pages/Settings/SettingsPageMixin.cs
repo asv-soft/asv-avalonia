@@ -5,9 +5,9 @@ namespace Asv.Avalonia;
 
 public static class SettingsPageMixin
 {
-    extension(ShellMixin.PageBuilder builder)
+    extension(PageMixin.Builder builder)
     {
-        public ShellMixin.PageBuilder UseSettingsPage(Action<Builder>? configure = null)
+        public PageMixin.Builder UseSettingsPage(Action<Builder>? configure = null)
         {
             // register settings page and view for it
             builder.Register<SettingsPageViewModel, TreePageView>(SettingsPageViewModel.PageId);
@@ -23,10 +23,10 @@ public static class SettingsPageMixin
             return builder;
         }
 
-        public Builder Settings => new Builder(builder);
+        public Builder Settings => new(builder);
     }
 
-    public class Builder(ShellMixin.PageBuilder builder)
+    public class Builder(PageMixin.Builder builder)
     {
         public Builder UseDefaultSettings()
         {
@@ -92,6 +92,6 @@ public static class SettingsPageMixin
             return this;
         }
 
-        public ShellMixin.PageBuilder Parent => builder;
+        public PageMixin.Builder Parent => builder;
     }
 }

@@ -4,9 +4,9 @@ namespace Asv.Avalonia;
 
 public static class HomeMixin
 {
-    extension(ShellMixin.PageBuilder builder)
+    extension(PageMixin.Builder builder)
     {
-        public ShellMixin.PageBuilder UseDefaultHomePage(Action<Builder>? configure = null)
+        public PageMixin.Builder UseDefaultHomePage(Action<Builder>? configure = null)
         {
             configure ??= b => b.UseDefault();
             configure(new Builder(builder));
@@ -14,10 +14,10 @@ public static class HomeMixin
             return builder;
         }
 
-        public Builder Home => new Builder(builder);
+        public Builder Home => new(builder);
     }
 
-    public class Builder(ShellMixin.PageBuilder builder)
+    public class Builder(PageMixin.Builder builder)
     {
         public Builder UseDefault()
         {

@@ -4,7 +4,7 @@ namespace Asv.Avalonia;
 
 /// <summary>
 /// Resolves and applies registered <see cref="IExtensionFor{TInterface}"/> implementations
-/// to a target instance. Used by <see cref="ExtendableViewModel{TSelfInterface}"/> to load extensions from DI.
+/// to a target instance. Used by <see cref="ViewModel{TSharedInterface}"/> to load extensions from DI.
 /// </summary>
 public interface IExtensionService
 {

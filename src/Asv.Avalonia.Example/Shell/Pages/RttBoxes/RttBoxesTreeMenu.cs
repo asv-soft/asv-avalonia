@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -9,7 +10,7 @@ public class RttBoxesTreeMenu : TreePage
             RttBoxesPageViewModel.PageId,
             "Rtt boxes",
             RttBoxesPageViewModel.PageIcon,
-            RttBoxesPageViewModel.PageId,
+            new NavId(RttBoxesPageViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

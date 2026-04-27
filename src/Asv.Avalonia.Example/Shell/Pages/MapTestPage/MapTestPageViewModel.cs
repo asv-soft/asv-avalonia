@@ -23,6 +23,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
     public MapTestPageViewModel()
         : this(
+            DesignTime.PageContext,
             DesignTime.CommandService,
             NullLoggerFactory.Instance,
             DesignTime.DialogService,
@@ -34,13 +35,14 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     }
 
     public MapTestPageViewModel(
+        IPageContext context,
         ICommandService cmd,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService extensionService,
         IMapService mapService
     )
-        : base(PageId, cmd, loggerFactory, dialogService, extensionService)
+        : base(PageId, context, cmd, loggerFactory, dialogService, extensionService)
     {
         Title = RS.MapTestPageViewModel_Title;
         Icon = PageIcon;
@@ -51,7 +53,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        MapViewModel = new MapViewModel("Map", loggerFactory, mapService)
+        MapViewModel = new MapViewModel("Map", mapService)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
@@ -88,7 +90,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
     private void CreateEditableAnchorCircle(int pointCount, double radiusMeters)
     {
-        var path = new MapAnchor<IMapAnchor>("editable-anchor-path", _loggerFactory)
+        var path = new MapAnchor<IMapAnchor>("editable-anchor-path")
         {
             IsVisible = true,
             IsPolygonClosed = true,
@@ -98,7 +100,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
         for (var i = 0; i < pointCount; i++)
         {
-            var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}", _loggerFactory)
+            var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}")
             {
                 Icon = MaterialIconKind.MapMarker,
                 Title = string.Format(RS.MapTestPageViewModel_Anchor_Editable, i),
@@ -233,7 +235,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
         double? azimuth = null
     )
     {
-        var anchor = new MapAnchor<IMapAnchor>(id, _loggerFactory)
+        var anchor = new MapAnchor<IMapAnchor>(id)
         {
             Icon = icon,
             Title = title,
@@ -264,7 +266,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
             useMapRotation: true
         );
 
-        var planeTrail = new MapAnchor<IMapAnchor>("plane-trail", _loggerFactory)
+        var planeTrail = new MapAnchor<IMapAnchor>("plane-trail")
         {
             IsVisible = false,
             IsPolygonClosed = false,
@@ -349,7 +351,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     {
         RemoveHeavyPolygon();
 
-        var anchor = new MapAnchor<IMapAnchor>(HeavyPolygonAnchorId, _loggerFactory)
+        var anchor = new MapAnchor<IMapAnchor>(HeavyPolygonAnchorId)
         {
             IsVisible = true,
             IsPolygonClosed = true,
@@ -373,7 +375,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     {
         for (var i = MapViewModel.Anchors.Count - 1; i >= 0; i--)
         {
-            if (MapViewModel.Anchors[i].Id == HeavyPolygonAnchorId)
+            if (MapViewModel.Anchors[i].Id.ToString() == HeavyPolygonAnchorId)
             {
                 MapViewModel.Anchors.RemoveAt(i);
             }

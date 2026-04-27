@@ -8,17 +8,18 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     public const string PageId = "geo-map";
 
     public SettingsGeoMapViewModel()
-        : this(NullMapService.Instance, DesignTime.DialogService, DesignTime.LoggerFactory)
+        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullMapService.Instance, DesignTime.DialogService, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public SettingsGeoMapViewModel(
+        ITreeSubPageContext<SettingsPageViewModel> pageContext,
         IMapService mapService,
         IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, loggerFactory)
+        : base(PageId, pageContext)
     {
         MapMode = new MapModeProperty(mapService, loggerFactory)
             .SetRoutableParent(this)

@@ -1,6 +1,5 @@
 using Asv.Common;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
@@ -13,11 +12,10 @@ public sealed class HistoricalBoolProperty
     private bool _internalChange;
 
     public HistoricalBoolProperty(
-        NavId id,
-        ReactiveProperty<bool> modelValue,
-        ILoggerFactory loggerFactory
+        string typeId,
+        ReactiveProperty<bool> modelValue
     )
-        : base(id, loggerFactory)
+        : base(typeId)
     {
         ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);

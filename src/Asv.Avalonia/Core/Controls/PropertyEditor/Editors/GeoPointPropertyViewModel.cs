@@ -1,5 +1,4 @@
 using Asv.Common;
-using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -15,7 +14,7 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
 
     public GeoPointPropertyViewModel()
         : this(
-            DesignTime.Id,
+            DesignTime.Id.TypeId,
             new ReactiveProperty<GeoPoint>(),
             DesignTime.LoggerFactory,
             DesignTime.UnitService
@@ -26,12 +25,12 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
     }
 
     public GeoPointPropertyViewModel(
-        NavId id,
+        string id,
         ReactiveProperty<GeoPoint> modelValue,
         ILoggerFactory loggerFactory,
         IUnitService unitService
     )
-        : base(id, loggerFactory)
+        : base(id)
     {
         _modelValue = modelValue;
         _latitude = new ReactiveProperty<double>().DisposeItWith(Disposable);

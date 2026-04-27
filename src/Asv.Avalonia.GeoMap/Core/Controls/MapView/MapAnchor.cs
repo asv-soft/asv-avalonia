@@ -1,25 +1,24 @@
 using Asv.Common;
+using Asv.Modeling;
 using Avalonia.Media;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapAnchor<TContext> : ExtendableViewModel<TContext>, IMapAnchor
+public class MapAnchor<TContext> : ViewModel<TContext>, IMapAnchor
     where TContext : class, IMapAnchor
 {
-    public MapAnchor(NavId id, ILoggerFactory loggerFactory)
-        : this(id, loggerFactory, NullExtensionService.Instance, GeoPoint.Zero) { }
+    public MapAnchor(string typeId)
+        : this(typeId, NullExtensionService.Instance, GeoPoint.Zero) { }
 
     public MapAnchor(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string id,
         IExtensionService ext,
         GeoPoint? location = null
     )
-        : base(id, loggerFactory, ext)
+        : base(id, default, ext)
     {
         Title = id.ToString();
         Polygon = new ObservableList<GeoPoint>();

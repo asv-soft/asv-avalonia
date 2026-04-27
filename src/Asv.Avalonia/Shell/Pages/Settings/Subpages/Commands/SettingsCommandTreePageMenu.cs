@@ -11,7 +11,7 @@ public class SettingsCommandTreePageMenu : TreePage
             SettingsCommandListViewModel.PageId,
             RS.SettingsCommandListViewModel_Name,
             MaterialIconKind.TemperatureCelsius,
-            SettingsCommandListViewModel.PageId,
+            new NavId(SettingsCommandListViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

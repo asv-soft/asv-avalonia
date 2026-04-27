@@ -2,22 +2,20 @@
 using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class ShellMessageViewModel : ViewModelBase
+public class ShellMessageViewModel : ViewModel
 {
     private readonly ShellMessage _message;
 
     public ShellMessageViewModel(
         string typeId,
-        ILoggerFactory loggerFactory,
         ReactiveCommand<ShellMessageViewModel> closeCommand,
         ShellMessage message
     )
-        : base(typeId, default, loggerFactory)
+        : base(typeId)
     {
         _message = message;
         CloseCommand = closeCommand;

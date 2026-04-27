@@ -2,7 +2,6 @@
 using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
@@ -12,8 +11,8 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
     public TwoColumnRttBoxViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
-        Left = new KeyValueViewModel().DisposeItWith(Disposable);
-        Right = new KeyValueViewModel().DisposeItWith(Disposable);
+        Left = new KeyValueViewModel(0).DisposeItWith(Disposable);
+        Right = new KeyValueViewModel(1).DisposeItWith(Disposable);
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
         Left.Header = "Left";
@@ -66,14 +65,13 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
     }
 
     public TwoColumnRttBoxViewModel(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string typeId,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(typeId, networkErrorTimeout)
     {
-        Left = new KeyValueViewModel(loggerFactory).DisposeItWith(Disposable);
-        Right = new KeyValueViewModel(loggerFactory).DisposeItWith(Disposable);
+        Left = new KeyValueViewModel(0).DisposeItWith(Disposable);
+        Right = new KeyValueViewModel(1).DisposeItWith(Disposable);
     }
 
     public KeyValueViewModel Left { get; }
@@ -93,12 +91,11 @@ public class TwoColumnRttBoxViewModel<T>
     private readonly TimeSpan? _networkErrorTimeout;
 
     public TwoColumnRttBoxViewModel(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string typeId,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(typeId, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         valueStream

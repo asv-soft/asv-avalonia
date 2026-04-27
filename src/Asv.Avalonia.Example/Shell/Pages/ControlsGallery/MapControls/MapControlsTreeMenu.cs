@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -9,7 +10,7 @@ public class MapControlsTreeMenu : TreePage
             MapControlsPageViewModel.PageId,
             RS.MapControlsPageViewModel_Title,
             MapControlsPageViewModel.PageIcon,
-            MapControlsPageViewModel.PageId,
+            new NavId(MapControlsPageViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

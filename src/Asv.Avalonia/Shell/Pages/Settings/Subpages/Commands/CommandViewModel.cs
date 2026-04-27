@@ -6,7 +6,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class CommandViewModel : ViewModelBase
+public sealed class CommandViewModel : ViewModel
 {
     public const string ViewModelBaseId = "hotkey";
     public const string EmptyHotKey = "-";
@@ -23,7 +23,7 @@ public sealed class CommandViewModel : ViewModelBase
         IDialogService dialogService,
         ILoggerFactory loggerFactory
     )
-        : base(new NavId(ViewModelBaseId, command.Id), loggerFactory)
+        : base($"{ViewModelBaseId}-{command.Id}")
     {
         ArgumentNullException.ThrowIfNull(svc);
         ArgumentNullException.ThrowIfNull(searchService);

@@ -17,8 +17,8 @@ public class TreePageViewModelConfig
 public abstract class TreePageViewModel<TContext, TSubPage>
     : PageViewModel<TContext>,
         ITreePageViewModel
-    where TContext : class, IPage
-    where TSubPage : ITreeSubpage<TContext>
+    where TContext : class, ITreePageViewModel
+    where TSubPage : ITreeSubpage
 {
     private readonly ILayoutService _layoutService;
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
@@ -30,7 +30,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     protected TreePageViewModel(
         string typeId,
-        NavArgs args,
+        IPageContext context,
         ICommandService cmd,
         IServiceProvider container,
         ILayoutService layoutService,
@@ -38,7 +38,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(typeId, args, cmd, loggerFactory, dialogService, ext)
+        : base(typeId, context, cmd, loggerFactory, dialogService, ext)
     {
         _container = container;
         _loggerFactory = loggerFactory;
@@ -146,7 +146,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             _internalNavigate = false;
         }
 
-        var newPage = await CreateSubPage(id) ?? CreateDefaultPage();
+        var newPage = CreateSubPage(id) ?? CreateDefaultPage();
         if (newPage is null)
         {
             return this;
@@ -179,17 +179,10 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
     }
 
-    protected virtual async ValueTask<ITreeSubpage?> CreateSubPage(NavId id)
+    protected virtual ITreeSubpage CreateSubPage(NavId id)
     {
-        var page = _container.GetKeyedService<TSubPage>(id.Id);
-        if (page == null)
-        {
-            return null;
-        }
-
-        page.InitArgs(id.Args);
-        await page.Init(GetContext());
-        return page;
+        var context = new TreeSubPageContext<TContext>(id.Args, Context);
+        return _container.CreateTreeSubPage<TContext, TSubPage>(id.TypeId, context);
     }
 
     private ValueTask InternalCatchEvent(IViewModel owner, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
@@ -242,7 +235,9 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     private void SetSelectedNodeFromConfig(TreePageViewModelConfig cfg)
     {
-        var selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == cfg.SelectedNodeId);
+        var navId = new NavId(cfg.SelectedNodeId);
+        
+        var selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == navId);
 
         SelectedNode.Value = selectedNode;
 
@@ -256,12 +251,12 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             .ObserveAdd()
             .Subscribe(addEvent =>
             {
-                if (addEvent.Value.Id != cfg.SelectedNodeId)
+                if (addEvent.Value.Id != navId)
                 {
                     return;
                 }
 
-                selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == cfg.SelectedNodeId);
+                selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == navId);
                 if (selectedNode is null)
                 {
                     return;
@@ -281,11 +276,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         NavId
     >?> SelectedNode { get; }
     public ObservableList<ITreePage> Nodes { get; }
-
-    protected override TContext GetContext()
-    {
-        return this as TContext ?? throw new InvalidOperationException("Can't cast to context");
-    }
 
     protected override void AfterLoadExtensions()
     {

@@ -1,13 +1,11 @@
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
 public abstract class BindablePropertyBase<TModel, TView>(
-    NavId id,
-    ILoggerFactory loggerFactory
-) : ViewModelBase(id, loggerFactory), ISupportFocus
+    string typeId
+) : ViewModel(typeId), ISupportFocus
 {
     public abstract BindableReactiveProperty<TView> ViewValue { get; }
 

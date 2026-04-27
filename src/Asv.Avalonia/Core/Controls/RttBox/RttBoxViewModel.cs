@@ -1,27 +1,25 @@
 using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class RttBoxViewModel : ViewModelBase
+public class RttBoxViewModel : ViewModel
 {
     private readonly TimeProvider _timeProvider;
     private long _lastUpdate;
 
     public RttBoxViewModel()
-        : base(DesignTime.Id, DesignTime.LoggerFactory)
+        : base(DesignTime.Id.TypeId)
     {
         _timeProvider = TimeProvider.System;
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public RttBoxViewModel(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string id,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory)
+        : base(id)
     {
         _timeProvider = TimeProvider.System;
         if (networkErrorTimeout is not null)

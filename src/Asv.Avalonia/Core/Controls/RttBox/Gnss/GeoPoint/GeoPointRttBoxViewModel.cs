@@ -15,7 +15,7 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
     private readonly IUnit _altitudeUnit;
 
     public GeoPointRttBoxViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, NullUnitService.Instance, null)
+        : this(DesignTime.Id.TypeId, DesignTime.LoggerFactory, NullUnitService.Instance, null)
     {
         DesignTime.ThrowIfNotDesignMode();
         var start = new GeoPoint(55.75, 37.6173, 250.0); // Moscow coordinates
@@ -49,12 +49,12 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
     }
 
     public GeoPointRttBoxViewModel(
-        NavId id,
+        string typeId,
         ILoggerFactory loggerFactory,
         IUnitService units,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(typeId, networkErrorTimeout)
     {
         _location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
         _latitudeUnit =
@@ -102,13 +102,13 @@ public class GeoPointRttBoxViewModel<T>
     private readonly TimeSpan? _networkErrorTimeout;
 
     public GeoPointRttBoxViewModel(
-        NavId id,
+        string typeId,
         ILoggerFactory loggerFactory,
         IUnitService units,
         Observable<T> value,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, units, networkErrorTimeout)
+        : base(typeId, loggerFactory, units, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         value

@@ -4,7 +4,6 @@ using Asv.IO;
 using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
@@ -16,7 +15,7 @@ public class SettingsConnectionViewModelConfig
 }
 
 public class SettingsConnectionViewModel
-    : ExtendableViewModel<ISettingsConnectionSubPage>,
+    : ViewModel<ISettingsConnectionSubPage>,
         ISettingsConnectionSubPage
 {
     public const string SubPageId = "connections";
@@ -41,7 +40,6 @@ public class SettingsConnectionViewModel
             NullDeviceManager.Instance,
             DesignTime.Navigation,
             AppHost.Instance.Services,
-            DesignTime.LoggerFactory,
             DesignTime.ExtensionService
         )
     {
@@ -62,10 +60,9 @@ public class SettingsConnectionViewModel
         IDeviceManager deviceManager,
         INavigationService navigationService,
         IServiceProvider containerHost,
-        ILoggerFactory loggerFactory,
         IExtensionService ext
     )
-        : base(SubPageId, loggerFactory, ext)
+        : base(SubPageId, default, ext)
     {
         _navigationService = navigationService;
         _containerHost = containerHost;

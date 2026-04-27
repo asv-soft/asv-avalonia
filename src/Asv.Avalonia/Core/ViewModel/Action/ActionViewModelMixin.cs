@@ -11,7 +11,7 @@ public static class ActionViewModelMixin
         string? customDescription = null
     )
     {
-        var model = new ActionViewModel(info.Id, loggerFactory)
+        var model = new ActionViewModel(info.Id)
         {
             Icon = info.Icon,
             IconColor = info.IconColor,

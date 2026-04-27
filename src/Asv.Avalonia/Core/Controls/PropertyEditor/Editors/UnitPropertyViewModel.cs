@@ -18,7 +18,7 @@ public class UnitPropertyViewModel
 
     public UnitPropertyViewModel()
         : this(
-            DesignTime.Id.ToString(),
+            DesignTime.Id.TypeId.ToString(),
             new BindableReactiveProperty<double>(),
             new AltitudeUnit(
                 DesignTime.Configuration,

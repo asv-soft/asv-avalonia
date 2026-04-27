@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace Asv.Avalonia;
 
 public class DialogItemUnsavedChangesViewModel(ILoggerFactory loggerFactory)
-    : DialogViewModelBase(DialogId, loggerFactory)
+    : DialogViewModelBase(DialogId)
 {
     public const string DialogId = $"{BaseId}.item.unsaved_changes";
 

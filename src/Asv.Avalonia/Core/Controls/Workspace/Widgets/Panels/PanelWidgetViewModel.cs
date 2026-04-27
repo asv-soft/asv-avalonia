@@ -8,8 +8,8 @@ namespace Asv.Avalonia;
 
 public abstract class PanelWidgetViewModel : WorkspaceWidget
 {
-    protected PanelWidgetViewModel(NavId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    protected PanelWidgetViewModel(string id, ILoggerFactory loggerFactory)
+        : base(id)
     {
         ItemsSource = new ObservableList<IViewModel>();
         ItemsSource.SetRoutableParent(this).DisposeItWith(Disposable);

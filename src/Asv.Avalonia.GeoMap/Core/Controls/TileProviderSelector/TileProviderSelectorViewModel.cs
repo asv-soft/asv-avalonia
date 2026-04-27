@@ -7,7 +7,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class TileProviderSelectorViewModel : ViewModelBase
+public class TileProviderSelectorViewModel : ViewModel
 {
     public const string ViewModelId = "tile-provider";
 
@@ -22,7 +22,7 @@ public class TileProviderSelectorViewModel : ViewModelBase
     }
 
     public TileProviderSelectorViewModel(IMapService mapService, ILoggerFactory loggerFactory)
-        : base(ViewModelId, loggerFactory)
+        : base(ViewModelId)
     {
         _mapService = mapService;
 
@@ -30,7 +30,7 @@ public class TileProviderSelectorViewModel : ViewModelBase
             mapService.AvailableProviders.OrderBy(p => p.Info.Group.Id)
         );
         _view = itemsSource
-            .CreateView(p => new TileProviderViewModel(p, loggerFactory))
+            .CreateView(p => new TileProviderViewModel(p))
             .DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);

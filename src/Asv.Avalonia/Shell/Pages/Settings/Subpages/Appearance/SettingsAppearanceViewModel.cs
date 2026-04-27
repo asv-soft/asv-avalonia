@@ -19,7 +19,7 @@ public class SettingsAppearanceViewModel
     }
 
     public SettingsAppearanceViewModel(ILoggerFactory loggerFactory, IExtensionService ext)
-        : base(PageId, loggerFactory, ext)
+        : base(PageId, ext)
     {
         Sections = [];
         Sections.SetRoutableParent(this).DisposeItWith(Disposable);

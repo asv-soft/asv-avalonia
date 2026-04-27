@@ -1,17 +1,11 @@
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public sealed class KeyValueViewModel : DisposableViewModel
+public sealed class KeyValueViewModel(int index)
+    : ViewModel($"{BaseIdPart}_{index}")
 {
-    public static string BaseIdPart = "key-value";
-
-    public KeyValueViewModel()
-        : this(DesignTime.LoggerFactory) { }
-
-    public KeyValueViewModel(ILoggerFactory loggerFactory)
-        : base(new NavId(BaseIdPart, Guid.NewGuid().ToString()), loggerFactory) { }
+    public const string BaseIdPart = "key-value";
 
     public string? Header
     {

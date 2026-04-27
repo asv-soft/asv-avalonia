@@ -1,6 +1,5 @@
 using Asv.Common;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
@@ -14,11 +13,10 @@ public sealed class HistoricalEnumProperty<TEnum>
     private bool _internalChange;
 
     public HistoricalEnumProperty(
-        NavId id,
-        ReactiveProperty<Enum> modelValue,
-        ILoggerFactory loggerFactory
+        string typeId,
+        ReactiveProperty<Enum> modelValue
     )
-        : base(id, loggerFactory)
+        : base(typeId)
     {
         ModelValue = modelValue;
         ViewValue = new BindableReactiveProperty<TEnum>().DisposeItWith(Disposable);

@@ -18,12 +18,11 @@ public class EndpointViewModel : HeadlinedViewModel
     private readonly IUnit _frequencyUnit;
 
     private EndpointViewModel(
-        NavId id,
+        string id,
         IUnitService unitService,
-        ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base(id, loggerFactory)
+        : base(id)
     {
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
@@ -38,7 +37,7 @@ public class EndpointViewModel : HeadlinedViewModel
             .ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
         TagsSource.Add(
-            RxTag = new TagViewModel("rx", loggerFactory)
+            RxTag = new TagViewModel("rx")
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 Color = AsvColorKind.Success,
@@ -46,7 +45,7 @@ public class EndpointViewModel : HeadlinedViewModel
             }
         );
         TagsSource.Add(
-            TxTag = new TagViewModel("tx", loggerFactory)
+            TxTag = new TagViewModel("tx")
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 Color = AsvColorKind.Success,
@@ -56,7 +55,7 @@ public class EndpointViewModel : HeadlinedViewModel
     }
 
     internal EndpointViewModel()
-        : this(DesignTime.Id, DesignTime.UnitService, DesignTime.LoggerFactory, TimeProvider.System)
+        : this(DesignTime.Id.TypeId, DesignTime.UnitService, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         Header = "127.0.0.1:7574";
@@ -68,7 +67,7 @@ public class EndpointViewModel : HeadlinedViewModel
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : this(protocolEndpoint.Id, unitService, loggerFactory, timeProvider)
+        : this(protocolEndpoint.Id, unitService, timeProvider)
     {
         _protocolEndpoint = protocolEndpoint;
         Header = protocolEndpoint.Id;

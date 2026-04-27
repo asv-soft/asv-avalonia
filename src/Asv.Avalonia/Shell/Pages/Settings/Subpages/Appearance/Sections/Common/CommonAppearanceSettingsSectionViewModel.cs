@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 namespace Asv.Avalonia;
 
 public class CommonAppearanceSettingsSectionViewModel
-    : ViewModelBase,
+    : ViewModel,
         ISettingsAppearanceSection
 {
     public const string PageId = "common";
@@ -26,12 +26,12 @@ public class CommonAppearanceSettingsSectionViewModel
         IDialogService dialog,
         ILoggerFactory loggerFactory
     )
-        : base(PageId, loggerFactory)
+        : base(PageId)
     {
-        Theme = new ThemeProperty(themeService, loggerFactory)
+        Theme = new ThemeProperty(themeService)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Language = new LanguageProperty(localizationService, dialog, loggerFactory)
+        Language = new LanguageProperty(localizationService, dialog)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
     }

@@ -1,11 +1,12 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class InstalledPluginInfoViewModel : ViewModelBase
+public class InstalledPluginInfoViewModel : ViewModel
 {
     public const string ViewModelIdPart = "plugin.installed";
 
@@ -20,7 +21,7 @@ public class InstalledPluginInfoViewModel : ViewModelBase
         IPluginManager manager,
         ILoggerFactory loggerFactory
     )
-        : base(new NavId(ViewModelIdPart, pluginInfo.Id), loggerFactory)
+        : base(ViewModelIdPart, new NavArgs(new KeyValuePair<string, string>("plugin", pluginInfo.Id)))
     {
         ArgumentNullException.ThrowIfNull(pluginInfo);
         ArgumentNullException.ThrowIfNull(manager);
@@ -39,8 +40,7 @@ public class InstalledPluginInfoViewModel : ViewModelBase
         );
         IsUninstalled = new HistoricalBoolProperty(
             nameof(IsUninstalled),
-            isUninstalled,
-            loggerFactory
+            isUninstalled
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);

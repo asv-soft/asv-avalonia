@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace Asv.Avalonia.Example;
 
 public class DialogItemImageViewModel(ILoggerFactory loggerFactory)
-    : DialogViewModelBase(DialogId, loggerFactory)
+    : DialogViewModelBase(DialogId)
 {
     public const string DialogId = $"{BaseId}.item.image";
 

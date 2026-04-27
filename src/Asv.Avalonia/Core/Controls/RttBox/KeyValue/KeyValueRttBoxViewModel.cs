@@ -11,11 +11,10 @@ namespace Asv.Avalonia;
 
 public class KeyValueRttBoxViewModel : RttBoxViewModel
 {
-    private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<KeyValueViewModel> _itemsSource;
 
     public KeyValueRttBoxViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory)
+        : this(DesignTime.Id.TypeId)
     {
         DesignTime.ThrowIfNotDesignMode();
         ShortHeader = "Short";
@@ -23,11 +22,11 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
         ShortUnitSymbol = "ms";
         _itemsSource =
         [
-            new() { Header = "Power", UnitSymbol = "dBm" },
-            new() { Header = "Rise time", UnitSymbol = "ms" },
-            new() { Header = "Fall time", UnitSymbol = "ms" },
-            new() { Header = "Status", ValueString = "Normal" },
-            new() { Header = "Unknown" },
+            new(0) { Header = "Power", UnitSymbol = "dBm" },
+            new(1) { Header = "Rise time", UnitSymbol = "ms" },
+            new(2) { Header = "Fall time", UnitSymbol = "ms" },
+            new(3) { Header = "Status", ValueString = "Normal" },
+            new(4) { Header = "Unknown" },
         ];
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         Items = _itemsSource
@@ -58,13 +57,11 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
     }
 
     public KeyValueRttBoxViewModel(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string typeId,
         TimeSpan? networkErrorTimeout = null
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(typeId, networkErrorTimeout)
     {
-        _loggerFactory = loggerFactory;
         _itemsSource = [];
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         Items = _itemsSource
@@ -86,7 +83,7 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
             while (index >= _itemsSource.Count)
             {
                 _itemsSource.Add(
-                    new KeyValueViewModel(_loggerFactory)
+                    new KeyValueViewModel(_itemsSource.Count)
                     {
                         Header = header,
                         UnitSymbol = unitSymbol,
@@ -137,12 +134,12 @@ public class KeyValueRttBoxViewModel<T>
     private readonly TimeSpan? _networkErrorTimeout;
 
     public KeyValueRttBoxViewModel(
-        NavId id,
+        string typeId,
         ILoggerFactory loggerFactory,
         Observable<T> valueStream,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(typeId, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         valueStream

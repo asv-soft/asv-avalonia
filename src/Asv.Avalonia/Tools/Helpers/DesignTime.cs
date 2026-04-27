@@ -268,10 +268,11 @@ public static class DesignTime
 
     public static MenuTree MenuTree => new(Menu);
 
-    public static NavId Id => NavId.GenerateRandom();
+    public static NavId Id => new(NavId.GenerateRandomAsString());
     public static ICommand EmptyCommand = new ReactiveCommand();
     public static IDialogService DialogService => NullDialogService.Instance;
     public static IExtensionService ExtensionService => NullExtensionService.Instance;
+    public static ILayoutService LayoutService => NullLayoutService.Instance;
 
     public static void ThrowIfNotDesignMode()
     {
@@ -283,7 +284,7 @@ public static class DesignTime
 
     public static MaterialIconKind RandomImage => RandomEnum<MaterialIconKind>();
     public static AsvColorKind RandomColor => RandomEnum<AsvColorKind>();
-
+    public static IPageContext PageContext => NullPageContext.Instance;
     public static IShell Shell => DesignTimeShellViewModel.Instance;
     public static IConfiguration Configuration { get; } = new InMemoryConfiguration();
     public static ILoggerFactory LoggerFactory => NullLoggerFactory.Instance;

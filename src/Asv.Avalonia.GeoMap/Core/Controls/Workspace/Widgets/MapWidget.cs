@@ -9,8 +9,8 @@ namespace Asv.Avalonia.GeoMap;
 
 public class MapWidget : MapViewModel, IWorkspaceWidget
 {
-    public MapWidget(NavId id, ILoggerFactory loggerFactory, IMapService mapService)
-        : base(id, loggerFactory, mapService)
+    public MapWidget(string id, ILoggerFactory loggerFactory, IMapService mapService)
+        : base(id, mapService)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);

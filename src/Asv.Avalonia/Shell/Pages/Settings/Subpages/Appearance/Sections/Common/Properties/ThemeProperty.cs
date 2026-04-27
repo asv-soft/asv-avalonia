@@ -1,9 +1,8 @@
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class ThemeProperty : ViewModelBase
+public class ThemeProperty : ViewModel
 {
     private readonly IThemeService _svc;
     private bool _internalChange;
@@ -12,13 +11,13 @@ public class ThemeProperty : ViewModelBase
     public const string ViewModelId = "theme.current";
 
     public ThemeProperty()
-        : this(DesignTime.ThemeService, DesignTime.LoggerFactory)
+        : this(DesignTime.ThemeService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public ThemeProperty(IThemeService svc, ILoggerFactory loggerFactory)
-        : base(ViewModelId, loggerFactory)
+    public ThemeProperty(IThemeService svc)
+        : base(ViewModelId)
     {
         _svc = svc;
         SelectedItem = new BindableReactiveProperty<IThemeInfo>(svc.CurrentTheme.CurrentValue);

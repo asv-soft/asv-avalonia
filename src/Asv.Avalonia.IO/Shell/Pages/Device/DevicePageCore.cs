@@ -2,6 +2,7 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using Asv.Common;
 using Asv.IO;
+using Asv.Modeling;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -68,7 +69,7 @@ public sealed class DevicePageCore : IDisposable
     public Observable<Unit> OnDeviceDisconnected { get; }
     public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _isDeviceInitialized;
 
-    public void Init(NameValueCollection args)
+    public void Init(NavArgs args)
     {
         ThrowIfDisposed();
 

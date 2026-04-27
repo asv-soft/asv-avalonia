@@ -1,11 +1,10 @@
 ﻿using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class TagViewModel(NavId id, ILoggerFactory loggerFactory)
-    : ViewModelBase(id: id, loggerFactory)
+public class TagViewModel(string id)
+    : ViewModel(id)
 {
     public AsvColorKind Color
     {

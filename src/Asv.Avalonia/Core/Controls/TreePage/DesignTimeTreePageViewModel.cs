@@ -19,14 +19,15 @@ public interface IDesignTimeTreePage : IPage
     ReactiveCommand HideMenuCommand { get; }
 }
 
-public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage<IPage>>
+public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel, ITreeSubpage>
 {
     public DesignTimeTreePageViewModel()
         : base(
-            DesignTime.Id,
+            DesignTime.Id.TypeId,
+            DesignTime.PageContext,
             DesignTime.CommandService,
             AppHost.Instance.Services,
-            NullLayoutService.Instance,
+            DesignTime.LayoutService,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
             DesignTime.ExtensionService
@@ -38,13 +39,13 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1",
                 "Node1",
                 MaterialIconKind.Abacus,
-                "node1",
+                new NavId("node1"),
                 NavId.Empty,
                 DesignTime.LoggerFactory
             )
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
-                Status = new TagViewModel(DesignTime.Id, DesignTime.LoggerFactory)
+                Status = new TagViewModel(DesignTime.Id.TypeId)
                 {
                     Key = "STATUS",
                     Value = "Active",
@@ -58,7 +59,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node2",
                 "node2",
                 MaterialIconKind.Abacus,
-                "node2",
+                new NavId("node2"),
                 NavId.Empty,
                 DesignTime.LoggerFactory
             )
@@ -68,7 +69,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node3",
                 "node3",
                 MaterialIconKind.Abacus,
-                "node3",
+                new NavId("node3"),
                 NavId.Empty,
                 DesignTime.LoggerFactory
             )
@@ -78,7 +79,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node4",
                 "node4",
                 MaterialIconKind.Abacus,
-                "node4",
+                new NavId("node4"),
                 NavId.Empty,
                 DesignTime.LoggerFactory
             )
@@ -88,7 +89,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node5",
                 "node5",
                 MaterialIconKind.Abacus,
-                "node5",
+                new NavId("node5"),
                 NavId.Empty,
                 DesignTime.LoggerFactory
             )
@@ -101,8 +102,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1.1",
                 "node1.1",
                 MaterialIconKind.Abacus,
-                "node1",
-                "node1",
+                new NavId("node1"),
+                new NavId("node1"),
                 DesignTime.LoggerFactory
             )
             {
@@ -114,13 +115,13 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1.2",
                 "node1.2",
                 MaterialIconKind.Abacus,
-                "node1",
-                "node1",
+                new NavId("node1"),
+                new NavId("node1"),
                 DesignTime.LoggerFactory
             )
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
-                Status = new TagViewModel(DesignTime.Id, DesignTime.LoggerFactory)
+                Status = new TagViewModel(DesignTime.Id.TypeId)
                 {
                     Value = "Active",
                     Color = AsvColorKind.Success,
@@ -132,8 +133,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1.3",
                 "node1.3",
                 MaterialIconKind.Abacus,
-                "node1",
-                "node1",
+                new NavId("node1"),
+                new NavId("node1"),
                 DesignTime.LoggerFactory
             )
         );
@@ -142,8 +143,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1.4",
                 "node1.4",
                 MaterialIconKind.Abacus,
-                "node1",
-                "node1",
+                new NavId("node1"),
+                new NavId("node1"),
                 DesignTime.LoggerFactory
             )
         );
@@ -152,8 +153,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1.5",
                 "node1.5",
                 MaterialIconKind.Abacus,
-                "node1",
-                "node1",
+                new NavId("node1"),
+                new NavId("node1"),
                 DesignTime.LoggerFactory
             )
         );
@@ -162,8 +163,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1.1.1",
                 "node1.1.1",
                 MaterialIconKind.Abacus,
-                "node1.1",
-                "node1.1",
+                new NavId("node1.1"),
+                new NavId("node1.1"),
                 DesignTime.LoggerFactory
             )
         );
@@ -172,14 +173,14 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
                 "node1.1.2",
                 "node1.1.2",
                 MaterialIconKind.Abacus,
-                "node1.1",
-                "node1.1",
+                new NavId("node1.1"),
+                new NavId("node1.1"),
                 DesignTime.LoggerFactory
             )
         );
     }
 
-    protected override ValueTask<ITreeSubpage?> CreateSubPage(NavId id)
+    protected override ITreeSubpage CreateSubPage(NavId id)
     {
         var set = new SettingsAppearanceViewModel();
         set.Menu.Add(
@@ -192,6 +193,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<IPage, ITreeSubpage
         set.Menu.Add(new MenuItem("cmd01", "Command1", DesignTime.LoggerFactory));
         set.Menu.Add(new MenuItem("cmd02", "Command2", DesignTime.LoggerFactory));
         set.Menu.Add(new MenuItem("cmd03", "Command3", DesignTime.LoggerFactory));
-        return ValueTask.FromResult<ITreeSubpage?>(set);
+        return set;
     }
 }

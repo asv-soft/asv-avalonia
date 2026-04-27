@@ -12,39 +12,74 @@ public static class ViewModelMixin
         public Builder ViewModel => new(builder);
     }
     
+    public delegate TViewModelInterface FactoryDelegate<out TViewModelInterface, in TArgs>(TArgs args)
+        where TViewModelInterface : IViewModel;
+    
     extension(IServiceProvider services)
     {
-        public TViewModelInterface CreateViewModel<TViewModelInterface>(NavId id)
+        public TViewModelInterface CreateViewModel<TViewModelInterface, TArgs>(TArgs args)
             where TViewModelInterface : IViewModel
         {
-            return services
-                .GetRequiredKeyedService<ViewModelFactory<TViewModelInterface>>(id.TypeId)
-                .Invoke(id.Args);
+            return 
+                services.GetService<TViewModelInterface>() ??
+             services
+                .GetRequiredService<FactoryDelegate<TViewModelInterface, TArgs>>()
+                .Invoke(args);
+        }
+        
+        public TViewModelInterface CreateViewModel<TViewModelInterface, TArgs>(string key, TArgs args)
+            where TViewModelInterface : IViewModel
+        {
+            return 
+                services.GetKeyedService<TViewModelInterface>(key) ??
+                services
+                    .GetRequiredKeyedService<FactoryDelegate<TViewModelInterface, TArgs>>(key)
+                    .Invoke(args);
         }
     }
 
     public class Builder(IHostApplicationBuilder builder)
     {
-        public Builder Register<TViewModelInterface, TViewModelImplementation>(string typeId)
+        public Builder RegisterKeyed<TViewModelInterface, TViewModelImplementation>(string key)
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
         {
-            builder.Services.AddKeyedTransient<ViewModelFactory<TViewModelInterface>>(
-                typeId, 
-                (services, key) => args =>
-                {
-                    Debug.Assert(key != null, nameof(key) + " != null");
-                    var viewModelTypeId = (string)key;
-                    var vm = ActivatorUtilities.CreateInstance<TViewModelImplementation>(services, args);
-                    if (vm.Id.TypeId != viewModelTypeId)
-                    {
-                        throw new InvalidOperationException(
-                            $"Registered implementation {typeof(TViewModelImplementation).Name} of {typeof(TViewModelInterface).Name} {nameof(IViewModel.Id)}.{nameof(IViewModel.Id.TypeId)} != {viewModelTypeId}"
-                        );
-                    }
+            builder.Services.AddKeyedTransient<TViewModelInterface, TViewModelImplementation>(key);
+            return this;
+        }
+        public Builder Register<TViewModelInterface, TViewModelImplementation>()
+            where TViewModelInterface : class, IViewModel
+            where TViewModelImplementation : class, TViewModelInterface
+        {
+            builder.Services.AddTransient<TViewModelInterface, TViewModelImplementation>();
+            return this;
+        }
 
-                    return vm;
-                });
+        public Builder RegisterWithArgs<TViewModelInterface, TViewModelImplementation, TArgs>()
+            where TViewModelInterface : class, IViewModel
+            where TViewModelImplementation : class, TViewModelInterface
+        {
+            builder.Services.AddTransient<FactoryDelegate<TViewModelInterface, TArgs>>(
+                services => 
+                    args =>
+                    {
+                        Debug.Assert(args != null, nameof(args) + " != null");
+                        return ActivatorUtilities.CreateInstance<TViewModelImplementation>(services, args);
+                    });
+            return this;
+        }
+        public Builder RegisterKeyedWithArgs<TViewModelInterface, TViewModelImplementation, TArgs>(string key)
+            where TViewModelInterface : class, IViewModel
+            where TViewModelImplementation : class, TViewModelInterface
+        {
+            builder.Services.AddKeyedTransient<FactoryDelegate<TViewModelInterface, TArgs>>(
+                key,
+                (services, _) => 
+                    args =>
+                    {
+                        Debug.Assert(args != null, nameof(args) + " != null");
+                        return ActivatorUtilities.CreateInstance<TViewModelImplementation>(services, args);
+                    });
             return this;
         }
         

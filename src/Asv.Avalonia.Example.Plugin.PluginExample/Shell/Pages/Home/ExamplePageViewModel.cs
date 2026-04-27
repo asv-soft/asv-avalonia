@@ -13,6 +13,7 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>
 
     public ExamplePageViewModel()
         : this(
+            DesignTime.PageContext,
             DesignTime.CommandService,
             NullLoggerFactory.Instance,
             DesignTime.DialogService,
@@ -23,12 +24,13 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>
     }
 
     public ExamplePageViewModel(
+        IPageContext context,
         ICommandService cmd,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService extensionService
     )
-        : base(PageId, cmd, loggerFactory, dialogService, extensionService) { }
+        : base(PageId, context, cmd, loggerFactory, dialogService, extensionService) { }
 
     public override IEnumerable<IViewModel> GetChildren()
     {

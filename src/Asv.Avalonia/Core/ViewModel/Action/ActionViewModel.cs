@@ -1,10 +1,9 @@
 using System.Windows.Input;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class ActionViewModel(string id, ILoggerFactory loggerFactory)
-    : HeadlinedViewModel(id, loggerFactory),
+public class ActionViewModel(string typeId)
+    : HeadlinedViewModel(typeId),
         IActionViewModel
 {
     public ICommand? Command

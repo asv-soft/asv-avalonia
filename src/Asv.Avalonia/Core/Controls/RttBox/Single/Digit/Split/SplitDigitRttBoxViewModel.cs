@@ -14,14 +14,14 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
     }
 
     public SplitDigitRttBoxViewModel(
-        NavId id,
+        string typeId,
         ILoggerFactory loggerFactory,
         IUnitService units,
         string unitId,
         Observable<double> value,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, units, unitId, value, networkErrorTimeout)
+        : base(typeId, units, unitId, value, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
     }

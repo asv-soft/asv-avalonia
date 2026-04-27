@@ -80,11 +80,13 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     private readonly SelectFolderDialogDesktopPrefab _selectFolderDialog;
     private readonly YesOrNoDialogPrefab _yesOrNoDialog;
     private readonly GeoPointDialogPrefab _geoPointDialog;
+    private readonly ILogger<DialogControlsPageViewModel> _logger;
 
     #endregion
 
     public DialogControlsPageViewModel()
         : this(
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
             NullLoggerFactory.Instance,
             NullDialogService.Instance,
             NullNavigationService.Instance,
@@ -95,16 +97,18 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     }
 
     public DialogControlsPageViewModel(
+        ITreeSubPageContext<IControlsGalleryPage> context,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         INavigationService navigationService,
         IUnitService unitService
     )
-        : base(PageId, loggerFactory)
+        : base(PageId, context)
     {
         _loggerFactory = loggerFactory;
         _navigationService = navigationService;
-
+        _logger = loggerFactory.CreateLogger<DialogControlsPageViewModel>();
+        
         #region Units
 
         var latUnit = unitService.Units[LatitudeUnit.Id];
@@ -172,8 +176,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
         IsCustomDialogImageContent = new HistoricalBoolProperty(
             nameof(IsCustomDialogImageContent),
-            _customDialogIsImageContent,
-            loggerFactory
+            _customDialogIsImageContent
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -200,8 +203,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
         IsCustomDialogPrimaryButtonEnabled = new HistoricalBoolProperty(
             nameof(IsCustomDialogPrimaryButtonEnabled),
-            _customDialogIsPrimaryButtonEnabled,
-            loggerFactory
+            _customDialogIsPrimaryButtonEnabled
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -214,8 +216,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
         IsCustomDialogSecondaryButtonEnabled = new HistoricalBoolProperty(
             nameof(IsCustomDialogSecondaryButtonEnabled),
-            _customDialogIsSecondaryButtonEnabled,
-            loggerFactory
+            _customDialogIsSecondaryButtonEnabled
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -245,22 +246,19 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         CustomDialogResult = new HistoricalEnumProperty<ContentDialogResult>(
             nameof(CustomDialogResult),
-            _customDialogResult,
-            loggerFactory
+            _customDialogResult
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         YesOrNoDialogResult = new HistoricalEnumProperty<ConfirmationStatus>(
             nameof(YesOrNoDialogResult),
-            _yesOrNoDialogResult,
-            loggerFactory
+            _yesOrNoDialogResult
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         SaveCancelDialogResult = new HistoricalEnumProperty<ConfirmationStatus>(
             nameof(SaveCancelDialogResult),
-            _saveCancelDialogResult,
-            loggerFactory
+            _saveCancelDialogResult
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -494,7 +492,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
                 RS.DialogControlsPageViewModel_ContentDialog_Result,
                 resultToLog
             );
-            Logger.LogInformation("(CustomDialog) {msg}", msg);
+            _logger.LogInformation("(CustomDialog) {msg}", msg);
         }
         finally
         {
@@ -536,7 +534,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
             var msg = string.Format(RS.DialogControlsPageViewModel_OpenFilePrefab_Result, result);
             const string dialogName = nameof(OpenFileDialogDesktopPrefab);
-            Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+            _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
         }
     }
 
@@ -556,7 +554,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
             var msg = string.Format(RS.DialogControlsPageViewModel_SaveFilePrefab_Result, result);
             const string dialogName = nameof(SaveFileDialogDesktopPrefab);
-            Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+            _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
         }
     }
 
@@ -579,7 +577,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
                 result
             );
             const string dialogName = nameof(SelectFolderDialogDesktopPrefab);
-            Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+            _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
         }
     }
 
@@ -603,7 +601,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
                 payload.DefaultPath
             );
             const string dialogName = nameof(ObserveFolderDialogPrefab);
-            Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+            _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
         }
     }
 
@@ -623,7 +621,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         var msg = string.Format(RS.DialogControlsPageViewModel_YesOrNoPrefab_Result, result);
         const string dialogName = nameof(YesOrNoDialogPrefab);
-        Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+        _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
     private async ValueTask SaveCancelAsync(Unit unit, CancellationToken cancellationToken)
@@ -642,7 +640,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         var msg = string.Format(RS.DialogControlsPageViewModel_SavePrefab_Result, result);
         const string dialogName = nameof(SaveCancelDialogPrefab);
-        Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+        _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
     private async ValueTask ShowInputAsync(Unit unit, CancellationToken cancellationToken)
@@ -660,7 +658,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         var msg = string.Format(RS.DialogControlsPageViewModel_InputPrefab_Result, result);
         const string dialogName = nameof(InputDialogPrefab);
-        Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+        _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
     private async ValueTask ShowHotKeyCaptureAsync(Unit unit, CancellationToken cancellationToken)
@@ -680,7 +678,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             result ?? RS.DialogControlsPageViewModel_CancelResult
         );
         const string dialogName = nameof(HotKeyCaptureDialogPrefab);
-        Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+        _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
     private async ValueTask ShowGeoPointDialog(Unit unit, CancellationToken cancellationToken)
@@ -717,7 +715,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         var result = rawResult?.ToString() ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
         var msg = string.Format(RS.DialogControlsPageViewModel_GeoPointPrefab_Result, result);
         const string dialogName = nameof(GeoPointDialogPrefab);
-        Logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+        _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
     private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)

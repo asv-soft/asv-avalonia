@@ -1,7 +1,6 @@
 using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
@@ -55,14 +54,13 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
     }
 
     public DigitRttBoxViewModel(
-        NavId id,
-        ILoggerFactory loggerFactory,
+        string typeId,
         IUnitService units,
         string unitId,
         Observable<double> value,
         TimeSpan? networkErrorTimeout
     )
-        : base(id, loggerFactory, networkErrorTimeout)
+        : base(typeId, networkErrorTimeout)
     {
         _networkErrorTimeout = networkErrorTimeout;
         MeasureUnit =

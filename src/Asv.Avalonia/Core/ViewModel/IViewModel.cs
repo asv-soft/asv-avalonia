@@ -15,8 +15,6 @@ public interface IViewModel
         INotifyPropertyChanged,
         ISupportUndo<IViewModel>
 {
-    
 }
 
-public delegate TViewModelInterface ViewModelFactory<out TViewModelInterface>(NavArgs args)
-    where TViewModelInterface : IViewModel;
+

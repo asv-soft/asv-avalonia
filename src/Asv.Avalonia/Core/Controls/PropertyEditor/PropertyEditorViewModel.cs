@@ -1,17 +1,16 @@
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class PropertyEditorViewModel : ViewModelBase
+public class PropertyEditorViewModel : ViewModel
 {
     private readonly ObservableList<IPropertyViewModel> _itemsSource;
 
     public PropertyEditorViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory)
+        : this(DesignTime.Id.TypeId)
     {
         DesignTime.ThrowIfNotDesignMode();
         _itemsSource.Add(new UnitPropertyViewModel());
@@ -20,8 +19,8 @@ public class PropertyEditorViewModel : ViewModelBase
         Parent = DesignTime.Shell;
     }
 
-    public PropertyEditorViewModel(NavId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    public PropertyEditorViewModel(string id)
+        : base(id)
     {
         _itemsSource = new ObservableList<IPropertyViewModel>();
         _itemsSource.SetRoutableParent(this).DisposeItWith(Disposable);

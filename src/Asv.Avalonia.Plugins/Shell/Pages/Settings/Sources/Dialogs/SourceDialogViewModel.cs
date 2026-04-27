@@ -20,7 +20,7 @@ public sealed class SourceDialogViewModel : DialogViewModelBase
         ILoggerFactory loggerFactory,
         in PluginsSourceViewModel? viewModel = null
     )
-        : base(ViewModelId, loggerFactory)
+        : base(ViewModelId)
     {
         Name = new BindableReactiveProperty<string>(viewModel?.Name ?? string.Empty);
         SourceUri = new BindableReactiveProperty<string>(viewModel?.SourceUri ?? string.Empty);

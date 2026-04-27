@@ -1,9 +1,10 @@
 ﻿using System.Windows.Input;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Plugins;
 
-public class PluginsSourceViewModel : ViewModelBase
+public class PluginsSourceViewModel : ViewModel
 {
     public const string ViewModelIdPart = "source";
 
@@ -18,7 +19,7 @@ public class PluginsSourceViewModel : ViewModelBase
         INavigationService navigationService,
         ILoggerFactory loggerFactory
     )
-        : base(new NavId(ViewModelIdPart, pluginServerInfo.SourceUri), loggerFactory)
+        : base(ViewModelIdPart, new NavArgs(new KeyValuePair<string, string>("source",pluginServerInfo.SourceUri)))
     {
         ArgumentNullException.ThrowIfNull(pluginServerInfo);
         ArgumentNullException.ThrowIfNull(navigationService);

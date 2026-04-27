@@ -1,24 +1,21 @@
 using Asv.Common;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class MeasureUnitViewModel : ViewModelBase
+public class MeasureUnitViewModel : ViewModel
 {
     private readonly ISearchService _searchService;
     private bool _internalChange;
 
     public MeasureUnitViewModel(
         IUnit item,
-        ISearchService searchService,
-        ILoggerFactory loggerFactory
+        ISearchService searchService
     )
-        : base(item.UnitId, loggerFactory)
+        : base(item.UnitId)
     {
         ArgumentNullException.ThrowIfNull(item);
         ArgumentNullException.ThrowIfNull(searchService);
-        ArgumentNullException.ThrowIfNull(loggerFactory);
 
         _searchService = searchService;
 

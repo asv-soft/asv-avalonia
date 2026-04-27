@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Asv.Modeling;
@@ -38,13 +39,19 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     private HistoricalControlsPageViewModelConfig? _config;
 
     public HistoricalControlsPageViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
+            DesignTime.UnitService, 
+            DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public HistoricalControlsPageViewModel(IUnitService unit, ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public HistoricalControlsPageViewModel(
+        ITreeSubPageContext<IControlsGalleryPage> context,
+        IUnitService unit, 
+        ILoggerFactory loggerFactory)
+        : base(PageId, context)
     {
         var un = unit.Units[VelocityUnit.Id];
         var latUnit = unit.Units[LatitudeUnit.Id];
@@ -62,7 +69,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             Disposable
         );
 
-        IsTurnedOn = new HistoricalBoolProperty(nameof(IsTurnedOn), _isTurnedOn, loggerFactory)
+        IsTurnedOn = new HistoricalBoolProperty(nameof(IsTurnedOn), _isTurnedOn)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
@@ -144,16 +151,14 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 
         TagTypeProp = new HistoricalEnumProperty<AsvColorKind>(
             nameof(TagTypeProp),
-            _tagTypeProp,
-            loggerFactory
+            _tagTypeProp
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
         AsvColorKindProp = new HistoricalEnumProperty<AsvColorKind>(
             nameof(AsvColorKindProp),
-            _rttBoxStatusProp,
-            loggerFactory
+            _rttBoxStatusProp
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);

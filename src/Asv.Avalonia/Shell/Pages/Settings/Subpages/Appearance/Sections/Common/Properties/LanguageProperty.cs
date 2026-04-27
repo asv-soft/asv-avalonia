@@ -1,9 +1,8 @@
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class LanguageProperty : ViewModelBase
+public class LanguageProperty : ViewModel
 {
     public const string ViewModelId = "language.current";
 
@@ -15,17 +14,16 @@ public class LanguageProperty : ViewModelBase
     public BindableReactiveProperty<ILanguageInfo> SelectedItem { get; }
 
     public LanguageProperty()
-        : this(DesignTime.LocalizationService, NullDialogService.Instance, DesignTime.LoggerFactory)
+        : this(DesignTime.LocalizationService, NullDialogService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public LanguageProperty(
         ILocalizationService svc,
-        IDialogService dialog,
-        ILoggerFactory loggerFactory
+        IDialogService dialog
     )
-        : base(ViewModelId, loggerFactory)
+        : base(ViewModelId)
     {
         _svc = svc;
         _dialog = dialog.GetDialogPrefab<YesOrNoDialogPrefab>();

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -9,7 +10,7 @@ public class HistoricalControlsTreeMenu : TreePage
             HistoricalControlsPageViewModel.PageId,
             RS.HistoricalControlsPageViewModel_Title,
             HistoricalControlsPageViewModel.PageIcon,
-            HistoricalControlsPageViewModel.PageId,
+            new NavId(HistoricalControlsPageViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

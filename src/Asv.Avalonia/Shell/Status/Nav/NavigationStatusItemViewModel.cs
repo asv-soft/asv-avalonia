@@ -14,7 +14,7 @@ public class NavigationStatusItemViewModel : StatusItem
     public const string StaticId = "nav-crumbs";
 
     public NavigationStatusItemViewModel()
-        : base(StaticId, default, DesignTime.LoggerFactory)
+        : base(StaticId, default)
     {
         _commandService = DesignTime.CommandService;
         _source = new ObservableList<string>();
@@ -31,7 +31,7 @@ public class NavigationStatusItemViewModel : StatusItem
         INavigationService nav,
         ICommandService commandService
     )
-        : base(StaticId, default, loggerFactory)
+        : base(StaticId, default)
     {
         _source = new ObservableList<string>();
         Items = _source.ToNotifyCollectionChangedSlim();

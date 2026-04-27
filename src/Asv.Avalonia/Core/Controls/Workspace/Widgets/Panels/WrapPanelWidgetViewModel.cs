@@ -5,11 +5,11 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class WrapPanelWidgetViewModel(NavId id, ILoggerFactory loggerFactory)
+public class WrapPanelWidgetViewModel(string id, ILoggerFactory loggerFactory)
     : PanelWidgetViewModel(id, loggerFactory)
 {
     public WrapPanelWidgetViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory)
+        : this(DesignTime.Id.TypeId, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         ItemsSource.Add(new SingleRttBoxViewModel());

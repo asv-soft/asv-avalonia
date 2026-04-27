@@ -21,7 +21,7 @@ public class ShellViewModelConfig
     public string? SelectedPageId { get; set; } = string.Empty;
 }
 
-public class ShellViewModel : ExtendableViewModel<IShell>, IShell
+public class ShellViewModel : ViewModel<IShell>, IShell
 {
     private const int MaxInfoBarMessages = 3;
 
@@ -33,11 +33,13 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     private ShellViewModelConfig _config;
     private bool _isLoaded;
     private int _saveLayoutInProgress;
+    private readonly ILogger<ShellViewModel> _logger;
 
     protected readonly IServiceProvider Container;
     protected readonly ILoggerFactory LoggerFactory;
     protected readonly ICommandService Cmd;
     protected readonly IDialogService DialogService;
+    protected readonly IUndoStoreService UndoStoreService;
 
     protected ShellViewModel(
         string typeId,
@@ -46,12 +48,12 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(typeId, default, loggerFactory, ext)
+        : base(typeId, default, ext)
     {
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
         ArgumentNullException.ThrowIfNull(cfg);
-
+        _logger = loggerFactory.CreateLogger<ShellViewModel>();
         Cfg = cfg;
         Container = ioc;
         LoggerFactory = loggerFactory;
@@ -59,6 +61,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         DialogService = ioc.GetRequiredService<IDialogService>();
         Cmd = ioc.GetRequiredService<ICommandService>();
         Navigation = ioc.GetRequiredService<INavigationService>();
+        UndoStoreService = ioc.GetRequiredService<IUndoStoreService>();
 
         _unsavedChangesDialogPrefab = DialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
 
@@ -156,6 +159,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
+    protected ILogger Logger => _logger;
+
     #region Tools
 
     public ObservableList<IMenuItem> LeftMenu { get; }
@@ -221,7 +226,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             }
             catch (Exception e)
             {
-                Logger.ZLogTrace(
+                _logger.ZLogTrace(
                     e,
                     $"Error on requesting approval for the page {page.Title}[{page.Id}]: {e.Message}"
                 );
@@ -278,7 +283,8 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         var page = _pages.FirstOrDefault(x => x.Id == id);
         if (page is null)
         {
-            page = Container.CreateViewModel<IPage>(id);
+            var pageContext = new PageContext(id.Args, UndoStoreService.CreateUndoHistoryStore(id));
+            page = Container.CreatePage(id.TypeId, pageContext);
             _pages.Add(page);
             SelectedPage.Value = page;
             return page;
@@ -313,7 +319,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             }
             case PageCloseRequestedEvent close:
             {
-                Logger.ZLogInformation($"Close page [{close.Page.Id}]");
+                _logger.ZLogInformation($"Close page [{close.Page.Id}]");
 
                 if (_pages is [HomePageViewModel])
                 {
@@ -390,13 +396,13 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         }
         catch (Exception exception)
         {
-            Logger.LogError(exception, "Failed to restart the application.");
+            _logger.LogError(exception, "Failed to restart the application.");
         }
     }
 
     protected virtual void RestartApplication(string[] args)
     {
-        Logger.LogError(
+        _logger.LogError(
             "Restart is not supported by shell type {ShellType}. Arguments: {Args}",
             GetType().Name,
             string.Join(" ", args)
@@ -416,7 +422,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         try
         {
             _config = loadLayoutEvent.LayoutService.Get<ShellViewModelConfig>(this);
-            Logger.ZLogInformation($"Try to load layout: {string.Join(",", _config.Pages)}");
+            _logger.ZLogInformation($"Try to load layout: {string.Join(",", _config.Pages)}");
             foreach (var page in _config.Pages)
             {
                 await this.NavigateByPath(NavPath.Parse(page));
@@ -441,7 +447,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         }
         catch (Exception e)
         {
-            Logger.ZLogError(e, $"Error loading layout: {e.Message}");
+            _logger.ZLogError(e, $"Error loading layout: {e.Message}");
         }
         finally
         {
@@ -465,7 +471,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     {
         if (Interlocked.CompareExchange(ref _saveLayoutInProgress, 1, 0) != 0)
         {
-            Logger.LogWarning("Save layout is already in progress");
+            _logger.LogWarning("Save layout is already in progress");
             return;
         }
 
@@ -474,13 +480,13 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
             _config.Pages = Pages.Select(page => page.Id.ToString()).ToList();
             _config.SelectedPageId = SelectedPage.Value?.Id.ToString();
 
-            Logger.ZLogTrace($"Save layout: {string.Join(",", _config.Pages)}");
+            _logger.ZLogTrace($"Save layout: {string.Join(",", _config.Pages)}");
             layoutService.SetInMemory(this, _config);
             layoutService.FlushFromMemory(this);
         }
         catch (Exception e)
         {
-            Logger.LogError(e, "Error saving layout: {EMessage}", e.Message);
+            _logger.LogError(e, "Error saving layout: {EMessage}", e.Message);
         }
         finally
         {
@@ -525,7 +531,6 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
         _infoMessagesSource.Add(
             new ShellMessageViewModel(
                 Guid.NewGuid().ToString(),
-                LoggerFactory,
                 CloseInfoMessageCommand,
                 message
             )
@@ -548,6 +553,7 @@ public class ShellViewModel : ExtendableViewModel<IShell>, IShell
     private readonly SerialDisposable _sub1 = new();
     private readonly SerialDisposable _sub2 = new();
     private readonly SerialDisposable _sub3 = new();
+    
 
     protected override void Dispose(bool disposing)
     {

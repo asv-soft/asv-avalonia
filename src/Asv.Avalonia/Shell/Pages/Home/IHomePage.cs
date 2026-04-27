@@ -21,8 +21,8 @@ public interface IHomePageItem : IHeadlinedViewModel
 
 public class HomePageItem : ExtendableHeadlinedViewModel<IHomePageItem>, IHomePageItem
 {
-    public HomePageItem(string typeId, ILoggerFactory loggerFactory, IExtensionService ext)
-        : base(typeId, default, loggerFactory, ext)
+    public HomePageItem(string typeId, NavArgs args, ILoggerFactory loggerFactory, IExtensionService ext)
+        : base(typeId, args, loggerFactory, ext)
     {
         Disposable.AddAction(() => Actions.Clear());
         Disposable.AddAction(() => Info.Clear());

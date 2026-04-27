@@ -1,4 +1,5 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -12,7 +13,7 @@ public class SettingsPluginsTreePageMenu : TreePage
             SettingsPluginsSourcesViewModel.PageId,
             RS.SettingsPluginsSourcesViewModel_Name,
             MaterialIconKind.Cloud,
-            SettingsPluginsSourcesViewModel.PageId,
+            new NavId(SettingsPluginsSourcesViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

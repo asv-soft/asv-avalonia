@@ -18,7 +18,7 @@ public class DialogItemTextBoxViewModel : DialogViewModelBase
     }
 
     public DialogItemTextBoxViewModel(ILoggerFactory loggerFactory)
-        : base(DialogId, loggerFactory)
+        : base(DialogId)
     {
         Input = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
     }

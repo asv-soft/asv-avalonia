@@ -15,14 +15,14 @@ public class HomePageDeviceItem : HomePageItem
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
-        : base(NavId.NormalizeTypeId(device.Id.AsString()), loggerFactory, ext)
+        : base("home_device_page", new NavArgs(new KeyValuePair<string, string>("dev",device.Id.ToString())), loggerFactory, ext)
     {
         Device = device;
         Icon = deviceManager.GetIcon(device.Id);
         IconColor = deviceManager.GetDeviceColor(device.Id);
         device.Name.Subscribe(x => Header = x).DisposeItWith(Disposable);
         Info.Add(
-            new HeadlinedViewModel("id", loggerFactory)
+            new HeadlinedViewModel("id")
             {
                 Icon = MaterialIconKind.IdCard,
                 Header = RS.HomePageDeviceItem_Info_Id,
@@ -30,14 +30,14 @@ public class HomePageDeviceItem : HomePageItem
             }
         );
         Info.Add(
-            new HeadlinedViewModel("type", loggerFactory)
+            new HeadlinedViewModel("type")
             {
                 Icon = MaterialIconKind.MergeType,
                 Header = RS.HomePageDeviceItem_Info_Type,
                 Description = device.Id.DeviceClass,
             }
         );
-        var linkInfo = new HeadlinedViewModel("link", loggerFactory)
+        var linkInfo = new HeadlinedViewModel("link")
         {
             Icon = MaterialIconKind.Network,
             Header = RS.HomePageDeviceItem_Info_Link,

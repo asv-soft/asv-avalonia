@@ -1,4 +1,5 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using Avalonia.Media.Imaging;
 
 namespace Asv.Avalonia.Plugins;

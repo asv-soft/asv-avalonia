@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -9,7 +10,7 @@ public class DialogControlsTreeMenu : TreePage
             DialogControlsPageViewModel.PageId,
             RS.DialogControlsPageViewModel_Title,
             DialogControlsPageViewModel.PageIcon,
-            DialogControlsPageViewModel.PageId,
+            new NavId(DialogControlsPageViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

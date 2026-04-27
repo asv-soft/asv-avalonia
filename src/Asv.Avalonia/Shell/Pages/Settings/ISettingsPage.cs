@@ -1,8 +1,3 @@
-using ObservableCollections;
-
 namespace Asv.Avalonia;
 
-public interface ISettingsPage : IPage
-{
-    ObservableList<ITreePage> Nodes { get; }
-}
+public interface ISettingsPage : ITreePageViewModel;

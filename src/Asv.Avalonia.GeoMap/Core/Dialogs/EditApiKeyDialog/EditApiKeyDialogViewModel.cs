@@ -16,7 +16,7 @@ public sealed class EditApiKeyDialogViewModel : DialogViewModelBase
     }
 
     public EditApiKeyDialogViewModel(ILoggerFactory loggerFactory, string? currentKey = null)
-        : base(DialogId, loggerFactory)
+        : base(DialogId)
     {
         ApiKey = new BindableReactiveProperty<string>(currentKey ?? string.Empty).DisposeItWith(
             Disposable

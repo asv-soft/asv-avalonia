@@ -2,9 +2,9 @@
 
 public static class LogViewerMixin
 {
-    extension(ShellMixin.PageBuilder builder)
+    extension(PageMixin.Builder builder)
     {
-        public ShellMixin.PageBuilder UseLogViewerPage()
+        public PageMixin.Builder UseLogViewerPage()
         {
             builder.Register<LogViewerViewModel, LogViewerView>(LogViewerViewModel.PageId);
             builder.Parent.Parent.Extensions.Register<IHomePage, HomePageLogViewerExtension>();

@@ -1,9 +1,7 @@
-using Microsoft.Extensions.Logging;
-
 namespace Asv.Avalonia.GeoMap;
 
-public class TileProviderViewModel(ITileProvider provider, ILoggerFactory loggerFactory)
-    : ViewModelBase(provider.Info.Id, loggerFactory)
+public class TileProviderViewModel(ITileProvider provider)
+    : ViewModel(provider.Info.Id)
 {
     public ITileProvider Provider { get; } = provider;
     public string Name { get; } = provider.Info.Name;

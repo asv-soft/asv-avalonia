@@ -1,15 +1,14 @@
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia;
 
 public class WorkspaceWidget : HeadlinedViewModel, IWorkspaceWidget
 {
-    public WorkspaceWidget(NavId id, ILoggerFactory loggerFactory)
-        : base(id, loggerFactory)
+    public WorkspaceWidget(string id)
+        : base(id)
     {
         Menu = [];
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);

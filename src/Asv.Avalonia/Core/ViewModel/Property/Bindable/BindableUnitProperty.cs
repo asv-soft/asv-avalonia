@@ -9,6 +9,7 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
     private readonly string? _format;
     private bool _externalChange;
     private bool _internalChange;
+    private readonly ILogger<BindableUnitProperty> _logger;
 
     public BindableUnitProperty(
         string id,
@@ -17,10 +18,10 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
         ILoggerFactory loggerFactory,
         string? format = null
     )
-        : base(id, loggerFactory)
+        : base(id)
     {
         Unit = unit;
-
+        _logger = loggerFactory.CreateLogger<BindableUnitProperty>();
         _format = format;
 
         ModelValue = modelValue;
@@ -54,7 +55,7 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
             return resultSi;
         }
 
-        Logger.LogError(result.ValidationException, "Validation error");
+        _logger.LogError(result.ValidationException, "Validation error");
         return result.ValidationException?.GetExceptionWithLocalizationOrSelf();
     }
 

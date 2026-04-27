@@ -23,17 +23,17 @@ public class SettingsUnitsViewModel : SettingsSubPage
     private SettingsUnitsViewModelConfig? _config;
 
     public SettingsUnitsViewModel()
-        : this(NullSearchService.Instance, DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullSearchService.Instance, DesignTime.UnitService, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public SettingsUnitsViewModel(
+        ITreeSubPageContext<ISettingsPage> context,
         ISearchService searchService,
         IUnitService unitsService,
-        ILoggerFactory loggerFactory
-    )
-        : base(PageId, loggerFactory)
+        ILoggerFactory loggerFactory)
+        : base(PageId, context)
     {
         ArgumentNullException.ThrowIfNull(searchService);
         ArgumentNullException.ThrowIfNull(unitsService);
@@ -43,7 +43,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
         var observableList = new ObservableList<IUnit>(unitsService.Units.Values);
         _view = observableList
-            .CreateView(u => new MeasureUnitViewModel(u, searchService, loggerFactory))
+            .CreateView(u => new MeasureUnitViewModel(u, searchService))
             .DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);

@@ -6,19 +6,16 @@ using ObservableCollections;
 
 namespace Asv.Avalonia.Example;
 
-public interface IControlsGalleryPage : IPage
+public interface IControlsGalleryPage : ITreePageViewModel
 {
-    ObservableList<ITreePage> Nodes { get; }
     void ChangeStatus(MaterialIconKind? statusIcon, AsvColorKind color = AsvColorKind.None);
 }
 
-public interface IControlsGallerySubPage : ITreeSubpage<IControlsGalleryPage> { }
+public interface IControlsGallerySubPage : ITreeSubpage { }
 
-public abstract class ControlsGallerySubPage(NavId id, ILoggerFactory loggerFactory)
-    : TreeSubpage<IControlsGalleryPage>(id, loggerFactory),
+public abstract class ControlsGallerySubPage(string id, ITreeSubPageContext<IControlsGalleryPage> context)
+    : TreeSubpage<IControlsGalleryPage>(id, context),
         IControlsGallerySubPage
 {
-    public override ValueTask Init(IControlsGalleryPage context) => ValueTask.CompletedTask;
-
     public override IEnumerable<IViewModel> GetChildren() => Menu;
 }

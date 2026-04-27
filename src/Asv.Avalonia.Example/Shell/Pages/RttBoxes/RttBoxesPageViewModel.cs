@@ -14,14 +14,20 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
     public const MaterialIconKind PageIcon = MaterialIconKind.PoundBox;
 
     public RttBoxesPageViewModel()
-        : this(DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
+            DesignTime.UnitService, 
+            DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
     }
 
-    public RttBoxesPageViewModel(IUnitService unitService, ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public RttBoxesPageViewModel(
+        ITreeSubPageContext<IControlsGalleryPage> context,
+        IUnitService unitService, 
+        ILoggerFactory loggerFactory)
+        : base(PageId, context)
     {
         GeoPointRttBoxViewModel = CreateGeoPointRttBoxViewModel(unitService, loggerFactory)
             .SetRoutableParent(this)
@@ -77,7 +83,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             };
         }
 
-        var viewModel = new RttBoxViewModel(nameof(RttBoxViewModel), loggerFactory);
+        var viewModel = new RttBoxViewModel(nameof(RttBoxViewModel));
 
         viewModel.Icon = MaterialIconKind.Velocity;
         viewModel.Header = "Velocity";
@@ -94,8 +100,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         }
 
         var viewModel = new TwoColumnRttBoxViewModel(
-            nameof(TwoColumnRttBoxViewModel),
-            loggerFactory
+            nameof(TwoColumnRttBoxViewModel)
         );
 
         viewModel.Icon = MaterialIconKind.Ruler;
@@ -158,7 +163,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new SingleRttBoxViewModel();
         }
 
-        var viewModel = new SingleRttBoxViewModel(nameof(SingleRttBoxViewModel), loggerFactory);
+        var viewModel = new SingleRttBoxViewModel(nameof(SingleRttBoxViewModel));
 
         viewModel.Icon = MaterialIconKind.Ruler;
         viewModel.Header = "Distance";
@@ -206,7 +211,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new KeyValueRttBoxViewModel();
         }
 
-        var viewModel = new KeyValueRttBoxViewModel(nameof(KeyValueRttBoxViewModel), loggerFactory);
+        var viewModel = new KeyValueRttBoxViewModel(nameof(KeyValueRttBoxViewModel));
 
         viewModel.ShortHeader = "Short";
         viewModel.ShortValueString = "0.00";
@@ -216,11 +221,11 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         KeyValueViewModel[] items =
         [
-            new KeyValueViewModel(loggerFactory) { Header = "Power", UnitSymbol = "dBm" },
-            new KeyValueViewModel(loggerFactory) { Header = "Rise time", UnitSymbol = "ms" },
-            new KeyValueViewModel(loggerFactory) { Header = "Fall time", UnitSymbol = "ms" },
-            new KeyValueViewModel(loggerFactory) { Header = "Status", ValueString = "Normal" },
-            new KeyValueViewModel(loggerFactory) { Header = "Unknown" },
+            new KeyValueViewModel(0) { Header = "Power", UnitSymbol = "dBm" },
+            new KeyValueViewModel(1) { Header = "Rise time", UnitSymbol = "ms" },
+            new KeyValueViewModel(2) { Header = "Fall time", UnitSymbol = "ms" },
+            new KeyValueViewModel(3) { Header = "Status", ValueString = "Normal" },
+            new KeyValueViewModel(4) { Header = "Unknown" },
         ];
 
         viewModel.ItemsSource.AddRange(items);

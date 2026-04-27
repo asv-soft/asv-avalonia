@@ -2,19 +2,18 @@
 using Asv.IO;
 using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapViewModel : ViewModelBase, IMap
+public class MapViewModel : ViewModel, IMap
 {
     public MapViewModel()
-        : this(DesignTime.Id, DesignTime.LoggerFactory, NullMapService.Instance)
+        : this(DesignTime.Id.TypeId, NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
-        var drone = new MapAnchor<IMapAnchor>(DesignTime.Id, DesignTime.LoggerFactory)
+        var drone = new MapAnchor<IMapAnchor>(DesignTime.Id.TypeId)
         {
             Icon = MaterialIconKind.Navigation,
             Location = new GeoPoint(53, 53, 100),
@@ -32,8 +31,8 @@ public class MapViewModel : ViewModelBase, IMap
         );
     }
 
-    public MapViewModel(NavId id, ILoggerFactory loggerFactory, IMapService mapService)
-        : base(id, loggerFactory)
+    public MapViewModel(string id, IMapService mapService)
+        : base(id)
     {
         Anchors = new ObservableList<IMapAnchor>();
         Anchors.SetRoutableParent(this).DisposeItWith(Disposable);

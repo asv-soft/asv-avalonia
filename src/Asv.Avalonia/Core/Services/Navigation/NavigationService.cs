@@ -61,10 +61,10 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
         _disposeIt = dispose.Build();
     }
 
-    private void PushNavigation(NavPath NavPath)
+    private void PushNavigation(NavPath navPath)
     {
-        _logger.ZLogTrace($"Push navigation history: {NavPath}");
-        _backwardStack.Push(NavPath);
+        _logger.ZLogTrace($"Push navigation history: {navPath}");
+        _backwardStack.Push(navPath);
         _forwardStack.Clear();
     }
 
@@ -240,7 +240,7 @@ public class NavigationService : AsyncDisposableOnce, INavigationService
 
     public async ValueTask GoHomeAsync()
     {
-        var home = await GoTo(new NavPath(HomePageViewModel.PageId));
+        var home = await GoTo(new NavPath(new NavId(HomePageViewModel.PageId)));
 
         FocusControlChanged(home);
     }

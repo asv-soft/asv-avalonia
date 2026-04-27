@@ -1,4 +1,5 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using NuGet.Packaging.Core;
 
 namespace Asv.Avalonia.Plugins;

@@ -4,7 +4,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public abstract class MapZoomPropertyBase : ViewModelBase
+public abstract class MapZoomPropertyBase : ViewModel
 {
     private bool _internalChange;
 
@@ -14,7 +14,7 @@ public abstract class MapZoomPropertyBase : ViewModelBase
         string commandId,
         ILoggerFactory loggerFactory
     )
-        : base(id, loggerFactory)
+        : base(id)
     {
         SelectedItem = new BindableReactiveProperty<int>().DisposeItWith(Disposable);
 

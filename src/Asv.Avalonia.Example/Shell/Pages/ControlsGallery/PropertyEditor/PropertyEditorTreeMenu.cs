@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Asv.Modeling;
+using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
@@ -9,7 +10,7 @@ public class PropertyEditorTreeMenu : TreePage
             PropertyEditorPageViewModel.PageId,
             RS.PropertyEditorTreeMenu_PropertyEditorTreeMenu_Property_Editor,
             PropertyEditorPageViewModel.PageIcon,
-            PropertyEditorPageViewModel.PageId,
+            new NavId(PropertyEditorPageViewModel.PageId),
             NavId.Empty,
             loggerFactory
         ) { }

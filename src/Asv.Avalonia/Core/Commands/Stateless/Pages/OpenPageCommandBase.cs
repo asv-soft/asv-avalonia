@@ -19,7 +19,7 @@ public abstract class OpenPageCommandBase(string pageId, INavigationService nav)
         CancellationToken cancel
     )
     {
-        await nav.GoTo(new NavPath(new NavId(pageId, newValue.Value)));
+        await nav.GoTo(new NavPath(new NavId(pageId, NavArgs.Parse(newValue.Value))));
         return null;
     }
 
