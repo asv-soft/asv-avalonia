@@ -15,7 +15,7 @@
         <example:MapControlsPageViewModel />
     </Design.DataContext>
     <Panel>
-        <map:MapView DataContext="{Binding MapViewModel}" />
+        <map:MapView x:Name="PART_Map" DataContext="{Binding MapViewModel}" />
         <Slider
             VerticalAlignment="Top"
             Minimum="0"
@@ -27,6 +27,7 @@
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
             DeadZone="0"
+            GestureSurface="{Binding #PART_Map}"
             Margin="8"
         />
         <map:TileProviderSelectorView
