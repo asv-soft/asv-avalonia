@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
-using Asv.IO;
 using Asv.Modeling;
 using Avalonia.Media;
 using Material.Icons;
@@ -20,14 +19,21 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
     private const double InfinityPhaseStep = Math.PI / 90.0;
 
     public MapControlsPageViewModel()
-        : this(DesignTime.LoggerFactory, NullMapService.Instance)
+        : this(DesignTime.LoggerFactory, NullMapService.Instance, DesignTime.UnitService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public MapControlsPageViewModel(ILoggerFactory loggerFactory, IMapService mapService)
+    public MapControlsPageViewModel(
+        ILoggerFactory loggerFactory,
+        IMapService mapService,
+        IUnitService unitService
+    )
         : base(PageId, loggerFactory)
     {
+        LoggerFactory = loggerFactory;
+        UnitService = unitService;
+
         TileProviderSelectorViewModel = new TileProviderSelectorViewModel(mapService, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -110,6 +116,8 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
     public TileProviderSelectorViewModel TileProviderSelectorViewModel { get; }
     public MapViewModel MapViewModel { get; }
+    public IUnitService UnitService { get; }
+    public ILoggerFactory LoggerFactory { get; }
 
     private static void UpdatePlanePose(
         MapAnchor<IMapAnchor> plane,

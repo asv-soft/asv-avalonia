@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -36,5 +36,33 @@
             Margin="8"
             DataContext="{Binding TileProviderSelectorViewModel}"
         />
+        <map:MapRuler
+            x:Name="PART_Ruler"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Margin="8"
+            Anchors="{Binding MapViewModel.Anchors}"
+            UnitService="{Binding UnitService}"
+            LoggerFactory="{Binding LoggerFactory}"
+            TargetMap="{Binding #PART_Map}"
+            RulerChanged="OnRulerChanged"
+        />
+        <Border
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Margin="0,12,0,0"
+            Padding="12,6"
+            CornerRadius="4"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+            BorderThickness="1"
+            IsHitTestVisible="False"
+            IsVisible="{Binding #PART_Ruler.PromptText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+        >
+            <TextBlock
+                Text="{Binding #PART_Ruler.PromptText}"
+                Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+            />
+        </Border>
     </Panel>
 </UserControl>

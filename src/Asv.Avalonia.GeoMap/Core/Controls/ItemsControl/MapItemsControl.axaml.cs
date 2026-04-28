@@ -1,12 +1,9 @@
 using System.Collections;
-using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Selection;
-using Avalonia.Controls.Templates;
 using Avalonia.Input;
-using Avalonia.Metadata;
 
 namespace Asv.Avalonia.GeoMap;
 
@@ -211,12 +208,37 @@ public partial class MapItemsControl : SelectingItemsControl
     {
         base.OnPointerReleased(e);
 
-        if (_activePointer == e.Pointer)
+        if (_activePointer != e.Pointer)
         {
-            ClearDragState(e.Pointer);
-            e.Handled = true;
+            return;
         }
+
+        var releasePosition = e.GetPosition(this);
+
+        var wasLeftClick =
+            e.InitialPressMouseButton == MouseButton.Left
+            && DragState == DragState.DragMap
+            && (releasePosition - _startMousePosition).LengthSquared() <= ClickThresholdSquared;
+
+        ClearDragState(e.Pointer);
+        e.Handled = true;
+
+        if (!wasLeftClick)
+        {
+            return;
+        }
+
+        var args = new MapClickEventArgs(
+            MapClickEvent,
+            this,
+            CursorPosition,
+            e.KeyModifiers,
+            MouseButton.Left
+        );
+        RaiseEvent(args);
     }
+
+    private const double ClickThresholdSquared = 16.0;
 
     protected override void OnPointerCaptureLost(PointerCaptureLostEventArgs e)
     {

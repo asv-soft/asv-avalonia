@@ -1,0 +1,41 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="48"
+    d:DesignHeight="48"
+    x:Class="Asv.Avalonia.GeoMap.MapRuler"
+>
+    <Design.PreviewWith>
+        <Border Padding="20" Background="#102030">
+            <Border
+                Padding="4"
+                CornerRadius="4"
+                Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
+            >
+                <ToggleButton Padding="6">
+                    <avalonia:MaterialIcon Classes="medium" Kind="Ruler" />
+                </ToggleButton>
+            </Border>
+        </Border>
+    </Design.PreviewWith>
+
+    <Border
+        Padding="4"
+        CornerRadius="4"
+        Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
+    >
+        <ToggleButton
+            x:Name="PART_Toggle"
+            Click="OnToggleClick"
+            ToolTip.Tip="{x:Static map:RS.MapRuler_Tooltip}"
+            Padding="6"
+        >
+            <avalonia:MaterialIcon Classes="medium" Kind="Ruler" />
+        </ToggleButton>
+    </Border>
+</UserControl>
