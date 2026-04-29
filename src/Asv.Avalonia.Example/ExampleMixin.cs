@@ -29,7 +29,6 @@ public static class ExampleMixin
             builder.Extensions.Register<IHomePageItem, DeviceActionExample>();
             builder.FileAssociation.Register<ExampleFileHandler>();
             builder.ModuleIo.RegisterDevice<ExampleDeviceManagerExtension>();
-
             return builder;
         }
     }

@@ -297,6 +297,7 @@ public static class DesignTime
     public static ICommandService CommandService => NullCommandService.Instance;
     public static IFileAssociationService FileAssociation => NullFileAssociationService.Instance;
     public static IAppInfo AppInfo => NullAppInfo.Instance;
+    public static IHotKeyService Actions => NullActionsService.Instance;
 
     /// <summary>
     /// Generates a plausible short title/nickname (3–12 characters)

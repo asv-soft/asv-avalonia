@@ -30,6 +30,8 @@ public class UnhandledExceptionsHandlerOptions
     public bool IsEnabled { get; set; } = true;
     public HandlerOptions R3 { get; } = new();
     public HandlerOptions TaskScheduler { get; } = new();
+    public HandlerOptions AppDomain { get; } = new();
+    public HandlerOptions UiThread { get; } = new();
 
     public class HandlerOptions
     {
@@ -50,21 +52,66 @@ public class UnhandledExceptionsHandler(
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        if (!options.Value.IsEnabled == false)
+        if (options.Value.IsEnabled == false)
         {
             _logger.LogInformation("Unhandled exception handler is disabled");
             return Task.CompletedTask;
         }
 
         _logger.ZLogInformation($"Unhandled exception handler is enabled: {options}");
+
+        Dispatcher.UIThread.UnhandledException += OnUiUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException += AppDomainException;
         R3.ObservableSystem.RegisterUnhandledExceptionHandler(R3UnhandledException);
-        TaskScheduler.UnobservedTaskException += (_, e) =>
-            TaskSchedulerUnhandledException(e.Exception);
+        TaskScheduler.UnobservedTaskException += TaskSchedulerUnhandledException;
         return Task.CompletedTask;
     }
 
-    public void TaskSchedulerUnhandledException(AggregateException eException)
+    private void OnUiUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
+        if (options.Value.UiThread.PublishToShell && shellHost.Shell is not null)
+        {
+            shellHost.Shell.ShowMessage(
+                new ShellMessage("UI error", e.Exception.ToString(), ShellErrorState.Error)
+            );
+        }
+        if (options.Value.UiThread.PublishToLogger)
+        {
+            _logger.ZLogError(e.Exception, $"Unhandled exception in AppDomain: {e.Exception.Message}");
+        }
+        if (options.Value.UiThread.ForceApplicationCrash)
+        {
+            Dispatcher.UIThread.Invoke(() => throw e.Exception);
+        }
+        e.Handled = true;
+    }
+
+    private void AppDomainException(object sender, UnhandledExceptionEventArgs e)
+    {
+        var ex = e.ExceptionObject as Exception;
+        if (ex == null)
+        {
+            return;
+        }
+        if (options.Value.AppDomain.PublishToShell && shellHost.Shell is not null)
+        {
+            shellHost.Shell.ShowMessage(
+                new ShellMessage("AppDomain error", ex.ToString(), ShellErrorState.Error)
+            );
+        }
+        if (options.Value.AppDomain.PublishToLogger)
+        {
+            _logger.ZLogError(ex, $"Unhandled exception in AppDomain: {ex.Message}");
+        }
+        if (options.Value.AppDomain.ForceApplicationCrash)
+        {
+            Dispatcher.UIThread.Invoke(() => throw ex);
+        }
+    }
+
+    private void TaskSchedulerUnhandledException(object? sender, UnobservedTaskExceptionEventArgs e)
+    {
+        var eException = e.Exception;
         if (options.Value.TaskScheduler.PublishToShell && shellHost.Shell is not null)
         {
             shellHost.Shell.ShowMessage(

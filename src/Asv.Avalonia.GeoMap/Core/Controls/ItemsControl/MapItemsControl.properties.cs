@@ -269,8 +269,8 @@ public partial class MapItemsControl
                 ref _zoom,
                 Math.Clamp(
                     Math.Clamp(value, MinZoom, MaxZoom),
-                    Provider.Info.MinZoom,
-                    Provider.Info.MaxZoom
+                    Provider?.Info.MinZoom ?? 0,
+                    Provider?.Info.MaxZoom ?? MaxZoom
                 )
             );
     }

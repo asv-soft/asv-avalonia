@@ -1,12 +1,15 @@
-﻿using Material.Icons;
+﻿using Asv.Common;
+using Asv.Modeling;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
+using R3;
 
 namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
 public interface IExamplePageViewModel : IPage { }
 
-public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>
+public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamplePageViewModel
 {
     public const string PageId = "example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Earth;
@@ -15,7 +18,7 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>
         : this(
             DesignTime.PageContext,
             DesignTime.CommandService,
-            NullLoggerFactory.Instance,
+            DesignTime.LoggerFactory,
             DesignTime.DialogService,
             DesignTime.ExtensionService
         )
@@ -30,8 +33,17 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>
         IDialogService dialogService,
         IExtensionService extensionService
     )
-        : base(PageId, context, cmd, loggerFactory, dialogService, extensionService) { }
+        : base(PageId, context, cmd, loggerFactory, dialogService, extensionService)
+    {
+        Title = "Example page";
+        Text1 = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        Undo.Register(nameof(Text1), Text1).DisposeItWith(Disposable);
+        Text1.Value = "Hello world";
+        Undo.EnableChangePublication();
+    }
 
+    public BindableReactiveProperty<string> Text1 { get; }
+    
     public override IEnumerable<IViewModel> GetChildren()
     {
         return [];

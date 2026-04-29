@@ -11,7 +11,7 @@ public static class PluginExampleMixin
     {
         public IHostApplicationBuilder UsePluginExample()
         {
-            builder.Shell.Pages.Register<HomePageViewModel, HomePageView>(HomePageViewModel.PageId);
+            builder.Shell.Pages.Register<ExamplePageViewModel, ExamplePageView>(ExamplePageViewModel.PageId);
             builder.Commands.Register<OpenExamplePageCommand>();
             builder.Shell.Pages.Home.UseExtension<HomePagePluginExtension>();
             return builder;

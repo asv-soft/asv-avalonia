@@ -10,6 +10,16 @@
     x:Class="Asv.Avalonia.Example.Plugin.PluginExample.ExamplePageView"
     x:DataType="example:ExamplePageViewModel"
 >
-    Example page for the plugin
+    <Design.DataContext>
+        <example:ExamplePageViewModel/>
+    </Design.DataContext>
+    <StackPanel>
+        <Button HotKey="Ctrl+Z" Command="{Binding UndoHistory.Undo}" Content="Undo"/>
+        <Button Command="{Binding UndoHistory.Redo}" Content="Redo"/>
+        <TextBox Width="200" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{Binding Text1.Value}"/>
+    </StackPanel>
+    
+    
+    
 </UserControl
 >
