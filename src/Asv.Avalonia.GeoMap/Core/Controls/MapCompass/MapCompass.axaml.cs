@@ -1,13 +1,12 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapCompass : TemplatedControl
+public partial class MapCompass : TemplatedControl
 {
     private Cursor? _handCursor;
     private bool _isDragging;
@@ -44,60 +43,19 @@ public class MapCompass : TemplatedControl
                 compass.NormalizeNonNegative(TouchpadRotationSensitivityProperty);
             }
         });
+
+        GestureSurfaceProperty.Changed.Subscribe(args =>
+        {
+            if (args.Sender is MapCompass compass)
+            {
+                compass.AttachToGestureSurface();
+            }
+        });
     }
-
-    public static readonly StyledProperty<double> RotationProperty = AvaloniaProperty.Register<
-        MapCompass,
-        double
-    >(nameof(Rotation), defaultBindingMode: BindingMode.TwoWay);
-
-    public static readonly StyledProperty<double> DeadZoneProperty = AvaloniaProperty.Register<
-        MapCompass,
-        double
-    >(nameof(DeadZone), 0);
-
-    public static readonly StyledProperty<bool> EnableTouchpadGesturesProperty =
-        AvaloniaProperty.Register<MapCompass, bool>(nameof(EnableTouchpadGestures), true);
-
-    public static readonly StyledProperty<double> MouseRotationSensitivityProperty =
-        AvaloniaProperty.Register<MapCompass, double>(nameof(MouseRotationSensitivity), 1.0);
-
-    public static readonly StyledProperty<double> TouchpadRotationSensitivityProperty =
-        AvaloniaProperty.Register<MapCompass, double>(nameof(TouchpadRotationSensitivity), 1.0);
 
     public MapCompass()
     {
         AddHandler(Gestures.PointerTouchPadGestureRotateEvent, OnTouchPadGestureRotate);
-    }
-
-    public double Rotation
-    {
-        get => GetValue(RotationProperty);
-        set => SetValue(RotationProperty, value);
-    }
-
-    public double DeadZone
-    {
-        get => GetValue(DeadZoneProperty);
-        set => SetValue(DeadZoneProperty, value);
-    }
-
-    public bool EnableTouchpadGestures
-    {
-        get => GetValue(EnableTouchpadGesturesProperty);
-        set => SetValue(EnableTouchpadGesturesProperty, value);
-    }
-
-    public double MouseRotationSensitivity
-    {
-        get => GetValue(MouseRotationSensitivityProperty);
-        set => SetValue(MouseRotationSensitivityProperty, Math.Abs(value));
-    }
-
-    public double TouchpadRotationSensitivity
-    {
-        get => GetValue(TouchpadRotationSensitivityProperty);
-        set => SetValue(TouchpadRotationSensitivityProperty, Math.Abs(value));
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -339,7 +297,7 @@ public class MapCompass : TemplatedControl
     {
         DetachFromGestureSurface();
 
-        _gestureSurface = Parent as InputElement;
+        _gestureSurface = GestureSurface;
         if (_gestureSurface == null)
         {
             return;
@@ -386,12 +344,12 @@ public class MapCompass : TemplatedControl
     private Point GetPositionOnGestureSurface(PointerEventArgs e)
     {
         var surface = GetGestureSurfaceVisual();
-        return surface == null ? e.GetPosition(this) : e.GetPosition(surface);
+        return e.GetPosition(surface);
     }
 
-    private Visual? GetGestureSurfaceVisual()
+    private Visual GetGestureSurfaceVisual()
     {
-        return _gestureSurface as Visual ?? Parent as Visual ?? this;
+        return _gestureSurface as Visual ?? this;
     }
 
     private static void DisposeAndResetCursor(ref Cursor? cursor)

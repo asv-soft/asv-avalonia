@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class GoogleHybridTileProvider : ITileProvider
+public class GoogleHybridTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<GoogleHybridTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "GoogleHybrid";
 
@@ -11,10 +17,10 @@ public class GoogleHybridTileProvider : ITileProvider
         Group = TileProviderGroup.Google,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         var server = (key.X + (2 * key.Y)) % 4;
         if (server < 0)
@@ -24,6 +30,4 @@ public class GoogleHybridTileProvider : ITileProvider
 
         return $"https://mt{server}.google.com/maps/vt/lyrs=y&hl=en&x={key.X}&y={key.Y}&z={key.Zoom}";
     }
-
-    public int TileSize => 256;
 }

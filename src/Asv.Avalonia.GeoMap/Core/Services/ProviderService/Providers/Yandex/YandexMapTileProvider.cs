@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class YandexMapTileProvider : ITileProvider
+public class YandexMapTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<YandexMapTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "Yandex";
 
@@ -11,13 +17,11 @@ public class YandexMapTileProvider : ITileProvider
         Group = TileProviderGroup.Yandex,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         return $"https://core-renderer-tiles.maps.yandex.net/tiles?l=map&x={key.X}&y={key.Y}&z={key.Zoom}";
     }
-
-    public int TileSize => 256;
 }

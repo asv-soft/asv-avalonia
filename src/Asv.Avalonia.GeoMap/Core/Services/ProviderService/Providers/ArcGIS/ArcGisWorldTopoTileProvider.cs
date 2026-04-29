@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class ArcGisWorldTopoTileProvider : ITileProvider
+public class ArcGisWorldTopoTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<ArcGisWorldTopoTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "ArcGisWorldTopo";
 
@@ -13,13 +19,11 @@ public class ArcGisWorldTopoTileProvider : ITileProvider
         MaxZoom = 17,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         return $"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{key.Zoom}/{key.Y}/{key.X}";
     }
-
-    public int TileSize => 256;
 }

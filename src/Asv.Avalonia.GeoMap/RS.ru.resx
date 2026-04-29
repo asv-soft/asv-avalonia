@@ -200,4 +200,28 @@
     <data name="ArcGisWorldImageryTileProvider_Info_Name" xml:space="preserve">
         <value>Образная</value>
     </data>
+    <data name="HttpTileProvider_Error_Unauthorized_Title" xml:space="preserve">
+        <value>Ошибка авторизации</value>
+    </data>
+    <data name="HttpTileProvider_Error_Unauthorized_Message" xml:space="preserve">
+        <value>Некорректный или отсутствующий API ключ для провайдера карты «{0}». Укажите корректный API ключ в настройках.</value>
+    </data>
+    <data name="HttpTileProvider_Error_ServerError_Title" xml:space="preserve">
+        <value>Ошибка сервера</value>
+    </data>
+    <data name="HttpTileProvider_Error_ServerError_Message" xml:space="preserve">
+        <value>Провайдер карты «{0}» временно недоступен. Повторная попытка выполняется автоматически.</value>
+    </data>
+    <data name="HttpTileProvider_Error_Timeout_Title" xml:space="preserve">
+        <value>Таймаут подключения</value>
+    </data>
+    <data name="HttpTileProvider_Error_Timeout_Message" xml:space="preserve">
+        <value>Провайдер карты «{0}» не отвечает. Повторная попытка выполняется автоматически.</value>
+    </data>
+    <data name="HttpTileProvider_Error_NetworkError_Title" xml:space="preserve">
+        <value>Ошибка сети</value>
+    </data>
+    <data name="HttpTileProvider_Error_NetworkError_Message" xml:space="preserve">
+        <value>Не удалось подключиться к провайдеру карты «{0}». Проверьте подключение к интернету.</value>
+    </data>
 </root>

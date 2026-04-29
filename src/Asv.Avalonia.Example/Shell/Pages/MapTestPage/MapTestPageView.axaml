@@ -15,11 +15,12 @@
         <example:MapTestPageViewModel />
     </Design.DataContext>
     <Panel>
-        <map:MapView DataContext="{Binding MapViewModel}" />
+        <map:MapView x:Name="PART_Map" DataContext="{Binding MapViewModel}" />
         <map:MapCompass
             Rotation="{Binding MapViewModel.Rotation.Value}"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom"
+            GestureSurface="{Binding #PART_Map}"
             Margin="8"
         />
         <map:TileProviderSelectorView

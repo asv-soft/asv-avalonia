@@ -207,4 +207,28 @@
     <data name="ArcGisWorldImageryTileProvider_Info_Name" xml:space="preserve">
         <value>World Imagery</value>
     </data>
+    <data name="HttpTileProvider_Error_Unauthorized_Title" xml:space="preserve">
+        <value>Authorization error</value>
+    </data>
+    <data name="HttpTileProvider_Error_Unauthorized_Message" xml:space="preserve">
+        <value>Invalid or missing API key for map provider '{0}'. Please set a valid API key in Settings.</value>
+    </data>
+    <data name="HttpTileProvider_Error_ServerError_Title" xml:space="preserve">
+        <value>Server error</value>
+    </data>
+    <data name="HttpTileProvider_Error_ServerError_Message" xml:space="preserve">
+        <value>Map provider '{0}' is temporarily unavailable. Retrying automatically.</value>
+    </data>
+    <data name="HttpTileProvider_Error_Timeout_Title" xml:space="preserve">
+        <value>Connection timeout</value>
+    </data>
+    <data name="HttpTileProvider_Error_Timeout_Message" xml:space="preserve">
+        <value>Map provider '{0}' is not responding. Retrying automatically.</value>
+    </data>
+    <data name="HttpTileProvider_Error_NetworkError_Title" xml:space="preserve">
+        <value>Network error</value>
+    </data>
+    <data name="HttpTileProvider_Error_NetworkError_Message" xml:space="preserve">
+        <value>Failed to connect to map provider '{0}'. Check your internet connection.</value>
+    </data>
 </root>

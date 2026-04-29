@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class HereTerrainTileProvider : IProtectedTileProvider
+public class HereTerrainTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<HereTerrainTileProvider> logger,
+    TimeProvider timeProvider
+) : ProtectedHttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "HereTerrain";
 
@@ -11,14 +17,11 @@ public class HereTerrainTileProvider : IProtectedTileProvider
         Group = TileProviderGroup.Here,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
-    public string? ApiKey { get; set; }
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         return $"https://maps.hereapi.com/v3/base/mc/{key.Zoom}/{key.X}/{key.Y}/png?style=terrain.day&apiKey={ApiKey}";
     }
-
-    public int TileSize => 256;
 }

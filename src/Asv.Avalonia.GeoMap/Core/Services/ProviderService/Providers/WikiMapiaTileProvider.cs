@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class WikiMapiaTileProvider : ITileProvider
+public class WikiMapiaTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<WikiMapiaTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "WikiMapia";
 
@@ -13,10 +19,10 @@ public class WikiMapiaTileProvider : ITileProvider
         MaxZoom = 18,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         var server = (key.X % 4) + ((key.Y % 4) * 4);
         if (server < 0)
@@ -26,6 +32,4 @@ public class WikiMapiaTileProvider : ITileProvider
 
         return $"https://i{server}.wikimapia.org/?x={key.X}&y={key.Y}&zoom={key.Zoom}";
     }
-
-    public int TileSize => 256;
 }

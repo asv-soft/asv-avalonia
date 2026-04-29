@@ -1,6 +1,12 @@
+using Microsoft.Extensions.Logging;
+
 namespace Asv.Avalonia.GeoMap;
 
-public class UmpTileProvider : ITileProvider
+public class UmpTileProvider(
+    IHttpClientFactory httpClientFactory,
+    ILogger<UmpTileProvider> logger,
+    TimeProvider timeProvider
+) : HttpTileProvider(httpClientFactory, logger, timeProvider)
 {
     public const string Id = "UMP";
 
@@ -13,13 +19,11 @@ public class UmpTileProvider : ITileProvider
         MaxZoom = 18,
     };
 
-    public TileProviderInfo Info => StaticInfo;
-    public IMapProjection Projection => WebMercatorProjection.Instance;
+    public override TileProviderInfo Info => StaticInfo;
+    public override IMapProjection Projection => WebMercatorProjection.Instance;
 
-    public string? GetTileUrl(TileKey key)
+    protected override string GetTileUrl(TileKey key)
     {
         return $"http://tiles.ump.waw.pl/ump_tiles/{key.Zoom}/{key.X}/{key.Y}.png";
     }
-
-    public int TileSize => 256;
 }
