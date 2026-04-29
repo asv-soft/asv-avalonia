@@ -55,7 +55,7 @@ public partial class MapCompass : TemplatedControl
 
     public MapCompass()
     {
-        AddHandler(Gestures.PointerTouchPadGestureRotateEvent, OnTouchPadGestureRotate);
+        AddHandler(InputElement.PointerTouchPadGestureRotateEvent, OnTouchPadGestureRotate);
     }
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -308,7 +308,7 @@ public partial class MapCompass : TemplatedControl
         _gestureSurface.AddHandler(PointerReleasedEvent, OnSurfacePointerReleased);
         _gestureSurface.AddHandler(PointerCaptureLostEvent, OnSurfacePointerCaptureLost);
         _gestureSurface.AddHandler(
-            Gestures.PointerTouchPadGestureRotateEvent,
+            InputElement.PointerTouchPadGestureRotateEvent,
             OnTouchPadGestureRotate
         );
     }
@@ -325,7 +325,7 @@ public partial class MapCompass : TemplatedControl
         _gestureSurface.RemoveHandler(PointerReleasedEvent, OnSurfacePointerReleased);
         _gestureSurface.RemoveHandler(PointerCaptureLostEvent, OnSurfacePointerCaptureLost);
         _gestureSurface.RemoveHandler(
-            Gestures.PointerTouchPadGestureRotateEvent,
+            InputElement.PointerTouchPadGestureRotateEvent,
             OnTouchPadGestureRotate
         );
         _gestureSurface = null;

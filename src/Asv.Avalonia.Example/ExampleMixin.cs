@@ -139,10 +139,9 @@ public static class ExampleMixin
             where TViewModel : class, IControlsGallerySubPage
             where TView : Control
         {
-            builder.Parent.Parent.Services.AddKeyedTransient<IControlsGallerySubPage, TViewModel>(
-                subPageId
-            );
-            builder.Parent.Parent.ViewLocator.RegisterViewFor<TViewModel, TView>();
+            
+            builder.Parent.Parent.Shell.TreeSubPages.Register<IControlsGalleryPage, IControlsGallerySubPage, TViewModel, TView>(subPageId);
+            
             return this;
         }
 

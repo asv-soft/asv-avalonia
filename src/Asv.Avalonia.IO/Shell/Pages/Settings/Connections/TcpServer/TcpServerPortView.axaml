@@ -100,7 +100,7 @@
                 Text="{x:Static io:RS.PortView_Text_Host}"
             />
             <AutoCompleteBox
-                ValueMemberBinding="{Binding Key}"
+                ValueMemberBinding="{ReflectionBinding Key}"
                 Grid.Row="2"
                 Grid.Column="4"
                 ItemsSource="{Binding Config.HostHistory}"
@@ -109,8 +109,8 @@
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
-                            <Run Text="{Binding Key}" />
-                            <Run Text="{Binding Value}" />
+                            <Run Text="{ReflectionBinding Key}" />
+                            <Run Text="{ReflectionBinding Value}" />
                         </TextBlock>
                     </DataTemplate>
                 </AutoCompleteBox.ItemTemplate>
@@ -125,7 +125,7 @@
                 Text="{x:Static io:RS.PortView_Text_PortNumber}"
             />
             <AutoCompleteBox
-                ValueMemberBinding="{Binding Key}"
+                ValueMemberBinding="{ReflectionBinding Key}"
                 Grid.Row="4"
                 Grid.Column="4"
                 ItemsSource="{Binding Config.PortHistory}"
@@ -134,8 +134,8 @@
                 <AutoCompleteBox.ItemTemplate>
                     <DataTemplate>
                         <TextBlock>
-                            <Run Text="{Binding Key}" />
-                            <Run Text="{Binding Value}" />
+                            <Run Text="{ReflectionBinding Key}" />
+                            <Run Text="{ReflectionBinding Value}" />
                         </TextBlock>
                     </DataTemplate>
                 </AutoCompleteBox.ItemTemplate>

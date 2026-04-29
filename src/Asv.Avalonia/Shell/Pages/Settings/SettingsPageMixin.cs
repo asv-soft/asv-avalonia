@@ -75,8 +75,12 @@ public static class SettingsPageMixin
             where TViewModel : class, ISettingsSubPage
             where TView : Control
         {
-            builder.Parent.Parent.ViewLocator.RegisterViewFor<TViewModel, TView>();
-            builder.Parent.Parent.Services.AddKeyedTransient<ISettingsSubPage, TViewModel>(pageId);
+                builder.Parent.Parent.Shell.TreeSubPages.Register<
+                ISettingsPage,
+                ISettingsSubPage,
+                TViewModel,
+                TView
+            >(pageId);
             return this;
         }
 

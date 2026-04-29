@@ -21,8 +21,7 @@ public static class ViewModelMixin
             where TViewModelInterface : IViewModel
         {
             return 
-                services.GetService<TViewModelInterface>() ??
-             services
+                services
                 .GetRequiredService<FactoryDelegate<TViewModelInterface, TArgs>>()
                 .Invoke(args);
         }
@@ -31,7 +30,6 @@ public static class ViewModelMixin
             where TViewModelInterface : IViewModel
         {
             return 
-                services.GetKeyedService<TViewModelInterface>(key) ??
                 services
                     .GetRequiredKeyedService<FactoryDelegate<TViewModelInterface, TArgs>>(key)
                     .Invoke(args);

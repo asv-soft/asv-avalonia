@@ -149,17 +149,8 @@
                                         Foreground="Green"
                                         HorizontalAlignment="Right"
                                         VerticalAlignment="Bottom"
-                                    >
-                                        <avalonia:MaterialIcon.IsVisible>
-                                            <MultiBinding Converter="{x:Static asv-avalonia:EqualsMultiConverter.Instance}">
-                                                <Binding />
-                                                <Binding
-                                                    Path="DataContext.CurrentProvider.Value"
-                                                    RelativeSource="{RelativeSource AncestorType=ListBox}"
-                                                />
-                                            </MultiBinding>
-                                        </avalonia:MaterialIcon.IsVisible>
-                                    </avalonia:MaterialIcon>
+                                        IsVisible="{CompiledBinding IsCurrent.Value}"
+                                    />
                                 </Panel>
                                 <TextBlock Grid.Column="2" VerticalAlignment="Center">
                                     <Run Text="{CompiledBinding Group}" />

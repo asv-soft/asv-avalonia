@@ -51,6 +51,7 @@ public class MapProviderProperty : ViewModel
         CurrentProvider = new BindableReactiveProperty<TileProviderViewModel?>(
             _view.FirstOrDefault(vm => vm.Provider == mapService.CurrentProvider.Value)
         ).DisposeItWith(Disposable);
+        SetCurrentProvider(CurrentProvider.Value);
 
         IsSetCurrentEnabled = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
         IsEditApiKeyEnabled = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
@@ -67,7 +68,7 @@ public class MapProviderProperty : ViewModel
             .CurrentProvider.ObserveOnUIThreadDispatcher()
             .Subscribe(provider =>
             {
-                CurrentProvider.Value = _view.FirstOrDefault(vm => vm.Provider == provider);
+                SetCurrentProvider(_view.FirstOrDefault(vm => vm.Provider == provider));
                 UpdateButtonStates();
             })
             .DisposeItWith(Disposable);
@@ -80,6 +81,21 @@ public class MapProviderProperty : ViewModel
     public BindableReactiveProperty<bool> IsEditApiKeyEnabled { get; }
     public ICommand SetCurrentCommand { get; }
     public ICommand EditApiKeyCommand { get; }
+
+    private void SetCurrentProvider(TileProviderViewModel? provider)
+    {
+        if (CurrentProvider.Value is not null)
+        {
+            CurrentProvider.Value.IsCurrent.Value = false;
+        }
+
+        CurrentProvider.Value = provider;
+
+        if (CurrentProvider.Value is not null)
+        {
+            CurrentProvider.Value.IsCurrent.Value = true;
+        }
+    }
 
     private void UpdateButtonStates()
     {

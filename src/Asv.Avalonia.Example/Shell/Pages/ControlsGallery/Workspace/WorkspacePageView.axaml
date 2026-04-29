@@ -16,7 +16,7 @@
         <example:WorkspacePageViewModel />
     </Design.DataContext>
     <Panel>
-        <geoMap:MapView />
+        <geoMap:MapView DataContext="{Binding MapViewModel}" />
         <avalonia:Workspace ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

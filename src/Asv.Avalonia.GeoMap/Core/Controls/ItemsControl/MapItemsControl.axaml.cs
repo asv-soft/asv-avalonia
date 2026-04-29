@@ -35,8 +35,8 @@ public partial class MapItemsControl : SelectingItemsControl
         SelectionMode = SelectionMode.Multiple;
         SelectionChanged += OnSelectionChanged;
 
-        AddHandler(Gestures.PointerTouchPadGestureSwipeEvent, OnTouchPadGestureSwipe);
-        AddHandler(Gestures.PointerTouchPadGestureMagnifyEvent, OnTouchPadGestureMagnify);
+        AddHandler(InputElement.PointerTouchPadGestureSwipeEvent, OnTouchPadGestureSwipe);
+        AddHandler(InputElement.PointerTouchPadGestureMagnifyEvent, OnTouchPadGestureMagnify);
     }
 
     #region Property events

@@ -41,6 +41,7 @@
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="$(DotNetVersion)" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="$(DotNetVersion)" />
+        <PackageReference Include="System.Reactive" Version="$(SystemReactiveVersion)" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.14.0">
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

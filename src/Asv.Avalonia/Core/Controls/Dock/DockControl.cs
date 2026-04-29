@@ -241,7 +241,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             return;
         }
 
-        if (this.GetVisualRoot() is not Window window)
+        if (TopLevel.GetTopLevel(this) is not Window window)
         {
             return;
         }

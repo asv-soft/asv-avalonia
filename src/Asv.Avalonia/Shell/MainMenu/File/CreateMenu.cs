@@ -1,4 +1,3 @@
-using System.Reactive.Disposables;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 

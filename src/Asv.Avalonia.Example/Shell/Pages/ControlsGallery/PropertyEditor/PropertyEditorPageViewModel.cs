@@ -9,7 +9,7 @@ namespace Asv.Avalonia.Example;
 
 public class PropertyEditorPageViewModel : ControlsGallerySubPage
 {
-    public const string PageId = "property-editor-example";
+    public const string PageId = "property_editor_example";
     public const MaterialIconKind PageIcon = MaterialIconKind.PropertyTag;
 
     public PropertyEditorPageViewModel()

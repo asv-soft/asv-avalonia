@@ -14,7 +14,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     }
 
     public SettingsGeoMapViewModel(
-        ITreeSubPageContext<SettingsPageViewModel> pageContext,
+        ITreeSubPageContext<ISettingsPage> pageContext,
         IMapService mapService,
         IDialogService dialogService,
         ILoggerFactory loggerFactory

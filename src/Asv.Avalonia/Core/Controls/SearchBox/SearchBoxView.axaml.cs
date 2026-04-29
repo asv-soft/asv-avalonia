@@ -1,5 +1,5 @@
 ﻿using Avalonia.Controls;
-using Avalonia.Input;
+using Avalonia.Interactivity;
 using R3;
 
 namespace Asv.Avalonia;
@@ -11,7 +11,7 @@ public partial class SearchBoxView : UserControl
         InitializeComponent();
     }
 
-    private void InputElement_OnGotFocus(object? sender, GotFocusEventArgs e)
+    private void InputElement_OnGotFocus(object? sender, RoutedEventArgs e)
     {
         if (sender is TextBox textBox)
         {

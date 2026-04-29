@@ -37,6 +37,7 @@ public class SettingsConnectionViewModel
 
     public SettingsConnectionViewModel()
         : this(
+            NullTreeSubPageContext<SettingsPageViewModel>.Instance,
             NullDeviceManager.Instance,
             DesignTime.Navigation,
             AppHost.Instance.Services,
@@ -57,12 +58,13 @@ public class SettingsConnectionViewModel
     }
 
     public SettingsConnectionViewModel(
+        ITreeSubPageContext<ISettingsPage> context,
         IDeviceManager deviceManager,
         INavigationService navigationService,
         IServiceProvider containerHost,
         IExtensionService ext
     )
-        : base(SubPageId, default, ext)
+        : base(SubPageId, context.Args, ext)
     {
         _navigationService = navigationService;
         _containerHost = containerHost;

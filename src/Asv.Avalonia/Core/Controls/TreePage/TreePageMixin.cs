@@ -31,12 +31,13 @@ public static class TreePageMixin
     
     public class Builder(ShellMixin.Builder builder)
     {
-        public Builder Register<TContext, TSubPageViewModel, TSubPageView>(string pageId)
-            where TSubPageViewModel : class, ITreeSubpage
+        public Builder Register<TContext, TTreeSubpage, TSubPageViewModel, TSubPageView>(string pageId)
+            where TTreeSubpage : class, ITreeSubpage
+            where TSubPageViewModel : class, TTreeSubpage
             where TSubPageView : Control
             where TContext : class, ITreePageViewModel
         {
-            builder.Parent.ViewModel.RegisterKeyedWithArgs<ITreeSubpage, TSubPageViewModel, ITreeSubPageContext<TContext>>(pageId);
+            builder.Parent.ViewModel.RegisterKeyedWithArgs<TTreeSubpage, TSubPageViewModel, ITreeSubPageContext<TContext>>(pageId);
             builder.Parent.ViewLocator.RegisterViewFor<TSubPageViewModel, TSubPageView>();
             return this;
         }

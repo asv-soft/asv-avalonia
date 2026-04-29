@@ -727,11 +727,7 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
                 // ContentDialog itself to pull focus away from the main visual tree so weird things don't happen
                 // The latter shouldn't happen in 99% of cases as either something in the user content will be able
                 // to take focus OR there should always be at least one button which can take focus
-#pragma warning disable CS0618 // Type or member is obsolete // TODO: Copy fix for this from FA when they'll come up with it
-                var next =
-                    KeyboardNavigationHandler.GetNext(this, NavigationDirection.Next) ?? this;
-#pragma warning restore CS0618 // Type or member is obsolete
-                next.Focus();
+                Focus();
 
                 break;
         }

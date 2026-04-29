@@ -18,7 +18,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 {
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<IWorkspaceWidget> _itemsSource;
-    public const string PageId = "wrokspace-example";
+    public const string PageId = "wrokspace_example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Table;
 
     public WorkspacePageViewModel()
@@ -43,6 +43,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         Init(context.Context);
         _loggerFactory = loggerFactory;
+        MapViewModel = new MapViewModel($"{PageId}.map", mapService).DisposeItWith(Disposable);
         var hideAll = new MenuItem("action1", "Hide all", loggerFactory)
         {
             Command = new ReactiveCommand(x =>
@@ -98,7 +99,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         Menu.Add(showError);
         _itemsSource =
         [
-            new PropertyEditorWidgetViewModel("Poprerty editor", "prop-left", loggerFactory)
+            new PropertyEditorWidgetViewModel("prop_left", "Property editor", loggerFactory)
             {
                 Position = WorkspaceDock.Left,
                 ItemsSource =
@@ -215,8 +216,12 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public NotifyCollectionChangedSynchronizedViewList<IWorkspaceWidget> Items { get; }
 
+    public MapViewModel MapViewModel { get; }
+
     public override IEnumerable<IViewModel> GetChildren()
     {
+        yield return MapViewModel;
+
         foreach (var item in _itemsSource)
         {
             yield return item;

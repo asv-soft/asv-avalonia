@@ -6,7 +6,9 @@ namespace Asv.Avalonia;
 
 public interface IHotKeyService
 {
-    
+    void SetHotKey(string commandId, HotKeyInfo? hotKey);
+    HotKeyInfo? GetHotKey(string commandId);
+    IEnumerable<IActionInfo> GetAllActions();
 }
 
 public interface IActionInfo
@@ -23,20 +25,28 @@ public interface IHotKeyAction
     IActionInfo Info { get; }
 }
 
+public class HotKeyAction<TContext> : IHotKeyAction
+{
+    
+    public IActionInfo Info { get; }
+}
+
 public class NullActionsService : IHotKeyService
 {
     public static IHotKeyService Instance { get; } = new NullActionsService();
-    
-}
 
+    public void SetHotKey(string commandId, HotKeyInfo? hotKey)
+    {
+        // do nothing
+    }
 
+    public HotKeyInfo? GetHotKey(string commandId)
+    {
+        return null;
+    }
 
-public interface IActionFactory
-{
-    
-}
-
-public class ActionFactory
-{
-    
+    public IEnumerable<IActionInfo> GetAllActions()
+    {
+        return [];
+    }
 }

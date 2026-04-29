@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Utilities;
 
 namespace Asv.Avalonia;
 
@@ -56,25 +55,22 @@ public class VisualStateHelper
             return;
         }
 
-        CharacterReader cr = new CharacterReader(classes.AsSpan());
-
-        while (!cr.End)
+        foreach (var item in classes.Split(',', StringSplitOptions.RemoveEmptyEntries))
         {
-            var @class = cr.TakeUntil(',');
+            var @class = item.Trim();
+            if (@class.Length == 0)
+            {
+                continue;
+            }
 
             if (@class[^1] == '!')
             {
-                @class = @class.Slice(0, @class.Length - 1);
-                ((IPseudoClasses)element.Classes).Set(@class.ToString(), false);
+                @class = @class[..^1];
+                ((IPseudoClasses)element.Classes).Set(@class, false);
             }
             else
             {
-                ((IPseudoClasses)element.Classes).Set(@class.ToString(), set);
-            }
-
-            if (!cr.End)
-            {
-                cr.Skip(1);
+                ((IPseudoClasses)element.Classes).Set(@class, set);
             }
         }
     }

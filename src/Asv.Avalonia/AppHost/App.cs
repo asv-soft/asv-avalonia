@@ -44,7 +44,7 @@ public class AsvApplication : Application
 
         base.OnFrameworkInitializationCompleted();
 #if DEBUG
-        this.AttachDevTools();
+        this.AttachDeveloperTools();
 #endif
     }
 

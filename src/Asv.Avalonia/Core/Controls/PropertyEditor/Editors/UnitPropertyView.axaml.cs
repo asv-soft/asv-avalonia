@@ -26,7 +26,7 @@ public partial class UnitPropertyView : UserControl
         }
     }
 
-    private void PART_ValueTextBox_OnGotFocus(object? sender, GotFocusEventArgs e)
+    private void PART_ValueTextBox_OnGotFocus(object? sender, RoutedEventArgs e)
     {
         if (sender is TextBox textBox)
         {
