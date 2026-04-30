@@ -11,9 +11,9 @@ public interface IHotKeyService
     IEnumerable<IHotKeyInfo> Actions { get; }
 }
 
-public class NullActionsService : IHotKeyService
+public class NullHotKeyService : IHotKeyService
 {
-    public static IHotKeyService Instance { get; } = new NullActionsService();
+    public static IHotKeyService Instance { get; } = new NullHotKeyService();
 
     public Observable<KeyGesture> OnHotKey => Observable.Empty<KeyGesture>();
 

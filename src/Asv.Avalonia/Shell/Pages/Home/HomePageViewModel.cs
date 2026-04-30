@@ -101,13 +101,13 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 
     public HomePageViewModel(
         IPageContext context,
-        ICommandService cmd,
+        
         IAppInfo appInfo,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, context, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, context,  loggerFactory, dialogService, ext)
     {
         AppInfo = appInfo;
         Icon = PageIcon;

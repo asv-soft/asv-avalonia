@@ -38,14 +38,14 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
 
     public PluginsMarketPageViewModel(
         IPageContext context,
-        ICommandService cmd,
+        
         IPluginManager manager,
         IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, context, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, context,  loggerFactory, dialogService, ext)
     {
         ArgumentNullException.ThrowIfNull(cmd);
         ArgumentNullException.ThrowIfNull(manager);

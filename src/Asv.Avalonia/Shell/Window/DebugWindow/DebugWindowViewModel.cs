@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Asv.Modeling;
+using Avalonia.Input;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -13,27 +14,25 @@ public class DebugWindowViewModel : ViewModel, IDebugWindow
 
     public DebugWindowViewModel()
         : this(
-            DesignTime.Navigation,
             DesignTime.ShellHost,
-            DesignTime.CommandService,
+            DesignTime.HotKeyService,
             DesignTime.LoggerFactory
         ) { }
 
     public DebugWindowViewModel(
-        INavigationService nav,
         IShellHost host,
-        ICommandService cmd,
+        IHotKeyService hotKeys,
         ILoggerFactory loggerFactory
     )
         : base(ModelId)
     {
-        SelectedControlPath = nav.SelectedControlPath.ToReadOnlyBindableReactiveProperty();
         Debug.Assert(host.Shell != null, "host.Shell != null");
+        SelectedControlPath = host.Shell.Navigation.SelectedPath.ToReadOnlyBindableReactiveProperty();
         _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x));
         Pages = _pageView.ToNotifyCollectionChanged();
-        BackwardStack = nav.BackwardStack.ToNotifyCollectionChanged();
-        ForwardStack = nav.ForwardStack.ToNotifyCollectionChanged();
-        HotKey = cmd.OnHotKey.ToReadOnlyBindableReactiveProperty();
+        BackwardStack = host.Shell.Navigation.BackwardStack.ToNotifyCollectionChanged();
+        ForwardStack = host.Shell.Navigation.ForwardStack.ToNotifyCollectionChanged();
+        HotKey = hotKeys.OnHotKey.ToReadOnlyBindableReactiveProperty();
     }
 
     public NotifyCollectionChangedSynchronizedViewList<NavPath> ForwardStack { get; }
@@ -43,7 +42,7 @@ public class DebugWindowViewModel : ViewModel, IDebugWindow
     public NotifyCollectionChangedSynchronizedViewList<DebugPageViewModel> Pages { get; }
     public IReadOnlyBindableReactiveProperty<NavPath> SelectedControlPath { get; }
 
-    public IReadOnlyBindableReactiveProperty<HotKeyInfo> HotKey { get; }
+    public IReadOnlyBindableReactiveProperty<KeyGesture?> HotKey { get; }
 
     public override IEnumerable<IViewModel> GetChildren()
     {
@@ -62,11 +61,11 @@ public class DebugWindowViewModel : ViewModel, IDebugWindow
 public class DebugPageViewModel(IPage page)
     : ViewModel(page.Id.TypeId, page.Id.Args)
 {
-    public NotifyCollectionChangedSynchronizedViewList<CommandSnapshot> RedoStack { get; } =
-        page.History.RedoStack.ToNotifyCollectionChanged();
+    public NotifyCollectionChangedSynchronizedViewList<IUndoSnapshot> RedoStack { get; } =
+        page.UndoHistory.RedoStack.ToNotifyCollectionChanged();
 
-    public NotifyCollectionChangedSynchronizedViewList<CommandSnapshot> UndoStack { get; } =
-        page.History.UndoStack.ToNotifyCollectionChanged();
+    public NotifyCollectionChangedSynchronizedViewList<IUndoSnapshot> UndoStack { get; } =
+        page.UndoHistory.UndoStack.ToNotifyCollectionChanged();
 
     public override IEnumerable<IViewModel> GetChildren()
     {

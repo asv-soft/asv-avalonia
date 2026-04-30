@@ -16,13 +16,13 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         string id,
         IPageContext context,
         IDeviceManager devices,
-        ICommandService cmd,
+        
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(id, context, cmd, loggerFactory, dialogService, ext)
+        : base(id, context,  loggerFactory, dialogService, ext)
     {
         ArgumentNullException.ThrowIfNull(devices);
         ArgumentNullException.ThrowIfNull(layoutService);

@@ -1,11 +1,12 @@
 using System.Collections.Immutable;
-using System.Diagnostics;
 using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;
 using Asv.Common;
-using Asv.IO;
 using Asv.Modeling;
-using DotNext.Runtime.CompilerServices;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
+using Avalonia.LogicalTree;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -36,8 +37,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     private readonly ILogger<ShellViewModel> _logger;
 
     protected readonly IServiceProvider Container;
-    protected readonly ILoggerFactory LoggerFactory;
-    protected readonly ICommandService Cmd;
     protected readonly IDialogService DialogService;
     protected readonly IUndoStoreService UndoStoreService;
 
@@ -54,13 +53,25 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         ArgumentNullException.ThrowIfNull(loggerFactory);
         ArgumentNullException.ThrowIfNull(cfg);
         _logger = loggerFactory.CreateLogger<ShellViewModel>();
+
+
+        #region Navigation
+
+        InputElement
+            .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
+            .AddTo(ref DisposableBag);
+        Navigation = new NavigationController<IViewModel>(this, new NavigationStore("nav")).DisposeItWith(Disposable);
+
+        Events.Catch<GoToEvent>(async (_, e, _) => await Navigation.GoTo(e.Path)).DisposeItWith(Disposable);
+        
+        #endregion
+        
         Cfg = cfg;
         Container = ioc;
-        LoggerFactory = loggerFactory;
         LayoutService = ioc.GetRequiredService<ILayoutService>();
         DialogService = ioc.GetRequiredService<IDialogService>();
-        Cmd = ioc.GetRequiredService<ICommandService>();
-        Navigation = ioc.GetRequiredService<INavigationService>();
+        
+        
         UndoStoreService = ioc.GetRequiredService<IUndoStoreService>();
 
         _unsavedChangesDialogPrefab = DialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
@@ -158,6 +169,31 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
+    
+    private void GotFocusHandler(TopLevel top, RoutedEventArgs args)
+    {
+        if (args.Source is not Control source)
+        {
+            return;
+        }
+        var control = source;
+        while (control != null)
+        {
+            if (control.DataContext is IViewModel routable)
+            {
+                // this need for ignore root shell when focus changed
+                if (routable is IShell)
+                {
+                    return;
+                }
+                Navigation.ForceSelect(routable);
+                break;
+            }
+
+            // Try to find IViewModel DataContext in logical parent
+            control = control.GetLogicalParent() as Control;
+        }
+    }
 
     protected ILogger Logger => _logger;
 
@@ -175,12 +211,12 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     public void ChangeTheme()
     {
-        this.ExecuteCommand(ChangeThemeFreeCommand.Id).SafeFireAndForget();
+        //this.ExecuteCommand(ChangeThemeFreeCommand.Id).SafeFireAndForget();
     }
 
     public void OpenSettings()
     {
-        this.ExecuteCommand(OpenSettingsCommand.Id).SafeFireAndForget();
+        //this.ExecuteCommand(OpenSettingsCommand.Id).SafeFireAndForget();
     }
 
     #endregion
@@ -306,8 +342,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     {
         switch (e)
         {
-            case ExecuteCommandEvent cmd:
-                await Cmd.Execute(cmd.CommandId, cmd.Sender, cmd.CommandArg, cmd.Cancel);
+            case GoToEvent goTo:
+                await Navigation.GoTo(goTo.Path);
                 break;
             case RestartApplicationEvent restart:
             {
@@ -338,7 +374,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
                 if (_pages.Count == 0)
                 {
-                    await Navigation.GoHomeAsync();
+                    await Navigation.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)));
                     break;
                 }
 
@@ -496,7 +532,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     #endregion
 
-    public INavigationService Navigation { get; }
+    
+    
 
     public IConfiguration Cfg { get; }
     public ILayoutService LayoutService { get; }
@@ -570,4 +607,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     }
 
     #endregion
+
+    public INavigationController<IViewModel> Navigation { get; }
 }

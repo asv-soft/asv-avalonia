@@ -19,11 +19,10 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     private readonly IPluginManager _pluginManager;
     private readonly ObservableList<IPluginServerInfo> _sources;
     private readonly ISynchronizedView<IPluginServerInfo, PluginsSourceViewModel> _view;
-    private readonly INavigationService _navigationService;
     private readonly ILogger<SettingsPluginsSourcesViewModel> _logger;
 
     public SettingsPluginsSourcesViewModel()
-        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullPluginManager.Instance, DesignTime.Navigation, DesignTime.LoggerFactory)
+        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullPluginManager.Instance, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
         var items = new ObservableList<IPluginServerInfo>([
@@ -52,7 +51,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     public SettingsPluginsSourcesViewModel(
         ITreeSubPageContext<ISettingsPage> context,
         IPluginManager pluginManager,
-        INavigationService navigationService,
+        
         ILoggerFactory loggerFactory)
         : base(PageId, context)
     {

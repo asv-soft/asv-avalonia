@@ -21,7 +21,6 @@ public class SettingsConnectionViewModel
     public const string SubPageId = "connections";
     public const MaterialIconKind Icon = MaterialIconKind.Connection;
 
-    private readonly INavigationService _navigationService;
     private readonly IServiceProvider _containerHost;
 
     private SettingsConnectionViewModelConfig? _config;
@@ -39,7 +38,6 @@ public class SettingsConnectionViewModel
         : this(
             NullTreeSubPageContext<SettingsPageViewModel>.Instance,
             NullDeviceManager.Instance,
-            DesignTime.Navigation,
             AppHost.Instance.Services,
             DesignTime.ExtensionService
         )
@@ -60,13 +58,11 @@ public class SettingsConnectionViewModel
     public SettingsConnectionViewModel(
         ITreeSubPageContext<ISettingsPage> context,
         IDeviceManager deviceManager,
-        INavigationService navigationService,
         IServiceProvider containerHost,
         IExtensionService ext
     )
         : base(SubPageId, context.Args, ext)
     {
-        _navigationService = navigationService;
         _containerHost = containerHost;
         ObservableList<IProtocolPort> source = [];
         var sourceSyncView = source.CreateView(CreatePort).DisposeItWith(Disposable);
@@ -137,7 +133,7 @@ public class SettingsConnectionViewModel
                 )
                 {
                     var item = View.FirstOrDefault();
-                    _navigationService.GoTo(item?.GetPathFromRoot() ?? this.GetPathFromRoot());
+                    this.GoTo(item?.GetPathFromRoot() ?? this.GetPathFromRoot()).SafeFireAndForget();
                 }
                 break;
             case NotifyCollectionChangedAction.Replace:

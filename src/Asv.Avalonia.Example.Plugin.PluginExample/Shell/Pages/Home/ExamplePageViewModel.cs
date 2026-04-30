@@ -28,12 +28,12 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
 
     public ExamplePageViewModel(
         IPageContext context,
-        ICommandService cmd,
+        
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService extensionService
     )
-        : base(PageId, context, cmd, loggerFactory, dialogService, extensionService)
+        : base(PageId, context,  loggerFactory, dialogService, extensionService)
     {
         Header = "Example page";
         Text1 = new BindableReactiveProperty<string>().DisposeItWith(Disposable);

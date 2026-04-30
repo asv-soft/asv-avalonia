@@ -18,14 +18,14 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         string typeId,
         IPageContext context,
         IDeviceManager devices,
-        ICommandService cmd,
+        
         IServiceProvider container,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(typeId, context, cmd, container, layoutService, loggerFactory, dialogService, ext)
+        : base(typeId, context,  container, layoutService, loggerFactory, dialogService, ext)
     {
         _deviceCore = new DevicePageCore(devices, layoutService, loggerFactory.CreateLogger<DevicePageCore>(), this);
         _deviceCore.Init(context.NavArgs);

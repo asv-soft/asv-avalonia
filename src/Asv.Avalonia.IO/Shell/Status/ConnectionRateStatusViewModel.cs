@@ -17,7 +17,6 @@ public class ConnectionRateStatusViewModel : StatusItem
 
     private readonly ILoggerFactory _loggerFactory;
     private readonly TimeProvider _timeProvider;
-    private readonly INavigationService _nav;
     private readonly IUnit _frequencyUnit;
 
     private readonly IncrementalRateCounter _rxBytes;
@@ -29,8 +28,7 @@ public class ConnectionRateStatusViewModel : StatusItem
         : this(
             DesignTime.UnitService,
             NullLoggerFactory.Instance,
-            TimeProvider.System,
-            DesignTime.Navigation
+            TimeProvider.System
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -59,10 +57,9 @@ public class ConnectionRateStatusViewModel : StatusItem
         IDeviceManager deviceManager,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
-        TimeProvider timeProvider,
-        INavigationService nav
+        TimeProvider timeProvider
     )
-        : this(unitService, loggerFactory, timeProvider, nav)
+        : this(unitService, loggerFactory, timeProvider)
     {
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
@@ -76,14 +73,12 @@ public class ConnectionRateStatusViewModel : StatusItem
     private ConnectionRateStatusViewModel(
         IUnitService unitService,
         ILoggerFactory loggerFactory,
-        TimeProvider timeProvider,
-        INavigationService nav
+        TimeProvider timeProvider
     )
         : base(TypeId, default)
     {
         _loggerFactory = loggerFactory;
         _timeProvider = timeProvider;
-        _nav = nav;
         _frequencyUnit =
             unitService.Units[FrequencyUnit.Id]
             ?? throw new UnitException($"Unit {FrequencyUnit.Id} was not found");
@@ -133,7 +128,7 @@ public class ConnectionRateStatusViewModel : StatusItem
 
     public void NavigateToSettings()
     {
-        _nav.GoTo(
+        this.GoTo(
                 new NavPath(
                     new NavId(SettingsPageViewModel.PageId),
                     new NavId(SettingsConnectionViewModel.SubPageId)

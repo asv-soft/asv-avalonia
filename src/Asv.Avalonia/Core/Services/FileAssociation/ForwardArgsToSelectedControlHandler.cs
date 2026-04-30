@@ -1,23 +1,20 @@
-﻿using System.Reflection.Metadata;
-using Asv.Common;
-using Asv.Modeling;
+﻿using Asv.Modeling;
 using Avalonia.Controls;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class ForwardArgsToSelectedControlTask(
+public class ForwardArgsToSelectedControlHandler(
     ISoloRunFeature soloRunFeature,
     IFileAssociationService svc,
-    INavigationService navigationService,
+    
     IShellHost shellHost
 ) : IHostedService
 {
     private ValueTask HandleEvent(IAppArgs appArgs, CancellationToken ct)
     {
-        var context = navigationService.SelectedControl.CurrentValue ?? shellHost.Shell;
+        var context = shellHost.Shell?.Navigation.SelectedControl.CurrentValue;
 
         // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
         if (context == null)

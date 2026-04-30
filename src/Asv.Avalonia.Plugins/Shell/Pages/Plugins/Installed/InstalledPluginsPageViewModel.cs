@@ -38,13 +38,13 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
 
     public InstalledPluginsPageViewModel(
         IPageContext context,
-        ICommandService cmd,
+        
         IPluginManager manager,
         IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext)
-        : base(PageId, context, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, context,  loggerFactory, dialogService, ext)
     {
         Header = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;

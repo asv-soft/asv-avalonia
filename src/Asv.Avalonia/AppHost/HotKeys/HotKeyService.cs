@@ -15,7 +15,6 @@ public class HotKeyServiceConfig
 public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
 {
     private readonly IShellHost _host;
-    private readonly INavigationService _nav;
     private readonly IConfiguration _cfg;
     private readonly ILogger<HotKeyService> _logger;
     private readonly IReadOnlyDictionary<string, IHotKeyAction> _actions;
@@ -24,20 +23,17 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
 
     public HotKeyService(
         IShellHost host,
-        INavigationService nav,
         IConfiguration cfg,
         IEnumerable<IHotKeyAction> actions,
         ILoggerFactory loggerFactory
     )
     {
         ArgumentNullException.ThrowIfNull(host);
-        ArgumentNullException.ThrowIfNull(nav);
         ArgumentNullException.ThrowIfNull(cfg);
         ArgumentNullException.ThrowIfNull(actions);
         ArgumentNullException.ThrowIfNull(loggerFactory);
 
         _host = host;
-        _nav = nav;
         _cfg = cfg;
         _logger = loggerFactory.CreateLogger<HotKeyService>();
         _actions = actions
@@ -133,7 +129,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
             var hotKey = new KeyGesture(e.Key, e.KeyModifiers);
             _onHotKey.OnNext(hotKey);
 
-            var context = _nav.SelectedControl.CurrentValue;
+            var context = _host.Shell?.Navigation.SelectedControl.CurrentValue;
             if (context is null)
             {
                 return;

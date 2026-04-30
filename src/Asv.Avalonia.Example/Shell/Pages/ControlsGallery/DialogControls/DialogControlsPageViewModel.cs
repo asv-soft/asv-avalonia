@@ -45,8 +45,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public const MaterialIconKind PageIcon = MaterialIconKind.Dialogue;
 
     private readonly ILoggerFactory _loggerFactory;
-    private readonly INavigationService _navigationService;
-
     private readonly ReactiveProperty<string?> _customDialogTitle;
     private readonly ReactiveProperty<bool> _customDialogIsImageContent;
     private readonly ReactiveProperty<string?> _customDialogMessage;
@@ -89,7 +87,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
             NullLoggerFactory.Instance,
             NullDialogService.Instance,
-            NullNavigationService.Instance,
             NullUnitService.Instance
         )
     {
@@ -100,13 +97,12 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         ITreeSubPageContext<IControlsGalleryPage> context,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        INavigationService navigationService,
+        
         IUnitService unitService
     )
         : base(PageId, context)
     {
         _loggerFactory = loggerFactory;
-        _navigationService = navigationService;
         _logger = loggerFactory.CreateLogger<DialogControlsPageViewModel>();
         
         #region Units

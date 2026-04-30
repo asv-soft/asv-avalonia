@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 namespace Asv.Avalonia.Plugins;
 
 public sealed class EditPluginsSourceCommand(
-    INavigationService navigationService,
+    
     ILoggerFactory loggerFactory
 ) : ContextCommand<PluginsSourceViewModel>
 {

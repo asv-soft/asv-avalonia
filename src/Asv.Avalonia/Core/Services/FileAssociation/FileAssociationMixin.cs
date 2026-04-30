@@ -10,7 +10,7 @@ public static class FileAssociationMixin
         public IHostApplicationBuilder UseFileAssociation()
         {
             builder.Services.AddSingleton<IFileAssociationService, FileAssociationService>();
-            builder.Services.AddHostedService<ForwardArgsToSelectedControlTask>();
+            builder.Services.AddHostedService<ForwardArgsToSelectedControlHandler>();
             return builder;
         }
 

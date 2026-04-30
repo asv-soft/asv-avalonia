@@ -31,14 +31,14 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     protected TreePageViewModel(
         string typeId,
         IPageContext context,
-        ICommandService cmd,
+        
         IServiceProvider container,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(typeId, context, cmd, loggerFactory, dialogService, ext)
+        : base(typeId, context,  loggerFactory, dialogService, ext)
     {
         _container = container;
         _loggerFactory = loggerFactory;

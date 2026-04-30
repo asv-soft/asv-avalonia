@@ -16,7 +16,7 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
     protected PageViewModel(
         string typeId,
         IPageContext context,
-        ICommandService cmd,
+        
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
@@ -97,21 +97,6 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         set => SetField(ref field, value);
     }
 
-    public ICommandHistory History { get; }
     public IUndoHistory<IViewModel> UndoHistory { get; }
     public ICommand TryClose { get; }
-
-    #region Dispose
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            History.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
-
-    #endregion
 }

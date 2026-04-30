@@ -16,7 +16,7 @@ public class PluginsSourceViewModel : ViewModel
 
     public PluginsSourceViewModel(
         IPluginServerInfo pluginServerInfo,
-        INavigationService navigationService,
+        
         ILoggerFactory loggerFactory
     )
         : base(ViewModelIdPart, new NavArgs(new KeyValuePair<string, string>("source",pluginServerInfo.SourceUri)))

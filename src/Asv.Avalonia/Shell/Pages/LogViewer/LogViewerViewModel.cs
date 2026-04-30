@@ -142,7 +142,7 @@ public class LogViewerViewModel
 
     public LogViewerViewModel(
         IPageContext context,
-        ICommandService cmd,
+        
         ILogReaderService logReaderService,
         ISearchService search,
         ILoggerFactory loggerFactory,
@@ -150,7 +150,7 @@ public class LogViewerViewModel
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(PageId, context, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, context,  loggerFactory, dialogService, ext)
     {
         _logReaderService = logReaderService;
         _search = search;

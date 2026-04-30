@@ -5,7 +5,7 @@ namespace Asv.Avalonia.Plugins;
 
 public sealed class AddPluginsSourceCommand(
     IPluginManager pluginManager,
-    INavigationService navigationService,
+    
     ILoggerFactory loggerFactory
 ) : ContextCommand<SettingsPluginsSourcesViewModel>
 {

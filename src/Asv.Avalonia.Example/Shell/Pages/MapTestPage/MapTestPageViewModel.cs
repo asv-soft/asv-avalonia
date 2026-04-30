@@ -36,13 +36,13 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
     public MapTestPageViewModel(
         IPageContext context,
-        ICommandService cmd,
+        
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService extensionService,
         IMapService mapService
     )
-        : base(PageId, context, cmd, loggerFactory, dialogService, extensionService)
+        : base(PageId, context,  loggerFactory, dialogService, extensionService)
     {
         Header = RS.MapTestPageViewModel_Title;
         Icon = PageIcon;

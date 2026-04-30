@@ -106,7 +106,6 @@ public static class AppHostMixin
                 .UseTimeProvider()
                 .UseThemeService()
                 .UseSearchService()
-                .UseNavigationService()
                 .UseLocalizationService()
                 .UseExtensions()
                 .UseHotKeys()
@@ -118,7 +117,6 @@ public static class AppHostMixin
                 .UseUnitService()
                 .UseFileAssociation()
                 .UseDialogs()
-                .UseCommands()
                 .UseUnhandledExceptionsHandler();
         }
 
@@ -130,14 +128,12 @@ public static class AppHostMixin
                 .UseDesignTimeSearchService()
                 .UseDesignTimeShell()
                 .UseDesignUndoStore()
-                .UseDesignTimeNavigationService()
                 .UseDesignTimeOptionalSoloRun()
                 .UseDesignTimeLogReaderService()
                 .UseDesignTimeLocalizationService()
                 .UseDesignTimeLayoutService()
                 .UseDesignTimeFileAssociation()
-                .UseDesignTimeDialogs()
-                .UseDesignTimeCommands();
+                .UseDesignTimeDialogs();
             return builder;
         }
 

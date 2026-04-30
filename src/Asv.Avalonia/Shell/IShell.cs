@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using Asv.Modeling;
 using Avalonia.Controls;
 using Material.Icons;
 using ObservableCollections;
@@ -13,7 +14,7 @@ public enum ShellErrorState
     Error,
 }
 
-public interface IShell : IHasHeader
+public interface IShell : IHasHeader, INavigationRoot<IViewModel>
 {
     Observable<Unit> OnClose { get; }
     ObservableList<IMenuItem> MainMenu { get; }

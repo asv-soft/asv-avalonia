@@ -273,6 +273,7 @@ public static class DesignTime
     public static IDialogService DialogService => NullDialogService.Instance;
     public static IExtensionService ExtensionService => NullExtensionService.Instance;
     public static ILayoutService LayoutService => NullLayoutService.Instance;
+    public static IHotKeyService HotKeyService => NullHotKeyService.Instance;
 
     public static void ThrowIfNotDesignMode()
     {
@@ -289,15 +290,13 @@ public static class DesignTime
     public static IConfiguration Configuration { get; } = new InMemoryConfiguration();
     public static ILoggerFactory LoggerFactory => NullLoggerFactory.Instance;
     public static IShellHost ShellHost => NullShellHost.Instance;
-    public static INavigationService Navigation => NullNavigationService.Instance;
     public static IUnitService UnitService => NullUnitService.Instance;
     public static IThemeService ThemeService => NullThemeService.Instance;
     public static ILocalizationService LocalizationService => NullLocalizationService.Instance;
     public static ILogReaderService LogReaderService => NullLogReaderService.Instance;
-    public static ICommandService CommandService => NullCommandService.Instance;
     public static IFileAssociationService FileAssociation => NullFileAssociationService.Instance;
     public static IAppInfo AppInfo => NullAppInfo.Instance;
-    public static IHotKeyService Actions => NullActionsService.Instance;
+    public static IHotKeyService Actions => NullHotKeyService.Instance;
 
     /// <summary>
     /// Generates a plausible short title/nickname (3–12 characters)
