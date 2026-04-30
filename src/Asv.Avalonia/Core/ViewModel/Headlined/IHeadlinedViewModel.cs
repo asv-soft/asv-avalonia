@@ -4,28 +4,8 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IHeadlinedViewModel : IViewModel, ISupportOrder
+public interface IHeadlinedViewModel : ISupportOrder, IHasIcon, IHasHeader, IHasDescription
 {
-    /// <summary>
-    /// Gets or sets the icon associated with the view model.
-    /// </summary>
-    MaterialIconKind? Icon { get; set; }
-
-    /// <summary>
-    /// Gets or sets the brush for the icon.
-    /// </summary>
-    AsvColorKind IconColor { get; set; }
-
-    /// <summary>
-    /// Gets or sets the header (title) of the view model.
-    /// </summary>
-    string? Header { get; set; }
-
-    /// <summary>
-    /// Gets or sets the description of the view model.
-    /// </summary>
-    string? Description { get; set; }
-
     bool IsVisible { get; set; }
 }
 

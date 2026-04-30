@@ -109,6 +109,7 @@ public static class AppHostMixin
                 .UseNavigationService()
                 .UseLocalizationService()
                 .UseExtensions()
+                .UseHotKeys()
                 .UseShellHost()
                 .UseUndoStore()
                 .UseViewLocator()

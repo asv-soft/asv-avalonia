@@ -67,7 +67,7 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         }
     }
 
-    public MaterialIconKind Icon
+    public MaterialIconKind? Icon
     {
         get;
         set => SetField(ref field, value);

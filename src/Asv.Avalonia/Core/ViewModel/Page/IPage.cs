@@ -4,12 +4,9 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IPage : IViewModel, IHasUndoHistory<IViewModel>
+public interface IPage : IViewModel, IHasUndoHistory<IViewModel>, IHasIcon, IHasStatusIcon
 {
-    MaterialIconKind Icon { get; }
-    AsvColorKind IconColor { get; }
-    MaterialIconKind? Status { get; }
-    AsvColorKind StatusColor { get; }
+    
     string Title { get; }
     ICommandHistory History { get; }
     ICommand TryClose { get; }

@@ -17,13 +17,13 @@ public interface IShell : IViewModel
 {
     string Title { get; set; }
     Observable<Unit> OnClose { get; }
-    ShellErrorState ErrorState { get; set; }
     ObservableList<IMenuItem> MainMenu { get; }
+    ObservableList<IMenuItem> LeftMenu { get; }
+    ObservableList<IMenuItem> RightMenu { get; }
     IReadOnlyObservableList<IPage> Pages { get; }
     BindableReactiveProperty<IPage?> SelectedPage { get; }
     ObservableList<IStatusItem> StatusItems { get; }
-    ObservableList<IMenuItem> LeftMenu { get; }
-    ObservableList<IMenuItem> RightMenu { get; }
+    ShellErrorState ErrorState { get; set; }
     void ShowMessage(ShellMessage message);
 }
 
