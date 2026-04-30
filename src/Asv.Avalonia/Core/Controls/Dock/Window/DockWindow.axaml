@@ -12,7 +12,7 @@
     ExtendClientAreaToDecorationsHint="True"
     WindowDecorations="None"
     ExtendClientAreaTitleBarHeightHint="0"
-    Title="{Binding $self.Page.Title}"
+    Title="{Binding $self.Page.Header}"
     x:Name="Self"
     Focusable="True"
 >
@@ -44,7 +44,7 @@
                 />
                 <TextBlock
                     VerticalAlignment="Center"
-                    Text="{Binding ElementName=Self, Path=Page.Title}"
+                    Text="{Binding ElementName=Self, Path=Page.Header}"
                 />
             </StackPanel>
         </DockPanel>

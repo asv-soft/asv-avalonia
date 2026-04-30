@@ -50,7 +50,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         ArgumentNullException.ThrowIfNull(cmd);
         ArgumentNullException.ThrowIfNull(manager);
 
-        Title = RS.PluginsMarketPageViewModel_Title;
+        Header = RS.PluginsMarketPageViewModel_Title;
         Icon = PageIcon;
 
         _manager = manager;

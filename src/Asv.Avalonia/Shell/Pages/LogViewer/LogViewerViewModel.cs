@@ -46,7 +46,7 @@ public class LogViewerViewModel
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Title = RS.LogViewerViewModel_Title;
+        Header = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
         Search = new SearchBoxViewModel();
@@ -155,7 +155,7 @@ public class LogViewerViewModel
         _logReaderService = logReaderService;
         _search = search;
         _loggerFactory = loggerFactory;
-        Title = RS.LogViewerViewModel_Title;
+        Header = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
         Items = _itemsSource

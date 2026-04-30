@@ -112,7 +112,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         AppInfo = appInfo;
         Icon = PageIcon;
         IconColor = PageIconColor;
-        Title = RS.HomePageViewModel_Title;
+        Header = RS.HomePageViewModel_Title;
 
         Tools = [];
         Tools.SetRoutableParent(this).DisposeItWith(Disposable);

@@ -29,14 +29,14 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         UndoHistory = new UndoHistory<IViewModel>(this, context.UndoStore)
             .AddTo(ref DisposableBag);
         Icon = MaterialIconKind.Window;
-        Title = typeId;
+        Header = typeId;
         TryClose = new BindableAsyncCommand(ClosePageCommand.Id, this);
         _unsavedChangesDialogPrefab = dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
     }
 
     public async ValueTask TryCloseAsync(bool isForce)
     {
-        _logger.ZLogTrace($"Try close page {Title}[{Id}]");
+        _logger.ZLogTrace($"Try close page {Header}[{Id}]");
         try
         {
             if (!isForce)
@@ -51,7 +51,7 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
                             Title = RS.PageViewModel_CloseConfirmDialog_Title,
                         }
                     );
-                    _logger.ZLogTrace($"Try close page {Title}[{Id}] result: {result}");
+                    _logger.ZLogTrace($"Try close page {Header}[{Id}] result: {result}");
                     if (!result)
                     {
                         return;
@@ -63,7 +63,7 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         }
         catch (Exception e)
         {
-            _logger.ZLogError(e, $"Error on close page {Title}[{Id}]: {e.Message}");
+            _logger.ZLogError(e, $"Error on close page {Header}[{Id}]: {e.Message}");
         }
     }
 
@@ -91,7 +91,7 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         set => SetField(ref field, value);
     }
 
-    public string Title
+    public string Header
     {
         get;
         set => SetField(ref field, value);

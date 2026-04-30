@@ -23,7 +23,7 @@ public class SettingsPageViewModel
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Title = RS.SettingsPageViewModel_Title;
+        Header = RS.SettingsPageViewModel_Title;
         Icon = PageIcon;
     }
 
@@ -38,7 +38,7 @@ public class SettingsPageViewModel
     )
         : base(PageId, context, svc, host, layoutService, loggerFactory, dialogService, ext)
     {
-        Title = RS.SettingsPageViewModel_Title;
+        Header = RS.SettingsPageViewModel_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
     }

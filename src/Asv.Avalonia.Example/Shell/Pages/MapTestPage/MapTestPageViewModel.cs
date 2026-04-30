@@ -44,7 +44,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     )
         : base(PageId, context, cmd, loggerFactory, dialogService, extensionService)
     {
-        Title = RS.MapTestPageViewModel_Title;
+        Header = RS.MapTestPageViewModel_Title;
         Icon = PageIcon;
 
         IsHeavyPolygonVisible = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);

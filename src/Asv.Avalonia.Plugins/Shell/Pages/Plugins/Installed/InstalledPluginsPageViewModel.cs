@@ -46,7 +46,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
         IExtensionService ext)
         : base(PageId, context, cmd, loggerFactory, dialogService, ext)
     {
-        Title = RS.InstalledPluginsPageViewModel_Title;
+        Header = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;
         _logger = loggerFactory.CreateLogger<InstalledPluginsPageViewModel>();
         _manager = manager;

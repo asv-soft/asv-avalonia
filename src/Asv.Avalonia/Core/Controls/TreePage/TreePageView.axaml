@@ -62,7 +62,7 @@
                     <TextBlock.Text>
                         <MultiBinding Converter="{x:Static avalonia:CoalesceConverter.Instance}">
                             <Binding Path="TreeHeader" />
-                            <Binding Path="Title" />
+                            <Binding Path="Header" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>

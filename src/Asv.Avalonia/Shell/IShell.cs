@@ -13,9 +13,8 @@ public enum ShellErrorState
     Error,
 }
 
-public interface IShell : IViewModel
+public interface IShell : IHasHeader
 {
-    string Title { get; set; }
     Observable<Unit> OnClose { get; }
     ObservableList<IMenuItem> MainMenu { get; }
     ObservableList<IMenuItem> LeftMenu { get; }

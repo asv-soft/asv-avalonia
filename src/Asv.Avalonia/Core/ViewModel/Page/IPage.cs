@@ -4,10 +4,8 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IPage : IViewModel, IHasUndoHistory<IViewModel>, IHasIcon, IHasStatusIcon
+public interface IPage : IHasUndoHistory<IViewModel>, IHasIcon, IHasStatusIcon, IHasHeader
 {
-    
-    string Title { get; }
     ICommandHistory History { get; }
     ICommand TryClose { get; }
     ValueTask TryCloseAsync(bool force);

@@ -13,7 +13,7 @@
     ExtendClientAreaToDecorationsHint="True"
     WindowDecorations="None"
     ExtendClientAreaTitleBarHeightHint="1"
-    Title="{Binding Title}"
+    Title="{Binding Header}"
     PositionChanged="WindowBase_OnPositionChanged"
     SizeChanged="Control_OnSizeChanged"
     MinWidth="800"

@@ -38,7 +38,7 @@ public class ControlsGalleryPageViewModel
     )
         : base(PageId, context, cmd, containerHost, layoutService, loggerFactory, dialogService, ext)
     {
-        Title = RS.ControlsGalleryPageViewModel_Title;
+        Header = RS.ControlsGalleryPageViewModel_Title;
         TreeHeader = RS.ControlsGalleryPageViewModel_TreeHeader;
         Icon = PageIcon;
         IconColor = PageIconColor;

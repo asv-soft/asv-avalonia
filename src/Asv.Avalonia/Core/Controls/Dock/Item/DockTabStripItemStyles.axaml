@@ -21,7 +21,7 @@
                 Kind="{Binding Icon}"
                 control:AsvPallete.Color="{Binding IconColor}"
             />
-            <TextBlock FontSize="14" VerticalAlignment="Center" Text="{Binding Title}" />
+            <TextBlock FontSize="14" VerticalAlignment="Center" Text="{Binding Header}" />
             <avalonia:MaterialIcon
                 IsVisible="{Binding !!Status}"
                 Width="16"

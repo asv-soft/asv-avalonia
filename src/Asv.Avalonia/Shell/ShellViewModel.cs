@@ -228,7 +228,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             {
                 _logger.ZLogTrace(
                     e,
-                    $"Error on requesting approval for the page {page.Title}[{page.Id}]: {e.Message}"
+                    $"Error on requesting approval for the page {page.Header}[{page.Id}]: {e.Message}"
                 );
             }
         }
@@ -507,7 +507,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         set => SetField(ref field, value);
     }
 
-    public string Title
+    public string Header
     {
         get;
         set => SetField(ref field, value);
