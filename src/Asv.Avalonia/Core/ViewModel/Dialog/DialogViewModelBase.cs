@@ -41,11 +41,6 @@ public abstract class DialogViewModelBase : ViewModel
             IsValid.Value = _validationData.All(prop => !prop.HasErrors);
         }
 
-        if (e is ExecuteCommandEvent)
-        {
-            e.IsHandled = true;
-        }
-
         return ValueTask.CompletedTask;
     }
 

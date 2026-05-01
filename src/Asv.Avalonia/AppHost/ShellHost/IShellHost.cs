@@ -5,7 +5,8 @@ namespace Asv.Avalonia;
 
 public interface IShellHost
 {
-    IShell? Shell { get; set; }
-    Observable<IShell> OnShellLoaded { get; }
-    TopLevel? TopLevel { get; set; }
+    void Init(IShell shell, TopLevel topLevel);
+    IDisposable ExecuteNowOrWhenShellLoaded(Action<IShell, TopLevel> action);
+    IShell? Shell { get; }
+    TopLevel? TopLevel { get; }
 }

@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public class UndoAction : HotKeyAction<IPage>
 {
-    public override string Id => "undo";
+    public override string ActionId => "undo";
     public override string Name => "Undo";
     public override string Description => "Undo last action on page";
     public override MaterialIconKind Icon => MaterialIconKind.Undo;

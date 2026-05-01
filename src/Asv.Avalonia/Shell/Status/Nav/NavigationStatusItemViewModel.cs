@@ -1,7 +1,6 @@
 ﻿using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
@@ -10,13 +9,11 @@ namespace Asv.Avalonia;
 public class NavigationStatusItemViewModel : StatusItem
 {
     private readonly ObservableList<string> _source;
-    private readonly ICommandService _commandService;
-    public const string StaticId = "nav-crumbs";
+    public const string StaticId = "nav_crumbs";
 
     public NavigationStatusItemViewModel()
         : base(StaticId, default)
     {
-        _commandService = DesignTime.CommandService;
         _source = new ObservableList<string>();
         Items = _source.ToNotifyCollectionChangedSlim();
         CommandInfo = NextPageCommand.StaticInfo;
@@ -26,11 +23,7 @@ public class NavigationStatusItemViewModel : StatusItem
         _source.Add("element1");
     }
 
-    public NavigationStatusItemViewModel(
-        ILoggerFactory loggerFactory,
-        INavigationService nav,
-        ICommandService commandService
-    )
+    public NavigationStatusItemViewModel(IShellHost nav)
         : base(StaticId, default)
     {
         _source = new ObservableList<string>();

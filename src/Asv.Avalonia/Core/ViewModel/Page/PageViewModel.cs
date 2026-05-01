@@ -23,7 +23,6 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
     )
         : base(typeId, context.NavArgs, ext)
     {
-        History = cmd.CreateHistory(this);
         _logger = loggerFactory.CreateLogger<PageViewModel<TContext>>();
         
         UndoHistory = new UndoHistory<IViewModel>(this, context.UndoStore)

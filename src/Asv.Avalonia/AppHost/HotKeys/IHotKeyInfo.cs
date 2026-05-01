@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public interface IHotKeyInfo
 {
-    string Id { get; }
+    string ActionId { get; }
     string Name { get; }
     string Description { get; }
     MaterialIconKind Icon { get; }

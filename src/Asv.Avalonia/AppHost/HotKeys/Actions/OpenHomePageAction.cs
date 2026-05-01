@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 
 public class OpenHomePageAction : HotKeyAction<IViewModel>
 {
-    public override string Id => OpenHomePageCommand.Id;
+    public override string ActionId => OpenHomePageCommand.Id;
     public override string Name => OpenHomePageCommand.StaticInfo.Name;
     public override string Description => OpenHomePageCommand.StaticInfo.Description;
     public override MaterialIconKind Icon => OpenHomePageCommand.StaticInfo.Icon;

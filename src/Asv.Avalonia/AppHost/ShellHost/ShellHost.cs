@@ -4,31 +4,34 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class ShellHost : AsyncDisposableOnce, IShellHost
+public class ShellHost : IShellHost, IDisposable
 {
-    private readonly Subject<IShell> _onShellLoaded;
+    private readonly Subject<(IShell, TopLevel)> _onShellLoaded = new();
 
-    public ShellHost()
+    public void Init(IShell shell, TopLevel topLevel)
     {
-        _onShellLoaded = new Subject<IShell>();
+        Shell = shell;
+        TopLevel = topLevel;
     }
 
-    public IShell? Shell
+    public IDisposable ExecuteNowOrWhenShellLoaded(Action<IShell, TopLevel> action)
     {
-        get;
-        set
+        if (Shell != null && TopLevel != null)
         {
-            field = value;
-            if (field == null)
-            {
-                return;
-            }
-
-            _onShellLoaded.OnNext(field);
+            action(Shell, TopLevel);
+            return Disposable.Empty;
         }
+
+        return _onShellLoaded.Subscribe(t => action(t.Item1, t.Item2));
     }
 
-    public Observable<IShell> OnShellLoaded => _onShellLoaded;
+    public IShell? Shell { get; private set; }
 
     public TopLevel? TopLevel { get; set; }
+
+
+    public void Dispose()
+    {
+        _onShellLoaded.Dispose();
+    }
 }

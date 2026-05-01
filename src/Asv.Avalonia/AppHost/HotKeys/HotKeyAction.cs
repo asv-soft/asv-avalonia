@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 public abstract class HotKeyAction<TContext> : IHotKeyAction 
     where TContext : IViewModel
 {
-    public abstract string Id { get; }
+    public abstract string ActionId { get; }
     public abstract string Name { get; }
     public abstract string Description { get; }
     public abstract MaterialIconKind Icon { get; }

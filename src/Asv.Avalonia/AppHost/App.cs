@@ -21,8 +21,7 @@ public class AsvApplication : Application
         {
             if (desktop.MainWindow is TopLevel topLevel)
             {
-                shellHost.TopLevel = topLevel;
-                shellHost.Shell = shell;
+                shellHost.Init(shell, topLevel);
             }
             desktop.Exit += (_, _) => Dispose();
         }
@@ -30,8 +29,7 @@ public class AsvApplication : Application
         {
             if (singleViewPlatform.MainView is TopLevel topLevel)
             {
-                shellHost.TopLevel = topLevel;
-                shellHost.Shell = shell;
+                shellHost.Init(shell, topLevel);
             }
         }
         else

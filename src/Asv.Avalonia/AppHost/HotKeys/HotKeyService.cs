@@ -1,5 +1,6 @@
 using Asv.Cfg;
 using Asv.Common;
+using Avalonia.Controls;
 using Avalonia.Input;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -37,13 +38,13 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         _cfg = cfg;
         _logger = loggerFactory.CreateLogger<HotKeyService>();
         _actions = actions
-            .GroupBy(x => x.Id)
+            .GroupBy(x => x.ActionId)
             .ToDictionary(x => x.Key, x => x.Last());
         _currentHotKeys = LoadHotKeys();
         _onHotKey = new Subject<KeyGesture>().AddTo(ref DisposableBag);
         IsHotKeyEnabled = true;
 
-        host.OnShellLoaded.Subscribe(TryEnableHotKeys).AddTo(ref DisposableBag);
+        host.ExecuteNowOrWhenShellLoaded(TryEnableHotKeys).AddTo(ref DisposableBag);
     }
 
     private Dictionary<string, KeyGesture> LoadHotKeys()
@@ -103,7 +104,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         return result;
     }
 
-    private void TryEnableHotKeys(IShell shell)
+    private void TryEnableHotKeys(IShell shell, TopLevel topLevel)
     {
         if (_host.TopLevel is null)
         {
@@ -137,7 +138,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
 
             foreach (var action in _actions.Values)
             {
-                if (!_currentHotKeys.TryGetValue(action.Id, out var actionHotKey))
+                if (!_currentHotKeys.TryGetValue(action.ActionId, out var actionHotKey))
                 {
                     continue;
                 }

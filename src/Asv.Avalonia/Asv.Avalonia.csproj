@@ -182,7 +182,6 @@
 
     <ItemGroup>
       <Folder Include="Core\" />
-      <Folder Include="Core\Commands\Context\Behaviour\Focus\" />
     </ItemGroup>
 
     <ItemGroup>
