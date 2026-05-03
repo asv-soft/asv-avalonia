@@ -6,8 +6,8 @@ public sealed class ViewSaveAllMenu : MenuItem
 {
     public const string MenuId = $"{ViewSaveMenu.MenuId}.all";
 
-    public ViewSaveAllMenu(ILoggerFactory loggerFactory, ICommandService cmd)
-        : base(MenuId, RS.ViewSaveAllMenu_Header, loggerFactory, ViewMenu.MenuId)
+    public ViewSaveAllMenu(ILoggerFactory loggerFactory)
+        : base(MenuId, RS.ViewSaveAllMenu_Header, ViewMenu.MenuId)
     {
         Order = 1;
         Icon = SaveAllLayoutToFileCommand.StaticInfo.Icon;

@@ -8,7 +8,7 @@ public class EditMenu : MenuItem
     public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.edit";
 
     public EditMenu(ILoggerFactory loggerFactory)
-        : base(MenuId, RS.ShellView_Toolbar_Edit, loggerFactory)
+        : base(MenuId, RS.ShellView_Toolbar_Edit)
     {
         Order = 0;
         Icon = MaterialIconKind.PencilBoxOutline;

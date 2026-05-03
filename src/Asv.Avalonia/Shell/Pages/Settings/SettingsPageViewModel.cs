@@ -14,7 +14,7 @@ public class SettingsPageViewModel
     public SettingsPageViewModel()
         : this(
             DesignTime.PageContext,
-            DesignTime.CommandService,
+            
             AppHost.Instance.Services,
             NullLayoutService.Instance,
             DesignTime.LoggerFactory,

@@ -30,7 +30,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
     public SettingsCommandListViewModel()
         : this(
             NullTreeSubPageContext<SettingsPageViewModel>.Instance,
-            DesignTime.CommandService,
+            
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
             NullSearchService.Instance)
@@ -109,8 +109,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
 
         var menu = new MenuItem(
             "reset",
-            RS.SettingsCommandListView_ResetButton_Content,
-            loggerFactory
+            RS.SettingsCommandListView_ResetButton_Content
         )
         {
             Order = 1,

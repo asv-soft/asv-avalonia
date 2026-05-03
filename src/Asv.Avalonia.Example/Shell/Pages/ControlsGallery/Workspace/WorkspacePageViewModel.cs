@@ -44,7 +44,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         Init(context.Context);
         _loggerFactory = loggerFactory;
         MapViewModel = new MapViewModel($"{PageId}.map", mapService).DisposeItWith(Disposable);
-        var hideAll = new MenuItem("action1", "Hide all", loggerFactory)
+        var hideAll = new MenuItem("action1", "Hide all")
         {
             Command = new ReactiveCommand(x =>
             {
@@ -58,7 +58,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             }),
         };
 
-        var showAll = new MenuItem("action2", "Show all", loggerFactory)
+        var showAll = new MenuItem("action2", "Show all")
         {
             Command = new ReactiveCommand(x =>
             {
@@ -72,7 +72,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             }),
         };
 
-        var showError = new MenuItem("action3", "Show error", loggerFactory)
+        var showError = new MenuItem("action3", "Show error")
         {
             Command = new ReactiveCommand(
                 async (_, cancel) =>
@@ -197,7 +197,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public void Init(IControlsGalleryPage context)
     {
-        var changeStatus = new MenuItem("action5", "Change status", _loggerFactory)
+        var changeStatus = new MenuItem("action5", "Change status")
         {
             Command = new ReactiveCommand(x =>
             {

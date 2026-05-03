@@ -17,7 +17,6 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
     public HomePageViewModel()
         : this(
             DesignTime.PageContext,
-            DesignTime.CommandService,
             DesignTime.AppInfo,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
@@ -101,7 +100,6 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 
     public HomePageViewModel(
         IPageContext context,
-        
         IAppInfo appInfo,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,

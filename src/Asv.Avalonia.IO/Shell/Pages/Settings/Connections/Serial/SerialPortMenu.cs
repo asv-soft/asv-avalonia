@@ -9,8 +9,7 @@ public class SerialPortMenu : MenuItem
     public SerialPortMenu(ILoggerFactory loggerFactory)
         : base(
             SerialProtocolPort.Scheme,
-            RS.SettingsConnectionSerialExtension_MenuItem_Header,
-            loggerFactory
+            RS.SettingsConnectionSerialExtension_MenuItem_Header
         )
     {
         Icon = SerialPortViewModel.DefaultIcon;

@@ -17,7 +17,7 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
     public ExamplePageViewModel()
         : this(
             DesignTime.PageContext,
-            DesignTime.CommandService,
+            
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
             DesignTime.ExtensionService

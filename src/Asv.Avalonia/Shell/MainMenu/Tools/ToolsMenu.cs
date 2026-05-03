@@ -8,7 +8,7 @@ public class ToolsMenu : MenuItem
     public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.tools";
 
     public ToolsMenu(ILoggerFactory loggerFactory)
-        : base(MenuId, RS.ToolsMenu_Name, loggerFactory)
+        : base(MenuId, RS.ToolsMenu_Name)
     {
         Order = 50;
         Icon = MaterialIconKind.Tools;

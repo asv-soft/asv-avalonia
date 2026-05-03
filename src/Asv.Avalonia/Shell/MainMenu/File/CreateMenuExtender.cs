@@ -13,7 +13,6 @@ public class CreateMenuExtender(IFileAssociationService svc, ILoggerFactory logg
             var menu = new MenuItem(
                 $"{CreateMenu.MenuId}.{file.Id}",
                 file.Title,
-                loggerFactory,
                 CreateMenu.MenuId
             )
             {

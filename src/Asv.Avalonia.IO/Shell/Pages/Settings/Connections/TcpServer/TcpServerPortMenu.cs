@@ -9,8 +9,7 @@ public class TcpServerPortMenu : MenuItem
     public TcpServerPortMenu(ILoggerFactory loggerFactory)
         : base(
             TcpServerProtocolPort.Scheme,
-            RS.SettingsConnectionTcpServerPortExtension_MenuItem_Header,
-            loggerFactory
+            RS.SettingsConnectionTcpServerPortExtension_MenuItem_Header
         )
     {
         Icon = TcpServerPortViewModel.DefaultIcon;

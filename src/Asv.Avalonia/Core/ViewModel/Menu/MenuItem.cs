@@ -1,7 +1,6 @@
 using Asv.Modeling;
 using Avalonia.Controls;
 using Avalonia.Input;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia
 {
@@ -10,7 +9,6 @@ namespace Asv.Avalonia
         public MenuItem(
             string typeId,
             string header,
-            ILoggerFactory loggerFactory,
             string? parentId = null
         )
             : base(typeId)

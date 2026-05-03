@@ -1,5 +1,6 @@
 ﻿using Asv.Common;
 using Asv.Modeling;
+using Avalonia.Controls;
 using Material.Icons;
 using ObservableCollections;
 using R3;
@@ -28,9 +29,15 @@ public class NavigationStatusItemViewModel : StatusItem
     {
         _source = new ObservableList<string>();
         Items = _source.ToNotifyCollectionChangedSlim();
-        nav.SelectedControl.Subscribe(OnChanged).AddTo(Disposable);
+        nav.ExecuteNowOrWhenShellLoaded(OnShellLoaded).AddTo(Disposable);
+        
         _commandService = commandService;
         commandService.OnCommand.Subscribe(OnCommand).AddTo(Disposable);
+    }
+
+    private void OnShellLoaded(IShell shell, TopLevel top)
+    {
+        shell.Navigation.SelectedControl.Subscribe(OnChanged).AddTo(Disposable);
     }
 
     private void OnChanged(IViewModel? routable)

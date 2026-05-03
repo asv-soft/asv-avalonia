@@ -72,8 +72,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
 
         var add = new MenuItem(
             "add",
-            RS.SettingsPluginsSourcesViewModel_MenuItem_Add_Title,
-            loggerFactory
+            RS.SettingsPluginsSourcesViewModel_MenuItem_Add_Title
         )
         {
             Order = 0,
@@ -81,7 +80,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             Command = new BindableAsyncCommand(AddPluginsSourceCommand.Id, this),
         };
 
-        var refresh = new MenuItem("refresh", string.Empty, loggerFactory)
+        var refresh = new MenuItem("refresh", string.Empty)
         {
             Order = 1,
             Icon = MaterialIconKind.Refresh,

@@ -65,7 +65,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
         Search.Refresh();
 
-        var menu = new MenuItem("reset", RS.SettingsUnitsViewModel_Button_ResetAll, loggerFactory)
+        var menu = new MenuItem("reset", RS.SettingsUnitsViewModel_Button_ResetAll)
         {
             Order = 1,
             Icon = MaterialIconKind.Refresh,

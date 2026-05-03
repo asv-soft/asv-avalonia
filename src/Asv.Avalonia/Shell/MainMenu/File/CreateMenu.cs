@@ -8,7 +8,7 @@ public class CreateMenu : MenuItem
     public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.create";
 
     public CreateMenu(ILoggerFactory loggerFactory)
-        : base(MenuId, RS.CreateMenu_Header, loggerFactory)
+        : base(MenuId, RS.CreateMenu_Header)
     {
         Order = -90;
         Icon = MaterialIconKind.FilePlus;

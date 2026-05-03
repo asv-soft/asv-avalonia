@@ -41,7 +41,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         var file = new OpenMenu(DesignTime.LoggerFactory, DesignTime.CommandService);
         MainMenu.Add(file);
 
-        MainMenu.Add(new MenuItem("open", "Open", DesignTime.LoggerFactory, file.Id.TypeId));
+        MainMenu.Add(new MenuItem("open", "Open", file.Id.TypeId));
         MainMenu.Add(new EditMenu(DesignTime.LoggerFactory));
 
         var addLeft = true;
@@ -52,21 +52,21 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
                 if (addLeft)
                 {
                     LeftMenu.Add(
-                        new MenuItem($"open{x}", "Open", DesignTime.LoggerFactory)
+                        new MenuItem($"open{x}", "Open")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
                         }
                     );
                     LeftMenu.Add(
-                        new MenuItem($"open{x}_{x}", "Open", DesignTime.LoggerFactory, $"open{x}")
+                        new MenuItem($"open{x}_{x}", "Open", $"open{x}")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
                         }
                     );
                     LeftMenu.Add(
-                        new MenuItem($"open{x}_{x}_2", "Open", DesignTime.LoggerFactory, $"open{x}")
+                        new MenuItem($"open{x}_{x}_2", "Open", $"open{x}")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
@@ -94,7 +94,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
                 if (addRight)
                 {
                     RightMenu.Add(
-                        new MenuItem($"open{x}", "Open", DesignTime.LoggerFactory)
+                        new MenuItem($"open{x}", "Open")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,

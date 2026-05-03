@@ -6,8 +6,8 @@ public class OpenMenu : MenuItem
 {
     public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.open";
 
-    public OpenMenu(ILoggerFactory loggerFactory, ICommandService cmd)
-        : base(MenuId, RS.ShellView_Toolbar_Open, loggerFactory)
+    public OpenMenu(ILoggerFactory loggerFactory)
+        : base(MenuId, RS.ShellView_Toolbar_Open)
     {
         Order = -100;
         Icon = OpenFileCommand.StaticInfo.Icon;

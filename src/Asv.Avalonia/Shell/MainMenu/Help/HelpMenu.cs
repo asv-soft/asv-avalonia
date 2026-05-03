@@ -8,7 +8,7 @@ public class HelpMenu : MenuItem
     public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.help";
 
     public HelpMenu(ILoggerFactory loggerFactory)
-        : base(MenuId, RS.ShellView_Toolbar_Help, loggerFactory)
+        : base(MenuId, RS.ShellView_Toolbar_Help)
     {
         Order = 100;
         Icon = MaterialIconKind.Help;

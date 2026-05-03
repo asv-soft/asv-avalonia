@@ -7,7 +7,7 @@ public class ToolsHomeMenu : MenuItem
     public const string MenuId = $"{ToolsMenu.MenuId}.home";
 
     public ToolsHomeMenu(ILoggerFactory loggerFactory)
-        : base(MenuId, RS.ToolsMenu_Home, loggerFactory, ToolsMenu.MenuId)
+        : base(MenuId, RS.ToolsMenu_Home, ToolsMenu.MenuId)
     {
         Icon = OpenHomePageCommand.StaticInfo.Icon;
         Command = new BindableAsyncCommand(OpenHomePageCommand.Id, this);

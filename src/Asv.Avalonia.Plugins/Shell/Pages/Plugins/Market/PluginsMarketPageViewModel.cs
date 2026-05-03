@@ -24,7 +24,7 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     public PluginsMarketPageViewModel()
         : this(
             DesignTime.PageContext,
-            DesignTime.CommandService,
+            
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
             NullLoggerFactory.Instance,

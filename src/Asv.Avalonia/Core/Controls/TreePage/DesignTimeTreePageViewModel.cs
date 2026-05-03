@@ -183,15 +183,15 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
     {
         var set = new SettingsAppearanceViewModel();
         set.Menu.Add(
-            new MenuItem("cmd0", "Command", DesignTime.LoggerFactory)
+            new MenuItem("cmd0", "Command")
             {
                 Icon = MaterialIconKind.AccountCircle,
                 IconColor = AsvColorKind.Info1,
             }
         );
-        set.Menu.Add(new MenuItem("cmd01", "Command1", DesignTime.LoggerFactory));
-        set.Menu.Add(new MenuItem("cmd02", "Command2", DesignTime.LoggerFactory));
-        set.Menu.Add(new MenuItem("cmd03", "Command3", DesignTime.LoggerFactory));
+        set.Menu.Add(new MenuItem("cmd01", "Command1"));
+        set.Menu.Add(new MenuItem("cmd02", "Command2"));
+        set.Menu.Add(new MenuItem("cmd03", "Command3"));
         return set;
     }
 }

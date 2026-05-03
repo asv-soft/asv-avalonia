@@ -16,7 +16,7 @@ public class ControlsGalleryPageViewModel
     public ControlsGalleryPageViewModel()
         : this(
             DesignTime.PageContext,
-            DesignTime.CommandService,
+            
             AppHost.Instance.Services,
             NullLayoutService.Instance,
             NullLoggerFactory.Instance,

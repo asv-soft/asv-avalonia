@@ -25,7 +25,7 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     public InstalledPluginsPageViewModel()
         : this(
             DesignTime.PageContext,
-            DesignTime.CommandService,
+            
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
             DesignTime.LoggerFactory,

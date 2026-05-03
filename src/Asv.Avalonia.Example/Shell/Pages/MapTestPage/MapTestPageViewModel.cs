@@ -24,7 +24,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     public MapTestPageViewModel()
         : this(
             DesignTime.PageContext,
-            DesignTime.CommandService,
+            
             NullLoggerFactory.Instance,
             DesignTime.DialogService,
             DesignTime.ExtensionService,

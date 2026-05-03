@@ -9,8 +9,7 @@ public class UdpPortMenu : MenuItem
     public UdpPortMenu(ILoggerFactory loggerFactory)
         : base(
             UdpProtocolPort.Scheme,
-            RS.SettingsConnectionUdpPortExtension_MenuItem_Header,
-            loggerFactory
+            RS.SettingsConnectionUdpPortExtension_MenuItem_Header
         )
     {
         Icon = UdpPortViewModel.DefaultIcon;
