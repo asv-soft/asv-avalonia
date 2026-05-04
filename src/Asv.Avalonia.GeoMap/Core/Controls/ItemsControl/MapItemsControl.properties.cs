@@ -2,6 +2,8 @@ using Asv.Common;
 using Avalonia;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Media;
 using Avalonia.Metadata;
 
@@ -215,6 +217,21 @@ public partial class MapItemsControl
 
     #endregion
 
+    #region Map click
+
+    public static readonly RoutedEvent<MapClickEventArgs> MapClickEvent = RoutedEvent.Register<
+        MapItemsControl,
+        MapClickEventArgs
+    >(nameof(MapClick), RoutingStrategies.Bubble);
+
+    public event EventHandler<MapClickEventArgs>? MapClick
+    {
+        add => AddHandler(MapClickEvent, value);
+        remove => RemoveHandler(MapClickEvent, value);
+    }
+
+    #endregion
+
     #region CenterMap
 
     public static readonly DirectProperty<MapItemsControl, GeoPoint> CenterMapProperty =
@@ -244,7 +261,7 @@ public partial class MapItemsControl
     public ITileProvider Provider
     {
         get;
-        set => SetAndRaise(ProviderProperty, ref field, value);
+        set => SetAndRaise(ProviderProperty, ref field, value ?? EmptyTileProvider.Instance);
     } = EmptyTileProvider.Instance;
 
     #endregion
@@ -320,4 +337,27 @@ public partial class MapItemsControl
     } = IZoomService.MaxZoomLevel;
 
     #endregion
+}
+
+public sealed class MapClickEventArgs : RoutedEventArgs
+{
+    public MapClickEventArgs(
+        RoutedEvent routedEvent,
+        object source,
+        GeoPoint point,
+        KeyModifiers modifiers,
+        MouseButton button
+    )
+        : base(routedEvent, source)
+    {
+        Point = point;
+        Modifiers = modifiers;
+        Button = button;
+    }
+
+    public GeoPoint Point { get; }
+
+    public KeyModifiers Modifiers { get; }
+
+    public MouseButton Button { get; }
 }

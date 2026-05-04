@@ -207,6 +207,15 @@
     <data name="ArcGisWorldImageryTileProvider_Info_Name" xml:space="preserve">
         <value>World Imagery</value>
     </data>
+    <data name="MapRuler_Tooltip" xml:space="preserve">
+        <value>Ruler</value>
+    </data>
+    <data name="MapRuler_PickStart" xml:space="preserve">
+        <value>Select the ruler start point</value>
+    </data>
+    <data name="MapRuler_PickEnd" xml:space="preserve">
+        <value>Select the ruler end point</value>
+    </data>
     <data name="HttpTileProvider_Error_Unauthorized_Title" xml:space="preserve">
         <value>Authorization error</value>
     </data>

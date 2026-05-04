@@ -423,6 +423,24 @@ namespace Asv.Avalonia.GeoMap {
             }
         }
         
+        public static string MapRuler_Tooltip {
+            get {
+                return ResourceManager.GetString("MapRuler_Tooltip", resourceCulture);
+            }
+        }
+        
+        public static string MapRuler_PickStart {
+            get {
+                return ResourceManager.GetString("MapRuler_PickStart", resourceCulture);
+            }
+        }
+        
+        public static string MapRuler_PickEnd {
+            get {
+                return ResourceManager.GetString("MapRuler_PickEnd", resourceCulture);
+            }
+        }
+        
         public static string HttpTileProvider_Error_Unauthorized_Title {
             get {
                 return ResourceManager.GetString("HttpTileProvider_Error_Unauthorized_Title", resourceCulture);
