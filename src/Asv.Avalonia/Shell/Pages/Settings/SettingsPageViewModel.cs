@@ -14,7 +14,6 @@ public class SettingsPageViewModel
     public SettingsPageViewModel()
         : this(
             DesignTime.PageContext,
-            
             AppHost.Instance.Services,
             NullLayoutService.Instance,
             DesignTime.LoggerFactory,
@@ -29,14 +28,13 @@ public class SettingsPageViewModel
 
     public SettingsPageViewModel(
         IPageContext context,
-        ICommandService svc,
         IServiceProvider host,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, context, svc, host, layoutService, loggerFactory, dialogService, ext)
+        : base(PageId, context, host, layoutService, loggerFactory, dialogService, ext)
     {
         Header = RS.SettingsPageViewModel_Title;
         Icon = PageIcon;

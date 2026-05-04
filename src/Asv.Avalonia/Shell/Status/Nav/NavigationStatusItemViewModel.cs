@@ -17,8 +17,6 @@ public class NavigationStatusItemViewModel : StatusItem
     {
         _source = new ObservableList<string>();
         Items = _source.ToNotifyCollectionChangedSlim();
-        CommandInfo = NextPageCommand.StaticInfo;
-        CommandHotKey = NextPageCommand.StaticInfo.DefaultHotKey?.ToString() ?? string.Empty;
         _source.Add("shell");
         _source.Add("tab1");
         _source.Add("element1");
@@ -30,9 +28,6 @@ public class NavigationStatusItemViewModel : StatusItem
         _source = new ObservableList<string>();
         Items = _source.ToNotifyCollectionChangedSlim();
         nav.ExecuteNowOrWhenShellLoaded(OnShellLoaded).AddTo(Disposable);
-        
-        _commandService = commandService;
-        commandService.OnCommand.Subscribe(OnCommand).AddTo(Disposable);
     }
 
     private void OnShellLoaded(IShell shell, TopLevel top)
@@ -52,19 +47,6 @@ public class NavigationStatusItemViewModel : StatusItem
         {
             _source.Add(item.Id.TypeId);
         }
-    }
-
-    private void OnCommand(CommandSnapshot commandSnapshot)
-    {
-        CommandInfo = _commandService.GetCommandInfo(commandSnapshot.CommandId);
-        CommandHotKey =
-            _commandService.GetHotKey(commandSnapshot.CommandId)?.ToString() ?? string.Empty;
-    }
-
-    public ICommandInfo? CommandInfo
-    {
-        get;
-        private set => SetField(ref field, value);
     }
 
     public string? CommandHotKey

@@ -38,7 +38,7 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <TextBlock
+        <!--<TextBlock
             Classes="description"
             VerticalAlignment="Center"
             Text="|"
@@ -50,7 +50,7 @@
             IsVisible="{Binding !!CommandInfo}"
             VerticalAlignment="Center"
             Classes="description"
-        />
+        />-->
         <TextBlock
             Classes="description"
             VerticalAlignment="Center"

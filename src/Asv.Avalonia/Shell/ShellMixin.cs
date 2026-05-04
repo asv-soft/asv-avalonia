@@ -58,6 +58,4 @@ public static class ShellMixin
             return this;
         }
     }
-
-    
 }

@@ -1,7 +1,9 @@
+using System.Buffers;
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
 using Material.Icons;
+using MemoryPack;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -74,6 +76,10 @@ public class SettingsUnitsViewModel : SettingsSubPage
         Menu.Add(menu);
 
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
+        
+        
+        Undo.Register(handler);
+
     }
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
@@ -107,17 +113,27 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
     private async ValueTask ResetAll(Unit arg, CancellationToken cancel)
     {
-        var defaultUnitIds = _unitsService.Units.Select(kv =>
-        {
-            return KeyValuePair.Create<string, CommandArg>(
-                kv.Key,
-                CommandArg.CreateString(kv.Value.InternationalSystemUnit.UnitItemId)
-            );
-        });
-
+        using var change = Undo.BeginChangePublication();
+        var defaultKv = _unitsService.Units.Select(x=> )
+        
         await this.ExecuteCommand(ResetUnitsCommand.Id, new DictArg(defaultUnitIds), cancel);
     }
 
+    [MemoryPackable]
+    public partial class UnitsChanges : IChange
+    {
+        public Dictionary<string, string> _changes = new();
+        public void Serialize(IBufferWriter<byte> writer)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Deserialize(ReadOnlySequence<byte> data)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Search;
@@ -185,3 +201,5 @@ public class SettingsUnitsViewModel : SettingsSubPage
         base.Dispose(disposing);
     }
 }
+
+

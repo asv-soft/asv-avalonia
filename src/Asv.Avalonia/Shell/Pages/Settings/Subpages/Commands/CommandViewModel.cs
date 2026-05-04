@@ -18,7 +18,7 @@ public sealed class CommandViewModel : ViewModel
 
     public CommandViewModel(
         ICommandInfo command,
-        ICommandService svc,
+        
         ISearchService searchService,
         IDialogService dialogService,
         ILoggerFactory loggerFactory

@@ -34,7 +34,7 @@
     <Style Selector="Border">
         <!-- ===================================================== -->
         <!-- UNIVERSAL ANIMATION CLASSES – works on any Avalonia control -->
-        <!-- Use with AsvPallete.Color = Blink | Fadein | etc.           -->
+        <!-- Use with AsvPallet.Color = Blink | Fadein | etc.           -->
         <!-- ===================================================== -->
 
         <!-- Infinite blinking (on → off → on) -->

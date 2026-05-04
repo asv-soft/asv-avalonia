@@ -38,7 +38,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         InternalPages.Add(new SettingsPageViewModel());
         InternalPages.Add(new HomePageViewModel());
 
-        var file = new OpenMenu(DesignTime.LoggerFactory, DesignTime.CommandService);
+        var file = new OpenMenu(DesignTime.LoggerFactory);
         MainMenu.Add(file);
 
         MainMenu.Add(new MenuItem("open", "Open", file.Id.TypeId));

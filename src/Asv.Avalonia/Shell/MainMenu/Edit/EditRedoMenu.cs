@@ -1,16 +1,34 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Avalonia.Controls;
+using R3;
 
 namespace Asv.Avalonia;
 
 public class EditRedoMenu : MenuItem
 {
-    public const string MenuId = $"{EditMenu.MenuId}.redo";
+    public const string MenuId = "redo";
 
-    public EditRedoMenu(ILoggerFactory loggerFactory)
+    public EditRedoMenu(IShellHost shellHost)
         : base(MenuId, RS.RedoCommand_CommandInfo_Name, EditMenu.MenuId)
     {
-        Icon = RedoCommand.StaticInfo.Icon;
-        Command = new BindableAsyncCommand(RedoCommand.Id, this);
+        shellHost.ExecuteNowOrWhenShellLoaded(InitShell).AddTo(ref DisposableBag);
+        Icon = RedoAction.StaticInfo.Icon;
         Order = 1;
+    }
+
+    private void InitShell(IShell shell, TopLevel topLevel)
+    {
+        shell.SelectedPage.DistinctUntilChanged().Subscribe(SelectedPageChanged).AddTo(ref DisposableBag);
+    }
+
+    private void SelectedPageChanged(IPage? page)
+    {
+        if (page == null)
+        {
+            Command = null;
+            IsEnabled = false;
+            return;
+        }
+
+        Command = page.UndoHistory.Undo;
     }
 }
