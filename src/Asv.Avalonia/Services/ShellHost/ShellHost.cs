@@ -12,6 +12,7 @@ public class ShellHost : IShellHost, IDisposable
     {
         Shell = shell;
         TopLevel = topLevel;
+        _onShellLoaded.OnNext((shell, topLevel));
     }
 
     public IDisposable ExecuteNowOrWhenShellLoaded(IShellHost.Handler action)

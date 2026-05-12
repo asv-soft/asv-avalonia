@@ -1,0 +1,42 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+>
+    <Design.PreviewWith>
+        <Border Width="64" Height="64" Background="{DynamicResource SystemRegionBrush}">
+            <avalonia:WindowResizeGrip />
+        </Border>
+    </Design.PreviewWith>
+
+    <Style Selector="avalonia|WindowResizeGrip">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Border
+                        Height="{TemplateBinding ResizeBorderThickness}"
+                        VerticalAlignment="Top"
+                        Background="Transparent"
+                    />
+                    <Border
+                        Height="{TemplateBinding ResizeBorderThickness}"
+                        VerticalAlignment="Bottom"
+                        Background="Transparent"
+                    />
+                    <Border
+                        Width="{TemplateBinding ResizeBorderThickness}"
+                        HorizontalAlignment="Left"
+                        Background="Transparent"
+                    />
+                    <Border
+                        Width="{TemplateBinding ResizeBorderThickness}"
+                        HorizontalAlignment="Right"
+                        Background="Transparent"
+                    />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>
