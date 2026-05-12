@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
     mc:Ignorable="d"
-    Width="220"
+    d:DesignWidth="200"
     x:Class="Asv.Avalonia.KeyValueRttBoxView"
     x:DataType="avalonia:KeyValueRttBoxViewModel"
 >

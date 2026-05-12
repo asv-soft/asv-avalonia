@@ -200,6 +200,15 @@
     <data name="ArcGisWorldImageryTileProvider_Info_Name" xml:space="preserve">
         <value>Образная</value>
     </data>
+    <data name="MapRuler_Tooltip" xml:space="preserve">
+        <value>Линейка</value>
+    </data>
+    <data name="MapRuler_PickStart" xml:space="preserve">
+        <value>Выберите начальную точку линейки</value>
+    </data>
+    <data name="MapRuler_PickEnd" xml:space="preserve">
+        <value>Выберите конечную точку линейки</value>
+    </data>
     <data name="HttpTileProvider_Error_Unauthorized_Title" xml:space="preserve">
         <value>Ошибка авторизации</value>
     </data>
