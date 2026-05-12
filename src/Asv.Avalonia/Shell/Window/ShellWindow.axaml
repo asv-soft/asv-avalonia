@@ -20,5 +20,8 @@
     MinHeight="600"
     DragDrop.AllowDrop="True"
 >
-    <avalonia:ShellView />
+    <Panel>
+        <avalonia:ShellView />
+        <avalonia:WindowResizeGrip />
+    </Panel>
 </Window>
