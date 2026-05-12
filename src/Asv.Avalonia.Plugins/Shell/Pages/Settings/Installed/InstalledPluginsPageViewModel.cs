@@ -10,7 +10,7 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageViewModel>
+public class InstalledPluginsPageViewModel : SettingsSubPage
 {
     public const string PageId = "plugins-installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
@@ -24,12 +24,11 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
 
     public InstalledPluginsPageViewModel()
         : this(
-            DesignTime.PageContext,
+            NullTreeSubPageContext<SettingsPageViewModel>.Instance,
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
             DesignTime.LoggerFactory,
-            NullDialogService.Instance,
-            DesignTime.ExtensionService
+            NullDialogService.Instance
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -37,14 +36,13 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     }
 
     public InstalledPluginsPageViewModel(
-        IPageContext context,
+        ITreeSubPageContext<ISettingsPage> context,
         IPluginManager manager,
         IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
-        IDialogService dialogService,
-        IExtensionService ext
+        IDialogService dialogService
     )
-        : base(PageId, context, loggerFactory, dialogService, ext)
+        : base(PageId, context)
     {
         Header = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;
@@ -98,6 +96,17 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     public NotifyCollectionChangedSynchronizedViewList<InstalledPluginInfoViewModel> InstalledPluginsView { get; }
     public BindableReactiveProperty<InstalledPluginInfoViewModel?> SelectedPlugin { get; }
     public HistoricalBoolProperty IsShowOnlyVerified { get; }
+    public string Header
+    {
+        get;
+        set => SetField(ref field, value);
+    } = string.Empty;
+
+    public MaterialIconKind? Icon
+    {
+        get;
+        set => SetField(ref field, value);
+    }
 
     public override IEnumerable<IViewModel> GetChildren()
     {
@@ -109,8 +118,6 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
         yield return Search;
         yield return IsShowOnlyVerified;
     }
-
-    protected override void AfterLoadExtensions() { }
 
     private Task SearchImpl(string? text, IProgress<double> progress, CancellationToken cancel)
     {

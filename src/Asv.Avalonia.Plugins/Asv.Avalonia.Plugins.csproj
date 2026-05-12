@@ -84,4 +84,8 @@
       <Folder Include="Shell\Pages\Settings\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Shell\Pages\Settings\Market\PluginsMarketPageView.axaml" />
+    </ItemGroup>
+
 </Project>

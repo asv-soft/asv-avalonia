@@ -12,7 +12,7 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewModel>
+public class PluginsMarketPageViewModel : SettingsSubPage
 {
     public const string PageId = "plugins-market";
     public const MaterialIconKind PageIcon = MaterialIconKind.Store;
@@ -23,12 +23,10 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
 
     public PluginsMarketPageViewModel()
         : this(
-            DesignTime.PageContext,
+            NullTreeSubPageContext<SettingsPageViewModel>.Instance,
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
-            NullLoggerFactory.Instance,
-            DesignTime.DialogService,
-            DesignTime.ExtensionService
+            NullLoggerFactory.Instance
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -36,14 +34,12 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     }
 
     public PluginsMarketPageViewModel(
-        IPageContext context,
+        ITreeSubPageContext<ISettingsPage> context,
         IPluginManager manager,
         IPluginBootloader bootloader,
-        ILoggerFactory loggerFactory,
-        IDialogService dialogService,
-        IExtensionService ext
+        ILoggerFactory loggerFactory
     )
-        : base(PageId, context, loggerFactory, dialogService, ext)
+        : base(PageId, context)
     {
         ArgumentNullException.ThrowIfNull(manager);
 
@@ -94,6 +90,17 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     public NotifyCollectionChangedSynchronizedViewList<PluginInfoViewModel> PluginsView { get; }
     public HistoricalBoolProperty IsShowOnlyVerified { get; }
     public BindableReactiveProperty<PluginInfoViewModel?> SelectedPlugin { get; }
+    public string Header
+    {
+        get;
+        set => SetField(ref field, value);
+    } = string.Empty;
+
+    public MaterialIconKind? Icon
+    {
+        get;
+        set => SetField(ref field, value);
+    }
 
     private async Task SearchImpl(
         string? text,
@@ -145,6 +152,4 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
         yield return Search;
         yield return IsShowOnlyVerified;
     }
-
-    protected override void AfterLoadExtensions() { }
 }

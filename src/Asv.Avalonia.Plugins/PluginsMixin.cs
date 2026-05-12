@@ -33,6 +33,8 @@ public static class PluginsMixin
 
     public class Builder(IHostApplicationBuilder builder, PluginBootloaderOptions pluginOptions)
     {
+        private bool _isPluginSettingsGroupRegistered;
+
         public Builder UseDefault()
         {
             return UseOptionalMarket().UseOptionalInstalled();
@@ -66,17 +68,18 @@ public static class PluginsMixin
 
         public Builder UseOptionalMarket()
         {
-            builder.Shell.Pages.Home.UseExtension<HomePagePluginsMarketExtension>();
-
+            EnsurePluginSettingsGroup();
+            builder.Shell.Pages.Settings.AddSubPage<
+                PluginsMarketPageViewModel,
+                PluginsMarketPageView,
+                PluginsMarketTreePageMenu
+            >(PluginsMarketPageViewModel.PageId);
             builder.Shell.Pages.Settings.AddSubPage<
                 SettingsPluginsSourcesViewModel,
                 SettingsPluginsSourcesView,
                 SettingsPluginsTreePageMenu
             >(SettingsPluginsSourcesViewModel.PageId);
             builder.ViewLocator.RegisterViewFor<SourceDialogViewModel, SourceDialogView>();
-            builder.Shell.Pages.Register<PluginsMarketPageViewModel, PluginsMarketPageView>(
-                PluginsMarketPageViewModel.PageId
-            );
             return this;
         }
 
@@ -84,12 +87,26 @@ public static class PluginsMixin
 
         public Builder UseOptionalInstalled()
         {
-            builder.Shell.Pages.Register<InstalledPluginsPageViewModel, InstalledPluginsPageView>(
-                InstalledPluginsPageViewModel.PageId
-            );
-            builder.Shell.Pages.Home.UseExtension<HomePageInstalledPluginsExtension>();
-
+            EnsurePluginSettingsGroup();
+            builder.Shell.Pages.Settings.AddSubPage<
+                InstalledPluginsPageViewModel,
+                InstalledPluginsPageView,
+                InstalledPluginsTreePageMenu
+            >(InstalledPluginsPageViewModel.PageId);
             return this;
+        }
+
+        private void EnsurePluginSettingsGroup()
+        {
+            if (_isPluginSettingsGroupRegistered)
+            {
+                return;
+            }
+
+            builder.Services.AddKeyedTransient<ITreePage, PluginSettingsTreePageMenu>(
+                SettingsPageViewModel.PageId
+            );
+            _isPluginSettingsGroupRegistered = true;
         }
     }
 }
