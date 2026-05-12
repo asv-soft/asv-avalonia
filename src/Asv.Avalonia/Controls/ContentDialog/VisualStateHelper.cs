@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -10,7 +11,7 @@ public class VisualStateHelper
 {
     static VisualStateHelper()
     {
-        ForcedClassesProperty.Changed.Subscribe(OnForcedClassesPropertyChanged);
+        ForcedClassesProperty.Changed.ToObservable().Subscribe(OnForcedClassesPropertyChanged);
     }
 
     /// <summary>

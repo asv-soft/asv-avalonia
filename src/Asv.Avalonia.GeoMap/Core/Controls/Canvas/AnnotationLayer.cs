@@ -16,7 +16,7 @@ public partial class AnnotationLayer : Canvas
 {
     static AnnotationLayer()
     {
-        SourceProperty.Changed.Subscribe(e =>
+        SourceProperty.Changed.ToObservable().Subscribe(e =>
         {
             if (e.Sender is AnnotationLayer layer)
             {

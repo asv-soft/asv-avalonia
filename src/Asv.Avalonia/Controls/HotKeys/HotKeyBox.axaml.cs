@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -42,6 +43,7 @@ public sealed partial class HotKeyBox : TemplatedControl
         _textBlock.Focus();
 
         _sub1 = this.GetObservable(HotKeyProperty)
+            .ToObservable()
             .Subscribe(hk => _textBlock.Text = hk?.ToString() ?? string.Empty);
 
         _textBlock.Text = HotKey?.ToString() ?? string.Empty;

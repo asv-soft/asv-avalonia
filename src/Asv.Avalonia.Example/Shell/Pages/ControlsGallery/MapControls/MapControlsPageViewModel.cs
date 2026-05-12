@@ -20,19 +20,31 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
     private const double InfinityPhaseStep = Math.PI / 90.0;
 
     public MapControlsPageViewModel()
-        : this(DesignTime.LoggerFactory, NullMapService.Instance)
+        : this(
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
+            DesignTime.LoggerFactory,
+            DesignTime.UnitService,
+            NullMapService.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public MapControlsPageViewModel(ILoggerFactory loggerFactory, IMapService mapService)
-        : base(PageId, loggerFactory)
+    public MapControlsPageViewModel(
+        ITreeSubPageContext<IControlsGalleryPage> context,
+        ILoggerFactory loggerFactory,
+        IUnitService unitService,
+        IMapService mapService
+    )
+        : base(PageId, context)
     {
         TileProviderSelectorViewModel = new TileProviderSelectorViewModel(mapService, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        MapViewModel = new MapViewModel("Map", loggerFactory, mapService)
+        LoggerFactory = loggerFactory;
+        UnitService = unitService;
+        MapViewModel = new MapViewModel("Map", mapService)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 
@@ -42,7 +54,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         var centerPoint = MapViewModel.CenterMap.Value;
         var pointCount = 36;
 
-        var path = new MapAnchor<IMapAnchor>("editanle-anchor-path", loggerFactory);
+        var path = new MapAnchor<IMapAnchor>("editanle-anchor-path");
         path.IsVisible = true;
         path.IsPolygonClosed = true;
         path.PolygonPen = new Pen(new SolidColorBrush(Colors.Black), 2);
@@ -50,7 +62,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         MapViewModel.Anchors.Add(path);
         for (int i = 0; i < pointCount; i++)
         {
-            var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}", loggerFactory);
+            var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}");
             anchor.Icon = MaterialIconKind.MapMarker;
             anchor.Title = $"Anchor {i}";
             anchor.IsAnnotationVisible = false;
@@ -68,7 +80,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
                 })
                 .DisposeItWith(Disposable);
         }
-        var plane = new MapAnchor<IMapAnchor>("plane", loggerFactory);
+        var plane = new MapAnchor<IMapAnchor>("plane");
         plane.Icon = MaterialIconKind.Navigation;
         plane.Title = "Plane";
         plane.IsReadOnly = true;
@@ -78,7 +90,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         plane.UseMapRotation = true;
         MapViewModel.Anchors.Add(plane);
 
-        var planeTrail = new MapAnchor<IMapAnchor>("plane-trail", loggerFactory);
+        var planeTrail = new MapAnchor<IMapAnchor>("plane-trail");
         planeTrail.IsVisible = false;
         plane.IsReadOnly = true;
         planeTrail.IsPolygonClosed = false;
@@ -97,7 +109,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return TileProviderSelectorViewModel;
         yield return MapViewModel;

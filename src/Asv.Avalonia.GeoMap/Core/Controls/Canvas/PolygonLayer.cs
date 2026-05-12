@@ -13,7 +13,7 @@ public partial class PolygonLayer : Control
 {
     static PolygonLayer()
     {
-        SourceProperty.Changed.Subscribe(e =>
+        SourceProperty.Changed.ToObservable().Subscribe(e =>
         {
             if (e.Sender is PolygonLayer layer)
             {

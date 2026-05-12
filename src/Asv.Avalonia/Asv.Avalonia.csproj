@@ -71,7 +71,6 @@
         <PackageReference Include="Asv.Cfg" Version="$(AsvCommonVersion)" />
         <PackageReference Include="Asv.IO" Version="$(AsvCommonVersion)" />
         <PackageReference Include="Asv.Modeling" Version="$(AsvCommonVersion)" />
-        <PackageReference Include="System.Reactive" Version="$(SystemReactiveVersion)" />
         <PackageReference Include="ZLogger" Version="$(ZLoggerVersion)" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="$(DotNetVersion)" />
     </ItemGroup>

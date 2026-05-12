@@ -24,7 +24,7 @@ public partial class ShellWindow : Window
 
     static ShellWindow()
     {
-        WindowStateProperty.Changed.Subscribe(x =>
+        WindowStateProperty.Changed.ToObservable().Subscribe(x =>
         {
             if (x.Sender is ShellWindow window)
             {

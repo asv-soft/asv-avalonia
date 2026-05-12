@@ -1,7 +1,7 @@
-﻿using System.Reactive.Linq;
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
+using R3;
 
 namespace Asv.Avalonia.IO;
 
@@ -19,7 +19,7 @@ public class StatisticViewModel : ViewModel
         var stat = new Statistic();
 
         Observable
-            .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
+            .Interval(TimeSpan.FromSeconds(1))
             .Subscribe(_ =>
             {
                 stat.AddParserBytes(Random.Shared.Next(0, 1_000_000));

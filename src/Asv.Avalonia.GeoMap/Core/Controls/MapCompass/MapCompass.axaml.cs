@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Media;
+using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
@@ -19,7 +20,7 @@ public partial class MapCompass : TemplatedControl
 
     static MapCompass()
     {
-        RotationProperty.Changed.Subscribe(args =>
+        RotationProperty.Changed.ToObservable().Subscribe(args =>
         {
             if (args.Sender is MapCompass compass)
             {
@@ -28,7 +29,7 @@ public partial class MapCompass : TemplatedControl
             }
         });
 
-        MouseRotationSensitivityProperty.Changed.Subscribe(args =>
+        MouseRotationSensitivityProperty.Changed.ToObservable().Subscribe(args =>
         {
             if (args.Sender is MapCompass compass)
             {
@@ -36,7 +37,7 @@ public partial class MapCompass : TemplatedControl
             }
         });
 
-        TouchpadRotationSensitivityProperty.Changed.Subscribe(args =>
+        TouchpadRotationSensitivityProperty.Changed.ToObservable().Subscribe(args =>
         {
             if (args.Sender is MapCompass compass)
             {
@@ -44,7 +45,7 @@ public partial class MapCompass : TemplatedControl
             }
         });
 
-        GestureSurfaceProperty.Changed.Subscribe(args =>
+        GestureSurfaceProperty.Changed.ToObservable().Subscribe(args =>
         {
             if (args.Sender is MapCompass compass)
             {

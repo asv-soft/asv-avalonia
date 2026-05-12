@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Layout;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -45,6 +46,7 @@ public class DialogHost : ContentControl
             // OverlayLayer is a Canvas, so we won't get a signal to resize if the window
             // bounds change. Subscribe to force update
             _rootBoundsWatcher = wb.GetObservable(BoundsProperty)
+                .ToObservable()
                 .Subscribe(_ => OnRootBoundsChanged());
         }
     }

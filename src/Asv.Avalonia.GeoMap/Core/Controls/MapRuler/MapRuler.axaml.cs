@@ -221,15 +221,15 @@ public sealed partial class MapRuler : UserControl
     {
         TearDownVisuals();
 
-        _start = CreateEndpoint(FirstAnchorName, LoggerFactory, startLocation);
-        _stop = CreateEndpoint(SecondAnchorName, LoggerFactory, stopLocation);
+        _start = CreateEndpoint(FirstAnchorName, startLocation);
+        _stop = CreateEndpoint(SecondAnchorName, stopLocation);
         _start.IsAnnotationVisible = false;
 
         var linePen = new Pen(RulerBrush, RulerStrokeThickness)
         {
             DashStyle = new DashStyle(RulerPattern, 0),
         };
-        _line = new MapAnchor<IMapAnchor>(LineAnchorName, LoggerFactory)
+        _line = new MapAnchor<IMapAnchor>(LineAnchorName)
         {
             Title = string.Empty,
             IsReadOnly = true,
@@ -379,11 +379,10 @@ public sealed partial class MapRuler : UserControl
     #region Endpoint factory
 
     private static MapAnchor<IMapAnchor> CreateEndpoint(
-        NavigationId id,
-        ILoggerFactory loggerFactory,
+        string id,
         GeoPoint location
     ) =>
-        new(id, loggerFactory)
+        new(id)
         {
             Location = location,
             Icon = MaterialIconKind.MapMarker,
