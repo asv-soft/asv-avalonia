@@ -15,7 +15,7 @@ public class MaxMapZoomProperty : MapZoomPropertyBase
     }
 
     public MaxMapZoomProperty(IMapService mapService, ILoggerFactory loggerFactory)
-        : base(ViewModelId, mapService.MaxZoom, ChangeMaxZoomCommand.Id, loggerFactory)
+        : base(ViewModelId, mapService.MaxZoom, loggerFactory)
     {
         Items = mapService
             .MinZoom.Select(minZoom =>

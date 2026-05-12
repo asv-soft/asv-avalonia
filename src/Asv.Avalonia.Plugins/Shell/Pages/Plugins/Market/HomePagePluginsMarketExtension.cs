@@ -1,21 +1,23 @@
-﻿using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Asv.Common;
+using Asv.Modeling;
 using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class HomePagePluginsMarketExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
+public class HomePagePluginsMarketExtension : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        context.Tools.Add(
-            OpenPluginsMarketCommand
-                .StaticInfo.CreateAction(
-                    loggerFactory,
-                    RS.OpenPluginsMarketCommand_Action_Title,
-                    RS.OpenPluginsMarketCommand_Action_Description
-                )
-                .DisposeItWith(contextDispose)
-        );
+        var action = new ActionViewModel("open.plugins.market")
+        {
+            Header = RS.OpenPluginsMarketCommand_Action_Title,
+            Description = RS.OpenPluginsMarketCommand_Action_Description,
+            Icon = PluginsMarketPageViewModel.PageIcon,
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(PluginsMarketPageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
     }
 }

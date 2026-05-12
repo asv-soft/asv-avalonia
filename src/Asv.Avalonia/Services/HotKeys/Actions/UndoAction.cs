@@ -5,10 +5,13 @@ namespace Asv.Avalonia;
 
 public class UndoAction : HotKeyAction<IPage>
 {
-    public override string ActionId => "undo";
+    public const string Id = "undo";
+    public const MaterialIconKind IconKind = MaterialIconKind.Undo;
+
+    public override string ActionId => Id;
     public override string Name => RS.UndoCommand_CommandInfo_Name;
     public override string Description => RS.UndoCommand_CommandInfo_Description;
-    public override MaterialIconKind Icon => MaterialIconKind.Undo;
+    public override MaterialIconKind Icon => IconKind;
     public override KeyGesture DefaultHotKey => new(Key.Z, KeyModifiers.Control);
 
     protected override async ValueTask<bool> Execute(IPage target, CancellationToken cancel)

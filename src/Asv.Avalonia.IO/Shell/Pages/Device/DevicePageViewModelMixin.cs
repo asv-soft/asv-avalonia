@@ -1,4 +1,3 @@
-using System.Windows.Input;
 using Asv.IO;
 using Asv.Modeling;
 
@@ -8,12 +7,8 @@ public static class DevicePageViewModelMixin
 {
     public const string ArgsDeviceIdKey = "dev_id";
 
-    public static CommandArg CreateOpenPageArgs(DeviceId id)
+    public static NavArgs CreateOpenPageArgs(DeviceId id)
     {
-        return new StringArg(
-            new NavArgs(
-                new KeyValuePair<string, string?>(ArgsDeviceIdKey, id.AsString())
-            ).ToString()
-        );
+        return new NavArgs(new KeyValuePair<string, string?>(ArgsDeviceIdKey, id.AsString()));
     }
 }

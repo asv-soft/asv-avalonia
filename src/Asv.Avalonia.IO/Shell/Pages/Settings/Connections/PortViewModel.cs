@@ -99,9 +99,7 @@ public class PortViewModel : ViewModel, IPortViewModel
         TagsView = TagsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         _hasValidationError = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
         _hasChanges = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
-        SaveChangesCommand = new ReactiveCommand(_ =>
-            Task.Factory.StartNew(SaveChanges, null, TaskCreationOptions.LongRunning)
-        ).DisposeItWith(Disposable);
+        SaveChangesCommand = new ReactiveCommand(SaveChanges).DisposeItWith(Disposable);
         _hasValidationError
             .Subscribe(x => SaveChangesCommand.ChangeCanExecute(!x))
             .DisposeItWith(Disposable);
@@ -356,14 +354,18 @@ public class PortViewModel : ViewModel, IPortViewModel
         return ValueTask.CompletedTask;
     }
 
-    private async void SaveChanges(object? state)
+    private async ValueTask SaveChanges(Unit unit, CancellationToken cancel)
     {
         try
         {
             Debug.Assert(Port != null, "Port should not be null when saving changes");
             var cfg = (ProtocolPortConfig)Port.Config.Clone();
             InternalSaveChanges(cfg);
-            await PortCrudCommand.ExecuteChange(this, Port.Id, cfg);
+            var page = this.FindParentOfType<SettingsConnectionViewModel>();
+            if (page is not null)
+            {
+                await page.UpdatePortAsync(Port.Id, cfg);
+            }
         }
         catch (Exception e)
         {
@@ -374,6 +376,7 @@ public class PortViewModel : ViewModel, IPortViewModel
     private ValueTask RemovePort(Unit arg1, CancellationToken arg2)
     {
         Debug.Assert(Port != null, "Port should not be null when removing port");
-        return PortCrudCommand.ExecuteRemove(this, Port.Id);
+        return this.FindParentOfType<SettingsConnectionViewModel>()?.RemovePortAsync(Port.Id)
+            ?? ValueTask.CompletedTask;
     }
 }

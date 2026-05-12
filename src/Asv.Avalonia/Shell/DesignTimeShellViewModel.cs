@@ -38,7 +38,10 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         InternalPages.Add(new SettingsPageViewModel());
         InternalPages.Add(new HomePageViewModel());
 
-        var file = new OpenMenu(DesignTime.LoggerFactory);
+        var file = new MenuItem("open", RS.ShellView_Toolbar_Open)
+        {
+            Command = DesignTime.EmptyCommand,
+        };
         MainMenu.Add(file);
 
         MainMenu.Add(new MenuItem("open", "Open", file.Id.TypeId));

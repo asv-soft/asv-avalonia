@@ -15,6 +15,7 @@ public class MapProviderProperty : ViewModel
     private readonly IMapService _mapService;
     private readonly EditApiKeyDialogPrefab _editApiKeyDialog;
     private readonly ISynchronizedView<ITileProvider, TileProviderViewModel> _view;
+    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
     public MapProviderProperty()
         : this(NullMapService.Instance, DesignTime.DialogService, DesignTime.LoggerFactory)
@@ -31,6 +32,8 @@ public class MapProviderProperty : ViewModel
     {
         _mapService = mapService;
         _editApiKeyDialog = dialogService.GetDialogPrefab<EditApiKeyDialogPrefab>();
+        _undoSink = Undo.CreateValueChange<string>("default", ApplyTileProvider, ApplyTileProvider)
+            .DisposeItWith(Disposable);
 
         var itemsSource = new ObservableList<ITileProvider>(
             mapService.AvailableProviders.OrderBy(p => p.Info.Group.Id)
@@ -108,15 +111,34 @@ public class MapProviderProperty : ViewModel
         IsEditApiKeyEnabled.Value = SelectedItem.Value.Provider is IProtectedTileProvider;
     }
 
-    private async ValueTask SetCurrentAsync(Unit unit, CancellationToken cancel)
+    private ValueTask SetCurrentAsync(Unit unit, CancellationToken cancel)
     {
         if (SelectedItem.Value == null)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        var oldValue = _mapService.CurrentProvider.Value.Info.Id;
+        var newValue = SelectedItem.Value.Provider.Info.Id;
+        if (oldValue == newValue)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        ApplyTileProvider(newValue);
+        _undoSink.Publish(oldValue, newValue);
+        return ValueTask.CompletedTask;
+    }
+
+    private void ApplyTileProvider(string providerId)
+    {
+        var provider = _mapService.AvailableProviders.FirstOrDefault(x => x.Info.Id == providerId);
+        if (provider is null)
         {
             return;
         }
 
-        var newValue = new StringArg(SelectedItem.Value.Provider.Info.Id);
-        await this.ExecuteCommand(ChangeTileProviderCommand.Id, newValue, cancel);
+        _mapService.CurrentProvider.Value = provider;
     }
 
     private async ValueTask EditApiKeyAsync(Unit unit, CancellationToken cancel)

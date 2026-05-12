@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Text.Json;
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
@@ -22,6 +23,8 @@ public class SettingsConnectionViewModel
     public const MaterialIconKind Icon = MaterialIconKind.Connection;
 
     private readonly IServiceProvider _containerHost;
+    private readonly IDeviceManager _deviceManager;
+    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
     private SettingsConnectionViewModelConfig? _config;
 
@@ -63,6 +66,13 @@ public class SettingsConnectionViewModel
     )
         : base(SubPageId, context.Args, ext)
     {
+        _deviceManager = deviceManager;
+        _undoSink = Undo.CreateValueChange<string>(
+                "default",
+                ApplyPortsSnapshot,
+                ApplyPortsSnapshot
+            )
+            .DisposeItWith(Disposable);
         _containerHost = containerHost;
         ObservableList<IProtocolPort> source = [];
         var sourceSyncView = source.CreateView(CreatePort).DisposeItWith(Disposable);
@@ -102,6 +112,45 @@ public class SettingsConnectionViewModel
     public ValueTask Init(ISettingsPage context)
     {
         return ValueTask.CompletedTask;
+    }
+
+    public async ValueTask AddPortAsync(ProtocolPortConfig config)
+    {
+        var oldSnapshot = CapturePortsSnapshot();
+        await Task.Factory.StartNew(
+            () => _deviceManager.Router.AddPort(config.AsUri()),
+            TaskCreationOptions.LongRunning
+        );
+        _undoSink.Publish(oldSnapshot, CapturePortsSnapshot());
+    }
+
+    public async ValueTask UpdatePortAsync(string portId, ProtocolPortConfig config)
+    {
+        var oldSnapshot = CapturePortsSnapshot();
+        await Task.Factory.StartNew(
+            () =>
+            {
+                var port = _deviceManager.Router.Ports.First(x => x.Id == portId);
+                _deviceManager.Router.RemovePort(port);
+                _deviceManager.Router.AddPort(config.AsUri());
+            },
+            TaskCreationOptions.LongRunning
+        );
+        _undoSink.Publish(oldSnapshot, CapturePortsSnapshot());
+    }
+
+    public async ValueTask RemovePortAsync(string portId)
+    {
+        var oldSnapshot = CapturePortsSnapshot();
+        await Task.Factory.StartNew(
+            () =>
+            {
+                var port = _deviceManager.Router.Ports.First(x => x.Id == portId);
+                _deviceManager.Router.RemovePort(port);
+            },
+            TaskCreationOptions.LongRunning
+        );
+        _undoSink.Publish(oldSnapshot, CapturePortsSnapshot());
     }
 
     protected override void AfterLoadExtensions()
@@ -158,6 +207,27 @@ public class SettingsConnectionViewModel
 
         viewModel.Init(protocolPort);
         return viewModel;
+    }
+
+    private string CapturePortsSnapshot()
+    {
+        return JsonSerializer.Serialize(
+            _deviceManager.Router.Ports.Select(x => x.Config.AsUri().ToString())
+        );
+    }
+
+    private void ApplyPortsSnapshot(string snapshot)
+    {
+        var portUris = JsonSerializer.Deserialize<string[]>(snapshot) ?? [];
+        foreach (var port in _deviceManager.Router.Ports.ToArray())
+        {
+            _deviceManager.Router.RemovePort(port);
+        }
+
+        foreach (var portUri in portUris)
+        {
+            _deviceManager.Router.AddPort(new Uri(portUri));
+        }
     }
 
     private ValueTask InternalCatchEvent(

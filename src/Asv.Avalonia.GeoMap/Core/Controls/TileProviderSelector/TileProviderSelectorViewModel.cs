@@ -14,6 +14,7 @@ public class TileProviderSelectorViewModel : ViewModel
     private readonly IMapService _mapService;
     private readonly ISynchronizedView<ITileProvider, TileProviderViewModel> _view;
     private bool _internalChange;
+    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
     public TileProviderSelectorViewModel()
         : this(NullMapService.Instance, DesignTime.LoggerFactory)
@@ -47,25 +48,53 @@ public class TileProviderSelectorViewModel : ViewModel
             .Subscribe(OnChangeByModel)
             .DisposeItWith(Disposable);
         _internalChange = false;
+        _undoSink = Undo.CreateValueChange<string>("default", ApplyTileProvider, ApplyTileProvider)
+            .DisposeItWith(Disposable);
     }
 
     public INotifyCollectionChangedSynchronizedViewList<TileProviderViewModel> Items { get; }
     public BindableReactiveProperty<TileProviderViewModel?> SelectedItem { get; }
 
-    private async ValueTask OnChangedByUser(
-        TileProviderViewModel? userValue,
-        CancellationToken cancel
-    )
+    private ValueTask OnChangedByUser(TileProviderViewModel? userValue, CancellationToken cancel)
     {
         if (_internalChange || userValue == null)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        var oldValue = _mapService.CurrentProvider.Value.Info.Id;
+        var newValue = userValue.Provider.Info.Id;
+        if (oldValue == newValue)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        try
+        {
+            _internalChange = true;
+            ApplyTileProvider(newValue);
+            _undoSink.Publish(oldValue, newValue);
+            return ValueTask.CompletedTask;
+        }
+        catch (Exception exception)
+        {
+            return ValueTask.FromException(exception);
+        }
+        finally
+        {
+            _internalChange = false;
+        }
+    }
+
+    private void ApplyTileProvider(string providerId)
+    {
+        var provider = _mapService.AvailableProviders.FirstOrDefault(x => x.Info.Id == providerId);
+        if (provider is null)
         {
             return;
         }
 
-        _internalChange = true;
-        var newValue = new StringArg(userValue.Provider.Info.Id);
-        await this.ExecuteCommand(ChangeTileProviderCommand.Id, newValue, cancel: cancel);
-        _internalChange = false;
+        _mapService.CurrentProvider.Value = provider;
     }
 
     private void OnChangeByModel(ITileProvider modelValue)

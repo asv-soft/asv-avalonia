@@ -40,11 +40,7 @@ public class PluginInfoViewModel : ViewModel
         _pluginInfo = pluginInfo;
         _manager = manager;
 
-        Install = new CancellableCommandWithProgress<Unit>(
-            InstallImpl,
-            RS.PluginInfoViewModel_InstallCommand_Title,
-            logFactory
-        ).DisposeItWith(Disposable);
+        Install = new ReactiveCommand(InstallImpl).DisposeItWith(Disposable);
 
         IsInstalled = new BindableReactiveProperty<bool>(
             _manager.IsInstalled(pluginInfo.PackageId, out _localInfo)
@@ -137,7 +133,7 @@ public class PluginInfoViewModel : ViewModel
     public BindableReactiveProperty<string> SelectedVersion { get; }
     public BindableReactiveProperty<bool> IsInstalled { get; }
     public HistoricalBoolProperty IsUninstalled { get; }
-    public CancellableCommandWithProgress<Unit> Install { get; }
+    public ReactiveCommand Install { get; }
     public NotifyCollectionChangedSynchronizedViewList<string> PluginVersionsView { get; }
 
     public void Uninstall()
@@ -160,13 +156,13 @@ public class PluginInfoViewModel : ViewModel
         IsUninstalled.ViewValue.OnNext(false);
     }
 
-    private async Task InstallImpl(Unit unit, IProgress<double> progress, CancellationToken cancel)
+    private async ValueTask InstallImpl(Unit unit, CancellationToken cancel)
     {
         await _manager.Install(
             _pluginInfo.Source,
             _pluginInfo.PackageId,
             SelectedVersion.Value,
-            new Progress<ProgressMessage>(m => progress.Report(m.Progress)),
+            new Progress<ProgressMessage>(),
             cancel
         );
 

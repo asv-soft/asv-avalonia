@@ -15,7 +15,7 @@ public sealed class GeoPointDialogPayload
 ///     Dialog for entering users's Geopoint.
 /// </summary>
 public sealed class GeoPointDialogPrefab(
-    INavigationService nav,
+    IShellHost shellHost,
     ILoggerFactory loggerFactory,
     IUnitService unitService,
     IMapService mapService
@@ -27,7 +27,7 @@ public sealed class GeoPointDialogPrefab(
 
         vm.CenterGeoPoint.Value = dialogPayload.InitialLocation;
 
-        var dialogContent = new ContentDialog(vm, nav)
+        var dialogContent = new ContentDialog(vm)
         {
             Title = RS.GeoPointDialogPrefab_Content_Title,
             PrimaryButtonText = Avalonia.RS.DialogButton_Save,
@@ -37,7 +37,9 @@ public sealed class GeoPointDialogPrefab(
 
         vm.ApplyDialog(dialogContent);
 
-        var result = await dialogContent.ShowAsync();
+        var result = shellHost.TopLevel is { } topLevel
+            ? await dialogContent.ShowAsync(topLevel)
+            : await dialogContent.ShowAsync();
 
         return result is ContentDialogResult.Primary ? vm.GetResult() : null;
     }

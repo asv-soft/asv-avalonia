@@ -1,21 +1,23 @@
 using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Asv.Modeling;
+using R3;
 
 namespace Asv.Avalonia;
 
-public sealed class HomePageLogViewerExtension(ILoggerFactory loggerFactory)
-    : IExtensionFor<IHomePage>
+public sealed class HomePageLogViewerExtension : IExtensionFor<IHomePage>
 {
-    public void Extend(IHomePage context, R3.CompositeDisposable contextDispose)
+    public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        context.Tools.Add(
-            OpenLogViewerCommand
-                .StaticInfo.CreateAction(
-                    loggerFactory,
-                    RS.OpenLogViewerCommand_Action_Title,
-                    RS.OpenLogViewerCommand_Action_Description
-                )
-                .DisposeItWith(contextDispose)
-        );
+        var action = new ActionViewModel("open.log.viewer")
+        {
+            Header = RS.OpenLogViewerCommand_Action_Title,
+            Description = RS.OpenLogViewerCommand_Action_Description,
+            Icon = LogViewerViewModel.PageIcon,
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(LogViewerViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
     }
 }

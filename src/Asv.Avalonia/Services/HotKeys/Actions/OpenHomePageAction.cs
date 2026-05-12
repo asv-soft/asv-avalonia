@@ -6,10 +6,12 @@ namespace Asv.Avalonia;
 
 public class OpenHomePageAction : HotKeyAction<IViewModel>
 {
-    public override string ActionId => OpenHomePageCommand.Id;
-    public override string Name => OpenHomePageCommand.StaticInfo.Name;
-    public override string Description => OpenHomePageCommand.StaticInfo.Description;
-    public override MaterialIconKind Icon => OpenHomePageCommand.StaticInfo.Icon;
+    public const string Id = "open.home";
+
+    public override string ActionId => Id;
+    public override string Name => RS.OpenHomePageCommand_CommandInfo_Name;
+    public override string Description => RS.OpenHomePageCommand_CommandInfo_Description;
+    public override MaterialIconKind Icon => HomePageViewModel.PageIcon;
     public override KeyGesture DefaultHotKey => new(Key.H, KeyModifiers.Control);
 
     protected override async ValueTask<bool> Execute(IViewModel target, CancellationToken cancel)

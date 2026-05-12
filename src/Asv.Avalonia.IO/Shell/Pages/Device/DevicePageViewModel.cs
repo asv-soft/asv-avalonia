@@ -26,8 +26,6 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         ArgumentNullException.ThrowIfNull(devices);
         ArgumentNullException.ThrowIfNull(layoutService);
         ArgumentNullException.ThrowIfNull(loggerFactory);
-        ArgumentNullException.ThrowIfNull(cmd);
-
         _deviceCore = new DevicePageCore(
             devices,
             layoutService,

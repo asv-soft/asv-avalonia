@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using R3;
 
 namespace Asv.Avalonia;
@@ -6,6 +7,7 @@ namespace Asv.Avalonia;
 public class MeasureUnitViewModel : ViewModel
 {
     private readonly ISearchService _searchService;
+    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
     private bool _internalChange;
 
     public MeasureUnitViewModel(IUnit item, ISearchService searchService)
@@ -30,6 +32,9 @@ public class MeasureUnitViewModel : ViewModel
         _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);
         _sub2 = item.CurrentUnitItem.Subscribe(OnChangeByModel);
         _internalChange = false;
+
+        _undoSink = Undo.CreateValueChange<string>("default", ApplyUnit, ApplyUnit)
+            .DisposeItWith(Disposable);
 
         ResetCommand = new ReactiveCommand(ResetImpl).DisposeItWith(Disposable);
     }
@@ -82,34 +87,52 @@ public class MeasureUnitViewModel : ViewModel
         return [];
     }
 
-    internal async ValueTask ResetImpl(Unit arg, CancellationToken arg2)
+    internal ValueTask ResetImpl(Unit arg, CancellationToken arg2)
     {
         if (Base.InternationalSystemUnit.UnitItemId == Base.CurrentUnitItem.Value.UnitItemId)
         {
-            return;
+            return ValueTask.CompletedTask;
         }
 
-        _internalChange = true;
-        await ChangeMeasureUnitCommand.ExecuteCommand(this, Base, Base.InternationalSystemUnit);
-        _internalChange = false;
+        ChangeUnit(Base.InternationalSystemUnit);
+        return ValueTask.CompletedTask;
     }
 
-    private async ValueTask OnChangedByUser(IUnitItem userValue, CancellationToken cancel)
+    private ValueTask OnChangedByUser(IUnitItem userValue, CancellationToken cancel)
     {
         if (_internalChange)
         {
-            return;
+            return ValueTask.CompletedTask;
         }
 
-        _internalChange = true;
-        await ChangeMeasureUnitCommand.ExecuteCommand(this, Base, userValue);
-        _internalChange = false;
+        ChangeUnit(userValue);
+        return ValueTask.CompletedTask;
     }
 
     private void OnChangeByModel(IUnitItem modelValue)
     {
         _internalChange = true;
         SelectedItem.Value = modelValue;
+        _internalChange = false;
+    }
+
+    private void ChangeUnit(IUnitItem unitItem)
+    {
+        var oldUnitItemId = Base.CurrentUnitItem.Value.UnitItemId;
+        var newUnitItemId = unitItem.UnitItemId;
+        if (oldUnitItemId == newUnitItemId)
+        {
+            return;
+        }
+
+        ApplyUnit(newUnitItemId);
+        _undoSink.Publish(oldUnitItemId, newUnitItemId);
+    }
+
+    private void ApplyUnit(string unitItemId)
+    {
+        _internalChange = true;
+        Base.CurrentUnitItem.Value = Base[unitItemId];
         _internalChange = false;
     }
 

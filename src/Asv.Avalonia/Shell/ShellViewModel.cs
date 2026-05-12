@@ -210,16 +210,30 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     #endregion
 
-    #region Theme command
+    #region Header Actions
 
     public void ChangeTheme()
     {
-        //this.ExecuteCommand(ChangeThemeFreeCommand.Id).SafeFireAndForget();
+        var themeService = Container.GetService<IThemeService>();
+        if (themeService is null)
+        {
+            return;
+        }
+
+        var nextTheme =
+            themeService.CurrentTheme.Value.Id == ThemeService.DarkTheme
+                ? ThemeService.LightTheme
+                : ThemeService.DarkTheme;
+        var theme = themeService.Themes.FirstOrDefault(x => x.Id == nextTheme);
+        if (theme is not null)
+        {
+            themeService.CurrentTheme.Value = theme;
+        }
     }
 
     public void OpenSettings()
     {
-        //this.ExecuteCommand(OpenSettingsCommand.Id).SafeFireAndForget();
+        this.GoTo(new NavPath(new NavId(SettingsPageViewModel.PageId))).SafeFireAndForget();
     }
 
     #endregion

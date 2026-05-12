@@ -28,7 +28,6 @@ public static class GeoMapMixin
         {
             builder.ModuleGeoMap.AddControls();
             builder.ModuleGeoMap.AddDialogs();
-            builder.ModuleGeoMap.AddCommands();
             builder.ModuleGeoMap.AddServices();
 
             builder.ModuleGeoMap.AddGeoMapSettingsSubPage();

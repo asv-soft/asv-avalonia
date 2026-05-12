@@ -1,4 +1,5 @@
 ﻿using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -13,6 +14,7 @@ public class MapModeProperty : ViewModel
     public const string ViewModelId = "map.mode";
 
     private readonly IMapService _mapService;
+    private readonly IUndoChangeSink<ValueUndoChange<MapModeType>> _undoSink;
     private bool _internalChange;
 
     public MapModeProperty()
@@ -25,6 +27,8 @@ public class MapModeProperty : ViewModel
         : base(ViewModelId)
     {
         _mapService = mapService;
+        _undoSink = Undo.CreateValueChange<MapModeType>("default", ApplyMapMode, ApplyMapMode)
+            .DisposeItWith(Disposable);
         SelectedItem = new BindableReactiveProperty<MapModeInfo>().DisposeItWith(Disposable);
 
         _internalChange = true;
@@ -44,17 +48,31 @@ public class MapModeProperty : ViewModel
 
     public BindableReactiveProperty<MapModeInfo> SelectedItem { get; }
 
-    private async ValueTask OnChangedByUser(MapModeInfo userValue, CancellationToken cancel)
+    private ValueTask OnChangedByUser(MapModeInfo userValue, CancellationToken cancel)
     {
         if (_internalChange)
         {
-            return;
+            return ValueTask.CompletedTask;
         }
 
-        _internalChange = true;
-        var newValue = new StringArg(userValue.Type.ToString());
-        await this.ExecuteCommand(ChangeMapModeCommand.Id, newValue, cancel: cancel);
-        _internalChange = false;
+        var oldValue = _mapService.Mode.Value;
+        var newValue = userValue.Type;
+        if (oldValue == newValue)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        try
+        {
+            _internalChange = true;
+            ApplyMapMode(newValue);
+            _undoSink.Publish(oldValue, newValue);
+            return ValueTask.CompletedTask;
+        }
+        finally
+        {
+            _internalChange = false;
+        }
     }
 
     private void OnChangeByModel(MapModeType modelValue)
@@ -63,6 +81,11 @@ public class MapModeProperty : ViewModel
         var value = Items.First(info => info.Type == modelValue);
         SelectedItem.Value = value;
         _internalChange = false;
+    }
+
+    private void ApplyMapMode(MapModeType value)
+    {
+        _mapService.Mode.Value = value;
     }
 
     public override IEnumerable<IViewModel> GetChildren()

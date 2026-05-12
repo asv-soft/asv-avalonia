@@ -45,7 +45,6 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     )
         : base(PageId, context, loggerFactory, dialogService, ext)
     {
-        ArgumentNullException.ThrowIfNull(cmd);
         ArgumentNullException.ThrowIfNull(manager);
 
         Header = RS.PluginsMarketPageViewModel_Title;

@@ -1,4 +1,5 @@
-﻿using Asv.IO;
+﻿using Asv.Common;
+using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -10,10 +11,15 @@ public class UdpPortMenu : MenuItem
         : base(UdpProtocolPort.Scheme, RS.SettingsConnectionUdpPortExtension_MenuItem_Header)
     {
         Icon = UdpPortViewModel.DefaultIcon;
-        Command = new BindableAsyncCommand(PortCrudCommand.Id, this);
+        Command = new ReactiveCommand(AddPortAsync).DisposeItWith(Disposable);
+    }
+
+    private ValueTask AddPortAsync(Unit unit, CancellationToken cancel)
+    {
         var defaultConfig = UdpProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
         defaultConfig.Name = RS.SettingsConnectionUdpPortExtension_DefaultConfig_Name;
-        CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
+        return this.FindParentOfType<SettingsConnectionViewModel>()?.AddPortAsync(defaultConfig)
+            ?? ValueTask.CompletedTask;
     }
 }

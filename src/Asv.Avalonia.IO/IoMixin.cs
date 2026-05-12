@@ -13,8 +13,6 @@ public static class IoMixin
             Action<ConnectionSettingsBuilder>? configure = null
         )
         {
-            builder.Parent.Parent.Parent.Commands.Register<PortCrudCommand>();
-
             builder.Parent.Parent.Parent.ViewLocator.RegisterViewFor<PortViewModel, PortView>();
 
             builder.AddSubPage<

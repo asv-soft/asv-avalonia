@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+using Asv.Common;
+using Asv.Modeling;
+using Material.Icons;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -6,10 +9,12 @@ public class ToolsSettingsMenu : MenuItem
 {
     public const string MenuId = $"{ToolsMenu.MenuId}.settings";
 
-    public ToolsSettingsMenu(ILoggerFactory loggerFactory)
+    public ToolsSettingsMenu()
         : base(MenuId, RS.ToolsMenu_Settings, ToolsMenu.MenuId)
     {
-        Icon = OpenSettingsCommand.StaticInfo.Icon;
-        Command = new BindableAsyncCommand(OpenSettingsCommand.Id, this);
+        Icon = MaterialIconKind.Cog;
+        Command = new ReactiveCommand(_ =>
+            this.GoTo(new NavPath(new NavId(SettingsPageViewModel.PageId)))
+        ).DisposeItWith(Disposable);
     }
 }

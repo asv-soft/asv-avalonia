@@ -7,14 +7,14 @@ public sealed class EditApiKeyDialogPayload
     public string? CurrentApiKey { get; init; }
 }
 
-public sealed class EditApiKeyDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
+public sealed class EditApiKeyDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
     : IDialogPrefab<EditApiKeyDialogPayload, string?>
 {
     public async Task<string?> ShowDialogAsync(EditApiKeyDialogPayload dialogPayload)
     {
         using var vm = new EditApiKeyDialogViewModel(loggerFactory, dialogPayload.CurrentApiKey);
 
-        var dialogContent = new ContentDialog(vm, nav)
+        var dialogContent = new ContentDialog(vm)
         {
             Title = RS.EditApiKeyDialogPrefab_Content_Title,
             PrimaryButtonText = RS.EditApiKeyDialogPrefab_Content_PrimaryButton,
@@ -24,7 +24,9 @@ public sealed class EditApiKeyDialogPrefab(INavigationService nav, ILoggerFactor
 
         vm.ApplyDialog(dialogContent);
 
-        var result = await dialogContent.ShowAsync();
+        var result = shellHost.TopLevel is { } topLevel
+            ? await dialogContent.ShowAsync(topLevel)
+            : await dialogContent.ShowAsync();
 
         if (result is ContentDialogResult.Primary)
         {

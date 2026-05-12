@@ -29,7 +29,10 @@ public static class HotKeyMixin
     {
         public Builder RegisterDefault()
         {
-            return Register<UndoAction>().Register<OpenHomePageAction>();
+            return Register<UndoAction>()
+                .Register<RedoAction>()
+                .Register<OpenHomePageAction>()
+                .Register<OpenFileAction>();
         }
 
         public Builder Register<THotKeyAction>()

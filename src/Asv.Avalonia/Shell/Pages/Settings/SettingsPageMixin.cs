@@ -30,7 +30,7 @@ public static class SettingsPageMixin
     {
         public Builder UseDefaultSettings()
         {
-            return UseUnitsSettings().AddAppearanceSettingsSubPage().AddCommandsSettingsSubPage();
+            return UseUnitsSettings().AddAppearanceSettingsSubPage();
         }
 
         public Builder UseUnitsSettings()
@@ -60,15 +60,6 @@ public static class SettingsPageMixin
                 SettingsAppearanceView,
                 AppearanceSettingTreePageMenu
             >(SettingsAppearanceViewModel.PageId);
-        }
-
-        public Builder AddCommandsSettingsSubPage()
-        {
-            return AddSubPage<
-                SettingsCommandListViewModel,
-                SettingsCommandListView,
-                SettingsCommandTreePageMenu
-            >(SettingsCommandListViewModel.PageId);
         }
 
         public Builder AddSubPage<TViewModel, TView>(string pageId)

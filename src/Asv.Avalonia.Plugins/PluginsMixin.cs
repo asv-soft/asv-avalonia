@@ -68,7 +68,6 @@ public static class PluginsMixin
         {
             builder.Shell.Pages.Home.UseExtension<HomePagePluginsMarketExtension>();
 
-            builder.Commands.Register<OpenPluginsMarketCommand>();
             builder.Shell.Pages.Settings.AddSubPage<
                 SettingsPluginsSourcesViewModel,
                 SettingsPluginsSourcesView,
@@ -90,7 +89,6 @@ public static class PluginsMixin
             );
             builder.Shell.Pages.Home.UseExtension<HomePageInstalledPluginsExtension>();
 
-            builder.Commands.Register<OpenInstalledPluginsCommand>();
             return this;
         }
     }

@@ -1,6 +1,7 @@
-﻿using System.Windows.Input;
+using System.Windows.Input;
+using Asv.Common;
 using Asv.Modeling;
-using Microsoft.Extensions.Logging;
+using R3;
 
 namespace Asv.Avalonia.Plugins;
 
@@ -9,25 +10,34 @@ public class PluginsSourceViewModel : ViewModel
     public const string ViewModelIdPart = "source";
 
     public PluginsSourceViewModel()
-        : this(NullPluginServerInfo.Instance, DesignTime.Navigation, DesignTime.LoggerFactory)
+        : this(
+            NullPluginServerInfo.Instance,
+            _ => ValueTask.CompletedTask,
+            _ => ValueTask.CompletedTask
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public PluginsSourceViewModel(IPluginServerInfo pluginServerInfo, ILoggerFactory loggerFactory)
+    public PluginsSourceViewModel(
+        IPluginServerInfo pluginServerInfo,
+        Func<PluginsSourceViewModel, ValueTask> edit,
+        Func<PluginsSourceViewModel, ValueTask> remove
+    )
         : base(
             ViewModelIdPart,
             new NavArgs(new KeyValuePair<string, string>("source", pluginServerInfo.SourceUri))
         )
     {
         ArgumentNullException.ThrowIfNull(pluginServerInfo);
-        ArgumentNullException.ThrowIfNull(navigationService);
+        ArgumentNullException.ThrowIfNull(edit);
+        ArgumentNullException.ThrowIfNull(remove);
 
         Name = pluginServerInfo.Name;
         SourceUri = pluginServerInfo.SourceUri;
         Model = pluginServerInfo;
-        Edit = new BindableAsyncCommand(EditPluginsSourceCommand.Id, this);
-        Remove = new BindableAsyncCommand(DeletePluginsSourceCommand.Id, this);
+        Edit = new ReactiveCommand((_, _) => edit(this)).DisposeItWith(Disposable);
+        Remove = new ReactiveCommand((_, _) => remove(this)).DisposeItWith(Disposable);
     }
 
     public IPluginServerInfo Model { get; }

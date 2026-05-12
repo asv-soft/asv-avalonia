@@ -1,17 +1,18 @@
-﻿using Avalonia.Controls;
+using Avalonia.Controls;
 using R3;
 
 namespace Asv.Avalonia;
 
 public class EditRedoMenu : MenuItem
 {
-    public const string MenuId = "redo";
+    public const string MenuId = $"{EditMenu.MenuId}.redo";
 
-    public EditRedoMenu(IShellHost shellHost)
+    public EditRedoMenu(IShellHost shellHost, IHotKeyService hotKeys)
         : base(MenuId, RS.RedoCommand_CommandInfo_Name, EditMenu.MenuId)
     {
         shellHost.ExecuteNowOrWhenShellLoaded(InitShell).AddTo(ref DisposableBag);
-        Icon = RedoAction.StaticInfo.Icon;
+        Icon = RedoAction.IconKind;
+        HotKey = hotKeys[RedoAction.Id];
         Order = 1;
     }
 
@@ -25,13 +26,7 @@ public class EditRedoMenu : MenuItem
 
     private void SelectedPageChanged(IPage? page)
     {
-        if (page == null)
-        {
-            Command = null;
-            IsEnabled = false;
-            return;
-        }
-
-        Command = page.UndoHistory.Undo;
+        Command = page?.UndoHistory.Redo;
+        IsEnabled = Command is not null;
     }
 }

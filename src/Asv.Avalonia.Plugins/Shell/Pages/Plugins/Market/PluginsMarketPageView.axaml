@@ -179,8 +179,7 @@
                                 Grid.Column="0"
                                 Classes="accent"
                                 IsVisible="{Binding !IsInstalled.Value}"
-                                IsEnabled="{CompiledBinding !Install.IsExecuting.Value}"
-                                Command="{CompiledBinding Install.Command}"
+                                Command="{CompiledBinding Install}"
                                 Content="{x:Static plugins:RS.PluginsMarketPageView_Install}"
                             />
                             <Button
@@ -195,15 +194,9 @@
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Maximum="1"
-                                IsVisible="{CompiledBinding Install.IsExecuting.Value}"
-                                Value="{CompiledBinding Install.Progress.Value}"
+                                IsVisible="False"
                             />
-                            <StackPanel
-                                Orientation="Horizontal"
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                IsVisible="{CompiledBinding !Install.IsExecuting.Value}"
-                            >
+                            <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1">
                                 <TextBlock
                                     IsVisible="{Binding !IsInstalled.Value}"
                                     Theme="{DynamicResource BodyStrongTextBlockStyle}"
@@ -220,7 +213,6 @@
                             <ComboBox
                                 Grid.Row="0"
                                 Grid.Column="2"
-                                IsVisible="{CompiledBinding !Install.IsExecuting.Value}"
                                 ItemsSource="{Binding PluginVersionsView}"
                                 PlaceholderText="{x:Static plugins:RS.InstalledPluginsPageView_AllVersions}"
                                 VerticalAlignment="Center"
@@ -232,12 +224,7 @@
                                     </DataTemplate>
                                 </ComboBox.ItemTemplate>
                             </ComboBox>
-                            <Button
-                                Grid.Row="0"
-                                Grid.Column="2"
-                                IsVisible="{CompiledBinding Install.IsExecuting.Value}"
-                                Command="{CompiledBinding Install.Cancel}"
-                            >
+                            <Button Grid.Row="0" Grid.Column="2" IsVisible="False">
                                 <avalonia:MaterialIcon Kind="Cancel" />
                             </Button>
                         </Grid>

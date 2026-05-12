@@ -177,8 +177,10 @@ public class LogViewerViewModel
 
         Skip.Skip(1).Subscribe(_ => Search.Refresh()).DisposeItWith(Disposable);
 
-        Next = new ReactiveCommand(_ => Commands.NextPage(this)).DisposeItWith(Disposable);
-        Previous = new ReactiveCommand(_ => Commands.PreviousPage(this)).DisposeItWith(Disposable);
+        Next = new ReactiveCommand(_ => Skip.Value += Take.Value).DisposeItWith(Disposable);
+        Previous = new ReactiveCommand(_ =>
+            Skip.Value = Math.Max(0, Skip.Value - Take.Value)
+        ).DisposeItWith(Disposable);
 
         Search.Refresh();
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);

@@ -1,4 +1,5 @@
-﻿using Asv.IO;
+﻿using Asv.Common;
+using Asv.IO;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -13,10 +14,15 @@ public class TcpServerPortMenu : MenuItem
         )
     {
         Icon = TcpServerPortViewModel.DefaultIcon;
-        Command = new BindableAsyncCommand(PortCrudCommand.Id, this);
+        Command = new ReactiveCommand(AddPortAsync).DisposeItWith(Disposable);
+    }
+
+    private ValueTask AddPortAsync(Unit unit, CancellationToken cancel)
+    {
         var defaultConfig = TcpServerProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
         defaultConfig.Name = RS.SettingsConnectionTcpServerPortExtension_DefaultConfig_Name;
-        CommandParameter = PortCrudCommand.CreateAddArg(defaultConfig);
+        return this.FindParentOfType<SettingsConnectionViewModel>()?.AddPortAsync(defaultConfig)
+            ?? ValueTask.CompletedTask;
     }
 }

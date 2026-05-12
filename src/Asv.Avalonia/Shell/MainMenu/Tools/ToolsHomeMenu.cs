@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
+using Asv.Common;
+using Asv.Modeling;
+using Material.Icons;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -6,10 +9,13 @@ public class ToolsHomeMenu : MenuItem
 {
     public const string MenuId = $"{ToolsMenu.MenuId}.home";
 
-    public ToolsHomeMenu(ILoggerFactory loggerFactory)
+    public ToolsHomeMenu(IHotKeyService hotKeys)
         : base(MenuId, RS.ToolsMenu_Home, ToolsMenu.MenuId)
     {
-        Icon = OpenHomePageCommand.StaticInfo.Icon;
-        Command = new BindableAsyncCommand(OpenHomePageCommand.Id, this);
+        Icon = MaterialIconKind.Home;
+        HotKey = hotKeys[OpenHomePageAction.Id];
+        Command = new ReactiveCommand(_ =>
+            this.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)))
+        ).DisposeItWith(Disposable);
     }
 }
