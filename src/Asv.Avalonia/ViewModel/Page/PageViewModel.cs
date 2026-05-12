@@ -16,7 +16,6 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
     protected PageViewModel(
         string typeId,
         IPageContext context,
-        
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
@@ -24,13 +23,13 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         : base(typeId, context.NavArgs, ext)
     {
         _logger = loggerFactory.CreateLogger<PageViewModel<TContext>>();
-        
-        UndoHistory = new UndoHistory<IViewModel>(this, context.UndoStore)
-            .AddTo(ref DisposableBag);
+
+        UndoHistory = new UndoHistory<IViewModel>(this, context.UndoStore).AddTo(ref DisposableBag);
         Icon = MaterialIconKind.Window;
         Header = typeId;
-        TryClose = new ReactiveCommand((_,_) => TryCloseAsync(false), AwaitOperation.Drop)
-            .AddTo(ref DisposableBag);
+        TryClose = new ReactiveCommand((_, _) => TryCloseAsync(false), AwaitOperation.Drop).AddTo(
+            ref DisposableBag
+        );
         _unsavedChangesDialogPrefab = dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
     }
 

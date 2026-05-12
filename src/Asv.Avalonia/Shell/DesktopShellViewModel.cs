@@ -194,7 +194,11 @@ public sealed class DesktopShellViewModel : ShellViewModel
         selected.Rise(new DesktopDragEvent(selected, args: e));
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         if (e is DesktopDragEvent eve)
         {

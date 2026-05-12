@@ -4,7 +4,9 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IHeadlinedViewModel : ISupportOrder, IHasIcon, IHasHeader, IHasDescription, IHasVisibility
-{
-    
-}
+public interface IHeadlinedViewModel
+    : ISupportOrder,
+        IHasIcon,
+        IHasHeader,
+        IHasDescription,
+        IHasVisibility { }

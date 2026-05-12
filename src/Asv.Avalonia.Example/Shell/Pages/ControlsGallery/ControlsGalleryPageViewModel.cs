@@ -16,7 +16,6 @@ public class ControlsGalleryPageViewModel
     public ControlsGalleryPageViewModel()
         : this(
             DesignTime.PageContext,
-            
             AppHost.Instance.Services,
             NullLayoutService.Instance,
             NullLoggerFactory.Instance,
@@ -29,14 +28,13 @@ public class ControlsGalleryPageViewModel
 
     public ControlsGalleryPageViewModel(
         IPageContext context,
-        
         IServiceProvider containerHost,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, context,  containerHost, layoutService, loggerFactory, dialogService, ext)
+        : base(PageId, context, containerHost, layoutService, loggerFactory, dialogService, ext)
     {
         Header = RS.ControlsGalleryPageViewModel_Title;
         TreeHeader = RS.ControlsGalleryPageViewModel_TreeHeader;

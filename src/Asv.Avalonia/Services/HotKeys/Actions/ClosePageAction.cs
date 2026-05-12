@@ -11,6 +11,7 @@ public class ClosePageAction : HotKeyAction<IPage>
     public override string Description => RS.ClosePageCommand_CommandInfo_Description;
     public override MaterialIconKind Icon => MaterialIconKind.CloseBold;
     public override KeyGesture DefaultHotKey => new(Key.Q, KeyModifiers.Control);
+
     protected override ValueTask<bool> Execute(IPage target, CancellationToken cancel)
     {
         target.TryCloseAsync(false);

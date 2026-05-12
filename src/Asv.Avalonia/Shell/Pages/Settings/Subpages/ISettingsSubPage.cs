@@ -1,6 +1,3 @@
 namespace Asv.Avalonia;
 
-public interface ISettingsSubPage : ITreeSubpage
-{
-    
-}
+public interface ISettingsSubPage : ITreeSubpage { }

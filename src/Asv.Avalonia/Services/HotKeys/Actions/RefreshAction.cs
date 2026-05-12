@@ -11,6 +11,7 @@ public class RefreshAction : HotKeyAction<ISupportRefresh>
     public override string Description => RS.RefreshCommand_CommandInfo_Description;
     public override MaterialIconKind Icon => MaterialIconKind.Refresh;
     public override KeyGesture DefaultHotKey => new(Key.F5);
+
     protected override ValueTask<bool> Execute(ISupportRefresh target, CancellationToken cancel)
     {
         target.Refresh();

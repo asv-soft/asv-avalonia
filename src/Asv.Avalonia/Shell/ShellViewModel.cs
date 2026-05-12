@@ -54,24 +54,27 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         ArgumentNullException.ThrowIfNull(cfg);
         _logger = loggerFactory.CreateLogger<ShellViewModel>();
 
-
         #region Navigation
 
         InputElement
             .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
             .AddTo(ref DisposableBag);
-        Navigation = new NavigationController<IViewModel>(this, new NavigationStore("nav")).DisposeItWith(Disposable);
+        Navigation = new NavigationController<IViewModel>(
+            this,
+            new NavigationStore("nav")
+        ).DisposeItWith(Disposable);
 
-        Events.Catch<GoToEvent>(async (_, e, _) => await Navigation.GoTo(e.Path)).DisposeItWith(Disposable);
-        
+        Events
+            .Catch<GoToEvent>(async (_, e, _) => await Navigation.GoTo(e.Path))
+            .DisposeItWith(Disposable);
+
         #endregion
-        
+
         Cfg = cfg;
         Container = ioc;
         LayoutService = ioc.GetRequiredService<ILayoutService>();
         DialogService = ioc.GetRequiredService<IDialogService>();
-        
-        
+
         UndoStoreService = ioc.GetRequiredService<IUndoStoreService>();
 
         _unsavedChangesDialogPrefab = DialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
@@ -169,7 +172,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
-    
+
     private void GotFocusHandler(TopLevel top, RoutedEventArgs args)
     {
         if (args.Source is not Control source)
@@ -313,7 +316,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     #endregion
 
     #region Routable
-    
+
     public override async ValueTask<IViewModel> Navigate(NavId id)
     {
         var page = _pages.FirstOrDefault(x => x.Id == id);
@@ -338,7 +341,11 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     public override IEnumerable<IViewModel> GetChildren() => _pages;
 
-    private async ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private async ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {
@@ -532,8 +539,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     #endregion
 
-    
-    
 
     public IConfiguration Cfg { get; }
     public ILayoutService LayoutService { get; }
@@ -566,11 +571,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             _infoMessagesSource.RemoveAt(0);
         }
         _infoMessagesSource.Add(
-            new ShellMessageViewModel(
-                Guid.NewGuid().ToString(),
-                CloseInfoMessageCommand,
-                message
-            )
+            new ShellMessageViewModel(Guid.NewGuid().ToString(), CloseInfoMessageCommand, message)
         );
     }
 
@@ -590,7 +591,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     private readonly SerialDisposable _sub1 = new();
     private readonly SerialDisposable _sub2 = new();
     private readonly SerialDisposable _sub3 = new();
-    
 
     protected override void Dispose(bool disposing)
     {

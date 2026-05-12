@@ -16,7 +16,7 @@ public class UnitPropertyViewModel
 
     public UnitPropertyViewModel()
         : this(
-            DesignTime.Id.TypeId.ToString(),
+            DesignTime.Id.TypeId,
             new BindableReactiveProperty<double>(),
             new AltitudeUnit(
                 DesignTime.Configuration,
@@ -53,8 +53,9 @@ public class UnitPropertyViewModel
         : base(id, modelValue, unit, loggerFactory, format)
     {
         ChangeUnitCommand = new ReactiveCommand<IUnitItem>(item =>
-            ChangeMeasureUnitCommand.ExecuteCommand(this, unit, item).SafeFireAndForget()
-        ).DisposeItWith(Disposable);
+        {
+            unit.CurrentUnitItem.Value = item;
+        }).DisposeItWith(Disposable);
         CurrentUnit = unit
             .CurrentUnitItem.ToBindableReactiveProperty(unit.CurrentUnitItem.Value)
             .DisposeItWith(Disposable);
@@ -66,8 +67,7 @@ public class UnitPropertyViewModel
     public void CommitValue()
     {
         IsInEditMode = false;
-        this.ExecuteCommand(ChangeDoublePropertyCommand.Id, new DoubleArg(_lastValue))
-            .SafeFireAndForget();
+        base.ApplyValueToModel(_lastValue, CancellationToken.None).SafeFireAndForget();
     }
 
     protected override ValueTask ApplyValueToModel(double value, CancellationToken cancel)

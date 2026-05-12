@@ -3,8 +3,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class TagViewModel(string id)
-    : ViewModel(id)
+public class TagViewModel(string id) : ViewModel(id)
 {
     public AsvColorKind Color
     {

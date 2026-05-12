@@ -8,7 +8,7 @@ public static class MainMenuMixin
     {
         public MainMenuBuilder MainMenu => new(builder);
     }
-    
+
     public class MainMenuBuilder(ShellMixin.Builder builder)
     {
         public MainMenuBuilder Register<TMenuViewModel>()

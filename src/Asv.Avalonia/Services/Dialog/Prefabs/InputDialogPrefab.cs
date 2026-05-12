@@ -21,7 +21,7 @@ public sealed class InputDialogPayload
 /// <summary>
 /// Dialog for entering user's string.
 /// </summary>
-public sealed class InputDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
+public sealed class InputDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
     : IDialogPrefab<InputDialogPayload, string?>
 {
     public async Task<string?> ShowDialogAsync(InputDialogPayload dialogPayload)
@@ -30,7 +30,7 @@ public sealed class InputDialogPrefab(INavigationService nav, ILoggerFactory log
         {
             Message = dialogPayload.Message,
         };
-        var dialogContent = new ContentDialog(vm, nav)
+        var dialogContent = new ContentDialog(vm)
         {
             Title = dialogPayload.Title,
             PrimaryButtonText = RS.DialogButton_Yes,
@@ -38,7 +38,9 @@ public sealed class InputDialogPrefab(INavigationService nav, ILoggerFactory log
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = await dialogContent.ShowAsync();
+        var result = shellHost.TopLevel is { } topLevel
+            ? await dialogContent.ShowAsync(topLevel)
+            : await dialogContent.ShowAsync();
 
         if (result == ContentDialogResult.Primary)
         {

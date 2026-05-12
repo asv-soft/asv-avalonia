@@ -139,9 +139,13 @@ public static class ExampleMixin
             where TViewModel : class, IControlsGallerySubPage
             where TView : Control
         {
-            
-            builder.Parent.Parent.Shell.TreeSubPages.Register<IControlsGalleryPage, IControlsGallerySubPage, TViewModel, TView>(subPageId);
-            
+            builder.Parent.Parent.Shell.TreeSubPages.Register<
+                IControlsGalleryPage,
+                IControlsGallerySubPage,
+                TViewModel,
+                TView
+            >(subPageId);
+
             return this;
         }
 

@@ -12,16 +12,18 @@ public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
         : this(DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
-        HotKey.Value = HotKeyInfo.Parse("Ctrl+C");
+        HotKey.Value = global::Avalonia.Input.KeyGesture.Parse("Ctrl+C");
     }
 
     public DialogItemHotKeyCaptureViewModel(ILoggerFactory loggerFactory)
         : base(DialogId)
     {
-        HotKey = new BindableReactiveProperty<HotKeyInfo?>().DisposeItWith(Disposable);
+        HotKey = new BindableReactiveProperty<global::Avalonia.Input.KeyGesture?>().DisposeItWith(
+            Disposable
+        );
     }
 
-    public BindableReactiveProperty<HotKeyInfo?> HotKey { get; }
+    public BindableReactiveProperty<global::Avalonia.Input.KeyGesture?> HotKey { get; }
 
     public override IEnumerable<IViewModel> GetChildren() => [];
 }

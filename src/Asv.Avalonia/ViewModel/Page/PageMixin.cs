@@ -10,7 +10,7 @@ public static class PageMixin
     {
         public Builder Pages => new(builder);
     }
-    
+
     extension(IServiceProvider services)
     {
         public IPage CreatePage(string pageId, IPageContext context)
@@ -18,14 +18,16 @@ public static class PageMixin
             return services.CreateViewModel<IPage, IPageContext>(pageId, context);
         }
     }
-    
+
     public class Builder(ShellMixin.Builder builder)
     {
         public Builder Register<TPageViewModel, TPageView>(string pageId)
             where TPageViewModel : class, IPage
             where TPageView : Control
         {
-            builder.Parent.ViewModel.RegisterKeyedWithArgs<IPage, TPageViewModel, IPageContext>(pageId);
+            builder.Parent.ViewModel.RegisterKeyedWithArgs<IPage, TPageViewModel, IPageContext>(
+                pageId
+            );
             builder.Parent.ViewLocator.RegisterViewFor<TPageViewModel, TPageView>();
             return this;
         }

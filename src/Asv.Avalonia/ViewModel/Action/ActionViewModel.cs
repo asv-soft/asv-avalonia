@@ -2,9 +2,7 @@ using System.Windows.Input;
 
 namespace Asv.Avalonia;
 
-public class ActionViewModel(string typeId)
-    : HeadlinedViewModel(typeId),
-        IActionViewModel
+public class ActionViewModel(string typeId) : HeadlinedViewModel(typeId), IActionViewModel
 {
     public ICommand? Command
     {

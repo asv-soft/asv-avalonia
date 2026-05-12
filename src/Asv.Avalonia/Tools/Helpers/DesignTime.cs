@@ -230,21 +230,9 @@ public static class DesignTime
 
     public static IReadOnlyObservableList<IMenuItem> Menu =>
         new ObservableList<IMenuItem>([
-            new MenuItem("id_1", "Menu1")
-            {
-                Icon = RandomImage,
-                Command = EmptyCommand,
-            },
-            new MenuItem("id_2", "Menu2")
-            {
-                Icon = RandomImage,
-                Command = EmptyCommand,
-            },
-            new MenuItem("id_3", "Menu3")
-            {
-                Icon = RandomImage,
-                Command = EmptyCommand,
-            },
+            new MenuItem("id_1", "Menu1") { Icon = RandomImage, Command = EmptyCommand },
+            new MenuItem("id_2", "Menu2") { Icon = RandomImage, Command = EmptyCommand },
+            new MenuItem("id_3", "Menu3") { Icon = RandomImage, Command = EmptyCommand },
             new MenuItem("id_3_1", "Menu3_1", "id_1")
             {
                 Icon = RandomImage,

@@ -16,8 +16,9 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
     public RttBoxesPageViewModel()
         : this(
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
-            DesignTime.UnitService, 
-            DesignTime.LoggerFactory)
+            DesignTime.UnitService,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
@@ -25,8 +26,9 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
     public RttBoxesPageViewModel(
         ITreeSubPageContext<IControlsGalleryPage> context,
-        IUnitService unitService, 
-        ILoggerFactory loggerFactory)
+        IUnitService unitService,
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, context)
     {
         GeoPointRttBoxViewModel = CreateGeoPointRttBoxViewModel(unitService, loggerFactory)
@@ -99,9 +101,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new TwoColumnRttBoxViewModel();
         }
 
-        var viewModel = new TwoColumnRttBoxViewModel(
-            nameof(TwoColumnRttBoxViewModel)
-        );
+        var viewModel = new TwoColumnRttBoxViewModel(nameof(TwoColumnRttBoxViewModel));
 
         viewModel.Icon = MaterialIconKind.Ruler;
         viewModel.Header = "Distance";

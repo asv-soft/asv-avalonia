@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 public class OrderedComparer : IComparer<ISupportOrder>
 {
     public static readonly OrderedComparer Instance = new();
-    
+
     public int Compare(ISupportOrder? x, ISupportOrder? y)
     {
         if (ReferenceEquals(x, y))

@@ -25,11 +25,7 @@ public class ConnectionRateStatusViewModel : StatusItem
     private readonly IncrementalRateCounter _txPackets;
 
     public ConnectionRateStatusViewModel()
-        : this(
-            DesignTime.UnitService,
-            NullLoggerFactory.Instance,
-            TimeProvider.System
-        )
+        : this(DesignTime.UnitService, NullLoggerFactory.Instance, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         var stat = new Statistic();
@@ -92,13 +88,7 @@ public class ConnectionRateStatusViewModel : StatusItem
     [field: MaybeNull]
     public StatisticViewModel FullStatistic
     {
-        get
-        {
-            return field ??= new StatisticViewModel(
-                $"{TypeId}.statistic",
-                _timeProvider
-            );
-        }
+        get { return field ??= new StatisticViewModel($"{TypeId}.statistic", _timeProvider); }
     }
 
     public override int Order => 256;

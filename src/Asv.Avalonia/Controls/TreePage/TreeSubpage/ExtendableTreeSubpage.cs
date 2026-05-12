@@ -6,7 +6,8 @@ using ObservableCollections;
 namespace Asv.Avalonia;
 
 public abstract class ExtendableTreeSubpage<TContext, TSubContext>
-    : ViewModel<TSubContext>, ITreeSubpage
+    : ViewModel<TSubContext>,
+        ITreeSubpage
     where TSubContext : class, ITreeSubpage
     where TContext : class, IPage
 {

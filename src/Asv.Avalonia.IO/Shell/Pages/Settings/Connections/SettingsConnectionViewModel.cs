@@ -133,7 +133,8 @@ public class SettingsConnectionViewModel
                 )
                 {
                     var item = View.FirstOrDefault();
-                    this.GoTo(item?.GetPathFromRoot() ?? this.GetPathFromRoot()).SafeFireAndForget();
+                    this.GoTo(item?.GetPathFromRoot() ?? this.GetPathFromRoot())
+                        .SafeFireAndForget();
                 }
                 break;
             case NotifyCollectionChangedAction.Replace:
@@ -159,7 +160,11 @@ public class SettingsConnectionViewModel
         return viewModel;
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {

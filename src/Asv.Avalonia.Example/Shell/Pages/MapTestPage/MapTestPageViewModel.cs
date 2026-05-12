@@ -24,7 +24,6 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     public MapTestPageViewModel()
         : this(
             DesignTime.PageContext,
-            
             NullLoggerFactory.Instance,
             DesignTime.DialogService,
             DesignTime.ExtensionService,
@@ -36,13 +35,12 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
     public MapTestPageViewModel(
         IPageContext context,
-        
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService extensionService,
         IMapService mapService
     )
-        : base(PageId, context,  loggerFactory, dialogService, extensionService)
+        : base(PageId, context, loggerFactory, dialogService, extensionService)
     {
         Header = RS.MapTestPageViewModel_Title;
         Icon = PageIcon;

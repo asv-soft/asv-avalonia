@@ -20,14 +20,16 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
     public InfoBoxControlsPageViewModel()
         : this(
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
-            NullLoggerFactory.Instance)
+            NullLoggerFactory.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public InfoBoxControlsPageViewModel(
         ITreeSubPageContext<IControlsGalleryPage> context,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, context)
     {
         _severity = new ReactiveProperty<Enum>(InfoBarSeverity.Informational).DisposeItWith(
@@ -40,10 +42,7 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
             RS.InfoBoxControlsPageViewModel_Example_Message
         ).DisposeItWith(Disposable);
 
-        Severity = new HistoricalEnumProperty<InfoBarSeverity>(
-            nameof(Severity),
-            _severity
-        )
+        Severity = new HistoricalEnumProperty<InfoBarSeverity>(nameof(Severity), _severity)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         InfoBoxTitle = new HistoricalStringProperty(

@@ -6,11 +6,7 @@ namespace Asv.Avalonia
 {
     public class MenuItem : ActionViewModel, IMenuItem
     {
-        public MenuItem(
-            string typeId,
-            string header,
-            string? parentId = null
-        )
+        public MenuItem(string typeId, string header, string? parentId = null)
             : base(typeId)
         {
             ParentId = parentId == null ? NavId.Empty : new NavId(parentId);

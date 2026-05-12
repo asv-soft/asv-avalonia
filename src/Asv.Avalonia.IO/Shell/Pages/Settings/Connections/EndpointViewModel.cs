@@ -17,11 +17,7 @@ public class EndpointViewModel : HeadlinedViewModel
 
     private readonly IUnit _frequencyUnit;
 
-    private EndpointViewModel(
-        string id,
-        IUnitService unitService,
-        TimeProvider timeProvider
-    )
+    private EndpointViewModel(string id, IUnitService unitService, TimeProvider timeProvider)
         : base(id)
     {
         _rxBytes = new IncrementalRateCounter(5, timeProvider);

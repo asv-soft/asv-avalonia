@@ -14,12 +14,11 @@ public class PluginsSourceViewModel : ViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public PluginsSourceViewModel(
-        IPluginServerInfo pluginServerInfo,
-        
-        ILoggerFactory loggerFactory
-    )
-        : base(ViewModelIdPart, new NavArgs(new KeyValuePair<string, string>("source",pluginServerInfo.SourceUri)))
+    public PluginsSourceViewModel(IPluginServerInfo pluginServerInfo, ILoggerFactory loggerFactory)
+        : base(
+            ViewModelIdPart,
+            new NavArgs(new KeyValuePair<string, string>("source", pluginServerInfo.SourceUri))
+        )
     {
         ArgumentNullException.ThrowIfNull(pluginServerInfo);
         ArgumentNullException.ThrowIfNull(navigationService);

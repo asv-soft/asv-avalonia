@@ -8,10 +8,7 @@ public class MeasureUnitViewModel : ViewModel
     private readonly ISearchService _searchService;
     private bool _internalChange;
 
-    public MeasureUnitViewModel(
-        IUnit item,
-        ISearchService searchService
-    )
+    public MeasureUnitViewModel(IUnit item, ISearchService searchService)
         : base(item.UnitId)
     {
         ArgumentNullException.ThrowIfNull(item);

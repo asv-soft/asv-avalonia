@@ -21,7 +21,7 @@ public sealed class UnsavedChangesDialogPayload
 /// <summary>
 /// Dialog that shows unsaved changes of the app.
 /// </summary>
-public sealed class UnsavedChangesDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
+public sealed class UnsavedChangesDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
     : IDialogPrefab<UnsavedChangesDialogPayload, bool>
 {
     public async Task<bool> ShowDialogAsync(UnsavedChangesDialogPayload dialogPayload)
@@ -31,7 +31,7 @@ public sealed class UnsavedChangesDialogPrefab(INavigationService nav, ILoggerFa
             Restrictions = dialogPayload.Restrictions,
         };
 
-        var dialogContent = new ContentDialog(vm, nav)
+        var dialogContent = new ContentDialog(vm)
         {
             Title = dialogPayload.Title,
             PrimaryButtonText = RS.DialogButton_Yes,
@@ -39,7 +39,9 @@ public sealed class UnsavedChangesDialogPrefab(INavigationService nav, ILoggerFa
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = await dialogContent.ShowAsync();
+        var result = shellHost.TopLevel is { } topLevel
+            ? await dialogContent.ShowAsync(topLevel)
+            : await dialogContent.ShowAsync();
 
         return result == ContentDialogResult.Primary;
     }

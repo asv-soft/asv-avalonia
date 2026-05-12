@@ -23,10 +23,11 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public WorkspacePageViewModel()
         : this(
-            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance, 
-            DesignTime.LoggerFactory, 
-            DesignTime.UnitService, 
-            NullMapService.Instance)
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
+            DesignTime.LoggerFactory,
+            DesignTime.UnitService,
+            NullMapService.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
@@ -233,7 +234,11 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         }
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         if (e is PageCloseAttemptEvent close)
         {

@@ -26,7 +26,8 @@ public class BackgroundCommand<TArg> : ViewModel
     public BackgroundCommand(
         string id,
         BackgroundCommandDelegate<TArg> execute,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory
+    )
         : base(id)
     {
         _execute = execute;

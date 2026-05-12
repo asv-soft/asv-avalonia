@@ -41,16 +41,18 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     public HistoricalControlsPageViewModel()
         : this(
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
-            DesignTime.UnitService, 
-            DesignTime.LoggerFactory)
+            DesignTime.UnitService,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public HistoricalControlsPageViewModel(
         ITreeSubPageContext<IControlsGalleryPage> context,
-        IUnitService unit, 
-        ILoggerFactory loggerFactory)
+        IUnitService unit,
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, context)
     {
         var un = unit.Units[VelocityUnit.Id];
@@ -149,10 +151,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
         GeoPointProperty.ForceValidate();
 
-        TagTypeProp = new HistoricalEnumProperty<AsvColorKind>(
-            nameof(TagTypeProp),
-            _tagTypeProp
-        )
+        TagTypeProp = new HistoricalEnumProperty<AsvColorKind>(nameof(TagTypeProp), _tagTypeProp)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
@@ -193,7 +192,11 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {

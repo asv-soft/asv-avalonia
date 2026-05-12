@@ -10,11 +10,7 @@ public class CreateMenuExtender(IFileAssociationService svc, ILoggerFactory logg
     {
         foreach (var file in svc.SupportedFiles.Where(x => x.CanCreate))
         {
-            var menu = new MenuItem(
-                $"{CreateMenu.MenuId}.{file.Id}",
-                file.Title,
-                CreateMenu.MenuId
-            )
+            var menu = new MenuItem($"{CreateMenu.MenuId}.{file.Id}", file.Title, CreateMenu.MenuId)
             {
                 Icon = file.Icon,
             };

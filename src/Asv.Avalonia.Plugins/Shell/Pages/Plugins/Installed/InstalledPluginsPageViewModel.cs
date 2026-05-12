@@ -25,12 +25,12 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
     public InstalledPluginsPageViewModel()
         : this(
             DesignTime.PageContext,
-            
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
-            DesignTime.ExtensionService)
+            DesignTime.ExtensionService
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         IsShowOnlyVerified.ModelValue.Value = false;
@@ -38,13 +38,13 @@ public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageV
 
     public InstalledPluginsPageViewModel(
         IPageContext context,
-        
         IPluginManager manager,
         IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        IExtensionService ext)
-        : base(PageId, context,  loggerFactory, dialogService, ext)
+        IExtensionService ext
+    )
+        : base(PageId, context, loggerFactory, dialogService, ext)
     {
         Header = RS.InstalledPluginsPageViewModel_Title;
         Icon = PageIcon;

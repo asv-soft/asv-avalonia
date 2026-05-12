@@ -26,7 +26,12 @@ public class PortViewModel : ViewModel, IPortViewModel
     private const int MaxPortNameLength = 50;
 
     public PortViewModel()
-        : this(DesignTime.Id.TypeId, DesignTime.UnitService, DesignTime.LoggerFactory, TimeProvider.System)
+        : this(
+            DesignTime.Id.TypeId,
+            DesignTime.UnitService,
+            DesignTime.LoggerFactory,
+            TimeProvider.System
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         InitArgs(Guid.NewGuid().ToString());
@@ -46,25 +51,13 @@ public class PortViewModel : ViewModel, IPortViewModel
                 };
             })
             .DisposeItWith(Disposable);
+        TagsSource.Add(new TagViewModel("ip") { Key = "ip", Value = "127.0.0.1" });
+        TagsSource.Add(new TagViewModel("port") { Key = "port", Value = "7341" });
         TagsSource.Add(
-            new TagViewModel("ip") { Key = "ip", Value = "127.0.0.1" }
+            new TagViewModel("rx") { Icon = MaterialIconKind.ArrowDownBold, Value = "12kb" }
         );
         TagsSource.Add(
-            new TagViewModel("port") { Key = "port", Value = "7341" }
-        );
-        TagsSource.Add(
-            new TagViewModel("rx")
-            {
-                Icon = MaterialIconKind.ArrowDownBold,
-                Value = "12kb",
-            }
-        );
-        TagsSource.Add(
-            new TagViewModel("tx")
-            {
-                Icon = MaterialIconKind.ArrowUpBold,
-                Value = "38kb",
-            }
+            new TagViewModel("tx") { Icon = MaterialIconKind.ArrowUpBold, Value = "38kb" }
         );
 
         var source = new ObservableList<EndpointViewModel>
@@ -122,11 +115,7 @@ public class PortViewModel : ViewModel, IPortViewModel
         RemovePortCommand = new ReactiveCommand(RemovePort).DisposeItWith(Disposable);
 
         TagsSource.Add(
-            TypeTag = new TagViewModel("type")
-            {
-                Color = AsvColorKind.Info1,
-                Key = null,
-            }
+            TypeTag = new TagViewModel("type") { Color = AsvColorKind.Info1, Key = null }
         );
 
         TagsSource.Add(

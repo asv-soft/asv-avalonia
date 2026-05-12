@@ -7,16 +7,19 @@ public static class UndoStoreMixin
 {
     extension(IHostApplicationBuilder builder)
     {
-        public IHostApplicationBuilder UseUndoStore(Action<UndoStoreServiceOptions>? configure = null)
+        public IHostApplicationBuilder UseUndoStore(
+            Action<UndoStoreServiceOptions>? configure = null
+        )
         {
             configure ??= _ => { };
-            builder.Services.AddSingleton<IUndoStoreService, UndoStoreService>()
+            builder
+                .Services.AddSingleton<IUndoStoreService, UndoStoreService>()
                 .AddOptions<UndoStoreServiceOptions>()
                 .BindConfiguration(UndoStoreServiceOptions.SectionName)
                 .PostConfigure(configure);
             return builder;
         }
-        
+
         public IHostApplicationBuilder UseDesignUndoStore()
         {
             builder.Services.AddSingleton<IUndoStoreService, NullUndoStoreService>();

@@ -10,8 +10,7 @@ public class EditUndoMenu : MenuItem
         : base(MenuId, RS.UndoCommand_CommandInfo_Name, EditMenu.MenuId)
     {
         Icon = UndoCommand.StaticInfo.Icon;
-        UndoAction.Create 
-        Command = new BindableAsyncCommand(UndoCommand.Id, this);
+        UndoAction.Create Command = new BindableAsyncCommand(UndoCommand.Id, this);
         Order = 0;
     }
 }

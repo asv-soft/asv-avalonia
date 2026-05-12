@@ -17,7 +17,6 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
     public ExamplePageViewModel()
         : this(
             DesignTime.PageContext,
-            
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
             DesignTime.ExtensionService
@@ -28,12 +27,11 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
 
     public ExamplePageViewModel(
         IPageContext context,
-        
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService extensionService
     )
-        : base(PageId, context,  loggerFactory, dialogService, extensionService)
+        : base(PageId, context, loggerFactory, dialogService, extensionService)
     {
         Header = "Example page";
         Text1 = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
@@ -43,7 +41,7 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
     }
 
     public BindableReactiveProperty<string> Text1 { get; }
-    
+
     public override IEnumerable<IViewModel> GetChildren()
     {
         return [];

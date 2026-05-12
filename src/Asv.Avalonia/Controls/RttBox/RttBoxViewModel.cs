@@ -15,10 +15,7 @@ public class RttBoxViewModel : ViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public RttBoxViewModel(
-        string id,
-        TimeSpan? networkErrorTimeout = null
-    )
+    public RttBoxViewModel(string id, TimeSpan? networkErrorTimeout = null)
         : base(id)
     {
         _timeProvider = TimeProvider.System;

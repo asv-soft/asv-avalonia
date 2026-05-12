@@ -12,6 +12,7 @@ public class SearchAction : HotKeyAction<IShell>
     public override string Description => RS.FocusSearchBoxCommand_CommandInfo_Description;
     public override MaterialIconKind Icon => MaterialIconKind.Search;
     public override KeyGesture DefaultHotKey => new(Key.F, KeyModifiers.Control);
+
     protected override async ValueTask<bool> Execute(IShell target, CancellationToken cancel)
     {
         var found = await TreeVisitorEvent.VisitAll<ISupportTextSearch>(target, cancel);

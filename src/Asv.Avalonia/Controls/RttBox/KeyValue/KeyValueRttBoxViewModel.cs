@@ -56,10 +56,7 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
             .DisposeItWith(Disposable);
     }
 
-    public KeyValueRttBoxViewModel(
-        string typeId,
-        TimeSpan? networkErrorTimeout = null
-    )
+    public KeyValueRttBoxViewModel(string typeId, TimeSpan? networkErrorTimeout = null)
         : base(typeId, networkErrorTimeout)
     {
         _itemsSource = [];

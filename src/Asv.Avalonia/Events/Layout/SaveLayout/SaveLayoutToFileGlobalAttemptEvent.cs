@@ -10,7 +10,10 @@ public static class SaveLayoutToFileGlobalAttemptMixin
 {
     public static async ValueTask<
         IReadOnlyCollection<Restriction>
-    > RequestChildApprovalToSaveLayoutToFile(this IViewModel src, CancellationToken cancel = default)
+    > RequestChildApprovalToSaveLayoutToFile(
+        this IViewModel src,
+        CancellationToken cancel = default
+    )
     {
         if (cancel.IsCancellationRequested)
         {

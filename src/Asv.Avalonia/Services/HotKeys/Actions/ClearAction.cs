@@ -11,6 +11,7 @@ public class ClearAction : HotKeyAction<ISupportClear>
     public override string Description => RS.ClearCommand_CommandInfo_Description;
     public override MaterialIconKind Icon => MaterialIconKind.Clear;
     public override KeyGesture DefaultHotKey => new(Key.Escape, KeyModifiers.Control);
+
     protected override ValueTask<bool> Execute(ISupportClear target, CancellationToken cancel)
     {
         target.Clear();

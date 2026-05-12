@@ -25,7 +25,11 @@ public abstract class DialogViewModelBase : ViewModel
         return;
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         if (e is ValidationEvent validation)
         {

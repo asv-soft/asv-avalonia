@@ -39,7 +39,6 @@ public class LogViewerViewModel
         : base(
             DesignTime.Id.TypeId,
             DesignTime.PageContext,
-            NullCommandService.Instance,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
             DesignTime.ExtensionService
@@ -142,7 +141,6 @@ public class LogViewerViewModel
 
     public LogViewerViewModel(
         IPageContext context,
-        
         ILogReaderService logReaderService,
         ISearchService search,
         ILoggerFactory loggerFactory,
@@ -150,7 +148,7 @@ public class LogViewerViewModel
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(PageId, context,  loggerFactory, dialogService, ext)
+        : base(PageId, context, loggerFactory, dialogService, ext)
     {
         _logReaderService = logReaderService;
         _search = search;
@@ -329,7 +327,11 @@ public class LogViewerViewModel
         }
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {

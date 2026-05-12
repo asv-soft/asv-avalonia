@@ -8,7 +8,12 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     public const string PageId = "geo-map";
 
     public SettingsGeoMapViewModel()
-        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullMapService.Instance, DesignTime.DialogService, DesignTime.LoggerFactory)
+        : this(
+            NullTreeSubPageContext<SettingsPageViewModel>.Instance,
+            NullMapService.Instance,
+            DesignTime.DialogService,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }

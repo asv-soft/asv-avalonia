@@ -11,7 +11,9 @@ public static class DevicePageViewModelMixin
     public static CommandArg CreateOpenPageArgs(DeviceId id)
     {
         return new StringArg(
-            new NavArgs(new KeyValuePair<string, string?>(ArgsDeviceIdKey, id.AsString())).ToString()
+            new NavArgs(
+                new KeyValuePair<string, string?>(ArgsDeviceIdKey, id.AsString())
+            ).ToString()
         );
     }
 }

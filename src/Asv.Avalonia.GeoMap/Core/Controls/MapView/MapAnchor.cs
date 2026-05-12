@@ -13,11 +13,7 @@ public class MapAnchor<TContext> : ViewModel<TContext>, IMapAnchor
     public MapAnchor(string typeId)
         : this(typeId, NullExtensionService.Instance, GeoPoint.Zero) { }
 
-    public MapAnchor(
-        string id,
-        IExtensionService ext,
-        GeoPoint? location = null
-    )
+    public MapAnchor(string id, IExtensionService ext, GeoPoint? location = null)
         : base(id, default, ext)
     {
         Title = id.ToString();

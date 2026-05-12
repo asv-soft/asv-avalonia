@@ -17,7 +17,10 @@ public class EditRedoMenu : MenuItem
 
     private void InitShell(IShell shell, TopLevel topLevel)
     {
-        shell.SelectedPage.DistinctUntilChanged().Subscribe(SelectedPageChanged).AddTo(ref DisposableBag);
+        shell
+            .SelectedPage.DistinctUntilChanged()
+            .Subscribe(SelectedPageChanged)
+            .AddTo(ref DisposableBag);
     }
 
     private void SelectedPageChanged(IPage? page)

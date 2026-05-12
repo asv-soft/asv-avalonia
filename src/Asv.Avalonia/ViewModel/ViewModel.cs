@@ -17,7 +17,7 @@ public abstract class ViewModel : IViewModel
     private static readonly CompositeDisposable DisposedDisposable = CreateDisposedDisposable();
     private DisposableBag _disposableBag;
     protected ref DisposableBag DisposableBag => ref _disposableBag;
-    
+
     private int _isDisposed;
     private CancellationTokenSource? _cancel;
     private CompositeDisposable? _dispose;
@@ -31,8 +31,9 @@ public abstract class ViewModel : IViewModel
     }
 
     public IRoutedEventController<IViewModel> Events { get; }
-    
-    public IUndoController Undo => _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
+
+    public IUndoController Undo =>
+        _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
 
     public NavId Id { get; private set; }
 
@@ -222,7 +223,7 @@ public abstract class ViewModel : IViewModel
         Parent = null;
         PropertyChanging = null;
         PropertyChanged = null;
-        
+
         var cancel = Interlocked.Exchange(ref _cancel, null);
         if (cancel?.Token.CanBeCanceled == true)
         {

@@ -2,8 +2,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class TileProviderViewModel(ITileProvider provider)
-    : ViewModel(provider.Info.Id)
+public class TileProviderViewModel(ITileProvider provider) : ViewModel(provider.Info.Id)
 {
     public BindableReactiveProperty<bool> IsCurrent { get; } = new(false);
     public ITileProvider Provider { get; } = provider;

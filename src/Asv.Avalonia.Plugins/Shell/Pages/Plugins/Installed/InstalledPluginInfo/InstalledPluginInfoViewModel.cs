@@ -21,7 +21,10 @@ public class InstalledPluginInfoViewModel : ViewModel
         IPluginManager manager,
         ILoggerFactory loggerFactory
     )
-        : base(ViewModelIdPart, new NavArgs(new KeyValuePair<string, string>("plugin", pluginInfo.Id)))
+        : base(
+            ViewModelIdPart,
+            new NavArgs(new KeyValuePair<string, string>("plugin", pluginInfo.Id))
+        )
     {
         ArgumentNullException.ThrowIfNull(pluginInfo);
         ArgumentNullException.ThrowIfNull(manager);
@@ -38,10 +41,7 @@ public class InstalledPluginInfoViewModel : ViewModel
         var isUninstalled = new ReactiveProperty<bool>(pluginInfo.IsUninstalled).DisposeItWith(
             Disposable
         );
-        IsUninstalled = new HistoricalBoolProperty(
-            nameof(IsUninstalled),
-            isUninstalled
-        )
+        IsUninstalled = new HistoricalBoolProperty(nameof(IsUninstalled), isUninstalled)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         IsLoaded = pluginInfo.IsLoaded;

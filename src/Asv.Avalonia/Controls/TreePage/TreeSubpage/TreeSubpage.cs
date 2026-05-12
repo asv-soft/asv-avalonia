@@ -33,7 +33,4 @@ public abstract class TreeSubpage : ViewModel, ITreeSubpage
 
 public abstract class TreeSubpage<TContext>(string typeId, ITreeSubPageContext<TContext> context)
     : TreeSubpage(typeId, context.Args)
-    where TContext : class, IPage
-{
-    
-}
+    where TContext : class, IPage { }

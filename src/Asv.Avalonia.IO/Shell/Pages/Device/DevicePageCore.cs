@@ -76,9 +76,9 @@ public sealed class DevicePageCore : IDisposable
         _logger.ZLogTrace($"{nameof(_owner.Id)} init args: {args}");
         Debug.Assert(_devices != null, "_devices != null");
 
-        _targetDeviceId = args
-            .FirstOrDefault(x => x.Key == DevicePageViewModelMixin.ArgsDeviceIdKey)
-            .Value;
+        _targetDeviceId = args.FirstOrDefault(x =>
+            x.Key == DevicePageViewModelMixin.ArgsDeviceIdKey
+        ).Value;
 
         if (_targetDeviceId is null)
         {

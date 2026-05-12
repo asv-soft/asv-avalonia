@@ -24,7 +24,6 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
     public PluginsMarketPageViewModel()
         : this(
             DesignTime.PageContext,
-            
             NullPluginManager.Instance,
             NullPluginBootloader.Instance,
             NullLoggerFactory.Instance,
@@ -38,14 +37,13 @@ public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewMod
 
     public PluginsMarketPageViewModel(
         IPageContext context,
-        
         IPluginManager manager,
         IPluginBootloader bootloader,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, context,  loggerFactory, dialogService, ext)
+        : base(PageId, context, loggerFactory, dialogService, ext)
     {
         ArgumentNullException.ThrowIfNull(cmd);
         ArgumentNullException.ThrowIfNull(manager);

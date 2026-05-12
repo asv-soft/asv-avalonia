@@ -187,7 +187,10 @@ public class LayoutService : AsyncDisposableOnce, ILayoutService
 
     private static string NormalizeId(string id)
     {
-        return string.Join("_", id.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries));
+        return string.Join(
+            "_",
+            id.Split(Path.GetInvalidFileNameChars(), StringSplitOptions.RemoveEmptyEntries)
+        );
     }
 
     private TPocoType Get<TPocoType>(string key, Lazy<TPocoType> defaultValue)

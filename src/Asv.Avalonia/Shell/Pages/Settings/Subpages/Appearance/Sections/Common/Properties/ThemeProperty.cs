@@ -1,14 +1,19 @@
+using Asv.Common;
+using Asv.Modeling;
 using R3;
 
 namespace Asv.Avalonia;
 
 public class ThemeProperty : ViewModel
 {
+    public const string ViewModelId = "theme";
+
     private readonly IThemeService _svc;
     private bool _internalChange;
-    private readonly IDisposable _sub1;
-    private readonly IDisposable _sub2;
-    public const string ViewModelId = "theme.current";
+    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoHandler;
+
+    public IEnumerable<IThemeInfo> Items => _svc.Themes;
+    public BindableReactiveProperty<IThemeInfo> SelectedItem { get; }
 
     public ThemeProperty()
         : this(DesignTime.ThemeService)
@@ -20,24 +25,56 @@ public class ThemeProperty : ViewModel
         : base(ViewModelId)
     {
         _svc = svc;
-        SelectedItem = new BindableReactiveProperty<IThemeInfo>(svc.CurrentTheme.CurrentValue);
+        SelectedItem = new BindableReactiveProperty<IThemeInfo>(
+            svc.CurrentTheme.CurrentValue
+        ).DisposeItWith(Disposable);
         _internalChange = true;
-        _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);
-        _sub2 = svc.CurrentTheme.Subscribe(OnChangeByModel);
+        SelectedItem.SubscribeAwait(OnChangedByUser).DisposeItWith(Disposable);
+        svc.CurrentTheme.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
         _internalChange = false;
+        _undoHandler = Undo.CreateValueChange<string>("default", ApplyTheme, ApplyTheme)
+            .DisposeItWith(Disposable);
     }
 
-    private async ValueTask OnChangedByUser(IThemeInfo userValue, CancellationToken cancel)
+    private ValueTask OnChangedByUser(IThemeInfo userValue, CancellationToken cancel)
     {
         if (_internalChange)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        var oldValue = _svc.CurrentTheme.Value.Id;
+        if (oldValue == userValue.Id)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        try
+        {
+            _internalChange = true;
+            ApplyTheme(userValue.Id);
+            _undoHandler.Publish(oldValue, userValue.Id);
+            return ValueTask.CompletedTask;
+        }
+        catch (Exception exception)
+        {
+            return ValueTask.FromException(exception);
+        }
+        finally
+        {
+            _internalChange = false;
+        }
+    }
+
+    private void ApplyTheme(string themeId)
+    {
+        var theme = _svc.Themes.FirstOrDefault(x => x.Id == themeId);
+        if (theme is null)
         {
             return;
         }
 
-        _internalChange = true;
-        var newValue = new StringArg(userValue.Id);
-        await this.ExecuteCommand(ChangeThemeFreeCommand.Id, newValue);
-        _internalChange = false;
+        _svc.CurrentTheme.Value = theme;
     }
 
     private void OnChangeByModel(IThemeInfo modelValue)
@@ -47,23 +84,8 @@ public class ThemeProperty : ViewModel
         _internalChange = false;
     }
 
-    public IEnumerable<IThemeInfo> Items => _svc.Themes;
-    public BindableReactiveProperty<IThemeInfo> SelectedItem { get; }
-
     public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _sub1.Dispose();
-            _sub2.Dispose();
-            SelectedItem.Dispose();
-        }
-
-        base.Dispose(disposing);
     }
 }

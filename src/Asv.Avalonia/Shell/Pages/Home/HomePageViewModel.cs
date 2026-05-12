@@ -105,7 +105,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(PageId, context,  loggerFactory, dialogService, ext)
+        : base(PageId, context, loggerFactory, dialogService, ext)
     {
         AppInfo = appInfo;
         Icon = PageIcon;
@@ -119,9 +119,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
 
         Items = [];
 
-        ItemsList = Items
-            .CreateView(x => new HomePageItemDecorator(x))
-            .DisposeItWith(Disposable);
+        ItemsList = Items.CreateView(x => new HomePageItemDecorator(x)).DisposeItWith(Disposable);
 
         ItemsList.DisposeMany().DisposeItWith(Disposable);
         ItemsList.SetRoutableParent(this).DisposeItWith(Disposable);

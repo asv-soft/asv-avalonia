@@ -64,10 +64,7 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
             .DisposeItWith(Disposable);
     }
 
-    public TwoColumnRttBoxViewModel(
-        string typeId,
-        TimeSpan? networkErrorTimeout = null
-    )
+    public TwoColumnRttBoxViewModel(string typeId, TimeSpan? networkErrorTimeout = null)
         : base(typeId, networkErrorTimeout)
     {
         Left = new KeyValueViewModel(0).DisposeItWith(Disposable);

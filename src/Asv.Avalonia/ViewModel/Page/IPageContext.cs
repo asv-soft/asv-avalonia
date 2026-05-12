@@ -17,7 +17,7 @@ public class PageContext(NavArgs navArgs, IUndoHistoryStore undoStore) : IPageCo
 public class NullPageContext : IPageContext
 {
     public static IPageContext Instance { get; } = new NullPageContext();
-    
+
     public NavArgs NavArgs { get; } = NavArgs.Empty;
-    public IUndoHistoryStore UndoStore => NullHistoryStore.Instance;
+    public IUndoHistoryStore UndoStore => NullUndoHistoryStore.Instance;
 }

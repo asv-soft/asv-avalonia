@@ -37,9 +37,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         _host = host;
         _cfg = cfg;
         _logger = loggerFactory.CreateLogger<HotKeyService>();
-        _actions = actions
-            .GroupBy(x => x.ActionId)
-            .ToDictionary(x => x.Key, x => x.Last());
+        _actions = actions.GroupBy(x => x.ActionId).ToDictionary(x => x.Key, x => x.Last());
         _currentHotKeys = LoadHotKeys();
         _onHotKey = new Subject<KeyGesture>().AddTo(ref DisposableBag);
         IsHotKeyEnabled = true;
@@ -59,7 +57,9 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
             {
                 config.HotKeys.Remove(actionId);
                 configChanged = true;
-                _logger.ZLogWarning($"Hot key action '{actionId}' not found => remove it from config");
+                _logger.ZLogWarning(
+                    $"Hot key action '{actionId}' not found => remove it from config"
+                );
                 continue;
             }
 
@@ -113,9 +113,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         }
 
         _host.TopLevel.KeyDown += OnKeyDown;
-        Disposable
-            .Create(() => _host.TopLevel.KeyDown -= OnKeyDown)
-            .AddTo(ref DisposableBag);
+        Disposable.Create(() => _host.TopLevel.KeyDown -= OnKeyDown).AddTo(ref DisposableBag);
     }
 
     private async void OnKeyDown(object? sender, KeyEventArgs e)

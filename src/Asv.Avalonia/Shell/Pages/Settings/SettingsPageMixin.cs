@@ -75,7 +75,7 @@ public static class SettingsPageMixin
             where TViewModel : class, ISettingsSubPage
             where TView : Control
         {
-                builder.Parent.Parent.Shell.TreeSubPages.Register<
+            builder.Parent.Parent.Shell.TreeSubPages.Register<
                 ISettingsPage,
                 ISettingsSubPage,
                 TViewModel,

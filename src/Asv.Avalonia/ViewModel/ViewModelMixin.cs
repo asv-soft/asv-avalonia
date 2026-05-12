@@ -11,28 +11,31 @@ public static class ViewModelMixin
     {
         public Builder ViewModel => new(builder);
     }
-    
-    public delegate TViewModelInterface FactoryDelegate<out TViewModelInterface, in TArgs>(TArgs args)
+
+    public delegate TViewModelInterface FactoryDelegate<out TViewModelInterface, in TArgs>(
+        TArgs args
+    )
         where TViewModelInterface : IViewModel;
-    
+
     extension(IServiceProvider services)
     {
         public TViewModelInterface CreateViewModel<TViewModelInterface, TArgs>(TArgs args)
             where TViewModelInterface : IViewModel
         {
-            return 
-                services
+            return services
                 .GetRequiredService<FactoryDelegate<TViewModelInterface, TArgs>>()
                 .Invoke(args);
         }
-        
-        public TViewModelInterface CreateViewModel<TViewModelInterface, TArgs>(string key, TArgs args)
+
+        public TViewModelInterface CreateViewModel<TViewModelInterface, TArgs>(
+            string key,
+            TArgs args
+        )
             where TViewModelInterface : IViewModel
         {
-            return 
-                services
-                    .GetRequiredKeyedService<FactoryDelegate<TViewModelInterface, TArgs>>(key)
-                    .Invoke(args);
+            return services
+                .GetRequiredKeyedService<FactoryDelegate<TViewModelInterface, TArgs>>(key)
+                .Invoke(args);
         }
     }
 
@@ -45,6 +48,7 @@ public static class ViewModelMixin
             builder.Services.AddKeyedTransient<TViewModelInterface, TViewModelImplementation>(key);
             return this;
         }
+
         public Builder Register<TViewModelInterface, TViewModelImplementation>()
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
@@ -57,29 +61,38 @@ public static class ViewModelMixin
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
         {
-            builder.Services.AddTransient<FactoryDelegate<TViewModelInterface, TArgs>>(
-                services => 
-                    args =>
-                    {
-                        Debug.Assert(args != null, nameof(args) + " != null");
-                        return ActivatorUtilities.CreateInstance<TViewModelImplementation>(services, args);
-                    });
+            builder.Services.AddTransient<FactoryDelegate<TViewModelInterface, TArgs>>(services =>
+                args =>
+                {
+                    Debug.Assert(args != null, nameof(args) + " != null");
+                    return ActivatorUtilities.CreateInstance<TViewModelImplementation>(
+                        services,
+                        args
+                    );
+                }
+            );
             return this;
         }
-        public Builder RegisterKeyedWithArgs<TViewModelInterface, TViewModelImplementation, TArgs>(string key)
+
+        public Builder RegisterKeyedWithArgs<TViewModelInterface, TViewModelImplementation, TArgs>(
+            string key
+        )
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
         {
             builder.Services.AddKeyedTransient<FactoryDelegate<TViewModelInterface, TArgs>>(
                 key,
-                (services, _) => 
+                (services, _) =>
                     args =>
                     {
                         Debug.Assert(args != null, nameof(args) + " != null");
-                        return ActivatorUtilities.CreateInstance<TViewModelImplementation>(services, args);
-                    });
+                        return ActivatorUtilities.CreateInstance<TViewModelImplementation>(
+                            services,
+                            args
+                        );
+                    }
+            );
             return this;
         }
-        
     }
 }

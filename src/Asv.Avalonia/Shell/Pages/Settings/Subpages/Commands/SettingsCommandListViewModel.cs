@@ -30,10 +30,10 @@ public class SettingsCommandListViewModel : SettingsSubPage
     public SettingsCommandListViewModel()
         : this(
             NullTreeSubPageContext<SettingsPageViewModel>.Instance,
-            
             DesignTime.LoggerFactory,
             NullDialogService.Instance,
-            NullSearchService.Instance)
+            NullSearchService.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -43,7 +43,8 @@ public class SettingsCommandListViewModel : SettingsSubPage
         ICommandService commandsService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        ISearchService searchService)
+        ISearchService searchService
+    )
         : base(PageId, context)
     {
         _commandsService = commandsService;
@@ -107,10 +108,7 @@ public class SettingsCommandListViewModel : SettingsSubPage
 
         ResetAllHotKeysCommand = new ReactiveCommand(ResetAllHotKeys).DisposeItWith(Disposable);
 
-        var menu = new MenuItem(
-            "reset",
-            RS.SettingsCommandListView_ResetButton_Content
-        )
+        var menu = new MenuItem("reset", RS.SettingsCommandListView_ResetButton_Content)
         {
             Order = 1,
             Icon = MaterialIconKind.Refresh,
@@ -226,7 +224,11 @@ public class SettingsCommandListViewModel : SettingsSubPage
         base.Dispose(disposing);
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {

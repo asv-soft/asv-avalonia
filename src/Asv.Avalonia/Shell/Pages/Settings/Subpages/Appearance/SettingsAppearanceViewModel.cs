@@ -17,7 +17,10 @@ public class SettingsAppearanceViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public SettingsAppearanceViewModel(ITreeSubPageContext<ISettingsPage> context, IExtensionService ext)
+    public SettingsAppearanceViewModel(
+        ITreeSubPageContext<ISettingsPage> context,
+        IExtensionService ext
+    )
         : base(PageId, context, ext)
     {
         Sections = [];

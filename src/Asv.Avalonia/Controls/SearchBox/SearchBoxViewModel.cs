@@ -67,15 +67,7 @@ public class SearchBoxViewModel
         textValueObservable
             .DistinctUntilChanged()
             .WhereNotNull()
-            .SubscribeAwait(
-                async (x, c) =>
-                    await this.ExecuteCommand(
-                        TextSearchCommand.Id,
-                        CommandArg.CreateString(x),
-                        cancel: c
-                    ),
-                AwaitOperation.Parallel
-            )
+            .SubscribeAwait((x, _) => QueryAsync(x), AwaitOperation.Parallel)
             .DisposeItWith(Disposable);
 
         Disposable.AddAction(() => _cancellationTokenSource?.Cancel(false));
@@ -106,9 +98,10 @@ public class SearchBoxViewModel
         Text.ViewValue.Value = string.Empty;
     }
 
-    public async ValueTask ClearCommandCall()
+    public ValueTask ClearCommandCall()
     {
-        await this.ExecuteCommand(ClearCommand.Id);
+        Clear();
+        return ValueTask.CompletedTask;
     }
 
     public override IEnumerable<IViewModel> GetChildren()
@@ -130,6 +123,12 @@ public class SearchBoxViewModel
         }
 
         InternalExecuteAsync(text ?? string.Empty).SafeFireAndForget(ErrorHandler);
+    }
+
+    private ValueTask QueryAsync(string text)
+    {
+        Query(text);
+        return ValueTask.CompletedTask;
     }
 
     public void Focus()

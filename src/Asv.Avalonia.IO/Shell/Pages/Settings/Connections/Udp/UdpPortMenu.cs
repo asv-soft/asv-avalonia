@@ -7,10 +7,7 @@ namespace Asv.Avalonia.IO;
 public class UdpPortMenu : MenuItem
 {
     public UdpPortMenu(ILoggerFactory loggerFactory)
-        : base(
-            UdpProtocolPort.Scheme,
-            RS.SettingsConnectionUdpPortExtension_MenuItem_Header
-        )
+        : base(UdpProtocolPort.Scheme, RS.SettingsConnectionUdpPortExtension_MenuItem_Header)
     {
         Icon = UdpPortViewModel.DefaultIcon;
         Command = new BindableAsyncCommand(PortCrudCommand.Id, this);

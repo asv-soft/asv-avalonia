@@ -37,10 +37,7 @@ public class StatisticViewModel : ViewModel
             });
     }
 
-    public StatisticViewModel(
-        string typeId,
-        TimeProvider timeProvider
-    )
+    public StatisticViewModel(string typeId, TimeProvider timeProvider)
         : base(typeId)
     {
         _rxBytes = new IncrementalRateCounter(5, timeProvider);

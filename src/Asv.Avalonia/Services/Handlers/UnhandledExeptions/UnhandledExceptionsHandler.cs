@@ -77,7 +77,10 @@ public class UnhandledExceptionsHandler(
         }
         if (options.Value.UiThread.PublishToLogger)
         {
-            _logger.ZLogError(e.Exception, $"Unhandled exception in AppDomain: {e.Exception.Message}");
+            _logger.ZLogError(
+                e.Exception,
+                $"Unhandled exception in AppDomain: {e.Exception.Message}"
+            );
         }
         if (options.Value.UiThread.ForceApplicationCrash)
         {

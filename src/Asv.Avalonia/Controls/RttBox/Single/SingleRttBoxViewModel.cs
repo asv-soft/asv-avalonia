@@ -46,10 +46,7 @@ public class SingleRttBoxViewModel : RttBoxViewModel
             .DisposeItWith(Disposable);
     }
 
-    public SingleRttBoxViewModel(
-        string typeId,
-        TimeSpan? networkErrorTimeout = null
-    )
+    public SingleRttBoxViewModel(string typeId, TimeSpan? networkErrorTimeout = null)
         : base(typeId, networkErrorTimeout) { }
 
     public string? UnitSymbol

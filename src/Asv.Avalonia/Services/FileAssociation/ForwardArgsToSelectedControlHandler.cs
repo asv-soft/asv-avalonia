@@ -8,7 +8,6 @@ namespace Asv.Avalonia;
 public class ForwardArgsToSelectedControlHandler(
     ISoloRunFeature soloRunFeature,
     IFileAssociationService svc,
-    
     IShellHost shellHost
 ) : IHostedService
 {

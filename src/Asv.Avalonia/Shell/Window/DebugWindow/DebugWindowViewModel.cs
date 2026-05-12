@@ -13,11 +13,7 @@ public class DebugWindowViewModel : ViewModel, IDebugWindow
     private readonly ISynchronizedView<IPage, DebugPageViewModel> _pageView;
 
     public DebugWindowViewModel()
-        : this(
-            DesignTime.ShellHost,
-            DesignTime.HotKeyService,
-            DesignTime.LoggerFactory
-        ) { }
+        : this(DesignTime.ShellHost, DesignTime.HotKeyService, DesignTime.LoggerFactory) { }
 
     public DebugWindowViewModel(
         IShellHost host,
@@ -27,7 +23,8 @@ public class DebugWindowViewModel : ViewModel, IDebugWindow
         : base(ModelId)
     {
         Debug.Assert(host.Shell != null, "host.Shell != null");
-        SelectedControlPath = host.Shell.Navigation.SelectedPath.ToReadOnlyBindableReactiveProperty();
+        SelectedControlPath =
+            host.Shell.Navigation.SelectedPath.ToReadOnlyBindableReactiveProperty();
         _pageView = host.Shell.Pages.CreateView(x => new DebugPageViewModel(x));
         Pages = _pageView.ToNotifyCollectionChanged();
         BackwardStack = host.Shell.Navigation.BackwardStack.ToNotifyCollectionChanged();
@@ -58,8 +55,7 @@ public class DebugWindowViewModel : ViewModel, IDebugWindow
     }
 }
 
-public class DebugPageViewModel(IPage page)
-    : ViewModel(page.Id.TypeId, page.Id.Args)
+public class DebugPageViewModel(IPage page) : ViewModel(page.Id.TypeId, page.Id.Args)
 {
     public NotifyCollectionChangedSynchronizedViewList<IUndoSnapshot> RedoStack { get; } =
         page.UndoHistory.RedoStack.ToNotifyCollectionChanged();

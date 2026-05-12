@@ -8,18 +8,20 @@ public sealed class HotKeyCaptureDialogPayload
 
     public required string Message { get; init; }
 
-    public HotKeyInfo? CurrentHotKey { get; init; }
+    public global::Avalonia.Input.KeyGesture? CurrentHotKey { get; init; }
 }
 
-public sealed class HotKeyCaptureDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
-    : IDialogPrefab<HotKeyCaptureDialogPayload, HotKeyInfo?>
+public sealed class HotKeyCaptureDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
+    : IDialogPrefab<HotKeyCaptureDialogPayload, global::Avalonia.Input.KeyGesture?>
 {
-    public async Task<HotKeyInfo?> ShowDialogAsync(HotKeyCaptureDialogPayload dialogPayload)
+    public async Task<global::Avalonia.Input.KeyGesture?> ShowDialogAsync(
+        HotKeyCaptureDialogPayload dialogPayload
+    )
     {
         using var vm = new DialogItemHotKeyCaptureViewModel(loggerFactory);
         vm.HotKey.OnNext(dialogPayload.CurrentHotKey);
 
-        var dialogContent = new ContentDialog(vm, nav)
+        var dialogContent = new ContentDialog(vm)
         {
             Title = dialogPayload.Title,
             PrimaryButtonText = RS.DialogButton_Save,
@@ -27,7 +29,9 @@ public sealed class HotKeyCaptureDialogPrefab(INavigationService nav, ILoggerFac
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = await dialogContent.ShowAsync();
+        var result = shellHost.TopLevel is { } topLevel
+            ? await dialogContent.ShowAsync(topLevel)
+            : await dialogContent.ShowAsync();
 
         if (result == ContentDialogResult.Primary)
         {

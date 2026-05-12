@@ -21,7 +21,7 @@ public sealed class SaveCancelDialogPayload
 /// <summary>
 /// Dialog with options to Save, Don't Save, or Cancel.
 /// </summary>
-public sealed class SaveCancelDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
+public sealed class SaveCancelDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
     : IDialogPrefab<SaveCancelDialogPayload, bool>
 {
     public async Task<bool> ShowDialogAsync(SaveCancelDialogPayload dialogPayload)
@@ -30,7 +30,7 @@ public sealed class SaveCancelDialogPrefab(INavigationService nav, ILoggerFactor
         {
             Message = dialogPayload.Message,
         };
-        var dialogContent = new ContentDialog(vm, nav)
+        var dialogContent = new ContentDialog(vm)
         {
             Title = dialogPayload.Title,
             PrimaryButtonText = RS.DialogButton_Save,
@@ -38,7 +38,9 @@ public sealed class SaveCancelDialogPrefab(INavigationService nav, ILoggerFactor
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = await dialogContent.ShowAsync();
+        var result = shellHost.TopLevel is { } topLevel
+            ? await dialogContent.ShowAsync(topLevel)
+            : await dialogContent.ShowAsync();
 
         return result == ContentDialogResult.Primary;
     }

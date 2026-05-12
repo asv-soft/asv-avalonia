@@ -8,13 +8,10 @@ public sealed class HistoricalBoolProperty
     : BindablePropertyBase<bool, bool>,
         IHistoricalProperty<bool>
 {
-    private bool _externalChange;
     private bool _internalChange;
+    private readonly IUndoChangeSink<ValueUndoChange<bool>> _undoSink;
 
-    public HistoricalBoolProperty(
-        string typeId,
-        ReactiveProperty<bool> modelValue
-    )
+    public HistoricalBoolProperty(string typeId, ReactiveProperty<bool> modelValue)
         : base(typeId)
     {
         ModelValue = modelValue;
@@ -26,6 +23,13 @@ public sealed class HistoricalBoolProperty
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
+        _undoSink = Undo.CreateValueChange<bool>("default", ApplyBoolValue, ApplyBoolValue)
+            .DisposeItWith(Disposable);
+    }
+
+    private void ApplyBoolValue(bool value)
+    {
+        ModelValue.Value = value;
     }
 
     public override ReactiveProperty<bool> ModelValue { get; }
@@ -43,18 +47,26 @@ public sealed class HistoricalBoolProperty
             return;
         }
 
-        _externalChange = true;
-        await ApplyValueToModel(userValue, cancel);
-        _externalChange = false;
-    }
-
-    protected override void OnChangeByModel(bool modelValue)
-    {
-        if (_externalChange)
+        var oldValue = ModelValue.Value;
+        if (oldValue == userValue)
         {
             return;
         }
 
+        try
+        {
+            _internalChange = true;
+            ApplyBoolValue(userValue);
+            _undoSink.Publish(oldValue, userValue);
+        }
+        finally
+        {
+            _internalChange = false;
+        }
+    }
+
+    protected override void OnChangeByModel(bool modelValue)
+    {
         _internalChange = true;
         ViewValue.OnNext(modelValue);
         _internalChange = false;
@@ -65,9 +77,9 @@ public sealed class HistoricalBoolProperty
         return [];
     }
 
-    protected override async ValueTask ApplyValueToModel(bool value, CancellationToken cancel)
+    protected override ValueTask ApplyValueToModel(bool value, CancellationToken cancel)
     {
-        var newValue = new BoolArg(value);
-        await this.ExecuteCommand(ChangeBoolPropertyCommand.Id, newValue, cancel);
+        ApplyBoolValue(value);
+        return ValueTask.CompletedTask;
     }
 }

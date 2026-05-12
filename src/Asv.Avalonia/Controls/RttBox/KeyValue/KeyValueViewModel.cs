@@ -2,8 +2,7 @@ using Asv.Modeling;
 
 namespace Asv.Avalonia;
 
-public sealed class KeyValueViewModel(int index)
-    : ViewModel($"{BaseIdPart}_{index}")
+public sealed class KeyValueViewModel(int index) : ViewModel($"{BaseIdPart}_{index}")
 {
     public const string BaseIdPart = "key-value";
 

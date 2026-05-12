@@ -23,4 +23,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Services\Cmd\Command\Info\" />
+    </ItemGroup>
 </Project>

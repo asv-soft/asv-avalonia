@@ -4,8 +4,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia;
 
-public class DialogItemTextViewModel(ILoggerFactory loggerFactory)
-    : DialogViewModelBase(DialogId)
+public class DialogItemTextViewModel(ILoggerFactory loggerFactory) : DialogViewModelBase(DialogId)
 {
     public const string DialogId = $"{BaseId}.item.text";
 

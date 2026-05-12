@@ -1,7 +1,7 @@
+using System.Text;
 using Asv.Modeling;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System.Text;
 
 namespace Asv.Avalonia;
 
@@ -54,11 +54,7 @@ public class UndoStoreService : IUndoStoreService
         var builder = new StringBuilder(value.Length);
         foreach (var ch in value)
         {
-            if (
-                (ch >= 'a' && ch <= 'z')
-                || (ch >= '0' && ch <= '9')
-                || ch is '.' or '-'
-            )
+            if ((ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch is '.' or '-')
             {
                 builder.Append(ch);
                 continue;

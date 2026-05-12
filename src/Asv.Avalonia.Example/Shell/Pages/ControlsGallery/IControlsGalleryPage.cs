@@ -13,9 +13,10 @@ public interface IControlsGalleryPage : ITreePageViewModel
 
 public interface IControlsGallerySubPage : ITreeSubpage { }
 
-public abstract class ControlsGallerySubPage(string id, ITreeSubPageContext<IControlsGalleryPage> context)
-    : TreeSubpage<IControlsGalleryPage>(id, context),
-        IControlsGallerySubPage
+public abstract class ControlsGallerySubPage(
+    string id,
+    ITreeSubPageContext<IControlsGalleryPage> context
+) : TreeSubpage<IControlsGalleryPage>(id, context), IControlsGallerySubPage
 {
     public override IEnumerable<IViewModel> GetChildren() => Menu;
 }

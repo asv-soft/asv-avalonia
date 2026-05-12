@@ -97,14 +97,13 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         ITreeSubPageContext<IControlsGalleryPage> context,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        
         IUnitService unitService
     )
         : base(PageId, context)
     {
         _loggerFactory = loggerFactory;
         _logger = loggerFactory.CreateLogger<DialogControlsPageViewModel>();
-        
+
         #region Units
 
         var latUnit = unitService.Units[LatitudeUnit.Id];
@@ -714,7 +713,11 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {

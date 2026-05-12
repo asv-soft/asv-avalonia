@@ -31,14 +31,13 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     protected TreePageViewModel(
         string typeId,
         IPageContext context,
-        
         IServiceProvider container,
         ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
     )
-        : base(typeId, context,  loggerFactory, dialogService, ext)
+        : base(typeId, context, loggerFactory, dialogService, ext)
     {
         _container = container;
         _loggerFactory = loggerFactory;
@@ -185,7 +184,11 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         return _container.CreateTreeSubPage<TContext, TSubPage>(id.TypeId, context);
     }
 
-    private ValueTask InternalCatchEvent(IViewModel owner, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel owner,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {
@@ -236,7 +239,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     private void SetSelectedNodeFromConfig(TreePageViewModelConfig cfg)
     {
         var navId = new NavId(cfg.SelectedNodeId);
-        
+
         var selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == navId);
 
         SelectedNode.Value = selectedNode;
@@ -271,10 +274,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     public BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
 
-    public BindableReactiveProperty<ObservableTreeNode<
-        ITreePage,
-        NavId
-    >?> SelectedNode { get; }
+    public BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?> SelectedNode { get; }
     public ObservableList<ITreePage> Nodes { get; }
 
     protected override void AfterLoadExtensions()

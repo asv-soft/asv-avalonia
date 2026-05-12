@@ -1,4 +1,5 @@
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -9,8 +10,8 @@ public sealed class HistoricalStringProperty
         IHistoricalProperty<string?>
 {
     private readonly IList<Func<string?, ValidationResult>> _validationRules = [];
-    private bool _externalChange;
     private bool _internalChange;
+    private readonly IUndoChangeSink<ValueUndoChange<string?>> _undoSink;
 
     public HistoricalStringProperty(
         string id,
@@ -31,6 +32,13 @@ public sealed class HistoricalStringProperty
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
+        _undoSink = Undo.CreateValueChange<string?>("default", ApplyStringValue, ApplyStringValue)
+            .DisposeItWith(Disposable);
+    }
+
+    private void ApplyStringValue(string? value)
+    {
+        ModelValue.Value = value;
     }
 
     public override ReactiveProperty<string?> ModelValue { get; }
@@ -60,30 +68,43 @@ public sealed class HistoricalStringProperty
         return null;
     }
 
-    protected override async ValueTask OnChangedByUser(string? userValue, CancellationToken cancel)
+    protected override ValueTask OnChangedByUser(string? userValue, CancellationToken cancel)
     {
         if (ViewValue.HasErrors)
         {
-            return;
+            return ValueTask.CompletedTask;
         }
 
         if (_internalChange)
         {
-            return;
+            return ValueTask.CompletedTask;
         }
 
-        _externalChange = true;
-        await ApplyValueToModel(userValue ?? string.Empty, cancel);
-        _externalChange = false;
+        var oldValue = ModelValue.Value;
+        if (oldValue == userValue)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        try
+        {
+            _internalChange = true;
+            ApplyStringValue(userValue);
+            _undoSink.Publish(oldValue, userValue);
+            return ValueTask.CompletedTask;
+        }
+        catch (Exception exception)
+        {
+            return ValueTask.FromException(exception);
+        }
+        finally
+        {
+            _internalChange = false;
+        }
     }
 
     protected override void OnChangeByModel(string? modelValue)
     {
-        if (_externalChange)
-        {
-            return;
-        }
-
         _internalChange = true;
         ViewValue.OnNext(modelValue);
         _internalChange = false;
@@ -104,10 +125,10 @@ public sealed class HistoricalStringProperty
         }
     }
 
-    protected override async ValueTask ApplyValueToModel(string? value, CancellationToken cancel)
+    protected override ValueTask ApplyValueToModel(string? value, CancellationToken cancel)
     {
-        var newValue = new StringArg(value ?? string.Empty);
-        await this.ExecuteCommand(ChangeStringPropertyCommand.Id, newValue, cancel);
+        ApplyStringValue(value);
+        return ValueTask.CompletedTask;
     }
 
     protected override void Dispose(bool disposing)

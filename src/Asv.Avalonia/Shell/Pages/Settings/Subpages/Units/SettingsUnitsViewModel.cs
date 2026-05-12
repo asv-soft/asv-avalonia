@@ -1,9 +1,7 @@
-using System.Buffers;
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
 using Material.Icons;
-using MemoryPack;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -23,9 +21,15 @@ public class SettingsUnitsViewModel : SettingsSubPage
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
     private readonly IUnitService _unitsService;
     private SettingsUnitsViewModelConfig? _config;
+    private readonly IUndoChangeSink<ValueUndoChange<Dictionary<string, string>>> _undoHandler;
 
     public SettingsUnitsViewModel()
-        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullSearchService.Instance, DesignTime.UnitService, DesignTime.LoggerFactory)
+        : this(
+            NullTreeSubPageContext<SettingsPageViewModel>.Instance,
+            NullSearchService.Instance,
+            DesignTime.UnitService,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -34,7 +38,8 @@ public class SettingsUnitsViewModel : SettingsSubPage
         ITreeSubPageContext<ISettingsPage> context,
         ISearchService searchService,
         IUnitService unitsService,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, context)
     {
         ArgumentNullException.ThrowIfNull(searchService);
@@ -76,10 +81,13 @@ public class SettingsUnitsViewModel : SettingsSubPage
         Menu.Add(menu);
 
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
-        
-        
-        Undo.Register(handler);
 
+        _undoHandler = Undo.CreateValueChange<Dictionary<string, string>>(
+                "default",
+                ApplyUnits,
+                ApplyUnits
+            )
+            .DisposeItWith(Disposable);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<MeasureUnitViewModel> Items { get; }
@@ -111,29 +119,45 @@ public class SettingsUnitsViewModel : SettingsSubPage
         return Task.CompletedTask;
     }
 
-    private async ValueTask ResetAll(Unit arg, CancellationToken cancel)
+    private ValueTask ResetAll(Unit arg, CancellationToken cancel)
     {
-        using var change = Undo.BeginChangePublication();
-        var defaultKv = _unitsService.Units.Select(x=> )
-        
-        await this.ExecuteCommand(ResetUnitsCommand.Id, new DictArg(defaultUnitIds), cancel);
+        try
+        {
+            cancel.ThrowIfCancellationRequested();
+
+            var defaultKv = _unitsService.Units.ToDictionary(
+                x => x.Key,
+                x => x.Value.InternationalSystemUnit.UnitItemId
+            );
+
+            var currentKv = _unitsService.Units.ToDictionary(
+                x => x.Key,
+                x => x.Value.CurrentUnitItem.Value.UnitItemId
+            );
+
+            _undoHandler.Publish(currentKv, defaultKv);
+            ApplyUnits(defaultKv);
+            return ValueTask.CompletedTask;
+        }
+        catch (Exception exception)
+        {
+            return ValueTask.FromException(exception);
+        }
     }
 
-    [MemoryPackable]
-    public partial class UnitsChanges : IChange
+    private void ApplyUnits(IReadOnlyDictionary<string, string> units)
     {
-        public Dictionary<string, string> _changes = new();
-        public void Serialize(IBufferWriter<byte> writer)
+        foreach (var (unitId, unitItemId) in units)
         {
-            throw new NotImplementedException();
-        }
+            if (!_unitsService.Units.TryGetValue(unitId, out var unit))
+            {
+                continue;
+            }
 
-        public void Deserialize(ReadOnlySequence<byte> data)
-        {
-            throw new NotImplementedException();
+            unit.CurrentUnitItem.Value = unit[unitItemId];
         }
     }
-    
+
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Search;
@@ -148,7 +172,11 @@ public class SettingsUnitsViewModel : SettingsSubPage
         }
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {
@@ -201,5 +229,3 @@ public class SettingsUnitsViewModel : SettingsSubPage
         base.Dispose(disposing);
     }
 }
-
-

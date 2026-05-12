@@ -7,10 +7,7 @@ namespace Asv.Avalonia.IO;
 public class TcpClientPortMenu : MenuItem
 {
     public TcpClientPortMenu(ILoggerFactory loggerFactory)
-        : base(
-            TcpClientProtocolPort.Scheme,
-            RS.SettingsConnectionTcpExtension_MenuItem_Header
-        )
+        : base(TcpClientProtocolPort.Scheme, RS.SettingsConnectionTcpExtension_MenuItem_Header)
     {
         Icon = TcpClientPortViewModel.DefaultIcon;
         Command = new BindableAsyncCommand(PortCrudCommand.Id, this);

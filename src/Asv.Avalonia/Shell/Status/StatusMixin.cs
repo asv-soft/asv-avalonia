@@ -9,7 +9,7 @@ public static class StatusMixin
     {
         public Builder Status => new(builder);
     }
-    
+
     public class Builder(ShellMixin.Builder builder)
     {
         public Builder Register<TStatusViewModel, TView>()

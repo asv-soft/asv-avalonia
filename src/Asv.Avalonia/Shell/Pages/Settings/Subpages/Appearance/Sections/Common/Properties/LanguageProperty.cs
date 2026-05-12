@@ -1,14 +1,17 @@
+using Asv.Common;
+using Asv.Modeling;
 using R3;
 
 namespace Asv.Avalonia;
 
 public class LanguageProperty : ViewModel
 {
-    public const string ViewModelId = "language.current";
+    public const string ViewModelId = "language";
 
     private readonly ILocalizationService _svc;
     private readonly YesOrNoDialogPrefab _dialog;
     private bool _internalChange;
+    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
     public IEnumerable<ILanguageInfo> Items => _svc.AvailableLanguages;
     public BindableReactiveProperty<ILanguageInfo> SelectedItem { get; }
@@ -19,21 +22,20 @@ public class LanguageProperty : ViewModel
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public LanguageProperty(
-        ILocalizationService svc,
-        IDialogService dialog
-    )
+    public LanguageProperty(ILocalizationService svc, IDialogService dialog)
         : base(ViewModelId)
     {
         _svc = svc;
         _dialog = dialog.GetDialogPrefab<YesOrNoDialogPrefab>();
         SelectedItem = new BindableReactiveProperty<ILanguageInfo>(
             svc.CurrentLanguage.CurrentValue
-        );
+        ).DisposeItWith(Disposable);
         _internalChange = true;
-        _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);
-        _sub2 = svc.CurrentLanguage.Subscribe(OnChangeByModel);
+        SelectedItem.SubscribeAwait(OnChangedByUser).DisposeItWith(Disposable);
+        svc.CurrentLanguage.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
         _internalChange = false;
+        _undoSink = Undo.CreateValueChange<string>("default", ApplyLanguage, ApplyLanguage)
+            .DisposeItWith(Disposable);
     }
 
     private async ValueTask OnChangedByUser(ILanguageInfo userValue, CancellationToken cancel)
@@ -43,10 +45,22 @@ public class LanguageProperty : ViewModel
             return;
         }
 
-        _internalChange = true;
-        var newValue = new StringArg(userValue.Id);
-        await this.ExecuteCommand(ChangeLanguageFreeCommand.Id, newValue, cancel: cancel);
-        _internalChange = false;
+        var oldValue = _svc.CurrentLanguage.Value.Id;
+        if (oldValue == userValue.Id)
+        {
+            return;
+        }
+
+        try
+        {
+            _internalChange = true;
+            ApplyLanguage(userValue.Id);
+            _undoSink.Publish(oldValue, userValue.Id);
+        }
+        finally
+        {
+            _internalChange = false;
+        }
 
         var dialogPayload = new YesOrNoDialogPayload
         {
@@ -58,8 +72,23 @@ public class LanguageProperty : ViewModel
 
         if (isReloadReady)
         {
-            await this.ExecuteCommand(RestartApplicationCommand.Id, cancel: cancel);
+            var restrictions = await this.RequestRestartApplicationApproval(cancel);
+            if (restrictions.Count == 0)
+            {
+                await this.RequestRestart(cancel);
+            }
         }
+    }
+
+    private void ApplyLanguage(string languageId)
+    {
+        var language = _svc.AvailableLanguages.FirstOrDefault(x => x.Id == languageId);
+        if (language is null)
+        {
+            return;
+        }
+
+        _svc.CurrentLanguage.Value = language;
     }
 
     private void OnChangeByModel(ILanguageInfo modelValue)
@@ -73,23 +102,4 @@ public class LanguageProperty : ViewModel
     {
         return [];
     }
-
-    #region Dispose
-
-    private readonly IDisposable _sub1;
-    private readonly IDisposable _sub2;
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _sub1.Dispose();
-            _sub2.Dispose();
-            SelectedItem.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
-
-    #endregion
 }

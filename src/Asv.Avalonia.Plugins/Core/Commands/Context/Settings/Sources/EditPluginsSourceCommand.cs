@@ -5,10 +5,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Plugins;
 
-public sealed class EditPluginsSourceCommand(
-    
-    ILoggerFactory loggerFactory
-) : ContextCommand<PluginsSourceViewModel>
+public sealed class EditPluginsSourceCommand(ILoggerFactory loggerFactory)
+    : ContextCommand<PluginsSourceViewModel>
 {
     #region Static
 

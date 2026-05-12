@@ -35,9 +35,7 @@ public class MapProviderProperty : ViewModel
         var itemsSource = new ObservableList<ITileProvider>(
             mapService.AvailableProviders.OrderBy(p => p.Info.Group.Id)
         );
-        _view = itemsSource
-            .CreateView(p => new TileProviderViewModel(p))
-            .DisposeItWith(Disposable);
+        _view = itemsSource.CreateView(p => new TileProviderViewModel(p)).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         _view.SetRoutableParent(this).DisposeItWith(Disposable);
         Items = _view

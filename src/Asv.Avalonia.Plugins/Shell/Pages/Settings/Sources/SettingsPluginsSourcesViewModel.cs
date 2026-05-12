@@ -22,7 +22,11 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     private readonly ILogger<SettingsPluginsSourcesViewModel> _logger;
 
     public SettingsPluginsSourcesViewModel()
-        : this(NullTreeSubPageContext<SettingsPageViewModel>.Instance, NullPluginManager.Instance, DesignTime.LoggerFactory)
+        : this(
+            NullTreeSubPageContext<SettingsPageViewModel>.Instance,
+            NullPluginManager.Instance,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         var items = new ObservableList<IPluginServerInfo>([
@@ -51,8 +55,8 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     public SettingsPluginsSourcesViewModel(
         ITreeSubPageContext<ISettingsPage> context,
         IPluginManager pluginManager,
-        
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, context)
     {
         _logger = loggerFactory.CreateLogger<SettingsPluginsSourcesViewModel>();
@@ -70,10 +74,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
 
-        var add = new MenuItem(
-            "add",
-            RS.SettingsPluginsSourcesViewModel_MenuItem_Add_Title
-        )
+        var add = new MenuItem("add", RS.SettingsPluginsSourcesViewModel_MenuItem_Add_Title)
         {
             Order = 0,
             Icon = MaterialIconKind.Add,
@@ -135,7 +136,11 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         base.Dispose(disposing);
     }
 
-    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    private ValueTask InternalCatchEvent(
+        IViewModel src,
+        AsyncRoutedEvent<IViewModel> e,
+        CancellationToken cancel
+    )
     {
         switch (e)
         {

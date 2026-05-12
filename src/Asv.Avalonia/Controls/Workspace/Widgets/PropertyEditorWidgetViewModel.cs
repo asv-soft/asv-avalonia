@@ -10,11 +10,7 @@ namespace Asv.Avalonia;
 
 public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspaceWidget
 {
-    public PropertyEditorWidgetViewModel(
-        string id,
-        string header,
-        ILoggerFactory loggerFactory
-    )
+    public PropertyEditorWidgetViewModel(string id, string header, ILoggerFactory loggerFactory)
         : base(id)
     {
         Header = header;

@@ -21,18 +21,18 @@ public static class HotKeyMixin
 
             return builder;
         }
+
         public Builder HotKeys => new(builder);
     }
-    
+
     public class Builder(IHostApplicationBuilder builder)
     {
         public Builder RegisterDefault()
         {
-            return Register<UndoAction>()
-                .Register<OpenHomePageAction>();
+            return Register<UndoAction>().Register<OpenHomePageAction>();
         }
 
-        public Builder Register<THotKeyAction>() 
+        public Builder Register<THotKeyAction>()
             where THotKeyAction : class, IHotKeyAction
         {
             builder.Services.AddSingleton<IHotKeyAction, THotKeyAction>();

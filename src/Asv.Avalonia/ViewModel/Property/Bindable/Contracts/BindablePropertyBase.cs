@@ -3,9 +3,9 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class BindablePropertyBase<TModel, TView>(
-    string typeId
-) : ViewModel(typeId), ISupportFocus
+public abstract class BindablePropertyBase<TModel, TView>(string typeId)
+    : ViewModel(typeId),
+        ISupportFocus
 {
     public abstract BindableReactiveProperty<TView> ViewValue { get; }
 

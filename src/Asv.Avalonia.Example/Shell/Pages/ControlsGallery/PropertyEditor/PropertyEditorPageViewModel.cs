@@ -15,8 +15,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public PropertyEditorPageViewModel()
         : this(
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
-            DesignTime.UnitService, 
-            DesignTime.LoggerFactory)
+            DesignTime.UnitService,
+            DesignTime.LoggerFactory
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Parent = DesignTime.Shell;
@@ -25,7 +26,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public PropertyEditorPageViewModel(
         ITreeSubPageContext<IControlsGalleryPage> context,
         IUnitService unit,
-        ILoggerFactory loggerFactory)
+        ILoggerFactory loggerFactory
+    )
         : base(PageId, context)
     {
         PropertyEditor = new PropertyEditorViewModel("editor")

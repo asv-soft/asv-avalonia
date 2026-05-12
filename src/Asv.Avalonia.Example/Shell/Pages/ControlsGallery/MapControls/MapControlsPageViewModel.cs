@@ -21,17 +21,19 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
     public MapControlsPageViewModel()
         : this(
-            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance, 
-            DesignTime.LoggerFactory, 
-            NullMapService.Instance)
+            NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
+            DesignTime.LoggerFactory,
+            NullMapService.Instance
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
     public MapControlsPageViewModel(
         ITreeSubPageContext<IControlsGalleryPage> context,
-        ILoggerFactory loggerFactory, 
-        IMapService mapService)
+        ILoggerFactory loggerFactory,
+        IMapService mapService
+    )
         : base(PageId, context)
     {
         TileProviderSelectorViewModel = new TileProviderSelectorViewModel(mapService, loggerFactory)

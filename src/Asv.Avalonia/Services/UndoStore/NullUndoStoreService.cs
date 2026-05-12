@@ -6,6 +6,6 @@ public class NullUndoStoreService : IUndoStoreService
 {
     public IUndoHistoryStore CreateUndoHistoryStore(NavId ownerId)
     {
-        return NullHistoryStore.Instance;
+        return NullUndoHistoryStore.Instance;
     }
 }

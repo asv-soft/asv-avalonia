@@ -29,7 +29,6 @@ public class ShellHost : IShellHost, IDisposable
 
     public TopLevel? TopLevel { get; set; }
 
-
     public void Dispose()
     {
         _onShellLoaded.Dispose();

@@ -16,7 +16,8 @@ public interface ITreeSubPageContext<out TContext>
     TContext Context { get; }
 }
 
-public class TreeSubPageContext<TContext>(NavArgs args, TContext context) : ITreeSubPageContext<TContext>
+public class TreeSubPageContext<TContext>(NavArgs args, TContext context)
+    : ITreeSubPageContext<TContext>
     where TContext : class, ITreePageViewModel
 {
     public NavArgs Args { get; } = args;
@@ -26,8 +27,9 @@ public class TreeSubPageContext<TContext>(NavArgs args, TContext context) : ITre
 public class NullTreeSubPageContext<TContext> : ITreeSubPageContext<TContext>
     where TContext : class, ITreePageViewModel, new()
 {
-    public static ITreeSubPageContext<TContext> Instance { get; } = new NullTreeSubPageContext<TContext>();
-    
+    public static ITreeSubPageContext<TContext> Instance { get; } =
+        new NullTreeSubPageContext<TContext>();
+
     public NavArgs Args => default;
     public TContext Context { get; } = new();
 }
