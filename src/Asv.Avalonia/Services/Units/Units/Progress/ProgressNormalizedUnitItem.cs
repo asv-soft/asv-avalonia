@@ -2,13 +2,13 @@
 
 namespace Asv.Avalonia;
 
-public class ProgressInPartsUnitItem() : UnitItemBase(0.01)
+public class ProgressNormalizedUnitItem() : UnitItemBase(0.01)
 {
-    public const string Id = $"{ProgressUnit.Id}.in.parts";
+    public const string Id = $"{ProgressUnit.Id}.normalized";
 
     public override string UnitItemId => Id;
-    public override string Name => RS.InParts_UnitItem_Name;
-    public override string Description => RS.InParts_Progress_Description;
+    public override string Name => RS.Normalized_UnitItem_Name;
+    public override string Description => RS.Normalized_Progress_Description;
     public override string Symbol => string.Empty;
     public override bool IsInternationalSystemUnit => false;
 

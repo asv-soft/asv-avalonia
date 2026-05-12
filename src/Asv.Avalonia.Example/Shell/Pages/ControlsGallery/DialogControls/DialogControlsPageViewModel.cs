@@ -106,9 +106,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         #region Units
 
-        var latUnit = unitService.Units[LatitudeUnit.Id];
-        var lonUnit = unitService.Units[LongitudeUnit.Id];
-        var altUnit = unitService.Units[AltitudeUnit.Id];
+        var latUnit = unitService.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id);
+        var lonUnit = unitService.GetRequiredUnitOfType<LongitudeUnit>(LongitudeUnit.Id);
+        var altUnit = unitService.GetRequiredUnitOfType<AltitudeUnit>(AltitudeUnit.Id);
 
         LonUnitName = lonUnit
             .CurrentUnitItem.Select(item => item.Symbol)
@@ -274,9 +274,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         GeoPointDialogResult = new HistoricalGeoPointProperty(
             nameof(GeoPointDialogResult),
             _geoPointDialogResult,
-            latUnit,
-            lonUnit,
-            altUnit,
+            unitService,
             loggerFactory
         )
             .SetRoutableParent(this)

@@ -22,9 +22,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
     public BindableGeoPointProperty(
         string typeId,
         ReactiveProperty<GeoPoint> modelValue,
-        IUnit latUnit,
-        IUnit lonUnit,
-        IUnit altUnit,
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         Action<GeoPointPropertyOptions>? configureOptions = null
     )
@@ -32,6 +30,10 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
     {
         Options = new GeoPointPropertyOptions();
         configureOptions?.Invoke(Options);
+
+        var latUnit = unitService.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id);
+        var lonUnit = unitService.GetRequiredUnitOfType<LongitudeUnit>(LongitudeUnit.Id);
+        var altUnit = unitService.GetRequiredUnitOfType<AltitudeUnit>(AltitudeUnit.Id);
 
         ModelValue = modelValue;
 
@@ -78,7 +80,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
             })
             .DisposeItWith(Disposable);
 
-        Latitude = new BindableUnitProperty(
+        Latitude = new BindableUnitProperty<LatitudeUnit>(
             nameof(Latitude),
             ModelLat,
             latUnit,
@@ -87,7 +89,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Longitude = new BindableUnitProperty(
+        Longitude = new BindableUnitProperty<LongitudeUnit>(
             nameof(Longitude),
             ModelLon,
             lonUnit,
@@ -96,7 +98,7 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Altitude = new BindableUnitProperty(
+        Altitude = new BindableUnitProperty<AltitudeUnit>(
             nameof(Altitude),
             ModelAlt,
             altUnit,
@@ -116,9 +118,9 @@ public class BindableGeoPointProperty : CompositeBindablePropertyBase<GeoPoint>
             .DisposeItWith(Disposable);
     }
 
-    public BindableUnitProperty Latitude { get; }
-    public BindableUnitProperty Longitude { get; }
-    public BindableUnitProperty Altitude { get; }
+    public BindableUnitProperty<LatitudeUnit> Latitude { get; }
+    public BindableUnitProperty<LongitudeUnit> Longitude { get; }
+    public BindableUnitProperty<AltitudeUnit> Altitude { get; }
 
     public override void ForceValidate()
     {

@@ -35,10 +35,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             Parent = this,
             ItemsSource =
             {
-                new UnitPropertyViewModel(
+                new UnitPropertyViewModel<LatitudeUnit>(
                     "lat",
                     Latitude,
-                    unit[LatitudeUnit.Id] ?? throw new ArgumentNullException(),
+                    unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
                     loggerFactory
                 )
                 {

@@ -4,12 +4,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
 
-internal sealed class DdmLlzConfig
+public sealed class DdmLlzConfig : IUnitConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
-public sealed class DdmLlzUnit : UnitBase
+public sealed class DdmLlzUnit(
+    IConfiguration cfgSvc,
+    [FromKeyedServices(DdmLlzUnit.Id)] IEnumerable<IUnitItem> items
+) : UnitBase<DdmLlzConfig>(cfgSvc, items)
 {
     public const string Id = "dbm.llz";
 
@@ -17,41 +20,4 @@ public sealed class DdmLlzUnit : UnitBase
     public override string Name => RS.DdmLlz_Name;
     public override string Description => RS.DdmLlz_Description;
     public override string UnitId => Id;
-
-    private readonly DdmLlzConfig? _config;
-    private readonly IConfiguration _cfgSvc;
-
-    public DdmLlzUnit(IConfiguration cfgSvc, [FromKeyedServices(Id)] IEnumerable<IUnitItem> items)
-        : base(items)
-    {
-        ArgumentNullException.ThrowIfNull(cfgSvc);
-        _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<DdmLlzConfig>();
-        if (_config.CurrentUnitItemId is null)
-        {
-            return;
-        }
-
-        AvailableUnits.TryGetValue(_config.CurrentUnitItemId, out var unit);
-        if (unit is not null)
-        {
-            CurrentUnitItem.OnNext(unit);
-        }
-    }
-
-    protected override void SetUnitItem(IUnitItem unitItem)
-    {
-        if (_config is null)
-        {
-            return;
-        }
-
-        if (_config.CurrentUnitItemId == unitItem.UnitItemId)
-        {
-            return;
-        }
-
-        _config.CurrentUnitItemId = unitItem.UnitItemId;
-        _cfgSvc.Set(_config);
-    }
 }

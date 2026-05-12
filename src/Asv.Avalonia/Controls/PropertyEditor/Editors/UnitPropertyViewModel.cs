@@ -1,4 +1,6 @@
+using Asv.Cfg;
 using Asv.Common;
+using Avalonia.Media;
 using DotNext;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -6,14 +8,14 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class UnitPropertyViewModel
-    : HistoricalUnitProperty,
-        IPropertyViewModel,
-        ISupportCancel,
-        ISupportRefresh
+public class UnitPropertyViewModel(
+    string id,
+    ReactiveProperty<double> modelValue,
+    IUnit unit,
+    ILoggerFactory loggerFactory,
+    string? format = null
+) : UnitPropertyViewModel<IUnit>(id, modelValue, unit, loggerFactory, format)
 {
-    private double _lastValue;
-
     public UnitPropertyViewModel()
         : this(
             DesignTime.Id.TypeId,
@@ -40,13 +42,23 @@ public class UnitPropertyViewModel
                     ? "err value"
                     : Random.Shared.Next<short>().ToString();
             });
-        ChangeUnitCommand = new ReactiveCommand<IUnitItem>(x => { });
+        ChangeUnitCommand.ChangeCanExecute(false);
     }
+}
+
+public class UnitPropertyViewModel<TUnit>
+    : HistoricalUnitProperty<TUnit>,
+        IPropertyViewModel,
+        ISupportCancel,
+        ISupportRefresh
+    where TUnit : IUnit
+{
+    private double _lastValue;
 
     public UnitPropertyViewModel(
         string id,
         ReactiveProperty<double> modelValue,
-        IUnit unit,
+        TUnit unit,
         ILoggerFactory loggerFactory,
         string? format = null
     )
@@ -57,7 +69,8 @@ public class UnitPropertyViewModel
             unit.CurrentUnitItem.Value = item;
         }).DisposeItWith(Disposable);
         CurrentUnit = unit
-            .CurrentUnitItem.ToBindableReactiveProperty(unit.CurrentUnitItem.Value)
+            .CurrentUnitItem.ObserveOnUIThreadDispatcher()
+            .ToBindableReactiveProperty(unit.CurrentUnitItem.Value)
             .DisposeItWith(Disposable);
     }
 

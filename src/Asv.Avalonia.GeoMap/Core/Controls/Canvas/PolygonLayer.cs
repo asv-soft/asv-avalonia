@@ -13,13 +13,15 @@ public partial class PolygonLayer : Control
 {
     static PolygonLayer()
     {
-        SourceProperty.Changed.ToObservable().Subscribe(e =>
-        {
-            if (e.Sender is PolygonLayer layer)
+        SourceProperty
+            .Changed.ToObservable()
+            .Subscribe(e =>
             {
-                layer.SourceUpdated(e);
-            }
-        });
+                if (e.Sender is PolygonLayer layer)
+                {
+                    layer.SourceUpdated(e);
+                }
+            });
     }
 
     private void SourceUpdated(AvaloniaPropertyChangedEventArgs<MapItemsControl?> e)

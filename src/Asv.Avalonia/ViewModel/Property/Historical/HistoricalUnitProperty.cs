@@ -5,14 +5,25 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class HistoricalUnitProperty : BindableUnitProperty, IHistoricalProperty<double>
+public class HistoricalUnitProperty(
+    string id,
+    ReactiveProperty<double> modelValue,
+    IUnit unit,
+    ILoggerFactory loggerFactory,
+    string? format = null
+) : HistoricalUnitProperty<IUnit>(id, modelValue, unit, loggerFactory, format) { }
+
+public class HistoricalUnitProperty<TUnit>
+    : BindableUnitProperty<TUnit>,
+        IHistoricalProperty<double>
+    where TUnit : IUnit
 {
     private readonly IUndoChangeSink<ValueUndoChange<double>> _undoSink;
 
     public HistoricalUnitProperty(
         string id,
         ReactiveProperty<double> modelValue,
-        IUnit unit,
+        TUnit unit,
         ILoggerFactory loggerFactory,
         string? format = null
     )

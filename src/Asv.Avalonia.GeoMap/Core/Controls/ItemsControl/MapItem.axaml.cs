@@ -16,16 +16,24 @@ public partial class MapItem : ContentControl, ISelectable
     {
         SelectableMixin.Attach<MapItem>(IsSelectedProperty);
         PressedMixin.Attach<MapItem>();
-        CenterXProperty.Changed.ToObservable().Subscribe(x => RecalculateRotation(x.Sender as MapItem));
-        CenterYProperty.Changed.ToObservable().Subscribe(x => RecalculateRotation(x.Sender as MapItem));
-        BoundsProperty.Changed.ToObservable().Subscribe(x => RecalculateRotation(x.Sender as MapItem));
-        RotationProperty.Changed.ToObservable().Subscribe(x => RecalculateEffectiveRotation(x.Sender as MapItem));
-        UseMapRotationProperty.Changed.ToObservable().Subscribe(x =>
-            RecalculateEffectiveRotation(x.Sender as MapItem)
-        );
-        MapCanvas.RotationProperty.Changed.ToObservable().Subscribe(x =>
-            RecalculateEffectiveRotation(x.Sender as MapItem)
-        );
+        CenterXProperty
+            .Changed.ToObservable()
+            .Subscribe(x => RecalculateRotation(x.Sender as MapItem));
+        CenterYProperty
+            .Changed.ToObservable()
+            .Subscribe(x => RecalculateRotation(x.Sender as MapItem));
+        BoundsProperty
+            .Changed.ToObservable()
+            .Subscribe(x => RecalculateRotation(x.Sender as MapItem));
+        RotationProperty
+            .Changed.ToObservable()
+            .Subscribe(x => RecalculateEffectiveRotation(x.Sender as MapItem));
+        UseMapRotationProperty
+            .Changed.ToObservable()
+            .Subscribe(x => RecalculateEffectiveRotation(x.Sender as MapItem));
+        MapCanvas
+            .RotationProperty.Changed.ToObservable()
+            .Subscribe(x => RecalculateEffectiveRotation(x.Sender as MapItem));
     }
 
     private static void RecalculateRotation(MapItem? sender)

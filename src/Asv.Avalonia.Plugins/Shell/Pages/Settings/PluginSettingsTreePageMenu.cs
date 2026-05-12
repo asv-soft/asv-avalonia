@@ -9,12 +9,6 @@ public class PluginSettingsTreePageMenu : TreePage
     public const string PageId = "plugins";
 
     public PluginSettingsTreePageMenu(ILoggerFactory loggerFactory)
-        : base(
-            PageId,
-            "Plugins",
-            MaterialIconKind.Plugin,
-            NavId.Empty,
-            NavId.Empty,
-            loggerFactory
-        ) { }
+        : base(PageId, "Plugins", MaterialIconKind.Plugin, NavId.Empty, NavId.Empty, loggerFactory)
+    { }
 }

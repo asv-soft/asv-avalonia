@@ -1,15 +1,27 @@
 ﻿using System.Collections.Immutable;
+using Asv.Cfg;
 using Material.Icons;
 using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class UnitBase : IUnit
+public interface IUnitConfig
+{
+    public string? CurrentUnitItemId { get; set; }
+}
+
+public abstract class UnitBase<TConfig> : IUnit
+    where TConfig : class, IUnitConfig, new()
 {
     private readonly ImmutableDictionary<string, IUnitItem> _items;
+    private readonly IConfiguration _cfgSvc;
+    private readonly TConfig _config;
 
-    protected UnitBase(IEnumerable<IUnitItem> items)
+    protected UnitBase(IConfiguration cfgSvc, IEnumerable<IUnitItem> items)
     {
+        ArgumentNullException.ThrowIfNull(cfgSvc);
+        _cfgSvc = cfgSvc;
+
         var builder = ImmutableDictionary.CreateBuilder<string, IUnitItem>();
         foreach (var item in items)
         {
@@ -27,12 +39,33 @@ public abstract class UnitBase : IUnit
         }
 
         InternationalSystemUnit = defaultUnit[0].Value;
-        CurrentUnitItem = new SynchronizedReactiveProperty<IUnitItem>(InternationalSystemUnit);
+
+        var defaultUnitItem = InternationalSystemUnit;
+
+        _config = cfgSvc.Get<TConfig>();
+        if (_config.CurrentUnitItemId is not null)
+        {
+            if (_items.TryGetValue(_config.CurrentUnitItemId, out var unit))
+            {
+                defaultUnitItem = unit;
+            }
+        }
+
+        CurrentUnitItem = new SynchronizedReactiveProperty<IUnitItem>(defaultUnitItem);
 
         _sub1 = CurrentUnitItem.Subscribe(SetUnitItem);
     }
 
-    protected abstract void SetUnitItem(IUnitItem unitItem);
+    private void SetUnitItem(IUnitItem unitItem)
+    {
+        if (_config.CurrentUnitItemId == unitItem.UnitItemId)
+        {
+            return;
+        }
+
+        _config.CurrentUnitItemId = unitItem.UnitItemId;
+        _cfgSvc.Set(_config);
+    }
 
     public IReadOnlyDictionary<string, IUnitItem> AvailableUnits => _items;
     public abstract MaterialIconKind Icon { get; }

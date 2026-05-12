@@ -11,7 +11,7 @@
     x:Class="Asv.Avalonia.ShellTabWindow"
     Title="ShellTabWindow"
     ExtendClientAreaToDecorationsHint="True"
-    WindowDecorations="None"
+    WindowDecorations="BorderOnly"
     ExtendClientAreaTitleBarHeightHint="0"
 >
     <Window.ContentTemplate>

@@ -4,7 +4,16 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class BindableUnitProperty : BindablePropertyBase<double, string?>
+public class BindableUnitProperty(
+    string id,
+    ReactiveProperty<double> modelValue,
+    IUnit unit,
+    ILoggerFactory loggerFactory,
+    string? format = null
+) : BindableUnitProperty<IUnit>(id, modelValue, unit, loggerFactory, format);
+
+public class BindableUnitProperty<TUnit> : BindablePropertyBase<double, string?>
+    where TUnit : IUnit
 {
     private readonly string? _format;
     private bool _externalChange;
@@ -14,7 +23,7 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
     public BindableUnitProperty(
         string id,
         ReactiveProperty<double> modelValue,
-        IUnit unit,
+        TUnit unit,
         ILoggerFactory loggerFactory,
         string? format = null
     )
@@ -43,7 +52,7 @@ public class BindableUnitProperty : BindablePropertyBase<double, string?>
 
     public sealed override ReactiveProperty<double> ModelValue { get; }
     public sealed override BindableReactiveProperty<string?> ViewValue { get; }
-    public IUnit Unit { get; }
+    public TUnit Unit { get; }
 
     protected override Exception? ValidateUserValue(string? userValue)
     {

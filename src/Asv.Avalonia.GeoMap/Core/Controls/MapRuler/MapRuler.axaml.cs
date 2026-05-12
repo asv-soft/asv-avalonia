@@ -378,10 +378,7 @@ public sealed partial class MapRuler : UserControl
 
     #region Endpoint factory
 
-    private static MapAnchor<IMapAnchor> CreateEndpoint(
-        string id,
-        GeoPoint location
-    ) =>
+    private static MapAnchor<IMapAnchor> CreateEndpoint(string id, GeoPoint location) =>
         new(id)
         {
             Location = location,

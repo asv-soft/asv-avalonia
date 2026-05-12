@@ -8,7 +8,7 @@ public static class DdmGpMixin
     {
         builder
             .AddUnit<DdmGpUnit>(DdmGpUnit.Id)
-            .AddItem<DdmGpInPartsUnitItem>()
+            .AddItem<DdmGpNormalizedUnitItem>()
             .AddItem<DdmGpMicroAmpRuUnitItem>()
             .AddItem<DdmGpMicroAmpUnitItem>()
             .AddItem<DdmGpPercentUnitItem>();
@@ -18,8 +18,8 @@ public static class DdmGpMixin
     public static IUnitItem? DdmGp(this IUnitService service) =>
         service[DdmGpUnit.Id]?.CurrentUnitItem.Value;
 
-    public static IUnitItem? DdmGpInParts(this IUnitService service) =>
-        service[DdmGpUnit.Id, DdmGpInPartsUnitItem.Id];
+    public static IUnitItem? DdmGpNormalized(this IUnitService service) =>
+        service[DdmGpUnit.Id, DdmGpNormalizedUnitItem.Id];
 
     public static IUnitItem? DdmGpMicroAmpRu(this IUnitService service) =>
         service[DdmGpUnit.Id, DdmGpMicroAmpRuUnitItem.Id];

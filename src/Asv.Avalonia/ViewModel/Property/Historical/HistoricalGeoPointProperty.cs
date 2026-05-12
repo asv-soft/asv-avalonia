@@ -1,5 +1,4 @@
 using Asv.Common;
-using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -10,19 +9,21 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
     public HistoricalGeoPointProperty(
         string typeId,
         ReactiveProperty<GeoPoint> modelValue,
-        IUnit latUnit,
-        IUnit lonUnit,
-        IUnit altUnit,
+        IUnitService unitService,
         ILoggerFactory loggerFactory,
         Action<GeoPointPropertyOptions>? configureOptions = null
     )
-        : base(typeId, modelValue, latUnit, lonUnit, altUnit, loggerFactory, configureOptions)
+        : base(typeId, modelValue, unitService, loggerFactory, configureOptions)
     {
         base.Latitude.Dispose();
         base.Longitude.Dispose();
         base.Altitude.Dispose();
 
-        Latitude = new HistoricalUnitProperty(
+        var latUnit = unitService.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id);
+        var lonUnit = unitService.GetRequiredUnitOfType<LongitudeUnit>(LongitudeUnit.Id);
+        var altUnit = unitService.GetRequiredUnitOfType<AltitudeUnit>(AltitudeUnit.Id);
+
+        Latitude = new HistoricalUnitProperty<LatitudeUnit>(
             nameof(Latitude),
             ModelLat,
             latUnit,
@@ -31,7 +32,7 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Longitude = new HistoricalUnitProperty(
+        Longitude = new HistoricalUnitProperty<LongitudeUnit>(
             nameof(Longitude),
             ModelLon,
             lonUnit,
@@ -40,7 +41,7 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        Altitude = new HistoricalUnitProperty(
+        Altitude = new HistoricalUnitProperty<AltitudeUnit>(
             nameof(Altitude),
             ModelAlt,
             altUnit,
@@ -51,9 +52,9 @@ public class HistoricalGeoPointProperty : BindableGeoPointProperty, IHistoricalP
             .DisposeItWith(Disposable);
     }
 
-    public new HistoricalUnitProperty Latitude { get; }
-    public new HistoricalUnitProperty Longitude { get; }
-    public new HistoricalUnitProperty Altitude { get; }
+    public new HistoricalUnitProperty<LatitudeUnit> Latitude { get; }
+    public new HistoricalUnitProperty<LongitudeUnit> Longitude { get; }
+    public new HistoricalUnitProperty<AltitudeUnit> Altitude { get; }
 
     public override void ForceValidate()
     {

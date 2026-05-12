@@ -9,7 +9,7 @@ public static class ProgressMixin
         builder
             .AddUnit<ProgressUnit>(ProgressUnit.Id)
             .AddItem<ProgressPercentUnitItem>()
-            .AddItem<ProgressInPartsUnitItem>();
+            .AddItem<ProgressNormalizedUnitItem>();
         return builder;
     }
 
@@ -20,5 +20,5 @@ public static class ProgressMixin
         service[ProgressUnit.Id, ProgressPercentUnitItem.Id];
 
     public static IUnitItem? ProgressPercent(this IUnitService service) =>
-        service[ProgressUnit.Id, ProgressInPartsUnitItem.Id];
+        service[ProgressUnit.Id, ProgressNormalizedUnitItem.Id];
 }

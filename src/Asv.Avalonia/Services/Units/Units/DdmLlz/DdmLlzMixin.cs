@@ -8,7 +8,7 @@ public static class DdmLlzMixin
     {
         builder
             .AddUnit<DdmLlzUnit>(DdmLlzUnit.Id)
-            .AddItem<DdmLlzInPartsUnitItem>()
+            .AddItem<DdmLlzNormalizedUnitItem>()
             .AddItem<DdmLlzMicroAmpRuUnitItem>()
             .AddItem<DdmLlzMicroAmpUnitItem>()
             .AddItem<DdmLlzPercentUnitItem>();
@@ -18,8 +18,8 @@ public static class DdmLlzMixin
     public static IUnitItem? DdmLlz(this IUnitService service) =>
         service[DdmLlzUnit.Id]?.CurrentUnitItem.Value;
 
-    public static IUnitItem? DdmLlzInParts(this IUnitService service) =>
-        service[DdmLlzUnit.Id, DdmLlzInPartsUnitItem.Id];
+    public static IUnitItem? DdmLlzNormalized(this IUnitService service) =>
+        service[DdmLlzUnit.Id, DdmLlzNormalizedUnitItem.Id];
 
     public static IUnitItem? DdmLlzMicroAmpRu(this IUnitService service) =>
         service[DdmLlzUnit.Id, DdmLlzMicroAmpRuUnitItem.Id];

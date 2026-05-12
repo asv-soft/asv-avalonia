@@ -4,52 +4,17 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
 
-internal sealed class VoltageConfig
+public sealed class VoltageConfig : IUnitConfig
 {
     public string? CurrentUnitItemId { get; set; }
 }
 
-public sealed class VoltageUnit : UnitBase
+public sealed class VoltageUnit(
+    IConfiguration cfgSvc,
+    [FromKeyedServices(VoltageUnit.Id)] IEnumerable<IUnitItem> items
+) : UnitBase<VoltageConfig>(cfgSvc, items)
 {
-    private readonly VoltageConfig? _config;
-    private readonly IConfiguration _cfgSvc;
-
     public const string Id = "voltage";
-
-    public VoltageUnit(IConfiguration cfgSvc, [FromKeyedServices(Id)] IEnumerable<IUnitItem> items)
-        : base(items)
-    {
-        ArgumentNullException.ThrowIfNull(cfgSvc);
-        _cfgSvc = cfgSvc;
-        _config = cfgSvc.Get<VoltageConfig>();
-
-        if (_config.CurrentUnitItemId is null)
-        {
-            return;
-        }
-
-        AvailableUnits.TryGetValue(_config.CurrentUnitItemId, out var unit);
-        if (unit is not null)
-        {
-            CurrentUnitItem.OnNext(unit);
-        }
-    }
-
-    protected override void SetUnitItem(IUnitItem unitItem)
-    {
-        if (_config is null)
-        {
-            return;
-        }
-
-        if (_config.CurrentUnitItemId == unitItem.UnitItemId)
-        {
-            return;
-        }
-
-        _config.CurrentUnitItemId = unitItem.UnitItemId;
-        _cfgSvc.Set(_config);
-    }
 
     public override MaterialIconKind Icon => MaterialIconKind.HighVoltage;
     public override string Name => RS.Voltage_Name;

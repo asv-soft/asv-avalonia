@@ -169,8 +169,8 @@
     <data name="AmplitudeModulation_Description" xml:space="preserve">
         <value>Amlitude modulation unit</value>
     </data>
-    <data name="InParts_AmplitudeModulation_Description" xml:space="preserve">
-        <value>Amplitude modulation in parts</value>
+    <data name="Normalized_AmplitudeModulation_Description" xml:space="preserve">
+        <value>Amplitude modulation normalized</value>
     </data>
     <data name="Percent_AmplitudeModulation_Description" xml:space="preserve">
         <value>Amplitude modulation in percents</value>
@@ -205,8 +205,8 @@
     <data name="InParts_UnitItem_Name" xml:space="preserve">
         <value>In parts</value>
     </data>
-    <data name="InParts_DdmGp_Description" xml:space="preserve">
-        <value>DDM (Gp) in parts</value>
+    <data name="Normalized_DdmGp_Description" xml:space="preserve">
+        <value>DDM (Gp) normalized</value>
     </data>
     <data name="Percent_UnitItem_Name" xml:space="preserve">
         <value>In Percents</value>
@@ -235,8 +235,8 @@
     <data name="DdmLlz_Description" xml:space="preserve">
         <value>Difference depth of modulation measure units</value>
     </data>
-    <data name="InParts_DdmLlz_Description" xml:space="preserve">
-        <value>DDM (Llz) in parts</value>
+    <data name="Normalized_DdmLlz_Description" xml:space="preserve">
+        <value>DDM (Llz) normalized</value>
     </data>
     <data name="Percent_DdmLlz_Description" xml:space="preserve">
         <value>DDM (Llz) in percents</value>
@@ -593,8 +593,8 @@
     <data name="Mah_Capacity_Description" xml:space="preserve">
         <value>Capacity in milliampere per hour</value>
     </data>
-    <data name="InParts_Progress_Description" xml:space="preserve">
-        <value>Progress in parts</value>
+    <data name="Normalized_Progress_Description" xml:space="preserve">
+        <value>Progress normalized</value>
     </data>
     <data name="OpenSettingsCommand_CommandInfo_Name" xml:space="preserve">
         <value>Open settings command</value>
@@ -635,8 +635,8 @@
     <data name="RttBox_NetworkError_ToolTip" xml:space="preserve">
         <value>Connection error</value>
     </data>
-    <data name="InParts_SDM_Description" xml:space="preserve">
-        <value>SDM in parts</value>
+    <data name="Normalized_SDM_Description" xml:space="preserve">
+        <value>SDM normalized</value>
     </data>
     <data name="HomePageView_DeviceBrowser_Title" xml:space="preserve">
         <value>Device browser</value>

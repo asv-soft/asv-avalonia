@@ -16,13 +16,15 @@ public partial class AnnotationLayer : Canvas
 {
     static AnnotationLayer()
     {
-        SourceProperty.Changed.ToObservable().Subscribe(e =>
-        {
-            if (e.Sender is AnnotationLayer layer)
+        SourceProperty
+            .Changed.ToObservable()
+            .Subscribe(e =>
             {
-                layer.MapControlSourceUpdated(e);
-            }
-        });
+                if (e.Sender is AnnotationLayer layer)
+                {
+                    layer.MapControlSourceUpdated(e);
+                }
+            });
     }
 
     private readonly List<MapAnnotation> _annotations = new();

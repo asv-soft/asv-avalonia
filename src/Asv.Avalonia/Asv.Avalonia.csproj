@@ -133,7 +133,6 @@
 
     <ItemGroup>
       <Folder Include="_Core\" />
-      <Folder Include="_move_to_common\" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1023,51 +1023,6 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Amplitude modulation in parts.
-        /// </summary>
-        public static string InParts_AmplitudeModulation_Description {
-            get {
-                return ResourceManager.GetString("InParts_AmplitudeModulation_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DDM (Gp) in parts.
-        /// </summary>
-        public static string InParts_DdmGp_Description {
-            get {
-                return ResourceManager.GetString("InParts_DdmGp_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to DDM (Llz) in parts.
-        /// </summary>
-        public static string InParts_DdmLlz_Description {
-            get {
-                return ResourceManager.GetString("InParts_DdmLlz_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Progress in parts.
-        /// </summary>
-        public static string InParts_Progress_Description {
-            get {
-                return ResourceManager.GetString("InParts_Progress_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to SDM in parts.
-        /// </summary>
-        public static string InParts_SDM_Description {
-            get {
-                return ResourceManager.GetString("InParts_SDM_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to In parts.
         /// </summary>
         public static string InParts_UnitItem_Name {
@@ -1658,6 +1613,51 @@ namespace Asv.Avalonia {
         public static string NextPageCommand_CommandInfo_Name {
             get {
                 return ResourceManager.GetString("NextPageCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Amplitude modulation normalized.
+        /// </summary>
+        public static string Normalized_AmplitudeModulation_Description {
+            get {
+                return ResourceManager.GetString("Normalized_AmplitudeModulation_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DDM (Gp) normalized.
+        /// </summary>
+        public static string Normalized_DdmGp_Description {
+            get {
+                return ResourceManager.GetString("Normalized_DdmGp_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DDM (Llz) normalized.
+        /// </summary>
+        public static string Normalized_DdmLlz_Description {
+            get {
+                return ResourceManager.GetString("Normalized_DdmLlz_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Progress normalized.
+        /// </summary>
+        public static string Normalized_Progress_Description {
+            get {
+                return ResourceManager.GetString("Normalized_Progress_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SDM normalized.
+        /// </summary>
+        public static string Normalized_SDM_Description {
+            get {
+                return ResourceManager.GetString("Normalized_SDM_Description", resourceCulture);
             }
         }
         
