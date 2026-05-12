@@ -35,9 +35,7 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
     {
         Header = "Example page";
         Text1 = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
-        Undo.Register(nameof(Text1), Text1).DisposeItWith(Disposable);
         Text1.Value = "Hello world";
-        Undo.EnableChangePublication();
     }
 
     public BindableReactiveProperty<string> Text1 { get; }

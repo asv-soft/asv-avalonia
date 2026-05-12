@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public class CreateMenu : MenuItem
 {
-    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.create";
+    public const string MenuId = "main-menu-create";
 
     public CreateMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.CreateMenu_Header)

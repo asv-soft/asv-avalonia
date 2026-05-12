@@ -372,16 +372,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         {
             ShowHotKeyCaptureDialogResult.ViewValue.Value = null;
         }).DisposeItWith(Disposable);
-        ResetOpenGeoPointResultCommand = new ReactiveCommand(
-            async (_, ct) =>
-            {
-                await this.ExecuteCommand(
-                    ResetGeoPointDialogResultCommand.Id,
-                    ResetGeoPointDialogResultCommandArg.Empty,
-                    ct
-                );
-            }
-        ).DisposeItWith(Disposable);
+        ResetOpenGeoPointResultCommand = new ReactiveCommand(_ =>
+        {
+            GeoPointDialogResult.ModelValue.Value = GeoPoint.Zero;
+        }).DisposeItWith(Disposable);
 
         #endregion
 
@@ -456,7 +450,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
                 vm = new DialogItemTextViewModel(_loggerFactory) { Message = vmMessage };
             }
 
-            var dialogContent = new ContentDialog(vm, _navigationService)
+            var dialogContent = new ContentDialog(vm)
             {
                 Title = CustomDialogTitle.ViewValue.Value ?? string.Empty,
                 PrimaryButtonText = CustomDialogPrimaryButtonText.ViewValue.Value ?? string.Empty,
@@ -666,11 +660,11 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         var result = await _hotKeyCaptureDialog.ShowDialogAsync(payload);
 
-        ShowHotKeyCaptureDialogResult.ViewValue.Value = result;
+        ShowHotKeyCaptureDialogResult.ViewValue.Value = result?.ToString();
 
         var msg = string.Format(
             RS.DialogControlsPageViewModel_HotKeyCapturePrefab_Result,
-            result ?? RS.DialogControlsPageViewModel_CancelResult
+            result?.ToString() ?? RS.DialogControlsPageViewModel_CancelResult
         );
         const string dialogName = nameof(HotKeyCaptureDialogPrefab);
         _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
@@ -687,24 +681,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         if (rawResult is not null)
         {
-            await this.ExecuteCommand(
-                ResetGeoPointDialogResultCommand.Id,
-                CommandArg.CreateDictionary(
-                    new KeyValuePair<string, CommandArg>(
-                        ResetGeoPointDialogResultCommandArg.LonKey,
-                        CommandArg.CreateDouble(rawResult.Value.Longitude)
-                    ),
-                    new KeyValuePair<string, CommandArg>(
-                        ResetGeoPointDialogResultCommandArg.LatKey,
-                        CommandArg.CreateDouble(rawResult.Value.Latitude)
-                    ),
-                    new KeyValuePair<string, CommandArg>(
-                        ResetGeoPointDialogResultCommandArg.AltKey,
-                        CommandArg.CreateDouble(rawResult.Value.Altitude)
-                    )
-                ),
-                cancel: cancellationToken
-            );
+            GeoPointDialogResult.ModelValue.Value = rawResult.Value;
         }
 
         var result = rawResult?.ToString() ?? $"({RS.DialogControlsPageViewModel_CancelResult})";

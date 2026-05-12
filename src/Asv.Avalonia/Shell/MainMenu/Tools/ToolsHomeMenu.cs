@@ -7,7 +7,7 @@ namespace Asv.Avalonia;
 
 public class ToolsHomeMenu : MenuItem
 {
-    public const string MenuId = $"{ToolsMenu.MenuId}.home";
+    public const string MenuId = $"{ToolsMenu.MenuId}-home";
 
     public ToolsHomeMenu(IHotKeyService hotKeys)
         : base(MenuId, RS.ToolsMenu_Home, ToolsMenu.MenuId)

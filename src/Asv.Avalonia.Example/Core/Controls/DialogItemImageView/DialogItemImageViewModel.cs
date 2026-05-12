@@ -9,7 +9,7 @@ namespace Asv.Avalonia.Example;
 
 public class DialogItemImageViewModel(ILoggerFactory loggerFactory) : DialogViewModelBase(DialogId)
 {
-    public const string DialogId = $"{BaseId}.item.image";
+    public const string DialogId = $"{BaseId}-item-image";
 
     private const string DesignImagePath = "avares://Asv.Avalonia.Example/Assets/logo.png";
 

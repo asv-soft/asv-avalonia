@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Asv.Modeling;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,6 +8,16 @@ namespace Asv.Avalonia;
 
 public static class ShellMixin
 {
+    extension(IViewModel sender)
+    {
+        public ValueTask GoTo(NavPath path)
+        {
+            var path1 = new List<NavId> { new(ShellViewModel.Id) };
+            path1.AddRange(path);
+            return sender.Events.Rise(new NavigateEvent<IViewModel>(sender, new NavPath(path1)));
+        }
+    }
+
     extension(IHostApplicationBuilder builder)
     {
         private IHostApplicationBuilder UseShell(Action<Builder>? configure = null)

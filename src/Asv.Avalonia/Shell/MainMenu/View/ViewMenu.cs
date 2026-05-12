@@ -4,7 +4,7 @@ namespace Asv.Avalonia;
 
 public class ViewMenu : MenuItem
 {
-    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.view";
+    public const string MenuId = "main-menu-view";
 
     public ViewMenu()
         : base(MenuId, RS.ShellView_Toolbar_View)

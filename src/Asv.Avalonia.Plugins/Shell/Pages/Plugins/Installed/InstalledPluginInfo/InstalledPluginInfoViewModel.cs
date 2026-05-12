@@ -8,7 +8,7 @@ namespace Asv.Avalonia.Plugins;
 
 public class InstalledPluginInfoViewModel : ViewModel
 {
-    public const string ViewModelIdPart = "plugin.installed";
+    public const string ViewModelIdPart = "plugin-installed";
 
     public InstalledPluginInfoViewModel()
         : this(NullLocalPluginInfo.Instance, NullPluginManager.Instance, DesignTime.LoggerFactory)

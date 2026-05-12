@@ -6,15 +6,13 @@ namespace Asv.Avalonia;
 
 public sealed class MobileShellViewModel : ShellViewModel
 {
-    public const string ShellId = "shell_mobile";
-
     public MobileShellViewModel(
         IServiceProvider containerHost,
         IConfiguration cfg,
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
-        : base(ShellId, containerHost, loggerFactory, cfg, ext)
+        : base(containerHost, loggerFactory, cfg, ext)
     {
         // do nothing
     }

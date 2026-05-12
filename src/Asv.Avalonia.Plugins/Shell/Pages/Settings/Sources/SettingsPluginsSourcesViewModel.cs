@@ -12,7 +12,7 @@ namespace Asv.Avalonia.Plugins;
 
 public class SettingsPluginsSourcesViewModel : SettingsSubPage
 {
-    public const string PageId = "plugins.sources";
+    public const string PageId = "plugins-sources";
 
     private readonly IPluginManager _pluginManager;
     private readonly IShellHost _shellHost;

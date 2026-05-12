@@ -7,7 +7,7 @@ namespace Asv.Avalonia;
 
 public class ToolsSettingsMenu : MenuItem
 {
-    public const string MenuId = $"{ToolsMenu.MenuId}.settings";
+    public const string MenuId = $"{ToolsMenu.MenuId}-settings";
 
     public ToolsSettingsMenu()
         : base(MenuId, RS.ToolsMenu_Settings, ToolsMenu.MenuId)

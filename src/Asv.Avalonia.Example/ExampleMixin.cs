@@ -43,14 +43,6 @@ public static class ExampleMixin
     {
         public ControlGalleryBuilder UseDefault()
         {
-            builder.Parent.Parent.Services.AddSingleton<
-                IAsyncCommand,
-                OpenControlsGalleryPageCommand
-            >();
-            builder.Parent.Parent.Services.AddSingleton<
-                IAsyncCommand,
-                ResetGeoPointDialogResultCommand
-            >();
             builder.Parent.Parent.Extensions.Register<
                 IHomePage,
                 HomePageControlsGalleryPageExtension
@@ -165,7 +157,6 @@ public static class ExampleMixin
     {
         public MapTestBuilder UseDefault()
         {
-            builder.Parent.Parent.Services.AddSingleton<IAsyncCommand, OpenMapTestPageCommand>();
             builder.Parent.Parent.Extensions.Register<IHomePage, HomePageMapTestPageExtension>();
             builder.Parent.Parent.Shell.Pages.Register<MapTestPageViewModel, MapTestPageView>(
                 MapTestPageViewModel.PageId

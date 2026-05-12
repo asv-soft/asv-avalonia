@@ -8,7 +8,7 @@ public class HomePageSettingsExtension : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        var action = new ActionViewModel("open.settings")
+        var action = new ActionViewModel("open-settings")
         {
             Header = RS.OpenSettingsCommand_Action_Title,
             Description = RS.OpenSettingsCommand_Action_Description,

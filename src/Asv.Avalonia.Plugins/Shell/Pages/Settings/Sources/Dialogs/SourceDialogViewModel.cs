@@ -6,7 +6,7 @@ namespace Asv.Avalonia.Plugins;
 
 public sealed class SourceDialogViewModel : DialogViewModelBase
 {
-    public const string ViewModelId = $"{BaseId}.plugins.sources.source";
+    public const string ViewModelId = $"{BaseId}-plugins-sources-source";
 
     public SourceDialogViewModel()
         : this(DesignTime.LoggerFactory)

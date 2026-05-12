@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 
 public class DialogItemTextViewModel(ILoggerFactory loggerFactory) : DialogViewModelBase(DialogId)
 {
-    public const string DialogId = $"{BaseId}.item.text";
+    public const string DialogId = $"{BaseId}-item-text";
 
     public DialogItemTextViewModel()
         : this(NullLoggerFactory.Instance)

@@ -24,6 +24,8 @@ public class ShellViewModelConfig
 
 public class ShellViewModel : ViewModel<IShell>, IShell
 {
+    public const string Id = "shell";
+
     private const int MaxInfoBarMessages = 3;
 
     private readonly Subject<Unit> _onCloseEvent;
@@ -41,13 +43,12 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     protected readonly IUndoStoreService UndoStoreService;
 
     protected ShellViewModel(
-        string typeId,
         IServiceProvider ioc,
         ILoggerFactory loggerFactory,
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(typeId, default, ext)
+        : base(Id, default, ext)
     {
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
@@ -63,10 +64,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             this,
             new NavigationStore("nav")
         ).DisposeItWith(Disposable);
-
-        Events
-            .Catch<GoToEvent>(async (_, e, _) => await Navigation.GoTo(e.Path))
-            .DisposeItWith(Disposable);
 
         #endregion
 
@@ -363,9 +360,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     {
         switch (e)
         {
-            case GoToEvent goTo:
-                await Navigation.GoTo(goTo.Path);
-                break;
             case RestartApplicationEvent restart:
             {
                 using var sub = _onCloseEvent.Take(1).Subscribe(_ => RestartApplicationCommon());

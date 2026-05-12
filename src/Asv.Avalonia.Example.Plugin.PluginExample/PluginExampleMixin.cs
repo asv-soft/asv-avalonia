@@ -14,7 +14,6 @@ public static class PluginExampleMixin
             builder.Shell.Pages.Register<ExamplePageViewModel, ExamplePageView>(
                 ExamplePageViewModel.PageId
             );
-            builder.Commands.Register<OpenExamplePageCommand>();
             builder.Shell.Pages.Home.UseExtension<HomePagePluginExtension>();
             return builder;
         }

@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public class EditUndoMenu : MenuItem
 {
-    public const string MenuId = $"{EditMenu.MenuId}.undo";
+    public const string MenuId = $"{EditMenu.MenuId}-undo";
 
     public EditUndoMenu(IShellHost shellHost, IHotKeyService hotKeys)
         : base(MenuId, RS.UndoCommand_CommandInfo_Name, EditMenu.MenuId)

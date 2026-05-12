@@ -6,7 +6,7 @@ namespace Asv.Avalonia.GeoMap;
 
 public class MaxMapZoomProperty : MapZoomPropertyBase
 {
-    public const string ViewModelId = "map.max-zoom";
+    public const string ViewModelId = "map-max-zoom";
 
     public MaxMapZoomProperty()
         : this(NullMapService.Instance, DesignTime.LoggerFactory)

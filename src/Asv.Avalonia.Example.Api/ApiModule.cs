@@ -13,15 +13,15 @@ public class ContextCommand<TContext>
 }
 
 public class Command1
-    : ContextCommand<IViewModel>.WithArg<StringArg>,
-        ContextCommand<IViewModel>.WithArg<DoubleArg>
+    : ContextCommand<IViewModel>.WithArg<string>,
+        ContextCommand<IViewModel>.WithArg<double>
 {
-    public ValueTask Execute(IViewModel context, StringArg argument)
+    public ValueTask Execute(IViewModel context, string argument)
     {
         throw new NotImplementedException();
     }
 
-    public ValueTask Execute(IViewModel context, DoubleArg argument)
+    public ValueTask Execute(IViewModel context, double argument)
     {
         throw new NotImplementedException();
     }

@@ -6,7 +6,7 @@ namespace Asv.Avalonia.GeoMap;
 
 public class MinMapZoomProperty : MapZoomPropertyBase
 {
-    public const string ViewModelId = "map.min-zoom";
+    public const string ViewModelId = "map-min-zoom";
 
     public MinMapZoomProperty()
         : this(NullMapService.Instance, DesignTime.LoggerFactory)

@@ -8,7 +8,7 @@ namespace Asv.Avalonia;
 
 public class OpenMenu : MenuItem
 {
-    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.open";
+    public const string MenuId = "main-menu-open";
 
     private readonly IFileAssociationService _files;
     private readonly OpenFileDialogDesktopPrefab _dialog;

@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public class HelpMenu : MenuItem
 {
-    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.help";
+    public const string MenuId = "main-menu-help";
 
     public HelpMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ShellView_Toolbar_Help)

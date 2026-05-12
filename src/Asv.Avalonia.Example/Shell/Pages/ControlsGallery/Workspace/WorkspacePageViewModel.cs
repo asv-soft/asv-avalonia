@@ -44,7 +44,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         Init(context.Context);
         _loggerFactory = loggerFactory;
-        MapViewModel = new MapViewModel($"{PageId}.map", mapService).DisposeItWith(Disposable);
+        MapViewModel = new MapViewModel($"{PageId}-map", mapService).DisposeItWith(Disposable);
         var hideAll = new MenuItem("action1", "Hide all")
         {
             Command = new ReactiveCommand(x =>

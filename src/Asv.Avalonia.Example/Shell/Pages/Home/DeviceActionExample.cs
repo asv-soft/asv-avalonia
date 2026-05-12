@@ -1,11 +1,19 @@
-﻿using Microsoft.Extensions.Logging;
+using Asv.Common;
+using Material.Icons;
+using R3;
 
 namespace Asv.Avalonia.Example;
 
-public class DeviceActionExample(ILoggerFactory loggerFactory) : IExtensionFor<IHomePageItem>
+public class DeviceActionExample : IExtensionFor<IHomePageItem>
 {
-    public void Extend(IHomePageItem context, R3.CompositeDisposable contextDispose)
+    public void Extend(IHomePageItem context, CompositeDisposable contextDispose)
     {
-        context.Actions.Add(OpenDebugWindowCommand.StaticInfo.CreateAction(loggerFactory));
+        var action = new ActionViewModel("debug")
+        {
+            Header = "Debug",
+            Icon = MaterialIconKind.Bug,
+        }.DisposeItWith(contextDispose);
+
+        context.Actions.Add(action);
     }
 }

@@ -4,12 +4,10 @@ namespace Asv.Avalonia;
 
 public sealed class DesignTimeShellViewModel : ShellViewModel
 {
-    public const string ShellId = "shell_design";
     public static DesignTimeShellViewModel Instance { get; } = new();
 
     public DesignTimeShellViewModel()
         : base(
-            ShellId,
             AppHost.Instance.Services,
             DesignTime.LoggerFactory,
             DesignTime.Configuration,
@@ -44,7 +42,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         };
         MainMenu.Add(file);
 
-        MainMenu.Add(new MenuItem("open", "Open", file.Id.TypeId));
+        MainMenu.Add(new MenuItem("open-child", "Open", file.Id.TypeId));
         MainMenu.Add(new EditMenu(DesignTime.LoggerFactory));
 
         var addLeft = true;

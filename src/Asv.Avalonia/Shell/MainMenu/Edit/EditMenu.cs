@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public class EditMenu : MenuItem
 {
-    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.edit";
+    public const string MenuId = "main-menu-edit";
 
     public EditMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ShellView_Toolbar_Edit)

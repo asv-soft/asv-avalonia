@@ -19,8 +19,6 @@ public class DesktopShellViewModelConfig : ShellViewModelConfig { }
 
 public sealed class DesktopShellViewModel : ShellViewModel
 {
-    public const string ShellId = "shell_desktop";
-
     private readonly IFileAssociationService _fileService;
 
     public DesktopShellViewModel(
@@ -30,7 +28,7 @@ public sealed class DesktopShellViewModel : ShellViewModel
         ILoggerFactory loggerFactory,
         IExtensionService ext
     )
-        : base(ShellId, ioc, loggerFactory, cfg, ext)
+        : base(ioc, loggerFactory, cfg, ext)
     {
         _fileService = fileService;
 

@@ -8,7 +8,7 @@ public class HomePageInstalledPluginsExtension : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        var action = new ActionViewModel("open.plugins.installed")
+        var action = new ActionViewModel("open-plugins-installed")
         {
             Header = RS.OpenInstalledPluginsCommand_Action_Title,
             Description = RS.OpenInstalledPluginsCommand_Action_Description,

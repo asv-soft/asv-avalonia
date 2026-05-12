@@ -14,7 +14,7 @@ namespace Asv.Avalonia.Plugins;
 
 public class PluginsMarketPageViewModel : PageViewModel<PluginsMarketPageViewModel>
 {
-    public const string PageId = "plugins.market";
+    public const string PageId = "plugins-market";
     public const MaterialIconKind PageIcon = MaterialIconKind.Store;
 
     private readonly IPluginManager _manager;

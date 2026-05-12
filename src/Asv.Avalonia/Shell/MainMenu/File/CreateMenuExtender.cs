@@ -16,7 +16,8 @@ public class CreateMenuExtender(
     {
         foreach (var file in files.SupportedFiles.Where(x => x.CanCreate))
         {
-            var menu = new MenuItem($"{CreateMenu.MenuId}.{file.Id}", file.Title, CreateMenu.MenuId)
+            var menuId = $"{CreateMenu.MenuId}-{file.Id.Replace('.', '-')}";
+            var menu = new MenuItem(menuId, file.Title, CreateMenu.MenuId)
             {
                 Icon = file.Icon,
                 Command = new ReactiveCommand((_, cancel) => CreateAsync(file, cancel)),

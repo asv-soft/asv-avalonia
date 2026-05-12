@@ -7,7 +7,7 @@ namespace Asv.Avalonia.GeoMap;
 
 public class GeoPointDialogViewModel : DialogViewModelBase
 {
-    public const string DialogId = $"{BaseId}.geopoint";
+    public const string DialogId = $"{BaseId}-geopoint";
 
     private readonly IUnit _distanceUnit;
     private bool _isSyncingGeoPointProperty;

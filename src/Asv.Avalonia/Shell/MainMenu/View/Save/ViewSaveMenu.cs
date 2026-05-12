@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 
 public sealed class ViewSaveMenu : MenuItem
 {
-    public const string MenuId = $"{ViewMenu.MenuId}.save";
+    public const string MenuId = $"{ViewMenu.MenuId}-save";
 
     private readonly IShellHost _shellHost;
     private readonly ILayoutService _layoutService;

@@ -126,7 +126,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
                 item.IsSelected = false;
             }
 
-            selected.IsSelected = true;
+            _mainTabControl.SelectedItem = selected;
             _selectedTab = selected;
         }
     }
@@ -165,6 +165,12 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         }
 
         _mainTabControl.Items.Add(tab);
+
+        if (SelectedItem is IPage selectedPage && selectedPage.Id == page.Id)
+        {
+            _mainTabControl.SelectedItem = tab;
+            _selectedTab = tab;
+        }
     }
 
     private DockTabItem CreateDockTabItem(IPage content)
@@ -347,7 +353,8 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             item.IsSelected = false;
         }
 
-        fromCfg.IsSelected = true;
+        _mainTabControl.SelectedItem = fromCfg;
+        _selectedTab = fromCfg;
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)

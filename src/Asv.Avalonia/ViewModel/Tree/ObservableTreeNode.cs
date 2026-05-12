@@ -78,7 +78,8 @@ public class ObservableTreeNode<T, TKey>
     private void TryAdd(T item)
     {
         var parent = _parentSelector(item);
-        if (parent.Equals(Key))
+        var key = _keySelector(item);
+        if (parent.Equals(Key) && !key.Equals(Key))
         {
             _itemSource.Add(
                 _createNodeFactory(

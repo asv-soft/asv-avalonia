@@ -6,7 +6,7 @@ namespace Asv.Avalonia.GeoMap;
 
 public sealed class EditApiKeyDialogViewModel : DialogViewModelBase
 {
-    public const string DialogId = $"{BaseId}.edit-api-key";
+    public const string DialogId = $"{BaseId}-edit-api-key";
 
     public EditApiKeyDialogViewModel()
         : this(DesignTime.LoggerFactory)

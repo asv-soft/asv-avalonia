@@ -11,7 +11,7 @@ public record struct MapModeInfo(string Name, MapModeType Type);
 
 public class MapModeProperty : ViewModel
 {
-    public const string ViewModelId = "map.mode";
+    public const string ViewModelId = "map-mode";
 
     private readonly IMapService _mapService;
     private readonly IUndoChangeSink<ValueUndoChange<MapModeType>> _undoSink;

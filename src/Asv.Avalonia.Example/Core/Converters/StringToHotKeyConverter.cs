@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
 
 namespace Asv.Avalonia.Example;
 
@@ -12,7 +13,7 @@ public class StringToHotKeyConverter : IValueConverter
     {
         if (value is string s)
         {
-            return HotKeyInfo.Parse(s);
+            return KeyGesture.Parse(s);
         }
 
         return null;
@@ -25,7 +26,7 @@ public class StringToHotKeyConverter : IValueConverter
         CultureInfo culture
     )
     {
-        if (value is HotKeyInfo hk)
+        if (value is KeyGesture hk)
         {
             return hk.ToString();
         }

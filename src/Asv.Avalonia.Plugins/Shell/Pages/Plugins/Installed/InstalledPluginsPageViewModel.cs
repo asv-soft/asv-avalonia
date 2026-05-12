@@ -12,7 +12,7 @@ namespace Asv.Avalonia.Plugins;
 
 public class InstalledPluginsPageViewModel : PageViewModel<InstalledPluginsPageViewModel>
 {
-    public const string PageId = "plugins.installed";
+    public const string PageId = "plugins-installed";
     public const MaterialIconKind PageIcon = MaterialIconKind.Plugin;
 
     private readonly IPluginManager _manager;

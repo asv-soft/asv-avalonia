@@ -2,7 +2,7 @@
 
 public sealed class NullDialogViewModel : DialogViewModelBase
 {
-    public const string DialogId = $"{BaseId}.null";
+    public const string DialogId = $"{BaseId}-null";
 
     public static NullDialogViewModel Instance { get; } = new();
 

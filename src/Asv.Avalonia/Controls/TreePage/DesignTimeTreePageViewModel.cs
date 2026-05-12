@@ -98,8 +98,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
         );
         Nodes.Add(
             new TreePage(
-                "node1.1",
-                "node1.1",
+                "node1-1",
+                "node1-1",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
                 new NavId("node1"),
@@ -111,8 +111,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
         );
         Nodes.Add(
             new TreePage(
-                "node1.2",
-                "node1.2",
+                "node1-2",
+                "node1-2",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
                 new NavId("node1"),
@@ -129,8 +129,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
         );
         Nodes.Add(
             new TreePage(
-                "node1.3",
-                "node1.3",
+                "node1-3",
+                "node1-3",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
                 new NavId("node1"),
@@ -139,8 +139,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
         );
         Nodes.Add(
             new TreePage(
-                "node1.4",
-                "node1.4",
+                "node1-4",
+                "node1-4",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
                 new NavId("node1"),
@@ -149,8 +149,8 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
         );
         Nodes.Add(
             new TreePage(
-                "node1.5",
-                "node1.5",
+                "node1-5",
+                "node1-5",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
                 new NavId("node1"),
@@ -159,21 +159,21 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
         );
         Nodes.Add(
             new TreePage(
-                "node1.1.1",
-                "node1.1.1",
+                "node1-1-1",
+                "node1-1-1",
                 MaterialIconKind.Abacus,
-                new NavId("node1.1"),
-                new NavId("node1.1"),
+                new NavId("node1-1"),
+                new NavId("node1-1"),
                 DesignTime.LoggerFactory
             )
         );
         Nodes.Add(
             new TreePage(
-                "node1.1.2",
-                "node1.1.2",
+                "node1-1-2",
+                "node1-1-2",
                 MaterialIconKind.Abacus,
-                new NavId("node1.1"),
-                new NavId("node1.1"),
+                new NavId("node1-1"),
+                new NavId("node1-1"),
                 DesignTime.LoggerFactory
             )
         );

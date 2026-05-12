@@ -1,18 +1,23 @@
-using Microsoft.Extensions.Logging;
+using Asv.Common;
+using Asv.Modeling;
 using R3;
 
 namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
-public class HomePagePluginExtension(ILoggerFactory loggerFactory) : IExtensionFor<IHomePage>
+public class HomePagePluginExtension : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        context.Tools.Add(
-            OpenExamplePageCommand.StaticInfo.CreateAction(
-                loggerFactory,
-                "Plugin example action",
-                "This is example action from plugin"
-            )
-        );
+        var action = new ActionViewModel("open-plugin-example")
+        {
+            Header = "Plugin example action",
+            Description = "This is example action from plugin",
+            Icon = ExamplePageViewModel.PageIcon,
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(ExamplePageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
     }
 }

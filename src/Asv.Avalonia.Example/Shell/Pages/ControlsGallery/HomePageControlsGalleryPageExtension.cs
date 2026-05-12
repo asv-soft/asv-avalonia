@@ -1,22 +1,24 @@
 using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Asv.Modeling;
 using R3;
 
 namespace Asv.Avalonia.Example;
 
-public class HomePageControlsGalleryPageExtension(ILoggerFactory loggerFactory)
-    : IExtensionFor<IHomePage>
+public class HomePageControlsGalleryPageExtension : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        context.Tools.Add(
-            OpenControlsGalleryPageCommand
-                .StaticInfo.CreateAction(
-                    loggerFactory,
-                    RS.OpenControlsGalleryPageCommand_Action_Title,
-                    RS.OpenControlsGalleryPageCommand_Action_Description
-                )
-                .DisposeItWith(contextDispose)
-        );
+        var action = new ActionViewModel("open-controls-gallery")
+        {
+            Header = RS.OpenControlsGalleryPageCommand_Action_Title,
+            Description = RS.OpenControlsGalleryPageCommand_Action_Description,
+            Icon = ControlsGalleryPageViewModel.PageIcon,
+            IconColor = ControlsGalleryPageViewModel.PageIconColor,
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(ControlsGalleryPageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
     }
 }

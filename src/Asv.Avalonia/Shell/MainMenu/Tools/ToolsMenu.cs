@@ -5,7 +5,7 @@ namespace Asv.Avalonia;
 
 public class ToolsMenu : MenuItem
 {
-    public const string MenuId = $"{MainMenuDefaultMenuExtender.Contract}.tools";
+    public const string MenuId = "main-menu-tools";
 
     public ToolsMenu(ILoggerFactory loggerFactory)
         : base(MenuId, RS.ToolsMenu_Name)

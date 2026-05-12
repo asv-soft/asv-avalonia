@@ -6,7 +6,7 @@ namespace Asv.Avalonia;
 public class DialogItemUnsavedChangesViewModel(ILoggerFactory loggerFactory)
     : DialogViewModelBase(DialogId)
 {
-    public const string DialogId = $"{BaseId}.item.unsaved_changes";
+    public const string DialogId = $"{BaseId}-item-unsaved_changes";
 
     public DialogItemUnsavedChangesViewModel()
         : this(NullLoggerFactory.Instance)

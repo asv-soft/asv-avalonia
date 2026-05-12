@@ -8,7 +8,7 @@ public class HomePagePluginsMarketExtension : IExtensionFor<IHomePage>
 {
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        var action = new ActionViewModel("open.plugins.market")
+        var action = new ActionViewModel("open-plugins-market")
         {
             Header = RS.OpenPluginsMarketCommand_Action_Title,
             Description = RS.OpenPluginsMarketCommand_Action_Description,

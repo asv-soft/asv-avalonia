@@ -88,7 +88,7 @@ public class ConnectionRateStatusViewModel : StatusItem
     [field: MaybeNull]
     public StatisticViewModel FullStatistic
     {
-        get { return field ??= new StatisticViewModel($"{TypeId}.statistic", _timeProvider); }
+        get { return field ??= new StatisticViewModel($"{TypeId}-statistic", _timeProvider); }
     }
 
     public override int Order => 256;
