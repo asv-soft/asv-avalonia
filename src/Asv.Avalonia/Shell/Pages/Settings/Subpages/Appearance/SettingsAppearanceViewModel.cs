@@ -30,6 +30,11 @@ public class SettingsAppearanceViewModel
         Views = Sections.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
 
+    public override IEnumerable<IViewModel> GetChildren()
+    {
+        return Sections;
+    }
+
     public ObservableList<ISettingsAppearanceSection> Sections { get; }
 
     public NotifyCollectionChangedSynchronizedViewList<ISettingsAppearanceSection> Views { get; }
