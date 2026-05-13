@@ -9,7 +9,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
 {
     public const string DialogId = $"{BaseId}-geopoint";
 
-    private readonly IUnit _distanceUnit;
+    private readonly DistanceUnit _distanceUnit;
     private bool _isSyncingGeoPointProperty;
     private bool _isSyncingCenterGeoPoint;
 
@@ -26,10 +26,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
     )
         : base(DialogId)
     {
-        var latUnit = unitService.Units[LatitudeUnit.Id];
-        var lonUnit = unitService.Units[LongitudeUnit.Id];
-        var altUnit = unitService.Units[AltitudeUnit.Id];
-        _distanceUnit = unitService.Units[DistanceUnit.Id];
+        _distanceUnit = unitService.GetRequiredUnitOfType<DistanceUnit>(DistanceUnit.Id);
 
         CurrentProvider = mapService
             .CurrentProvider.ToReadOnlyBindableReactiveProperty<ITileProvider>()
@@ -41,9 +38,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         GeoPointProperty = new BindableGeoPointProperty(
             nameof(GeoPointProperty),
             geoPointProperty,
-            latUnit,
-            lonUnit,
-            altUnit,
+            unitService,
             loggerFactory
         )
             .SetRoutableParent(this)
@@ -95,16 +90,16 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .Subscribe(_ => MoveCommand?.ChangeCanExecute(!DistanceProperty.HasErrors))
             .DisposeItWith(Disposable);
 
-        LonUnitName = lonUnit
-            .CurrentUnitItem.Select(item => item.Symbol)
+        LonUnitName = GeoPointProperty
+            .Longitude.Unit.CurrentUnitItem.Select(item => item.Symbol)
             .ToReadOnlyBindableReactiveProperty<string>()
             .DisposeItWith(Disposable);
-        LatUnitName = latUnit
-            .CurrentUnitItem.Select(item => item.Symbol)
+        LatUnitName = GeoPointProperty
+            .Latitude.Unit.CurrentUnitItem.Select(item => item.Symbol)
             .ToReadOnlyBindableReactiveProperty<string>()
             .DisposeItWith(Disposable);
-        AltUnitName = altUnit
-            .CurrentUnitItem.Select(item => item.Symbol)
+        AltUnitName = GeoPointProperty
+            .Altitude.Unit.CurrentUnitItem.Select(item => item.Symbol)
             .ToReadOnlyBindableReactiveProperty<string>()
             .DisposeItWith(Disposable);
         DistanceUnitName = _distanceUnit

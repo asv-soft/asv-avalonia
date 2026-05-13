@@ -72,4 +72,17 @@ public interface IUnitService
     IReadOnlyDictionary<string, IUnit> Units { get; }
     IUnit? this[string unit] => Units.GetValueOrDefault(unit);
     IUnitItem? this[string unit, string item] => this[unit]?[item];
+
+    public TUnit GetRequiredUnitOfType<TUnit>(string unitId)
+        where TUnit : IUnit
+    {
+        var raw = Units.GetValueOrDefault(unitId);
+
+        if (raw is TUnit typed)
+        {
+            return typed;
+        }
+
+        throw new UnitException($"Unit {unitId} is not of type {typeof(TUnit)}");
+    }
 }

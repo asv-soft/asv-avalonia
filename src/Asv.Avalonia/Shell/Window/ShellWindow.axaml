@@ -11,7 +11,7 @@
     x:DataType="avalonia:ShellViewModel"
     d:DataContext="{x:Static avalonia:DesignTimeShellViewModel.Instance}"
     ExtendClientAreaToDecorationsHint="True"
-    WindowDecorations="None"
+    WindowDecorations="BorderOnly"
     ExtendClientAreaTitleBarHeightHint="1"
     Title="{Binding Header}"
     PositionChanged="WindowBase_OnPositionChanged"
@@ -22,6 +22,5 @@
 >
     <Panel>
         <avalonia:ShellView />
-        <avalonia:WindowResizeGrip />
     </Panel>
 </Window>

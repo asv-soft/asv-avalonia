@@ -3,7 +3,7 @@ using Asv.Common;
 
 namespace Asv.Avalonia;
 
-public abstract class IntensityUnitItemBase(double minValue, double maxValue, double multiplier)
+public abstract class IntensityUnitItem(double minValue, double maxValue, double multiplier)
     : UnitItemBase(multiplier)
 {
     public override ValidationResult ValidateValue(string? value)

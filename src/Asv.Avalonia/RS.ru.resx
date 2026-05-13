@@ -182,8 +182,8 @@
     <data name="AmplitudeModulation_Description" xml:space="preserve">
         <value>Единица измерения амплитудной модуляции</value>
     </data>
-    <data name="InParts_AmplitudeModulation_Description" xml:space="preserve">
-        <value>Амплитудная модуляция в частях</value>
+    <data name="Normalized_AmplitudeModulation_Description" xml:space="preserve">
+        <value>Амплитудная модуляция нормализованная</value>
     </data>
     <data name="Percent_AmplitudeModulation_Description" xml:space="preserve">
         <value>Амплитудная модуляция в прцентах</value>
@@ -215,8 +215,8 @@
     <data name="InParts_UnitItem_Name" xml:space="preserve">
         <value>В частях</value>
     </data>
-    <data name="InParts_DdmGp_Description" xml:space="preserve">
-        <value>РГМ (Gp) в частях</value>
+    <data name="Normalized_DdmGp_Description" xml:space="preserve">
+        <value>РГМ (Gp) нормализованная</value>
     </data>
     <data name="Percent_UnitItem_Name" xml:space="preserve">
         <value>В процентах</value>
@@ -245,8 +245,8 @@
     <data name="DdmLlz_Description" xml:space="preserve">
         <value>Единицы измереня разницы в глубине модуляции</value>
     </data>
-    <data name="InParts_DdmLlz_Description" xml:space="preserve">
-        <value>РГМ (Llz) в частях</value>
+    <data name="Normalized_DdmLlz_Description" xml:space="preserve">
+        <value>РГМ (Llz) нормализованная</value>
     </data>
     <data name="Percent_DdmLlz_Description" xml:space="preserve">
         <value>РГМ (Llz) в процентах</value>
@@ -624,8 +624,8 @@
     <data name="Mah_Capacity_Description" xml:space="preserve">
         <value>Емкость в миллиамперах в час</value>
     </data>
-    <data name="InParts_Progress_Description" xml:space="preserve">
-        <value>Прогресс в частях</value>
+    <data name="Normalized_Progress_Description" xml:space="preserve">
+        <value>Прогресс нормализованный</value>
     </data>
     <data name="OpenSettingsCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, которая открывает настройки</value>
@@ -681,8 +681,8 @@
     <data name="RttBox_NetworkError_ToolTip" xml:space="preserve">
         <value>Ошибка подключения</value>
     </data>
-    <data name="InParts_SDM_Description" xml:space="preserve">
-        <value>СГМ в частях</value>
+    <data name="Normalized_SDM_Description" xml:space="preserve">
+        <value>СГМ нормализованный</value>
     </data>
     <data name="HomePageView_DeviceBrowser_Title" xml:space="preserve">
         <value>Браузер устройств</value>

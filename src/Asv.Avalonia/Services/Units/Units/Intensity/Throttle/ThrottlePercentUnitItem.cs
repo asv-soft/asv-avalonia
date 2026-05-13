@@ -1,6 +1,6 @@
 ﻿namespace Asv.Avalonia;
 
-public sealed class ThrottlePercentUnit() : IntensityUnitItemBase(-100, 100, 1)
+public sealed class ThrottlePercentUnitItem() : IntensityUnitItem(-100, 100, 1)
 {
     public const string Id = $"{ThrottleUnit.Id}.percent";
 

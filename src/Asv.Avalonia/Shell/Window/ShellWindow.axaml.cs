@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
@@ -24,14 +25,16 @@ public partial class ShellWindow : Window
 
     static ShellWindow()
     {
-        WindowStateProperty.Changed.ToObservable().Subscribe(x =>
-        {
-            if (x.Sender is ShellWindow window)
+        WindowStateProperty
+            .Changed.ToObservable()
+            .Subscribe(x =>
             {
-                window._savePosition?.OnNext(Unit.Default);
-                window.UpdateWindowStateUI();
-            }
-        });
+                if (x.Sender is ShellWindow window)
+                {
+                    window._savePosition?.OnNext(Unit.Default);
+                    window.UpdateWindowStateUI();
+                }
+            });
     }
 
     public ShellWindow(ILayoutService layoutService, ILoggerFactory logger)

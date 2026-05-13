@@ -20,38 +20,46 @@ public partial class MapCompass : TemplatedControl
 
     static MapCompass()
     {
-        RotationProperty.Changed.ToObservable().Subscribe(args =>
-        {
-            if (args.Sender is MapCompass compass)
+        RotationProperty
+            .Changed.ToObservable()
+            .Subscribe(args =>
             {
-                compass.NormalizeRotation();
-                compass.UpdateNeedleRotation();
-            }
-        });
+                if (args.Sender is MapCompass compass)
+                {
+                    compass.NormalizeRotation();
+                    compass.UpdateNeedleRotation();
+                }
+            });
 
-        MouseRotationSensitivityProperty.Changed.ToObservable().Subscribe(args =>
-        {
-            if (args.Sender is MapCompass compass)
+        MouseRotationSensitivityProperty
+            .Changed.ToObservable()
+            .Subscribe(args =>
             {
-                compass.NormalizeNonNegative(MouseRotationSensitivityProperty);
-            }
-        });
+                if (args.Sender is MapCompass compass)
+                {
+                    compass.NormalizeNonNegative(MouseRotationSensitivityProperty);
+                }
+            });
 
-        TouchpadRotationSensitivityProperty.Changed.ToObservable().Subscribe(args =>
-        {
-            if (args.Sender is MapCompass compass)
+        TouchpadRotationSensitivityProperty
+            .Changed.ToObservable()
+            .Subscribe(args =>
             {
-                compass.NormalizeNonNegative(TouchpadRotationSensitivityProperty);
-            }
-        });
+                if (args.Sender is MapCompass compass)
+                {
+                    compass.NormalizeNonNegative(TouchpadRotationSensitivityProperty);
+                }
+            });
 
-        GestureSurfaceProperty.Changed.ToObservable().Subscribe(args =>
-        {
-            if (args.Sender is MapCompass compass)
+        GestureSurfaceProperty
+            .Changed.ToObservable()
+            .Subscribe(args =>
             {
-                compass.AttachToGestureSurface();
-            }
-        });
+                if (args.Sender is MapCompass compass)
+                {
+                    compass.AttachToGestureSurface();
+                }
+            });
     }
 
     public MapCompass()

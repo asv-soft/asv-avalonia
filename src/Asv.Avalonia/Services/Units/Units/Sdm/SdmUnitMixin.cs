@@ -9,7 +9,7 @@ public static class SdmUnitMixin
         builder
             .AddUnit<SdmUnit>(SdmUnit.Id)
             .AddItem<SdmPercentUnitItem>()
-            .AddItem<SdmInPartsUnitItem>();
+            .AddItem<SdmNormalizedUnitItem>();
         return builder;
     }
 
@@ -20,5 +20,5 @@ public static class SdmUnitMixin
         service[SdmUnit.Id, SdmPercentUnitItem.Id];
 
     public static IUnitItem? SdmPercent(this IUnitService service) =>
-        service[SdmUnit.Id, SdmInPartsUnitItem.Id];
+        service[SdmUnit.Id, SdmNormalizedUnitItem.Id];
 }

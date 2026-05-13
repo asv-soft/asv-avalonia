@@ -8,7 +8,7 @@ public static class AmModulationMixin
     {
         builder
             .AddUnit<AmModulationUnit>(AmModulationUnit.Id)
-            .AddItem<AmModulationInPartsUnitItem>()
+            .AddItem<AmModulationNormalizedUnitItem>()
             .AddItem<AmModulationPercentUnitItem>();
         return builder;
     }
@@ -16,8 +16,8 @@ public static class AmModulationMixin
     public static IUnitItem? AmModulation(this IUnitService service) =>
         service[AngleUnit.Id]?.CurrentUnitItem.Value;
 
-    public static IUnitItem? AmModulationInParts(this IUnitService service) =>
-        service[AngleUnit.Id, AmModulationInPartsUnitItem.Id];
+    public static IUnitItem? AmModulationNormalized(this IUnitService service) =>
+        service[AngleUnit.Id, AmModulationNormalizedUnitItem.Id];
 
     public static IUnitItem? AmModulationPercent(this IUnitService service) =>
         service[AngleUnit.Id, AmModulationPercentUnitItem.Id];

@@ -9,11 +9,6 @@ namespace Asv.Avalonia;
 
 public class GeoPointRttBoxViewModel : RttBoxViewModel
 {
-    private readonly ReactiveProperty<GeoPoint> _location;
-    private readonly IUnit _latitudeUnit;
-    private readonly IUnit _longitudeUnit;
-    private readonly IUnit _altitudeUnit;
-
     public GeoPointRttBoxViewModel()
         : this(DesignTime.Id.TypeId, DesignTime.LoggerFactory, NullUnitService.Instance, null)
     {
@@ -56,22 +51,11 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
     )
         : base(typeId, networkErrorTimeout)
     {
-        _location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
-        _latitudeUnit =
-            units[LatitudeUnit.Id]
-            ?? throw new ArgumentException("Latitude unit not found in unit service");
-        _longitudeUnit =
-            units[LongitudeUnit.Id]
-            ?? throw new ArgumentException("Longitude unit not found in unit service");
-        _altitudeUnit =
-            units[AltitudeUnit.Id]
-            ?? throw new ArgumentException("Altitude unit not found in unit service");
+        var location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
         GeoPointProperty = new BindableGeoPointProperty(
             nameof(GeoPointProperty),
-            _location,
-            _latitudeUnit,
-            _longitudeUnit,
-            _altitudeUnit,
+            location,
+            units,
             loggerFactory,
             options =>
             {

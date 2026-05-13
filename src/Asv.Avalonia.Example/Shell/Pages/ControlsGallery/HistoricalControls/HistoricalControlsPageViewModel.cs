@@ -55,10 +55,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     )
         : base(PageId, context)
     {
-        var un = unit.Units[VelocityUnit.Id];
-        var latUnit = unit.Units[LatitudeUnit.Id];
-        var lonUnit = unit.Units[LongitudeUnit.Id];
-        var altUnit = unit.Units[AltitudeUnit.Id];
+        var speedUnit = unit.GetRequiredUnitOfType<VelocityUnit>(VelocityUnit.Id);
 
         _speed = new ReactiveProperty<double>(double.NaN).DisposeItWith(Disposable);
         _isTurnedOn = new ReactiveProperty<bool>().DisposeItWith(Disposable);
@@ -79,7 +76,12 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             IsTurnedOn.ViewValue.Value = !IsTurnedOn.ViewValue.Value
         ).DisposeItWith(Disposable);
 
-        Speed = new HistoricalUnitProperty(nameof(Speed), _speed, un, loggerFactory)
+        Speed = new HistoricalUnitProperty<VelocityUnit>(
+            nameof(Speed),
+            _speed,
+            speedUnit,
+            loggerFactory
+        )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
@@ -142,9 +144,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         GeoPointProperty = new HistoricalGeoPointProperty(
             nameof(GeoPointProperty),
             _geoPointProperty,
-            latUnit,
-            lonUnit,
-            altUnit,
+            unit,
             loggerFactory
         )
             .SetRoutableParent(this)
@@ -166,7 +166,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     }
 
     public ReactiveCommand TurnOn { get; }
-    public HistoricalUnitProperty Speed { get; }
+    public HistoricalUnitProperty<VelocityUnit> Speed { get; }
     public HistoricalBoolProperty IsTurnedOn { get; }
     public HistoricalStringProperty StringPropWithoutValidation { get; }
     public HistoricalStringProperty StringPropWithOneValidation { get; }
