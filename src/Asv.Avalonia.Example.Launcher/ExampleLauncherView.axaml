@@ -1,0 +1,87 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:launcher="clr-namespace:Asv.Avalonia.Launcher;assembly=Asv.Avalonia.Launcher"
+    x:Class="Asv.Avalonia.Example.Launcher.ExampleLauncherView"
+    x:DataType="launcher:LauncherViewModel"
+    mc:Ignorable="d"
+>
+    <Design.DataContext>
+        <launcher:LauncherViewModel />
+    </Design.DataContext>
+
+    <Border Classes="launcher-surface">
+        <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Margin="28">
+            <Border
+                Grid.Row="0"
+                Grid.Column="0"
+                Classes="launcher-logo-frame"
+                Width="96"
+                Height="96"
+                VerticalAlignment="Top"
+            >
+                <Image
+                    Width="82"
+                    Height="82"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Source="avares://Asv.Avalonia.Example.Launcher/Assets/asv-soft-logo.png"
+                    Stretch="Uniform"
+                />
+            </Border>
+
+            <Grid
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="24,0,0,0"
+                RowDefinitions="Auto,Auto,*,Auto,Auto"
+            >
+                <TextBlock Grid.Row="0" Classes="launcher-title" Text="ASV Launcher" />
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,4,0,0"
+                    Classes="launcher-subtitle"
+                    Text="Example application startup"
+                />
+                <TextBlock
+                    Grid.Row="3"
+                    Margin="0,0,0,10"
+                    Classes="launcher-status"
+                    Text="{Binding Status.Value}"
+                />
+                <ProgressBar
+                    Grid.Row="4"
+                    Classes="launcher-progress"
+                    IsIndeterminate="{Binding IsProgressIndeterminate.Value}"
+                    Minimum="0"
+                    Maximum="1"
+                    Value="{Binding Progress.Value}"
+                />
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Grid.Column="0"
+                Margin="0,24,0,0"
+                ColumnDefinitions="*,Auto"
+            >
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Classes="launcher-footer"
+                    Text="Powered by Asv.Avalonia"
+                />
+                <Button
+                    Grid.Column="1"
+                    Classes="launcher-close"
+                    IsVisible="{Binding IsCloseVisible.Value}"
+                    Command="{Binding CloseCommand}"
+                    Content="Close"
+                />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

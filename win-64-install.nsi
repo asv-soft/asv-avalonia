@@ -31,15 +31,17 @@ ShowUnInstDetails show
 Section "Core Files (required)" SEC01
   SetOutPath "$INSTDIR"
   ; Check dir in yml where your project is stored
-  File /r "./publish/app\\*.*"
+  File /r "./publish/app\*.*"
 SectionEnd
 
 ; Section for shortcuts
 Section "Start Menu and Desktop Shortcuts" SEC02
+  CreateDirectory "$SMPROGRAMS\Asv Avalonia Example"
+
   ; Create a shortcut on the desktop
-  CreateShortcut "$DESKTOP\Asv Avalonia Example.lnk" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" "" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" 0
+  CreateShortcut "$DESKTOP\Asv Avalonia Example.lnk" "$INSTDIR\Asv.Avalonia.Example.Launcher.exe" "--target $\"$INSTDIR\Asv.Avalonia.Example.Desktop.exe$\"" "$INSTDIR\Asv.Avalonia.Example.Launcher.exe" 0
   ; Create a shortcut in the Start menu
-  CreateShortcut "$SMPROGRAMS\Asv Avalonia Example\Asv Avalonia Example.lnk" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" "" "$INSTDIR\Asv.Avalonia.Example.Desktop.exe" 0
+  CreateShortcut "$SMPROGRAMS\Asv Avalonia Example\Asv Avalonia Example.lnk" "$INSTDIR\Asv.Avalonia.Example.Launcher.exe" "--target $\"$INSTDIR\Asv.Avalonia.Example.Desktop.exe$\"" "$INSTDIR\Asv.Avalonia.Example.Launcher.exe" 0
 SectionEnd
 
 Section -Post
@@ -56,7 +58,7 @@ Function un.onUninstSuccess
 FunctionEnd
 
 Function un.onInit
-  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove Asv Drones Gui and all of its components?" IDYES +2
+  MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to completely remove Asv Avalonia Example and all of its components?" IDYES +2
   Abort
 FunctionEnd
 

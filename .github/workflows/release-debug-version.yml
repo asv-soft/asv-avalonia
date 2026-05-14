@@ -37,6 +37,7 @@ jobs:
           dotnet restore ./src/${{ env.PROJECT_NAME }}.DC/${{ env.PROJECT_NAME }}.DC.csproj  
           dotnet restore ./src/${{ env.PROJECT_NAME }}.IO/${{ env.PROJECT_NAME }}.IO.csproj    
           dotnet restore ./src/${{ env.PROJECT_NAME }}.GeoMap/${{ env.PROJECT_NAME }}.GeoMap.csproj       
+          dotnet restore ./src/${{ env.PROJECT_NAME }}.LauncherReady/${{ env.PROJECT_NAME }}.LauncherReady.csproj
           dotnet restore ./src/${{ env.PROJECT_NAME }}.Plugins/${{ env.PROJECT_NAME }}.Plugins.csproj
           
 
@@ -46,6 +47,7 @@ jobs:
           dotnet build ./src/${{ env.PROJECT_NAME }}.DC/${{ env.PROJECT_NAME }}.DC.csproj --configuration Release --no-restore 
           dotnet build ./src/${{ env.PROJECT_NAME }}.IO/${{ env.PROJECT_NAME }}.IO.csproj --configuration Release --no-restore
           dotnet build ./src/${{ env.PROJECT_NAME }}.GeoMap/${{ env.PROJECT_NAME }}.GeoMap.csproj --configuration Release --no-restore
+          dotnet build ./src/${{ env.PROJECT_NAME }}.LauncherReady/${{ env.PROJECT_NAME }}.LauncherReady.csproj --configuration Release --no-restore
           dotnet build ./src/${{ env.PROJECT_NAME }}.Plugins/${{ env.PROJECT_NAME }}.Plugins.csproj --configuration Release --no-restore
 
       - name: Set version variable
@@ -75,6 +77,7 @@ jobs:
           setversion ${{ env.VERSION }} ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj    
           setversion ${{ env.VERSION }} ./src/${{ env.PROJECT_NAME }}.IO/${{ env.PROJECT_NAME }}.IO.csproj    
           setversion ${{ env.VERSION }} ./src/${{ env.PROJECT_NAME }}.GeoMap/${{ env.PROJECT_NAME }}.GeoMap.csproj       
+          setversion ${{ env.VERSION }} ./src/${{ env.PROJECT_NAME }}.LauncherReady/${{ env.PROJECT_NAME }}.LauncherReady.csproj
           setversion ${{ env.VERSION }} ./src/${{ env.PROJECT_NAME }}.Plugins/${{ env.PROJECT_NAME }}.Plugins.csproj
 
       - name: Pack projects to Nuget
@@ -82,6 +85,7 @@ jobs:
           dotnet pack ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -c Release /p:Version="${{ env.VERSION }}" --no-build -o .
           dotnet pack ./src/${{ env.PROJECT_NAME }}.IO/${{ env.PROJECT_NAME }}.IO.csproj -c Release /p:Version="${{ env.VERSION }}" --no-build -o .
           dotnet pack ./src/${{ env.PROJECT_NAME }}.GeoMap/${{ env.PROJECT_NAME }}.GeoMap.csproj -c Release /p:Version="${{ env.VERSION }}" --no-build -o .
+          dotnet pack ./src/${{ env.PROJECT_NAME }}.LauncherReady/${{ env.PROJECT_NAME }}.LauncherReady.csproj -c Release /p:Version="${{ env.VERSION }}" --no-build -o .
           dotnet pack ./src/${{ env.PROJECT_NAME }}.Plugins/${{ env.PROJECT_NAME }}.Plugins.csproj -c Release /p:Version="${{ env.VERSION }}" --no-build -o .
 
       - name: List output files
@@ -92,4 +96,5 @@ jobs:
           dotnet nuget push ${{ env.PROJECT_NAME }}.${{ env.VERSION }}.nupkg -k ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.GITHUB_PACKAGES_URL }}
           dotnet nuget push ${{ env.PROJECT_NAME }}.IO.${{ env.VERSION }}.nupkg -k ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.GITHUB_PACKAGES_URL }}
           dotnet nuget push ${{ env.PROJECT_NAME }}.GeoMap.${{ env.VERSION }}.nupkg -k ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.GITHUB_PACKAGES_URL }}
+          dotnet nuget push ${{ env.PROJECT_NAME }}.LauncherReady.${{ env.VERSION }}.nupkg -k ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.GITHUB_PACKAGES_URL }}
           dotnet nuget push ${{ env.PROJECT_NAME }}.Plugins.${{ env.VERSION }}.nupkg -k ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.GITHUB_PACKAGES_URL }}

@@ -9,6 +9,11 @@
     <Project Path="Asv.Avalonia.Example.Desktop/Asv.Avalonia.Example.Desktop.csproj" />
     <Project Path="Asv.Avalonia.Example.iOS/Asv.Avalonia.Example.iOS.csproj" />
   </Folder>
+  <Folder Name="/Launcher/">
+    <Project Path="Asv.Avalonia.Example.Launcher/Asv.Avalonia.Example.Launcher.csproj" />
+    <Project Path="Asv.Avalonia.Launcher.Api/Asv.Avalonia.Launcher.Api.csproj" />
+    <Project Path="Asv.Avalonia.Launcher/Asv.Avalonia.Launcher.csproj" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.csharpierignore" />
     <File Path="../.github/workflows/docs.yml" />
@@ -19,6 +24,7 @@
     <File Path="../.gitignore" />
     <File Path="../LICENSE" />
     <File Path="../README.md" />
+    <File Path="../win-64-install.nsi" />
     <File Path=".aiassistant/rules/comments.md" />
     <File Path="CodeStyle.ruleset" />
     <File Path="Directory.Build.props" />
@@ -26,6 +32,7 @@
   <Project Path="Asv.Avalonia.DC/Asv.Avalonia.DC.csproj" />
   <Project Path="Asv.Avalonia.GeoMap/Asv.Avalonia.GeoMap.csproj" />
   <Project Path="Asv.Avalonia.IO/Asv.Avalonia.IO.csproj" />
+  <Project Path="Asv.Avalonia.LauncherReady\Asv.Avalonia.LauncherReady.csproj" />
   <Project Path="Asv.Avalonia.Plugins/Asv.Avalonia.Plugins.csproj" />
   <Project Path="Asv.Avalonia.Test/Asv.Avalonia.Test.csproj" />
   <Project Path="Asv.Avalonia/Asv.Avalonia.csproj" />

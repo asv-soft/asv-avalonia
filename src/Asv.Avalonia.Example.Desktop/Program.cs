@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.IO;
+using Asv.Avalonia.Launcher.Ready;
 using Asv.Avalonia.Plugins;
 using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Logging;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example.Desktop;
@@ -73,6 +73,10 @@ sealed class Program
                             .UseOptionalMarket(); // register market plugins page
                     })
                     .UseModuleGeoMap()
+                    .UseLauncher(cfg =>
+                    {
+                        cfg.IsOptional();
+                    })
                     .UseModuleIo()
                     .UseExampleApp();
             });
