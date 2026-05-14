@@ -1,0 +1,125 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:avalonia1="clr-namespace:Asv.Avalonia"
+>
+    <Design.PreviewWith>
+        <Grid ColumnDefinitions="*,*">
+            <ThemeVariantScope Grid.Column="0" RequestedThemeVariant="Dark">
+                <Border Background="{DynamicResource SystemRegionBrush}">
+                    <avalonia1:StartupSplashScreen
+                        AppName="ASV App"
+                        Header="Starting modules"
+                        Description="Preparing workspace and loading services..."
+                        StatusText="Initializing..."
+                        Width="520"
+                        Height="300"
+                    />
+                </Border>
+            </ThemeVariantScope>
+            <ThemeVariantScope Grid.Column="1" RequestedThemeVariant="Light">
+                <Border Background="{DynamicResource SystemRegionBrush}">
+                    <avalonia1:StartupSplashScreen
+                        AppName="ASV App"
+                        Header="Starting modules"
+                        Description="Preparing workspace and loading services..."
+                        StatusText="Initializing..."
+                        Width="520"
+                        Height="300"
+                    />
+                </Border>
+            </ThemeVariantScope>
+        </Grid>
+    </Design.PreviewWith>
+
+    <Style Selector="avalonia1|StartupSplashScreen">
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="VerticalAlignment" Value="Stretch" />
+        <Setter Property="Background" Value="{DynamicResource SystemRegionBrush}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border Background="{TemplateBinding Background}" Padding="32">
+                    <Grid
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Width="520"
+                        RowDefinitions="Auto,8,Auto,12,Auto,16,Auto,10,Auto"
+                    >
+                        <Grid Grid.Row="0" ColumnDefinitions="Auto,12,*">
+                            <Grid Width="56" Height="56">
+                                <Border
+                                    Background="{DynamicResource AsvBackgroundColorLevel2Brush}"
+                                    CornerRadius="12"
+                                />
+                                <Image
+                                    Width="56"
+                                    Height="56"
+                                    Stretch="Uniform"
+                                    Source="{TemplateBinding AppIcon}"
+                                />
+                                <avalonia:MaterialIcon
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Width="28"
+                                    Height="28"
+                                    Foreground="{DynamicResource AsvForegroundSuccessBrush}"
+                                    Kind="{TemplateBinding Icon}"
+                                />
+                            </Grid>
+
+                            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+                                <TextBlock
+                                    FontSize="{DynamicResource AsvH3FontSize}"
+                                    Opacity="0.85"
+                                    Text="{TemplateBinding AppName}"
+                                />
+                                <TextBlock
+                                    FontSize="{DynamicResource AsvH1FontSize}"
+                                    Text="{TemplateBinding Header}"
+                                />
+                            </StackPanel>
+                        </Grid>
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Opacity="0.85"
+                            Text="{TemplateBinding Description}"
+                        />
+
+                        <ContentPresenter
+                            Grid.Row="4"
+                            Content="{TemplateBinding SplashScreenContent}"
+                        />
+
+                        <TextBlock Grid.Row="6" Text="{TemplateBinding StatusText}" />
+
+                        <ProgressBar
+                            Grid.Row="8"
+                            Minimum="{TemplateBinding ProgressMinimum}"
+                            Maximum="{TemplateBinding ProgressMaximum}"
+                            Value="{TemplateBinding ProgressValue}"
+                            IsIndeterminate="{TemplateBinding IsIndeterminate}"
+                        />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="avalonia1|StartupSplashScreen[IsBusy=true] avalonia|MaterialIcon">
+        <Style.Animations>
+            <Animation IterationCount="Infinite" Duration="0:0:3">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Opacity" Value="0.2" />
+                </KeyFrame>
+                <KeyFrame Cue="50%">
+                    <Setter Property="Opacity" Value="1.0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Opacity" Value="0.2" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+</Styles>
