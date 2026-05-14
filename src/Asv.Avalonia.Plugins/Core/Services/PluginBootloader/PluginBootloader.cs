@@ -182,7 +182,11 @@ public class PluginBootloader : AsyncDisposableOnceBag, IPluginBootloader
             }
             catch (Exception e)
             {
-                ExceptionReport.WriteToFile(assembly.Location, e, out _);
+                ExceptionReport.WriteToFile(
+                    Path.GetDirectoryName(assembly.Location) ?? AppContext.BaseDirectory,
+                    e,
+                    out _
+                );
             }
         }
     }

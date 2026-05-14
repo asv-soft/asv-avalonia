@@ -38,6 +38,8 @@ public static class ExceptionReport
         string ext
     )
     {
+        dir = NormalizeReportDirectory(dir);
+
         // Move files: N-1 -> N
         for (var i = maxCrashFiles - 1; i >= 0; i--)
         {
@@ -65,6 +67,17 @@ public static class ExceptionReport
         }
 
         return Path.Combine(dir, $"#{filePrefix}_0.{ext}");
+    }
+
+    private static string NormalizeReportDirectory(string path)
+    {
+        if (File.Exists(path))
+        {
+            path = Path.GetDirectoryName(path) ?? AppContext.BaseDirectory;
+        }
+
+        Directory.CreateDirectory(path);
+        return path;
     }
 
     public static string Build(Exception ex)
