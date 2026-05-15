@@ -1,0 +1,21 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Asv.Avalonia.Example.Launcher.LauncherWindow"
+    Width="420"
+    Height="420"
+    CanResize="False"
+    WindowStartupLocation="CenterScreen"
+    WindowDecorations="None"
+    Title="Launcher"
+>
+    <Grid RowDefinitions="*,Auto,*">
+        <TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            FontSize="16"
+            Text="Launcher is starting application..."
+        />
+    </Grid>
+</Window>
