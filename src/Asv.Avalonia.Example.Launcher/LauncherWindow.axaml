@@ -9,13 +9,35 @@
     WindowDecorations="None"
     Title="Launcher"
 >
-    <Grid RowDefinitions="*,Auto,*">
+    <Grid RowDefinitions="*,Auto,Auto,Auto,*">
         <TextBlock
             Grid.Row="1"
+            x:Name="StatusText"
+            Margin="24,0,24,8"
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             FontSize="16"
+            TextAlignment="Center"
+            TextWrapping="Wrap"
             Text="Launcher is starting application..."
+        />
+        <ProgressBar
+            Grid.Row="2"
+            x:Name="LaunchProgress"
+            Margin="24,0,24,0"
+            IsIndeterminate="True"
+            Minimum="0"
+            Maximum="1"
+            Value="0"
+        />
+        <Button
+            Grid.Row="3"
+            x:Name="CloseButton"
+            Margin="24,12,24,0"
+            HorizontalAlignment="Stretch"
+            IsVisible="False"
+            Click="CloseButtonOnClick"
+            Content="Close"
         />
     </Grid>
 </Window>
