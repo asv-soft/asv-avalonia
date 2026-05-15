@@ -125,14 +125,58 @@
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Controls\RttBox\Gnss\GeoPoint\GeoPointRttBoxView.axaml" />
-      <AdditionalFiles Include="Controls\RttBox\KeyValue\TwoColumn\TwoColumnRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\ContentDialog\ContentDialogStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\DockControlStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\Item\DockTabItemStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\Item\DockTabStripItemStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\TabControl\DockTabControlStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Dock\Window\DockWindow.axaml" />
+      <AdditionalFiles Include="Core\Controls\FrequencyScreen\FrequencyControl.axaml" />
+      <AdditionalFiles Include="Core\Controls\GeoPoint\GeoPointEditor.axaml" />
+      <AdditionalFiles Include="Core\Controls\HotKeys\HotKeyBox.axaml" />
+      <AdditionalFiles Include="Core\Controls\Indicators\BatteryIndicator.axaml" />
+      <AdditionalFiles Include="Core\Controls\Indicators\ConnectionQuality.axaml" />
+      <AdditionalFiles Include="Core\Controls\Indicators\GpsStatusIndicator.axaml" />
+      <AdditionalFiles Include="Core\Controls\InfoBar\InfoBarStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Items\ItemsListStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\GeoPointPropertyView.axaml" />
+      <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\UnitPropertyView.axaml" />
+      <AdditionalFiles Include="Core\Controls\PropertyEditor\PropertyEditorView.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\KeyValue\KeyValueRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\RttBox.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\Single\Digit\Split\SplitDigitRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\RttBox\Single\SingleRttBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\SearchBox\SearchBoxView.axaml" />
+      <AdditionalFiles Include="Core\Controls\SplashScreens\ActionScreen.axaml" />
+      <AdditionalFiles Include="Core\Controls\SplashScreens\AwaitingScreen.axaml" />
+      <AdditionalFiles Include="Core\Controls\Tags\Tag.axaml" />
+      <AdditionalFiles Include="Core\Controls\Tools\ToolsListStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\TreePage\GroupTreePageItemView.axaml" />
+      <AdditionalFiles Include="Core\Controls\TreePage\TreePageView.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\Widgets\Panels\StackPanelWidgetView.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\Widgets\Panels\WrapPanelWidgetView.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\Workspace.axaml" />
+      <AdditionalFiles Include="Core\Controls\Workspace\WorkspaceItem.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemHotKeyCaptureView.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextBoxView.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextView.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemUnsavedChangesView.axaml" />
+      <AdditionalFiles Include="Core\Styles\Palette\Brushes.axaml" />
+      <AdditionalFiles Include="Core\Styles\Palette\Dark.axaml" />
+      <AdditionalFiles Include="Core\Styles\Palette\Default.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\BorderStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\ButtonStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\EllipseStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\MaterialIconStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\PathStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\ProgressBarStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\TabStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\TextBlockStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\TextBoxStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Styles\TransparentButtonStyles.axaml" />
+      <AdditionalFiles Include="Core\Styles\Theme.axaml" />
       <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Units\SettingsUnitsView.axaml" />
       <AdditionalFiles Include="Shell\Window\DebugWindow\DebugWindow.axaml" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="_Core\" />
     </ItemGroup>
 
     <ItemGroup>
