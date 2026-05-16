@@ -41,11 +41,12 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
         );
 
         var processStartInfo = CreateStartInfo(options);
-        using var process = new Process { StartInfo = processStartInfo };
+        using var process = new Process();
+        process.StartInfo = processStartInfo;
 
         try
         {
-            if (process.Start() == false)
+            if (!process.Start())
             {
                 return new LauncherRunResult(
                     LauncherExitCode.TargetStartFailed,
@@ -153,7 +154,6 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
         var startInfo = new ProcessStartInfo
         {
             FileName = options.TargetPath,
-            UseShellExecute = false,
             WorkingDirectory =
                 Path.GetDirectoryName(options.TargetPath) ?? Environment.CurrentDirectory,
         };
@@ -197,6 +197,11 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
             );
         }
 
+        if (TryValidatePipeNameLength(options.PipeName, out var pipeLengthError) == false)
+        {
+            return new LauncherRunResult(LauncherExitCode.InvalidArguments, pipeLengthError);
+        }
+
         if (string.IsNullOrWhiteSpace(options.SessionToken))
         {
             return new LauncherRunResult(
@@ -214,5 +219,37 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
         }
 
         return null;
+    }
+
+    private static bool TryValidatePipeNameLength(string pipeName, out string error)
+    {
+        error = string.Empty;
+
+        // On Unix, .NET named pipes are backed by Unix domain sockets with max path length 104.
+        if (OperatingSystem.IsWindows())
+        {
+            return true;
+        }
+
+        const int maxSocketPathLength = 104;
+        const string coreFxPipePrefix = "CoreFxPipe_";
+        var estimatedSocketPathLength =
+            Path.GetTempPath().Length + coreFxPipePrefix.Length + pipeName.Length;
+        if (estimatedSocketPathLength <= maxSocketPathLength)
+        {
+            return true;
+        }
+
+        var maxPipeNameLength =
+            maxSocketPathLength - Path.GetTempPath().Length - coreFxPipePrefix.Length;
+        if (maxPipeNameLength < 1)
+        {
+            maxPipeNameLength = 1;
+        }
+
+        error =
+            $"Pipe name is too long for this platform/temp path. "
+            + $"Current length: {pipeName.Length}, max allowed: {maxPipeNameLength}.";
+        return false;
     }
 }

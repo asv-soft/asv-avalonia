@@ -19,7 +19,7 @@ public static class LauncherCommandLineParser
 
         string? targetPath = null;
         var targetArgs = new List<string>();
-        var pipeName = $"asv-launcher-{Guid.NewGuid():N}";
+        var pipeName = $"asvl-{Guid.NewGuid():N}"[..13];
         var sessionToken = Guid.NewGuid().ToString("N");
         var startupTimeout = TimeSpan.FromSeconds(60);
         var passthroughMode = false;

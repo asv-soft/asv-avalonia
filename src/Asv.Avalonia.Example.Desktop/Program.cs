@@ -75,6 +75,8 @@ sealed class Program
                     .UseModuleGeoMap()
                     .UseModuleIo()
                     .UseExampleApp();
+
+                builder.Extensions.Register<IShell, LauncherReadyShellExtension>();
             });
     }
 }
