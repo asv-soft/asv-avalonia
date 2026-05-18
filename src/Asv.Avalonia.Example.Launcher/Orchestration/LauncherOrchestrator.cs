@@ -5,13 +5,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.Example.Launcher.Contracts;
 using Asv.Avalonia.Example.Launcher.Ipc;
+using Asv.Avalonia.Launcher.Api;
 
 namespace Asv.Avalonia.Example.Launcher.Orchestration;
 
 public sealed class LauncherOrchestrator : ILauncherOrchestrator
 {
-    public const string LauncherPipeArg = "--launcher-pipe";
-    public const string LauncherTokenArg = "--launcher-token";
+    public const string LauncherPipeArg = LauncherCommandLineArguments.LauncherPipeArg;
+    public const string LauncherTokenArg = LauncherCommandLineArguments.LauncherTokenArg;
 
     private readonly ILauncherSignalServerFactory _signalServerFactory;
 

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia.Example.Launcher.Contracts;
 using Asv.Avalonia.Example.Launcher.Orchestration;
+using Asv.Avalonia.Launcher.Api;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 

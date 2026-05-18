@@ -1,13 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
-using System.Threading.Tasks;
+using Asv.Avalonia.Launcher.Api;
 
-namespace Asv.Avalonia.Example.Desktop;
+namespace Asv.Avalonia.Launcher.Ready;
 
 #pragma warning disable SA1313
 internal readonly record struct LauncherReadyEndpoint(string PipeName, string SessionToken);
@@ -15,8 +11,8 @@ internal readonly record struct LauncherReadyEndpoint(string PipeName, string Se
 
 internal static class LauncherReadyNotifier
 {
-    public const string LauncherPipeArg = "--launcher-pipe";
-    public const string LauncherTokenArg = "--launcher-token";
+    public const string LauncherPipeArg = LauncherCommandLineArguments.LauncherPipeArg;
+    public const string LauncherTokenArg = LauncherCommandLineArguments.LauncherTokenArg;
 
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {
@@ -108,28 +104,5 @@ internal static class LauncherReadyNotifier
         await using var writer = new StreamWriter(pipe, Encoding.UTF8, leaveOpen: false);
         await writer.WriteAsync(payload.AsMemory(), timeoutCts.Token).ConfigureAwait(false);
         await writer.FlushAsync(timeoutCts.Token).ConfigureAwait(false);
-    }
-
-    private sealed class LauncherIpcMessage
-    {
-        public string ProtocolVersion { get; init; } = "1";
-        public string SessionToken { get; init; } = string.Empty;
-        public DateTimeOffset TimestampUtc { get; init; } = DateTimeOffset.UtcNow;
-        public LauncherSignal Signal { get; init; } = new(LauncherSignalType.Progress);
-    }
-
-#pragma warning disable SA1313
-    private sealed record LauncherSignal(
-        LauncherSignalType Type,
-        string? Message = null,
-        double? Progress = null
-    );
-#pragma warning restore SA1313
-
-    private enum LauncherSignalType
-    {
-        Ready = 0,
-        Error = 1,
-        Progress = 2,
     }
 }

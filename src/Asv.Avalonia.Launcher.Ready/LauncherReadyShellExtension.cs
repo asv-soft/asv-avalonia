@@ -1,12 +1,10 @@
-using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Example.Desktop;
+namespace Asv.Avalonia.Launcher.Ready;
 
 internal sealed class LauncherReadyShellExtension(ILogger<LauncherReadyShellExtension> logger)
     : IExtensionFor<IShell>
