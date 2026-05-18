@@ -27,6 +27,8 @@
   <Project Path="Asv.Avalonia.DC/Asv.Avalonia.DC.csproj" />
   <Project Path="Asv.Avalonia.GeoMap/Asv.Avalonia.GeoMap.csproj" />
   <Project Path="Asv.Avalonia.IO/Asv.Avalonia.IO.csproj" />
+  <Project Path="Asv.Avalonia.Launcher.Api/Asv.Avalonia.Launcher.Api.csproj" />
+  <Project Path="Asv.Avalonia.Launcher.Ready/Asv.Avalonia.Launcher.Ready.csproj" />
   <Project Path="Asv.Avalonia.Plugins/Asv.Avalonia.Plugins.csproj" />
   <Project Path="Asv.Avalonia.Test/Asv.Avalonia.Test.csproj" />
   <Project Path="Asv.Avalonia/Asv.Avalonia.csproj" />

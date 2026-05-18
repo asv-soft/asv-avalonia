@@ -1,6 +1,4 @@
-using System;
-
-namespace Asv.Avalonia.Example.Launcher.Contracts;
+namespace Asv.Avalonia.Launcher.Api;
 
 public sealed class LauncherIpcMessage
 {
