@@ -74,7 +74,7 @@ sealed class Program
                     })
                     .UseModuleGeoMap()
                     .UseModuleIo()
-                    .UseModuleLauncherReady()
+                    .UseLauncher()
                     .UseExampleApp();
             });
     }

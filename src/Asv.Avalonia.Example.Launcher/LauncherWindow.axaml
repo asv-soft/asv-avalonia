@@ -7,6 +7,7 @@
     CanResize="False"
     WindowStartupLocation="CenterScreen"
     WindowDecorations="None"
+    Topmost="True"
     Title="Launcher"
 >
     <Grid RowDefinitions="*,Auto,Auto,Auto,*">
