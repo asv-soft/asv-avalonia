@@ -9,8 +9,10 @@ namespace Asv.Avalonia.Launcher.Ready;
 internal readonly record struct LauncherReadyEndpoint(string PipeName, string SessionToken);
 #pragma warning restore SA1313
 
-internal static class LauncherReadyNotifier
+internal sealed class LauncherNotifier(IAppArgsHost appArgsHost, TimeProvider timeProvider)
 {
+    private static readonly TimeSpan ConnectTimeout = TimeSpan.FromSeconds(3);
+
     public const string LauncherPipeArg = LauncherCommandLineArguments.LauncherPipeArg;
     public const string LauncherTokenArg = LauncherCommandLineArguments.LauncherTokenArg;
 
@@ -67,42 +69,39 @@ internal static class LauncherReadyNotifier
         return true;
     }
 
-    public static async Task NotifyReadyAsync(
+    public async Task NotifyReadyAsync(
         LauncherReadyEndpoint endpoint,
         CancellationToken cancellationToken = default
     )
     {
-        if (string.IsNullOrWhiteSpace(endpoint.PipeName))
-        {
-            throw new ArgumentException("Pipe name is required.", nameof(endpoint));
-        }
-
-        if (string.IsNullOrWhiteSpace(endpoint.SessionToken))
-        {
-            throw new ArgumentException("Session token is required.", nameof(endpoint));
-        }
+        ArgumentException.ThrowIfNullOrWhiteSpace(endpoint.PipeName);
+        ArgumentException.ThrowIfNullOrWhiteSpace(endpoint.SessionToken);
 
         var message = new LauncherIpcMessage
         {
             SessionToken = endpoint.SessionToken,
+            TimestampUtc = timeProvider.GetUtcNow(),
             Signal = new LauncherSignal(LauncherSignalType.Ready, "Main UI ready.", 1.0),
         };
 
         var payload = JsonSerializer.Serialize(message, SerializerOptions);
-        using var pipe = new NamedPipeClientStream(
+        await using var pipe = new NamedPipeClientStream(
             ".",
             endpoint.PipeName,
             PipeDirection.Out,
             PipeOptions.Asynchronous
         );
 
-        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        timeoutCts.CancelAfter(TimeSpan.FromSeconds(3));
+        using var timeoutCts = new CancellationTokenSource(ConnectTimeout, timeProvider);
+        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
+            cancellationToken,
+            timeoutCts.Token
+        );
 
-        await pipe.ConnectAsync(timeoutCts.Token).ConfigureAwait(false);
+        await pipe.ConnectAsync(linkedCts.Token).ConfigureAwait(false);
 
         await using var writer = new StreamWriter(pipe, Encoding.UTF8, leaveOpen: false);
-        await writer.WriteAsync(payload.AsMemory(), timeoutCts.Token).ConfigureAwait(false);
-        await writer.FlushAsync(timeoutCts.Token).ConfigureAwait(false);
+        await writer.WriteAsync(payload.AsMemory(), linkedCts.Token).ConfigureAwait(false);
+        await writer.FlushAsync(linkedCts.Token).ConfigureAwait(false);
     }
 }

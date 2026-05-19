@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia.Launcher.Ready;
@@ -6,7 +7,7 @@ public static class LauncherReadyMixin
 {
     extension(IHostApplicationBuilder builder)
     {
-        public IHostApplicationBuilder UseModuleLauncherReady(Action<Builder>? configure = null)
+        public IHostApplicationBuilder UseLauncher(Action<Builder>? configure = null)
         {
             configure ??= b => b.RegisterDefault();
             configure(new Builder(builder));
@@ -22,7 +23,8 @@ public static class LauncherReadyMixin
 
         public IHostApplicationBuilder RegisterDefault()
         {
-            builder.Extensions.Register<IShell, LauncherReadyShellExtension>();
+            builder.Services.AddSingleton<LauncherNotifier>();
+            builder.Services.AddHostedService<LauncherFeature>();
             return builder;
         }
     }
