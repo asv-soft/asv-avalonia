@@ -1,7 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using ZLogger;
@@ -102,6 +101,7 @@ public static class AppHostMixin
 
             return builder
                 .UseAppInfo()
+                .UseAppArgsStore()
                 .UseJsonUserConfig()
                 .UseTimeProvider()
                 .UseThemeService()
@@ -127,8 +127,8 @@ public static class AppHostMixin
                 .UseDesingTimeThemeService()
                 .UseDesignTimeSearchService()
                 .UseDesignTimeShell()
+                .UseDesignTimeAppArgsStore()
                 .UseDesignUndoStore()
-                .UseDesignTimeOptionalSoloRun()
                 .UseDesignTimeLogReaderService()
                 .UseDesignTimeLocalizationService()
                 .UseDesignTimeLayoutService()

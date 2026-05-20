@@ -11,9 +11,14 @@ public static class SoloRunFeatureMixin
             Action<SoloRunFeatureBuilder>? configure = null
         )
         {
+            if (builder.IsDesignTimeEnvironment)
+            {
+                builder.UseDesignTimeOptionalSoloRun();
+                return builder;
+            }
+
             var options = builder
-                .Services.AddSingleton<ISoloRunFeature, SoloRunFeature>()
-                .AddHostedService(x => x.GetRequiredService<ISoloRunFeature>())
+                .Services.AddHostedService<SoloRunFeature>()
                 .AddOptions<SoloRunFeatureOptions>()
                 .Bind(builder.Configuration.GetSection(SoloRunFeatureOptions.Section))
                 .PostConfigure<IAppInfo>(
@@ -30,10 +35,10 @@ public static class SoloRunFeatureMixin
             return builder;
         }
 
-        public IHostApplicationBuilder UseDesignTimeOptionalSoloRun()
+        private void UseDesignTimeOptionalSoloRun()
         {
-            builder.Services.ReplaceSingleton(NullSoloRunFeature.Instance);
-            return builder;
+            builder.Services.ReplaceSingleton<IAppArgsStore, AppArgsStore>();
+            builder.Services.AddHostedService(_ => NullSoloRunFeature.Instance);
         }
     }
 }
