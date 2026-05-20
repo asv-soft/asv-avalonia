@@ -146,11 +146,9 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
                     continue;
                 }
 
-                if (await action.TryExecute(context))
-                {
-                    e.Handled = true;
-                    return;
-                }
+                await action.TryExecute(context);
+                e.Handled = true;
+                return;
             }
         }
         catch (Exception exception)

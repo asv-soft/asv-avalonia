@@ -145,9 +145,10 @@ public class UnitPropertyViewModel<TUnit>
         OnChangeByModel(ModelValue.CurrentValue);
     }
 
-    public void Refresh()
+    public ValueTask Refresh(CancellationToken cancel = default)
     {
         IsInEditMode = false;
         OnChangeByModel(ModelValue.CurrentValue);
+        return ValueTask.CompletedTask;
     }
 }

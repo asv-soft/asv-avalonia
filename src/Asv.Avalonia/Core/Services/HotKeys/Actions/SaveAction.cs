@@ -13,9 +13,9 @@ public class SaveAction : HotKeyAction<ISupportSave>
     public override MaterialIconKind Icon => MaterialIconKind.FloppyDisc;
     public override KeyGesture DefaultHotKey => new(Key.S, KeyModifiers.Control);
 
-    protected override ValueTask<bool> Execute(ISupportSave target, CancellationToken cancel)
+    protected override ValueTask Execute(ISupportSave target, CancellationToken cancel)
     {
         target.Save();
-        return new ValueTask<bool>(true);
+        return ValueTask.CompletedTask;
     }
 }

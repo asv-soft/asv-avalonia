@@ -14,9 +14,8 @@ public class RedoAction : HotKeyAction<IPage>
     public override MaterialIconKind Icon => IconKind;
     public override KeyGesture DefaultHotKey => new(Key.Y, KeyModifiers.Control);
 
-    protected override async ValueTask<bool> Execute(IPage target, CancellationToken cancel)
+    protected override async ValueTask Execute(IPage target, CancellationToken cancel)
     {
         await target.UndoHistory.RedoAsync(cancel);
-        return true;
     }
 }

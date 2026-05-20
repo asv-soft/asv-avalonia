@@ -12,9 +12,9 @@ public class CancelAction : HotKeyAction<ISupportCancel>
     public override MaterialIconKind Icon => MaterialIconKind.Cancel;
     public override KeyGesture DefaultHotKey { get; } = new(Key.Escape);
 
-    protected override ValueTask<bool> Execute(ISupportCancel target, CancellationToken cancel)
+    protected override ValueTask Execute(ISupportCancel target, CancellationToken cancel)
     {
         target.Cancel();
-        return new ValueTask<bool>(true);
+        return ValueTask.CompletedTask;
     }
 }

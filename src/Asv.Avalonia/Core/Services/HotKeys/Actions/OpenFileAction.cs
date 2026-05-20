@@ -25,11 +25,10 @@ public class OpenFileAction(
     public override MaterialIconKind Icon => MaterialIconKind.File;
     public override KeyGesture DefaultHotKey => new(Key.O, KeyModifiers.Control);
 
-    protected override async ValueTask<bool> Execute(IShell target, CancellationToken cancel)
+    protected override async ValueTask Execute(IShell target, CancellationToken cancel)
     {
         var dialog = dialogs.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
         await OpenAsync(files, dialog, path, config, cancel);
-        return true;
     }
 
     public static async ValueTask OpenAsync(

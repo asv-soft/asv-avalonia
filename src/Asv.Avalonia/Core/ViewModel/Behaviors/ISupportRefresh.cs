@@ -2,5 +2,5 @@
 
 public interface ISupportRefresh : IViewModel
 {
-    void Refresh();
+    ValueTask Refresh(CancellationToken cancel = default);
 }

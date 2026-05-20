@@ -12,9 +12,9 @@ public class ClearAction : HotKeyAction<ISupportClear>
     public override MaterialIconKind Icon => MaterialIconKind.Clear;
     public override KeyGesture DefaultHotKey => new(Key.Escape, KeyModifiers.Control);
 
-    protected override ValueTask<bool> Execute(ISupportClear target, CancellationToken cancel)
+    protected override ValueTask Execute(ISupportClear target, CancellationToken cancel)
     {
         target.Clear();
-        return new ValueTask<bool>(true);
+        return ValueTask.CompletedTask;
     }
 }

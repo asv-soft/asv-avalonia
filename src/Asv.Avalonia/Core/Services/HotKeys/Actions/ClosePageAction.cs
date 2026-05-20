@@ -12,9 +12,9 @@ public class ClosePageAction : HotKeyAction<IPage>
     public override MaterialIconKind Icon => MaterialIconKind.CloseBold;
     public override KeyGesture DefaultHotKey => new(Key.Q, KeyModifiers.Control);
 
-    protected override ValueTask<bool> Execute(IPage target, CancellationToken cancel)
+    protected override ValueTask Execute(IPage target, CancellationToken cancel)
     {
         target.TryCloseAsync(false);
-        return new ValueTask<bool>(true);
+        return ValueTask.CompletedTask;
     }
 }

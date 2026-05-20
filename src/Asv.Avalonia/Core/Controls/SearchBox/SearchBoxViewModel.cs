@@ -88,9 +88,10 @@ public class SearchBoxViewModel
         _logger.LogWarning("Search '{NavId}' was cancelled", Id);
     }
 
-    public void Refresh()
+    public ValueTask Refresh(CancellationToken cancel = default)
     {
         Query(Text.ViewValue.Value);
+        return ValueTask.CompletedTask;
     }
 
     public void Clear()

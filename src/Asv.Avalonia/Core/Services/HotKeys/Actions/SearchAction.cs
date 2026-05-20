@@ -13,16 +13,15 @@ public class SearchAction : HotKeyAction<IShell>
     public override MaterialIconKind Icon => MaterialIconKind.Search;
     public override KeyGesture DefaultHotKey => new(Key.F, KeyModifiers.Control);
 
-    protected override async ValueTask<bool> Execute(IShell target, CancellationToken cancel)
+    protected override async ValueTask Execute(IShell target, CancellationToken cancel)
     {
         var found = await TreeVisitorEvent.VisitAll<ISupportTextSearch>(target, cancel);
         if (found.Count == 0)
         {
-            return false;
+            return;
         }
 
         // we assume that the ISearchBox with the longest path to root is the main search box
         found.MaxItem(x => RoutableMixin.GetPathFromRoot(x).Count)?.Focus();
-        return false;
     }
 }

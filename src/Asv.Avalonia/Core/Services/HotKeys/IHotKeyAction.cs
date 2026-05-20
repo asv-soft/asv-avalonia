@@ -2,5 +2,5 @@ namespace Asv.Avalonia;
 
 public interface IHotKeyAction : IHotKeyInfo
 {
-    ValueTask<bool> TryExecute(IViewModel context, CancellationToken cancel = default);
+    ValueTask TryExecute(IViewModel context, CancellationToken cancel = default);
 }
