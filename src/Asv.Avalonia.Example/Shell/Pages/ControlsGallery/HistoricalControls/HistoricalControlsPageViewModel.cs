@@ -13,6 +13,7 @@ namespace Asv.Avalonia.Example;
 public sealed class HistoricalControlsPageViewModelConfig
 {
     public double Speed { get; set; } = -1;
+    public double Time { get; set; } = -1;
     public bool IsTurnedOn { get; set; } = false;
     public string StringPropWithoutValidation { get; set; } = string.Empty;
     public string StringPropWithOneValidation { get; set; } = string.Empty;
@@ -29,6 +30,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 
     private readonly ReactiveProperty<bool> _isTurnedOn;
     private readonly ReactiveProperty<double> _speed;
+    private readonly ReactiveProperty<double> _time;
     private readonly ReactiveProperty<string?> _stringWithManyValidations;
     private readonly ReactiveProperty<string?> _stringWithOneValidation;
     private readonly ReactiveProperty<string?> _stringWithoutValidation;
@@ -56,8 +58,10 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     {
         _layoutChanged.DisposeItWith(Disposable);
         var speedUnit = unit.GetRequiredUnitOfType<VelocityUnit>(VelocityUnit.Id);
+        var timeUnit = unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id);
 
         _speed = new ReactiveProperty<double>(double.NaN).DisposeItWith(Disposable);
+        _time = new ReactiveProperty<double>(0).DisposeItWith(Disposable);
         _isTurnedOn = new ReactiveProperty<bool>().DisposeItWith(Disposable);
         _stringWithoutValidation = new ReactiveProperty<string?>().DisposeItWith(Disposable);
         _stringWithOneValidation = new ReactiveProperty<string?>().DisposeItWith(Disposable);
@@ -81,6 +85,25 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             _speed,
             speedUnit,
             loggerFactory
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+
+        Time = new HistoricalUnitProperty<TimeSpanUnit>(
+            nameof(Time),
+            _time,
+            timeUnit,
+            loggerFactory
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+
+        ReadOnlyTime = new HistoricalUnitProperty<TimeSpanUnit>(
+            nameof(ReadOnlyTime),
+            _time,
+            timeUnit,
+            loggerFactory,
+            "00"
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -163,6 +186,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
 
         TrackLayout(_speed);
+        TrackLayout(_time);
         TrackLayout(_isTurnedOn);
         TrackLayout(_stringWithoutValidation);
         TrackLayout(_stringWithOneValidation);
@@ -182,6 +206,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 
     public ReactiveCommand TurnOn { get; }
     public HistoricalUnitProperty<VelocityUnit> Speed { get; }
+    public HistoricalUnitProperty<TimeSpanUnit> Time { get; }
+    public HistoricalUnitProperty<TimeSpanUnit> ReadOnlyTime { get; }
     public HistoricalBoolProperty IsTurnedOn { get; }
     public HistoricalStringProperty StringPropWithoutValidation { get; }
     public HistoricalStringProperty StringPropWithOneValidation { get; }
@@ -194,6 +220,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     {
         yield return IsTurnedOn;
         yield return Speed;
+        yield return Time;
         yield return StringPropWithoutValidation;
         yield return StringPropWithOneValidation;
         yield return StringPropWithManyValidations;
@@ -218,10 +245,12 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     private HistoricalControlsPageViewModelConfig SaveLayout()
     {
         var speed = Speed.ModelValue.Value;
+        var time = Time.ModelValue.Value;
         return new HistoricalControlsPageViewModelConfig
         {
             IsTurnedOn = IsTurnedOn.ViewValue.Value,
             Speed = double.IsFinite(speed) ? speed : -1,
+            Time = double.IsFinite(time) ? time : -1,
             StringPropWithoutValidation =
                 StringPropWithoutValidation.ViewValue.Value ?? string.Empty,
             StringPropWithOneValidation =
@@ -240,6 +269,11 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         if (config.Speed >= 0)
         {
             Speed.ModelValue.Value = config.Speed;
+        }
+
+        if (config.Time >= 0)
+        {
+            Time.ModelValue.Value = config.Time;
         }
 
         StringPropWithoutValidation.ModelValue.Value = config.StringPropWithoutValidation;

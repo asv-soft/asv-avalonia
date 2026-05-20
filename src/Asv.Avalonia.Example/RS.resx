@@ -143,6 +143,9 @@
     <data name="HistoricalControlsPageView_Unit" xml:space="preserve">
         <value>Speed:</value>
     </data>
+    <data name="HistoricalControlsPageView_Time" xml:space="preserve">
+        <value>Time:</value>
+    </data>
     <data name="HistoricalControlsPageView_Basic" xml:space="preserve">
         <value>Basic</value>
     </data>
