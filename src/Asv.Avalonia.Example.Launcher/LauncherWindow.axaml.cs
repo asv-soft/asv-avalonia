@@ -57,11 +57,11 @@ public partial class LauncherWindow : Window
         SetStatus("Parsing launcher arguments...", null);
 
         if (
-            LauncherCommandLineParser.TryParse(
+            !LauncherCommandLineParser.TryParse(
                 Program.StartupArgs,
                 out var options,
                 out var parseError
-            ) == false
+            )
         )
         {
             Environment.ExitCode = (int)LauncherExitCode.InvalidArguments;

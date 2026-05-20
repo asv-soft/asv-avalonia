@@ -2,6 +2,8 @@ using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
 using Asv.Avalonia.Launcher.Api;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia.Launcher.Ready;
 
@@ -9,10 +11,8 @@ namespace Asv.Avalonia.Launcher.Ready;
 internal readonly record struct LauncherReadyEndpoint(string PipeName, string SessionToken);
 #pragma warning restore SA1313
 
-internal sealed class LauncherNotifier(IAppArgsHost appArgsHost, TimeProvider timeProvider)
+internal sealed class LauncherNotifier
 {
-    private static readonly TimeSpan ConnectTimeout = TimeSpan.FromSeconds(3);
-
     public const string LauncherPipeArg = LauncherCommandLineArguments.LauncherPipeArg;
     public const string LauncherTokenArg = LauncherCommandLineArguments.LauncherTokenArg;
 
@@ -23,14 +23,78 @@ internal sealed class LauncherNotifier(IAppArgsHost appArgsHost, TimeProvider ti
         WriteIndented = false,
     };
 
-    public static bool TryReadEndpoint(
-        IReadOnlyList<string> args,
-        out LauncherReadyEndpoint endpoint
+    private static readonly TimeSpan ConnectTimeout = TimeSpan.FromSeconds(3);
+
+    private readonly TimeProvider _timeProvider;
+    private readonly LauncherReadyEndpoint? _endpoint;
+    private readonly ILogger<LauncherNotifier> _logger;
+
+    public LauncherNotifier(
+        IAppArgsStore appArgsStore,
+        TimeProvider timeProvider,
+        IOptions<LauncherFeatureOptions> options,
+        ILogger<LauncherNotifier> logger
     )
     {
-        ArgumentNullException.ThrowIfNull(args);
+        ArgumentNullException.ThrowIfNull(appArgsStore);
+        ArgumentNullException.ThrowIfNull(timeProvider);
+        ArgumentNullException.ThrowIfNull(options);
+        ArgumentNullException.ThrowIfNull(logger);
 
-        endpoint = default;
+        _timeProvider = timeProvider;
+        _logger = logger;
+
+        _endpoint = TryGetEndpointFromArgs(appArgsStore.Args.CurrentValue.RawArgs);
+        if (_endpoint.HasValue || options.Value.IsOptional)
+        {
+            return;
+        }
+
+        throw new InvalidOperationException("Failed to read launcher endpoint.");
+    }
+
+    public async Task NotifyReadyAsync(CancellationToken cancellationToken = default)
+    {
+        if (_endpoint is null)
+        {
+            _logger.LogDebug(
+                "Launcher endpoint arguments are missing. READY signal notification is skipped."
+            );
+            return;
+        }
+
+        var endpoint = _endpoint.Value;
+
+        var message = new LauncherIpcMessage
+        {
+            SessionToken = endpoint.SessionToken,
+            TimestampUtc = _timeProvider.GetUtcNow(),
+            Signal = new LauncherSignal(LauncherSignalType.Ready, "Main UI ready.", 1.0),
+        };
+
+        var payload = JsonSerializer.Serialize(message, SerializerOptions);
+        await using var pipe = new NamedPipeClientStream(
+            ".",
+            endpoint.PipeName,
+            PipeDirection.Out,
+            PipeOptions.Asynchronous
+        );
+
+        using var timeoutCts = new CancellationTokenSource(ConnectTimeout, _timeProvider);
+        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
+            cancellationToken,
+            timeoutCts.Token
+        );
+
+        await pipe.ConnectAsync(linkedCts.Token).ConfigureAwait(false);
+
+        await using var writer = new StreamWriter(pipe, Encoding.UTF8, leaveOpen: false);
+        await writer.WriteAsync(payload.AsMemory(), linkedCts.Token).ConfigureAwait(false);
+        await writer.FlushAsync(linkedCts.Token).ConfigureAwait(false);
+    }
+
+    private static LauncherReadyEndpoint? TryGetEndpointFromArgs(in IReadOnlyList<string> args)
+    {
         string? pipeName = null;
         string? sessionToken = null;
 
@@ -62,46 +126,9 @@ internal sealed class LauncherNotifier(IAppArgsHost appArgsHost, TimeProvider ti
 
         if (string.IsNullOrWhiteSpace(pipeName) || string.IsNullOrWhiteSpace(sessionToken))
         {
-            return false;
+            return null;
         }
 
-        endpoint = new LauncherReadyEndpoint(pipeName, sessionToken);
-        return true;
-    }
-
-    public async Task NotifyReadyAsync(
-        LauncherReadyEndpoint endpoint,
-        CancellationToken cancellationToken = default
-    )
-    {
-        ArgumentException.ThrowIfNullOrWhiteSpace(endpoint.PipeName);
-        ArgumentException.ThrowIfNullOrWhiteSpace(endpoint.SessionToken);
-
-        var message = new LauncherIpcMessage
-        {
-            SessionToken = endpoint.SessionToken,
-            TimestampUtc = timeProvider.GetUtcNow(),
-            Signal = new LauncherSignal(LauncherSignalType.Ready, "Main UI ready.", 1.0),
-        };
-
-        var payload = JsonSerializer.Serialize(message, SerializerOptions);
-        await using var pipe = new NamedPipeClientStream(
-            ".",
-            endpoint.PipeName,
-            PipeDirection.Out,
-            PipeOptions.Asynchronous
-        );
-
-        using var timeoutCts = new CancellationTokenSource(ConnectTimeout, timeProvider);
-        using var linkedCts = CancellationTokenSource.CreateLinkedTokenSource(
-            cancellationToken,
-            timeoutCts.Token
-        );
-
-        await pipe.ConnectAsync(linkedCts.Token).ConfigureAwait(false);
-
-        await using var writer = new StreamWriter(pipe, Encoding.UTF8, leaveOpen: false);
-        await writer.WriteAsync(payload.AsMemory(), linkedCts.Token).ConfigureAwait(false);
-        await writer.FlushAsync(linkedCts.Token).ConfigureAwait(false);
+        return new LauncherReadyEndpoint(pipeName, sessionToken);
     }
 }
