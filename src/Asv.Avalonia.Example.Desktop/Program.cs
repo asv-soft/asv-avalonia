@@ -74,7 +74,12 @@ sealed class Program
                     })
                     .UseModuleGeoMap()
                     .UseModuleIo()
-                    .UseLauncher()
+                    .UseLauncher(cfg =>
+                    {
+#if DEBUG
+                        cfg.IsOptional();
+#endif
+                    })
                     .UseExampleApp();
             });
     }

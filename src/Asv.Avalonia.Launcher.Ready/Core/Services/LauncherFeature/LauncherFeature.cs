@@ -13,7 +13,6 @@ internal sealed class LauncherFeature : IHostedService
     private IDisposable? _sub1;
 
     public LauncherFeature(
-        IAppArgsHost appArgsHost,
         IShellHost shellHost,
         LauncherNotifier notifier,
         ILogger<LauncherFeature> logger
@@ -30,16 +29,10 @@ internal sealed class LauncherFeature : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        if (!LauncherNotifier.TryReadEndpoint(Environment.GetCommandLineArgs(), out var endpoint))
-        {
-            _logger.LogError("Failed to read launcher endpoint.");
-            return Task.CompletedTask;
-        }
-
         _sub1 = _shellHost.ExecuteNowOrWhenShellLoaded(
             (_, _) =>
             {
-                NotifyReadyOnceAsync(endpoint, cancellationToken)
+                NotifyReadyOnceAsync(cancellationToken)
                     .SafeFireAndForget(ex =>
                         _logger.LogError(ex, "Failed to send launcher READY signal.")
                     );
@@ -60,16 +53,13 @@ internal sealed class LauncherFeature : IHostedService
         return Task.CompletedTask;
     }
 
-    private async Task NotifyReadyOnceAsync(
-        LauncherReadyEndpoint endpoint,
-        CancellationToken cancel
-    )
+    private async Task NotifyReadyOnceAsync(CancellationToken cancel)
     {
         if (Interlocked.CompareExchange(ref _readyNotificationSent, 1, 0) != 0)
         {
             return;
         }
 
-        await _notifier.NotifyReadyAsync(endpoint, cancel).ConfigureAwait(false);
+        await _notifier.NotifyReadyAsync(cancel).ConfigureAwait(false);
     }
 }

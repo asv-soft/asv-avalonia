@@ -1,7 +1,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia.Launcher.Ready;
+
+public class LauncherFeatureOptions
+{
+    public const string Section = "Launcher";
+    public bool IsOptional { get; set; }
+}
 
 public static class LauncherReadyMixin
 {
@@ -9,17 +16,36 @@ public static class LauncherReadyMixin
     {
         public IHostApplicationBuilder UseLauncher(Action<Builder>? configure = null)
         {
+            var options = builder
+                .Services.AddOptions<LauncherFeatureOptions>()
+                .Bind(builder.Configuration.GetSection(LauncherFeatureOptions.Section));
+
             configure ??= b => b.RegisterDefault();
-            configure(new Builder(builder));
+            configure(new Builder(builder, options));
             return builder;
         }
 
-        public Builder ModuleLauncherReady => new(builder);
+        public Builder ModuleLauncherReady =>
+            new(
+                builder,
+                builder
+                    .Services.AddOptions<LauncherFeatureOptions>()
+                    .Bind(builder.Configuration.GetSection(LauncherFeatureOptions.Section))
+            );
     }
 
-    public class Builder(IHostApplicationBuilder builder)
+    public class Builder(
+        IHostApplicationBuilder builder,
+        OptionsBuilder<LauncherFeatureOptions> options
+    )
     {
         public IHostApplicationBuilder Parent => builder;
+
+        public Builder IsOptional(bool isOptional = true)
+        {
+            options.Configure(x => x.IsOptional = isOptional);
+            return this;
+        }
 
         public IHostApplicationBuilder RegisterDefault()
         {
