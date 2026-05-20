@@ -6,7 +6,7 @@ using R3;
 namespace Asv.Avalonia;
 
 public class ForwardArgsToSelectedControlHandler(
-    ISoloRunFeature soloRunFeature,
+    IAppArgsStore appArgsStore,
     IFileAssociationService svc,
     IShellHost shellHost
 ) : IHostedService
@@ -27,7 +27,7 @@ public class ForwardArgsToSelectedControlHandler(
     {
         if (!Design.IsDesignMode)
         {
-            soloRunFeature.Args.SubscribeAwait(HandleEvent);
+            appArgsStore.Args.SubscribeAwait(HandleEvent);
         }
         return Task.CompletedTask;
     }

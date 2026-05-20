@@ -1,8 +1,8 @@
 using System.IO.Pipes;
 using Asv.Common;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using R3;
 using ZLogger;
 using Lock = System.Threading.Lock;
 
@@ -16,9 +16,9 @@ public class SoloRunFeatureOptions
     public string? Pipe { get; set; }
 }
 
-public class SoloRunFeature : AsyncDisposableWithCancel, ISoloRunFeature
+public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
 {
-    private readonly SynchronizedReactiveProperty<IAppArgs> _args;
+    private readonly IAppArgsStore _argsStore;
     private readonly ILogger<SoloRunFeature> _logger;
     private readonly string? _pipeName;
     private readonly Mutex _mutex;
@@ -27,14 +27,17 @@ public class SoloRunFeature : AsyncDisposableWithCancel, ISoloRunFeature
     private Task? _pipeServerTask;
     private CancellationTokenSource? _pipeServerCts;
     private NamedPipeServerStream? _pipeServer;
+    private readonly bool _isFirstInstance;
 
     private volatile int _isMutexDisposed;
 
-    public SoloRunFeature(IOptions<SoloRunFeatureOptions> option, ILoggerFactory loggerFactory)
+    public SoloRunFeature(
+        IOptions<SoloRunFeatureOptions> option,
+        IAppArgsStore argsStore,
+        ILoggerFactory loggerFactory
+    )
     {
-        _args = new SynchronizedReactiveProperty<IAppArgs>(
-            new AppArgs(Environment.GetCommandLineArgs())
-        );
+        _argsStore = argsStore;
         _logger = loggerFactory.CreateLogger<SoloRunFeature>();
         var config = option.Value;
         if (string.IsNullOrWhiteSpace(config.Mutex))
@@ -42,8 +45,28 @@ public class SoloRunFeature : AsyncDisposableWithCancel, ISoloRunFeature
             throw new InvalidOperationException("Mutex name is not set");
         }
 
-        _mutex = new Mutex(true, config.Mutex, out var isNewInstance);
-        IsFirstInstance = isNewInstance;
+        var mutexName = $"Global\\{config.Mutex}";
+        _mutex = new Mutex(
+            initiallyOwned: true,
+            name: mutexName,
+            options: new NamedWaitHandleOptions
+            {
+                CurrentUserOnly = true,
+                CurrentSessionOnly = false,
+            },
+            createdNew: out var isNewInstance
+        );
+        _logger.LogTrace(
+            "SoloRun: pid={Pid}, mutex='{Mutex}', isNew={IsNew}, user={User}, tmp={Tmp}, baseDir={BaseDir}",
+            Environment.ProcessId,
+            mutexName,
+            isNewInstance,
+            Environment.UserName,
+            Environment.GetEnvironmentVariable("TMPDIR"),
+            AppContext.BaseDirectory
+        );
+
+        _isFirstInstance = isNewInstance;
         if (!option.Value.ArgForward)
         {
             return;
@@ -55,7 +78,7 @@ public class SoloRunFeature : AsyncDisposableWithCancel, ISoloRunFeature
         }
 
         _pipeName = option.Value.Pipe;
-        if (IsFirstInstance)
+        if (_isFirstInstance)
         {
             return;
         }
@@ -64,12 +87,13 @@ public class SoloRunFeature : AsyncDisposableWithCancel, ISoloRunFeature
         SendArgumentsToRunningInstance(args, option.Value.Pipe);
     }
 
-    public bool IsFirstInstance { get; }
-    public ReadOnlyReactiveProperty<IAppArgs> Args => _args;
-
     public Task StartAsync(CancellationToken cancel = default)
     {
-        if (string.IsNullOrWhiteSpace(_pipeName) || !IsFirstInstance || _pipeServerTask is not null)
+        if (
+            string.IsNullOrWhiteSpace(_pipeName)
+            || !_isFirstInstance
+            || _pipeServerTask is not null
+        )
         {
             return Task.CompletedTask;
         }
@@ -165,7 +189,7 @@ public class SoloRunFeature : AsyncDisposableWithCancel, ISoloRunFeature
                 }
 
                 _logger.ZLogInformation($"Received arguments from the named pipe {pipeName}.");
-                _args.OnNext(AppArgs.DeserializeFromString(args));
+                _argsStore.Set(AppArgs.DeserializeFromString(args));
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
