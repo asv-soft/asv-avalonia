@@ -7,14 +7,14 @@ namespace Asv.Avalonia.Launcher.Ready;
 internal sealed class LauncherFeature : IHostedService
 {
     private readonly IShellHost _shellHost;
-    private readonly LauncherNotifier _notifier;
+    private readonly ILauncherNotifier _notifier;
     private readonly ILogger<LauncherFeature> _logger;
     private volatile int _readyNotificationSent;
     private IDisposable? _sub1;
 
     public LauncherFeature(
         IShellHost shellHost,
-        LauncherNotifier notifier,
+        ILauncherNotifier notifier,
         ILogger<LauncherFeature> logger
     )
     {

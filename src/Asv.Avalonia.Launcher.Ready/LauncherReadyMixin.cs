@@ -50,9 +50,8 @@ public static class LauncherReadyMixin
 
         public IHostApplicationBuilder RegisterDefault()
         {
-            builder.Services.AddSingleton<LauncherNotifier>();
+            builder.Services.AddSingleton<ILauncherNotifier, LauncherNotifier>();
             builder.Services.AddHostedService<LauncherFeature>();
-            Console.WriteLine("Launcher feature is ready");
             return builder;
         }
     }
