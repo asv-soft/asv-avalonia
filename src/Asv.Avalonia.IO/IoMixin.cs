@@ -81,6 +81,20 @@ public static class IoMixin
             builder.Parent.Parent.Parent.Services.AddKeyedTransient<IPortViewModel, TViewModel>(
                 portScheme
             );
+            builder.Parent.Parent.Parent.Services.AddKeyedTransient<
+                ViewModelMixin.FactoryDelegate<IPortViewModel, IProtocolPort>
+            >(
+                portScheme,
+                (services, _) =>
+                    protocolPort =>
+                    {
+                        ArgumentNullException.ThrowIfNull(protocolPort);
+                        return ActivatorUtilities.CreateInstance<TViewModel>(
+                            services,
+                            protocolPort
+                        );
+                    }
+            );
             builder.Parent.Parent.Parent.Services.AddKeyedTransient<IMenuItem, TMenu>(
                 SettingsConnectionDefaultMenuExtension.Contract
             );

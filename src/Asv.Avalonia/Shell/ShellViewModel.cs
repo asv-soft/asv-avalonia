@@ -23,7 +23,8 @@ public class ShellViewModelConfig
 
 public class ShellViewModel : ViewModel<IShell>, IShell
 {
-    public const string Id = "shell";
+    private readonly IServiceProvider _ioc;
+    public const string TypeId = "shell";
 
     private const int MaxInfoBarMessages = 3;
 
@@ -39,9 +40,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     private bool _isLoaded;
     private bool _layoutTrackingStarted;
     private int _saveLayoutInProgress;
-
-    protected readonly IServiceProvider Container;
-    protected readonly IDialogService DialogService;
+    private readonly IThemeService _themeService;
 
     protected ShellViewModel(
         IServiceProvider ioc,
@@ -49,8 +48,9 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         IConfiguration cfg,
         IExtensionService ext
     )
-        : base(Id, default, ext)
+        : base(TypeId, default, ext)
     {
+        _ioc = ioc;
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
         ArgumentNullException.ThrowIfNull(cfg);
@@ -67,21 +67,19 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             this,
             new NavigationStore("nav")
         ).DisposeItWith(Disposable);
-
-        Cfg = cfg;
-        Container = ioc;
-        DialogService = ioc.GetRequiredService<IDialogService>();
+        var dialogService1 = ioc.GetRequiredService<IDialogService>();
         _appPath = ioc.GetRequiredService<IAppPath>();
-        _unsavedChangesDialogPrefab = DialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
-        LayoutManager = new LayoutManager<IViewModel>(
-            this,
-            new JsonTokenLayoutStore(_appPath.GetPageFolder(new NavId(Id), "layout"), _logger)
-        ).DisposeItWith(Disposable);
+        _themeService = ioc.GetRequiredService<IThemeService>();
+        
+        _unsavedChangesDialogPrefab = dialogService1.GetDialogPrefab<UnsavedChangesDialogPrefab>();
+        var path = _appPath.GetPageFolder(new NavId(TypeId), "layout");
+        LayoutManager = new LayoutManager<IViewModel>(this, new JsonTokenLayoutStore(path, _logger))
+            .DisposeItWith(Disposable);
 
-        WindowSateIconKind = new BindableReactiveProperty<MaterialIconKind>().DisposeItWith(
-            Disposable
-        );
-        WindowStateHeader = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
+        WindowSateIconKind = new BindableReactiveProperty<MaterialIconKind>()
+            .DisposeItWith(Disposable);
+        WindowStateHeader = new BindableReactiveProperty<string>()
+            .DisposeItWith(Disposable);
 
         _onCloseEvent = new Subject<Unit>().DisposeItWith(Disposable);
 
@@ -166,12 +164,14 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             _infoMessagesSource.Remove(x)
         ).DisposeItWith(Disposable);
 
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
+        Events.Catch<ShellMessageEvent>(x => ShowMessage(x.Message)).DisposeItWith(Disposable);
+        Events.Catch<RestartApplicationEvent>(OnRestartApplicationRequested)
+            .DisposeItWith(Disposable);
+        Events.Catch<PageCloseRequestedEvent>(OnPageCloseRequested).DisposeItWith(Disposable);
     }
 
     protected ILogger Logger => _logger;
 
-    public IConfiguration Cfg { get; }
     public ILayoutManager<IViewModel> LayoutManager { get; }
     public INavigationController<IViewModel> Navigation { get; }
 
@@ -207,24 +207,18 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     {
         get;
         set => SetField(ref field, value);
-    }
+    } = string.Empty;
 
     public void ChangeTheme()
     {
-        var themeService = Container.GetService<IThemeService>();
-        if (themeService is null)
-        {
-            return;
-        }
-
         var nextTheme =
-            themeService.CurrentTheme.Value.Id == ThemeService.DarkTheme
+            _themeService.CurrentTheme.Value.Id == ThemeService.DarkTheme
                 ? ThemeService.LightTheme
                 : ThemeService.DarkTheme;
-        var theme = themeService.Themes.FirstOrDefault(x => x.Id == nextTheme);
+        var theme = _themeService.Themes.FirstOrDefault(x => x.Id == nextTheme);
         if (theme is not null)
         {
-            themeService.CurrentTheme.Value = theme;
+            _themeService.CurrentTheme.Value = theme;
         }
     }
 
@@ -245,7 +239,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
                 new JsonUndoHistoryStore(undoFolder, _logger),
                 new JsonTokenLayoutStore(layoutFolder, _logger)
             );
-            page = Container.CreatePage(id.TypeId, pageContext);
+            page = _ioc.CreatePage(id.TypeId, pageContext);
             _pages.Add(page);
             SelectedPage.Value = page;
             return page;
@@ -280,7 +274,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .Register(nameof(ShellViewModel), LoadLayout, SaveLayout, _layoutChanged)
             .DisposeItWith(Disposable);
         Layout.LoadAll();
-        LoadDefaultLayoutIfNeeded().SafeFireAndForget();
     }
 
     protected virtual async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
@@ -375,30 +368,23 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         }
     }
 
-    private async ValueTask InternalCatchEvent(
+    private async ValueTask OnRestartApplicationRequested(
         IViewModel src,
-        AsyncRoutedEvent<IViewModel> e,
+        RestartApplicationEvent restart,
         CancellationToken cancel
     )
     {
-        switch (e)
-        {
-            case RestartApplicationEvent restart:
-            {
-                using var sub = _onCloseEvent.Take(1).Subscribe(_ => RestartApplicationCommon());
-                await TryCloseAsync(restart.Cancel);
-                break;
-            }
-            case PageCloseRequestedEvent close:
-                await ClosePage(close);
-                break;
-            case ShellMessageEvent showInfoMessageEvent:
-                ShowMessage(showInfoMessageEvent.Message);
-                break;
-            default:
-                await ValueTask.CompletedTask;
-                break;
-        }
+        using var sub = _onCloseEvent.Take(1).Subscribe(_ => RestartApplicationCommon());
+        await TryCloseAsync(restart.Cancel);
+    }
+
+    private async ValueTask OnPageCloseRequested(
+        IViewModel src,
+        PageCloseRequestedEvent close,
+        CancellationToken cancel
+    )
+    {
+        await ClosePage(close);
     }
 
     private async ValueTask ClosePage(PageCloseRequestedEvent close)
@@ -449,16 +435,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         {
             _logger.LogError(exception, "Failed to restart the application.");
         }
-    }
-
-    private async ValueTask LoadDefaultLayoutIfNeeded()
-    {
-        if (_isLoaded)
-        {
-            return;
-        }
-
-        await LoadLayoutAsync(new ShellViewModelConfig());
     }
 
     private void LoadLayout(ShellViewModelConfig config)

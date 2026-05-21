@@ -34,12 +34,46 @@ public class TcpClientPortViewModel : PortViewModel
     }
 
     public TcpClientPortViewModel(
+        IProtocolPort protocolPort,
         IConfiguration cfgSvc,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{TcpClientProtocolPort.Scheme}-editor", unitService, loggerFactory, timeProvider)
+        : this(
+            protocolPort?.Id ?? throw new ArgumentNullException(nameof(protocolPort)),
+            cfgSvc,
+            unitService,
+            loggerFactory,
+            timeProvider
+        )
+    {
+    }
+
+    public TcpClientPortViewModel(
+        IConfiguration cfgSvc,
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : this(
+            $"{TcpClientProtocolPort.Scheme}-editor",
+            cfgSvc,
+            unitService,
+            loggerFactory,
+            timeProvider
+        )
+    {
+    }
+
+    private TcpClientPortViewModel(
+        string id,
+        IConfiguration cfgSvc,
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : base(id, unitService, loggerFactory, timeProvider)
     {
         _cfgSvc = cfgSvc;
         Icon = DefaultIcon;

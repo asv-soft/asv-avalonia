@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using Asv.Cfg;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -7,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Rendering;
 using Avalonia.VisualTree;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -18,18 +18,21 @@ internal enum DockItemState
 
 internal sealed class DockControlConfig
 {
-    public readonly Dictionary<string, DockItemState> DockItemStates = new();
+    public Dictionary<string, DockItemState> DockItemStates { get; set; } = new();
     public string? SelectedDockTabItemId { get; set; }
 }
 
-public partial class DockControl : SelectingItemsControl, ICustomHitTest
+public class DockControl : SelectingItemsControl, ICustomHitTest
 {
     private const string PART_MainTabControl = "PART_MainTabControl";
+    private readonly Subject<Unit> _layoutChanged = new();
     private readonly List<DockTabItem> _windowedItems = [];
 
     private DockTabItem? _selectedTab;
     private DockTabControl _mainTabControl = null!;
-    private DockControlConfig _config = null!;
+    private DockControlConfig _config = new();
+    private IDisposable? _layout;
+    private bool _internalLayoutChange;
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -42,15 +45,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             );
         LogicalChildren.Add(_mainTabControl);
 
-        if (Design.IsDesignMode)
-        {
-            _config = Configuration?.Get<DockControlConfig>() ?? new DockControlConfig();
-        }
-        else
-        {
-            ArgumentNullException.ThrowIfNull(Configuration);
-            _config = Configuration.Get<DockControlConfig>();
-        }
+        RegisterLayout();
 
         if (Items is INotifyCollectionChanged notifyCol)
         {
@@ -86,7 +81,16 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
                 if (dockTabItem is null)
                 {
-                    return;
+                    var windowedItem = _windowedItems.FirstOrDefault(item =>
+                        item.Content == removedItem
+                    );
+                    if (windowedItem is not null)
+                    {
+                        _windowedItems.Remove(windowedItem);
+                        NotifyLayoutChanged();
+                    }
+
+                    continue;
                 }
 
                 if (dockTabItem.Header is DockTabStripItem header)
@@ -97,6 +101,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
                 }
 
                 _mainTabControl?.Items.Remove(dockTabItem);
+                NotifyLayoutChanged();
             }
 
             return;
@@ -127,6 +132,8 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
             _mainTabControl.SelectedItem = selected;
             _selectedTab = selected;
+            _config.SelectedDockTabItemId = selected.Id;
+            NotifyLayoutChanged();
         }
     }
 
@@ -160,7 +167,6 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         else
         {
             _config.DockItemStates[page.Id.ToString()] = DockItemState.Tab;
-            Configuration?.Set(_config);
         }
 
         _mainTabControl.Items.Add(tab);
@@ -216,7 +222,7 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
             if (SelectedItem is IPage current && current.Id != tab.Content?.Id)
             {
                 _config.SelectedDockTabItemId = tab.Id;
-                Configuration?.Set(_config);
+                NotifyLayoutChanged();
             }
 
             _selectedTab = tab;
@@ -257,7 +263,12 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
     private void DetachTab(DockTabItem tab)
     {
-        if (tab.Content is null)
+        if (tab.Content is not { } page)
+        {
+            return;
+        }
+
+        if (_windowedItems.Any(it => it.Id == tab.Id))
         {
             return;
         }
@@ -275,50 +286,53 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
         var win = new DockWindow
         {
-            Id = tab.Content.Id.ToString(),
-            Page = tab.Content,
+            Id = page.Id.ToString(),
+            Page = page,
             DataContext = tab.DataContext,
         };
 
         _windowedItems.Add(tab);
-        _config.DockItemStates[tab.Content.Id.ToString()] = DockItemState.Window;
-        Configuration?.Set(_config);
+        _config.DockItemStates[page.Id.ToString()] = DockItemState.Window;
+        NotifyLayoutChanged();
 
-        win.Closing += AttachTab;
+        win.Closing += OnWindowClosing;
         win.Show();
         return;
 
-        void AttachTab(object? source, WindowClosingEventArgs args)
+        void OnWindowClosing(object? source, WindowClosingEventArgs args)
         {
-            win.Closing -= AttachTab;
+            win.Closing -= OnWindowClosing;
 
             if (args.CloseReason == WindowCloseReason.ApplicationShutdown)
             {
                 return;
             }
 
-            if (!_mainTabControl.Items.Contains(tab))
-            {
-                _mainTabControl.Items.Add(tab);
-            }
-
-            _windowedItems.Remove(tab);
-
-            if (tab.Content is null)
-            {
-                return;
-            }
-
-            _config.DockItemStates[tab.Content.Id.ToString()] = DockItemState.Tab;
-            Configuration?.Set(_config);
-
-            _selectedTab = tab;
-            _config.SelectedDockTabItemId = tab.Id;
-            Configuration?.Set(_config);
-
-            SelectedItem = null;
-            SelectedItem = tab.Content;
+            AttachTab(tab);
         }
+    }
+
+    private void AttachTab(DockTabItem tab)
+    {
+        if (!_mainTabControl.Items.Contains(tab))
+        {
+            _mainTabControl.Items.Add(tab);
+        }
+
+        _windowedItems.Remove(tab);
+
+        if (tab.Content is not { } page)
+        {
+            return;
+        }
+
+        _config.DockItemStates[page.Id.ToString()] = DockItemState.Tab;
+        _selectedTab = tab;
+        _config.SelectedDockTabItemId = tab.Id;
+
+        SelectedItem = null;
+        SelectedItem = page;
+        NotifyLayoutChanged();
     }
 
     private void EnsureDockTabItemFromCfgSelected()
@@ -348,6 +362,9 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
+        _layout?.Dispose();
+        _layout = null;
+
         if (Items is INotifyCollectionChanged notifyCol)
         {
             notifyCol.CollectionChanged -= ItemsCollectionChanged;
@@ -378,6 +395,96 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         }
 
         base.OnDetachedFromVisualTree(e);
+    }
+
+    private void RegisterLayout()
+    {
+        _layout?.Dispose();
+        _layout = this.RegisterLayout<DockControlConfig, Unit>(
+            nameof(DockControl),
+            LoadLayout,
+            SaveLayout,
+            _layoutChanged
+        );
+    }
+
+    private void LoadLayout(DockControlConfig config)
+    {
+        _internalLayoutChange = true;
+        try
+        {
+            _config = config;
+            _config.DockItemStates ??= new Dictionary<string, DockItemState>();
+            ApplyLayout();
+        }
+        finally
+        {
+            _internalLayoutChange = false;
+        }
+    }
+
+    private DockControlConfig? SaveLayout()
+    {
+        if (_internalLayoutChange)
+        {
+            return null;
+        }
+
+        var config = new DockControlConfig
+        {
+            SelectedDockTabItemId = (_mainTabControl.SelectedItem as DockTabItem)?.Id
+                ?? _selectedTab?.Id,
+        };
+
+        foreach (var item in _mainTabControl.Items.OfType<DockTabItem>())
+        {
+            if (item.Content is { } page)
+            {
+                config.DockItemStates[page.Id.ToString()] = DockItemState.Tab;
+            }
+        }
+
+        foreach (var item in _windowedItems)
+        {
+            if (item.Content is { } page)
+            {
+                config.DockItemStates[page.Id.ToString()] = DockItemState.Window;
+            }
+        }
+
+        _config = config;
+        return config;
+    }
+
+    private void ApplyLayout()
+    {
+        foreach (var content in Items)
+        {
+            AddTabIfNotExists(content);
+        }
+
+        foreach (var tab in _mainTabControl.Items.OfType<DockTabItem>().ToArray())
+        {
+            if (
+                _config.DockItemStates.TryGetValue(tab.Id, out var state)
+                && state == DockItemState.Window
+            )
+            {
+                DetachTab(tab);
+            }
+        }
+
+        EnsureDockTabItemFromCfgSelected();
+    }
+
+    private void NotifyLayoutChanged()
+    {
+        if (_internalLayoutChange)
+        {
+            return;
+        }
+
+        _layoutChanged.OnNext(Unit.Default);
     }
 
     public static readonly DirectProperty<DockControl, double> LeftDisabledHitTestHeightProperty =

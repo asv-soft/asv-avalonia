@@ -23,11 +23,41 @@ public class SerialPortViewModel : PortViewModel
     }
 
     public SerialPortViewModel(
+        IProtocolPort protocolPort,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{SerialProtocolPort.Scheme}-editor", unitService, loggerFactory, timeProvider)
+        : this(
+            protocolPort?.Id ?? throw new ArgumentNullException(nameof(protocolPort)),
+            unitService,
+            loggerFactory,
+            timeProvider
+        )
+    {
+    }
+
+    public SerialPortViewModel(
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : this(
+            $"{SerialProtocolPort.Scheme}-editor",
+            unitService,
+            loggerFactory,
+            timeProvider
+        )
+    {
+    }
+
+    private SerialPortViewModel(
+        string id,
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : base(id, unitService, loggerFactory, timeProvider)
     {
         Icon = DefaultIcon;
 

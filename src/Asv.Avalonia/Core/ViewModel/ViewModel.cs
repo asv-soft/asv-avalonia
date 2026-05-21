@@ -23,7 +23,7 @@ public abstract class ViewModel : IViewModel
     private int _isDisposed;
     private CancellationTokenSource? _cancel;
     private CompositeDisposable? _dispose;
-    private UndoController<IViewModel>? _undo;
+    private IUndoController? _undo;
     private ILayoutController? _layout;
 
     protected ViewModel(string typeId, NavArgs args = default)
@@ -35,23 +35,11 @@ public abstract class ViewModel : IViewModel
 
     public IRoutedEventController<IViewModel> Events { get; }
 
-    public IUndoController Undo =>
-        _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
+    public IUndoController Undo => _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
 
-    public ILayoutController Layout =>
-        _layout ??= new LayoutController<IViewModel>(this).AddTo(ref DisposableBag);
+    public ILayoutController Layout => _layout ??= new LayoutController<IViewModel>(this).AddTo(ref DisposableBag);
 
-    public NavId Id { get; private set; }
-
-    protected void InitArgs(string typeId)
-    {
-        Id = new NavId(typeId);
-    }
-
-    protected void InitArgs(NavArgs args)
-    {
-        Id = new NavId(Id.TypeId, args);
-    }
+    public NavId Id { get; }
 
     public IViewModel? Parent
     {

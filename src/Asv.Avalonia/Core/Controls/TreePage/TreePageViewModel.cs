@@ -46,6 +46,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         SelectedNode.SubscribeAwait(SelectedNodeChanged).AddTo(ref DisposableBag);
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).AddTo(ref DisposableBag);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).AddTo(ref DisposableBag);
+        R3.Disposable.Create(() => SelectedPage.Value?.Dispose()).AddTo(ref DisposableBag);
     }
 
     public MaterialIconKind? TreeHeaderIcon
@@ -140,7 +141,18 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         Layout
             .Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
             .AddTo(ref DisposableBag);
+        
         Layout.LoadAll();
+    }
+    
+    private string? SaveLayout()
+    {
+        return SelectedNode.Value?.Key.ToString();
+    }
+
+    private void LoadLayout(string layoutValue)
+    {
+        Navigate(NavId.Parse(layoutValue)).SafeFireAndForget();
     }
 
     protected virtual ITreeSubpage? CreateDefaultPage()
@@ -154,16 +166,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     {
         var context = new TreeSubPageContext<TContext>(id.Args, Context);
         return _container.CreateTreeSubPage<TContext, TSubPage>(id.TypeId, context);
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            SelectedPage.Value?.Dispose();
-        }
-
-        base.Dispose(disposing);
     }
 
     private void ShowMenu(bool value)
@@ -192,15 +194,5 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
 
         await Navigate(node.Base.NavigateTo);
-    }
-
-    private string? SaveLayout()
-    {
-        return SelectedNode.Value?.Key.ToString();
-    }
-
-    private void LoadLayout(string layoutValue)
-    {
-        Navigate(NavId.Parse(layoutValue)).SafeFireAndForget();
     }
 }

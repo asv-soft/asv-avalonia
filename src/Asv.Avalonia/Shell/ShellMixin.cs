@@ -12,7 +12,7 @@ public static class ShellMixin
     {
         public ValueTask GoTo(NavPath path)
         {
-            var path1 = new List<NavId> { new(ShellViewModel.Id) };
+            var path1 = new List<NavId> { new(ShellViewModel.TypeId) };
             path1.AddRange(path);
             return sender.Events.Rise(new NavigateEvent<IViewModel>(sender, new NavPath(path1)));
         }

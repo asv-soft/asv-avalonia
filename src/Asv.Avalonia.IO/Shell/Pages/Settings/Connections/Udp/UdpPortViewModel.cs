@@ -30,12 +30,46 @@ public class UdpPortViewModel : PortViewModel
     }
 
     public UdpPortViewModel(
+        IProtocolPort protocolPort,
         IConfiguration cfgSvc,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base($"{UdpProtocolPort.Scheme}-editor", unitService, loggerFactory, timeProvider)
+        : this(
+            protocolPort?.Id ?? throw new ArgumentNullException(nameof(protocolPort)),
+            cfgSvc,
+            unitService,
+            loggerFactory,
+            timeProvider
+        )
+    {
+    }
+
+    public UdpPortViewModel(
+        IConfiguration cfgSvc,
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : this(
+            $"{UdpProtocolPort.Scheme}-editor",
+            cfgSvc,
+            unitService,
+            loggerFactory,
+            timeProvider
+        )
+    {
+    }
+
+    private UdpPortViewModel(
+        string id,
+        IConfiguration cfgSvc,
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : base(id, unitService, loggerFactory, timeProvider)
     {
         _cfgSvc = cfgSvc;
         _unitService = unitService;

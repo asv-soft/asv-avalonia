@@ -27,14 +27,13 @@ public class PortViewModel : ViewModel, IPortViewModel
 
     public PortViewModel()
         : this(
-            DesignTime.Id.TypeId,
+            Guid.NewGuid().ToString(),
             DesignTime.UnitService,
             DesignTime.LoggerFactory,
             TimeProvider.System
-        )
+    )
     {
         DesignTime.ThrowIfNotDesignMode();
-        InitArgs(Guid.NewGuid().ToString());
         Icon = MaterialIconKind.Connection;
         var index = 0;
         Observable
@@ -70,12 +69,27 @@ public class PortViewModel : ViewModel, IPortViewModel
     }
 
     public PortViewModel(
-        string typeId,
+        IProtocolPort protocolPort,
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : base(typeId)
+        : this(
+            protocolPort?.Id ?? throw new ArgumentNullException(nameof(protocolPort)),
+            unitService,
+            loggerFactory,
+            timeProvider
+        )
+    {
+    }
+
+    public PortViewModel(
+        string id,
+        IUnitService unitService,
+        ILoggerFactory loggerFactory,
+        TimeProvider timeProvider
+    )
+        : base(id)
     {
         LoggerFactory = loggerFactory;
         TimeProvider = timeProvider;
@@ -214,7 +228,6 @@ public class PortViewModel : ViewModel, IPortViewModel
             .ObserveOnUIThreadDispatcher()
             .Subscribe(UpdateStatistic)
             .DisposeItWith(Disposable);
-        InitArgs(protocolPort.Id);
         InternalLoadChanges(protocolPort.Config);
         ResetChanges();
 
