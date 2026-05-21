@@ -20,8 +20,9 @@ public static class LauncherReadyMixin
                 .Services.AddOptions<LauncherFeatureOptions>()
                 .Bind(builder.Configuration.GetSection(LauncherFeatureOptions.Section));
 
-            configure ??= b => b.RegisterDefault();
-            configure(new Builder(builder, options));
+            var launcherBuilder = new Builder(builder, options);
+            launcherBuilder.RegisterDefault();
+            configure?.Invoke(launcherBuilder);
             return builder;
         }
 
@@ -51,6 +52,7 @@ public static class LauncherReadyMixin
         {
             builder.Services.AddSingleton<LauncherNotifier>();
             builder.Services.AddHostedService<LauncherFeature>();
+            Console.WriteLine("Launcher feature is ready");
             return builder;
         }
     }
