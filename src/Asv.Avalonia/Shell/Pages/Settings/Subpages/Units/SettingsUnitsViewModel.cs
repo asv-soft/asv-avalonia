@@ -20,7 +20,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
 
     private readonly ISynchronizedView<IUnit, MeasureUnitViewModel> _view;
     private readonly IUnitService _unitsService;
-    private SettingsUnitsViewModelConfig? _config;
+    private readonly Subject<Unit> _layoutChanged = new();
     private readonly IUndoChangeSink<ValueUndoChange<Dictionary<string, string>>> _undoHandler;
 
     public SettingsUnitsViewModel()
@@ -47,6 +47,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
         ArgumentNullException.ThrowIfNull(loggerFactory);
 
         _unitsService = unitsService;
+        _layoutChanged.DisposeItWith(Disposable);
 
         var observableList = new ObservableList<IUnit>(unitsService.Units.Values);
         _view = observableList
@@ -58,6 +59,10 @@ public class SettingsUnitsViewModel : SettingsSubPage
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);
         SelectedItem = new BindableReactiveProperty<MeasureUnitViewModel?>();
+        SelectedItem
+            .Skip(1)
+            .Subscribe(_ => _layoutChanged.OnNext(Unit.Default))
+            .DisposeItWith(Disposable);
 
         Search = new SearchBoxViewModel(
             nameof(Search),
@@ -66,6 +71,10 @@ public class SettingsUnitsViewModel : SettingsSubPage
             TimeSpan.FromMilliseconds(500)
         )
             .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+        Search
+            .Text.ViewValue.Skip(1)
+            .Subscribe(_ => _layoutChanged.OnNext(Unit.Default))
             .DisposeItWith(Disposable);
 
         ResetAllCommand = new ReactiveCommand(ResetAll).DisposeItWith(Disposable);
@@ -80,13 +89,14 @@ public class SettingsUnitsViewModel : SettingsSubPage
         };
         Menu.Add(menu);
 
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
-
         _undoHandler = Undo.CreateValueChange<Dictionary<string, string>>(
                 "default",
                 ApplyUnits,
                 ApplyUnits
             )
+            .DisposeItWith(Disposable);
+        Layout
+            .Register(nameof(SettingsUnitsViewModel), LoadLayout, SaveLayout, _layoutChanged)
             .DisposeItWith(Disposable);
     }
 
@@ -172,50 +182,23 @@ public class SettingsUnitsViewModel : SettingsSubPage
         }
     }
 
-    private ValueTask InternalCatchEvent(
-        IViewModel src,
-        AsyncRoutedEvent<IViewModel> e,
-        CancellationToken cancel
-    )
+    private SettingsUnitsViewModelConfig SaveLayout()
     {
-        switch (e)
+        return new SettingsUnitsViewModelConfig
         {
-            case SaveLayoutEvent saveLayoutEvent:
-                if (_config is null)
-                {
-                    break;
-                }
+            SearchText = Search.Text.ViewValue.Value ?? string.Empty,
+            SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty,
+        };
+    }
 
-                this.HandleSaveLayout(
-                    saveLayoutEvent,
-                    _config,
-                    cfg =>
-                    {
-                        cfg.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
-                        cfg.SelectedItemId = SelectedItem.Value?.Id.ToString() ?? string.Empty;
-                    }
-                );
-                break;
-            case LoadLayoutEvent loadLayoutEvent:
-                _config = this.HandleLoadLayout<SettingsUnitsViewModelConfig>(
-                    loadLayoutEvent,
-                    cfg =>
-                    {
-                        Search.Text.ModelValue.Value = cfg.SearchText;
-                        var selected = _view.FirstOrDefault(x =>
-                            x.Id.ToString() == cfg.SelectedItemId
-                        );
-
-                        if (selected is not null)
-                        {
-                            SelectedItem.Value = selected;
-                        }
-                    }
-                );
-                break;
+    private void LoadLayout(SettingsUnitsViewModelConfig config)
+    {
+        Search.Text.ModelValue.Value = config.SearchText;
+        var selected = _view.FirstOrDefault(x => x.Id.ToString() == config.SelectedItemId);
+        if (selected is not null)
+        {
+            SelectedItem.Value = selected;
         }
-
-        return ValueTask.CompletedTask;
     }
 
     protected override void Dispose(bool disposing)

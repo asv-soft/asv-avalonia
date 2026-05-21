@@ -32,8 +32,7 @@ public class LogViewerViewModel
     private readonly ISearchService _search;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<LogMessageViewModel> _itemsSource = new();
-
-    private LogViewerViewModelConfig? _config;
+    private readonly Subject<Unit> _layoutChanged = new();
 
     public LogViewerViewModel()
         : base(
@@ -45,6 +44,7 @@ public class LogViewerViewModel
         )
     {
         DesignTime.ThrowIfNotDesignMode();
+        _layoutChanged.DisposeItWith(Disposable);
         Header = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
@@ -153,6 +153,7 @@ public class LogViewerViewModel
         _logReaderService = logReaderService;
         _search = search;
         _loggerFactory = loggerFactory;
+        _layoutChanged.DisposeItWith(Disposable);
         Header = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
@@ -175,7 +176,18 @@ public class LogViewerViewModel
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Skip.Skip(1).Subscribe(_ => Search.Refresh()).DisposeItWith(Disposable);
+        Skip.Skip(1)
+            .Subscribe(_ =>
+            {
+                Search.Refresh();
+                _layoutChanged.OnNext(Unit.Default);
+            })
+            .DisposeItWith(Disposable);
+        Take.Skip(1).Subscribe(_ => _layoutChanged.OnNext(Unit.Default)).DisposeItWith(Disposable);
+        Search
+            .Text.ViewValue.Skip(1)
+            .Subscribe(_ => _layoutChanged.OnNext(Unit.Default))
+            .DisposeItWith(Disposable);
 
         Next = new ReactiveCommand(_ => Skip.Value += Take.Value).DisposeItWith(Disposable);
         Previous = new ReactiveCommand(_ =>
@@ -183,7 +195,6 @@ public class LogViewerViewModel
         ).DisposeItWith(Disposable);
 
         Search.Refresh();
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public SearchBoxViewModel Search { get; }
@@ -214,7 +225,13 @@ public class LogViewerViewModel
         }
     }
 
-    protected override void AfterLoadExtensions() { }
+    protected override void AfterLoadExtensions()
+    {
+        Layout
+            .Register(nameof(LogViewerViewModel), LoadLayout, SaveLayout, _layoutChanged)
+            .DisposeItWith(Disposable);
+        Layout.LoadAll();
+    }
 
     private async Task UpdateImpl(
         string? query,
@@ -329,44 +346,20 @@ public class LogViewerViewModel
         }
     }
 
-    private ValueTask InternalCatchEvent(
-        IViewModel src,
-        AsyncRoutedEvent<IViewModel> e,
-        CancellationToken cancel
-    )
+    private LogViewerViewModelConfig SaveLayout()
     {
-        switch (e)
+        return new LogViewerViewModelConfig
         {
-            case SaveLayoutEvent saveLayoutEvent:
-                if (_config is null)
-                {
-                    break;
-                }
+            SearchText = Search.Text.ViewValue.Value ?? string.Empty,
+            Skip = Skip.Value,
+            Take = Take.Value,
+        };
+    }
 
-                this.HandleSaveLayout(
-                    saveLayoutEvent,
-                    _config,
-                    cfg =>
-                    {
-                        cfg.SearchText = Search.Text.ViewValue.Value ?? string.Empty;
-                        cfg.Skip = Skip.Value;
-                        cfg.Take = Take.Value;
-                    }
-                );
-                break;
-            case LoadLayoutEvent loadLayoutEvent:
-                _config = this.HandleLoadLayout<LogViewerViewModelConfig>(
-                    loadLayoutEvent,
-                    cfg =>
-                    {
-                        Search.Text.ModelValue.Value = cfg.SearchText;
-                        Skip.Value = cfg.Skip;
-                        Take.Value = cfg.Take;
-                    }
-                );
-                break;
-        }
-
-        return ValueTask.CompletedTask;
+    private void LoadLayout(LogViewerViewModelConfig config)
+    {
+        Search.Text.ModelValue.Value = config.SearchText;
+        Skip.Value = config.Skip;
+        Take.Value = config.Take;
     }
 }

@@ -6,12 +6,15 @@ public interface IPageContext
 {
     NavArgs NavArgs { get; }
     IUndoHistoryStore UndoStore { get; }
+    ILayoutStore LayoutStore { get; }
 }
 
-public class PageContext(NavArgs navArgs, IUndoHistoryStore undoStore) : IPageContext
+public class PageContext(NavArgs navArgs, IUndoHistoryStore undoStore, ILayoutStore layoutStore)
+    : IPageContext
 {
-    public NavArgs NavArgs { get; } = navArgs;
-    public IUndoHistoryStore UndoStore { get; } = undoStore;
+    public NavArgs NavArgs => navArgs;
+    public IUndoHistoryStore UndoStore => undoStore;
+    public ILayoutStore LayoutStore => layoutStore;
 }
 
 public class NullPageContext : IPageContext
@@ -20,4 +23,5 @@ public class NullPageContext : IPageContext
 
     public NavArgs NavArgs { get; } = NavArgs.Empty;
     public IUndoHistoryStore UndoStore => NullUndoHistoryStore.Instance;
+    public ILayoutStore LayoutStore => NullLayoutStore.Instance;
 }

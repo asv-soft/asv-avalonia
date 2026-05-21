@@ -14,7 +14,7 @@ public enum ShellErrorState
     Error,
 }
 
-public interface IShell : IHasHeader, INavigationRoot<IViewModel>
+public interface IShell : IHasHeader, INavigationRoot<IViewModel>, IHasLayoutManager<IViewModel>
 {
     Observable<Unit> OnClose { get; }
     ObservableList<IMenuItem> MainMenu { get; }

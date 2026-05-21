@@ -64,7 +64,7 @@ public static class ShellMixin
         public Builder RegisterDefault()
         {
             this.MainMenu.UseDefault();
-            this.Status.UseNavigationStatus();
+            this.Status.UseDefault().UseNavigationStatus();
             this.Pages.UseDefaultHomePage().UseSettingsPage();
             return this;
         }

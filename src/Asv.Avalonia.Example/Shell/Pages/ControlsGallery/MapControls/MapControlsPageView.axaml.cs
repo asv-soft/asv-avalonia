@@ -1,7 +1,11 @@
+using System;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
+using Asv.IO;
+using Asv.Modeling;
 using Avalonia;
 using Avalonia.Controls;
+using R3;
 
 namespace Asv.Avalonia.Example;
 
@@ -13,31 +17,32 @@ public sealed class MapControlsPageViewConfig
 
 public partial class MapControlsPageView : UserControl
 {
-    private readonly ILayoutService _layoutService;
-    private MapControlsPageViewConfig? _config;
+    private readonly IDisposable? _layout;
+    private readonly Subject<Unit>? _layoutChanged;
+    private MapControlsPageViewConfig? _config = new();
 
     public MapControlsPageView()
-        : this(NullLayoutService.Instance)
     {
-        DesignTime.ThrowIfNotDesignMode();
-    }
-
-    public MapControlsPageView(ILayoutService layoutService)
-    {
-        _layoutService = layoutService;
         InitializeComponent();
-    }
-
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        base.OnAttachedToVisualTree(e);
-
         if (Design.IsDesignMode)
         {
             return;
         }
 
-        LoadLayout();
+        _layoutChanged = new Subject<Unit>();
+        _layout = this.RegisterLayout<MapControlsPageViewConfig, Unit>(
+            nameof(MapControlsPageView),
+            LoadLayout,
+            SaveLayout,
+            _layoutChanged
+        );
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        _layout?.Dispose();
+        _layoutChanged?.Dispose();
+        base.OnDetachedFromVisualTree(e);
     }
 
     private void OnRulerChanged(object? sender, RulerChangedEventArgs e)
@@ -47,10 +52,11 @@ public partial class MapControlsPageView : UserControl
             return;
         }
 
-        SaveLayout(e);
+        UpdateLayout(e);
+        _layoutChanged?.OnNext(Unit.Default);
     }
 
-    private void SaveLayout(RulerChangedEventArgs e)
+    private void UpdateLayout(RulerChangedEventArgs e)
     {
         if (_config is null || DataContext is null)
         {
@@ -67,13 +73,11 @@ public partial class MapControlsPageView : UserControl
             _config.RulerStartPoint = null;
             _config.RulerStopPoint = null;
         }
-
-        _layoutService.SetInMemory(this, _config);
     }
 
-    private void LoadLayout()
+    private void LoadLayout(MapControlsPageViewConfig config)
     {
-        _config = _layoutService.Get<MapControlsPageViewConfig>(this);
+        _config = config;
 
         if (_config is not { RulerStartPoint: { } start, RulerStopPoint: { } stop })
         {
@@ -82,5 +86,10 @@ public partial class MapControlsPageView : UserControl
 
         PART_Ruler.StartPoint = start;
         PART_Ruler.StopPoint = stop;
+    }
+
+    private MapControlsPageViewConfig? SaveLayout()
+    {
+        return _config;
     }
 }

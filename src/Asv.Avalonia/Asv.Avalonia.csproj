@@ -182,8 +182,4 @@
     <ItemGroup>
       <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Services\" />
-    </ItemGroup>
 </Project>

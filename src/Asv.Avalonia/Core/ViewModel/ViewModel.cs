@@ -15,6 +15,8 @@ namespace Asv.Avalonia;
 public abstract class ViewModel : IViewModel
 {
     private static readonly CompositeDisposable DisposedDisposable = CreateDisposedDisposable();
+
+    // ReSharper disable once ReplaceWithFieldKeyword
     private DisposableBag _disposableBag;
     protected ref DisposableBag DisposableBag => ref _disposableBag;
 
@@ -22,6 +24,7 @@ public abstract class ViewModel : IViewModel
     private CancellationTokenSource? _cancel;
     private CompositeDisposable? _dispose;
     private UndoController<IViewModel>? _undo;
+    private ILayoutController? _layout;
 
     protected ViewModel(string typeId, NavArgs args = default)
     {
@@ -34,6 +37,9 @@ public abstract class ViewModel : IViewModel
 
     public IUndoController Undo =>
         _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
+
+    public ILayoutController Layout =>
+        _layout ??= new LayoutController<IViewModel>(this).AddTo(ref DisposableBag);
 
     public NavId Id { get; private set; }
 

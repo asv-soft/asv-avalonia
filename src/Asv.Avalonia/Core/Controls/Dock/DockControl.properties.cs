@@ -13,13 +13,4 @@ public partial class DockControl
         get => GetValue(ConfigurationProperty);
         set => SetValue(ConfigurationProperty, value);
     }
-
-    public static readonly StyledProperty<ILayoutService?> LayoutServiceProperty =
-        AvaloniaProperty.Register<DockControl, ILayoutService?>(nameof(LayoutService));
-
-    public ILayoutService? LayoutService
-    {
-        get => GetValue(LayoutServiceProperty);
-        set => SetValue(LayoutServiceProperty, value);
-    }
 }

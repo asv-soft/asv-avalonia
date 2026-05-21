@@ -1,5 +1,8 @@
+using System;
+using Asv.Modeling;
 using Avalonia;
 using Avalonia.Controls;
+using R3;
 
 namespace Asv.Avalonia.Example;
 
@@ -10,54 +13,53 @@ public class DialogControlsPageViewConfig
 
 public partial class DialogControlsPageView : UserControl
 {
-    private readonly ILayoutService _layoutService;
-
-    private DialogControlsPageViewConfig? _config;
+    private readonly IDisposable? _layout;
+    private readonly Subject<Unit>? _layoutChanged;
 
     public DialogControlsPageView()
-        : this(NullLayoutService.Instance)
     {
-        DesignTime.ThrowIfNotDesignMode();
-    }
-
-    public DialogControlsPageView(ILayoutService layoutService)
-    {
-        _layoutService = layoutService;
         InitializeComponent();
-    }
-
-    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
-    {
-        LoadLayout();
-        base.OnAttachedToVisualTree(e);
-    }
-
-    private void LoadLayout()
-    {
         if (Design.IsDesignMode)
         {
             return;
         }
 
-        _config = _layoutService.Get<DialogControlsPageViewConfig>(this);
-
-        MainScrollViewer.Offset = _config.ScrollOffset;
+        _layoutChanged = new Subject<Unit>();
+        _layout = this.RegisterLayout<DialogControlsPageViewConfig, Unit>(
+            nameof(DialogControlsPageView),
+            LoadLayout,
+            SaveLayout,
+            _layoutChanged
+        );
     }
 
-    private void SaveLayout()
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        if (Design.IsDesignMode || _config is null || DataContext is null)
+        _layout?.Dispose();
+        _layoutChanged?.Dispose();
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    private void LoadLayout(DialogControlsPageViewConfig config)
+    {
+        MainScrollViewer.Offset = config.ScrollOffset;
+    }
+
+    private DialogControlsPageViewConfig? SaveLayout()
+    {
+        if (
+            !double.IsFinite(MainScrollViewer.Offset.X)
+            || !double.IsFinite(MainScrollViewer.Offset.Y)
+        )
         {
-            return;
+            return null;
         }
 
-        _config.ScrollOffset = MainScrollViewer.Offset;
-
-        _layoutService.SetInMemory(this, _config);
+        return new DialogControlsPageViewConfig { ScrollOffset = MainScrollViewer.Offset };
     }
 
     private void MainScrollViewer_OnScrollChanged(object? sender, ScrollChangedEventArgs e)
     {
-        SaveLayout();
+        _layoutChanged?.OnNext(Unit.Default);
     }
 }

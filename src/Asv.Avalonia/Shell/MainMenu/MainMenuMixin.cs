@@ -34,9 +34,7 @@ public static class MainMenuMixin
                 .Register<ToolsMenu>()
                 .Register<ToolsHomeMenu>()
                 .Register<ToolsSettingsMenu>()
-                .Register<ViewMenu>()
-                .Register<ViewSaveMenu>()
-                .Register<ViewSaveAllMenu>();
+                .Register<ViewMenu>();
         }
     }
 }

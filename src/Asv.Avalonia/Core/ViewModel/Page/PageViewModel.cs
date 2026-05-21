@@ -23,7 +23,9 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         : base(typeId, context.NavArgs, ext)
     {
         _logger = loggerFactory.CreateLogger<PageViewModel<TContext>>();
-
+        LayoutManager = new LayoutManager<IViewModel>(this, context.LayoutStore).AddTo(
+            ref DisposableBag
+        );
         UndoHistory = new UndoHistory<IViewModel>(this, context.UndoStore).AddTo(ref DisposableBag);
         Icon = MaterialIconKind.Window;
         Header = typeId;
@@ -97,5 +99,6 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
     }
 
     public IUndoHistory<IViewModel> UndoHistory { get; }
+    public ILayoutManager<IViewModel> LayoutManager { get; }
     public ICommand TryClose { get; }
 }

@@ -1,5 +1,4 @@
 using Asv.Common;
-using Asv.IO;
 using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,30 +8,22 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class TreePageViewModelConfig
-{
-    public string SelectedNodeId { get; set; } = string.Empty;
-}
-
 public abstract class TreePageViewModel<TContext, TSubPage>
     : PageViewModel<TContext>,
         ITreePageViewModel
     where TContext : class, ITreePageViewModel
     where TSubPage : ITreeSubpage
 {
-    private readonly ILayoutService _layoutService;
     private readonly ReactiveProperty<ITreeSubpage?> _selectedPage;
     private readonly IServiceProvider _container;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
-    private TreePageViewModelConfig? _config;
 
     protected TreePageViewModel(
         string typeId,
         IPageContext context,
         IServiceProvider container,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
@@ -41,31 +32,21 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     {
         _container = container;
         _loggerFactory = loggerFactory;
-        _layoutService = layoutService;
         Nodes = [];
-        Nodes.SetRoutableParent(this).DisposeItWith(Disposable);
-        Nodes.DisposeRemovedItems().DisposeItWith(Disposable);
-        TreeView = new TreePageMenu(Nodes).DisposeItWith(Disposable);
-        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<
-            ITreePage,
-            NavId
-        >?>().DisposeItWith(Disposable);
-        _selectedPage = new ReactiveProperty<ITreeSubpage?>().DisposeItWith(Disposable);
-        SelectedPage = _selectedPage.ToBindableReactiveProperty().DisposeItWith(Disposable);
+        Nodes.SetRoutableParent(this).AddTo(ref DisposableBag);
+        Nodes.DisposeRemovedItems().AddTo(ref DisposableBag);
+        TreeView = new TreePageMenu(Nodes).AddTo(ref DisposableBag);
+        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?>().AddTo(
+            ref DisposableBag
+        );
+        _selectedPage = new ReactiveProperty<ITreeSubpage?>().AddTo(ref DisposableBag);
+        SelectedPage = _selectedPage.ToBindableReactiveProperty().AddTo(ref DisposableBag);
         _breadCrumbSource = [];
-        BreadCrumb = _breadCrumbSource.ToViewList().DisposeItWith(Disposable);
-        SelectedNode.SubscribeAwait(SelectedNodeChanged).DisposeItWith(Disposable);
-        ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).DisposeItWith(Disposable);
-        HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).DisposeItWith(Disposable);
-
-        _selectedPage
-            .WhereNotNull()
-            .SubscribeAwait(async (p, ct) => await p.RequestLoadLayout(layoutService, ct))
-            .DisposeItWith(Disposable);
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
+        BreadCrumb = _breadCrumbSource.ToViewList().AddTo(ref DisposableBag);
+        SelectedNode.SubscribeAwait(SelectedNodeChanged).AddTo(ref DisposableBag);
+        ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).AddTo(ref DisposableBag);
+        HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).AddTo(ref DisposableBag);
     }
-
-    #region Header
 
     public MaterialIconKind? TreeHeaderIcon
     {
@@ -79,17 +60,9 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         set => SetField(ref field, value);
     }
 
-    #endregion
-
-    #region Menu
-
     public ReactiveCommand ShowMenuCommand { get; }
-    public ReactiveCommand HideMenuCommand { get; }
 
-    private void ShowMenu(bool value)
-    {
-        IsMenuVisible = value;
-    }
+    public ReactiveCommand HideMenuCommand { get; }
 
     public bool IsMenuVisible
     {
@@ -97,7 +70,106 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         set => SetField(ref field, value);
     } = true;
 
-    #endregion
+    public ObservableTree<ITreePage, NavId> TreeView { get; }
+
+    public BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
+
+    public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
+
+    public BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?> SelectedNode { get; }
+
+    public ObservableList<ITreePage> Nodes { get; }
+
+    public override ValueTask<IViewModel> Navigate(NavId id)
+    {
+        try
+        {
+            if (SelectedPage.Value != null && SelectedPage.Value.Id == id)
+            {
+                return ValueTask.FromResult<IViewModel>(SelectedPage.Value);
+            }
+
+            if (SelectedNode.Value?.Base.NavigateTo != id)
+            {
+                _internalNavigate = true;
+                SelectedNode.Value = TreeView.FindNode(x => x.Base.NavigateTo == id);
+                _internalNavigate = false;
+            }
+
+            var newPage = CreateSubPage(id) ?? CreateDefaultPage();
+            if (newPage is null)
+            {
+                return ValueTask.FromResult<IViewModel>(this);
+            }
+
+            var sub = _selectedPage.Value;
+            newPage.Parent = this;
+            _selectedPage.Value = newPage;
+            newPage.Layout.LoadAll();
+
+            var children = _selectedPage.Value.GetChildren();
+            foreach (var child in children)
+            {
+                child.Parent = newPage;
+            }
+
+            sub?.Dispose();
+            return ValueTask.FromResult<IViewModel>(newPage);
+        }
+        catch (Exception exception)
+        {
+            return ValueTask.FromException<IViewModel>(exception);
+        }
+    }
+
+    public override IEnumerable<IViewModel> GetChildren()
+    {
+        foreach (var node in Nodes)
+        {
+            yield return node;
+        }
+
+        if (SelectedPage.CurrentValue != null)
+        {
+            yield return SelectedPage.CurrentValue;
+        }
+    }
+
+    protected override void AfterLoadExtensions()
+    {
+        Layout
+            .Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
+            .AddTo(ref DisposableBag);
+        Layout.LoadAll();
+    }
+
+    protected virtual ITreeSubpage? CreateDefaultPage()
+    {
+        return SelectedNode.Value != null
+            ? new GroupTreePageItemViewModel(SelectedNode.Value, Navigate, _loggerFactory)
+            : null;
+    }
+
+    protected virtual ITreeSubpage CreateSubPage(NavId id)
+    {
+        var context = new TreeSubPageContext<TContext>(id.Args, Context);
+        return _container.CreateTreeSubPage<TContext, TSubPage>(id.TypeId, context);
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            SelectedPage.Value?.Dispose();
+        }
+
+        base.Dispose(disposing);
+    }
+
+    private void ShowMenu(bool value)
+    {
+        IsMenuVisible = value;
+    }
 
     private async ValueTask SelectedNodeChanged(
         ObservableTreeNode<ITreePage, NavId>? node,
@@ -119,183 +191,16 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             );
         }
 
-        await this.RequestSaveLayout(_layoutService, cancel);
-        await this.RequestSaveLayoutToFile(_layoutService, cancel, RoutingStrategy.Direct);
         await Navigate(node.Base.NavigateTo);
     }
 
-    protected virtual ITreeSubpage? CreateDefaultPage()
+    private string? SaveLayout()
     {
-        return SelectedNode.Value != null
-            ? new GroupTreePageItemViewModel(SelectedNode.Value, Navigate, _loggerFactory)
-            : null;
+        return SelectedNode.Value?.Key.ToString();
     }
 
-    public override async ValueTask<IViewModel> Navigate(NavId id)
+    private void LoadLayout(string layoutValue)
     {
-        if (SelectedPage.Value != null && SelectedPage.Value.Id == id)
-        {
-            return SelectedPage.Value;
-        }
-
-        if (SelectedNode.Value?.Base.NavigateTo != id)
-        {
-            _internalNavigate = true;
-            SelectedNode.Value = TreeView.FindNode(x => x.Base.NavigateTo == id);
-            _internalNavigate = false;
-        }
-
-        var newPage = CreateSubPage(id) ?? CreateDefaultPage();
-        if (newPage is null)
-        {
-            return this;
-        }
-
-        var sub = _selectedPage.Value;
-        newPage.Parent = this;
-        _selectedPage.Value = newPage;
-
-        var children = _selectedPage.Value.GetChildren();
-        foreach (var child in children)
-        {
-            child.Parent = newPage;
-        }
-
-        sub?.Dispose();
-        return newPage;
+        Navigate(NavId.Parse(layoutValue)).SafeFireAndForget();
     }
-
-    public override IEnumerable<IViewModel> GetChildren()
-    {
-        foreach (var node in Nodes)
-        {
-            yield return node;
-        }
-
-        if (SelectedPage.CurrentValue != null)
-        {
-            yield return SelectedPage.CurrentValue;
-        }
-    }
-
-    protected virtual ITreeSubpage CreateSubPage(NavId id)
-    {
-        var context = new TreeSubPageContext<TContext>(id.Args, Context);
-        return _container.CreateTreeSubPage<TContext, TSubPage>(id.TypeId, context);
-    }
-
-    private ValueTask InternalCatchEvent(
-        IViewModel owner,
-        AsyncRoutedEvent<IViewModel> e,
-        CancellationToken cancel
-    )
-    {
-        switch (e)
-        {
-            case PageCloseRequestedEvent close:
-            {
-                if (Id != close.Page.Id)
-                {
-                    break;
-                }
-
-                foreach (var node in Nodes)
-                {
-                    _layoutService.RemoveFromMemoryViewModelAndView(node);
-                }
-
-                break;
-            }
-            case SaveLayoutEvent saveLayoutEvent:
-                if (_config is null)
-                {
-                    break;
-                }
-
-                this.HandleSaveLayout(
-                    saveLayoutEvent,
-                    _config,
-                    cfg => cfg.SelectedNodeId = SelectedNode.Value?.Key.ToString() ?? string.Empty
-                );
-                break;
-            case LoadLayoutEvent loadLayoutEvent:
-                _config = this.HandleLoadLayout<TreePageViewModelConfig>(
-                    loadLayoutEvent,
-                    cfg =>
-                    {
-                        if (!string.IsNullOrEmpty(cfg.SelectedNodeId))
-                        {
-                            SetSelectedNodeFromConfig(cfg);
-                        }
-                    }
-                );
-
-                break;
-        }
-
-        return ValueTask.CompletedTask;
-    }
-
-    private void SetSelectedNodeFromConfig(TreePageViewModelConfig cfg)
-    {
-        var navId = new NavId(cfg.SelectedNodeId);
-
-        var selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == navId);
-
-        SelectedNode.Value = selectedNode;
-
-        if (selectedNode is not null)
-        {
-            return;
-        }
-
-        // TreeView may not have all nodes yet
-        _sub1.Disposable = Nodes
-            .ObserveAdd()
-            .Subscribe(addEvent =>
-            {
-                if (addEvent.Value.Id != navId)
-                {
-                    return;
-                }
-
-                selectedNode = TreeView.FindNode(x => x.Base.NavigateTo == navId);
-                if (selectedNode is null)
-                {
-                    return;
-                }
-
-                SelectedNode.Value = selectedNode;
-                _sub1.Disposable?.Dispose();
-            });
-    }
-
-    public ObservableTree<ITreePage, NavId> TreeView { get; }
-    public BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
-    public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
-
-    public BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?> SelectedNode { get; }
-    public ObservableList<ITreePage> Nodes { get; }
-
-    protected override void AfterLoadExtensions()
-    {
-        // do nothing
-    }
-
-    #region Dispose
-
-    private readonly SerialDisposable _sub1 = new();
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _sub1.Dispose();
-            SelectedPage.Value?.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
-
-    #endregion
 }

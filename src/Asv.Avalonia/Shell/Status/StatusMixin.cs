@@ -17,8 +17,16 @@ public static class StatusMixin
             where TView : Control
         {
             // register status item
-            builder.Parent.Services.AddTransient<IStatusItem, TStatusViewModel>();
+            builder.Parent.Services.AddKeyedTransient<IStatusItem, TStatusViewModel>(
+                DefaultStatusExtender.Contract
+            );
             builder.Parent.ViewLocator.RegisterViewFor<TStatusViewModel, TView>();
+            return this;
+        }
+
+        public Builder UseDefault()
+        {
+            builder.Parent.Extensions.Register<IShell, DefaultStatusExtender>();
             return this;
         }
 

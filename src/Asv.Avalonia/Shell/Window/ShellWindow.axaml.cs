@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices;
 using Avalonia;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
@@ -10,15 +9,13 @@ namespace Asv.Avalonia;
 
 public partial class ShellWindow : Window
 {
-    private readonly ILayoutService? _layoutService;
     private readonly Subject<Unit>? _savePosition;
-    private readonly IDisposable? _sub1;
+    private readonly IDisposable? _layout;
     private readonly ILogger<ShellWindow> _logger;
-    private ShellWindowConfig _config;
     private bool _internalChange;
 
     public ShellWindow()
-        : this(NullLayoutService.Instance, NullLoggerFactory.Instance)
+        : this(NullLoggerFactory.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -37,10 +34,9 @@ public partial class ShellWindow : Window
             });
     }
 
-    public ShellWindow(ILayoutService layoutService, ILoggerFactory logger)
+    public ShellWindow(ILoggerFactory logger)
     {
         InitializeComponent();
-
         if (Design.IsDesignMode)
         {
             return;
@@ -48,35 +44,26 @@ public partial class ShellWindow : Window
 
         _logger = logger.CreateLogger<ShellWindow>();
 
-        _layoutService = layoutService;
         _savePosition = new Subject<Unit>();
-        _sub1 = _savePosition
-            .Where(_ => !_internalChange)
-            .ThrottleLast(TimeSpan.FromSeconds(1))
-            .Subscribe(_ => SaveLayout());
+        _layout = this.RegisterLayout<ShellWindowConfig, Unit>(
+            nameof(ShellWindow),
+            LoadLayout,
+            SaveLayout,
+            _savePosition.Where(_ => !_internalChange)
+        );
     }
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
         base.OnClosing(e);
-        SaveLayout();
+        _savePosition?.OnNext(Unit.Default);
         _savePosition?.Dispose();
-        _sub1?.Dispose();
+        _layout?.Dispose();
     }
 
-    protected override void OnOpened(EventArgs e)
+    private void LoadLayout(ShellWindowConfig config)
     {
-        base.OnOpened(e);
-
-        ArgumentNullException.ThrowIfNull(_layoutService);
-
-        _config = _layoutService.Get<ShellWindowConfig>(this);
-        LoadLayout();
-    }
-
-    private void LoadLayout()
-    {
-        if (_layoutService is null)
+        if (!IsValidSize(config.Width) || !IsValidSize(config.Height))
         {
             return;
         }
@@ -85,9 +72,9 @@ public partial class ShellWindow : Window
 
         try
         {
-            _logger.ZLogTrace($"Load {nameof(ShellWindow)} layout: {_config}");
+            _logger.ZLogTrace($"Load {nameof(ShellWindow)} layout: {config}");
 
-            if (_config.IsMaximized)
+            if (config.IsMaximized)
             {
                 WindowState = WindowState.Maximized;
                 return;
@@ -102,16 +89,16 @@ public partial class ShellWindow : Window
                 totalHeight += scr.Bounds.Height;
             }
 
-            if (_config.PositionX > totalWidth || _config.PositionY > totalHeight)
+            if (config.PositionX > totalWidth || config.PositionY > totalHeight)
             {
                 Position = new PixelPoint(0, 0);
             }
             else
             {
-                Position = new PixelPoint(_config.PositionX, _config.PositionY);
+                Position = new PixelPoint(config.PositionX, config.PositionY);
             }
 
-            if (_config.Height > totalHeight || _config.Width > totalWidth)
+            if (config.Height > totalHeight || config.Width > totalWidth)
             {
                 if (Screens.Primary != null)
                 {
@@ -125,8 +112,8 @@ public partial class ShellWindow : Window
             }
             else
             {
-                Height = _config.Height;
-                Width = _config.Width;
+                Height = config.Height;
+                Width = config.Width;
             }
         }
         catch (Exception e)
@@ -142,22 +129,29 @@ public partial class ShellWindow : Window
         }
     }
 
-    private void SaveLayout()
+    private ShellWindowConfig? SaveLayout()
     {
-        if (_layoutService == null)
+        if (_internalChange || !IsValidSize(Width) || !IsValidSize(Height))
         {
-            return;
+            return null;
         }
 
-        _config.Height = Height;
-        _config.Width = Width;
-        _config.PositionX = Position.X;
-        _config.PositionY = Position.Y;
-        _config.IsMaximized = WindowState == WindowState.Maximized;
+        var config = new ShellWindowConfig
+        {
+            Height = Height,
+            Width = Width,
+            PositionX = Position.X,
+            PositionY = Position.Y,
+            IsMaximized = WindowState == WindowState.Maximized,
+        };
 
-        _logger.ZLogTrace($"Save {nameof(ShellWindow)} layout: {_config}");
-        _layoutService.SetInMemory(this, _config);
-        _layoutService.FlushFromMemory(this);
+        _logger.ZLogTrace($"Save {nameof(ShellWindow)} layout: {config}");
+        return config;
+    }
+
+    private static bool IsValidSize(double value)
+    {
+        return double.IsFinite(value) && value > 0;
     }
 
     private void UpdateWindowStateUI()

@@ -26,7 +26,6 @@ public sealed class DevicePageCore : IDisposable
     private readonly Subject<Unit> _onDeviceDisconnected = new();
     private readonly SerialDisposable _waitInitSubscription = new();
     private readonly IDeviceManager _devices;
-    private readonly ILayoutService _layoutService;
     private readonly ILogger _logger;
     private readonly IPage _owner;
 
@@ -34,12 +33,7 @@ public sealed class DevicePageCore : IDisposable
     private string? _targetDeviceId;
     private CancellationTokenSource? _deviceDisconnectedToken;
 
-    public DevicePageCore(
-        IDeviceManager devices,
-        ILayoutService layoutService,
-        ILogger logger,
-        IPage owner
-    )
+    public DevicePageCore(IDeviceManager devices, ILogger logger, IPage owner)
     {
         if (Design.IsDesignMode)
         {
@@ -55,7 +49,6 @@ public sealed class DevicePageCore : IDisposable
         }
 
         _devices = devices;
-        _layoutService = layoutService;
         _logger = logger;
         _owner = owner;
 
@@ -87,18 +80,9 @@ public sealed class DevicePageCore : IDisposable
             );
         }
 
-        _onDeviceDisconnecting
-            .SubscribeAwait(
-                async (_, ct) => await _owner.RequestSaveLayout(_layoutService, ct),
-                AwaitOperation.Switch
-            )
-            .DisposeItWith(_disposable);
         _isDeviceInitialized
             .Where(isInit => isInit)
-            .SubscribeAwait(
-                async (_, ct) => await _owner.RequestLoadLayout(_layoutService, ct),
-                AwaitOperation.Switch
-            )
+            .Subscribe(_ => _owner.Layout.LoadAll())
             .DisposeItWith(_disposable);
         _onDeviceDisconnected
             .Synchronize()

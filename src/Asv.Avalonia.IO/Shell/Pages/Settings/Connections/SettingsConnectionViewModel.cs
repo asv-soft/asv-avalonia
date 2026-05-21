@@ -24,17 +24,24 @@ public class SettingsConnectionViewModel
 
     private readonly IServiceProvider _containerHost;
     private readonly IDeviceManager _deviceManager;
+    private readonly Subject<Unit> _layoutChanged = new();
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
-    private SettingsConnectionViewModelConfig? _config;
+    private IPortViewModel? _selectedItem;
 
     public MenuTree MenuView { get; }
     public ObservableList<IMenuItem> Menu { get; } = [];
     public NotifyCollectionChangedSynchronizedViewList<IPortViewModel> View { get; }
     public IPortViewModel? SelectedItem
     {
-        get;
-        set => SetField(ref field, value);
+        get => _selectedItem;
+        set
+        {
+            if (SetField(ref _selectedItem, value))
+            {
+                _layoutChanged.OnNext(Unit.Default);
+            }
+        }
     }
 
     public SettingsConnectionViewModel()
@@ -66,6 +73,7 @@ public class SettingsConnectionViewModel
     )
         : base(SubPageId, context.Args, ext)
     {
+        _layoutChanged.DisposeItWith(Disposable);
         _deviceManager = deviceManager;
         _undoSink = Undo.CreateValueChange<string>(
                 "default",
@@ -93,7 +101,6 @@ public class SettingsConnectionViewModel
 
         deviceManager.Router.PortAdded.Subscribe(x => source.Add(x)).DisposeItWith(Disposable);
         deviceManager.Router.PortRemoved.Subscribe(x => source.Remove(x)).DisposeItWith(Disposable);
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 
     public override IEnumerable<IViewModel> GetChildren()
@@ -155,7 +162,9 @@ public class SettingsConnectionViewModel
 
     protected override void AfterLoadExtensions()
     {
-        // do nothing
+        Layout
+            .Register(nameof(SettingsConnectionViewModel), LoadLayout, SaveLayout, _layoutChanged)
+            .DisposeItWith(Disposable);
     }
 
     protected override void Dispose(bool disposing)
@@ -230,37 +239,16 @@ public class SettingsConnectionViewModel
         }
     }
 
-    private ValueTask InternalCatchEvent(
-        IViewModel src,
-        AsyncRoutedEvent<IViewModel> e,
-        CancellationToken cancel
-    )
+    private SettingsConnectionViewModelConfig SaveLayout()
     {
-        switch (e)
+        return new SettingsConnectionViewModelConfig
         {
-            case SaveLayoutEvent saveLayoutEvent:
-                if (_config is null)
-                {
-                    break;
-                }
+            SelectedItemId = SelectedItem?.Id.ToString() ?? string.Empty,
+        };
+    }
 
-                this.HandleSaveLayout(
-                    saveLayoutEvent,
-                    _config,
-                    cfg => cfg.SelectedItemId = SelectedItem?.Id.ToString() ?? string.Empty
-                );
-                break;
-            case LoadLayoutEvent loadLayoutEvent:
-                _config = this.HandleLoadLayout<SettingsConnectionViewModelConfig>(
-                    loadLayoutEvent,
-                    cfg =>
-                        SelectedItem = View.FirstOrDefault(x =>
-                            x.Id.ToString() == cfg.SelectedItemId
-                        )
-                );
-                break;
-        }
-
-        return ValueTask.CompletedTask;
+    private void LoadLayout(SettingsConnectionViewModelConfig config)
+    {
+        SelectedItem = View.FirstOrDefault(x => x.Id.ToString() == config.SelectedItemId);
     }
 }

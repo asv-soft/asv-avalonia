@@ -1,6 +1,5 @@
 ﻿using System.Collections.Specialized;
 using Asv.Cfg;
-using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -216,12 +215,6 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         {
             if (SelectedItem is IPage current && current.Id != tab.Content?.Id)
             {
-                if (LayoutService is null)
-                {
-                    throw new Exception($"{nameof(LayoutService)} is null");
-                }
-
-                current.RequestSaveLayout(LayoutService).SafeFireAndForget();
                 _config.SelectedDockTabItemId = tab.Id;
                 Configuration?.Set(_config);
             }
@@ -299,10 +292,6 @@ public partial class DockControl : SelectingItemsControl, ICustomHitTest
         {
             win.Closing -= AttachTab;
 
-            if (LayoutService is not null)
-            {
-                tab.Content.RequestSaveLayout(LayoutService).SafeFireAndForget();
-            }
             if (args.CloseReason == WindowCloseReason.ApplicationShutdown)
             {
                 return;

@@ -35,8 +35,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<GeoPoint> _geoPointProperty;
     private readonly ReactiveProperty<Enum> _tagTypeProp;
     private readonly ReactiveProperty<Enum> _rttBoxStatusProp;
-
-    private HistoricalControlsPageViewModelConfig? _config;
+    private readonly Subject<Unit> _layoutChanged = new();
 
     public HistoricalControlsPageViewModel()
         : this(
@@ -55,6 +54,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     )
         : base(PageId, context)
     {
+        _layoutChanged.DisposeItWith(Disposable);
         var speedUnit = unit.GetRequiredUnitOfType<VelocityUnit>(VelocityUnit.Id);
 
         _speed = new ReactiveProperty<double>(double.NaN).DisposeItWith(Disposable);
@@ -162,7 +162,22 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
+        TrackLayout(_speed);
+        TrackLayout(_isTurnedOn);
+        TrackLayout(_stringWithoutValidation);
+        TrackLayout(_stringWithOneValidation);
+        TrackLayout(_stringWithManyValidations);
+        TrackLayout(_geoPointProperty);
+        TrackLayout(_tagTypeProp);
+        TrackLayout(_rttBoxStatusProp);
+        Layout
+            .Register(
+                nameof(HistoricalControlsPageViewModel),
+                LoadLayout,
+                SaveLayout,
+                _layoutChanged
+            )
+            .DisposeItWith(Disposable);
     }
 
     public ReactiveCommand TurnOn { get; }
@@ -192,64 +207,46 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         }
     }
 
-    private ValueTask InternalCatchEvent(
-        IViewModel src,
-        AsyncRoutedEvent<IViewModel> e,
-        CancellationToken cancel
-    )
+    private void TrackLayout<T>(Observable<T> observable)
     {
-        switch (e)
+        observable
+            .Skip(1)
+            .Subscribe(_ => _layoutChanged.OnNext(Unit.Default))
+            .DisposeItWith(Disposable);
+    }
+
+    private HistoricalControlsPageViewModelConfig SaveLayout()
+    {
+        var speed = Speed.ModelValue.Value;
+        return new HistoricalControlsPageViewModelConfig
         {
-            case SaveLayoutEvent saveLayoutEvent:
-                if (_config is null)
-                {
-                    break;
-                }
+            IsTurnedOn = IsTurnedOn.ViewValue.Value,
+            Speed = double.IsFinite(speed) ? speed : -1,
+            StringPropWithoutValidation =
+                StringPropWithoutValidation.ViewValue.Value ?? string.Empty,
+            StringPropWithOneValidation =
+                StringPropWithOneValidation.ViewValue.Value ?? string.Empty,
+            StringPropWithManyValidations =
+                StringPropWithManyValidations.ViewValue.Value ?? string.Empty,
+            GeoPointProperty = GeoPointProperty.ModelValue.Value,
+            TagTypeProp = TagTypeProp.ViewValue.Value,
+            AsvColorKindProp = AsvColorKindProp.ViewValue.Value,
+        };
+    }
 
-                this.HandleSaveLayout(
-                    saveLayoutEvent,
-                    _config,
-                    cfg =>
-                    {
-                        cfg.IsTurnedOn = IsTurnedOn.ViewValue.Value;
-                        cfg.Speed = Speed.ModelValue.Value;
-                        cfg.StringPropWithoutValidation =
-                            StringPropWithoutValidation.ViewValue.Value ?? string.Empty;
-                        cfg.StringPropWithOneValidation =
-                            StringPropWithOneValidation.ViewValue.Value ?? string.Empty;
-                        cfg.StringPropWithManyValidations =
-                            StringPropWithManyValidations.ViewValue.Value ?? string.Empty;
-                        cfg.GeoPointProperty = GeoPointProperty.ModelValue.Value;
-                        cfg.TagTypeProp = TagTypeProp.ViewValue.Value;
-                        cfg.AsvColorKindProp = AsvColorKindProp.ViewValue.Value;
-                    }
-                );
-                break;
-            case LoadLayoutEvent loadLayoutEvent:
-                _config = this.HandleLoadLayout<HistoricalControlsPageViewModelConfig>(
-                    loadLayoutEvent,
-                    cfg =>
-                    {
-                        IsTurnedOn.ModelValue.Value = cfg.IsTurnedOn;
-                        if (cfg.Speed >= 0)
-                        {
-                            Speed.ModelValue.Value = cfg.Speed;
-                        }
-
-                        StringPropWithoutValidation.ModelValue.Value =
-                            cfg.StringPropWithoutValidation;
-                        StringPropWithOneValidation.ModelValue.Value =
-                            cfg.StringPropWithOneValidation;
-                        StringPropWithManyValidations.ModelValue.Value =
-                            cfg.StringPropWithManyValidations;
-                        GeoPointProperty.ModelValue.Value = cfg.GeoPointProperty;
-                        TagTypeProp.ModelValue.Value = cfg.TagTypeProp;
-                        AsvColorKindProp.ModelValue.Value = cfg.AsvColorKindProp;
-                    }
-                );
-                break;
+    private void LoadLayout(HistoricalControlsPageViewModelConfig config)
+    {
+        IsTurnedOn.ModelValue.Value = config.IsTurnedOn;
+        if (config.Speed >= 0)
+        {
+            Speed.ModelValue.Value = config.Speed;
         }
 
-        return ValueTask.CompletedTask;
+        StringPropWithoutValidation.ModelValue.Value = config.StringPropWithoutValidation;
+        StringPropWithOneValidation.ModelValue.Value = config.StringPropWithOneValidation;
+        StringPropWithManyValidations.ModelValue.Value = config.StringPropWithManyValidations;
+        GeoPointProperty.ModelValue.Value = config.GeoPointProperty;
+        TagTypeProp.ModelValue.Value = config.TagTypeProp;
+        AsvColorKindProp.ModelValue.Value = config.AsvColorKindProp;
     }
 }

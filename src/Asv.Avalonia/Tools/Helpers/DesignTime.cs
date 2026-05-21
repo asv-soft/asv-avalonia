@@ -260,7 +260,6 @@ public static class DesignTime
     public static ICommand EmptyCommand = new ReactiveCommand();
     public static IDialogService DialogService => NullDialogService.Instance;
     public static IExtensionService ExtensionService => NullExtensionService.Instance;
-    public static ILayoutService LayoutService => NullLayoutService.Instance;
     public static IHotKeyService HotKeyService => NullHotKeyService.Instance;
 
     public static void ThrowIfNotDesignMode()

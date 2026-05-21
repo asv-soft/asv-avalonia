@@ -17,14 +17,11 @@ public class AsvApplication : Application
     {
         var shellHost = AppHost.Instance.Services.GetRequiredService<IShellHost>();
         var shell = AppHost.Instance.Services.GetRequiredService<IShell>();
-        var layoutService = AppHost.Instance.Services.GetRequiredService<ILayoutService>();
-
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             if (desktop.MainWindow is TopLevel topLevel)
             {
                 shellHost.Init(shell, topLevel);
-                shell.RequestLoadLayoutForSelfOnly(layoutService).SafeFireAndForget();
             }
             desktop.Exit += (_, _) => Dispose();
         }
@@ -33,7 +30,6 @@ public class AsvApplication : Application
             if (singleViewPlatform.MainView is TopLevel topLevel)
             {
                 shellHost.Init(shell, topLevel);
-                shell.RequestLoadLayoutForSelfOnly(layoutService).SafeFireAndForget();
             }
         }
         else

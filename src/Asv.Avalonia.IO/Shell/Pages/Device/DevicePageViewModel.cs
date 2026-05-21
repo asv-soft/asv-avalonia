@@ -16,7 +16,6 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         string id,
         IPageContext context,
         IDeviceManager devices,
-        ILayoutService layoutService,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext
@@ -24,11 +23,9 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
         : base(id, context, loggerFactory, dialogService, ext)
     {
         ArgumentNullException.ThrowIfNull(devices);
-        ArgumentNullException.ThrowIfNull(layoutService);
         ArgumentNullException.ThrowIfNull(loggerFactory);
         _deviceCore = new DevicePageCore(
             devices,
-            layoutService,
             loggerFactory.CreateLogger<DevicePageCore>(),
             this
         );

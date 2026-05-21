@@ -26,7 +26,6 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             DesignTime.Id.TypeId,
             DesignTime.PageContext,
             AppHost.Instance.Services,
-            DesignTime.LayoutService,
             DesignTime.LoggerFactory,
             DesignTime.DialogService,
             DesignTime.ExtensionService

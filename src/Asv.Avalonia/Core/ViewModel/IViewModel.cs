@@ -13,4 +13,5 @@ public interface IViewModel
     : IDisposable,
         INotifyPropertyChanging,
         INotifyPropertyChanged,
-        ISupportUndo<IViewModel> { }
+        ISupportUndo<IViewModel>,
+        ISupportLayout { }

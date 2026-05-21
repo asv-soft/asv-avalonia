@@ -110,9 +110,8 @@ public static class AppHostMixin
                 .UseExtensions()
                 .UseHotKeys()
                 .UseShellHost()
-                .UseUndoStore()
+                .UseAppPath()
                 .UseViewLocator()
-                .UseLayoutService()
                 .UseDefaultControls()
                 .UseUnitService()
                 .UseFileAssociation()
@@ -128,10 +127,9 @@ public static class AppHostMixin
                 .UseDesignTimeSearchService()
                 .UseDesignTimeShell()
                 .UseDesignTimeAppArgsStore()
-                .UseDesignUndoStore()
+                .UseAppPath()
                 .UseDesignTimeLogReaderService()
                 .UseDesignTimeLocalizationService()
-                .UseDesignTimeLayoutService()
                 .UseDesignTimeFileAssociation()
                 .UseDesignTimeDialogs();
             return builder;

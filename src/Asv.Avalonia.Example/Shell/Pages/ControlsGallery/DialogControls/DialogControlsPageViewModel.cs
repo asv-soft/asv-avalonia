@@ -64,8 +64,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<string?> _saveFileDialogResult;
     private readonly ReactiveProperty<string?> _selectFolderDialogResult;
     private readonly ReactiveProperty<string?> _observeFolderDialogResult;
-
-    private DialogControlsPageViewModelConfig? _config;
+    private readonly Subject<Unit> _layoutChanged = new();
 
     #region Prefabs
 
@@ -101,6 +100,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     )
         : base(PageId, context)
     {
+        _layoutChanged.DisposeItWith(Disposable);
         _loggerFactory = loggerFactory;
         _logger = loggerFactory.CreateLogger<DialogControlsPageViewModel>();
 
@@ -379,7 +379,27 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         GeoPointDialogResult.ForceValidate();
 
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
+        TrackLayout(_customDialogTitle);
+        TrackLayout(_customDialogIsImageContent);
+        TrackLayout(_customDialogMessage);
+        TrackLayout(_customDialogImagePath);
+        TrackLayout(_customDialogPrimaryButtonText);
+        TrackLayout(_customDialogIsPrimaryButtonEnabled);
+        TrackLayout(_customDialogSecondaryButtonText);
+        TrackLayout(_customDialogIsSecondaryButtonEnabled);
+        TrackLayout(_customDialogResult);
+        TrackLayout(_yesOrNoDialogResult);
+        TrackLayout(_saveCancelDialogResult);
+        TrackLayout(_showInputDialogResult);
+        TrackLayout(_showHotKeyCaptureDialogResult);
+        TrackLayout(_geoPointDialogResult);
+        TrackLayout(_openFileDialogResult);
+        TrackLayout(_saveFileDialogResult);
+        TrackLayout(_selectFolderDialogResult);
+        TrackLayout(_observeFolderDialogResult);
+        Layout
+            .Register(nameof(DialogControlsPageViewModel), LoadLayout, SaveLayout, _layoutChanged)
+            .DisposeItWith(Disposable);
     }
 
     public ReactiveCommand ShowCustomDialogCommand { get; }
@@ -688,90 +708,65 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
     }
 
-    private ValueTask InternalCatchEvent(
-        IViewModel src,
-        AsyncRoutedEvent<IViewModel> e,
-        CancellationToken cancel
-    )
+    private void TrackLayout<T>(Observable<T> observable)
     {
-        switch (e)
+        observable
+            .Skip(1)
+            .Subscribe(_ => _layoutChanged.OnNext(Unit.Default))
+            .DisposeItWith(Disposable);
+    }
+
+    private DialogControlsPageViewModelConfig SaveLayout()
+    {
+        return new DialogControlsPageViewModelConfig
         {
-            case SaveLayoutEvent saveLayoutEvent:
-                if (_config is null)
-                {
-                    break;
-                }
+            CustomDialogTitle = CustomDialogTitle.ViewValue.Value ?? string.Empty,
+            CustomDialogIsImageContent = IsCustomDialogImageContent.ViewValue.Value,
+            CustomDialogMessage = CustomDialogMessage.ViewValue.Value ?? string.Empty,
+            CustomDialogImagePath = CustomDialogImagePath.ViewValue.Value,
+            CustomDialogPrimaryButtonText =
+                CustomDialogPrimaryButtonText.ViewValue.Value ?? string.Empty,
+            CustomDialogIsPrimaryButtonEnabled = IsCustomDialogPrimaryButtonEnabled.ViewValue.Value,
+            CustomDialogSecondaryButtonText =
+                CustomDialogSecondaryButtonText.ViewValue.Value ?? string.Empty,
+            CustomDialogIsSecondaryButtonEnabled = IsCustomDialogSecondaryButtonEnabled
+                .ViewValue
+                .Value,
+            CustomDialogResult = CustomDialogResult.ViewValue.Value,
+            YesOrNoDialogResult = YesOrNoDialogResult.ViewValue.Value,
+            SaveCancelDialogResult = SaveCancelDialogResult.ViewValue.Value,
+            ShowInputDialogResult = ShowInputDialogResult.ViewValue.Value,
+            ShowHotKeyCaptureDialogResult = ShowHotKeyCaptureDialogResult.ViewValue.Value,
+            GeoPointDialogResult = GeoPointDialogResult.ModelValue.Value,
+            OpenFileDialogResult = OpenFileDialogResult.ViewValue.Value,
+            SaveFileDialogResult = SaveFileDialogResult.ViewValue.Value,
+            SelectFolderDialogResult = SelectFolderDialogResult.ViewValue.Value,
+            ObserveFolderDialogResult = ObserveFolderDialogResult.ViewValue.Value,
+        };
+    }
 
-                this.HandleSaveLayout(
-                    saveLayoutEvent,
-                    _config,
-                    cfg =>
-                    {
-                        cfg.CustomDialogTitle = CustomDialogTitle.ViewValue.Value ?? string.Empty;
-                        cfg.CustomDialogIsImageContent = IsCustomDialogImageContent.ViewValue.Value;
-                        cfg.CustomDialogMessage =
-                            CustomDialogMessage.ViewValue.Value ?? string.Empty;
-                        cfg.CustomDialogImagePath = CustomDialogImagePath.ViewValue.Value;
-                        cfg.CustomDialogPrimaryButtonText =
-                            CustomDialogPrimaryButtonText.ViewValue.Value ?? string.Empty;
-                        cfg.CustomDialogIsPrimaryButtonEnabled = IsCustomDialogPrimaryButtonEnabled
-                            .ViewValue
-                            .Value;
-                        cfg.CustomDialogSecondaryButtonText =
-                            CustomDialogSecondaryButtonText.ViewValue.Value ?? string.Empty;
-                        cfg.CustomDialogIsSecondaryButtonEnabled =
-                            IsCustomDialogSecondaryButtonEnabled.ViewValue.Value;
-                        cfg.CustomDialogResult = CustomDialogResult.ViewValue.Value;
-                        cfg.YesOrNoDialogResult = YesOrNoDialogResult.ViewValue.Value;
-                        cfg.SaveCancelDialogResult = SaveCancelDialogResult.ViewValue.Value;
-                        cfg.ShowInputDialogResult = ShowInputDialogResult.ViewValue.Value;
-                        cfg.ShowHotKeyCaptureDialogResult = ShowHotKeyCaptureDialogResult
-                            .ViewValue
-                            .Value;
-                        cfg.GeoPointDialogResult = GeoPointDialogResult.ModelValue.Value;
-                        cfg.OpenFileDialogResult = OpenFileDialogResult.ViewValue.Value;
-                        cfg.SaveFileDialogResult = SaveFileDialogResult.ViewValue.Value;
-                        cfg.SelectFolderDialogResult = SelectFolderDialogResult.ViewValue.Value;
-                        cfg.ObserveFolderDialogResult = ObserveFolderDialogResult.ViewValue.Value;
-                    },
-                    FlushingStrategy.FlushBothViewModelAndView
-                );
-                break;
-            case LoadLayoutEvent loadLayoutEvent:
-                _config = this.HandleLoadLayout<DialogControlsPageViewModelConfig>(
-                    loadLayoutEvent,
-                    cfg =>
-                    {
-                        CustomDialogTitle.ModelValue.Value = cfg.CustomDialogTitle;
-                        IsCustomDialogImageContent.ModelValue.Value =
-                            cfg.CustomDialogIsImageContent;
-                        CustomDialogMessage.ModelValue.Value = cfg.CustomDialogMessage;
-                        CustomDialogImagePath.ModelValue.Value = cfg.CustomDialogImagePath;
-                        CustomDialogPrimaryButtonText.ModelValue.Value =
-                            cfg.CustomDialogPrimaryButtonText;
-                        IsCustomDialogPrimaryButtonEnabled.ModelValue.Value =
-                            cfg.CustomDialogIsPrimaryButtonEnabled;
-                        CustomDialogSecondaryButtonText.ModelValue.Value =
-                            cfg.CustomDialogSecondaryButtonText;
-                        IsCustomDialogSecondaryButtonEnabled.ModelValue.Value =
-                            cfg.CustomDialogIsSecondaryButtonEnabled;
-                        CustomDialogResult.ModelValue.Value = cfg.CustomDialogResult;
-                        YesOrNoDialogResult.ModelValue.Value = cfg.YesOrNoDialogResult;
-                        SaveCancelDialogResult.ModelValue.Value = cfg.SaveCancelDialogResult;
-                        ShowInputDialogResult.ModelValue.Value = cfg.ShowInputDialogResult;
-                        ShowHotKeyCaptureDialogResult.ModelValue.Value =
-                            cfg.ShowHotKeyCaptureDialogResult;
-                        GeoPointDialogResult.ModelValue.Value = cfg.GeoPointDialogResult;
-                        OpenFileDialogResult.ModelValue.Value = cfg.OpenFileDialogResult;
-                        SaveFileDialogResult.ModelValue.Value = cfg.SaveFileDialogResult;
-                        SelectFolderDialogResult.ModelValue.Value = cfg.SelectFolderDialogResult;
-                        ObserveFolderDialogResult.ModelValue.Value = cfg.ObserveFolderDialogResult;
-                    }
-                );
-                break;
-        }
-
-        return ValueTask.CompletedTask;
+    private void LoadLayout(DialogControlsPageViewModelConfig config)
+    {
+        CustomDialogTitle.ModelValue.Value = config.CustomDialogTitle;
+        IsCustomDialogImageContent.ModelValue.Value = config.CustomDialogIsImageContent;
+        CustomDialogMessage.ModelValue.Value = config.CustomDialogMessage;
+        CustomDialogImagePath.ModelValue.Value = config.CustomDialogImagePath;
+        CustomDialogPrimaryButtonText.ModelValue.Value = config.CustomDialogPrimaryButtonText;
+        IsCustomDialogPrimaryButtonEnabled.ModelValue.Value =
+            config.CustomDialogIsPrimaryButtonEnabled;
+        CustomDialogSecondaryButtonText.ModelValue.Value = config.CustomDialogSecondaryButtonText;
+        IsCustomDialogSecondaryButtonEnabled.ModelValue.Value =
+            config.CustomDialogIsSecondaryButtonEnabled;
+        CustomDialogResult.ModelValue.Value = config.CustomDialogResult;
+        YesOrNoDialogResult.ModelValue.Value = config.YesOrNoDialogResult;
+        SaveCancelDialogResult.ModelValue.Value = config.SaveCancelDialogResult;
+        ShowInputDialogResult.ModelValue.Value = config.ShowInputDialogResult;
+        ShowHotKeyCaptureDialogResult.ModelValue.Value = config.ShowHotKeyCaptureDialogResult;
+        GeoPointDialogResult.ModelValue.Value = config.GeoPointDialogResult;
+        OpenFileDialogResult.ModelValue.Value = config.OpenFileDialogResult;
+        SaveFileDialogResult.ModelValue.Value = config.SaveFileDialogResult;
+        SelectFolderDialogResult.ModelValue.Value = config.SelectFolderDialogResult;
+        ObserveFolderDialogResult.ModelValue.Value = config.ObserveFolderDialogResult;
     }
 
     public override IEnumerable<IViewModel> GetChildren()
