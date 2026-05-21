@@ -19,6 +19,7 @@
     <option name="PROJECT_TFM" value="net10.0" />
     <method v="2">
       <option name="Build" />
+      <option name="Build" default="false" projectName="Asv.Avalonia.Example.Desktop" projectPath="$PROJECT_DIR$/Asv.Avalonia.Example.Desktop/Asv.Avalonia.Example.Desktop.csproj" />
     </method>
   </configuration>
 </component>

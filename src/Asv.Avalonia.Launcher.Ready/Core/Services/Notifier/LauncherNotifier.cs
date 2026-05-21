@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
@@ -11,7 +12,7 @@ namespace Asv.Avalonia.Launcher.Ready;
 internal readonly record struct LauncherReadyEndpoint(string PipeName, string SessionToken);
 #pragma warning restore SA1313
 
-internal sealed class LauncherNotifier
+internal sealed class LauncherNotifier : ILauncherNotifier
 {
     public const string LauncherPipeArg = LauncherCommandLineArguments.LauncherPipeArg;
     public const string LauncherTokenArg = LauncherCommandLineArguments.LauncherTokenArg;
@@ -44,9 +45,25 @@ internal sealed class LauncherNotifier
         _timeProvider = timeProvider;
         _logger = logger;
 
-        _endpoint = TryGetEndpointFromArgs(appArgsStore.Args.CurrentValue.RawArgs);
-        if (_endpoint.HasValue || options.Value.IsOptional)
+        foreach (var arg in appArgsStore.Args.CurrentValue.Args.Values)
         {
+            _logger.LogDebug("Launcher args {arg}", arg);
+        }
+        foreach (var tag in appArgsStore.Args.CurrentValue.Tags)
+        {
+            _logger.LogDebug("Launcher tags {tag}", tag);
+        }
+
+        _endpoint = TryGetEndpointFromArgs(appArgsStore.Args.CurrentValue.Args);
+        if (_endpoint.HasValue)
+        {
+            _logger.LogDebug("Launcher endpoint arguments are present.");
+            return;
+        }
+
+        if (options.Value.IsOptional)
+        {
+            _logger.LogDebug("Value is optional");
             return;
         }
 
@@ -93,42 +110,52 @@ internal sealed class LauncherNotifier
         await writer.FlushAsync(linkedCts.Token).ConfigureAwait(false);
     }
 
-    private static LauncherReadyEndpoint? TryGetEndpointFromArgs(in IReadOnlyList<string> args)
+    private LauncherReadyEndpoint? TryGetEndpointFromArgs(
+        in IReadOnlyDictionary<string, string> args
+    )
     {
-        string? pipeName = null;
-        string? sessionToken = null;
+        var hasPipeName = TryGetArgValue(args, LauncherPipeArg, out var pipeName);
+        var hasSessionToken = TryGetArgValue(args, LauncherTokenArg, out var sessionToken);
 
-        for (var i = 0; i < args.Count; i++)
-        {
-            var current = args[i];
-
-            if (string.Equals(current, LauncherPipeArg, StringComparison.Ordinal))
-            {
-                var valueIndex = i + 1;
-                if (valueIndex < args.Count)
-                {
-                    pipeName = args[valueIndex];
-                    i = valueIndex;
-                }
-                continue;
-            }
-
-            if (string.Equals(current, LauncherTokenArg, StringComparison.Ordinal))
-            {
-                var valueIndex = i + 1;
-                if (valueIndex < args.Count)
-                {
-                    sessionToken = args[valueIndex];
-                    i = valueIndex;
-                }
-            }
-        }
-
-        if (string.IsNullOrWhiteSpace(pipeName) || string.IsNullOrWhiteSpace(sessionToken))
+        if (!hasPipeName || !hasSessionToken)
         {
             return null;
         }
 
+        _logger.LogDebug(
+            "Launcher endpoint arguments are present: {PipeName} {SessionToken}",
+            pipeName,
+            sessionToken
+        );
         return new LauncherReadyEndpoint(pipeName, sessionToken);
+    }
+
+    private static bool TryGetArgValue(
+        in IReadOnlyDictionary<string, string> args,
+        string key,
+        out string value
+    )
+    {
+        value = string.Empty;
+
+        if (args.TryGetValue(key, out var rawValue) && !string.IsNullOrWhiteSpace(rawValue))
+        {
+            value = rawValue;
+            return true;
+        }
+
+        if (!key.StartsWith("--", StringComparison.Ordinal))
+        {
+            return false;
+        }
+
+        var normalizedKey = key[2..];
+        if (args.TryGetValue(normalizedKey, out rawValue) && !string.IsNullOrWhiteSpace(rawValue))
+        {
+            value = rawValue;
+            return true;
+        }
+
+        return false;
     }
 }

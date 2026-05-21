@@ -160,10 +160,8 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
             startInfo.ArgumentList.Add(targetArg);
         }
 
-        startInfo.ArgumentList.Add(LauncherPipeArg);
-        startInfo.ArgumentList.Add(options.PipeName);
-        startInfo.ArgumentList.Add(LauncherTokenArg);
-        startInfo.ArgumentList.Add(options.SessionToken);
+        startInfo.ArgumentList.Add($"{LauncherPipeArg}={options.PipeName}");
+        startInfo.ArgumentList.Add($"{LauncherTokenArg}={options.SessionToken}");
 
         return startInfo;
     }
