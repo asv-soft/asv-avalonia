@@ -102,6 +102,7 @@ public static class AppHostMixin
             return builder
                 .UseAppInfo()
                 .UseAppArgsStore()
+                .UseRestartFeature()
                 .UseJsonUserConfig()
                 .UseTimeProvider()
                 .UseThemeService()
