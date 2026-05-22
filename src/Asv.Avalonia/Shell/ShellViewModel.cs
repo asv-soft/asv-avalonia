@@ -6,6 +6,7 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Material.Icons;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -22,6 +23,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     private readonly Subject<Unit> _onCloseEvent;
     private readonly ObservableList<IPage> _pages;
     private readonly ILogger<ShellViewModel> _logger;
+    private readonly IAppRestartScheduler? _appRestartScheduler;
 
     private readonly IThemeService _themeService;
     private readonly IDialogService _dialogService;
@@ -48,6 +50,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         _logger = loggerFactory.CreateLogger<ShellViewModel>();
         _themeService = themeService;
         _dialogService = dialogService;
+        _appRestartScheduler = ioc.GetService<IAppRestartScheduler>();
 
         InputElement
             .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
@@ -286,15 +289,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         return true;
     }
 
-    protected virtual void RestartApplication(string[] args)
-    {
-        _logger.LogError(
-            "Restart is not supported by shell type {ShellType}. Arguments: {Args}",
-            GetType().Name,
-            string.Join(" ", args)
-        );
-    }
-
     private void GotFocusHandler(TopLevel top, RoutedEventArgs args)
     {
         if (args.Source is not Control source)
@@ -325,8 +319,19 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         CancellationToken cancel
     )
     {
-        using var sub = _onCloseEvent.Take(1).Subscribe(_ => RestartApplicationCommon());
-        await TryCloseAsync(restart.Cancel);
+        if (_appRestartScheduler is null)
+        {
+            _logger.LogWarning("Application restart is not supported.");
+            return;
+        }
+
+        _appRestartScheduler.Schedule();
+        var isClosing = await TryCloseAsync(restart.Cancel);
+
+        if (!isClosing)
+        {
+            _appRestartScheduler.Cancel();
+        }
     }
 
     private async ValueTask ClosePage(PageCloseRequestedEvent close)
@@ -363,19 +368,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         {
             SelectedPage.Value = null;
             SelectedPage.Value = current;
-        }
-    }
-
-    private void RestartApplicationCommon()
-    {
-        try
-        {
-            var args = Environment.GetCommandLineArgs().Skip(1).ToArray();
-            RestartApplication(args);
-        }
-        catch (Exception exception)
-        {
-            _logger.LogError(exception, "Failed to restart the application.");
         }
     }
 

@@ -1,5 +1,4 @@
 using System.IO.Pipes;
-using Asv.Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -16,7 +15,7 @@ public class SoloRunFeatureOptions
     public string? Pipe { get; set; }
 }
 
-public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
+public class SoloRunFeature : BackgroundService
 {
     private readonly IAppArgsStore _argsStore;
     private readonly ILogger<SoloRunFeature> _logger;
@@ -24,12 +23,11 @@ public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
     private readonly Mutex _mutex;
     private readonly Lock _pipeServerSync = new();
 
-    private Task? _pipeServerTask;
-    private CancellationTokenSource? _pipeServerCts;
     private NamedPipeServerStream? _pipeServer;
     private readonly bool _isFirstInstance;
 
     private volatile int _isMutexDisposed;
+    private volatile int _isStopped;
 
     public SoloRunFeature(
         IOptions<SoloRunFeatureOptions> option,
@@ -45,7 +43,7 @@ public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
             throw new InvalidOperationException("Mutex name is not set");
         }
 
-        var mutexName = $"Global\\{config.Mutex}";
+        var mutexName = config.Mutex;
         _mutex = new Mutex(
             initiallyOwned: true,
             name: mutexName,
@@ -87,51 +85,43 @@ public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
         SendArgumentsToRunningInstance(args, option.Value.Pipe);
     }
 
-    public Task StartAsync(CancellationToken cancel = default)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        if (
-            string.IsNullOrWhiteSpace(_pipeName)
-            || !_isFirstInstance
-            || _pipeServerTask is not null
-        )
+        if (string.IsNullOrWhiteSpace(_pipeName) || !_isFirstInstance)
         {
-            return Task.CompletedTask;
+            return;
         }
 
-        cancel.ThrowIfCancellationRequested();
-        _pipeServerCts = CancellationTokenSource.CreateLinkedTokenSource(cancel);
-        _pipeServerTask = Task.Factory.StartNew(
-            async _ => await RunNamedPipeServerAsync(_pipeName, _pipeServerCts.Token),
-            TaskCreationOptions.LongRunning,
-            _pipeServerCts.Token
-        );
-
-        return Task.CompletedTask;
+        await RunNamedPipeServerAsync(_pipeName, stoppingToken).ConfigureAwait(false);
     }
 
-    public Task StopAsync(CancellationToken cancel = default)
+    public override async Task StopAsync(CancellationToken cancellationToken)
     {
-        if (IsDisposed)
+        if (Interlocked.CompareExchange(ref _isStopped, 1, 0) != 0)
         {
-            return Task.CompletedTask;
+            return;
         }
-
-        if (cancel.IsCancellationRequested)
-        {
-            return Task.CompletedTask;
-        }
-
-        var cts = Interlocked.Exchange(ref _pipeServerCts, null);
-        cts?.Cancel();
 
         DisposePipeServer();
+        try
+        {
+            await base.StopAsync(cancellationToken).ConfigureAwait(false);
+        }
+        finally
+        {
+            DisposeMutex();
+        }
+    }
 
-        var pipeServerTask = Interlocked.Exchange(ref _pipeServerTask, null);
-        pipeServerTask?.Dispose();
+    public override void Dispose()
+    {
+        if (Interlocked.CompareExchange(ref _isStopped, 1, 0) == 0)
+        {
+            DisposePipeServer();
+            DisposeMutex();
+        }
 
-        cts?.Dispose();
-        DisposeMutex();
-        return Task.CompletedTask;
+        base.Dispose();
     }
 
     private void DisposeMutex()
@@ -160,9 +150,7 @@ public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
 
     private async Task RunNamedPipeServerAsync(string pipeName, CancellationToken cancellationToken)
     {
-        cancellationToken.ThrowIfCancellationRequested();
-
-        while (!cancellationToken.IsCancellationRequested && !IsDisposed)
+        while (!cancellationToken.IsCancellationRequested)
         {
             try
             {
@@ -191,7 +179,7 @@ public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
                 _logger.ZLogInformation($"Received arguments from the named pipe {pipeName}.");
                 _argsStore.Set(AppArgs.DeserializeFromString(args));
             }
-            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            catch (OperationCanceledException)
             {
                 break;
             }
@@ -250,19 +238,6 @@ public class SoloRunFeature : AsyncDisposableWithCancel, IHostedService
                 "Shutting down the current instance because it is the second instance."
             );
             Environment.Exit(0);
-        }
-    }
-
-    protected override async ValueTask DisposeAsyncCore()
-    {
-        await StopAsync();
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            StopAsync().GetAwaiter().GetResult();
         }
     }
 }
