@@ -1,3 +1,4 @@
+using Asv.Common;
 using Asv.Modeling;
 using Avalonia;
 using Avalonia.Controls;
@@ -8,6 +9,77 @@ namespace Asv.Avalonia;
 
 public static class ViewLayoutMixin
 {
+    extension(ILayoutController layout)
+    {
+        public IDisposable Register<TData, TTrigger>(
+            string layoutId,
+            Action<TData> load,
+            Func<TData?> save,
+            Observable<TTrigger> trigger
+        )
+            where TData : class, new()
+        {
+            ArgumentNullException.ThrowIfNull(layout);
+            ArgumentException.ThrowIfNullOrWhiteSpace(layoutId);
+            ArgumentNullException.ThrowIfNull(load);
+            ArgumentNullException.ThrowIfNull(save);
+            ArgumentNullException.ThrowIfNull(trigger);
+
+            var sink = layout.Register<TData>(
+                layoutId,
+                (data, _) =>
+                {
+                    load(data);
+                    return ValueTask.CompletedTask;
+                }
+            );
+            var sub = trigger.SubscribeAwait(
+                (_, cancel) =>
+                {
+                    return save() is { } data
+                        ? sink.SaveAsync(data, cancel)
+                        : ValueTask.CompletedTask;
+                },
+                AwaitOperation.Drop
+            );
+            return Disposable.Combine(sink, sub);
+        }
+
+        public IDisposable Register<TValue, TTrigger>(
+            string layoutId,
+            Action<TValue> load,
+            Func<TValue?> save,
+            Observable<TTrigger> trigger
+        )
+            where TValue : struct
+        {
+            ArgumentNullException.ThrowIfNull(layout);
+            ArgumentException.ThrowIfNullOrWhiteSpace(layoutId);
+            ArgumentNullException.ThrowIfNull(load);
+            ArgumentNullException.ThrowIfNull(save);
+            ArgumentNullException.ThrowIfNull(trigger);
+
+            var sink = layout.Register<TValue>(
+                layoutId,
+                (data, _) =>
+                {
+                    load(data);
+                    return ValueTask.CompletedTask;
+                }
+            );
+            var sub = trigger.SubscribeAwait(
+                (_, cancel) =>
+                {
+                    return save() is { } data
+                        ? sink.SaveAsync(data, cancel)
+                        : ValueTask.CompletedTask;
+                },
+                AwaitOperation.Drop
+            );
+            return Disposable.Combine(sink, sub);
+        }
+    }
+
     extension(Control view)
     {
         public IDisposable RegisterLayout<TData, TTrigger>(
@@ -40,15 +112,24 @@ public static class ViewLayoutMixin
                     return Disposable.Empty;
                 }
 
-                var sink = viewModel.Layout.Register(layoutId, load);
-                sink.Load();
-                var sub = trigger.Subscribe(_ =>
-                {
-                    if (save() is { } data)
+                var sink = viewModel.Layout.Register<TData>(
+                    layoutId,
+                    (data, _) =>
                     {
-                        sink.Save(data);
+                        load(data);
+                        return ValueTask.CompletedTask;
                     }
-                });
+                );
+                sink.LoadAsync(CancellationToken.None).AsTask().SafeFireAndForget();
+                var sub = trigger.SubscribeAwait(
+                    (_, cancel) =>
+                    {
+                        return save() is { } data
+                            ? sink.SaveAsync(data, cancel)
+                            : ValueTask.CompletedTask;
+                    },
+                    AwaitOperation.Drop
+                );
                 return Disposable.Combine(sink, sub);
             }
         }
@@ -83,15 +164,24 @@ public static class ViewLayoutMixin
                     return Disposable.Empty;
                 }
 
-                var sink = viewModel.Layout.Register(layoutId, load);
-                sink.Load();
-                var sub = trigger.Subscribe(_ =>
-                {
-                    if (save() is { } data)
+                var sink = viewModel.Layout.Register<TValue>(
+                    layoutId,
+                    (data, _) =>
                     {
-                        sink.Save(data);
+                        load(data);
+                        return ValueTask.CompletedTask;
                     }
-                });
+                );
+                sink.LoadAsync(CancellationToken.None).AsTask().SafeFireAndForget();
+                var sub = trigger.SubscribeAwait(
+                    (_, cancel) =>
+                    {
+                        return save() is { } data
+                            ? sink.SaveAsync(data, cancel)
+                            : ValueTask.CompletedTask;
+                    },
+                    AwaitOperation.Drop
+                );
                 return Disposable.Combine(sink, sub);
             }
         }

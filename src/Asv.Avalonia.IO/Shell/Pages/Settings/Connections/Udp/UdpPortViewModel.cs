@@ -42,9 +42,7 @@ public class UdpPortViewModel : PortViewModel
             unitService,
             loggerFactory,
             timeProvider
-        )
-    {
-    }
+        ) { }
 
     public UdpPortViewModel(
         IConfiguration cfgSvc,
@@ -52,15 +50,8 @@ public class UdpPortViewModel : PortViewModel
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : this(
-            $"{UdpProtocolPort.Scheme}-editor",
-            cfgSvc,
-            unitService,
-            loggerFactory,
-            timeProvider
-        )
-    {
-    }
+        : this($"{UdpProtocolPort.Scheme}-editor", cfgSvc, unitService, loggerFactory, timeProvider)
+    { }
 
     private UdpPortViewModel(
         string id,

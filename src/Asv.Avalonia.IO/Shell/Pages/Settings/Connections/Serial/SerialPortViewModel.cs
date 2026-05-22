@@ -33,23 +33,14 @@ public class SerialPortViewModel : PortViewModel
             unitService,
             loggerFactory,
             timeProvider
-        )
-    {
-    }
+        ) { }
 
     public SerialPortViewModel(
         IUnitService unitService,
         ILoggerFactory loggerFactory,
         TimeProvider timeProvider
     )
-        : this(
-            $"{SerialProtocolPort.Scheme}-editor",
-            unitService,
-            loggerFactory,
-            timeProvider
-        )
-    {
-    }
+        : this($"{SerialProtocolPort.Scheme}-editor", unitService, loggerFactory, timeProvider) { }
 
     private SerialPortViewModel(
         string id,

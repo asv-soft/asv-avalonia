@@ -20,7 +20,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Parent = DesignTime.Shell;
+        SetParent(DesignTime.Shell);
     }
 
     public PropertyEditorPageViewModel(
@@ -32,7 +32,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         PropertyEditor = new PropertyEditorViewModel("editor")
         {
-            Parent = this,
             ItemsSource =
             {
                 new UnitPropertyViewModel<LatitudeUnit>(
@@ -42,7 +41,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     loggerFactory
                 )
                 {
-                    Parent = this,
                     Header = "Position",
                     ShortName = "Lat",
                     Description = "Latitude description",
@@ -55,7 +53,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     loggerFactory
                 )
                 {
-                    Parent = this,
                     Header = "Longitude",
                     ShortName = "Lon",
                     Description = "Latitude description",
@@ -68,7 +65,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     loggerFactory
                 )
                 {
-                    Parent = this,
                     Header = "Altitude",
                     ShortName = "Alt",
                     Description = "Altitude description",
@@ -76,7 +72,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 },
                 new GeoPointPropertyViewModel("geo", GeoPoint, loggerFactory, unit)
                 {
-                    Parent = this,
                     Header = "Geo Point",
                     Description = "Geo Point description",
                     Icon = MaterialIconKind.Earth,
@@ -88,7 +83,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     loggerFactory
                 )
                 {
-                    Parent = this,
                     Header = "Time",
                     ShortName = "Time",
                     Description = "Time description",
@@ -101,14 +95,13 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     loggerFactory
                 )
                 {
-                    Parent = this,
                     Header = "Throttle",
                     ShortName = "Throttle",
                     Description = "Throttle description",
                     Icon = MaterialIconKind.Signal,
                 },
             },
-        };
+        }.SetRoutableParent(this);
 
         GeoPoint.Subscribe(x =>
         {

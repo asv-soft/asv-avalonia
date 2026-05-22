@@ -104,14 +104,14 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             }
 
             var sub = _selectedPage.Value;
-            newPage.Parent = this;
+            newPage.SetParent(this);
             _selectedPage.Value = newPage;
-            newPage.Layout.LoadAll();
+            newPage.Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
 
             var children = _selectedPage.Value.GetChildren();
             foreach (var child in children)
             {
-                child.Parent = newPage;
+                child.SetParent(newPage);
             }
 
             sub?.Dispose();
@@ -141,10 +141,18 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         Layout
             .Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
             .AddTo(ref DisposableBag);
-        
-        Layout.LoadAll();
+        Layout
+            .Register(
+                nameof(IsMenuVisible),
+                x => IsMenuVisible = x,
+                () => IsMenuVisible,
+                this.ObservePropertyChanged(x => x.IsMenuVisible)
+            )
+            .AddTo(ref DisposableBag);
+
+        Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
     }
-    
+
     private string? SaveLayout()
     {
         return SelectedNode.Value?.Key.ToString();

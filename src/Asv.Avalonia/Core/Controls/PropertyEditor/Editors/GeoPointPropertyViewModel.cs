@@ -63,10 +63,11 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
             "F7"
         )
         {
-            Parent = this,
             ShortName = RS.Latitude_ShortName,
             Icon = MaterialIconKind.Latitude,
-        }.DisposeItWith(Disposable);
+        }
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         Longitude = new UnitPropertyViewModel(
             nameof(Longitude),
             _longitude,
@@ -75,10 +76,11 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
             "F7"
         )
         {
-            Parent = this,
             ShortName = RS.Longitude_ShortName,
             Icon = MaterialIconKind.Longitude,
-        }.DisposeItWith(Disposable);
+        }
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         Altitude = new UnitPropertyViewModel(
             nameof(Altitude),
             _altitude,
@@ -87,10 +89,11 @@ public class GeoPointPropertyViewModel : HeadlinedViewModel, IPropertyViewModel
             "F2"
         )
         {
-            Parent = this,
             ShortName = RS.Altitude_ShortName,
             Icon = MaterialIconKind.Altimeter,
-        }.DisposeItWith(Disposable);
+        }
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
     }
 
     public override IEnumerable<IViewModel> GetChildren()

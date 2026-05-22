@@ -14,4 +14,6 @@ public interface IViewModel
         INotifyPropertyChanging,
         INotifyPropertyChanged,
         ISupportUndo<IViewModel>,
+        ISupportParentChange<IViewModel>,
+        ISupportRootTracking<IViewModel, IShell>,
         ISupportLayout { }

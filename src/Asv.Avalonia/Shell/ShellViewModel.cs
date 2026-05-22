@@ -70,16 +70,18 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         var dialogService1 = ioc.GetRequiredService<IDialogService>();
         _appPath = ioc.GetRequiredService<IAppPath>();
         _themeService = ioc.GetRequiredService<IThemeService>();
-        
+
         _unsavedChangesDialogPrefab = dialogService1.GetDialogPrefab<UnsavedChangesDialogPrefab>();
         var path = _appPath.GetPageFolder(new NavId(TypeId), "layout");
-        LayoutManager = new LayoutManager<IViewModel>(this, new JsonTokenLayoutStore(path, _logger))
-            .DisposeItWith(Disposable);
+        LayoutManager = new LayoutManager<IViewModel>(
+            this,
+            new JsonTokenLayoutStore(path, _logger)
+        ).DisposeItWith(Disposable);
 
-        WindowSateIconKind = new BindableReactiveProperty<MaterialIconKind>()
-            .DisposeItWith(Disposable);
-        WindowStateHeader = new BindableReactiveProperty<string>()
-            .DisposeItWith(Disposable);
+        WindowSateIconKind = new BindableReactiveProperty<MaterialIconKind>().DisposeItWith(
+            Disposable
+        );
+        WindowStateHeader = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
 
         _onCloseEvent = new Subject<Unit>().DisposeItWith(Disposable);
 
@@ -165,7 +167,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         ).DisposeItWith(Disposable);
 
         Events.Catch<ShellMessageEvent>(x => ShowMessage(x.Message)).DisposeItWith(Disposable);
-        Events.Catch<RestartApplicationEvent>(OnRestartApplicationRequested)
+        Events
+            .Catch<RestartApplicationEvent>(OnRestartApplicationRequested)
             .DisposeItWith(Disposable);
         Events.Catch<PageCloseRequestedEvent>(OnPageCloseRequested).DisposeItWith(Disposable);
     }
@@ -273,7 +276,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         Layout
             .Register(nameof(ShellViewModel), LoadLayout, SaveLayout, _layoutChanged)
             .DisposeItWith(Disposable);
-        Layout.LoadAll();
+        Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
     }
 
     protected virtual async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)

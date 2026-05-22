@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Asv.Common;
 using Asv.Modeling;
 using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
@@ -25,27 +26,41 @@ public abstract class ViewModel : IViewModel
     private CompositeDisposable? _dispose;
     private IUndoController? _undo;
     private ILayoutController? _layout;
+    private readonly Subject<IViewModel?> _parentChanged;
 
     protected ViewModel(string typeId, NavArgs args = default)
     {
         Id = new NavId(typeId, args);
+        _parentChanged = new Subject<IViewModel?>();
         Events = new RoutedEventController<IViewModel>(this).AddTo(ref DisposableBag);
         Events.Catch<TreeVisitorEvent>(e => e.Visit(this)).AddTo(ref DisposableBag);
+        RootTracking = new ViewModelRootTrackingController(this).AddTo(ref DisposableBag); // Warning! create it after events, to ensure it receives all events related to root tracking
     }
 
+    public IRootTrackingController<IShell> RootTracking { get; }
     public IRoutedEventController<IViewModel> Events { get; }
 
-    public IUndoController Undo => _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
+    public IUndoController Undo =>
+        _undo ??= new UndoController<IViewModel>(this).AddTo(ref DisposableBag);
 
-    public ILayoutController Layout => _layout ??= new LayoutController<IViewModel>(this).AddTo(ref DisposableBag);
+    public ILayoutController Layout =>
+        _layout ??= new LayoutController<IViewModel>(this).AddTo(ref DisposableBag);
 
     public NavId Id { get; }
 
     public IViewModel? Parent
     {
         get;
-        set => SetField(ref field, value);
+        private set => SetField(ref field, value);
     }
+    
+    public void SetParent(IViewModel? parent)
+    {
+        Parent = parent;
+        _parentChanged.OnNext(parent);
+    }
+
+    public Observable<IViewModel?> ParentChanged => _parentChanged;
 
     public virtual IEnumerable<IViewModel> GetChildren()
     {
@@ -242,6 +257,7 @@ public abstract class ViewModel : IViewModel
     {
         return $"{GetType().Name}[{Id}]";
     }
+    
 }
 
 public abstract class ViewModel<TExtensionIfc> : ViewModel
@@ -282,4 +298,152 @@ public abstract class ViewModel<TExtensionIfc> : ViewModel
     /// Derived classes must implement this method to provide additional logic after extension loading.
     /// </summary>
     protected abstract void AfterLoadExtensions();
+}
+
+internal sealed class ViewModelRootTrackingController : IRootTrackingController<IShell>, IDisposable
+{
+    private readonly IViewModel _owner;
+    private readonly ReactiveProperty<IShell?> _root;
+    private readonly Subject<IShell> _attached;
+    private readonly Subject<Unit> _detached;
+    private readonly SerialDisposable _parentRootSubscription;
+    private readonly CompositeDisposable _dispose;
+    private IShell? _currentRoot;
+    private bool _isDisposed;
+
+    public ViewModelRootTrackingController(IViewModel owner)
+    {
+        ArgumentNullException.ThrowIfNull(owner);
+
+        _owner = owner;
+        _root = new ReactiveProperty<IShell?>();
+        _attached = new Subject<IShell>();
+        _detached = new Subject<Unit>();
+        _parentRootSubscription = new SerialDisposable();
+        _dispose = new CompositeDisposable
+        {
+            _root,
+            _attached,
+            _detached,
+            _parentRootSubscription,
+        };
+
+        _owner.ParentChanged.Subscribe(_ => UpdateRoot()).DisposeItWith(_dispose);
+        UpdateRoot();
+    }
+
+    public ReadOnlyReactiveProperty<IShell?> Root => _root;
+
+    public Observable<IShell> Attached => _attached;
+
+    public Observable<Unit> Detached => _detached;
+
+    public IDisposable ExecuteWhenRootAttached(Action<IShell> action)
+    {
+        ArgumentNullException.ThrowIfNull(action);
+
+        if (_currentRoot is { } root)
+        {
+            action(root);
+        }
+
+        return _attached.Subscribe(action);
+    }
+
+    public IDisposable ExecuteWhenRootAttached(Func<IShell, ValueTask> action)
+    {
+        ArgumentNullException.ThrowIfNull(action);
+
+        if (_currentRoot is { } root)
+        {
+            action(root).AsTask().SafeFireAndForget();
+        }
+
+        return _attached.SubscribeAwait(
+            (root, _) => action(root),
+            AwaitOperation.Drop
+        );
+    }
+
+    public IDisposable ExecuteWhenRootAttached(
+        Func<IShell, CancellationToken, ValueTask> action
+    )
+    {
+        ArgumentNullException.ThrowIfNull(action);
+
+        if (_currentRoot is { } root)
+        {
+            action(root, CancellationToken.None).AsTask().SafeFireAndForget();
+        }
+
+        return _attached.SubscribeAwait(action, AwaitOperation.Drop);
+    }
+
+    public void Dispose()
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        _isDisposed = true;
+        _dispose.Dispose();
+    }
+
+    private void UpdateRoot()
+    {
+        _parentRootSubscription.Disposable = Disposable.Empty;
+
+        if (_owner is IShell shell)
+        {
+            SetRoot(shell);
+            return;
+        }
+
+        var parent = _owner.Parent;
+        if (parent is null)
+        {
+            ClearRoot();
+            return;
+        }
+
+        SetRoot(parent.RootTracking.Root.CurrentValue);
+
+        var parentRootSubscription = new CompositeDisposable
+        {
+            parent.RootTracking.Attached.Subscribe(SetRoot),
+            parent.RootTracking.Detached.Subscribe(_ => ClearRoot()),
+        };
+        _parentRootSubscription.Disposable = parentRootSubscription;
+    }
+
+    private void SetRoot(IShell? root)
+    {
+        if (root is null)
+        {
+            ClearRoot();
+            return;
+        }
+
+        if (ReferenceEquals(_currentRoot, root))
+        {
+            return;
+        }
+
+        _currentRoot = root;
+        _root.Value = root;
+        _attached.OnNext(root);
+    }
+
+    private void ClearRoot()
+    {
+        if (_currentRoot is null)
+        {
+            return;
+        }
+
+        _currentRoot = null;
+        _root.Value = null;
+        _detached.OnNext(Unit.Default);
+    }
 }

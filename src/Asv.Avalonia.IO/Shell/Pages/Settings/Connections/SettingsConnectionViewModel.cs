@@ -206,10 +206,12 @@ public class SettingsConnectionViewModel
 
     private IPortViewModel CreatePort(IProtocolPort protocolPort)
     {
-        var factory = _containerHost.GetKeyedService<
-            ViewModelMixin.FactoryDelegate<IPortViewModel, IProtocolPort>
-        >(protocolPort.TypeInfo.Scheme);
-        var viewModel = factory?.Invoke(protocolPort)
+        var factory = _containerHost.GetKeyedService<ViewModelMixin.FactoryDelegate<
+            IPortViewModel,
+            IProtocolPort
+        >>(protocolPort.TypeInfo.Scheme);
+        var viewModel =
+            factory?.Invoke(protocolPort)
             ?? ActivatorUtilities.CreateInstance<PortViewModel>(_containerHost, protocolPort);
         viewModel.SetRoutableParent(this);
         viewModel.Init(protocolPort);

@@ -30,7 +30,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Parent = DesignTime.Shell;
+        SetParent(DesignTime.Shell);
         Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
     }
 

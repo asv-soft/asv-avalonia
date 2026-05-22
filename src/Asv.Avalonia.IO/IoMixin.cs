@@ -81,9 +81,10 @@ public static class IoMixin
             builder.Parent.Parent.Parent.Services.AddKeyedTransient<IPortViewModel, TViewModel>(
                 portScheme
             );
-            builder.Parent.Parent.Parent.Services.AddKeyedTransient<
-                ViewModelMixin.FactoryDelegate<IPortViewModel, IProtocolPort>
-            >(
+            builder.Parent.Parent.Parent.Services.AddKeyedTransient<ViewModelMixin.FactoryDelegate<
+                IPortViewModel,
+                IProtocolPort
+            >>(
                 portScheme,
                 (services, _) =>
                     protocolPort =>

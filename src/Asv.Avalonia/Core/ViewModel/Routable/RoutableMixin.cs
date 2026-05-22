@@ -19,9 +19,9 @@ public static class RoutableMixin
     )
         where TView : class, IViewModel
     {
-        src.ForEach(item => item.Parent = parent);
-        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.View.Parent = parent);
-        var sub2 = src.ObserveRemove().Subscribe(x => x.Value.View.Parent = null);
+        src.ForEach(item => item.SetParent(parent));
+        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.View.SetParent(parent));
+        var sub2 = src.ObserveRemove().Subscribe(x => x.Value.View.SetParent(null));
         return Disposable.Combine(sub1, sub2);
     }
 
@@ -32,9 +32,9 @@ public static class RoutableMixin
     )
         where TView : class, IViewModel
     {
-        src.ForEach(item => item.Parent = parent);
-        src.ObserveAdd().Subscribe(x => x.Value.View.Parent = parent).DisposeItWith(dispose);
-        src.ObserveRemove().Subscribe(x => x.Value.View.Parent = null).DisposeItWith(dispose);
+        src.ForEach(item => item.SetParent(parent));
+        src.ObserveAdd().Subscribe(x => x.Value.View.SetParent(parent)).DisposeItWith(dispose);
+        src.ObserveRemove().Subscribe(x => x.Value.View.SetParent(null)).DisposeItWith(dispose);
         return src;
     }
 
@@ -45,7 +45,7 @@ public static class RoutableMixin
     )
         where TView : class, IViewModel
     {
-        src.ForEach(item => item.Parent = parent);
+        src.ForEach(item => item.SetParent(parent));
         Observable
             .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 handler => (sender, args) => handler(args),
@@ -89,7 +89,7 @@ public static class RoutableMixin
         where TCollection : INotifyCollectionChanged, IEnumerable<TItem>
         where TItem : IViewModel
     {
-        src.ForEach(item => item.Parent = parent);
+        src.ForEach(item => item.SetParent(parent));
         return Observable
             .FromEvent<NotifyCollectionChangedEventHandler, NotifyCollectionChangedEventArgs>(
                 handler => (sender, args) => handler(args),
@@ -112,7 +112,7 @@ public static class RoutableMixin
                 {
                     if (item is IViewModel routable)
                     {
-                        routable.Parent = parent;
+                        routable.SetParent(parent);
                     }
                 }
 
@@ -123,7 +123,7 @@ public static class RoutableMixin
                 {
                     if (item is IViewModel routable)
                     {
-                        routable.Parent = null;
+                        routable.SetParent(null);
                         routable.Dispose();
                     }
                 }
@@ -136,7 +136,7 @@ public static class RoutableMixin
                 {
                     if (item is IViewModel routable)
                     {
-                        routable.Parent = null;
+                        routable.SetParent(null);
                         routable.Dispose();
                     }
                 }
@@ -145,7 +145,7 @@ public static class RoutableMixin
                 {
                     if (item is IViewModel routable)
                     {
-                        routable.Parent = parent;
+                        routable.SetParent(parent);
                     }
                 }
 
@@ -162,7 +162,7 @@ public static class RoutableMixin
     public static T SetRoutableParent<T>(this T src, IViewModel parent)
         where T : class, IViewModel
     {
-        src.Parent = parent;
+        src.SetParent(parent);
         return src;
     }
 
@@ -172,11 +172,11 @@ public static class RoutableMixin
     )
         where T : class, IViewModel
     {
-        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.Parent = parent);
-        var sub2 = src.ObserveRemove().Subscribe(x => x.Value.Parent = null);
+        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.SetParent(parent));
+        var sub2 = src.ObserveRemove().Subscribe(x => x.Value.SetParent(null));
         foreach (var routable in src)
         {
-            routable.Parent = parent;
+            routable.SetParent(parent);
         }
         return Disposable.Combine(sub1, sub2);
     }

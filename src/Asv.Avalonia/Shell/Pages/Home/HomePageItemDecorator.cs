@@ -9,7 +9,7 @@ public class HomePageItemDecorator : ViewModel
     public HomePageItemDecorator(IHomePageItem homePageItem)
         : base($"decorator")
     {
-        homePageItem.Parent = this;
+        homePageItem.SetParent(this);
         HomePageItem = homePageItem;
         HomePageItem.DisposeItWith(Disposable);
         ActionsView = homePageItem

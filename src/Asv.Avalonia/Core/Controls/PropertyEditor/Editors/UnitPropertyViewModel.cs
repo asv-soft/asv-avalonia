@@ -28,7 +28,7 @@ public class UnitPropertyViewModel(
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Parent = DesignTime.Shell;
+        SetParent(DesignTime.Shell);
         Header = "Altitude";
         Description = "Altitude description";
         Icon = MaterialIconKind.Altimeter;

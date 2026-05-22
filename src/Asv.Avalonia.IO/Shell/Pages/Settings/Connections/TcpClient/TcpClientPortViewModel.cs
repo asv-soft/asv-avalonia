@@ -46,9 +46,7 @@ public class TcpClientPortViewModel : PortViewModel
             unitService,
             loggerFactory,
             timeProvider
-        )
-    {
-    }
+        ) { }
 
     public TcpClientPortViewModel(
         IConfiguration cfgSvc,
@@ -62,9 +60,7 @@ public class TcpClientPortViewModel : PortViewModel
             unitService,
             loggerFactory,
             timeProvider
-        )
-    {
-    }
+        ) { }
 
     private TcpClientPortViewModel(
         string id,

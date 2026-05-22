@@ -82,7 +82,7 @@ public sealed class DevicePageCore : IDisposable
 
         _isDeviceInitialized
             .Where(isInit => isInit)
-            .Subscribe(_ => _owner.Layout.LoadAll())
+            .Subscribe(_ => _owner.Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget())
             .DisposeItWith(_disposable);
         _onDeviceDisconnected
             .Synchronize()

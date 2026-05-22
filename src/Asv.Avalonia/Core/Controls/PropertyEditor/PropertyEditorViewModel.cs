@@ -16,7 +16,7 @@ public class PropertyEditorViewModel : ViewModel
         _itemsSource.Add(new UnitPropertyViewModel());
         _itemsSource.Add(new UnitPropertyViewModel());
         _itemsSource.Add(new UnitPropertyViewModel());
-        Parent = DesignTime.Shell;
+        SetParent(DesignTime.Shell);
     }
 
     public PropertyEditorViewModel(string id)

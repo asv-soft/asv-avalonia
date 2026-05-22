@@ -230,7 +230,7 @@ public class LogViewerViewModel
         Layout
             .Register(nameof(LogViewerViewModel), LoadLayout, SaveLayout, _layoutChanged)
             .DisposeItWith(Disposable);
-        Layout.LoadAll();
+        Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
     }
 
     private async Task UpdateImpl(

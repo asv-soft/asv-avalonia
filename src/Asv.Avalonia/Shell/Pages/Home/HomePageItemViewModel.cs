@@ -15,7 +15,7 @@ public class HomePageItemViewModel : ViewModel
         PropertiesView = homePageItem
             .Info.ToNotifyCollectionChangedSlim()
             .DisposeItWith(Disposable);
-        HomePageItem.Parent = this;
+        HomePageItem.SetParent(this);
     }
 
     public IHomePageItem HomePageItem { get; }

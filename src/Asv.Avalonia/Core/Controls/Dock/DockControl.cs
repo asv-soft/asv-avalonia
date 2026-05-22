@@ -432,8 +432,8 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
 
         var config = new DockControlConfig
         {
-            SelectedDockTabItemId = (_mainTabControl.SelectedItem as DockTabItem)?.Id
-                ?? _selectedTab?.Id,
+            SelectedDockTabItemId =
+                (_mainTabControl.SelectedItem as DockTabItem)?.Id ?? _selectedTab?.Id,
         };
 
         foreach (var item in _mainTabControl.Items.OfType<DockTabItem>())

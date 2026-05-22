@@ -31,7 +31,7 @@ public class PortViewModel : ViewModel, IPortViewModel
             DesignTime.UnitService,
             DesignTime.LoggerFactory,
             TimeProvider.System
-    )
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
         Icon = MaterialIconKind.Connection;
@@ -79,9 +79,7 @@ public class PortViewModel : ViewModel, IPortViewModel
             unitService,
             loggerFactory,
             timeProvider
-        )
-    {
-    }
+        ) { }
 
     public PortViewModel(
         string id,

@@ -10,7 +10,7 @@ public class LogMessageViewModel : ViewModel
         : base(NavId.GenerateByHashAsString(@base.Message, @base.Category, @base.Description))
     {
         Base = @base;
-        Parent = parent;
+        SetParent(parent);
     }
 
     public LogMessage Base { get; }

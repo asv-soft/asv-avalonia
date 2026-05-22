@@ -329,7 +329,7 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
             attemptsCount++;
         }
 
-        routableContent.Parent = routable;
+        routableContent.SetParent(routable);
         DataContext = routableContent;
         return true;
     }

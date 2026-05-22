@@ -5,8 +5,8 @@ using Material.Icons;
 namespace Asv.Avalonia;
 
 public interface IPage
-    : IHasUndoHistory<IViewModel>,
-        IHasLayoutManager<IViewModel>,
+    : ISupportUndoHistory<IViewModel>,
+        ISupportLayoutManager<IViewModel>,
         IHasIcon,
         IHasStatusIcon,
         IHasHeader

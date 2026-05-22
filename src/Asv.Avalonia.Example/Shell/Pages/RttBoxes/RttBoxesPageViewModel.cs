@@ -21,7 +21,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        Parent = DesignTime.Shell;
+        SetParent(DesignTime.Shell);
     }
 
     public RttBoxesPageViewModel(
