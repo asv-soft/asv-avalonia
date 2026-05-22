@@ -45,11 +45,11 @@ public partial class ShellWindow : Window
         _logger = logger.CreateLogger<ShellWindow>();
 
         _savePosition = new Subject<Unit>();
-        _layout = this.RegisterLayout<ShellWindowConfig, Unit>(
+        _layout = this.RegisterLayout(
             nameof(ShellWindow),
             LoadLayout,
             SaveLayout,
-            _savePosition.Where(_ => !_internalChange)
+            _savePosition.ThrottleLast(TimeSpan.FromSeconds(1)).Where(_ => !_internalChange)
         );
     }
 

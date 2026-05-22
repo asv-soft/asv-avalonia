@@ -29,49 +29,49 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     private const int MaxInfoBarMessages = 3;
 
     private readonly IAppPath _appPath;
-    private readonly Subject<Unit> _layoutChanged;
     private readonly Subject<Unit> _onCloseEvent;
     private readonly ObservableList<ShellMessageViewModel> _infoMessagesSource;
     private readonly ObservableList<IPage> _pages;
     private readonly ILogger<ShellViewModel> _logger;
-    private readonly UnsavedChangesDialogPrefab _unsavedChangesDialogPrefab;
 
     private ShellViewModelConfig _config;
     private bool _isLoaded;
-    private bool _layoutTrackingStarted;
     private int _saveLayoutInProgress;
     private readonly IThemeService _themeService;
+    private readonly IDialogService _dialogService;
 
     protected ShellViewModel(
         IServiceProvider ioc,
         ILoggerFactory loggerFactory,
-        IConfiguration cfg,
+        IAppPath appPath,
+        IThemeService themeService,
+        IDialogService dialogService,
         IExtensionService ext
     )
         : base(TypeId, default, ext)
     {
-        _ioc = ioc;
         ArgumentNullException.ThrowIfNull(ioc);
         ArgumentNullException.ThrowIfNull(loggerFactory);
-        ArgumentNullException.ThrowIfNull(cfg);
+        ArgumentNullException.ThrowIfNull(appPath);
+        ArgumentNullException.ThrowIfNull(themeService);
+        ArgumentNullException.ThrowIfNull(dialogService);
+        ArgumentNullException.ThrowIfNull(ext);
 
+        _ioc = ioc;
+        _appPath = appPath;
         _logger = loggerFactory.CreateLogger<ShellViewModel>();
         _config = new ShellViewModelConfig();
-        _layoutChanged = new Subject<Unit>().DisposeItWith(Disposable);
+        _themeService = themeService;
+        _dialogService = dialogService;
 
         InputElement
             .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
             .AddTo(ref DisposableBag);
 
-        Navigation = new NavigationController<IViewModel>(
-            this,
-            new NavigationStore("nav")
-        ).DisposeItWith(Disposable);
-        var dialogService1 = ioc.GetRequiredService<IDialogService>();
-        _appPath = ioc.GetRequiredService<IAppPath>();
-        _themeService = ioc.GetRequiredService<IThemeService>();
-
-        _unsavedChangesDialogPrefab = dialogService1.GetDialogPrefab<UnsavedChangesDialogPrefab>();
+        var store = new NavigationStore("nav");
+        Navigation = new NavigationController<IViewModel>(this, store)
+            .DisposeItWith(Disposable);
+        
         var path = _appPath.GetPageFolder(new NavId(TypeId), "layout");
         LayoutManager = new LayoutManager<IViewModel>(
             this,
@@ -85,16 +85,19 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         _onCloseEvent = new Subject<Unit>().DisposeItWith(Disposable);
 
+        #region Pages
+
         _pages = new ObservableList<IPage>();
         _pages.DisposeRemovedItems().DisposeItWith(Disposable);
         _pages.SetRoutableParent(this).DisposeItWith(Disposable);
         PagesView = _pages.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
 
+        #endregion
+
         Close = new ReactiveCommand(async (_, c) => await TryCloseAsync(c)).DisposeItWith(
             Disposable
         );
-        ChangeWindowState = new ReactiveCommand((_, c) => ChangeWindowModeAsync(c));
-        Collapse = new ReactiveCommand((_, c) => CollapseAsync(c));
+        
         SelectedPage = new BindableReactiveProperty<IPage?>().DisposeItWith(Disposable);
 
         MainMenu = new ObservableList<IMenuItem>();
@@ -170,14 +173,13 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         Events
             .Catch<RestartApplicationEvent>(OnRestartApplicationRequested)
             .DisposeItWith(Disposable);
-        Events.Catch<PageCloseRequestedEvent>(OnPageCloseRequested).DisposeItWith(Disposable);
+        Events.Catch<PageCloseRequestedEvent>((_, e, _) => ClosePage(e)).DisposeItWith(Disposable);
     }
 
     protected ILogger Logger => _logger;
 
     public ILayoutManager<IViewModel> LayoutManager { get; }
     public INavigationController<IViewModel> Navigation { get; }
-
     public ObservableList<IMenuItem> LeftMenu { get; }
     public MenuTree LeftMenuView { get; }
     public ObservableList<IMenuItem> RightMenu { get; }
@@ -188,8 +190,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     public Observable<Unit> OnClose => _onCloseEvent;
     public BindableReactiveProperty<MaterialIconKind> WindowSateIconKind { get; }
     public BindableReactiveProperty<string> WindowStateHeader { get; }
-    public ReactiveCommand ChangeWindowState { get; }
-    public ReactiveCommand Collapse { get; }
     public IReadOnlyObservableList<IPage> Pages => _pages;
     public BindableReactiveProperty<IPage?> SelectedPage { get; }
     public NotifyCollectionChangedSynchronizedViewList<IPage> PagesView { get; }
@@ -273,9 +273,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     protected override void AfterLoadExtensions()
     {
-        Layout
-            .Register(nameof(ShellViewModel), LoadLayout, SaveLayout, _layoutChanged)
-            .DisposeItWith(Disposable);
+       
         Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
     }
 
@@ -293,7 +291,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
                 }
 
                 await Navigation.GoTo(page.GetPathFromRoot());
-                var result = await _unsavedChangesDialogPrefab.ShowDialogAsync(
+                var prefab = _dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
+                var result = await prefab.ShowDialogAsync(
                     new UnsavedChangesDialogPayload
                     {
                         Restrictions = reasons,
@@ -316,16 +315,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         _onCloseEvent.OnNext(Unit.Default);
         return true;
-    }
-
-    protected virtual ValueTask ChangeWindowModeAsync(CancellationToken cancellationToken)
-    {
-        return ValueTask.CompletedTask;
-    }
-
-    protected virtual ValueTask CollapseAsync(CancellationToken cancellationToken)
-    {
-        return ValueTask.CompletedTask;
     }
 
     protected virtual void RestartApplication(string[] args)
@@ -380,16 +369,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         using var sub = _onCloseEvent.Take(1).Subscribe(_ => RestartApplicationCommon());
         await TryCloseAsync(restart.Cancel);
     }
-
-    private async ValueTask OnPageCloseRequested(
-        IViewModel src,
-        PageCloseRequestedEvent close,
-        CancellationToken cancel
-    )
-    {
-        await ClosePage(close);
-    }
-
     private async ValueTask ClosePage(PageCloseRequestedEvent close)
     {
         _logger.ZLogInformation($"Close page [{close.Page.Id}]");
@@ -492,30 +471,10 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         }
         finally
         {
-            StartLayoutTracking();
+            
         }
     }
 
-    private void StartLayoutTracking()
-    {
-        if (_layoutTrackingStarted)
-        {
-            return;
-        }
-
-        _layoutTrackingStarted = true;
-        Pages.ObserveAdd().Subscribe(_ => NotifyLayoutChanged()).DisposeItWith(Disposable);
-        Pages.ObserveRemove().Subscribe(_ => NotifyLayoutChanged()).DisposeItWith(Disposable);
-        SelectedPage.Subscribe(_ => NotifyLayoutChanged()).DisposeItWith(Disposable);
-    }
-
-    private void NotifyLayoutChanged()
-    {
-        if (_isLoaded)
-        {
-            _layoutChanged.OnNext(Unit.Default);
-        }
-    }
 
     private ShellViewModelConfig? SaveLayout()
     {
@@ -542,5 +501,15 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         {
             Interlocked.Exchange(ref _saveLayoutInProgress, 0);
         }
+    }
+
+    public virtual void ChangeWindowMode()
+    {
+        // implemented in desktop shell
+    }
+
+    public virtual void CollapseWindow()
+    {
+        // implemented in desktop shell
     }
 }

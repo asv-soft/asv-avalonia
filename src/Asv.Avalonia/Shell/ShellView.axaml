@@ -151,7 +151,7 @@
                         Height="28"
                         Theme="{DynamicResource TransparentButton}"
                         DockPanel.Dock="Right"
-                        Command="{Binding ChangeWindowState}"
+                        Command="{Binding ChangeWindowMode}"
                     >
                         <avalonia1:MaterialIcon
                             Classes="smallest"
@@ -165,7 +165,7 @@
                         Height="28"
                         Theme="{DynamicResource TransparentButton}"
                         DockPanel.Dock="Right"
-                        Command="{Binding Collapse}"
+                        Command="{Binding CollapseWindow}"
                     >
                         <avalonia1:MaterialIcon Classes="smallest" Kind="Minimize" />
                         <ToolTip.Tip>

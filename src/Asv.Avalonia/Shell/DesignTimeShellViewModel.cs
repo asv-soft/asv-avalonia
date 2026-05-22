@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using R3;
 
 namespace Asv.Avalonia;
@@ -10,7 +11,9 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         : base(
             AppHost.Instance.Services,
             DesignTime.LoggerFactory,
-            DesignTime.Configuration,
+            AppHost.Instance.Services.GetRequiredService<IAppPath>(),
+            DesignTime.ThemeService,
+            DesignTime.DialogService,
             DesignTime.ExtensionService
         )
     {

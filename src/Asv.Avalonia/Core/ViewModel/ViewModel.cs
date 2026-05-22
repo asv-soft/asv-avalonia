@@ -53,7 +53,7 @@ public abstract class ViewModel : IViewModel
         get;
         private set => SetField(ref field, value);
     }
-    
+
     public void SetParent(IViewModel? parent)
     {
         Parent = parent;
@@ -257,7 +257,6 @@ public abstract class ViewModel : IViewModel
     {
         return $"{GetType().Name}[{Id}]";
     }
-    
 }
 
 public abstract class ViewModel<TExtensionIfc> : ViewModel
@@ -320,13 +319,7 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
         _attached = new Subject<IShell>();
         _detached = new Subject<Unit>();
         _parentRootSubscription = new SerialDisposable();
-        _dispose = new CompositeDisposable
-        {
-            _root,
-            _attached,
-            _detached,
-            _parentRootSubscription,
-        };
+        _dispose = new CompositeDisposable { _root, _attached, _detached, _parentRootSubscription };
 
         _owner.ParentChanged.Subscribe(_ => UpdateRoot()).DisposeItWith(_dispose);
         UpdateRoot();
@@ -359,15 +352,10 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
             action(root).AsTask().SafeFireAndForget();
         }
 
-        return _attached.SubscribeAwait(
-            (root, _) => action(root),
-            AwaitOperation.Drop
-        );
+        return _attached.SubscribeAwait((root, _) => action(root), AwaitOperation.Drop);
     }
 
-    public IDisposable ExecuteWhenRootAttached(
-        Func<IShell, CancellationToken, ValueTask> action
-    )
+    public IDisposable ExecuteWhenRootAttached(Func<IShell, CancellationToken, ValueTask> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 

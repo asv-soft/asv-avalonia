@@ -47,6 +47,21 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).AddTo(ref DisposableBag);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).AddTo(ref DisposableBag);
         R3.Disposable.Create(() => SelectedPage.Value?.Dispose()).AddTo(ref DisposableBag);
+        
+        Layout.Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
+            .AddTo(ref DisposableBag);
+        Layout
+            .Register(
+                nameof(IsMenuVisible),
+                x => IsMenuVisible = x,
+                () => IsMenuVisible,
+                this.ObservePropertyChanged(x => x.IsMenuVisible)
+            )
+            .AddTo(ref DisposableBag);
+
+        Layout.LoadWhenRootAttached(RootTracking).DisposeItWith(Disposable);
+        
+        
     }
 
     public MaterialIconKind? TreeHeaderIcon
@@ -138,19 +153,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     protected override void AfterLoadExtensions()
     {
-        Layout
-            .Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
-            .AddTo(ref DisposableBag);
-        Layout
-            .Register(
-                nameof(IsMenuVisible),
-                x => IsMenuVisible = x,
-                () => IsMenuVisible,
-                this.ObservePropertyChanged(x => x.IsMenuVisible)
-            )
-            .AddTo(ref DisposableBag);
-
-        Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
+        // do nothing
     }
 
     private string? SaveLayout()

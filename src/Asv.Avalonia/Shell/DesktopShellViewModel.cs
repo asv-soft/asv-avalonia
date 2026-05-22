@@ -23,12 +23,14 @@ public sealed class DesktopShellViewModel : ShellViewModel
 
     public DesktopShellViewModel(
         IFileAssociationService fileService,
-        IConfiguration cfg,
         IServiceProvider ioc,
         ILoggerFactory loggerFactory,
+        IAppPath appPath,
+        IThemeService themeService,
+        IDialogService dialogService,
         IExtensionService ext
     )
-        : base(ioc, loggerFactory, cfg, ext)
+        : base(ioc, loggerFactory, appPath, themeService, dialogService, ext)
     {
         _fileService = fileService;
 
@@ -103,20 +105,20 @@ public sealed class DesktopShellViewModel : ShellViewModel
         return true;
     }
 
-    protected override ValueTask ChangeWindowModeAsync(CancellationToken cancellationToken)
+    public override void ChangeWindowMode()
     {
         if (
             Application.Current?.ApplicationLifetime
             is not IClassicDesktopStyleApplicationLifetime lifetime
         )
         {
-            return ValueTask.CompletedTask;
+            return;
         }
 
         var window = lifetime.MainWindow;
         if (window == null)
         {
-            return ValueTask.CompletedTask;
+            return;
         }
 
         if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
@@ -135,11 +137,9 @@ public sealed class DesktopShellViewModel : ShellViewModel
 
             UpdateWindowStateUi(window.WindowState);
         }
-
-        return base.ChangeWindowModeAsync(cancellationToken);
     }
 
-    protected override ValueTask CollapseAsync(CancellationToken cancellationToken)
+    public override void CollapseWindow()
     {
         var appLifetime = Application.Current?.ApplicationLifetime;
         if (appLifetime is IClassicDesktopStyleApplicationLifetime lifetime)
@@ -150,8 +150,6 @@ public sealed class DesktopShellViewModel : ShellViewModel
                 window.WindowState = WindowState.Minimized;
             }
         }
-
-        return base.CollapseAsync(cancellationToken);
     }
 
     protected override void RestartApplication(string[] args)
