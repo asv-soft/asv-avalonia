@@ -47,8 +47,9 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).AddTo(ref DisposableBag);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).AddTo(ref DisposableBag);
         R3.Disposable.Create(() => SelectedPage.Value?.Dispose()).AddTo(ref DisposableBag);
-        
-        Layout.Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
+
+        Layout
+            .Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
             .AddTo(ref DisposableBag);
         Layout
             .Register(
@@ -60,8 +61,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             .AddTo(ref DisposableBag);
 
         Layout.LoadWhenRootAttached(RootTracking).DisposeItWith(Disposable);
-        
-        
     }
 
     public MaterialIconKind? TreeHeaderIcon

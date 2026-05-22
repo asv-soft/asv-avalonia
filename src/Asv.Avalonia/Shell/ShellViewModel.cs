@@ -69,9 +69,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .AddTo(ref DisposableBag);
 
         var store = new NavigationStore("nav");
-        Navigation = new NavigationController<IViewModel>(this, store)
-            .DisposeItWith(Disposable);
-        
+        Navigation = new NavigationController<IViewModel>(this, store).DisposeItWith(Disposable);
+
         var path = _appPath.GetPageFolder(new NavId(TypeId), "layout");
         LayoutManager = new LayoutManager<IViewModel>(
             this,
@@ -87,7 +86,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         #region Pages
 
-        _pages = new ObservableList<IPage>();
+        _pages = [];
         _pages.DisposeRemovedItems().DisposeItWith(Disposable);
         _pages.SetRoutableParent(this).DisposeItWith(Disposable);
         PagesView = _pages.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
@@ -97,7 +96,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         Close = new ReactiveCommand(async (_, c) => await TryCloseAsync(c)).DisposeItWith(
             Disposable
         );
-        
+
         SelectedPage = new BindableReactiveProperty<IPage?>().DisposeItWith(Disposable);
 
         MainMenu = new ObservableList<IMenuItem>();
@@ -273,8 +272,29 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     protected override void AfterLoadExtensions()
     {
-       
-        Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
+        // Save last page layout
+#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+        Layout
+            .Register(
+                nameof(SelectedPage),
+                x => Navigate(new NavId(x)).SafeFireAndForget(),
+                () => SelectedPage.Value?.Id.ToString(),
+                SelectedPage.Skip(1)
+            )
+#pragma warning restore CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
+            .AddTo(ref DisposableBag);
+
+        // save opened pages
+        Layout
+            .Register(
+                nameof(Pages),
+                pages => pages.ForEach(x => Navigate(new NavId(x)).SafeFireAndForget()),
+                () => Pages.Select(page => page.Id.ToString()).ToArray(),
+                Pages.ObserveChanged().Skip(1)
+            )
+            .AddTo(ref DisposableBag);
+
+        Layout.LoadWhenRootAttached(RootTracking).AddTo(ref DisposableBag);
     }
 
     protected virtual async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
@@ -369,6 +389,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         using var sub = _onCloseEvent.Take(1).Subscribe(_ => RestartApplicationCommon());
         await TryCloseAsync(restart.Cancel);
     }
+
     private async ValueTask ClosePage(PageCloseRequestedEvent close)
     {
         _logger.ZLogInformation($"Close page [{close.Page.Id}]");
@@ -469,12 +490,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         {
             _logger.ZLogError(e, $"Error loading layout: {e.Message}");
         }
-        finally
-        {
-            
-        }
+        finally { }
     }
-
 
     private ShellViewModelConfig? SaveLayout()
     {
