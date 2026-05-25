@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Asv.Avalonia.Example.Launcher.Contracts;
+using Asv.Avalonia.Launcher.Api;
 
 namespace Asv.Avalonia.Example.Launcher.Orchestration;
 
@@ -36,28 +37,28 @@ public static class LauncherCommandLineParser
 
             switch (current)
             {
-                case "--":
+                case LauncherCommandLineArguments.PassthroughArgsSeparator:
                     passthroughMode = true;
                     break;
-                case "--target":
+                case LauncherCommandLineArguments.TargetArg:
                     if (!TryReadValue(args, ref i, out targetPath, out error))
                     {
                         return false;
                     }
                     break;
-                case "--pipe":
+                case LauncherCommandLineArguments.PipeArg:
                     if (!TryReadValue(args, ref i, out pipeName, out error))
                     {
                         return false;
                     }
                     break;
-                case "--token":
+                case LauncherCommandLineArguments.TokenArg:
                     if (!TryReadValue(args, ref i, out sessionToken, out error))
                     {
                         return false;
                     }
                     break;
-                case "--timeout-sec":
+                case LauncherCommandLineArguments.TimeoutSecArg:
                     if (!TryReadValue(args, ref i, out var timeoutRaw, out error))
                     {
                         return false;
@@ -65,7 +66,8 @@ public static class LauncherCommandLineParser
 
                     if (int.TryParse(timeoutRaw, out var timeoutSec) == false || timeoutSec <= 0)
                     {
-                        error = $"Invalid --timeout-sec value: '{timeoutRaw}'.";
+                        error =
+                            $"Invalid {LauncherCommandLineArguments.TimeoutSecArg} value: '{timeoutRaw}'.";
                         return false;
                     }
 
@@ -79,7 +81,8 @@ public static class LauncherCommandLineParser
 
         if (string.IsNullOrWhiteSpace(targetPath))
         {
-            error = "Missing required argument: --target <path-to-executable>.";
+            error =
+                $"Missing required argument: {LauncherCommandLineArguments.TargetArg} <path-to-executable>.";
             return false;
         }
 

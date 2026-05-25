@@ -39,12 +39,12 @@ public sealed class DesktopWithLauncherAppRestartFeature(
                 WorkingDirectory =
                     Path.GetDirectoryName(launcherPath) ?? Environment.CurrentDirectory,
             };
-            psi.ArgumentList.Add("--target");
+            psi.ArgumentList.Add(LauncherCommandLineArguments.TargetArg);
             psi.ArgumentList.Add(appPath);
 
             if (targetArgs.Length > 0)
             {
-                psi.ArgumentList.Add("--");
+                psi.ArgumentList.Add(LauncherCommandLineArguments.PassthroughArgsSeparator);
                 foreach (var arg in targetArgs)
                 {
                     psi.ArgumentList.Add(arg);
