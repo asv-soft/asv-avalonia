@@ -23,6 +23,8 @@ public static class LauncherReadyMixin
             var launcherBuilder = new Builder(builder, options);
             launcherBuilder.RegisterDefault();
             configure?.Invoke(launcherBuilder);
+
+            builder.ChangeAppRestartForDesktop();
             return builder;
         }
 
@@ -33,6 +35,15 @@ public static class LauncherReadyMixin
                     .Services.AddOptions<LauncherFeatureOptions>()
                     .Bind(builder.Configuration.GetSection(LauncherFeatureOptions.Section))
             );
+
+        private IHostApplicationBuilder ChangeAppRestartForDesktop()
+        {
+            builder.Services.ReplaceSingleton<
+                IAppRestartFeature,
+                DesktopWithLauncherAppRestartFeature
+            >();
+            return builder;
+        }
     }
 
     public class Builder(
