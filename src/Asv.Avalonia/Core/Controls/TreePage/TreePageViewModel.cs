@@ -120,7 +120,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             var sub = _selectedPage.Value;
             newPage.SetParent(this);
             _selectedPage.Value = newPage;
-            newPage.Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
 
             var children = _selectedPage.Value.GetChildren();
             foreach (var child in children)
@@ -172,10 +171,17 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             : null;
     }
 
-    protected virtual ITreeSubpage CreateSubPage(NavId id)
+    protected virtual ITreeSubpage? CreateSubPage(NavId id)
     {
-        var context = new TreeSubPageContext<TContext>(id.Args, Context);
-        return _container.CreateTreeSubPage<TContext, TSubPage>(id.TypeId, context);
+        try
+        {
+            var context = new TreeSubPageContext<TContext>(id.Args, Context);
+            return _container.CreateTreeSubPage<TContext, TSubPage>(id.TypeId, context);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
     }
 
     private void ShowMenu(bool value)

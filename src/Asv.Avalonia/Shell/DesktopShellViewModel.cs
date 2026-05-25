@@ -11,11 +11,10 @@ using Avalonia.Platform.Storage;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using R3;
 using ZLogger;
 
 namespace Asv.Avalonia;
-
-public class DesktopShellViewModelConfig : ShellViewModelConfig { }
 
 public sealed class DesktopShellViewModel : ShellViewModel
 {
@@ -51,12 +50,48 @@ public sealed class DesktopShellViewModel : ShellViewModel
         wnd.AddHandler(DragDrop.DropEvent, OnFileDrop);
         wnd.AddHandler(DragDrop.DragOverEvent, OnDragOver);
 
+        Events.Catch<DesktopDragEvent>(OnDesktopDragEvent).AddTo(ref DisposableBag);
+        Events.Catch<DesktopPushArgsEvent>(OnDesktopPushArgsEvent).AddTo(ref DisposableBag);
+
         UpdateWindowStateUi(wnd.WindowState);
 
         lifetime.MainWindow = wnd;
         lifetime.MainWindow.Show();
+    }
 
-        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
+    private ValueTask OnDesktopPushArgsEvent(
+        IViewModel owner,
+        DesktopPushArgsEvent e,
+        CancellationToken cancel
+    )
+    {
+        if (e.Args.Tags.Count > 1)
+        {
+            return _fileService.Open(e.Args.Tags.Skip(1).First());
+        }
+        return ValueTask.CompletedTask;
+    }
+
+    private ValueTask OnDesktopDragEvent(
+        IViewModel owner,
+        DesktopDragEvent e,
+        CancellationToken cancel
+    )
+    {
+        var files = e.Args.DataTransfer.TryGetFiles();
+        if (files == null)
+        {
+            return ValueTask.CompletedTask;
+        }
+        foreach (var file in files)
+        {
+            var path = file.TryGetLocalPath();
+            if (Path.Exists(path))
+            {
+                return _fileService.Open(path);
+            }
+        }
+        return ValueTask.CompletedTask;
     }
 
     public void UpdateWindowStateUi(WindowState state)
@@ -187,40 +222,6 @@ public sealed class DesktopShellViewModel : ShellViewModel
     private void OnFileDrop(object? sender, DragEventArgs e)
     {
         var selected = Navigation.SelectedControl.CurrentValue ?? this;
-        selected.Rise(new DesktopDragEvent(selected, args: e));
-    }
-
-    private ValueTask InternalCatchEvent(
-        IViewModel src,
-        AsyncRoutedEvent<IViewModel> e,
-        CancellationToken cancel
-    )
-    {
-        if (e is DesktopDragEvent eve)
-        {
-            var files = eve.Args.DataTransfer.TryGetFiles();
-            if (files == null)
-            {
-                return ValueTask.CompletedTask;
-            }
-            foreach (var file in files)
-            {
-                var path = file.TryGetLocalPath();
-                if (Path.Exists(path))
-                {
-                    return _fileService.Open(path);
-                }
-            }
-        }
-
-        if (e is DesktopPushArgsEvent argsEvent)
-        {
-            if (argsEvent.Args.Tags.Count > 1)
-            {
-                return _fileService.Open(argsEvent.Args.Tags.Skip(1).First());
-            }
-        }
-
-        return ValueTask.CompletedTask;
+        selected.Rise(new DesktopDragEvent(selected, args: e)).SafeFireAndForget();
     }
 }

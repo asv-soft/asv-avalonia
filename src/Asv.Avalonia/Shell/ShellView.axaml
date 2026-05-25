@@ -91,13 +91,13 @@
         x:Name="WindowFrame"
         BorderThickness="1"
         Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
-        Classes.normal-frame="{Binding ErrorState,
+        Classes.normal-frame="{Binding Messages.ErrorState,
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance},
               ConverterParameter={x:Static avalonia:ShellErrorState.Normal} }"
-        Classes.error-frame="{Binding ErrorState,
+        Classes.error-frame="{Binding Messages.ErrorState,
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance},
               ConverterParameter={x:Static avalonia:ShellErrorState.Error} }"
-        Classes.warning-frame="{Binding ErrorState,
+        Classes.warning-frame="{Binding Messages.ErrorState,
               Converter={x:Static avalonia:EnumToBooleanConverter.Instance},
               ConverterParameter={x:Static avalonia:ShellErrorState.Warning} }"
     >
@@ -348,7 +348,7 @@
                 Width="250"
                 VerticalAlignment="Bottom"
                 Margin="0,0,45,35"
-                ItemsSource="{Binding InfoBarMessages}"
+                ItemsSource="{Binding Messages.ItemsView}"
             >
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>

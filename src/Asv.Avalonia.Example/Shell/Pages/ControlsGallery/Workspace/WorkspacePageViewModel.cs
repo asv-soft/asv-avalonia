@@ -78,7 +78,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             Command = new ReactiveCommand(
                 async (_, cancel) =>
                 {
-                    await this.RaiseShellInfoMessage(
+                    await this.RiseShellInfoMessage(
                         new ShellMessage(
                             "Error",
                             "This is test error message",

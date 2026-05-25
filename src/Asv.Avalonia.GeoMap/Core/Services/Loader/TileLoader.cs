@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using System.Threading.Channels;
+using Asv.Avalonia.InfoMessage;
 using Asv.Cfg;
 using Asv.Common;
 using Avalonia;
@@ -192,7 +193,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             }
             catch (DownloadTileException ex)
             {
-                _shellHost.Shell?.ShowMessage(
+                _shellHost.Shell?.RiseShellInfoMessage(
                     new ShellMessage(
                         ex.LocalizedTitle,
                         ex.LocalizedMessage,

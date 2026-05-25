@@ -13,21 +13,21 @@ public class ShellMessageEvent(IViewModel source, ShellMessage message)
 
 public static class ShellMessageEventMixin
 {
-    public static ValueTask RaiseShellInfoMessage(
+    public static ValueTask RiseShellInfoMessage(
         this IViewModel source,
         ShellMessage message,
-        CancellationToken cancel
+        CancellationToken cancel = default
     )
     {
         return source.Rise(new ShellMessageEvent(source, message), cancel);
     }
 
-    public static ValueTask RaiseShellErrorMessage(
+    public static ValueTask RiseShellErrorMessage(
         this IViewModel source,
         string title,
         string message,
         Exception exception,
-        CancellationToken cancel
+        CancellationToken cancel = default
     )
     {
         return source.Rise(

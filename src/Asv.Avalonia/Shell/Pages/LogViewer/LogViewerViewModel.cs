@@ -32,7 +32,6 @@ public class LogViewerViewModel
     private readonly ISearchService _search;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<LogMessageViewModel> _itemsSource = new();
-    private readonly Subject<Unit> _layoutChanged = new();
 
     public LogViewerViewModel()
         : base(
@@ -44,7 +43,6 @@ public class LogViewerViewModel
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        _layoutChanged.DisposeItWith(Disposable);
         Header = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
@@ -153,7 +151,6 @@ public class LogViewerViewModel
         _logReaderService = logReaderService;
         _search = search;
         _loggerFactory = loggerFactory;
-        _layoutChanged.DisposeItWith(Disposable);
         Header = RS.LogViewerViewModel_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
@@ -176,24 +173,11 @@ public class LogViewerViewModel
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Skip.Skip(1)
-            .Subscribe(_ =>
-            {
-                Search.Refresh();
-                _layoutChanged.OnNext(Unit.Default);
-            })
-            .DisposeItWith(Disposable);
-        Take.Skip(1).Subscribe(_ => _layoutChanged.OnNext(Unit.Default)).DisposeItWith(Disposable);
-        Search
-            .Text.ViewValue.Skip(1)
-            .Subscribe(_ => _layoutChanged.OnNext(Unit.Default))
-            .DisposeItWith(Disposable);
-
         Next = new ReactiveCommand(_ => Skip.Value += Take.Value).DisposeItWith(Disposable);
         Previous = new ReactiveCommand(_ =>
             Skip.Value = Math.Max(0, Skip.Value - Take.Value)
         ).DisposeItWith(Disposable);
-
+        Skip.Merge(Take).Subscribe(_ => Search.Refresh()).DisposeItWith(Disposable);
         Search.Refresh();
     }
 
@@ -227,10 +211,15 @@ public class LogViewerViewModel
 
     protected override void AfterLoadExtensions()
     {
+        var trigger = Search
+            .Text.ViewValue.Select(_ => Unit.Default)
+            .Merge(Skip.Select(_ => Unit.Default))
+            .Merge(Take.Select(_ => Unit.Default));
+
         Layout
-            .Register(nameof(LogViewerViewModel), LoadLayout, SaveLayout, _layoutChanged)
+            .Register(nameof(LogViewerViewModel), LoadLayout, SaveLayout, trigger)
             .DisposeItWith(Disposable);
-        Layout.LoadAllAsync(CancellationToken.None).SafeFireAndForget();
+        Layout.LoadWhenRootAttached(RootTracking).AddTo(ref DisposableBag);
     }
 
     private async Task UpdateImpl(

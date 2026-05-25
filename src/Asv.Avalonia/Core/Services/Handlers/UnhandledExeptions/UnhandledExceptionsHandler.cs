@@ -1,4 +1,5 @@
-﻿using Avalonia.Threading;
+﻿using Asv.Avalonia.InfoMessage;
+using Avalonia.Threading;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -71,8 +72,10 @@ public class UnhandledExceptionsHandler(
     {
         if (options.Value.UiThread.PublishToShell && shellHost.Shell is not null)
         {
-            shellHost.Shell.ShowMessage(
-                new ShellMessage("UI error", e.Exception.ToString(), ShellErrorState.Error)
+            shellHost.Shell.RiseShellErrorMessage(
+                "UI error",
+                "Unhandled exception in UI thread",
+                e.Exception
             );
         }
         if (options.Value.UiThread.PublishToLogger)
@@ -98,8 +101,10 @@ public class UnhandledExceptionsHandler(
         }
         if (options.Value.AppDomain.PublishToShell && shellHost.Shell is not null)
         {
-            shellHost.Shell.ShowMessage(
-                new ShellMessage("AppDomain error", ex.ToString(), ShellErrorState.Error)
+            shellHost.Shell.RiseShellErrorMessage(
+                "AppDomain error",
+                "Unhandled exception in AppDomain",
+                ex
             );
         }
         if (options.Value.AppDomain.PublishToLogger)
@@ -117,12 +122,10 @@ public class UnhandledExceptionsHandler(
         var eException = e.Exception;
         if (options.Value.TaskScheduler.PublishToShell && shellHost.Shell is not null)
         {
-            shellHost.Shell.ShowMessage(
-                new ShellMessage(
-                    "Task scheduler error",
-                    eException.ToString(),
-                    ShellErrorState.Error
-                )
+            shellHost.Shell.RiseShellErrorMessage(
+                "TaskScheduler error",
+                "Unhandled exception in TaskScheduler",
+                eException
             );
         }
         eException.Handle(ex => true);
@@ -143,9 +146,7 @@ public class UnhandledExceptionsHandler(
     {
         if (options.Value.R3.PublishToShell && shellHost.Shell is not null)
         {
-            shellHost.Shell.ShowMessage(
-                new ShellMessage("R3 Error", ex.ToString(), ShellErrorState.Error)
-            );
+            shellHost.Shell.RiseShellErrorMessage("R3 error", "Unhandled exception in R3", ex);
         }
         if (options.Value.R3.PublishToLogger)
         {

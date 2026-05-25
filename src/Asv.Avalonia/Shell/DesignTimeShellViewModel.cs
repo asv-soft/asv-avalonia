@@ -21,13 +21,13 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         StatusItems.Add(new NavigationStatusItemViewModel());
 
         int cnt = 0;
-        ErrorState = ShellErrorState.Error;
+        Messages.ErrorState = ShellErrorState.Error;
         var all = Enum.GetValues<ShellErrorState>().Length;
         TimeProvider.System.CreateTimer(
             _ =>
             {
                 cnt++;
-                ErrorState = Enum.GetValues<ShellErrorState>()[cnt % all];
+                Messages.ErrorState = Enum.GetValues<ShellErrorState>()[cnt % all];
 #pragma warning disable SA1117
             },
             null,

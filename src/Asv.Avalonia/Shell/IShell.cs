@@ -23,8 +23,6 @@ public interface IShell : IHasHeader, INavigationRoot<IViewModel>, ISupportLayou
     IReadOnlyObservableList<IPage> Pages { get; }
     BindableReactiveProperty<IPage?> SelectedPage { get; }
     ObservableList<IStatusItem> StatusItems { get; }
-    ShellErrorState ErrorState { get; set; }
-    void ShowMessage(ShellMessage message);
 }
 
 public readonly struct ShellMessage(

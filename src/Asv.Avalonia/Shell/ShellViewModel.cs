@@ -1,5 +1,4 @@
 using Asv.Avalonia.InfoMessage;
-using Asv.Cfg;
 using Asv.Common;
 using Asv.Modeling;
 using Avalonia.Controls;
@@ -7,7 +6,6 @@ using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
 using Material.Icons;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -15,28 +13,16 @@ using ZLogger;
 
 namespace Asv.Avalonia;
 
-public class ShellViewModelConfig
-{
-    public IList<string> Pages { get; set; } = [];
-    public string? SelectedPageId { get; set; } = string.Empty;
-}
-
 public class ShellViewModel : ViewModel<IShell>, IShell
 {
     private readonly IServiceProvider _ioc;
     public const string TypeId = "shell";
 
-    private const int MaxInfoBarMessages = 3;
-
     private readonly IAppPath _appPath;
     private readonly Subject<Unit> _onCloseEvent;
-    private readonly ObservableList<ShellMessageViewModel> _infoMessagesSource;
     private readonly ObservableList<IPage> _pages;
     private readonly ILogger<ShellViewModel> _logger;
 
-    private ShellViewModelConfig _config;
-    private bool _isLoaded;
-    private int _saveLayoutInProgress;
     private readonly IThemeService _themeService;
     private readonly IDialogService _dialogService;
 
@@ -60,7 +46,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         _ioc = ioc;
         _appPath = appPath;
         _logger = loggerFactory.CreateLogger<ShellViewModel>();
-        _config = new ShellViewModelConfig();
         _themeService = themeService;
         _dialogService = dialogService;
 
@@ -71,10 +56,10 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         var store = new NavigationStore("nav");
         Navigation = new NavigationController<IViewModel>(this, store).DisposeItWith(Disposable);
 
-        var path = _appPath.GetPageFolder(new NavId(TypeId), "layout");
+        var layoutPath = _appPath.GetPageFolder(new NavId(TypeId), "layout");
         LayoutManager = new LayoutManager<IViewModel>(
             this,
-            new JsonTokenLayoutStore(path, _logger)
+            new JsonTokenLayoutStore(layoutPath, _logger)
         ).DisposeItWith(Disposable);
 
         WindowSateIconKind = new BindableReactiveProperty<MaterialIconKind>().DisposeItWith(
@@ -89,6 +74,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         _pages = [];
         _pages.DisposeRemovedItems().DisposeItWith(Disposable);
         _pages.SetRoutableParent(this).DisposeItWith(Disposable);
+        R3.Disposable.Create(() => _pages.Clear()).AddTo(ref DisposableBag);
+
         PagesView = _pages.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
 
         #endregion
@@ -116,56 +103,28 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         LeftMenu = new ObservableList<IMenuItem>();
         LeftMenuView = new MenuTree(LeftMenu);
-        LeftMenu.Sort(HeadlinedComparer.Instance);
+        LeftMenu.Sort(ISupportOrder.Comparer.Instance);
         LeftMenu
             .ObserveAdd()
-            .Subscribe(_ => LeftMenu.Sort(HeadlinedComparer.Instance))
+            .Subscribe(_ => LeftMenu.Sort(ISupportOrder.Comparer.Instance))
             .DisposeItWith(Disposable);
         LeftMenu.SetRoutableParent(this).DisposeItWith(Disposable);
         LeftMenu.DisposeRemovedItems().DisposeItWith(Disposable);
 
         RightMenu = new ObservableList<IMenuItem>();
         RightMenuView = new MenuTree(RightMenu);
-        RightMenu.Sort(HeadlinedComparer.Instance);
+        RightMenu.Sort(ISupportOrder.Comparer.Instance);
         RightMenu
             .ObserveAdd()
-            .Subscribe(_ => RightMenu.Sort(HeadlinedComparer.Instance))
+            .Subscribe(_ => RightMenu.Sort(ISupportOrder.Comparer.Instance))
             .DisposeItWith(Disposable);
         RightMenu.SetRoutableParent(this).DisposeItWith(Disposable);
         RightMenu.DisposeRemovedItems().DisposeItWith(Disposable);
 
-        _infoMessagesSource = new ObservableList<ShellMessageViewModel>();
-        InfoBarMessages = _infoMessagesSource
-            .ToNotifyCollectionChangedSlim()
-            .DisposeItWith(Disposable);
-        _infoMessagesSource.SetRoutableParent(this).DisposeItWith(Disposable);
-        _infoMessagesSource.DisposeRemovedItems().DisposeItWith(Disposable);
-        _infoMessagesSource
-            .ObserveCountChanged()
-            .Subscribe(_ =>
-            {
-                var last = _infoMessagesSource.LastOrDefault();
-                if (last is null)
-                {
-                    ErrorState = ShellErrorState.Normal;
-                    return;
-                }
-                if (last.Severity == ShellErrorState.Error)
-                {
-                    ErrorState = ShellErrorState.Error;
-                    return;
-                }
-                if (last.Severity == ShellErrorState.Warning)
-                {
-                    ErrorState = ShellErrorState.Warning;
-                    return;
-                }
-                ErrorState = ShellErrorState.Normal;
-            })
-            .DisposeItWith(Disposable);
-
+        Messages = new ShellMessageCollection().AddTo(ref DisposableBag);
+        Messages.SetParent(this);
         CloseInfoMessageCommand = new ReactiveCommand<ShellMessageViewModel>(x =>
-            _infoMessagesSource.Remove(x)
+            Messages.ItemsSource.Remove(x)
         ).DisposeItWith(Disposable);
 
         Events.Catch<ShellMessageEvent>(x => ShowMessage(x.Message)).DisposeItWith(Disposable);
@@ -174,6 +133,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .DisposeItWith(Disposable);
         Events.Catch<PageCloseRequestedEvent>((_, e, _) => ClosePage(e)).DisposeItWith(Disposable);
     }
+
+    public ShellMessageCollection Messages { get; }
 
     protected ILogger Logger => _logger;
 
@@ -195,15 +156,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     public ObservableList<IStatusItem> StatusItems { get; }
     public NotifyCollectionChangedSynchronizedViewList<IStatusItem> StatusItemsView { get; }
     public ReactiveCommand<ShellMessageViewModel> CloseInfoMessageCommand { get; }
-    public NotifyCollectionChangedSynchronizedViewList<ShellMessageViewModel> InfoBarMessages { get; }
 
     protected ObservableList<IPage> InternalPages => _pages;
-
-    public ShellErrorState ErrorState
-    {
-        get;
-        set => SetField(ref field, value);
-    }
 
     public string Header
     {
@@ -260,12 +214,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     public void ShowMessage(ShellMessage message)
     {
-        if (_infoMessagesSource.Count >= MaxInfoBarMessages)
-        {
-            _infoMessagesSource.RemoveAt(0);
-        }
-
-        _infoMessagesSource.Add(
+        Messages.ItemsSource.Add(
             new ShellMessageViewModel(Guid.NewGuid().ToString(), CloseInfoMessageCommand, message)
         );
     }
@@ -344,16 +293,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             GetType().Name,
             string.Join(" ", args)
         );
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _pages.ClearWithItemsDispose();
-        }
-
-        base.Dispose(disposing);
     }
 
     private void GotFocusHandler(TopLevel top, RoutedEventArgs args)
@@ -437,86 +376,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         catch (Exception exception)
         {
             _logger.LogError(exception, "Failed to restart the application.");
-        }
-    }
-
-    private void LoadLayout(ShellViewModelConfig config)
-    {
-        LoadLayoutAsync(config).SafeFireAndForget();
-    }
-
-    private async ValueTask LoadLayoutAsync(
-        ShellViewModelConfig config,
-        CancellationToken cancellationToken = default
-    )
-    {
-        if (_isLoaded)
-        {
-            return;
-        }
-
-        try
-        {
-            _config = config;
-            _logger.ZLogInformation($"Try to load layout: {string.Join(",", _config.Pages)}");
-            foreach (var page in _config.Pages)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await this.NavigateByPath(NavPath.Parse(page));
-            }
-
-            NavPath? navPathToGo = null;
-            if (_config.SelectedPageId is not null)
-            {
-                navPathToGo = Pages
-                    .FirstOrDefault(page => page.Id.ToString() == _config.SelectedPageId)
-                    ?.GetPathFromRoot();
-            }
-
-            navPathToGo ??= Pages.FirstOrDefault()?.GetPathFromRoot();
-            if (navPathToGo is not null)
-            {
-                await Navigation.GoTo(navPathToGo.Value);
-            }
-
-            if (Pages.Count == 0)
-            {
-                await this.NavigateByPath(new NavPath(new NavId(HomePageViewModel.PageId)));
-            }
-
-            _isLoaded = true;
-        }
-        catch (Exception e)
-        {
-            _logger.ZLogError(e, $"Error loading layout: {e.Message}");
-        }
-        finally { }
-    }
-
-    private ShellViewModelConfig? SaveLayout()
-    {
-        if (Interlocked.CompareExchange(ref _saveLayoutInProgress, 1, 0) != 0)
-        {
-            _logger.LogWarning("Save layout is already in progress");
-            return null;
-        }
-
-        try
-        {
-            _config.Pages = Pages.Select(page => page.Id.ToString()).ToList();
-            _config.SelectedPageId = SelectedPage.Value?.Id.ToString();
-
-            _logger.ZLogTrace($"Save layout: {string.Join(",", _config.Pages)}");
-            return _config;
-        }
-        catch (Exception e)
-        {
-            _logger.LogError(e, "Error saving layout: {EMessage}", e.Message);
-            return null;
-        }
-        finally
-        {
-            Interlocked.Exchange(ref _saveLayoutInProgress, 0);
         }
     }
 
