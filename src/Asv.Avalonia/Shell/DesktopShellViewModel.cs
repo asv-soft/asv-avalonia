@@ -187,33 +187,6 @@ public sealed class DesktopShellViewModel : ShellViewModel
         }
     }
 
-    protected override void RestartApplication(string[] args)
-    {
-        var exePath = Environment.ProcessPath;
-        if (string.IsNullOrWhiteSpace(exePath))
-        {
-            Logger.LogError("Failed to get path of the application");
-            return;
-        }
-
-        StartProcess(exePath, args);
-    }
-
-    private void StartProcess(string exePath, string[] args)
-    {
-        var psi = new ProcessStartInfo { FileName = exePath, UseShellExecute = false };
-
-        foreach (var arg in args)
-        {
-            psi.ArgumentList.Add(arg);
-        }
-
-        Process.Start(psi);
-        Logger.ZLogInformation(
-            $"Application restarted successfully with arguments: {string.Join(" ", args)} and path {exePath}."
-        );
-    }
-
     private void OnDragOver(object? sender, DragEventArgs e)
     {
         e.DragEffects = DragDropEffects.Copy;
