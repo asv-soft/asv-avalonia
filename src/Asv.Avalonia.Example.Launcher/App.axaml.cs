@@ -15,7 +15,10 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new LauncherWindow();
+            desktop.MainWindow = new LauncherWindow
+            {
+                DataContext = new LauncherWindowViewModel(Program.StartupArgs),
+            };
         }
 
         base.OnFrameworkInitializationCompleted();

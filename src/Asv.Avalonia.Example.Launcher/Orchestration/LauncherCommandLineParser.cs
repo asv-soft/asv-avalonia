@@ -7,14 +7,18 @@ namespace Asv.Avalonia.Example.Launcher.Orchestration;
 
 public static class LauncherCommandLineParser
 {
-    public static bool TryParse(string[] args, out LauncherStartOptions? options, out string error)
+    public static bool TryParse(
+        string[] args,
+        out LauncherStartOptions? options,
+        out string errorMessage
+    )
     {
         options = null;
-        error = string.Empty;
+        errorMessage = string.Empty;
 
         if (args.Length == 0)
         {
-            error = "Missing launcher arguments.";
+            errorMessage = "Missing launcher arguments.";
             return false;
         }
 
@@ -41,32 +45,32 @@ public static class LauncherCommandLineParser
                     passthroughMode = true;
                     break;
                 case LauncherCommandLineArguments.TargetArg:
-                    if (!TryReadValue(args, ref i, out targetPath, out error))
+                    if (!TryReadValue(args, ref i, out targetPath, out errorMessage))
                     {
                         return false;
                     }
                     break;
                 case LauncherCommandLineArguments.PipeArg:
-                    if (!TryReadValue(args, ref i, out pipeName, out error))
+                    if (!TryReadValue(args, ref i, out pipeName, out errorMessage))
                     {
                         return false;
                     }
                     break;
                 case LauncherCommandLineArguments.TokenArg:
-                    if (!TryReadValue(args, ref i, out sessionToken, out error))
+                    if (!TryReadValue(args, ref i, out sessionToken, out errorMessage))
                     {
                         return false;
                     }
                     break;
                 case LauncherCommandLineArguments.TimeoutSecArg:
-                    if (!TryReadValue(args, ref i, out var timeoutRaw, out error))
+                    if (!TryReadValue(args, ref i, out var timeoutRaw, out errorMessage))
                     {
                         return false;
                     }
 
                     if (int.TryParse(timeoutRaw, out var timeoutSec) == false || timeoutSec <= 0)
                     {
-                        error =
+                        errorMessage =
                             $"Invalid {LauncherCommandLineArguments.TimeoutSecArg} value: '{timeoutRaw}'.";
                         return false;
                     }
@@ -74,14 +78,14 @@ public static class LauncherCommandLineParser
                     startupTimeout = TimeSpan.FromSeconds(timeoutSec);
                     break;
                 default:
-                    error = $"Unknown launcher argument: '{current}'.";
+                    errorMessage = $"Unknown launcher argument: '{current}'.";
                     return false;
             }
         }
 
         if (string.IsNullOrWhiteSpace(targetPath))
         {
-            error =
+            errorMessage =
                 $"Missing required argument: {LauncherCommandLineArguments.TargetArg} <path-to-executable>.";
             return false;
         }

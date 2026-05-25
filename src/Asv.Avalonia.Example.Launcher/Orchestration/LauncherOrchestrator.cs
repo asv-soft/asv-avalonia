@@ -68,25 +68,23 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
             )
         );
 
+        using var startupTimeoutCts = new CancellationTokenSource(options.StartupTimeout);
+        using var waitCts = CancellationTokenSource.CreateLinkedTokenSource(
+            cancellationToken,
+            startupTimeoutCts.Token
+        );
         var processExitTask = process.WaitForExitAsync(cancellationToken);
-        var timeoutTask = Task.Delay(options.StartupTimeout, cancellationToken);
 
         while (true)
         {
-            var signalTask = WaitForSignalAsync(options, cancellationToken);
-            var completedTask = await Task.WhenAny(signalTask, processExitTask, timeoutTask)
+            var signalTask = WaitForSignalAsync(options, waitCts.Token);
+            var completedTask = await Task.WhenAny(signalTask, processExitTask)
                 .ConfigureAwait(false);
-
-            if (ReferenceEquals(completedTask, timeoutTask))
-            {
-                return new LauncherRunResult(
-                    LauncherExitCode.StartupTimeout,
-                    $"Startup timeout ({options.StartupTimeout})."
-                );
-            }
 
             if (ReferenceEquals(completedTask, processExitTask))
             {
+                await CancelSignalWaitAsync(waitCts, signalTask).ConfigureAwait(false);
+                await processExitTask.ConfigureAwait(false);
                 return new LauncherRunResult(
                     LauncherExitCode.TargetExitedBeforeReady,
                     "Target process exited before READY signal.",
@@ -98,6 +96,21 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
             try
             {
                 signalMessage = await signalTask.ConfigureAwait(false);
+            }
+            catch (OperationCanceledException)
+                when (startupTimeoutCts.IsCancellationRequested
+                    && !cancellationToken.IsCancellationRequested
+                )
+            {
+                TryTerminateTargetProcess(process);
+                return new LauncherRunResult(
+                    LauncherExitCode.StartupTimeout,
+                    $"Startup timeout ({options.StartupTimeout}). Target process did not report READY."
+                );
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
             }
             catch (Exception ex)
             {
@@ -132,6 +145,41 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
                         signalMessage.Signal
                     );
             }
+        }
+    }
+
+    private static async Task CancelSignalWaitAsync(
+        CancellationTokenSource cancellationTokenSource,
+        Task<LauncherIpcMessage> signalTask
+    )
+    {
+        if (!signalTask.IsCompleted)
+        {
+            await cancellationTokenSource.CancelAsync().ConfigureAwait(false);
+        }
+
+        try
+        {
+            await signalTask.ConfigureAwait(false);
+        }
+        catch
+        {
+            // The signal wait is being canceled because another terminal condition already won.
+        }
+    }
+
+    private static void TryTerminateTargetProcess(Process process)
+    {
+        try
+        {
+            if (!process.HasExited)
+            {
+                process.Kill(entireProcessTree: true);
+            }
+        }
+        catch
+        {
+            // Best-effort cleanup after startup timeout.
         }
     }
 
