@@ -38,11 +38,9 @@
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Styles/Palette/Brushes.axaml" />
-
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/TransparentButtonStyles.axaml" />
-                <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/TabStyles.axaml" />
-
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Styles/Palette/Brushes.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Styles/Styles/TransparentButtonStyles.axaml" />
+                <MergeResourceInclude Source="avares://Asv.Avalonia/Styles/Styles/TabStyles.axaml" />
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Items/ItemsListStyles.axaml" />
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/Tools/ToolsListStyles.axaml" />
                 <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Controls/ContentDialog/ContentDialogStyles.axaml" />
@@ -56,12 +54,12 @@
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Dark">
                     <ResourceDictionary.MergedDictionaries>
-                        <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Styles/Palette/Dark.axaml" />
+                        <MergeResourceInclude Source="avares://Asv.Avalonia/Styles/Palette/Dark.axaml" />
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Default">
                     <ResourceDictionary.MergedDictionaries>
-                        <MergeResourceInclude Source="avares://Asv.Avalonia/Core/Styles/Palette/Default.axaml" />
+                        <MergeResourceInclude Source="avares://Asv.Avalonia/Styles/Palette/Default.axaml" />
                     </ResourceDictionary.MergedDictionaries>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
@@ -93,13 +91,13 @@
     <FluentTheme></FluentTheme>
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/BorderStyles.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/EllipseStyles.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/MaterialIconStyles.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/ProgressBarStyles.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/TextBlockStyles.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/TextBoxStyles.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Styles/PathStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/BorderStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/EllipseStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/MaterialIconStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/ProgressBarStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/TextBlockStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/TextBoxStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/PathStyles.axaml" />
 
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Workspace/Workspace.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Workspace/WorkspaceItem.axaml" />

@@ -5,7 +5,7 @@
     RequestedThemeVariant="Dark"
 >
     <Application.Styles>
-        <StyleInclude Source="avares://Asv.Avalonia/Core/Styles/Theme.axaml" />
+        <StyleInclude Source="avares://Asv.Avalonia/Theme.axaml" />
         <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Theme.axaml" />
 
         <Style Selector="Border.BlockInnerStyle">

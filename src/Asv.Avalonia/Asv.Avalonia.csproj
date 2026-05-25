@@ -161,20 +161,6 @@
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextBoxView.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextView.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemUnsavedChangesView.axaml" />
-      <AdditionalFiles Include="Core\Styles\Palette\Brushes.axaml" />
-      <AdditionalFiles Include="Core\Styles\Palette\Dark.axaml" />
-      <AdditionalFiles Include="Core\Styles\Palette\Default.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\BorderStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\ButtonStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\EllipseStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\MaterialIconStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\PathStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\ProgressBarStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\TabStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\TextBlockStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\TextBoxStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Styles\TransparentButtonStyles.axaml" />
-      <AdditionalFiles Include="Core\Styles\Theme.axaml" />
       <AdditionalFiles Include="Shell\Pages\Settings\Subpages\Units\SettingsUnitsView.axaml" />
       <AdditionalFiles Include="Shell\Window\DebugWindow\DebugWindow.axaml" />
     </ItemGroup>
