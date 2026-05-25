@@ -15,15 +15,8 @@ public sealed class NamedPipeLauncherSignalServer : ILauncherSignalServer
 
     public NamedPipeLauncherSignalServer(string pipeName, string sessionToken)
     {
-        if (string.IsNullOrWhiteSpace(pipeName))
-        {
-            throw new ArgumentException("Pipe name is required.", nameof(pipeName));
-        }
-
-        if (string.IsNullOrWhiteSpace(sessionToken))
-        {
-            throw new ArgumentException("Session token is required.", nameof(sessionToken));
-        }
+        ArgumentNullException.ThrowIfNull(pipeName);
+        ArgumentNullException.ThrowIfNull(sessionToken);
 
         _pipeName = pipeName;
         _sessionToken = sessionToken;
