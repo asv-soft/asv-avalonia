@@ -4,4 +4,5 @@ public static class LauncherCommandLineArguments
 {
     public const string LauncherPipeArg = "--launcher-pipe";
     public const string LauncherTokenArg = "--launcher-token";
+    public const string LauncherPathArg = "--launcher-path";
 }

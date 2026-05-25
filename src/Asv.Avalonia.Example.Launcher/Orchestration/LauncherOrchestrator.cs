@@ -9,6 +9,7 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
 {
     public const string LauncherPipeArg = LauncherCommandLineArguments.LauncherPipeArg;
     public const string LauncherTokenArg = LauncherCommandLineArguments.LauncherTokenArg;
+    public const string LauncherPathArg = LauncherCommandLineArguments.LauncherPathArg;
 
     private readonly ILauncherSignalServerFactory _signalServerFactory;
 
@@ -162,6 +163,12 @@ public sealed class LauncherOrchestrator : ILauncherOrchestrator
 
         startInfo.ArgumentList.Add($"{LauncherPipeArg}={options.PipeName}");
         startInfo.ArgumentList.Add($"{LauncherTokenArg}={options.SessionToken}");
+
+        var launcherPath = Environment.ProcessPath;
+        if (!string.IsNullOrWhiteSpace(launcherPath))
+        {
+            startInfo.ArgumentList.Add($"{LauncherPathArg}={launcherPath}");
+        }
 
         return startInfo;
     }
