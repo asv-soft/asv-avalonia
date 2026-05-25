@@ -5,6 +5,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.LogicalTree;
+using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
@@ -25,6 +26,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     private readonly IThemeService _themeService;
     private readonly IDialogService _dialogService;
+    private bool _isOpeningHomePage;
 
     protected ShellViewModel(
         IServiceProvider ioc,
@@ -85,6 +87,10 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         );
 
         SelectedPage = new BindableReactiveProperty<IPage?>().DisposeItWith(Disposable);
+        _pages
+            .ObserveChanged()
+            .SubscribeAwait((_, cancel) => OpenHomePageIfNoPages(cancel), AwaitOperation.Drop)
+            .DisposeItWith(Disposable);
 
         MainMenu = new ObservableList<IMenuItem>();
         MainMenuView = new MenuTree(MainMenu).DisposeItWith(Disposable);
@@ -244,6 +250,15 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .AddTo(ref DisposableBag);
 
         Layout.LoadWhenRootAttached(RootTracking).AddTo(ref DisposableBag);
+        RootTracking
+            .ExecuteWhenRootAttached(_ =>
+                Dispatcher.UIThread.Post(
+                    () =>
+                        OpenHomePageIfNoPages(CancellationToken.None).AsTask().SafeFireAndForget(),
+                    DispatcherPriority.Background
+                )
+            )
+            .DisposeItWith(Disposable);
     }
 
     protected virtual async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
@@ -329,32 +344,31 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         await TryCloseAsync(restart.Cancel);
     }
 
-    private async ValueTask ClosePage(PageCloseRequestedEvent close)
+    private ValueTask ClosePage(PageCloseRequestedEvent close)
     {
         _logger.ZLogInformation($"Close page [{close.Page.Id}]");
 
         if (_pages is [HomePageViewModel])
         {
-            return;
+            return ValueTask.CompletedTask;
         }
 
         var current = SelectedPage.Value;
         var removedIndex = _pages.IndexOf(close.Page);
         if (removedIndex < 0)
         {
-            return;
+            return ValueTask.CompletedTask;
         }
 
         _pages.Remove(close.Page);
 
-        if (_pages.Count == 0)
-        {
-            await Navigation.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)));
-            return;
-        }
-
         if (current?.Id == close.Page.Id)
         {
+            if (_pages.Count == 0)
+            {
+                return ValueTask.CompletedTask;
+            }
+
             SelectedPage.Value = null;
             var newIndex = removedIndex < _pages.Count ? removedIndex : 0;
             SelectedPage.Value = _pages[newIndex];
@@ -363,6 +377,27 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         {
             SelectedPage.Value = null;
             SelectedPage.Value = current;
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    private async ValueTask OpenHomePageIfNoPages(CancellationToken cancel)
+    {
+        if (IsDisposed || _pages.Count != 0 || _isOpeningHomePage)
+        {
+            return;
+        }
+
+        _isOpeningHomePage = true;
+        try
+        {
+            cancel.ThrowIfCancellationRequested();
+            await this.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)));
+        }
+        finally
+        {
+            _isOpeningHomePage = false;
         }
     }
 
