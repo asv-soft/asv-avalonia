@@ -39,9 +39,9 @@ namespace Asv.Avalonia.GeoMap;
 public sealed partial class MapRuler : UserControl
 {
     private const string ToggleControlName = "PART_Toggle";
-    private const string FirstAnchorName = "ruler.start";
-    private const string SecondAnchorName = "ruler.stop";
-    private const string LineAnchorName = "ruler.line";
+    private const string FirstAnchorName = "ruler_start";
+    private const string SecondAnchorName = "ruler_stop";
+    private const string LineAnchorName = "ruler_line";
     private const double RulerStrokeThickness = 4.0;
     private static readonly IBrush RulerBrush = Brushes.Indigo;
     private static readonly double[] RulerPattern = [2.0, 2.0];
@@ -58,9 +58,9 @@ public sealed partial class MapRuler : UserControl
 
     private RulerState _state = RulerState.Idle;
     private GeoPoint? _firstPoint;
-    private MapAnchor<IMapAnchor>? _start;
-    private MapAnchor<IMapAnchor>? _stop;
-    private MapAnchor<IMapAnchor>? _line;
+    private IMapAnchor? _start;
+    private IMapAnchor? _stop;
+    private IMapAnchor? _line;
     private DisposableBag _activeSubs;
     private IList<IMapAnchor>? _ownedAnchorsList;
     private InputElement? _clickSurface;
@@ -229,9 +229,9 @@ public sealed partial class MapRuler : UserControl
         {
             DashStyle = new DashStyle(RulerPattern, 0),
         };
-        _line = new MapAnchor<IMapAnchor>(LineAnchorName)
+        _line = new MapAnchor(LineAnchorName)
         {
-            Title = string.Empty,
+            Header = string.Empty,
             IsReadOnly = true,
             IsAnnotationVisible = false,
             IsPolygonClosed = false,
@@ -371,15 +371,15 @@ public sealed partial class MapRuler : UserControl
 
         var d = GeoMath.Distance(_start.Location, _stop.Location);
         var unit = UnitService.Units[DistanceUnit.Id].CurrentUnitItem.Value;
-        _stop.Title = unit.PrintFromSiWithUnits(d, "F1");
+        _stop.Header = unit.PrintFromSiWithUnits(d, "F1");
     }
 
     #endregion
 
     #region Endpoint factory
 
-    private static MapAnchor<IMapAnchor> CreateEndpoint(string id, GeoPoint location) =>
-        new(id)
+    private static IMapAnchor CreateEndpoint(string id, GeoPoint location) =>
+        new MapAnchor(id)
         {
             Location = location,
             Icon = MaterialIconKind.MapMarker,

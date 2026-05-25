@@ -32,12 +32,12 @@
                     BorderThickness="1"
                     BorderBrush="White"
                     x:Name="PART_Annotation"
-                    IsVisible="{Binding !!Title.Length}"
+                    IsVisible="{Binding !!Header.Length}"
                     Padding="3"
                     CornerRadius="3"
                     Background="#4a148c"
                 >
-                    <TextBlock Text="{ReflectionBinding Title}" />
+                    <TextBlock Text="{ReflectionBinding Header}" />
                 </Border>
             </DataTemplate>
         </map:MapItemsControl.AnnotationTemplate>

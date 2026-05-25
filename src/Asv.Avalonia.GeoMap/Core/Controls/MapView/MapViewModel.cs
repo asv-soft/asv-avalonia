@@ -12,7 +12,7 @@ public class MapViewModel : ViewModel, IMap
         : this(DesignTime.Id.TypeId, NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
-        var drone = new MapAnchor<IMapAnchor>(DesignTime.Id.TypeId)
+        var drone = new MapAnchor(DesignTime.Id.TypeId)
         {
             Icon = MaterialIconKind.Navigation,
             Location = new GeoPoint(53, 53, 100),

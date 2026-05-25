@@ -182,9 +182,9 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 CanExpand = true,
                 Anchors =
                 {
-                    new MapAnchor<IMapAnchor>("drone1")
+                    new MapAnchor("drone1")
                     {
-                        Title = "Drone 1",
+                        Header = "Drone 1",
                         Location = new GeoPoint(53.0, 53.0, 100),
                         Icon = MaterialIconKind.Airplane,
                     },

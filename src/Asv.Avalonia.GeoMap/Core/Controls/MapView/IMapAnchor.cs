@@ -1,19 +1,14 @@
 ﻿using Asv.Common;
 using Avalonia.Media;
-using Material.Icons;
 using ObservableCollections;
-using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public interface IMapAnchor : IViewModel
+public interface IMapAnchor : IHasIcon, IHasHeader
 {
-    MaterialIconKind Icon { get; set; }
-    string Title { get; set; }
     double Azimuth { get; set; }
     GeoPoint Location { get; set; }
     double IconSize { get; set; }
-    AsvColorKind IconColor { get; set; }
     HorizontalOffset CenterX { get; set; }
     VerticalOffset CenterY { get; set; }
     bool IsReadOnly { get; set; }
@@ -24,5 +19,6 @@ public interface IMapAnchor : IViewModel
     IBrush? PolygonFill { get; set; }
     bool IsPolygonClosed { get; set; }
     bool IsAnnotationVisible { get; set; }
+    ObservableList<GeoPoint> Polygon { get; }
     NotifyCollectionChangedSynchronizedViewList<GeoPoint> PolygonView { get; }
 }

@@ -88,7 +88,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
     private void CreateEditableAnchorCircle(int pointCount, double radiusMeters)
     {
-        var path = new MapAnchor<IMapAnchor>("editable-anchor-path")
+        var path = new MapAnchor("editable-anchor-path")
         {
             IsVisible = true,
             IsPolygonClosed = true,
@@ -98,10 +98,10 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
         for (var i = 0; i < pointCount; i++)
         {
-            var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}")
+            var anchor = new MapAnchor($"editable-anchor-{i}")
             {
                 Icon = MaterialIconKind.MapMarker,
-                Title = string.Format(RS.MapTestPageViewModel_Anchor_Editable, i),
+                Header = string.Format(RS.MapTestPageViewModel_Anchor_Editable, i),
                 IsAnnotationVisible = false,
                 CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0),
                 Location = _centerPoint.RadialPoint(radiusMeters, 360.0 / pointCount * i),
@@ -222,7 +222,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
         );
     }
 
-    private MapAnchor<IMapAnchor> AddAnchor(
+    private MapAnchor AddAnchor(
         string id,
         MaterialIconKind icon,
         string title,
@@ -233,10 +233,10 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
         double? azimuth = null
     )
     {
-        var anchor = new MapAnchor<IMapAnchor>(id)
+        var anchor = new MapAnchor(id)
         {
             Icon = icon,
-            Title = title,
+            Header = title,
             IsReadOnly = true,
             IsAnnotationVisible = true,
             Location = location,
@@ -264,7 +264,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
             useMapRotation: true
         );
 
-        var planeTrail = new MapAnchor<IMapAnchor>("plane-trail")
+        var planeTrail = new MapAnchor("plane-trail")
         {
             IsVisible = false,
             IsPolygonClosed = false,
@@ -287,10 +287,10 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     }
 
     private static void UpdatePlanePose(
-        MapAnchor<IMapAnchor> plane,
+        MapAnchor plane,
         GeoPoint centerPoint,
         double phase,
-        MapAnchor<IMapAnchor> planeTrail
+        MapAnchor planeTrail
     )
     {
         var sinPhase = Math.Sin(phase);
@@ -304,7 +304,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
         plane.Location = OffsetFromCenter(centerPoint, eastOffset, northOffset);
         plane.Azimuth = Math.Atan2(eastVelocity, northVelocity) * 180.0 / Math.PI;
-        plane.Title = string.Format(
+        plane.Header = string.Format(
             RS.MapTestPageViewModel_Anchor_PlaneAzimuth,
             $"{NormalizeAngle(plane.Azimuth):F0}"
         );
@@ -349,7 +349,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     {
         RemoveHeavyPolygon();
 
-        var anchor = new MapAnchor<IMapAnchor>(HeavyPolygonAnchorId)
+        var anchor = new MapAnchor(HeavyPolygonAnchorId)
         {
             IsVisible = true,
             IsPolygonClosed = true,

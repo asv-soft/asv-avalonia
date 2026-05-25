@@ -54,7 +54,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         var centerPoint = MapViewModel.CenterMap.Value;
         var pointCount = 36;
 
-        var path = new MapAnchor<IMapAnchor>("editanle-anchor-path");
+        var path = new MapAnchor("editanle-anchor-path");
         path.IsVisible = true;
         path.IsPolygonClosed = true;
         path.PolygonPen = new Pen(new SolidColorBrush(Colors.Black), 2);
@@ -62,9 +62,9 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         MapViewModel.Anchors.Add(path);
         for (int i = 0; i < pointCount; i++)
         {
-            var anchor = new MapAnchor<IMapAnchor>($"editable-anchor-{i}");
+            var anchor = new MapAnchor($"editable-anchor-{i}");
             anchor.Icon = MaterialIconKind.MapMarker;
-            anchor.Title = $"Anchor {i}";
+            anchor.Header = $"Anchor {i}";
             anchor.IsAnnotationVisible = false;
             anchor.CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0);
             anchor.Location = centerPoint.RadialPoint(1000, 360.0 / pointCount * i);
@@ -80,9 +80,9 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
                 })
                 .DisposeItWith(Disposable);
         }
-        var plane = new MapAnchor<IMapAnchor>("plane");
+        var plane = new MapAnchor("plane");
         plane.Icon = MaterialIconKind.Navigation;
-        plane.Title = "Plane";
+        plane.Header = "Plane";
         plane.IsReadOnly = true;
         plane.IsAnnotationVisible = true;
         plane.CenterX = new HorizontalOffset(HorizontalOffsetEnum.Center, 0);
@@ -90,7 +90,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         plane.UseMapRotation = true;
         MapViewModel.Anchors.Add(plane);
 
-        var planeTrail = new MapAnchor<IMapAnchor>("plane-trail");
+        var planeTrail = new MapAnchor("plane-trail");
         planeTrail.IsVisible = false;
         plane.IsReadOnly = true;
         planeTrail.IsPolygonClosed = false;
@@ -126,10 +126,10 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
     public ILoggerFactory LoggerFactory { get; }
 
     private static void UpdatePlanePose(
-        MapAnchor<IMapAnchor> plane,
+        MapAnchor plane,
         GeoPoint centerPoint,
         double phase,
-        MapAnchor<IMapAnchor> planeTrail
+        MapAnchor planeTrail
     )
     {
         var sinPhase = Math.Sin(phase);
@@ -143,7 +143,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
         plane.Location = OffsetFromCenter(centerPoint, eastOffset, northOffset);
         plane.Azimuth = Math.Atan2(eastVelocity, northVelocity) * 180.0 / Math.PI;
-        plane.Title = $"Plane {NormalizeAngle(plane.Azimuth):F0}°";
+        plane.Header = $"Plane {NormalizeAngle(plane.Azimuth):F0}°";
 
         planeTrail.Polygon.Add(plane.Location);
         while (planeTrail.Polygon.Count > PlaneTrailLength)
