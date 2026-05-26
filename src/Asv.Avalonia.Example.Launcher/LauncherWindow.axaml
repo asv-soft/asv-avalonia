@@ -27,21 +27,21 @@
             FontSize="16"
             TextAlignment="Center"
             TextWrapping="Wrap"
-            Text="{Binding Status}"
+            Text="{Binding Status.Value}"
         />
         <ProgressBar
             Grid.Row="2"
             Margin="24,0,24,0"
-            IsIndeterminate="{Binding IsProgressIndeterminate}"
+            IsIndeterminate="{Binding IsProgressIndeterminate.Value}"
             Minimum="0"
             Maximum="1"
-            Value="{Binding Progress}"
+            Value="{Binding Progress.Value}"
         />
         <Button
             Grid.Row="3"
             Margin="24,12,24,0"
             HorizontalAlignment="Stretch"
-            IsVisible="{Binding IsCloseVisible}"
+            IsVisible="{Binding IsCloseVisible.Value}"
             Command="{Binding CloseCommand}"
             Content="Close"
         />

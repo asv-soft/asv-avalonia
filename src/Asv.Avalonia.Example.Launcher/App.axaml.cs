@@ -6,6 +6,8 @@ namespace Asv.Avalonia.Example.Launcher;
 
 public partial class App : Application
 {
+    private LauncherWindowViewModel? _viewModel;
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
@@ -15,12 +17,17 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            desktop.MainWindow = new LauncherWindow
-            {
-                DataContext = new LauncherWindowViewModel(Program.StartupArgs),
-            };
+            _viewModel = new LauncherWindowViewModel(Program.StartupArgs);
+            desktop.MainWindow = new LauncherWindow { DataContext = _viewModel };
+            desktop.Exit += (_, _) => DisposeViewModel();
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void DisposeViewModel()
+    {
+        _viewModel?.Dispose();
+        _viewModel = null;
     }
 }

@@ -32,6 +32,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)" />
         <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="AvaloniaUI.DiagnosticsSupport" Version="2.2.0" />
         <PackageReference Include="R3" Version="$(R3Version)" />
+        <PackageReference Include="R3Extensions.Avalonia" Version="$(R3Version)" />
         <PackageReference Include="Roslynator.Analyzers" Version="4.14.0">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
