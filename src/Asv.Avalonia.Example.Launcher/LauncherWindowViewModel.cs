@@ -45,7 +45,7 @@ public sealed class LauncherWindowViewModel : IDisposable
     private volatile int _isStarted;
 
     public LauncherWindowViewModel()
-        : this([], null, false)
+        : this([], NullLauncherOrchestrator.Instance)
     {
         if (!Design.IsDesignMode)
         {
@@ -55,14 +55,7 @@ public sealed class LauncherWindowViewModel : IDisposable
 
     public LauncherWindowViewModel(
         IReadOnlyList<string> startupArgs,
-        ILauncherOrchestrator? orchestrator = null
-    )
-        : this(startupArgs, orchestrator, true) { }
-
-    private LauncherWindowViewModel(
-        IReadOnlyList<string> startupArgs,
-        ILauncherOrchestrator? orchestrator,
-        bool autoStart
+        ILauncherOrchestrator orchestrator
     )
     {
         ArgumentNullException.ThrowIfNull(startupArgs);
@@ -70,7 +63,7 @@ public sealed class LauncherWindowViewModel : IDisposable
         _disposable = default;
         _lifecycleCts = new CancellationTokenSource();
         _startupArgs = startupArgs.ToArray();
-        _orchestrator = orchestrator ?? new LauncherOrchestrator();
+        _orchestrator = orchestrator;
 
         _status = new SynchronizedReactiveProperty<string>(
             "Launcher is starting application..."
@@ -99,7 +92,7 @@ public sealed class LauncherWindowViewModel : IDisposable
             .ToReadOnlyBindableReactiveProperty()
             .AddTo(ref _disposable);
 
-        if (autoStart && !Design.IsDesignMode)
+        if (!Design.IsDesignMode)
         {
             StartInBackground();
         }

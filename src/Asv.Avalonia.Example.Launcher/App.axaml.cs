@@ -1,3 +1,4 @@
+using Asv.Avalonia.Example.Launcher.Orchestration;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -17,7 +18,9 @@ public partial class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            _viewModel = new LauncherWindowViewModel(Program.StartupArgs);
+            var orchestrator = new LauncherOrchestrator();
+
+            _viewModel = new LauncherWindowViewModel(Program.StartupArgs, orchestrator);
             desktop.MainWindow = new LauncherWindow { DataContext = _viewModel };
             desktop.Exit += (_, _) => DisposeViewModel();
         }
