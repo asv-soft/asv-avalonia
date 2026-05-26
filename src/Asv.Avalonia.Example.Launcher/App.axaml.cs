@@ -1,4 +1,5 @@
 using Asv.Avalonia.Launcher;
+using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Example.Launcher;
@@ -12,8 +13,22 @@ public partial class App : LauncherApp
 
     protected override void ConfigureLauncher(LauncherApplicationOptions options)
     {
+        options.CreateView = viewModel => new ExampleLauncherView { DataContext = viewModel };
+
+        options.ConfigureWindow = window =>
+        {
+            window.Title = "ASV Example Launcher";
+            window.Width = 560;
+            window.Height = 280;
+            window.CanResize = false;
+            window.Topmost = true;
+            window.WindowDecorations = WindowDecorations.None;
+            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        };
+
         // Configure Window Example
-        /* options.ConfigureWindow = window =>
+        /*
+        options.ConfigureWindow = window =>
         {
             window.Title = "ASV Example Launcher";
             window.Width = 520;
