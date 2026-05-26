@@ -1,4 +1,4 @@
-namespace Asv.Avalonia.Example.Launcher.Contracts;
+namespace Asv.Avalonia.Launcher.Contracts;
 
 public enum LauncherExitCode
 {

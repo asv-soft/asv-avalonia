@@ -1,6 +1,6 @@
 using Asv.Avalonia.Launcher.Api;
 
-namespace Asv.Avalonia.Example.Launcher.Contracts;
+namespace Asv.Avalonia.Launcher.Contracts;
 
 public sealed class LauncherRunResult
 {

@@ -1,69 +1,73 @@
-using Asv.Avalonia.Example.Launcher.Contracts;
-using Asv.Avalonia.Example.Launcher.Orchestration;
 using Asv.Avalonia.Launcher.Api;
+using Asv.Avalonia.Launcher.Contracts;
+using Asv.Avalonia.Launcher.Orchestration;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Threading;
 using R3;
 
-namespace Asv.Avalonia.Example.Launcher;
+namespace Asv.Avalonia.Launcher;
 
-public sealed class LauncherWindowViewModel : IDisposable
+public sealed class LauncherViewModel : IDisposable
 {
-    private const int SuccessShutdownDelayMs = 700;
-
-    #region Common
-
-    private DisposableBag _disposable;
     private readonly CancellationTokenSource _lifecycleCts;
-    private bool _isDisposed;
-    private int _isShutdownRequested;
-
-    public void Dispose()
-    {
-        if (_isDisposed)
-        {
-            return;
-        }
-
-        _isDisposed = true;
-        _lifecycleCts.Cancel();
-        _disposable.Dispose();
-        _lifecycleCts.Dispose();
-    }
-
-    #endregion
-
     private readonly string[] _startupArgs;
     private readonly ILauncherOrchestrator _orchestrator;
+    private readonly LauncherApplicationOptions _applicationOptions;
     private readonly SynchronizedReactiveProperty<string> _status;
     private readonly SynchronizedReactiveProperty<double> _progress;
     private readonly SynchronizedReactiveProperty<bool> _isProgressIndeterminate;
     private readonly SynchronizedReactiveProperty<bool> _isCloseVisible;
-
+    private DisposableBag _disposable;
+    private bool _isDisposed;
+    private int _isShutdownRequested;
     private volatile int _isStarted;
 
-    public LauncherWindowViewModel()
-        : this([], NullLauncherOrchestrator.Instance)
+    public LauncherViewModel()
+        : this(
+            [],
+            NullLauncherOrchestrator.Instance,
+            new LauncherApplicationOptions { ShutdownOnSuccess = false },
+            false
+        )
     {
         if (!Design.IsDesignMode)
         {
-            throw new Exception("Should not be used in runtime.");
+            throw new InvalidOperationException(
+                "Design constructor should not be used at runtime."
+            );
         }
     }
 
-    public LauncherWindowViewModel(
+    public LauncherViewModel(
         IReadOnlyList<string> startupArgs,
-        ILauncherOrchestrator orchestrator
+        ILauncherOrchestrator orchestrator,
+        LauncherApplicationOptions? applicationOptions = null
+    )
+        : this(
+            startupArgs,
+            orchestrator,
+            applicationOptions ?? new LauncherApplicationOptions(),
+            true
+        ) { }
+
+    private LauncherViewModel(
+        IReadOnlyList<string> startupArgs,
+        ILauncherOrchestrator orchestrator,
+        LauncherApplicationOptions applicationOptions,
+        bool autoStart
     )
     {
         ArgumentNullException.ThrowIfNull(startupArgs);
+        ArgumentNullException.ThrowIfNull(orchestrator);
+        ArgumentNullException.ThrowIfNull(applicationOptions);
 
         _disposable = default;
         _lifecycleCts = new CancellationTokenSource();
         _startupArgs = startupArgs.ToArray();
         _orchestrator = orchestrator;
+        _applicationOptions = applicationOptions;
 
         _status = new SynchronizedReactiveProperty<string>(
             "Launcher is starting application..."
@@ -92,7 +96,7 @@ public sealed class LauncherWindowViewModel : IDisposable
             .ToReadOnlyBindableReactiveProperty()
             .AddTo(ref _disposable);
 
-        if (!Design.IsDesignMode)
+        if (autoStart && !Design.IsDesignMode)
         {
             StartInBackground();
         }
@@ -103,6 +107,19 @@ public sealed class LauncherWindowViewModel : IDisposable
     public IReadOnlyBindableReactiveProperty<bool> IsProgressIndeterminate { get; }
     public IReadOnlyBindableReactiveProperty<bool> IsCloseVisible { get; }
     public ReactiveCommand CloseCommand { get; }
+
+    public void Dispose()
+    {
+        if (_isDisposed)
+        {
+            return;
+        }
+
+        _isDisposed = true;
+        _lifecycleCts.Cancel();
+        _disposable.Dispose();
+        _lifecycleCts.Dispose();
+    }
 
     private void StartInBackground()
     {
@@ -153,14 +170,22 @@ public sealed class LauncherWindowViewModel : IDisposable
             SetStatus(signal.Message ?? signal.Type.ToString(), signal.Progress);
         });
 
-        var runResult = await _orchestrator.RunAsync(options, progress, cancellationToken);
+        var runResult = await _orchestrator
+            .RunAsync(options, progress, cancellationToken)
+            .ConfigureAwait(false);
         Environment.ExitCode = (int)runResult.ExitCode;
 
         if (runResult.ExitCode == LauncherExitCode.Success)
         {
             SetStatus(runResult.Message, 1);
-            await Task.Delay(SuccessShutdownDelayMs, cancellationToken).ConfigureAwait(false);
-            ShutdownApplication();
+
+            if (_applicationOptions.ShutdownOnSuccess)
+            {
+                await Task.Delay(_applicationOptions.SuccessShutdownDelay, cancellationToken)
+                    .ConfigureAwait(false);
+                ShutdownApplication();
+            }
+
             return;
         }
 

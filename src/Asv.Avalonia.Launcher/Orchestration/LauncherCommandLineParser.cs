@@ -1,12 +1,12 @@
-using Asv.Avalonia.Example.Launcher.Contracts;
 using Asv.Avalonia.Launcher.Api;
+using Asv.Avalonia.Launcher.Contracts;
 
-namespace Asv.Avalonia.Example.Launcher.Orchestration;
+namespace Asv.Avalonia.Launcher.Orchestration;
 
 public static class LauncherCommandLineParser
 {
     public static bool TryParse(
-        string[] args,
+        IReadOnlyList<string> args,
         out LauncherStartOptions? options,
         out string errorMessage
     )
@@ -14,7 +14,7 @@ public static class LauncherCommandLineParser
         options = null;
         errorMessage = string.Empty;
 
-        if (args.Length == 0)
+        if (args.Count == 0)
         {
             errorMessage = "Missing launcher arguments.";
             return false;
@@ -27,7 +27,7 @@ public static class LauncherCommandLineParser
         var startupTimeout = TimeSpan.FromSeconds(60);
         var passthroughMode = false;
 
-        for (var i = 0; i < args.Length; i++)
+        for (var i = 0; i < args.Count; i++)
         {
             var current = args[i];
 
@@ -100,14 +100,14 @@ public static class LauncherCommandLineParser
     }
 
     private static bool TryReadValue(
-        string[] args,
+        IReadOnlyList<string> args,
         ref int index,
         out string value,
         out string error
     )
     {
         var valueIndex = index + 1;
-        if (valueIndex >= args.Length)
+        if (valueIndex >= args.Count)
         {
             value = string.Empty;
             error = $"Missing value for argument: '{args[index]}'.";

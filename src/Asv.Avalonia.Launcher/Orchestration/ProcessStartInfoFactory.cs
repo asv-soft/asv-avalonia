@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using Asv.Avalonia.Example.Launcher.Contracts;
 using Asv.Avalonia.Launcher.Api;
+using Asv.Avalonia.Launcher.Contracts;
 
-namespace Asv.Avalonia.Example.Launcher.Orchestration;
+namespace Asv.Avalonia.Launcher.Orchestration;
 
 public sealed class ProcessStartInfoFactory
 {

@@ -1,11 +1,13 @@
-using Asv.Avalonia.Example.Launcher.Contracts;
 using Asv.Avalonia.Launcher.Api;
+using Asv.Avalonia.Launcher.Contracts;
 
-namespace Asv.Avalonia.Example.Launcher.Orchestration;
+namespace Asv.Avalonia.Launcher.Orchestration;
 
-public class NullLauncherOrchestrator : ILauncherOrchestrator
+public sealed class NullLauncherOrchestrator : ILauncherOrchestrator
 {
     public static readonly ILauncherOrchestrator Instance = new NullLauncherOrchestrator();
+
+    private NullLauncherOrchestrator() { }
 
     public Task<LauncherRunResult> RunAsync(
         LauncherStartOptions options,

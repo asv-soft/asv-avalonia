@@ -1,22 +1,15 @@
-<Window
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:launcher="clr-namespace:Asv.Avalonia.Example.Launcher"
-    x:Class="Asv.Avalonia.Example.Launcher.LauncherWindow"
-    x:DataType="launcher:LauncherWindowViewModel"
+    xmlns:launcher="clr-namespace:Asv.Avalonia.Launcher"
+    x:Class="Asv.Avalonia.Launcher.DefaultLauncherView"
+    x:DataType="launcher:LauncherViewModel"
     mc:Ignorable="d"
-    Width="420"
-    Height="420"
-    CanResize="False"
-    WindowStartupLocation="CenterScreen"
-    WindowDecorations="None"
-    Topmost="True"
-    Title="Launcher"
 >
     <Design.DataContext>
-        <launcher:LauncherWindowViewModel />
+        <launcher:LauncherViewModel />
     </Design.DataContext>
     <Grid RowDefinitions="*,Auto,Auto,Auto,*">
         <TextBlock
@@ -46,4 +39,4 @@
             Content="Close"
         />
     </Grid>
-</Window>
+</UserControl>

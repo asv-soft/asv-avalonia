@@ -1,6 +1,6 @@
 using System.Diagnostics;
 
-namespace Asv.Avalonia.Example.Launcher.Contracts;
+namespace Asv.Avalonia.Launcher.Contracts;
 
 public sealed class TargetProcessStartResult
 {
@@ -23,13 +23,5 @@ public sealed class TargetProcessStartResult
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(errorMessage);
         return new TargetProcessStartResult(null, errorMessage);
-    }
-}
-
-public static class TargetProcessStartResultExtensions
-{
-    public static TargetProcessStartResult SampleResult()
-    {
-        return TargetProcessStartResult.Failed("Sample message");
     }
 }

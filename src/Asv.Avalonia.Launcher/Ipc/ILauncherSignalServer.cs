@@ -1,9 +1,6 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Asv.Avalonia.Launcher.Api;
 
-namespace Asv.Avalonia.Example.Launcher.Ipc;
+namespace Asv.Avalonia.Launcher.Ipc;
 
 public interface ILauncherSignalServer : IAsyncDisposable
 {

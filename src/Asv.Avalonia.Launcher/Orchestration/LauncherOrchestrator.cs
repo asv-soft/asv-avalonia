@@ -1,8 +1,8 @@
-using Asv.Avalonia.Example.Launcher.Contracts;
-using Asv.Avalonia.Example.Launcher.Ipc;
 using Asv.Avalonia.Launcher.Api;
+using Asv.Avalonia.Launcher.Contracts;
+using Asv.Avalonia.Launcher.Ipc;
 
-namespace Asv.Avalonia.Example.Launcher.Orchestration;
+namespace Asv.Avalonia.Launcher.Orchestration;
 
 public sealed class LauncherOrchestrator : ILauncherOrchestrator
 {
