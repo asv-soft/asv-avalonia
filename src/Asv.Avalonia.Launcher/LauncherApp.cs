@@ -44,13 +44,6 @@ public class LauncherApp : Application
         return options;
     }
 
-    protected virtual LauncherViewModel CreateViewModel(LauncherApplicationOptions options)
-    {
-        var args = options.Args ?? Environment.GetCommandLineArgs().Skip(1).ToArray();
-        var orchestrator = options.Orchestrator ?? new LauncherOrchestrator();
-        return new LauncherViewModel(args, orchestrator, options);
-    }
-
     protected virtual Window CreateMainWindow(
         LauncherViewModel viewModel,
         LauncherApplicationOptions options
@@ -77,6 +70,13 @@ public class LauncherApp : Application
         window = new LauncherWindow { Content = view, DataContext = viewModel };
         options.ConfigureWindow?.Invoke(window);
         return window;
+    }
+
+    private LauncherViewModel CreateViewModel(LauncherApplicationOptions options)
+    {
+        var args = options.Args ?? Environment.GetCommandLineArgs().Skip(1).ToArray();
+        var orchestrator = new LauncherOrchestrator();
+        return new LauncherViewModel(args, orchestrator, options);
     }
 
     private void DisposeViewModel()
