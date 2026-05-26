@@ -1,12 +1,8 @@
-using System;
-using System.IO;
 using System.IO.Pipes;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Asv.Avalonia.Launcher.Api;
 
-namespace Asv.Avalonia.Example.Launcher.Ipc;
+namespace Asv.Avalonia.Launcher.Ipc;
 
 public sealed class NamedPipeLauncherSignalServer : ILauncherSignalServer
 {
@@ -48,6 +44,11 @@ public sealed class NamedPipeLauncherSignalServer : ILauncherSignalServer
         return message;
     }
 
+    public ValueTask DisposeAsync()
+    {
+        return ValueTask.CompletedTask;
+    }
+
     private void ValidateMessage(LauncherIpcMessage message)
     {
         if (
@@ -67,10 +68,5 @@ public sealed class NamedPipeLauncherSignalServer : ILauncherSignalServer
         {
             throw new UnauthorizedAccessException("IPC session token mismatch.");
         }
-    }
-
-    public ValueTask DisposeAsync()
-    {
-        return ValueTask.CompletedTask;
     }
 }

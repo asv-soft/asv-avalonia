@@ -1,4 +1,4 @@
-using Asv.Avalonia.Example.Launcher.Contracts;
+using Asv.Avalonia.Launcher.Contracts;
 using Avalonia;
 using Avalonia.Controls;
 

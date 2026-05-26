@@ -1,4 +1,4 @@
-namespace Asv.Avalonia.Example.Launcher.Ipc;
+namespace Asv.Avalonia.Launcher.Ipc;
 
 public interface ILauncherSignalServerFactory
 {

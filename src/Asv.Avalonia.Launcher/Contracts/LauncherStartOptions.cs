@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-
-namespace Asv.Avalonia.Example.Launcher.Contracts;
+namespace Asv.Avalonia.Launcher.Contracts;
 
 public sealed class LauncherStartOptions
 {

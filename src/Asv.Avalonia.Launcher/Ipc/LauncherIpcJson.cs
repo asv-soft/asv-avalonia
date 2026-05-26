@@ -1,8 +1,7 @@
-using System;
 using System.Text.Json;
 using Asv.Avalonia.Launcher.Api;
 
-namespace Asv.Avalonia.Example.Launcher.Ipc;
+namespace Asv.Avalonia.Launcher.Ipc;
 
 internal static class LauncherIpcJson
 {
