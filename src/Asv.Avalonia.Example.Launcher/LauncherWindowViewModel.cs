@@ -1,25 +1,22 @@
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using Asv.Avalonia.Example.Launcher.Contracts;
 using Asv.Avalonia.Example.Launcher.Orchestration;
 using Asv.Avalonia.Launcher.Api;
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Threading;
 using R3;
 
 namespace Asv.Avalonia.Example.Launcher;
 
-public sealed class LauncherWindowViewModel
-    : INotifyPropertyChanging,
-        INotifyPropertyChanged,
-        IDisposable
+public sealed class LauncherWindowViewModel : IDisposable
 {
     #region Common
 
     private DisposableBag _disposable;
+    private readonly CancellationTokenSource _lifecycleCts;
     private bool _isDisposed;
-
-    public event PropertyChangingEventHandler? PropertyChanging;
-    public event PropertyChangedEventHandler? PropertyChanged;
+    private int _isShutdownRequested;
 
     public void Dispose()
     {
@@ -29,50 +26,24 @@ public sealed class LauncherWindowViewModel
         }
 
         _isDisposed = true;
+        _lifecycleCts.Cancel();
         _disposable.Dispose();
-    }
-
-    private void OnPropertyChanging([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanging?.Invoke(this, new PropertyChangingEventArgs(propertyName));
-    }
-
-    private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    private bool SetField<T>(ref T field, T value, [CallerMemberName] string? propertyName = null)
-    {
-        if (EqualityComparer<T>.Default.Equals(field, value))
-        {
-            return false;
-        }
-
-        OnPropertyChanging(propertyName);
-        field = value;
-        OnPropertyChanged(propertyName);
-        return true;
+        _lifecycleCts.Dispose();
     }
 
     #endregion
 
     private readonly string[] _startupArgs;
     private readonly ILauncherOrchestrator _orchestrator;
-    private readonly BindableReactiveProperty<string> _status;
-    private readonly BindableReactiveProperty<double> _progress;
-    private readonly BindableReactiveProperty<bool> _isProgressIndeterminate;
-    private readonly BindableReactiveProperty<bool> _isCloseVisible;
-
-    private string _statusValue = "Launcher is starting application...";
-    private double _progressValue;
-    private bool _isProgressIndeterminateValue = true;
-    private bool _isCloseVisibleValue;
+    private readonly SynchronizedReactiveProperty<string> _status;
+    private readonly SynchronizedReactiveProperty<double> _progress;
+    private readonly SynchronizedReactiveProperty<bool> _isProgressIndeterminate;
+    private readonly SynchronizedReactiveProperty<bool> _isCloseVisible;
 
     private volatile int _isStarted;
 
     public LauncherWindowViewModel()
-        : this([])
+        : this([], null, false)
     {
         if (!Design.IsDesignMode)
         {
@@ -84,60 +55,77 @@ public sealed class LauncherWindowViewModel
         IReadOnlyList<string> startupArgs,
         ILauncherOrchestrator? orchestrator = null
     )
+        : this(startupArgs, orchestrator, true) { }
+
+    private LauncherWindowViewModel(
+        IReadOnlyList<string> startupArgs,
+        ILauncherOrchestrator? orchestrator,
+        bool autoStart
+    )
     {
         ArgumentNullException.ThrowIfNull(startupArgs);
 
         _disposable = default;
+        _lifecycleCts = new CancellationTokenSource();
         _startupArgs = startupArgs.ToArray();
         _orchestrator = orchestrator ?? new LauncherOrchestrator();
 
-        _status = new BindableReactiveProperty<string>(_statusValue).AddTo(ref _disposable);
-        _progress = new BindableReactiveProperty<double>(_progressValue).AddTo(ref _disposable);
-        _isProgressIndeterminate = new BindableReactiveProperty<bool>(
-            _isProgressIndeterminateValue
+        _status = new SynchronizedReactiveProperty<string>(
+            "Launcher is starting application..."
         ).AddTo(ref _disposable);
-        _isCloseVisible = new BindableReactiveProperty<bool>(_isCloseVisibleValue).AddTo(
+        _progress = new SynchronizedReactiveProperty<double>().AddTo(ref _disposable);
+        _isProgressIndeterminate = new SynchronizedReactiveProperty<bool>(true).AddTo(
             ref _disposable
         );
+        _isCloseVisible = new SynchronizedReactiveProperty<bool>().AddTo(ref _disposable);
+        CloseCommand = new ReactiveCommand(_ => ShutdownApplication()).AddTo(ref _disposable);
 
-        _status
-            .Subscribe(value => SetField(ref _statusValue, value, nameof(Status)))
+        Status = _status
+            .ObserveOnUIThreadDispatcher()
+            .ToReadOnlyBindableReactiveProperty<string>()
             .AddTo(ref _disposable);
-        _progress
-            .Subscribe(value => SetField(ref _progressValue, value, nameof(Progress)))
+        Progress = _progress
+            .ObserveOnUIThreadDispatcher()
+            .ToReadOnlyBindableReactiveProperty()
             .AddTo(ref _disposable);
-        _isProgressIndeterminate
-            .Subscribe(value =>
-                SetField(ref _isProgressIndeterminateValue, value, nameof(IsProgressIndeterminate))
-            )
+        IsProgressIndeterminate = _isProgressIndeterminate
+            .ObserveOnUIThreadDispatcher()
+            .ToReadOnlyBindableReactiveProperty()
             .AddTo(ref _disposable);
-        _isCloseVisible
-            .Subscribe(value => SetField(ref _isCloseVisibleValue, value, nameof(IsCloseVisible)))
+        IsCloseVisible = _isCloseVisible
+            .ObserveOnUIThreadDispatcher()
+            .ToReadOnlyBindableReactiveProperty()
             .AddTo(ref _disposable);
 
-        CloseCommand = new ReactiveCommand(_ => RequestClose()).AddTo(ref _disposable);
+        if (autoStart && !Design.IsDesignMode)
+        {
+            StartInBackground();
+        }
     }
 
-    public string Status => _statusValue;
-    public double Progress => _progressValue;
-    public bool IsProgressIndeterminate => _isProgressIndeterminateValue;
-    public bool IsCloseVisible => _isCloseVisibleValue;
+    public IReadOnlyBindableReactiveProperty<string> Status { get; }
+    public IReadOnlyBindableReactiveProperty<double> Progress { get; }
+    public IReadOnlyBindableReactiveProperty<bool> IsProgressIndeterminate { get; }
+    public IReadOnlyBindableReactiveProperty<bool> IsCloseVisible { get; }
     public ReactiveCommand CloseCommand { get; }
 
-    public event EventHandler? CloseRequested;
-
-    public async Task StartAsync(CancellationToken cancellationToken = default)
+    private void StartInBackground()
     {
-        ObjectDisposedException.ThrowIf(_isDisposed, this);
-
         if (Interlocked.CompareExchange(ref _isStarted, 1, 0) != 0)
         {
             return;
         }
 
+        Task.Run(async () => await StartAsync(_lifecycleCts.Token), _lifecycleCts.Token);
+    }
+
+    private async Task StartAsync(CancellationToken cancellationToken = default)
+    {
+        ObjectDisposedException.ThrowIf(_isDisposed, this);
+
         try
         {
-            await RunOrchestrationAsync(cancellationToken);
+            await RunOrchestrationAsync(cancellationToken).ConfigureAwait(false);
         }
         catch (OperationCanceledException)
         {
@@ -175,7 +163,7 @@ public sealed class LauncherWindowViewModel
 
         if (runResult.ExitCode == LauncherExitCode.Success)
         {
-            RequestClose();
+            ShutdownApplication();
             return;
         }
 
@@ -184,6 +172,11 @@ public sealed class LauncherWindowViewModel
 
     private void SetStatus(string status, double? progress = null)
     {
+        if (_isDisposed)
+        {
+            return;
+        }
+
         _status.Value = status;
 
         if (progress is >= 0 and <= 1)
@@ -199,12 +192,31 @@ public sealed class LauncherWindowViewModel
 
     private void SetFailed(string message)
     {
+        if (_isDisposed)
+        {
+            return;
+        }
+
         SetStatus(message, 0);
         _isCloseVisible.Value = true;
     }
 
-    private void RequestClose()
+    private void ShutdownApplication()
     {
-        CloseRequested?.Invoke(this, EventArgs.Empty);
+        if (_isDisposed || Interlocked.Exchange(ref _isShutdownRequested, 1) != 0)
+        {
+            return;
+        }
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            if (
+                Application.Current?.ApplicationLifetime
+                is IClassicDesktopStyleApplicationLifetime lifetime
+            )
+            {
+                lifetime.Shutdown();
+            }
+        });
     }
 }
