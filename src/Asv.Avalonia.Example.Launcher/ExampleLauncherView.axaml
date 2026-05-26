@@ -1,0 +1,119 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:launcher="clr-namespace:Asv.Avalonia.Launcher;assembly=Asv.Avalonia.Launcher"
+    x:Class="Asv.Avalonia.Example.Launcher.ExampleLauncherView"
+    x:DataType="launcher:LauncherViewModel"
+    mc:Ignorable="d"
+>
+    <Design.DataContext>
+        <launcher:LauncherViewModel />
+    </Design.DataContext>
+
+    <Border Background="#181A20" BorderBrush="#2E323D" BorderThickness="1">
+        <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Margin="28">
+            <Border
+                Grid.Row="0"
+                Grid.Column="0"
+                Width="96"
+                Height="96"
+                VerticalAlignment="Top"
+                Background="#111318"
+            >
+                <Border
+                    Width="78"
+                    Height="78"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                >
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                            <GradientStop Color="#FA2D8C" Offset="0" />
+                            <GradientStop Color="#8D45FF" Offset="0.48" />
+                            <GradientStop Color="#00D2FF" Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
+                    <Grid Margin="8">
+                        <Rectangle Fill="#111318" />
+                        <TextBlock
+                            Margin="8"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontSize="26"
+                            FontWeight="700"
+                            Foreground="#FFFFFF"
+                            Text="AS"
+                        />
+                        <Rectangle
+                            Width="30"
+                            Height="4"
+                            Margin="8,0,0,10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Bottom"
+                            Fill="#FFFFFF"
+                        />
+                    </Grid>
+                </Border>
+            </Border>
+
+            <Grid
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="24,0,0,0"
+                RowDefinitions="Auto,Auto,*,Auto,Auto"
+            >
+                <TextBlock
+                    Grid.Row="0"
+                    FontSize="26"
+                    FontWeight="700"
+                    Foreground="#F7F8FB"
+                    Text="ASV Launcher"
+                />
+                <TextBlock
+                    Grid.Row="1"
+                    Margin="0,4,0,0"
+                    FontSize="13"
+                    Foreground="#8D95A6"
+                    Text="Example application startup"
+                />
+                <TextBlock
+                    Grid.Row="3"
+                    Margin="0,0,0,10"
+                    FontSize="13"
+                    Foreground="#C9CED8"
+                    Text="{Binding Status.Value}"
+                    TextWrapping="Wrap"
+                />
+                <ProgressBar
+                    Grid.Row="4"
+                    Height="4"
+                    Background="#2B303A"
+                    Foreground="#48C6FF"
+                    IsIndeterminate="{Binding IsProgressIndeterminate.Value}"
+                    Minimum="0"
+                    Maximum="1"
+                    Value="{Binding Progress.Value}"
+                />
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,24,0,0" ColumnDefinitions="*,Auto">
+                <TextBlock
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    FontSize="12"
+                    Foreground="#6F7787"
+                    Text="Powered by Asv.Avalonia"
+                />
+                <Button
+                    Grid.Column="1"
+                    MinWidth="92"
+                    IsVisible="{Binding IsCloseVisible.Value}"
+                    Command="{Binding CloseCommand}"
+                    Content="Close"
+                />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

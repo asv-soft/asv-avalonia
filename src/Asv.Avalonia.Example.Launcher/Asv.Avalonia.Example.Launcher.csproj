@@ -44,4 +44,10 @@
     <ItemGroup>
         <ProjectReference Include="..\Asv.Avalonia.Launcher\Asv.Avalonia.Launcher.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="ExampleLauncherView.axaml.cs">
+        <DependentUpon>ExampleLauncherView.axaml</DependentUpon>
+      </Compile>
+    </ItemGroup>
 </Project>
