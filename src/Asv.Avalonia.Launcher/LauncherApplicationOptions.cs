@@ -8,6 +8,5 @@ public sealed class LauncherApplicationOptions
     public TimeSpan SuccessShutdownDelay { get; set; } = TimeSpan.FromMilliseconds(700);
     public bool ShutdownOnSuccess { get; set; } = true;
     public Func<LauncherViewModel, Control>? CreateView { get; set; }
-    public Func<LauncherViewModel, Window>? CreateWindow { get; set; }
     public Action<Window>? ConfigureWindow { get; set; }
 }
