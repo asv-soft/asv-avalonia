@@ -11,6 +11,8 @@ namespace Asv.Avalonia.Example.Launcher;
 
 public sealed class LauncherWindowViewModel : IDisposable
 {
+    private const int SuccessShutdownDelayMs = 700;
+
     #region Common
 
     private DisposableBag _disposable;
@@ -163,6 +165,8 @@ public sealed class LauncherWindowViewModel : IDisposable
 
         if (runResult.ExitCode == LauncherExitCode.Success)
         {
+            SetStatus(runResult.Message, 1);
+            await Task.Delay(SuccessShutdownDelayMs, cancellationToken).ConfigureAwait(false);
             ShutdownApplication();
             return;
         }
