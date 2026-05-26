@@ -1,5 +1,4 @@
 using Asv.Avalonia.Launcher;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Example.Launcher;
@@ -26,6 +25,21 @@ public partial class App : LauncherApp
             window.WindowDecorations = WindowDecorations.Full;
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         };
+        */
+
+        // Configure launcher behavior
+        /*
+        options.SuccessShutdownDelay = TimeSpan.FromSeconds(2);
+        options.ShutdownOnSuccess = true;
+        */
+
+        // Configure only launcher content view
+        /*
+        options.CreateView = viewModel =>
+            new DefaultLauncherView
+            {
+                DataContext = viewModel,
+            };
         */
     }
 }

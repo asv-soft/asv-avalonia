@@ -33,7 +33,7 @@ public class LauncherApp : Application
 
     protected virtual void ConfigureLauncher(LauncherApplicationOptions options) { }
 
-    protected virtual LauncherApplicationOptions CreateOptions()
+    private LauncherApplicationOptions CreateOptions()
     {
         var options = new LauncherApplicationOptions
         {
@@ -44,30 +44,15 @@ public class LauncherApp : Application
         return options;
     }
 
-    protected virtual Window CreateMainWindow(
-        LauncherViewModel viewModel,
-        LauncherApplicationOptions options
-    )
+    private Window CreateMainWindow(LauncherViewModel viewModel, LauncherApplicationOptions options)
     {
-        var window = options.CreateWindow?.Invoke(viewModel);
-        if (window is not null)
-        {
-            if (window.DataContext is null)
-            {
-                window.DataContext = viewModel;
-            }
-
-            options.ConfigureWindow?.Invoke(window);
-            return window;
-        }
-
         var view = options.CreateView?.Invoke(viewModel) ?? new DefaultLauncherView();
         if (view.DataContext is null)
         {
             view.DataContext = viewModel;
         }
 
-        window = new LauncherWindow { Content = view, DataContext = viewModel };
+        var window = new LauncherWindow { Content = view, DataContext = viewModel };
         options.ConfigureWindow?.Invoke(window);
         return window;
     }
