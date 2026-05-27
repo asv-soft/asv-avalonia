@@ -13,6 +13,14 @@ public partial class App : LauncherApp
 
     protected override void ConfigureLauncher(LauncherApplicationOptions options)
     {
+        options.IconSource = new Uri(
+            "avares://Asv.Avalonia.Example.Launcher/Assets/asv-soft-logo.png"
+        );
+        options.Title = "Launcher for Asv.Avalonia Example";
+        options.Description = "Example application startup launcher";
+        options.Footer = "made by ASV.SOFT team";
+
+        // Configure launcher view and window
         // options.CreateView = viewModel => new ExampleLauncherView { DataContext = viewModel };
         //
         // options.ConfigureWindow = window =>

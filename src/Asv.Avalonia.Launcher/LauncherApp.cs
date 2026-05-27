@@ -51,7 +51,7 @@ public class LauncherApp : Application
 
     private Window CreateMainWindow(LauncherViewModel viewModel, LauncherApplicationOptions options)
     {
-        var view = options.CreateView?.Invoke(viewModel) ?? new DefaultLauncherView();
+        var view = options.CreateView?.Invoke(viewModel) ?? new DefaultLauncherView(options);
         if (view.DataContext is null)
         {
             view.DataContext = viewModel;
