@@ -74,12 +74,6 @@ sealed class Program
                     })
                     .UseModuleGeoMap()
                     .UseModuleIo()
-                    .UseLauncher(cfg =>
-                    {
-#if DEBUG
-                        cfg.IsOptional();
-#endif
-                    })
                     .UseExampleApp();
             });
     }
