@@ -67,14 +67,15 @@ jobs:
         with:
           script-file: win-64-install.nsi
         
-      - name: Sign the installer
-        uses: dlemstra/code-sign-action@v1
-        with:
-          certificate: '${{ secrets.WINDOWS_SIGNING_CERTIFICATE }}'
-          password: '${{ secrets.WINDOWS_SIGNING_PASSWORD }}'
-          files: |
-            AsvAvaloniaExampleInstaller.exe
-          description: 'Sign The Installer'      
+        # uncomment when real certificate is available
+#      - name: Sign the installer
+#        uses: dlemstra/code-sign-action@v1
+#        with:
+#          certificate: '${{ secrets.WINDOWS_SIGNING_CERTIFICATE }}'
+#          password: '${{ secrets.WINDOWS_SIGNING_PASSWORD }}'
+#          files: |
+#            AsvAvaloniaExampleInstaller.exe
+#          description: 'Sign The Installer'      
       
       - name: List output files
         run: Get-ChildItem -Path ./publish/app -Force
