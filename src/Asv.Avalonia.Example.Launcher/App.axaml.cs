@@ -1,5 +1,4 @@
 using Asv.Avalonia.Launcher;
-using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia.Example.Launcher;
@@ -13,6 +12,7 @@ public partial class App : LauncherApp
 
     protected override void ConfigureLauncher(LauncherApplicationOptions options)
     {
+        // Configure base launcher view
         options.IconSource = new Uri(
             "avares://Asv.Avalonia.Example.Launcher/Assets/asv-soft-logo.png"
         );
@@ -35,34 +35,21 @@ public partial class App : LauncherApp
         // };
 
         // Configure Window Example
-        /*
-        options.ConfigureWindow = window =>
-        {
-            window.Title = "ASV Example Launcher";
-            window.Width = 520;
-            window.Height = 320;
-            window.MinWidth = 420;
-            window.MinHeight = 260;
-            window.CanResize = true;
-            window.Topmost = false;
-            window.WindowDecorations = WindowDecorations.Full;
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        };
-        */
+        // options.ConfigureWindow = window =>
+        // {
+        //     window.Title = "ASV Example Launcher";
+        //     window.Width = 1000;
+        //     window.Height = 320;
+        //     window.MinWidth = 420;
+        //     window.MinHeight = 260;
+        //     window.CanResize = true;
+        //     window.Topmost = false;
+        //     window.WindowDecorations = WindowDecorations.Full;
+        //     window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        // };
 
         // Configure launcher behavior
-        /*
-        options.SuccessShutdownDelay = TimeSpan.FromSeconds(2);
-        options.ShutdownOnSuccess = true;
-        */
-
-        // Configure only launcher content view
-        /*
-        options.CreateView = viewModel =>
-            new DefaultLauncherView
-            {
-                DataContext = viewModel,
-            };
-        */
+        // options.SuccessShutdownDelay = TimeSpan.FromSeconds(2);
+        // options.ShutdownOnSuccess = false;
     }
 }
