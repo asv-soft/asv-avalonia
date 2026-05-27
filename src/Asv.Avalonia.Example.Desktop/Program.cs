@@ -73,6 +73,12 @@ sealed class Program
                             .UseOptionalMarket(); // register market plugins page
                     })
                     .UseModuleGeoMap()
+                    .UseLauncher(cfg =>
+                    {
+#if DEBUG
+                        cfg.IsOptional();
+#endif
+                    })
                     .UseModuleIo()
                     .UseExampleApp();
             });
