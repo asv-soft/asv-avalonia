@@ -48,14 +48,15 @@ jobs:
       - name: Publish project for installer
         run: dotnet publish ./src/${{ env.PROJECT_NAME }}.Desktop/${{ env.PROJECT_NAME }}.Desktop.csproj -c Release -o ./publish/app
         
-      - name: Sign app files
-        uses: dlemstra/code-sign-action@v1
-        with:
-          certificate: '${{ secrets.WINDOWS_SIGNING_CERTIFICATE }}'
-          password: '${{ secrets.WINDOWS_SIGNING_PASSWORD }}'
-          folder: './publish/app'
-          recursive: true
-          description: 'Sign The App'
+        # uncomment when real certificate is available
+#      - name: Sign app files
+#        uses: dlemstra/code-sign-action@v1
+#        with:
+#          certificate: '${{ secrets.WINDOWS_SIGNING_CERTIFICATE }}'
+#          password: '${{ secrets.WINDOWS_SIGNING_PASSWORD }}'
+#          folder: './publish/app'
+#          recursive: true
+#          description: 'Sign The App'
       
       - name: Install NSIS
         run: |
