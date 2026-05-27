@@ -28,8 +28,7 @@ public sealed class LauncherViewModel : IDisposable
         : this(
             [],
             NullLauncherOrchestrator.Instance,
-            new LauncherApplicationOptions { ShutdownOnSuccess = false },
-            false
+            new LauncherApplicationOptions { ShutdownOnSuccess = false }
         )
     {
         if (!Design.IsDesignMode)
@@ -44,19 +43,6 @@ public sealed class LauncherViewModel : IDisposable
         IReadOnlyList<string> startupArgs,
         ILauncherOrchestrator orchestrator,
         LauncherApplicationOptions? applicationOptions = null
-    )
-        : this(
-            startupArgs,
-            orchestrator,
-            applicationOptions ?? new LauncherApplicationOptions(),
-            true
-        ) { }
-
-    private LauncherViewModel(
-        IReadOnlyList<string> startupArgs,
-        ILauncherOrchestrator orchestrator,
-        LauncherApplicationOptions applicationOptions,
-        bool autoStart
     )
     {
         ArgumentNullException.ThrowIfNull(startupArgs);
@@ -96,7 +82,7 @@ public sealed class LauncherViewModel : IDisposable
             .ToReadOnlyBindableReactiveProperty()
             .AddTo(ref _disposable);
 
-        if (autoStart && !Design.IsDesignMode)
+        if (!Design.IsDesignMode)
         {
             StartInBackground();
         }

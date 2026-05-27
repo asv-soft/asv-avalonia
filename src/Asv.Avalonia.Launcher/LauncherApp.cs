@@ -2,6 +2,7 @@ using Asv.Avalonia.Launcher.Orchestration;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Styling;
 using Avalonia.Themes.Fluent;
 
 namespace Asv.Avalonia.Launcher;
@@ -12,10 +13,14 @@ public class LauncherApp : Application
 
     public override void Initialize()
     {
+        RequestedThemeVariant = ThemeVariant.Default;
+
         if (Styles.Count == 0)
         {
             Styles.Add(new FluentTheme());
         }
+
+        base.Initialize();
     }
 
     public override void OnFrameworkInitializationCompleted()
