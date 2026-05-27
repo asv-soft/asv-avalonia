@@ -8,7 +8,6 @@ namespace Asv.Avalonia;
 
 public class LanguageInfo : ILanguageInfo
 {
-    private CultureInfo? _culture;
     private readonly Func<CultureInfo> _getCulture;
 
     public LanguageInfo(string id, string displayName, Func<CultureInfo> getCulture)
@@ -24,7 +23,7 @@ public class LanguageInfo : ILanguageInfo
 
     public string Id { get; }
     public string DisplayName { get; }
-    public CultureInfo Culture => _culture ??= _getCulture();
+    public CultureInfo Culture => field ??= _getCulture();
 }
 
 public class LocalizationServiceConfig
@@ -57,10 +56,10 @@ public class LocalizationService
 
         selectedLang ??= _languages[0];
         CurrentLanguage = new SynchronizedReactiveProperty<ILanguageInfo>(selectedLang);
-        _sub1 = CurrentLanguage.SubscribeAwait(SetLanguage);
+        _sub1 = CurrentLanguage.Subscribe(SetLanguage);
     }
 
-    private ValueTask SetLanguage(ILanguageInfo lang, CancellationToken cancelToken)
+    private void SetLanguage(ILanguageInfo lang)
     {
         ArgumentNullException.ThrowIfNull(lang);
 
@@ -70,12 +69,12 @@ public class LocalizationService
         }
 
         var culture = langInfo.Culture;
+
         CultureInfo.CurrentUICulture = culture;
         CultureInfo.DefaultThreadCurrentUICulture = culture;
         Thread.CurrentThread.CurrentUICulture = culture;
-        InternalSaveConfig(_ => _.CurrentLanguage = lang.Id);
 
-        return ValueTask.CompletedTask;
+        InternalSaveConfig(c => c.CurrentLanguage = lang.Id);
     }
 
     #region Dispose
