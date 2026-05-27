@@ -13,18 +13,18 @@ public partial class App : LauncherApp
 
     protected override void ConfigureLauncher(LauncherApplicationOptions options)
     {
-        options.CreateView = viewModel => new ExampleLauncherView { DataContext = viewModel };
-
-        options.ConfigureWindow = window =>
-        {
-            window.Title = "ASV Example Launcher";
-            window.Width = 560;
-            window.Height = 280;
-            window.CanResize = false;
-            window.Topmost = true;
-            window.WindowDecorations = WindowDecorations.None;
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-        };
+        // options.CreateView = viewModel => new ExampleLauncherView { DataContext = viewModel };
+        //
+        // options.ConfigureWindow = window =>
+        // {
+        //     window.Title = "ASV Example Launcher";
+        //     window.Width = 600;
+        //     window.Height = 280;
+        //     window.CanResize = false;
+        //     window.Topmost = true;
+        //     window.WindowDecorations = WindowDecorations.None;
+        //     window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        // };
 
         // Configure Window Example
         /*

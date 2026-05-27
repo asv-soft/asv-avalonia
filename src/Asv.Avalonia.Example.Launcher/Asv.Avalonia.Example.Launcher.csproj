@@ -46,6 +46,10 @@
     </ItemGroup>
 
     <ItemGroup>
+        <AvaloniaResource Include="Assets/**" />
+    </ItemGroup>
+
+    <ItemGroup>
       <Compile Update="ExampleLauncherView.axaml.cs">
         <DependentUpon>ExampleLauncherView.axaml</DependentUpon>
       </Compile>

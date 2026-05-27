@@ -12,50 +12,24 @@
         <launcher:LauncherViewModel />
     </Design.DataContext>
 
-    <Border Background="#181A20" BorderBrush="#2E323D" BorderThickness="1">
+    <Border Classes="launcher-surface">
         <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Margin="28">
             <Border
                 Grid.Row="0"
                 Grid.Column="0"
+                Classes="launcher-logo-frame"
                 Width="96"
                 Height="96"
                 VerticalAlignment="Top"
-                Background="#111318"
             >
-                <Border
-                    Width="78"
-                    Height="78"
+                <Image
+                    Width="82"
+                    Height="82"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                >
-                    <Border.Background>
-                        <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
-                            <GradientStop Color="#FA2D8C" Offset="0" />
-                            <GradientStop Color="#8D45FF" Offset="0.48" />
-                            <GradientStop Color="#00D2FF" Offset="1" />
-                        </LinearGradientBrush>
-                    </Border.Background>
-                    <Grid Margin="8">
-                        <Rectangle Fill="#111318" />
-                        <TextBlock
-                            Margin="8"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            FontSize="26"
-                            FontWeight="700"
-                            Foreground="#FFFFFF"
-                            Text="AS"
-                        />
-                        <Rectangle
-                            Width="30"
-                            Height="4"
-                            Margin="8,0,0,10"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Bottom"
-                            Fill="#FFFFFF"
-                        />
-                    </Grid>
-                </Border>
+                    Source="avares://Asv.Avalonia.Example.Launcher/Assets/asv-soft-logo.png"
+                    Stretch="Uniform"
+                />
             </Border>
 
             <Grid
@@ -64,33 +38,22 @@
                 Margin="24,0,0,0"
                 RowDefinitions="Auto,Auto,*,Auto,Auto"
             >
-                <TextBlock
-                    Grid.Row="0"
-                    FontSize="26"
-                    FontWeight="700"
-                    Foreground="#F7F8FB"
-                    Text="ASV Launcher"
-                />
+                <TextBlock Grid.Row="0" Classes="launcher-title" Text="ASV Launcher" />
                 <TextBlock
                     Grid.Row="1"
                     Margin="0,4,0,0"
-                    FontSize="13"
-                    Foreground="#8D95A6"
+                    Classes="launcher-subtitle"
                     Text="Example application startup"
                 />
                 <TextBlock
                     Grid.Row="3"
                     Margin="0,0,0,10"
-                    FontSize="13"
-                    Foreground="#C9CED8"
+                    Classes="launcher-status"
                     Text="{Binding Status.Value}"
-                    TextWrapping="Wrap"
                 />
                 <ProgressBar
                     Grid.Row="4"
-                    Height="4"
-                    Background="#2B303A"
-                    Foreground="#48C6FF"
+                    Classes="launcher-progress"
                     IsIndeterminate="{Binding IsProgressIndeterminate.Value}"
                     Minimum="0"
                     Maximum="1"
@@ -98,17 +61,22 @@
                 />
             </Grid>
 
-            <Grid Grid.Row="1" Grid.ColumnSpan="2" Margin="0,24,0,0" ColumnDefinitions="*,Auto">
+            <Grid
+                Grid.Row="1"
+                Grid.ColumnSpan="2"
+                Grid.Column="0"
+                Margin="0,24,0,0"
+                ColumnDefinitions="*,Auto"
+            >
                 <TextBlock
                     Grid.Column="0"
                     VerticalAlignment="Center"
-                    FontSize="12"
-                    Foreground="#6F7787"
+                    Classes="launcher-footer"
                     Text="Powered by Asv.Avalonia"
                 />
                 <Button
                     Grid.Column="1"
-                    MinWidth="92"
+                    Classes="launcher-close"
                     IsVisible="{Binding IsCloseVisible.Value}"
                     Command="{Binding CloseCommand}"
                     Content="Close"

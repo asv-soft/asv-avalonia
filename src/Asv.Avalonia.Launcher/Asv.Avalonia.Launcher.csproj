@@ -54,4 +54,8 @@
     <ItemGroup>
         <ProjectReference Include="..\Asv.Avalonia.Launcher.Api\Asv.Avalonia.Launcher.Api.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets/**" />
+    </ItemGroup>
 </Project>
