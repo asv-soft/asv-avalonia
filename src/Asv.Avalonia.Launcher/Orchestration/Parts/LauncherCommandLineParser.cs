@@ -24,7 +24,7 @@ public static class LauncherCommandLineParser
         var targetArgs = new List<string>();
         var pipeName = $"asvl-{Guid.NewGuid():N}"[..13];
         var sessionToken = Guid.NewGuid().ToString("N");
-        var startupTimeout = TimeSpan.FromSeconds(60);
+        var startupTimeout = TimeSpan.FromSeconds(10);
         var passthroughMode = false;
 
         for (var i = 0; i < args.Count; i++)
