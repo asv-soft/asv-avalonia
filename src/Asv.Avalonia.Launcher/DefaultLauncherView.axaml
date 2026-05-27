@@ -2,6 +2,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:launcher="clr-namespace:Asv.Avalonia.Launcher"
     x:Class="Asv.Avalonia.Launcher.DefaultLauncherView"
@@ -25,14 +26,25 @@
                 Height="96"
                 VerticalAlignment="Top"
             >
-                <Image
-                    Width="82"
-                    Height="82"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Source="avares://Asv.Avalonia.Launcher/Assets/asv-soft-logo.png"
-                    Stretch="Uniform"
-                />
+                <Grid>
+                    <Image
+                        x:Name="IconImage"
+                        Width="82"
+                        Height="82"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Stretch="Uniform"
+                    />
+                    <material:MaterialIcon
+                        x:Name="MaterialIcon"
+                        Classes="launcher-material-icon"
+                        Width="54"
+                        Height="54"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsVisible="False"
+                    />
+                </Grid>
             </Border>
 
             <Grid
@@ -41,12 +53,12 @@
                 Margin="24,0,0,0"
                 RowDefinitions="Auto,Auto,*,Auto,Auto"
             >
-                <TextBlock Grid.Row="0" Classes="launcher-title" Text="ASV Launcher" />
+                <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Classes="launcher-title" />
                 <TextBlock
+                    x:Name="DescriptionTextBlock"
                     Grid.Row="1"
                     Margin="0,4,0,0"
                     Classes="launcher-subtitle"
-                    Text="Application startup"
                 />
                 <TextBlock
                     Grid.Row="3"
@@ -72,10 +84,10 @@
                 ColumnDefinitions="*,Auto"
             >
                 <TextBlock
+                    x:Name="FooterTextBlock"
                     Grid.Column="0"
                     VerticalAlignment="Center"
                     Classes="launcher-footer"
-                    Text="Powered by Asv.Avalonia"
                 />
                 <Button
                     Grid.Column="1"

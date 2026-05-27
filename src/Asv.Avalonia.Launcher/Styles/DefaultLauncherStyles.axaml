@@ -1,8 +1,11 @@
 <Styles
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:system="clr-namespace:System;assembly=System.Runtime"
 >
+    <material:MaterialIconStyles />
+
     <Styles.Resources>
         <ResourceDictionary>
             <system:Double x:Key="LauncherTitleFontSize">20</system:Double>
@@ -51,6 +54,10 @@
         <Setter Property="Background" Value="{DynamicResource LauncherLogoFrameBrush}" />
         <Setter Property="BorderBrush" Value="{DynamicResource LauncherLogoFrameBorderBrush}" />
         <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="material|MaterialIcon.launcher-material-icon">
+        <Setter Property="Foreground" Value="{DynamicResource LauncherLogoFrameBorderBrush}" />
     </Style>
 
     <Style Selector="TextBlock.launcher-title">
