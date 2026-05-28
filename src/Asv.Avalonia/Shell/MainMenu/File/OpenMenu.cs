@@ -29,8 +29,8 @@ public class OpenMenu : MenuItem
         _path = path;
         _config = config;
 
-        Order = -100;
-        Icon = MaterialIconKind.File;
+        Order = 0;
+        Icon = MaterialIconKind.FileOutline;
         HotKey = hotKeys[OpenFileAction.Id];
         Command = new ReactiveCommand(OpenAsync).DisposeItWith(Disposable);
     }
