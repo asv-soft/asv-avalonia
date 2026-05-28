@@ -1,0 +1,40 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="Asv.Avalonia.Example.TextFilePageView"
+    x:DataType="example:TextFilePageViewModel"
+>
+    <Design.DataContext>
+        <example:TextFilePageViewModel />
+    </Design.DataContext>
+
+    <DockPanel Margin="16">
+        <Border
+            DockPanel.Dock="Top"
+            Padding="16"
+            Background="{DynamicResource SystemRegionBrush}"
+            CornerRadius="6"
+            Margin="0,0,0,12"
+        >
+            <StackPanel Spacing="6">
+                <TextBlock Text="Text file" FontSize="18" FontWeight="SemiBold" />
+                <TextBlock Text="{Binding FilePath.Value}" TextWrapping="Wrap" Opacity="0.85" />
+            </StackPanel>
+        </Border>
+
+        <TextBox
+            AcceptsReturn="True"
+            AcceptsTab="True"
+            TextWrapping="Wrap"
+            VerticalContentAlignment="Top"
+            HorizontalContentAlignment="Left"
+            Text="{Binding Text.Value, Mode=TwoWay}"
+        />
+    </DockPanel>
+</UserControl>

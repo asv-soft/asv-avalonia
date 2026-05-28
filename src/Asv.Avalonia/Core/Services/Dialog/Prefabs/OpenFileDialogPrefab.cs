@@ -77,6 +77,6 @@ public sealed class OpenFileDialogDesktopPrefab(IShellHost host)
         Debug.Assert(host.TopLevel != null, "host.TopLevel != null");
         var files = await host.TopLevel.StorageProvider.OpenFilePickerAsync(options);
 
-        return files.Count == 1 ? files[0].Path.AbsolutePath : null;
+        return files.Count == 1 ? files[0].TryGetLocalPath() : null;
     }
 }

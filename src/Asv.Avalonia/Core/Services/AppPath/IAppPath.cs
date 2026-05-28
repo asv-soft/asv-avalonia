@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Text;
 using Asv.Modeling;
 using Microsoft.Extensions.Hosting;
@@ -12,6 +13,7 @@ public interface IAppPath
 
 public class AppPath : IAppPath
 {
+    private const int MaxFileNameSegmentLength = 120;
     private static readonly HashSet<char> InvalidFileNameChars =
     [
         .. Path.GetInvalidFileNameChars(),
@@ -63,6 +65,17 @@ public class AppPath : IAppPath
         }
 
         var escaped = builder.ToString().TrimEnd(' ', '.');
-        return escaped.Length == 0 || escaped is "." or ".." ? "_" : escaped;
+        if (escaped.Length == 0 || escaped is "." or "..")
+        {
+            return "_";
+        }
+
+        if (escaped.Length <= MaxFileNameSegmentLength)
+        {
+            return escaped;
+        }
+
+        var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(escaped)))[..16];
+        return $"{escaped[..(MaxFileNameSegmentLength - hash.Length - 1)]}-{hash}";
     }
 }

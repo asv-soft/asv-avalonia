@@ -25,9 +25,10 @@ public static class ExampleMixin
 #if DEBUG
             builder.Shell.Pages.MapTest.UseDefault();
 #endif
+            builder.Shell.Pages.TextFile.UseDefault();
             builder.Shell.Pages.ControlGallery.UseDefault();
             builder.Extensions.Register<IHomePageItem, DeviceActionExample>();
-            builder.FileAssociation.Register<ExampleFileHandler>();
+            builder.FileAssociation.Register<TextFileHandler>();
             builder.ModuleIo.RegisterDevice<ExampleDeviceManagerExtension>();
             return builder;
         }
@@ -37,6 +38,7 @@ public static class ExampleMixin
     {
         public ControlGalleryBuilder ControlGallery => new ControlGalleryBuilder(builder);
         public MapTestBuilder MapTest => new MapTestBuilder(builder);
+        public TextFileBuilder TextFile => new TextFileBuilder(builder);
     }
 
     public class ControlGalleryBuilder(PageMixin.Builder builder)
@@ -160,6 +162,17 @@ public static class ExampleMixin
             builder.Parent.Parent.Extensions.Register<IHomePage, HomePageMapTestPageExtension>();
             builder.Parent.Parent.Shell.Pages.Register<MapTestPageViewModel, MapTestPageView>(
                 MapTestPageViewModel.PageId
+            );
+            return this;
+        }
+    }
+
+    public class TextFileBuilder(PageMixin.Builder builder)
+    {
+        public TextFileBuilder UseDefault()
+        {
+            builder.Parent.Parent.Shell.Pages.Register<TextFilePageViewModel, TextFilePageView>(
+                TextFilePageViewModel.PageId
             );
             return this;
         }

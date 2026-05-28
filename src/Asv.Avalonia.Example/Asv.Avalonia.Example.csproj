@@ -84,6 +84,7 @@
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\InfoBoxControls\InfoBoxControlsPageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\MapControls\MapControlsPageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\PropertyEditor\PropertyEditorPageView.axaml" />
+      <AdditionalFiles Include="Shell\Pages\TextFile\TextFilePageView.axaml" />
       <AdditionalFiles Include="Shell\Pages\ControlsGallery\Workspace\WorkspacePageView.axaml" />
     </ItemGroup>
 
