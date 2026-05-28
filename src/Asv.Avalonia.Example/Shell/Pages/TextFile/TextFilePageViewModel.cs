@@ -7,6 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Asv.Common;
 using Asv.Modeling;
+using Avalonia.Input;
+using Avalonia.Platform.Storage;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -58,6 +60,49 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
 
         Text.ModelValue.Subscribe(_ => UpdateStateIcon()).DisposeItWith(Disposable);
         UpdateStateIcon();
+        Events.Catch<DesktopDragEvent>(OnDesktopDragEvent).DisposeItWith(Disposable);
+    }
+
+    private async ValueTask OnDesktopDragEvent(
+        IViewModel owner,
+        DesktopDragEvent e,
+        CancellationToken cancel
+    )
+    {
+        var files = await GetDraggedFilePaths(e.Args);
+        if (files.Length == 0)
+        {
+            return;
+        }
+
+        var builder = new StringBuilder();
+        foreach (var path in files)
+        {
+            if (cancel.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if (!Path.Exists(path))
+            {
+                continue;
+            }
+
+            if (builder.Length > 0)
+            {
+                builder.AppendLine();
+            }
+
+            builder.Append(await File.ReadAllTextAsync(path, Encoding.UTF8, cancel));
+        }
+
+        if (builder.Length == 0)
+        {
+            return;
+        }
+
+        InsertText(builder.ToString());
+        e.Args.Handled = true;
     }
 
     public HistoricalStringProperty Text { get; }
@@ -134,6 +179,56 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         var isModified = !string.Equals(GetText(), _savedText, StringComparison.Ordinal);
         Status = isModified ? MaterialIconKind.Pencil : null;
         StatusColor = isModified ? AsvColorKind.Warning : AsvColorKind.None;
+    }
+
+    private void InsertText(string text)
+    {
+        var currentText = GetText();
+        Text.ViewValue.Value =
+            currentText.Length == 0 ? text : $"{currentText}{Environment.NewLine}{text}";
+    }
+
+    private static async ValueTask<string[]> GetDraggedFilePaths(DragEventArgs args)
+    {
+        var paths = new List<string>();
+        if (args.DataTransfer is IAsyncDataTransfer asyncDataTransfer)
+        {
+            var asyncFiles = await asyncDataTransfer.TryGetFilesAsync();
+            AddStorageItems(paths, asyncFiles);
+        }
+
+        var transferFiles = args.DataTransfer.TryGetFiles();
+        AddStorageItems(paths, transferFiles);
+
+        var fileNamesFormat = DataFormat.CreateStringPlatformFormat("FileNames");
+        var fileNames = args.DataTransfer.TryGetValues(fileNamesFormat);
+        if (fileNames != null)
+        {
+            foreach (var path in fileNames)
+            {
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    paths.Add(path);
+                }
+            }
+        }
+
+        return paths.Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+    }
+
+    private static void AddStorageItems(List<string> paths, IEnumerable<IStorageItem>? files)
+    {
+        if (files != null)
+        {
+            foreach (var file in files)
+            {
+                var path = file.TryGetLocalPath();
+                if (!string.IsNullOrWhiteSpace(path))
+                {
+                    paths.Add(path);
+                }
+            }
+        }
     }
 
     private string GetText()
