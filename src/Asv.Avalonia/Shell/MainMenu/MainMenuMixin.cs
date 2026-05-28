@@ -32,6 +32,7 @@ public static class MainMenuMixin
                 .Register<CreateMenu>()
                 .Register<OpenMenu>()
                 .Register<SaveMenu>()
+                .Register<SaveAsMenu>()
                 .Register<HelpMenu>()
                 .Register<ToolsMenu>()
                 .Register<ToolsHomeMenu>()

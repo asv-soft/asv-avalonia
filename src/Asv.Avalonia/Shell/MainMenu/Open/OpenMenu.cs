@@ -9,7 +9,7 @@ public class OpenMenu : MenuItem
     public OpenMenu()
         : base(MenuId, RS.ShellView_Toolbar_Open)
     {
-        Order = 0;
+        Order = -80;
         Icon = MaterialIconKind.FileOutline;
     }
 }

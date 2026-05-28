@@ -2,29 +2,29 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class SaveMenu : MenuItem
+public class SaveAsMenu : MenuItem
 {
-    public const string MenuId = "main-menu-save";
+    public const string MenuId = "main-menu-save-as";
 
-    public SaveMenu(
+    public SaveAsMenu(
         IHotKeyService hotKeys,
         IEnumerable<IHotKeyAction> actions,
         IShellHost shellHost
     )
-        : base(MenuId, RS.SaveCommand_CommandInfo_Name)
+        : base(MenuId, RS.SaveAsCommand_CommandInfo_Name)
     {
-        var saveAction = actions.First(x => x.ActionId == SaveAction.Id);
+        var saveAsAction = actions.First(x => x.ActionId == SaveAsAction.Id);
 
-        Order = -70;
-        Icon = saveAction.Icon;
-        BindHotKey(hotKeys, SaveAction.Id);
+        Order = -60;
+        Icon = saveAsAction.Icon;
+        BindHotKey(hotKeys, SaveAsAction.Id);
         Command = new ReactiveCommand(
             async (_, cancel) =>
             {
                 var selected = shellHost.Shell?.Navigation.SelectedControl.CurrentValue;
                 if (selected != null)
                 {
-                    await saveAction.Execute(selected, cancel);
+                    await saveAsAction.Execute(selected, cancel);
                 }
             }
         ).AddTo(ref DisposableBag);
