@@ -12,7 +12,7 @@ public class EditRedoMenu : MenuItem
     {
         shellHost.ExecuteNowOrWhenShellLoaded(InitShell).AddTo(ref DisposableBag);
         Icon = RedoAction.IconKind;
-        HotKey = hotKeys[RedoAction.Id];
+        BindHotKey(hotKeys, RedoAction.Id);
         Order = 1;
     }
 

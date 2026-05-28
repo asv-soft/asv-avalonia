@@ -9,6 +9,7 @@ public interface IHotKeyService
     bool IsHotKeyEnabled { get; set; }
     KeyGesture? this[string hotKeyId] { get; set; }
     IEnumerable<IHotKeyInfo> Actions { get; }
+    Observable<(IHotKeyInfo Action, KeyGesture Gesture)> OnHotKeyGestureChanged { get; }
 }
 
 public class NullHotKeyService : IHotKeyService
@@ -26,4 +27,6 @@ public class NullHotKeyService : IHotKeyService
     }
 
     public IEnumerable<IHotKeyInfo> Actions => [];
+    public Observable<(IHotKeyInfo Action, KeyGesture Gesture)> OnHotKeyGestureChanged =>
+        Observable.Empty<(IHotKeyInfo Action, KeyGesture Gesture)>();
 }

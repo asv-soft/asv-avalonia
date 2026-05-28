@@ -21,6 +21,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
     private readonly IReadOnlyDictionary<string, IHotKeyAction> _actions;
     private readonly Dictionary<string, KeyGesture> _currentHotKeys;
     private readonly Subject<KeyGesture> _onHotKey;
+    private readonly Subject<(IHotKeyInfo Action, KeyGesture Gesture)> _onHotKeyGestureChanged;
 
     public HotKeyService(
         IShellHost host,
@@ -40,6 +41,9 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         _actions = actions.GroupBy(x => x.ActionId).ToDictionary(x => x.Key, x => x.Last());
         _currentHotKeys = LoadHotKeys();
         _onHotKey = new Subject<KeyGesture>().AddTo(ref DisposableBag);
+        _onHotKeyGestureChanged = new Subject<(IHotKeyInfo Action, KeyGesture Gesture)>().AddTo(
+            ref DisposableBag
+        );
         IsHotKeyEnabled = true;
 
         host.ExecuteNowOrWhenShellLoaded(TryEnableHotKeys).AddTo(ref DisposableBag);
@@ -162,6 +166,9 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
 
     public Observable<KeyGesture> OnHotKey => _onHotKey;
 
+    public Observable<(IHotKeyInfo Action, KeyGesture Gesture)> OnHotKeyGestureChanged =>
+        _onHotKeyGestureChanged;
+
     public bool IsHotKeyEnabled { get; set; }
 
     public KeyGesture? this[string hotKeyId]
@@ -184,6 +191,9 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
 
             var config = _cfg.Get<HotKeyServiceConfig>();
             var effectiveHotKey = value ?? action.DefaultHotKey;
+            var changed =
+                !_currentHotKeys.TryGetValue(hotKeyId, out var currentHotKey)
+                || !currentHotKey.Equals(effectiveHotKey);
             _currentHotKeys[hotKeyId] = effectiveHotKey;
 
             if (effectiveHotKey.Equals(action.DefaultHotKey))
@@ -196,6 +206,10 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
             }
 
             _cfg.Set(config);
+            if (changed)
+            {
+                _onHotKeyGestureChanged.OnNext((action, effectiveHotKey));
+            }
         }
     }
 

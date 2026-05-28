@@ -13,7 +13,7 @@ public class ToolsHomeMenu : MenuItem
         : base(MenuId, RS.ToolsMenu_Home, ToolsMenu.MenuId)
     {
         Icon = MaterialIconKind.Home;
-        HotKey = hotKeys[OpenHomePageAction.Id];
+        BindHotKey(hotKeys, OpenHomePageAction.Id);
         Command = new ReactiveCommand(_ =>
             this.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)))
         ).DisposeItWith(Disposable);

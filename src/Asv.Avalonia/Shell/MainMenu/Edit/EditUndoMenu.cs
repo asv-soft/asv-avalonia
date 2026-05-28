@@ -12,7 +12,7 @@ public class EditUndoMenu : MenuItem
     {
         shellHost.ExecuteNowOrWhenShellLoaded(InitShell).AddTo(ref DisposableBag);
         Icon = UndoAction.IconKind;
-        HotKey = hotKeys[UndoAction.Id];
+        BindHotKey(hotKeys, UndoAction.Id);
         Order = 0;
     }
 

@@ -1,6 +1,7 @@
 using Asv.Modeling;
 using Avalonia.Controls;
 using Avalonia.Input;
+using R3;
 
 namespace Asv.Avalonia
 {
@@ -50,6 +51,15 @@ namespace Asv.Avalonia
         {
             get;
             set => SetField(ref field, value);
+        }
+
+        protected void BindHotKey(IHotKeyService hotKeys, string actionId)
+        {
+            HotKey = hotKeys[actionId];
+            hotKeys
+                .OnHotKeyGestureChanged.Where(x => x.Action.ActionId == actionId)
+                .Subscribe(x => HotKey = x.Gesture)
+                .AddTo(ref DisposableBag);
         }
 
         public override IEnumerable<IViewModel> GetChildren()

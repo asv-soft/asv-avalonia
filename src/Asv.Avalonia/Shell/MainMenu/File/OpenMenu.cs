@@ -31,7 +31,7 @@ public class OpenMenu : MenuItem
 
         Order = 0;
         Icon = MaterialIconKind.FileOutline;
-        HotKey = hotKeys[OpenFileAction.Id];
+        BindHotKey(hotKeys, OpenFileAction.Id);
         Command = new ReactiveCommand(OpenAsync).DisposeItWith(Disposable);
     }
 
