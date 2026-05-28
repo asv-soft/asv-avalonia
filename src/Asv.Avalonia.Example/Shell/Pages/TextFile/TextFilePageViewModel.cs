@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,8 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
     public const string PageId = "text_file";
     public const MaterialIconKind PageIcon = MaterialIconKind.FileOutline;
     private const string FilePathArg = "file";
+    private readonly ReactiveProperty<string?> _textModel;
+    private string _savedText = string.Empty;
 
     public TextFilePageViewModel()
         : this(
@@ -38,7 +41,10 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
     )
         : base(PageId, context, loggerFactory, dialogService, extensionService)
     {
-        Text = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+        _textModel = new ReactiveProperty<string?>(string.Empty).DisposeItWith(Disposable);
+        Text = new HistoricalStringProperty(nameof(Text), _textModel, loggerFactory)
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
         FilePath = new BindableReactiveProperty<string>(NewFileTitle).DisposeItWith(Disposable);
 
         Header = "Text file";
@@ -49,9 +55,12 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         {
             Load(filePath);
         }
+
+        Text.ModelValue.Subscribe(_ => UpdateStateIcon()).DisposeItWith(Disposable);
+        UpdateStateIcon();
     }
 
-    public BindableReactiveProperty<string> Text { get; }
+    public HistoricalStringProperty Text { get; }
 
     public BindableReactiveProperty<string> FilePath { get; }
 
@@ -92,16 +101,25 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
             return;
         }
 
-        await File.WriteAllTextAsync(filePath, Text.Value, Encoding.UTF8, cancel);
+        await File.WriteAllTextAsync(filePath, GetText(), Encoding.UTF8, cancel);
         SetFilePath(filePath);
+        _savedText = GetText();
+        UpdateStateIcon();
     }
 
     protected override void AfterLoadExtensions() { }
 
+    public override IEnumerable<IViewModel> GetChildren()
+    {
+        yield return Text;
+    }
+
     private void Load(string filePath)
     {
-        Text.Value = File.ReadAllText(filePath, Encoding.UTF8);
+        Text.ModelValue.Value = File.ReadAllText(filePath, Encoding.UTF8);
+        _savedText = GetText();
         SetFilePath(filePath);
+        UpdateStateIcon();
     }
 
     private void SetFilePath(string filePath)
@@ -109,5 +127,17 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         CurrentFilePath = filePath;
         FilePath.Value = filePath;
         Header = Path.GetFileName(filePath);
+    }
+
+    private void UpdateStateIcon()
+    {
+        var isModified = !string.Equals(GetText(), _savedText, StringComparison.Ordinal);
+        Status = isModified ? MaterialIconKind.Pencil : null;
+        StatusColor = isModified ? AsvColorKind.Warning : AsvColorKind.None;
+    }
+
+    private string GetText()
+    {
+        return Text.ModelValue.Value ?? string.Empty;
     }
 }

@@ -34,7 +34,7 @@
             TextWrapping="Wrap"
             VerticalContentAlignment="Top"
             HorizontalContentAlignment="Left"
-            Text="{Binding Text.Value, Mode=TwoWay}"
+            Text="{Binding Text.ViewValue.Value, Mode=TwoWay}"
         />
     </DockPanel>
 </UserControl>
