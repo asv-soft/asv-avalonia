@@ -1,0 +1,44 @@
+<Styles xmlns="https://github.com/avaloniaui">
+    <Style Selector="Border.launcher-surface">
+        <Setter Property="Background" Value="#171A1F" />
+        <Setter Property="BorderBrush" Value="#34404A" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="Border.launcher-logo-frame">
+        <Setter Property="Background" Value="#101318" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-title">
+        <Setter Property="FontSize" Value="26" />
+        <Setter Property="FontWeight" Value="700" />
+        <Setter Property="Foreground" Value="#F7F8FB" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-subtitle">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="#8D95A6" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-status">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="#D6DCE7" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-footer">
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="Foreground" Value="#6F7787" />
+    </Style>
+
+    <Style Selector="ProgressBar.launcher-progress">
+        <Setter Property="Height" Value="4" />
+        <Setter Property="Background" Value="#2B303A" />
+        <Setter Property="Foreground" Value="#7AE582" />
+    </Style>
+
+    <Style Selector="Button.launcher-close">
+        <Setter Property="MinWidth" Value="92" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+</Styles>

@@ -1,0 +1,102 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:launcher="clr-namespace:Asv.Avalonia.Launcher"
+    x:Class="Asv.Avalonia.Launcher.DefaultLauncherView"
+    x:DataType="launcher:LauncherViewModel"
+    mc:Ignorable="d"
+>
+    <Design.DataContext>
+        <launcher:LauncherViewModel />
+    </Design.DataContext>
+    <UserControl.Styles>
+        <StyleInclude Source="avares://Asv.Avalonia.Launcher/Styles/DefaultLauncherStyles.axaml" />
+    </UserControl.Styles>
+
+    <Border Classes="launcher-surface">
+        <Grid RowDefinitions="*,Auto" ColumnDefinitions="Auto,*" Margin="28">
+            <Border
+                Grid.Row="0"
+                Grid.Column="0"
+                Classes="launcher-logo-frame"
+                Width="96"
+                Height="96"
+                VerticalAlignment="Top"
+            >
+                <Grid>
+                    <Image
+                        x:Name="IconImage"
+                        Width="82"
+                        Height="82"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Stretch="Uniform"
+                    />
+                    <material:MaterialIcon
+                        x:Name="MaterialIcon"
+                        Classes="launcher-material-icon"
+                        Width="54"
+                        Height="54"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        IsVisible="False"
+                    />
+                </Grid>
+            </Border>
+
+            <Grid
+                Grid.Row="0"
+                Grid.Column="1"
+                Margin="24,0,0,0"
+                RowDefinitions="Auto,Auto,*,Auto,Auto"
+            >
+                <TextBlock x:Name="TitleTextBlock" Grid.Row="0" Classes="launcher-title" />
+                <TextBlock
+                    x:Name="DescriptionTextBlock"
+                    Grid.Row="1"
+                    Margin="0,4,0,0"
+                    Classes="launcher-subtitle"
+                />
+                <TextBlock
+                    Grid.Row="3"
+                    Margin="0,0,0,10"
+                    Classes="launcher-status"
+                    Text="{Binding Status.Value}"
+                />
+                <ProgressBar
+                    Grid.Row="4"
+                    Classes="launcher-progress"
+                    IsIndeterminate="{Binding IsProgressIndeterminate.Value}"
+                    Minimum="0"
+                    Maximum="1"
+                    Value="{Binding Progress.Value}"
+                />
+            </Grid>
+
+            <Grid
+                Grid.Row="1"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Margin="0,24,0,0"
+                ColumnDefinitions="*,Auto"
+            >
+                <TextBlock
+                    x:Name="FooterTextBlock"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Classes="launcher-footer"
+                />
+                <Button
+                    Grid.Column="1"
+                    Classes="launcher-close"
+                    IsVisible="{Binding IsCloseVisible.Value}"
+                    Command="{Binding CloseCommand}"
+                    Content="Close"
+                />
+            </Grid>
+        </Grid>
+    </Border>
+</UserControl>

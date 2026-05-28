@@ -978,20 +978,38 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duration in hours and minutes.
+        /// </summary>
+        public static string HourMinute_TimeSpan_Description {
+            get {
+                return ResourceManager.GetString("HourMinute_TimeSpan_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hours and minutes.
+        /// </summary>
+        public static string HourMinute_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("HourMinute_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to hours/min.
+        /// </summary>
+        public static string HourMinute_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("HourMinute_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duration in h:m:s.
         /// </summary>
         public static string HourMinuteSecond_TimeSpan_Description {
             get {
                 return ResourceManager.GetString("HourMinuteSecond_TimeSpan_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Invalid format. Expected &apos;hh{0}mm{0}ss&apos;.
-        /// </summary>
-        public static string HourMinuteSecond_UnitItem_InvalidFormatException {
-            get {
-                return ResourceManager.GetString("HourMinuteSecond_UnitItem_InvalidFormatException", resourceCulture);
             }
         }
         
@@ -1010,15 +1028,6 @@ namespace Asv.Avalonia {
         public static string HourMinuteSecond_UnitItem_Symbol {
             get {
                 return ResourceManager.GetString("HourMinuteSecond_UnitItem_Symbol", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All time components (hours, minutes, seconds) must be specified.
-        /// </summary>
-        public static string HourMinuteSecond_UnitItem_UnspecifiedTimeException {
-            get {
-                return ResourceManager.GetString("HourMinuteSecond_UnitItem_UnspecifiedTimeException", resourceCulture);
             }
         }
         
@@ -1500,6 +1509,42 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Time in milliseconds.
+        /// </summary>
+        public static string Millisecond_TimeSpan_Description {
+            get {
+                return ResourceManager.GetString("Millisecond_TimeSpan_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Millisecond.
+        /// </summary>
+        public static string Millisecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Millisecond_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fractional milliseconds are not supported, enter a whole number.
+        /// </summary>
+        public static string Millisecond_UnitItem_NotIntegerException {
+            get {
+                return ResourceManager.GetString("Millisecond_UnitItem_NotIntegerException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ms.
+        /// </summary>
+        public static string Millisecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("Millisecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MIlliVolts.
         /// </summary>
         public static string MilliVolt_UnitItem_Name {
@@ -1550,6 +1595,33 @@ namespace Asv.Avalonia {
         public static string Minute_UnitItem_Symbol {
             get {
                 return ResourceManager.GetString("Minute_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Duration in minutes and seconds.
+        /// </summary>
+        public static string MinuteSecond_TimeSpan_Description {
+            get {
+                return ResourceManager.GetString("MinuteSecond_TimeSpan_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Minutes and seconds.
+        /// </summary>
+        public static string MinuteSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("MinuteSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to min/sec.
+        /// </summary>
+        public static string MinuteSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("MinuteSecond_UnitItem_Symbol", resourceCulture);
             }
         }
         
@@ -2112,24 +2184,6 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Command that saves changes.
-        /// </summary>
-        public static string SaveCommand_CommandInfo_Description {
-            get {
-                return ResourceManager.GetString("SaveCommand_CommandInfo_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save.
-        /// </summary>
-        public static string SaveCommand_CommandInfo_Name {
-            get {
-                return ResourceManager.GetString("SaveCommand_CommandInfo_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Command that saves changes to a selected file.
         /// </summary>
         public static string SaveAsCommand_CommandInfo_Description {
@@ -2144,6 +2198,24 @@ namespace Asv.Avalonia {
         public static string SaveAsCommand_CommandInfo_Name {
             get {
                 return ResourceManager.GetString("SaveAsCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Command that saves changes.
+        /// </summary>
+        public static string SaveCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("SaveCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string SaveCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("SaveCommand_CommandInfo_Name", resourceCulture);
             }
         }
         
@@ -2585,6 +2657,24 @@ namespace Asv.Avalonia {
         public static string TimeSpan_Name {
             get {
                 return ResourceManager.GetString("TimeSpan_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid format. Expected &apos;{0}&apos;.
+        /// </summary>
+        public static string TimeSpanComposite_UnitItem_InvalidFormatException {
+            get {
+                return ResourceManager.GetString("TimeSpanComposite_UnitItem_InvalidFormatException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to All time components must be specified.
+        /// </summary>
+        public static string TimeSpanComposite_UnitItem_UnspecifiedTimeException {
+            get {
+                return ResourceManager.GetString("TimeSpanComposite_UnitItem_UnspecifiedTimeException", resourceCulture);
             }
         }
         

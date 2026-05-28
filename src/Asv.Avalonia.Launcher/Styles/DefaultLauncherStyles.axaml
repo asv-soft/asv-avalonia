@@ -1,0 +1,101 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:material="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+>
+    <material:MaterialIconStyles />
+
+    <Styles.Resources>
+        <ResourceDictionary>
+            <system:Double x:Key="LauncherTitleFontSize">20</system:Double>
+            <system:Double x:Key="LauncherTextFontSize">12</system:Double>
+
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="LauncherSurfaceBrush" Color="#F7F8FA" />
+                    <SolidColorBrush x:Key="LauncherSurfaceBorderBrush" Color="#D8DEE8" />
+                    <SolidColorBrush x:Key="LauncherLogoFrameBrush" Color="#E7ECFC" />
+                    <SolidColorBrush x:Key="LauncherLogoFrameBorderBrush" Color="#2553A3" />
+                    <SolidColorBrush x:Key="LauncherTitleBrush" Color="#1F2430" />
+                    <SolidColorBrush x:Key="LauncherMutedTextBrush" Color="#667085" />
+                    <SolidColorBrush x:Key="LauncherStatusTextBrush" Color="#344054" />
+                    <SolidColorBrush x:Key="LauncherProgressTrackBrush" Color="#E4E7EC" />
+                    <SolidColorBrush x:Key="LauncherProgressBrush" Color="#1E846B" />
+                    <SolidColorBrush x:Key="LauncherCloseBackgroundBrush" Color="#E7ECFC" />
+                    <SolidColorBrush x:Key="LauncherCloseBorderBrush" Color="#2553A3" />
+                    <SolidColorBrush x:Key="LauncherCloseForegroundBrush" Color="#2553A3" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="LauncherSurfaceBrush" Color="#171A1F" />
+                    <SolidColorBrush x:Key="LauncherSurfaceBorderBrush" Color="#34404A" />
+                    <SolidColorBrush x:Key="LauncherLogoFrameBrush" Color="#313945" />
+                    <SolidColorBrush x:Key="LauncherLogoFrameBorderBrush" Color="#607CEB" />
+                    <SolidColorBrush x:Key="LauncherTitleBrush" Color="#F7F8FB" />
+                    <SolidColorBrush x:Key="LauncherMutedTextBrush" Color="#8D95A6" />
+                    <SolidColorBrush x:Key="LauncherStatusTextBrush" Color="#D6DCE7" />
+                    <SolidColorBrush x:Key="LauncherProgressTrackBrush" Color="#2B303A" />
+                    <SolidColorBrush x:Key="LauncherProgressBrush" Color="#21C088" />
+                    <SolidColorBrush x:Key="LauncherCloseBackgroundBrush" Color="#313945" />
+                    <SolidColorBrush x:Key="LauncherCloseBorderBrush" Color="#607CEB" />
+                    <SolidColorBrush x:Key="LauncherCloseForegroundBrush" Color="#DDE5FF" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+
+    <Style Selector="Border.launcher-surface">
+        <Setter Property="Background" Value="{DynamicResource LauncherSurfaceBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LauncherSurfaceBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="Border.launcher-logo-frame">
+        <Setter Property="Background" Value="{DynamicResource LauncherLogoFrameBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LauncherLogoFrameBorderBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+    </Style>
+
+    <Style Selector="material|MaterialIcon.launcher-material-icon">
+        <Setter Property="Foreground" Value="{DynamicResource LauncherLogoFrameBorderBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-title">
+        <Setter Property="FontSize" Value="{DynamicResource LauncherTitleFontSize}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Foreground" Value="{DynamicResource LauncherTitleBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-subtitle">
+        <Setter Property="FontSize" Value="{DynamicResource LauncherTextFontSize}" />
+        <Setter Property="Foreground" Value="{DynamicResource LauncherMutedTextBrush}" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-status">
+        <Setter Property="FontSize" Value="{DynamicResource LauncherTextFontSize}" />
+        <Setter Property="Foreground" Value="{DynamicResource LauncherStatusTextBrush}" />
+        <Setter Property="TextWrapping" Value="Wrap" />
+    </Style>
+
+    <Style Selector="TextBlock.launcher-footer">
+        <Setter Property="FontSize" Value="{DynamicResource LauncherTextFontSize}" />
+        <Setter Property="Foreground" Value="{DynamicResource LauncherMutedTextBrush}" />
+    </Style>
+
+    <Style Selector="ProgressBar.launcher-progress">
+        <Setter Property="Height" Value="4" />
+        <Setter Property="Background" Value="{DynamicResource LauncherProgressTrackBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource LauncherProgressBrush}" />
+    </Style>
+
+    <Style Selector="Button.launcher-close">
+        <Setter Property="MinWidth" Value="92" />
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+    </Style>
+
+    <Style Selector="Button.launcher-close /template/ ContentPresenter#PART_ContentPresenter">
+        <Setter Property="Background" Value="{DynamicResource LauncherCloseBackgroundBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource LauncherCloseBorderBrush}" />
+        <Setter Property="Foreground" Value="{DynamicResource LauncherCloseForegroundBrush}" />
+    </Style>
+</Styles>

@@ -1,0 +1,10 @@
+<Application
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Asv.Avalonia.Example.Launcher.App"
+>
+    <Application.Styles>
+        <FluentTheme />
+        <StyleInclude Source="avares://Asv.Avalonia.Example.Launcher/Styles/ExampleLauncherStyles.axaml" />
+    </Application.Styles>
+</Application>
