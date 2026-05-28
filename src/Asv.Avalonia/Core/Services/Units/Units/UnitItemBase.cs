@@ -26,6 +26,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
 
         return new UnitException(
             result.ValidationException?.Message,
+            result.ValidationException,
             result.ValidationException?.LocalizedMessage
         );
     }
@@ -43,7 +44,7 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
 
     public virtual string PrintWithUnits(double value, string? format = null)
     {
-        return $"{value.ToString(format, CultureInfo.InvariantCulture)} {Symbol}";
+        return $"{Print(value, format)} {Symbol}";
     }
 
     public virtual double FromSi(double siValue)

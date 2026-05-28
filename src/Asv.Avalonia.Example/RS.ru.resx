@@ -141,6 +141,9 @@
     <data name="HistoricalControlsPageView_Unit" xml:space="preserve">
         <value>Скорость:</value>
     </data>
+    <data name="HistoricalControlsPageView_Time" xml:space="preserve">
+        <value>Время:</value>
+    </data>
     <data name="InfoBoxControlsPageViewModel_Example_Message" xml:space="preserve">
         <value>Пример сообщения</value>
     </data>

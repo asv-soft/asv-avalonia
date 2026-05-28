@@ -79,7 +79,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 new UnitPropertyViewModel(
                     "time",
                     Time,
-                    unit[TimeSpanUnit.Id] ?? throw new ArgumentNullException(),
+                    unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
                     loggerFactory
                 )
                 {

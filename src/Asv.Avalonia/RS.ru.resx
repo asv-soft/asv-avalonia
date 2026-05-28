@@ -918,17 +918,47 @@
     <data name="HourMinuteSecond_UnitItem_Name" xml:space="preserve">
         <value>Часы, минуты и секунды</value>
     </data>
+    <data name="Millisecond_UnitItem_Name" xml:space="preserve">
+        <value>Миллисекунда</value>
+    </data>
+    <data name="Millisecond_TimeSpan_Description" xml:space="preserve">
+        <value>Время в миллисекундах</value>
+    </data>
+    <data name="Millisecond_UnitItem_Symbol" xml:space="preserve">
+        <value>мс</value>
+    </data>
+    <data name="Millisecond_UnitItem_NotIntegerException" xml:space="preserve">
+        <value>Дробные миллисекунды не поддерживаются, введите целое число</value>
+    </data>
+    <data name="MinuteSecond_UnitItem_Name" xml:space="preserve">
+        <value>Минуты и секунды</value>
+    </data>
+    <data name="MinuteSecond_TimeSpan_Description" xml:space="preserve">
+        <value>Длительность в минутах и секундах</value>
+    </data>
+    <data name="MinuteSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>мин/сек</value>
+    </data>
+    <data name="HourMinute_UnitItem_Name" xml:space="preserve">
+        <value>Часы и минуты</value>
+    </data>
+    <data name="HourMinute_TimeSpan_Description" xml:space="preserve">
+        <value>Длительность в часах и минутах</value>
+    </data>
+    <data name="HourMinute_UnitItem_Symbol" xml:space="preserve">
+        <value>ч/мин</value>
+    </data>
     <data name="TimeSpan_Name" xml:space="preserve">
         <value>Длительность</value>
     </data>
     <data name="TimeSpan_Description" xml:space="preserve">
         <value>Единица измерения времени</value>
     </data>
-    <data name="HourMinuteSecond_UnitItem_InvalidFormatException" xml:space="preserve">
-        <value>Неверный формат. Ожидался 'чч{0}мм{0}сс'</value>
+    <data name="TimeSpanComposite_UnitItem_InvalidFormatException" xml:space="preserve">
+        <value>Неверный формат. Ожидался '{0}'</value>
     </data>
-    <data name="HourMinuteSecond_UnitItem_UnspecifiedTimeException" xml:space="preserve">
-        <value>Укажите полное время (часы, минуты, секунды)</value>
+    <data name="TimeSpanComposite_UnitItem_UnspecifiedTimeException" xml:space="preserve">
+        <value>Укажите все компоненты времени</value>
     </data>
     <data name="UnitException_UnitItemValueIsNan_Message" xml:space="preserve">
         <value>Значение не является числом</value>

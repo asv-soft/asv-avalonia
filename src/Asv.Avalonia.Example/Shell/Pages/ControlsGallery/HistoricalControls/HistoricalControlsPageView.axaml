@@ -50,7 +50,7 @@
                     />
                     <Grid
                         ColumnDefinitions="Auto,8,*"
-                        RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                        RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto"
                         RowSpacing="8"
                     >
                         <TextBlock
@@ -68,36 +68,57 @@
                         <TextBlock
                             Grid.Row="1"
                             Grid.Column="0"
-                            Text="{x:Static example:RS.HistoricalControlsPageView_String}"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_Time}"
                             VerticalAlignment="Center"
                         />
                         <TextBox
                             Grid.Row="1"
                             Grid.Column="2"
+                            Text="{Binding Time.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
+                        >
+                            <TextBox.InnerRightContent>
+                                <TextBlock
+                                    Margin="8,0,8,0"
+                                    VerticalAlignment="Center"
+                                    Foreground="{DynamicResource TextFillColorDisabledBrush}"
+                                    Text="{Binding ReadOnlyTime.ViewValue.Value}"
+                                />
+                            </TextBox.InnerRightContent>
+                        </TextBox>
+
+                        <TextBlock
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Text="{x:Static example:RS.HistoricalControlsPageView_String}"
+                            VerticalAlignment="Center"
+                        />
+                        <TextBox
+                            Grid.Row="2"
+                            Grid.Column="2"
                             Text="{Binding StringPropWithoutValidation.ViewValue.Value, UpdateSourceTrigger=LostFocus}"
                         />
 
                         <TextBlock
-                            Grid.Row="2"
+                            Grid.Row="3"
                             Grid.Column="0"
                             Text="{x:Static example:RS.HistoricalControlsPageView_Toggle}"
                             VerticalAlignment="Center"
                         />
                         <Button
-                            Grid.Row="2"
+                            Grid.Row="3"
                             Grid.Column="2"
                             Content="{Binding IsTurnedOn.ViewValue.Value}"
                             Command="{CompiledBinding TurnOn}"
                         />
 
                         <TextBlock
-                            Grid.Row="3"
+                            Grid.Row="4"
                             Grid.Column="0"
                             Text="{x:Static example:RS.HistoricalControlsPageView_GeoPoint}"
                             VerticalAlignment="Center"
                         />
                         <Grid
-                            Grid.Row="3"
+                            Grid.Row="4"
                             Grid.Column="2"
                             ColumnDefinitions="*,*,*"
                             ColumnSpacing="8"
@@ -120,13 +141,13 @@
                         </Grid>
 
                         <TextBlock
-                            Grid.Row="4"
+                            Grid.Row="5"
                             Grid.Column="0"
                             Text="{x:Static example:RS.HistoricalControlsPageView_Enum}"
                             VerticalAlignment="Center"
                         />
                         <Grid
-                            Grid.Row="4"
+                            Grid.Row="5"
                             Grid.Column="2"
                             ColumnDefinitions="*,*"
                             ColumnSpacing="8"

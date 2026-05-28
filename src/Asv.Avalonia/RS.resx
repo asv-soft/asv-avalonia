@@ -872,17 +872,47 @@
     <data name="HourMinuteSecond_UnitItem_Name" xml:space="preserve">
         <value>Hours, minutes and seconds</value>
     </data>
+    <data name="Millisecond_UnitItem_Name" xml:space="preserve">
+        <value>Millisecond</value>
+    </data>
+    <data name="Millisecond_TimeSpan_Description" xml:space="preserve">
+        <value>Time in milliseconds</value>
+    </data>
+    <data name="Millisecond_UnitItem_Symbol" xml:space="preserve">
+        <value>ms</value>
+    </data>
+    <data name="Millisecond_UnitItem_NotIntegerException" xml:space="preserve">
+        <value>Fractional milliseconds are not supported, enter a whole number</value>
+    </data>
+    <data name="MinuteSecond_UnitItem_Name" xml:space="preserve">
+        <value>Minutes and seconds</value>
+    </data>
+    <data name="MinuteSecond_TimeSpan_Description" xml:space="preserve">
+        <value>Duration in minutes and seconds</value>
+    </data>
+    <data name="MinuteSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>min/sec</value>
+    </data>
+    <data name="HourMinute_UnitItem_Name" xml:space="preserve">
+        <value>Hours and minutes</value>
+    </data>
+    <data name="HourMinute_TimeSpan_Description" xml:space="preserve">
+        <value>Duration in hours and minutes</value>
+    </data>
+    <data name="HourMinute_UnitItem_Symbol" xml:space="preserve">
+        <value>hours/min</value>
+    </data>
     <data name="TimeSpan_Name" xml:space="preserve">
         <value>Duration</value>
     </data>
     <data name="TimeSpan_Description" xml:space="preserve">
         <value>Duration unit</value>
     </data>
-    <data name="HourMinuteSecond_UnitItem_InvalidFormatException" xml:space="preserve">
-        <value>Invalid format. Expected 'hh{0}mm{0}ss'</value>
+    <data name="TimeSpanComposite_UnitItem_InvalidFormatException" xml:space="preserve">
+        <value>Invalid format. Expected '{0}'</value>
     </data>
-    <data name="HourMinuteSecond_UnitItem_UnspecifiedTimeException" xml:space="preserve">
-        <value>All time components (hours, minutes, seconds) must be specified</value>
+    <data name="TimeSpanComposite_UnitItem_UnspecifiedTimeException" xml:space="preserve">
+        <value>All time components must be specified</value>
     </data>
     <data name="UnitException_UnitItemValueIsNan_Message" xml:space="preserve">
         <value>Value is not a number</value>

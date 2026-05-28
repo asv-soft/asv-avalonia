@@ -56,7 +56,7 @@ namespace Asv.Avalonia.Example {
                 return ResourceManager.GetString("MapControlsPageViewModel_Title", resourceCulture);
             }
         }
-
+        
         public static string InfoBoxControlsPageViewModel_Title {
             get {
                 return ResourceManager.GetString("InfoBoxControlsPageViewModel_Title", resourceCulture);
@@ -282,6 +282,12 @@ namespace Asv.Avalonia.Example {
         public static string HistoricalControlsPageView_Unit {
             get {
                 return ResourceManager.GetString("HistoricalControlsPageView_Unit", resourceCulture);
+            }
+        }
+        
+        public static string HistoricalControlsPageView_Time {
+            get {
+                return ResourceManager.GetString("HistoricalControlsPageView_Time", resourceCulture);
             }
         }
         

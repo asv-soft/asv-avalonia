@@ -8,8 +8,11 @@ public static class TimeSpanMixin
     {
         builder
             .AddUnit<TimeSpanUnit>(TimeSpanUnit.Id)
+            .AddItem<TimeSpanMillisecondUnitItem>()
+            .AddItem<TimeSpanMinuteSecondUnitItem>()
+            .AddItem<TimeSpanHourMinuteUnitItem>()
             .AddItem<TimeSpanMinuteUnitItem>()
-            .AddItem<TimeSpanHmsUnitItem>()
+            .AddItem<TimeSpanHourMinuteSecondUnitItem>()
             .AddItem<TimeSpanHourUnitItem>()
             .AddItem<TimeSpanSecondUnitItem>();
         return builder;
@@ -27,6 +30,15 @@ public static class TimeSpanMixin
     public static IUnitItem? TimeSpanHour(this IUnitService service) =>
         service[TimeSpanUnit.Id, TimeSpanHourUnitItem.Id];
 
-    public static IUnitItem? TimeSpanHms(this IUnitService service) =>
-        service[TimeSpanUnit.Id, TimeSpanHmsUnitItem.Id];
+    public static IUnitItem? TimeSpanHourMinuteSecond(this IUnitService service) =>
+        service[TimeSpanUnit.Id, TimeSpanHourMinuteSecondUnitItem.Id];
+
+    public static IUnitItem? TimeSpanMillisecond(this IUnitService service) =>
+        service[TimeSpanUnit.Id, TimeSpanMillisecondUnitItem.Id];
+
+    public static IUnitItem? TimeSpanMinuteSecond(this IUnitService service) =>
+        service[TimeSpanUnit.Id, TimeSpanMinuteSecondUnitItem.Id];
+
+    public static IUnitItem? TimeSpanHourMinute(this IUnitService service) =>
+        service[TimeSpanUnit.Id, TimeSpanHourMinuteUnitItem.Id];
 }
