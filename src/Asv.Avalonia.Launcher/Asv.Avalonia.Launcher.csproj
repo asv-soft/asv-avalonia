@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>$(TargetFramework)</TargetFramework>
-        <Version>$(ProductVersion)</Version>
-        <PackageVersion>$(ProductVersion)</PackageVersion>
+        <Version>$(LauncherVersion)</Version>
+        <PackageVersion>$(LauncherVersion)</PackageVersion>
 
         <Authors>https://github.com/asv-soft</Authors>
         <Company>https://github.com/asv-soft</Company>

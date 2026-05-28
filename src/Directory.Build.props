@@ -4,6 +4,7 @@
         <ApiVersion>1.0.0</ApiVersion>
         <TargetFramework>net10.0</TargetFramework>
         <ProductVersion>3.0.0-dev.10</ProductVersion>
+        <LauncherVersion>0.0.1-dev.0</LauncherVersion>
         <AvaloniaVersion>12.0.3</AvaloniaVersion>
         <AvaloniaDataGridVersion>12.0.0</AvaloniaDataGridVersion>
         <DotNetVersion>10.0.0</DotNetVersion>
