@@ -14,8 +14,18 @@ public static class ShellMixin
         {
             var path1 = new List<NavId> { new(ShellViewModel.TypeId) };
             path1.AddRange(path);
+            if (sender is IShell shell)
+            {
+                return GoToShell(shell, new NavPath(path1));
+            }
+
             return sender.Events.Rise(new NavigateEvent<IViewModel>(sender, new NavPath(path1)));
         }
+    }
+
+    private static async ValueTask GoToShell(IShell shell, NavPath path)
+    {
+        await shell.Navigation.GoTo(path);
     }
 
     extension(IHostApplicationBuilder builder)

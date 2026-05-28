@@ -18,6 +18,7 @@ public class OpenMenuExtender(
 {
     private const string OpenDialogMenuId = $"{OpenMenu.MenuId}-dialog";
     private const string RecentMenuIdPrefix = $"{OpenMenu.MenuId}-recent-";
+    private const string ClearRecentMenuId = $"{OpenMenu.MenuId}-clear-recent";
 
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {
@@ -44,7 +45,9 @@ public class OpenMenuExtender(
     {
         foreach (
             var item in context
-                .MainMenu.Where(x => x.Id.TypeId.StartsWith(RecentMenuIdPrefix))
+                .MainMenu.Where(x =>
+                    x.Id.TypeId.StartsWith(RecentMenuIdPrefix) || x.Id.TypeId == ClearRecentMenuId
+                )
                 .ToArray()
         )
         {
@@ -76,6 +79,24 @@ public class OpenMenuExtender(
 
             context.MainMenu.Add(menu);
         }
+
+        if (recentFiles.Length == 0)
+        {
+            return;
+        }
+
+        var clearRecent = new MenuItem(ClearRecentMenuId, "Clear Recent", OpenMenu.MenuId)
+        {
+            Icon = MaterialIconKind.DeleteSweep,
+            Order = 10 + FileCommandConfig.MaxRecentFiles,
+            Command = new ReactiveCommand(_ =>
+            {
+                OpenFileAction.ClearRecentFiles(config);
+                RefreshRecentFiles(context, contextDispose);
+            }),
+        }.DisposeItWith(contextDispose);
+
+        context.MainMenu.Add(clearRecent);
     }
 
     private async ValueTask OpenRecentFile(string filePath, CancellationToken cancel)

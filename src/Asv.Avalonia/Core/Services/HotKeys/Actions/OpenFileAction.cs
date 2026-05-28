@@ -109,4 +109,11 @@ public class OpenFileAction(
         cfg.RecentFiles = recentFiles;
         config.Set(cfg);
     }
+
+    public static void ClearRecentFiles(IConfiguration config)
+    {
+        var cfg = config.Get<FileCommandConfig>();
+        cfg.RecentFiles = [];
+        config.Set(cfg);
+    }
 }
