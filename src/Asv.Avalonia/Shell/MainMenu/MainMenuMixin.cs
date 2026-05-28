@@ -25,6 +25,7 @@ public static class MainMenuMixin
         public MainMenuBuilder UseDefault()
         {
             Parent.Parent.Extensions.Register<IShell, CreateMenuExtender>();
+            Parent.Parent.Extensions.Register<IShell, OpenMenuExtender>();
             return Register<EditMenu>()
                 .Register<EditUndoMenu>()
                 .Register<EditRedoMenu>()

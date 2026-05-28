@@ -56,7 +56,8 @@ public class CreateMenuExtender(
             return;
         }
 
-        config.Set(new FileCommandConfig { LastDirectory = Path.GetDirectoryName(filePath) });
+        cfg.LastDirectory = Path.GetDirectoryName(filePath);
+        config.Set(cfg);
         await files.Create(filePath, fileType);
     }
 }

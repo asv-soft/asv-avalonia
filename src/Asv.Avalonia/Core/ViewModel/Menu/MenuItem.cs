@@ -53,7 +53,7 @@ namespace Asv.Avalonia
             set => SetField(ref field, value);
         }
 
-        protected void BindHotKey(IHotKeyService hotKeys, string actionId)
+        public void BindHotKey(IHotKeyService hotKeys, string actionId)
         {
             HotKey = hotKeys[actionId];
             hotKeys

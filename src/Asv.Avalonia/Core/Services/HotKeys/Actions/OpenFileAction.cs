@@ -7,7 +7,10 @@ namespace Asv.Avalonia;
 
 public class FileCommandConfig
 {
+    public const int MaxRecentFiles = 10;
+
     public string? LastDirectory { get; set; }
+    public List<string> RecentFiles { get; set; } = [];
 }
 
 public class OpenFileAction(
@@ -69,7 +72,41 @@ public class OpenFileAction(
             return;
         }
 
-        config.Set(new FileCommandConfig { LastDirectory = Path.GetDirectoryName(filePath) });
         await files.Open(filePath);
+        AddRecentFile(config, filePath);
+    }
+
+    public static IReadOnlyList<string> GetRecentFiles(IConfiguration config)
+    {
+        var cfg = config.Get<FileCommandConfig>();
+        return (cfg.RecentFiles ?? [])
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(FileCommandConfig.MaxRecentFiles)
+            .ToArray();
+    }
+
+    public static void AddRecentFile(IConfiguration config, string filePath)
+    {
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            return;
+        }
+
+        var fullPath = Path.GetFullPath(filePath);
+        var cfg = config.Get<FileCommandConfig>();
+        var recentFiles = (cfg.RecentFiles ?? [])
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Select(Path.GetFullPath)
+            .Where(x => !string.Equals(x, fullPath, StringComparison.OrdinalIgnoreCase))
+            .Prepend(fullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .Take(FileCommandConfig.MaxRecentFiles)
+            .ToList();
+
+        cfg.LastDirectory = Path.GetDirectoryName(fullPath);
+        cfg.RecentFiles = recentFiles;
+        config.Set(cfg);
     }
 }
