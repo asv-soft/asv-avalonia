@@ -24,6 +24,7 @@
     <File Path="../.gitignore" />
     <File Path="../LICENSE" />
     <File Path="../README.md" />
+    <File Path="../win-64-install.nsi" />
     <File Path=".aiassistant/rules/comments.md" />
     <File Path="CodeStyle.ruleset" />
     <File Path="Directory.Build.props" />
