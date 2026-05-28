@@ -37,6 +37,7 @@ public static class HotKeyMixin
                 .Register<RedoAction>()
                 .Register<RefreshAction>()
                 .Register<SaveAction>()
+                .Register<SaveAsAction>()
                 .Register<SearchAction>()
                 .Register<UndoAction>();
         }

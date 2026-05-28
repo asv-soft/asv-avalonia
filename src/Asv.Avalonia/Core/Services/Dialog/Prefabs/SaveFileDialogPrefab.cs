@@ -19,6 +19,11 @@ public sealed class SaveFileDialogPayload
     public string? DefaultExt { get; init; }
 
     /// <summary>
+    /// Gets or inits the suggested file name.
+    /// </summary>
+    public string? SuggestedFileName { get; init; }
+
+    /// <summary>
     /// Gets or inits the extension filter, example: "txt, *, .nupkg".
     /// </summary>
     public string? TypeFilter { get; init; }
@@ -37,7 +42,11 @@ public sealed class SaveFileDialogDesktopPrefab(IShellHost host)
 {
     public async Task<string?> ShowDialogAsync(SaveFileDialogPayload dialogPayload)
     {
-        var options = new FilePickerSaveOptions { Title = dialogPayload.Title };
+        var options = new FilePickerSaveOptions
+        {
+            Title = dialogPayload.Title,
+            SuggestedFileName = dialogPayload.SuggestedFileName,
+        };
 
         if (!string.IsNullOrEmpty(dialogPayload.DefaultExt))
         {

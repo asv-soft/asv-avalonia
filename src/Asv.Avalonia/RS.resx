@@ -824,6 +824,12 @@
     <data name="SaveCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that saves changes</value>
     </data>
+    <data name="SaveAsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Save As</value>
+    </data>
+    <data name="SaveAsCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Command that saves changes to a selected file</value>
+    </data>
     <data name="ChangeIntPropertyCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change Integer Property</value>
     </data>

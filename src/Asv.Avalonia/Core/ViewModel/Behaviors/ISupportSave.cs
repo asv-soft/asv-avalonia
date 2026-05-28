@@ -1,4 +1,4 @@
-﻿namespace Asv.Avalonia.Save;
+﻿namespace Asv.Avalonia;
 
 public interface ISupportSave : IViewModel
 {

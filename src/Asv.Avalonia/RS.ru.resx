@@ -867,6 +867,12 @@
     <data name="SaveCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, которая сохраняет изменения</value>
     </data>
+    <data name="SaveAsCommand_CommandInfo_Name" xml:space="preserve">
+        <value>Сохранить как</value>
+    </data>
+    <data name="SaveAsCommand_CommandInfo_Description" xml:space="preserve">
+        <value>Команда, которая сохраняет изменения в выбранный файл</value>
+    </data>
     <data name="ChangeIntPropertyCommand_CommandInfo_Name" xml:space="preserve">
         <value>Изменить свойство целочисленного типа</value>
     </data>

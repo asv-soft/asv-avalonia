@@ -2130,6 +2130,24 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Command that saves changes to a selected file.
+        /// </summary>
+        public static string SaveAsCommand_CommandInfo_Description {
+            get {
+                return ResourceManager.GetString("SaveAsCommand_CommandInfo_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save As.
+        /// </summary>
+        public static string SaveAsCommand_CommandInfo_Name {
+            get {
+                return ResourceManager.GetString("SaveAsCommand_CommandInfo_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command that saves layout of the current page to file.
         /// </summary>
         public static string SaveLayoutToFileCommand_CommandInfo_Description {

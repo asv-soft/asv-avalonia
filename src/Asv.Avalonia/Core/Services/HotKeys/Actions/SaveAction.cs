@@ -1,4 +1,3 @@
-using Asv.Avalonia.Save;
 using Avalonia.Input;
 using Material.Icons;
 
@@ -15,7 +14,6 @@ public class SaveAction : HotKeyAction<ISupportSave>
 
     protected override ValueTask InternalExecute(ISupportSave target, CancellationToken cancel)
     {
-        target.Save();
-        return ValueTask.CompletedTask;
+        return target.Save();
     }
 }
