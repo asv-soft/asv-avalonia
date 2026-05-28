@@ -53,12 +53,32 @@ namespace Asv.Avalonia
             set => SetField(ref field, value);
         }
 
-        public void BindHotKey(IHotKeyService hotKeys, string actionId)
+        public void BindHotKey(
+            IHotKeyService hotKeys,
+            string actionId,
+            bool visibleWhenCantExecute = false
+        )
         {
             HotKey = hotKeys[actionId];
             hotKeys
                 .OnHotKeyGestureChanged.Where(x => x.Action.ActionId == actionId)
                 .Subscribe(x => HotKey = x.Gesture)
+                .AddTo(ref DisposableBag);
+
+            hotKeys
+                .ObserveCanExecute(actionId)
+                .Subscribe(canExecute =>
+                {
+                    if (visibleWhenCantExecute)
+                    {
+                        IsVisible = true;
+                        IsEnabled = canExecute;
+                    }
+                    else
+                    {
+                        IsVisible = canExecute;
+                    }
+                })
                 .AddTo(ref DisposableBag);
         }
 

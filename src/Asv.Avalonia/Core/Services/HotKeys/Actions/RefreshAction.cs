@@ -12,7 +12,10 @@ public class RefreshAction : HotKeyAction<ISupportRefresh>
     public override MaterialIconKind Icon => MaterialIconKind.Refresh;
     public override KeyGesture DefaultHotKey => new(Key.F5);
 
-    protected override async ValueTask Execute(ISupportRefresh target, CancellationToken cancel)
+    protected override async ValueTask InternalExecute(
+        ISupportRefresh target,
+        CancellationToken cancel
+    )
     {
         await target.Refresh();
     }

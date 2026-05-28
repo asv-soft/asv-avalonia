@@ -12,11 +12,16 @@ public abstract class HotKeyAction<TContext> : IHotKeyAction
     public abstract MaterialIconKind Icon { get; }
     public abstract KeyGesture DefaultHotKey { get; }
 
-    public ValueTask TryExecute(IViewModel context, CancellationToken cancel = default)
+    public bool CanExecute(IViewModel context)
     {
-        var target = context.FindParentOfType<TContext>();
-        return target == null ? ValueTask.CompletedTask : Execute(target, cancel);
+        return context.FindParentOfType<TContext>() != null;
     }
 
-    protected abstract ValueTask Execute(TContext target, CancellationToken cancel);
+    public ValueTask Execute(IViewModel context, CancellationToken cancel = default)
+    {
+        var target = context.FindParentOfType<TContext>();
+        return target == null ? ValueTask.CompletedTask : InternalExecute(target, cancel);
+    }
+
+    protected abstract ValueTask InternalExecute(TContext target, CancellationToken cancel);
 }

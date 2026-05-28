@@ -13,7 +13,7 @@ public class SearchAction : HotKeyAction<IShell>
     public override MaterialIconKind Icon => MaterialIconKind.Search;
     public override KeyGesture DefaultHotKey => new(Key.F, KeyModifiers.Control);
 
-    protected override async ValueTask Execute(IShell target, CancellationToken cancel)
+    protected override async ValueTask InternalExecute(IShell target, CancellationToken cancel)
     {
         var found = await TreeVisitorEvent.VisitAll<ISupportTextSearch>(target, cancel);
         if (found.Count == 0)

@@ -14,7 +14,7 @@ public class UndoAction : HotKeyAction<IPage>
     public override MaterialIconKind Icon => IconKind;
     public override KeyGesture DefaultHotKey => new(Key.Z, KeyModifiers.Control);
 
-    protected override async ValueTask Execute(IPage target, CancellationToken cancel)
+    protected override async ValueTask InternalExecute(IPage target, CancellationToken cancel)
     {
         await target.UndoHistory.UndoAsync(cancel);
     }

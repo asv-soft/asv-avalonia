@@ -14,7 +14,7 @@ public class OpenHomePageAction : HotKeyAction<IViewModel>
     public override MaterialIconKind Icon => HomePageViewModel.PageIcon;
     public override KeyGesture DefaultHotKey => new(Key.H, KeyModifiers.Control);
 
-    protected override async ValueTask Execute(IViewModel target, CancellationToken cancel)
+    protected override async ValueTask InternalExecute(IViewModel target, CancellationToken cancel)
     {
         await target.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)));
     }

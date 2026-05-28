@@ -20,6 +20,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
     private readonly ILogger<HotKeyService> _logger;
     private readonly IReadOnlyDictionary<string, IHotKeyAction> _actions;
     private readonly Dictionary<string, KeyGesture> _currentHotKeys;
+    private readonly IReadOnlyDictionary<string, BindableReactiveProperty<bool>> _canExecute;
     private readonly Subject<KeyGesture> _onHotKey;
     private readonly Subject<(IHotKeyInfo Action, KeyGesture Gesture)> _onHotKeyGestureChanged;
 
@@ -40,6 +41,10 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         _logger = loggerFactory.CreateLogger<HotKeyService>();
         _actions = actions.GroupBy(x => x.ActionId).ToDictionary(x => x.Key, x => x.Last());
         _currentHotKeys = LoadHotKeys();
+        _canExecute = _actions.ToDictionary(
+            x => x.Key,
+            _ => new BindableReactiveProperty<bool>().AddTo(ref DisposableBag)
+        );
         _onHotKey = new Subject<KeyGesture>().AddTo(ref DisposableBag);
         _onHotKeyGestureChanged = new Subject<(IHotKeyInfo Action, KeyGesture Gesture)>().AddTo(
             ref DisposableBag
@@ -47,6 +52,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         IsHotKeyEnabled = true;
 
         host.ExecuteNowOrWhenShellLoaded(TryEnableHotKeys).AddTo(ref DisposableBag);
+        host.ExecuteNowOrWhenShellLoaded(TrackCanExecute).AddTo(ref DisposableBag);
     }
 
     private Dictionary<string, KeyGesture> LoadHotKeys()
@@ -120,6 +126,22 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         Disposable.Create(() => _host.TopLevel.KeyDown -= OnKeyDown).AddTo(ref DisposableBag);
     }
 
+    private void TrackCanExecute(IShell shell, TopLevel topLevel)
+    {
+        UpdateCanExecute(shell.Navigation.SelectedControl.CurrentValue);
+        shell.Navigation.SelectedControl.Subscribe(UpdateCanExecute).AddTo(ref DisposableBag);
+    }
+
+    private void UpdateCanExecute(IViewModel? context)
+    {
+        var actualContext = context ?? _host.Shell;
+        foreach (var (actionId, action) in _actions)
+        {
+            _canExecute[actionId].Value =
+                actualContext is not null && action.CanExecute(actualContext);
+        }
+    }
+
     private async void OnKeyDown(object? sender, KeyEventArgs e)
     {
         try
@@ -150,7 +172,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
                     continue;
                 }
 
-                await action.TryExecute(context);
+                await action.Execute(context);
                 e.Handled = true;
                 return;
             }
@@ -214,4 +236,14 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
     }
 
     public IEnumerable<IHotKeyInfo> Actions => _actions.Values;
+
+    public Observable<bool> ObserveCanExecute(string actionId)
+    {
+        if (_canExecute.TryGetValue(actionId, out var canExecute))
+        {
+            return canExecute;
+        }
+
+        throw new KeyNotFoundException($"Hot key action '{actionId}' not found.");
+    }
 }
