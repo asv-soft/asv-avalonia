@@ -1,5 +1,4 @@
 using Asv.Common;
-using Asv.IO;
 using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -29,52 +28,30 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
             devices,
             loggerFactory.CreateLogger<DevicePageCore>(),
             this
-        );
+        ).DisposeItWith(Disposable);
         _deviceCore.Init(context.NavArgs);
-        _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
-        _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
-        _deviceCore.OnDeviceInitialized += AfterDeviceInitializedBase;
-        _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
+
+        _deviceCore
+            .OnDeviceInitialized.Subscribe(w =>
+                w.WhenDisconnectedToken.Register(() =>
+                {
+                    Nodes.RemoveAll();
+                    SelectedPage.Value?.Dispose();
+                    SelectedNode.Value?.Dispose();
+                    SelectedPage.Value = null;
+                    SelectedNode.Value = null;
+                })
+            )
+            .DisposeItWith(Disposable);
 
         IsDeviceInitialized = _deviceCore
             .IsDeviceInitialized.ToReadOnlyBindableReactiveProperty()
             .DisposeItWith(Disposable);
     }
 
-    private void AfterDeviceInitializedBase(
-        IClientDevice device,
-        CancellationToken onDisconnectedToken
-    )
-    {
-        onDisconnectedToken.Register(() =>
-        {
-            Nodes.RemoveAll();
-            SelectedPage.Value?.Dispose();
-            SelectedNode.Value?.Dispose();
-            SelectedPage.Value = null;
-            SelectedNode.Value = null;
-        });
-    }
-
-    protected abstract void AfterDeviceInitialized(
-        IClientDevice device,
-        CancellationToken onDisconnectedToken
-    );
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
-            _deviceCore.OnDeviceInitialized -= AfterDeviceInitializedBase;
-            _deviceCore.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
-
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
     public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized { get; }
+    public Observable<DeviceWrapper> OnDeviceInitialized => _deviceCore.OnDeviceInitialized;
     public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
     public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }

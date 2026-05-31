@@ -1,4 +1,3 @@
-using System.Collections.Specialized;
 using System.Diagnostics;
 using Asv.Common;
 using Asv.IO;
@@ -56,11 +55,12 @@ public sealed class DevicePageCore : IDisposable
         OnDeviceDisconnecting = _onDeviceDisconnecting.AsObservable();
     }
 
-    public event Action<IClientDevice, CancellationToken>? OnDeviceInitialized;
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _target;
+    public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _isDeviceInitialized;
+    public Observable<DeviceWrapper> OnDeviceInitialized =>
+        _target.Where(x => x.HasValue).Select(x => x!.Value).ObserveOnUIThreadDispatcher();
     public Observable<Unit> OnDeviceDisconnecting { get; }
     public Observable<Unit> OnDeviceDisconnected { get; }
-    public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _isDeviceInitialized;
 
     public void Init(NavArgs args)
     {
@@ -121,6 +121,7 @@ public sealed class DevicePageCore : IDisposable
         _deviceDisconnectedToken?.Dispose();
         _deviceDisconnectedToken = null;
         _waitInitSubscription.Disposable?.Dispose();
+        _target.OnNext(null);
     }
 
     private void DeviceFoundButNotInitialized(IClientDevice device)
@@ -140,7 +141,6 @@ public sealed class DevicePageCore : IDisposable
         {
             _waitInitSubscription.Disposable?.Dispose();
             _deviceDisconnectedToken = new CancellationTokenSource();
-            OnDeviceInitialized?.Invoke(device, _deviceDisconnectedToken.Token);
             _target.OnNext(new DeviceWrapper(device, _deviceDisconnectedToken.Token));
             _isDeviceInitialized.Value = true;
         }

@@ -1,7 +1,4 @@
-﻿using System.Collections.Specialized;
-using Asv.Common;
-using Asv.IO;
-using Asv.Modeling;
+﻿using Asv.Common;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -22,40 +19,27 @@ public abstract class DevicePageViewModel<T> : PageViewModel<T>, IDevicePage
     )
         : base(id, context, loggerFactory, dialogService, ext)
     {
+        ArgumentNullException.ThrowIfNull(context);
         ArgumentNullException.ThrowIfNull(devices);
         ArgumentNullException.ThrowIfNull(loggerFactory);
+        ArgumentNullException.ThrowIfNull(dialogService);
+        ArgumentNullException.ThrowIfNull(ext);
+
         _deviceCore = new DevicePageCore(
             devices,
             loggerFactory.CreateLogger<DevicePageCore>(),
             this
-        );
+        ).DisposeItWith(Disposable);
         _deviceCore.Init(context.NavArgs);
-        _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
-        _deviceCore.OnDeviceInitialized += AfterDeviceInitialized;
 
         IsDeviceInitialized = _deviceCore
             .IsDeviceInitialized.ToReadOnlyBindableReactiveProperty()
             .DisposeItWith(Disposable);
     }
 
-    protected abstract void AfterDeviceInitialized(
-        IClientDevice device,
-        CancellationToken onDisconnectedToken
-    );
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing)
-        {
-            _deviceCore.OnDeviceInitialized -= AfterDeviceInitialized;
-            _deviceCore.Dispose();
-        }
-
-        base.Dispose(disposing);
-    }
-
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
     public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized { get; }
+    public Observable<DeviceWrapper> OnDeviceInitialized => _deviceCore.OnDeviceInitialized;
     public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
     public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }
