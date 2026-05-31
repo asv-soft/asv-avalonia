@@ -4,6 +4,7 @@ using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
 using Avalonia.Controls;
+using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
@@ -106,12 +107,25 @@ public sealed class DevicePageCore : IDisposable
             })
             .DisposeItWith(_disposable);
 
-        foreach (
-            var device in _devices.Explorer.Devices.Where(x => x.Key.AsString() == _targetDeviceId)
-        )
-        {
-            DeviceFoundButNotInitialized(device.Value);
-        }
+        Dispatcher.UIThread.Post(
+            () =>
+            {
+                if (_disposed)
+                {
+                    return;
+                }
+
+                foreach (
+                    var device in _devices.Explorer.Devices.Where(x =>
+                        x.Key.AsString() == _targetDeviceId
+                    )
+                )
+                {
+                    DeviceFoundButNotInitialized(device.Value);
+                }
+            },
+            DispatcherPriority.Background
+        );
     }
 
     private void DeviceRemoved()
