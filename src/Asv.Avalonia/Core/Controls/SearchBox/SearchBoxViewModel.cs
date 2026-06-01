@@ -57,6 +57,8 @@ public class SearchBoxViewModel
         IsExecuting = _isExecuting.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
         Progress = _progress.ToReadOnlyBindableReactiveProperty().DisposeItWith(Disposable);
 
+        RefreshCommand = new ReactiveCommand((_, ct) => Refresh(ct)).DisposeItWith(Disposable);
+
         var textValueObservable = Text.ViewValue.Skip(1);
 
         if (throttleTime is not null)
@@ -77,6 +79,7 @@ public class SearchBoxViewModel
     public IReadOnlyBindableReactiveProperty<bool> CanExecute { get; }
     public IReadOnlyBindableReactiveProperty<bool> IsExecuting { get; }
     public IReadOnlyBindableReactiveProperty<double> Progress { get; }
+    public ReactiveCommand RefreshCommand { get; }
 
     public void Cancel()
     {
@@ -143,18 +146,15 @@ public class SearchBoxViewModel
         _canExecute.Value = false;
         _progress.Value = double.NaN;
         _cancellationTokenSource = new CancellationTokenSource();
+
         try
         {
             await _searchCallback(text, this, _cancellationTokenSource.Token);
         }
-        catch (OperationCanceledException)
-        {
-            return;
-        }
+        catch (OperationCanceledException) { }
         catch (Exception ex)
         {
             ErrorHandler(ex);
-            return;
         }
         finally
         {

@@ -43,7 +43,7 @@
                     </Button>
                     <Button
                         IsVisible="{Binding !IsExecuting.Value}"
-                        Command="{Binding Refresh}"
+                        Command="{Binding RefreshCommand}"
                         Padding="0"
                         Theme="{StaticResource TransparentButton}"
                     >
