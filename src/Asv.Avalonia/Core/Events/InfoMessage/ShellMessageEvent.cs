@@ -38,4 +38,21 @@ public static class ShellMessageEventMixin
             cancel
         );
     }
+
+    public static ValueTask RiseShellWarningMessage(
+        this IViewModel source,
+        string title,
+        string message,
+        Exception? exception = null,
+        CancellationToken cancel = default
+    )
+    {
+        return source.Rise(
+            new ShellMessageEvent(
+                source,
+                new ShellMessage(title, message, ShellErrorState.Warning, exception?.ToString())
+            ),
+            cancel
+        );
+    }
 }

@@ -79,7 +79,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         _pages = [];
         _pages.DisposeRemovedItems().DisposeItWith(Disposable);
         _pages.SetRoutableParent(this).DisposeItWith(Disposable);
-        R3.Disposable.Create(() => _pages.Clear()).AddTo(ref DisposableBag);
+        R3.Disposable.Create(() => _pages.ClearWithItemsDispose()).AddTo(ref DisposableBag);
 
         PagesView = _pages.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
 

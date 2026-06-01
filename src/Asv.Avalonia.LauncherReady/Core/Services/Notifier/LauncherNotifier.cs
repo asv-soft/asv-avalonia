@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
@@ -63,7 +62,9 @@ internal sealed class LauncherNotifier : ILauncherNotifier
 
         if (options.Value.IsOptional)
         {
-            _logger.LogDebug("Value is optional");
+            _logger.LogDebug(
+                "Launcher is optional, but launcher's endpoint arguments were not presented"
+            );
             return;
         }
 
