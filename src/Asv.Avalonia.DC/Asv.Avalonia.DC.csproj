@@ -1,40 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>$(TargetFramework)</TargetFramework>
-        <FileVersion>$(ProductVersion)</FileVersion>
-        <Version>$(ProductVersion)</Version>
-        <PackageVersion>$(ProductVersion)</PackageVersion>
-
-        <Authors>https://github.com/asv-soft</Authors>
-        <Company>https://github.com/asv-soft</Company>
-        <Copyright>https://github.com/asv-soft</Copyright>
-
-        <PackageProjectUrl>https://github.com/asv-soft/asv-avalonia</PackageProjectUrl>
-        <RepositoryUrl>https://github.com/asv-soft/asv-avalonia</RepositoryUrl>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-        
-        <ImplicitUsings>enable</ImplicitUsings>
-        <CodeAnalysisRuleSet>../CodeStyle.ruleset</CodeAnalysisRuleSet>
-        <WarningsAsErrors>
-            CS0169,
-            CS0618,
-            CS1502,
-            CS1503,
-            CS8524,
-            CS8600,
-            CS8601,
-            CS8602,
-            CS8603,
-            CS8604,
-            CS8625,
-            CS8629,
-            CS8762,
-            CA1510,
-            CA1851
-        </WarningsAsErrors>
-        <LangVersion>preview</LangVersion>
     </PropertyGroup>
     
     <ItemGroup>
