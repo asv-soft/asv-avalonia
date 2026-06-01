@@ -97,13 +97,18 @@ public static class ViewLayoutMixin
             ArgumentNullException.ThrowIfNull(trigger);
 
             var registration = new SerialDisposable();
-            registration.Disposable = Register();
 
             var dataContextSubscription = view.GetObservable(StyledElement.DataContextProperty)
                 .ToObservable()
-                .Subscribe(_ => registration.Disposable = Register());
+                .Subscribe(_ => ReRegister());
 
             return Disposable.Combine(registration, dataContextSubscription);
+
+            void ReRegister()
+            {
+                registration.Disposable = Disposable.Empty;
+                registration.Disposable = Register();
+            }
 
             IDisposable Register()
             {
@@ -149,13 +154,18 @@ public static class ViewLayoutMixin
             ArgumentNullException.ThrowIfNull(trigger);
 
             var registration = new SerialDisposable();
-            registration.Disposable = Register();
 
             var dataContextSubscription = view.GetObservable(StyledElement.DataContextProperty)
                 .ToObservable()
-                .Subscribe(_ => registration.Disposable = Register());
+                .Subscribe(_ => ReRegister());
 
             return Disposable.Combine(registration, dataContextSubscription);
+
+            void ReRegister()
+            {
+                registration.Disposable = Disposable.Empty;
+                registration.Disposable = Register();
+            }
 
             IDisposable Register()
             {

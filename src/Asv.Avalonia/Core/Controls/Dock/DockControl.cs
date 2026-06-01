@@ -400,12 +400,7 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
     private void RegisterLayout()
     {
         _layout?.Dispose();
-        _layout = this.RegisterLayout<DockControlConfig, Unit>(
-            nameof(DockControl),
-            LoadLayout,
-            SaveLayout,
-            _layoutChanged
-        );
+        _layout = this.RegisterLayout(nameof(DockControl), LoadLayout, SaveLayout, _layoutChanged);
     }
 
     private void LoadLayout(DockControlConfig config)
