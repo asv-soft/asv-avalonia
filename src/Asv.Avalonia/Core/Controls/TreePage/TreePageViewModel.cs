@@ -19,6 +19,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
     private bool _internalNavigate;
+    private bool _isLayoutLoaded;
 
     protected TreePageViewModel(
         string typeId,
@@ -47,20 +48,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).AddTo(ref DisposableBag);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).AddTo(ref DisposableBag);
         R3.Disposable.Create(() => SelectedPage.Value?.Dispose()).AddTo(ref DisposableBag);
-
-        Layout
-            .Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
-            .AddTo(ref DisposableBag);
-        Layout
-            .Register(
-                nameof(IsMenuVisible),
-                x => IsMenuVisible = x,
-                () => IsMenuVisible,
-                this.ObservePropertyChanged(x => x.IsMenuVisible)
-            )
-            .AddTo(ref DisposableBag);
-
-        Layout.LoadWhenRootAttached(RootTracking).DisposeItWith(Disposable);
     }
 
     public MaterialIconKind? TreeHeaderIcon
@@ -151,17 +138,67 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     protected override void AfterLoadExtensions()
     {
-        // do nothing
-    }
+        var selectedNodeLayout = Layout.Register<string>(
+            nameof(SelectedNode),
+            (layoutValue, _) =>
+            {
+                LoadLayout(layoutValue);
+                return ValueTask.CompletedTask;
+            }
+        );
+        var selectedNodeLayoutSave = SelectedNode
+            .Skip(1)
+            .WhereNotNull()
+            .Where(_ => _isLayoutLoaded)
+            .SubscribeAwait(
+                (node, cancel) => selectedNodeLayout.SaveAsync(node.Key.ToString(), cancel),
+                AwaitOperation.Drop
+            );
+        R3.Disposable.Combine(selectedNodeLayout, selectedNodeLayoutSave).AddTo(ref DisposableBag);
 
-    private string? SaveLayout()
-    {
-        return SelectedNode.Value?.Key.ToString();
+        var isMenuVisibleLayout = Layout.Register<bool>(
+            nameof(IsMenuVisible),
+            (value, _) =>
+            {
+                IsMenuVisible = value;
+                return ValueTask.CompletedTask;
+            }
+        );
+        var isMenuVisibleLayoutSave = this.ObservePropertyChanged(x => x.IsMenuVisible)
+            .Where(_ => _isLayoutLoaded)
+            .SubscribeAwait(
+                (_, cancel) => isMenuVisibleLayout.SaveAsync(IsMenuVisible, cancel),
+                AwaitOperation.Drop
+            );
+        R3.Disposable.Combine(isMenuVisibleLayout, isMenuVisibleLayoutSave)
+            .AddTo(ref DisposableBag);
+
+        RootTracking.ExecuteWhenRootAttached(LoadLayoutWhenRootAttached).AddTo(ref DisposableBag);
+        return;
+
+        async ValueTask LoadLayoutWhenRootAttached(IShell root, CancellationToken cancel)
+        {
+            _ = root;
+            _isLayoutLoaded = false;
+            try
+            {
+                await selectedNodeLayout.LoadAsync(cancel);
+                await isMenuVisibleLayout.LoadAsync(cancel);
+            }
+            finally
+            {
+                if (!cancel.IsCancellationRequested && !IsDisposed)
+                {
+                    _isLayoutLoaded = true;
+                }
+            }
+        }
     }
 
     private void LoadLayout(string layoutValue)
     {
-        Navigate(NavId.Parse(layoutValue)).SafeFireAndForget();
+        var id = NavId.Parse(layoutValue);
+        SelectedNode.Value = TreeView.FindNode(x => x.Key == id || x.Base.NavigateTo == id);
     }
 
     protected virtual ITreeSubpage? CreateDefaultPage()
