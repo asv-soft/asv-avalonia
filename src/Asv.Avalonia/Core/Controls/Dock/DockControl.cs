@@ -123,17 +123,7 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
                 return;
             }
 
-            foreach (
-                var item in _mainTabControl.Items.OfType<DockTabItem>().Where(it => it.IsSelected)
-            )
-            {
-                item.IsSelected = false;
-            }
-
-            _mainTabControl.SelectedItem = selected;
-            _selectedTab = selected;
-            _config.SelectedDockTabItemId = selected.Id;
-            NotifyLayoutChanged();
+            SelectTab(selected);
         }
     }
 
@@ -173,8 +163,7 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
 
         if (SelectedItem is IPage selectedPage && selectedPage.Id == page.Id)
         {
-            _mainTabControl.SelectedItem = tab;
-            _selectedTab = tab;
+            SelectTab(tab, notifyLayoutChanged: false);
         }
     }
 
@@ -226,7 +215,7 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
             }
 
             _selectedTab = tab;
-            SelectedItem = tab.Content;
+            SetCurrentValue(SelectedItemProperty, tab.Content);
         }
 
         e.Pointer.Capture(tabStrip);
@@ -330,8 +319,8 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
         _selectedTab = tab;
         _config.SelectedDockTabItemId = tab.Id;
 
-        SelectedItem = null;
-        SelectedItem = page;
+        SetCurrentValue(SelectedItemProperty, null);
+        SetCurrentValue(SelectedItemProperty, page);
         NotifyLayoutChanged();
     }
 
@@ -351,13 +340,25 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
             return;
         }
 
+        SelectTab(fromCfg, notifyLayoutChanged: false);
+    }
+
+    private void SelectTab(DockTabItem tab, bool notifyLayoutChanged = true)
+    {
         foreach (var item in _mainTabControl.Items.OfType<DockTabItem>().Where(it => it.IsSelected))
         {
             item.IsSelected = false;
         }
 
-        _mainTabControl.SelectedItem = fromCfg;
-        _selectedTab = fromCfg;
+        _mainTabControl.SelectedItem = tab;
+        tab.IsSelected = true;
+        _selectedTab = tab;
+        _config.SelectedDockTabItemId = tab.Id;
+
+        if (notifyLayoutChanged)
+        {
+            NotifyLayoutChanged();
+        }
     }
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
