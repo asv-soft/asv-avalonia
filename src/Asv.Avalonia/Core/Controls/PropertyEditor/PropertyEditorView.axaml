@@ -16,17 +16,17 @@
     <ItemsControl Margin="8" ItemsSource="{Binding Items}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <StackPanel Spacing="4" />
+                <StackPanel Grid.IsSharedSizeScope="True" Spacing="4" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <StackPanel Spacing="4">
-                    <TextBlock
+                    <!--<TextBlock
                         IsVisible="{Binding Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                         Classes="description"
                         Text="{Binding Header}"
-                    />
+                    />-->
                     <ContentControl Content="{Binding}" />
                 </StackPanel>
             </DataTemplate>

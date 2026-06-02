@@ -21,11 +21,14 @@ public abstract class ViewModel : IViewModel
     private DisposableBag _disposableBag;
     protected ref DisposableBag DisposableBag => ref _disposableBag;
 
+    // ReSharper disable once ReplaceWithFieldKeyword
+    private IUndoController? _undo;
+
+    // ReSharper disable once ReplaceWithFieldKeyword
+    private ILayoutController? _layout;
     private int _isDisposed;
     private CancellationTokenSource? _cancel;
     private CompositeDisposable? _dispose;
-    private IUndoController? _undo;
-    private ILayoutController? _layout;
     private readonly Subject<IViewModel?> _parentChanged;
 
     protected ViewModel(string typeId, NavArgs args = default)
@@ -47,6 +50,8 @@ public abstract class ViewModel : IViewModel
         _layout ??= new LayoutController<IViewModel>(this).AddTo(ref DisposableBag);
 
     public NavId Id { get; }
+
+    public object? Tag { get; set; }
 
     public IViewModel? Parent
     {

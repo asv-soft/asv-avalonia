@@ -49,7 +49,12 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         R3.Disposable.Create(() => SelectedPage.Value?.Dispose()).AddTo(ref DisposableBag);
 
         Layout
-            .Register(nameof(SelectedNode), LoadLayout, SaveLayout, SelectedNode)
+            .Register(
+                nameof(SelectedNode),
+                LoadLayout,
+                SaveLayout,
+                SelectedNode.Select(_ => Unit.Default)
+            )
             .AddTo(ref DisposableBag);
         Layout
             .Register(

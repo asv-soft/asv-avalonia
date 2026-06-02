@@ -135,4 +135,9 @@
     <ItemGroup>
       <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Core\Controls\PropertyEditor\Compact\" />
+      <Folder Include="Core\Controls\PropertyEditor\Extended\" />
+    </ItemGroup>
 </Project>

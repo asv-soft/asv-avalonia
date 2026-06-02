@@ -9,7 +9,9 @@ public static class PropertyEditorMixin
             return builder
                 .RegisterViewFor<PropertyEditorViewModel, PropertyEditorView>()
                 .RegisterViewFor<UnitPropertyViewModel, UnitPropertyView>()
-                .RegisterViewFor<GeoPointPropertyViewModel, GeoPointPropertyView>();
+                .RegisterViewFor<GeoPointPropertyViewModel, GeoPointPropertyView>()
+                .RegisterViewFor<PropertyTextBoxViewModel, PropertyTextBoxView>()
+                .RegisterViewFor<PropertyComboBoxViewModel, PropertyComboBoxView>();
         }
     }
 }

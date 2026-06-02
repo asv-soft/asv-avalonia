@@ -20,6 +20,13 @@
         </DockPanel>
 
         <DockPanel LastChildFill="False" Grid.Column="1">
+            <TextBlock DockPanel.Dock="Top" Text="Display name" />
+            <TextBox DockPanel.Dock="Top" Text="{Binding DisplayNameProperty.Text.Value}" />
+            <TextBlock DockPanel.Dock="Top" Text="Operation profile" />
+            <TextBlock
+                DockPanel.Dock="Top"
+                Text="{Binding OperationProfileProperty.SelectedItem.Value.Header}"
+            />
             <TextBlock DockPanel.Dock="Top" Text="Latitude" />
             <TextBox DockPanel.Dock="Top" Text="{Binding Latitude.Value}" />
             <TextBlock DockPanel.Dock="Top" Text="Longitude" />

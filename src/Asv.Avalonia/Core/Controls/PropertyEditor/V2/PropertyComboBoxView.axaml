@@ -1,0 +1,206 @@
+<UserControl
+    x:Name="PART_Root"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="300"
+    x:Class="Asv.Avalonia.PropertyComboBoxView"
+    x:DataType="avalonia:PropertyComboBoxViewModel"
+>
+    <Design.DataContext>
+        <avalonia:PropertyComboBoxViewModel />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <DataTemplate
+            x:Key="PropertyComboBoxSelectedItemTemplate"
+            x:DataType="avalonia:IHeadlinedViewModel"
+        >
+            <StackPanel Orientation="Horizontal" Spacing="4">
+                <avalonia1:MaterialIcon
+                    IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Kind="{Binding Icon}"
+                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Header}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="PropertyComboBoxFlyoutItemTemplate"
+            x:DataType="avalonia:IHeadlinedViewModel"
+        >
+            <Grid MinWidth="100" Margin="0,2" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto">
+                <avalonia1:MaterialIcon
+                    Grid.RowSpan="2"
+                    Margin="0,0,8,0"
+                    VerticalAlignment="Center"
+                    IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Kind="{Binding Icon}"
+                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                />
+                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Header}" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Classes="description"
+                    IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Text="{Binding Description}"
+                    TextWrapping="Wrap"
+                />
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <Border
+        VerticalAlignment="Top"
+        HorizontalAlignment="Stretch"
+        Background="{DynamicResource TextControlBackground}"
+        BorderBrush="{DynamicResource TextControlBorderBrush}"
+        BorderThickness="1"
+        CornerRadius="4"
+        Padding="4,2"
+    >
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="PrefixIcon" Width="Auto" />
+                <ColumnDefinition SharedSizeGroup="PrefixName" Width="Auto" />
+                <ColumnDefinition SharedSizeGroup="PrefixStatus" Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition SharedSizeGroup="PostfixAction" Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <avalonia1:MaterialIcon
+                Grid.Column="0"
+                Margin="4,0,0,0"
+                IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                avalonia:AsvPallete.Color="{Binding IconColor}"
+                Width="16"
+                Height="16"
+                Foreground="{DynamicResource TextControlForegroundDisabled}"
+                Kind="{Binding Icon}"
+            />
+            <TextBlock
+                Grid.Column="1"
+                MinWidth="20"
+                IsVisible="{Binding ShortName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                VerticalAlignment="Center"
+                Margin="4,0"
+                Classes="description"
+                Text="{Binding ShortName}"
+            />
+            <Panel Grid.Column="2">
+                <Ellipse
+                    Opacity="0"
+                    Margin="4,0,4,0"
+                    Classes.fadeout="{Binding UpdatedFlag}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center"
+                    Width="5"
+                    Height="5"
+                    Fill="{DynamicResource AsvForegroundInfo3Brush}"
+                />
+                <avalonia1:MaterialIcon
+                    Classes="blink"
+                    ToolTip.Tip="{Binding ErrorMessage}"
+                    IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    Kind="{Binding ErrorIcon}"
+                    Foreground="{DynamicResource AsvForegroundErrorBrush}"
+                />
+            </Panel>
+
+            <Button
+                Grid.Column="3"
+                IsEnabled="{Binding !IsBusy}"
+                x:Name="PART_FlyoutButton"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                VerticalContentAlignment="Center"
+                Padding="4"
+                Theme="{StaticResource TransparentButton}"
+            >
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="Prefix" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <ContentControl
+                        Grid.Column="0"
+                        HorizontalAlignment="Stretch"
+                        Content="{Binding SelectedItem.Value}"
+                        ContentTemplate="{StaticResource PropertyComboBoxSelectedItemTemplate}"
+                    />
+                </Grid>
+                <Button.Flyout>
+                    <Flyout>
+                        <ItemsControl ItemsSource="{Binding ItemsView}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="avalonia:IHeadlinedViewModel">
+                                    <Button
+                                        MinWidth="180"
+                                        HorizontalAlignment="Stretch"
+                                        HorizontalContentAlignment="Stretch"
+                                        Theme="{StaticResource TransparentButton}"
+                                        Click="ItemButton_OnClick"
+                                    >
+                                        <Grid
+                                            Margin="0,2"
+                                            ColumnDefinitions="Auto,*"
+                                            RowDefinitions="Auto,Auto"
+                                        >
+                                            <avalonia1:MaterialIcon
+                                                Grid.RowSpan="2"
+                                                Margin="0,0,8,0"
+                                                VerticalAlignment="Center"
+                                                IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                Kind="{Binding Icon}"
+                                                avalonia:AsvPallete.Color="{Binding IconColor}"
+                                            />
+                                            <TextBlock Grid.Column="1" Text="{Binding Header}" />
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                Classes="description"
+                                                IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                                Text="{Binding Description}"
+                                                TextWrapping="Wrap"
+                                            />
+                                        </Grid>
+                                    </Button>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Flyout>
+                </Button.Flyout>
+                <ToolTip.Tip>
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h1" Text="{Binding Header}" />
+                        <TextBlock Classes="description" Text="{Binding Description}" />
+                    </StackPanel>
+                </ToolTip.Tip>
+            </Button>
+
+            <Button Grid.Column="4" Padding="4" Theme="{StaticResource TransparentButton}">
+                <avalonia1:MaterialIcon Kind="DotsVertical" />
+            </Button>
+
+            <ProgressBar
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                IsVisible="{Binding IsBusy}"
+                Background="Transparent"
+                Height="20"
+                Opacity="0.5"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Stretch"
+                Minimum="0"
+                Maximum="1"
+                IsIndeterminate="True"
+            />
+        </Grid>
+    </Border>
+</UserControl>

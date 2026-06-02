@@ -16,6 +16,14 @@ public class PropertyEditorViewModel : ViewModel
         _itemsSource.Add(new UnitPropertyViewModel());
         _itemsSource.Add(new UnitPropertyViewModel());
         _itemsSource.Add(new UnitPropertyViewModel());
+        _itemsSource.Add(new PropertyTextBoxViewModel());
+        _itemsSource.Add(new PropertyComboBoxViewModel());
+        _itemsSource.Add(new PropertyTextBoxViewModel());
+        _itemsSource.Add(new PropertyComboBoxViewModel());
+        _itemsSource.Add(new PropertyTextBoxViewModel());
+        _itemsSource.Add(new PropertyComboBoxViewModel());
+        _itemsSource.Add(new PropertyTextBoxViewModel());
+        _itemsSource.Add(new PropertyComboBoxViewModel());
         SetParent(DesignTime.Shell);
     }
 

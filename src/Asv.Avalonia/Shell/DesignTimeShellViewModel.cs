@@ -1,3 +1,5 @@
+using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
 
@@ -39,13 +41,13 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
         InternalPages.Add(new SettingsPageViewModel());
         InternalPages.Add(new HomePageViewModel());
 
-        var file = new MenuItem("open", RS.ShellView_Toolbar_Open)
+        var file = new MenuItem(NavId.GenerateRandomAsString(), RS.ShellView_Toolbar_Open)
         {
             Command = DesignTime.EmptyCommand,
         };
         MainMenu.Add(file);
 
-        MainMenu.Add(new MenuItem("open-child", "Open", file.Id.TypeId));
+        MainMenu.Add(new MenuItem(NavId.GenerateRandomAsString(), "Open", file.Id.TypeId));
         MainMenu.Add(new EditMenu(DesignTime.LoggerFactory));
 
         var addLeft = true;
@@ -55,22 +57,23 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
             {
                 if (addLeft)
                 {
+                    var parentId = NavId.GenerateRandomAsString();
                     LeftMenu.Add(
-                        new MenuItem($"open{x}", "Open")
+                        new MenuItem(parentId, "Open")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
                         }
                     );
                     LeftMenu.Add(
-                        new MenuItem($"open{x}_{x}", "Open", $"open{x}")
+                        new MenuItem(NavId.GenerateRandomAsString(), "Open", parentId)
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
                         }
                     );
                     LeftMenu.Add(
-                        new MenuItem($"open{x}_{x}_2", "Open", $"open{x}")
+                        new MenuItem(NavId.GenerateRandomAsString(), "Open", parentId)
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
@@ -98,7 +101,7 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
                 if (addRight)
                 {
                     RightMenu.Add(
-                        new MenuItem($"open{x}", "Open")
+                        new MenuItem(NavId.GenerateRandomAsString(), "Open")
                         {
                             Icon = DesignTime.RandomImage,
                             Command = DesignTime.EmptyCommand,
