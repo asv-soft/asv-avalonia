@@ -32,7 +32,9 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         _deviceCore.Init(context.NavArgs);
 
         _deviceCore
-            .OnDeviceInitialized.ObserveOnUIThreadDispatcher()
+            .Target.Where(x => x.HasValue)
+            .Select(x => x!.Value)
+            .ObserveOnUIThreadDispatcher()
             .Subscribe(w =>
                 w.WhenDisconnectedToken.Register(() =>
                 {
@@ -52,7 +54,6 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
     public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized { get; }
-    public Observable<DeviceWrapper> OnDeviceInitialized => _deviceCore.OnDeviceInitialized;
     public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
     public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
 }

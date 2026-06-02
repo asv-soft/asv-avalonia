@@ -29,6 +29,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     private readonly IThemeService _themeService;
     private readonly IDialogService _dialogService;
     private bool _isOpeningHomePage;
+    private bool _isLayoutLoaded;
 
     protected ShellViewModel(
         IServiceProvider ioc,
@@ -92,6 +93,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         SelectedPage = new BindableReactiveProperty<IPage?>().DisposeItWith(Disposable);
         _pages
             .ObserveChanged()
+            .ObserveOnUIThreadDispatcher()
             .SubscribeAwait((_, cancel) => OpenHomePageIfNoPages(cancel), AwaitOperation.Drop)
             .DisposeItWith(Disposable);
 
@@ -230,38 +232,100 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     protected override void AfterLoadExtensions()
     {
-        // Save last page layout
-#pragma warning disable CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
-        Layout
-            .Register(
-                nameof(SelectedPage),
-                x => Navigate(new NavId(x)).SafeFireAndForget(),
-                () => SelectedPage.Value?.Id.ToString(),
-                SelectedPage.Skip(1)
-            )
-#pragma warning restore CS8714 // The type cannot be used as type parameter in the generic type or method. Nullability of type argument doesn't match 'notnull' constraint.
-            .AddTo(ref DisposableBag);
-
         // save opened pages
-        Layout
-            .Register(
-                nameof(Pages),
-                pages => pages.ForEach(x => Navigate(new NavId(x)).SafeFireAndForget()),
-                () => Pages.Select(page => page.Id.ToString()).ToArray(),
-                Pages.ObserveChanged().Skip(1)
-            )
-            .AddTo(ref DisposableBag);
+        var pagesLayout = Layout.Register<string[]>(
+            nameof(Pages),
+            async (pages, cancel) =>
+            {
+                foreach (var page in pages)
+                {
+                    cancel.ThrowIfCancellationRequested();
+                    await Navigate(new NavId(page));
+                }
+            }
+        );
+        var pagesLayoutSave = Pages
+            .ObserveChanged()
+            .Skip(1)
+            .Where(_ => _isLayoutLoaded)
+            .SubscribeAwait(
+                (_, cancel) =>
+                    pagesLayout.SaveAsync(
+                        Pages.Select(page => page.Id.ToString()).ToArray(),
+                        cancel
+                    ),
+                AwaitOperation.Drop
+            );
+        R3.Disposable.Combine(pagesLayout, pagesLayoutSave).AddTo(ref DisposableBag);
 
-        Layout.LoadWhenRootAttached(RootTracking).AddTo(ref DisposableBag);
-        RootTracking
-            .ExecuteWhenRootAttached(_ =>
-                Dispatcher.UIThread.Post(
-                    () =>
-                        OpenHomePageIfNoPages(CancellationToken.None).AsTask().SafeFireAndForget(),
-                    DispatcherPriority.Background
-                )
-            )
-            .DisposeItWith(Disposable);
+        // Save last page layout
+        var selectedPageLayout = Layout.Register<string>(
+            nameof(SelectedPage),
+            (page, _) =>
+            {
+                SelectExistingPage(page);
+                return ValueTask.CompletedTask;
+            }
+        );
+        var selectedPageLayoutSave = SelectedPage
+            .Skip(1)
+            .WhereNotNull()
+            .Where(_ => _isLayoutLoaded)
+            .SubscribeAwait(
+                (page, cancel) => selectedPageLayout.SaveAsync(page.Id.ToString(), cancel),
+                AwaitOperation.Drop
+            );
+        R3.Disposable.Combine(selectedPageLayout, selectedPageLayoutSave).AddTo(ref DisposableBag);
+
+        RootTracking.ExecuteWhenRootAttached(LoadLayoutWhenRootAttached).AddTo(ref DisposableBag);
+        return;
+
+        async ValueTask LoadLayoutWhenRootAttached(IShell root, CancellationToken cancel)
+        {
+            _ = root;
+            _isLayoutLoaded = false;
+            try
+            {
+                await pagesLayout.LoadAsync(cancel);
+                await selectedPageLayout.LoadAsync(cancel);
+            }
+            catch (OperationCanceledException) when (cancel.IsCancellationRequested)
+            {
+                throw;
+            }
+            catch (Exception e)
+            {
+                _logger.ZLogWarning(e, $"Error on loading shell layout: {e.Message}");
+            }
+            finally
+            {
+                if (!cancel.IsCancellationRequested && !IsDisposed)
+                {
+                    _isLayoutLoaded = true;
+                    Dispatcher.UIThread.Post(
+                        () =>
+                            OpenHomePageIfNoPages(CancellationToken.None)
+                                .AsTask()
+                                .SafeFireAndForget(),
+                        DispatcherPriority.Background
+                    );
+                }
+            }
+        }
+    }
+
+    private void SelectExistingPage(string? pageId)
+    {
+        if (string.IsNullOrWhiteSpace(pageId))
+        {
+            return;
+        }
+
+        var selected = _pages.FirstOrDefault(page => page.Id == new NavId(pageId));
+        if (selected is not null)
+        {
+            SelectedPage.Value = selected;
+        }
     }
 
     protected virtual async ValueTask<bool> TryCloseAsync(CancellationToken cancellationToken)
@@ -353,11 +417,6 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     {
         _logger.ZLogInformation($"Close page [{close.Page.Id}]");
 
-        if (_pages is [HomePageViewModel])
-        {
-            return ValueTask.CompletedTask;
-        }
-
         var current = SelectedPage.Value;
         var removedIndex = _pages.IndexOf(close.Page);
         if (removedIndex < 0)
@@ -367,22 +426,20 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         _pages.Remove(close.Page);
 
-        if (current?.Id == close.Page.Id)
+        if (_pages.Count == 0)
         {
-            if (_pages.Count == 0)
-            {
-                return ValueTask.CompletedTask;
-            }
+            SelectedPage.Value = null;
+            return ValueTask.CompletedTask;
+        }
 
-            SelectedPage.Value = null;
-            var newIndex = removedIndex < _pages.Count ? removedIndex : 0;
-            SelectedPage.Value = _pages[newIndex];
-        }
-        else
+        if (current?.Id != close.Page.Id)
         {
-            SelectedPage.Value = null;
-            SelectedPage.Value = current;
+            return ValueTask.CompletedTask;
         }
+
+        SelectedPage.Value = null;
+        var newIndex = removedIndex < _pages.Count ? removedIndex : _pages.Count - 1;
+        SelectedPage.Value = _pages[newIndex];
 
         return ValueTask.CompletedTask;
     }
