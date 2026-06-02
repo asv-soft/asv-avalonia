@@ -21,7 +21,16 @@ public static class LauncherReadyMixin
                 .Bind(builder.Configuration.GetSection(LauncherFeatureOptions.Section));
 
             var launcherBuilder = new Builder(builder, options);
-            launcherBuilder.RegisterDefault();
+
+            if (!builder.IsDesignTimeEnvironment)
+            {
+                launcherBuilder.RegisterDefault();
+            }
+            else
+            {
+                launcherBuilder.RegisterDesignTime();
+            }
+
             configure?.Invoke(launcherBuilder);
 
             builder.ChangeAppRestartForDesktop();
@@ -44,6 +53,11 @@ public static class LauncherReadyMixin
             >();
             return builder;
         }
+
+        private void UseDesignTimeLauncher()
+        {
+            builder.Services.AddSingleton<ILauncherNotifier, NullLauncherNotifier>();
+        }
     }
 
     public class Builder(
@@ -62,6 +76,13 @@ public static class LauncherReadyMixin
         public IHostApplicationBuilder RegisterDefault()
         {
             builder.Services.AddSingleton<ILauncherNotifier, LauncherNotifier>();
+            builder.Services.AddHostedService<LauncherFeature>();
+            return builder;
+        }
+
+        public IHostApplicationBuilder RegisterDesignTime()
+        {
+            builder.Services.AddSingleton<ILauncherNotifier, NullLauncherNotifier>();
             builder.Services.AddHostedService<LauncherFeature>();
             return builder;
         }

@@ -37,7 +37,6 @@ public static class SoloRunFeatureMixin
 
         private void UseDesignTimeOptionalSoloRun()
         {
-            builder.Services.ReplaceSingleton<IAppArgsStore, AppArgsStore>();
             builder.Services.AddHostedService(_ => NullSoloRunFeature.Instance);
         }
     }
