@@ -26,7 +26,7 @@ public static class PluginsMixin
             configure(new Builder(builder, pluginOptions));
             var loader = new PluginBootloader(Options.Create(pluginOptions), builder.Environment);
             builder.Services.AddSingleton<IPluginBootloader>(loader);
-            builder.AddPostConfigureCallbacks(builder => loader.InitPlugins(builder));
+            builder.AddPostConfigureCallbacks(loader.InitPlugins);
             return builder;
         }
     }

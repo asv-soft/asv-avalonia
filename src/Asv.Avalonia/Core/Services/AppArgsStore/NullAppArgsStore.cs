@@ -9,7 +9,7 @@ public sealed class NullAppArgsStore : IAppArgsStore
 
     public NullAppArgsStore()
     {
-        Args = new ReactiveProperty<IAppArgs>();
+        Args = new ReactiveProperty<IAppArgs>(new AppArgs([]));
     }
 
     public ReadOnlyReactiveProperty<IAppArgs> Args { get; }

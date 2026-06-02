@@ -44,16 +44,30 @@ internal sealed class LauncherNotifier : ILauncherNotifier
         _timeProvider = timeProvider;
         _logger = logger;
 
-        foreach (var arg in appArgsStore.Args.CurrentValue.Args.Values)
+        var appArgs = appArgsStore.Args.CurrentValue;
+        if (appArgs is null)
+        {
+            if (options.Value.IsOptional)
+            {
+                _logger.LogDebug(
+                    "Launcher is optional, but application arguments are not available."
+                );
+                return;
+            }
+
+            throw new InvalidOperationException("Failed to read application arguments.");
+        }
+
+        foreach (var arg in appArgs.Args.Values)
         {
             _logger.LogDebug("Launcher args {arg}", arg);
         }
-        foreach (var tag in appArgsStore.Args.CurrentValue.Tags)
+        foreach (var tag in appArgs.Tags)
         {
             _logger.LogDebug("Launcher tags {tag}", tag);
         }
 
-        _endpoint = TryGetEndpointFromArgs(appArgsStore.Args.CurrentValue.Args);
+        _endpoint = TryGetEndpointFromArgs(appArgs.Args);
         if (_endpoint.HasValue)
         {
             _logger.LogDebug("Launcher endpoint arguments are present.");

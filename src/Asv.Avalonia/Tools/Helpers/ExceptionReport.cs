@@ -56,7 +56,7 @@ public static class ExceptionReport
                 continue;
             }
 
-            var dst = Path.Combine(dir, $"{filePrefix}_{i + 1}.{ext}");
+            var dst = Path.Combine(dir, $"{filePrefix}{i + 1}.{ext}");
 
             if (File.Exists(dst))
             {
@@ -66,7 +66,7 @@ public static class ExceptionReport
             File.Move(src, dst);
         }
 
-        return Path.Combine(dir, $"#{filePrefix}_0.{ext}");
+        return Path.Combine(dir, $"{filePrefix}0.{ext}");
     }
 
     private static string NormalizeReportDirectory(string path)
