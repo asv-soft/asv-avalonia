@@ -57,8 +57,6 @@ public sealed class DevicePageCore : IDisposable
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _target;
     public ReadOnlyReactiveProperty<bool> IsDeviceInitialized => _isDeviceInitialized;
-    public Observable<DeviceWrapper> OnDeviceInitialized =>
-        _target.Where(x => x.HasValue).Select(x => x!.Value);
     public Observable<Unit> OnDeviceDisconnecting { get; }
     public Observable<Unit> OnDeviceDisconnected { get; }
 
