@@ -1,0 +1,74 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="80"
+    x:Class="Asv.Avalonia.PropertyButtonView"
+    x:DataType="avalonia:PropertyButtonViewModel"
+>
+    <Design.DataContext>
+        <avalonia:PropertyButtonViewModel />
+    </Design.DataContext>
+
+    <Button
+        Padding="8,4,0,4"
+        HorizontalContentAlignment="Stretch"
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Top"
+        IsEnabled="{Binding !IsBusy}"
+        Command="{Binding ExecuteCommand}"
+    >
+        <ToolTip.Tip>
+            <StackPanel Spacing="8">
+                <TextBlock Classes="h1" Text="{Binding Header}" />
+                <TextBlock Classes="description" Text="{Binding Description}" />
+            </StackPanel>
+        </ToolTip.Tip>
+        <Panel HorizontalAlignment="Stretch">
+            <avalonia1:MaterialIcon
+                ToolTip.Tip="{Binding ErrorMessage}"
+                IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                Classes="blink"
+                HorizontalAlignment="Left"
+                Kind="{Binding ErrorIcon}"
+                Foreground="{DynamicResource AsvForegroundErrorBrush}"
+                Margin="4,0,0,0"
+                Width="18"
+                Height="18"
+            />
+            <Ellipse
+                Opacity="0"
+                Margin="10,0,0,0"
+                Classes.fadeout="{Binding UpdatedFlag}"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Width="5"
+                Height="5"
+                Fill="{DynamicResource AsvForegroundInfo3Brush}"
+            />
+            <ProgressBar
+                IsVisible="{Binding IsBusy}"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Stretch"
+                Margin="0,0,8,-5"
+                IsIndeterminate="True"
+            />
+            <StackPanel Margin="20,0,0,0" Orientation="Horizontal" Spacing="4">
+                <avalonia1:MaterialIcon
+                    IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                    Margin="8,0"
+                    Width="25"
+                    Height="25"
+                    Kind="{Binding Icon}"
+                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                />
+                <TextBlock VerticalAlignment="Center" Text="{Binding Header}" />
+            </StackPanel>
+        </Panel>
+    </Button>
+</UserControl>

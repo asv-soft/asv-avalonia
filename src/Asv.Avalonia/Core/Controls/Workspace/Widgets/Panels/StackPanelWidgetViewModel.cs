@@ -10,8 +10,8 @@ public class StackPanelWidgetViewModel(string id, ILoggerFactory loggerFactory)
         : this(DesignTime.Id.TypeId, DesignTime.LoggerFactory)
     {
         DesignTime.ThrowIfNotDesignMode();
-        ItemsSource.Add(new UnitPropertyViewModel());
-        ItemsSource.Add(new UnitPropertyViewModel());
-        ItemsSource.Add(new UnitPropertyViewModel());
+        ItemsSource.Add(new PropertyUnitDesign());
+        ItemsSource.Add(new PropertyUnitDesign());
+        ItemsSource.Add(new PropertyUnitDesign());
     }
 }

@@ -13,7 +13,7 @@
     x:DataType="avalonia:PropertyComboBoxViewModel"
 >
     <Design.DataContext>
-        <avalonia:PropertyComboBoxViewModel />
+        <avalonia:PropertyComboBoxDesign />
     </Design.DataContext>
 
     <UserControl.Resources>
@@ -55,13 +55,46 @@
                 />
             </Grid>
         </DataTemplate>
+
+        <ControlTheme
+            x:Key="PropertyMenuNodeTheme"
+            TargetType="MenuItem"
+            BasedOn="{StaticResource {x:Type MenuItem}}"
+            x:DataType="avalonia:MenuNode"
+        >
+            <Setter
+                Property="Icon"
+                Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}"
+            />
+            <Setter Property="Header" Value="{Binding Base.Header}" />
+            <Setter Property="ItemsSource" Value="{Binding Items}" />
+            <Setter Property="Command" Value="{Binding Base.Command}" />
+            <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}" />
+            <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+            <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+            <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+            <Setter Property="InputGesture" Value="{Binding Base.HotKey}" />
+            <Setter Property="IsChecked" Value="{Binding Base.IsChecked}" />
+            <Setter Property="ToggleType" Value="{Binding Base.ToggleType}" />
+            <Setter Property="GroupName" Value="{Binding Base.GroupName}" />
+        </ControlTheme>
     </UserControl.Resources>
 
+    <UserControl.Styles>
+        <Style Selector="Border.property-border">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.property-border:pointerover">
+            <Setter Property="Background" Value="{DynamicResource TextControlBackgroundPointerOver}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushPointerOver}" />
+        </Style>
+    </UserControl.Styles>
+
     <Border
+        Classes="property-border"
         VerticalAlignment="Top"
         HorizontalAlignment="Stretch"
-        Background="{DynamicResource TextControlBackground}"
-        BorderBrush="{DynamicResource TextControlBorderBrush}"
         BorderThickness="1"
         CornerRadius="4"
         Padding="4,2"
@@ -87,11 +120,11 @@
             <TextBlock
                 Grid.Column="1"
                 MinWidth="20"
-                IsVisible="{Binding ShortName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                IsVisible="{Binding ShortHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                 VerticalAlignment="Center"
                 Margin="4,0"
                 Classes="description"
-                Text="{Binding ShortName}"
+                Text="{Binding ShortHeader}"
             />
             <Panel Grid.Column="2">
                 <Ellipse
@@ -184,7 +217,19 @@
                 </ToolTip.Tip>
             </Button>
 
-            <Button Grid.Column="4" Padding="4" Theme="{StaticResource TransparentButton}">
+            <Button
+                Grid.Column="4"
+                Padding="4"
+                Theme="{StaticResource TransparentButton}"
+                IsVisible="{Binding MenuView, Converter={x:Static ObjectConverters.IsNotNull}}"
+            >
+                <Button.Flyout>
+                    <MenuFlyout ItemsSource="{Binding MenuView.Items}">
+                        <MenuFlyout.ItemContainerTheme>
+                            <StaticResource ResourceKey="PropertyMenuNodeTheme" />
+                        </MenuFlyout.ItemContainerTheme>
+                    </MenuFlyout>
+                </Button.Flyout>
                 <avalonia1:MaterialIcon Kind="DotsVertical" />
             </Button>
 

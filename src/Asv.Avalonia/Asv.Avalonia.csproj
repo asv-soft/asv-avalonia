@@ -85,6 +85,30 @@
           <DependentUpon>CommonAppearanceSettingsSectionView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\V2\ComboBox\PropertyComboBoxView.axaml.cs">
+          <DependentUpon>PropertyComboBoxView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\V2\Button\PropertyButtonView.axaml.cs">
+          <DependentUpon>PropertyButtonView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\V2\TextBox\PropertyTextBoxView.axaml.cs">
+          <DependentUpon>PropertyTextBoxView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\V2\Unit\PropertyUnitView.axaml.cs">
+          <DependentUpon>PropertyUnitView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\V2\GeoPoint\PropertyGeoPointView.axaml.cs">
+          <DependentUpon>PropertyGeoPointView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\Compact\PropertyEditorView.axaml.cs">
+          <DependentUpon>PropertyEditorView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -106,9 +130,6 @@
       <AdditionalFiles Include="Core\Controls\Indicators\GpsStatusIndicator.axaml" />
       <AdditionalFiles Include="Core\Controls\InfoBar\InfoBarStyles.axaml" />
       <AdditionalFiles Include="Core\Controls\Items\ItemsListStyles.axaml" />
-      <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\GeoPointPropertyView.axaml" />
-      <AdditionalFiles Include="Core\Controls\PropertyEditor\Editors\UnitPropertyView.axaml" />
-      <AdditionalFiles Include="Core\Controls\PropertyEditor\PropertyEditorView.axaml" />
       <AdditionalFiles Include="Core\Controls\RttBox\KeyValue\KeyValueRttBoxView.axaml" />
       <AdditionalFiles Include="Core\Controls\RttBox\RttBox.axaml" />
       <AdditionalFiles Include="Core\Controls\RttBox\Single\Digit\Split\SplitDigitRttBoxView.axaml" />
@@ -134,10 +155,5 @@
 
     <ItemGroup>
       <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Core\Controls\PropertyEditor\Compact\" />
-      <Folder Include="Core\Controls\PropertyEditor\Extended\" />
     </ItemGroup>
 </Project>

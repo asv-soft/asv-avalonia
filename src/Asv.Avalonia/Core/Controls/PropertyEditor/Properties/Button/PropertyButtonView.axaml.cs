@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
 
-public partial class PropertyUnitView : UserControl
+public partial class PropertyButtonView : UserControl
 {
-    public PropertyUnitView()
+    public PropertyButtonView()
     {
         InitializeComponent();
     }

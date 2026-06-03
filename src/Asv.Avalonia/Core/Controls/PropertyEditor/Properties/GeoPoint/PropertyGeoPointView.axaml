@@ -1,0 +1,32 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="160"
+    x:Class="Asv.Avalonia.PropertyGeoPointView"
+    x:DataType="avalonia:PropertyGeoPointViewModel"
+>
+    <Design.DataContext>
+        <avalonia:PropertyGeoPointDesign />
+    </Design.DataContext>
+
+    <ToolTip.Tip>
+        <StackPanel
+            Spacing="8"
+            IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+        >
+            <TextBlock Classes="h1" Text="{Binding Header}" />
+            <TextBlock Classes="description" Text="{Binding Description}" />
+        </StackPanel>
+    </ToolTip.Tip>
+
+    <StackPanel Spacing="4">
+        <ContentControl Content="{Binding Latitude}" />
+        <ContentControl Content="{Binding Longitude}" />
+        <ContentControl Content="{Binding Altitude}" />
+    </StackPanel>
+</UserControl>

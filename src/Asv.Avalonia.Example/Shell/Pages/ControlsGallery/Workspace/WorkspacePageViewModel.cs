@@ -105,19 +105,17 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 Position = WorkspaceDock.Left,
                 ItemsSource =
                 {
-                    new GeoPointPropertyViewModel(
+                    new PropertyGeoPointReactive(
                         "location1",
                         new ReactiveProperty<GeoPoint>(),
-                        loggerFactory,
                         unitService
                     )
                     {
                         Header = "Location 1",
                     },
-                    new GeoPointPropertyViewModel(
-                        "location1",
+                    new PropertyGeoPointReactive(
+                        "location2",
                         new ReactiveProperty<GeoPoint>(),
-                        loggerFactory,
                         unitService
                     )
                     {

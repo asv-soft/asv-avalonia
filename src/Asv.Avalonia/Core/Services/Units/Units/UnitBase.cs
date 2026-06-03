@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Asv.Cfg;
+using Asv.Common;
 using Material.Icons;
 using R3;
 
@@ -10,7 +11,7 @@ public interface IUnitConfig
     public string? CurrentUnitItemId { get; set; }
 }
 
-public abstract class UnitBase<TConfig> : IUnit
+public abstract class UnitBase<TConfig> : AsyncDisposableOnceBag, IUnit
     where TConfig : class, IUnitConfig, new()
 {
     private readonly ImmutableDictionary<string, IUnitItem> _items;
@@ -51,9 +52,11 @@ public abstract class UnitBase<TConfig> : IUnit
             }
         }
 
-        CurrentUnitItem = new SynchronizedReactiveProperty<IUnitItem>(defaultUnitItem);
+        CurrentUnitItem = new BindableReactiveProperty<IUnitItem>(defaultUnitItem)
+            .AddTo(ref DisposableBag);
 
-        _sub1 = CurrentUnitItem.Subscribe(SetUnitItem);
+        CurrentUnitItem.Subscribe(SetUnitItem)
+            .AddTo(ref DisposableBag);
     }
 
     private void SetUnitItem(IUnitItem unitItem)
@@ -73,18 +76,7 @@ public abstract class UnitBase<TConfig> : IUnit
     public abstract string Name { get; }
     public abstract string Description { get; }
     public abstract string UnitId { get; }
-    public SynchronizedReactiveProperty<IUnitItem> CurrentUnitItem { get; }
+    public BindableReactiveProperty<IUnitItem> CurrentUnitItem { get; }
     public IUnitItem InternationalSystemUnit { get; }
 
-    #region Dispose
-
-    private readonly IDisposable _sub1;
-
-    public void Dispose()
-    {
-        _sub1.Dispose();
-        CurrentUnitItem.Dispose();
-    }
-
-    #endregion
 }

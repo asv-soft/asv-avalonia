@@ -3,6 +3,7 @@ using Asv.Modeling;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Threading;
 using R3;
 
 namespace Asv.Avalonia;
@@ -119,19 +120,17 @@ public static class ViewLayoutMixin
 
                 var sink = viewModel.Layout.Register<TData>(
                     layoutId,
-                    (data, _) =>
-                    {
-                        load(data);
-                        return ValueTask.CompletedTask;
-                    }
+                    (data, cancel) => InvokeOnUiThreadAsync(() => load(data), cancel)
                 );
                 sink.LoadAsync(CancellationToken.None).AsTask().SafeFireAndForget();
                 var sub = trigger.SubscribeAwait(
-                    (_, cancel) =>
+                    async (_, cancel) =>
                     {
-                        return save() is { } data
-                            ? sink.SaveAsync(data, cancel)
-                            : ValueTask.CompletedTask;
+                        var data = await InvokeOnUiThreadAsync(save, cancel);
+                        if (data is not null)
+                        {
+                            await sink.SaveAsync(data, cancel);
+                        }
                     },
                     AwaitOperation.Drop
                 );
@@ -176,19 +175,17 @@ public static class ViewLayoutMixin
 
                 var sink = viewModel.Layout.Register<TValue>(
                     layoutId,
-                    (data, _) =>
-                    {
-                        load(data);
-                        return ValueTask.CompletedTask;
-                    }
+                    (data, cancel) => InvokeOnUiThreadAsync(() => load(data), cancel)
                 );
                 sink.LoadAsync(CancellationToken.None).AsTask().SafeFireAndForget();
                 var sub = trigger.SubscribeAwait(
-                    (_, cancel) =>
+                    async (_, cancel) =>
                     {
-                        return save() is { } data
-                            ? sink.SaveAsync(data, cancel)
-                            : ValueTask.CompletedTask;
+                        var data = await InvokeOnUiThreadAsync(save, cancel);
+                        if (data is { } value)
+                        {
+                            await sink.SaveAsync(value, cancel);
+                        }
                     },
                     AwaitOperation.Drop
                 );
@@ -248,6 +245,33 @@ public static class ViewLayoutMixin
         private static bool IsValidPixelWidth(double value)
         {
             return value is > 0 && double.IsFinite(value);
+        }
+
+        private static async ValueTask InvokeOnUiThreadAsync(
+            Action action,
+            CancellationToken cancel
+        )
+        {
+            if (Dispatcher.UIThread.CheckAccess())
+            {
+                action();
+                return;
+            }
+
+            await Dispatcher.UIThread.InvokeAsync(action, DispatcherPriority.Normal, cancel);
+        }
+
+        private static async ValueTask<TValue?> InvokeOnUiThreadAsync<TValue>(
+            Func<TValue?> action,
+            CancellationToken cancel
+        )
+        {
+            if (Dispatcher.UIThread.CheckAccess())
+            {
+                return action();
+            }
+
+            return await Dispatcher.UIThread.InvokeAsync(action, DispatcherPriority.Normal, cancel);
         }
     }
 }

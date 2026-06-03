@@ -1,0 +1,151 @@
+using System.ComponentModel;
+using Asv.Modeling;
+using R3;
+
+namespace Asv.Avalonia;
+
+public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCancel
+{
+    private CancellationTokenSource? _applyCancel;
+    private bool _changesFromUser;
+    private string? _lastTextValue;
+
+    protected PropertyTextBoxViewModel(string typeId)
+        : base(typeId)
+    {
+        Text = new BindableReactiveProperty<string?>().AddTo(ref DisposableBag);
+        ApplyFromUserCommand = new ReactiveCommand(
+            (_, _) => ApplyFromUser(),
+            AwaitOperation.Drop
+        ).AddTo(ref DisposableBag);
+
+        Text.Skip(1)
+            .Where(_ => _changesFromUser)
+            .Subscribe(_ => IsSync = false)
+            .AddTo(ref DisposableBag);
+
+        Observable
+            .FromEventHandler<DataErrorsChangedEventArgs>(
+                h => Text.ErrorsChanged += h,
+                h => Text.ErrorsChanged -= h
+            )
+            .Subscribe(_ => HasValidationErrors = Text.HasErrors)
+            .AddTo(ref DisposableBag);
+    }
+
+    protected void ApplyValueFromModel(string? newValue)
+    {
+        ClearModelErrors();
+        if (IsInEditMode)
+        {
+            return;
+        }
+        ApplyTextFromModel(newValue, newValue, true, true);
+    }
+
+    protected void ApplyTextFromModel(
+        string? newValue,
+        string? lastTextValue,
+        bool isSync,
+        bool updateFlag
+    )
+    {
+        ClearModelErrors();
+        _changesFromUser = false;
+        Text.Value = newValue;
+        _lastTextValue = lastTextValue;
+        _changesFromUser = true;
+        IsSync = isSync;
+        if (updateFlag)
+        {
+            MarkUpdated();
+        }
+    }
+
+    public bool HasValidationErrors
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+
+    public BindableReactiveProperty<string?> Text { get; }
+
+    public ReactiveCommand ApplyFromUserCommand { get; }
+
+    public bool IsInEditMode
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public bool IsSync
+    {
+        get;
+        protected set => SetField(ref field, value);
+    } = true;
+
+    public string? Units
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public async ValueTask ApplyFromUser()
+    {
+        if (IsBusy)
+        {
+            return;
+        }
+
+        if (IsSync)
+        {
+            IsInEditMode = false;
+            return;
+        }
+
+        if (HasValidationErrors)
+        {
+            return;
+        }
+
+        ClearModelErrors();
+        var applyCancel = new CancellationTokenSource();
+        _applyCancel = applyCancel;
+        IsBusy = true;
+        try
+        {
+            await ApplyFromUser(applyCancel.Token);
+        }
+        catch (Exception e)
+        {
+            ApplyErrorFromModel(e);
+        }
+        finally
+        {
+            IsInEditMode = false;
+            if (ReferenceEquals(_applyCancel, applyCancel))
+            {
+                _applyCancel = null;
+            }
+            applyCancel.Dispose();
+            IsBusy = false;
+            IsSync = true;
+        }
+    }
+
+    protected abstract ValueTask ApplyFromUser(CancellationToken cancel);
+
+    public void Cancel()
+    {
+        if (IsInEditMode == false)
+        {
+            return;
+        }
+
+        if (IsBusy)
+        {
+            return;
+        }
+        ApplyValueFromModel(_lastTextValue);
+    }
+}

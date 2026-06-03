@@ -44,75 +44,94 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             .AddTo(ref DisposableBag);
         DisplayNameProperty.Text.ForceValidate();
         OperationProfileProperty = CreateOperationProfileProperty();
+        ActionButtonProperty = CreateActionButtonProperty();
+        AltitudeUnitProperty = CreateUnitProperty(
+            "altitude_unit_v2",
+            unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
+            "Altitude V2",
+            "Alt",
+            "V2 unit property with a text value and unit selector.",
+            MaterialIconKind.Altimeter,
+            AsvColorKind.Info3,
+            1250
+        );
+        ThrottleUnitProperty = CreateUnitProperty(
+            "throttle_unit_v2",
+            unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
+            "Throttle V2",
+            "Thr",
+            "V2 unit property using the throttle unit selector.",
+            MaterialIconKind.Signal,
+            AsvColorKind.Success,
+            65
+        );
         PropertyEditor = new PropertyEditorViewModel("editor")
         {
             ItemsSource =
             {
                 DisplayNameProperty,
                 OperationProfileProperty,
-                new UnitPropertyViewModel<LatitudeUnit>(
+                ActionButtonProperty,
+                AltitudeUnitProperty,
+                ThrottleUnitProperty,
+                new PropertyUnitReactive(
                     "lat",
-                    Latitude,
                     unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
-                    loggerFactory
+                    Latitude
                 )
                 {
                     Header = "Position",
-                    ShortName = "Lat",
+                    ShortHeader = "Lat",
                     Description = "Latitude description",
                     Icon = MaterialIconKind.Latitude,
                 },
-                new UnitPropertyViewModel(
+                new PropertyUnitReactive(
                     "lon",
-                    Longitude,
                     unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
-                    loggerFactory
+                    Longitude
                 )
                 {
                     Header = "Longitude",
-                    ShortName = "Lon",
+                    ShortHeader = "Lon",
                     Description = "Latitude description",
                     Icon = MaterialIconKind.Latitude,
                 },
-                new UnitPropertyViewModel(
+                new PropertyUnitReactive(
                     "alt",
-                    Altitude,
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
-                    loggerFactory
+                    Altitude
                 )
                 {
                     Header = "Altitude",
-                    ShortName = "Alt",
+                    ShortHeader = "Alt",
                     Description = "Altitude description",
                     Icon = MaterialIconKind.Altimeter,
                 },
-                new GeoPointPropertyViewModel("geo", GeoPoint, loggerFactory, unit)
+                new PropertyGeoPointReactive("geo_v2", GeoPoint, unit)
                 {
                     Header = "Geo Point",
                     Description = "Geo Point description",
                     Icon = MaterialIconKind.Earth,
                 },
-                new UnitPropertyViewModel(
+                new PropertyUnitReactive(
                     "time",
-                    Time,
                     unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
-                    loggerFactory
+                    Time
                 )
                 {
                     Header = "Time",
-                    ShortName = "Time",
+                    ShortHeader = "Time",
                     Description = "Time description",
                     Icon = MaterialIconKind.Timelapse,
                 },
-                new UnitPropertyViewModel(
+                new PropertyUnitReactive(
                     "throttle",
-                    Throttle,
                     unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
-                    loggerFactory
+                    Throttle
                 )
                 {
                     Header = "Throttle",
-                    ShortName = "Throttle",
+                    ShortHeader = "Throttle",
                     Description = "Throttle description",
                     Icon = MaterialIconKind.Signal,
                 },
@@ -129,23 +148,67 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     private static PropertyTextBoxViewModel CreateDisplayNameProperty()
     {
-        var property = new PropertyTextBoxViewModel("display_name")
+        var property = new PropertyTextBoxReactive(
+            "display_name",
+            new ReactiveProperty<string?>("Survey mission")
+        )
         {
             Header = "Display name",
-            ShortName = "Name",
+            ShortHeader = "Name",
             Description =
                 "Text editor with validation, icon, remote update marker, and menu button.",
             Icon = MaterialIconKind.FormTextbox,
             IconColor = AsvColorKind.Info5,
         };
-        property.Text.Value = "Survey mission";
+
+        return property;
+    }
+
+    private PropertyButtonViewModel CreateActionButtonProperty()
+    {
+        return new PropertyButtonViewModel("action_button", ExecuteActionButton)
+        {
+            Header = "Run check",
+            ShortHeader = "Run",
+            Description = "Button property with async command, busy state, and update marker.",
+            Icon = MaterialIconKind.PlayCircle,
+            IconColor = AsvColorKind.Success,
+        };
+    }
+
+    private async ValueTask ExecuteActionButton(CancellationToken cancel)
+    {
+        await Task.Delay(TimeSpan.FromMilliseconds(750), cancel);
+        ActionButtonClickCount++;
+    }
+
+    private static PropertyUnitViewModel CreateUnitProperty(
+        string id,
+        IUnit unit,
+        string header,
+        string shortName,
+        string description,
+        MaterialIconKind icon,
+        AsvColorKind iconColor,
+        double value
+    )
+    {
+        var property = new PropertyUnitReactive(id, unit, new ReactiveProperty<double>(value))
+        {
+            Header = header,
+            ShortHeader = shortName,
+            Description = description,
+            Icon = icon,
+            IconColor = iconColor,
+        };
 
         return property;
     }
 
     private static PropertyComboBoxViewModel CreateOperationProfileProperty()
     {
-        var property = new PropertyComboBoxViewModel("operation_profile")
+        var selectedProfile = new ReactiveProperty<IHeadlinedViewModel?>();
+        var property = new PropertyComboBoxReactive("operation_profile", selectedProfile)
         {
             Header = "Operation profile",
             Description =
@@ -234,7 +297,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             null,
             AsvColorKind.None
         );
-        property.SelectedItem.Value = firstItem;
+        selectedProfile.Value = firstItem;
 
         return property;
     }
@@ -276,7 +339,16 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public BindableReactiveProperty<double> Time { get; } = new();
     public BindableReactiveProperty<double> Throttle { get; } = new();
 
+    public int ActionButtonClickCount
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+
     public PropertyTextBoxViewModel DisplayNameProperty { get; }
     public PropertyComboBoxViewModel OperationProfileProperty { get; }
+    public PropertyButtonViewModel ActionButtonProperty { get; }
+    public PropertyUnitViewModel AltitudeUnitProperty { get; }
+    public PropertyUnitViewModel ThrottleUnitProperty { get; }
     public PropertyEditorViewModel PropertyEditor { get; }
 }

@@ -13,10 +13,10 @@
     <Design.DataContext>
         <avalonia:PropertyEditorViewModel />
     </Design.DataContext>
-    <ItemsControl Margin="8" ItemsSource="{Binding Items}">
+    <ItemsControl Grid.IsSharedSizeScope="True" Margin="8" ItemsSource="{Binding Items}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
-                <StackPanel Grid.IsSharedSizeScope="True" Spacing="4" />
+                <StackPanel Spacing="4" />
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>

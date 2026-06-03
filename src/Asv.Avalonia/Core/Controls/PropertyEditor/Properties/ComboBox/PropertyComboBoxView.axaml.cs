@@ -10,7 +10,7 @@ public partial class PropertyComboBoxView : UserControl
         InitializeComponent();
     }
 
-    private void ItemButton_OnClick(object? sender, RoutedEventArgs e)
+    private async void ItemButton_OnClick(object? sender, RoutedEventArgs e)
     {
         if (
             DataContext is not PropertyComboBoxViewModel viewModel
@@ -20,7 +20,7 @@ public partial class PropertyComboBoxView : UserControl
             return;
         }
 
-        viewModel.SelectedItem.Value = item;
         PART_FlyoutButton.Flyout?.Hide();
+        await viewModel.SelectItem(item);
     }
 }

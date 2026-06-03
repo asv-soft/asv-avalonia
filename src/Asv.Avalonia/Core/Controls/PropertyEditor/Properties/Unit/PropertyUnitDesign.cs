@@ -5,27 +5,32 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class PropertyTextBoxViewModel : HeadlinedViewModel, IPropertyViewModel
+public class PropertyUnitDesign : PropertyUnitViewModel
 {
-    public PropertyTextBoxViewModel()
-        : this(NavId.GenerateRandomAsString())
+    public PropertyUnitDesign()
+        : base(
+            DesignTime.Id.TypeId,
+            new AltitudeUnit(
+                DesignTime.Configuration,
+                [new AltitudeMeterUnitItem(), new AltitudeFeetUnitItem()]
+            )
+        )
     {
         DesignTime.ThrowIfNotDesignMode();
-        ShortName = "Name";
+        ShortHeader = "Name";
         Icon = MaterialIconKind.FormTextbox;
-        IconColor = AsvColorKind.Info3;
+        IconColor = AsvColorKind.Info5;
         Header = "Display name";
-        Units = "km\\h";
         Description =
             "Editable text property with the same visual structure as combo box properties.";
-        Text.Value = "Survey profile";
+        Text.Value = "123456789";
 
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
             .ObserveOnUIThreadDispatcher()
             .Subscribe(_ =>
             {
-                UpdatedFlag = !UpdatedFlag;
+                MarkUpdated();
             })
             .AddTo(ref DisposableBag);
 
@@ -43,7 +48,7 @@ public class PropertyTextBoxViewModel : HeadlinedViewModel, IPropertyViewModel
             .ObserveOnUIThreadDispatcher()
             .Subscribe(_ =>
             {
-                Text.Value = Text.Value == null ? "Survey profile" : null;
+                Text.Value = Text.Value == null ? "123456789" : null;
             })
             .AddTo(ref DisposableBag);
 
@@ -69,53 +74,8 @@ public class PropertyTextBoxViewModel : HeadlinedViewModel, IPropertyViewModel
         Text.ForceValidate();
     }
 
-    public PropertyTextBoxViewModel(string typeId)
-        : base(typeId)
+    protected override ValueTask ApplyFromUser(double siValue, CancellationToken cancel)
     {
-        Text = new BindableReactiveProperty<string?>().AddTo(ref DisposableBag);
-    }
-
-    public BindableReactiveProperty<string?> Text { get; }
-
-    public bool UpdatedFlag
-    {
-        get;
-        private set => SetField(ref field, value);
-    }
-
-    public string? ShortName
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public bool IsBusy
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public MaterialIconKind ErrorIcon
-    {
-        get;
-        set => SetField(ref field, value);
-    } = MaterialIconKind.CloseNetwork;
-
-    public string? ErrorMessage
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public bool IsSync
-    {
-        get;
-        set => SetField(ref field, value);
-    } = true;
-
-    public string? Units
-    {
-        get;
-        set => SetField(ref field, value);
+        return ValueTask.CompletedTask;
     }
 }

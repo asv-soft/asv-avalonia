@@ -1,18 +1,17 @@
-﻿using Asv.Common;
+using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
-using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class PropertyComboBoxViewModel : HeadlinedViewModel, IPropertyViewModel
+public class PropertyComboBoxDesign : PropertyComboBoxViewModel
 {
-    public PropertyComboBoxViewModel()
-        : this(NavId.GenerateRandomAsString())
+    public PropertyComboBoxDesign()
+        : base(NavId.GenerateRandomAsString())
     {
         DesignTime.ThrowIfNotDesignMode();
-        ShortName = "Mode";
+        ShortHeader = "Mode";
         Icon = MaterialIconKind.Tune;
         Header = "Work mode";
         Description = "Select the desired work mode from the list.";
@@ -81,13 +80,37 @@ public class PropertyComboBoxViewModel : HeadlinedViewModel, IPropertyViewModel
         );
         AddItem("custom_mode", "Custom profile", null, null, AsvColorKind.None);
         SelectedItem.Value = firstItem;
+        Menu.Add(
+            new MenuItem("copy_value", "Copy value")
+            {
+                Icon = MaterialIconKind.ContentCopy,
+                Command = DesignTime.EmptyCommand,
+            }
+        );
+        Menu.Add(
+            new MenuItem("reset_value", "Reset value")
+            {
+                Icon = MaterialIconKind.Restore,
+                Command = DesignTime.EmptyCommand,
+            }
+        );
+        Menu.Add(
+            new MenuItem("more_actions", "More actions") { Icon = MaterialIconKind.DotsHorizontal }
+        );
+        Menu.Add(
+            new MenuItem("validate_value", "Validate", "more_actions")
+            {
+                Icon = MaterialIconKind.CheckCircle,
+                Command = DesignTime.EmptyCommand,
+            }
+        );
 
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))
             .ObserveOnUIThreadDispatcher()
             .Subscribe(_ =>
             {
-                UpdatedFlag = !UpdatedFlag;
+                MarkUpdated();
             })
             .AddTo(ref DisposableBag);
 
@@ -129,59 +152,8 @@ public class PropertyComboBoxViewModel : HeadlinedViewModel, IPropertyViewModel
         return item;
     }
 
-    public PropertyComboBoxViewModel(string typeId)
-        : base(typeId)
+    protected override ValueTask ApplyFromUser(IHeadlinedViewModel item, CancellationToken cancel)
     {
-        SelectedItem = new BindableReactiveProperty<IHeadlinedViewModel?>().AddTo(
-            ref DisposableBag
-        );
-        ItemsView = ItemsSource.ToNotifyCollectionChangedSlim().AddTo(ref DisposableBag);
-        SelectItemCommand = new ReactiveCommand<IHeadlinedViewModel>(item =>
-        {
-            SelectedItem.Value = item;
-        }).AddTo(ref DisposableBag);
-    }
-
-    public NotifyCollectionChangedSynchronizedViewList<IHeadlinedViewModel> ItemsView { get; }
-
-    public ObservableList<IHeadlinedViewModel> ItemsSource { get; } = [];
-
-    public BindableReactiveProperty<IHeadlinedViewModel?> SelectedItem { get; }
-
-    public ReactiveCommand<IHeadlinedViewModel> SelectItemCommand { get; }
-
-    public bool UpdatedFlag
-    {
-        get;
-        private set => SetField(ref field, value);
-    }
-
-    public string? ShortName
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public bool IsBusy
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public MaterialIconKind ErrorIcon
-    {
-        get;
-        set => SetField(ref field, value);
-    } = MaterialIconKind.CloseNetwork;
-
-    public string? ErrorMessage
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public override IEnumerable<IViewModel> GetChildren()
-    {
-        return ItemsView;
+        return ValueTask.CompletedTask;
     }
 }

@@ -27,6 +27,20 @@
                 DockPanel.Dock="Top"
                 Text="{Binding OperationProfileProperty.SelectedItem.Value.Header}"
             />
+            <TextBlock DockPanel.Dock="Top" Text="Run check count" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding ActionButtonClickCount}" />
+            <TextBlock DockPanel.Dock="Top" Text="Altitude V2" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding AltitudeUnitProperty.Text.Value}" />
+            <TextBlock
+                DockPanel.Dock="Top"
+                Text="{Binding AltitudeUnitProperty.Unit.CurrentUnitItem.Value.Name}"
+            />
+            <TextBlock DockPanel.Dock="Top" Text="Throttle V2" />
+            <TextBlock DockPanel.Dock="Top" Text="{Binding ThrottleUnitProperty.Text.Value}" />
+            <TextBlock
+                DockPanel.Dock="Top"
+                Text="{Binding ThrottleUnitProperty.Unit.CurrentUnitItem.Value.Name}"
+            />
             <TextBlock DockPanel.Dock="Top" Text="Latitude" />
             <TextBox DockPanel.Dock="Top" Text="{Binding Latitude.Value}" />
             <TextBlock DockPanel.Dock="Top" Text="Longitude" />

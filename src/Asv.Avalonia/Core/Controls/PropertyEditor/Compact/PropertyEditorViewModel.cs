@@ -13,17 +13,12 @@ public class PropertyEditorViewModel : ViewModel
         : this(DesignTime.Id.TypeId)
     {
         DesignTime.ThrowIfNotDesignMode();
-        _itemsSource.Add(new UnitPropertyViewModel());
-        _itemsSource.Add(new UnitPropertyViewModel());
-        _itemsSource.Add(new UnitPropertyViewModel());
-        _itemsSource.Add(new PropertyTextBoxViewModel());
-        _itemsSource.Add(new PropertyComboBoxViewModel());
-        _itemsSource.Add(new PropertyTextBoxViewModel());
-        _itemsSource.Add(new PropertyComboBoxViewModel());
-        _itemsSource.Add(new PropertyTextBoxViewModel());
-        _itemsSource.Add(new PropertyComboBoxViewModel());
-        _itemsSource.Add(new PropertyTextBoxViewModel());
-        _itemsSource.Add(new PropertyComboBoxViewModel());
+        _itemsSource.Add(new PropertyTextBoxDesign { ShortHeader = "A" });
+        _itemsSource.Add(new PropertyComboBoxDesign { ShortHeader = "Ab" });
+        _itemsSource.Add(new PropertyUnitDesign { ShortHeader = "Abc" });
+        _itemsSource.Add(new PropertyButtonViewModel() { ShortHeader = "Abcd" });
+        _itemsSource.Add(new PropertyGeoPointDesign());
+
         SetParent(DesignTime.Shell);
     }
 
