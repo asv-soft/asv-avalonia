@@ -6,7 +6,7 @@
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
     xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="250"
+    d:DesignWidth="500"
     d:DesignHeight="120"
     x:Class="Asv.Avalonia.PropertyUnitView"
     x:DataType="avalonia:PropertyUnitViewModel"
@@ -93,42 +93,8 @@
                             Content="{TemplateBinding Content}"
                             Padding="{TemplateBinding Padding}"
                         />
-                        <ContentControl
-                            HorizontalAlignment="Right"
-                            Margin="0,0,4,0"
-                            ContentTemplate="{TemplateBinding ErrorTemplate}"
-                            DataContext="{TemplateBinding Owner}"
-                            Content="{Binding (DataValidationErrors.Errors)}"
-                            IsVisible="{Binding (DataValidationErrors.HasErrors)}"
-                        />
                     </Panel>
                 </ControlTemplate>
-            </Setter>
-            <Setter Property="ErrorTemplate">
-                <DataTemplate x:DataType="{x:Type x:Object}">
-                    <Canvas Width="14" Height="14" Margin="4 0 1 0" Background="Transparent">
-                        <Canvas.Styles>
-                            <Style Selector="ToolTip">
-                                <Setter
-                                    Property="Background"
-                                    Value="{DynamicResource AsvForegroundErrorBrush}"
-                                />
-                                <Setter
-                                    Property="BorderBrush"
-                                    Value="{DynamicResource AsvForegroundErrorBrush}"
-                                />
-                            </Style>
-                        </Canvas.Styles>
-                        <ToolTip.Tip>
-                            <ItemsControl ItemsSource="{Binding}" />
-                        </ToolTip.Tip>
-                        <Path
-                            Data="M14,7 A7,7 0 0,0 0,7 M0,7 A7,7 0 1,0 14,7 M7,3l0,5 M7,9l0,2"
-                            Stroke="{DynamicResource AsvForegroundErrorBrush}"
-                            StrokeThickness="2"
-                        />
-                    </Canvas>
-                </DataTemplate>
             </Setter>
         </Style>
     </UserControl.Styles>
@@ -139,9 +105,10 @@
         Classes.editing="{Binding IsInEditMode}"
         VerticalAlignment="Top"
         HorizontalAlignment="Stretch"
-        BorderThickness="0.5"
+        BorderThickness="1"
         CornerRadius="4"
-        Padding="2,0"
+        Padding="4,0"
+        ToolTip.Tip="{Binding (DataValidationErrors.Errors), ElementName=PART_TextBox, Converter={x:Static avalonia:ValidationErrorsToStringConverter.Instance}}"
     >
         <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
@@ -157,9 +124,6 @@
                 Margin="4,0,0,0"
                 IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                 avalonia:AsvPallete.Color="{Binding IconColor}"
-                Width="16"
-                Height="16"
-                Foreground="{DynamicResource TextControlForegroundDisabled}"
                 Kind="{Binding Icon}"
             />
             <TextBlock
@@ -206,13 +170,8 @@
             >
                 <TextBox.KeyBindings>
                     <KeyBinding Gesture="Enter" Command="{Binding ApplyFromUserCommand}" />
+                    <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}" />
                 </TextBox.KeyBindings>
-                <ToolTip.Tip>
-                    <StackPanel Spacing="8">
-                        <TextBlock Classes="h1" Text="{Binding Header}" />
-                        <TextBlock Classes="description" Text="{Binding Description}" />
-                    </StackPanel>
-                </ToolTip.Tip>
             </TextBox>
 
             <Button
@@ -237,7 +196,7 @@
                         <MultiBinding Converter="{x:Static BoolConverters.Or}">
                             <Binding Path="IsSync" />
                             <Binding Path="IsBusy" />
-                            <Binding Path="Text.HasErrors" />
+                            <Binding Path="HasValidationErrors" />
                         </MultiBinding>
                     </Button.IsVisible>
                     <Button.Flyout>
@@ -258,11 +217,21 @@
                             </MenuFlyout.ItemContainerTheme>
                         </MenuFlyout>
                     </Button.Flyout>
-                    <TextBlock
-                        Classes="description"
-                        VerticalAlignment="Center"
-                        Text="{Binding Unit.CurrentUnitItem.Value.Symbol}"
-                    />
+                    <Panel>
+                        <TextBlock
+                            Classes="description"
+                            IsVisible="{Binding Unit.CurrentUnitItem.Value.Symbol, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                            VerticalAlignment="Center"
+                            Text="{Binding Unit.CurrentUnitItem.Value.Symbol}"
+                        />
+                        <avalonia1:MaterialIcon
+                            IsVisible="{Binding Unit.CurrentUnitItem.Value.Symbol, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                            Width="16"
+                            Height="16"
+                            VerticalAlignment="Center"
+                            Kind="DotsVertical"
+                        />
+                    </Panel>
                 </Button>
                 <Button
                     Padding="4,2"
@@ -275,7 +244,7 @@
                         <MultiBinding Converter="{x:Static BoolConverters.And}">
                             <Binding Path="!IsSync" />
                             <Binding Path="!IsBusy" />
-                            <Binding Path="!Text.HasErrors" />
+                            <Binding Path="!HasValidationErrors" />
                         </MultiBinding>
                     </Button.IsVisible>
                     <avalonia1:MaterialIcon
@@ -300,6 +269,15 @@
                 Maximum="1"
                 IsIndeterminate="True"
             />
+
+            <Border Background="Transparent" Grid.Column="0" Grid.ColumnSpan="2">
+                <ToolTip.Tip>
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h1" Text="{Binding Header}" />
+                        <TextBlock Classes="description" Text="{Binding Description}" />
+                    </StackPanel>
+                </ToolTip.Tip>
+            </Border>
         </Grid>
     </Border>
 </UserControl>

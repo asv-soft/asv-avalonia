@@ -122,6 +122,7 @@
       <AdditionalFiles Include="Core\Controls\Dock\Item\DockTabStripItemStyles.axaml" />
       <AdditionalFiles Include="Core\Controls\Dock\TabControl\DockTabControlStyles.axaml" />
       <AdditionalFiles Include="Core\Controls\Dock\Window\DockWindow.axaml" />
+      <AdditionalFiles Include="Core\Controls\ExecuteIndicator\ExecuteIndicator.axaml" />
       <AdditionalFiles Include="Core\Controls\FrequencyScreen\FrequencyControl.axaml" />
       <AdditionalFiles Include="Core\Controls\GeoPoint\GeoPointEditor.axaml" />
       <AdditionalFiles Include="Core\Controls\HotKeys\HotKeyBox.axaml" />
@@ -156,4 +157,5 @@
     <ItemGroup>
       <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
     </ItemGroup>
+
 </Project>

@@ -22,11 +22,6 @@
         <ItemsControl.ItemTemplate>
             <DataTemplate>
                 <StackPanel Spacing="4">
-                    <!--<TextBlock
-                        IsVisible="{Binding Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                        Classes="description"
-                        Text="{Binding Header}"
-                    />-->
                     <ContentControl Content="{Binding}" />
                 </StackPanel>
             </DataTemplate>

@@ -107,14 +107,12 @@
                 <ColumnDefinition />
                 <ColumnDefinition SharedSizeGroup="PostfixAction" Width="Auto" />
             </Grid.ColumnDefinitions>
+            
             <avalonia1:MaterialIcon
                 Grid.Column="0"
                 Margin="4,0,0,0"
                 IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                 avalonia:AsvPallete.Color="{Binding IconColor}"
-                Width="16"
-                Height="16"
-                Foreground="{DynamicResource TextControlForegroundDisabled}"
                 Kind="{Binding Icon}"
             />
             <TextBlock
@@ -209,12 +207,7 @@
                         </ItemsControl>
                     </Flyout>
                 </Button.Flyout>
-                <ToolTip.Tip>
-                    <StackPanel Spacing="8">
-                        <TextBlock Classes="h1" Text="{Binding Header}" />
-                        <TextBlock Classes="description" Text="{Binding Description}" />
-                    </StackPanel>
-                </ToolTip.Tip>
+                
             </Button>
 
             <Button
@@ -233,19 +226,21 @@
                 <avalonia1:MaterialIcon Kind="DotsVertical" />
             </Button>
 
-            <ProgressBar
+            <avalonia:ExecuteIndicator
                 Grid.Column="0"
                 Grid.ColumnSpan="4"
-                IsVisible="{Binding IsBusy}"
-                Background="Transparent"
-                Height="20"
-                Opacity="0.5"
                 VerticalAlignment="Center"
-                HorizontalAlignment="Stretch"
-                Minimum="0"
-                Maximum="1"
-                IsIndeterminate="True"
+                HorizontalAlignment="Right"
+                IsExecuting="{Binding IsBusy}"
             />
+            <Border Background="Transparent" Grid.Column="0" Grid.ColumnSpan="2">
+                <ToolTip.Tip>
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h1" Text="{Binding Header}" />
+                        <TextBlock Classes="description" Text="{Binding Description}" />
+                    </StackPanel>
+                </ToolTip.Tip>
+            </Border>
         </Grid>
     </Border>
 </UserControl>

@@ -101,6 +101,7 @@
 
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Workspace/Workspace.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Workspace/WorkspaceItem.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/ExecuteIndicator/ExecuteIndicator.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/BatteryIndicator.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/ConnectionQuality.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/GpsStatusIndicator.axaml" />

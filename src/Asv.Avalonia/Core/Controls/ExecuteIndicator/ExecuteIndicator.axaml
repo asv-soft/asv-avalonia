@@ -1,0 +1,120 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Asv.Avalonia"
+>
+    <Design.PreviewWith>
+        <StackPanel Spacing="8">
+            <controls:ExecuteIndicator IsExecuting="True" />
+            <controls:ExecuteIndicator IsExecuting="True" Foreground="{DynamicResource AsvForegroundInfo3Brush}" />
+            <controls:ExecuteIndicator IsExecuting="False" />
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|ExecuteIndicator">
+        <Setter Property="IsVisible" Value="False" />
+        <Setter Property="Foreground" Value="{DynamicResource AsvForegroundSuccessBrush}" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <StackPanel
+                    Orientation="Horizontal"
+                    Spacing="3"
+                    Height="11"
+                    VerticalAlignment="Center"
+                >
+                    <Grid Width="5" Height="11">
+                        <Ellipse
+                            x:Name="PART_FirstDot"
+                            Width="5"
+                            Height="5"
+                            VerticalAlignment="Bottom"
+                            Fill="{TemplateBinding Foreground}"
+                        />
+                    </Grid>
+                    <Grid Width="5" Height="11">
+                        <Ellipse
+                            x:Name="PART_SecondDot"
+                            Width="5"
+                            Height="5"
+                            VerticalAlignment="Bottom"
+                            Fill="{TemplateBinding Foreground}"
+                        />
+                    </Grid>
+                    <Grid Width="5" Height="11">
+                        <Ellipse
+                            x:Name="PART_ThirdDot"
+                            Width="5"
+                            Height="5"
+                            VerticalAlignment="Bottom"
+                            Fill="{TemplateBinding Foreground}"
+                        />
+                    </Grid>
+                </StackPanel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|ExecuteIndicator:executing">
+        <Setter Property="IsVisible" Value="True" />
+    </Style>
+
+    <Style Selector="controls|ExecuteIndicator:executing /template/ Ellipse#PART_FirstDot">
+        <Style.Animations>
+            <Animation Duration="0:0:0.9" IterationCount="Infinite">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+                <KeyFrame Cue="18%">
+                    <Setter Property="Margin" Value="0,0,0,5" />
+                </KeyFrame>
+                <KeyFrame Cue="36%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
+    <Style Selector="controls|ExecuteIndicator:executing /template/ Ellipse#PART_SecondDot">
+        <Style.Animations>
+            <Animation Duration="0:0:0.9" IterationCount="Infinite">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+                <KeyFrame Cue="33%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+                <KeyFrame Cue="51%">
+                    <Setter Property="Margin" Value="0,0,0,5" />
+                </KeyFrame>
+                <KeyFrame Cue="69%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+
+    <Style Selector="controls|ExecuteIndicator:executing /template/ Ellipse#PART_ThirdDot">
+        <Style.Animations>
+            <Animation Duration="0:0:0.9" IterationCount="Infinite">
+                <KeyFrame Cue="0%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+                <KeyFrame Cue="66%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+                <KeyFrame Cue="84%">
+                    <Setter Property="Margin" Value="0,0,0,5" />
+                </KeyFrame>
+                <KeyFrame Cue="100%">
+                    <Setter Property="Margin" Value="0,0,0,0" />
+                </KeyFrame>
+            </Animation>
+        </Style.Animations>
+    </Style>
+</Styles>

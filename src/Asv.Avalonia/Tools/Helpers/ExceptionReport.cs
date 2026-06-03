@@ -5,6 +5,10 @@ namespace Asv.Avalonia;
 
 public static class ExceptionReport
 {
+    private static readonly object CrashFileHistorySync = new();
+    private const int CrashFileWriteAttemptCount = 3;
+    private const int CrashFileWriteRetryDelayMs = 20;
+
     public static void WriteToFile(
         string dir,
         Exception ex,
@@ -14,9 +18,8 @@ public static class ExceptionReport
         string ext = "log"
     )
     {
-        var crashFileName = ShiftCrashFileHistory(dir, maxCrashFiles, filePrefix, ext);
         reportContent = Build(ex);
-        File.WriteAllText(crashFileName, reportContent, Encoding.UTF8);
+        WriteReportToFile(dir, reportContent, maxCrashFiles, filePrefix, ext);
     }
 
     public static void WriteToFile(
@@ -27,8 +30,32 @@ public static class ExceptionReport
         string ext = "log"
     )
     {
-        var crashFileName = ShiftCrashFileHistory(dir, maxCrashFiles, filePrefix, ext);
-        File.WriteAllText(crashFileName, reportContent, Encoding.UTF8);
+        WriteReportToFile(dir, reportContent, maxCrashFiles, filePrefix, ext);
+    }
+
+    private static void WriteReportToFile(
+        string dir,
+        string reportContent,
+        int maxCrashFiles,
+        string filePrefix,
+        string ext
+    )
+    {
+        lock (CrashFileHistorySync)
+        {
+            var crashFileName = ShiftCrashFileHistory(dir, maxCrashFiles, filePrefix, ext);
+            if (TryWriteReportFile(crashFileName, reportContent))
+            {
+                return;
+            }
+
+            var fallbackCrashFileName = GetFallbackCrashFileName(
+                Path.GetDirectoryName(crashFileName) ?? AppContext.BaseDirectory,
+                filePrefix,
+                ext
+            );
+            TryWriteReportFile(fallbackCrashFileName, reportContent);
+        }
     }
 
     private static string ShiftCrashFileHistory(
@@ -52,21 +79,108 @@ public static class ExceptionReport
 
             if (i == maxCrashFiles - 1)
             {
-                File.Delete(src); // remove oldest
+                DeleteCrashFileIfExists(src); // remove oldest
                 continue;
             }
 
             var dst = Path.Combine(dir, $"{filePrefix}{i + 1}.{ext}");
-
-            if (File.Exists(dst))
-            {
-                File.Delete(dst);
-            }
-
-            File.Move(src, dst);
+            MoveCrashFileIfExists(src, dst);
         }
 
         return Path.Combine(dir, $"{filePrefix}0.{ext}");
+    }
+
+    private static bool TryWriteReportFile(string path, string reportContent)
+    {
+        for (var attempt = 0; attempt < CrashFileWriteAttemptCount; attempt++)
+        {
+            try
+            {
+                using var stream = new FileStream(
+                    path,
+                    FileMode.Create,
+                    FileAccess.Write,
+                    FileShare.ReadWrite | FileShare.Delete
+                );
+                using var writer = new StreamWriter(stream, Encoding.UTF8);
+                writer.Write(reportContent);
+                return true;
+            }
+            catch (IOException) when (attempt < CrashFileWriteAttemptCount - 1)
+            {
+                Thread.Sleep(CrashFileWriteRetryDelayMs);
+            }
+            catch (UnauthorizedAccessException) when (attempt < CrashFileWriteAttemptCount - 1)
+            {
+                Thread.Sleep(CrashFileWriteRetryDelayMs);
+            }
+            catch (IOException)
+            {
+                return false;
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return false;
+            }
+        }
+
+        return false;
+    }
+
+    private static string GetFallbackCrashFileName(string dir, string filePrefix, string ext)
+    {
+        return Path.Combine(
+            dir,
+            $"{filePrefix}{DateTime.UtcNow:yyyyMMddHHmmssfff}_{Environment.ProcessId}_{Environment.CurrentManagedThreadId}_{Guid.NewGuid():N}.{ext}"
+        );
+    }
+
+    private static void DeleteCrashFileIfExists(string path)
+    {
+        try
+        {
+            File.Delete(path);
+        }
+        catch (FileNotFoundException)
+        {
+            // Another process/thread may rotate the same crash history concurrently.
+        }
+        catch (DirectoryNotFoundException)
+        {
+            // The report directory may disappear during cleanup in design-time runs.
+        }
+        catch (IOException)
+        {
+            // Another design-time process may still hold the crash file.
+        }
+        catch (UnauthorizedAccessException)
+        {
+            // Best-effort crash history cleanup must not break application startup.
+        }
+    }
+
+    private static void MoveCrashFileIfExists(string src, string dst)
+    {
+        try
+        {
+            File.Move(src, dst, true);
+        }
+        catch (FileNotFoundException)
+        {
+            // Another process/thread may rotate the same crash history concurrently.
+        }
+        catch (DirectoryNotFoundException)
+        {
+            // The report directory may disappear during cleanup in design-time runs.
+        }
+        catch (IOException)
+        {
+            // Another design-time process may still hold the crash file.
+        }
+        catch (UnauthorizedAccessException)
+        {
+            // Best-effort crash history cleanup must not break application startup.
+        }
     }
 
     private static string NormalizeReportDirectory(string path)

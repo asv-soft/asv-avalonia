@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:example="clr-namespace:Asv.Avalonia.Example"
     mc:Ignorable="d"
-    d:DesignWidth="800"
+    d:DesignWidth="1200"
     d:DesignHeight="450"
     x:Class="Asv.Avalonia.Example.PropertyEditorPageView"
     x:DataType="example:PropertyEditorPageViewModel"
@@ -13,42 +13,108 @@
     <Design.DataContext>
         <example:PropertyEditorPageViewModel />
     </Design.DataContext>
-    <Grid ColumnDefinitions="*,*">
-        <DockPanel Grid.Column="0">
-            <TextBlock DockPanel.Dock="Top" Text="PropertyEditor" />
-            <ContentControl MinWidth="250" Content="{Binding PropertyEditor}" />
-        </DockPanel>
 
-        <DockPanel LastChildFill="False" Grid.Column="1">
-            <TextBlock DockPanel.Dock="Top" Text="Display name" />
-            <TextBox DockPanel.Dock="Top" Text="{Binding DisplayNameProperty.Text.Value}" />
-            <TextBlock DockPanel.Dock="Top" Text="Operation profile" />
-            <TextBlock
-                DockPanel.Dock="Top"
-                Text="{Binding OperationProfileProperty.SelectedItem.Value.Header}"
-            />
-            <TextBlock DockPanel.Dock="Top" Text="Run check count" />
-            <TextBlock DockPanel.Dock="Top" Text="{Binding ActionButtonClickCount}" />
-            <TextBlock DockPanel.Dock="Top" Text="Altitude V2" />
-            <TextBlock DockPanel.Dock="Top" Text="{Binding AltitudeUnitProperty.Text.Value}" />
-            <TextBlock
-                DockPanel.Dock="Top"
-                Text="{Binding AltitudeUnitProperty.Unit.CurrentUnitItem.Value.Name}"
-            />
-            <TextBlock DockPanel.Dock="Top" Text="Throttle V2" />
-            <TextBlock DockPanel.Dock="Top" Text="{Binding ThrottleUnitProperty.Text.Value}" />
-            <TextBlock
-                DockPanel.Dock="Top"
-                Text="{Binding ThrottleUnitProperty.Unit.CurrentUnitItem.Value.Name}"
-            />
-            <TextBlock DockPanel.Dock="Top" Text="Latitude" />
-            <TextBox DockPanel.Dock="Top" Text="{Binding Latitude.Value}" />
-            <TextBlock DockPanel.Dock="Top" Text="Longitude" />
-            <TextBox DockPanel.Dock="Top" Text="{Binding Longitude.Value}" />
-            <TextBlock DockPanel.Dock="Top" Text="Altitude" />
-            <TextBox DockPanel.Dock="Top" Text="{Binding Altitude.Value}" />
-            <TextBlock DockPanel.Dock="Top" Text="GeoPoint" />
-            <TextBlock DockPanel.Dock="Top" Text="{Binding GeoPoint.Value}" />
-        </DockPanel>
+    <UserControl.Styles>
+        <Style Selector="TextBlock.value-label">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBlock.value-text">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="16" ColumnDefinitions="340,*,340">
+        <Grid Grid.Column="0" Width="320" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Classes="h1" Margin="0,0,0,12" Text="PropertyEditor" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ContentControl Content="{Binding PropertyEditor}" />
+            </ScrollViewer>
+        </Grid>
+
+        <ScrollViewer Grid.Column="1" Margin="24,0" VerticalScrollBarVisibility="Auto">
+            <StackPanel MaxWidth="520" VerticalAlignment="Center" Spacing="12">
+                <TextBlock Classes="h1" Text="Model values" />
+
+                <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="description value-label" Text="Display name" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Classes="value-text" Text="{Binding DisplayName.Value}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="description value-label" Text="Operation profile" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding OperationProfile.Value.Header}"
+                    />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="description value-label" Text="Run check count" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding ActionButtonClickCount}"
+                    />
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Classes="description value-label" Text="GeoPoint" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Classes="value-text" Text="{Binding GeoPoint.Value}" />
+                </Grid>
+
+                <TextBlock Classes="h2" Margin="0,8,0,0" Text="Units" />
+                <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="description value-label" Text="Altitude V2 model" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding AltitudeUnitValue.Value}"
+                    />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="description value-label" Text="Throttle V2 model" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding ThrottleUnitValue.Value}"
+                    />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="description value-label" Text="Time model" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Classes="value-text" Text="{Binding Time.Value}" />
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Classes="description value-label" Text="Throttle model" />
+                    <TextBlock Grid.Row="3" Grid.Column="1" Classes="value-text" Text="{Binding Throttle.Value}" />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Classes="description value-label" Text="Altitude model" />
+                    <TextBlock Grid.Row="4" Grid.Column="1" Classes="value-text" Text="{Binding Altitude.Value}" />
+                </Grid>
+
+                <TextBlock Classes="h2" Margin="0,8,0,0" Text="Position" />
+                <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
+                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="description value-label" Text="Latitude model" />
+                    <TextBlock Grid.Row="0" Grid.Column="1" Classes="value-text" Text="{Binding Latitude.Value}" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="description value-label" Text="Longitude model" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Classes="value-text" Text="{Binding Longitude.Value}" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="description value-label" Text="Altitude model" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Classes="value-text" Text="{Binding Altitude.Value}" />
+                </Grid>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Grid Grid.Column="2" Width="320" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <TextBlock Classes="h1" Margin="0,0,0,12" Text="PropertyEditor copy" />
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                <ContentControl Content="{Binding PropertyEditorCopy}" />
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>

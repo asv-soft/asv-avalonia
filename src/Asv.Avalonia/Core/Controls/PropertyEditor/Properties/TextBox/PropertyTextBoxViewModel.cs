@@ -18,6 +18,7 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
             (_, _) => ApplyFromUser(),
             AwaitOperation.Drop
         ).AddTo(ref DisposableBag);
+        CancelCommand = new ReactiveCommand(_ => Cancel()).AddTo(ref DisposableBag);
 
         Text.Skip(1)
             .Where(_ => _changesFromUser)
@@ -71,6 +72,8 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
     public BindableReactiveProperty<string?> Text { get; }
 
     public ReactiveCommand ApplyFromUserCommand { get; }
+
+    public ReactiveCommand CancelCommand { get; }
 
     public bool IsInEditMode
     {
@@ -146,6 +149,7 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
         {
             return;
         }
-        ApplyValueFromModel(_lastTextValue);
+        IsInEditMode = false;
+        ApplyTextFromModel(_lastTextValue, _lastTextValue, true, false);
     }
 }

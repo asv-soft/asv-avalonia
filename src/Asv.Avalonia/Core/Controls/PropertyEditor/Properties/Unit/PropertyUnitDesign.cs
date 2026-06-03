@@ -24,6 +24,30 @@ public class PropertyUnitDesign : PropertyUnitViewModel
         Description =
             "Editable text property with the same visual structure as combo box properties.";
         Text.Value = "123456789";
+        Menu.Add(
+            new MenuItem("copy_value", "Copy value")
+            {
+                Icon = MaterialIconKind.ContentCopy,
+                Command = DesignTime.EmptyCommand,
+            }
+        );
+        Menu.Add(
+            new MenuItem("reset_value", "Reset value")
+            {
+                Icon = MaterialIconKind.Restore,
+                Command = DesignTime.EmptyCommand,
+            }
+        );
+        Menu.Add(
+            new MenuItem("more_actions", "More actions") { Icon = MaterialIconKind.DotsHorizontal }
+        );
+        Menu.Add(
+            new MenuItem("validate_value", "Validate", "more_actions")
+            {
+                Icon = MaterialIconKind.CheckCircle,
+                Command = DesignTime.EmptyCommand,
+            }
+        );
 
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1))

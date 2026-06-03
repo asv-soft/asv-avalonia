@@ -31,18 +31,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         : base(PageId, context)
     {
         DisplayNameProperty = CreateDisplayNameProperty();
-        DisplayNameProperty
-            .Text.EnableValidation(value =>
-            {
-                if (string.IsNullOrWhiteSpace(value))
-                {
-                    return new ValidationException("Display name is required");
-                }
-
-                return null;
-            })
-            .AddTo(ref DisposableBag);
-        DisplayNameProperty.Text.ForceValidate();
         OperationProfileProperty = CreateOperationProfileProperty();
         ActionButtonProperty = CreateActionButtonProperty();
         AltitudeUnitProperty = CreateUnitProperty(
@@ -53,7 +41,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             "V2 unit property with a text value and unit selector.",
             MaterialIconKind.Altimeter,
             AsvColorKind.Info3,
-            1250
+            AltitudeUnitValue
         );
         ThrottleUnitProperty = CreateUnitProperty(
             "throttle_unit_v2",
@@ -63,19 +51,76 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             "V2 unit property using the throttle unit selector.",
             MaterialIconKind.Signal,
             AsvColorKind.Success,
-            65
+            ThrottleUnitValue
         );
-        PropertyEditor = new PropertyEditorViewModel("editor")
-        {
-            ItemsSource =
-            {
+        PropertyEditor = CreatePropertyEditor(
+                "editor",
+                unit,
                 DisplayNameProperty,
                 OperationProfileProperty,
                 ActionButtonProperty,
                 AltitudeUnitProperty,
-                ThrottleUnitProperty,
+                ThrottleUnitProperty
+            )
+            .SetRoutableParent(this);
+        PropertyEditorCopy = CreatePropertyEditor(
+                "editor_copy",
+                unit,
+                CreateDisplayNameProperty(),
+                CreateOperationProfileProperty(),
+                CreateActionButtonProperty(),
+                CreateUnitProperty(
+                    "altitude_unit_v2_copy",
+                    unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
+                    "Altitude V2",
+                    "Alt",
+                    "V2 unit property with a text value and unit selector.",
+                    MaterialIconKind.Altimeter,
+                    AsvColorKind.Info3,
+                    AltitudeUnitValue
+                ),
+                CreateUnitProperty(
+                    "throttle_unit_v2_copy",
+                    unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
+                    "Throttle V2",
+                    "Thr",
+                    "V2 unit property using the throttle unit selector.",
+                    MaterialIconKind.Signal,
+                    AsvColorKind.Success,
+                    ThrottleUnitValue
+                )
+            )
+            .SetRoutableParent(this);
+
+        GeoPoint.Subscribe(x =>
+        {
+            Latitude.Value = x.Latitude;
+            Longitude.Value = x.Longitude;
+            Altitude.Value = x.Altitude;
+        });
+    }
+
+    private PropertyEditorViewModel CreatePropertyEditor(
+        string id,
+        IUnitService unit,
+        PropertyTextBoxViewModel displayNameProperty,
+        PropertyComboBoxViewModel operationProfileProperty,
+        PropertyButtonViewModel actionButtonProperty,
+        PropertyUnitViewModel altitudeUnitProperty,
+        PropertyUnitViewModel throttleUnitProperty
+    )
+    {
+        return new PropertyEditorViewModel(id)
+        {
+            ItemsSource =
+            {
+                displayNameProperty,
+                operationProfileProperty,
+                actionButtonProperty,
+                altitudeUnitProperty,
+                throttleUnitProperty,
                 new PropertyUnitReactive(
-                    "lat",
+                    $"{id}_lat",
                     unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
                     Latitude
                 )
@@ -86,7 +131,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Icon = MaterialIconKind.Latitude,
                 },
                 new PropertyUnitReactive(
-                    "lon",
+                    $"{id}_lon",
                     unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
                     Longitude
                 )
@@ -97,7 +142,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Icon = MaterialIconKind.Latitude,
                 },
                 new PropertyUnitReactive(
-                    "alt",
+                    $"{id}_alt",
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
                     Altitude
                 )
@@ -107,14 +152,14 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Description = "Altitude description",
                     Icon = MaterialIconKind.Altimeter,
                 },
-                new PropertyGeoPointReactive("geo_v2", GeoPoint, unit)
+                new PropertyGeoPointReactive($"{id}_geo_v2", GeoPoint, unit)
                 {
                     Header = "Geo Point",
                     Description = "Geo Point description",
                     Icon = MaterialIconKind.Earth,
                 },
                 new PropertyUnitReactive(
-                    "time",
+                    $"{id}_time",
                     unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
                     Time
                 )
@@ -125,7 +170,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Icon = MaterialIconKind.Timelapse,
                 },
                 new PropertyUnitReactive(
-                    "throttle",
+                    $"{id}_throttle",
                     unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
                     Throttle
                 )
@@ -136,22 +181,12 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Icon = MaterialIconKind.Signal,
                 },
             },
-        }.SetRoutableParent(this);
-
-        GeoPoint.Subscribe(x =>
-        {
-            Latitude.Value = x.Latitude;
-            Longitude.Value = x.Longitude;
-            Altitude.Value = x.Altitude;
-        });
+        };
     }
 
-    private static PropertyTextBoxViewModel CreateDisplayNameProperty()
+    private PropertyTextBoxViewModel CreateDisplayNameProperty()
     {
-        var property = new PropertyTextBoxReactive(
-            "display_name",
-            new ReactiveProperty<string?>("Survey mission")
-        )
+        var property = new PropertyTextBoxReactive("display_name", DisplayName)
         {
             Header = "Display name",
             ShortHeader = "Name",
@@ -160,6 +195,18 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             Icon = MaterialIconKind.FormTextbox,
             IconColor = AsvColorKind.Info5,
         };
+        property
+            .Text.EnableValidation(value =>
+            {
+                if (string.IsNullOrWhiteSpace(value))
+                {
+                    return new ValidationException("Display name is required");
+                }
+
+                return null;
+            })
+            .AddTo(ref DisposableBag);
+        property.Text.ForceValidate();
 
         return property;
     }
@@ -190,10 +237,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         string description,
         MaterialIconKind icon,
         AsvColorKind iconColor,
-        double value
+        ReactiveProperty<double> model
     )
     {
-        var property = new PropertyUnitReactive(id, unit, new ReactiveProperty<double>(value))
+        var property = new PropertyUnitReactive(id, unit, model)
         {
             Header = header,
             ShortHeader = shortName,
@@ -205,10 +252,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         return property;
     }
 
-    private static PropertyComboBoxViewModel CreateOperationProfileProperty()
+    private PropertyComboBoxViewModel CreateOperationProfileProperty()
     {
-        var selectedProfile = new ReactiveProperty<IHeadlinedViewModel?>();
-        var property = new PropertyComboBoxReactive("operation_profile", selectedProfile)
+        var property = new PropertyComboBoxReactive("operation_profile", OperationProfile)
         {
             Header = "Operation profile",
             Description =
@@ -297,7 +343,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             null,
             AsvColorKind.None
         );
-        selectedProfile.Value = firstItem;
+        OperationProfile.Value ??= firstItem;
 
         return property;
     }
@@ -325,6 +371,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return PropertyEditor;
+        yield return PropertyEditorCopy;
         foreach (var item in base.GetChildren())
         {
             yield return item;
@@ -334,6 +381,11 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public BindableReactiveProperty<double> Altitude { get; } = new();
     public BindableReactiveProperty<double> Latitude { get; } = new();
     public BindableReactiveProperty<double> Longitude { get; } = new();
+
+    public BindableReactiveProperty<string?> DisplayName { get; } = new("Survey mission");
+    public BindableReactiveProperty<IHeadlinedViewModel?> OperationProfile { get; } = new();
+    public BindableReactiveProperty<double> AltitudeUnitValue { get; } = new(1250);
+    public BindableReactiveProperty<double> ThrottleUnitValue { get; } = new(65);
 
     public BindableReactiveProperty<GeoPoint> GeoPoint { get; } = new();
     public BindableReactiveProperty<double> Time { get; } = new();
@@ -351,4 +403,5 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public PropertyUnitViewModel AltitudeUnitProperty { get; }
     public PropertyUnitViewModel ThrottleUnitProperty { get; }
     public PropertyEditorViewModel PropertyEditor { get; }
+    public PropertyEditorViewModel PropertyEditorCopy { get; }
 }
