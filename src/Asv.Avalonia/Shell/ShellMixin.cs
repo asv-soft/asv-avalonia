@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using Asv.Modeling;
-using Avalonia.Controls;
+﻿using Asv.Modeling;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -12,14 +10,26 @@ public static class ShellMixin
     {
         public ValueTask GoTo(NavPath path)
         {
-            var path1 = new List<NavId> { new(ShellViewModel.TypeId) };
-            path1.AddRange(path);
-            if (sender is IShell shell)
+            var rootId = new NavId(ShellViewModel.TypeId);
+
+            NavPath fullPath;
+            if (path.Count > 0 && path[0] == rootId)
             {
-                return GoToShell(shell, new NavPath(path1));
+                fullPath = path;
+            }
+            else
+            {
+                var items = new List<NavId> { rootId };
+                items.AddRange(path);
+                fullPath = new NavPath(items);
             }
 
-            return sender.Events.Rise(new NavigateEvent<IViewModel>(sender, new NavPath(path1)));
+            if (sender is IShell shell)
+            {
+                return GoToShell(shell, fullPath);
+            }
+
+            return sender.Events.Rise(new NavigateEvent<IViewModel>(sender, fullPath));
         }
     }
 
