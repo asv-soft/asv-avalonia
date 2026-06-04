@@ -1,3 +1,10 @@
-﻿namespace Asv.Avalonia;
+namespace Asv.Avalonia;
 
-public class ExtendedPropertyEditorViewModel { }
+public class ExtendedPropertyEditorViewModel : PropertyEditorViewModel
+{
+    public ExtendedPropertyEditorViewModel()
+        : base() { }
+
+    public ExtendedPropertyEditorViewModel(string id)
+        : base(id) { }
+}

@@ -50,6 +50,7 @@ public class UnhandledExceptionsHandler(
 {
     private readonly ILogger<UnhandledExceptionsHandler> _logger =
         loggerFactory.CreateLogger<UnhandledExceptionsHandler>();
+    private int _isStopped = 1;
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
@@ -61,6 +62,7 @@ public class UnhandledExceptionsHandler(
 
         _logger.ZLogInformation($"Unhandled exception handler is enabled: {options}");
 
+        Interlocked.Exchange(ref _isStopped, 0);
         Dispatcher.UIThread.UnhandledException += OnUiUnhandledException;
         AppDomain.CurrentDomain.UnhandledException += AppDomainException;
         R3.ObservableSystem.RegisterUnhandledExceptionHandler(R3UnhandledException);
@@ -70,6 +72,11 @@ public class UnhandledExceptionsHandler(
 
     private void OnUiUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
     {
+        if (IsStopped)
+        {
+            return;
+        }
+
         if (options.Value.UiThread.PublishToShell && shellHost.Shell is not null)
         {
             shellHost.Shell.RiseShellErrorMessage(
@@ -94,6 +101,11 @@ public class UnhandledExceptionsHandler(
 
     private void AppDomainException(object sender, UnhandledExceptionEventArgs e)
     {
+        if (IsStopped)
+        {
+            return;
+        }
+
         var ex = e.ExceptionObject as Exception;
         if (ex == null)
         {
@@ -119,6 +131,11 @@ public class UnhandledExceptionsHandler(
 
     private void TaskSchedulerUnhandledException(object? sender, UnobservedTaskExceptionEventArgs e)
     {
+        if (IsStopped)
+        {
+            return;
+        }
+
         var eException = e.Exception;
         if (options.Value.TaskScheduler.PublishToShell && shellHost.Shell is not null)
         {
@@ -144,6 +161,11 @@ public class UnhandledExceptionsHandler(
 
     public void R3UnhandledException(Exception ex)
     {
+        if (IsStopped)
+        {
+            return;
+        }
+
         if (options.Value.R3.PublishToShell && shellHost.Shell is not null)
         {
             shellHost.Shell.RiseShellErrorMessage("R3 error", "Unhandled exception in R3", ex);
@@ -160,8 +182,18 @@ public class UnhandledExceptionsHandler(
 
     public Task StopAsync(CancellationToken cancellationToken)
     {
+        if (Interlocked.Exchange(ref _isStopped, 1) == 1)
+        {
+            return Task.CompletedTask;
+        }
+
+        Dispatcher.UIThread.UnhandledException -= OnUiUnhandledException;
+        AppDomain.CurrentDomain.UnhandledException -= AppDomainException;
+        TaskScheduler.UnobservedTaskException -= TaskSchedulerUnhandledException;
         return Task.CompletedTask;
     }
+
+    private bool IsStopped => Volatile.Read(ref _isStopped) == 1;
 }
 
 public interface IUnhandledExceptionHandler

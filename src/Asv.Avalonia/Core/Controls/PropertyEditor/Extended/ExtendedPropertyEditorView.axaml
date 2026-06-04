@@ -1,13 +1,94 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="800"
-    d:DesignHeight="450"
+    d:DesignWidth="980"
+    d:DesignHeight="640"
     x:Class="Asv.Avalonia.ExtendedPropertyEditorView"
+    x:DataType="avalonia:ExtendedPropertyEditorViewModel"
 >
-    Welcome to Avalonia!
-</UserControl
->
+    <Design.DataContext>
+        <avalonia:ExtendedPropertyEditorViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <ItemsControl
+            Grid.IsSharedSizeScope="True"
+            MaxWidth="1080"
+            Margin="16"
+            HorizontalAlignment="Stretch"
+            ItemsSource="{Binding Items}"
+        >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Spacing="4" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="avalonia:IPropertyViewModel">
+                    <Border
+                        Background="Transparent"
+                        BorderBrush="{DynamicResource ButtonBackground}"
+                        BorderThickness="0,0,0,1"
+                        CornerRadius="0"
+                        Padding="12"
+                        IsVisible="{Binding IsVisible}"
+                    >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition SharedSizeGroup="Editor" Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid
+                                Grid.Column="0"
+                                ColumnDefinitions="Auto,*"
+                                RowDefinitions="Auto,Auto"
+                                VerticalAlignment="Center"
+                            >
+                                <avalonia1:MaterialIcon
+                                    Grid.RowSpan="2"
+                                    Margin="0,2,12,0"
+                                    VerticalAlignment="Top"
+                                    Width="20"
+                                    Height="20"
+                                    IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                    Kind="{Binding Icon}"
+                                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                                />
+                                <TextBlock
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Classes="h2"
+                                    Text="{Binding Header}"
+                                    TextWrapping="Wrap"
+                                />
+                                <TextBlock
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Margin="0,4,0,0"
+                                    Classes="description"
+                                    IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Text="{Binding Description}"
+                                    TextWrapping="Wrap"
+                                />
+                            </Grid>
+
+                            <ContentControl
+                                Grid.Column="1"
+                                Margin="24,0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Stretch"
+                                avalonia:PropertyEditorDisplayOptions.ShowPrefixIcon="False"
+                                Content="{Binding}"
+                            />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+</UserControl>

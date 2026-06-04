@@ -8,6 +8,7 @@ public static class PropertyEditorMixin
         {
             return builder
                 .RegisterViewFor<PropertyEditorViewModel, PropertyEditorView>()
+                .RegisterViewFor<ExtendedPropertyEditorViewModel, ExtendedPropertyEditorView>()
                 .RegisterViewFor<PropertyTextBoxViewModel, PropertyTextBoxView>()
                 .RegisterViewFor<PropertyComboBoxViewModel, PropertyComboBoxView>()
                 .RegisterViewFor<PropertyUnitViewModel, PropertyUnitView>()

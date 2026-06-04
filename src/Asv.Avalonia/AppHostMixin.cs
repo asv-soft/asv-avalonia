@@ -17,11 +17,7 @@ public static class AppHostMixin
         public AppBuilder UseAsv(Action<AppHost.Builder> configure)
         {
             // this is for unhandled exception from R3 library
-            avaloniaBuilder.UseR3(x =>
-                AppHost
-                    .Instance.Services.GetService<IUnhandledExceptionHandler>()
-                    ?.R3UnhandledException(x)
-            );
+            avaloniaBuilder.UseR3(HandleR3UnhandledException);
 
             var asvBuilder = AppHost.CreateBuilder();
             if (Design.IsDesignMode)
@@ -42,6 +38,21 @@ public static class AppHostMixin
             return avaloniaBuilder;
         }
     }
+
+    private static void HandleR3UnhandledException(Exception ex)
+    {
+        try
+        {
+            AppHost
+                .Instance.Services.GetService<IUnhandledExceptionHandler>()
+                ?.R3UnhandledException(ex);
+        }
+        catch (ObjectDisposedException)
+        {
+            // R3 may report late exceptions while the host service provider is already disposed.
+        }
+    }
+
     extension(IHostApplicationBuilder builder)
     {
         public void ExecutePostConfigureCallbacks()

@@ -129,12 +129,22 @@
                 <ColumnDefinition SharedSizeGroup="PostfixAction" Width="Auto" />
             </Grid.ColumnDefinitions>
             <avalonia1:MaterialIcon
+                Classes="property-prefix-icon"
                 Grid.Column="0"
                 Margin="4,0,0,0"
-                IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                 avalonia:AsvPallete.Color="{Binding IconColor}"
                 Kind="{Binding Icon}"
-            />
+            >
+                <avalonia1:MaterialIcon.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="Icon" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                        <Binding
+                            Path="(avalonia:PropertyEditorDisplayOptions.ShowPrefixIcon)"
+                            RelativeSource="{RelativeSource Self}"
+                        />
+                    </MultiBinding>
+                </avalonia1:MaterialIcon.IsVisible>
+            </avalonia1:MaterialIcon>
             <TextBlock
                 Grid.Column="1"
                 MinWidth="20"

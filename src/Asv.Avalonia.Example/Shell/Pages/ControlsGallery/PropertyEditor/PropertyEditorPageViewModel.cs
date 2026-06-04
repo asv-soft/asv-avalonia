@@ -96,6 +96,35 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 dialogService
             )
             .SetRoutableParent(this);
+        ExtendedPropertyEditor = CreateExtendedPropertyEditor(
+                "editor_extended",
+                unit,
+                CreateDisplayNameProperty(),
+                CreateOperationProfileProperty(),
+                CreateActionButtonProperty(),
+                CreateUnitProperty(
+                    "altitude_unit_v2_extended",
+                    unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
+                    "Altitude V2",
+                    "Alt",
+                    "V2 unit property with a text value and unit selector.",
+                    MaterialIconKind.Altimeter,
+                    AsvColorKind.Info3,
+                    AltitudeUnitValue
+                ),
+                CreateUnitProperty(
+                    "throttle_unit_v2_extended",
+                    unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
+                    "Throttle V2",
+                    "Thr",
+                    "V2 unit property using the throttle unit selector.",
+                    MaterialIconKind.Signal,
+                    AsvColorKind.Success,
+                    ThrottleUnitValue
+                ),
+                dialogService
+            )
+            .SetRoutableParent(this);
 
         GeoPoint.Subscribe(x =>
         {
@@ -116,78 +145,136 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         IDialogService dialogService
     )
     {
-        return new PropertyEditorViewModel(id)
-        {
-            ItemsSource =
+        return FillPropertyEditor(
+            new PropertyEditorViewModel(id),
+            id,
+            unit,
+            displayNameProperty,
+            operationProfileProperty,
+            actionButtonProperty,
+            altitudeUnitProperty,
+            throttleUnitProperty,
+            dialogService
+        );
+    }
+
+    private ExtendedPropertyEditorViewModel CreateExtendedPropertyEditor(
+        string id,
+        IUnitService unit,
+        PropertyTextBoxViewModel displayNameProperty,
+        PropertyComboBoxViewModel operationProfileProperty,
+        PropertyButtonViewModel actionButtonProperty,
+        PropertyUnitViewModel altitudeUnitProperty,
+        PropertyUnitViewModel throttleUnitProperty,
+        IDialogService dialogService
+    )
+    {
+        return FillPropertyEditor(
+            new ExtendedPropertyEditorViewModel(id),
+            id,
+            unit,
+            displayNameProperty,
+            operationProfileProperty,
+            actionButtonProperty,
+            altitudeUnitProperty,
+            throttleUnitProperty,
+            dialogService
+        );
+    }
+
+    private TEditor FillPropertyEditor<TEditor>(
+        TEditor editor,
+        string id,
+        IUnitService unit,
+        PropertyTextBoxViewModel displayNameProperty,
+        PropertyComboBoxViewModel operationProfileProperty,
+        PropertyButtonViewModel actionButtonProperty,
+        PropertyUnitViewModel altitudeUnitProperty,
+        PropertyUnitViewModel throttleUnitProperty,
+        IDialogService dialogService
+    )
+        where TEditor : PropertyEditorViewModel
+    {
+        editor.ItemsSource.Add(displayNameProperty);
+        editor.ItemsSource.Add(operationProfileProperty);
+        editor.ItemsSource.Add(actionButtonProperty);
+        editor.ItemsSource.Add(altitudeUnitProperty);
+        editor.ItemsSource.Add(throttleUnitProperty);
+        editor.ItemsSource.Add(
+            new PropertyUnitReactive(
+                $"{id}_lat",
+                unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
+                Latitude
+            )
             {
-                displayNameProperty,
-                operationProfileProperty,
-                actionButtonProperty,
-                altitudeUnitProperty,
-                throttleUnitProperty,
-                new PropertyUnitReactive(
-                    $"{id}_lat",
-                    unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
-                    Latitude
-                )
-                {
-                    Header = "Position",
-                    ShortHeader = "Lat",
-                    Description = "Latitude description",
-                    Icon = MaterialIconKind.Latitude,
-                },
-                new PropertyUnitReactive(
-                    $"{id}_lon",
-                    unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
-                    Longitude
-                )
-                {
-                    Header = "Longitude",
-                    ShortHeader = "Lon",
-                    Description = "Latitude description",
-                    Icon = MaterialIconKind.Latitude,
-                },
-                new PropertyUnitReactive(
-                    $"{id}_alt",
-                    unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
-                    Altitude
-                )
-                {
-                    Header = "Altitude",
-                    ShortHeader = "Alt",
-                    Description = "Altitude description",
-                    Icon = MaterialIconKind.Altimeter,
-                },
-                new PropertyGeoPointReactive($"{id}_geo_v2", GeoPoint, unit, dialogService)
-                {
-                    Header = "Geo Point",
-                    Description = "Geo Point description",
-                    Icon = MaterialIconKind.Earth,
-                },
-                new PropertyUnitReactive(
-                    $"{id}_time",
-                    unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
-                    Time
-                )
-                {
-                    Header = "Time",
-                    ShortHeader = "Time",
-                    Description = "Time description",
-                    Icon = MaterialIconKind.Timelapse,
-                },
-                new PropertyUnitReactive(
-                    $"{id}_throttle",
-                    unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
-                    Throttle
-                )
-                {
-                    Header = "Throttle",
-                    ShortHeader = "Throttle",
-                    Description = "Throttle description",
-                    Icon = MaterialIconKind.Signal,
-                },
-            },
-        };
+                Header = "Position",
+                ShortHeader = "Lat",
+                Description = "Latitude description",
+                Icon = MaterialIconKind.Latitude,
+            }
+        );
+        editor.ItemsSource.Add(
+            new PropertyUnitReactive(
+                $"{id}_lon",
+                unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
+                Longitude
+            )
+            {
+                Header = "Longitude",
+                ShortHeader = "Lon",
+                Description = "Latitude description",
+                Icon = MaterialIconKind.Latitude,
+            }
+        );
+        editor.ItemsSource.Add(
+            new PropertyUnitReactive(
+                $"{id}_alt",
+                unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
+                Altitude
+            )
+            {
+                Header = "Altitude",
+                ShortHeader = "Alt",
+                Description = "Altitude description",
+                Icon = MaterialIconKind.Altimeter,
+            }
+        );
+        editor.ItemsSource.Add(
+            new PropertyGeoPointReactive($"{id}_geo_v2", GeoPoint, unit, dialogService)
+            {
+                Header = "Geo Point",
+                Description = "Geo Point description",
+                Icon = MaterialIconKind.Earth,
+            }
+        );
+        editor.ItemsSource.Add(
+            new PropertyUnitReactive(
+                $"{id}_time",
+                unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
+                Time
+            )
+            {
+                Header = "Time",
+                ShortHeader = "Time",
+                Description = "Time description",
+                Icon = MaterialIconKind.Timelapse,
+            }
+        );
+        editor.ItemsSource.Add(
+            new PropertyUnitReactive(
+                $"{id}_throttle",
+                unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
+                Throttle
+            )
+            {
+                Header = "Throttle",
+                ShortHeader = "Throttle",
+                Description = "Throttle description",
+                Icon = MaterialIconKind.Signal,
+            }
+        );
+
+        return editor;
     }
 
     private PropertyTextBoxViewModel CreateDisplayNameProperty()
@@ -378,6 +465,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         yield return PropertyEditor;
         yield return PropertyEditorCopy;
+        yield return ExtendedPropertyEditor;
         foreach (var item in base.GetChildren())
         {
             yield return item;
@@ -410,4 +498,5 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public PropertyUnitViewModel ThrottleUnitProperty { get; }
     public PropertyEditorViewModel PropertyEditor { get; }
     public PropertyEditorViewModel PropertyEditorCopy { get; }
+    public ExtendedPropertyEditorViewModel ExtendedPropertyEditor { get; }
 }
