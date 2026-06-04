@@ -1,20 +1,17 @@
 using Asv.Common;
 using Asv.Modeling;
+using Material.Icons;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class LanguageProperty : ViewModel
+public class LanguageProperty : PropertyComboBoxViewModel
 {
     public const string ViewModelId = "language";
 
     private readonly ILocalizationService _svc;
     private readonly YesOrNoDialogPrefab _dialog;
-    private bool _internalChange;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
-
-    public IEnumerable<ILanguageInfo> Items => _svc.AvailableLanguages;
-    public BindableReactiveProperty<ILanguageInfo> SelectedItem { get; }
 
     public LanguageProperty()
         : this(DesignTime.LocalizationService, NullDialogService.Instance)
@@ -23,43 +20,52 @@ public class LanguageProperty : ViewModel
     }
 
     public LanguageProperty(ILocalizationService svc, IDialogService dialog)
-        : base(ViewModelId)
+        : base(ViewModelId, false)
     {
         _svc = svc;
         _dialog = dialog.GetDialogPrefab<YesOrNoDialogPrefab>();
-        SelectedItem = new BindableReactiveProperty<ILanguageInfo>(
-            svc.CurrentLanguage.CurrentValue
-        ).DisposeItWith(Disposable);
-        _internalChange = true;
-        SelectedItem.SubscribeAwait(OnChangedByUser).DisposeItWith(Disposable);
-        svc.CurrentLanguage.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
-        _internalChange = false;
+
+        Header = RS.SettingsAppearanceView_AppLanguage_Title;
+        Description = RS.ChangeLanguageCommand_CommandInfo_Description;
+        Icon = MaterialIconKind.Translate;
+        IconColor = AsvColorKind.Info6;
+
+        foreach (var language in svc.AvailableLanguages)
+        {
+            ItemsSource.Add(new LanguageOptionViewModel(language));
+        }
+
         _undoSink = Undo.CreateValueChange<string>("default", ApplyLanguage, ApplyLanguage)
             .DisposeItWith(Disposable);
+
+        svc.CurrentLanguage.Skip(1)
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(value => OnChangeByModel(value))
+            .DisposeItWith(Disposable);
+        OnChangeByModel(svc.CurrentLanguage.Value);
     }
 
-    private async ValueTask OnChangedByUser(ILanguageInfo userValue, CancellationToken cancel)
+    protected override async ValueTask ApplyFromUser(
+        IHeadlinedViewModel item,
+        CancellationToken cancel
+    )
     {
-        if (_internalChange)
+        if (item is not LanguageOptionViewModel option)
         {
             return;
         }
 
-        var oldValue = _svc.CurrentLanguage.Value.Id;
-        if (oldValue == userValue.Id)
+        var oldValue = _svc.CurrentLanguage.Value?.Id;
+        if (oldValue == option.Language.Id)
         {
             return;
         }
 
-        try
+        ApplyLanguage(option.Language.Id);
+
+        if (oldValue is not null)
         {
-            _internalChange = true;
-            ApplyLanguage(userValue.Id);
-            _undoSink.Publish(oldValue, userValue.Id);
-        }
-        finally
-        {
-            _internalChange = false;
+            _undoSink.Publish(oldValue, option.Language.Id);
         }
 
         var dialogPayload = new YesOrNoDialogPayload
@@ -69,14 +75,15 @@ public class LanguageProperty : ViewModel
         };
 
         var isReloadReady = await _dialog.ShowDialogAsync(dialogPayload);
-
-        if (isReloadReady)
+        if (!isReloadReady)
         {
-            var restrictions = await this.RequestRestartApplicationApproval(cancel);
-            if (restrictions.Count == 0)
-            {
-                await this.RequestRestart(cancel);
-            }
+            return;
+        }
+
+        var restrictions = await this.RequestRestartApplicationApproval(cancel);
+        if (restrictions.Count == 0)
+        {
+            await this.RequestRestart(cancel);
         }
     }
 
@@ -91,15 +98,40 @@ public class LanguageProperty : ViewModel
         _svc.CurrentLanguage.Value = language;
     }
 
-    private void OnChangeByModel(ILanguageInfo modelValue)
+    private void OnChangeByModel(ILanguageInfo? modelValue)
     {
-        _internalChange = true;
-        SelectedItem.Value = modelValue;
-        _internalChange = false;
+        ApplyValueFromModel(FindLanguage(modelValue?.Id));
     }
 
-    public override IEnumerable<IViewModel> GetChildren()
+    private LanguageOptionViewModel? FindLanguage(string? languageId)
     {
-        return [];
+        return ItemsSource
+                .OfType<LanguageOptionViewModel>()
+                .FirstOrDefault(x => x.Language.Id == languageId)
+            ?? ItemsSource.OfType<LanguageOptionViewModel>().FirstOrDefault();
+    }
+
+    private sealed class LanguageOptionViewModel : HeadlinedViewModel
+    {
+        public LanguageOptionViewModel(ILanguageInfo language)
+            : base(language.Id)
+        {
+            Language = language;
+            Header = language.DisplayName;
+            Icon = MaterialIconKind.Translate;
+            IconColor = GetIconColor(language.Id);
+        }
+
+        public ILanguageInfo Language { get; }
+
+        private static AsvColorKind GetIconColor(string languageId)
+        {
+            return languageId switch
+            {
+                "en" => AsvColorKind.Info3,
+                "ru" => AsvColorKind.Info5,
+                _ => AsvColorKind.Info6,
+            };
+        }
     }
 }

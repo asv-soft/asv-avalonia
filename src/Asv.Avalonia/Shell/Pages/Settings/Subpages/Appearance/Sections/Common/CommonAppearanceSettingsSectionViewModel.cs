@@ -26,18 +26,23 @@ public class CommonAppearanceSettingsSectionViewModel : ViewModel, ISettingsAppe
     )
         : base(PageId)
     {
-        Theme = new ThemeProperty(themeService).SetRoutableParent(this).DisposeItWith(Disposable);
-        Language = new LanguageProperty(localizationService, dialog)
+        Editor = new ExtendedPropertyEditorViewModel($"{PageId}.editor")
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
+
+        Theme = new ThemeProperty(themeService);
+        Language = new LanguageProperty(localizationService, dialog);
+
+        Editor.ItemsSource.Add(Theme);
+        Editor.ItemsSource.Add(Language);
     }
 
+    public ExtendedPropertyEditorViewModel Editor { get; }
     public ThemeProperty Theme { get; }
     public LanguageProperty Language { get; }
 
     public override IEnumerable<IViewModel> GetChildren()
     {
-        yield return Theme;
-        yield return Language;
+        yield return Editor;
     }
 }

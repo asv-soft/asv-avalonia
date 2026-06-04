@@ -1,19 +1,16 @@
 using Asv.Common;
 using Asv.Modeling;
+using Material.Icons;
 using R3;
 
 namespace Asv.Avalonia;
 
-public class ThemeProperty : ViewModel
+public class ThemeProperty : PropertyComboBoxViewModel
 {
     public const string ViewModelId = "theme";
 
     private readonly IThemeService _svc;
-    private bool _internalChange;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoHandler;
-
-    public IEnumerable<IThemeInfo> Items => _svc.Themes;
-    public BindableReactiveProperty<IThemeInfo> SelectedItem { get; }
 
     public ThemeProperty()
         : this(DesignTime.ThemeService)
@@ -22,48 +19,50 @@ public class ThemeProperty : ViewModel
     }
 
     public ThemeProperty(IThemeService svc)
-        : base(ViewModelId)
+        : base(ViewModelId, false)
     {
         _svc = svc;
-        SelectedItem = new BindableReactiveProperty<IThemeInfo>(
-            svc.CurrentTheme.CurrentValue
-        ).DisposeItWith(Disposable);
-        _internalChange = true;
-        SelectedItem.SubscribeAwait(OnChangedByUser).DisposeItWith(Disposable);
-        svc.CurrentTheme.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
-        _internalChange = false;
+        Header = RS.SettingsAppearanceView_AppTheme_Title;
+        Description = RS.ChangeThemeCommand_CommandInfo_Description;
+        Icon = MaterialIconKind.ThemeLightDark;
+        IconColor = AsvColorKind.Info5;
+
+        foreach (var theme in svc.Themes)
+        {
+            ItemsSource.Add(new ThemeOptionViewModel(theme));
+        }
+
         _undoHandler = Undo.CreateValueChange<string>("default", ApplyTheme, ApplyTheme)
             .DisposeItWith(Disposable);
+
+        svc.CurrentTheme.Skip(1)
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(value => OnChangeByModel(value))
+            .DisposeItWith(Disposable);
+        OnChangeByModel(svc.CurrentTheme.Value);
     }
 
-    private ValueTask OnChangedByUser(IThemeInfo userValue, CancellationToken cancel)
+    protected override ValueTask ApplyFromUser(IHeadlinedViewModel item, CancellationToken cancel)
     {
-        if (_internalChange)
+        if (item is not ThemeOptionViewModel option)
         {
             return ValueTask.CompletedTask;
         }
 
-        var oldValue = _svc.CurrentTheme.Value.Id;
-        if (oldValue == userValue.Id)
+        var oldValue = _svc.CurrentTheme.Value?.Id;
+        if (oldValue == option.Theme.Id)
         {
             return ValueTask.CompletedTask;
         }
 
-        try
+        ApplyTheme(option.Theme.Id);
+
+        if (oldValue is not null)
         {
-            _internalChange = true;
-            ApplyTheme(userValue.Id);
-            _undoHandler.Publish(oldValue, userValue.Id);
-            return ValueTask.CompletedTask;
+            _undoHandler.Publish(oldValue, option.Theme.Id);
         }
-        catch (Exception exception)
-        {
-            return ValueTask.FromException(exception);
-        }
-        finally
-        {
-            _internalChange = false;
-        }
+
+        return ValueTask.CompletedTask;
     }
 
     private void ApplyTheme(string themeId)
@@ -77,15 +76,48 @@ public class ThemeProperty : ViewModel
         _svc.CurrentTheme.Value = theme;
     }
 
-    private void OnChangeByModel(IThemeInfo modelValue)
+    private void OnChangeByModel(IThemeInfo? modelValue)
     {
-        _internalChange = true;
-        SelectedItem.Value = modelValue;
-        _internalChange = false;
+        ApplyValueFromModel(FindTheme(modelValue?.Id));
     }
 
-    public override IEnumerable<IViewModel> GetChildren()
+    private ThemeOptionViewModel? FindTheme(string? themeId)
     {
-        return [];
+        return ItemsSource.OfType<ThemeOptionViewModel>().FirstOrDefault(x => x.Theme.Id == themeId)
+            ?? ItemsSource.OfType<ThemeOptionViewModel>().FirstOrDefault();
+    }
+
+    private sealed class ThemeOptionViewModel : HeadlinedViewModel
+    {
+        public ThemeOptionViewModel(IThemeInfo theme)
+            : base(theme.Id)
+        {
+            Theme = theme;
+            Header = theme.Name;
+            Icon = GetIcon(theme.Id);
+            IconColor = GetIconColor(theme.Id);
+        }
+
+        public IThemeInfo Theme { get; }
+
+        private static MaterialIconKind GetIcon(string themeId)
+        {
+            return themeId switch
+            {
+                ThemeService.LightTheme => MaterialIconKind.WhiteBalanceSunny,
+                ThemeService.DarkTheme => MaterialIconKind.WeatherNight,
+                _ => MaterialIconKind.ThemeLightDark,
+            };
+        }
+
+        private static AsvColorKind GetIconColor(string themeId)
+        {
+            return themeId switch
+            {
+                ThemeService.LightTheme => AsvColorKind.Info4,
+                ThemeService.DarkTheme => AsvColorKind.Info8,
+                _ => AsvColorKind.Info5,
+            };
+        }
     }
 }
