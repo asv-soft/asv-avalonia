@@ -1,21 +1,19 @@
-using System.Windows.Input;
+using Asv.Avalonia;
 using Asv.Common;
 using Asv.IO;
-using Asv.Modeling;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
-using ObservableCollections;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapProviderProperty : ViewModel
+public class MapProviderProperty : PropertyComboBoxViewModel
 {
     public const string ViewModelId = "map-provider";
 
     private readonly IMapService _mapService;
     private readonly EditApiKeyDialogPrefab _editApiKeyDialog;
-    private readonly ISynchronizedView<ITileProvider, TileProviderViewModel> _view;
-    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
+    private readonly MenuItem _editApiKeyMenuItem;
 
     public MapProviderProperty()
         : this(NullMapService.Instance, DesignTime.DialogService, DesignTime.LoggerFactory)
@@ -32,56 +30,64 @@ public class MapProviderProperty : ViewModel
     {
         _mapService = mapService;
         _editApiKeyDialog = dialogService.GetDialogPrefab<EditApiKeyDialogPrefab>();
-        _undoSink = Undo.CreateValueChange<string>("default", ApplyTileProvider, ApplyTileProvider)
-            .DisposeItWith(Disposable);
 
-        var itemsSource = new ObservableList<ITileProvider>(
-            mapService.AvailableProviders.OrderBy(p => p.Info.Group.Id)
-        );
-        _view = itemsSource.CreateView(p => new TileProviderViewModel(p)).DisposeItWith(Disposable);
-        _view.DisposeMany().DisposeItWith(Disposable);
-        _view.SetRoutableParent(this).DisposeItWith(Disposable);
-        Items = _view
-            .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
-            .DisposeItWith(Disposable);
+        Header = RS.SettingsGeoMapView_TileProviderProperty_Title;
+        Description = RS.SettingsGeoMapView_TileProviderProperty_Description;
+        Icon = MaterialIconKind.MapOutline;
+        IconColor = AsvColorKind.Info7;
 
-        SelectedItem = new BindableReactiveProperty<TileProviderViewModel?>(null).DisposeItWith(
+        foreach (var provider in mapService.AvailableProviders.OrderBy(p => p.Info.Group.Id))
+        {
+            ItemsSource.Add(new TileProviderViewModel(provider));
+        }
+
+        CurrentProvider = new BindableReactiveProperty<TileProviderViewModel?>().DisposeItWith(
             Disposable
         );
-
-        CurrentProvider = new BindableReactiveProperty<TileProviderViewModel?>(
-            _view.FirstOrDefault(vm => vm.Provider == mapService.CurrentProvider.Value)
-        ).DisposeItWith(Disposable);
-        SetCurrentProvider(CurrentProvider.Value);
-
-        IsSetCurrentEnabled = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
+        EditApiKeyCommand = new ReactiveCommand(EditApiKeyAsync).DisposeItWith(Disposable);
         IsEditApiKeyEnabled = new BindableReactiveProperty<bool>(false).DisposeItWith(Disposable);
 
-        SetCurrentCommand = new ReactiveCommand(SetCurrentAsync).DisposeItWith(Disposable);
-        EditApiKeyCommand = new ReactiveCommand(EditApiKeyAsync).DisposeItWith(Disposable);
-
-        SelectedItem
-            .ObserveOnUIThreadDispatcher()
-            .Subscribe(_ => UpdateButtonStates())
-            .DisposeItWith(Disposable);
+        _editApiKeyMenuItem = new MenuItem(
+            "edit_provider_api_key",
+            RS.SettingsGeoMapView_EditProviderApiKey_Tooltip
+        )
+        {
+            Icon = MaterialIconKind.Pencil,
+            Command = EditApiKeyCommand,
+        };
+        Menu.Add(_editApiKeyMenuItem);
 
         _mapService
             .CurrentProvider.ObserveOnUIThreadDispatcher()
             .Subscribe(provider =>
             {
-                SetCurrentProvider(_view.FirstOrDefault(vm => vm.Provider == provider));
-                UpdateButtonStates();
+                SetCurrentProvider(FindProvider(provider));
             })
             .DisposeItWith(Disposable);
+
+        SetCurrentProvider(FindProvider(mapService.CurrentProvider.Value));
     }
 
-    public INotifyCollectionChangedSynchronizedViewList<TileProviderViewModel> Items { get; }
-    public BindableReactiveProperty<TileProviderViewModel?> SelectedItem { get; }
     public BindableReactiveProperty<TileProviderViewModel?> CurrentProvider { get; }
-    public BindableReactiveProperty<bool> IsSetCurrentEnabled { get; }
     public BindableReactiveProperty<bool> IsEditApiKeyEnabled { get; }
-    public ICommand SetCurrentCommand { get; }
-    public ICommand EditApiKeyCommand { get; }
+    public ReactiveCommand EditApiKeyCommand { get; }
+
+    protected override ValueTask ApplyFromUser(IHeadlinedViewModel item, CancellationToken cancel)
+    {
+        if (item is TileProviderViewModel provider)
+        {
+            _mapService.CurrentProvider.Value = provider.Provider;
+        }
+
+        return ValueTask.CompletedTask;
+    }
+
+    private TileProviderViewModel? FindProvider(ITileProvider provider)
+    {
+        return ItemsSource
+            .OfType<TileProviderViewModel>()
+            .FirstOrDefault(vm => vm.Provider == provider);
+    }
 
     private void SetCurrentProvider(TileProviderViewModel? provider)
     {
@@ -96,74 +102,33 @@ public class MapProviderProperty : ViewModel
         {
             CurrentProvider.Value.IsCurrent.Value = true;
         }
+
+        ApplyValueFromModel(provider);
+        UpdateApiKeyActionState();
     }
 
-    private void UpdateButtonStates()
+    private void UpdateApiKeyActionState()
     {
-        if (SelectedItem.Value == null)
-        {
-            IsSetCurrentEnabled.Value = false;
-            IsEditApiKeyEnabled.Value = false;
-            return;
-        }
-
-        IsSetCurrentEnabled.Value = SelectedItem.Value != CurrentProvider.Value;
-        IsEditApiKeyEnabled.Value = SelectedItem.Value.Provider is IProtectedTileProvider;
-    }
-
-    private ValueTask SetCurrentAsync(Unit unit, CancellationToken cancel)
-    {
-        if (SelectedItem.Value == null)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        var oldValue = _mapService.CurrentProvider.Value.Info.Id;
-        var newValue = SelectedItem.Value.Provider.Info.Id;
-        if (oldValue == newValue)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        ApplyTileProvider(newValue);
-        _undoSink.Publish(oldValue, newValue);
-        return ValueTask.CompletedTask;
-    }
-
-    private void ApplyTileProvider(string providerId)
-    {
-        var provider = _mapService.AvailableProviders.FirstOrDefault(x => x.Info.Id == providerId);
-        if (provider is null)
-        {
-            return;
-        }
-
-        _mapService.CurrentProvider.Value = provider;
+        var isEnabled = CurrentProvider.Value?.Provider is IProtectedTileProvider;
+        IsEditApiKeyEnabled.Value = isEnabled;
+        _editApiKeyMenuItem.IsEnabled = isEnabled;
     }
 
     private async ValueTask EditApiKeyAsync(Unit unit, CancellationToken cancel)
     {
-        if (SelectedItem.Value is not { Provider: IProtectedTileProvider })
+        if (CurrentProvider.Value is not { Provider: IProtectedTileProvider })
         {
             return;
         }
 
-        var currentKey = _mapService.GetProviderApiKey(SelectedItem.Value.Provider.Info.Id);
+        var currentKey = _mapService.GetProviderApiKey(CurrentProvider.Value.Provider.Info.Id);
         var result = await _editApiKeyDialog.ShowDialogAsync(
             new EditApiKeyDialogPayload { CurrentApiKey = currentKey }
         );
 
         if (result != currentKey)
         {
-            _mapService.SetProviderApiKey(SelectedItem.Value.Provider.Info.Id, result);
-        }
-    }
-
-    public override IEnumerable<IViewModel> GetChildren()
-    {
-        foreach (var tileProvider in _view)
-        {
-            yield return tileProvider;
+            _mapService.SetProviderApiKey(CurrentProvider.Value.Provider.Info.Id, result);
         }
     }
 }

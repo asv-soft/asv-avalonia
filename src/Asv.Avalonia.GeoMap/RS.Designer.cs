@@ -69,9 +69,21 @@ namespace Asv.Avalonia.GeoMap {
             }
         }
         
+        public static string MapModeProperty_MapModeInfo_Offline_Description {
+            get {
+                return ResourceManager.GetString("MapModeProperty_MapModeInfo_Offline_Description", resourceCulture);
+            }
+        }
+        
         public static string MapModeProperty_MapModeInfo_Online {
             get {
                 return ResourceManager.GetString("MapModeProperty_MapModeInfo_Online", resourceCulture);
+            }
+        }
+        
+        public static string MapModeProperty_MapModeInfo_Online_Description {
+            get {
+                return ResourceManager.GetString("MapModeProperty_MapModeInfo_Online_Description", resourceCulture);
             }
         }
         
@@ -81,15 +93,51 @@ namespace Asv.Avalonia.GeoMap {
             }
         }
         
+        public static string MapModeProperty_MapModeInfo_Mixed_Description {
+            get {
+                return ResourceManager.GetString("MapModeProperty_MapModeInfo_Mixed_Description", resourceCulture);
+            }
+        }
+        
         public static string SettingsGeoMapView_ModeProperty_Title {
             get {
                 return ResourceManager.GetString("SettingsGeoMapView_ModeProperty_Title", resourceCulture);
             }
         }
         
+        public static string SettingsGeoMapView_ModeProperty_Description {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_ModeProperty_Description", resourceCulture);
+            }
+        }
+        
         public static string SettingsGeoMapView_TileProviderProperty_Title {
             get {
                 return ResourceManager.GetString("SettingsGeoMapView_TileProviderProperty_Title", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_TileProviderProperty_Description {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_TileProviderProperty_Description", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_MapPreview_Title {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_MapPreview_Title", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_MapPreview_Description {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_MapPreview_Description", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_MapPreview_Anchor {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_MapPreview_Anchor", resourceCulture);
             }
         }
         
@@ -153,9 +201,33 @@ namespace Asv.Avalonia.GeoMap {
             }
         }
         
+        public static string SettingsGeoMapView_MinZoomProperty_Description {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_MinZoomProperty_Description", resourceCulture);
+            }
+        }
+        
         public static string SettingsGeoMapView_MaxZoomProperty_Title {
             get {
                 return ResourceManager.GetString("SettingsGeoMapView_MaxZoomProperty_Title", resourceCulture);
+            }
+        }
+        
+        public static string SettingsGeoMapView_MaxZoomProperty_Description {
+            get {
+                return ResourceManager.GetString("SettingsGeoMapView_MaxZoomProperty_Description", resourceCulture);
+            }
+        }
+        
+        public static string MapZoomProperty_ZoomLevel_Description {
+            get {
+                return ResourceManager.GetString("MapZoomProperty_ZoomLevel_Description", resourceCulture);
+            }
+        }
+        
+        public static string TileProviderViewModel_Description {
+            get {
+                return ResourceManager.GetString("TileProviderViewModel_Description", resourceCulture);
             }
         }
         

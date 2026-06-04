@@ -13,6 +13,7 @@ public partial class ShellWindow : Window
     private readonly IDisposable? _layout;
     private readonly ILogger<ShellWindow> _logger;
     private bool _internalChange;
+    private bool _isCloseRequested;
 
     public ShellWindow()
         : this(NullLoggerFactory.Instance)
@@ -55,10 +56,54 @@ public partial class ShellWindow : Window
 
     protected override void OnClosing(WindowClosingEventArgs e)
     {
+        if (TryHandleUserCloseRequest(e))
+        {
+            return;
+        }
+
         base.OnClosing(e);
         _savePosition?.OnNext(Unit.Default);
         _savePosition?.Dispose();
         _layout?.Dispose();
+    }
+
+    private bool TryHandleUserCloseRequest(WindowClosingEventArgs e)
+    {
+        if (e.CloseReason == WindowCloseReason.ApplicationShutdown)
+        {
+            return false;
+        }
+
+        if (DataContext is not DesktopShellViewModel vm)
+        {
+            return false;
+        }
+
+        e.Cancel = true;
+        if (_isCloseRequested)
+        {
+            return true;
+        }
+
+        _isCloseRequested = true;
+        TryCloseFromViewModel(vm);
+        return true;
+    }
+
+    private async void TryCloseFromViewModel(DesktopShellViewModel vm)
+    {
+        try
+        {
+            if (!await vm.TryCloseFromWindowAsync(CancellationToken.None))
+            {
+                _isCloseRequested = false;
+            }
+        }
+        catch (Exception e)
+        {
+            _isCloseRequested = false;
+            _logger.ZLogError(e, $"Error while closing {nameof(ShellWindow)}: {e.Message}");
+        }
     }
 
     private void LoadLayout(ShellWindowConfig config)

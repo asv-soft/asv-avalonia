@@ -35,17 +35,41 @@
     <data name="MapModeProperty_MapModeInfo_Mixed" xml:space="preserve">
         <value>Смешанный</value>
     </data>
+    <data name="MapModeProperty_MapModeInfo_Mixed_Description" xml:space="preserve">
+        <value>Сначала использует кешированные тайлы и загружает недостающие из сети.</value>
+    </data>
     <data name="MapModeProperty_MapModeInfo_Offline" xml:space="preserve">
         <value>Оффлайн</value>
+    </data>
+    <data name="MapModeProperty_MapModeInfo_Offline_Description" xml:space="preserve">
+        <value>Использует только локально кешированные тайлы карты.</value>
     </data>
     <data name="MapModeProperty_MapModeInfo_Online" xml:space="preserve">
         <value>Онлайн</value>
     </data>
+    <data name="MapModeProperty_MapModeInfo_Online_Description" xml:space="preserve">
+        <value>Загружает тайлы карты от выбранного онлайн-провайдера.</value>
+    </data>
     <data name="SettingsGeoMapView_ModeProperty_Title" xml:space="preserve">
         <value>Режим работы карты</value>
     </data>
+    <data name="SettingsGeoMapView_ModeProperty_Description" xml:space="preserve">
+        <value>Определяет, откуда загружаются тайлы: из сети, локального кеша или обоих источников.</value>
+    </data>
     <data name="SettingsGeoMapView_TileProviderProperty_Title" xml:space="preserve">
         <value>Провайдер карты</value>
+    </data>
+    <data name="SettingsGeoMapView_TileProviderProperty_Description" xml:space="preserve">
+        <value>Выбирает источник тайлов для отображения карты.</value>
+    </data>
+    <data name="SettingsGeoMapView_MapPreview_Title" xml:space="preserve">
+        <value>Предпросмотр карты</value>
+    </data>
+    <data name="SettingsGeoMapView_MapPreview_Description" xml:space="preserve">
+        <value>Показывает, как карта выглядит с текущим провайдером и настройками масштаба.</value>
+    </data>
+    <data name="SettingsGeoMapView_MapPreview_Anchor" xml:space="preserve">
+        <value>Точка предпросмотра</value>
     </data>
     <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
         <value>Карта</value>
@@ -65,8 +89,20 @@
     <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
         <value>Максимальный</value>
     </data>
+    <data name="SettingsGeoMapView_MaxZoomProperty_Description" xml:space="preserve">
+        <value>Максимальный уровень масштаба, доступный на карте.</value>
+    </data>
     <data name="SettingsGeoMapView_MinZoomProperty_Title" xml:space="preserve">
         <value>Минимальный</value>
+    </data>
+    <data name="SettingsGeoMapView_MinZoomProperty_Description" xml:space="preserve">
+        <value>Минимальный уровень масштаба, доступный на карте.</value>
+    </data>
+    <data name="MapZoomProperty_ZoomLevel_Description" xml:space="preserve">
+        <value>Уровень масштаба {0}.</value>
+    </data>
+    <data name="TileProviderViewModel_Description" xml:space="preserve">
+        <value>Провайдер группы «{0}». Уровни масштаба: {1}-{2}.</value>
     </data>
     <data name="EditApiKeyDialogView_ApiKeyProperty_Title" xml:space="preserve">
         <value>API ключ провайдера карты</value>

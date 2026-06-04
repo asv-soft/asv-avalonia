@@ -89,12 +89,24 @@ public static class AppHost
 
     public static void HandleApplicationCrash(Exception e)
     {
-        _instance
-            ?.Services.GetService<ILoggerFactory>()
-            ?.CreateLogger(nameof(AppHost))
-            .ZLogCritical(e, $"Application crashed: {e.Message}");
+        TryLogApplicationCrash(e);
 
         ExceptionReport.WriteToFile(AppContext.BaseDirectory, e, out var content);
         Console.WriteLine(content);
+    }
+
+    private static void TryLogApplicationCrash(Exception e)
+    {
+        try
+        {
+            _instance
+                ?.Services.GetService<ILoggerFactory>()
+                ?.CreateLogger(nameof(AppHost))
+                .ZLogCritical(e, $"Application crashed: {e.Message}");
+        }
+        catch (ObjectDisposedException)
+        {
+            // Crash reporting must still write the original exception when logging is unavailable.
+        }
     }
 }

@@ -1,4 +1,5 @@
 using Asv.Common;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -17,18 +18,22 @@ public class MinMapZoomProperty : MapZoomPropertyBase
     public MinMapZoomProperty(IMapService mapService, ILoggerFactory loggerFactory)
         : base(ViewModelId, mapService.MinZoom, loggerFactory)
     {
-        Items = mapService
+        Header = RS.SettingsGeoMapView_MinZoomProperty_Title;
+        Description = RS.SettingsGeoMapView_MinZoomProperty_Description;
+        Icon = MaterialIconKind.MagnifyMinusOutline;
+        IconColor = AsvColorKind.Info4;
+
+        mapService
             .MaxZoom.Select(maxZoom =>
                 Enumerable.Range(IZoomService.MinZoomLevel, maxZoom - IZoomService.MinZoomLevel + 1)
             )
-            .ToReadOnlyBindableReactiveProperty(
-                Enumerable.Range(
-                    IZoomService.MinZoomLevel,
-                    mapService.MaxZoom.Value - IZoomService.MinZoomLevel + 1
-                )
-            )
+            .Subscribe(SetAvailableValues)
             .DisposeItWith(Disposable);
+        SetAvailableValues(
+            Enumerable.Range(
+                IZoomService.MinZoomLevel,
+                mapService.MaxZoom.Value - IZoomService.MinZoomLevel + 1
+            )
+        );
     }
-
-    public IReadOnlyBindableReactiveProperty<IEnumerable<int>> Items { get; }
 }

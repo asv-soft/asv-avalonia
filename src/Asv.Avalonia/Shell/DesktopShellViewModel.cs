@@ -140,6 +140,11 @@ public sealed class DesktopShellViewModel : ShellViewModel
         return true;
     }
 
+    internal ValueTask<bool> TryCloseFromWindowAsync(CancellationToken cancellationToken)
+    {
+        return TryCloseAsync(cancellationToken);
+    }
+
     public override void ChangeWindowMode()
     {
         if (

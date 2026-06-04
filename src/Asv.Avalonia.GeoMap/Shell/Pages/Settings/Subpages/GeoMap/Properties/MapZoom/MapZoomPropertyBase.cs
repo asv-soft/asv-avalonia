@@ -1,3 +1,4 @@
+using Asv.Avalonia;
 using Asv.Common;
 using Asv.Modeling;
 using Microsoft.Extensions.Logging;
@@ -5,11 +6,9 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public abstract class MapZoomPropertyBase : ViewModel
+public abstract class MapZoomPropertyBase : PropertyComboBoxViewModel
 {
-    private bool _internalChange;
     private readonly SynchronizedReactiveProperty<int> _modelProperty;
-    private readonly IUndoChangeSink<ValueUndoChange<int>> _undoSink;
 
     protected MapZoomPropertyBase(
         string id,
@@ -19,65 +18,56 @@ public abstract class MapZoomPropertyBase : ViewModel
         : base(id)
     {
         _modelProperty = modelProperty;
-        SelectedItem = new BindableReactiveProperty<int>().DisposeItWith(Disposable);
-
-        _internalChange = true;
-        _undoSink = Undo.CreateValueChange<int>("default", ApplyZoomValue, ApplyZoomValue)
-            .DisposeItWith(Disposable);
-        SelectedItem
-            .SubscribeAwait(
-                (userValue, _) =>
-                {
-                    if (_internalChange)
-                    {
-                        return ValueTask.CompletedTask;
-                    }
-
-                    var oldValue = _modelProperty.Value;
-                    if (oldValue == userValue)
-                    {
-                        return ValueTask.CompletedTask;
-                    }
-
-                    try
-                    {
-                        _internalChange = true;
-                        ApplyZoomValue(userValue);
-                        _undoSink.Publish(oldValue, userValue);
-                        return ValueTask.CompletedTask;
-                    }
-                    catch (Exception exception)
-                    {
-                        return ValueTask.FromException(exception);
-                    }
-                    finally
-                    {
-                        _internalChange = false;
-                    }
-                }
-            )
-            .DisposeItWith(Disposable);
         modelProperty
-            .Synchronize()
-            .Subscribe(modelValue =>
-            {
-                _internalChange = true;
-                SelectedItem.Value = modelValue;
-                _internalChange = false;
-            })
+            .Skip(1)
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(value => ApplyModelValue(value))
             .DisposeItWith(Disposable);
-        _internalChange = false;
     }
 
-    public BindableReactiveProperty<int> SelectedItem { get; }
-
-    private void ApplyZoomValue(int value)
+    protected void SetAvailableValues(IEnumerable<int> values)
     {
-        _modelProperty.Value = value;
+        var currentValue = _modelProperty.Value;
+        ItemsSource.Clear();
+
+        foreach (var value in values.Distinct().Order())
+        {
+            ItemsSource.Add(new ZoomLevelItem(value));
+        }
+
+        ApplyModelValue(currentValue);
     }
 
-    public override IEnumerable<IViewModel> GetChildren()
+    protected override ValueTask ApplyFromUser(IHeadlinedViewModel item, CancellationToken cancel)
     {
-        return [];
+        if (item is not ZoomLevelItem zoom)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        _modelProperty.Value = zoom.Value;
+        return ValueTask.CompletedTask;
+    }
+
+    private void ApplyModelValue(int value)
+    {
+        var item = ItemsSource.OfType<ZoomLevelItem>().FirstOrDefault(x => x.Value == value);
+        if (item is not null)
+        {
+            ApplyValueFromModel(item);
+        }
+    }
+
+    private sealed class ZoomLevelItem : HeadlinedViewModel
+    {
+        public ZoomLevelItem(int value)
+            : base(value.ToString())
+        {
+            Value = value;
+            Header = value.ToString();
+            Description = string.Format(RS.MapZoomProperty_ZoomLevel_Description, value);
+        }
+
+        public int Value { get; }
     }
 }

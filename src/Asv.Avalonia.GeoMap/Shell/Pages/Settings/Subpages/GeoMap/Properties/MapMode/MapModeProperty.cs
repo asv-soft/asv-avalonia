@@ -1,21 +1,17 @@
-﻿using Asv.Common;
+using Asv.Avalonia;
+using Asv.Common;
 using Asv.Modeling;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-#pragma warning disable SA1313
-public record struct MapModeInfo(string Name, MapModeType Type);
-#pragma warning restore SA1313
-
-public class MapModeProperty : ViewModel
+public class MapModeProperty : PropertyComboBoxViewModel
 {
     public const string ViewModelId = "map-mode";
 
     private readonly IMapService _mapService;
-    private readonly IUndoChangeSink<ValueUndoChange<MapModeType>> _undoSink;
-    private bool _internalChange;
 
     public MapModeProperty()
         : this(NullMapService.Instance, DesignTime.LoggerFactory)
@@ -27,69 +23,69 @@ public class MapModeProperty : ViewModel
         : base(ViewModelId)
     {
         _mapService = mapService;
-        _undoSink = Undo.CreateValueChange<MapModeType>("default", ApplyMapMode, ApplyMapMode)
-            .DisposeItWith(Disposable);
-        SelectedItem = new BindableReactiveProperty<MapModeInfo>().DisposeItWith(Disposable);
+        Header = RS.SettingsGeoMapView_ModeProperty_Title;
+        Description = RS.SettingsGeoMapView_ModeProperty_Description;
+        Icon = MaterialIconKind.LetterMBoxOutline;
+        IconColor = AsvColorKind.Info3;
 
-        _internalChange = true;
-        SelectedItem
-            .SubscribeAwait(OnChangedByUser, AwaitOperation.Switch)
+        ItemsSource.Add(
+            new MapModeItem(
+                RS.MapModeProperty_MapModeInfo_Online,
+                RS.MapModeProperty_MapModeInfo_Online_Description,
+                MapModeType.Online
+            )
+        );
+        ItemsSource.Add(
+            new MapModeItem(
+                RS.MapModeProperty_MapModeInfo_Offline,
+                RS.MapModeProperty_MapModeInfo_Offline_Description,
+                MapModeType.Offline
+            )
+        );
+        ItemsSource.Add(
+            new MapModeItem(
+                RS.MapModeProperty_MapModeInfo_Mixed,
+                RS.MapModeProperty_MapModeInfo_Mixed_Description,
+                MapModeType.Mixed
+            )
+        );
+
+        _mapService
+            .Mode.Skip(1)
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(value => OnChangeByModel(value))
             .DisposeItWith(Disposable);
-        _mapService.Mode.Synchronize().Subscribe(OnChangeByModel).DisposeItWith(Disposable);
-        _internalChange = false;
+        OnChangeByModel(_mapService.Mode.Value);
     }
 
-    public IEnumerable<MapModeInfo> Items =>
-        [
-            new(RS.MapModeProperty_MapModeInfo_Online, MapModeType.Online),
-            new(RS.MapModeProperty_MapModeInfo_Offline, MapModeType.Offline),
-            new(RS.MapModeProperty_MapModeInfo_Mixed, MapModeType.Mixed),
-        ];
-
-    public BindableReactiveProperty<MapModeInfo> SelectedItem { get; }
-
-    private ValueTask OnChangedByUser(MapModeInfo userValue, CancellationToken cancel)
+    protected override ValueTask ApplyFromUser(IHeadlinedViewModel item, CancellationToken cancel)
     {
-        if (_internalChange)
+        if (item is not MapModeItem mapMode)
         {
             return ValueTask.CompletedTask;
         }
 
-        var oldValue = _mapService.Mode.Value;
-        var newValue = userValue.Type;
-        if (oldValue == newValue)
-        {
-            return ValueTask.CompletedTask;
-        }
-
-        try
-        {
-            _internalChange = true;
-            ApplyMapMode(newValue);
-            _undoSink.Publish(oldValue, newValue);
-            return ValueTask.CompletedTask;
-        }
-        finally
-        {
-            _internalChange = false;
-        }
+        _mapService.Mode.Value = mapMode.Type;
+        return ValueTask.CompletedTask;
     }
 
     private void OnChangeByModel(MapModeType modelValue)
     {
-        _internalChange = true;
-        var value = Items.First(info => info.Type == modelValue);
-        SelectedItem.Value = value;
-        _internalChange = false;
+        ApplyValueFromModel(
+            ItemsSource.OfType<MapModeItem>().First(info => info.Type == modelValue)
+        );
     }
 
-    private void ApplyMapMode(MapModeType value)
+    private sealed class MapModeItem : HeadlinedViewModel
     {
-        _mapService.Mode.Value = value;
-    }
+        public MapModeItem(string header, string description, MapModeType type)
+            : base(type.ToString())
+        {
+            Header = header;
+            Description = description;
+            Type = type;
+        }
 
-    public override IEnumerable<IViewModel> GetChildren()
-    {
-        return [];
+        public MapModeType Type { get; }
     }
 }

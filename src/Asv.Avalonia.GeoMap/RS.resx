@@ -30,17 +30,41 @@
     <data name="MapModeProperty_MapModeInfo_Offline" xml:space="preserve">
         <value>Offline</value>
     </data>
+    <data name="MapModeProperty_MapModeInfo_Offline_Description" xml:space="preserve">
+        <value>Use only locally cached map tiles.</value>
+    </data>
     <data name="MapModeProperty_MapModeInfo_Online" xml:space="preserve">
         <value>Online</value>
+    </data>
+    <data name="MapModeProperty_MapModeInfo_Online_Description" xml:space="preserve">
+        <value>Load map tiles from the selected online provider.</value>
     </data>
     <data name="MapModeProperty_MapModeInfo_Mixed" xml:space="preserve">
         <value>Mixed</value>
     </data>
+    <data name="MapModeProperty_MapModeInfo_Mixed_Description" xml:space="preserve">
+        <value>Use cached tiles first and load missing tiles online.</value>
+    </data>
     <data name="SettingsGeoMapView_ModeProperty_Title" xml:space="preserve">
         <value>Map mode</value>
     </data>
+    <data name="SettingsGeoMapView_ModeProperty_Description" xml:space="preserve">
+        <value>Controls whether tiles are loaded from the network, local cache, or both.</value>
+    </data>
     <data name="SettingsGeoMapView_TileProviderProperty_Title" xml:space="preserve">
         <value>Map provider</value>
+    </data>
+    <data name="SettingsGeoMapView_TileProviderProperty_Description" xml:space="preserve">
+        <value>Selects the tile source used to render the map.</value>
+    </data>
+    <data name="SettingsGeoMapView_MapPreview_Title" xml:space="preserve">
+        <value>Map preview</value>
+    </data>
+    <data name="SettingsGeoMapView_MapPreview_Description" xml:space="preserve">
+        <value>Shows how the map looks with the current provider and zoom settings.</value>
+    </data>
+    <data name="SettingsGeoMapView_MapPreview_Anchor" xml:space="preserve">
+        <value>Preview point</value>
     </data>
     <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
         <value>Map</value>
@@ -72,8 +96,20 @@
     <data name="SettingsGeoMapView_MinZoomProperty_Title" xml:space="preserve">
         <value>Min</value>
     </data>
+    <data name="SettingsGeoMapView_MinZoomProperty_Description" xml:space="preserve">
+        <value>Lowest zoom level available on the map.</value>
+    </data>
     <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
         <value>Max</value>
+    </data>
+    <data name="SettingsGeoMapView_MaxZoomProperty_Description" xml:space="preserve">
+        <value>Highest zoom level available on the map.</value>
+    </data>
+    <data name="MapZoomProperty_ZoomLevel_Description" xml:space="preserve">
+        <value>Zoom level {0}.</value>
+    </data>
+    <data name="TileProviderViewModel_Description" xml:space="preserve">
+        <value>{0} provider. Zoom levels {1}-{2}.</value>
     </data>
     <data name="EditApiKeyDialogView_ApiKeyProperty_Title" xml:space="preserve">
         <value>Map provider API Key</value>

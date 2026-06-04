@@ -1,4 +1,4 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -22,17 +22,26 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                <DataTemplate x:DataType="avalonia:NavigationStatusBreadcrumbItem">
+                    <StackPanel Orientation="Horizontal" Spacing="3">
                         <avalonia1:MaterialIcon
                             VerticalAlignment="Center"
-                            Classes="smallest"
+                            Width="{DynamicResource AsvFontSizeSmall}"
+                            Height="{DynamicResource AsvFontSizeSmall}"
                             Kind="ChevronRight"
+                        />
+                        <avalonia1:MaterialIcon
+                            VerticalAlignment="Center"
+                            Width="{DynamicResource AsvFontSizeSmall}"
+                            Height="{DynamicResource AsvFontSizeSmall}"
+                            avalonia:AsvPallete.Color="{Binding IconColor}"
+                            Kind="{Binding Icon}"
+                            IsVisible="{Binding HasIcon}"
                         />
                         <TextBlock
                             VerticalAlignment="Center"
                             Classes="description"
-                            Text="{Binding }"
+                            Text="{Binding Title}"
                         />
                     </StackPanel>
                 </DataTemplate>
