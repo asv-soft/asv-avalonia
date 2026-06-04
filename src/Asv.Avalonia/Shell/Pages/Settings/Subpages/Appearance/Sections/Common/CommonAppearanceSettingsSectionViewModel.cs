@@ -1,5 +1,4 @@
 ﻿using Asv.Common;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
@@ -8,12 +7,7 @@ public class CommonAppearanceSettingsSectionViewModel : ViewModel, ISettingsAppe
     public const string PageId = "common";
 
     public CommonAppearanceSettingsSectionViewModel()
-        : this(
-            DesignTime.ThemeService,
-            DesignTime.LocalizationService,
-            NullDialogService.Instance,
-            DesignTime.LoggerFactory
-        )
+        : this(DesignTime.ThemeService, DesignTime.LocalizationService, NullDialogService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
@@ -21,12 +15,11 @@ public class CommonAppearanceSettingsSectionViewModel : ViewModel, ISettingsAppe
     public CommonAppearanceSettingsSectionViewModel(
         IThemeService themeService,
         ILocalizationService localizationService,
-        IDialogService dialog,
-        ILoggerFactory loggerFactory
+        IDialogService dialog
     )
         : base(PageId)
     {
-        Editor = new ExtendedPropertyEditorViewModel($"{PageId}.editor")
+        Editor = new ExtendedPropertyEditorViewModel("editor")
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 

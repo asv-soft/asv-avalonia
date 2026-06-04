@@ -85,7 +85,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             };
         }
 
-        var viewModel = new RttBoxViewModel(nameof(RttBoxViewModel));
+        var viewModel = new RttBoxViewModel("base");
 
         viewModel.Icon = MaterialIconKind.Velocity;
         viewModel.Header = "Velocity";
@@ -101,7 +101,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new TwoColumnRttBoxViewModel();
         }
 
-        var viewModel = new TwoColumnRttBoxViewModel(nameof(TwoColumnRttBoxViewModel));
+        var viewModel = new TwoColumnRttBoxViewModel("two-column");
 
         viewModel.Icon = MaterialIconKind.Ruler;
         viewModel.Header = "Distance";
@@ -163,7 +163,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new SingleRttBoxViewModel();
         }
 
-        var viewModel = new SingleRttBoxViewModel(nameof(SingleRttBoxViewModel));
+        var viewModel = new SingleRttBoxViewModel("single");
 
         viewModel.Icon = MaterialIconKind.Ruler;
         viewModel.Header = "Distance";
@@ -211,7 +211,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new KeyValueRttBoxViewModel();
         }
 
-        var viewModel = new KeyValueRttBoxViewModel(nameof(KeyValueRttBoxViewModel));
+        var viewModel = new KeyValueRttBoxViewModel("key-value");
 
         viewModel.ShortHeader = "Short";
         viewModel.ShortValueString = "0.00";
@@ -267,7 +267,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         Observable<double> value = sub;
 
         var viewModel = new SplitDigitRttBoxViewModel(
-            nameof(SplitDigitRttBoxViewModel),
+            "split-digit",
             loggerFactory,
             unitService,
             DistanceUnit.Id,
@@ -319,12 +319,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new GeoPointRttBoxViewModel();
         }
 
-        var viewModel = new GeoPointRttBoxViewModel(
-            nameof(GeoPointRttBoxViewModel),
-            loggerFactory,
-            unitService,
-            null
-        );
+        var viewModel = new GeoPointRttBoxViewModel("geo-point", loggerFactory, unitService, null);
 
         viewModel.GeoPointProperty.ModelValue.Value = new GeoPoint(55.75, 37.6173, 250.0);
         viewModel.Icon = MaterialIconKind.AddressMarker;

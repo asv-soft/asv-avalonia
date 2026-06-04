@@ -51,7 +51,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         _distance = new ReactiveProperty<double>(DefaultDistance).DisposeItWith(Disposable);
 
         LatitudeProperty = new PropertyUnitReactive(
-            nameof(LatitudeProperty),
+            "latitude",
             unitService.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
             _latitude,
             format: "F7"
@@ -65,7 +65,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .DisposeItWith(Disposable);
 
         LongitudeProperty = new PropertyUnitReactive(
-            nameof(LongitudeProperty),
+            "longitude",
             unitService.GetRequiredUnitOfType<LongitudeUnit>(LongitudeUnit.Id),
             _longitude,
             format: "F7"
@@ -79,7 +79,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .DisposeItWith(Disposable);
 
         AltitudeProperty = new PropertyUnitReactive(
-            nameof(AltitudeProperty),
+            "altitude",
             unitService.GetRequiredUnitOfType<AltitudeUnit>(AltitudeUnit.Id),
             _altitude,
             format: "F2"
@@ -93,7 +93,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .DisposeItWith(Disposable);
 
         DistanceProperty = new PropertyUnitReactive(
-            nameof(DistanceProperty),
+            "distance",
             distanceUnit,
             _distance,
             format: "F0"
@@ -107,7 +107,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        FieldsEditor = new PropertyEditorViewModel($"{DialogId}-fields")
+        FieldsEditor = new PropertyEditorViewModel("fields")
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         FieldsEditor.ItemsSource.Add(LatitudeProperty);

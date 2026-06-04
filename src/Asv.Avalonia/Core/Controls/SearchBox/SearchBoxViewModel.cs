@@ -45,7 +45,7 @@ public class SearchBoxViewModel
         _searchCallback = searchCallback;
         _logger = loggerFactory.CreateLogger<SearchBoxViewModel>();
         var text = new ReactiveProperty<string?>(string.Empty).DisposeItWith(Disposable);
-        Text = new HistoricalStringProperty(nameof(Text), text, loggerFactory)
+        Text = new HistoricalStringProperty("text", text, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 

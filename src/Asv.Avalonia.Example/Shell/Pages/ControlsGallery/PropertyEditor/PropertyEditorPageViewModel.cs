@@ -10,7 +10,7 @@ namespace Asv.Avalonia.Example;
 
 public class PropertyEditorPageViewModel : ControlsGallerySubPage
 {
-    public const string PageId = "property_editor_example";
+    public const string PageId = "property-editor-example";
     public const MaterialIconKind PageIcon = MaterialIconKind.PropertyTag;
 
     public PropertyEditorPageViewModel()
@@ -37,7 +37,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         OperationProfileProperty = CreateOperationProfileProperty();
         ActionButtonProperty = CreateActionButtonProperty();
         AltitudeUnitProperty = CreateUnitProperty(
-            "altitude_unit_v2",
+            "altitude-unit",
             unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
             "Altitude V2",
             "Alt",
@@ -47,7 +47,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             AltitudeUnitValue
         );
         ThrottleUnitProperty = CreateUnitProperty(
-            "throttle_unit_v2",
+            "throttle-unit",
             unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
             "Throttle V2",
             "Thr",
@@ -68,13 +68,13 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             )
             .SetRoutableParent(this);
         PropertyEditorCopy = CreatePropertyEditor(
-                "editor_copy",
+                "editor-copy",
                 unit,
                 CreateDisplayNameProperty(),
                 CreateOperationProfileProperty(),
                 CreateActionButtonProperty(),
                 CreateUnitProperty(
-                    "altitude_unit_v2_copy",
+                    "altitude-unit",
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
                     "Altitude V2",
                     "Alt",
@@ -84,7 +84,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     AltitudeUnitValue
                 ),
                 CreateUnitProperty(
-                    "throttle_unit_v2_copy",
+                    "throttle-unit",
                     unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
                     "Throttle V2",
                     "Thr",
@@ -97,13 +97,13 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             )
             .SetRoutableParent(this);
         ExtendedPropertyEditor = CreateExtendedPropertyEditor(
-                "editor_extended",
+                "editor-extended",
                 unit,
                 CreateDisplayNameProperty(),
                 CreateOperationProfileProperty(),
                 CreateActionButtonProperty(),
                 CreateUnitProperty(
-                    "altitude_unit_v2_extended",
+                    "altitude-unit",
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
                     "Altitude V2",
                     "Alt",
@@ -113,7 +113,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     AltitudeUnitValue
                 ),
                 CreateUnitProperty(
-                    "throttle_unit_v2_extended",
+                    "throttle-unit",
                     unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
                     "Throttle V2",
                     "Thr",
@@ -147,7 +147,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         return FillPropertyEditor(
             new PropertyEditorViewModel(id),
-            id,
             unit,
             displayNameProperty,
             operationProfileProperty,
@@ -171,7 +170,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         return FillPropertyEditor(
             new ExtendedPropertyEditorViewModel(id),
-            id,
             unit,
             displayNameProperty,
             operationProfileProperty,
@@ -184,7 +182,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     private TEditor FillPropertyEditor<TEditor>(
         TEditor editor,
-        string id,
         IUnitService unit,
         PropertyTextBoxViewModel displayNameProperty,
         PropertyComboBoxViewModel operationProfileProperty,
@@ -202,7 +199,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         editor.ItemsSource.Add(throttleUnitProperty);
         editor.ItemsSource.Add(
             new PropertyUnitReactive(
-                $"{id}_lat",
+                "latitude",
                 unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
                 Latitude
             )
@@ -215,7 +212,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         editor.ItemsSource.Add(
             new PropertyUnitReactive(
-                $"{id}_lon",
+                "longitude",
                 unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
                 Longitude
             )
@@ -228,7 +225,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         editor.ItemsSource.Add(
             new PropertyUnitReactive(
-                $"{id}_alt",
+                "altitude",
                 unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
                 Altitude
             )
@@ -240,7 +237,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             }
         );
         editor.ItemsSource.Add(
-            new PropertyGeoPointReactive($"{id}_geo_v2", GeoPoint, unit, dialogService)
+            new PropertyGeoPointReactive("geo-point", GeoPoint, unit, dialogService)
             {
                 Header = "Geo Point",
                 Description = "Geo Point description",
@@ -249,7 +246,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         editor.ItemsSource.Add(
             new PropertyUnitReactive(
-                $"{id}_time",
+                "time",
                 unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
                 Time
             )
@@ -262,7 +259,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         editor.ItemsSource.Add(
             new PropertyUnitReactive(
-                $"{id}_throttle",
+                "throttle",
                 unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
                 Throttle
             )
@@ -279,7 +276,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     private PropertyTextBoxViewModel CreateDisplayNameProperty()
     {
-        var property = new PropertyTextBoxReactive("display_name", DisplayName)
+        var property = new PropertyTextBoxReactive("display-name", DisplayName)
         {
             Header = "Display name",
             ShortHeader = "Name",
@@ -306,7 +303,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     private PropertyButtonViewModel CreateActionButtonProperty()
     {
-        return new PropertyButtonViewModel("action_button", ExecuteActionButton)
+        return new PropertyButtonViewModel("run-check", ExecuteActionButton)
         {
             Header = "Run check",
             ShortHeader = "Run",
@@ -347,7 +344,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     private PropertyComboBoxViewModel CreateOperationProfileProperty()
     {
-        var property = new PropertyComboBoxReactive("operation_profile", OperationProfile)
+        var property = new PropertyComboBoxReactive("operation-profile", OperationProfile)
         {
             Header = "Operation profile",
             Description =
@@ -358,7 +355,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
         var firstItem = AddOperationProfileItem(
             property,
-            "manual_mode",
+            "manual",
             "Manual",
             "Operator controls every step directly.",
             MaterialIconKind.Hand,
@@ -366,7 +363,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "guided_mode",
+            "guided",
             "Guided",
             "Assisted flow with validation after each step.",
             MaterialIconKind.Compass,
@@ -374,7 +371,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "survey_mode",
+            "survey",
             "Survey",
             "Collects structured measurements for later analysis.",
             MaterialIconKind.MapMarkerRadius,
@@ -382,7 +379,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "silent_mode",
+            "silent",
             "Silent",
             "Runs without icon or accent decoration.",
             null,
@@ -390,7 +387,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "inspection_mode",
+            "inspection",
             "Inspection",
             "Highlights issues and requires operator confirmation.",
             MaterialIconKind.MagnifyScan,
@@ -398,7 +395,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "minimal_mode",
+            "minimal",
             "Minimal",
             "Text-only item for compact layouts.",
             null,
@@ -406,7 +403,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "diagnostic_mode",
+            "diagnostics",
             "Diagnostics",
             "Shows service information and hardware status.",
             MaterialIconKind.Stethoscope,
@@ -414,7 +411,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "offline_mode",
+            "offline-cache",
             "Offline cache",
             "No image, useful when external data is unavailable.",
             null,
@@ -422,7 +419,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "emergency_mode",
+            "emergency",
             "Emergency",
             "Critical action style with a warning-colored icon.",
             MaterialIconKind.AlertOctagon,
@@ -430,7 +427,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         AddOperationProfileItem(
             property,
-            "custom_mode",
+            "custom-profile",
             "Custom profile",
             "Plain item with only header and description.",
             null,

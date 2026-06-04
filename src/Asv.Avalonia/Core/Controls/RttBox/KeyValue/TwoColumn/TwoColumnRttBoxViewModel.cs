@@ -11,8 +11,8 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
     public TwoColumnRttBoxViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
-        Left = new KeyValueViewModel(0).DisposeItWith(Disposable);
-        Right = new KeyValueViewModel(1).DisposeItWith(Disposable);
+        Left = new KeyValueViewModel("left").DisposeItWith(Disposable);
+        Right = new KeyValueViewModel("right").DisposeItWith(Disposable);
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
         Left.Header = "Left";
@@ -67,8 +67,8 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
     public TwoColumnRttBoxViewModel(string typeId, TimeSpan? networkErrorTimeout = null)
         : base(typeId, networkErrorTimeout)
     {
-        Left = new KeyValueViewModel(0).DisposeItWith(Disposable);
-        Right = new KeyValueViewModel(1).DisposeItWith(Disposable);
+        Left = new KeyValueViewModel("left").DisposeItWith(Disposable);
+        Right = new KeyValueViewModel("right").DisposeItWith(Disposable);
     }
 
     public KeyValueViewModel Left { get; }

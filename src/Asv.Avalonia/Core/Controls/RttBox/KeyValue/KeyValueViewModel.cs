@@ -2,9 +2,13 @@ using Asv.Modeling;
 
 namespace Asv.Avalonia;
 
-public sealed class KeyValueViewModel(int index) : ViewModel($"{BaseIdPart}_{index}")
+public sealed class KeyValueViewModel : ViewModel
 {
-    public const string BaseIdPart = "key-value";
+    public KeyValueViewModel(int index)
+        : this($"row-{index}") { }
+
+    public KeyValueViewModel(string typeId)
+        : base(typeId) { }
 
     public string? Header
     {

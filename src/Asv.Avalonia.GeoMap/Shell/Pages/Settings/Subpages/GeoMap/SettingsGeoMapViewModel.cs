@@ -28,7 +28,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     )
         : base(PageId, pageContext)
     {
-        Editor = new ExtendedPropertyEditorViewModel($"{PageId}.editor")
+        Editor = new ExtendedPropertyEditorViewModel("editor")
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
@@ -42,13 +42,13 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         Editor.ItemsSource.Add(MinMapZoom);
         Editor.ItemsSource.Add(MaxMapZoom);
 
-        MapPreview = new MapViewModel($"{PageId}.preview", mapService)
+        MapPreview = new MapViewModel("preview", mapService)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         MapPreview.CenterMap.Value = new GeoPoint(56.8389, 60.6057, 0);
         MapPreview.Zoom.Value = ClampZoom(10, mapService);
         MapPreview.Anchors.Add(
-            new MapAnchor($"{PageId}.preview-anchor", location: MapPreview.CenterMap.Value)
+            new MapAnchor("preview-anchor", location: MapPreview.CenterMap.Value)
             {
                 Header = RS.SettingsGeoMapView_MapPreview_Anchor,
                 Icon = MaterialIconKind.MapMarkerRadius,

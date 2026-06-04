@@ -10,7 +10,7 @@ namespace Asv.Avalonia.Example;
 
 public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
 {
-    public const string PageId = "info_box_controls";
+    public const string PageId = "info-box-controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.InfoBox;
 
     private readonly ReactiveProperty<Enum> _severity;
@@ -42,21 +42,13 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
             RS.InfoBoxControlsPageViewModel_Example_Message
         ).DisposeItWith(Disposable);
 
-        Severity = new HistoricalEnumProperty<InfoBarSeverity>(nameof(Severity), _severity)
+        Severity = new HistoricalEnumProperty<InfoBarSeverity>("severity", _severity)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        InfoBoxTitle = new HistoricalStringProperty(
-            nameof(InfoBoxTitle),
-            _infoBoxTitle,
-            loggerFactory
-        )
+        InfoBoxTitle = new HistoricalStringProperty("title", _infoBoxTitle, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        InfoBoxMessage = new HistoricalStringProperty(
-            nameof(InfoBoxMessage),
-            _infoBoxMessage,
-            loggerFactory
-        )
+        InfoBoxMessage = new HistoricalStringProperty("message", _infoBoxMessage, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
     }

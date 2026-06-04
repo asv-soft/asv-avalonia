@@ -9,7 +9,7 @@ public class ControlsGalleryPageViewModel
     : TreePageViewModel<IControlsGalleryPage, IControlsGallerySubPage>,
         IControlsGalleryPage
 {
-    public const string PageId = "controls_gallery";
+    public const string PageId = "controls-gallery";
     public const MaterialIconKind PageIcon = MaterialIconKind.ViewGallery;
     public const AsvColorKind PageIconColor = AsvColorKind.Info20;
 

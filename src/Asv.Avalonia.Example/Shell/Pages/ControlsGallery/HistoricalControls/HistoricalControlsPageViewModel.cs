@@ -25,7 +25,7 @@ public sealed class HistoricalControlsPageViewModelConfig
 
 public class HistoricalControlsPageViewModel : ControlsGallerySubPage
 {
-    public const string PageId = "historical_controls";
+    public const string PageId = "historical-controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.History;
 
     private readonly ReactiveProperty<bool> _isTurnedOn;
@@ -72,7 +72,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             Disposable
         );
 
-        IsTurnedOn = new HistoricalBoolProperty(nameof(IsTurnedOn), _isTurnedOn)
+        IsTurnedOn = new HistoricalBoolProperty("is-turned-on", _isTurnedOn)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
@@ -80,26 +80,16 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             IsTurnedOn.ViewValue.Value = !IsTurnedOn.ViewValue.Value
         ).DisposeItWith(Disposable);
 
-        Speed = new HistoricalUnitProperty<VelocityUnit>(
-            nameof(Speed),
-            _speed,
-            speedUnit,
-            loggerFactory
-        )
+        Speed = new HistoricalUnitProperty<VelocityUnit>("speed", _speed, speedUnit, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        Time = new HistoricalUnitProperty<TimeSpanUnit>(
-            nameof(Time),
-            _time,
-            timeUnit,
-            loggerFactory
-        )
+        Time = new HistoricalUnitProperty<TimeSpanUnit>("time", _time, timeUnit, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
         ReadOnlyTime = new HistoricalUnitProperty<TimeSpanUnit>(
-            nameof(ReadOnlyTime),
+            "read-only-time",
             _time,
             timeUnit,
             loggerFactory,
@@ -109,7 +99,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
 
         StringPropWithoutValidation = new HistoricalStringProperty(
-            nameof(StringPropWithoutValidation),
+            "string-without-validation",
             _stringWithoutValidation,
             loggerFactory
         )
@@ -117,7 +107,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
 
         StringPropWithOneValidation = new HistoricalStringProperty(
-            nameof(StringPropWithOneValidation),
+            "string-with-one-validation",
             _stringWithOneValidation,
             loggerFactory,
             [
@@ -135,7 +125,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         StringPropWithOneValidation.ForceValidate();
 
         StringPropWithManyValidations = new HistoricalStringProperty(
-            nameof(StringPropWithManyValidations),
+            "string-with-many-validations",
             _stringWithManyValidations,
             loggerFactory,
             [
@@ -165,7 +155,7 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         StringPropWithManyValidations.ForceValidate();
 
         GeoPointProperty = new HistoricalGeoPointProperty(
-            nameof(GeoPointProperty),
+            "geo-point",
             _geoPointProperty,
             unit,
             loggerFactory
@@ -174,12 +164,12 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
         GeoPointProperty.ForceValidate();
 
-        TagTypeProp = new HistoricalEnumProperty<AsvColorKind>(nameof(TagTypeProp), _tagTypeProp)
+        TagTypeProp = new HistoricalEnumProperty<AsvColorKind>("tag-type", _tagTypeProp)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
         AsvColorKindProp = new HistoricalEnumProperty<AsvColorKind>(
-            nameof(AsvColorKindProp),
+            "asv-color-kind",
             _rttBoxStatusProp
         )
             .SetRoutableParent(this)

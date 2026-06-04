@@ -224,7 +224,7 @@
                     Grid.Row="4"
                     Grid.Column="2"
                     VerticalAlignment="Stretch"
-                    RestoreCommand="{Binding ResetYerOrNoCommand}"
+                    RestoreCommand="{Binding ResetYesOrNoCommand}"
                 >
                     <example:PreviewExampleBlock.PreviewContent>
                         <StackPanel

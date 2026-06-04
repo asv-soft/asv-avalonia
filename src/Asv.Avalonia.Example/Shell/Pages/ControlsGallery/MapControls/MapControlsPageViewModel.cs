@@ -13,7 +13,7 @@ namespace Asv.Avalonia.Example;
 
 public class MapControlsPageViewModel : ControlsGallerySubPage
 {
-    public const string PageId = "map_controls";
+    public const string PageId = "map-controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.Map;
     private const int PlaneTrailLength = 100;
     private const double InfinityRadius = 750.0;
@@ -44,7 +44,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
         LoggerFactory = loggerFactory;
         UnitService = unitService;
-        MapViewModel = new MapViewModel("Map", mapService)
+        MapViewModel = new MapViewModel("map", mapService)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 
@@ -54,7 +54,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         var centerPoint = MapViewModel.CenterMap.Value;
         var pointCount = 36;
 
-        var path = new MapAnchor("editanle-anchor-path");
+        var path = new MapAnchor("editable-anchor-path");
         path.IsVisible = true;
         path.IsPolygonClosed = true;
         path.PolygonPen = new Pen(new SolidColorBrush(Colors.Black), 2);

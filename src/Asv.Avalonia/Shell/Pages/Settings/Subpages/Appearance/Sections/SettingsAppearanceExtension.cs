@@ -17,8 +17,7 @@ public class SettingsAppearanceExtension(
             new CommonAppearanceSettingsSectionViewModel(
                 themeService,
                 localizationService,
-                dialog,
-                loggerFactory
+                dialog
             ).DisposeItWith(contextDispose)
         );
     }

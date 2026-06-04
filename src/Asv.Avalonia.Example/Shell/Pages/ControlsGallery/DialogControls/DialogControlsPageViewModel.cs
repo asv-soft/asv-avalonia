@@ -41,7 +41,7 @@ public class DialogControlsPageViewModelConfig
 
 public class DialogControlsPageViewModel : ControlsGallerySubPage
 {
-    public const string PageId = "dialog_controls";
+    public const string PageId = "dialog-controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.Dialogue;
 
     private readonly ILoggerFactory _loggerFactory;
@@ -163,54 +163,54 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         );
 
         CustomDialogTitle = new HistoricalStringProperty(
-            nameof(CustomDialogTitle),
+            "custom-dialog-title",
             _customDialogTitle,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         IsCustomDialogImageContent = new HistoricalBoolProperty(
-            nameof(IsCustomDialogImageContent),
+            "is-custom-dialog-image-content",
             _customDialogIsImageContent
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         CustomDialogMessage = new HistoricalStringProperty(
-            nameof(CustomDialogMessage),
+            "custom-dialog-message",
             _customDialogMessage,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         CustomDialogImagePath = new HistoricalStringProperty(
-            nameof(CustomDialogImagePath),
+            "custom-dialog-image-path",
             _customDialogImagePath,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         CustomDialogPrimaryButtonText = new HistoricalStringProperty(
-            nameof(CustomDialogPrimaryButtonText),
+            "custom-dialog-primary-button-text",
             _customDialogPrimaryButtonText,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         IsCustomDialogPrimaryButtonEnabled = new HistoricalBoolProperty(
-            nameof(IsCustomDialogPrimaryButtonEnabled),
+            "is-custom-dialog-primary-button-enabled",
             _customDialogIsPrimaryButtonEnabled
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         CustomDialogSecondaryButtonText = new HistoricalStringProperty(
-            nameof(CustomDialogSecondaryButtonText),
+            "custom-dialog-secondary-button-text",
             _customDialogSecondaryButtonText,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         IsCustomDialogSecondaryButtonEnabled = new HistoricalBoolProperty(
-            nameof(IsCustomDialogSecondaryButtonEnabled),
+            "is-custom-dialog-secondary-button-enabled",
             _customDialogIsSecondaryButtonEnabled
         )
             .SetRoutableParent(this)
@@ -240,39 +240,39 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         _observeFolderDialogResult = new ReactiveProperty<string?>().DisposeItWith(Disposable);
 
         CustomDialogResult = new HistoricalEnumProperty<ContentDialogResult>(
-            nameof(CustomDialogResult),
+            "custom-dialog-result",
             _customDialogResult
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         YesOrNoDialogResult = new HistoricalEnumProperty<ConfirmationStatus>(
-            nameof(YesOrNoDialogResult),
+            "yes-or-no-dialog-result",
             _yesOrNoDialogResult
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         SaveCancelDialogResult = new HistoricalEnumProperty<ConfirmationStatus>(
-            nameof(SaveCancelDialogResult),
+            "save-cancel-dialog-result",
             _saveCancelDialogResult
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         ShowInputDialogResult = new HistoricalStringProperty(
-            nameof(ShowInputDialogResult),
+            "input-dialog-result",
             _showInputDialogResult,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         ShowHotKeyCaptureDialogResult = new HistoricalStringProperty(
-            nameof(ShowHotKeyCaptureDialogResult),
+            "hotkey-capture-dialog-result",
             _showHotKeyCaptureDialogResult,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         GeoPointDialogResult = new HistoricalGeoPointProperty(
-            nameof(GeoPointDialogResult),
+            "geo-point-dialog-result",
             _geoPointDialogResult,
             unitService,
             loggerFactory
@@ -280,28 +280,28 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         OpenFileDialogResult = new HistoricalStringProperty(
-            nameof(OpenFileDialogResult),
+            "open-file-dialog-result",
             _openFileDialogResult,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         SaveFileDialogResult = new HistoricalStringProperty(
-            nameof(SaveFileDialogResult),
+            "save-file-dialog-result",
             _saveFileDialogResult,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         SelectFolderDialogResult = new HistoricalStringProperty(
-            nameof(SelectFolderDialogResult),
+            "select-folder-dialog-result",
             _selectFolderDialogResult,
             loggerFactory
         )
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         ObserveFolderDialogResult = new HistoricalStringProperty(
-            nameof(ObserveFolderDialogResult),
+            "observe-folder-dialog-result",
             _observeFolderDialogResult,
             loggerFactory
         )
@@ -354,7 +354,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         {
             ObserveFolderDialogResult.ViewValue.Value = null;
         }).DisposeItWith(Disposable);
-        ResetYerOrNoCommand = new ReactiveCommand(_ =>
+        ResetYesOrNoCommand = new ReactiveCommand(_ =>
         {
             YesOrNoDialogResult.ViewValue.Value = ConfirmationStatus.Undefined;
         }).DisposeItWith(Disposable);
@@ -415,7 +415,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public ReactiveCommand ObserveFolderCommand { get; }
 
     public ReactiveCommand ResetCustomResultCommand { get; }
-    public ReactiveCommand ResetYerOrNoCommand { get; }
+    public ReactiveCommand ResetYesOrNoCommand { get; }
     public ReactiveCommand ResetSaveCancelResultCommand { get; }
     public ReactiveCommand ResetShowInputResultCommand { get; }
     public ReactiveCommand ResetShowHotKeyResultCommand { get; }

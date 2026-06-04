@@ -53,7 +53,7 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
     {
         var location = new ReactiveProperty<GeoPoint>(GeoPoint.NaN).DisposeItWith(Disposable);
         GeoPointProperty = new BindableGeoPointProperty(
-            nameof(GeoPointProperty),
+            "geo-point",
             location,
             units,
             loggerFactory,

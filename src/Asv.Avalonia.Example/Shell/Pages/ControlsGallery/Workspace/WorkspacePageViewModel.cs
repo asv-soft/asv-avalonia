@@ -18,7 +18,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 {
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<IWorkspaceWidget> _itemsSource;
-    public const string PageId = "wrokspace_example";
+    public const string PageId = "workspace-example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Table;
 
     public WorkspacePageViewModel()
@@ -46,8 +46,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         Init(context.Context);
         _loggerFactory = loggerFactory;
-        MapViewModel = new MapViewModel($"{PageId}-map", mapService).DisposeItWith(Disposable);
-        var hideAll = new MenuItem("action1", "Hide all")
+        MapViewModel = new MapViewModel("map-view", mapService).DisposeItWith(Disposable);
+        var hideAll = new MenuItem("hide-all", "Hide all")
         {
             Command = new ReactiveCommand(x =>
             {
@@ -61,7 +61,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             }),
         };
 
-        var showAll = new MenuItem("action2", "Show all")
+        var showAll = new MenuItem("show-all", "Show all")
         {
             Command = new ReactiveCommand(x =>
             {
@@ -75,7 +75,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             }),
         };
 
-        var showError = new MenuItem("action3", "Show error")
+        var showError = new MenuItem("show-error", "Show error")
         {
             Command = new ReactiveCommand(
                 async (_, cancel) =>
@@ -102,7 +102,11 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         Menu.Add(showError);
         _itemsSource =
         [
-            new PropertyEditorWidgetViewModel("prop_left", "Property editor", loggerFactory)
+            new PropertyEditorWidgetViewModel(
+                "left-property-editor",
+                "Property editor",
+                loggerFactory
+            )
             {
                 Position = WorkspaceDock.Left,
                 ItemsSource =
@@ -127,18 +131,18 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
-            new WrapPanelWidgetViewModel("rtt-box", loggerFactory)
+            new WrapPanelWidgetViewModel("primary-rtt-panel", loggerFactory)
             {
                 Position = WorkspaceDock.Right,
                 ItemsSource =
                 {
-                    new SingleRttBoxViewModel("rtt-single-1")
+                    new SingleRttBoxViewModel("single-1")
                     {
                         Header = "Single RTT 1",
                         ShortHeader = "RTT1",
                         ValueString = "15.25",
                     },
-                    new SingleRttBoxViewModel("rtt-single-2")
+                    new SingleRttBoxViewModel("single-2")
                     {
                         Header = "Single RTT 2",
                         ShortHeader = "RTT2",
@@ -146,18 +150,18 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
-            new WrapPanelWidgetViewModel("rtt-box2", loggerFactory)
+            new WrapPanelWidgetViewModel("secondary-rtt-panel", loggerFactory)
             {
                 Position = WorkspaceDock.Right,
                 ItemsSource =
                 {
-                    new SingleRttBoxViewModel("rtt-single-1")
+                    new SingleRttBoxViewModel("single-1")
                     {
                         Header = "Single RTT 1",
                         ShortHeader = "RTT1",
                         ValueString = "15.25",
                     },
-                    new SingleRttBoxViewModel("rtt-single-2")
+                    new SingleRttBoxViewModel("single-2")
                     {
                         Header = "Single RTT 2",
                         ShortHeader = "RTT2",
@@ -165,7 +169,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
-            new MapWidget("map", loggerFactory, mapService)
+            new MapWidget("map-widget", loggerFactory, mapService)
             {
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,
@@ -174,7 +178,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 IsExpanded = true,
                 CanExpand = true,
             },
-            new MapWidget("ma2p", loggerFactory, mapService)
+            new MapWidget("map-with-anchor", loggerFactory, mapService)
             {
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,
@@ -184,7 +188,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 CanExpand = true,
                 Anchors =
                 {
-                    new MapAnchor("drone1")
+                    new MapAnchor("drone-1")
                     {
                         Header = "Drone 1",
                         Location = new GeoPoint(53.0, 53.0, 100),
@@ -200,7 +204,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public void Init(IControlsGalleryPage context)
     {
-        var changeStatus = new MenuItem("action5", "Change status")
+        var changeStatus = new MenuItem("change-status", "Change status")
         {
             Command = new ReactiveCommand(x =>
             {
