@@ -12,9 +12,10 @@ public class PropertyUnitReactive : PropertyUnitViewModel
         IUnit unit,
         ReactiveProperty<double> model,
         Func<double, Exception?>? validator = null,
-        string? format = null
+        string? format = null,
+        bool enableValueUndo = true
     )
-        : base(id, unit, format)
+        : base(id, unit, format, enableValueUndo)
     {
         _model = model;
         _model.Subscribe(

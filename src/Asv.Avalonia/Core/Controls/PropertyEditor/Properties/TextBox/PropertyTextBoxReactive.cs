@@ -10,9 +10,10 @@ public class PropertyTextBoxReactive : PropertyTextBoxViewModel
     public PropertyTextBoxReactive(
         string id,
         ReactiveProperty<string?> model,
-        Func<string?, Exception?>? validator = null
+        Func<string?, Exception?>? validator = null,
+        bool enableUndo = true
     )
-        : base(id)
+        : base(id, enableUndo)
     {
         _model = model;
         _validator = validator;

@@ -45,6 +45,14 @@
 - Keep UI changes consistent with the current theme, resource dictionaries, and control structure.
 - When adding user-facing text, update localization resources consistently when the surrounding feature is localized.
 
+## PropertyEditor Notes
+
+- `PropertyTextBoxViewModel` owns text apply/cancel behavior and can register text undo with its constructor `enableUndo` flag. `UndoController` already handles undo/redo execution state, so avoid local guard flags that duplicate that responsibility.
+- `PropertyUnitViewModel` has its own undo entries for SI value changes and unit changes; keep base text undo disabled for unit properties unless the undo model is intentionally redesigned.
+- `ExtendedPropertyEditorView` is a wide layout wrapper around the same property view models. Hide duplicated inner prefix icons through `PropertyEditorDisplayOptions.ShowPrefixIcon`, while keeping the row icon and action icons visible.
+- Keep extended rows visually transparent unless explicitly asked otherwise; avoid hover/background row styling that competes with the inner property control.
+- Example pages may show several editor instances over the same model, but each editor should receive its own property view model instances to avoid reusing one view model across visual trees.
+
 ## Testing and Verification
 
 - For behavioral changes, prefer adding or updating focused xUnit tests in `src/Asv.Avalonia.Test`.

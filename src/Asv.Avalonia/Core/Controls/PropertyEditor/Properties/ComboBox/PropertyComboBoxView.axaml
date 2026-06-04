@@ -164,6 +164,7 @@
                 Grid.Column="3"
                 IsEnabled="{Binding !IsBusy}"
                 x:Name="PART_FlyoutButton"
+                avalonia:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
                 VerticalContentAlignment="Center"

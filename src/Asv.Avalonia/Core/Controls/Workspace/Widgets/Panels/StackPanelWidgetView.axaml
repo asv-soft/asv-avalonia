@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="800"
+    d:DesignWidth="250"
     d:DesignHeight="450"
     x:Class="Asv.Avalonia.StackPanelWidgetView"
     x:DataType="avalonia:StackPanelWidgetViewModel"

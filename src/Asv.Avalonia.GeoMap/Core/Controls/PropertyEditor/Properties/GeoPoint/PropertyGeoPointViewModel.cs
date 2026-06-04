@@ -49,7 +49,8 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
             nameof(Latitude),
             unitService[LatitudeUnit.Id] ?? throw new NullReferenceException("Latitude Unit"),
             _latitude,
-            format: "F7"
+            format: "F7",
+            enableValueUndo: false
         )
         {
             ShortHeader = AvaloniaRS.Latitude_ShortName,
@@ -62,7 +63,8 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
             nameof(Longitude),
             unitService[LongitudeUnit.Id] ?? throw new NullReferenceException("Longitude Unit"),
             _longitude,
-            format: "F7"
+            format: "F7",
+            enableValueUndo: false
         )
         {
             ShortHeader = AvaloniaRS.Longitude_ShortName,
@@ -75,7 +77,8 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
             nameof(Altitude),
             unitService[AltitudeUnit.Id] ?? throw new NullReferenceException("Altitude Unit"),
             _altitude,
-            format: "F2"
+            format: "F2",
+            enableValueUndo: false
         )
         {
             ShortHeader = AvaloniaRS.Altitude_ShortName,

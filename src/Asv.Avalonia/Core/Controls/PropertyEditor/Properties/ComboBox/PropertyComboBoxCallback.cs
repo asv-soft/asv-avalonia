@@ -11,9 +11,10 @@ public class PropertyComboBoxCallback : PropertyComboBoxViewModel, ISupportRefre
         string id,
         Func<CancellationToken, ValueTask<IHeadlinedViewModel?>> read,
         Func<IHeadlinedViewModel, CancellationToken, ValueTask> write,
-        Observable<IHeadlinedViewModel?> update
+        Observable<IHeadlinedViewModel?> update,
+        bool enableUndo = true
     )
-        : base(id)
+        : base(id, enableUndo)
     {
         ArgumentNullException.ThrowIfNull(read);
         ArgumentNullException.ThrowIfNull(write);

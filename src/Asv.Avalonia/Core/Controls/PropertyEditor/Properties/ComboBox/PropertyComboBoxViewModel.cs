@@ -1,3 +1,4 @@
+using Asv.Modeling;
 using ObservableCollections;
 using R3;
 
@@ -6,8 +7,9 @@ namespace Asv.Avalonia;
 public abstract class PropertyComboBoxViewModel : PropertyViewModel
 {
     private CancellationTokenSource? _selectCancel;
+    private readonly IUndoChangeSink<ValueUndoChange<IHeadlinedViewModel>>? _undoValueSink;
 
-    protected PropertyComboBoxViewModel(string typeId)
+    protected PropertyComboBoxViewModel(string typeId, bool enableUndo = true)
         : base(typeId)
     {
         SelectedItem = new BindableReactiveProperty<IHeadlinedViewModel?>().AddTo(
@@ -18,6 +20,32 @@ public abstract class PropertyComboBoxViewModel : PropertyViewModel
             (item, cancel) => SelectItem(item, cancel),
             AwaitOperation.Drop
         ).AddTo(ref DisposableBag);
+
+        if (enableUndo)
+        {
+            _undoValueSink = Undo.Register<ValueUndoChange<IHeadlinedViewModel>>(
+                    "Value",
+                    OnUndoValue,
+                    OnRedoValue
+                )
+                .AddTo(ref DisposableBag);
+        }
+    }
+
+    private ValueTask OnRedoValue(
+        ValueUndoChange<IHeadlinedViewModel> change,
+        CancellationToken cancel
+    )
+    {
+        return SelectItem(change.NewValue, cancel);
+    }
+
+    private ValueTask OnUndoValue(
+        ValueUndoChange<IHeadlinedViewModel> change,
+        CancellationToken cancel
+    )
+    {
+        return SelectItem(change.OldValue, cancel);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IHeadlinedViewModel> ItemsView { get; }
@@ -54,6 +82,10 @@ public abstract class PropertyComboBoxViewModel : PropertyViewModel
         try
         {
             await ApplyFromUser(item, selectCancel.Token);
+            if (previousItem is not null)
+            {
+                _undoValueSink?.Publish(previousItem, item);
+            }
             MarkUpdated();
         }
         catch (OperationCanceledException) when (selectCancel.IsCancellationRequested)

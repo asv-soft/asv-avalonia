@@ -9,8 +9,9 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
     private CancellationTokenSource? _applyCancel;
     private bool _changesFromUser;
     private string? _lastTextValue;
+    private readonly IUndoChangeSink<ValueUndoChange<string?>>? _undoValueSink;
 
-    protected PropertyTextBoxViewModel(string typeId)
+    protected PropertyTextBoxViewModel(string typeId, bool enableUndo = true)
         : base(typeId)
     {
         Text = new BindableReactiveProperty<string?>().AddTo(ref DisposableBag);
@@ -19,6 +20,16 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
             AwaitOperation.Drop
         ).AddTo(ref DisposableBag);
         CancelCommand = new ReactiveCommand(_ => Cancel()).AddTo(ref DisposableBag);
+
+        if (enableUndo)
+        {
+            _undoValueSink = Undo.Register<ValueUndoChange<string?>>(
+                    "Value",
+                    OnUndoValue,
+                    OnRedoValue
+                )
+                .AddTo(ref DisposableBag);
+        }
 
         Text.Skip(1)
             .Where(_ => _changesFromUser)
@@ -32,6 +43,18 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
             )
             .Subscribe(_ => HasValidationErrors = Text.HasErrors)
             .AddTo(ref DisposableBag);
+    }
+
+    private ValueTask OnRedoValue(ValueUndoChange<string?> change, CancellationToken cancel)
+    {
+        Text.Value = change.NewValue;
+        return ApplyFromUser();
+    }
+
+    private ValueTask OnUndoValue(ValueUndoChange<string?> change, CancellationToken cancel)
+    {
+        Text.Value = change.OldValue;
+        return ApplyFromUser();
     }
 
     protected void ApplyValueFromModel(string? newValue)
@@ -112,12 +135,18 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
         }
 
         ClearModelErrors();
+        var oldValue = _lastTextValue;
+        var newValue = Text.Value;
         var applyCancel = new CancellationTokenSource();
         _applyCancel = applyCancel;
         IsBusy = true;
         try
         {
             await ApplyFromUser(applyCancel.Token);
+            if (!EqualityComparer<string?>.Default.Equals(oldValue, newValue))
+            {
+                _undoValueSink?.Publish(oldValue, newValue);
+            }
         }
         catch (Exception e)
         {

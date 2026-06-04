@@ -6,8 +6,12 @@ public class PropertyComboBoxReactive : PropertyComboBoxViewModel
 {
     private readonly ReactiveProperty<IHeadlinedViewModel?> _model;
 
-    public PropertyComboBoxReactive(string id, ReactiveProperty<IHeadlinedViewModel?> model)
-        : base(id)
+    public PropertyComboBoxReactive(
+        string id,
+        ReactiveProperty<IHeadlinedViewModel?> model,
+        bool enableUndo = true
+    )
+        : base(id, enableUndo)
     {
         ArgumentNullException.ThrowIfNull(model);
         _model = model;

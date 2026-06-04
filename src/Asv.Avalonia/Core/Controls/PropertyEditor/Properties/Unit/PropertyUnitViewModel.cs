@@ -9,11 +9,16 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
     private readonly string? _format;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoUnitSink;
     private double _lastValue;
-    private readonly IUndoChangeSink<ValueUndoChange<double>> _undoValueSink;
+    private readonly IUndoChangeSink<ValueUndoChange<double>>? _undoValueSink;
     private bool _changeUnitFromViewModel;
 
-    protected PropertyUnitViewModel(string typeId, IUnit unit, string? format = null)
-        : base(typeId)
+    protected PropertyUnitViewModel(
+        string typeId,
+        IUnit unit,
+        string? format = null,
+        bool enableValueUndo = true
+    )
+        : base(typeId, enableUndo: false)
     {
         ArgumentNullException.ThrowIfNull(unit);
         _format = format;
@@ -24,8 +29,15 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
         Text.EnableValidation(ValidateText).AddTo(ref DisposableBag);
         Text.ForceValidate();
 
-        _undoValueSink = Undo.Register<ValueUndoChange<double>>("Value", OnUndoValue, OnRedoValue)
-            .AddTo(ref DisposableBag);
+        if (enableValueUndo)
+        {
+            _undoValueSink = Undo.Register<ValueUndoChange<double>>(
+                    "Value",
+                    OnUndoValue,
+                    OnRedoValue
+                )
+                .AddTo(ref DisposableBag);
+        }
 
         Unit.CurrentUnitItem.Skip(1)
             .Subscribe(_ => ApplyTextFromUnit(_lastValue, true))
@@ -150,7 +162,7 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
     protected override ValueTask ApplyFromUser(CancellationToken cancel)
     {
         var value = Unit.CurrentUnitItem.CurrentValue.ParseToSi(Text.Value);
-        _undoValueSink.Publish(_lastValue, value);
+        _undoValueSink?.Publish(_lastValue, value);
         return ApplyFromUser(value, cancel);
     }
 

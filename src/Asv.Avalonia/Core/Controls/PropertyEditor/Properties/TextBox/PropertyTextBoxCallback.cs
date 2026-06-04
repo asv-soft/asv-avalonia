@@ -13,9 +13,10 @@ public class PropertyTextBoxCallback : PropertyTextBoxViewModel, ISupportRefresh
         Func<CancellationToken, ValueTask<string?>> read,
         Func<string?, CancellationToken, ValueTask> write,
         Observable<string?> update,
-        Func<string?, Exception?>? validator = null
+        Func<string?, Exception?>? validator = null,
+        bool enableUndo = true
     )
-        : base(id)
+        : base(id, enableUndo)
     {
         _read = read;
         _write = write;

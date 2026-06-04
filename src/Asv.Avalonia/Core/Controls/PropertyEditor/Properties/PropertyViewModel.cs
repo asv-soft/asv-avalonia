@@ -6,7 +6,7 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public abstract class PropertyViewModel : HeadlinedViewModel, IPropertyViewModel
+public abstract class PropertyViewModel : HeadlinedViewModel, IPropertyViewModel, ISupportFocus
 {
     private readonly SerialDisposable _menuView = new();
 
@@ -90,5 +90,16 @@ public abstract class PropertyViewModel : HeadlinedViewModel, IPropertyViewModel
 
         MenuView = new MenuTree(Menu);
         _menuView.Disposable = MenuView;
+    }
+
+    public bool IsFocused
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public void Focus()
+    {
+        IsFocused = true;
     }
 }

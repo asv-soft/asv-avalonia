@@ -177,6 +177,7 @@
                 x:Name="PART_TextBox"
                 GotFocus="PART_TextBox_OnGotFocus"
                 LostFocus="PART_TextBox_OnLostFocus"
+                avalonia:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
                 Grid.Column="3"
                 IsEnabled="{Binding !IsBusy}"
                 HorizontalAlignment="Stretch"

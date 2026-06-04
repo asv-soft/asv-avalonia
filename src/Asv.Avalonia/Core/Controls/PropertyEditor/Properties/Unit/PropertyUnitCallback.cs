@@ -15,9 +15,10 @@ public class PropertyUnitCallback : PropertyUnitViewModel, ISupportRefresh
         Func<double, CancellationToken, ValueTask> write,
         Observable<double> update,
         Func<double, Exception?>? validator = null,
-        string? format = null
+        string? format = null,
+        bool enableValueUndo = true
     )
-        : base(id, unit, format)
+        : base(id, unit, format, enableValueUndo)
     {
         _read = read;
         _write = write;

@@ -42,9 +42,19 @@ public abstract class UnitItemBase(double multiplier) : IUnitItem
         return value.ToString(format, CultureInfo.InvariantCulture);
     }
 
+    public virtual string PrintFromSi(double value, string? format = null)
+    {
+        return Print(FromSi(value), format);
+    }
+
     public virtual string PrintWithUnits(double value, string? format = null)
     {
         return $"{Print(value, format)} {Symbol}";
+    }
+
+    public virtual string PrintFromSiWithUnits(double value, string? format = null)
+    {
+        return PrintWithUnits(FromSi(value), format);
     }
 
     public virtual double FromSi(double siValue)
