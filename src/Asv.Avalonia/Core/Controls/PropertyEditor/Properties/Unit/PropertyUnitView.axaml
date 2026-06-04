@@ -69,12 +69,21 @@
             <Setter Property="BorderBrush" Value="Transparent" />
         </Style>
         <Style Selector="Border.property-border:pointerover">
-            <Setter Property="Background" Value="{DynamicResource TextControlBackgroundPointerOver}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushPointerOver}" />
+            <Setter
+                Property="Background"
+                Value="{DynamicResource TextControlBackgroundPointerOver}"
+            />
+            <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource TextControlBorderBrushPointerOver}"
+            />
         </Style>
         <Style Selector="Border.property-border.editing">
             <Setter Property="Background" Value="{DynamicResource TextControlBackgroundFocused}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrushFocused}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource TextControlBorderBrushFocused}"
+            />
         </Style>
         <Style Selector="Border.property-border.error">
             <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}" />
@@ -108,7 +117,6 @@
         BorderThickness="1"
         CornerRadius="4"
         Padding="4,0"
-        ToolTip.Tip="{Binding (DataValidationErrors.Errors), ElementName=PART_TextBox, Converter={x:Static avalonia:ValidationErrorsToStringConverter.Instance}}"
     >
         <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
@@ -166,6 +174,7 @@
                 Background="Transparent"
                 BorderThickness="0"
                 Padding="4"
+                ToolTip.Tip="{Binding (DataValidationErrors.Errors), ElementName=PART_TextBox, Converter={x:Static avalonia:ValidationErrorsToStringConverter.Instance}}"
                 Text="{Binding Text.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             >
                 <TextBox.KeyBindings>
@@ -187,11 +196,16 @@
                         </MenuFlyout.ItemContainerTheme>
                     </MenuFlyout>
                 </Button.Flyout>
-                <avalonia1:MaterialIcon Kind="DotsVertical" />
+                <avalonia1:MaterialIcon Kind="DotsHorizontal" />
             </Button>
 
             <Panel Grid.Column="4">
-                <Button Padding="4,2" IsTabStop="False" Theme="{DynamicResource TransparentButton}">
+                <Button
+                    Padding="4,2"
+                    IsTabStop="False"
+                    HorizontalAlignment="Stretch"
+                    Theme="{DynamicResource TransparentButton}"
+                >
                     <Button.IsVisible>
                         <MultiBinding Converter="{x:Static BoolConverters.Or}">
                             <Binding Path="IsSync" />
@@ -229,7 +243,7 @@
                             Width="16"
                             Height="16"
                             VerticalAlignment="Center"
-                            Kind="DotsVertical"
+                            Kind="DotsHorizontal"
                         />
                     </Panel>
                 </Button>
@@ -256,18 +270,13 @@
                 </Button>
             </Panel>
 
-            <ProgressBar
+            <avalonia:ProgressIndicator
                 Grid.Column="0"
-                Grid.ColumnSpan="5"
-                IsVisible="{Binding IsBusy}"
-                Background="Transparent"
-                Height="20"
-                Opacity="0.5"
+                Grid.ColumnSpan="4"
+                Margin="0,0,4,4"
                 VerticalAlignment="Center"
-                HorizontalAlignment="Stretch"
-                Minimum="0"
-                Maximum="1"
-                IsIndeterminate="True"
+                HorizontalAlignment="Right"
+                IsExecuting="{Binding IsBusy}"
             />
 
             <Border Background="Transparent" Grid.Column="0" Grid.ColumnSpan="2">

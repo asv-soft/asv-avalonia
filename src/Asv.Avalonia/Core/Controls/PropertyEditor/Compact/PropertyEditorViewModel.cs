@@ -17,7 +17,6 @@ public class PropertyEditorViewModel : ViewModel
         _itemsSource.Add(new PropertyComboBoxDesign { ShortHeader = "Ab" });
         _itemsSource.Add(new PropertyUnitDesign { ShortHeader = "Abc" });
         _itemsSource.Add(new PropertyButtonViewModel() { ShortHeader = "Abcd" });
-        _itemsSource.Add(new PropertyGeoPointDesign());
 
         SetParent(DesignTime.Shell);
     }

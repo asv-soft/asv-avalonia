@@ -41,10 +41,25 @@
                 <TextBlock Classes="h1" Text="Model values" />
 
                 <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="description value-label" Text="Display name" />
-                    <TextBlock Grid.Row="0" Grid.Column="1" Classes="value-text" Text="{Binding DisplayName.Value}" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Display name"
+                    />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding DisplayName.Value}"
+                    />
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="description value-label" Text="Operation profile" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Operation profile"
+                    />
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="1"
@@ -52,7 +67,12 @@
                         Text="{Binding OperationProfile.Value.Header}"
                     />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="description value-label" Text="Run check count" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Run check count"
+                    />
                     <TextBlock
                         Grid.Row="2"
                         Grid.Column="1"
@@ -60,13 +80,32 @@
                         Text="{Binding ActionButtonClickCount}"
                     />
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Classes="description value-label" Text="GeoPoint" />
-                    <TextBlock Grid.Row="3" Grid.Column="1" Classes="value-text" Text="{Binding GeoPoint.Value}" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="GeoPoint"
+                    />
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding GeoPoint.Value}"
+                    />
                 </Grid>
 
                 <TextBlock Classes="h2" Margin="0,8,0,0" Text="Units" />
-                <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="8">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="description value-label" Text="Altitude V2 model" />
+                <Grid
+                    ColumnDefinitions="180,*"
+                    RowDefinitions="Auto,Auto,Auto,Auto,Auto"
+                    RowSpacing="8"
+                >
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Altitude V2 model"
+                    />
                     <TextBlock
                         Grid.Row="0"
                         Grid.Column="1"
@@ -74,7 +113,12 @@
                         Text="{Binding AltitudeUnitValue.Value}"
                     />
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="description value-label" Text="Throttle V2 model" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Throttle V2 model"
+                    />
                     <TextBlock
                         Grid.Row="1"
                         Grid.Column="1"
@@ -82,26 +126,86 @@
                         Text="{Binding ThrottleUnitValue.Value}"
                     />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="description value-label" Text="Time model" />
-                    <TextBlock Grid.Row="2" Grid.Column="1" Classes="value-text" Text="{Binding Time.Value}" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Time model"
+                    />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding Time.Value}"
+                    />
 
-                    <TextBlock Grid.Row="3" Grid.Column="0" Classes="description value-label" Text="Throttle model" />
-                    <TextBlock Grid.Row="3" Grid.Column="1" Classes="value-text" Text="{Binding Throttle.Value}" />
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Throttle model"
+                    />
+                    <TextBlock
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding Throttle.Value}"
+                    />
 
-                    <TextBlock Grid.Row="4" Grid.Column="0" Classes="description value-label" Text="Altitude model" />
-                    <TextBlock Grid.Row="4" Grid.Column="1" Classes="value-text" Text="{Binding Altitude.Value}" />
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Altitude model"
+                    />
+                    <TextBlock
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding Altitude.Value}"
+                    />
                 </Grid>
 
                 <TextBlock Classes="h2" Margin="0,8,0,0" Text="Position" />
                 <Grid ColumnDefinitions="180,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="8">
-                    <TextBlock Grid.Row="0" Grid.Column="0" Classes="description value-label" Text="Latitude model" />
-                    <TextBlock Grid.Row="0" Grid.Column="1" Classes="value-text" Text="{Binding Latitude.Value}" />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Latitude model"
+                    />
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding Latitude.Value}"
+                    />
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Classes="description value-label" Text="Longitude model" />
-                    <TextBlock Grid.Row="1" Grid.Column="1" Classes="value-text" Text="{Binding Longitude.Value}" />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Longitude model"
+                    />
+                    <TextBlock
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding Longitude.Value}"
+                    />
 
-                    <TextBlock Grid.Row="2" Grid.Column="0" Classes="description value-label" Text="Altitude model" />
-                    <TextBlock Grid.Row="2" Grid.Column="1" Classes="value-text" Text="{Binding Altitude.Value}" />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Classes="description value-label"
+                        Text="Altitude model"
+                    />
+                    <TextBlock
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Classes="value-text"
+                        Text="{Binding Altitude.Value}"
+                    />
                 </Grid>
             </StackPanel>
         </ScrollViewer>

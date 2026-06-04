@@ -26,7 +26,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
             DesignTime.LoggerFactory,
             DesignTime.UnitService,
-            NullMapService.Instance
+            NullMapService.Instance,
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -38,7 +39,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         ITreeSubPageContext<IControlsGalleryPage> context,
         ILoggerFactory loggerFactory,
         IUnitService unitService,
-        IMapService mapService
+        IMapService mapService,
+        IDialogService dialogService
     )
         : base(PageId, context)
     {
@@ -108,7 +110,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     new PropertyGeoPointReactive(
                         "location1",
                         new ReactiveProperty<GeoPoint>(),
-                        unitService
+                        unitService,
+                        dialogService
                     )
                     {
                         Header = "Location 1",
@@ -116,7 +119,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     new PropertyGeoPointReactive(
                         "location2",
                         new ReactiveProperty<GeoPoint>(),
-                        unitService
+                        unitService,
+                        dialogService
                     )
                     {
                         Header = "Location 2",

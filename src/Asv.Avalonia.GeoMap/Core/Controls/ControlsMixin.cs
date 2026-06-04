@@ -6,7 +6,8 @@ public static class ControlsMixin
     {
         builder
             .Parent.ViewLocator.RegisterViewFor<MapViewModel, MapView>()
-            .RegisterViewFor<MapWidget, MapWidgetView>();
+            .RegisterViewFor<MapWidget, MapWidgetView>()
+            .RegisterViewFor<PropertyGeoPointViewModel, PropertyGeoPointView>();
 
         return builder;
     }

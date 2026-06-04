@@ -101,10 +101,6 @@
           <DependentUpon>PropertyUnitView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
-        <Compile Update="Core\Controls\PropertyEditor\V2\GeoPoint\PropertyGeoPointView.axaml.cs">
-          <DependentUpon>PropertyGeoPointView.axaml</DependentUpon>
-          <SubType>Code</SubType>
-        </Compile>
         <Compile Update="Core\Controls\PropertyEditor\Compact\PropertyEditorView.axaml.cs">
           <DependentUpon>PropertyEditorView.axaml</DependentUpon>
           <SubType>Code</SubType>

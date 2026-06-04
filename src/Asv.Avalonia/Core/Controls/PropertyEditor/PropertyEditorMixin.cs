@@ -11,7 +11,6 @@ public static class PropertyEditorMixin
                 .RegisterViewFor<PropertyTextBoxViewModel, PropertyTextBoxView>()
                 .RegisterViewFor<PropertyComboBoxViewModel, PropertyComboBoxView>()
                 .RegisterViewFor<PropertyUnitViewModel, PropertyUnitView>()
-                .RegisterViewFor<PropertyGeoPointViewModel, PropertyGeoPointView>()
                 .RegisterViewFor<PropertyButtonViewModel, PropertyButtonView>();
         }
     }

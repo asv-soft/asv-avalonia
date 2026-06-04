@@ -38,6 +38,9 @@
         <AutoGen>True</AutoGen>
         <DependentUpon>RS.resx</DependentUpon>
       </Compile>
+      <Compile Update="Core\Controls\PropertyEditor\Properties\GeoPoint\PropertyGeoPointView.axaml.cs">
+        <DependentUpon>PropertyGeoPointView.axaml</DependentUpon>
+      </Compile>
     </ItemGroup>
     <ItemGroup>
       <EmbeddedResource Update="RS.resx">
@@ -51,5 +54,8 @@
       <AdditionalFiles Include="Core\Controls\ItemsControl\MapItem.axaml" />
       <AdditionalFiles Include="Core\Controls\ItemsControl\MapItemsControl.axaml" />
       <AdditionalFiles Include="Core\Controls\MapView\MapView.axaml" />
+    </ItemGroup>
+    <ItemGroup>
+      <Folder Include="Core\Controls\PropertyEditor\Properties\" />
     </ItemGroup>
 </Project>

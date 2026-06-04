@@ -6,7 +6,10 @@
     <Design.PreviewWith>
         <StackPanel Spacing="8">
             <controls:ExecuteIndicator IsExecuting="True" />
-            <controls:ExecuteIndicator IsExecuting="True" Foreground="{DynamicResource AsvForegroundInfo3Brush}" />
+            <controls:ExecuteIndicator
+                IsExecuting="True"
+                Foreground="{DynamicResource AsvForegroundInfo3Brush}"
+            />
             <controls:ExecuteIndicator IsExecuting="False" />
         </StackPanel>
     </Design.PreviewWith>

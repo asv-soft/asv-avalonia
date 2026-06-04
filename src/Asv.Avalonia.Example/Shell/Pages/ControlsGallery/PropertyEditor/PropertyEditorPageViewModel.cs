@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -16,7 +17,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         : this(
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
             DesignTime.UnitService,
-            DesignTime.LoggerFactory
+            DesignTime.LoggerFactory,
+            DesignTime.DialogService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -26,7 +28,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public PropertyEditorPageViewModel(
         ITreeSubPageContext<IControlsGalleryPage> context,
         IUnitService unit,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService
     )
         : base(PageId, context)
     {
@@ -60,7 +63,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 OperationProfileProperty,
                 ActionButtonProperty,
                 AltitudeUnitProperty,
-                ThrottleUnitProperty
+                ThrottleUnitProperty,
+                dialogService
             )
             .SetRoutableParent(this);
         PropertyEditorCopy = CreatePropertyEditor(
@@ -88,7 +92,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     MaterialIconKind.Signal,
                     AsvColorKind.Success,
                     ThrottleUnitValue
-                )
+                ),
+                dialogService
             )
             .SetRoutableParent(this);
 
@@ -107,7 +112,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         PropertyComboBoxViewModel operationProfileProperty,
         PropertyButtonViewModel actionButtonProperty,
         PropertyUnitViewModel altitudeUnitProperty,
-        PropertyUnitViewModel throttleUnitProperty
+        PropertyUnitViewModel throttleUnitProperty,
+        IDialogService dialogService
     )
     {
         return new PropertyEditorViewModel(id)
@@ -152,7 +158,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Description = "Altitude description",
                     Icon = MaterialIconKind.Altimeter,
                 },
-                new PropertyGeoPointReactive($"{id}_geo_v2", GeoPoint, unit)
+                new PropertyGeoPointReactive($"{id}_geo_v2", GeoPoint, unit, dialogService)
                 {
                     Header = "Geo Point",
                     Description = "Geo Point description",

@@ -5,7 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="250"
+    d:DesignWidth="400"
     d:DesignHeight="450"
     x:Class="Asv.Avalonia.PropertyEditorView"
     x:DataType="avalonia:PropertyEditorViewModel"

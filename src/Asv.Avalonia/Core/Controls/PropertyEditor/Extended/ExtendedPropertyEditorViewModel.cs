@@ -1,6 +1,3 @@
 ﻿namespace Asv.Avalonia;
 
-public class ExtendedPropertyEditorViewModel
-{
-    
-}
+public class ExtendedPropertyEditorViewModel { }

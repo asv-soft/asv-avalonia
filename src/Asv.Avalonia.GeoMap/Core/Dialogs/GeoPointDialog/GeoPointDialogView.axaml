@@ -16,45 +16,39 @@
         <map:GeoPointDialogViewModel />
     </Design.DataContext>
 
-    <Grid Margin="0,0,20,0" ColumnDefinitions="Auto,*">
-        <Grid Grid.Column="0" RowDefinitions="Auto,Auto">
-            <Border
-                Grid.Row="0"
-                Margin="0,0,0,10"
-                Padding="4"
-                BorderBrush="{DynamicResource  AsvForegroundUnknownColor}"
-                BorderThickness="1"
-                CornerRadius="4"
-            >
-                <Grid Width="220" Height="220">
-                    <map:MapItemsControl
-                        CenterMap="{CompiledBinding CenterGeoPoint.Value, Mode=TwoWay}"
-                        Provider="{CompiledBinding CurrentProvider.Value}"
-                    >
-                        <map:MapItemsControl.Styles>
-                            <Style Selector="Border.active">
-                                <Setter Property="BorderThickness" Value="5" />
-                            </Style>
-                        </map:MapItemsControl.Styles>
-                    </map:MapItemsControl>
+    <Grid Margin="0,0,20,0" RowDefinitions="280,Auto">
+        <Border
+            Grid.Row="0"
+            Padding="4"
+            BorderBrush="{DynamicResource AsvForegroundUnknownColor}"
+            BorderThickness="1"
+            CornerRadius="4"
+        >
+            <Grid>
+                <map:MapItemsControl
+                    CenterMap="{CompiledBinding CenterGeoPoint.Value, Mode=TwoWay}"
+                    Provider="{CompiledBinding CurrentProvider.Value}"
+                >
+                    <map:MapItemsControl.Styles>
+                        <Style Selector="Border.active">
+                            <Setter Property="BorderThickness" Value="5" />
+                        </Style>
+                    </map:MapItemsControl.Styles>
+                </map:MapItemsControl>
 
-                    <avalonia:MaterialIcon
-                        HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        IsHitTestVisible="False"
-                        Classes="big"
-                        Opacity="0.75"
-                        Kind="Location"
-                    />
-                </Grid>
-            </Border>
+                <avalonia:MaterialIcon
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsHitTestVisible="False"
+                    Classes="big"
+                    Opacity="0.75"
+                    Kind="Location"
+                />
+            </Grid>
+        </Border>
 
-            <StackPanel
-                Grid.Row="1"
-                Orientation="Horizontal"
-                HorizontalAlignment="Center"
-                Margin="0,10,0,0"
-            >
+        <Grid Grid.Row="1" Margin="0,12,0,0" ColumnDefinitions="Auto,*">
+            <StackPanel Grid.Column="0" Spacing="8" VerticalAlignment="Top">
                 <UniformGrid Rows="3" Columns="3">
                     <Button
                         Command="{Binding MoveCommand}"
@@ -96,7 +90,14 @@
                     >
                         <avalonia:MaterialIcon Kind="ArrowLeft" />
                     </Button>
-                    <Border Width="30" Height="30" Background="Transparent" />
+                    <Border Width="35" Height="35" Background="Transparent">
+                        <avalonia:MaterialIcon
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Opacity="0.65"
+                            Kind="MapMarkerRadius"
+                        />
+                    </Border>
                     <Button
                         Command="{Binding MoveCommand}"
                         CommandParameter="{x:Static map:MoveDirection.Right}"
@@ -138,145 +139,35 @@
                         <avalonia:MaterialIcon Kind="ArrowBottomRight" />
                     </Button>
                 </UniformGrid>
-            </StackPanel>
-        </Grid>
 
-        <ScrollViewer
-            Grid.Column="1"
-            Margin="10,0,0,0"
-            VerticalScrollBarVisibility="Auto"
-            HorizontalScrollBarVisibility="Disabled"
-        >
-            <Grid ColumnDefinitions="Auto,125,Auto">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" MinHeight="90" />
-                    <RowDefinition Height="Auto" MinHeight="90" />
-                    <RowDefinition Height="Auto" MinHeight="90" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
-
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.Column="0"
-                    Text="{x:Static asv:RS.Longitude_Name}"
-                    VerticalAlignment="Top"
-                    Margin="5,8,2,0"
-                />
-                <TextBox
-                    Grid.Row="0"
-                    Grid.Column="1"
-                    VerticalAlignment="Top"
-                    Text="{Binding GeoPointProperty.Longitude.ViewValue.Value, Mode=TwoWay}"
-                />
-                <TextBlock
-                    Grid.Row="0"
-                    Grid.Column="2"
-                    Text="{Binding LonUnitName.Value}"
-                    VerticalAlignment="Top"
-                    Margin="5,8,0,0"
-                />
-
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="0"
-                    Text="{x:Static asv:RS.Latitude_Name}"
-                    VerticalAlignment="Top"
-                    Margin="5,8,2,0"
-                />
-                <TextBox
-                    Grid.Row="1"
-                    Grid.Column="1"
-                    VerticalAlignment="Top"
-                    Text="{Binding GeoPointProperty.Latitude.ViewValue.Value, Mode=TwoWay}"
-                />
-                <TextBlock
-                    Grid.Row="1"
-                    Grid.Column="2"
-                    Text="{Binding LatUnitName.Value}"
-                    VerticalAlignment="Top"
-                    Margin="5,8,0,0"
-                />
-
-                <TextBlock
-                    Grid.Row="2"
-                    Grid.Column="0"
-                    Text="{x:Static asv:RS.Altitude_Name}"
-                    VerticalAlignment="Top"
-                    Margin="5,8,2,0"
-                />
-                <Grid
-                    Grid.Row="2"
-                    Grid.Column="1"
-                    VerticalAlignment="Stretch"
-                    ColumnDefinitions="*,Auto"
-                >
-                    <TextBox
-                        Grid.Column="0"
-                        VerticalAlignment="Top"
-                        Text="{Binding GeoPointProperty.Altitude.ViewValue.Value, Mode=TwoWay}"
-                    />
-                    <StackPanel
-                        Grid.Column="1"
-                        Orientation="Vertical"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Top"
-                        Spacing="2"
-                        Margin="4,-15,0,0"
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
+                    <Button
+                        Command="{Binding MoveCommand}"
+                        CommandParameter="{x:Static map:MoveDirection.Up}"
+                        Width="35"
+                        Height="35"
                     >
-                        <Button
-                            Command="{Binding MoveCommand}"
-                            CommandParameter="{x:Static map:MoveDirection.Up}"
-                            Width="35"
-                            Height="35"
-                        >
-                            <avalonia:MaterialIcon Kind="ArrowTop" />
-                        </Button>
-                        <Button
-                            Command="{Binding MoveCommand}"
-                            CommandParameter="{x:Static map:MoveDirection.Down}"
-                            Width="35"
-                            Height="35"
-                        >
-                            <avalonia:MaterialIcon Kind="ArrowBottom" />
-                        </Button>
-                    </StackPanel>
-                </Grid>
-
-                <TextBlock
-                    Grid.Row="2"
-                    Grid.Column="2"
-                    Text="{Binding AltUnitName.Value}"
-                    VerticalAlignment="Top"
-                    Margin="5,8,0,0"
-                />
-
-                <StackPanel
-                    Grid.Row="3"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="3"
-                    Orientation="Horizontal"
-                    HorizontalAlignment="Left"
-                    Margin="0,10,0,0"
-                    Spacing="4"
-                >
-                    <TextBlock
-                        Text="{x:Static map:RS.GeoPointDialogViewModel_Step}"
-                        VerticalAlignment="Top"
-                        Margin="0,8,0,0"
-                    />
-                    <AutoCompleteBox
-                        Width="80"
-                        ItemsSource="{Binding StepOptions, Mode=TwoWay}"
-                        Text="{Binding DistanceProperty.Value, Mode=TwoWay}"
-                        MinimumPrefixLength="0"
-                    />
-                    <TextBlock
-                        Text="{Binding DistanceUnitName.Value}"
-                        VerticalAlignment="Top"
-                        Margin="5,8,0,0"
-                    />
+                        <avalonia:MaterialIcon Kind="ArrowTop" />
+                    </Button>
+                    <Button
+                        Command="{Binding MoveCommand}"
+                        CommandParameter="{x:Static map:MoveDirection.Down}"
+                        Width="35"
+                        Height="35"
+                    >
+                        <avalonia:MaterialIcon Kind="ArrowBottom" />
+                    </Button>
                 </StackPanel>
-            </Grid>
-        </ScrollViewer>
+            </StackPanel>
+
+            <ScrollViewer
+                Grid.Column="1"
+                Margin="10,0,0,0"
+                VerticalScrollBarVisibility="Auto"
+                HorizontalScrollBarVisibility="Disabled"
+            >
+                <asv:PropertyEditorView DataContext="{Binding FieldsEditor}" />
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </UserControl>

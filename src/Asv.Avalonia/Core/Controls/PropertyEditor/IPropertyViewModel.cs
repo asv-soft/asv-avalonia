@@ -2,7 +2,4 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IPropertyViewModel : IHeadlinedViewModel
-{
-    
-}
+public interface IPropertyViewModel : IHeadlinedViewModel { }

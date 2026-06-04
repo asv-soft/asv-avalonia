@@ -1,7 +1,7 @@
 using Asv.Common;
 using R3;
 
-namespace Asv.Avalonia;
+namespace Asv.Avalonia.GeoMap;
 
 public class PropertyGeoPointReactive : PropertyGeoPointViewModel
 {
@@ -12,7 +12,15 @@ public class PropertyGeoPointReactive : PropertyGeoPointViewModel
         ReactiveProperty<GeoPoint> model,
         IUnitService unitService
     )
-        : base(id, unitService)
+        : this(id, model, unitService, DesignTime.DialogService) { }
+
+    public PropertyGeoPointReactive(
+        string id,
+        ReactiveProperty<GeoPoint> model,
+        IUnitService unitService,
+        IDialogService dialogService
+    )
+        : base(id, unitService, dialogService)
     {
         ArgumentNullException.ThrowIfNull(model);
 

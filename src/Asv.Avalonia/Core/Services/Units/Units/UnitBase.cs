@@ -52,11 +52,11 @@ public abstract class UnitBase<TConfig> : AsyncDisposableOnceBag, IUnit
             }
         }
 
-        CurrentUnitItem = new BindableReactiveProperty<IUnitItem>(defaultUnitItem)
-            .AddTo(ref DisposableBag);
+        CurrentUnitItem = new BindableReactiveProperty<IUnitItem>(defaultUnitItem).AddTo(
+            ref DisposableBag
+        );
 
-        CurrentUnitItem.Subscribe(SetUnitItem)
-            .AddTo(ref DisposableBag);
+        CurrentUnitItem.Subscribe(SetUnitItem).AddTo(ref DisposableBag);
     }
 
     private void SetUnitItem(IUnitItem unitItem)
@@ -78,5 +78,4 @@ public abstract class UnitBase<TConfig> : AsyncDisposableOnceBag, IUnit
     public abstract string UnitId { get; }
     public BindableReactiveProperty<IUnitItem> CurrentUnitItem { get; }
     public IUnitItem InternationalSystemUnit { get; }
-
 }
