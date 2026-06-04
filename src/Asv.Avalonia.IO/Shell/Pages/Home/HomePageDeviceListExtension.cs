@@ -28,7 +28,12 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        _svc.Explorer.InitializedDevices.PopulateTo(context.Items, TryAdd, Remove)
+        _svc.Explorer.InitializedDevices.PopulateTo(
+                context.Items,
+                TryAdd,
+                Remove,
+                synchronizationContext: SynchronizationContext.Current
+            )
             .DisposeItWith(contextDispose);
     }
 
