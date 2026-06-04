@@ -27,7 +27,7 @@ public class LauncherApp : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            var options = CreateOptions();
+            var options = CreateOptions(desktop.Args);
             _viewModel = CreateViewModel(options);
             desktop.MainWindow = CreateMainWindow(_viewModel, options);
             desktop.Exit += (_, _) => DisposeViewModel();
@@ -38,11 +38,11 @@ public class LauncherApp : Application
 
     protected virtual void ConfigureLauncher(LauncherApplicationOptions options) { }
 
-    private LauncherApplicationOptions CreateOptions()
+    private LauncherApplicationOptions CreateOptions(IReadOnlyList<string>? args)
     {
         var options = new LauncherApplicationOptions
         {
-            Args = Environment.GetCommandLineArgs().Skip(1).ToArray(),
+            Args = args ?? Environment.GetCommandLineArgs().Skip(1).ToArray(),
         };
 
         ConfigureLauncher(options);
