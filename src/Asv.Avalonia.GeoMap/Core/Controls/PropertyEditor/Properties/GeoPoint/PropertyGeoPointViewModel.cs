@@ -13,7 +13,7 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
     private readonly ReactiveProperty<double> _latitude;
     private readonly ReactiveProperty<double> _longitude;
     private readonly GeoPointDialogPrefab? _geoPointDialog;
-    private readonly IUndoChangeSink<ValueUndoChange<GeoPoint>> _undoValueSink;
+    private readonly IUndoChangeSink<ValueUndoChange<string>> _undoValueSink;
     private GeoPoint _lastValue;
     private bool _updatingFromModel;
 
@@ -35,7 +35,7 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
         _longitude.Skip(1).Subscribe(_ => ApplyValueFromComponents()).AddTo(ref DisposableBag);
         _altitude.Skip(1).Subscribe(_ => ApplyValueFromComponents()).AddTo(ref DisposableBag);
 
-        _undoValueSink = Undo.Register<ValueUndoChange<GeoPoint>>("Value", OnUndoValue, OnRedoValue)
+        _undoValueSink = Undo.Register<ValueUndoChange<string>>("Value", OnUndoValue, OnRedoValue)
             .AddTo(ref DisposableBag);
 
         CanOpenGeoPointDialog =
@@ -89,16 +89,18 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
             .DisposeItWith(Disposable);
     }
 
-    private ValueTask OnRedoValue(ValueUndoChange<GeoPoint> change, CancellationToken cancel)
+    private ValueTask OnRedoValue(ValueUndoChange<string> change, CancellationToken cancel)
     {
-        ApplyValueFromModel(change.NewValue);
-        return ApplyFromUser(change.NewValue, cancel);
+        var value = GeoPoint.Parse(change.NewValue);
+        ApplyValueFromModel(value);
+        return ApplyFromUser(value, cancel);
     }
 
-    private ValueTask OnUndoValue(ValueUndoChange<GeoPoint> change, CancellationToken cancel)
+    private ValueTask OnUndoValue(ValueUndoChange<string> change, CancellationToken cancel)
     {
-        ApplyValueFromModel(change.OldValue);
-        return ApplyFromUser(change.OldValue, cancel);
+        var value = GeoPoint.Parse(change.OldValue);
+        ApplyValueFromModel(value);
+        return ApplyFromUser(value, cancel);
     }
 
     public PropertyUnitViewModel Latitude { get; }
@@ -196,7 +198,7 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
             ApplyValueFromModel(value);
         }
 
-        _undoValueSink.Publish(oldValue, value);
+        _undoValueSink.Publish(oldValue.ToString(), value.ToString());
         await ApplyFromUser(value, cancel);
     }
 
