@@ -32,21 +32,27 @@ public class MapModeProperty : PropertyComboBoxViewModel
             new MapModeItem(
                 RS.MapModeProperty_MapModeInfo_Online,
                 RS.MapModeProperty_MapModeInfo_Online_Description,
-                MapModeType.Online
+                MapModeType.Online,
+                MaterialIconKind.CloudOutline,
+                AsvColorKind.Info4
             )
         );
         ItemsSource.Add(
             new MapModeItem(
                 RS.MapModeProperty_MapModeInfo_Offline,
                 RS.MapModeProperty_MapModeInfo_Offline_Description,
-                MapModeType.Offline
+                MapModeType.Offline,
+                MaterialIconKind.DatabaseOutline,
+                AsvColorKind.Info8
             )
         );
         ItemsSource.Add(
             new MapModeItem(
                 RS.MapModeProperty_MapModeInfo_Mixed,
                 RS.MapModeProperty_MapModeInfo_Mixed_Description,
-                MapModeType.Mixed
+                MapModeType.Mixed,
+                MaterialIconKind.CloudSyncOutline,
+                AsvColorKind.Info7
             )
         );
 
@@ -78,12 +84,20 @@ public class MapModeProperty : PropertyComboBoxViewModel
 
     private sealed class MapModeItem : HeadlinedViewModel
     {
-        public MapModeItem(string header, string description, MapModeType type)
+        public MapModeItem(
+            string header,
+            string description,
+            MapModeType type,
+            MaterialIconKind icon,
+            AsvColorKind iconColor
+        )
             : base(type.ToString())
         {
             Header = header;
             Description = description;
             Type = type;
+            Icon = icon;
+            IconColor = iconColor;
         }
 
         public MapModeType Type { get; }
