@@ -1,7 +1,7 @@
 <Project>
     <PropertyGroup>
         <ApiVersion>3.0.0</ApiVersion>
-        <ProductVersion>3.0.0-dev.27</ProductVersion>
+        <ProductVersion>3.0.0-dev.28</ProductVersion>
         <LauncherVersion>0.0.1-dev.1</LauncherVersion>
         <TargetFramework>net10.0</TargetFramework>
 
