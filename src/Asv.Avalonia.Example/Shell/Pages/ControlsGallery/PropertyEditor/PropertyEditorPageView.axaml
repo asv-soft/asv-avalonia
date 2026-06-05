@@ -37,6 +37,11 @@
                     Classes="description"
                     Text="Show property headers"
                 />
+                <ToggleButton
+                    Margin="16,0,0,0"
+                    IsChecked="{Binding ShowLeftEditorAdvancedScope, Mode=TwoWay}"
+                    Content="Advanced left scope"
+                />
             </StackPanel>
 
             <Grid Grid.Row="2" ColumnDefinitions="340,*,340">

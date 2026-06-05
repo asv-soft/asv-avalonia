@@ -28,6 +28,8 @@ public abstract class PropertyViewModel : HeadlinedViewModel, IPropertyViewModel
 
     public ObservableList<IMenuItem> Menu { get; } = [];
 
+    public HashSet<string> DisplayScopes { get; } = [];
+
     public bool UpdatedFlag
     {
         get;

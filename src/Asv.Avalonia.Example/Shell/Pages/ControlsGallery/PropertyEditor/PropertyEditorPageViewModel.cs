@@ -12,6 +12,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 {
     public const string PageId = "property-editor-example";
     public const MaterialIconKind PageIcon = MaterialIconKind.PropertyTag;
+    private const string AdvancedScope = "advanced";
 
     public PropertyEditorPageViewModel()
         : this(
@@ -67,6 +68,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 dialogService
             )
             .SetRoutableParent(this);
+        ConfigureLeftEditorScopes();
         PropertyEditorCopy = CreatePropertyEditor(
                 "editor-copy",
                 unit,
@@ -518,6 +520,24 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         };
     }
 
+    private void ConfigureLeftEditorScopes()
+    {
+        AltitudeUnitProperty.DisplayScopes.Add(AdvancedScope);
+        ThrottleUnitProperty.DisplayScopes.Add(AdvancedScope);
+
+        foreach (var property in PropertyEditor.ItemsSource)
+        {
+            switch (property.Header)
+            {
+                case "Geo Point":
+                case "Time":
+                case "Throttle":
+                    property.DisplayScopes.Add(AdvancedScope);
+                    break;
+            }
+        }
+    }
+
     private static IHeadlinedViewModel AddOperationProfileItem(
         PropertyComboBoxViewModel property,
         string id,
@@ -581,6 +601,27 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             PropertyEditor.ShowHeader = value;
             PropertyEditorCopy.ShowHeader = value;
             ExtendedPropertyEditor.ShowHeader = value;
+        }
+    }
+
+    public bool ShowLeftEditorAdvancedScope
+    {
+        get;
+        set
+        {
+            if (SetField(ref field, value) == false)
+            {
+                return;
+            }
+
+            if (value)
+            {
+                PropertyEditor.DisplayScopes.Add(AdvancedScope);
+            }
+            else
+            {
+                PropertyEditor.DisplayScopes.Remove(AdvancedScope);
+            }
         }
     }
 
