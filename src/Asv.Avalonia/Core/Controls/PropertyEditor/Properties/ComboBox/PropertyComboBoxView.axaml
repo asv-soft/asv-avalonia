@@ -78,6 +78,32 @@
             <Setter Property="ToggleType" Value="{Binding Base.ToggleType}" />
             <Setter Property="GroupName" Value="{Binding Base.GroupName}" />
         </ControlTheme>
+
+        <ControlTheme
+            x:Key="PropertyComboBoxButtonTheme"
+            TargetType="Button"
+            BasedOn="{StaticResource {x:Type Button}}"
+        >
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
+            <Style Selector="^:pointerover /template/ ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+            <Style Selector="^:pressed /template/ ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Opacity" Value="1" />
+            </Style>
+            <Style Selector="^:disabled /template/ ContentPresenter">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="Transparent" />
+            </Style>
+        </ControlTheme>
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -150,7 +176,7 @@
                 HorizontalContentAlignment="Stretch"
                 VerticalContentAlignment="Center"
                 Padding="4"
-                Theme="{StaticResource TransparentButton}"
+                Theme="{StaticResource PropertyComboBoxButtonTheme}"
             >
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -173,7 +199,6 @@
                                         MinWidth="180"
                                         HorizontalAlignment="Stretch"
                                         HorizontalContentAlignment="Stretch"
-                                        Theme="{StaticResource TransparentButton}"
                                         Click="ItemButton_OnClick"
                                     >
                                         <Grid

@@ -10,6 +10,20 @@ namespace Asv.Avalonia;
 
 public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspaceWidget
 {
+    public PropertyEditorWidgetViewModel()
+        : this(DesignTime.Id.TypeId, "Property editor", DesignTime.LoggerFactory)
+    {
+        DesignTime.ThrowIfNotDesignMode();
+        Icon = MaterialIconKind.Tune;
+        IconColor = AsvColorKind.Info5;
+        Position = WorkspaceDock.Left;
+        ShowHeader = true;
+        ItemsSource.Add(new PropertyTextBoxDesign());
+        ItemsSource.Add(new PropertyComboBoxDesign());
+        ItemsSource.Add(new PropertyUnitDesign());
+        ItemsSource.Add(new PropertyButtonViewModel());
+    }
+
     public PropertyEditorWidgetViewModel(string id, string header, ILoggerFactory loggerFactory)
         : base(id)
     {

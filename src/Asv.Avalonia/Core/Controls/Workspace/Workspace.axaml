@@ -6,6 +6,7 @@
     <Design.PreviewWith>
         <Panel Width="1024" Height="500" Background="Gray">
             <avalonia:Workspace BorderThickness="3">
+                <avalonia:PropertyEditorWidgetViewModel />
                 <avalonia:WorkspaceItem Header="HEADER1" Position="Right">
                     <StackPanel>
                         <TextBlock Text="AAAA" />
