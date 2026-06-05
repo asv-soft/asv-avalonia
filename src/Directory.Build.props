@@ -1,8 +1,8 @@
 <Project>
     <PropertyGroup>
         <ApiVersion>3.0.0</ApiVersion>
-        <ProductVersion>3.0.0-dev.23</ProductVersion>
-        <LauncherVersion>0.0.1-dev.0</LauncherVersion>
+        <ProductVersion>3.0.0-dev.24</ProductVersion>
+        <LauncherVersion>0.0.1-dev.1</LauncherVersion>
         <TargetFramework>net10.0</TargetFramework>
 
         <AvaloniaVersion>12.0.4</AvaloniaVersion>
