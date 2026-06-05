@@ -13,7 +13,7 @@
     <Design.DataContext>
         <avalonia:StackPanelWidgetViewModel />
     </Design.DataContext>
-    <ItemsControl Margin="8" ItemsSource="{Binding ItemsView}">
+    <ItemsControl Margin="4" ItemsSource="{Binding ItemsView}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>
                 <StackPanel Spacing="4" />
@@ -21,7 +21,7 @@
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
             <DataTemplate>
-                <StackPanel Spacing="4">
+                <StackPanel>
                     <ContentControl Content="{Binding}" />
                 </StackPanel>
             </DataTemplate>
