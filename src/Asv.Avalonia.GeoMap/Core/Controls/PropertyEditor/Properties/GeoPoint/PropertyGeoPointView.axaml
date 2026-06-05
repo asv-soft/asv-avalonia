@@ -16,6 +16,31 @@
         <map:PropertyGeoPointDesign />
     </Design.DataContext>
 
+    <UserControl.Resources>
+        <ControlTheme
+            x:Key="PropertyMenuNodeTheme"
+            TargetType="MenuItem"
+            BasedOn="{StaticResource {x:Type MenuItem}}"
+            x:DataType="avalonia:MenuNode"
+        >
+            <Setter
+                Property="Icon"
+                Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}"
+            />
+            <Setter Property="Header" Value="{Binding Base.Header}" />
+            <Setter Property="ItemsSource" Value="{Binding Items}" />
+            <Setter Property="Command" Value="{Binding Base.Command}" />
+            <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}" />
+            <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+            <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+            <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+            <Setter Property="InputGesture" Value="{Binding Base.HotKey}" />
+            <Setter Property="IsChecked" Value="{Binding Base.IsChecked}" />
+            <Setter Property="ToggleType" Value="{Binding Base.ToggleType}" />
+            <Setter Property="GroupName" Value="{Binding Base.GroupName}" />
+        </ControlTheme>
+    </UserControl.Resources>
+
     <ToolTip.Tip>
         <StackPanel
             Spacing="8"
@@ -34,6 +59,13 @@
                 Theme="{StaticResource TransparentButton}"
                 IsVisible="{Binding MenuView, Converter={x:Static ObjectConverters.IsNotNull}}"
             >
+                <Button.Flyout>
+                    <MenuFlyout ItemsSource="{Binding MenuView.Items}">
+                        <MenuFlyout.ItemContainerTheme>
+                            <StaticResource ResourceKey="PropertyMenuNodeTheme" />
+                        </MenuFlyout.ItemContainerTheme>
+                    </MenuFlyout>
+                </Button.Flyout>
                 <avalonia1:MaterialIcon Kind="DotsHorizontal" />
             </Button>
             <Button

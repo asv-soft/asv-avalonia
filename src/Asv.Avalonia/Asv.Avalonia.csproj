@@ -105,6 +105,9 @@
           <DependentUpon>PropertyEditorView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\Properties\Status\PropertyStatusView.axaml.cs">
+          <DependentUpon>PropertyStatusView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,0 +1,48 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="24"
+    d:DesignHeight="24"
+    x:Class="Asv.Avalonia.PropertyStatusView"
+    x:DataType="avalonia:PropertyViewModel"
+>
+    <Panel MinWidth="20">
+        <avalonia:ProgressIndicator
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Foreground="{DynamicResource AsvForegroundInfo3Brush}"
+        >
+            <avalonia:ProgressIndicator.IsExecuting>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding Path="IsBusy" />
+                    <Binding
+                        Path="ErrorMessage"
+                        Converter="{x:Static StringConverters.IsNullOrEmpty}"
+                    />
+                </MultiBinding>
+            </avalonia:ProgressIndicator.IsExecuting>
+        </avalonia:ProgressIndicator>
+        <Ellipse
+            Opacity="0"
+            Margin="4,0"
+            Classes.fadeout="{Binding UpdatedFlag}"
+            VerticalAlignment="Center"
+            HorizontalAlignment="Center"
+            Width="5"
+            Height="5"
+            Fill="{DynamicResource AsvForegroundInfo3Brush}"
+        />
+        <avalonia1:MaterialIcon
+            Classes="blink"
+            ToolTip.Tip="{Binding ErrorMessage}"
+            IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            Kind="{Binding ErrorIcon}"
+            Foreground="{DynamicResource AsvForegroundErrorBrush}"
+        />
+    </Panel>
+</UserControl>

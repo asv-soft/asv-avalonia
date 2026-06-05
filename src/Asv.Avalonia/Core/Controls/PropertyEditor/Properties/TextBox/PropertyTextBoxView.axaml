@@ -123,8 +123,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition SharedSizeGroup="PrefixIcon" Width="Auto" />
                 <ColumnDefinition SharedSizeGroup="PrefixName" Width="Auto" />
-                <ColumnDefinition SharedSizeGroup="PrefixStatus" Width="Auto" />
                 <ColumnDefinition />
+                <ColumnDefinition SharedSizeGroup="PostfixStatus" Width="Auto" />
                 <ColumnDefinition SharedSizeGroup="PostfixUnits" Width="Auto" />
                 <ColumnDefinition SharedSizeGroup="PostfixAction" Width="Auto" />
             </Grid.ColumnDefinitions>
@@ -154,32 +154,13 @@
                 Classes="description"
                 Text="{Binding ShortHeader}"
             />
-            <Panel Grid.Column="2">
-                <Ellipse
-                    Opacity="0"
-                    Margin="4,0,4,0"
-                    Classes.fadeout="{Binding UpdatedFlag}"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Width="5"
-                    Height="5"
-                    Fill="{DynamicResource AsvForegroundInfo3Brush}"
-                />
-                <avalonia1:MaterialIcon
-                    Classes="blink"
-                    ToolTip.Tip="{Binding ErrorMessage}"
-                    IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                    Kind="{Binding ErrorIcon}"
-                    Foreground="{DynamicResource AsvForegroundErrorBrush}"
-                />
-            </Panel>
 
             <TextBox
                 x:Name="PART_TextBox"
                 GotFocus="PART_TextBox_OnGotFocus"
                 LostFocus="PART_TextBox_OnLostFocus"
                 avalonia:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
-                Grid.Column="3"
+                Grid.Column="2"
                 IsEnabled="{Binding !IsBusy}"
                 HorizontalAlignment="Stretch"
                 VerticalContentAlignment="Center"
@@ -194,6 +175,8 @@
                     <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}" />
                 </TextBox.KeyBindings>
             </TextBox>
+
+            <avalonia:PropertyStatusView Grid.Column="3" VerticalAlignment="Center" />
 
             <Button
                 Grid.Column="5"
@@ -243,15 +226,6 @@
                     />
                 </Button>
             </Panel>
-
-            <avalonia:ProgressIndicator
-                Grid.Column="0"
-                Grid.ColumnSpan="4"
-                Margin="0,0,4,4"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right"
-                IsExecuting="{Binding IsBusy}"
-            />
 
             <Border Background="Transparent" Grid.Column="0" Grid.ColumnSpan="2">
                 <ToolTip.Tip>

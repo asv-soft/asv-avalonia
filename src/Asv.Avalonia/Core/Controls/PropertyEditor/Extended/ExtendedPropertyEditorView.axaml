@@ -18,7 +18,6 @@
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <ItemsControl
             Grid.IsSharedSizeScope="True"
-            MaxWidth="1080"
             Margin="16"
             HorizontalAlignment="Stretch"
             ItemsSource="{Binding Items}"

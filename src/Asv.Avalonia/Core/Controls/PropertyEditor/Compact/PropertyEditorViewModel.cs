@@ -35,6 +35,12 @@ public class PropertyEditorViewModel : ViewModel
 
     public NotifyCollectionChangedSynchronizedViewList<IPropertyViewModel> Items { get; }
 
+    public bool ShowHeader
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     public override IEnumerable<IViewModel> GetChildren()
     {
         return _itemsSource;

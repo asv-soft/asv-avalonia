@@ -198,77 +198,89 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         editor.ItemsSource.Add(altitudeUnitProperty);
         editor.ItemsSource.Add(throttleUnitProperty);
         editor.ItemsSource.Add(
-            new PropertyUnitReactive(
-                "latitude",
-                unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
-                Latitude
+            AddExampleErrorMenu(
+                new PropertyUnitReactive(
+                    "latitude",
+                    unit.GetRequiredUnitOfType<LatitudeUnit>(LatitudeUnit.Id),
+                    Latitude
+                )
+                {
+                    Header = "Position",
+                    ShortHeader = "Lat",
+                    Description = "Latitude description",
+                    Icon = MaterialIconKind.Latitude,
+                }
             )
-            {
-                Header = "Position",
-                ShortHeader = "Lat",
-                Description = "Latitude description",
-                Icon = MaterialIconKind.Latitude,
-            }
         );
         editor.ItemsSource.Add(
-            new PropertyUnitReactive(
-                "longitude",
-                unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
-                Longitude
+            AddExampleErrorMenu(
+                new PropertyUnitReactive(
+                    "longitude",
+                    unit[LongitudeUnit.Id] ?? throw new ArgumentNullException(),
+                    Longitude
+                )
+                {
+                    Header = "Longitude",
+                    ShortHeader = "Lon",
+                    Description = "Latitude description",
+                    Icon = MaterialIconKind.Latitude,
+                }
             )
-            {
-                Header = "Longitude",
-                ShortHeader = "Lon",
-                Description = "Latitude description",
-                Icon = MaterialIconKind.Latitude,
-            }
         );
         editor.ItemsSource.Add(
-            new PropertyUnitReactive(
-                "altitude",
-                unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
-                Altitude
+            AddExampleErrorMenu(
+                new PropertyUnitReactive(
+                    "altitude",
+                    unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
+                    Altitude
+                )
+                {
+                    Header = "Altitude",
+                    ShortHeader = "Alt",
+                    Description = "Altitude description",
+                    Icon = MaterialIconKind.Altimeter,
+                }
             )
-            {
-                Header = "Altitude",
-                ShortHeader = "Alt",
-                Description = "Altitude description",
-                Icon = MaterialIconKind.Altimeter,
-            }
         );
         editor.ItemsSource.Add(
-            new PropertyGeoPointReactive("geo-point", GeoPoint, unit, dialogService)
-            {
-                Header = "Geo Point",
-                Description = "Geo Point description",
-                Icon = MaterialIconKind.Earth,
-            }
+            AddExampleErrorMenu(
+                new PropertyGeoPointReactive("geo-point", GeoPoint, unit, dialogService)
+                {
+                    Header = "Geo Point",
+                    Description = "Geo Point description",
+                    Icon = MaterialIconKind.Earth,
+                }
+            )
         );
         editor.ItemsSource.Add(
-            new PropertyUnitReactive(
-                "time",
-                unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
-                Time
+            AddExampleErrorMenu(
+                new PropertyUnitReactive(
+                    "time",
+                    unit.GetRequiredUnitOfType<TimeSpanUnit>(TimeSpanUnit.Id),
+                    Time
+                )
+                {
+                    Header = "Time",
+                    ShortHeader = "Time",
+                    Description = "Time description",
+                    Icon = MaterialIconKind.Timelapse,
+                }
             )
-            {
-                Header = "Time",
-                ShortHeader = "Time",
-                Description = "Time description",
-                Icon = MaterialIconKind.Timelapse,
-            }
         );
         editor.ItemsSource.Add(
-            new PropertyUnitReactive(
-                "throttle",
-                unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
-                Throttle
+            AddExampleErrorMenu(
+                new PropertyUnitReactive(
+                    "throttle",
+                    unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
+                    Throttle
+                )
+                {
+                    Header = "Throttle",
+                    ShortHeader = "Throttle",
+                    Description = "Throttle description",
+                    Icon = MaterialIconKind.Signal,
+                }
             )
-            {
-                Header = "Throttle",
-                ShortHeader = "Throttle",
-                Description = "Throttle description",
-                Icon = MaterialIconKind.Signal,
-            }
         );
 
         return editor;
@@ -298,19 +310,21 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             .AddTo(ref DisposableBag);
         property.Text.ForceValidate();
 
-        return property;
+        return AddExampleErrorMenu(property);
     }
 
     private PropertyButtonViewModel CreateActionButtonProperty()
     {
-        return new PropertyButtonViewModel("run-check", ExecuteActionButton)
-        {
-            Header = "Run check",
-            ShortHeader = "Run",
-            Description = "Button property with async command, busy state, and update marker.",
-            Icon = MaterialIconKind.PlayCircle,
-            IconColor = AsvColorKind.Success,
-        };
+        return AddExampleErrorMenu(
+            new PropertyButtonViewModel("run-check", ExecuteActionButton)
+            {
+                Header = "Run check",
+                ShortHeader = "Run",
+                Description = "Button property with async command, busy state, and update marker.",
+                Icon = MaterialIconKind.PlayCircle,
+                IconColor = AsvColorKind.Success,
+            }
+        );
     }
 
     private async ValueTask ExecuteActionButton(CancellationToken cancel)
@@ -339,7 +353,7 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             IconColor = iconColor,
         };
 
-        return property;
+        return AddExampleErrorMenu(property);
     }
 
     private PropertyComboBoxViewModel CreateOperationProfileProperty()
@@ -435,7 +449,73 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         );
         OperationProfile.Value ??= firstItem;
 
+        return AddExampleErrorMenu(property);
+    }
+
+    private static TProperty AddExampleErrorMenu<TProperty>(TProperty property)
+        where TProperty : PropertyViewModel
+    {
+        property.Menu.Add(
+            CreateSetErrorMenuItem(
+                property,
+                "set-validation-error",
+                "Validation error",
+                "Validation error from property menu.",
+                MaterialIconKind.AlertCircle,
+                0
+            )
+        );
+        property.Menu.Add(
+            CreateSetErrorMenuItem(
+                property,
+                "set-sync-error",
+                "Sync error",
+                "Synchronization error from property menu.",
+                MaterialIconKind.SyncAlert,
+                1
+            )
+        );
+        property.Menu.Add(
+            CreateSetErrorMenuItem(
+                property,
+                "set-network-error",
+                "Network error",
+                "Network error from property menu.",
+                MaterialIconKind.CloseNetwork,
+                2
+            )
+        );
+        property.Menu.Add(
+            new MenuItem("clear-error", "Clear error")
+            {
+                Icon = MaterialIconKind.Restore,
+                Order = 3,
+                Command = new ReactiveCommand(_ => property.ErrorMessage = null),
+            }
+        );
+
         return property;
+    }
+
+    private static MenuItem CreateSetErrorMenuItem(
+        PropertyViewModel property,
+        string id,
+        string header,
+        string message,
+        MaterialIconKind icon,
+        int order
+    )
+    {
+        return new MenuItem(id, header)
+        {
+            Icon = icon,
+            Order = order,
+            Command = new ReactiveCommand(_ =>
+            {
+                property.ErrorIcon = icon;
+                property.ErrorMessage = message;
+            }),
+        };
     }
 
     private static IHeadlinedViewModel AddOperationProfileItem(
@@ -486,6 +566,22 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         get;
         private set => SetField(ref field, value);
+    }
+
+    public bool ShowPropertyHeaders
+    {
+        get;
+        set
+        {
+            if (SetField(ref field, value) == false)
+            {
+                return;
+            }
+
+            PropertyEditor.ShowHeader = value;
+            PropertyEditorCopy.ShowHeader = value;
+            ExtendedPropertyEditor.ShowHeader = value;
+        }
     }
 
     public PropertyTextBoxViewModel DisplayNameProperty { get; }

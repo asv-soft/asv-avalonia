@@ -20,8 +20,22 @@
             </ItemsPanelTemplate>
         </ItemsControl.ItemsPanel>
         <ItemsControl.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="avalonia:IPropertyViewModel">
                 <StackPanel Spacing="4">
+                    <TextBlock Classes="description" Text="{Binding Header}">
+                        <TextBlock.IsVisible>
+                            <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                <ReflectionBinding
+                                    Path="DataContext.ShowHeader"
+                                    RelativeSource="{RelativeSource AncestorType=ItemsControl}"
+                                />
+                                <Binding
+                                    Path="Header"
+                                    Converter="{x:Static StringConverters.IsNotNullOrEmpty}"
+                                />
+                            </MultiBinding>
+                        </TextBlock.IsVisible>
+                    </TextBlock>
                     <ContentControl Content="{Binding}" />
                 </StackPanel>
             </DataTemplate>

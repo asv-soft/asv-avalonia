@@ -109,8 +109,8 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition SharedSizeGroup="PrefixIcon" Width="Auto" />
                 <ColumnDefinition SharedSizeGroup="PrefixName" Width="Auto" />
-                <ColumnDefinition SharedSizeGroup="PrefixStatus" Width="Auto" />
                 <ColumnDefinition />
+                <ColumnDefinition SharedSizeGroup="PostfixStatus" Width="Auto" />
                 <ColumnDefinition SharedSizeGroup="PostfixAction" Width="Auto" />
             </Grid.ColumnDefinitions>
 
@@ -140,28 +140,9 @@
                 Classes="description"
                 Text="{Binding ShortHeader}"
             />
-            <Panel Grid.Column="2">
-                <Ellipse
-                    Opacity="0"
-                    Margin="4,0,4,0"
-                    Classes.fadeout="{Binding UpdatedFlag}"
-                    VerticalAlignment="Center"
-                    HorizontalAlignment="Center"
-                    Width="5"
-                    Height="5"
-                    Fill="{DynamicResource AsvForegroundInfo3Brush}"
-                />
-                <avalonia1:MaterialIcon
-                    Classes="blink"
-                    ToolTip.Tip="{Binding ErrorMessage}"
-                    IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-                    Kind="{Binding ErrorIcon}"
-                    Foreground="{DynamicResource AsvForegroundErrorBrush}"
-                />
-            </Panel>
 
             <Button
-                Grid.Column="3"
+                Grid.Column="2"
                 IsEnabled="{Binding !IsBusy}"
                 x:Name="PART_FlyoutButton"
                 avalonia:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
@@ -208,11 +189,16 @@
                                                 Kind="{Binding Icon}"
                                                 avalonia:AsvPallete.Color="{Binding IconColor}"
                                             />
-                                            <TextBlock Grid.Column="1" Text="{Binding Header}" />
+                                            <TextBlock
+                                                Grid.Row="0"
+                                                Grid.Column="1"
+                                                Text="{Binding Header}"
+                                            />
                                             <TextBlock
                                                 Grid.Row="1"
                                                 Grid.Column="1"
                                                 Classes="description"
+                                                Margin="0,2,0,0"
                                                 IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                                                 Text="{Binding Description}"
                                                 TextWrapping="Wrap"
@@ -225,6 +211,8 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
+
+            <avalonia:PropertyStatusView Grid.Column="3" VerticalAlignment="Center" />
 
             <Button
                 Grid.Column="4"
@@ -242,13 +230,6 @@
                 <avalonia1:MaterialIcon Kind="DotsHorizontal" />
             </Button>
 
-            <avalonia:ExecuteIndicator
-                Grid.Column="0"
-                Grid.ColumnSpan="4"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Right"
-                IsExecuting="{Binding IsBusy}"
-            />
             <Border Background="Transparent" Grid.Column="0" Grid.ColumnSpan="2">
                 <ToolTip.Tip>
                     <StackPanel Spacing="8">
