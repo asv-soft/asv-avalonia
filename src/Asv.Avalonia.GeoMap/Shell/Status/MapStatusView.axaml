@@ -1,13 +1,416 @@
-﻿<UserControl
+<UserControl
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:geoMap="clr-namespace:Asv.Avalonia.GeoMap"
     mc:Ignorable="d"
-    d:DesignWidth="800"
-    d:DesignHeight="450"
+    d:DesignWidth="240"
+    d:DesignHeight="240"
+    Height="25"
     x:Class="Asv.Avalonia.GeoMap.MapStatusView"
+    x:DataType="geoMap:MapStatusViewModel"
 >
-    Welcome to Avalonia!
-</UserControl
->
+    <Design.DataContext>
+        <geoMap:MapStatusViewModel />
+    </Design.DataContext>
+    <Button VerticalAlignment="Bottom" Theme="{DynamicResource TransparentButton}">
+        <Button.Styles>
+            <Style Selector="FlyoutPresenter">
+                <Setter Property="MaxWidth" Value="1200" />
+            </Style>
+        </Button.Styles>
+        <Button.Flyout>
+            <Flyout
+                ShowMode="Transient"
+                IsOpen="{Binding IsFlyoutOpen, Mode=OneWayToSource}"
+                Placement="TopEdgeAlignedLeft"
+            >
+                <StackPanel Spacing="4">
+                    <Grid
+                        ColumnSpacing="8"
+                        RowDefinitions="Auto,4,*"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                    >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition MinWidth="220" />
+                            <ColumnDefinition Width="4" />
+                            <ColumnDefinition MinWidth="170" />
+                            <ColumnDefinition Width="4" />
+                            <ColumnDefinition MinWidth="180" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel
+                            Spacing="4"
+                            HorizontalAlignment="Center"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Orientation="Horizontal"
+                        >
+                            <avalonia:MaterialIcon
+                                Width="16"
+                                Height="16"
+                                VerticalAlignment="Center"
+                                Classes="success"
+                                Kind="ArrowDownBold"
+                            />
+                            <TextBlock
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Section_Loader}"
+                            />
+                        </StackPanel>
+
+                        <StackPanel
+                            Spacing="4"
+                            HorizontalAlignment="Center"
+                            Grid.Row="0"
+                            Grid.Column="2"
+                            Orientation="Horizontal"
+                        >
+                            <avalonia:MaterialIcon
+                                Width="16"
+                                Height="16"
+                                VerticalAlignment="Center"
+                                Classes="success"
+                                Kind="CloudQueue"
+                            />
+                            <TextBlock
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Section_MemoryCache}"
+                            />
+                        </StackPanel>
+
+                        <StackPanel
+                            Spacing="4"
+                            HorizontalAlignment="Center"
+                            Grid.ColumnSpan="2"
+                            Grid.Row="0"
+                            Grid.Column="3"
+                            Orientation="Horizontal"
+                        >
+                            <avalonia:MaterialIcon
+                                Width="16"
+                                Height="16"
+                                VerticalAlignment="Center"
+                                Classes="success"
+                                Kind="CableData"
+                            />
+                            <TextBlock
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Section_FileCache}"
+                            />
+                        </StackPanel>
+
+                        <Rectangle
+                            Grid.Column="0"
+                            Grid.Row="1"
+                            Grid.ColumnSpan="5"
+                            Fill="{StaticResource SystemChromeDisabledLowColor}"
+                            Height="0.5"
+                            VerticalAlignment="Bottom"
+                        />
+
+                        <Grid
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            ColumnDefinitions="Auto,*"
+                            VerticalAlignment="Top"
+                            RowDefinitions="*,*,*,*,*,*"
+                            ColumnSpacing="4"
+                            RowSpacing="4"
+                        >
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_TotalRequests}"
+                            />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding TotalRequestsText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_NetworkRequests}"
+                            />
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding NetworkRequestsText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_DownloadedTiles}"
+                            />
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding NetworkDownloadedTilesText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_DownloadedSize}"
+                            />
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding NetworkDownloadedSizeText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_FailedDownloads}"
+                            />
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding FailedDownloadsText}"
+                            />
+                        </Grid>
+
+                        <Rectangle
+                            Grid.Column="1"
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Fill="{StaticResource SystemChromeDisabledLowColor}"
+                            Width="0.5"
+                            VerticalAlignment="Stretch"
+                        />
+
+                        <Grid
+                            Grid.Row="2"
+                            Grid.Column="2"
+                            ColumnDefinitions="Auto,*"
+                            VerticalAlignment="Top"
+                            RowDefinitions="*,*,*,*,*"
+                            ColumnSpacing="4"
+                            RowSpacing="4"
+                        >
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_MemoryCacheSize}"
+                            />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding MemoryCacheSizeText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_CacheTiles}"
+                            />
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding MemoryCacheTilesText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_CacheHits}"
+                            />
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding MemoryCacheHitsText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_CacheMisses}"
+                            />
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding MemoryCacheMissesText}"
+                            />
+                        </Grid>
+
+                        <Rectangle
+                            Grid.Column="3"
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Fill="{StaticResource SystemChromeDisabledLowColor}"
+                            Width="0.5"
+                            VerticalAlignment="Stretch"
+                        />
+
+                        <Grid
+                            Grid.Row="2"
+                            Grid.Column="4"
+                            ColumnDefinitions="Auto,*"
+                            VerticalAlignment="Top"
+                            RowDefinitions="*,*,*,*,*,*"
+                            ColumnSpacing="4"
+                            RowSpacing="4"
+                        >
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_FolderSize}"
+                            />
+                            <TextBlock
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding MapFolderSizeText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_FileCacheCapacity}"
+                            />
+                            <TextBlock
+                                Grid.Row="2"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding MapFolderCapacityText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_DownloadedTiles}"
+                            />
+                            <TextBlock
+                                Grid.Row="3"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding DownloadedTilesText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_CacheHits}"
+                            />
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding FileCacheHitsText}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{x:Static geoMap:RS.MapStatusView_Row_CacheMisses}"
+                            />
+                            <TextBlock
+                                Grid.Row="5"
+                                Grid.Column="1"
+                                VerticalAlignment="Center"
+                                Classes="description"
+                                Text="{Binding FileCacheMissesText}"
+                            />
+                        </Grid>
+                    </Grid>
+
+                    <Button
+                        HorizontalAlignment="Center"
+                        Classes="accent"
+                        Command="{Binding NavigateToSettings}"
+                    >
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <avalonia:MaterialIcon Kind="Cog" />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="{x:Static geoMap:RS.MapStatusView_NavigationButton_Settings}"
+                            />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </Flyout>
+        </Button.Flyout>
+        <StackPanel Orientation="Horizontal" Spacing="3">
+            <avalonia:MaterialIcon
+                Kind="MapAdd"
+                Width="15"
+                Height="15"
+                Foreground="{DynamicResource AsvForegroundSuccessBrush}"
+            />
+            <TextBlock
+                Classes="description"
+                VerticalAlignment="Center"
+                Text="{Binding NetworkRateText}"
+            />
+            <avalonia:MaterialIcon
+                Kind="TrayFull"
+                Width="15"
+                Height="15"
+                Foreground="{DynamicResource AsvForegroundWarningBrush}"
+            />
+            <TextBlock
+                Classes="description"
+                VerticalAlignment="Center"
+                Text="{Binding QueueSizeText}"
+            />
+        </StackPanel>
+    </Button>
+</UserControl>

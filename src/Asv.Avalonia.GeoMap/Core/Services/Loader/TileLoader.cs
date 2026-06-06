@@ -51,7 +51,14 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     private readonly Counter<int> _meterQueue;
     private readonly Counter<int> _meterDownload;
     private readonly IShellHost _shellHost;
+    private readonly TileLoaderConfig _config;
     private readonly Lock _syncCfg = new();
+    private long _totalRequests;
+    private long _totalQueuedRequests;
+    private long _totalNetworkRequests;
+    private long _totalDownloadedTiles;
+    private long _totalDownloadedBytes;
+    private long _totalFailedDownloads;
 
     public TileLoader(
         ILogger<TileLoader> logger,
@@ -68,21 +75,21 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         _slowCache = slowCache;
         _localRequests = new ConcurrentHashSet<TileKey>();
         _emptyBitmap = new ConcurrentDictionary<int, Bitmap>();
-        var config = configProvider.Get<TileLoaderConfig>();
-        CurrentMapMode = new SynchronizedReactiveProperty<MapModeType>(config.Mode);
+        _config = configProvider.Get<TileLoaderConfig>();
+        CurrentMapMode = new SynchronizedReactiveProperty<MapModeType>(_config.Mode);
         EmptyTileBrush = new SynchronizedReactiveProperty<IBrush>(
-            Brush.Parse(config.EmptyTileBrush)
+            Brush.Parse(_config.EmptyTileBrush)
         );
         _onLoaded = new Subject<TileKey>();
         _requestQueue = Channel.CreateBounded<TileKey>(
-            new BoundedChannelOptions(config.RequestQueueSize)
+            new BoundedChannelOptions(_config.RequestQueueSize)
             {
                 FullMode = BoundedChannelFullMode.DropOldest,
             }
         );
         DisposeCancel.Register(() => _requestQueue.Writer.TryComplete());
 
-        for (var i = 0; i < config.RequestParallelThreads; i++)
+        for (var i = 0; i < _config.RequestParallelThreads; i++)
         {
             Task.Run(ProcessQueue);
         }
@@ -99,8 +106,8 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             {
                 using (_syncCfg.EnterScope())
                 {
-                    config.Mode = mode;
-                    configProvider.Set(config);
+                    _config.Mode = mode;
+                    configProvider.Set(_config);
                 }
             });
 
@@ -111,8 +118,8 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             {
                 using (_syncCfg.EnterScope())
                 {
-                    config.EmptyTileBrush = brush.ToString() ?? config.EmptyTileBrush;
-                    configProvider.Set(config);
+                    _config.EmptyTileBrush = brush.ToString() ?? _config.EmptyTileBrush;
+                    configProvider.Set(_config);
                 }
             });
     }
@@ -124,6 +131,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     public void Render(DrawingContext context, double x, double y, TileKey key)
     {
         _meterReq.Add(1);
+        Interlocked.Increment(ref _totalRequests);
         using var refBitmap = _fastCache[key];
         if (refBitmap != null)
         {
@@ -132,7 +140,10 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         }
         if (!_localRequests.Contains(key))
         {
-            _requestQueue.Writer.TryWrite(key);
+            if (_requestQueue.Writer.TryWrite(key))
+            {
+                Interlocked.Increment(ref _totalQueuedRequests);
+            }
         }
         context.DrawRectangle(
             EmptyTileBrush.Value,
@@ -174,6 +185,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                 }
 
                 _meterDownload.Add(1);
+                Interlocked.Increment(ref _totalNetworkRequests);
 
                 var downloadedTile = await key.Provider.DownloadAsync(key, DisposeCancel);
                 if (downloadedTile is null)
@@ -181,6 +193,8 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                     continue;
                 }
 
+                Interlocked.Increment(ref _totalDownloadedTiles);
+                Interlocked.Add(ref _totalDownloadedBytes, downloadedTile.CompressedSize);
                 downloadedTile.AddRef();
                 if (CurrentMapMode.Value != MapModeType.Online)
                 {
@@ -193,6 +207,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             }
             catch (DownloadTileException ex)
             {
+                Interlocked.Increment(ref _totalFailedDownloads);
                 _shellHost.Shell?.RiseShellInfoMessage(
                     new ShellMessage(
                         ex.LocalizedTitle,
@@ -205,6 +220,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             }
             catch (Exception ex)
             {
+                Interlocked.Increment(ref _totalFailedDownloads);
                 Debug.WriteLine(ex.Message);
                 _logger.LogError(ex, "Failed to load tile {key}", key);
             }
@@ -213,6 +229,23 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                 _localRequests.Remove(key);
             }
         }
+    }
+
+    public TileLoaderStatistic GetStatistic()
+    {
+        return new TileLoaderStatistic(
+            Interlocked.Read(ref _totalRequests),
+            _requestQueue.Reader.CanCount ? _requestQueue.Reader.Count : 0,
+            _localRequests.Count,
+            _config.RequestQueueSize,
+            _config.RequestParallelThreads,
+            Interlocked.Read(ref _totalQueuedRequests),
+            Interlocked.Read(ref _totalNetworkRequests),
+            Interlocked.Read(ref _totalDownloadedTiles),
+            Interlocked.Read(ref _totalDownloadedBytes),
+            Interlocked.Read(ref _totalFailedDownloads),
+            CurrentMapMode.Value
+        );
     }
 
     #region Disposable

@@ -32,7 +32,6 @@ public class FileSystemCache : TileCache
     private readonly int _capacitySize;
     private const string TileFileExtension = "png";
     private readonly Channel<Tile> _writerQueue;
-    private ConcurrentHashSet<string>? _folderCache;
 
     public FileSystemCache(
         IOptions<FileSystemCacheConfig> config,
@@ -86,16 +85,20 @@ public class FileSystemCache : TileCache
                 _meterSet.Add(1);
                 var tilePath = GetTileCachePath(tile.Key);
 
-                // ReSharper disable once InconsistentlySynchronizedField
-                _logger.ZLogInformation($"Create tile file: {tilePath}");
+                var hadFile = File.Exists(tilePath);
+                var oldSize = hadFile ? new FileInfo(tilePath).Length : 0;
                 tile.Save(tilePath);
                 tile.Dispose();
-                _fileCount++;
-                var info = GetTileCachePath(tile.Key);
-                _dirSizeInBytes += info.Length;
+                var newSize = new FileInfo(tilePath).Length;
+                if (!hadFile)
+                {
+                    Interlocked.Increment(ref _fileCount);
+                }
+
+                Interlocked.Add(ref _dirSizeInBytes, newSize - oldSize);
             }
         }
-        catch (OperationCanceledException e)
+        catch (OperationCanceledException)
         {
             // this is normal when dispose
         }
@@ -132,12 +135,12 @@ public class FileSystemCache : TileCache
         var tilePath = GetTileCachePath(key);
         if (File.Exists(tilePath))
         {
-            _totalHits++;
+            Interlocked.Increment(ref _totalHits);
             return Tile.Create(key, tilePath);
         }
         else
         {
-            _totalMiss++;
+            Interlocked.Increment(ref _totalMiss);
             return null;
         }
     }
@@ -146,21 +149,17 @@ public class FileSystemCache : TileCache
     {
         var providerName = key.Provider.Info.Id;
         var tileFolder = Path.Combine(_cacheDirectory, providerName, key.Zoom.ToString());
-        _folderCache ??= new ConcurrentHashSet<string>();
-        if (_folderCache.Add(tileFolder) == false)
-        {
-            Directory.CreateDirectory(tileFolder);
-        }
+        Directory.CreateDirectory(tileFolder);
         return Path.Combine(tileFolder, $"{key.X}_{key.Y}.{TileFileExtension}");
     }
 
     public override TileCacheStatistic GetStatistic()
     {
         return new TileCacheStatistic(
-            _totalHits,
-            _totalMiss,
-            _fileCount,
-            _dirSizeInBytes,
+            Interlocked.Read(ref _totalHits),
+            Interlocked.Read(ref _totalMiss),
+            Interlocked.Read(ref _fileCount),
+            Interlocked.Read(ref _dirSizeInBytes),
             _capacitySize
         );
     }

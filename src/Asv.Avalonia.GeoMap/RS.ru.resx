@@ -74,6 +74,72 @@
     <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
         <value>Карта</value>
     </data>
+    <data name="MapStatusView_Details_Title" xml:space="preserve">
+        <value>Загрузка карты</value>
+    </data>
+    <data name="MapStatusView_NavigationButton_Settings" xml:space="preserve">
+        <value>Настройки карты</value>
+    </data>
+    <data name="MapStatusView_Section_Loader" xml:space="preserve">
+        <value>Загрузчик</value>
+    </data>
+    <data name="MapStatusView_Section_MemoryCache" xml:space="preserve">
+        <value>Кэш в памяти</value>
+    </data>
+    <data name="MapStatusView_Section_FileCache" xml:space="preserve">
+        <value>Папка карты</value>
+    </data>
+    <data name="MapStatusView_Row_NetworkRate" xml:space="preserve">
+        <value>Скорость из сети</value>
+    </data>
+    <data name="MapStatusView_Row_Queue" xml:space="preserve">
+        <value>Очередь</value>
+    </data>
+    <data name="MapStatusView_Row_ActiveRequests" xml:space="preserve">
+        <value>Активные запросы</value>
+    </data>
+    <data name="MapStatusView_Row_MapMode" xml:space="preserve">
+        <value>Режим</value>
+    </data>
+    <data name="MapStatusView_Row_ParallelDownloads" xml:space="preserve">
+        <value>Параллельные загрузки</value>
+    </data>
+    <data name="MapStatusView_Row_TotalRequests" xml:space="preserve">
+        <value>Запросы тайлов</value>
+    </data>
+    <data name="MapStatusView_Row_QueuedRequestsTotal" xml:space="preserve">
+        <value>Поставлено в очередь</value>
+    </data>
+    <data name="MapStatusView_Row_NetworkRequests" xml:space="preserve">
+        <value>Запросы в сеть</value>
+    </data>
+    <data name="MapStatusView_Row_DownloadedTiles" xml:space="preserve">
+        <value>Скачанные тайлы</value>
+    </data>
+    <data name="MapStatusView_Row_DownloadedSize" xml:space="preserve">
+        <value>Скачанный размер</value>
+    </data>
+    <data name="MapStatusView_Row_FailedDownloads" xml:space="preserve">
+        <value>Ошибки загрузки</value>
+    </data>
+    <data name="MapStatusView_Row_MemoryCacheSize" xml:space="preserve">
+        <value>Размер кэша</value>
+    </data>
+    <data name="MapStatusView_Row_CacheTiles" xml:space="preserve">
+        <value>Тайлы</value>
+    </data>
+    <data name="MapStatusView_Row_CacheHits" xml:space="preserve">
+        <value>Попадания</value>
+    </data>
+    <data name="MapStatusView_Row_CacheMisses" xml:space="preserve">
+        <value>Промахи</value>
+    </data>
+    <data name="MapStatusView_Row_FolderSize" xml:space="preserve">
+        <value>Размер папки</value>
+    </data>
+    <data name="MapStatusView_Row_FileCacheCapacity" xml:space="preserve">
+        <value>Лимит папки</value>
+    </data>
     <data name="ChangeTileProviderCommand_CommandInfo_Name" xml:space="preserve">
         <value>Изменить провайдера карты</value>
     </data>

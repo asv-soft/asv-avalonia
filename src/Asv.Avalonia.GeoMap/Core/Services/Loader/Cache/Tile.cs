@@ -56,6 +56,7 @@ public sealed class Tile : IDisposable
 
     public TileKey Key { get; }
     public long Size { get; }
+    public int CompressedSize => _compressedSize;
 
     public void AddRef()
     {

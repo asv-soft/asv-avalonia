@@ -13,6 +13,11 @@ public class MemoryTileCacheConfig : TileCacheConfig
 {
     public const string ConfigurationSection = "fastcache";
 
+    public MemoryTileCacheConfig()
+    {
+        SizeLimitKb = 150 * 1024;
+    }
+
     protected override IEnumerable<string> GetOptions()
     {
         foreach (var option in base.GetOptions())
@@ -131,7 +136,6 @@ public class MemoryTileCache : TileCache
         object? state
     )
     {
-        _logger.ZLogTrace($"Remove memory cache item '{key}' cause '{reason}'");
         var bitmap = value as Tile;
         Debug.Assert(bitmap != null, "Evicted value is not Bitmap");
         SafeBitmapAction((TileKey)key, bitmap, (_, b) => b.Dispose());

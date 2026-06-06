@@ -146,6 +146,138 @@ namespace Asv.Avalonia.GeoMap {
                 return ResourceManager.GetString("SettingsGeoMapViewModel_Name", resourceCulture);
             }
         }
+
+        public static string MapStatusView_Details_Title {
+            get {
+                return ResourceManager.GetString("MapStatusView_Details_Title", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_NavigationButton_Settings {
+            get {
+                return ResourceManager.GetString("MapStatusView_NavigationButton_Settings", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Section_Loader {
+            get {
+                return ResourceManager.GetString("MapStatusView_Section_Loader", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Section_MemoryCache {
+            get {
+                return ResourceManager.GetString("MapStatusView_Section_MemoryCache", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Section_FileCache {
+            get {
+                return ResourceManager.GetString("MapStatusView_Section_FileCache", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_NetworkRate {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_NetworkRate", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_Queue {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_Queue", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_ActiveRequests {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_ActiveRequests", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_MapMode {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_MapMode", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_ParallelDownloads {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_ParallelDownloads", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_TotalRequests {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_TotalRequests", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_QueuedRequestsTotal {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_QueuedRequestsTotal", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_NetworkRequests {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_NetworkRequests", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_DownloadedTiles {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_DownloadedTiles", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_DownloadedSize {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_DownloadedSize", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_FailedDownloads {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_FailedDownloads", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_MemoryCacheSize {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_MemoryCacheSize", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_CacheTiles {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_CacheTiles", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_CacheHits {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_CacheHits", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_CacheMisses {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_CacheMisses", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_FolderSize {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_FolderSize", resourceCulture);
+            }
+        }
+
+        public static string MapStatusView_Row_FileCacheCapacity {
+            get {
+                return ResourceManager.GetString("MapStatusView_Row_FileCacheCapacity", resourceCulture);
+            }
+        }
         
         public static string ChangeTileProviderCommand_CommandInfo_Name {
             get {

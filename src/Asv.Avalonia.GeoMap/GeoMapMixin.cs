@@ -31,6 +31,7 @@ public static class GeoMapMixin
             builder.ModuleGeoMap.AddServices();
 
             builder.ModuleGeoMap.AddGeoMapSettingsSubPage();
+            builder.Shell.Status.UseMapStatus();
         }
 
         public IHostApplicationBuilder Parent => builder;
@@ -40,6 +41,14 @@ public static class GeoMapMixin
         {
             builder.Services.AddSingleton<ITileProvider, TTileProvider>();
             return this;
+        }
+    }
+
+    extension(StatusMixin.Builder builder)
+    {
+        public StatusMixin.Builder UseMapStatus()
+        {
+            return builder.Register<MapStatusViewModel, MapStatusView>();
         }
     }
 }

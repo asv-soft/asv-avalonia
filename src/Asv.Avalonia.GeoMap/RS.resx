@@ -69,6 +69,72 @@
     <data name="SettingsGeoMapViewModel_Name" xml:space="preserve">
         <value>Map</value>
     </data>
+    <data name="MapStatusView_Details_Title" xml:space="preserve">
+        <value>Map loading</value>
+    </data>
+    <data name="MapStatusView_NavigationButton_Settings" xml:space="preserve">
+        <value>Map settings</value>
+    </data>
+    <data name="MapStatusView_Section_Loader" xml:space="preserve">
+        <value>Loader</value>
+    </data>
+    <data name="MapStatusView_Section_MemoryCache" xml:space="preserve">
+        <value>Memory cache</value>
+    </data>
+    <data name="MapStatusView_Section_FileCache" xml:space="preserve">
+        <value>Map folder</value>
+    </data>
+    <data name="MapStatusView_Row_NetworkRate" xml:space="preserve">
+        <value>Network rate</value>
+    </data>
+    <data name="MapStatusView_Row_Queue" xml:space="preserve">
+        <value>Queue</value>
+    </data>
+    <data name="MapStatusView_Row_ActiveRequests" xml:space="preserve">
+        <value>Active requests</value>
+    </data>
+    <data name="MapStatusView_Row_MapMode" xml:space="preserve">
+        <value>Mode</value>
+    </data>
+    <data name="MapStatusView_Row_ParallelDownloads" xml:space="preserve">
+        <value>Parallel downloads</value>
+    </data>
+    <data name="MapStatusView_Row_TotalRequests" xml:space="preserve">
+        <value>Tile requests</value>
+    </data>
+    <data name="MapStatusView_Row_QueuedRequestsTotal" xml:space="preserve">
+        <value>Queued requests</value>
+    </data>
+    <data name="MapStatusView_Row_NetworkRequests" xml:space="preserve">
+        <value>Network requests</value>
+    </data>
+    <data name="MapStatusView_Row_DownloadedTiles" xml:space="preserve">
+        <value>Downloaded tiles</value>
+    </data>
+    <data name="MapStatusView_Row_DownloadedSize" xml:space="preserve">
+        <value>Downloaded size</value>
+    </data>
+    <data name="MapStatusView_Row_FailedDownloads" xml:space="preserve">
+        <value>Failed downloads</value>
+    </data>
+    <data name="MapStatusView_Row_MemoryCacheSize" xml:space="preserve">
+        <value>Cache size</value>
+    </data>
+    <data name="MapStatusView_Row_CacheTiles" xml:space="preserve">
+        <value>Tiles</value>
+    </data>
+    <data name="MapStatusView_Row_CacheHits" xml:space="preserve">
+        <value>Hits</value>
+    </data>
+    <data name="MapStatusView_Row_CacheMisses" xml:space="preserve">
+        <value>Misses</value>
+    </data>
+    <data name="MapStatusView_Row_FolderSize" xml:space="preserve">
+        <value>Folder size</value>
+    </data>
+    <data name="MapStatusView_Row_FileCacheCapacity" xml:space="preserve">
+        <value>Folder capacity</value>
+    </data>
     <data name="ChangeTileProviderCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change tile provider</value>
     </data>
