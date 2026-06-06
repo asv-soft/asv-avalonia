@@ -94,13 +94,13 @@
         <value>Zoom</value>
     </data>
     <data name="SettingsGeoMapView_MinZoomProperty_Title" xml:space="preserve">
-        <value>Min</value>
+        <value>Minimum zoom</value>
     </data>
     <data name="SettingsGeoMapView_MinZoomProperty_Description" xml:space="preserve">
         <value>Lowest zoom level available on the map.</value>
     </data>
     <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
-        <value>Max</value>
+        <value>Maximum zoom</value>
     </data>
     <data name="SettingsGeoMapView_MaxZoomProperty_Description" xml:space="preserve">
         <value>Highest zoom level available on the map.</value>

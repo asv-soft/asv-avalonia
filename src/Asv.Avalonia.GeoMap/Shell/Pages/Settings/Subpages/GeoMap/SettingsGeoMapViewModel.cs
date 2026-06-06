@@ -14,6 +14,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
             NullTreeSubPageContext<SettingsPageViewModel>.Instance,
             NullMapService.Instance,
             DesignTime.DialogService,
+            DesignTime.UnitService,
             DesignTime.LoggerFactory
         )
     {
@@ -24,10 +25,14 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         ITreeSubPageContext<ISettingsPage> pageContext,
         IMapService mapService,
         IDialogService dialogService,
+        IUnitService unitService,
         ILoggerFactory loggerFactory
     )
         : base(PageId, pageContext)
     {
+        UnitService = unitService;
+        LoggerFactory = loggerFactory;
+
         Editor = new ExtendedPropertyEditorViewModel("editor")
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -76,6 +81,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     public MapViewModel MapPreview { get; }
     public string MapPreviewHeader => RS.SettingsGeoMapView_MapPreview_Title;
     public string MapPreviewDescription => RS.SettingsGeoMapView_MapPreview_Description;
+    public IUnitService UnitService { get; }
+    public ILoggerFactory LoggerFactory { get; }
     public MapProviderProperty MapProvider { get; }
     public MapModeProperty MapMode { get; }
     public MinMapZoomProperty MinMapZoom { get; }

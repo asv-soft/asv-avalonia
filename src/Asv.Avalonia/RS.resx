@@ -111,6 +111,9 @@
     <data name="ShellView_WindowControlButton_Close" xml:space="preserve">
         <value>Close</value>
     </data>
+    <data name="ShellMessage_CopyDetails" xml:space="preserve">
+        <value>Copy details</value>
+    </data>
     <data name="ShellView_WindowControlButton_Maximize" xml:space="preserve">
         <value>Full screen</value>
     </data>

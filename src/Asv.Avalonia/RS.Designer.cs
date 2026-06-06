@@ -2535,6 +2535,15 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy details.
+        /// </summary>
+        public static string ShellMessage_CopyDetails {
+            get {
+                return ResourceManager.GetString("ShellMessage_CopyDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string ShellView_WindowControlButton_Close {

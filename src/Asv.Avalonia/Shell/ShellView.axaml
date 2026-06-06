@@ -418,6 +418,7 @@
                                     <avalonia1:MaterialIcon Kind="Close" />
                                 </Button>
                                 <Button
+                                    Margin="0,4,0,0"
                                     IsVisible="{Binding !!Command}"
                                     Command="{Binding Command}"
                                     CommandParameter="{Binding CommandParam}"

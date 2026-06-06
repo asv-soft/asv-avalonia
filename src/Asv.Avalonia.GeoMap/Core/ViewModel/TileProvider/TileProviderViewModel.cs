@@ -11,7 +11,7 @@ public class TileProviderViewModel : HeadlinedViewModel
     {
         Provider = provider;
         Name = provider.Info.Name;
-        Header = Name;
+        Header = $"{Group} ({Name})";
         Description = string.Format(
             RS.TileProviderViewModel_Description,
             Group,

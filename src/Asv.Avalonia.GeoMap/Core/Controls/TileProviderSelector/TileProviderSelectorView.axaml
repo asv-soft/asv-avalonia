@@ -27,11 +27,7 @@
         </ComboBox.SelectionBoxItemTemplate>
         <ComboBox.ItemTemplate>
             <DataTemplate x:DataType="map:TileProviderViewModel">
-                <TextBlock>
-                    <Run Text="{CompiledBinding Group}" />
-                    <Run Text=" — " />
-                    <Run Text="{CompiledBinding Name}" />
-                </TextBlock>
+                <TextBlock Text="{CompiledBinding Header}" />
             </DataTemplate>
         </ComboBox.ItemTemplate>
     </ComboBox>

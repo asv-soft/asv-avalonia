@@ -87,13 +87,13 @@
         <value>Общие</value>
     </data>
     <data name="SettingsGeoMapView_MaxZoomProperty_Title" xml:space="preserve">
-        <value>Максимальный</value>
+        <value>Максимальный масштаб</value>
     </data>
     <data name="SettingsGeoMapView_MaxZoomProperty_Description" xml:space="preserve">
         <value>Максимальный уровень масштаба, доступный на карте.</value>
     </data>
     <data name="SettingsGeoMapView_MinZoomProperty_Title" xml:space="preserve">
-        <value>Минимальный</value>
+        <value>Минимальный масштаб</value>
     </data>
     <data name="SettingsGeoMapView_MinZoomProperty_Description" xml:space="preserve">
         <value>Минимальный уровень масштаба, доступный на карте.</value>

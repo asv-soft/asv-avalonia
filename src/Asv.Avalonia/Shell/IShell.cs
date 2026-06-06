@@ -9,9 +9,10 @@ namespace Asv.Avalonia;
 
 public enum ShellErrorState
 {
-    Normal,
-    Warning,
-    Error,
+    Normal = 0,
+    Warning = 1,
+    Error = 2,
+    Success = 3,
 }
 
 public interface IShell : IHasHeader, INavigationRoot<IViewModel>, ISupportLayoutManager<IViewModel>

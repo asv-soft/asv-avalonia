@@ -1,5 +1,6 @@
 using Asv.Common;
 using Asv.Modeling;
+using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using R3;
 
@@ -121,6 +122,18 @@ public sealed class DesignTimeShellViewModel : ShellViewModel
                     }
                 }
             });
+
+        ShowMessage(
+            new ShellMessage(
+                "Action message",
+                "This design-time message shows the optional action button.",
+                ShellErrorState.Success,
+                "Use this sample to verify message actions in the shell notification layout.",
+                MaterialIconKind.Information,
+                DesignTime.EmptyCommand,
+                commandTitle: RS.ShellMessage_CopyDetails
+            )
+        );
 
         Observable
             .Timer(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(5))

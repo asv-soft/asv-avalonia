@@ -32,7 +32,43 @@
                 BorderBrush="{DynamicResource ButtonBackground}"
                 BorderThickness="1"
             >
-                <geoMap:MapView DataContext="{Binding MapPreview}" />
+                <Panel>
+                    <geoMap:MapView x:Name="PART_Map" DataContext="{Binding MapPreview}" />
+                    <geoMap:MapCompass
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Margin="8"
+                        GestureSurface="{Binding #PART_Map}"
+                        Rotation="{Binding MapPreview.Rotation.Value}"
+                    />
+                    <geoMap:MapRuler
+                        x:Name="PART_Ruler"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Margin="8"
+                        Anchors="{Binding MapPreview.Anchors}"
+                        UnitService="{Binding UnitService}"
+                        LoggerFactory="{Binding LoggerFactory}"
+                        TargetMap="{Binding #PART_Map}"
+                    />
+                    <Border
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="0,12,0,0"
+                        Padding="12,6"
+                        CornerRadius="4"
+                        Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                        BorderThickness="1"
+                        IsHitTestVisible="False"
+                        IsVisible="{Binding #PART_Ruler.PromptText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                    >
+                        <TextBlock
+                            Text="{Binding #PART_Ruler.PromptText}"
+                            Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                        />
+                    </Border>
+                </Panel>
             </Border>
         </Grid>
     </Grid>

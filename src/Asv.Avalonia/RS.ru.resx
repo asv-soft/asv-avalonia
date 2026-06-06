@@ -118,6 +118,9 @@
     <data name="ShellView_WindowControlButton_Close" xml:space="preserve">
         <value>Закрыть</value>
     </data>
+    <data name="ShellMessage_CopyDetails" xml:space="preserve">
+        <value>Скопировать детали</value>
+    </data>
     <data name="ShellView_WindowControlButton_Maximize" xml:space="preserve">
         <value>Во весь экран</value>
     </data>
