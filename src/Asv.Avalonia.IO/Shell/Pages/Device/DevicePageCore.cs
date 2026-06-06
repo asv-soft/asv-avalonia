@@ -71,7 +71,7 @@ public sealed class DevicePageCore : IDisposable
             x.Key == DevicePageViewModelMixin.ArgsDeviceIdKey
         ).Value;
 
-        if (_targetDeviceId is null)
+        if (_targetDeviceId is null && !Design.IsDesignMode)
         {
             throw new ArgumentNullException(
                 $"{DevicePageViewModelMixin.ArgsDeviceIdKey} argument is required"
@@ -89,6 +89,11 @@ public sealed class DevicePageCore : IDisposable
             .Synchronize()
             .Subscribe(_ => _isDeviceInitialized.Value = false)
             .DisposeItWith(_disposable);
+
+        if (_targetDeviceId is null)
+        {
+            return;
+        }
 
         _devices
             .Explorer.Devices.ObserveAdd()
