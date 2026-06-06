@@ -22,6 +22,7 @@
     <File Path="../.github/workflows/release-debug-version.yml" />
     <File Path="../.github/workflows/release.yml" />
     <File Path="../.gitignore" />
+    <File Path="../AGENTS.md" />
     <File Path="../LICENSE" />
     <File Path="../README.md" />
     <File Path="../win-64-install.nsi" />

@@ -27,6 +27,12 @@ public static class ViewModelMixin
                 .Invoke(args);
         }
 
+        public TViewModelInterface? TryCreateViewModel<TViewModelInterface, TArgs>(TArgs args)
+            where TViewModelInterface : class, IViewModel
+        {
+            return services.GetService<FactoryDelegate<TViewModelInterface, TArgs>>()?.Invoke(args);
+        }
+
         public TViewModelInterface CreateViewModel<TViewModelInterface, TArgs>(
             string key,
             TArgs args
@@ -36,6 +42,17 @@ public static class ViewModelMixin
             return services
                 .GetRequiredKeyedService<FactoryDelegate<TViewModelInterface, TArgs>>(key)
                 .Invoke(args);
+        }
+
+        public TViewModelInterface? TryCreateViewModel<TViewModelInterface, TArgs>(
+            string key,
+            TArgs args
+        )
+            where TViewModelInterface : class, IViewModel
+        {
+            return services
+                .GetKeyedService<FactoryDelegate<TViewModelInterface, TArgs>>(key)
+                ?.Invoke(args);
         }
     }
 
