@@ -1,21 +1,34 @@
-﻿using System.Buffers;
-using System.Collections.Concurrent;
-using System.Diagnostics;
+using System.Buffers;
 using Avalonia;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
-using DotNext.Buffers;
+#if DEBUG
+using System.Diagnostics;
+#endif
+
+#if DEBUG
 using R3;
+#endif
 
 namespace Asv.Avalonia.GeoMap;
 
 public sealed class Tile : IDisposable
 {
+#if DEBUG
+    private const string DebugCounterSwitchName = "Asv.Avalonia.GeoMap.Tile.DebugCounters";
     private static int _created;
     private static int _disposed;
 
     static Tile()
     {
+        if (
+            !AppContext.TryGetSwitch(DebugCounterSwitchName, out var isDebugCounterEnabled)
+            || !isDebugCounterEnabled
+        )
+        {
+            return;
+        }
+
         Observable
             .Timer(TimeSpan.Zero, TimeSpan.FromMilliseconds(3000))
             .Subscribe(_ =>
@@ -25,6 +38,7 @@ public sealed class Tile : IDisposable
                 );
             });
     }
+#endif
 
     public static Tile Create(TileKey key, Stream stream, int size)
     {
@@ -39,19 +53,22 @@ public sealed class Tile : IDisposable
 
     private int _refCount = 1;
     private Bitmap _value;
-    private readonly byte[] _compressed;
+    private byte[]? _compressed;
     private readonly int _compressedSize;
 
     private Tile(TileKey key, Stream source, int size)
     {
         Key = key;
-        _compressed = ArrayPool<byte>.Shared.Rent(size);
+        var compressed = ArrayPool<byte>.Shared.Rent(size);
+        _compressed = compressed;
         _compressedSize = size;
-        source.ReadExactly(_compressed, 0, size);
+        source.ReadExactly(compressed, 0, size);
 
-        _value = new Bitmap(new MemoryStream(_compressed, 0, _compressedSize));
-        Size = (_value.PixelSize.Width * _value.PixelSize.Height * 4) + _compressedSize;
+        _value = new Bitmap(new MemoryStream(compressed, 0, _compressedSize));
+        Size = _value.PixelSize.Width * _value.PixelSize.Height * 4;
+#if DEBUG
         Interlocked.Increment(ref _created);
+#endif
     }
 
     public TileKey Key { get; }
@@ -65,7 +82,22 @@ public sealed class Tile : IDisposable
 
     public void Save(string filePath)
     {
-        File.WriteAllBytes(filePath, _compressed.AsSpan(0, _compressedSize));
+        var compressed = _compressed;
+        if (compressed == null)
+        {
+            throw new InvalidOperationException("Compressed tile data has already been released.");
+        }
+
+        File.WriteAllBytes(filePath, compressed.AsSpan(0, _compressedSize));
+    }
+
+    public void ReleaseCompressedBytes()
+    {
+        var compressed = Interlocked.Exchange(ref _compressed, null);
+        if (compressed != null)
+        {
+            ArrayPool<byte>.Shared.Return(compressed);
+        }
     }
 
     public void Render(DrawingContext context, double x, double y)
@@ -77,8 +109,10 @@ public sealed class Tile : IDisposable
     {
         if (Interlocked.Decrement(ref _refCount) == 0)
         {
+#if DEBUG
             Interlocked.Increment(ref _disposed);
-            ArrayPool<byte>.Shared.Return(_compressed);
+#endif
+            ReleaseCompressedBytes();
             _value.Dispose();
             _value = null!;
         }

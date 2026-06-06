@@ -559,7 +559,7 @@ public class MapAnnotation : AsyncDisposableOnce
         Target = target;
         Annotation = annotation;
         Connector = connector;
-        target
+        var visibilitySubscription = target
             .ObservePropertyChanged(x => x.IsAnnotationVisible)
             .Subscribe(x =>
             {
@@ -569,13 +569,15 @@ public class MapAnnotation : AsyncDisposableOnce
         Connector.IsVisible = Target.IsAnnotationVisible;
         Annotation.IsVisible = Target.IsAnnotationVisible;
 
-        _dispose = target
+        var selectionSubscription = target
             .ObservePropertyChanged(x => x.IsSelected)
             .Subscribe(x =>
             {
                 Connector.Classes.Set("active", x);
                 Annotation.Classes.Set("active", x);
             });
+
+        _dispose = R3.Disposable.Combine(visibilitySubscription, selectionSubscription);
     }
 
     public MapItem Target { get; }

@@ -43,7 +43,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     private readonly ITileCache _fastCache;
     private readonly ITileCache _slowCache;
     private readonly ConcurrentDictionary<int, Bitmap> _emptyBitmap;
-    private readonly ConcurrentHashSet<TileKey> _localRequests;
+    private readonly ConcurrentHashSet<TileKey> _pendingRequests;
     private readonly Channel<TileKey> _requestQueue;
     private readonly Subject<TileKey> _onLoaded;
     private readonly ILogger<TileLoader> _logger;
@@ -59,6 +59,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
     private long _totalDownloadedTiles;
     private long _totalDownloadedBytes;
     private long _totalFailedDownloads;
+    private int _activeRequests;
 
     public TileLoader(
         ILogger<TileLoader> logger,
@@ -73,7 +74,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         _shellHost = shellHost;
         _fastCache = fastCache;
         _slowCache = slowCache;
-        _localRequests = new ConcurrentHashSet<TileKey>();
+        _pendingRequests = new ConcurrentHashSet<TileKey>();
         _emptyBitmap = new ConcurrentDictionary<int, Bitmap>();
         _config = configProvider.Get<TileLoaderConfig>();
         CurrentMapMode = new SynchronizedReactiveProperty<MapModeType>(_config.Mode);
@@ -84,7 +85,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         _requestQueue = Channel.CreateBounded<TileKey>(
             new BoundedChannelOptions(_config.RequestQueueSize)
             {
-                FullMode = BoundedChannelFullMode.DropOldest,
+                FullMode = BoundedChannelFullMode.Wait,
             }
         );
         DisposeCancel.Register(() => _requestQueue.Writer.TryComplete());
@@ -138,11 +139,15 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             refBitmap.Render(context, x, y);
             return;
         }
-        if (!_localRequests.Contains(key))
+        if (_pendingRequests.Add(key))
         {
             if (_requestQueue.Writer.TryWrite(key))
             {
                 Interlocked.Increment(ref _totalQueuedRequests);
+            }
+            else
+            {
+                _pendingRequests.Remove(key);
             }
         }
         context.DrawRectangle(
@@ -157,14 +162,9 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         await foreach (var key in _requestQueue.Reader.ReadAllAsync(DisposeCancel))
         {
             _meterQueue.Add(1);
+            Interlocked.Increment(ref _activeRequests);
             try
             {
-                if (!_localRequests.Add(key))
-                {
-                    // already in progress => skip
-                    continue;
-                }
-
                 using var refBitmap = _fastCache[key];
                 if (refBitmap != null)
                 {
@@ -174,6 +174,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                 var tile = _slowCache[key];
                 if (tile != null)
                 {
+                    tile.ReleaseCompressedBytes();
                     _fastCache[key] = tile;
                     _onLoaded.OnNext(key);
                     continue;
@@ -199,6 +200,10 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                 {
                     downloadedTile.AddRef();
                     _slowCache[key] = downloadedTile;
+                }
+                else
+                {
+                    downloadedTile.ReleaseCompressedBytes();
                 }
 
                 _fastCache[key] = downloadedTile;
@@ -226,7 +231,8 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             }
             finally
             {
-                _localRequests.Remove(key);
+                _pendingRequests.Remove(key);
+                Interlocked.Decrement(ref _activeRequests);
             }
         }
     }
@@ -236,7 +242,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         return new TileLoaderStatistic(
             Interlocked.Read(ref _totalRequests),
             _requestQueue.Reader.CanCount ? _requestQueue.Reader.Count : 0,
-            _localRequests.Count,
+            Volatile.Read(ref _activeRequests),
             _config.RequestQueueSize,
             _config.RequestParallelThreads,
             Interlocked.Read(ref _totalQueuedRequests),
@@ -261,7 +267,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
             _sub2.Dispose();
             _fastCache.Dispose();
             _slowCache.Dispose();
-            _localRequests.Dispose();
+            _pendingRequests.Dispose();
             _onLoaded.Dispose();
             EmptyTileBrush.Dispose();
             CurrentMapMode.Dispose();
@@ -282,7 +288,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         await CastAndDispose(_sub1);
         await CastAndDispose(_sub2);
         await CastAndDispose(CurrentMapMode);
-        await CastAndDispose(_localRequests);
+        await CastAndDispose(_pendingRequests);
         await CastAndDispose(_onLoaded);
         await CastAndDispose(EmptyTileBrush);
 

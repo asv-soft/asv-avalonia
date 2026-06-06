@@ -63,9 +63,9 @@ public class FileSystemCache : TileCache
 
         _writerQueue = Channel.CreateBounded<Tile>(
             new BoundedChannelOptions(config.Value.WriteQueueSize)
-            {
-                FullMode = BoundedChannelFullMode.DropOldest,
-            }
+        /*{
+            FullMode = BoundedChannelFullMode.DropOldest,
+        }*/
         );
 
         DisposeCancel.Register(() => _writerQueue.Writer.TryComplete());
@@ -82,20 +82,33 @@ public class FileSystemCache : TileCache
         {
             await foreach (var tile in _writerQueue.Reader.ReadAllAsync(DisposeCancel))
             {
-                _meterSet.Add(1);
-                var tilePath = GetTileCachePath(tile.Key);
-
-                var hadFile = File.Exists(tilePath);
-                var oldSize = hadFile ? new FileInfo(tilePath).Length : 0;
-                tile.Save(tilePath);
-                tile.Dispose();
-                var newSize = new FileInfo(tilePath).Length;
-                if (!hadFile)
+                var persisted = false;
+                try
                 {
-                    Interlocked.Increment(ref _fileCount);
-                }
+                    _meterSet.Add(1);
+                    var tilePath = GetTileCachePath(tile.Key);
 
-                Interlocked.Add(ref _dirSizeInBytes, newSize - oldSize);
+                    var hadFile = File.Exists(tilePath);
+                    var oldSize = hadFile ? new FileInfo(tilePath).Length : 0;
+                    tile.Save(tilePath);
+                    persisted = true;
+                    var newSize = new FileInfo(tilePath).Length;
+                    if (!hadFile)
+                    {
+                        Interlocked.Increment(ref _fileCount);
+                    }
+
+                    Interlocked.Add(ref _dirSizeInBytes, newSize - oldSize);
+                }
+                finally
+                {
+                    if (persisted)
+                    {
+                        tile.ReleaseCompressedBytes();
+                    }
+
+                    tile.Dispose();
+                }
             }
         }
         catch (OperationCanceledException)
