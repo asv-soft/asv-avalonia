@@ -195,9 +195,9 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
 
                 Interlocked.Increment(ref _totalDownloadedTiles);
                 Interlocked.Add(ref _totalDownloadedBytes, downloadedTile.CompressedSize);
-                downloadedTile.AddRef();
                 if (CurrentMapMode.Value != MapModeType.Online)
                 {
+                    downloadedTile.AddRef();
                     _slowCache[key] = downloadedTile;
                 }
 
