@@ -30,7 +30,6 @@ public partial class MapItemsControl : SelectingItemsControl
     public MapItemsControl()
     {
         SelectionMode = SelectionMode.Multiple;
-        SelectionChanged += OnSelectionChanged;
 
         AddHandler(InputElement.PointerTouchPadGestureSwipeEvent, OnTouchPadGestureSwipe);
         AddHandler(InputElement.PointerTouchPadGestureMagnifyEvent, OnTouchPadGestureMagnify);
@@ -60,25 +59,6 @@ public partial class MapItemsControl : SelectingItemsControl
     #endregion
 
     #region Selection
-
-    private void OnSelectionChanged(object? sender, SelectionChangedEventArgs args)
-    {
-        foreach (var item in args.RemovedItems)
-        {
-            if (ContainerFromItem(item) is ISelectable sel)
-            {
-                sel.IsSelected = false;
-            }
-        }
-
-        foreach (var item in args.AddedItems)
-        {
-            if (ContainerFromItem(item) is ISelectable sel)
-            {
-                sel.IsSelected = true;
-            }
-        }
-    }
 
     public new IList? SelectedItems
     {
@@ -357,7 +337,6 @@ public partial class MapItemsControl : SelectingItemsControl
                     continue;
                 }
 
-                control.IsSelected = true;
                 var index = IndexFromContainer(control);
                 Selection.Select(index);
             }
