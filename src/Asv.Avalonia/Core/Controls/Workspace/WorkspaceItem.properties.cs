@@ -88,4 +88,13 @@ public partial class WorkspaceItem
         get;
         set => SetAndRaise(OpenContextMenuProperty, ref field, value);
     }
+
+    public static readonly StyledProperty<string?> ActionsHeaderProperty =
+        AvaloniaProperty.Register<WorkspaceItem, string?>(nameof(ActionsHeader));
+
+    public string? ActionsHeader
+    {
+        get => GetValue(ActionsHeaderProperty);
+        set => SetValue(ActionsHeaderProperty, value);
+    }
 }
