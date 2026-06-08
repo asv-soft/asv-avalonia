@@ -1,6 +1,7 @@
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
+using Avalonia.Threading;
 using Microsoft.Extensions.Logging;
 using R3;
 
@@ -28,7 +29,17 @@ public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        _svc.Explorer.InitializedDevices.PopulateTo(context.Items, TryAdd, Remove)
+        var synchronizationContext = new AvaloniaSynchronizationContext(
+            Dispatcher.UIThread,
+            DispatcherPriority.Default
+        );
+
+        _svc.Explorer.InitializedDevices.PopulateTo(
+                context.Items,
+                TryAdd,
+                Remove,
+                synchronizationContext: synchronizationContext
+            )
             .DisposeItWith(contextDispose);
     }
 
