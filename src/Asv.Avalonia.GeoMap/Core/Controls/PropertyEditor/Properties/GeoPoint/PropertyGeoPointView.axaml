@@ -69,6 +69,7 @@
 
             <TextBlock
                 Grid.Column="1"
+                Grid.ColumnSpan="2"
                 HorizontalAlignment="Left"
                 Margin="4,8,0,8"
                 Classes="description"
