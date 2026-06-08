@@ -1,5 +1,4 @@
-﻿using Avalonia.Media;
-using Material.Icons;
+﻿using Material.Icons;
 
 namespace Asv.Avalonia;
 
@@ -9,8 +8,8 @@ public interface IWorkspaceWidget : IViewModel
     AsvColorKind IconColor { get; }
     string? Header { get; }
     WorkspaceDock Position { get; }
-    bool IsExpanded { get; }
     bool CanExpand { get; }
-    MenuTree? MenuView { get; }
+    bool IsExpanded { get; set; }
     bool IsVisible { get; set; }
+    MenuTree? MenuView { get; }
 }
