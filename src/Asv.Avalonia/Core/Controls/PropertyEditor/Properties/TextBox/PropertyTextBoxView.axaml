@@ -155,7 +155,7 @@
             </avalonia1:MaterialIcon>
             <TextBlock
                 MinWidth="20"
-                Margin="4,0,0,0"
+                Margin="4,0,4,0"
                 Grid.Column="1"
                 IsVisible="{Binding ShortHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                 VerticalAlignment="Center"
@@ -218,8 +218,12 @@
                     />
                 </Button>
             </Panel>
-
-            <Border Background="Transparent" Grid.Column="0" Grid.ColumnSpan="2">
+            <Border
+                Background="Transparent"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            >
                 <ToolTip.Tip>
                     <StackPanel Spacing="8">
                         <TextBlock Classes="h1" Text="{Binding Header}" />

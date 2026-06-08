@@ -148,6 +148,7 @@
                 <ColumnDefinition SharedSizeGroup="PrefixName" Width="Auto" />
                 <ColumnDefinition />
                 <ColumnDefinition SharedSizeGroup="PostfixStatus" Width="Auto" />
+                <ColumnDefinition SharedSizeGroup="PostfixUnits" Width="Auto" />
             </Grid.ColumnDefinitions>
 
             <avalonia1:MaterialIcon
@@ -249,7 +250,12 @@
 
             <avalonia:PropertyStatusView Grid.Column="3" VerticalAlignment="Center" />
 
-            <Border Background="Transparent" Grid.Column="0" Grid.ColumnSpan="2">
+            <Border
+                Background="Transparent"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            >
                 <ToolTip.Tip>
                     <StackPanel Spacing="8">
                         <TextBlock Classes="h1" Text="{Binding Header}" />
