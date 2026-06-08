@@ -51,34 +51,19 @@
         </StackPanel>
     </ToolTip.Tip>
 
-    <StackPanel Spacing="4">
-        <DockPanel Margin="4,4,4,0">
-            <Button
-                Padding="4"
-                DockPanel.Dock="Right"
-                Theme="{StaticResource TransparentButton}"
-                IsVisible="{Binding MenuView, Converter={x:Static ObjectConverters.IsNotNull}}"
-            >
-                <Button.Flyout>
-                    <MenuFlyout ItemsSource="{Binding MenuView.Items}">
-                        <MenuFlyout.ItemContainerTheme>
-                            <StaticResource ResourceKey="PropertyMenuNodeTheme" />
-                        </MenuFlyout.ItemContainerTheme>
-                    </MenuFlyout>
-                </Button.Flyout>
-                <avalonia1:MaterialIcon Kind="DotsHorizontal" />
-            </Button>
+    <StackPanel>
+        <DockPanel>
             <Button
                 Padding="4"
                 DockPanel.Dock="Right"
                 Theme="{StaticResource TransparentButton}"
                 Command="{Binding OpenGeoPointDialogCommand}"
-                IsVisible="{Binding CanOpenGeoPointDialog}"
             >
                 <avalonia1:MaterialIcon Kind="MapMarkerRadius" />
             </Button>
             <TextBlock
-                Margin="10,2"
+                HorizontalAlignment="Center"
+                Classes="description"
                 IsVisible="{Binding Header, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                 Text="{Binding Header}"
             />
