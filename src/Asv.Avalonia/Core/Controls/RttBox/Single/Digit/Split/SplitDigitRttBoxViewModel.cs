@@ -11,6 +11,7 @@ public class SplitDigitRttBoxViewModel : DigitRttBoxViewModel
     public SplitDigitRttBoxViewModel()
     {
         DesignTime.ThrowIfNotDesignMode();
+        Description = "Distance with integer and fractional parts rendered separately.";
     }
 
     public SplitDigitRttBoxViewModel(

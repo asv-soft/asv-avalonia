@@ -34,6 +34,7 @@ public class KeyValueRttBoxViewModel : RttBoxViewModel
             .DisposeItWith(Disposable);
         Icon = MaterialIconKind.Radar;
         Header = "Common RTT";
+        Description = "Grouped telemetry values with a compact short-state preview.";
 
         int index = 0;
         int maxIndex = Enum.GetValues<AsvColorKind>().Length;

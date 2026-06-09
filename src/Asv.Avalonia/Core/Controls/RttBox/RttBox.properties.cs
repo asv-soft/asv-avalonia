@@ -45,6 +45,19 @@ public partial class RttBox
         set => SetAndRaise(HeaderProperty, ref field, value);
     }
 
+    public static readonly DirectProperty<RttBox, string?> DescriptionProperty =
+        AvaloniaProperty.RegisterDirect<RttBox, string?>(
+            nameof(Description),
+            o => o.Description,
+            (o, v) => o.Description = v
+        );
+
+    public string? Description
+    {
+        get;
+        set => SetAndRaise(DescriptionProperty, ref field, value);
+    }
+
     public static readonly DirectProperty<RttBox, bool?> IsUpdatedProperty =
         AvaloniaProperty.RegisterDirect<RttBox, bool?>(
             nameof(IsUpdated),

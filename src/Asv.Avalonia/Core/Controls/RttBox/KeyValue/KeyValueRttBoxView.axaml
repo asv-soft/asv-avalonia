@@ -19,6 +19,7 @@
         HorizontalContentAlignment="Stretch"
         Icon="{Binding Icon}"
         Header="{Binding Header}"
+        Description="{Binding Description}"
         IsNetworkError="{Binding IsNetworkError}"
         avalonia:AsvPallete.Color="{Binding Status}"
     >

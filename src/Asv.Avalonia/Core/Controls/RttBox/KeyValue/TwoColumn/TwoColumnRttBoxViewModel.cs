@@ -15,6 +15,7 @@ public class TwoColumnRttBoxViewModel : RttBoxViewModel
         Right = new KeyValueViewModel("right").DisposeItWith(Disposable);
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
+        Description = "Two related telemetry values displayed side by side.";
         Left.Header = "Left";
         Right.Header = "Right";
         Left.UnitSymbol = "mm";

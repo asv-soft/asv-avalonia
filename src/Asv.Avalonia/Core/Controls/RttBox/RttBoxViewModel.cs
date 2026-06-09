@@ -3,7 +3,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class RttBoxViewModel : ViewModel
+public class RttBoxViewModel : HeadlinedViewModel
 {
     private readonly TimeProvider _timeProvider;
     private long _lastUpdate;
@@ -57,18 +57,6 @@ public class RttBoxViewModel : ViewModel
         IsUpdated = false;
         IsUpdated = true;
         _lastUpdate = _timeProvider.GetTimestamp();
-    }
-
-    public MaterialIconKind? Icon
-    {
-        get;
-        set => SetField(ref field, value);
-    }
-
-    public string? Header
-    {
-        get;
-        set => SetField(ref field, value);
     }
 
     public string? ShortHeader

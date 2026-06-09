@@ -15,6 +15,7 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
         MeasureUnit = DesignTime.UnitService.Units[DistanceUnit.Id];
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
+        Description = "Distance formatted with the current display unit.";
         UnitSymbol = MeasureUnit.CurrentUnitItem.CurrentValue.Symbol;
         FormatString = "## 000.000";
         var sub = new Subject<double>().DisposeItWith(Disposable);

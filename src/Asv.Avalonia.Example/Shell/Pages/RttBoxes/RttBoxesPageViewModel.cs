@@ -80,6 +80,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             {
                 Icon = MaterialIconKind.Velocity,
                 Header = "Velocity",
+                Description = "Current vehicle speed in the selected telemetry stream.",
                 IsNetworkError = true,
                 ShortHeader = "vel",
             };
@@ -89,6 +90,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         viewModel.Icon = MaterialIconKind.Velocity;
         viewModel.Header = "Velocity";
+        viewModel.Description = "Current vehicle speed in the selected telemetry stream.";
         viewModel.IsNetworkError = true;
         viewModel.ShortHeader = "vel";
         return viewModel;
@@ -105,6 +107,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         viewModel.Icon = MaterialIconKind.Ruler;
         viewModel.Header = "Distance";
+        viewModel.Description = "Left and right distance channels updated independently.";
         viewModel.Left.Header = "Left";
         viewModel.Right.Header = "Right";
         viewModel.Left.UnitSymbol = "mm";
@@ -167,6 +170,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         viewModel.Icon = MaterialIconKind.Ruler;
         viewModel.Header = "Distance";
+        viewModel.Description = "Single live distance value with progress and status.";
         viewModel.UnitSymbol = "mm";
 
         int index = 0;
@@ -218,6 +222,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         viewModel.ShortUnitSymbol = "ms";
         viewModel.Icon = MaterialIconKind.Radar;
         viewModel.Header = "Common RTT";
+        viewModel.Description = "Common round-trip telemetry values shown as key-value rows.";
 
         KeyValueViewModel[] items =
         [
@@ -277,6 +282,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         viewModel.Icon = MaterialIconKind.Ruler;
         viewModel.Header = "Distance";
+        viewModel.Description = "Distance value split into integer and fractional runs.";
         viewModel.FormatString = "## 000.000";
         int index = 0;
         int maxIndex = Enum.GetValues<AsvColorKind>().Length;
@@ -324,6 +330,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         viewModel.GeoPointProperty.ModelValue.Value = new GeoPoint(55.75, 37.6173, 250.0);
         viewModel.Icon = MaterialIconKind.AddressMarker;
         viewModel.Header = "UAV position";
+        viewModel.Description = "Live UAV latitude, longitude, and altitude.";
         viewModel.ShortHeader = "UAV";
 
         var index = 0;

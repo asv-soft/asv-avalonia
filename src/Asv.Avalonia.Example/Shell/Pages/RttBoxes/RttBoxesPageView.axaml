@@ -39,6 +39,7 @@
                 avalonia:AsvPallete.Color="Info1"
                 Icon="{CompiledBinding Icon}"
                 Header="{CompiledBinding Header}"
+                Description="{CompiledBinding Description}"
                 IsNetworkError="{CompiledBinding IsNetworkError}"
                 SmallHeader="{CompiledBinding ShortHeader}"
                 DataContext="{CompiledBinding RttBoxViewModel}"

@@ -39,6 +39,7 @@ public class GeoPointRttBoxViewModel : RttBoxViewModel
                 Updated();
             });
         Header = "UAV position";
+        Description = "Current GNSS position reported by the vehicle.";
         ShortHeader = "UAV";
         Icon = MaterialIconKind.AddressMarker;
     }

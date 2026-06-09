@@ -14,6 +14,7 @@ public class SingleRttBoxViewModel : RttBoxViewModel
         DesignTime.ThrowIfNotDesignMode();
         Icon = MaterialIconKind.Ruler;
         Header = "Distance";
+        Description = "Measured distance from the active telemetry source.";
         UnitSymbol = "mm";
         int index = 0;
         int maxIndex = Enum.GetValues<AsvColorKind>().Length;

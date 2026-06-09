@@ -22,6 +22,7 @@
         HorizontalContentAlignment="Stretch"
         Icon="{Binding Icon}"
         Header="{Binding Header}"
+        Description="{Binding Description}"
         SmallContent="{Binding ShortStatusText}"
         SmallHeader="{Binding ShortHeader}"
         avalonia:AsvPallete.Color="{Binding Status}"
