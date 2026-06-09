@@ -86,18 +86,6 @@ public class DigitRttBoxViewModel : SingleRttBoxViewModel
         set => SetField(ref field, value);
     }
 
-    public new string? ValueString
-    {
-        get;
-        protected set => SetField(ref field, value);
-    }
-
-    public new string? UnitSymbol
-    {
-        get;
-        private set => SetField(ref field, value);
-    }
-
     protected IUnit MeasureUnit { get; }
 
     protected virtual void OnValueChanged(double value)
