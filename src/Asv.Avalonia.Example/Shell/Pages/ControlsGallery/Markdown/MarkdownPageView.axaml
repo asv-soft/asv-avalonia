@@ -1,0 +1,27 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    mc:Ignorable="d"
+    d:DesignWidth="900"
+    d:DesignHeight="700"
+    x:Class="Asv.Avalonia.Example.MarkdownPageView"
+    x:DataType="example:MarkdownPageViewModel"
+>
+    <Design.DataContext>
+        <example:MarkdownPageViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <asv:MarkdownViewer
+            Margin="16"
+            MaxWidth="760"
+            HorizontalAlignment="Left"
+            Text="{Binding Documentation}"
+            TextWrapping="Wrap"
+        />
+    </ScrollViewer>
+</UserControl>

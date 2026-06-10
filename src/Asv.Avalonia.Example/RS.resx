@@ -35,6 +35,9 @@
     <data name="HistoricalControlsPageViewModel_Title" xml:space="preserve">
         <value>Historical fields</value>
     </data>
+    <data name="MarkdownPageViewModel_Title" xml:space="preserve">
+        <value>Markdown</value>
+    </data>
     <data name="ControlsGalleryPageViewModel_Title" xml:space="preserve">
         <value>Controls gallery</value>
     </data>

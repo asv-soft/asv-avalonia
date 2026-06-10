@@ -66,6 +66,7 @@ public static class ExampleMixin
                 .UseHistoricalSubPage()
                 .UseInfoBoxSubPage()
                 .UseMapControlsSubPage()
+                .UseMarkdownSubPage()
                 .UsePropertyEditorSubPage()
                 .UseWorkspaceSubPage()
                 .UseRttBoxesSubPage();
@@ -103,6 +104,13 @@ public static class ExampleMixin
         {
             return UseSubPage<MapControlsPageViewModel, MapControlsPageView, MapControlsTreeMenu>(
                 MapControlsPageViewModel.PageId
+            );
+        }
+
+        public ControlGalleryBuilder UseMarkdownSubPage()
+        {
+            return UseSubPage<MarkdownPageViewModel, MarkdownPageView, MarkdownTreeMenu>(
+                MarkdownPageViewModel.PageId
             );
         }
 
