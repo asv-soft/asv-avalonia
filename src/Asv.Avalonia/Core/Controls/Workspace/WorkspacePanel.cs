@@ -72,7 +72,12 @@ public partial class WorkspacePanel : Panel
             },
         ];
 
-        mainGrid.RowDefinitions =
+        // The center/bottom rows live in a nested grid so that the side ScrollViewers sit in a
+        // single Star row. If they spanned [Star, Pixel, Auto] rows instead (RowSpan=3), Grid would
+        // measure them with unbounded height (cells touching an Auto row are measured before star
+        // rows are resolved) — the ScrollViewers would size to content, never showing a scrollbar.
+        var centerGrid = new Grid { Name = "CenterGrid", ShowGridLines = false };
+        centerGrid.RowDefinitions =
         [
             _centerRow = new RowDefinition
             {
@@ -91,20 +96,20 @@ public partial class WorkspacePanel : Panel
                 [!RowDefinition.MinHeightProperty] = this[!MinBottomHeightProperty],
             },
         ];
+        Grid.SetRow(centerGrid, 0);
+        Grid.SetColumn(centerGrid, 2);
 
         // Left ScrollViewer with the StackPanel
         _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = 4 };
         var leftScrollViewer = new ScrollViewer { Background = null, Content = _leftPanel };
         Grid.SetRow(leftScrollViewer, 0);
         Grid.SetColumn(leftScrollViewer, 0);
-        Grid.SetRowSpan(leftScrollViewer, 3);
 
         // Right ScrollViewer with the StackPanel
         _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = 4 };
         var rightScrollViewer = new ScrollViewer { Background = null, Content = _rightPanel };
         Grid.SetRow(rightScrollViewer, 0);
         Grid.SetColumn(rightScrollViewer, 4);
-        Grid.SetRowSpan(rightScrollViewer, 3);
 
         // Bottom TabControl
         var bottomTab = new TabControl
@@ -115,7 +120,7 @@ public partial class WorkspacePanel : Panel
             Padding = new Thickness(0),
         };
         Grid.SetRow(bottomTab, 2);
-        Grid.SetColumn(bottomTab, 2);
+        Grid.SetColumn(bottomTab, 0);
         bottomTab.ItemsSource = _bottomPanel = [];
 
         _centerPanel = new DockPanel
@@ -128,7 +133,7 @@ public partial class WorkspacePanel : Panel
         };
 
         Grid.SetRow(_centerPanel, 0);
-        Grid.SetColumn(_centerPanel, 2);
+        Grid.SetColumn(_centerPanel, 0);
 
         // Vertical GridSplitter between columns 0 and 2
         _verticalSplitter1 = new GridSplitter
@@ -141,7 +146,6 @@ public partial class WorkspacePanel : Panel
         _verticalSplitter1.DragCompleted += HorizontalSplitterOnDragCompleted;
 
         Grid.SetRow(_verticalSplitter1, 0);
-        Grid.SetRowSpan(_verticalSplitter1, 3);
         Grid.SetColumn(_verticalSplitter1, 1);
 
         // Vertical GridSplitter between columns 2 and 4
@@ -155,7 +159,6 @@ public partial class WorkspacePanel : Panel
         _verticalSplitter2.DragCompleted += HorizontalSplitterOnDragCompleted;
 
         Grid.SetRow(_verticalSplitter2, 0);
-        Grid.SetRowSpan(_verticalSplitter2, 3);
         Grid.SetColumn(_verticalSplitter2, 3);
 
         // Horizontal GridSplitter in row 2
@@ -170,16 +173,19 @@ public partial class WorkspacePanel : Panel
 
         _horizontalSplitter.DragCompleted += HorizontalSplitterOnDragCompleted;
         Grid.SetRow(_horizontalSplitter, 1);
-        Grid.SetColumn(_horizontalSplitter, 2);
+        Grid.SetColumn(_horizontalSplitter, 0);
+
+        // Center column rows live in the nested grid
+        centerGrid.Children.Add(_centerPanel);
+        centerGrid.Children.Add(_horizontalSplitter);
+        centerGrid.Children.Add(bottomTab);
 
         // Add all elements to the Grid
         mainGrid.Children.Add(leftScrollViewer);
         mainGrid.Children.Add(rightScrollViewer);
-        mainGrid.Children.Add(bottomTab);
-        mainGrid.Children.Add(_centerPanel);
+        mainGrid.Children.Add(centerGrid);
         mainGrid.Children.Add(_verticalSplitter1);
         mainGrid.Children.Add(_verticalSplitter2);
-        mainGrid.Children.Add(_horizontalSplitter);
 
         // Add the Grid as the only child element of the panel
         LogicalChildren.Add(mainGrid);
