@@ -11,7 +11,14 @@ public class TextFileHandler(IShellHost shellHost) : IFileHandler
 {
     private static readonly FileTypeInfo[] StaticTypes =
     [
-        new("text", "Text file", "txt", true, true, MaterialIconKind.FileOutline),
+        new(
+            "asvmd",
+            "ASV Markdown file",
+            TextFilePageViewModel.FileExtension,
+            true,
+            true,
+            MaterialIconKind.FileOutline
+        ),
     ];
 
     public int Priority => -100;
@@ -19,7 +26,11 @@ public class TextFileHandler(IShellHost shellHost) : IFileHandler
 
     public bool CanOpen(string path)
     {
-        return string.Equals(Path.GetExtension(path), ".txt", StringComparison.OrdinalIgnoreCase);
+        return string.Equals(
+            Path.GetExtension(path),
+            $".{TextFilePageViewModel.FileExtension}",
+            StringComparison.OrdinalIgnoreCase
+        );
     }
 
     public async ValueTask Open(string path)

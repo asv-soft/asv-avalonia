@@ -20,6 +20,7 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
 {
     public const string PageId = "text_file";
     public const MaterialIconKind PageIcon = MaterialIconKind.FileOutline;
+    public const string FileExtension = "asvmd";
     private const string FilePathArg = "file";
     private readonly ReactiveProperty<string?> _textModel;
     private string _savedText = string.Empty;
@@ -49,7 +50,7 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
             .DisposeItWith(Disposable);
         FilePath = new BindableReactiveProperty<string>(NewFileTitle).DisposeItWith(Disposable);
 
-        Header = "Text file";
+        Header = "ASV Markdown file";
         Icon = PageIcon;
 
         var filePath = context.NavArgs.FirstOrDefault(x => x.Key == FilePathArg).Value;
@@ -116,13 +117,13 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
     }
 
     public string? DefaultFileName =>
-        CurrentFilePath != null ? Path.GetFileName(CurrentFilePath) : "text-file-example.txt";
+        CurrentFilePath != null ? Path.GetFileName(CurrentFilePath) : $"document.{FileExtension}";
 
-    public string? DefaultExtension => "txt";
+    public string? DefaultExtension => FileExtension;
 
-    public string? TypeFilter => "txt,*";
+    public string? TypeFilter => $"{FileExtension},*";
 
-    private static string NewFileTitle => "New text file";
+    private static string NewFileTitle => "New ASV Markdown file";
 
     public static NavArgs CreateOpenArgs(string filePath)
     {

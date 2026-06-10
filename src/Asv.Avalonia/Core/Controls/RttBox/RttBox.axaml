@@ -263,7 +263,7 @@
         <Setter Property="HeaderFontSize" Value="18" />
         <Setter Property="FontWeight" Value="Light" />
         <Setter Property="ToolTip.Tip">
-            <MultiBinding Converter="{x:Static controls:RttBoxToolTipConverter.Instance}">
+            <MultiBinding Converter="{x:Static controls:MarkdownToolTipConverter.Instance}">
                 <Binding Path="Header" RelativeSource="{RelativeSource Self}" />
                 <Binding Path="Description" RelativeSource="{RelativeSource Self}" />
             </MultiBinding>

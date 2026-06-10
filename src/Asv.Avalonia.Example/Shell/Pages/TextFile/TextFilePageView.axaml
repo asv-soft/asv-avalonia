@@ -3,6 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
     xmlns:example="clr-namespace:Asv.Avalonia.Example"
     mc:Ignorable="d"
     d:DesignWidth="800"
@@ -23,18 +24,61 @@
             Margin="0,0,0,12"
         >
             <StackPanel Spacing="6">
-                <TextBlock Text="Text file" FontSize="18" FontWeight="SemiBold" />
+                <TextBlock Text="ASV Markdown file" FontSize="18" FontWeight="SemiBold" />
                 <TextBlock Text="{Binding FilePath.Value}" TextWrapping="Wrap" Opacity="0.85" />
             </StackPanel>
         </Border>
 
-        <TextBox
-            AcceptsReturn="True"
-            AcceptsTab="True"
-            TextWrapping="Wrap"
-            VerticalContentAlignment="Top"
-            HorizontalContentAlignment="Left"
-            Text="{Binding Text.ViewValue.Value, Mode=TwoWay}"
-        />
+        <Grid ColumnDefinitions="*,Auto,*">
+            <DockPanel Grid.Column="0">
+                <TextBlock
+                    DockPanel.Dock="Top"
+                    Text="Editor"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,6"
+                />
+                <TextBox
+                    AcceptsReturn="True"
+                    AcceptsTab="True"
+                    TextWrapping="Wrap"
+                    VerticalContentAlignment="Top"
+                    HorizontalContentAlignment="Left"
+                    Text="{Binding Text.ViewValue.Value, Mode=TwoWay}"
+                />
+            </DockPanel>
+
+            <GridSplitter
+                Grid.Column="1"
+                Width="8"
+                Margin="8,0"
+                Background="Transparent"
+                ResizeDirection="Columns"
+            />
+
+            <DockPanel Grid.Column="2">
+                <TextBlock
+                    DockPanel.Dock="Top"
+                    Text="Preview"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Margin="0,0,0,6"
+                />
+                <Border
+                    Padding="12"
+                    Background="{DynamicResource SystemRegionBrush}"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="6"
+                >
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <asv:MarkdownViewer
+                            Text="{Binding Text.ViewValue.Value}"
+                            TextWrapping="Wrap"
+                        />
+                    </ScrollViewer>
+                </Border>
+            </DockPanel>
+        </Grid>
     </DockPanel>
 </UserControl>

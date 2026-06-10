@@ -33,6 +33,14 @@ public class MarkdownPageViewModel : ControlsGallerySubPage
 
             <asv:MarkdownViewer Text="{Binding Documentation}" TextWrapping="Wrap" />
 
+            ## Markdown tooltips
+
+            Use MarkdownToolTipConverter when a tooltip must render the same subset instead of plain text.
+
+            - Single binding: ToolTip.Tip="{Binding Description, Converter={x:Static asv:MarkdownToolTipConverter.Instance}}"
+            - Header plus description: use MultiBinding with Header first and Description second.
+            - ConverterParameter can be used as a static header for a single Description binding.
+
             ## Supported block syntax
 
             - Headings: # Title, ## Section, and ### Subsection.

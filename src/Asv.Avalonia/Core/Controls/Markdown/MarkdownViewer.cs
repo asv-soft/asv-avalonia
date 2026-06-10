@@ -223,7 +223,7 @@ public class MarkdownViewer : ContentControl
         return true;
     }
 
-    private TextBlock CreateHeading(string text, int level)
+    private SelectableTextBlock CreateHeading(string text, int level)
     {
         var styleClass = level switch
         {
@@ -250,7 +250,7 @@ public class MarkdownViewer : ContentControl
             row.ColumnDefinitions.Add(new ColumnDefinition(GridLength.Auto));
             row.ColumnDefinitions.Add(new ColumnDefinition(new GridLength(1, GridUnitType.Star)));
 
-            var marker = new TextBlock
+            var marker = new SelectableTextBlock
             {
                 Text = item.Marker,
                 MinWidth = item.Kind == MarkdownListKind.Ordered ? 24 : 12,
@@ -270,9 +270,9 @@ public class MarkdownViewer : ContentControl
         return panel;
     }
 
-    private TextBlock CreateInlineTextBlock(string text, string? styleClass)
+    private SelectableTextBlock CreateInlineTextBlock(string text, string? styleClass)
     {
-        var block = new TextBlock { TextWrapping = TextWrapping };
+        var block = new SelectableTextBlock { TextWrapping = TextWrapping };
         if (styleClass is not null)
         {
             block.Classes.Add(styleClass);
@@ -332,9 +332,10 @@ public class MarkdownViewer : ContentControl
                 var closeStart = FindClosingColorTag(text, tokenEnd + 1);
                 if (closeStart >= 0 && TryReadColor(attributes, out var parsedColor))
                 {
+                    var colorTextStart = tokenEnd + 1;
                     AddInlineElements(
                         inlines,
-                        text[(tokenEnd + 1)..closeStart],
+                        text[colorTextStart..closeStart],
                         parsedColor,
                         styleClass
                     );
@@ -343,7 +344,8 @@ public class MarkdownViewer : ContentControl
                 }
             }
 
-            AddTextInline(inlines, text[tokenStart..(tokenEnd + 1)], color, styleClass);
+            var literalEnd = tokenEnd + 1;
+            AddTextInline(inlines, text[tokenStart..literalEnd], color, styleClass);
             index = tokenEnd + 1;
         }
     }
@@ -389,7 +391,7 @@ public class MarkdownViewer : ContentControl
             return;
         }
 
-        var block = new TextBlock { Text = unescapedText };
+        var block = new SelectableTextBlock { Text = unescapedText };
         if (styleClass is not null)
         {
             block.Classes.Add(styleClass);
