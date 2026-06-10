@@ -70,6 +70,7 @@
         </Button>
 
         <TreeView
+            Name="PART_TreeMenu"
             Margin="0,8,0,0"
             MinWidth="150"
             Grid.Column="0"
@@ -77,6 +78,7 @@
             IsVisible="{Binding IsMenuVisible}"
             AutoScrollToSelectedItem="True"
             SelectedItem="{Binding SelectedNode.Value, Mode=TwoWay}"
+            SelectionChanged="PART_TreeMenu_OnSelectionChanged"
             SelectionMode="Single"
             ItemsSource="{Binding TreeView.Items}"
         >
@@ -145,10 +147,13 @@
         />
 
         <ContentControl
+            Name="PART_SelectedPageContent"
             Margin="0,8,0,0"
             Grid.Column="2"
             Grid.Row="1"
-            Content="{Binding SelectedPage.Value}"
+            Focusable="True"
+            DataContext="{Binding SelectedPage.Value}"
+            Content="{Binding}"
         />
 
         <Button
