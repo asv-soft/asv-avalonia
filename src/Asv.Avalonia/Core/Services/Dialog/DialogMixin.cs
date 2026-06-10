@@ -42,7 +42,8 @@ public static class DialogMixin
                 >()
                 .RegisterViewFor<DialogItemTextViewModel, DialogItemTextView>()
                 .RegisterViewFor<DialogItemTextBoxViewModel, DialogItemTextBoxView>()
-                .RegisterViewFor<DialogItemHotKeyCaptureViewModel, DialogItemHotKeyCaptureView>();
+                .RegisterViewFor<DialogItemHotKeyCaptureViewModel, DialogItemHotKeyCaptureView>()
+                .RegisterViewFor<DialogItemUnsavedChangesViewModel, DialogItemUnsavedChangesView>();
 
             return RegisterPrefab<HotKeyCaptureDialogPrefab>()
                 .RegisterPrefab<InputDialogPrefab>()
