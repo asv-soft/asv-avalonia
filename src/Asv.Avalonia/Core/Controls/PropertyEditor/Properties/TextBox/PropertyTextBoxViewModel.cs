@@ -145,7 +145,7 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
             await ApplyFromUser(applyCancel.Token);
             if (!EqualityComparer<string?>.Default.Equals(oldValue, newValue))
             {
-                _undoValueSink?.Publish(oldValue, newValue);
+                _undoValueSink?.PublishUpdate(oldValue, newValue);
             }
         }
         catch (Exception e)

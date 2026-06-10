@@ -29,7 +29,7 @@ public class HistoricalUnitProperty<TUnit>
     )
         : base(id, modelValue, unit, loggerFactory, format)
     {
-        _undoSink = Undo.CreateValueChange<double>("default", ApplyUnitValue, ApplyUnitValue)
+        _undoSink = Undo.RegisterValue<double>("default", ApplyUnitValue, ApplyUnitValue)
             .DisposeItWith(Disposable);
     }
 
@@ -47,7 +47,7 @@ public class HistoricalUnitProperty<TUnit>
         }
 
         ApplyUnitValue(value);
-        _undoSink.Publish(oldValue, value);
+        _undoSink.PublishUpdate(oldValue, value);
         return ValueTask.CompletedTask;
     }
 }

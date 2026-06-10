@@ -84,7 +84,7 @@ public abstract class PropertyComboBoxViewModel : PropertyViewModel
             await ApplyFromUser(item, selectCancel.Token);
             if (previousItem is not null)
             {
-                _undoValueSink?.Publish(previousItem, item);
+                _undoValueSink?.PublishUpdate(previousItem, item);
             }
             MarkUpdated();
         }

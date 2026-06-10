@@ -107,7 +107,7 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
         var currentValue = ReadCurrentValueBeforeUnitChange();
         var wasSync = IsSync;
         ChangeUnit(newUnitItemId, currentValue, wasSync);
-        _undoUnitSink.Publish(oldUnitItemId, newUnitItemId);
+        _undoUnitSink.PublishUpdate(oldUnitItemId, newUnitItemId);
     }
 
     private void ChangeUnit(string unitItemId)
@@ -162,7 +162,7 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
     protected override ValueTask ApplyFromUser(CancellationToken cancel)
     {
         var value = Unit.CurrentUnitItem.CurrentValue.ParseToSi(Text.Value);
-        _undoValueSink?.Publish(_lastValue, value);
+        _undoValueSink?.PublishUpdate(_lastValue, value);
         return ApplyFromUser(value, cancel);
     }
 

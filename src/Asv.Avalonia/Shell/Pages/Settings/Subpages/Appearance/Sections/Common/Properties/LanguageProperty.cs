@@ -35,7 +35,7 @@ public class LanguageProperty : PropertyComboBoxViewModel
             ItemsSource.Add(new LanguageOptionViewModel(language));
         }
 
-        _undoSink = Undo.CreateValueChange<string>("default", ApplyLanguage, ApplyLanguage)
+        _undoSink = Undo.RegisterValue<string>("default", ApplyLanguage, ApplyLanguage)
             .DisposeItWith(Disposable);
 
         svc.CurrentLanguage.Skip(1)
@@ -65,7 +65,7 @@ public class LanguageProperty : PropertyComboBoxViewModel
 
         if (oldValue is not null)
         {
-            _undoSink.Publish(oldValue, option.Language.Id);
+            _undoSink.PublishUpdate(oldValue, option.Language.Id);
         }
 
         var dialogPayload = new YesOrNoDialogPayload

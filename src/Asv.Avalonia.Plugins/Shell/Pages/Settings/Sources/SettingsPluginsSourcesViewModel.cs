@@ -54,7 +54,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         _shellHost = shellHost;
         _loggerFactory = loggerFactory;
         _yesOrNoDialogPrefab = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
-        _undoSink = Undo.CreateValueChange<string>(
+        _undoSink = Undo.RegisterValue<string>(
                 "default",
                 ApplySourcesSnapshot,
                 ApplySourcesSnapshot
@@ -144,7 +144,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
 
         var newSnapshot = AddSourceSnapshot(oldSnapshot, ToSnapshot(server));
         ApplySourcesSnapshot(newSnapshot);
-        _undoSink.Publish(oldSnapshot, newSnapshot);
+        _undoSink.PublishUpdate(oldSnapshot, newSnapshot);
     }
 
     private async ValueTask EditSourceAsync(PluginsSourceViewModel source)
@@ -167,7 +167,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             ToSnapshot(server)
         );
         ApplySourcesSnapshot(newSnapshot);
-        _undoSink.Publish(oldSnapshot, newSnapshot);
+        _undoSink.PublishUpdate(oldSnapshot, newSnapshot);
     }
 
     private async ValueTask RemoveSourceAsync(PluginsSourceViewModel source)
@@ -186,7 +186,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         var oldSnapshot = CaptureSourcesSnapshot();
         var newSnapshot = RemoveSourceSnapshot(oldSnapshot, source.Model.SourceUri);
         ApplySourcesSnapshot(newSnapshot);
-        _undoSink.Publish(oldSnapshot, newSnapshot);
+        _undoSink.PublishUpdate(oldSnapshot, newSnapshot);
     }
 
     private async Task<PluginServer?> ShowSourceDialogAsync(

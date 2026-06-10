@@ -75,11 +75,7 @@ public class SettingsConnectionViewModel
     {
         _layoutChanged.DisposeItWith(Disposable);
         _deviceManager = deviceManager;
-        _undoSink = Undo.CreateValueChange<string>(
-                "default",
-                ApplyPortsSnapshot,
-                ApplyPortsSnapshot
-            )
+        _undoSink = Undo.RegisterValue<string>("default", ApplyPortsSnapshot, ApplyPortsSnapshot)
             .DisposeItWith(Disposable);
         _containerHost = containerHost;
         ObservableList<IProtocolPort> source = [];
@@ -128,7 +124,7 @@ public class SettingsConnectionViewModel
             () => _deviceManager.Router.AddPort(config.AsUri()),
             TaskCreationOptions.LongRunning
         );
-        _undoSink.Publish(oldSnapshot, CapturePortsSnapshot());
+        _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
 
     public async ValueTask UpdatePortAsync(string portId, ProtocolPortConfig config)
@@ -143,7 +139,7 @@ public class SettingsConnectionViewModel
             },
             TaskCreationOptions.LongRunning
         );
-        _undoSink.Publish(oldSnapshot, CapturePortsSnapshot());
+        _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
 
     public async ValueTask RemovePortAsync(string portId)
@@ -157,7 +153,7 @@ public class SettingsConnectionViewModel
             },
             TaskCreationOptions.LongRunning
         );
-        _undoSink.Publish(oldSnapshot, CapturePortsSnapshot());
+        _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
 
     protected override void AfterLoadExtensions()

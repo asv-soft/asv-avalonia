@@ -32,7 +32,7 @@ public class ThemeProperty : PropertyComboBoxViewModel
             ItemsSource.Add(new ThemeOptionViewModel(theme));
         }
 
-        _undoHandler = Undo.CreateValueChange<string>("default", ApplyTheme, ApplyTheme)
+        _undoHandler = Undo.RegisterValue<string>("default", ApplyTheme, ApplyTheme)
             .DisposeItWith(Disposable);
 
         svc.CurrentTheme.Skip(1)
@@ -59,7 +59,7 @@ public class ThemeProperty : PropertyComboBoxViewModel
 
         if (oldValue is not null)
         {
-            _undoHandler.Publish(oldValue, option.Theme.Id);
+            _undoHandler.PublishUpdate(oldValue, option.Theme.Id);
         }
 
         return ValueTask.CompletedTask;

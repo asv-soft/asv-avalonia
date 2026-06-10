@@ -48,7 +48,7 @@ public class TileProviderSelectorViewModel : ViewModel
             .Subscribe(OnChangeByModel)
             .DisposeItWith(Disposable);
         _internalChange = false;
-        _undoSink = Undo.CreateValueChange<string>("default", ApplyTileProvider, ApplyTileProvider)
+        _undoSink = Undo.RegisterValue<string>("default", ApplyTileProvider, ApplyTileProvider)
             .DisposeItWith(Disposable);
     }
 
@@ -73,7 +73,7 @@ public class TileProviderSelectorViewModel : ViewModel
         {
             _internalChange = true;
             ApplyTileProvider(newValue);
-            _undoSink.Publish(oldValue, newValue);
+            _undoSink.PublishUpdate(oldValue, newValue);
             return ValueTask.CompletedTask;
         }
         catch (Exception exception)

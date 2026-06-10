@@ -89,7 +89,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
         };
         Menu.Add(menu);
 
-        _undoHandler = Undo.CreateValueChange<Dictionary<string, string>>(
+        _undoHandler = Undo.RegisterValue<Dictionary<string, string>>(
                 "default",
                 ApplyUnits,
                 ApplyUnits
@@ -145,7 +145,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
                 x => x.Value.CurrentUnitItem.Value.UnitItemId
             );
 
-            _undoHandler.Publish(currentKv, defaultKv);
+            _undoHandler.PublishUpdate(currentKv, defaultKv);
             ApplyUnits(defaultKv);
             return ValueTask.CompletedTask;
         }

@@ -23,7 +23,7 @@ public sealed class HistoricalBoolProperty
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
-        _undoSink = Undo.CreateValueChange<bool>("default", ApplyBoolValue, ApplyBoolValue)
+        _undoSink = Undo.RegisterValue<bool>("default", ApplyBoolValue, ApplyBoolValue)
             .DisposeItWith(Disposable);
     }
 
@@ -57,7 +57,7 @@ public sealed class HistoricalBoolProperty
         {
             _internalChange = true;
             ApplyBoolValue(userValue);
-            _undoSink.Publish(oldValue, userValue);
+            _undoSink.PublishUpdate(oldValue, userValue);
         }
         finally
         {

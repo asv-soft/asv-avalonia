@@ -32,7 +32,7 @@ public sealed class HistoricalStringProperty
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
-        _undoSink = Undo.CreateValueChange<string?>("default", ApplyStringValue, ApplyStringValue)
+        _undoSink = Undo.RegisterValue<string?>("default", ApplyStringValue, ApplyStringValue)
             .DisposeItWith(Disposable);
     }
 
@@ -90,7 +90,7 @@ public sealed class HistoricalStringProperty
         {
             _internalChange = true;
             ApplyStringValue(userValue);
-            _undoSink.Publish(oldValue, userValue);
+            _undoSink.PublishUpdate(oldValue, userValue);
             return ValueTask.CompletedTask;
         }
         catch (Exception exception)

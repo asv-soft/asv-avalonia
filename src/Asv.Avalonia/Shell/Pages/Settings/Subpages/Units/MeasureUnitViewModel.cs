@@ -33,7 +33,7 @@ public class MeasureUnitViewModel : ViewModel
         _sub2 = item.CurrentUnitItem.Subscribe(OnChangeByModel);
         _internalChange = false;
 
-        _undoSink = Undo.CreateValueChange<string>("default", ApplyUnit, ApplyUnit)
+        _undoSink = Undo.RegisterValue<string>("default", ApplyUnit, ApplyUnit)
             .DisposeItWith(Disposable);
 
         ResetCommand = new ReactiveCommand(ResetImpl).DisposeItWith(Disposable);
@@ -126,7 +126,7 @@ public class MeasureUnitViewModel : ViewModel
         }
 
         ApplyUnit(newUnitItemId);
-        _undoSink.Publish(oldUnitItemId, newUnitItemId);
+        _undoSink.PublishUpdate(oldUnitItemId, newUnitItemId);
     }
 
     private void ApplyUnit(string unitItemId)

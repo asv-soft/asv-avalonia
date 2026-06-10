@@ -24,7 +24,7 @@ public sealed class HistoricalEnumProperty<TEnum>
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
-        _undoSink = Undo.CreateValueChange<Enum>("default", ApplyEnumValue, ApplyEnumValue)
+        _undoSink = Undo.RegisterValue<Enum>("default", ApplyEnumValue, ApplyEnumValue)
             .DisposeItWith(Disposable);
     }
 
@@ -60,7 +60,7 @@ public sealed class HistoricalEnumProperty<TEnum>
         {
             _internalChange = true;
             ApplyEnumValue(userValue);
-            _undoSink.Publish(oldValue, userValue);
+            _undoSink.PublishUpdate(oldValue, userValue);
             return ValueTask.CompletedTask;
         }
         catch (Exception exception)

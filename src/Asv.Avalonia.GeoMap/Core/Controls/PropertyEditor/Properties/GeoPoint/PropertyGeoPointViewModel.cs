@@ -198,7 +198,7 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
             ApplyValueFromModel(value);
         }
 
-        _undoValueSink.Publish(oldValue.ToString(), value.ToString());
+        _undoValueSink.PublishUpdate(oldValue.ToString(), value.ToString());
         await ApplyFromUser(value, cancel);
     }
 
