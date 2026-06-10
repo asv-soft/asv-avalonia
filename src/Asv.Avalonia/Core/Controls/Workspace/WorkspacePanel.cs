@@ -5,12 +5,14 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
-using Avalonia.Media;
+using Avalonia.VisualTree;
+using R3;
 
 namespace Asv.Avalonia;
 
 public partial class WorkspacePanel : Panel
 {
+    private readonly Subject<Unit> _layoutChanged = new();
     private readonly StackPanel _leftPanel;
     private readonly StackPanel _rightPanel;
     private readonly DockPanel _centerPanel;
@@ -26,6 +28,9 @@ public partial class WorkspacePanel : Panel
     private readonly RowDefinition _horizontalSplitterRaw;
     private readonly ColumnDefinition _verticalSplitterRaw1;
     private readonly ColumnDefinition _verticalSplitterRaw2;
+    private WorkspacePanelConfig _config = new();
+    private IDisposable? _layout;
+    private bool _internalLayoutChange;
 
     static WorkspacePanel()
     {
@@ -181,6 +186,29 @@ public partial class WorkspacePanel : Panel
         VisualChildren.Add(mainGrid);
     }
 
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        RegisterLayout();
+    }
+
+    protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        _layout?.Dispose();
+        _layout = null;
+        base.OnDetachedFromVisualTree(e);
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == LayoutIdProperty && _layout is not null)
+        {
+            RegisterLayout();
+        }
+    }
+
     private void HorizontalSplitterOnDragCompleted(object? sender, VectorEventArgs e)
     {
         RaiseEvent(
@@ -195,6 +223,7 @@ public partial class WorkspacePanel : Panel
                 RoutedEvent = WorkspaceChangedEvent,
             }
         );
+        NotifyLayoutChanged(sender);
     }
 
     protected override void ChildrenChanged(object? sender, NotifyCollectionChangedEventArgs e)
@@ -344,5 +373,123 @@ public partial class WorkspacePanel : Panel
                 panel.RemoveAt(i);
             }
         }
+    }
+
+    private void RegisterLayout()
+    {
+        _layout?.Dispose();
+        _layout = null;
+
+        if (Design.IsDesignMode || string.IsNullOrWhiteSpace(LayoutId))
+        {
+            return;
+        }
+
+        _layout = this.RegisterLayout(LayoutId, LoadLayout, SaveLayout, _layoutChanged);
+    }
+
+    private void LoadLayout(WorkspacePanelConfig config)
+    {
+        _internalLayoutChange = true;
+        try
+        {
+            _config = config;
+
+            if (TryGetValidPixelWidth(config.LeftColumnWidth, MinLeftWidth, out var leftWidth))
+            {
+                LeftWidth = new GridLength(leftWidth, GridUnitType.Pixel);
+            }
+
+            if (TryGetValidPixelWidth(config.RightColumnWidth, MinRightWidth, out var rightWidth))
+            {
+                RightWidth = new GridLength(rightWidth, GridUnitType.Pixel);
+            }
+        }
+        finally
+        {
+            _internalLayoutChange = false;
+        }
+    }
+
+    private WorkspacePanelConfig? SaveLayout()
+    {
+        if (_internalLayoutChange)
+        {
+            return null;
+        }
+
+        var config = new WorkspacePanelConfig
+        {
+            LeftColumnWidth = _config.LeftColumnWidth,
+            RightColumnWidth = _config.RightColumnWidth,
+        };
+
+        if (GetColumnPixelWidth(_leftColumn, LeftWidth) is { } leftWidth)
+        {
+            config.LeftColumnWidth = leftWidth;
+        }
+
+        if (GetColumnPixelWidth(_rightColumn, RightWidth) is { } rightWidth)
+        {
+            config.RightColumnWidth = rightWidth;
+        }
+
+        if (config.LeftColumnWidth is null && config.RightColumnWidth is null)
+        {
+            return null;
+        }
+
+        _config = config;
+        return config;
+    }
+
+    private void NotifyLayoutChanged(object? sender)
+    {
+        if (
+            _internalLayoutChange
+            || (
+                !ReferenceEquals(sender, _verticalSplitter1)
+                && !ReferenceEquals(sender, _verticalSplitter2)
+            )
+        )
+        {
+            return;
+        }
+
+        _layoutChanged.OnNext(Unit.Default);
+    }
+
+    private static double? GetColumnPixelWidth(ColumnDefinition column, GridLength fallback)
+    {
+        if (IsValidPixelWidth(column.ActualWidth))
+        {
+            return column.ActualWidth;
+        }
+
+        return fallback.GridUnitType == GridUnitType.Pixel && IsValidPixelWidth(fallback.Value)
+            ? fallback.Value
+            : null;
+    }
+
+    private static bool TryGetValidPixelWidth(double? value, double minWidth, out double width)
+    {
+        width = 0;
+        if (value is not { } pixelWidth || !IsValidPixelWidth(pixelWidth))
+        {
+            return false;
+        }
+
+        if (double.IsFinite(minWidth) && minWidth > 0)
+        {
+            pixelWidth = Math.Max(pixelWidth, minWidth);
+        }
+
+        width = pixelWidth;
+        return true;
+    }
+
+    private static bool IsValidPixelWidth(double value)
+    {
+        return value is > 0 && double.IsFinite(value);
     }
 }

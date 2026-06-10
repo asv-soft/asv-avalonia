@@ -7,6 +7,17 @@ namespace Asv.Avalonia;
 
 public partial class WorkspacePanel
 {
+    public static readonly StyledProperty<string> LayoutIdProperty = AvaloniaProperty.Register<
+        WorkspacePanel,
+        string
+    >(nameof(LayoutId), nameof(WorkspacePanel));
+
+    public string LayoutId
+    {
+        get => GetValue(LayoutIdProperty);
+        set => SetValue(LayoutIdProperty, value);
+    }
+
     public static readonly AttachedProperty<WorkspaceDock> DockProperty =
         AvaloniaProperty.RegisterAttached<WorkspacePanel, Control, WorkspaceDock>("Dock");
 
@@ -158,4 +169,10 @@ public class WorkspaceEventArgs : RoutedEventArgs
     public double RightColumnActualWidth { get; set; }
     public double CenterRowActualHeight { get; set; }
     public double BottomRowActualHeight { get; set; }
+}
+
+internal sealed class WorkspacePanelConfig
+{
+    public double? LeftColumnWidth { get; set; }
+    public double? RightColumnWidth { get; set; }
 }
