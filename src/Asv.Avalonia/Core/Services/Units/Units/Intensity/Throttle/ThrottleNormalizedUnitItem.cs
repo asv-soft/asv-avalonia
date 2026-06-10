@@ -7,6 +7,6 @@ public sealed class ThrottleNormalizedUnitItem() : IntensityUnitItem(-1, 1, 0.01
     public override string UnitItemId => Id;
     public override string Name => RS.Normalized_UnitItem_Name;
     public override string Description => RS.Normalized_Throttle_Description;
-    public override string Symbol => string.Empty;
+    public override string Symbol => "P";
     public override bool IsInternationalSystemUnit => false;
 }

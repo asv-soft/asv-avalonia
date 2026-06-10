@@ -73,6 +73,12 @@ public class MapAnchor : ViewModel, IMapAnchor
         set => SetField(ref field, value);
     }
 
+    public bool CanDragWithoutModifier
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
     public bool UseMapRotation
     {
         get;
@@ -190,6 +196,12 @@ public class MapAnchor<TContext> : ViewModel<TContext>, IMapAnchor
     }
 
     public bool IsReadOnly
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public bool CanDragWithoutModifier
     {
         get;
         set => SetField(ref field, value);

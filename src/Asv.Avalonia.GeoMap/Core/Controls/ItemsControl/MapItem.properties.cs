@@ -149,6 +149,19 @@ public partial class MapItem
 
     #endregion
 
+    #region CanDragWithoutModifier
+
+    public static readonly StyledProperty<bool> CanDragWithoutModifierProperty =
+        AvaloniaProperty.Register<MapItem, bool>(nameof(CanDragWithoutModifier));
+
+    public bool CanDragWithoutModifier
+    {
+        get => GetValue(CanDragWithoutModifierProperty);
+        set => SetValue(CanDragWithoutModifierProperty, value);
+    }
+
+    #endregion
+
     #region IsSelected
 
     public static readonly StyledProperty<bool> IsSelectedProperty = AvaloniaProperty.Register<

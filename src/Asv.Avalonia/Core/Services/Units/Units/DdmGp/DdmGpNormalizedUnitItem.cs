@@ -7,6 +7,6 @@ public sealed class DdmGpNormalizedUnitItem() : UnitItemBase(1)
     public override string UnitItemId => Id;
     public override string Name => RS.Normalized_UnitItem_Name;
     public override string Description => RS.Normalized_DdmGp_Description;
-    public override string Symbol => string.Empty;
+    public override string Symbol => "P";
     public override bool IsInternationalSystemUnit => true;
 }

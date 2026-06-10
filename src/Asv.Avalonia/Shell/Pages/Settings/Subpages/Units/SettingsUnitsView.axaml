@@ -36,6 +36,14 @@
                 <Style Selector="DataGridRow DataGridCell.action Button">
                     <Setter Property="IsVisible" Value="False" />
                 </Style>
+                <Style Selector="DataGridRow">
+                    <Setter Property="ToolTip.Tip">
+                        <ReflectionBinding
+                            Path="DataContext.Base.Description"
+                            RelativeSource="{RelativeSource Self}"
+                        />
+                    </Setter>
+                </Style>
             </DataGrid.Styles>
             <DataGrid.Columns>
                 <DataGridTemplateColumn CellStyleClasses="action" Width="Auto">
@@ -56,23 +64,6 @@
                                 SelectionStart="{Binding NameSelection.Start}"
                                 SelectionEnd="{Binding NameSelection.Stop}"
                                 Text="{Binding Base.Name}"
-                                VerticalAlignment="Center"
-                                IsHitTestVisible="False"
-                            />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
-                <DataGridTemplateColumn
-                    IsReadOnly="True"
-                    Width="2*"
-                    Header="{x:Static avalonia:RS.SettingsUnitsView_Header_Description}"
-                >
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <SelectableTextBlock
-                                SelectionStart="{Binding DescriptionSelection.Start}"
-                                SelectionEnd="{Binding DescriptionSelection.Stop}"
-                                Text="{Binding Base.Description}"
                                 VerticalAlignment="Center"
                                 IsHitTestVisible="False"
                             />
@@ -146,9 +137,14 @@
                                 Theme="{DynamicResource TransparentButton}"
                                 HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
+                                Width="32"
+                                Height="32"
+                                Padding="4"
+                                IsEnabled="{Binding CanReset.Value}"
                                 Command="{Binding ResetCommand}"
+                                ToolTip.Tip="{x:Static avalonia:RS.SettingsUnitsView_Header_Reset}"
                             >
-                                <avalonia1:MaterialIcon Kind="Restore" Classes="small" />
+                                <avalonia1:MaterialIcon Kind="BackupRestore" Classes="small" />
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

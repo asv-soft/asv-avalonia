@@ -6,36 +6,99 @@
     xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="48"
+    d:DesignWidth="220"
     d:DesignHeight="48"
     x:Class="Asv.Avalonia.GeoMap.MapRuler"
+    x:Name="PART_Root"
 >
     <Design.PreviewWith>
         <Border Padding="20" Background="#102030">
-            <Border
-                Padding="4"
-                CornerRadius="4"
-                Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
-            >
-                <ToggleButton Padding="6">
-                    <avalonia:MaterialIcon Classes="medium" Kind="Ruler" />
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <ToggleButton
+                    Width="44"
+                    Height="44"
+                    Padding="0"
+                    Background="{DynamicResource AsvBackgroundInfo5Brush}"
+                    BorderBrush="{DynamicResource AsvForegroundInfo5Brush}"
+                    BorderThickness="1"
+                >
+                    <avalonia:MaterialIcon
+                        Classes="medium"
+                        Kind="Ruler"
+                        Foreground="{DynamicResource AsvForegroundInfo5Brush}"
+                    />
                 </ToggleButton>
-            </Border>
+                <Border
+                    Padding="12,7"
+                    CornerRadius="3"
+                    Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                    BorderThickness="1"
+                >
+                    <TextBlock
+                        Text="12.4 km"
+                        Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                        FontWeight="SemiBold"
+                    />
+                </Border>
+            </StackPanel>
         </Border>
     </Design.PreviewWith>
 
-    <Border
-        Padding="4"
-        CornerRadius="4"
-        Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
-    >
+    <StackPanel Orientation="Horizontal" Spacing="8">
         <ToggleButton
             x:Name="PART_Toggle"
+            Width="44"
+            Height="44"
             Click="OnToggleClick"
             ToolTip.Tip="{x:Static map:RS.MapRuler_Tooltip}"
-            Padding="6"
+            Padding="0"
+            Background="{DynamicResource AsvBackgroundInfo5Brush}"
+            BorderBrush="{DynamicResource AsvForegroundInfo5Brush}"
+            BorderThickness="1"
         >
-            <avalonia:MaterialIcon Classes="medium" Kind="Ruler" />
+            <avalonia:MaterialIcon
+                Classes="medium"
+                Kind="Ruler"
+                Foreground="{DynamicResource AsvForegroundInfo5Brush}"
+            />
         </ToggleButton>
-    </Border>
+
+        <Border
+            IsVisible="{Binding #PART_Root.DistanceText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            Padding="12,7,6,7"
+            CornerRadius="3"
+            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+            BorderThickness="1"
+            VerticalAlignment="Center"
+        >
+            <Grid ColumnDefinitions="Auto,28">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding #PART_Root.DistanceText}"
+                    Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
+                    FontSize="13"
+                    FontWeight="SemiBold"
+                />
+                <Button
+                    Grid.Column="1"
+                    Width="28"
+                    Height="28"
+                    Margin="8,-4,-2,-4"
+                    Padding="0"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    Click="OnClearClick"
+                >
+                    <avalonia:MaterialIcon
+                        Width="18"
+                        Height="18"
+                        Kind="Close"
+                        Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"
+                    />
+                </Button>
+            </Grid>
+        </Border>
+    </StackPanel>
 </UserControl>

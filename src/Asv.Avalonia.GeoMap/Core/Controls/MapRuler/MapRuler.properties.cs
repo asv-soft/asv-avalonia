@@ -73,6 +73,22 @@ public partial class MapRuler
 
     #endregion
 
+    #region DistanceText
+
+    public static readonly DirectProperty<MapRuler, string?> DistanceTextProperty =
+        AvaloniaProperty.RegisterDirect<MapRuler, string?>(
+            nameof(DistanceText),
+            o => o.DistanceText
+        );
+
+    public string? DistanceText
+    {
+        get;
+        private set => SetAndRaise(DistanceTextProperty, ref field, value);
+    }
+
+    #endregion
+
     #region StartPoint / StopPoint
 
     public static readonly StyledProperty<GeoPoint?> StartPointProperty = AvaloniaProperty.Register<

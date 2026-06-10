@@ -32,5 +32,13 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </avalonia:Workspace>
+        <Button
+            Classes="danger"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Margin="12"
+            Content="Generate Exception"
+            Command="{CompiledBinding GenerateExceptionCommand}"
+        />
     </Panel>
 </UserControl>

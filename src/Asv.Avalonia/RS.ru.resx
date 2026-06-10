@@ -64,7 +64,7 @@
         <value>Расстояние</value>
     </data>
     <data name="Distance_Description" xml:space="preserve">
-        <value>Единица измерения расстояния</value>
+        <value>Расстояние</value>
     </data>
     <data name="OpenDebugCommand_CommandInfo_Name" xml:space="preserve">
         <value>Открыть окно отладки</value>
@@ -159,7 +159,7 @@
         <value>Высота</value>
     </data>
     <data name="Altitude_Description" xml:space="preserve">
-        <value>Единица измерения высоты</value>
+        <value>Высота</value>
     </data>
     <data name="Meter_Altitude_Description" xml:space="preserve">
         <value>Высота в метрах</value>
@@ -183,7 +183,7 @@
         <value>Амплитудная модуляция</value>
     </data>
     <data name="AmplitudeModulation_Description" xml:space="preserve">
-        <value>Единица измерения амплитудной модуляции</value>
+        <value>Амплитудная модуляция</value>
     </data>
     <data name="Normalized_AmplitudeModulation_Description" xml:space="preserve">
         <value>Амплитудная модуляция нормализованная</value>
@@ -192,7 +192,7 @@
         <value>Амплитудная модуляция в прцентах</value>
     </data>
     <data name="Bearing_Description" xml:space="preserve">
-        <value>Единица измерения несущей</value>
+        <value>Несущая</value>
     </data>
     <data name="Bearing_Name" xml:space="preserve">
         <value>Несущая</value>
@@ -204,7 +204,7 @@
         <value>Несущая в процентах</value>
     </data>
     <data name="DM_UnitItem_Symbol" xml:space="preserve">
-        <value>Г°М'</value>
+        <value>°′</value>
     </data>
     <data name="DM_Bearing_Description" xml:space="preserve">
         <value>Несущая в градусах и минутах</value>
@@ -213,7 +213,7 @@
         <value>РГМ (Gp)</value>
     </data>
     <data name="DdmGp_Description" xml:space="preserve">
-        <value>Единицы измереня разницы в глубине модуляции</value>
+        <value>Разность глубин модуляции</value>
     </data>
     <data name="InParts_UnitItem_Name" xml:space="preserve">
         <value>В частях</value>
@@ -246,7 +246,7 @@
         <value>РГМ (Llz)</value>
     </data>
     <data name="DdmLlz_Description" xml:space="preserve">
-        <value>Единицы измереня разницы в глубине модуляции</value>
+        <value>Разность глубин модуляции</value>
     </data>
     <data name="Normalized_DdmLlz_Description" xml:space="preserve">
         <value>РГМ (Llz) нормализованная</value>
@@ -264,7 +264,7 @@
         <value>Градусы и минуты</value>
     </data>
     <data name="Angle_Description" xml:space="preserve">
-        <value>Единица измерения градусов</value>
+        <value>Градусы</value>
     </data>
     <data name="Degree_Angle_Description" xml:space="preserve">
         <value>Угол в градусах</value>
@@ -273,7 +273,7 @@
         <value>Угол</value>
     </data>
     <data name="Degree_UnitItem_Symbol" xml:space="preserve">
-        <value>Г°</value>
+        <value>°</value>
     </data>
     <data name="Ms_UnitItem_Name" xml:space="preserve">
         <value>Минуты и секунды</value>
@@ -282,10 +282,10 @@
         <value>Угол в минутах и секундах</value>
     </data>
     <data name="Ms_UnitItem_Symbol" xml:space="preserve">
-        <value>[М]′[С]′′</value>
+        <value>′″</value>
     </data>
     <data name="Dms_UnitItem_Symbol" xml:space="preserve">
-        <value>Г°М′С′'</value>
+        <value>°′″</value>
     </data>
     <data name="Dms_UnitItem_Name" xml:space="preserve">
         <value>Градусы, минуты и секунды</value>
@@ -297,7 +297,7 @@
         <value>Напряженность поля</value>
     </data>
     <data name="FieldStrength_Description" xml:space="preserve">
-        <value>Единица измерения напряженности поля</value>
+        <value>Напряженность поля</value>
     </data>
     <data name="MicroVoltsPerMeter_UnitItem_Name" xml:space="preserve">
         <value>Микровольт на метр</value>
@@ -313,7 +313,7 @@
     </data>
 
     <data name="Power_Description" xml:space="preserve">
-        <value>Единица измерения мощности</value>
+        <value>Мощность</value>
     </data>
     <data name="Dbm_UnitItem_Name" xml:space="preserve">
         <value>Децибел по отношению к 1 милливатт</value>
@@ -328,7 +328,7 @@
         <value>Частота</value>
     </data>
     <data name="Frequency_Description" xml:space="preserve">
-        <value>Единица измерения частоты</value>
+        <value>Частота</value>
     </data>
     <data name="Hertz_UnitItem_Name" xml:space="preserve">
         <value>Герцы</value>
@@ -370,7 +370,7 @@
         <value>Широта</value>
     </data>
     <data name="Latitude_Description" xml:space="preserve">
-        <value>Единица измерения широты</value>
+        <value>Широта</value>
     </data>
     <data name="Degree_Latitude_Description" xml:space="preserve">
         <value>Широта в градусах</value>
@@ -379,7 +379,7 @@
         <value>Долгота</value>
     </data>
     <data name="Longitude_Description" xml:space="preserve">
-        <value>Единица измерения долготы</value>
+        <value>Долгота</value>
     </data>
     <data name="Degree_Longitude_Description" xml:space="preserve">
         <value>Долгота в гадусах</value>
@@ -391,7 +391,7 @@
         <value>Долгота в градусах, минутах и секундах</value>
     </data>
     <data name="Phase_Description" xml:space="preserve">
-        <value>Единица измерения фазы</value>
+        <value>Фаза</value>
     </data>
     <data name="Phase_Name" xml:space="preserve">
         <value>Фаза</value>
@@ -412,7 +412,7 @@
         <value>СГМ</value>
     </data>
     <data name="Sdm_Description" xml:space="preserve">
-        <value>Единицы измерения суммы глубины модуляции</value>
+        <value>Сумма глубин модуляции</value>
     </data>
     <data name="Percent_Sdm_Description" xml:space="preserve">
         <value>СГМ в процентах</value>
@@ -421,7 +421,7 @@
         <value>Температура</value>
     </data>
     <data name="Temperature_Description" xml:space="preserve">
-        <value>Единица измерения температуры</value>
+        <value>Температура</value>
     </data>
     <data name="Kelvin_UnitItem_Name" xml:space="preserve">
         <value>Кельвин</value>
@@ -445,7 +445,7 @@
         <value>Скорость</value>
     </data>
     <data name="Velocity_Description" xml:space="preserve">
-        <value>Единица измерения скорости</value>
+        <value>Скорость</value>
     </data>
     <data name="MetersPerSecond_UnitItem_Name" xml:space="preserve">
         <value>Метры в секунду</value>
@@ -607,16 +607,16 @@
         <value>Напряжение</value>
     </data>
     <data name="Voltage_Description" xml:space="preserve">
-        <value>Единица измерения напряжения</value>
+        <value>Напряжение</value>
     </data>
     <data name="Amperage_Name" xml:space="preserve">
         <value>Сила тока</value>
     </data>
     <data name="Amperage_Description" xml:space="preserve">
-        <value>Единица измеренеия силы тока</value>
+        <value>Сила тока</value>
     </data>
     <data name="Progress_Description" xml:space="preserve">
-        <value>Единица измерения прогресса</value>
+        <value>Прогресс</value>
     </data>
     <data name="Progress_Name" xml:space="preserve">
         <value>Прогресс</value>
@@ -955,7 +955,7 @@
         <value>Длительность</value>
     </data>
     <data name="TimeSpan_Description" xml:space="preserve">
-        <value>Единица измерения времени</value>
+        <value>Время</value>
     </data>
     <data name="TimeSpanComposite_UnitItem_InvalidFormatException" xml:space="preserve">
         <value>Неверный формат. Ожидался '{0}'</value>
@@ -985,7 +985,7 @@
         <value>Мощность</value>
     </data>
     <data name="Throttle_Description" xml:space="preserve">
-        <value>Единица измерения мощности</value>
+        <value>Мощность</value>
     </data>
     <data name="ResetCommandHotKeysCommand_CommandInfo_Description" xml:space="preserve">
         <value>Команда, которая сбрасывает все горячие клавиши</value>

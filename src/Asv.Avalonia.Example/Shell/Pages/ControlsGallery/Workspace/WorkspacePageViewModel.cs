@@ -47,6 +47,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         Init(context.Context);
         _loggerFactory = loggerFactory;
         MapViewModel = new MapViewModel("map-view", mapService).DisposeItWith(Disposable);
+        GenerateExceptionCommand = new ReactiveCommand(GenerateException).DisposeItWith(Disposable);
         var hideAll = new MenuItem("hide-all", "Hide all")
         {
             Command = new ReactiveCommand(x =>
@@ -225,6 +226,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public MapViewModel MapViewModel { get; }
 
+    public ReactiveCommand GenerateExceptionCommand { get; }
+
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return MapViewModel;
@@ -252,5 +255,27 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         }
 
         return ValueTask.CompletedTask;
+    }
+
+    private async ValueTask GenerateException(Unit unit, CancellationToken cancel)
+    {
+        try
+        {
+            ThrowDemoException();
+        }
+        catch (Exception exception)
+        {
+            await this.RiseShellErrorMessage(
+                "Workspace exception",
+                "Generated exception for ShellView popup demo.",
+                exception,
+                cancel
+            );
+        }
+    }
+
+    private static void ThrowDemoException()
+    {
+        throw new InvalidOperationException("Generated exception from ControlGallery Workspace.");
     }
 }

@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.VisualTree;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using R3;
@@ -13,8 +14,8 @@ namespace Asv.Avalonia.GeoMap;
 
 /// <summary>
 /// <para>
-/// Map ruler: two draggable endpoints connected by a dashed polyline with a live
-/// distance readout shown as the "stop" anchor's annotation.
+/// Map ruler: two draggable endpoints connected by a Google Maps-like polyline
+/// with a live distance readout in the ruler control.
 /// </para>
 /// <para>
 /// The ruler's persistent state is exposed via <see cref="StartPoint"/> /
@@ -42,9 +43,11 @@ public sealed partial class MapRuler : UserControl
     private const string FirstAnchorName = "ruler_start";
     private const string SecondAnchorName = "ruler_stop";
     private const string LineAnchorName = "ruler_line";
-    private const double RulerStrokeThickness = 4.0;
-    private static readonly IBrush RulerBrush = Brushes.Indigo;
-    private static readonly double[] RulerPattern = [2.0, 2.0];
+    private const string LineHaloAnchorName = "ruler_line_halo";
+    private const double RulerStrokeThickness = 3.0;
+    private const double RulerHaloStrokeThickness = 7.0;
+    private static readonly IBrush RulerBrush = SolidColorBrush.Parse("#1A73E8");
+    private static readonly IBrush RulerHaloBrush = Brushes.White;
 
     #region State
 
@@ -61,11 +64,14 @@ public sealed partial class MapRuler : UserControl
     private IMapAnchor? _start;
     private IMapAnchor? _stop;
     private IMapAnchor? _line;
+    private IMapAnchor? _lineHalo;
     private DisposableBag _activeSubs;
     private IList<IMapAnchor>? _ownedAnchorsList;
     private InputElement? _clickSurface;
+    private MapItemsControl? _mapControl;
     private readonly ToggleButton _toggle;
     private bool _isAttached;
+    private bool _isPreview;
     private bool _lastFiredShown;
 
     #endregion
@@ -124,13 +130,34 @@ public sealed partial class MapRuler : UserControl
         DetachFromClickSurface();
 
         _clickSurface = TargetMap;
+        _mapControl = ResolveMapControl(_clickSurface);
         _clickSurface?.AddHandler(MapItemsControl.MapClickEvent, OnMapClick);
+        _clickSurface?.AddHandler(
+            InputElement.PointerMovedEvent,
+            OnMapPointerMoved,
+            RoutingStrategies.Bubble,
+            true
+        );
     }
 
     private void DetachFromClickSurface()
     {
         _clickSurface?.RemoveHandler(MapItemsControl.MapClickEvent, OnMapClick);
+        _clickSurface?.RemoveHandler(InputElement.PointerMovedEvent, OnMapPointerMoved);
         _clickSurface = null;
+        _mapControl = null;
+    }
+
+    private static MapItemsControl? ResolveMapControl(InputElement? target)
+    {
+        if (target is MapItemsControl mapControl)
+        {
+            return mapControl;
+        }
+
+        return target is Visual visual
+            ? visual.GetVisualDescendants().OfType<MapItemsControl>().FirstOrDefault()
+            : null;
     }
 
     #endregion
@@ -146,16 +173,21 @@ public sealed partial class MapRuler : UserControl
                 break;
             case RulerState.PickingStart:
             case RulerState.PickingEnd:
-                ResetPicking();
+                ClearRuler();
                 break;
             case RulerState.Active:
             default:
-                StartPoint = null;
-                StopPoint = null;
+                ClearRuler();
                 break;
         }
 
         SyncToggleVisual();
+    }
+
+    private void OnClearClick(object? sender, RoutedEventArgs e)
+    {
+        ClearRuler();
+        e.Handled = true;
     }
 
     private void SyncToggleVisual()
@@ -165,15 +197,30 @@ public sealed partial class MapRuler : UserControl
 
     private void BeginPicking()
     {
+        DistanceText = null;
         _state = RulerState.PickingStart;
         PromptText = RS.MapRuler_PickStart;
+    }
+
+    private void ClearRuler()
+    {
+        if (_isPreview)
+        {
+            TearDownVisuals();
+        }
+
+        StartPoint = null;
+        StopPoint = null;
+        ResetPicking();
     }
 
     private void ResetPicking()
     {
         _firstPoint = null;
+        _isPreview = false;
         _state = RulerState.Idle;
         PromptText = null;
+        DistanceText = null;
         SyncToggleVisual();
     }
 
@@ -189,6 +236,7 @@ public sealed partial class MapRuler : UserControl
                 _firstPoint = e.Point;
                 _state = RulerState.PickingEnd;
                 PromptText = RS.MapRuler_PickEnd;
+                BuildVisuals(e.Point, e.Point, true);
                 break;
             case RulerState.PickingEnd:
                 if (_firstPoint is null)
@@ -202,8 +250,8 @@ public sealed partial class MapRuler : UserControl
                 StartPoint = first;
                 StopPoint = e.Point;
                 break;
-            case RulerState.Idle:
             case RulerState.Active:
+            case RulerState.Idle:
             default:
                 return;
         }
@@ -215,42 +263,51 @@ public sealed partial class MapRuler : UserControl
 
     #endregion
 
+    private void OnMapPointerMoved(object? sender, PointerEventArgs e)
+    {
+        if (_state != RulerState.PickingEnd || _firstPoint is null || _mapControl is null)
+        {
+            return;
+        }
+
+        UpdatePreviewStop(_mapControl.CursorPosition);
+    }
+
     #region Build / tear down visuals
 
-    private void BuildVisuals(GeoPoint startLocation, GeoPoint stopLocation)
+    private void BuildVisuals(GeoPoint startLocation, GeoPoint stopLocation, bool isPreview)
     {
         TearDownVisuals();
+        _isPreview = isPreview;
 
         _start = CreateEndpoint(FirstAnchorName, startLocation);
         _stop = CreateEndpoint(SecondAnchorName, stopLocation);
-        _start.IsAnnotationVisible = false;
-
-        var linePen = new Pen(RulerBrush, RulerStrokeThickness)
-        {
-            DashStyle = new DashStyle(RulerPattern, 0),
-        };
-        _line = new MapAnchor(LineAnchorName)
-        {
-            Header = string.Empty,
-            IsReadOnly = true,
-            IsAnnotationVisible = false,
-            IsPolygonClosed = false,
-            IconSize = 0,
-            PolygonPen = linePen,
-        };
-        _line.Polygon.Add(startLocation);
-        _line.Polygon.Add(stopLocation);
+        _lineHalo = CreateLine(
+            LineHaloAnchorName,
+            startLocation,
+            stopLocation,
+            RulerHaloBrush,
+            RulerHaloStrokeThickness
+        );
+        _line = CreateLine(
+            LineAnchorName,
+            startLocation,
+            stopLocation,
+            RulerBrush,
+            RulerStrokeThickness
+        );
+        ApplyVisualMode(isPreview);
 
         _start
             .ObservePropertyChanged(x => x.Location)
             .ObserveOnUIThreadDispatcher()
-            .Subscribe(p => StartPoint = p)
+            .Subscribe(p => OnEndpointMoved(true, p))
             .AddTo(ref _activeSubs);
 
         _stop
             .ObservePropertyChanged(x => x.Location)
             .ObserveOnUIThreadDispatcher()
-            .Subscribe(p => StopPoint = p)
+            .Subscribe(p => OnEndpointMoved(false, p))
             .AddTo(ref _activeSubs);
 
         UnitService
@@ -260,10 +317,70 @@ public sealed partial class MapRuler : UserControl
             .AddTo(ref _activeSubs);
 
         _ownedAnchorsList = Anchors;
+        _ownedAnchorsList?.Add(_lineHalo);
+        _ownedAnchorsList?.Add(_line);
         _ownedAnchorsList?.Add(_start);
         _ownedAnchorsList?.Add(_stop);
-        _ownedAnchorsList?.Add(_line);
 
+        UpdateDistanceLabel();
+    }
+
+    private void ApplyVisualMode(bool isPreview)
+    {
+        if (_start is not null)
+        {
+            _start.IsReadOnly = isPreview;
+            _start.CanDragWithoutModifier = !isPreview;
+            _start.IsAnnotationVisible = false;
+        }
+
+        if (_stop is not null)
+        {
+            _stop.IsReadOnly = isPreview;
+            _stop.CanDragWithoutModifier = !isPreview;
+            _stop.IsAnnotationVisible = false;
+        }
+    }
+
+    private void OnEndpointMoved(bool isStart, GeoPoint point)
+    {
+        if (_isPreview)
+        {
+            if (isStart)
+            {
+                _firstPoint = point;
+            }
+
+            UpdateLineFromEndpoints();
+            UpdateDistanceLabel();
+            return;
+        }
+
+        if (isStart)
+        {
+            StartPoint = point;
+        }
+        else
+        {
+            StopPoint = point;
+        }
+    }
+
+    private void UpdatePreviewStop(GeoPoint stopLocation)
+    {
+        if (_firstPoint is not { } startLocation)
+        {
+            return;
+        }
+
+        if (_start is null || _stop is null)
+        {
+            BuildVisuals(startLocation, stopLocation, true);
+            return;
+        }
+
+        _stop.Location = stopLocation;
+        UpdateLine(startLocation, stopLocation);
         UpdateDistanceLabel();
     }
 
@@ -274,6 +391,16 @@ public sealed partial class MapRuler : UserControl
 
         if (_ownedAnchorsList is not null)
         {
+            if (_lineHalo is not null)
+            {
+                _ownedAnchorsList.Remove(_lineHalo);
+            }
+
+            if (_line is not null)
+            {
+                _ownedAnchorsList.Remove(_line);
+            }
+
             if (_start is not null)
             {
                 _ownedAnchorsList.Remove(_start);
@@ -283,17 +410,15 @@ public sealed partial class MapRuler : UserControl
             {
                 _ownedAnchorsList.Remove(_stop);
             }
-
-            if (_line is not null)
-            {
-                _ownedAnchorsList.Remove(_line);
-            }
         }
 
         _ownedAnchorsList = null;
         _start = null;
         _stop = null;
         _line = null;
+        _lineHalo = null;
+        _isPreview = false;
+        DistanceText = null;
     }
 
     #endregion
@@ -309,17 +434,14 @@ public sealed partial class MapRuler : UserControl
         {
             if (MatchesCurrentVisuals(startPoint, stopPoint))
             {
-                if (_line is not null)
-                {
-                    _line.Polygon[0] = startPoint;
-                    _line.Polygon[1] = stopPoint;
-                }
-
+                UpdateLine(startPoint, stopPoint);
+                _isPreview = false;
+                ApplyVisualMode(false);
                 UpdateDistanceLabel();
             }
             else if (_isAttached)
             {
-                BuildVisuals(startPoint, stopPoint);
+                BuildVisuals(startPoint, stopPoint, false);
             }
 
             _state = RulerState.Active;
@@ -329,7 +451,12 @@ public sealed partial class MapRuler : UserControl
         }
         else
         {
-            if (_start is not null || _stop is not null || _line is not null)
+            if (
+                _start is not null
+                || _stop is not null
+                || _line is not null
+                || _lineHalo is not null
+            )
             {
                 TearDownVisuals();
             }
@@ -360,18 +487,58 @@ public sealed partial class MapRuler : UserControl
 
     #endregion
 
-    #region Distance label
+    #region Line geometry
 
-    private void UpdateDistanceLabel()
+    private void UpdateLineFromEndpoints()
     {
         if (_start is null || _stop is null)
         {
             return;
         }
 
+        UpdateLine(_start.Location, _stop.Location);
+    }
+
+    private void UpdateLine(GeoPoint start, GeoPoint stop)
+    {
+        UpdateLine(_lineHalo, start, stop);
+        UpdateLine(_line, start, stop);
+    }
+
+    private static void UpdateLine(IMapAnchor? line, GeoPoint start, GeoPoint stop)
+    {
+        if (line is null)
+        {
+            return;
+        }
+
+        if (line.Polygon.Count < 2)
+        {
+            line.Polygon.Clear();
+            line.Polygon.Add(start);
+            line.Polygon.Add(stop);
+            return;
+        }
+
+        line.Polygon[0] = start;
+        line.Polygon[1] = stop;
+    }
+
+    #endregion
+
+    #region Distance label
+
+    private void UpdateDistanceLabel()
+    {
+        if (_start is null || _stop is null)
+        {
+            DistanceText = null;
+            return;
+        }
+
         var d = GeoMath.Distance(_start.Location, _stop.Location);
         var unit = UnitService.Units[DistanceUnit.Id].CurrentUnitItem.Value;
-        _stop.Header = unit.PrintFromSiWithUnits(d, "F1");
+        DistanceText = unit.PrintFromSiWithUnits(d, "F1");
     }
 
     #endregion
@@ -381,15 +548,38 @@ public sealed partial class MapRuler : UserControl
     private static IMapAnchor CreateEndpoint(string id, GeoPoint location) =>
         new MapAnchor(id)
         {
+            Header = string.Empty,
             Location = location,
-            Icon = MaterialIconKind.MapMarker,
-            IconSize = 40,
-            IconColor = AsvColorKind.Info4,
+            Icon = MaterialIconKind.Circle,
+            IconSize = 18,
+            IconColor = AsvColorKind.Info5,
             CenterX = new HorizontalOffset(HorizontalOffsetEnum.Center, 0),
-            CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0),
-            IsAnnotationVisible = true,
+            CenterY = new VerticalOffset(VerticalOffsetEnum.Center, 0),
+            IsAnnotationVisible = false,
             IsReadOnly = false,
         };
+
+    private static IMapAnchor CreateLine(
+        string id,
+        GeoPoint start,
+        GeoPoint stop,
+        IBrush brush,
+        double thickness
+    )
+    {
+        var line = new MapAnchor(id)
+        {
+            Header = string.Empty,
+            IsReadOnly = true,
+            IsAnnotationVisible = false,
+            IsPolygonClosed = false,
+            IconSize = 0,
+            PolygonPen = new Pen(brush, thickness),
+        };
+        line.Polygon.Add(start);
+        line.Polygon.Add(stop);
+        return line;
+    }
 
     #endregion
 }

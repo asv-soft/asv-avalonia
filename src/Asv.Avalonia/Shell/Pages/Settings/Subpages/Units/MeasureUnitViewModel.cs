@@ -28,6 +28,10 @@ public class MeasureUnitViewModel : ViewModel
             .CurrentUnitItem.Select(u => u.Symbol)
             .ToBindableReactiveProperty<string>()
             .DisposeItWith(Disposable);
+        CanReset = Base
+            .CurrentUnitItem.Select(u => u.UnitItemId != Base.InternationalSystemUnit.UnitItemId)
+            .ToBindableReactiveProperty<bool>()
+            .DisposeItWith(Disposable);
         _internalChange = true;
         _sub1 = SelectedItem.SubscribeAwait(OnChangedByUser);
         _sub2 = item.CurrentUnitItem.Subscribe(OnChangeByModel);
@@ -43,6 +47,7 @@ public class MeasureUnitViewModel : ViewModel
     public IUnit Base { get; }
     public IReadOnlyBindableReactiveProperty<string> Name { get; }
     public IReadOnlyBindableReactiveProperty<string> Symbol { get; }
+    public IReadOnlyBindableReactiveProperty<bool> CanReset { get; }
 
     public ReactiveCommand ResetCommand { get; }
 

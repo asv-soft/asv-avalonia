@@ -117,22 +117,31 @@ public partial class MapItemsControl : SelectingItemsControl
             return;
         }
 
-        switch (e.KeyModifiers)
+        if (e.KeyModifiers.HasFlag(KeyModifiers.Shift))
         {
-            case KeyModifiers.Shift:
-                BeginSelectionRectangleDrag(e.Pointer, position);
-                e.Handled = true;
-                return;
-            case KeyModifiers.Control
-                when GetContainerFromEventSource(e.Source) is { } selectionContainer:
-                BeginSelectionDrag(e.Pointer, position, selectionContainer);
-                e.Handled = true;
-                return;
+            BeginSelectionRectangleDrag(e.Pointer, position);
+            e.Handled = true;
+            return;
+        }
+
+        var container = GetContainerFromEventSource(e.Source);
+
+        if (
+            container is not null
+            && (
+                e.KeyModifiers.HasFlag(KeyModifiers.Control)
+                || (container is MapItem { CanDragWithoutModifier: true })
+            )
+        )
+        {
+            BeginSelectionDrag(e.Pointer, position, container);
+            e.Handled = true;
+            return;
         }
 
         BeginMapDrag(e.Pointer, position);
 
-        if (GetContainerFromEventSource(e.Source) is { } container)
+        if (container is not null)
         {
             var index = IndexFromContainer(container);
             Selection.BeginBatchUpdate();
