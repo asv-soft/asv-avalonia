@@ -121,6 +121,9 @@
     <data name="ShellMessage_CopyDetails" xml:space="preserve">
         <value>Скопировать детали</value>
     </data>
+    <data name="ShellMessage_ShowDetails" xml:space="preserve">
+        <value>Показать детали</value>
+    </data>
     <data name="ShellView_WindowControlButton_Maximize" xml:space="preserve">
         <value>Во весь экран</value>
     </data>

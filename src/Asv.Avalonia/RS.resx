@@ -114,6 +114,9 @@
     <data name="ShellMessage_CopyDetails" xml:space="preserve">
         <value>Copy details</value>
     </data>
+    <data name="ShellMessage_ShowDetails" xml:space="preserve">
+        <value>Show details</value>
+    </data>
     <data name="ShellView_WindowControlButton_Maximize" xml:space="preserve">
         <value>Full screen</value>
     </data>

@@ -11,7 +11,8 @@ using Material.Icons.Avalonia;
 namespace Asv.Avalonia;
 
 /// <summary>
-/// Displays a small Markdown subset with headings, lists, Material icons, and Asv colors.
+/// Displays a small Markdown subset with headings, lists, bold text, Material icons, and Asv
+/// colors.
 /// </summary>
 public class MarkdownViewer : ContentControl
 {
@@ -279,7 +280,7 @@ public class MarkdownViewer : ContentControl
         }
 
         block.Inlines ??= [];
-        AddInlineElements(block.Inlines, text, AsvColorKind.None, styleClass);
+        AddInlineElements(block.Inlines, text, AsvColorKind.None, false);
         return block;
     }
 
@@ -287,28 +288,42 @@ public class MarkdownViewer : ContentControl
         InlineCollection inlines,
         string text,
         AsvColorKind color,
-        string? styleClass
+        bool isBold
     )
     {
         var index = 0;
         while (index < text.Length)
         {
-            var tokenStart = FindNextTokenStart(text, index);
+            var tokenStart = FindNextInlineTokenStart(text, index, out var tokenKind);
             if (tokenStart < 0)
             {
-                AddTextInline(inlines, text[index..], color, styleClass);
+                AddTextInline(inlines, text[index..], color, isBold);
                 return;
             }
 
             if (tokenStart > index)
             {
-                AddTextInline(inlines, text[index..tokenStart], color, styleClass);
+                AddTextInline(inlines, text[index..tokenStart], color, isBold);
+            }
+
+            if (tokenKind == MarkdownInlineTokenKind.Bold)
+            {
+                var closeStart = FindClosingBoldMarker(text, tokenStart + 2);
+                if (closeStart < 0)
+                {
+                    AddTextInline(inlines, text[tokenStart..], color, isBold);
+                    return;
+                }
+
+                AddInlineElements(inlines, text[(tokenStart + 2)..closeStart], color, true);
+                index = closeStart + 2;
+                continue;
             }
 
             var tokenEnd = text.IndexOf(']', tokenStart + 1);
             if (tokenEnd < 0)
             {
-                AddTextInline(inlines, text[tokenStart..], color, styleClass);
+                AddTextInline(inlines, text[tokenStart..], color, isBold);
                 return;
             }
 
@@ -337,7 +352,7 @@ public class MarkdownViewer : ContentControl
                         inlines,
                         text[colorTextStart..closeStart],
                         parsedColor,
-                        styleClass
+                        isBold
                     );
                     index = closeStart + "[/color]".Length;
                     continue;
@@ -345,7 +360,7 @@ public class MarkdownViewer : ContentControl
             }
 
             var literalEnd = tokenEnd + 1;
-            AddTextInline(inlines, text[tokenStart..literalEnd], color, styleClass);
+            AddTextInline(inlines, text[tokenStart..literalEnd], color, isBold);
             index = tokenEnd + 1;
         }
     }
@@ -372,11 +387,11 @@ public class MarkdownViewer : ContentControl
         inlines.Add(new InlineUIContainer(icon));
     }
 
-    private static void AddTextInline(
+    private void AddTextInline(
         InlineCollection inlines,
         string text,
         AsvColorKind color,
-        string? styleClass
+        bool isBold
     )
     {
         var unescapedText = Unescape(text);
@@ -385,23 +400,111 @@ public class MarkdownViewer : ContentControl
             return;
         }
 
-        if (color == AsvColorKind.None)
+        var run = new Run(unescapedText);
+        if (isBold)
         {
-            inlines.Add(new Run(unescapedText));
-            return;
+            run.FontWeight = FontWeight.Bold;
         }
 
-        var block = new SelectableTextBlock { Text = unescapedText };
-        if (styleClass is not null)
+        if (TryGetForegroundBrush(color, out var brush))
         {
-            block.Classes.Add(styleClass);
+            run.Foreground = brush;
         }
 
-        AsvPallete.SetColor(block, color);
-        inlines.Add(new InlineUIContainer(block));
+        inlines.Add(run);
     }
 
-    private static int FindNextTokenStart(string text, int start)
+    private bool TryGetForegroundBrush(AsvColorKind color, out IBrush brush)
+    {
+        brush = null!;
+        var resourceKey = GetForegroundBrushResourceKey(color);
+        if (resourceKey is null)
+        {
+            return false;
+        }
+
+        return this.TryFindResource(resourceKey, out var resource) && resource is IBrush foundBrush
+            ? (brush = foundBrush) is not null
+            : global::Avalonia.Application.Current?.TryGetResource(
+                resourceKey,
+                ActualThemeVariant,
+                out resource
+            ) == true
+                && resource is IBrush applicationBrush
+                && (brush = applicationBrush) is not null;
+    }
+
+    private static string? GetForegroundBrushResourceKey(AsvColorKind color)
+    {
+        var paletteColor =
+            color
+            & ~(
+                AsvColorKind.Blink
+                | AsvColorKind.BlinkOnce
+                | AsvColorKind.Fadein
+                | AsvColorKind.FadeinBlink
+                | AsvColorKind.Fadeout
+                | AsvColorKind.Small
+                | AsvColorKind.Medium
+                | AsvColorKind.Large
+            );
+
+        return paletteColor switch
+        {
+            AsvColorKind.Error => "AsvForegroundErrorBrush",
+            AsvColorKind.Warning => "AsvForegroundWarningBrush",
+            AsvColorKind.Success => "AsvForegroundSuccessBrush",
+            AsvColorKind.Unknown => "AsvForegroundUnknownBrush",
+            AsvColorKind.Info1 => "AsvForegroundInfo1Brush",
+            AsvColorKind.Info2 => "AsvForegroundInfo2Brush",
+            AsvColorKind.Info3 => "AsvForegroundInfo3Brush",
+            AsvColorKind.Info4 => "AsvForegroundInfo4Brush",
+            AsvColorKind.Info5 => "AsvForegroundInfo5Brush",
+            AsvColorKind.Info6 => "AsvForegroundInfo6Brush",
+            AsvColorKind.Info7 => "AsvForegroundInfo7Brush",
+            AsvColorKind.Info8 => "AsvForegroundInfo8Brush",
+            AsvColorKind.Info9 => "AsvForegroundInfo9Brush",
+            AsvColorKind.Info10 => "AsvForegroundInfo10Brush",
+            AsvColorKind.Info11 => "AsvForegroundInfo11Brush",
+            AsvColorKind.Info12 => "AsvForegroundInfo12Brush",
+            AsvColorKind.Info13 => "AsvForegroundInfo13Brush",
+            AsvColorKind.Info14 => "AsvForegroundInfo14Brush",
+            AsvColorKind.Info15 => "AsvForegroundInfo15Brush",
+            AsvColorKind.Info16 => "AsvForegroundInfo16Brush",
+            AsvColorKind.Info17 => "AsvForegroundInfo17Brush",
+            AsvColorKind.Info18 => "AsvForegroundInfo18Brush",
+            AsvColorKind.Info19 => "AsvForegroundInfo19Brush",
+            AsvColorKind.Info20 => "AsvForegroundInfo20Brush",
+            _ => null,
+        };
+    }
+
+    private static int FindNextInlineTokenStart(
+        string text,
+        int start,
+        out MarkdownInlineTokenKind tokenKind
+    )
+    {
+        var attributeStart = FindNextAttributeTokenStart(text, start);
+        var boldStart = FindNextBoldMarker(text, start);
+
+        if (attributeStart < 0 && boldStart < 0)
+        {
+            tokenKind = MarkdownInlineTokenKind.None;
+            return -1;
+        }
+
+        if (attributeStart >= 0 && (boldStart < 0 || attributeStart < boldStart))
+        {
+            tokenKind = MarkdownInlineTokenKind.Attribute;
+            return attributeStart;
+        }
+
+        tokenKind = MarkdownInlineTokenKind.Bold;
+        return boldStart;
+    }
+
+    private static int FindNextAttributeTokenStart(string text, int start)
     {
         for (var i = start; i < text.Length; i++)
         {
@@ -412,6 +515,33 @@ public class MarkdownViewer : ContentControl
         }
 
         return -1;
+    }
+
+    private static int FindNextBoldMarker(string text, int start)
+    {
+        var index = start;
+        while (index < text.Length - 1)
+        {
+            var markerStart = text.IndexOf("**", index, StringComparison.Ordinal);
+            if (markerStart < 0)
+            {
+                return -1;
+            }
+
+            if (!IsEscaped(text, markerStart))
+            {
+                return markerStart;
+            }
+
+            index = markerStart + 2;
+        }
+
+        return -1;
+    }
+
+    private static int FindClosingBoldMarker(string text, int start)
+    {
+        return FindNextBoldMarker(text, start);
     }
 
     private static int FindClosingColorTag(string text, int start)
@@ -473,7 +603,7 @@ public class MarkdownViewer : ContentControl
 
     private static bool IsEscapable(char value)
     {
-        return value is '[' or ']' or '\\';
+        return value is '[' or ']' or '*' or '\\';
     }
 
     private static Dictionary<string, string> ParseAttributes(string token)
@@ -535,5 +665,12 @@ public class MarkdownViewer : ContentControl
     {
         Unordered,
         Ordered,
+    }
+
+    private enum MarkdownInlineTokenKind
+    {
+        None,
+        Attribute,
+        Bold,
     }
 }

@@ -52,6 +52,7 @@ public class MarkdownPageViewModel : ControlsGallerySubPage
 
             - Icon token: \[icon=CheckCircle;color=Success;]
             - Text color token: \[color=Warning;]warning text\[/color]
+            - Bold text: **important text**
             - Attribute separator: use semicolon after each key-value pair.
             - Color flags: combine AsvColorKind values with |, for example Error|Blink.
 
@@ -61,6 +62,7 @@ public class MarkdownPageViewModel : ControlsGallerySubPage
             - [icon=AlertCircle;color=Warning;] Warning item using AsvColorKind.Warning.
             - [icon=Information;color=Info5;] Informational item using Info5.
             - Text can contain [color=Success;]green success fragments[/color], [color=Warning;]warning fragments[/color], and [color=Error|Blink;]blinking error fragments[/color].
+            - Inline formatting can combine [color=Warning;]**bold warning fragments**[/color] with normal text.
 
             1. [icon=Cog;color=Info7;] Ordered item with an icon.
             2. [icon=CodeBraces;color=Info12;] Ordered item with another palette color.
@@ -71,5 +73,6 @@ public class MarkdownPageViewModel : ControlsGallerySubPage
 
             - Literal icon token: \[icon=CheckCircle;color=Success;]
             - Literal color block: \[color=Success;]text\[/color]
+            - Literal bold marker: \**not bold\**
             """;
 }

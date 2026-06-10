@@ -2544,6 +2544,15 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show details.
+        /// </summary>
+        public static string ShellMessage_ShowDetails {
+            get {
+                return ResourceManager.GetString("ShellMessage_ShowDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close.
         /// </summary>
         public static string ShellView_WindowControlButton_Close {

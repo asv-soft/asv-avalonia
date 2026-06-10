@@ -45,6 +45,16 @@
 - Keep UI changes consistent with the current theme, resource dictionaries, and control structure.
 - When adding user-facing text, update localization resources consistently when the surrounding feature is localized.
 
+## MarkdownViewer Notes
+
+- Use `MarkdownViewer` for short trusted in-app documentation, status text, exception details, and markdown-enabled tooltips where native Avalonia rendering is preferred over full HTML Markdown.
+- The supported block syntax is intentionally small: `# Title`, `## Section`, `### Subsection`, unordered list items with `- item` or `* item`, ordered list items with `1. item`, and normal paragraphs.
+- Supported inline syntax includes bold text with `**important text**`, Material icons with optional palette color, for example `[icon=CheckCircle;color=Success;]`, and colored text spans, for example `[color=Warning;]warning text[/color]`.
+- Token attributes use semicolon-separated `key=value` pairs. Color values are `AsvColorKind` names and can be combined with `|`, for example `[color=Error|Blink;]critical text[/color]`.
+- Escape literal token brackets or bold markers with backslashes when showing syntax as text: `\[icon=CheckCircle;color=Success;]`, `\[color=Success;]text\[/color]`, or `\**not bold\**`.
+- Do not assume unsupported Markdown features render correctly. Tables, links, images, code fences, italic or single-asterisk emphasis, raw HTML, and nested lists need explicit `MarkdownViewer` support before using them.
+- Use `MarkdownToolTipConverter` when a tooltip should render the same supported subset instead of plain text.
+
 ## PropertyEditor Notes
 
 - `PropertyTextBoxViewModel` owns text apply/cancel behavior and can register text undo with its constructor `enableUndo` flag. `UndoController` already handles undo/redo execution state, so avoid local guard flags that duplicate that responsibility.

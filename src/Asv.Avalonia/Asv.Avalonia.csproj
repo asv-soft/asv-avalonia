@@ -146,6 +146,7 @@
       <AdditionalFiles Include="Core\Controls\Workspace\Workspace.axaml" />
       <AdditionalFiles Include="Core\Controls\Workspace\WorkspaceItem.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemHotKeyCaptureView.axaml" />
+      <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemMarkdownView.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextBoxView.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemTextView.axaml" />
       <AdditionalFiles Include="Core\Services\Dialog\Content\DialogItemUnsavedChangesView.axaml" />
