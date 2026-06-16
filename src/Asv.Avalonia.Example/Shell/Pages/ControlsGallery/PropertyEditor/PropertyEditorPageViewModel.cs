@@ -1,9 +1,6 @@
-using System;
-using System.Collections.Generic;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia.Example;
@@ -18,7 +15,6 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         : this(
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
             DesignTime.UnitService,
-            DesignTime.LoggerFactory,
             DesignTime.DialogService
         )
     {
@@ -29,14 +25,16 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public PropertyEditorPageViewModel(
         ITreeSubPageContext<IControlsGalleryPage> context,
         IUnitService unit,
-        ILoggerFactory loggerFactory,
         IDialogService dialogService
     )
         : base(PageId, context)
     {
         DisplayNameProperty = CreateDisplayNameProperty();
         OperationProfileProperty = CreateOperationProfileProperty();
-        ActionButtonProperty = CreateActionButtonProperty();
+
+        ActionButtonProperty = CreateActionButtonProperty(
+            DisplayNameProperty.Text.Select(static name => !string.IsNullOrWhiteSpace(name))
+        );
         AltitudeUnitProperty = CreateUnitProperty(
             "altitude-unit",
             unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
@@ -315,10 +313,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         return AddExampleErrorMenu(property);
     }
 
-    private PropertyButtonViewModel CreateActionButtonProperty()
+    private PropertyButtonViewModel CreateActionButtonProperty(Observable<bool>? canExecute = null)
     {
         return AddExampleErrorMenu(
-            new PropertyButtonViewModel("run-check", ExecuteActionButton)
+            new PropertyButtonViewModel("run-check", ExecuteActionButton, canExecute)
             {
                 Header = "Run check",
                 ShortHeader = "Run",
