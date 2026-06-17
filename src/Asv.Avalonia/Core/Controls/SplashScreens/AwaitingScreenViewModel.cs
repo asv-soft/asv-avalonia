@@ -54,9 +54,7 @@ public interface IAwaitingScreen
     double? Progress { get; set; }
 }
 
-public class AwaitingScreenViewModel(string id)
-    : ViewModel(id),
-        IAwaitingScreen
+public class AwaitingScreenViewModel(string id) : ViewModel(id), IAwaitingScreen
 {
     public IDisposable? Show(string header, string message, TimeSpan? delayForShowMessage = null)
     {

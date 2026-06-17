@@ -177,7 +177,11 @@ file static class AvaPlotExtensions
         return new Pixel(x, y);
     }
 
-    public static void ProcessMouseDown(this UserInputProcessor processor, Pixel pixel, PointerUpdateKind kind)
+    public static void ProcessMouseDown(
+        this UserInputProcessor processor,
+        Pixel pixel,
+        PointerUpdateKind kind
+    )
     {
         IUserAction action = kind switch
         {
@@ -189,7 +193,11 @@ file static class AvaPlotExtensions
         processor.Process(action);
     }
 
-    public static void ProcessMouseUp(this UserInputProcessor processor, Pixel pixel, PointerUpdateKind kind)
+    public static void ProcessMouseUp(
+        this UserInputProcessor processor,
+        Pixel pixel,
+        PointerUpdateKind kind
+    )
     {
         IUserAction action = kind switch
         {
@@ -206,11 +214,14 @@ file static class AvaPlotExtensions
         processor.Process(new UserActions.MouseMove(pixel));
     }
 
-    public static void ProcessMouseWheel(this UserInputProcessor processor, Pixel pixel, double delta)
+    public static void ProcessMouseWheel(
+        this UserInputProcessor processor,
+        Pixel pixel,
+        double delta
+    )
     {
-        IUserAction action = delta > 0
-            ? new UserActions.MouseWheelUp(pixel)
-            : new UserActions.MouseWheelDown(pixel);
+        IUserAction action =
+            delta > 0 ? new UserActions.MouseWheelUp(pixel) : new UserActions.MouseWheelDown(pixel);
         processor.Process(action);
     }
 
@@ -319,7 +330,10 @@ file sealed class AvaPlotMenu(AvaPlot avaPlot) : IPlotMenu
                 continue;
             }
 
-            var menuItem = new global::Avalonia.Controls.MenuItem { Header = contextMenuItem.Label };
+            var menuItem = new global::Avalonia.Controls.MenuItem
+            {
+                Header = contextMenuItem.Label,
+            };
             menuItem.Click += (_, _) => contextMenuItem.OnInvoke(plot);
             items.Add(menuItem);
         }
