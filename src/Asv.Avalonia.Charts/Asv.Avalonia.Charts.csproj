@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    </PropertyGroup>
+   
+    <ItemGroup>
+      <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ScottPlot" Version="5.1.58" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Core\Controls\Dashboard\" />
+      <Folder Include="Core\Controls\Workspace\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Core\Controls\Plot\PlotView.axaml" />
+    </ItemGroup>
+
+</Project>

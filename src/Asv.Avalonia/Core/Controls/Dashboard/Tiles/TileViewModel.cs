@@ -1,4 +1,5 @@
-﻿using Asv.Modeling;
+﻿using Asv.Common;
+using Asv.Modeling;
 using Material.Icons;
 using R3;
 
@@ -18,28 +19,24 @@ public interface ITileViewModel : IHeadlinedViewModel
 
 public class TileViewModel : HeadlinedViewModel, ITileViewModel
 {
-    public TileViewModel() 
-        : base(NavId.GenerateRandomAsString())
+    private bool _isLayoutLoaded;
+
+    public TileViewModel()
+        : this(NavId.GenerateRandomAsString())
     {
         DesignTime.ThrowIfNotDesignMode();
     }
-    
-    public TileViewModel(string typeId) 
+
+    public TileViewModel(string typeId)
         : base(typeId)
     {
-        
+        RegisterDensityLayout();
     }
 
     public TileDensity Density
     {
         get;
         set => SetField(ref field, value);
-    }
-    
-    public bool UpdatedFlag
-    {
-        get;
-        private set => SetField(ref field, value);
     }
 
     public string? ShortHeader
@@ -48,27 +45,71 @@ public class TileViewModel : HeadlinedViewModel, ITileViewModel
         set => SetField(ref field, value);
     }
 
-    public bool IsBusy
-    {
-        get;
-        protected set => SetField(ref field, value);
-    }
-
-    public MaterialIconKind ErrorIcon
-    {
-        get;
-        set => SetField(ref field, value);
-    } = MaterialIconKind.CloseNetwork;
-
-    public string? ErrorMessage
+    public AsvColorKind StatusColor
     {
         get;
         set => SetField(ref field, value);
     }
 
-    protected void MarkUpdated()
+    public MaterialIconKind? StatusIcon
     {
-        UpdatedFlag = false;
-        UpdatedFlag = true;
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public AsvColorKind StatusIconColor
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+
+    public void MarkUpdated()
+    {
+        // Reset first so class-based Fadeout animations restart on repeated updates.
+        StatusIconColor &= ~AsvColorKind.Fadeout;
+        StatusIconColor |= AsvColorKind.Fadeout;
+    }
+
+    private void RegisterDensityLayout()
+    {
+        var densityLayout = Layout.Register<TileDensity>(
+            nameof(Density),
+            (value, _) =>
+            {
+                if (Enum.IsDefined(value))
+                {
+                    Density = value;
+                }
+
+                return ValueTask.CompletedTask;
+            }
+        );
+        var densityLayoutSave = this.ObservePropertyChanged(x => x.Density)
+            .Where(_ => _isLayoutLoaded)
+            .SubscribeAwait(
+                (_, cancel) => densityLayout.SaveAsync(Density, cancel),
+                AwaitOperation.Drop
+            );
+        R3.Disposable.Combine(densityLayout, densityLayoutSave).DisposeItWith(Disposable);
+
+        RootTracking.ExecuteWhenRootAttached(LoadLayoutWhenRootAttached).DisposeItWith(Disposable);
+        return;
+
+        async ValueTask LoadLayoutWhenRootAttached(IShell root, CancellationToken cancel)
+        {
+            _ = root;
+            _isLayoutLoaded = false;
+            try
+            {
+                await densityLayout.LoadAsync(cancel);
+            }
+            finally
+            {
+                if (!cancel.IsCancellationRequested && !IsDisposed)
+                {
+                    _isLayoutLoaded = true;
+                }
+            }
+        }
     }
 }

@@ -9,7 +9,6 @@ public static class DashboardMixin
             return builder
                 .RegisterViewFor<IDashboard, DashboardView>()
                 .RegisterViewFor<DashboardViewModel, DashboardView>()
-                .RegisterViewFor<DashboardWidget, DashboardWidgetView>()
                 .RegisterViewFor<TextTileViewModel, TextTileView>();
         }
     }

@@ -27,6 +27,10 @@
         </Style>
 
         <!-- =============== DESCRIPTION / SUBTITLE =============== -->
+        <Style Selector="^.header">
+            <Setter Property="Foreground" Value="{DynamicResource AsvForegroundHeaderColor}" />
+        </Style>
+        
         <Style Selector="^.description">
             <Setter Property="FontSize" Value="{DynamicResource AsvFontSizeSmall}" />
             <Setter Property="FontWeight" Value="Normal" />

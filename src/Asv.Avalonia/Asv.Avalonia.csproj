@@ -167,8 +167,4 @@
       <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Core\Controls\Dashboard\Tiles\Digit\" />
-    </ItemGroup>
-
 </Project>

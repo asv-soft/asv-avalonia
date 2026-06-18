@@ -30,6 +30,7 @@
     <File Path="CodeStyle.ruleset" />
     <File Path="Directory.Build.props" />
   </Folder>
+  <Project Path="Asv.Avalonia.Charts/Asv.Avalonia.Charts.csproj" />
   <Project Path="Asv.Avalonia.DC/Asv.Avalonia.DC.csproj" />
   <Project Path="Asv.Avalonia.GeoMap/Asv.Avalonia.GeoMap.csproj" />
   <Project Path="Asv.Avalonia.IO/Asv.Avalonia.IO.csproj" />

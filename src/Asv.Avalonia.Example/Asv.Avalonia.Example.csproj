@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Asv.Avalonia.Charts\Asv.Avalonia.Charts.csproj" />
       <ProjectReference Include="..\Asv.Avalonia.Example.Api\Asv.Avalonia.Example.Api.csproj" />
     </ItemGroup>
 

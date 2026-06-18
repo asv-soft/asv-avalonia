@@ -2,6 +2,8 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 >
+    
+    
     <!-- Status colors -->
     <Color x:Key="AsvForegroundErrorColor">#cc5058</Color>
     <!-- Red – Error -->
@@ -103,4 +105,5 @@
     <!-- Other theme colors -->
     <Color x:Key="AsvPopupCommonColor">#2F2F2F</Color>
     <Color x:Key="AsvSmokeFillColorDefault">#4D000000</Color>
+    <Color x:Key="AsvForegroundHeaderColor">#8d93a0</Color>
 </ResourceDictionary>

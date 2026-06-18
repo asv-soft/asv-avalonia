@@ -95,4 +95,5 @@
 
     <Color x:Key="AsvPopupCommonColor">#C3C3C3</Color>
     <Color x:Key="AsvSmokeFillColorDefault">#4DFFFFFF</Color>
+    <Color x:Key="AsvForegroundHeaderColor">#5C6370</Color>
 </ResourceDictionary>

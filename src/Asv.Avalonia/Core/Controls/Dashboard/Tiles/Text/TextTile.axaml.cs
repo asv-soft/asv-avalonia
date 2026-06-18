@@ -64,16 +64,22 @@ public class TextTile : TemplatedControl
         set => SetValue(IconColorProperty, value);
     }
 
-    public static readonly StyledProperty<AsvColorKind> StatusColorProperty =
-        AvaloniaProperty.Register<TextTile, AsvColorKind>(
-            nameof(StatusColor),
-            AsvColorKind.Info3 | AsvColorKind.Blink
-        );
+    public static readonly StyledProperty<MaterialIconKind?> StatusIconProperty = AvaloniaProperty.Register<TextTile, MaterialIconKind?>(
+        nameof(StatusIcon));
 
-    public AsvColorKind StatusColor
+    public MaterialIconKind? StatusIcon
     {
-        get => GetValue(StatusColorProperty);
-        set => SetValue(StatusColorProperty, value);
+        get => GetValue(StatusIconProperty);
+        set => SetValue(StatusIconProperty, value);
+    }
+
+    public static readonly StyledProperty<AsvColorKind> StatusIconColorProperty = AvaloniaProperty.Register<TextTile, AsvColorKind>(
+        nameof(StatusIconColor));
+
+    public AsvColorKind StatusIconColor
+    {
+        get => GetValue(StatusIconColorProperty);
+        set => SetValue(StatusIconColorProperty, value);
     }
 
     public static readonly StyledProperty<string?> StatusTextProperty = AvaloniaProperty.Register<

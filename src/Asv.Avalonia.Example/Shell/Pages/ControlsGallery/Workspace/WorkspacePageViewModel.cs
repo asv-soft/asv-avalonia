@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Avalonia.Charts;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.InfoMessage;
 using Asv.Common;
@@ -27,7 +28,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             DesignTime.LoggerFactory,
             DesignTime.UnitService,
             NullMapService.Instance,
-            DesignTime.DialogService
+            DesignTime.DialogService,
+            DesignTime.ThemeService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -40,14 +42,14 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         ILoggerFactory loggerFactory,
         IUnitService unitService,
         IMapService mapService,
-        IDialogService dialogService
+        IDialogService dialogService,
+        IThemeService themeService
     )
         : base(PageId, context)
     {
         Init(context.Context);
         _loggerFactory = loggerFactory;
         MapViewModel = new MapViewModel("map-view", mapService).DisposeItWith(Disposable);
-        GenerateExceptionCommand = new ReactiveCommand(GenerateException).DisposeItWith(Disposable);
         var hideAll = new MenuItem("hide-all", "Hide all")
         {
             Command = new ReactiveCommand(x =>
@@ -98,9 +100,21 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 }
             ),
         };
+        var generateException = new MenuItem("generate-exception", "Generate Exception")
+        {
+            Icon = MaterialIconKind.AlertCircle,
+            IconColor = AsvColorKind.Error,
+            Order = 100,
+            Command = new ReactiveCommand(GenerateException).DisposeItWith(Disposable),
+        };
         Menu.Add(showAll);
         Menu.Add(hideAll);
         Menu.Add(showError);
+        Menu.Add(generateException);
+        var signalPlot = CreateSignalPlotWidget(themeService);
+        var dashboard = CreateDashboardWidget();
+        StartSignalPlotDemo(signalPlot);
+
         _itemsSource =
         [
             new PropertyEditorWidgetViewModel(
@@ -110,6 +124,11 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             )
             {
                 Position = WorkspaceDock.Left,
+                Icon = MaterialIconKind.Tune,
+                IconColor = AsvColorKind.Info5,
+                IsExpanded = true,
+                CanExpand = true,
+                IsVisible = true,
                 ItemsSource =
                 {
                     new PropertyGeoPointReactive(
@@ -132,44 +151,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                     },
                 },
             },
-            new WrapPanelWidgetViewModel("primary-rtt-panel", loggerFactory)
-            {
-                Position = WorkspaceDock.Right,
-                ItemsSource =
-                {
-                    new SingleRttBoxViewModel("single-1")
-                    {
-                        Header = "Single RTT 1",
-                        ShortHeader = "RTT1",
-                        ValueString = "15.25",
-                    },
-                    new SingleRttBoxViewModel("single-2")
-                    {
-                        Header = "Single RTT 2",
-                        ShortHeader = "RTT2",
-                        ValueString = "15.25",
-                    },
-                },
-            },
-            new WrapPanelWidgetViewModel("secondary-rtt-panel", loggerFactory)
-            {
-                Position = WorkspaceDock.Right,
-                ItemsSource =
-                {
-                    new SingleRttBoxViewModel("single-1")
-                    {
-                        Header = "Single RTT 1",
-                        ShortHeader = "RTT1",
-                        ValueString = "15.25",
-                    },
-                    new SingleRttBoxViewModel("single-2")
-                    {
-                        Header = "Single RTT 2",
-                        ShortHeader = "RTT2",
-                        ValueString = "15.25",
-                    },
-                },
-            },
+            signalPlot,
+            dashboard,
             new MapWidget("map-widget", loggerFactory, mapService)
             {
                 Position = WorkspaceDock.Bottom,
@@ -226,8 +209,6 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public MapViewModel MapViewModel { get; }
 
-    public ReactiveCommand GenerateExceptionCommand { get; }
-
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return MapViewModel;
@@ -255,6 +236,116 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         }
 
         return ValueTask.CompletedTask;
+    }
+
+    private SignalPlotWidget CreateSignalPlotWidget(IThemeService themeService)
+    {
+        return new SignalPlotWidget("signal-plot-widget", themeService)
+        {
+            Position = WorkspaceDock.Right,
+            Header = "Signal Plot",
+            Icon = MaterialIconKind.Signal,
+            IconColor = AsvColorKind.Info5,
+            IsExpanded = true,
+            CanExpand = false,
+            IsVisible = true,
+            HistorySize = 5,
+            Order = 10,
+        };
+    }
+
+    private static DashboardWidget CreateDashboardWidget()
+    {
+        var dashboard = new DashboardWidget("telemetry-dashboard")
+        {
+            Position = WorkspaceDock.Right,
+            Header = "Telemetry Dashboard",
+            Icon = MaterialIconKind.ViewGallery,
+            IconColor = AsvColorKind.Info4,
+            IsExpanded = true,
+            CanExpand = true,
+            IsVisible = true,
+            Order = 20,
+        };
+
+        dashboard.Tiles.Add(
+            new TextTileViewModel("workspace-dashboard-battery")
+            {
+                Density = TileDensity.Regular,
+                Header = "Battery",
+                ShortHeader = "BAT",
+                Icon = MaterialIconKind.Battery80,
+                IconColor = AsvColorKind.Warning,
+                StatusIcon = MaterialIconKind.CheckCircle,
+                StatusIconColor = AsvColorKind.Success,
+                Text = "76",
+                TextColor = AsvColorKind.Warning,
+                Units = "%",
+                StatusText = "15.6 V / 4.8 A",
+                StatusTextColor = AsvColorKind.Unknown,
+                Progress = 76,
+                ProgressColor = AsvColorKind.Warning,
+            }
+        );
+        dashboard.Tiles.Add(
+            new TextTileViewModel("workspace-dashboard-link")
+            {
+                Density = TileDensity.Compact,
+                Header = "Link Quality",
+                ShortHeader = "LINK",
+                Icon = MaterialIconKind.Signal,
+                IconColor = AsvColorKind.Info5,
+                StatusIcon = MaterialIconKind.CheckCircle,
+                StatusIconColor = AsvColorKind.Success,
+                Text = "92",
+                TextColor = AsvColorKind.Success,
+                Units = "%",
+                Progress = 92,
+                ProgressColor = AsvColorKind.Success,
+            }
+        );
+        dashboard.Tiles.Add(
+            new TextTileViewModel("workspace-dashboard-fix")
+            {
+                Density = TileDensity.Inline,
+                Header = "GNSS Fix",
+                ShortHeader = "GNSS",
+                Icon = MaterialIconKind.CrosshairsGps,
+                IconColor = AsvColorKind.Info5,
+                StatusIcon = MaterialIconKind.CheckCircle,
+                StatusIconColor = AsvColorKind.Success,
+                Text = "RTK Fixed",
+                TextColor = AsvColorKind.Success,
+            }
+        );
+
+        return dashboard;
+    }
+
+    private void StartSignalPlotDemo(SignalPlotWidget signalPlot)
+    {
+        var tick = 0;
+        UpdateSignalPlot(signalPlot, tick);
+        Observable
+            .Timer(TimeSpan.FromMilliseconds(500), TimeSpan.FromMilliseconds(500))
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(_ => UpdateSignalPlot(signalPlot, ++tick))
+            .DisposeItWith(Disposable);
+    }
+
+    private static void UpdateSignalPlot(SignalPlotWidget signalPlot, int tick)
+    {
+        const int SampleCount = 128;
+        var samples = new double[SampleCount];
+        var phase = tick * 0.18;
+
+        for (var i = 0; i < samples.Length; i++)
+        {
+            var x = i / 8.0;
+            samples[i] = Math.Sin(x + phase) + (0.35 * Math.Sin((x * 2.7) - phase));
+        }
+
+        signalPlot.Refresh(samples);
     }
 
     private async ValueTask GenerateException(Unit unit, CancellationToken cancel)

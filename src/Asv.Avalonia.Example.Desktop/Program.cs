@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
+using Asv.Avalonia.Charts;
 using Asv.Avalonia.Example.Api;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.IO;
@@ -73,6 +74,7 @@ sealed class Program
                             .UseOptionalMarket(); // register market plugins page
                     })
                     .UseModuleGeoMap()
+                    .UseModuleCharts()
                     .UseLauncher(cfg =>
                     {
                         cfg.IsOptional();

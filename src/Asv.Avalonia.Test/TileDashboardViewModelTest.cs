@@ -41,6 +41,30 @@ public class DashboardViewModelTest
         Assert.Equal([tile], GetItems(dashboard.Inline));
     }
 
+    [Fact]
+    public void MarkUpdated_StatusIconColorAlreadyHasFadeout_ReappliesFadeout()
+    {
+        // Arrange
+        var tile = new TestTileViewModel("tile")
+        {
+            StatusIconColor = AsvColorKind.Success | AsvColorKind.Fadeout,
+        };
+        var changes = new List<AsvColorKind>();
+        tile.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(TileViewModel.StatusIconColor))
+            {
+                changes.Add(tile.StatusIconColor);
+            }
+        };
+
+        // Act
+        tile.MarkUpdated();
+
+        // Assert
+        Assert.Equal([AsvColorKind.Success, AsvColorKind.Success | AsvColorKind.Fadeout], changes);
+    }
+
     private static List<ITileViewModel> GetItems(IEnumerable<ITileViewModel> source)
     {
         var result = new List<ITileViewModel>();

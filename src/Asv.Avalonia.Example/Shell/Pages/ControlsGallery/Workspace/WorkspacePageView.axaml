@@ -24,21 +24,13 @@
                         MinLeftWidth="250"
                         LeftWidth="250"
                         CentralWidth="*"
-                        MinRightWidth="260"
-                        RightWidth="260"
+                        MinRightWidth="200"
+                        RightWidth="200"
                         BottomHeight="250"
                         MinBottomHeight="250"
                     />
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </avalonia:Workspace>
-        <Button
-            Classes="danger"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Margin="12"
-            Content="Generate Exception"
-            Command="{CompiledBinding GenerateExceptionCommand}"
-        />
     </Panel>
 </UserControl>
