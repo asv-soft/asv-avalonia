@@ -67,7 +67,17 @@ public partial class MapCanvas : Panel
         );
 
         SetRotation(child, MapRotation);
-        child.Arrange(new Rect(pos, child.DesiredSize));
+
+        var rectToArrange = new Rect(pos, child.DesiredSize);
+        if (
+            double.IsFinite(rectToArrange.X)
+            && double.IsFinite(rectToArrange.Y)
+            && double.IsFinite(rectToArrange.Width)
+            && double.IsFinite(rectToArrange.Height)
+        )
+        {
+            child.Arrange(rectToArrange);
+        }
     }
 
     private static Point RotatePoint(Point point, Point center, double angle)
