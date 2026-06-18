@@ -114,7 +114,7 @@
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/RttBox/RttBox.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/FrequencyScreen/FrequencyControl.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Dashboard/Tiles/Text/TextTile.axaml" />
-    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Dashboard/Tiles/List/ListTile.axaml" />
+    
     
     
 </Styles>
