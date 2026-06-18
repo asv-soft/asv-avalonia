@@ -11,7 +11,7 @@ public static class ControlsMixin
             .RegisterTreePage()
             .RegisterRttBox()
             .RegisterPropertyEditor()
-            .RegisterRttViewer();
+            .RegisterDashboard();
         return builder;
     }
 }

@@ -2,13 +2,13 @@ using Xunit;
 
 namespace Asv.Avalonia.Test;
 
-public class TileDashboardViewModelTest
+public class DashboardViewModelTest
 {
     [Fact]
     public void Tiles_AddTile_PutsTileIntoMatchingDensityList()
     {
         // Arrange
-        using var dashboard = new TileDashboardViewModel("dashboard");
+        using var dashboard = new DashboardViewModel("dashboard");
         var regular = new TestTileViewModel("regular") { Density = TileDensity.Regular };
         var compact = new TestTileViewModel("compact") { Density = TileDensity.Compact };
         var inline = new TestTileViewModel("inline") { Density = TileDensity.Inline };
@@ -28,7 +28,7 @@ public class TileDashboardViewModelTest
     public void TileDensity_Change_MovesTileBetweenDensityLists()
     {
         // Arrange
-        using var dashboard = new TileDashboardViewModel("dashboard");
+        using var dashboard = new DashboardViewModel("dashboard");
         var tile = new TestTileViewModel("tile") { Density = TileDensity.Regular };
         dashboard.Tiles.Add(tile);
 

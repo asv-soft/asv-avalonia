@@ -4,9 +4,9 @@ using Avalonia.Markup.Xaml;
 
 namespace Asv.Avalonia;
 
-public partial class TileDashboardView : UserControl
+public partial class DashboardWidgetView : UserControl
 {
-    public TileDashboardView()
+    public DashboardWidgetView()
     {
         InitializeComponent();
     }

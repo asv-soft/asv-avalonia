@@ -112,6 +112,10 @@
           <DependentUpon>TextTile.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Core\Controls\RttViewer\Dashboard\TileDashboardView.axaml.cs">
+          <DependentUpon>TileDashboardView.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -164,7 +168,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Core\Controls\RttViewer\Tiles\Digit\" />
+      <Folder Include="Core\Controls\Dashboard\Tiles\Digit\" />
     </ItemGroup>
 
 </Project>

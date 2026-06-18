@@ -5,22 +5,14 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public interface ITileDashboardViewModel : IViewModel
-{
-    ObservableList<ITileViewModel> Tiles { get; }
-    NotifyCollectionChangedSynchronizedViewList<ITileViewModel> Regular { get; }
-    NotifyCollectionChangedSynchronizedViewList<ITileViewModel> Compact { get; }
-    NotifyCollectionChangedSynchronizedViewList<ITileViewModel> Inline { get; }
-}
-
-public class TileDashboardViewModel : ViewModel, ITileDashboardViewModel
+public class DashboardViewModel : ViewModel, IDashboard
 {
     private readonly Dictionary<ITileViewModel, IDisposable> _densitySubscriptions = [];
     private readonly ObservableList<ITileViewModel> _regularTiles = [];
     private readonly ObservableList<ITileViewModel> _compactTiles = [];
     private readonly ObservableList<ITileViewModel> _inlineTiles = [];
 
-    public TileDashboardViewModel()
+    public DashboardViewModel()
         : this(NavId.GenerateRandomAsString())
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -67,7 +59,7 @@ public class TileDashboardViewModel : ViewModel, ITileDashboardViewModel
         );
     }
 
-    public TileDashboardViewModel(string typeId, NavArgs args = default)
+    public DashboardViewModel(string typeId, NavArgs args = default)
         : base(typeId, args)
     {
         Tiles.SetRoutableParent(this).DisposeItWith(Disposable);
