@@ -1,0 +1,388 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:Asv.Avalonia"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+>
+    <Design.PreviewWith>
+        <StackPanel Width="400" Height="600">
+            <WrapPanel Grid.IsSharedSizeScope="True">
+                <controls:TextTile
+                    Density="Regular"
+                    IconColor="Info1"
+                    ProgressColor="Error"
+                    Progress="10"
+                    Header="GNSS 1 Status"
+                    StatusTextColor="Warning"
+                    StatusText="15,6 V • 4.8 A • 74.9 W"
+                    ShortHeader="GNSS1"
+                    Text="123"
+                    SubScriptText=".456"
+                    Units="deg"
+                />
+                <controls:TextTile
+                    Density="Regular"
+                    Progress="10"
+                    Header="GNSS 1 Status"
+                    StatusText="15,6 V • 4.8 A • 74.9 W"
+                    ShortHeader="GNSS1"
+                    Text="123"
+                    SubScriptText="456"
+                    SuperScriptText="sss"
+                />
+
+                <controls:TextTile
+                    Density="Compact"
+                    Header="GNSS 3 Status"
+                    ShortHeader="GNSS3"
+                    Text="RTK Fixed"
+                />
+                <controls:TextTile
+                    Density="Compact"
+                    Header="GNSS 4 Status"
+                    ShortHeader="GNSS4"
+                    Text="RTK Fixed"
+                />
+                <controls:TextTile
+                    Density="Compact"
+                    Progress="{x:Static sys:Double.NegativeInfinity}"
+                    Header="GNSS 5 Status"
+                    ShortHeader="GNSS5"
+                    Text="RTK Fixed"
+                />
+                <controls:TextTile
+                    Density="Compact"
+                    Header="v Status"
+                    ShortHeader="GNSS"
+                    Text="RTK Fixed"
+                />
+                <controls:TextTile
+                    HorizontalAlignment="Stretch"
+                    Density="Inline"
+                    Header="GPS Status"
+                    ShortHeader="GNSS"
+                    Text="RTK Fixed"
+                />
+                <controls:TextTile
+                    HorizontalAlignment="Stretch"
+                    Density="Inline"
+                    Header="GPS Status"
+                    ShortHeader="GNSS"
+                    Text="RTK Fixed"
+                />
+                <controls:TextTile
+                    HorizontalAlignment="Stretch"
+                    Density="Inline"
+                    Header="GPS Status"
+                    ShortHeader="GNSS"
+                    Text="RTK Fixed"
+                />
+            </WrapPanel>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="Ellipse.text-tile-status-indicator">
+        <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+        <Style Selector="^.unknown">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundUnknownBrush}" />
+        </Style>
+        <Style Selector="^.error">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundErrorBrush}" />
+        </Style>
+        <Style Selector="^.warning">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundWarningBrush}" />
+        </Style>
+        <Style Selector="^.success">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundSuccessBrush}" />
+        </Style>
+        <Style Selector="^.info1">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo1Brush}" />
+        </Style>
+        <Style Selector="^.info2">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo2Brush}" />
+        </Style>
+        <Style Selector="^.info3">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+        </Style>
+        <Style Selector="^.info4">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo4Brush}" />
+        </Style>
+        <Style Selector="^.info5">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo5Brush}" />
+        </Style>
+        <Style Selector="^.info6">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo6Brush}" />
+        </Style>
+        <Style Selector="^.info7">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo7Brush}" />
+        </Style>
+        <Style Selector="^.info8">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo8Brush}" />
+        </Style>
+        <Style Selector="^.info9">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo9Brush}" />
+        </Style>
+        <Style Selector="^.info10">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo10Brush}" />
+        </Style>
+        <Style Selector="^.info11">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo11Brush}" />
+        </Style>
+        <Style Selector="^.info12">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo12Brush}" />
+        </Style>
+        <Style Selector="^.info13">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo13Brush}" />
+        </Style>
+        <Style Selector="^.info14">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo14Brush}" />
+        </Style>
+        <Style Selector="^.info15">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo15Brush}" />
+        </Style>
+        <Style Selector="^.info16">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo16Brush}" />
+        </Style>
+        <Style Selector="^.info17">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo17Brush}" />
+        </Style>
+        <Style Selector="^.info18">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo18Brush}" />
+        </Style>
+        <Style Selector="^.info19">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo19Brush}" />
+        </Style>
+        <Style Selector="^.info20">
+            <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo20Brush}" />
+        </Style>
+    </Style>
+
+    <Style Selector="controls|TextTile">
+        <!-- Set Defaults -->
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Margin="2"
+                    BoxShadow="0 2 8 0 #40000000"
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource ButtonBackground}"
+                    CornerRadius="4"
+                    Padding="4"
+                >
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top">
+                            <avalonia:MaterialIcon
+                                Margin="4,0,4,0"
+                                DockPanel.Dock="Left"
+                                Classes="medium"
+                                VerticalAlignment="Center"
+                                controls:AsvPallete.Color="{TemplateBinding IconColor}"
+                                Kind="{TemplateBinding Icon}"
+                            />
+                            <Panel Width="12" Height="12" DockPanel.Dock="Right">
+                                <Ellipse
+                                    Margin="4,0"
+                                    Classes="text-tile-status-indicator"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Width="5"
+                                    Height="5"
+                                    controls:AsvPallete.Color="{TemplateBinding StatusColor}"
+                                />
+                            </Panel>
+                            <TextBlock
+                                Text="{TemplateBinding Header}"
+                                FontSize="{DynamicResource AsvH3FontSize}"
+                                Foreground="{DynamicResource TextControlForegroundDisabled}"
+                                VerticalAlignment="Center"
+                            />
+                        </DockPanel>
+                        <controls:TelemetryProgressBar
+                            IsVisible="{TemplateBinding Progress, Converter={x:Static controls:TelemetryProgressBarConverter.Instance}, ConverterParameter=IsVisible}"
+                            IsIndeterminate="{TemplateBinding Progress, Converter={x:Static controls:TelemetryProgressBarConverter.Instance}, ConverterParameter=IsIndeterminate}"
+                            Value="{TemplateBinding Progress, Converter={x:Static controls:TelemetryProgressBarConverter.Instance}, ConverterParameter=Value}"
+                            Status="{TemplateBinding ProgressColor}"
+                            Margin="8,0"
+                            DockPanel.Dock="Bottom"
+                        />
+                        <TextBlock
+                            Margin="0,2"
+                            IsVisible="{TemplateBinding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}"
+                            DockPanel.Dock="Bottom"
+                            Text="{TemplateBinding StatusText}"
+                            FontSize="{DynamicResource AsvH3FontSize}"
+                            controls:AsvPallete.Color="{TemplateBinding StatusTextColor}"
+                            HorizontalAlignment="Center"
+                        />
+                        <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                                Grid.RowSpan="2"
+                                controls:AsvPallete.Color="{TemplateBinding TextColor}"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="{TemplateBinding Text}"
+                                FontSize="30"
+                                HorizontalAlignment="Center"
+                            />
+                            <TextBlock
+                                Grid.Column="1"
+                                Grid.Row="0"
+                                FontWeight="Light"
+                                VerticalAlignment="Center"
+                                Text="{TemplateBinding SuperScriptText}"
+                                FontSize="{DynamicResource AsvH3FontSize}"
+                                controls:AsvPallete.Color="{TemplateBinding SuperScriptTextColor}"
+                                HorizontalAlignment="Left"
+                            />
+                            <TextBlock
+                                Grid.Column="1"
+                                Grid.Row="1"
+                                VerticalAlignment="Center"
+                                FontWeight="Light"
+                                Margin="0,0,0,4"
+                                Text="{TemplateBinding SubScriptText}"
+                                FontSize="{DynamicResource AsvH3FontSize}"
+                                controls:AsvPallete.Color="{TemplateBinding SubScriptTextColor}"
+                                HorizontalAlignment="Left"
+                            />
+                            <TextBlock
+                                Grid.Column="2"
+                                Grid.Row="1"
+                                FontWeight="Light"
+                                Margin="4,0,0,4"
+                                VerticalAlignment="Bottom"
+                                Text="{TemplateBinding Units}"
+                                Classes="description"
+                                HorizontalAlignment="Center"
+                            />
+                        </Grid>
+                    </DockPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+    <Style Selector="controls|TextTile.regular">
+        <Setter Property="Width" Value="200" />
+        <Setter Property="Height" Value="100" />
+    </Style>
+
+    <Style Selector="controls|TextTile.compact">
+        <Setter Property="Width" Value="100" />
+        <Setter Property="Height" Value="50" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    BorderThickness="1"
+                    BorderBrush="{DynamicResource ButtonBackground}"
+                    CornerRadius="4"
+                    Margin="2"
+                    Padding="4"
+                >
+                    <DockPanel>
+                        <DockPanel DockPanel.Dock="Top">
+                            <avalonia:MaterialIcon
+                                Margin="4,0,4,0"
+                                DockPanel.Dock="Left"
+                                Classes="smallest"
+                                VerticalAlignment="Center"
+                                controls:AsvPallete.Color="{TemplateBinding IconColor}"
+                                Kind="{TemplateBinding Icon}"
+                            />
+                            <Panel Width="12" Height="12" DockPanel.Dock="Right">
+                                <Ellipse
+                                    Margin="4,0"
+                                    Classes="text-tile-status-indicator"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    Width="5"
+                                    Height="5"
+                                    controls:AsvPallete.Color="{TemplateBinding StatusColor}"
+                                />
+                            </Panel>
+                            <TextBlock
+                                Text="{TemplateBinding ShortHeader}"
+                                FontSize="{DynamicResource AsvH4FontSize}"
+                                Foreground="{DynamicResource TextControlForegroundDisabled}"
+                                VerticalAlignment="Center"
+                            />
+                        </DockPanel>
+                        <TextBlock
+                            Text="{TemplateBinding Text}"
+                            FontSize="16"
+                            controls:AsvPallete.Color="{TemplateBinding TextColor}"
+                            HorizontalAlignment="Center"
+                        />
+                    </DockPanel>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|TextTile.inline">
+        <Setter Property="Height" Value="25" />
+        <Setter Property="Width" Value="200" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    HorizontalAlignment="Stretch"
+                    BorderThickness="1"
+                    Margin="2"
+                    BorderBrush="{DynamicResource ButtonBackground}"
+                    CornerRadius="4"
+                >
+                    <Grid ColumnSpacing="8" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition SharedSizeGroup="RttIcon" Width="Auto" />
+                            <ColumnDefinition SharedSizeGroup="RttHeader" Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition SharedSizeGroup="RttStatus" Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <avalonia:MaterialIcon
+                            Grid.Column="0"
+                            Margin="4,0,4,0"
+                            DockPanel.Dock="Left"
+                            Width="12"
+                            Height="12"
+                            VerticalAlignment="Center"
+                            controls:AsvPallete.Color="{TemplateBinding IconColor}"
+                            Kind="{TemplateBinding Icon}"
+                        />
+                        <TextBlock
+                            Grid.Column="1"
+                            Text="{TemplateBinding ShortHeader}"
+                            Classes="description"
+                            VerticalAlignment="Center"
+                        />
+                        <TextBlock
+                            Grid.Column="2"
+                            Text="{TemplateBinding Text}"
+                            controls:AsvPallete.Color="{TemplateBinding TextColor}"
+                        />
+                        <Panel Grid.Column="3" Width="12" Height="12" HorizontalAlignment="Right">
+                            <Ellipse
+                                Margin="4,0"
+                                Classes="text-tile-status-indicator"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center"
+                                Width="5"
+                                Height="5"
+                                controls:AsvPallete.Color="{TemplateBinding StatusColor}"
+                            />
+                        </Panel>
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+</Styles>

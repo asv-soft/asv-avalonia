@@ -10,7 +10,8 @@ public static class ControlsMixin
             .ViewLocator.RegisterWorkspace()
             .RegisterTreePage()
             .RegisterRttBox()
-            .RegisterPropertyEditor();
+            .RegisterPropertyEditor()
+            .RegisterRttViewer();
         return builder;
     }
 }

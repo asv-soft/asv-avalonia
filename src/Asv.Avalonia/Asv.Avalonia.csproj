@@ -108,6 +108,10 @@
         <Compile Update="Core\Controls\PropertyEditor\Properties\Status\PropertyStatusView.axaml.cs">
           <DependentUpon>PropertyStatusView.axaml</DependentUpon>
         </Compile>
+        <Compile Update="Core\Controls\RttViewer\Tiles\Text\TextTile.axaml.cs">
+          <DependentUpon>TextTile.axaml</DependentUpon>
+          <SubType>Code</SubType>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -130,6 +134,7 @@
       <AdditionalFiles Include="Core\Controls\Indicators\GpsStatusIndicator.axaml" />
       <AdditionalFiles Include="Core\Controls\InfoBar\InfoBarStyles.axaml" />
       <AdditionalFiles Include="Core\Controls\Items\ItemsListStyles.axaml" />
+      <AdditionalFiles Include="Core\Controls\Progress\TelemetryProgressBar.axaml" />
       <AdditionalFiles Include="Core\Controls\RttBox\KeyValue\KeyValueRttBoxView.axaml" />
       <AdditionalFiles Include="Core\Controls\RttBox\RttBox.axaml" />
       <AdditionalFiles Include="Core\Controls\RttBox\Single\Digit\Split\SplitDigitRttBoxView.axaml" />
@@ -156,6 +161,10 @@
 
     <ItemGroup>
       <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Core\Controls\RttViewer\Tiles\Digit\" />
     </ItemGroup>
 
 </Project>

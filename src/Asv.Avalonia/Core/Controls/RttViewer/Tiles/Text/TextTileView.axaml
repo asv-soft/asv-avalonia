@@ -1,0 +1,42 @@
+﻿<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="200"
+    d:DesignHeight="100"
+    x:Class="Asv.Avalonia.TextTileView"
+    x:DataType="avalonia:TextTileViewModel"
+>
+    <Design.DataContext>
+        <avalonia:TextTileViewModel />
+    </Design.DataContext>
+    <avalonia:TextTile
+        Header="{Binding Header}"
+        ShortHeader="{Binding ShortHeader}"
+        Icon="{Binding Icon}"
+        IconColor="{Binding IconColor}"
+        StatusColor="{Binding StatusColor}"
+        Density="{Binding Density}"
+        Text="{Binding Text}"
+        TextColor="{Binding TextColor}"
+        StatusText="{Binding StatusText}"
+        StatusTextColor="{Binding StatusTextColor}"
+        SuperScriptText="{Binding SuperScriptText}"
+        SuperScriptTextColor="{Binding SuperScriptTextColor}"
+        SubScriptText="{Binding SubScriptText}"
+        SubScriptTextColor="{Binding SubScriptTextColor}"
+        Units="{Binding Units}"
+        Progress="{Binding Progress}"
+        ProgressColor="{Binding ProgressColor}"
+    >
+        <ToolTip.Tip>
+            <MultiBinding Converter="{x:Static avalonia:MarkdownToolTipConverter.Instance}">
+                <Binding Path="Header" />
+                <Binding Path="Description" />
+            </MultiBinding>
+        </ToolTip.Tip>
+    </avalonia:TextTile>
+</UserControl>
