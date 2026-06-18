@@ -6,8 +6,7 @@
     xmlns:sys="clr-namespace:System;assembly=System.Runtime"
 >
     <Design.PreviewWith>
-        <StackPanel Width="400" Height="600">
-            <WrapPanel Grid.IsSharedSizeScope="True">
+        <WrapPanel Width="400" Grid.IsSharedSizeScope="True">
                 <controls:TextTile
                     Background="#1b2024"
                     Density="Regular"
@@ -39,7 +38,7 @@
                     Density="Compact"
                     Header="GNSS 3 Status"
                     ShortHeader="GNSS3"
-                    Text="RTK Fixed"
+                    Text="124.54"
                 />
                 <controls:TextTile
                     Density="Compact"
@@ -72,17 +71,18 @@
                     Density="Inline"
                     Header="GPS Status"
                     ShortHeader="GNSS"
-                    Text="RTK Fixed"
+                    Text="125.45"
                 />
                 <controls:TextTile
                     HorizontalAlignment="Stretch"
                     Density="Inline"
                     Header="GPS Status"
+                    Units="m\s"
+                    StatusIcon="CircleMedium"
                     ShortHeader="GNSS"
                     Text="RTK Fixed"
                 />
             </WrapPanel>
-        </StackPanel>
     </Design.PreviewWith>
 
     <Style Selector="controls|TextTile">
@@ -96,12 +96,12 @@
                     BorderThickness="1"
                     BorderBrush="{DynamicResource ButtonBackground}"
                     CornerRadius="4"
-                    Padding="4"
+                    Padding="2"
                 >
                     <DockPanel>
                         <DockPanel DockPanel.Dock="Top">
                             <avalonia:MaterialIcon
-                                Margin="4,0,4,0"
+                                Margin="0,0,4,0"
                                 DockPanel.Dock="Left"
                                 Classes="medium"
                                 VerticalAlignment="Center"
@@ -127,7 +127,7 @@
                             IsIndeterminate="{TemplateBinding Progress, Converter={x:Static controls:TelemetryProgressBarConverter.Instance}, ConverterParameter=IsIndeterminate}"
                             Value="{TemplateBinding Progress, Converter={x:Static controls:TelemetryProgressBarConverter.Instance}, ConverterParameter=Value}"
                             Status="{TemplateBinding ProgressColor}"
-                            Margin="8,0"
+                            Margin="8,2"
                             DockPanel.Dock="Bottom"
                         />
                         <TextBlock
@@ -215,7 +215,7 @@
                     <DockPanel>
                         <DockPanel DockPanel.Dock="Top">
                             <avalonia:MaterialIcon
-                                Margin="4,0,4,0"
+                                Margin="0,0,2,0"
                                 DockPanel.Dock="Left"
                                 Classes="smallest"
                                 VerticalAlignment="Center"
@@ -260,6 +260,7 @@
                     BorderThickness="1"
                     Margin="2"
                     BorderBrush="{DynamicResource ButtonBackground}"
+                    Padding="2"
                     CornerRadius="4"
                 >
                     <Grid ColumnSpacing="8" HorizontalAlignment="Stretch">
@@ -267,11 +268,12 @@
                             <ColumnDefinition SharedSizeGroup="RttIcon" Width="Auto" />
                             <ColumnDefinition SharedSizeGroup="RttHeader" Width="Auto" />
                             <ColumnDefinition Width="*" />
+                            <ColumnDefinition SharedSizeGroup="RttUnits" Width="Auto" />
                             <ColumnDefinition SharedSizeGroup="RttStatus" Width="Auto" />
                         </Grid.ColumnDefinitions>
                         <avalonia:MaterialIcon
                             Grid.Column="0"
-                            Margin="4,0,4,0"
+                            Margin="0,0,0,0"
                             DockPanel.Dock="Left"
                             Width="12"
                             Height="12"
@@ -281,19 +283,29 @@
                         />
                         <TextBlock
                             Grid.Column="1"
+                            HorizontalAlignment="Left"
                             Text="{TemplateBinding ShortHeader}"
-                            FontSize="12"
+                            
                             Classes="header"
                             VerticalAlignment="Center"
                         />
                         <TextBlock
                             Grid.Column="2"
+                            HorizontalAlignment="Left"
+                            
                             Text="{TemplateBinding Text}"
                             controls:AsvPallete.Color="{TemplateBinding TextColor}"
                         />
+                        <TextBlock
+                            Grid.Column="3"
+                            Text="{TemplateBinding Units}"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Classes="description"
+                        />
                         <avalonia:MaterialIcon
                             IsVisible="{TemplateBinding StatusIcon, Converter={x:Static ObjectConverters.IsNotNull}}"
-                            Grid.Column="3"
+                            Grid.Column="4"
                             HorizontalAlignment="Right"
                             controls:AsvPallete.Color="{TemplateBinding StatusIconColor}"
                             Kind="{TemplateBinding StatusIcon}"

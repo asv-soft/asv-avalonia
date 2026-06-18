@@ -287,23 +287,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 ProgressColor = AsvColorKind.Warning,
             }
         );
-        dashboard.Tiles.Add(
-            new TextTileViewModel("workspace-dashboard-link")
-            {
-                Density = TileDensity.Compact,
-                Header = "Link Quality",
-                ShortHeader = "LINK",
-                Icon = MaterialIconKind.Signal,
-                IconColor = AsvColorKind.Info5,
-                StatusIcon = MaterialIconKind.CheckCircle,
-                StatusIconColor = AsvColorKind.Success,
-                Text = "92",
-                TextColor = AsvColorKind.Success,
-                Units = "%",
-                Progress = 92,
-                ProgressColor = AsvColorKind.Success,
-            }
-        );
+        
         dashboard.Tiles.Add(
             new TextTileViewModel("workspace-dashboard-fix")
             {

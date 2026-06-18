@@ -5,83 +5,8 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class TextTile : TemplatedControl
+public class TextTile : TileTemplatedControl
 {
-    private const string RegularClass = "regular";
-    private const string CompactClass = "compact";
-    private const string InlineClass = "inline";
-
-    static TextTile()
-    {
-        DensityProperty.Changed.AddClassHandler<TextTile>((view, _) => view.UpdateDensityClasses());
-    }
-
-    public TextTile()
-    {
-        UpdateDensityClasses();
-    }
-
-    public static readonly StyledProperty<MaterialIconKind> IconProperty =
-        AvaloniaProperty.Register<TextTile, MaterialIconKind>(
-            nameof(Icon),
-            MaterialIconKind.Telecoil
-        );
-
-    public MaterialIconKind Icon
-    {
-        get => GetValue(IconProperty);
-        set => SetValue(IconProperty, value);
-    }
-
-    public static readonly StyledProperty<string?> ShortHeaderProperty = AvaloniaProperty.Register<
-        TextTile,
-        string?
-    >(nameof(ShortHeader));
-
-    public string? ShortHeader
-    {
-        get => GetValue(ShortHeaderProperty);
-        set => SetValue(ShortHeaderProperty, value);
-    }
-
-    public static readonly StyledProperty<string?> HeaderProperty = AvaloniaProperty.Register<
-        TextTile,
-        string?
-    >(nameof(Header));
-
-    public string? Header
-    {
-        get => GetValue(HeaderProperty);
-        set => SetValue(HeaderProperty, value);
-    }
-
-    public static readonly StyledProperty<AsvColorKind> IconColorProperty =
-        AvaloniaProperty.Register<TextTile, AsvColorKind>(nameof(IconColor), AsvColorKind.Error);
-
-    public AsvColorKind IconColor
-    {
-        get => GetValue(IconColorProperty);
-        set => SetValue(IconColorProperty, value);
-    }
-
-    public static readonly StyledProperty<MaterialIconKind?> StatusIconProperty = AvaloniaProperty.Register<TextTile, MaterialIconKind?>(
-        nameof(StatusIcon));
-
-    public MaterialIconKind? StatusIcon
-    {
-        get => GetValue(StatusIconProperty);
-        set => SetValue(StatusIconProperty, value);
-    }
-
-    public static readonly StyledProperty<AsvColorKind> StatusIconColorProperty = AvaloniaProperty.Register<TextTile, AsvColorKind>(
-        nameof(StatusIconColor));
-
-    public AsvColorKind StatusIconColor
-    {
-        get => GetValue(StatusIconColorProperty);
-        set => SetValue(StatusIconColorProperty, value);
-    }
-
     public static readonly StyledProperty<string?> StatusTextProperty = AvaloniaProperty.Register<
         TextTile,
         string?
@@ -178,17 +103,6 @@ public class TextTile : TemplatedControl
         set => SetValue(UnitsProperty, value);
     }
 
-    public static readonly StyledProperty<TileDensity> DensityProperty = AvaloniaProperty.Register<
-        TextTile,
-        TileDensity
-    >(nameof(Density), TileDensity.Regular);
-
-    public TileDensity Density
-    {
-        get => GetValue(DensityProperty);
-        set => SetValue(DensityProperty, value);
-    }
-
     public static readonly StyledProperty<double> ProgressProperty = AvaloniaProperty.Register<
         TextTile,
         double
@@ -207,21 +121,5 @@ public class TextTile : TemplatedControl
     {
         get => GetValue(ProgressColorProperty);
         set => SetValue(ProgressColorProperty, value);
-    }
-
-    private void UpdateDensityClasses()
-    {
-        Classes.Remove(RegularClass);
-        Classes.Remove(CompactClass);
-        Classes.Remove(InlineClass);
-
-        Classes.Add(
-            Density switch
-            {
-                TileDensity.Compact => CompactClass,
-                TileDensity.Inline => InlineClass,
-                _ => RegularClass,
-            }
-        );
     }
 }
