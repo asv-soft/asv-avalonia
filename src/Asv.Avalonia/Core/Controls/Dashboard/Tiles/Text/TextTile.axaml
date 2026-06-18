@@ -259,7 +259,6 @@
                     HorizontalAlignment="Stretch"
                     BorderThickness="1"
                     Margin="2"
-                    BorderBrush="{DynamicResource ButtonBackground}"
                     Padding="2"
                     CornerRadius="4"
                 >

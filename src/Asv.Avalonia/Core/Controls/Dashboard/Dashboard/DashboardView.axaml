@@ -13,27 +13,75 @@
     <Design.DataContext>
         <avalonia:DashboardViewModel />
     </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="Border.dashboard-density-drop-target.drag-over">
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundAccentBrush}" />
+        </Style>
+    </UserControl.Styles>
     <StackPanel Spacing="4" Grid.IsSharedSizeScope="True">
-        <ItemsControl ItemsSource="{Binding Regular}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <ItemsControl ItemsSource="{Binding Compact}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-        <ItemsControl ItemsSource="{Binding Inline}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <WrapPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+        <Border
+            x:Name="RegularDropTarget"
+            Classes="dashboard-density-drop-target"
+            MinHeight="28"
+            BorderThickness="1"
+            BorderBrush="Transparent"
+            CornerRadius="4"
+        >
+            <ItemsControl ItemsSource="{Binding Regular}">
+                <ItemsControl.ItemContainerTheme>
+                    <ControlTheme TargetType="ContentPresenter">
+                        <Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
+                    </ControlTheme>
+                </ItemsControl.ItemContainerTheme>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Border>
+        <Border
+            x:Name="CompactDropTarget"
+            Classes="dashboard-density-drop-target"
+            MinHeight="28"
+            BorderThickness="1"
+            BorderBrush="Transparent"
+            CornerRadius="4"
+        >
+            <ItemsControl ItemsSource="{Binding Compact}">
+                <ItemsControl.ItemContainerTheme>
+                    <ControlTheme TargetType="ContentPresenter">
+                        <Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
+                    </ControlTheme>
+                </ItemsControl.ItemContainerTheme>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Border>
+        <Border
+            x:Name="InlineDropTarget"
+            Classes="dashboard-density-drop-target"
+            MinHeight="28"
+            BorderThickness="1"
+            BorderBrush="Transparent"
+            CornerRadius="4"
+        >
+            <ItemsControl ItemsSource="{Binding Inline}">
+                <ItemsControl.ItemContainerTheme>
+                    <ControlTheme TargetType="ContentPresenter">
+                        <Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
+                    </ControlTheme>
+                </ItemsControl.ItemContainerTheme>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Border>
     </StackPanel>
 </UserControl>

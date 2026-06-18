@@ -128,6 +128,20 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
             Menu.Add(item);
         }
 
+        state.VisibilityItem = new MenuItem(
+            GetTileVisibilityMenuId(tile),
+            "Show/Hide",
+            tileMenu.Id.TypeId
+        )
+        {
+            ToggleType = MenuItemToggleType.CheckBox,
+            Order = DensityItems.Length,
+            Command = new ReactiveCommand(_ => tile.IsVisible = !tile.IsVisible).DisposeItWith(
+                state.Disposable
+            ),
+        };
+        Menu.Add(state.VisibilityItem);
+
         _tileMenus[tile] = state;
         UpdateTileMenu(tile, null);
     }
@@ -144,6 +158,11 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
         foreach (var item in state.DensityItems.Values)
         {
             Menu.Remove(item);
+        }
+
+        if (state.VisibilityItem is not null)
+        {
+            Menu.Remove(state.VisibilityItem);
         }
 
         Menu.Remove(state.TileItem);
@@ -183,6 +202,18 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
                 item.Value.IsChecked = item.Key == tile.Density;
             }
         }
+
+        if (
+            propertyName is null
+            || propertyName == nameof(ITileViewModel.IsVisible)
+            || propertyName == nameof(IHeadlinedViewModel.IsVisible)
+        )
+        {
+            if (state.VisibilityItem is not null)
+            {
+                state.VisibilityItem.IsChecked = tile.IsVisible;
+            }
+        }
     }
 
     private static string GetTileHeader(ITileViewModel tile)
@@ -205,11 +236,18 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
         return $"{GetTileMenuId(tile)}-density-{density}";
     }
 
+    private static string GetTileVisibilityMenuId(ITileViewModel tile)
+    {
+        return $"{GetTileMenuId(tile)}-visibility";
+    }
+
     private sealed class TileMenuState(MenuItem tileItem) : IDisposable
     {
         public MenuItem TileItem { get; } = tileItem;
 
         public Dictionary<TileDensity, MenuItem> DensityItems { get; } = [];
+
+        public MenuItem? VisibilityItem { get; set; }
 
         public CompositeDisposable Disposable { get; } = [];
 
