@@ -91,4 +91,6 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
             yield return item;
         }
     }
+
+    public int Order { get; set; }
 }

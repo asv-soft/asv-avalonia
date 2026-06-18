@@ -1,8 +1,9 @@
-﻿using Material.Icons;
+﻿using Asv.Modeling;
+using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public interface IWorkspaceWidget : IViewModel
+public interface IWorkspaceWidget : IViewModel, ISupportOrder
 {
     MaterialIconKind? Icon { get; }
     AsvColorKind IconColor { get; }

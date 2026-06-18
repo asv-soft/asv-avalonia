@@ -62,4 +62,6 @@ public class MapWidget : MapViewModel, IWorkspaceWidget
         get;
         set => SetField(ref field, value);
     } = true;
+
+    public int Order { get; set; }
 }
