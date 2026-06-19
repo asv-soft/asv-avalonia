@@ -3,6 +3,7 @@ using Asv.Modeling;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Threading;
 using R3;
 
@@ -242,9 +243,99 @@ public static class ViewLayoutMixin
             }
         }
 
+        public IDisposable RegisterWorkspaceLayout(string layoutId, Workspace workspace)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(layoutId);
+            ArgumentNullException.ThrowIfNull(workspace);
+
+            var registration = new SerialDisposable();
+
+            workspace.Loaded += OnLoaded;
+            TryRegister();
+
+            return Disposable.Combine(
+                registration,
+                Disposable.Create(() => workspace.Loaded -= OnLoaded)
+            );
+
+            void OnLoaded(object? sender, RoutedEventArgs e) => TryRegister();
+
+            void TryRegister()
+            {
+                if (workspace.ItemsPanelRoot is WorkspacePanel panel)
+                {
+                    workspace.Loaded -= OnLoaded;
+                    registration.Disposable = view.RegisterWorkspaceLayout(layoutId, panel);
+                }
+            }
+        }
+
+        public IDisposable RegisterWorkspaceLayout(string layoutId, WorkspacePanel panel)
+        {
+            ArgumentNullException.ThrowIfNull(panel);
+
+            var changed = new Subject<Unit>();
+
+            panel.WorkspaceChanged += OnWorkspaceChanged;
+            var unsubscribe = Disposable.Create(() => panel.WorkspaceChanged -= OnWorkspaceChanged);
+
+            var layout = view.RegisterLayout(
+                layoutId,
+                config =>
+                {
+                    ApplyPixel(config.LeftWidth, panel.MinLeftWidth, x => panel.LeftWidth = x);
+                    ApplyPixel(config.RightWidth, panel.MinRightWidth, x => panel.RightWidth = x);
+                    ApplyPixel(
+                        config.BottomHeight,
+                        panel.MinBottomHeight,
+                        x => panel.BottomHeight = x
+                    );
+                },
+                () =>
+                {
+                    var config = new WorkspacePanelConfig
+                    {
+                        LeftWidth = panel.LeftColumnPixelWidth,
+                        RightWidth = panel.RightColumnPixelWidth,
+                        BottomHeight = panel.BottomRowPixelHeight,
+                    };
+
+                    return
+                        config.LeftWidth is null
+                        && config.RightWidth is null
+                        && config.BottomHeight is null
+                        ? null
+                        : config;
+                },
+                changed
+            );
+
+            return Disposable.Combine(layout, unsubscribe, changed);
+
+            void OnWorkspaceChanged(object? sender, WorkspaceEventArgs e)
+            {
+                changed.OnNext(Unit.Default);
+            }
+        }
+
+        private static void ApplyPixel(double? stored, double min, Action<GridLength> apply)
+        {
+            if (stored is not { } value || !IsValidPixelWidth(value))
+            {
+                return;
+            }
+
+            if (double.IsFinite(min) && min > 0 && value < min)
+            {
+                value = min;
+            }
+
+            apply(new GridLength(value, GridUnitType.Pixel));
+        }
+
         private static bool IsValidPixelWidth(double value)
         {
-            return value is > 0 && double.IsFinite(value);
+            return value > 0 && double.IsFinite(value);
         }
 
         private static async ValueTask InvokeOnUiThreadAsync(
