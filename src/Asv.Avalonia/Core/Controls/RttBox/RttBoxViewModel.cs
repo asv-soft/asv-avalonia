@@ -3,7 +3,7 @@ using Material.Icons;
 
 namespace Asv.Avalonia;
 
-public class RttBoxViewModel : HeadlinedViewModel
+public class RttBoxViewModel : HeadlinedViewModel, IRttBoxViewModel
 {
     private readonly TimeProvider _timeProvider;
     private long _lastUpdate;

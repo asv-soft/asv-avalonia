@@ -1,6 +1,3 @@
 ﻿namespace Asv.Avalonia.Charts;
 
-public interface IPlotWidget : IWorkspaceWidget
-{
-    
-}
+public interface IPlotWidget : IWorkspaceWidget { }
