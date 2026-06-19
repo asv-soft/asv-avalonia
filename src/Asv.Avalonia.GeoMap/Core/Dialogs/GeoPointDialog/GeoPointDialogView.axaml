@@ -40,10 +40,19 @@
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     IsHitTestVisible="False"
-                    Classes="big"
-                    Opacity="0.75"
+                    Classes="big accent"
                     Kind="Location"
-                />
+                >
+                    <avalonia:MaterialIcon.Effect>
+                        <DropShadowEffect
+                            BlurRadius="7"
+                            OffsetX="0"
+                            OffsetY="0"
+                            Opacity="0.5"
+                            Color="Black"
+                        />
+                    </avalonia:MaterialIcon.Effect>
+                </avalonia:MaterialIcon>
             </Grid>
         </Border>
 
