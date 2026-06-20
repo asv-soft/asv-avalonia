@@ -18,7 +18,7 @@ public static class ChartsMixin
 
         public Builder ModuleCharts => new(builder);
     }
-    
+
     public class Builder(IHostApplicationBuilder builder)
     {
         public void RegisterDefault()
@@ -27,7 +27,5 @@ public static class ChartsMixin
         }
 
         public IHostApplicationBuilder Parent => builder;
-
     }
-
 }

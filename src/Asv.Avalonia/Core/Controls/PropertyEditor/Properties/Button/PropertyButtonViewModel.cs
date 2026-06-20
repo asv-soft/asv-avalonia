@@ -1,4 +1,3 @@
-using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
 using R3;
@@ -48,18 +47,35 @@ public class PropertyButtonViewModel : PropertyViewModel
             .AddTo(ref DisposableBag);
     }
 
-    public PropertyButtonViewModel(string typeId, Func<CancellationToken, ValueTask> execute)
+    public PropertyButtonViewModel(
+        string typeId,
+        Func<CancellationToken, ValueTask> execute,
+        Observable<bool>? canExecute = null
+    )
         : base(typeId)
     {
         ArgumentNullException.ThrowIfNull(execute);
         _execute = execute;
-        ExecuteCommand = new ReactiveCommand(
-            (_, cancel) => Execute(cancel),
-            AwaitOperation.Drop
-        ).AddTo(ref DisposableBag);
+
+        if (canExecute is null)
+        {
+            ExecuteCommand = new ReactiveCommand(
+                (_, cancel) => Execute(cancel),
+                AwaitOperation.Drop
+            ).AddTo(ref DisposableBag);
+        }
+        else
+        {
+            ExecuteCommand = canExecute
+                .ToReactiveCommand<Unit>(
+                    (_, cancel) => Execute(cancel),
+                    awaitOperation: AwaitOperation.Drop
+                )
+                .AddTo(ref DisposableBag);
+        }
     }
 
-    public ReactiveCommand ExecuteCommand { get; }
+    public ReactiveCommand<Unit> ExecuteCommand { get; }
 
     public async ValueTask Execute(CancellationToken cancel = default)
     {

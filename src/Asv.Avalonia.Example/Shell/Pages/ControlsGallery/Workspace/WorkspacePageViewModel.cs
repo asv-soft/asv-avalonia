@@ -287,7 +287,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 ProgressColor = AsvColorKind.Warning,
             }
         );
-        
+
         dashboard.Tiles.Add(
             new TextTileViewModel("workspace-dashboard-fix")
             {

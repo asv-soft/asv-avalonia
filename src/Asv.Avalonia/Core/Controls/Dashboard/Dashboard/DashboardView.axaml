@@ -15,8 +15,14 @@
     </Design.DataContext>
     <UserControl.Styles>
         <Style Selector="Border.dashboard-density-drop-target.drag-over">
-            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource SystemControlBackgroundAccentBrush}" />
+            <Setter
+                Property="Background"
+                Value="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+            />
+            <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource SystemControlBackgroundAccentBrush}"
+            />
         </Style>
     </UserControl.Styles>
     <StackPanel Spacing="4" Grid.IsSharedSizeScope="True">
