@@ -9,7 +9,6 @@ public class DashboardViewModel : ViewModel, IDashboard
 {
     private readonly Dictionary<ITileViewModel, IDisposable> _densitySubscriptions = [];
     private readonly ObservableList<ITileViewModel> _regularTiles = [];
-    private readonly ObservableList<ITileViewModel> _compactTiles = [];
     private readonly ObservableList<ITileViewModel> _inlineTiles = [];
 
     public DashboardViewModel()
@@ -42,7 +41,7 @@ public class DashboardViewModel : ViewModel, IDashboard
         Tiles.Add(
             new TextTileViewModel("gnss-3")
             {
-                Density = TileDensity.Compact,
+                Density = TileDensity.Regular,
                 Header = "GNSS 3 Status",
                 ShortHeader = "GNSS3",
                 Text = "RTK Float",
@@ -68,15 +67,12 @@ public class DashboardViewModel : ViewModel, IDashboard
         Tiles.ObserveRemove().Subscribe(x => RemoveTile(x.Value)).DisposeItWith(Disposable);
 
         Regular = _regularTiles.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
-        Compact = _compactTiles.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         Inline = _inlineTiles.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
 
     public ObservableList<ITileViewModel> Tiles { get; } = [];
 
     public NotifyCollectionChangedSynchronizedViewList<ITileViewModel> Regular { get; }
-
-    public NotifyCollectionChangedSynchronizedViewList<ITileViewModel> Compact { get; }
 
     public NotifyCollectionChangedSynchronizedViewList<ITileViewModel> Inline { get; }
 
@@ -96,7 +92,6 @@ public class DashboardViewModel : ViewModel, IDashboard
 
             _densitySubscriptions.Clear();
             _regularTiles.Clear();
-            _compactTiles.Clear();
             _inlineTiles.Clear();
             Tiles.ClearWithItemsDispose();
         }
@@ -148,14 +143,13 @@ public class DashboardViewModel : ViewModel, IDashboard
 
         if (!target.Contains(tile))
         {
-            target.Add(tile);
+            InsertByOrder(target, tile);
         }
     }
 
     private void RemoveFromDensityLists(ITileViewModel tile)
     {
         _regularTiles.Remove(tile);
-        _compactTiles.Remove(tile);
         _inlineTiles.Remove(tile);
     }
 
@@ -163,9 +157,22 @@ public class DashboardViewModel : ViewModel, IDashboard
     {
         return density switch
         {
-            TileDensity.Compact => _compactTiles,
             TileDensity.Inline => _inlineTiles,
             _ => _regularTiles,
         };
+    }
+
+    private static void InsertByOrder(ObservableList<ITileViewModel> target, ITileViewModel tile)
+    {
+        for (var i = 0; i < target.Count; i++)
+        {
+            if (tile.Order < target[i].Order)
+            {
+                target.Insert(i, tile);
+                return;
+            }
+        }
+
+        target.Add(tile);
     }
 }

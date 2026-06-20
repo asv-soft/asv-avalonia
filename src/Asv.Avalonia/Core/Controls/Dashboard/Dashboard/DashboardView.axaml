@@ -42,27 +42,6 @@
             </ItemsControl>
         </Border>
         <Border
-            x:Name="CompactDropTarget"
-            Classes="dashboard-density-drop-target"
-            MinHeight="28"
-            BorderThickness="1"
-            BorderBrush="Transparent"
-            CornerRadius="4"
-        >
-            <ItemsControl ItemsSource="{Binding Compact}">
-                <ItemsControl.ItemContainerTheme>
-                    <ControlTheme TargetType="ContentPresenter">
-                        <Setter Property="IsVisible" Value="{ReflectionBinding IsVisible}" />
-                    </ControlTheme>
-                </ItemsControl.ItemContainerTheme>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel />
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </Border>
-        <Border
             x:Name="InlineDropTarget"
             Classes="dashboard-density-drop-target"
             MinHeight="28"

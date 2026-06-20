@@ -10,17 +10,14 @@ public class DashboardViewModelTest
         // Arrange
         using var dashboard = new DashboardViewModel("dashboard");
         var regular = new TestTileViewModel("regular") { Density = TileDensity.Regular };
-        var compact = new TestTileViewModel("compact") { Density = TileDensity.Compact };
         var inline = new TestTileViewModel("inline") { Density = TileDensity.Inline };
 
         // Act
         dashboard.Tiles.Add(regular);
-        dashboard.Tiles.Add(compact);
         dashboard.Tiles.Add(inline);
 
         // Assert
         Assert.Equal([regular], GetItems(dashboard.Regular));
-        Assert.Equal([compact], GetItems(dashboard.Compact));
         Assert.Equal([inline], GetItems(dashboard.Inline));
     }
 
@@ -37,8 +34,25 @@ public class DashboardViewModelTest
 
         // Assert
         Assert.Empty(GetItems(dashboard.Regular));
-        Assert.Empty(GetItems(dashboard.Compact));
         Assert.Equal([tile], GetItems(dashboard.Inline));
+    }
+
+    [Fact]
+    public void Tiles_AddTile_SortsDensityListByOrder()
+    {
+        // Arrange
+        using var dashboard = new DashboardViewModel("dashboard");
+        var third = new TestTileViewModel("third") { Density = TileDensity.Regular, Order = 30 };
+        var first = new TestTileViewModel("first") { Density = TileDensity.Regular, Order = 10 };
+        var second = new TestTileViewModel("second") { Density = TileDensity.Regular, Order = 20 };
+
+        // Act
+        dashboard.Tiles.Add(third);
+        dashboard.Tiles.Add(first);
+        dashboard.Tiles.Add(second);
+
+        // Assert
+        Assert.Equal([first, second, third], GetItems(dashboard.Regular));
     }
 
     [Fact]

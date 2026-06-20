@@ -264,54 +264,55 @@ public partial class WorkspacePanel : Panel
         RemoveStale(_centerPanel.Children, current);
         RemoveStale(_bottomPanel, current);
 
-        foreach (var control in Children)
+        var leftIndex = 0;
+        var rightIndex = 0;
+        var bottomIndex = 0;
+        var centerIndex = 0;
+
+        foreach (var control in GetOrderedChildren())
         {
             var dock = GetDock(control);
             switch (dock)
             {
                 case WorkspaceDock.Left:
-                    if (_leftPanel.Children.Contains(control))
-                    {
-                        continue;
-                    }
-
-                    _rightPanel.Children.Remove(control);
-                    _bottomPanel.Remove(control);
-                    _centerPanel.Children.Remove(control);
-                    _leftPanel.Children.Add(control);
+                    MoveToPanel(
+                        control,
+                        _leftPanel.Children,
+                        leftIndex++,
+                        _rightPanel.Children,
+                        _bottomPanel,
+                        _centerPanel.Children
+                    );
                     break;
                 case WorkspaceDock.Right:
-                    if (_rightPanel.Children.Contains(control))
-                    {
-                        continue;
-                    }
-
-                    _leftPanel.Children.Remove(control);
-                    _bottomPanel.Remove(control);
-                    _centerPanel.Children.Remove(control);
-                    _rightPanel.Children.Add(control);
+                    MoveToPanel(
+                        control,
+                        _rightPanel.Children,
+                        rightIndex++,
+                        _leftPanel.Children,
+                        _bottomPanel,
+                        _centerPanel.Children
+                    );
                     break;
                 case WorkspaceDock.Bottom:
-                    if (_bottomPanel.Contains(control))
-                    {
-                        continue;
-                    }
-
-                    _leftPanel.Children.Remove(control);
-                    _rightPanel.Children.Remove(control);
-                    _centerPanel.Children.Remove(control);
-                    _bottomPanel.Add(control);
+                    MoveToPanel(
+                        control,
+                        _bottomPanel,
+                        bottomIndex++,
+                        _leftPanel.Children,
+                        _rightPanel.Children,
+                        _centerPanel.Children
+                    );
                     break;
                 case WorkspaceDock.Center:
-                    if (_centerPanel.Children.Contains(control))
-                    {
-                        continue;
-                    }
-                    _leftPanel.Children.Remove(control);
-                    _rightPanel.Children.Remove(control);
-                    _bottomPanel.Remove(control);
-                    _centerPanel.Children.Add(control);
-
+                    MoveToPanel(
+                        control,
+                        _centerPanel.Children,
+                        centerIndex++,
+                        _leftPanel.Children,
+                        _rightPanel.Children,
+                        _bottomPanel
+                    );
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -379,6 +380,59 @@ public partial class WorkspacePanel : Panel
                 panel.RemoveAt(i);
             }
         }
+    }
+
+    private IEnumerable<Control> GetOrderedChildren()
+    {
+        return OrderChildren(Children);
+    }
+
+    internal static IEnumerable<Control> OrderChildren(IEnumerable<Control> children)
+    {
+        return children
+            .Select(
+                (control, index) =>
+                    new
+                    {
+                        Control = control,
+                        Order = GetOrder(control),
+                        index,
+                    }
+            )
+            .OrderBy(x => x.Order)
+            .ThenBy(x => x.index)
+            .Select(x => x.Control);
+    }
+
+    private static int GetOrder(Control control)
+    {
+        return control.DataContext is IWorkspaceWidget widget ? widget.Order : 0;
+    }
+
+    private static void MoveToPanel(
+        Control control,
+        IList<Control> target,
+        int targetIndex,
+        params IList<Control>[] otherPanels
+    )
+    {
+        foreach (var panel in otherPanels)
+        {
+            panel.Remove(control);
+        }
+
+        var currentIndex = target.IndexOf(control);
+        if (currentIndex == targetIndex)
+        {
+            return;
+        }
+
+        if (currentIndex >= 0)
+        {
+            target.RemoveAt(currentIndex);
+        }
+
+        target.Insert(Math.Min(targetIndex, target.Count), control);
     }
 
     private void RegisterLayout()

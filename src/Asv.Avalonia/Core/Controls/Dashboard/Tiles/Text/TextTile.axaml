@@ -3,7 +3,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:Asv.Avalonia"
     xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-    xmlns:sys="clr-namespace:System;assembly=System.Runtime"
 >
     <Design.PreviewWith>
         <WrapPanel Width="400" Grid.IsSharedSizeScope="True">
@@ -34,31 +33,6 @@
                     SuperScriptText="sss"
                 />
 
-                <controls:TextTile
-                    Density="Compact"
-                    Header="GNSS 3 Status"
-                    ShortHeader="GNSS3"
-                    Text="124.54"
-                />
-                <controls:TextTile
-                    Density="Compact"
-                    Header="GNSS 4 Status"
-                    ShortHeader="GNSS4"
-                    Text="RTK Fixed"
-                />
-                <controls:TextTile
-                    Density="Compact"
-                    Progress="{x:Static sys:Double.NegativeInfinity}"
-                    Header="GNSS 5 Status"
-                    ShortHeader="GNSS5"
-                    Text="RTK Fixed"
-                />
-                <controls:TextTile
-                    Density="Compact"
-                    Header="v Status"
-                    ShortHeader="GNSS"
-                    Text="RTK Fixed"
-                />
                 <controls:TextTile
                     HorizontalAlignment="Stretch"
                     Density="Inline"
@@ -135,7 +109,6 @@
                             IsVisible="{TemplateBinding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}"
                             DockPanel.Dock="Bottom"
                             Text="{TemplateBinding StatusText}"
-                            FontSize="{DynamicResource AsvH3FontSize}"
                             controls:AsvPallete.Color="{TemplateBinding StatusTextColor}"
                             HorizontalAlignment="Center"
                         />
@@ -155,7 +128,7 @@
                                 VerticalAlignment="Center"
                                 FontWeight="Bold"
                                 Text="{TemplateBinding Text}"
-                                FontSize="30"
+                                FontSize="32"
                                 HorizontalAlignment="Center"
                             />
                             <TextBlock
@@ -164,7 +137,6 @@
                                 FontWeight="Light"
                                 VerticalAlignment="Center"
                                 Text="{TemplateBinding SuperScriptText}"
-                                FontSize="{DynamicResource AsvH3FontSize}"
                                 controls:AsvPallete.Color="{TemplateBinding SuperScriptTextColor}"
                                 HorizontalAlignment="Left"
                             />
@@ -175,20 +147,10 @@
                                 FontWeight="Light"
                                 Margin="0,0,0,4"
                                 Text="{TemplateBinding SubScriptText}"
-                                FontSize="{DynamicResource AsvH3FontSize}"
                                 controls:AsvPallete.Color="{TemplateBinding SubScriptTextColor}"
                                 HorizontalAlignment="Left"
                             />
-                            <TextBlock
-                                Grid.Column="2"
-                                Grid.Row="1"
-                                FontWeight="Light"
-                                Margin="4,0,0,4"
-                                VerticalAlignment="Bottom"
-                                Text="{TemplateBinding Units}"
-                                Classes="description"
-                                HorizontalAlignment="Center"
-                            />
+                            
                         </Grid>
                     </DockPanel>
                 </Border>
@@ -198,55 +160,6 @@
     <Style Selector="controls|TextTile.regular">
         <Setter Property="Width" Value="200" />
         <Setter Property="Height" Value="100" />
-    </Style>
-
-    <Style Selector="controls|TextTile.compact">
-        <Setter Property="Width" Value="100" />
-        <Setter Property="Height" Value="50" />
-        <Setter Property="Template">
-            <ControlTemplate>
-                <Border
-                    BorderThickness="1"
-                    BorderBrush="{DynamicResource ButtonBackground}"
-                    CornerRadius="4"
-                    Margin="2"
-                    Padding="4"
-                >
-                    <DockPanel>
-                        <DockPanel DockPanel.Dock="Top">
-                            <avalonia:MaterialIcon
-                                Margin="0,0,2,0"
-                                DockPanel.Dock="Left"
-                                Classes="smallest"
-                                VerticalAlignment="Center"
-                                controls:AsvPallete.Color="{TemplateBinding IconColor}"
-                                Kind="{TemplateBinding Icon}"
-                            />
-                            <avalonia:MaterialIcon
-                                IsVisible="{TemplateBinding StatusIcon, Converter={x:Static ObjectConverters.IsNotNull}}"
-                                DockPanel.Dock="Right"
-                                HorizontalAlignment="Right"
-                                controls:AsvPallete.Color="{TemplateBinding StatusIconColor}"
-                                Kind="{TemplateBinding StatusIcon}"
-                            />
-                            <TextBlock
-                                Text="{TemplateBinding ShortHeader}"
-                                Classes="header"
-                                FontSize="{DynamicResource AsvH4FontSize}"
-                                Foreground="{DynamicResource TextControlForegroundDisabled}"
-                                VerticalAlignment="Center"
-                            />
-                        </DockPanel>
-                        <TextBlock
-                            Text="{TemplateBinding Text}"
-                            FontSize="16"
-                            controls:AsvPallete.Color="{TemplateBinding TextColor}"
-                            HorizontalAlignment="Center"
-                        />
-                    </DockPanel>
-                </Border>
-            </ControlTemplate>
-        </Setter>
     </Style>
 
     <Style Selector="controls|TextTile.inline">
@@ -291,7 +204,6 @@
                         <TextBlock
                             Grid.Column="2"
                             HorizontalAlignment="Left"
-                            
                             Text="{TemplateBinding Text}"
                             controls:AsvPallete.Color="{TemplateBinding TextColor}"
                         />

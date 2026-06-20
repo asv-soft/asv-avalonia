@@ -11,12 +11,7 @@ namespace Asv.Avalonia;
 public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
 {
     private const string TileMenuIdPrefix = "tile";
-    private static readonly TileDensity[] DensityItems =
-    [
-        TileDensity.Regular,
-        TileDensity.Compact,
-        TileDensity.Inline,
-    ];
+    private static readonly TileDensity[] DensityItems = [TileDensity.Regular, TileDensity.Inline];
     private readonly Dictionary<ITileViewModel, TileMenuState> _tileMenus = [];
 
     public DashboardWidget()
@@ -109,8 +104,9 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
 
         Menu.Add(tileMenu);
 
-        foreach (var density in DensityItems)
+        for (var index = 0; index < DensityItems.Length; index++)
         {
+            var density = DensityItems[index];
             var item = new MenuItem(
                 GetTileDensityMenuId(tile, density),
                 density.ToString(),
@@ -119,7 +115,7 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
             {
                 ToggleType = MenuItemToggleType.Radio,
                 GroupName = GetTileDensityGroupName(tile),
-                Order = (int)density,
+                Order = index,
                 Command = new ReactiveCommand(_ => tile.Density = density).DisposeItWith(
                     state.Disposable
                 ),

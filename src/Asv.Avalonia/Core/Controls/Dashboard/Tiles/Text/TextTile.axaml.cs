@@ -1,12 +1,18 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Material.Icons;
 
 namespace Asv.Avalonia;
 
 public class TextTile : TileTemplatedControl
 {
+    public TextTile()
+    {
+        DoubleTapped += OnDoubleTapped;
+    }
+
     public static readonly StyledProperty<string?> StatusTextProperty = AvaloniaProperty.Register<
         TextTile,
         string?
@@ -121,5 +127,28 @@ public class TextTile : TileTemplatedControl
     {
         get => GetValue(ProgressColorProperty);
         set => SetValue(ProgressColorProperty, value);
+    }
+
+    private void OnDoubleTapped(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is ITileViewModel tile)
+        {
+            tile.Density = GetNextDensity(tile.Density);
+        }
+        else
+        {
+            Density = GetNextDensity(Density);
+        }
+
+        e.Handled = true;
+    }
+
+    private static TileDensity GetNextDensity(TileDensity density)
+    {
+        return density switch
+        {
+            TileDensity.Inline => TileDensity.Regular,
+            _ => TileDensity.Inline,
+        };
     }
 }

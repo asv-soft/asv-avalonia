@@ -159,7 +159,6 @@ public partial class DashboardView : UserControl
     private IEnumerable<(Control Target, TileDensity Density)> GetDropTargets()
     {
         yield return (RegularDropTarget, TileDensity.Regular);
-        yield return (CompactDropTarget, TileDensity.Compact);
         yield return (InlineDropTarget, TileDensity.Inline);
     }
 

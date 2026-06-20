@@ -8,8 +8,7 @@ namespace Asv.Avalonia;
 public enum TileDensity
 {
     Regular,
-    Compact,
-    Inline,
+    Inline = 2,
 }
 
 public interface ITileViewModel : IHeadlinedViewModel
