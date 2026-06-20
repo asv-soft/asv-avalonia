@@ -6,57 +6,57 @@
 >
     <Design.PreviewWith>
         <WrapPanel Width="400" Grid.IsSharedSizeScope="True">
-                <controls:TextTile
-                    Background="#1b2024"
-                    Density="Regular"
-                    IconColor="Info1"
-                    ProgressColor="Error"
-                    StatusIcon="CircleMedium"
-                    StatusIconColor="Success, Blink"
-                    Progress="10"
-                    Header="GNSS 1 Status"
-                    StatusTextColor="Warning"
-                    StatusText="15,6 V • 4.8 A • 74.9 W"
-                    ShortHeader="GNSS1"
-                    Text="123"
-                    SubScriptText=".456"
-                    Units="deg"
-                />
-                <controls:TextTile
-                    Density="Regular"
-                    Progress="10"
-                    Header="GNSS 1 Status"
-                    StatusText="15,6 V • 4.8 A • 74.9 W"
-                    ShortHeader="GNSS1"
-                    Text="123"
-                    SubScriptText="456"
-                    SuperScriptText="sss"
-                />
+            <controls:TextTile
+                Background="#1b2024"
+                Density="Regular"
+                IconColor="Info1"
+                ProgressColor="Error"
+                StatusIcon="CircleMedium"
+                StatusIconColor="Success, Blink"
+                Progress="10"
+                Header="GNSS 1 Status"
+                StatusTextColor="Warning"
+                StatusText="15,6 V • 4.8 A • 74.9 W"
+                ShortHeader="GNSS1"
+                Text="123"
+                SubScriptText=".456"
+                Units="deg"
+            />
+            <controls:TextTile
+                Density="Regular"
+                Progress="10"
+                Header="GNSS 1 Status"
+                StatusText="15,6 V • 4.8 A • 74.9 W"
+                ShortHeader="GNSS1"
+                Text="123"
+                SubScriptText="456"
+                SuperScriptText="sss"
+            />
 
-                <controls:TextTile
-                    HorizontalAlignment="Stretch"
-                    Density="Inline"
-                    Header="GPS Status"
-                    ShortHeader="GNSS"
-                    Text="RTK Fixed"
-                />
-                <controls:TextTile
-                    HorizontalAlignment="Stretch"
-                    Density="Inline"
-                    Header="GPS Status"
-                    ShortHeader="GNSS"
-                    Text="125.45"
-                />
-                <controls:TextTile
-                    HorizontalAlignment="Stretch"
-                    Density="Inline"
-                    Header="GPS Status"
-                    Units="m\s"
-                    StatusIcon="CircleMedium"
-                    ShortHeader="GNSS"
-                    Text="RTK Fixed"
-                />
-            </WrapPanel>
+            <controls:TextTile
+                HorizontalAlignment="Stretch"
+                Density="Inline"
+                Header="GPS Status"
+                ShortHeader="GNSS"
+                Text="RTK Fixed"
+            />
+            <controls:TextTile
+                HorizontalAlignment="Stretch"
+                Density="Inline"
+                Header="GPS Status"
+                ShortHeader="GNSS"
+                Text="125.45"
+            />
+            <controls:TextTile
+                HorizontalAlignment="Stretch"
+                Density="Inline"
+                Header="GPS Status"
+                Units="m\s"
+                StatusIcon="CircleMedium"
+                ShortHeader="GNSS"
+                Text="RTK Fixed"
+            />
+        </WrapPanel>
     </Design.PreviewWith>
 
     <Style Selector="controls|TextTile">
@@ -150,7 +150,6 @@
                                 controls:AsvPallete.Color="{TemplateBinding SubScriptTextColor}"
                                 HorizontalAlignment="Left"
                             />
-                            
                         </Grid>
                     </DockPanel>
                 </Border>
@@ -197,7 +196,6 @@
                             Grid.Column="1"
                             HorizontalAlignment="Left"
                             Text="{TemplateBinding ShortHeader}"
-                            
                             Classes="header"
                             VerticalAlignment="Center"
                         />
