@@ -26,8 +26,7 @@ public sealed class MarkdownDetailsDialogPayload
 /// <summary>
 /// Dialog that shows Markdown details and can copy the original text.
 /// </summary>
-public sealed class MarkdownDetailsDialogPrefab(IShellHost shellHost)
-    : IDialogPrefab<MarkdownDetailsDialogPayload, bool>
+public sealed class MarkdownDetailsDialogPrefab : IDialogPrefab<MarkdownDetailsDialogPayload, bool>
 {
     public async Task<bool> ShowDialogAsync(MarkdownDetailsDialogPayload dialogPayload)
     {
@@ -41,9 +40,7 @@ public sealed class MarkdownDetailsDialogPrefab(IShellHost shellHost)
             DefaultButton = ContentDialogButton.Close,
         };
 
-        var result = shellHost.TopLevel is { } topLevel
-            ? await dialogContent.ShowAsync(topLevel)
-            : await dialogContent.ShowAsync();
+        var result = await dialogContent.ShowAsync();
 
         if (result == ContentDialogResult.Primary)
         {
@@ -58,7 +55,7 @@ public sealed class MarkdownDetailsDialogPrefab(IShellHost shellHost)
     {
         try
         {
-            var clipboard = shellHost.TopLevel?.Clipboard;
+            var clipboard = TopLevelHelper.GetTopLevel()?.Clipboard;
             if (clipboard is null || string.IsNullOrWhiteSpace(text))
             {
                 return;

@@ -15,7 +15,6 @@ public sealed class GeoPointDialogPayload
 ///     Dialog for entering users's Geopoint.
 /// </summary>
 public sealed class GeoPointDialogPrefab(
-    IShellHost shellHost,
     ILoggerFactory loggerFactory,
     IUnitService unitService,
     IMapService mapService
@@ -37,9 +36,7 @@ public sealed class GeoPointDialogPrefab(
 
         vm.ApplyDialog(dialogContent);
 
-        var result = shellHost.TopLevel is { } topLevel
-            ? await dialogContent.ShowAsync(topLevel)
-            : await dialogContent.ShowAsync();
+        var result = await dialogContent.ShowAsync();
 
         return result is ContentDialogResult.Primary ? vm.GetResult() : null;
     }

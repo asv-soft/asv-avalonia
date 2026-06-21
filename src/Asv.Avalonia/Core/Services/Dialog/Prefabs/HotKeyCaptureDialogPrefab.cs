@@ -11,7 +11,7 @@ public sealed class HotKeyCaptureDialogPayload
     public global::Avalonia.Input.KeyGesture? CurrentHotKey { get; init; }
 }
 
-public sealed class HotKeyCaptureDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
+public sealed class HotKeyCaptureDialogPrefab(ILoggerFactory loggerFactory)
     : IDialogPrefab<HotKeyCaptureDialogPayload, global::Avalonia.Input.KeyGesture?>
 {
     public async Task<global::Avalonia.Input.KeyGesture?> ShowDialogAsync(
@@ -29,9 +29,7 @@ public sealed class HotKeyCaptureDialogPrefab(IShellHost shellHost, ILoggerFacto
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = shellHost.TopLevel is { } topLevel
-            ? await dialogContent.ShowAsync(topLevel)
-            : await dialogContent.ShowAsync();
+        var result = await dialogContent.ShowAsync();
 
         if (result == ContentDialogResult.Primary)
         {

@@ -114,19 +114,20 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
         return result;
     }
 
-    private void TryEnableHotKeys(IShell shell, TopLevel topLevel)
+    private void TryEnableHotKeys(IShell shell)
     {
-        if (_host.TopLevel is null)
+        var topLevel = TopLevelHelper.GetTopLevel();
+        if (topLevel is null)
         {
-            _logger.ZLogWarning($"Cannot enable hot keys: shell host top level is null");
+            _logger.ZLogWarning($"Cannot enable hot keys: no top level available");
             return;
         }
 
-        _host.TopLevel.KeyDown += OnKeyDown;
-        Disposable.Create(() => _host.TopLevel.KeyDown -= OnKeyDown).AddTo(ref DisposableBag);
+        topLevel.KeyDown += OnKeyDown;
+        Disposable.Create(() => topLevel.KeyDown -= OnKeyDown).AddTo(ref DisposableBag);
     }
 
-    private void TrackCanExecute(IShell shell, TopLevel topLevel)
+    private void TrackCanExecute(IShell shell)
     {
         UpdateCanExecute(shell.Navigation.SelectedControl.CurrentValue);
         shell.Navigation.SelectedControl.Subscribe(UpdateCanExecute).AddTo(ref DisposableBag);

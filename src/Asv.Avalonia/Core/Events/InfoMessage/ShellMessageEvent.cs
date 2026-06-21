@@ -151,7 +151,7 @@ public static class ShellMessageEventMixin
     {
         try
         {
-            var clipboard = AppHost.Instance.Services.GetService<IShellHost>()?.TopLevel?.Clipboard;
+            var clipboard = TopLevelHelper.GetTopLevel()?.Clipboard;
             if (clipboard is null || string.IsNullOrWhiteSpace(text))
             {
                 return;

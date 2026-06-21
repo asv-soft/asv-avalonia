@@ -15,7 +15,6 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     public const string PageId = "plugins-sources";
 
     private readonly IPluginManager _pluginManager;
-    private readonly IShellHost _shellHost;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<IPluginServerInfo> _sources;
     private readonly ISynchronizedView<IPluginServerInfo, PluginsSourceViewModel> _view;
@@ -28,7 +27,6 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             NullTreeSubPageContext<SettingsPageViewModel>.Instance,
             NullPluginManager.Instance,
             NullDialogService.Instance,
-            NullShellHost.Instance,
             DesignTime.LoggerFactory
         )
     {
@@ -39,19 +37,16 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         ITreeSubPageContext<ISettingsPage> context,
         IPluginManager pluginManager,
         IDialogService dialogService,
-        IShellHost shellHost,
         ILoggerFactory loggerFactory
     )
         : base(PageId, context)
     {
         ArgumentNullException.ThrowIfNull(pluginManager);
         ArgumentNullException.ThrowIfNull(dialogService);
-        ArgumentNullException.ThrowIfNull(shellHost);
         ArgumentNullException.ThrowIfNull(loggerFactory);
 
         _logger = loggerFactory.CreateLogger<SettingsPluginsSourcesViewModel>();
         _pluginManager = pluginManager;
-        _shellHost = shellHost;
         _loggerFactory = loggerFactory;
         _yesOrNoDialogPrefab = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
         _undoSink = Undo.RegisterValue<string>(
@@ -207,9 +202,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
 
             viewModel.ApplyDialog(dialog);
 
-            var result = _shellHost.TopLevel is { } topLevel
-                ? await dialog.ShowAsync(topLevel)
-                : await dialog.ShowAsync();
+            var result = await dialog.ShowAsync();
 
             if (result != ContentDialogResult.Primary)
             {

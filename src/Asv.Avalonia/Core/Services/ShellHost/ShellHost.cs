@@ -1,34 +1,29 @@
-﻿using Asv.Common;
-using Avalonia.Controls;
 using R3;
 
 namespace Asv.Avalonia;
 
 public class ShellHost : IShellHost, IDisposable
 {
-    private readonly Subject<(IShell, TopLevel)> _onShellLoaded = new();
+    private readonly Subject<IShell> _onShellLoaded = new();
 
-    public void Init(IShell shell, TopLevel topLevel)
+    public void Init(IShell shell)
     {
         Shell = shell;
-        TopLevel = topLevel;
-        _onShellLoaded.OnNext((shell, topLevel));
+        _onShellLoaded.OnNext(shell);
     }
 
     public IDisposable ExecuteNowOrWhenShellLoaded(IShellHost.Handler action)
     {
-        if (Shell != null && TopLevel != null)
+        if (Shell != null)
         {
-            action(Shell, TopLevel);
+            action(Shell);
             return Disposable.Empty;
         }
 
-        return _onShellLoaded.Subscribe(t => action(t.Item1, t.Item2));
+        return _onShellLoaded.Subscribe(shell => action(shell));
     }
 
-    public IShell? Shell { get; private set; }
-
-    public TopLevel? TopLevel { get; set; }
+    public virtual IShell? Shell { get; private set; }
 
     public void Dispose()
     {

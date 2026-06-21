@@ -21,7 +21,7 @@ public sealed class InputDialogPayload
 /// <summary>
 /// Dialog for entering user's string.
 /// </summary>
-public sealed class InputDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
+public sealed class InputDialogPrefab(ILoggerFactory loggerFactory)
     : IDialogPrefab<InputDialogPayload, string?>
 {
     public async Task<string?> ShowDialogAsync(InputDialogPayload dialogPayload)
@@ -38,9 +38,7 @@ public sealed class InputDialogPrefab(IShellHost shellHost, ILoggerFactory logge
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = shellHost.TopLevel is { } topLevel
-            ? await dialogContent.ShowAsync(topLevel)
-            : await dialogContent.ShowAsync();
+        var result = await dialogContent.ShowAsync();
 
         if (result == ContentDialogResult.Primary)
         {

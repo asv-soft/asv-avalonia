@@ -1,5 +1,4 @@
 using Asv.Modeling;
-using Avalonia.Controls;
 using Material.Icons;
 using ObservableCollections;
 using R3;
@@ -38,7 +37,7 @@ public class NavigationStatusItemViewModel : StatusItem
         nav.ExecuteNowOrWhenShellLoaded(OnShellLoaded).AddTo(Disposable);
     }
 
-    private void OnShellLoaded(IShell shell, TopLevel top)
+    private void OnShellLoaded(IShell shell)
     {
         shell.Navigation.SelectedControl.Subscribe(OnChanged).AddTo(Disposable);
     }
