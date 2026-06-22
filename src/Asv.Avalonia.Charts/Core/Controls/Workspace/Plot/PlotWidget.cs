@@ -14,6 +14,7 @@ public abstract class PlotWidget : PlotViewModel, IPlotWidget
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }
+
     public ObservableList<IMenuItem> Menu { get; } = [];
 
     public MaterialIconKind? Icon
@@ -61,5 +62,4 @@ public abstract class PlotWidget : PlotViewModel, IPlotWidget
     } = true;
 
     public int Order { get; set; }
-
 }

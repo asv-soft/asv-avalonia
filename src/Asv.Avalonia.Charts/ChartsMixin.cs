@@ -23,11 +23,10 @@ public static class ChartsMixin
     {
         public void RegisterDefault()
         {
-            builder.ViewLocator
-                .RegisterViewFor<PlotViewModel, PlotView>()
+            builder
+                .ViewLocator.RegisterViewFor<PlotViewModel, PlotView>()
                 .RegisterViewFor<IPlotWidget, PlotView>()
-                .RegisterViewFor<ISignalPlotWidget, PlotView>();;
-            
+                .RegisterViewFor<ISignalPlotWidget, PlotView>();
         }
 
         public IHostApplicationBuilder Parent => builder;
