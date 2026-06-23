@@ -19,18 +19,12 @@ public class AsvApplication : Application
         var shell = AppHost.Instance.Services.GetRequiredService<IShell>();
         if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            if (desktop.MainWindow is TopLevel topLevel)
-            {
-                shellHost.Init(shell, topLevel);
-            }
+            shellHost.Init(shell);
             desktop.Exit += (_, _) => Dispose();
         }
-        else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
+        else if (Current?.ApplicationLifetime is ISingleViewApplicationLifetime)
         {
-            if (singleViewPlatform.MainView is TopLevel topLevel)
-            {
-                shellHost.Init(shell, topLevel);
-            }
+            shellHost.Init(shell);
         }
         else
         {

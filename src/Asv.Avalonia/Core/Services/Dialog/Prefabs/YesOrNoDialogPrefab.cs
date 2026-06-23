@@ -21,7 +21,7 @@ public sealed class YesOrNoDialogPayload
 /// <summary>
 /// Dialog that shows yes or no options.
 /// </summary>
-public sealed class YesOrNoDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
+public sealed class YesOrNoDialogPrefab(ILoggerFactory loggerFactory)
     : IDialogPrefab<YesOrNoDialogPayload, bool>
 {
     public async Task<bool> ShowDialogAsync(YesOrNoDialogPayload dialogPayload)
@@ -39,9 +39,7 @@ public sealed class YesOrNoDialogPrefab(IShellHost shellHost, ILoggerFactory log
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = shellHost.TopLevel is { } topLevel
-            ? await dialogContent.ShowAsync(topLevel)
-            : await dialogContent.ShowAsync();
+        var result = await dialogContent.ShowAsync();
 
         return result == ContentDialogResult.Primary;
     }

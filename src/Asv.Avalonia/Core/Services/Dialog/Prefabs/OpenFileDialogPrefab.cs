@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using Avalonia.Platform.Storage;
 
 namespace Asv.Avalonia;
@@ -27,11 +26,16 @@ public sealed class OpenFileDialogPayload
 /// <summary>
 /// Dialog to select a file.
 /// </summary>
-public sealed class OpenFileDialogDesktopPrefab(IShellHost host)
-    : IDialogPrefab<OpenFileDialogPayload, string?>
+public sealed class OpenFileDialogDesktopPrefab : IDialogPrefab<OpenFileDialogPayload, string?>
 {
     public async Task<string?> ShowDialogAsync(OpenFileDialogPayload dialogPayload)
     {
+        var topLevel = TopLevelHelper.GetTopLevel();
+        if (topLevel is null)
+        {
+            return null;
+        }
+
         var options = new FilePickerOpenOptions
         {
             Title = dialogPayload.Title,
@@ -67,15 +71,13 @@ public sealed class OpenFileDialogDesktopPrefab(IShellHost host)
 
         if (!string.IsNullOrEmpty(dialogPayload.InitialDirectory))
         {
-            Debug.Assert(host.TopLevel != null, "host.TopLevel != null");
             options.SuggestedStartLocation =
-                await host.TopLevel.StorageProvider.TryGetFolderFromPathAsync(
+                await topLevel.StorageProvider.TryGetFolderFromPathAsync(
                     dialogPayload.InitialDirectory
                 );
         }
 
-        Debug.Assert(host.TopLevel != null, "host.TopLevel != null");
-        var files = await host.TopLevel.StorageProvider.OpenFilePickerAsync(options);
+        var files = await topLevel.StorageProvider.OpenFilePickerAsync(options);
 
         return files.Count == 1 ? files[0].TryGetLocalPath() : null;
     }

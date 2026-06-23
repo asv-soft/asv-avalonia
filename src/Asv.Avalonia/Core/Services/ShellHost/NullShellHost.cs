@@ -1,5 +1,3 @@
-﻿using Avalonia.Controls;
-
 namespace Asv.Avalonia;
 
 public class NullShellHost : ShellHost
@@ -8,14 +6,5 @@ public class NullShellHost : ShellHost
 
     private NullShellHost() { }
 
-    public IShell? Shell
-    {
-        get => DesignTimeShellViewModel.Instance;
-        set
-        {
-            // do nothing
-        }
-    }
-
-    public TopLevel? TopLevel { get; set; }
+    public override IShell? Shell => DesignTimeShellViewModel.Instance;
 }

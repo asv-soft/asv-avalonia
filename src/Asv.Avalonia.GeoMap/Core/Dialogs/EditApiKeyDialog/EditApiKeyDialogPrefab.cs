@@ -7,7 +7,7 @@ public sealed class EditApiKeyDialogPayload
     public string? CurrentApiKey { get; init; }
 }
 
-public sealed class EditApiKeyDialogPrefab(IShellHost shellHost, ILoggerFactory loggerFactory)
+public sealed class EditApiKeyDialogPrefab(ILoggerFactory loggerFactory)
     : IDialogPrefab<EditApiKeyDialogPayload, string?>
 {
     public async Task<string?> ShowDialogAsync(EditApiKeyDialogPayload dialogPayload)
@@ -24,9 +24,7 @@ public sealed class EditApiKeyDialogPrefab(IShellHost shellHost, ILoggerFactory 
 
         vm.ApplyDialog(dialogContent);
 
-        var result = shellHost.TopLevel is { } topLevel
-            ? await dialogContent.ShowAsync(topLevel)
-            : await dialogContent.ShowAsync();
+        var result = await dialogContent.ShowAsync();
 
         if (result is ContentDialogResult.Primary)
         {

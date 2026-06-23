@@ -1,4 +1,3 @@
-using Avalonia.Controls;
 using R3;
 
 namespace Asv.Avalonia;
@@ -16,7 +15,7 @@ public class EditRedoMenu : MenuItem
         Order = 1;
     }
 
-    private void InitShell(IShell shell, TopLevel topLevel)
+    private void InitShell(IShell shell)
     {
         shell
             .SelectedPage.DistinctUntilChanged()

@@ -29,15 +29,13 @@ internal sealed class LauncherFeature : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        _sub1 = _shellHost.ExecuteNowOrWhenShellLoaded(
-            (_, _) =>
-            {
-                NotifyReadyOnceAsync(cancellationToken)
-                    .SafeFireAndForget(ex =>
-                        _logger.LogError(ex, "Failed to send launcher READY signal.")
-                    );
-            }
-        );
+        _sub1 = _shellHost.ExecuteNowOrWhenShellLoaded(_ =>
+        {
+            NotifyReadyOnceAsync(cancellationToken)
+                .SafeFireAndForget(ex =>
+                    _logger.LogError(ex, "Failed to send launcher READY signal.")
+                );
+        });
 
         return Task.CompletedTask;
     }
