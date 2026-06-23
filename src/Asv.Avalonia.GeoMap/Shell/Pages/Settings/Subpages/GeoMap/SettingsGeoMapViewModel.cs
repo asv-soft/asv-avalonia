@@ -15,7 +15,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
             NullMapService.Instance,
             DesignTime.DialogService,
             DesignTime.UnitService,
-            DesignTime.LoggerFactory
+            DesignTime.LoggerFactory,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -26,7 +27,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         IMapService mapService,
         IDialogService dialogService,
         IUnitService unitService,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IExtensionService extensionService
     )
         : base(PageId, pageContext)
     {
@@ -47,7 +49,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         Editor.ItemsSource.Add(MinMapZoom);
         Editor.ItemsSource.Add(MaxMapZoom);
 
-        MapPreview = new MapViewModel("preview", mapService)
+        MapPreview = new MapViewModel("preview", mapService, extensionService)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         MapPreview.CenterMap.Value = new GeoPoint(56.8389, 60.6057, 0);

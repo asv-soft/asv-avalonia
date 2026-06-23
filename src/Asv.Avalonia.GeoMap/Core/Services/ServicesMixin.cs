@@ -39,6 +39,8 @@ public static class ServicesMixin
         builder.Parent.Services.AddSingleton<ITileProviderService, TileProviderService>();
         builder.Parent.Services.AddSingleton<IZoomService, ZoomService>();
 
+        builder.Parent.Extensions.Register<IMap, MapModesExtension>();
+
         builder
             .RegisterTileProvider<ThunderforestLandscapeTileProvider>()
             .RegisterTileProvider<ThunderforestCycleTileProvider>()

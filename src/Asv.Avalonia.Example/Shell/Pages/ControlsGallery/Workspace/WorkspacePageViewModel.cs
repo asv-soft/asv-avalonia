@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
-using Asv.Avalonia.Charts;
+﻿using Asv.Avalonia.Charts;
 using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.InfoMessage;
 using Asv.Common;
-using Asv.IO;
 using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -17,7 +12,6 @@ namespace Asv.Avalonia.Example;
 
 public class WorkspacePageViewModel : ControlsGallerySubPage
 {
-    private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<IWorkspaceWidget> _itemsSource;
     public const string PageId = "workspace-example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Table;
@@ -29,7 +23,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             DesignTime.UnitService,
             NullMapService.Instance,
             DesignTime.DialogService,
-            DesignTime.ThemeService
+            DesignTime.ThemeService,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -43,16 +38,18 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         IUnitService unitService,
         IMapService mapService,
         IDialogService dialogService,
-        IThemeService themeService
+        IThemeService themeService,
+        IExtensionService extensionService
     )
         : base(PageId, context)
     {
         Init(context.Context);
-        _loggerFactory = loggerFactory;
-        MapViewModel = new MapViewModel("map-view", mapService).DisposeItWith(Disposable);
+        MapViewModel = new MapViewModel("map-view", mapService, extensionService).DisposeItWith(
+            Disposable
+        );
         var hideAll = new MenuItem("hide-all", "Hide all")
         {
-            Command = new ReactiveCommand(x =>
+            Command = new ReactiveCommand(_ =>
             {
                 if (_itemsSource != null)
                 {
@@ -66,7 +63,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
         var showAll = new MenuItem("show-all", "Show all")
         {
-            Command = new ReactiveCommand(x =>
+            Command = new ReactiveCommand(_ =>
             {
                 if (_itemsSource != null)
                 {
@@ -153,7 +150,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             },
             signalPlot,
             dashboard,
-            new MapWidget("map-widget", loggerFactory, mapService)
+            new MapWidget("map-widget", mapService, extensionService)
             {
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,
@@ -162,7 +159,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 IsExpanded = true,
                 CanExpand = true,
             },
-            new MapWidget("map-with-anchor", loggerFactory, mapService)
+            new MapWidget("map-with-anchor", mapService, extensionService)
             {
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,
@@ -190,7 +187,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         var changeStatus = new MenuItem("change-status", "Change status")
         {
-            Command = new ReactiveCommand(x =>
+            Command = new ReactiveCommand(_ =>
             {
                 if (context.Status == null)
                 {
@@ -198,7 +195,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 }
                 else
                 {
-                    context.ChangeStatus(null, AsvColorKind.None);
+                    context.ChangeStatus(null);
                 }
             }),
         };

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Asv.Avalonia.GeoMap;
+﻿using Asv.Avalonia.GeoMap;
 using Asv.Common;
-using Asv.IO;
 using Asv.Modeling;
 using Avalonia.Media;
 using Material.Icons;
@@ -24,7 +21,8 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
             NullTreeSubPageContext<ControlsGalleryPageViewModel>.Instance,
             DesignTime.LoggerFactory,
             DesignTime.UnitService,
-            NullMapService.Instance
+            NullMapService.Instance,
+            DesignTime.ExtensionService
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -34,7 +32,8 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         ITreeSubPageContext<IControlsGalleryPage> context,
         ILoggerFactory loggerFactory,
         IUnitService unitService,
-        IMapService mapService
+        IMapService mapService,
+        IExtensionService extensionService
     )
         : base(PageId, context)
     {
@@ -44,7 +43,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
         LoggerFactory = loggerFactory;
         UnitService = unitService;
-        MapViewModel = new MapViewModel("map", mapService)
+        MapViewModel = new MapViewModel("map", mapService, extensionService)
             .DisposeItWith(Disposable)
             .SetRoutableParent(this);
 

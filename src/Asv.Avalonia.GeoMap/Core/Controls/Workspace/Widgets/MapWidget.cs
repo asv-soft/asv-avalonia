@@ -1,16 +1,14 @@
 ﻿using Asv.Common;
-using Asv.IO;
 using Asv.Modeling;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using ObservableCollections;
 
 namespace Asv.Avalonia.GeoMap;
 
 public class MapWidget : MapViewModel, IWorkspaceWidget
 {
-    public MapWidget(string id, ILoggerFactory loggerFactory, IMapService mapService)
-        : base(id, mapService)
+    public MapWidget(string id, IMapService mapService, IExtensionService extension)
+        : base(id, mapService, extension)
     {
         Menu.SetRoutableParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
