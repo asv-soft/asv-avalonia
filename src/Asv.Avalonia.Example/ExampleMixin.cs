@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Asv.Avalonia.GeoMap;
 using Asv.Avalonia.IO;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
@@ -171,6 +171,12 @@ public static class ExampleMixin
             builder.Parent.Parent.Shell.Pages.Register<MapTestPageViewModel, MapTestPageView>(
                 MapTestPageViewModel.PageId
             );
+
+            builder.Parent.Parent.Extensions.Register<
+                IMap,
+                MapModeExtension<CursorCoordinatesMode>
+            >();
+            builder.Parent.Parent.Extensions.Register<IMap, RulerModeExtension>();
             return this;
         }
     }

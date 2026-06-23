@@ -7,6 +7,8 @@ namespace Asv.Avalonia.GeoMap;
 public interface IMap : IViewModel
 {
     ObservableList<IMapAnchor> Anchors { get; }
+    IMapInteractionService Interaction { get; }
+    ObservableList<IMapInteractionMode> Modes { get; }
     BindableReactiveProperty<IMapAnchor?> SelectedAnchor { get; }
     BindableReactiveProperty<double> Rotation { get; }
     BindableReactiveProperty<GeoPoint> CenterMap { get; }

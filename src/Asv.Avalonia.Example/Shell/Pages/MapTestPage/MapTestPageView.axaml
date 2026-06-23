@@ -4,6 +4,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:map="clr-namespace:Asv.Avalonia.GeoMap;assembly=Asv.Avalonia.GeoMap"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     xmlns:example="clr-namespace:Asv.Avalonia.Example"
     mc:Ignorable="d"
     d:DesignWidth="800"
@@ -16,6 +17,28 @@
     </Design.DataContext>
     <Panel>
         <map:MapView x:Name="PART_Map" DataContext="{Binding MapViewModel}" />
+        <ComboBox
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="8"
+            MinWidth="150"
+            ItemsSource="{Binding MapViewModel.ModesView}"
+            SelectedItem="{Binding MapViewModel.Interaction.ActiveMode.Value}"
+        >
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="map:IMapInteractionMode">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <avalonia:MaterialIcon
+                            Width="18"
+                            Height="18"
+                            VerticalAlignment="Center"
+                            Kind="{Binding Icon}"
+                        />
+                        <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         <map:MapCompass
             Rotation="{Binding MapViewModel.Rotation.Value}"
             HorizontalAlignment="Right"

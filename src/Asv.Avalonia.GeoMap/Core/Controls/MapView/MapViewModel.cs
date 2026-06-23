@@ -1,4 +1,4 @@
-﻿using Asv.Common;
+using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
 using ObservableCollections;
@@ -6,7 +6,7 @@ using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-public class MapViewModel : ViewModel, IMap
+public class MapViewModel : ViewModel<IMap>, IMap
 {
     public MapViewModel()
         : this(DesignTime.Id.TypeId, NullMapService.Instance)
@@ -19,21 +19,26 @@ public class MapViewModel : ViewModel, IMap
         };
         Anchors.Add(drone);
         var azimuth = 0;
-        TimeProvider.System.CreateTimer(
-            _ =>
-            {
-                drone.Azimuth = (azimuth++ * 10) % 360;
-            },
-            null,
-            TimeSpan.FromSeconds(1),
-            TimeSpan.FromSeconds(1)
-        );
+        TimeProvider
+            .System.CreateTimer(
+                _ =>
+                {
+                    drone.Azimuth = (azimuth++ * 10) % 360;
+                },
+                null,
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(1)
+            )
+            .DisposeItWith(Disposable);
     }
 
     public MapViewModel(string id, IMapService mapService)
-        : base(id)
+        : this(id, mapService, NullExtensionService.Instance) { }
+
+    public MapViewModel(string id, IMapService mapService, IExtensionService extension)
+        : base(id, default, extension)
     {
-        Anchors = new ObservableList<IMapAnchor>();
+        Anchors = [];
         Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
@@ -58,7 +63,18 @@ public class MapViewModel : ViewModel, IMap
         CurrentProvider = mapService
             .CurrentProvider.ToReadOnlyBindableReactiveProperty<ITileProvider>()
             .DisposeItWith(Disposable);
+
+        Interaction = new MapInteractionController().DisposeItWith(Disposable);
+
+        Modes = [NavigateMode.Instance];
+        ModesView = Modes.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
+
+    public IMapInteractionService Interaction { get; }
+
+    public ObservableList<IMapInteractionMode> Modes { get; }
+
+    public NotifyCollectionChangedSynchronizedViewList<IMapInteractionMode> ModesView { get; }
 
     public IReadOnlyBindableReactiveProperty<ITileProvider> CurrentProvider { get; }
 
@@ -82,11 +98,15 @@ public class MapViewModel : ViewModel, IMap
         }
     }
 
+    protected override void AfterLoadExtensions() { }
+
     protected override void Dispose(bool disposing)
     {
         if (disposing)
         {
             AnchorsView.Dispose();
+            ModesView.Dispose();
+            Modes.ClearWithItemsDispose();
         }
 
         base.Dispose(disposing);

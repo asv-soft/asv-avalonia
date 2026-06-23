@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Avalonia.Media;
@@ -18,7 +16,6 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     private const double InfinityRadius = 750.0;
     private const double InfinityPhaseStep = Math.PI / 90.0;
 
-    private readonly ILoggerFactory _loggerFactory;
     private readonly GeoPoint _centerPoint;
 
     public MapTestPageViewModel()
@@ -51,14 +48,13 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        MapViewModel = new MapViewModel("Map", mapService)
+        MapViewModel = new MapViewModel("Map", mapService, extensionService)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
         MapViewModel.Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
 
         _centerPoint = MapViewModel.CenterMap.Value;
-        _loggerFactory = loggerFactory;
 
         CreateEditableAnchorCircle(pointCount: 36, radiusMeters: 1000);
         CreateRotationTestAnchors();
@@ -353,7 +349,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
         {
             IsVisible = true,
             IsPolygonClosed = true,
-            PolygonPen = new Pen(SolidColorBrush.Parse("#FF4CAF50"), 1),
+            PolygonPen = new Pen(SolidColorBrush.Parse("#FF4CAF50")),
             PolygonFill = SolidColorBrush.Parse("#404CAF50"),
         };
 
