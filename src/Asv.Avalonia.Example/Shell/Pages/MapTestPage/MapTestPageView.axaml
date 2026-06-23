@@ -16,6 +16,13 @@
     </Design.DataContext>
     <Panel>
         <map:MapView x:Name="PART_Map" DataContext="{Binding MapViewModel}" />
+        <map:MapRuler
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Margin="8"
+            Map="{Binding MapViewModel}"
+            UnitService="{Binding UnitService}"
+        />
         <map:MapCompass
             Rotation="{Binding MapViewModel.Rotation.Value}"
             HorizontalAlignment="Right"
