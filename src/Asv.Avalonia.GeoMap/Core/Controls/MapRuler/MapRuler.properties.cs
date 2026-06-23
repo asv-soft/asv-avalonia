@@ -1,74 +1,35 @@
 using Asv.Common;
 using Avalonia;
-using Avalonia.Input;
 using Avalonia.Interactivity;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.GeoMap;
 
 public partial class MapRuler
 {
-    #region TargetMap
+    #region Map
 
-    public static readonly StyledProperty<InputElement> TargetMapProperty =
-        AvaloniaProperty.Register<MapRuler, InputElement>(nameof(TargetMap));
+    public static readonly StyledProperty<IMap?> MapProperty = AvaloniaProperty.Register<
+        MapRuler,
+        IMap?
+    >(nameof(Map));
 
-    public InputElement TargetMap
+    public IMap? Map
     {
-        get => GetValue(TargetMapProperty);
-        set => SetValue(TargetMapProperty, value);
-    }
-
-    #endregion
-
-    #region Anchors
-
-    public static readonly StyledProperty<IList<IMapAnchor>> AnchorsProperty =
-        AvaloniaProperty.Register<MapRuler, IList<IMapAnchor>>(nameof(Anchors));
-
-    public IList<IMapAnchor> Anchors
-    {
-        get => GetValue(AnchorsProperty);
-        set => SetValue(AnchorsProperty, value);
+        get => GetValue(MapProperty);
+        set => SetValue(MapProperty, value);
     }
 
     #endregion
 
     #region UnitService
 
-    public static readonly StyledProperty<IUnitService> UnitServiceProperty =
-        AvaloniaProperty.Register<MapRuler, IUnitService>(nameof(UnitService));
+    public static readonly StyledProperty<IUnitService?> UnitServiceProperty =
+        AvaloniaProperty.Register<MapRuler, IUnitService?>(nameof(UnitService));
 
-    public IUnitService UnitService
+    public IUnitService? UnitService
     {
         get => GetValue(UnitServiceProperty);
         set => SetValue(UnitServiceProperty, value);
-    }
-
-    #endregion
-
-    #region LoggerFactory
-
-    public static readonly StyledProperty<ILoggerFactory> LoggerFactoryProperty =
-        AvaloniaProperty.Register<MapRuler, ILoggerFactory>(nameof(LoggerFactory));
-
-    public ILoggerFactory LoggerFactory
-    {
-        get => GetValue(LoggerFactoryProperty);
-        set => SetValue(LoggerFactoryProperty, value);
-    }
-
-    #endregion
-
-    #region PromptText
-
-    public static readonly DirectProperty<MapRuler, string?> PromptTextProperty =
-        AvaloniaProperty.RegisterDirect<MapRuler, string?>(nameof(PromptText), o => o.PromptText);
-
-    public string? PromptText
-    {
-        get;
-        private set => SetAndRaise(PromptTextProperty, ref field, value);
     }
 
     #endregion
