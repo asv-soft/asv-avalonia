@@ -19,21 +19,23 @@ public class MapViewModel : ViewModel, IMap
         };
         Anchors.Add(drone);
         var azimuth = 0;
-        TimeProvider.System.CreateTimer(
-            _ =>
-            {
-                drone.Azimuth = (azimuth++ * 10) % 360;
-            },
-            null,
-            TimeSpan.FromSeconds(1),
-            TimeSpan.FromSeconds(1)
-        );
+        TimeProvider
+            .System.CreateTimer(
+                _ =>
+                {
+                    drone.Azimuth = (azimuth++ * 10) % 360;
+                },
+                null,
+                TimeSpan.FromSeconds(1),
+                TimeSpan.FromSeconds(1)
+            )
+            .DisposeItWith(Disposable);
     }
 
     public MapViewModel(string id, IMapService mapService)
         : base(id)
     {
-        Anchors = new ObservableList<IMapAnchor>();
+        Anchors = [];
         Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
@@ -54,11 +56,14 @@ public class MapViewModel : ViewModel, IMap
         Zoom = new BindableReactiveProperty<int>(10).DisposeItWith(Disposable);
 
         Rotation = new BindableReactiveProperty<double>(0.0).DisposeItWith(Disposable);
-
         CurrentProvider = mapService
             .CurrentProvider.ToReadOnlyBindableReactiveProperty<ITileProvider>()
             .DisposeItWith(Disposable);
+
+        Interaction = new MapInteractionController().DisposeItWith(Disposable);
     }
+
+    public IMapInteractionController Interaction { get; }
 
     public IReadOnlyBindableReactiveProperty<ITileProvider> CurrentProvider { get; }
 
