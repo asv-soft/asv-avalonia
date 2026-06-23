@@ -171,11 +171,23 @@
                 Grid.Column="1"
                 Margin="4,0"
                 MinWidth="20"
-                IsVisible="{Binding ShortHeader, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
                 VerticalAlignment="Center"
                 Classes="description"
                 Text="{Binding ShortHeader}"
-            />
+            >
+                <TextBlock.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding
+                            Path="ShortHeader"
+                            Converter="{x:Static StringConverters.IsNotNullOrEmpty}"
+                        />
+                        <Binding
+                            Path="(avalonia:PropertyEditorDisplayOptions.ShowShortHeader)"
+                            RelativeSource="{RelativeSource Self}"
+                        />
+                    </MultiBinding>
+                </TextBlock.IsVisible>
+            </TextBlock>
 
             <Button
                 Grid.Column="2"

@@ -82,6 +82,7 @@
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Stretch"
                                 avalonia:PropertyEditorDisplayOptions.ShowPrefixIcon="False"
+                                avalonia:PropertyEditorDisplayOptions.ShowShortHeader="False"
                                 Content="{Binding}"
                             />
                         </Grid>
