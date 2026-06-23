@@ -2,41 +2,14 @@ using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.VisualTree;
+using Avalonia.Threading;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
 
-/// <summary>
-/// <para>
-/// Map ruler: two draggable endpoints connected by a Google Maps-like polyline
-/// with a live distance readout in the ruler control.
-/// </para>
-/// <para>
-/// The ruler's persistent state is exposed via <see cref="StartPoint"/> /
-/// <see cref="StopPoint"/> styled properties. Both not null = ruler shown; either
-/// null = ruler hidden. The ruler treats writes from the picking flow, the user's
-/// drag of an endpoint, and an external host writer identically — they all go
-/// through the same property-changed handler. The <see cref="RulerChanged"/>
-/// routed event reports any meaningful change (shown / hidden / endpoint moved)
-/// so a host can persist the points via its own layout service. The control
-/// itself knows nothing about persistence.
-/// </para>
-/// <para>
-/// The ruler attaches a bubbling handler for <see cref="MapItemsControl.MapClickEvent"/>
-/// to the explicit <see cref="TargetMap"/> input element.
-/// </para>
-/// <para>
-/// Engagement cycle (driven by toggle button + map clicks):
-/// <c>Idle</c> → <c>PickingStart</c> → <c>PickingEnd</c> → <c>Active</c> → <c>Idle</c>.
-/// A click on the toggle while in any non-Idle state cancels the ruler.
-/// </para>
-/// </summary>
 public sealed partial class MapRuler : UserControl
 {
     private const string ToggleControlName = "PART_Toggle";
@@ -48,8 +21,6 @@ public sealed partial class MapRuler : UserControl
     private const double RulerHaloStrokeThickness = 7.0;
     private static readonly IBrush RulerBrush = SolidColorBrush.Parse("#1A73E8");
     private static readonly IBrush RulerHaloBrush = Brushes.White;
-
-    #region State
 
     private enum RulerState
     {
@@ -66,52 +37,33 @@ public sealed partial class MapRuler : UserControl
     private IMapAnchor? _line;
     private IMapAnchor? _lineHalo;
     private DisposableBag _activeSubs;
+    private IMapInteractionSession? _session;
     private IList<IMapAnchor>? _ownedAnchorsList;
-    private InputElement? _clickSurface;
-    private MapItemsControl? _mapControl;
     private readonly ToggleButton _toggle;
     private bool _isAttached;
     private bool _isPreview;
     private bool _lastFiredShown;
 
-    #endregion
-
-    #region Init
-
     static MapRuler()
     {
-        TargetMapProperty.Changed.AddClassHandler<MapRuler>(
-            (ruler, _) => ruler.AttachToClickSurface()
-        );
-
-        AnchorsProperty.Changed.AddClassHandler<MapRuler>((ruler, _) => ruler.OnPointsChanged());
-
+        MapProperty.Changed.AddClassHandler<MapRuler>((ruler, _) => ruler.OnPointsChanged());
         UnitServiceProperty.Changed.AddClassHandler<MapRuler>(
             (ruler, _) => ruler.UpdateDistanceLabel()
         );
-
         StartPointProperty.Changed.AddClassHandler<MapRuler>((ruler, _) => ruler.OnPointsChanged());
-
         StopPointProperty.Changed.AddClassHandler<MapRuler>((ruler, _) => ruler.OnPointsChanged());
     }
 
     public MapRuler()
     {
         InitializeComponent();
-
         _toggle = this.GetControl<ToggleButton>(ToggleControlName);
     }
-
-    #endregion
-
-    #region Attach / detach
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
-
         _isAttached = true;
-        AttachToClickSurface();
         OnPointsChanged();
     }
 
@@ -120,49 +72,11 @@ public sealed partial class MapRuler : UserControl
         _isAttached = false;
         TearDownVisuals();
         ResetPicking();
-        DetachFromClickSurface();
-
+        DisposeSession();
         base.OnDetachedFromVisualTree(e);
     }
 
-    private void AttachToClickSurface()
-    {
-        DetachFromClickSurface();
-
-        _clickSurface = TargetMap;
-        _mapControl = ResolveMapControl(_clickSurface);
-        _clickSurface?.AddHandler(MapItemsControl.MapClickEvent, OnMapClick);
-        _clickSurface?.AddHandler(
-            InputElement.PointerMovedEvent,
-            OnMapPointerMoved,
-            RoutingStrategies.Bubble,
-            true
-        );
-    }
-
-    private void DetachFromClickSurface()
-    {
-        _clickSurface?.RemoveHandler(MapItemsControl.MapClickEvent, OnMapClick);
-        _clickSurface?.RemoveHandler(InputElement.PointerMovedEvent, OnMapPointerMoved);
-        _clickSurface = null;
-        _mapControl = null;
-    }
-
-    private static MapItemsControl? ResolveMapControl(InputElement? target)
-    {
-        if (target is MapItemsControl mapControl)
-        {
-            return mapControl;
-        }
-
-        return target is Visual visual
-            ? visual.GetVisualDescendants().OfType<MapItemsControl>().FirstOrDefault()
-            : null;
-    }
-
-    #endregion
-
-    #region Toggle button
+    #region Toggle / clear
 
     private void OnToggleClick(object? sender, RoutedEventArgs e)
     {
@@ -171,11 +85,6 @@ public sealed partial class MapRuler : UserControl
             case RulerState.Idle:
                 BeginPicking();
                 break;
-            case RulerState.PickingStart:
-            case RulerState.PickingEnd:
-                ClearRuler();
-                break;
-            case RulerState.Active:
             default:
                 ClearRuler();
                 break;
@@ -197,9 +106,28 @@ public sealed partial class MapRuler : UserControl
 
     private void BeginPicking()
     {
+        if (
+            Map is not { } map
+            || !map.Interaction.TryBegin(
+                new MapInteractionRequest
+                {
+                    Status = RS.MapRuler_PickStart,
+                    Accent = AsvColorKind.Warning,
+                },
+                out var session
+            )
+        )
+        {
+            return;
+        }
+
         DistanceText = null;
+        _session = session;
+        session.Disposable.AddAction(OnSessionEnded);
+        map.Interaction.Clicked.Subscribe(OnSessionClick).AddTo(session.Disposable);
+        map.Interaction.CursorMoved.Subscribe(OnSessionCursor).AddTo(session.Disposable);
+
         _state = RulerState.PickingStart;
-        PromptText = RS.MapRuler_PickStart;
     }
 
     private void ClearRuler()
@@ -212,6 +140,7 @@ public sealed partial class MapRuler : UserControl
         StartPoint = null;
         StopPoint = null;
         ResetPicking();
+        DisposeSession();
     }
 
     private void ResetPicking()
@@ -219,59 +148,83 @@ public sealed partial class MapRuler : UserControl
         _firstPoint = null;
         _isPreview = false;
         _state = RulerState.Idle;
-        PromptText = null;
         DistanceText = null;
         SyncToggleVisual();
     }
 
     #endregion
 
-    #region Map click
+    #region Session input
 
-    private void OnMapClick(object? sender, MapClickEventArgs e)
+    private void OnSessionClick(GeoPoint point)
     {
         switch (_state)
         {
             case RulerState.PickingStart:
-                _firstPoint = e.Point;
+                _firstPoint = point;
                 _state = RulerState.PickingEnd;
-                PromptText = RS.MapRuler_PickEnd;
-                BuildVisuals(e.Point, e.Point, true);
+                SetStatus(RS.MapRuler_PickEnd);
+                BuildVisuals(point, point, true);
                 break;
             case RulerState.PickingEnd:
                 if (_firstPoint is null)
                 {
-                    ResetPicking();
+                    ClearRuler();
                     return;
                 }
 
                 var first = _firstPoint.Value;
                 _firstPoint = null;
                 StartPoint = first;
-                StopPoint = e.Point;
+                StopPoint = point;
+                Dispatcher.UIThread.Post(DisposeSession);
                 break;
-            case RulerState.Active:
-            case RulerState.Idle:
             default:
                 return;
         }
 
-        e.Handled = true;
-
         SyncToggleVisual();
     }
 
-    #endregion
-
-    private void OnMapPointerMoved(object? sender, PointerEventArgs e)
+    private void OnSessionCursor(GeoPoint cursor)
     {
-        if (_state != RulerState.PickingEnd || _firstPoint is null || _mapControl is null)
+        if (_state != RulerState.PickingEnd || _firstPoint is null)
         {
             return;
         }
 
-        UpdatePreviewStop(_mapControl.CursorPosition);
+        UpdatePreviewStop(cursor);
     }
+
+    private void OnSessionEnded()
+    {
+        var wasPicking = _state is RulerState.PickingStart or RulerState.PickingEnd;
+        DisposeSession();
+
+        if (wasPicking)
+        {
+            ClearRuler();
+        }
+    }
+
+    private void DisposeSession()
+    {
+        var session = _session;
+        _session = null;
+        session?.Dispose();
+    }
+
+    private void SetStatus(string? text)
+    {
+        if (_session is null || Map is null)
+        {
+            return;
+        }
+
+        Map.Interaction.SetStatus(_session, text);
+    }
+
+    #endregion
 
     #region Build / tear down visuals
 
@@ -310,13 +263,16 @@ public sealed partial class MapRuler : UserControl
             .Subscribe(p => OnEndpointMoved(false, p))
             .AddTo(ref _activeSubs);
 
-        UnitService
-            .Units[DistanceUnit.Id]
-            .CurrentUnitItem.ObserveOnUIThreadDispatcher()
-            .Subscribe(_ => UpdateDistanceLabel())
-            .AddTo(ref _activeSubs);
+        if (UnitService is { } unitService)
+        {
+            unitService
+                .Units[DistanceUnit.Id]
+                .CurrentUnitItem.ObserveOnUIThreadDispatcher()
+                .Subscribe(_ => UpdateDistanceLabel())
+                .AddTo(ref _activeSubs);
+        }
 
-        _ownedAnchorsList = Anchors;
+        _ownedAnchorsList = Map?.Anchors;
         _ownedAnchorsList?.Add(_lineHalo);
         _ownedAnchorsList?.Add(_line);
         _ownedAnchorsList?.Add(_start);
@@ -446,7 +402,7 @@ public sealed partial class MapRuler : UserControl
 
             _state = RulerState.Active;
             _firstPoint = null;
-            PromptText = null;
+            SetStatus(null);
             SyncToggleVisual();
         }
         else
@@ -480,7 +436,7 @@ public sealed partial class MapRuler : UserControl
     {
         return _start is not null
             && _stop is not null
-            && ReferenceEquals(_ownedAnchorsList, Anchors)
+            && ReferenceEquals(_ownedAnchorsList, Map?.Anchors)
             && _start.Location.Equals(start)
             && _stop.Location.Equals(stop);
     }
@@ -530,14 +486,14 @@ public sealed partial class MapRuler : UserControl
 
     private void UpdateDistanceLabel()
     {
-        if (_start is null || _stop is null)
+        if (_start is null || _stop is null || UnitService is not { } unitService)
         {
             DistanceText = null;
             return;
         }
 
         var d = GeoMath.Distance(_start.Location, _stop.Location);
-        var unit = UnitService.Units[DistanceUnit.Id].CurrentUnitItem.Value;
+        var unit = unitService.Units[DistanceUnit.Id].CurrentUnitItem.Value;
         DistanceText = unit.PrintFromSiWithUnits(d, "F1");
     }
 
