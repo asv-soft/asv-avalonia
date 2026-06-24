@@ -1,0 +1,158 @@
+﻿<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Asv.Avalonia"
+>
+    <Design.PreviewWith>
+        <StackPanel Width="220" Spacing="12" Background="{DynamicResource SystemRegionBrush}">
+            <controls:CompactSlider Value="25" ValueText="25" Units="%" SliderColor="Info3" />
+            <controls:CompactSlider Value="65" ValueText="65" Units="%" SliderColor="Success" />
+            <controls:CompactSlider Value="90" ValueText="90" Units="%" SliderColor="Warning" />
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|CompactSlider">
+        <Setter Property="Height" Value="24" />
+        <Setter Property="MinHeight" Value="0" />
+        <Setter Property="ThumbSize" Value="18" />
+        <Setter Property="ThumbWidth" Value="56" />
+        <Setter Property="TrackHeight" Value="3" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel Height="{TemplateBinding Height}" MinHeight="0" ClipToBounds="False">
+                    <Border
+                        Classes="compact-slider-accent"
+                        controls:AsvPallete.Color="{TemplateBinding SliderColor}"
+                        Height="{TemplateBinding TrackHeight}"
+                        VerticalAlignment="Center"
+                        CornerRadius="2"
+                        Background="{DynamicResource SystemControlBackgroundBaseMediumLowBrush}"
+                    />
+                    <Canvas Height="{TemplateBinding Height}" ClipToBounds="False">
+                        <Border
+                            Classes="compact-slider-thumb compact-slider-accent"
+                            controls:AsvPallete.Color="{TemplateBinding SliderColor}"
+                            Canvas.Left="{TemplateBinding ThumbLeft}"
+                            Canvas.Top="{TemplateBinding ThumbTop}"
+                            Width="{TemplateBinding ThumbWidth}"
+                            Height="{TemplateBinding ThumbSize}"
+                            CornerRadius="9"
+                            BorderThickness="1"
+                            BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                            Background="{DynamicResource SystemControlBackgroundAccentBrush}"
+                        >
+                            <StackPanel
+                                Margin="5,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="2"
+                            >
+                                <TextBlock
+                                    Classes="compact-slider-thumb-text"
+                                    FontSize="{DynamicResource AsvFontSizeSmall}"
+                                    FontWeight="SemiBold"
+                                    Text="{TemplateBinding ValueText}"
+                                    TextTrimming="CharacterEllipsis"
+                                />
+                                <TextBlock
+                                    Classes="compact-slider-thumb-unit"
+                                    FontSize="{DynamicResource AsvFontSizeSmall}"
+                                    IsVisible="{TemplateBinding Units, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                                    Text="{TemplateBinding Units}"
+                                    TextTrimming="CharacterEllipsis"
+                                />
+                            </StackPanel>
+                        </Border>
+                    </Canvas>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|CompactSlider:disabled">
+        <Setter Property="Opacity" Value="0.55" />
+    </Style>
+
+    <Style Selector="TextBlock.compact-slider-thumb-text">
+        <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
+    </Style>
+
+    <Style Selector="TextBlock.compact-slider-thumb-unit">
+        <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
+        <Setter Property="Opacity" Value="0.7" />
+    </Style>
+
+    <Style Selector="Border.compact-slider-accent.error">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundErrorBrush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.warning">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundWarningBrush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.success">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundSuccessBrush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.unknown">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundUnknownBrush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info1">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo1Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info2">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo2Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info3">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info4">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo4Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info5">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo5Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info6">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo6Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info7">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo7Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info8">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo8Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info9">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo9Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info10">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo10Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info11">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo11Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info12">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo12Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info13">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo13Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info14">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo14Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info15">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo15Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info16">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo16Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info17">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo17Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info18">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo18Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info19">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo19Brush}" />
+    </Style>
+    <Style Selector="Border.compact-slider-accent.info20">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo20Brush}" />
+    </Style>
+</Styles>

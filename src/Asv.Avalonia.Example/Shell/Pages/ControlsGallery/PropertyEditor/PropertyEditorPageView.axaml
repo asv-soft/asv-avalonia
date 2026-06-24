@@ -67,7 +67,7 @@
 
                         <Grid
                             ColumnDefinitions="180,*"
-                            RowDefinitions="Auto,Auto,Auto,Auto"
+                            RowDefinitions="Auto,Auto,Auto,Auto,Auto"
                             RowSpacing="8"
                         >
                             <TextBlock
@@ -113,10 +113,23 @@
                                 Grid.Row="3"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="GeoPoint"
+                                Text="Telemetry"
                             />
                             <TextBlock
                                 Grid.Row="3"
+                                Grid.Column="1"
+                                Classes="value-text"
+                                Text="{Binding TelemetryEnabled.Value}"
+                            />
+
+                            <TextBlock
+                                Grid.Row="4"
+                                Grid.Column="0"
+                                Classes="description value-label"
+                                Text="GeoPoint"
+                            />
+                            <TextBlock
+                                Grid.Row="4"
                                 Grid.Column="1"
                                 Classes="value-text"
                                 Text="{Binding GeoPoint.Value}"

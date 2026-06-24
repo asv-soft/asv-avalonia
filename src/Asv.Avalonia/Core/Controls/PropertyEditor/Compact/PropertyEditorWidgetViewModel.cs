@@ -20,7 +20,9 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         ShowHeader = true;
         ItemsSource.Add(new PropertyTextBoxDesign());
         ItemsSource.Add(new PropertyComboBoxDesign());
+        ItemsSource.Add(new PropertyToggleButtonGroupDesign());
         ItemsSource.Add(new PropertyUnitDesign());
+        ItemsSource.Add(new PropertyToggleSwitchDesign());
         ItemsSource.Add(new PropertyButtonViewModel());
     }
 

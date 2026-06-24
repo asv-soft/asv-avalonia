@@ -116,6 +116,27 @@
           <DependentUpon>TileDashboardView.axaml</DependentUpon>
           <SubType>Code</SubType>
         </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\Properties\Slider\PropertySliderView.axaml.cs">
+          <DependentUpon>PropertySliderView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Core\Controls\Slider\CompactSlider.cs">
+          <DependentUpon>CompactSlider.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Core\Controls\Slider\CompactSlider.properties.cs">
+          <DependentUpon>CompactSlider.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Core\Controls\ToggleSwitch\StateToggleSwitch.cs">
+          <DependentUpon>StateToggleSwitch.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Core\Controls\ToggleSwitch\StateToggleSwitch.properties.cs">
+          <DependentUpon>StateToggleSwitch.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\Properties\ToggleSwitch\PropertyToggleSwitchView.axaml.cs">
+          <DependentUpon>PropertyToggleSwitchView.axaml</DependentUpon>
+        </Compile>
+        <Compile Update="Core\Controls\PropertyEditor\Properties\ToggleButtonGroup\PropertyToggleButtonGroupView.axaml.cs">
+          <DependentUpon>PropertyToggleButtonGroupView.axaml</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -136,6 +157,8 @@
       <AdditionalFiles Include="Core\Controls\Indicators\BatteryIndicator.axaml" />
       <AdditionalFiles Include="Core\Controls\Indicators\ConnectionQuality.axaml" />
       <AdditionalFiles Include="Core\Controls\Indicators\GpsStatusIndicator.axaml" />
+      <AdditionalFiles Include="Core\Controls\Slider\CompactSlider.axaml" />
+      <AdditionalFiles Include="Core\Controls\ToggleSwitch\StateToggleSwitch.axaml" />
       <AdditionalFiles Include="Core\Controls\InfoBar\InfoBarStyles.axaml" />
       <AdditionalFiles Include="Core\Controls\Items\ItemsListStyles.axaml" />
       <AdditionalFiles Include="Core\Controls\Progress\TelemetryProgressBar.axaml" />
@@ -165,6 +188,10 @@
 
     <ItemGroup>
       <AvaloniaXaml Remove="Controls\TelemBox\Digit\SingleRttBoxView.axaml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Core\Controls\PropertyEditor\Properties\Slider\" />
     </ItemGroup>
 
 </Project>

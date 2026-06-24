@@ -1,0 +1,172 @@
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Asv.Avalonia"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
+    <Design.PreviewWith>
+        <StackPanel Width="180" Spacing="10" Background="{DynamicResource SystemRegionBrush}">
+            <controls:StateToggleSwitch IsChecked="True" />
+            <controls:StateToggleSwitch IsChecked="False" />
+            <controls:StateToggleSwitch
+                CheckedIcon="CheckCircle"
+                CheckedStatus="Info5"
+                CheckedText="READY"
+                IsChecked="True"
+                UncheckedIcon="AlertCircle"
+                UncheckedStatus="Warning"
+                UncheckedText="WAIT"
+            />
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <Style Selector="controls|StateToggleSwitch">
+        <Setter Property="Width" Value="128" />
+        <Setter Property="Height" Value="20" />
+        <Setter Property="MinWidth" Value="96" />
+        <Setter Property="MinHeight" Value="20" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="FontSize" Value="{DynamicResource AsvFontSizeNormal}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border
+                    Classes="state-toggle-track"
+                    controls:AsvPallete.Color="{TemplateBinding StateStatus}"
+                    Width="{TemplateBinding Width}"
+                    Height="{TemplateBinding Height}"
+                    Background="{DynamicResource AsvForegroundUnknownBrush}"
+                    BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="10"
+                    ClipToBounds="True"
+                >
+                    <Grid ColumnDefinitions="*,*">
+                        <StackPanel
+                            Grid.Column="{TemplateBinding ContentColumn}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="4"
+                        >
+                            <icons:MaterialIcon
+                                Width="{DynamicResource AsvFontSizeNormal}"
+                                Height="{DynamicResource AsvFontSizeNormal}"
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                IsVisible="{TemplateBinding StateIcon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                Kind="{TemplateBinding StateIcon}"
+                            />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Foreground="White"
+                                Text="{TemplateBinding StateText}"
+                                TextTrimming="CharacterEllipsis"
+                            />
+                        </StackPanel>
+
+                        <Border
+                            Grid.Column="{TemplateBinding ThumbColumn}"
+                            Width="{DynamicResource AsvFontSizeNormal}"
+                            Height="{DynamicResource AsvFontSizeNormal}"
+                            Margin="3"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Background="White"
+                            CornerRadius="7"
+                        />
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </Style>
+
+    <Style Selector="controls|StateToggleSwitch:pointerover /template/ Border.state-toggle-track">
+        <Setter Property="Opacity" Value="0.9" />
+    </Style>
+
+    <Style Selector="controls|StateToggleSwitch:pressed /template/ Border.state-toggle-track">
+        <Setter Property="Opacity" Value="0.82" />
+    </Style>
+
+    <Style Selector="controls|StateToggleSwitch:disabled">
+        <Setter Property="Opacity" Value="0.55" />
+    </Style>
+
+    <Style Selector="Border.state-toggle-track.error">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundErrorBrush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.warning">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundWarningBrush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.success">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundSuccessBrush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.unknown">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundUnknownBrush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info1">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo1Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info2">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo2Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info3">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo3Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info4">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo4Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info5">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo5Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info6">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo6Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info7">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo7Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info8">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo8Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info9">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo9Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info10">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo10Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info11">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo11Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info12">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo12Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info13">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo13Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info14">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo14Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info15">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo15Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info16">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo16Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info17">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo17Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info18">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo18Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info19">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo19Brush}" />
+    </Style>
+    <Style Selector="Border.state-toggle-track.info20">
+        <Setter Property="Background" Value="{DynamicResource AsvForegroundInfo20Brush}" />
+    </Style>
+</Styles>

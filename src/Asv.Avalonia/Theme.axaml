@@ -105,6 +105,8 @@
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/BatteryIndicator.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/ConnectionQuality.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Indicators/GpsStatusIndicator.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Slider/CompactSlider.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/ToggleSwitch/StateToggleSwitch.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Progress/TelemetryProgressBar.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/GeoPoint/GeoPointEditor.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Core/Controls/Tags/Tag.axaml" />

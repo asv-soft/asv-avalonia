@@ -31,10 +31,16 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         DisplayNameProperty = CreateDisplayNameProperty();
         OperationProfileProperty = CreateOperationProfileProperty();
+        OptimizationModeProperty = CreateOptimizationModeProperty();
+        TelemetryEnabledProperty = CreateToggleSwitchProperty(
+            "telemetry-enabled",
+            TelemetryEnabled
+        );
 
         ActionButtonProperty = CreateActionButtonProperty(
             DisplayNameProperty.Text.Select(static name => !string.IsNullOrWhiteSpace(name))
         );
+        ThrottleSliderProperty = CreateSliderProperty("throttle-slider", ThrottleUnitValue);
         AltitudeUnitProperty = CreateUnitProperty(
             "altitude-unit",
             unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
@@ -60,7 +66,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 unit,
                 DisplayNameProperty,
                 OperationProfileProperty,
+                OptimizationModeProperty,
                 ActionButtonProperty,
+                TelemetryEnabledProperty,
+                ThrottleSliderProperty,
                 AltitudeUnitProperty,
                 ThrottleUnitProperty,
                 dialogService
@@ -72,7 +81,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 unit,
                 CreateDisplayNameProperty(),
                 CreateOperationProfileProperty(),
+                CreateOptimizationModeProperty(),
                 CreateActionButtonProperty(),
+                CreateToggleSwitchProperty("telemetry-enabled", TelemetryEnabled),
+                CreateSliderProperty("throttle-slider", ThrottleUnitValue),
                 CreateUnitProperty(
                     "altitude-unit",
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
@@ -101,7 +113,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 unit,
                 CreateDisplayNameProperty(),
                 CreateOperationProfileProperty(),
+                CreateOptimizationModeProperty(),
                 CreateActionButtonProperty(),
+                CreateToggleSwitchProperty("telemetry-enabled", TelemetryEnabled),
+                CreateSliderProperty("throttle-slider", ThrottleUnitValue),
                 CreateUnitProperty(
                     "altitude-unit",
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
@@ -139,7 +154,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         IUnitService unit,
         PropertyTextBoxViewModel displayNameProperty,
         PropertyComboBoxViewModel operationProfileProperty,
+        PropertyToggleButtonGroupViewModel optimizationModeProperty,
         PropertyButtonViewModel actionButtonProperty,
+        PropertyToggleSwitchViewModel toggleSwitchProperty,
+        PropertySliderViewModel throttleSliderProperty,
         PropertyUnitViewModel altitudeUnitProperty,
         PropertyUnitViewModel throttleUnitProperty,
         IDialogService dialogService
@@ -150,7 +168,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             unit,
             displayNameProperty,
             operationProfileProperty,
+            optimizationModeProperty,
             actionButtonProperty,
+            toggleSwitchProperty,
+            throttleSliderProperty,
             altitudeUnitProperty,
             throttleUnitProperty,
             dialogService
@@ -162,7 +183,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         IUnitService unit,
         PropertyTextBoxViewModel displayNameProperty,
         PropertyComboBoxViewModel operationProfileProperty,
+        PropertyToggleButtonGroupViewModel optimizationModeProperty,
         PropertyButtonViewModel actionButtonProperty,
+        PropertyToggleSwitchViewModel toggleSwitchProperty,
+        PropertySliderViewModel throttleSliderProperty,
         PropertyUnitViewModel altitudeUnitProperty,
         PropertyUnitViewModel throttleUnitProperty,
         IDialogService dialogService
@@ -173,7 +197,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             unit,
             displayNameProperty,
             operationProfileProperty,
+            optimizationModeProperty,
             actionButtonProperty,
+            toggleSwitchProperty,
+            throttleSliderProperty,
             altitudeUnitProperty,
             throttleUnitProperty,
             dialogService
@@ -185,7 +212,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         IUnitService unit,
         PropertyTextBoxViewModel displayNameProperty,
         PropertyComboBoxViewModel operationProfileProperty,
+        PropertyToggleButtonGroupViewModel optimizationModeProperty,
         PropertyButtonViewModel actionButtonProperty,
+        PropertyToggleSwitchViewModel toggleSwitchProperty,
+        PropertySliderViewModel throttleSliderProperty,
         PropertyUnitViewModel altitudeUnitProperty,
         PropertyUnitViewModel throttleUnitProperty,
         IDialogService dialogService
@@ -194,7 +224,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         editor.ItemsSource.Add(displayNameProperty);
         editor.ItemsSource.Add(operationProfileProperty);
+        editor.ItemsSource.Add(optimizationModeProperty);
         editor.ItemsSource.Add(actionButtonProperty);
+        editor.ItemsSource.Add(toggleSwitchProperty);
+        editor.ItemsSource.Add(throttleSliderProperty);
         editor.ItemsSource.Add(altitudeUnitProperty);
         editor.ItemsSource.Add(throttleUnitProperty);
         editor.ItemsSource.Add(
@@ -333,6 +366,46 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         ActionButtonClickCount++;
     }
 
+    private static PropertyToggleSwitchViewModel CreateToggleSwitchProperty(
+        string id,
+        ReactiveProperty<bool> model
+    )
+    {
+        return AddExampleErrorMenu(
+            new PropertyToggleSwitchReactive(id, model)
+            {
+                Header = "Telemetry",
+                ShortHeader = "Tel",
+                Description = "Toggle switch property with boolean model and update marker.",
+                Icon = MaterialIconKind.ToggleSwitch,
+                IconColor = AsvColorKind.Info5,
+            }
+        );
+    }
+
+    private static PropertySliderViewModel CreateSliderProperty(
+        string id,
+        ReactiveProperty<double> model
+    )
+    {
+        return AddExampleErrorMenu(
+            new PropertySliderReactive(id, model, 0, 100)
+            {
+                Header = "Throttle slider",
+                ShortHeader = "Thr",
+                Description = "Slider property with live value, units, and update marker.",
+                Icon = MaterialIconKind.Signal,
+                IconColor = AsvColorKind.Success,
+                TickFrequency = 5,
+                SmallChange = 1,
+                LargeChange = 10,
+                IsSnapToTickEnabled = true,
+                Units = "%",
+                ValueFormat = "0",
+            }
+        );
+    }
+
     private static PropertyUnitViewModel CreateUnitProperty(
         string id,
         IUnit unit,
@@ -452,6 +525,46 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         return AddExampleErrorMenu(property);
     }
 
+    private PropertyToggleButtonGroupViewModel CreateOptimizationModeProperty()
+    {
+        var property = new PropertyToggleButtonGroupReactive("optimization-mode", OptimizationMode)
+        {
+            Header = "Optimization mode",
+            ShortHeader = "Mode",
+            Description = "Button group property based on combo box selection.",
+            Icon = MaterialIconKind.Tune,
+            IconColor = AsvColorKind.Success,
+        };
+
+        var firstItem = AddSelectionItem(
+            property,
+            "speed",
+            "Speed",
+            "Prefer faster processing.",
+            MaterialIconKind.Signal,
+            AsvColorKind.Success
+        );
+        AddSelectionItem(
+            property,
+            "quality",
+            "Quality",
+            "Prefer higher quality.",
+            MaterialIconKind.CheckCircle,
+            AsvColorKind.Success
+        );
+        AddSelectionItem(
+            property,
+            "balanced",
+            "Balanced",
+            "Use a balanced preset.",
+            MaterialIconKind.Tune,
+            AsvColorKind.Success
+        );
+        OptimizationMode.Value ??= firstItem;
+
+        return AddExampleErrorMenu(property);
+    }
+
     private static TProperty AddExampleErrorMenu<TProperty>(TProperty property)
         where TProperty : PropertyViewModel
     {
@@ -556,6 +669,26 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         return item;
     }
 
+    private static IHeadlinedViewModel AddSelectionItem(
+        PropertyComboBoxViewModel property,
+        string id,
+        string header,
+        string description,
+        MaterialIconKind? icon,
+        AsvColorKind iconColor
+    )
+    {
+        var item = new HeadlinedViewModel(id)
+        {
+            Header = header,
+            Description = description,
+            Icon = icon,
+            IconColor = iconColor,
+        };
+        property.ItemsSource.Add(item);
+        return item;
+    }
+
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return PropertyEditor;
@@ -573,6 +706,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     public BindableReactiveProperty<string?> DisplayName { get; } = new("Survey mission");
     public BindableReactiveProperty<IHeadlinedViewModel?> OperationProfile { get; } = new();
+    public BindableReactiveProperty<IHeadlinedViewModel?> OptimizationMode { get; } = new();
+    public BindableReactiveProperty<bool> TelemetryEnabled { get; } = new(true);
     public BindableReactiveProperty<double> AltitudeUnitValue { get; } = new(1250);
     public BindableReactiveProperty<double> ThrottleUnitValue { get; } = new(65);
 
@@ -625,7 +760,10 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
     public PropertyTextBoxViewModel DisplayNameProperty { get; }
     public PropertyComboBoxViewModel OperationProfileProperty { get; }
+    public PropertyToggleButtonGroupViewModel OptimizationModeProperty { get; }
     public PropertyButtonViewModel ActionButtonProperty { get; }
+    public PropertyToggleSwitchViewModel TelemetryEnabledProperty { get; }
+    public PropertySliderViewModel ThrottleSliderProperty { get; }
     public PropertyUnitViewModel AltitudeUnitProperty { get; }
     public PropertyUnitViewModel ThrottleUnitProperty { get; }
     public PropertyEditorViewModel PropertyEditor { get; }

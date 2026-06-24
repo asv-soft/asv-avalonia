@@ -1,0 +1,157 @@
+﻿<UserControl
+    x:Name="PART_Root"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia"
+    xmlns:avalonia1="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="80"
+    x:Class="Asv.Avalonia.PropertyToggleSwitchView"
+    x:DataType="avalonia:PropertyToggleSwitchViewModel"
+>
+    <Design.DataContext>
+        <avalonia:PropertyToggleSwitchDesign />
+    </Design.DataContext>
+
+    <UserControl.Resources>
+        <ControlTheme
+            x:Key="PropertyMenuNodeTheme"
+            TargetType="MenuItem"
+            BasedOn="{StaticResource {x:Type MenuItem}}"
+            x:DataType="avalonia:MenuNode"
+        >
+            <Setter
+                Property="Icon"
+                Value="{Binding Base.Icon, Converter={x:Static avalonia:MaterialIconConverter.Instance}}"
+            />
+            <Setter Property="Header" Value="{Binding Base.Header}" />
+            <Setter Property="ItemsSource" Value="{Binding Items}" />
+            <Setter Property="Command" Value="{Binding Base.Command}" />
+            <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}" />
+            <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+            <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+            <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+            <Setter Property="InputGesture" Value="{Binding Base.HotKey}" />
+            <Setter Property="IsChecked" Value="{Binding Base.IsChecked}" />
+            <Setter Property="ToggleType" Value="{Binding Base.ToggleType}" />
+            <Setter Property="GroupName" Value="{Binding Base.GroupName}" />
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Border.property-border">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.property-border:pointerover">
+            <Setter
+                Property="Background"
+                Value="{DynamicResource TextControlBackgroundPointerOver}"
+            />
+            <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource TextControlBorderBrushPointerOver}"
+            />
+        </Style>
+    </UserControl.Styles>
+
+    <Border
+        Classes="property-border"
+        VerticalAlignment="Top"
+        HorizontalAlignment="Stretch"
+        BorderThickness="1"
+        CornerRadius="4"
+        Padding="4,2"
+    >
+        <Border.ContextMenu>
+            <ContextMenu
+                IsVisible="{Binding MenuView, Converter={x:Static ObjectConverters.IsNotNull}}"
+                ItemsSource="{Binding MenuView.Items}"
+            >
+                <ContextMenu.ItemContainerTheme>
+                    <StaticResource ResourceKey="PropertyMenuNodeTheme" />
+                </ContextMenu.ItemContainerTheme>
+            </ContextMenu>
+        </Border.ContextMenu>
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="PrefixIcon" Width="Auto" />
+                <ColumnDefinition SharedSizeGroup="PrefixName" Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition SharedSizeGroup="PostfixStatus" Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <avalonia1:MaterialIcon
+                Grid.Column="0"
+                Margin="2,0,0,0"
+                Kind="{Binding Icon}"
+                avalonia:AsvPallete.Color="{Binding IconColor}"
+            >
+                <avalonia1:MaterialIcon.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="Icon" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                        <Binding
+                            Path="(avalonia:PropertyEditorDisplayOptions.ShowPrefixIcon)"
+                            RelativeSource="{RelativeSource Self}"
+                        />
+                    </MultiBinding>
+                </avalonia1:MaterialIcon.IsVisible>
+            </avalonia1:MaterialIcon>
+            <TextBlock
+                Grid.Column="1"
+                Margin="4,0"
+                MinWidth="20"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding ShortHeader}"
+            >
+                <TextBlock.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding
+                            Path="ShortHeader"
+                            Converter="{x:Static StringConverters.IsNotNullOrEmpty}"
+                        />
+                        <Binding
+                            Path="(avalonia:PropertyEditorDisplayOptions.ShowShortHeader)"
+                            RelativeSource="{RelativeSource Self}"
+                        />
+                    </MultiBinding>
+                </TextBlock.IsVisible>
+            </TextBlock>
+
+            <avalonia:StateToggleSwitch
+                Grid.Column="2"
+                Margin="4,0,8,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Center"
+                avalonia:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
+                CheckedIcon="{Binding CheckedIcon}"
+                CheckedStatus="{Binding CheckedStatus}"
+                CheckedText="{Binding CheckedText}"
+                IsChecked="{Binding Value.Value, Mode=TwoWay}"
+                IsEnabled="{Binding !IsBusy}"
+                UncheckedIcon="{Binding UncheckedIcon}"
+                UncheckedStatus="{Binding UncheckedStatus}"
+                UncheckedText="{Binding UncheckedText}"
+            />
+
+            <avalonia:PropertyStatusView Grid.Column="3" VerticalAlignment="Center" />
+
+            <Border
+                Background="Transparent"
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                IsVisible="{Binding Description, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+            >
+                <ToolTip.Tip>
+                    <StackPanel Spacing="8">
+                        <TextBlock Classes="h1" Text="{Binding Header}" />
+                        <TextBlock Classes="description" Text="{Binding Description}" />
+                    </StackPanel>
+                </ToolTip.Tip>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

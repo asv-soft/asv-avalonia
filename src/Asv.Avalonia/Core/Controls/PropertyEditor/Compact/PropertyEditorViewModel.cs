@@ -17,7 +17,9 @@ public class PropertyEditorViewModel : ViewModel
         DesignTime.ThrowIfNotDesignMode();
         _itemsSource.Add(new PropertyTextBoxDesign { ShortHeader = "A" });
         _itemsSource.Add(new PropertyComboBoxDesign { ShortHeader = "Ab" });
+        _itemsSource.Add(new PropertyToggleButtonGroupDesign { ShortHeader = "Abc" });
         _itemsSource.Add(new PropertyUnitDesign { ShortHeader = "Abc" });
+        _itemsSource.Add(new PropertyToggleSwitchDesign { ShortHeader = "Abcd" });
         _itemsSource.Add(new PropertyButtonViewModel() { ShortHeader = "Abcd" });
 
         SetParent(DesignTime.Shell);
