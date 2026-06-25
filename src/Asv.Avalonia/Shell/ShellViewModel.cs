@@ -59,7 +59,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
             .AddTo(ref DisposableBag);
 
-        var store = new NavigationStore("nav");
+        var navPath = _appPath.GetAppPathFolder("nav");
+        var store = new NavigationStore(navPath);
         Navigation = new NavigationController<IViewModel>(this, store).DisposeItWith(Disposable);
 
         var layoutPath = _appPath.GetPageFolder(new NavId(TypeId), "layout");

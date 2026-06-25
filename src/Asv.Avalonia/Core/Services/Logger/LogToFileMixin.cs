@@ -27,10 +27,14 @@ public static class LogToFileMixin
                 builder.Configuration.GetSection(LogToFileOptions.Section).Get<LogToFileOptions>()
                 ?? new LogToFileOptions();
             configure?.Invoke(new Builder(logFileOptions));
+            logFileOptions.Folder = AppPath.GetAppPathFolder(
+                builder.Environment,
+                logFileOptions.Folder
+            );
             builder.Logging.AddZLoggerRollingFile(options =>
             {
                 options.FilePathSelector = (dt, index) =>
-                    Path.Combine($"{logFileOptions.Folder}", $"{dt:yyyy-MM-dd}_{index}.logs");
+                    Path.Combine(logFileOptions.Folder, $"{dt:yyyy-MM-dd}_{index}.logs");
                 options.UseJsonFormatter();
                 options.RollingSizeKB = logFileOptions.RollingSizeKb;
             });

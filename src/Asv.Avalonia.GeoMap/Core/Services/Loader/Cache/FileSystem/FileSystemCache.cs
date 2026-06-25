@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Metrics;
 using System.Threading.Channels;
+using Asv.Avalonia;
 using Asv.Common;
 using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
@@ -36,12 +37,15 @@ public class FileSystemCache : TileCache
     public FileSystemCache(
         IOptions<FileSystemCacheConfig> config,
         ILoggerFactory factory,
-        IMeterFactory meterFactory
+        IMeterFactory meterFactory,
+        IAppPath appPath
     )
         : base(config.Value, factory)
     {
+        ArgumentNullException.ThrowIfNull(appPath);
+
         _logger = factory.CreateLogger<FileSystemCache>();
-        _cacheDirectory = config.Value.FolderPath;
+        _cacheDirectory = appPath.GetAppPathFolder(config.Value.FolderPath);
         _capacitySize = config.Value.SizeLimitKb * 1024;
         if (!Directory.Exists(_cacheDirectory))
         {

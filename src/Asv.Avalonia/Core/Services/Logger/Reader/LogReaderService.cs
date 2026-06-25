@@ -16,9 +16,11 @@ public class LogReaderService : ILogReaderService
 {
     private readonly string _logsFolder;
 
-    public LogReaderService(LogReaderOptions options)
+    public LogReaderService(LogReaderOptions options, IAppPath appPath)
     {
-        _logsFolder = options.Folder;
+        ArgumentNullException.ThrowIfNull(appPath);
+
+        _logsFolder = appPath.GetAppPathFolder(options.Folder);
         ArgumentNullException.ThrowIfNull(_logsFolder);
     }
 
