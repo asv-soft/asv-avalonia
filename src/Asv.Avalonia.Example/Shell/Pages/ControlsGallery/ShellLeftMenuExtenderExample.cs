@@ -7,6 +7,10 @@ namespace Asv.Avalonia.Example;
 
 public class ShellLeftMenuExtenderExample : IExtensionFor<IShell>
 {
+    public const string StaticId = "ext.shell.left-menu.example";
+
+    string ISupportId<string>.Id => StaticId;
+
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {
         context.LeftMenu.Add(

@@ -13,6 +13,10 @@ public class DefaultSettingsExtension(
     [FromKeyedServices(SettingsPageViewModel.PageId)] IEnumerable<ITreePage> items
 ) : IExtensionFor<ISettingsPage>
 {
+    public const string StaticId = "ext.settings.tree";
+
+    string Asv.Modeling.ISupportId<string>.Id => StaticId;
+
     public void Extend(ISettingsPage context, CompositeDisposable contextDispose)
     {
         foreach (var treePage in items)

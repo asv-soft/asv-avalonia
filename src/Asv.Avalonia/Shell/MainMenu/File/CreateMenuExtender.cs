@@ -12,6 +12,10 @@ public class CreateMenuExtender(
     IConfiguration config
 ) : IExtensionFor<IShell>
 {
+    public const string StaticId = "ext.shell.menu.create";
+
+    string Asv.Modeling.ISupportId<string>.Id => StaticId;
+
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {
         foreach (var file in files.SupportedFiles.Where(x => x.CanCreate))

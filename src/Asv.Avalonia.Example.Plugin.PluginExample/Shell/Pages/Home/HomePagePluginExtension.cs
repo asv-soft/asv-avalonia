@@ -6,6 +6,10 @@ namespace Asv.Avalonia.Example.Plugin.PluginExample;
 
 public class HomePagePluginExtension : IExtensionFor<IHomePage>
 {
+    public const string StaticId = "ext.home.plugin-example";
+
+    string ISupportId<string>.Id => StaticId;
+
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
         var action = new ActionViewModel("open-plugin-example")

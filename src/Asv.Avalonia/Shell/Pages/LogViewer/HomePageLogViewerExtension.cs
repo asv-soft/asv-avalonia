@@ -6,6 +6,10 @@ namespace Asv.Avalonia;
 
 public sealed class HomePageLogViewerExtension : IExtensionFor<IHomePage>
 {
+    public const string StaticId = "ext.home.log-viewer";
+
+    string ISupportId<string>.Id => StaticId;
+
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
         var action = new ActionViewModel("open-log-viewer")

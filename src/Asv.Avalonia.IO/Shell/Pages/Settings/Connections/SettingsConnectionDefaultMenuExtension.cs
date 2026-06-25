@@ -12,7 +12,11 @@ public class SettingsConnectionDefaultMenuExtension(
         IEnumerable<IMenuItem> menuItems
 ) : IExtensionFor<ISettingsConnectionSubPage>
 {
+    public const string StaticId = "ext.settings.connection.menu";
+
     public const string Contract = "settings.connection.menu";
+
+    string Asv.Modeling.ISupportId<string>.Id => StaticId;
 
     public void Extend(ISettingsConnectionSubPage context, CompositeDisposable contextDispose)
     {

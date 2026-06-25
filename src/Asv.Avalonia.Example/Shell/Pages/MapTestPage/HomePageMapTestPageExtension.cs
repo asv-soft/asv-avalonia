@@ -6,6 +6,10 @@ namespace Asv.Avalonia.Example;
 
 public class HomePageMapTestPageExtension : IExtensionFor<IHomePage>
 {
+    public const string StaticId = "ext.home.map-test";
+
+    string ISupportId<string>.Id => StaticId;
+
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
         var action = new ActionViewModel("open-map-test")

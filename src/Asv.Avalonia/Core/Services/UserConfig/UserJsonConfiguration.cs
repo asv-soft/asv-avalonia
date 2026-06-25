@@ -12,7 +12,7 @@ public class UserConfigurationOptions
 
 public class UserJsonConfiguration : JsonOneFileConfiguration
 {
-    private const string UserSettingsFileName = "settings.json";
+    private const string UserSettingsFileName = "profile.json";
 
     public UserJsonConfiguration(
         IOptions<UserConfigurationOptions> config,

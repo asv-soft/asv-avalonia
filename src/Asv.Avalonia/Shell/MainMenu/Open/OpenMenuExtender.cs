@@ -16,9 +16,13 @@ public class OpenMenuExtender(
     IHotKeyService hotKeys
 ) : IExtensionFor<IShell>
 {
+    public const string StaticId = "ext.shell.menu.open";
+
     private const string OpenDialogMenuId = $"{OpenMenu.MenuId}-dialog";
     private const string RecentMenuIdPrefix = $"{OpenMenu.MenuId}-recent-";
     private const string ClearRecentMenuId = $"{OpenMenu.MenuId}-clear-recent";
+
+    string Asv.Modeling.ISupportId<string>.Id => StaticId;
 
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {

@@ -9,7 +9,11 @@ public class MainMenuDefaultMenuExtender(
     [FromKeyedServices(MainMenuDefaultMenuExtender.Contract)] IEnumerable<IMenuItem> items
 ) : IExtensionFor<IShell>
 {
+    public const string StaticId = "ext.shell.menu.main";
+
     public const string Contract = "shell.menu.main";
+
+    string ISupportId<string>.Id => StaticId;
 
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {

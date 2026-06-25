@@ -11,6 +11,10 @@ public class SettingsAppearanceExtension(
     ILoggerFactory loggerFactory
 ) : IExtensionFor<ISettingsAppearanceSubPage>
 {
+    public const string StaticId = "ext.settings.appearance";
+
+    string Asv.Modeling.ISupportId<string>.Id => StaticId;
+
     public void Extend(ISettingsAppearanceSubPage context, CompositeDisposable contextDispose)
     {
         context.Sections.Add(

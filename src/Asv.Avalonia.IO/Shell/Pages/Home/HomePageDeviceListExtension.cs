@@ -9,6 +9,10 @@ namespace Asv.Avalonia.IO;
 
 public class HomePageDeviceListExtension : IExtensionFor<IHomePage>
 {
+    public const string StaticId = "ext.home.device-list";
+
+    string ISupportId<string>.Id => StaticId;
+
     private readonly IDeviceManager _svc;
     private readonly ILoggerFactory _loggerFactory;
     private readonly IExtensionService _ext;

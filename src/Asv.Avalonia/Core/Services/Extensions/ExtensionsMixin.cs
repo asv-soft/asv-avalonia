@@ -46,5 +46,25 @@ public static class ExtensionsMixin
             builder.Services.AddKeyedTransient<IExtensionFor<TContext>, TExtension>(key);
             return this;
         }
+
+        public Builder RegisterPolicy<
+            TContext,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TPolicy
+        >()
+            where TPolicy : class, IExtensionPolicyFor<TContext>
+        {
+            builder.Services.AddTransient<IExtensionPolicyFor<TContext>, TPolicy>();
+            return this;
+        }
+
+        public Builder RegisterPolicy<
+            TContext,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TPolicy
+        >(string key)
+            where TPolicy : class, IExtensionPolicyFor<TContext>
+        {
+            builder.Services.AddKeyedTransient<IExtensionPolicyFor<TContext>, TPolicy>(key);
+            return this;
+        }
     }
 }
