@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Microsoft.Extensions.Hosting;
 
@@ -37,9 +38,14 @@ public static class TreePageMixin
 
     public class Builder(ShellMixin.Builder builder)
     {
-        public Builder Register<TContext, TTreeSubpage, TSubPageViewModel, TSubPageView>(
-            string pageId
-        )
+        public Builder Register<
+            TContext,
+            TTreeSubpage,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TSubPageViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TSubPageView
+        >(string pageId)
             where TTreeSubpage : class, ITreeSubpage
             where TSubPageViewModel : class, TTreeSubpage
             where TSubPageView : Control

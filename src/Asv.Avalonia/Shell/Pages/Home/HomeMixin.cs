@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
 
@@ -25,14 +26,20 @@ public static class HomeMixin
             return this;
         }
 
-        public Builder UseExtension<TExtension>()
+        public Builder UseExtension<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TExtension
+        >()
             where TExtension : class, IExtensionFor<IHomePage>
         {
             builder.Parent.Parent.Extensions.Register<IHomePage, TExtension>();
             return this;
         }
 
-        public Builder UseTool<TActionViewModel>()
+        public Builder UseTool<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TActionViewModel
+        >()
             where TActionViewModel : class, IActionViewModel
         {
             builder.Parent.Parent.Services.AddKeyedTransient<IActionViewModel, TActionViewModel>(
@@ -41,7 +48,10 @@ public static class HomeMixin
             return this;
         }
 
-        public Builder UseItemExtension<TExtension>()
+        public Builder UseItemExtension<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TExtension
+        >()
             where TExtension : class, IExtensionFor<IHomePageItem>
         {
             builder.Parent.Parent.Extensions.Register<IHomePageItem, TExtension>();

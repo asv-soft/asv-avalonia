@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text;
 using DotNext.Collections.Generic;
@@ -13,8 +14,6 @@ public class LogReaderOptions
 
 public class LogReaderService : ILogReaderService
 {
-    private static readonly JsonSerializer Serializer = new();
-
     private readonly string _logsFolder;
 
     public LogReaderService(LogReaderOptions options)
@@ -23,10 +22,14 @@ public class LogReaderService : ILogReaderService
         ArgumentNullException.ThrowIfNull(_logsFolder);
     }
 
+    [RequiresUnreferencedCode(
+        "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
+    )]
     public async IAsyncEnumerable<LogMessage> LoadItemsFromLogFile(
         [EnumeratorCancellation] CancellationToken cancel = default
     )
     {
+        var serializer = JsonSerializer.CreateDefault();
         var result = new Stack<LogMessage>();
         foreach (
             var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs").OrderDescending()
@@ -58,7 +61,7 @@ public class LogReaderService : ILogReaderService
                     continue;
                 }
 
-                var item = Serializer.Deserialize<LogMessage>(rdr);
+                var item = serializer.Deserialize<LogMessage>(rdr);
                 if (item is not null)
                 {
                     result.Push(item);

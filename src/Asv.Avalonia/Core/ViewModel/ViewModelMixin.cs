@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Asv.Modeling;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -58,7 +59,11 @@ public static class ViewModelMixin
 
     public class Builder(IHostApplicationBuilder builder)
     {
-        public Builder RegisterKeyed<TViewModelInterface, TViewModelImplementation>(string key)
+        public Builder RegisterKeyed<
+            TViewModelInterface,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModelImplementation
+        >(string key)
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
         {
@@ -66,7 +71,11 @@ public static class ViewModelMixin
             return this;
         }
 
-        public Builder Register<TViewModelInterface, TViewModelImplementation>()
+        public Builder Register<
+            TViewModelInterface,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModelImplementation
+        >()
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
         {
@@ -74,7 +83,12 @@ public static class ViewModelMixin
             return this;
         }
 
-        public Builder RegisterWithArgs<TViewModelInterface, TViewModelImplementation, TArgs>()
+        public Builder RegisterWithArgs<
+            TViewModelInterface,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModelImplementation,
+            TArgs
+        >()
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
         {
@@ -91,9 +105,12 @@ public static class ViewModelMixin
             return this;
         }
 
-        public Builder RegisterKeyedWithArgs<TViewModelInterface, TViewModelImplementation, TArgs>(
-            string key
-        )
+        public Builder RegisterKeyedWithArgs<
+            TViewModelInterface,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModelImplementation,
+            TArgs
+        >(string key)
             where TViewModelInterface : class, IViewModel
             where TViewModelImplementation : class, TViewModelInterface
         {

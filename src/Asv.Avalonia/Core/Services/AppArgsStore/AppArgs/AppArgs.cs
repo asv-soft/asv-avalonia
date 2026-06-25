@@ -1,4 +1,5 @@
 using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
 
@@ -75,6 +76,10 @@ public partial class AppArgs : IAppArgs
     }
 
     #endregion
+
+    [RequiresUnreferencedCode(
+        "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
+    )]
     public static AppArgs DeserializeFromString(string sourceString)
     {
         var model = JsonConvert.DeserializeObject<SerializationModel>(sourceString);
@@ -122,6 +127,9 @@ public partial class AppArgs : IAppArgs
         );
     }
 
+    [RequiresUnreferencedCode(
+        "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
+    )]
     public string SerializeToString()
     {
         var result = JsonConvert.SerializeObject(

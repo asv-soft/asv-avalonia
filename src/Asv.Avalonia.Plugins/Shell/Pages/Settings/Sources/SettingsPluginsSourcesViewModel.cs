@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json;
 using Asv.Common;
 using Asv.IO;
@@ -22,6 +23,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     private readonly YesOrNoDialogPrefab? _yesOrNoDialogPrefab;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public SettingsPluginsSourcesViewModel()
         : this(
             NullTreeSubPageContext<SettingsPageViewModel>.Instance,
@@ -33,6 +37,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         DesignTime.ThrowIfNotDesignMode();
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public SettingsPluginsSourcesViewModel(
         ITreeSubPageContext<ISettingsPage> context,
         IPluginManager pluginManager,
@@ -123,6 +130,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         }
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private async ValueTask AddSourceAsync(Unit unit, CancellationToken cancel)
     {
         var oldSnapshot = CaptureSourcesSnapshot();
@@ -142,6 +152,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         _undoSink.PublishUpdate(oldSnapshot, newSnapshot);
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private async ValueTask EditSourceAsync(PluginsSourceViewModel source)
     {
         var oldSnapshot = CaptureSourcesSnapshot();
@@ -165,6 +178,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         _undoSink.PublishUpdate(oldSnapshot, newSnapshot);
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private async ValueTask RemoveSourceAsync(PluginsSourceViewModel source)
     {
         var payload = new YesOrNoDialogPayload
@@ -218,11 +234,17 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         }
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private string CaptureSourcesSnapshot()
     {
         return Serialize(_pluginManager.Servers.Select(ToSnapshot));
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private void ApplySourcesSnapshot(string snapshot)
     {
         var sources = Deserialize(snapshot);
@@ -239,6 +261,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         Refresh();
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private static string AddSourceSnapshot(string snapshot, PluginSourceSnapshot source)
     {
         var sources = Deserialize(snapshot).ToList();
@@ -247,6 +272,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         return Serialize(sources);
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private static string ReplaceSourceSnapshot(
         string snapshot,
         string oldSourceUri,
@@ -267,6 +295,9 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         return Serialize(sources);
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private static string RemoveSourceSnapshot(string snapshot, string sourceUri)
     {
         var sources = Deserialize(snapshot).ToList();
@@ -289,11 +320,17 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         );
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private static string Serialize(IEnumerable<PluginSourceSnapshot> sources)
     {
         return JsonSerializer.Serialize(sources);
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private static PluginSourceSnapshot[] Deserialize(string snapshot)
     {
         return JsonSerializer.Deserialize<PluginSourceSnapshot[]>(snapshot) ?? [];

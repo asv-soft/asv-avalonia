@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
@@ -58,7 +59,10 @@ public static class DialogMixin
                 .RegisterPrefab<YesOrNoDialogPrefab>();
         }
 
-        public Builder RegisterPrefab<TCustomDialog>()
+        public Builder RegisterPrefab<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TCustomDialog
+        >()
             where TCustomDialog : class, ICustomDialog
         {
             builder.Services.AddTransient<ICustomDialog, TCustomDialog>();

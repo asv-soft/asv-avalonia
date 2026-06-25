@@ -9,6 +9,9 @@ public static class ExceptionReport
     private const int CrashFileWriteAttemptCount = 3;
     private const int CrashFileWriteRetryDelayMs = 20;
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     public static void WriteToFile(
         string dir,
         Exception ex,
@@ -194,6 +197,9 @@ public static class ExceptionReport
         return path;
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     public static string Build(Exception ex)
     {
         var sb = new StringBuilder(32 * 1024);
@@ -201,6 +207,9 @@ public static class ExceptionReport
         return sb.ToString();
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     public static void Build(Exception ex, Action<string> appendLine)
     {
         AppendHeader(appendLine);
@@ -208,6 +217,9 @@ public static class ExceptionReport
         AppendExceptionRecursive(appendLine, ex, 0);
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     public static void Build(Exception ex, StreamWriter wrt)
     {
         AppendHeader(wrt.WriteLine);
@@ -215,6 +227,9 @@ public static class ExceptionReport
         AppendExceptionRecursive(wrt.WriteLine, ex, 0);
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     public static void Build(Exception ex, StringBuilder sb)
     {
         AppendHeader(str => sb.AppendLine(str));
@@ -265,6 +280,9 @@ public static class ExceptionReport
         appendLine(string.Empty);
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     private static void AppendExceptionRecursive(Action<string> appendLine, Exception ex, int level)
     {
         var indent = new string(' ', level * 2);

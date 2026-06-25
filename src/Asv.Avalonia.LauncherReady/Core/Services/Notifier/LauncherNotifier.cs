@@ -1,4 +1,5 @@
 using System.IO.Pipes;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Text.Json;
 using Asv.Avalonia.Launcher.Api;
@@ -85,6 +86,9 @@ internal sealed class LauncherNotifier : ILauncherNotifier
         throw new InvalidOperationException("Failed to read launcher endpoint.");
     }
 
+    [RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public async Task NotifyReadyAsync(CancellationToken cancellationToken = default)
     {
         if (_endpoint is null)

@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,7 +22,12 @@ public static class PageMixin
 
     public class Builder(ShellMixin.Builder builder)
     {
-        public Builder Register<TPageViewModel, TPageView>(string pageId)
+        public Builder Register<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TPageViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TPageView
+        >(string pageId)
             where TPageViewModel : class, IPage
             where TPageView : Control
         {

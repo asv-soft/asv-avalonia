@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,7 +13,11 @@ public static class StatusMixin
 
     public class Builder(ShellMixin.Builder builder)
     {
-        public Builder Register<TStatusViewModel, TView>()
+        public Builder Register<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TStatusViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TView
+        >()
             where TStatusViewModel : class, IStatusItem
             where TView : Control
         {

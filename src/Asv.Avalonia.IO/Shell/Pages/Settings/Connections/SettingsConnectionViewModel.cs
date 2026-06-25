@@ -44,6 +44,9 @@ public class SettingsConnectionViewModel
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public SettingsConnectionViewModel()
         : this(
             NullTreeSubPageContext<SettingsPageViewModel>.Instance,
@@ -65,6 +68,9 @@ public class SettingsConnectionViewModel
         View = source.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public SettingsConnectionViewModel(
         ITreeSubPageContext<ISettingsPage> context,
         IDeviceManager deviceManager,
@@ -117,6 +123,9 @@ public class SettingsConnectionViewModel
         return ValueTask.CompletedTask;
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public async ValueTask AddPortAsync(ProtocolPortConfig config)
     {
         var oldSnapshot = CapturePortsSnapshot();
@@ -127,6 +136,9 @@ public class SettingsConnectionViewModel
         _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public async ValueTask UpdatePortAsync(string portId, ProtocolPortConfig config)
     {
         var oldSnapshot = CapturePortsSnapshot();
@@ -142,6 +154,9 @@ public class SettingsConnectionViewModel
         _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     public async ValueTask RemovePortAsync(string portId)
     {
         var oldSnapshot = CapturePortsSnapshot();
@@ -214,6 +229,9 @@ public class SettingsConnectionViewModel
         return viewModel;
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private string CapturePortsSnapshot()
     {
         return JsonSerializer.Serialize(
@@ -221,6 +239,9 @@ public class SettingsConnectionViewModel
         );
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private void ApplyPortsSnapshot(string snapshot)
     {
         var portUris = JsonSerializer.Deserialize<string[]>(snapshot) ?? [];

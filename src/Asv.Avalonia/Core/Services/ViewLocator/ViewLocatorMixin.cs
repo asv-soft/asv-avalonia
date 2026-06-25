@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics.CodeAnalysis;
+using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -19,7 +20,10 @@ public static class ViewLocatorMixin
 
     public class Builder(IHostApplicationBuilder builder)
     {
-        public Builder RegisterViewFor<TViewModel, TView>()
+        public Builder RegisterViewFor<
+            TViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TView
+        >()
             where TView : Control
             where TViewModel : IViewModel
         {

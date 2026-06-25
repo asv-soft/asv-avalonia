@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
@@ -33,7 +34,9 @@ public static class UnitsHostBuilderMixin
             _builder = builder;
         }
 
-        public ItemBuilder AddUnit<TUnit>(string unitId)
+        public ItemBuilder AddUnit<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TUnit
+        >(string unitId)
             where TUnit : class, IUnit
         {
             _builder.Services.AddSingleton<IUnit, TUnit>();
@@ -78,7 +81,10 @@ public static class UnitsHostBuilderMixin
             _itemId = itemId;
         }
 
-        public ItemBuilder AddItem<TUnitItem>()
+        public ItemBuilder AddItem<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TUnitItem
+        >()
             where TUnitItem : class, IUnitItem
         {
             _builder.Services.AddKeyedSingleton<IUnitItem, TUnitItem>(_itemId);

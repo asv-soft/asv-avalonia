@@ -28,6 +28,9 @@ public static class ShellMessageEventMixin
         return source.Rise(new ShellMessageEvent(source, message), cancel);
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     public static ValueTask RiseShellErrorMessage(
         this IViewModel source,
         string title,
@@ -55,6 +58,9 @@ public static class ShellMessageEventMixin
         );
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     public static ValueTask RiseShellWarningMessage(
         this IViewModel source,
         string title,
@@ -82,6 +88,9 @@ public static class ShellMessageEventMixin
         );
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     private static MarkdownDetailsDialogPayload CreateMessageDetails(
         string title,
         string message,
@@ -192,6 +201,9 @@ public static class ShellMessageEventMixin
         return builder.ToString().TrimEnd();
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     private static string CreateExceptionMarkdownText(string shellMessage, Exception exception)
     {
         var builder = new StringBuilder();
@@ -288,6 +300,9 @@ public static class ShellMessageEventMixin
         builder.AppendLine(EscapeMarkdown(value));
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     private static void AppendMetadataBullets(StringBuilder builder, Exception exception)
     {
         AppendBullet(builder, "Information", "Info5", "HResult", $"0x{exception.HResult:X8}");
@@ -319,6 +334,9 @@ public static class ShellMessageEventMixin
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     private static void AppendPlainMetadataBullets(StringBuilder builder, Exception exception)
     {
         AppendPlainBullet(builder, "HResult", $"0x{exception.HResult:X8}");
@@ -366,6 +384,9 @@ public static class ShellMessageEventMixin
         builder.AppendLine();
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     private static void AppendInnerExceptions(StringBuilder builder, Exception exception, int depth)
     {
         const int maxDepth = 8;
@@ -399,6 +420,9 @@ public static class ShellMessageEventMixin
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Reads Exception.TargetSite metadata, which can be removed by trimming."
+    )]
     private static void AppendNestedException(
         StringBuilder builder,
         Exception exception,

@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using System.Diagnostics.CodeAnalysis;
+using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
@@ -62,7 +63,11 @@ public static class SettingsPageMixin
             >(SettingsAppearanceViewModel.PageId);
         }
 
-        public Builder AddSubPage<TViewModel, TView>(string pageId)
+        public Builder AddSubPage<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TView
+        >(string pageId)
             where TViewModel : class, ISettingsSubPage
             where TView : Control
         {
@@ -75,7 +80,13 @@ public static class SettingsPageMixin
             return this;
         }
 
-        public Builder AddSubPage<TViewModel, TView, TTreeMenu>(string pageId)
+        public Builder AddSubPage<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TView,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TTreeMenu
+        >(string pageId)
             where TViewModel : class, ISettingsSubPage
             where TView : Control
             where TTreeMenu : class, ITreePage

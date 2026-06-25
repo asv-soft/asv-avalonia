@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Asv.Avalonia;
@@ -11,7 +12,10 @@ public static class MainMenuMixin
 
     public class MainMenuBuilder(ShellMixin.Builder builder)
     {
-        public MainMenuBuilder Register<TMenuViewModel>()
+        public MainMenuBuilder Register<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TMenuViewModel
+        >()
             where TMenuViewModel : class, IMenuItem
         {
             builder.Parent.Services.AddKeyedTransient<IMenuItem, TMenuViewModel>(

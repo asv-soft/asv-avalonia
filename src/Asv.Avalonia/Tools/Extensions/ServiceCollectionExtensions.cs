@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
@@ -5,9 +6,11 @@ namespace Asv.Avalonia;
 
 public static class ServiceCollectionExtensions
 {
-    public static IServiceCollection ReplaceSingleton<TService, TImplementation>(
-        this IServiceCollection services
-    )
+    public static IServiceCollection ReplaceSingleton<
+        TService,
+        [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+            TImplementation
+    >(this IServiceCollection services)
         where TImplementation : class, TService
         where TService : class
     {

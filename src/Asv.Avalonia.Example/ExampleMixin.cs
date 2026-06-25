@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Asv.Avalonia.IO;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
@@ -137,7 +138,11 @@ public static class ExampleMixin
             );
         }
 
-        public ControlGalleryBuilder UseSubPage<TViewModel, TView>(string subPageId)
+        public ControlGalleryBuilder UseSubPage<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TView
+        >(string subPageId)
             where TViewModel : class, IControlsGallerySubPage
             where TView : Control
         {
@@ -151,7 +156,13 @@ public static class ExampleMixin
             return this;
         }
 
-        public ControlGalleryBuilder UseSubPage<TViewModel, TView, TTreeMenu>(string subPageId)
+        public ControlGalleryBuilder UseSubPage<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TView,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TTreeMenu
+        >(string subPageId)
             where TTreeMenu : class, ITreePage
             where TViewModel : class, IControlsGallerySubPage
             where TView : Control

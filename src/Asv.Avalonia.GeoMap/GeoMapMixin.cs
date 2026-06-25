@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -36,7 +37,10 @@ public static class GeoMapMixin
 
         public IHostApplicationBuilder Parent => builder;
 
-        public Builder RegisterTileProvider<TTileProvider>()
+        public Builder RegisterTileProvider<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TTileProvider
+        >()
             where TTileProvider : class, ITileProvider
         {
             builder.Services.AddSingleton<ITileProvider, TTileProvider>();

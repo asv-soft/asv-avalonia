@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -24,14 +25,22 @@ public static class ExtensionsMixin
 
     public class Builder(IHostApplicationBuilder builder)
     {
-        public Builder Register<TContext, TExtension>()
+        public Builder Register<
+            TContext,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TExtension
+        >()
             where TExtension : class, IExtensionFor<TContext>
         {
             builder.Services.AddTransient<IExtensionFor<TContext>, TExtension>();
             return this;
         }
 
-        public Builder Register<TContext, TExtension>(string key)
+        public Builder Register<
+            TContext,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TExtension
+        >(string key)
             where TExtension : class, IExtensionFor<TContext>
         {
             builder.Services.AddKeyedTransient<IExtensionFor<TContext>, TExtension>(key);

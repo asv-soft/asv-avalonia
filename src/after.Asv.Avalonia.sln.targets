@@ -1,0 +1,78 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <!--
+    .slnx solution metaprojects do not generate per-project Restore targets.
+    Some IDEs still invoke targets such as Asv_Avalonia_DC:Restore, so keep
+    those aliases here and forward them to the matching project restore.
+  -->
+  <PropertyGroup>
+    <_AsvAvaloniaSolutionRestoreProperties>Configuration=$(Configuration);Platform=$(Platform);BuildingSolutionFile=true;SolutionDir=$(MSBuildThisFileDirectory);SolutionExt=.slnx;SolutionFileName=Asv.Avalonia.slnx;SolutionName=Asv.Avalonia;SolutionPath=$(MSBuildThisFileDirectory)Asv.Avalonia.slnx</_AsvAvaloniaSolutionRestoreProperties>
+  </PropertyGroup>
+
+  <Target Name="Asv_Avalonia_Charts:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Charts\Asv.Avalonia.Charts.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Asv_Avalonia_DC:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.DC\Asv.Avalonia.DC.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Asv_Avalonia_GeoMap:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.GeoMap\Asv.Avalonia.GeoMap.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Asv_Avalonia_IO:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.IO\Asv.Avalonia.IO.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Asv_Avalonia_LauncherReady:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.LauncherReady\Asv.Avalonia.LauncherReady.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Asv_Avalonia_Plugins:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Plugins\Asv.Avalonia.Plugins.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Asv_Avalonia_Test:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Test\Asv.Avalonia.Test.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Asv_Avalonia:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia\Asv.Avalonia.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Example\Asv_Avalonia_Example_Api:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Example.Api\Asv.Avalonia.Example.Api.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Example\Asv_Avalonia_Example_Plugin_PluginExample:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Example.Plugin.PluginExample\Asv.Avalonia.Example.Plugin.PluginExample.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Example\Asv_Avalonia_Example:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Example\Asv.Avalonia.Example.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Example\Platforms\Asv_Avalonia_Example_Android:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Example.Android\Asv.Avalonia.Example.Android.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Example\Platforms\Asv_Avalonia_Example_Desktop:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Example.Desktop\Asv.Avalonia.Example.Desktop.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Example\Platforms\Asv_Avalonia_Example_iOS:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Example.iOS\Asv.Avalonia.Example.iOS.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Launcher\Asv_Avalonia_Example_Launcher:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Example.Launcher\Asv.Avalonia.Example.Launcher.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Launcher\Asv_Avalonia_Launcher_Api:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Launcher.Api\Asv.Avalonia.Launcher.Api.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+
+  <Target Name="Launcher\Asv_Avalonia_Launcher:Restore">
+    <MSBuild Projects="$(MSBuildThisFileDirectory)Asv.Avalonia.Launcher\Asv.Avalonia.Launcher.csproj" Targets="Restore" BuildInParallel="True" Properties="$(_AsvAvaloniaSolutionRestoreProperties)" />
+  </Target>
+</Project>

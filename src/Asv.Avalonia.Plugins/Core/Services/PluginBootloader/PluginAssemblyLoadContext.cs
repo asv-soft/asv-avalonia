@@ -5,6 +5,9 @@ namespace Asv.Avalonia.Plugins;
 
 public class PluginAssemblyLoadContext(string pluginPath) : AssemblyLoadContext
 {
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Loads plugin assemblies dynamically; members required by plugins cannot be statically preserved by the trimmer."
+    )]
     public static PluginAssemblyLoadContext Create(
         string folder,
         string assemblyPrefix,
@@ -27,6 +30,9 @@ public class PluginAssemblyLoadContext(string pluginPath) : AssemblyLoadContext
 
     private readonly string _pluginFolder = Path.GetFullPath(pluginPath);
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Loads plugin assemblies dynamically; members required by plugins cannot be statically preserved by the trimmer."
+    )]
     protected override Assembly? Load(AssemblyName assemblyName)
     {
         // if assembly already loaded at main context => return null (it will be loaded by main context)

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
@@ -25,7 +26,10 @@ public static class FileAssociationMixin
 
     public class Builder(IHostApplicationBuilder builder)
     {
-        public Builder Register<TFileHandler>()
+        public Builder Register<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TFileHandler
+        >()
             where TFileHandler : class, IFileHandler
         {
             builder.Services.AddSingleton<IFileHandler, TFileHandler>();

@@ -3,6 +3,8 @@
     <PropertyGroup>
         <OutputType>Exe</OutputType>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <JsonSerializerIsReflectionEnabledByDefault>true</JsonSerializerIsReflectionEnabledByDefault>
+        
     </PropertyGroup>
     
     <ItemGroup>

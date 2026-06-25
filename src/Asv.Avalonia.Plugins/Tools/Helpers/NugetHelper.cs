@@ -19,7 +19,16 @@ public static class NugetHelper
         "dependencies.json"
     );
 
-    public static readonly HashSet<string> IncludedPackages = LoadDependencies();
+    private static HashSet<string>? _includedPackages;
+
+    public static HashSet<string> IncludedPackages
+    {
+        [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+            "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+        )]
+        get => _includedPackages ??= LoadDependencies();
+    }
+
     public static readonly NuGetFramework DefaultFramework = CreateDefaultFramework();
 
     private static NuGetFramework CreateDefaultFramework()
@@ -270,6 +279,9 @@ public static class NugetHelper
             .MaxBy(_ => _.TargetFramework.Version);
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses System.Text.Json reflection-based serialization, which is not trim safe."
+    )]
     private static HashSet<string> LoadDependencies()
     {
         if (!File.Exists(DependenciesFilePath))

@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using Microsoft.Extensions.Logging.Abstractions;
 
@@ -9,6 +10,9 @@ public class NullLogReaderService : ILogReaderService
 
     private NullLogReaderService() { }
 
+    [RequiresUnreferencedCode(
+        "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
+    )]
     public async IAsyncEnumerable<LogMessage> LoadItemsFromLogFile(
         [EnumeratorCancellation] CancellationToken cancel = default
     )

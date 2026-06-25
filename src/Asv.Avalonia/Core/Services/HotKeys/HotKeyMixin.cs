@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -42,7 +43,10 @@ public static class HotKeyMixin
                 .Register<UndoAction>();
         }
 
-        public Builder Register<THotKeyAction>()
+        public Builder Register<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                THotKeyAction
+        >()
             where THotKeyAction : class, IHotKeyAction
         {
             builder.Services.AddSingleton<IHotKeyAction, THotKeyAction>();

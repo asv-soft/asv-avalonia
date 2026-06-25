@@ -7,6 +7,9 @@ public class PluginState
 {
     private const string PluginStateFileName = "__PLUGIN_STATE__";
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
+    )]
     public static PluginState? Read(string folder)
     {
         var stateFilePath = Path.Combine(folder, PluginStateFileName);
@@ -15,6 +18,9 @@ public class PluginState
             : JsonConvert.DeserializeObject<PluginState>(File.ReadAllText(stateFilePath));
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
+    )]
     public static PluginState Write(string folder, PluginState state)
     {
         var stateFilePath = Path.Combine(folder, PluginStateFileName);
@@ -26,6 +32,9 @@ public class PluginState
         return state;
     }
 
+    [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
+        "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
+    )]
     public static void Edit(string folder, Action<PluginState> edit)
     {
         var state = Read(folder) ?? new PluginState();

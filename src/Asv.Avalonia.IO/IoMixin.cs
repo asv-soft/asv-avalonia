@@ -1,4 +1,5 @@
-﻿using Asv.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using Asv.IO;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -72,7 +73,12 @@ public static class IoMixin
             );
         }
 
-        public ConnectionSettingsBuilder UsePort<TViewModel, TView, TMenu>(string portScheme)
+        public ConnectionSettingsBuilder UsePort<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TViewModel,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TView,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TMenu
+        >(string portScheme)
             where TViewModel : class, IPortViewModel
             where TView : Control
             where TMenu : class, IMenuItem
@@ -152,7 +158,10 @@ public static class IoMixin
 
         public IHostApplicationBuilder Parent => builder;
 
-        public Builder RegisterDevice<TDeviceManagerExtension>()
+        public Builder RegisterDevice<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
+                TDeviceManagerExtension
+        >()
             where TDeviceManagerExtension : class, IDeviceManagerExtension
         {
             builder.Services.AddSingleton<IDeviceManagerExtension, TDeviceManagerExtension>();
