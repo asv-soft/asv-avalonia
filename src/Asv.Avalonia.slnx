@@ -5,9 +5,15 @@
     <Project Path="Asv.Avalonia.Example/Asv.Avalonia.Example.csproj" />
   </Folder>
   <Folder Name="/Example/Platforms/">
-    <Project Path="Asv.Avalonia.Example.Android/Asv.Avalonia.Example.Android.csproj" />
+    <Project Path="Asv.Avalonia.Example.Android/Asv.Avalonia.Example.Android.csproj">
+      <Build Solution="Debug|*" Project="false" />
+      <Build Solution="Release|*" Project="false" />
+    </Project>
     <Project Path="Asv.Avalonia.Example.Desktop/Asv.Avalonia.Example.Desktop.csproj" />
-    <Project Path="Asv.Avalonia.Example.iOS/Asv.Avalonia.Example.iOS.csproj" />
+    <Project Path="Asv.Avalonia.Example.iOS/Asv.Avalonia.Example.iOS.csproj">
+      <Build Solution="Debug|*" Project="false" />
+      <Build Solution="Release|*" Project="false" />
+    </Project>
   </Folder>
   <Folder Name="/Launcher/">
     <Project Path="Asv.Avalonia.Example.Launcher/Asv.Avalonia.Example.Launcher.csproj" />
@@ -27,6 +33,7 @@
     <File Path="../README.md" />
     <File Path="../win-64-install.nsi" />
     <File Path=".aiassistant/rules/comments.md" />
+    <File Path="after.Asv.Avalonia.sln.targets" />
     <File Path="CodeStyle.ruleset" />
     <File Path="Directory.Build.props" />
   </Folder>

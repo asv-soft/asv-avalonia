@@ -1,5 +1,5 @@
-using System.IO.Pipes;
 using System.Diagnostics.CodeAnalysis;
+using System.IO.Pipes;
 using System.Text;
 using System.Text.Json;
 using Asv.Avalonia.Launcher.Api;
