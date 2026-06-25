@@ -124,7 +124,7 @@
             <avalonia:StateToggleSwitch
                 Grid.Column="2"
                 Margin="4,0,8,0"
-                HorizontalAlignment="Left"
+                HorizontalAlignment="Right"
                 VerticalAlignment="Center"
                 avalonia:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
                 CheckedIcon="{Binding CheckedIcon}"
