@@ -150,6 +150,16 @@
                                 controls:AsvPallete.Color="{TemplateBinding SubScriptTextColor}"
                                 HorizontalAlignment="Left"
                             />
+                            <TextBlock
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Grid.RowSpan="2"
+                                Margin="4,0,0,4"
+                                VerticalAlignment="Bottom"
+                                HorizontalAlignment="Left"
+                                Text="{TemplateBinding Units}"
+                                Classes="description"
+                            />
                         </Grid>
                     </DockPanel>
                 </Border>
