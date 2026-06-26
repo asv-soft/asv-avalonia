@@ -29,6 +29,7 @@
 
     <Style Selector="controls|MapItem">
         <Setter Property="Focusable" Value="True" />
+        <Setter Property="Background" Value="Transparent" />
         <Style Selector="^ Pen">
             <Setter Property="Brush" />
             <Setter Property="Thickness" />

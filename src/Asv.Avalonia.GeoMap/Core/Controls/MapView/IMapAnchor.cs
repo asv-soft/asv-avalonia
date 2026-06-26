@@ -11,6 +11,16 @@ namespace Asv.Avalonia.GeoMap;
 public interface IMapAnchor : IHasIcon, IHasHeader
 {
     /// <summary>
+    /// Gets the tree view of <see cref="Menu"/> used by Avalonia bindings to render the anchor context menu.
+    /// </summary>
+    public MenuTree MenuView { get; }
+
+    /// <summary>
+    /// Gets the menu items used to build the anchor context menu.
+    /// </summary>
+    public ObservableList<IMenuItem> Menu { get; }
+
+    /// <summary>
     /// Gets or sets the item rotation angle in degrees.
     /// </summary>
     double Azimuth { get; set; }
