@@ -41,28 +41,9 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"
             Margin="8"
-            Anchors="{Binding MapViewModel.Anchors}"
+            Map="{Binding MapViewModel}"
             UnitService="{Binding UnitService}"
-            LoggerFactory="{Binding LoggerFactory}"
-            TargetMap="{Binding #PART_Map}"
             RulerChanged="OnRulerChanged"
         />
-        <Border
-            HorizontalAlignment="Center"
-            VerticalAlignment="Top"
-            Margin="0,12,0,0"
-            Padding="12,6"
-            CornerRadius="4"
-            Background="{DynamicResource SystemControlBackgroundAltHighBrush}"
-            BorderBrush="{DynamicResource SystemControlForegroundBaseMediumBrush}"
-            BorderThickness="1"
-            IsHitTestVisible="False"
-            IsVisible="{Binding #PART_Ruler.PromptText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
-        >
-            <TextBlock
-                Text="{Binding #PART_Ruler.PromptText}"
-                Foreground="{DynamicResource SystemControlForegroundBaseHighBrush}"
-            />
-        </Border>
     </Panel>
 </UserControl>
