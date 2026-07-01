@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.Metrics;
@@ -41,6 +42,12 @@ public static class AppHost
             );
         }
         settings ??= new HostApplicationBuilderSettings { Args = Environment.GetCommandLineArgs() };
+
+        if (Design.IsDesignMode)
+        {
+            settings.EnvironmentName = DesignTime.EnvironmentName;
+        }
+
         var builder = Host.CreateApplicationBuilder(settings);
 
         return new Builder(builder);
@@ -50,7 +57,6 @@ public static class AppHost
     {
         private readonly HostApplicationBuilder _originBuilder;
         private readonly IHostApplicationBuilder _ifcBuilder;
-        private const string PostConfigureCallbackKey = "PostConfigureCallback";
 
         internal Builder(HostApplicationBuilder originBuilder)
         {

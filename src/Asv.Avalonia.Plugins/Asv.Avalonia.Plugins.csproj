@@ -45,8 +45,6 @@
 
     <ItemGroup>
       <Folder Include="Core\" />
-      <Folder Include="Core\Commands\Context\" />
-      <Folder Include="Core\Commands\Stateless\Pages\" />
       <Folder Include="Shell\" />
       <Folder Include="Shell\Pages\Settings\" />
     </ItemGroup>

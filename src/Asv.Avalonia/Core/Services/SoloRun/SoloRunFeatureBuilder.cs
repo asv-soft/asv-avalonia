@@ -6,10 +6,15 @@ namespace Asv.Avalonia;
 public class SoloRunFeatureBuilder
 {
     private string? _mutexName;
-    private bool _argumentForwarding;
+    private bool? _argumentForwarding;
     private string? _pipeName;
 
     internal SoloRunFeatureBuilder() { }
+
+    public SoloRunFeatureBuilder UseDefault()
+    {
+        return this;
+    }
 
     public SoloRunFeatureBuilder WithMutexName(string name)
     {
@@ -39,9 +44,20 @@ public class SoloRunFeatureBuilder
     {
         return options.Configure(config =>
         {
-            config.Mutex = _mutexName;
-            config.ArgForward = _argumentForwarding;
-            config.Pipe = _pipeName;
+            if (_mutexName is not null)
+            {
+                config.Mutex = _mutexName;
+            }
+
+            if (_argumentForwarding.HasValue)
+            {
+                config.ArgForward = _argumentForwarding.Value;
+            }
+
+            if (_pipeName is not null)
+            {
+                config.Pipe = _pipeName;
+            }
         });
     }
 }
