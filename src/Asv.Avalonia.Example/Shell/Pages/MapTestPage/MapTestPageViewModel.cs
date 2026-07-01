@@ -107,6 +107,11 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
                 CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0),
                 Location = _centerPoint.RadialPoint(radiusMeters, 360.0 / pointCount * i),
             };
+            if (i % 2 == 0)
+            {
+                AddDemoMenu(anchor);
+            }
+
             MapViewModel.Anchors.Add(anchor);
 
             path.Polygon.Add(anchor.Location);
@@ -249,6 +254,22 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
         MapViewModel.Anchors.Add(anchor);
         return anchor;
+    }
+
+    private static void AddDemoMenu(MapAnchor anchor)
+    {
+        anchor.Menu.Add(
+            new MenuItem("demo-info", RS.MapTestPageViewModel_Menu_Info)
+            {
+                Icon = MaterialIconKind.InformationOutline,
+            }
+        );
+        anchor.Menu.Add(
+            new MenuItem("demo-action", RS.MapTestPageViewModel_Menu_Action)
+            {
+                Icon = MaterialIconKind.GestureTapButton,
+            }
+        );
     }
 
     #endregion

@@ -15,6 +15,32 @@
     <Design.DataContext>
         <map:MapViewModel />
     </Design.DataContext>
+
+    <UserControl.Resources>
+        <ControlTheme
+            x:Key="PropertyMenuNodeTheme"
+            TargetType="MenuItem"
+            BasedOn="{StaticResource {x:Type MenuItem}}"
+            x:DataType="avalonia1:MenuNode"
+        >
+            <Setter
+                Property="Icon"
+                Value="{Binding Base.Icon, Converter={x:Static avalonia1:MaterialIconConverter.Instance}}"
+            />
+            <Setter Property="Header" Value="{Binding Base.Header}" />
+            <Setter Property="ItemsSource" Value="{Binding Items}" />
+            <Setter Property="Command" Value="{Binding Base.Command}" />
+            <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}" />
+            <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+            <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+            <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+            <Setter Property="InputGesture" Value="{Binding Base.HotKey}" />
+            <Setter Property="IsChecked" Value="{Binding Base.IsChecked}" />
+            <Setter Property="ToggleType" Value="{Binding Base.ToggleType}" />
+            <Setter Property="GroupName" Value="{Binding Base.GroupName}" />
+        </ControlTheme>
+    </UserControl.Resources>
+
     <Panel>
         <map:MapItemsControl
             x:Name="PART_Map"
@@ -64,6 +90,15 @@
                     <Setter Property="Rotation" Value="{Binding Azimuth}" />
                     <Setter Property="CenterX" Value="{Binding CenterX}" />
                     <Setter Property="CenterY" Value="{Binding CenterY}" />
+                    <Setter Property="ContextMenu">
+                        <Template>
+                            <ContextMenu ItemsSource="{Binding MenuView.Items}">
+                                <ContextMenu.ItemContainerTheme>
+                                    <StaticResource ResourceKey="PropertyMenuNodeTheme" />
+                                </ContextMenu.ItemContainerTheme>
+                            </ContextMenu>
+                        </Template>
+                    </Setter>
                     <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
                     <Setter
                         Property="CanDragWithoutModifier"

@@ -414,4 +414,10 @@
     <data name="MapTestPageViewModel_HeavyPolygon" xml:space="preserve">
         <value>Показать полигон из 100К точек</value>
     </data>
+    <data name="MapTestPageViewModel_Menu_Info" xml:space="preserve">
+        <value>Информация о якоре</value>
+    </data>
+    <data name="MapTestPageViewModel_Menu_Action" xml:space="preserve">
+        <value>Пример действия</value>
+    </data>
 </root>

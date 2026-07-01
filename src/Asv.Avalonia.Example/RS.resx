@@ -422,4 +422,10 @@ Used to confirm saving information.
     <data name="MapTestPageViewModel_HeavyPolygon" xml:space="preserve">
         <value>Show 100K points polygon</value>
     </data>
+    <data name="MapTestPageViewModel_Menu_Info" xml:space="preserve">
+        <value>Anchor info</value>
+    </data>
+    <data name="MapTestPageViewModel_Menu_Action" xml:space="preserve">
+        <value>Sample action</value>
+    </data>
 </root>
