@@ -747,5 +747,17 @@ namespace Asv.Avalonia.Example {
                 return ResourceManager.GetString("MapTestPageViewModel_HeavyPolygon", resourceCulture);
             }
         }
+
+        public static string MapTestPageViewModel_Menu_Info {
+            get {
+                return ResourceManager.GetString("MapTestPageViewModel_Menu_Info", resourceCulture);
+            }
+        }
+
+        public static string MapTestPageViewModel_Menu_Action {
+            get {
+                return ResourceManager.GetString("MapTestPageViewModel_Menu_Action", resourceCulture);
+            }
+        }
     }
 }

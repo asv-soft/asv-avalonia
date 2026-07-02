@@ -78,12 +78,7 @@
         <!-- Set Defaults -->
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>
-                <avalonia:WorkspacePanel
-                    LayoutId="{Binding LayoutId, RelativeSource={RelativeSource AncestorType=avalonia:Workspace}}"
-                    LeftWidth="*"
-                    CentralWidth="4*"
-                    RightWidth="2*"
-                />
+                <avalonia:WorkspacePanel LeftWidth="*" CentralWidth="4*" RightWidth="2*" />
             </ItemsPanelTemplate>
         </Setter>
         <Setter Property="Template">

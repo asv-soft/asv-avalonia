@@ -15,66 +15,125 @@
     <Design.DataContext>
         <map:MapViewModel />
     </Design.DataContext>
-    <map:MapItemsControl
-        CenterMap="{Binding CenterMap.Value, Mode=TwoWay}"
-        Zoom="{Binding Zoom.Value, Mode=TwoWay}"
-        Provider="{Binding CurrentProvider.Value}"
-        MinZoom="{Binding MinZoom.Value}"
-        MaxZoom="{Binding MaxZoom.Value}"
-        ItemsSource="{Binding AnchorsView}"
-        SelectedItem="{Binding SelectedAnchor.Value, Mode=TwoWay}"
-        Rotation="{Binding Rotation.Value, Mode=TwoWay}"
-        SelectionMode="Multiple"
-    >
-        <map:MapItemsControl.AnnotationTemplate>
-            <DataTemplate>
-                <Border
-                    BorderThickness="1"
-                    BorderBrush="White"
-                    x:Name="PART_Annotation"
-                    IsVisible="{Binding !!Header.Length}"
-                    Padding="3"
-                    CornerRadius="3"
-                    Background="#4a148c"
-                >
-                    <TextBlock Text="{ReflectionBinding Header}" />
-                </Border>
-            </DataTemplate>
-        </map:MapItemsControl.AnnotationTemplate>
-        <map:MapItemsControl.Styles>
-            <Style Selector="Border.active">
-                <Setter Property="BorderThickness" Value="5" />
-            </Style>
-        </map:MapItemsControl.Styles>
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <avalonia:MaterialIcon
-                    Width="{Binding IconSize}"
-                    Height="{Binding IconSize}"
-                    avalonia1:AsvPallete.Color="{Binding IconColor}"
-                    Kind="{Binding Icon}"
-                />
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-        <ItemsControl.ItemContainerTheme>
-            <ControlTheme TargetType="map:MapItem" x:DataType="map:IMapAnchor">
-                <Setter Property="Location" Value="{Binding Location, Mode=TwoWay}" />
-                <Setter Property="Rotation" Value="{Binding Azimuth}" />
-                <Setter Property="CenterX" Value="{Binding CenterX}" />
-                <Setter Property="CenterY" Value="{Binding CenterY}" />
-                <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
-                <Setter
-                    Property="CanDragWithoutModifier"
-                    Value="{Binding CanDragWithoutModifier}"
-                />
-                <Setter Property="UseMapRotation" Value="{Binding UseMapRotation}" />
-                <Setter Property="IsVisible" Value="{Binding IsVisible}" />
-                <Setter Property="Polygon" Value="{Binding PolygonView}" />
-                <Setter Property="IsAnnotationVisible" Value="{Binding IsAnnotationVisible}" />
-                <Setter Property="IsPolygonClosed" Value="{Binding IsPolygonClosed}" />
-                <Setter Property="Pen" Value="{Binding PolygonPen}"></Setter>
-                <Setter Property="Fill" Value="{Binding PolygonFill}"></Setter>
-            </ControlTheme>
-        </ItemsControl.ItemContainerTheme>
-    </map:MapItemsControl>
+
+    <UserControl.Resources>
+        <ControlTheme
+            x:Key="PropertyMenuNodeTheme"
+            TargetType="MenuItem"
+            BasedOn="{StaticResource {x:Type MenuItem}}"
+            x:DataType="avalonia1:MenuNode"
+        >
+            <Setter
+                Property="Icon"
+                Value="{Binding Base.Icon, Converter={x:Static avalonia1:MaterialIconConverter.Instance}}"
+            />
+            <Setter Property="Header" Value="{Binding Base.Header}" />
+            <Setter Property="ItemsSource" Value="{Binding Items}" />
+            <Setter Property="Command" Value="{Binding Base.Command}" />
+            <Setter Property="CommandParameter" Value="{Binding Base.CommandParameter}" />
+            <Setter Property="IsEnabled" Value="{Binding Base.IsEnabled}" />
+            <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
+            <Setter Property="StaysOpenOnClick" Value="{Binding Base.StaysOpenOnClick}" />
+            <Setter Property="InputGesture" Value="{Binding Base.HotKey}" />
+            <Setter Property="IsChecked" Value="{Binding Base.IsChecked}" />
+            <Setter Property="ToggleType" Value="{Binding Base.ToggleType}" />
+            <Setter Property="GroupName" Value="{Binding Base.GroupName}" />
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <Panel>
+        <map:MapItemsControl
+            x:Name="PART_Map"
+            CenterMap="{Binding CenterMap.Value, Mode=TwoWay}"
+            Zoom="{Binding Zoom.Value, Mode=TwoWay}"
+            Provider="{Binding CurrentProvider.Value}"
+            MinZoom="{Binding MinZoom.Value}"
+            MaxZoom="{Binding MaxZoom.Value}"
+            ItemsSource="{Binding AnchorsView}"
+            SelectedItem="{Binding SelectedAnchor.Value, Mode=TwoWay}"
+            Rotation="{Binding Rotation.Value, Mode=TwoWay}"
+            SelectionMode="Multiple"
+        >
+            <map:MapItemsControl.AnnotationTemplate>
+                <DataTemplate>
+                    <Border
+                        BorderThickness="1"
+                        BorderBrush="White"
+                        x:Name="PART_Annotation"
+                        IsVisible="{Binding !!Header.Length}"
+                        Padding="3"
+                        CornerRadius="3"
+                        Background="#4a148c"
+                    >
+                        <TextBlock Text="{ReflectionBinding Header}" />
+                    </Border>
+                </DataTemplate>
+            </map:MapItemsControl.AnnotationTemplate>
+            <map:MapItemsControl.Styles>
+                <Style Selector="Border.active">
+                    <Setter Property="BorderThickness" Value="5" />
+                </Style>
+            </map:MapItemsControl.Styles>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <avalonia:MaterialIcon
+                        Width="{Binding IconSize}"
+                        Height="{Binding IconSize}"
+                        avalonia1:AsvPallete.Color="{Binding IconColor}"
+                        Kind="{Binding Icon}"
+                    />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+            <ItemsControl.ItemContainerTheme>
+                <ControlTheme TargetType="map:MapItem" x:DataType="map:IMapAnchor">
+                    <Setter Property="Location" Value="{Binding Location, Mode=TwoWay}" />
+                    <Setter Property="Rotation" Value="{Binding Azimuth}" />
+                    <Setter Property="CenterX" Value="{Binding CenterX}" />
+                    <Setter Property="CenterY" Value="{Binding CenterY}" />
+                    <Setter Property="ContextMenu">
+                        <Template>
+                            <ContextMenu ItemsSource="{Binding MenuView.Items}">
+                                <ContextMenu.ItemContainerTheme>
+                                    <StaticResource ResourceKey="PropertyMenuNodeTheme" />
+                                </ContextMenu.ItemContainerTheme>
+                            </ContextMenu>
+                        </Template>
+                    </Setter>
+                    <Setter Property="IsReadOnly" Value="{Binding IsReadOnly}" />
+                    <Setter
+                        Property="CanDragWithoutModifier"
+                        Value="{Binding CanDragWithoutModifier}"
+                    />
+                    <Setter Property="UseMapRotation" Value="{Binding UseMapRotation}" />
+                    <Setter Property="IsVisible" Value="{Binding IsVisible}" />
+                    <Setter Property="Polygon" Value="{Binding PolygonView}" />
+                    <Setter Property="IsAnnotationVisible" Value="{Binding IsAnnotationVisible}" />
+                    <Setter Property="IsPolygonClosed" Value="{Binding IsPolygonClosed}" />
+                    <Setter Property="Pen" Value="{Binding PolygonPen}"></Setter>
+                    <Setter Property="Fill" Value="{Binding PolygonFill}"></Setter>
+                </ControlTheme>
+            </ItemsControl.ItemContainerTheme>
+        </map:MapItemsControl>
+
+        <Border
+            avalonia1:AsvPallete.Color="{Binding Interaction.Accent.Value}"
+            IsVisible="{Binding Interaction.Accent.Value, Converter={x:Static ObjectConverters.IsNotNull}}"
+            Background="Transparent"
+            BorderThickness="3"
+            IsHitTestVisible="False"
+        />
+
+        <Border
+            HorizontalAlignment="Center"
+            VerticalAlignment="Top"
+            Margin="8"
+            Padding="10,5"
+            CornerRadius="4"
+            Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
+            IsHitTestVisible="False"
+            IsVisible="{Binding Interaction.Status.Value, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+        >
+            <TextBlock Text="{Binding Interaction.Status.Value}" FontWeight="SemiBold" />
+        </Border>
+    </Panel>
 </UserControl>
