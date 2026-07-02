@@ -23,8 +23,8 @@ internal static class MockAppHost
         var builder = new MockHostApplicationBuilder(fileSystem);
 
         configure(builder);
-        inspectServices?.Invoke(builder.Services);
         builder.ExecutePostConfigureCallbacks();
+        inspectServices?.Invoke(builder.Services);
 
         return new MockHost(builder.Services.BuildServiceProvider());
     }
@@ -37,6 +37,7 @@ internal static class MockAppHost
             Services.AddMetrics();
             Services.AddSingleton(fileSystem);
             Services.AddSingleton(Environment);
+            Services.AddSingleton<IConfiguration>(Configuration);
 
             Environment.ApplicationName =
                 typeof(MockAppHost).Assembly.GetName().Name ?? string.Empty;
