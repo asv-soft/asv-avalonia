@@ -12,7 +12,6 @@ public class PluginsMarketTreePageMenu : TreePage
             RS.PluginsMarketPageViewModel_Title,
             MaterialIconKind.Store,
             new NavId(PluginsMarketPageViewModel.PageId),
-            new NavId(PluginSettingsTreePageMenu.PageId),
-            loggerFactory
+            new NavId(PluginSettingsTreePageMenu.PageId)
         ) { }
 }

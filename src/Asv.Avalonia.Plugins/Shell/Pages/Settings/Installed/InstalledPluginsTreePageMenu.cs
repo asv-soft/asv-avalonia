@@ -12,7 +12,6 @@ public class InstalledPluginsTreePageMenu : TreePage
             RS.InstalledPluginsPageViewModel_Title,
             MaterialIconKind.Plugin,
             new NavId(InstalledPluginsPageViewModel.PageId),
-            new NavId(PluginSettingsTreePageMenu.PageId),
-            loggerFactory
+            new NavId(PluginSettingsTreePageMenu.PageId)
         ) { }
 }

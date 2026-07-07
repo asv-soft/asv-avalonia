@@ -11,7 +11,6 @@ public class PropertyEditorTreeMenu : TreePage
             RS.PropertyEditorTreeMenu_PropertyEditorTreeMenu_Property_Editor,
             PropertyEditorPageViewModel.PageIcon,
             new NavId(PropertyEditorPageViewModel.PageId),
-            NavId.Empty,
-            loggerFactory
+            NavId.Empty
         ) { }
 }

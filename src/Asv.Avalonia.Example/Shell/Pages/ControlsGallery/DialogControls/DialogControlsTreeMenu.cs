@@ -11,7 +11,6 @@ public class DialogControlsTreeMenu : TreePage
             RS.DialogControlsPageViewModel_Title,
             DialogControlsPageViewModel.PageIcon,
             new NavId(DialogControlsPageViewModel.PageId),
-            NavId.Empty,
-            loggerFactory
+            NavId.Empty
         ) { }
 }

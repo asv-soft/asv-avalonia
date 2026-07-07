@@ -11,7 +11,6 @@ public class RttBoxesTreeMenu : TreePage
             "Rtt boxes",
             RttBoxesPageViewModel.PageIcon,
             new NavId(RttBoxesPageViewModel.PageId),
-            NavId.Empty,
-            loggerFactory
+            NavId.Empty
         ) { }
 }

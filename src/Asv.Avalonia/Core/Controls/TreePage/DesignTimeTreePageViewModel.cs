@@ -33,14 +33,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
     {
         DesignTime.ThrowIfNotDesignMode();
         Nodes.Add(
-            new TreePage(
-                "node1",
-                "Node1",
-                MaterialIconKind.Abacus,
-                new NavId("node1"),
-                NavId.Empty,
-                DesignTime.LoggerFactory
-            )
+            new TreePage("node1", "Node1", MaterialIconKind.Abacus, new NavId("node1"), NavId.Empty)
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
                 Status = new TagViewModel(DesignTime.Id.TypeId)
@@ -53,44 +46,16 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             }
         );
         Nodes.Add(
-            new TreePage(
-                "node2",
-                "node2",
-                MaterialIconKind.Abacus,
-                new NavId("node2"),
-                NavId.Empty,
-                DesignTime.LoggerFactory
-            )
+            new TreePage("node2", "node2", MaterialIconKind.Abacus, new NavId("node2"), NavId.Empty)
         );
         Nodes.Add(
-            new TreePage(
-                "node3",
-                "node3",
-                MaterialIconKind.Abacus,
-                new NavId("node3"),
-                NavId.Empty,
-                DesignTime.LoggerFactory
-            )
+            new TreePage("node3", "node3", MaterialIconKind.Abacus, new NavId("node3"), NavId.Empty)
         );
         Nodes.Add(
-            new TreePage(
-                "node4",
-                "node4",
-                MaterialIconKind.Abacus,
-                new NavId("node4"),
-                NavId.Empty,
-                DesignTime.LoggerFactory
-            )
+            new TreePage("node4", "node4", MaterialIconKind.Abacus, new NavId("node4"), NavId.Empty)
         );
         Nodes.Add(
-            new TreePage(
-                "node5",
-                "node5",
-                MaterialIconKind.Abacus,
-                new NavId("node5"),
-                NavId.Empty,
-                DesignTime.LoggerFactory
-            )
+            new TreePage("node5", "node5", MaterialIconKind.Abacus, new NavId("node5"), NavId.Empty)
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
             }
@@ -101,8 +66,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
                 "node1-1",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
-                new NavId("node1"),
-                DesignTime.LoggerFactory
+                new NavId("node1")
             )
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
@@ -114,8 +78,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
                 "node1-2",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
-                new NavId("node1"),
-                DesignTime.LoggerFactory
+                new NavId("node1")
             )
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
@@ -132,8 +95,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
                 "node1-3",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
-                new NavId("node1"),
-                DesignTime.LoggerFactory
+                new NavId("node1")
             )
         );
         Nodes.Add(
@@ -142,8 +104,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
                 "node1-4",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
-                new NavId("node1"),
-                DesignTime.LoggerFactory
+                new NavId("node1")
             )
         );
         Nodes.Add(
@@ -152,8 +113,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
                 "node1-5",
                 MaterialIconKind.Abacus,
                 new NavId("node1"),
-                new NavId("node1"),
-                DesignTime.LoggerFactory
+                new NavId("node1")
             )
         );
         Nodes.Add(
@@ -162,8 +122,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
                 "node1-1-1",
                 MaterialIconKind.Abacus,
                 new NavId("node1-1"),
-                new NavId("node1-1"),
-                DesignTime.LoggerFactory
+                new NavId("node1-1")
             )
         );
         Nodes.Add(
@@ -172,8 +131,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
                 "node1-1-2",
                 MaterialIconKind.Abacus,
                 new NavId("node1-1"),
-                new NavId("node1-1"),
-                DesignTime.LoggerFactory
+                new NavId("node1-1")
             )
         );
     }

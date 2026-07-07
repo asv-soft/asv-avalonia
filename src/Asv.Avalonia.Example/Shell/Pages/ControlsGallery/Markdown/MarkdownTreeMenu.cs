@@ -11,8 +11,7 @@ public class MarkdownTreeMenu : TreePage
             GetTitle(),
             MarkdownPageViewModel.PageIcon,
             new NavId(MarkdownPageViewModel.PageId),
-            NavId.Empty,
-            loggerFactory
+            NavId.Empty
         ) { }
 
     private static string GetTitle()

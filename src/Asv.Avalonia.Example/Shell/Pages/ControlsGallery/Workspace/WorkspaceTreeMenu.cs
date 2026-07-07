@@ -12,7 +12,6 @@ public class WorkspaceTreeMenu : TreePage
             WorkspacePageViewModel.PageIcon,
             new NavId(WorkspacePageViewModel.PageId),
             NavId.Empty,
-            loggerFactory,
             new TagViewModel("status")
             {
                 Value = "Active",

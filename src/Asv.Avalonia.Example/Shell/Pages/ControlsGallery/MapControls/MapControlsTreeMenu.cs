@@ -11,7 +11,6 @@ public class MapControlsTreeMenu : TreePage
             RS.MapControlsPageViewModel_Title,
             MapControlsPageViewModel.PageIcon,
             new NavId(MapControlsPageViewModel.PageId),
-            NavId.Empty,
-            loggerFactory
+            NavId.Empty
         ) { }
 }

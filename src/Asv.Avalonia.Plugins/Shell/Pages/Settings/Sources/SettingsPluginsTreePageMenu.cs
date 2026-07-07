@@ -14,7 +14,6 @@ public class SettingsPluginsTreePageMenu : TreePage
             RS.SettingsPluginsSourcesViewModel_Name,
             MaterialIconKind.Cloud,
             new NavId(SettingsPluginsSourcesViewModel.PageId),
-            new NavId(PluginSettingsTreePageMenu.PageId),
-            loggerFactory
+            new NavId(PluginSettingsTreePageMenu.PageId)
         ) { }
 }

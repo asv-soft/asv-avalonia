@@ -18,8 +18,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
             "Item 1",
             MaterialIconKind.Abacus,
             NavId.Empty,
-            NavId.Empty,
-            DesignTime.LoggerFactory
+            NavId.Empty
         )
         {
             Description = "This is a description for Item 1",
@@ -28,26 +27,12 @@ public class GroupTreePageItemViewModel : TreeSubpage
         var flatList = new ObservableList<ITreePage>
         {
             root,
-            new TreePage(
-                "item2",
-                "Item 2",
-                MaterialIconKind.Abacus,
-                NavId.Empty,
-                root.Id,
-                DesignTime.LoggerFactory
-            )
+            new TreePage("item2", "Item 2", MaterialIconKind.Abacus, NavId.Empty, root.Id)
             {
                 Description = "This is a description for Item 2",
                 IconColor = AsvColorKind.Error | AsvColorKind.Blink,
             },
-            new TreePage(
-                "item3",
-                "Item 3",
-                MaterialIconKind.Abacus,
-                NavId.Empty,
-                root.Id,
-                DesignTime.LoggerFactory
-            )
+            new TreePage("item3", "Item 3", MaterialIconKind.Abacus, NavId.Empty, root.Id)
             {
                 Description = "This is a description for Item 3",
             },
