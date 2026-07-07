@@ -7,7 +7,7 @@ namespace Asv.Avalonia;
 public abstract class PropertyComboBoxViewModel : PropertyViewModel
 {
     private CancellationTokenSource? _selectCancel;
-    private readonly IUndoChangeSink<ValueUndoChange<IHeadlinedViewModel>>? _undoValueSink;
+    private readonly IUndoChangeSink<ValueUndoChange<string>>? _undoValueSink;
 
     protected PropertyComboBoxViewModel(string typeId, bool enableUndo = true)
         : base(typeId)
@@ -23,29 +23,20 @@ public abstract class PropertyComboBoxViewModel : PropertyViewModel
 
         if (enableUndo)
         {
-            _undoValueSink = Undo.Register<ValueUndoChange<IHeadlinedViewModel>>(
-                    "Value",
-                    OnUndoValue,
-                    OnRedoValue
-                )
+            _undoValueSink = Undo.RegisterValue<string>("Value", SelectItemById, SelectItemById)
                 .AddTo(ref DisposableBag);
         }
     }
 
-    private ValueTask OnRedoValue(
-        ValueUndoChange<IHeadlinedViewModel> change,
-        CancellationToken cancel
-    )
+    private ValueTask SelectItemById(string id, CancellationToken cancel)
     {
-        return SelectItem(change.NewValue, cancel);
-    }
+        var item = ItemsSource.FirstOrDefault(x => TryGetItemUndoId(x) == id);
+        if (item is null)
+        {
+            throw new InvalidOperationException($"ComboBox item '{id}' not found.");
+        }
 
-    private ValueTask OnUndoValue(
-        ValueUndoChange<IHeadlinedViewModel> change,
-        CancellationToken cancel
-    )
-    {
-        return SelectItem(change.OldValue, cancel);
+        return SelectItem(item, cancel);
     }
 
     public NotifyCollectionChangedSynchronizedViewList<IHeadlinedViewModel> ItemsView { get; }
@@ -72,6 +63,12 @@ public abstract class PropertyComboBoxViewModel : PropertyViewModel
 
         ClearModelErrors();
         var previousItem = SelectedItem.Value;
+        var undoPreviousId =
+            previousItem is not null && _undoValueSink is not null
+                ? GetItemUndoId(previousItem)
+                : null;
+        var undoNewId =
+            previousItem is not null && _undoValueSink is not null ? GetItemUndoId(item) : null;
         SelectedItem.Value = item;
         _selectCancel?.Cancel(false);
         _selectCancel?.Dispose();
@@ -82,9 +79,9 @@ public abstract class PropertyComboBoxViewModel : PropertyViewModel
         try
         {
             await ApplyFromUser(item, selectCancel.Token);
-            if (previousItem is not null)
+            if (undoPreviousId is not null && undoNewId is not null)
             {
-                _undoValueSink?.PublishUpdate(previousItem, item);
+                _undoValueSink?.PublishUpdate(undoPreviousId, undoNewId);
             }
             MarkUpdated();
         }
@@ -117,6 +114,23 @@ public abstract class PropertyComboBoxViewModel : PropertyViewModel
     }
 
     protected abstract ValueTask ApplyFromUser(IHeadlinedViewModel item, CancellationToken cancel);
+
+    private static string GetItemUndoId(IHeadlinedViewModel item)
+    {
+        if (item is not IViewModel viewModel)
+        {
+            throw new InvalidOperationException(
+                $"ComboBox item '{item.GetType().FullName}' must implement {nameof(IViewModel)} to support undo."
+            );
+        }
+
+        return viewModel.Id.ToString();
+    }
+
+    private static string? TryGetItemUndoId(IHeadlinedViewModel item)
+    {
+        return item is IViewModel viewModel ? viewModel.Id.ToString() : null;
+    }
 
     public override IEnumerable<IViewModel> GetChildren()
     {
