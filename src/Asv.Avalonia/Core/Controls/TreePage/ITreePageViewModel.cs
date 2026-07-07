@@ -4,5 +4,5 @@ namespace Asv.Avalonia;
 
 public interface ITreePageViewModel : IDesignTimeTreePage
 {
-    public ObservableList<ITreePage> Nodes { get; }
+    public ObservableList<ITreePageMenuItem> Nodes { get; }
 }

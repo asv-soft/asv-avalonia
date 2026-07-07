@@ -1,10 +1,10 @@
-﻿using Asv.Modeling;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class SettingsUnitTreePageMenu : TreePage
+public class SettingsUnitTreePageMenu : TreePageMenuItem
 {
     public SettingsUnitTreePageMenu(ILoggerFactory loggerFactory)
         : base(

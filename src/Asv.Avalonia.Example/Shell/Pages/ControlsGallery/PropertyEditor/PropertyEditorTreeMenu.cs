@@ -1,9 +1,9 @@
-﻿using Asv.Modeling;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
-public class PropertyEditorTreeMenu : TreePage
+public class PropertyEditorTreeMenu : TreePageMenuItem
 {
     public PropertyEditorTreeMenu(ILoggerFactory loggerFactory)
         : base(

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
-public class MarkdownTreeMenu : TreePage
+public class MarkdownTreeMenu : TreePageMenuItem
 {
     public MarkdownTreeMenu(ILoggerFactory loggerFactory)
         : base(

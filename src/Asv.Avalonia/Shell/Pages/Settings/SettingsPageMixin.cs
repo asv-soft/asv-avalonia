@@ -1,4 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -89,10 +89,10 @@ public static class SettingsPageMixin
         >(string pageId)
             where TViewModel : class, ISettingsSubPage
             where TView : Control
-            where TTreeMenu : class, ITreePage
+            where TTreeMenu : class, ITreePageMenuItem
         {
             AddSubPage<TViewModel, TView>(pageId);
-            builder.Parent.Parent.Services.AddKeyedTransient<ITreePage, TTreeMenu>(
+            builder.Parent.Parent.Services.AddKeyedTransient<ITreePageMenuItem, TTreeMenu>(
                 SettingsPageViewModel.PageId
             );
             return this;

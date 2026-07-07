@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
-public class AppearanceSettingTreePageMenu : TreePage
+public class AppearanceSettingTreePageMenu : TreePageMenuItem
 {
     public AppearanceSettingTreePageMenu(ILoggerFactory loggerFactory)
         : base(

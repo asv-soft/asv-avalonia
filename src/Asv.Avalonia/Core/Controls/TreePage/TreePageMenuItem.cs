@@ -4,9 +4,9 @@ using R3;
 
 namespace Asv.Avalonia;
 
-public class TreePage : HeadlinedViewModel, ITreePage
+public class TreePageMenuItem : HeadlinedViewModel, ITreePageMenuItem
 {
-    public TreePage(
+    public TreePageMenuItem(
         string typeId,
         string title,
         MaterialIconKind? icon,

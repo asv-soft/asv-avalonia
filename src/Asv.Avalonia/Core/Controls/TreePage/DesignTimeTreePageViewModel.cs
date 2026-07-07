@@ -10,8 +10,8 @@ public interface IDesignTimeTreePage : IPage
 {
     MaterialIconKind? TreeHeaderIcon { get; }
     string? TreeHeader { get; }
-    ObservableTree<ITreePage, NavId> TreeView { get; }
-    BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?> SelectedNode { get; }
+    ObservableTree<ITreePageMenuItem, NavId> TreeView { get; }
+    BindableReactiveProperty<ObservableTreeNode<ITreePageMenuItem, NavId>?> SelectedNode { get; }
     BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
     ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
     bool IsMenuVisible { get; }
@@ -33,7 +33,13 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
     {
         DesignTime.ThrowIfNotDesignMode();
         Nodes.Add(
-            new TreePage("node1", "Node1", MaterialIconKind.Abacus, new NavId("node1"), NavId.Empty)
+            new TreePageMenuItem(
+                "node1",
+                "Node1",
+                MaterialIconKind.Abacus,
+                new NavId("node1"),
+                NavId.Empty
+            )
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
                 Status = new TagViewModel(DesignTime.Id.TypeId)
@@ -46,22 +52,46 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             }
         );
         Nodes.Add(
-            new TreePage("node2", "node2", MaterialIconKind.Abacus, new NavId("node2"), NavId.Empty)
+            new TreePageMenuItem(
+                "node2",
+                "node2",
+                MaterialIconKind.Abacus,
+                new NavId("node2"),
+                NavId.Empty
+            )
         );
         Nodes.Add(
-            new TreePage("node3", "node3", MaterialIconKind.Abacus, new NavId("node3"), NavId.Empty)
+            new TreePageMenuItem(
+                "node3",
+                "node3",
+                MaterialIconKind.Abacus,
+                new NavId("node3"),
+                NavId.Empty
+            )
         );
         Nodes.Add(
-            new TreePage("node4", "node4", MaterialIconKind.Abacus, new NavId("node4"), NavId.Empty)
+            new TreePageMenuItem(
+                "node4",
+                "node4",
+                MaterialIconKind.Abacus,
+                new NavId("node4"),
+                NavId.Empty
+            )
         );
         Nodes.Add(
-            new TreePage("node5", "node5", MaterialIconKind.Abacus, new NavId("node5"), NavId.Empty)
+            new TreePageMenuItem(
+                "node5",
+                "node5",
+                MaterialIconKind.Abacus,
+                new NavId("node5"),
+                NavId.Empty
+            )
             {
                 IconColor = DesignTime.RandomEnum<AsvColorKind>(),
             }
         );
         Nodes.Add(
-            new TreePage(
+            new TreePageMenuItem(
                 "node1-1",
                 "node1-1",
                 MaterialIconKind.Abacus,
@@ -73,7 +103,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             }
         );
         Nodes.Add(
-            new TreePage(
+            new TreePageMenuItem(
                 "node1-2",
                 "node1-2",
                 MaterialIconKind.Abacus,
@@ -90,7 +120,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             }
         );
         Nodes.Add(
-            new TreePage(
+            new TreePageMenuItem(
                 "node1-3",
                 "node1-3",
                 MaterialIconKind.Abacus,
@@ -99,7 +129,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             )
         );
         Nodes.Add(
-            new TreePage(
+            new TreePageMenuItem(
                 "node1-4",
                 "node1-4",
                 MaterialIconKind.Abacus,
@@ -108,7 +138,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             )
         );
         Nodes.Add(
-            new TreePage(
+            new TreePageMenuItem(
                 "node1-5",
                 "node1-5",
                 MaterialIconKind.Abacus,
@@ -117,7 +147,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             )
         );
         Nodes.Add(
-            new TreePage(
+            new TreePageMenuItem(
                 "node1-1-1",
                 "node1-1-1",
                 MaterialIconKind.Abacus,
@@ -126,7 +156,7 @@ public class DesignTimeTreePageViewModel : TreePageViewModel<ITreePageViewModel,
             )
         );
         Nodes.Add(
-            new TreePage(
+            new TreePageMenuItem(
                 "node1-1-2",
                 "node1-1-2",
                 MaterialIconKind.Abacus,

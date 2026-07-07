@@ -2,7 +2,7 @@ using Asv.Modeling;
 
 namespace Asv.Avalonia;
 
-public interface ITreePage : IHeadlinedViewModel
+public interface ITreePageMenuItem : IHeadlinedViewModel
 {
     NavId ParentId { get; }
     TagViewModel? Status { get; }

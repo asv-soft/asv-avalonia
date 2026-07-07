@@ -1,9 +1,9 @@
-﻿using Asv.Modeling;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
-public class RttBoxesTreeMenu : TreePage
+public class RttBoxesTreeMenu : TreePageMenuItem
 {
     public RttBoxesTreeMenu(ILoggerFactory loggerFactory)
         : base(

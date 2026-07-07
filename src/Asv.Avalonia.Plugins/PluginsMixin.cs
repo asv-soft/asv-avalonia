@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Reflection;
 using Asv.Common;
 using Microsoft.Extensions.Configuration;
@@ -103,7 +103,7 @@ public static class PluginsMixin
                 return;
             }
 
-            builder.Services.AddKeyedTransient<ITreePage, PluginSettingsTreePageMenu>(
+            builder.Services.AddKeyedTransient<ITreePageMenuItem, PluginSettingsTreePageMenu>(
                 SettingsPageViewModel.PageId
             );
             _isPluginSettingsGroupRegistered = true;

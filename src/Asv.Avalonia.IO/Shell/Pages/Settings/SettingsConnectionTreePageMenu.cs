@@ -7,7 +7,7 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public class SettingsConnectionTreePageMenu : TreePage
+public class SettingsConnectionTreePageMenu : TreePageMenuItem
 {
     public SettingsConnectionTreePageMenu(ILoggerFactory loggerFactory)
         : base(

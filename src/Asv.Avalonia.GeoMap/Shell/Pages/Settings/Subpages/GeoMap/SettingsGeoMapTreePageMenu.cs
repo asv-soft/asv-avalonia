@@ -4,7 +4,7 @@ using Material.Icons;
 namespace Asv.Avalonia.GeoMap;
 
 public class SettingsGeoMapTreePageMenu()
-    : TreePage(
+    : TreePageMenuItem(
         SettingsGeoMapViewModel.PageId,
         RS.SettingsGeoMapViewModel_Name,
         MaterialIconKind.Map,

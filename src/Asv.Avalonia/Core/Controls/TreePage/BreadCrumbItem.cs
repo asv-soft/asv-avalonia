@@ -1,7 +1,7 @@
 namespace Asv.Avalonia;
 
-public class BreadCrumbItem(bool isFirst, ITreePage item)
+public class BreadCrumbItem(bool isFirst, ITreePageMenuItem item)
 {
     public bool IsFirst { get; } = isFirst;
-    public ITreePage Item { get; } = item;
+    public ITreePageMenuItem Item { get; } = item;
 }

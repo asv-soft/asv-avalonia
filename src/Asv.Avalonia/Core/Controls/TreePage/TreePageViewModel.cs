@@ -37,9 +37,10 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         Nodes.SetRoutableParent(this).AddTo(ref DisposableBag);
         Nodes.DisposeRemovedItems().AddTo(ref DisposableBag);
         TreeView = new TreePageMenu(Nodes).AddTo(ref DisposableBag);
-        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?>().AddTo(
-            ref DisposableBag
-        );
+        SelectedNode = new BindableReactiveProperty<ObservableTreeNode<
+            ITreePageMenuItem,
+            NavId
+        >?>().AddTo(ref DisposableBag);
         _selectedPage = new ReactiveProperty<ITreeSubpage?>().AddTo(ref DisposableBag);
         SelectedPage = _selectedPage.ToBindableReactiveProperty().AddTo(ref DisposableBag);
         _breadCrumbSource = [];
@@ -72,15 +73,18 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         set => SetField(ref field, value);
     } = true;
 
-    public ObservableTree<ITreePage, NavId> TreeView { get; }
+    public ObservableTree<ITreePageMenuItem, NavId> TreeView { get; }
 
     public BindableReactiveProperty<ITreeSubpage?> SelectedPage { get; }
 
     public ISynchronizedViewList<BreadCrumbItem> BreadCrumb { get; }
 
-    public BindableReactiveProperty<ObservableTreeNode<ITreePage, NavId>?> SelectedNode { get; }
+    public BindableReactiveProperty<ObservableTreeNode<
+        ITreePageMenuItem,
+        NavId
+    >?> SelectedNode { get; }
 
-    public ObservableList<ITreePage> Nodes { get; }
+    public ObservableList<ITreePageMenuItem> Nodes { get; }
 
     public override ValueTask<IViewModel> Navigate(NavId id)
     {
@@ -227,7 +231,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     }
 
     private async ValueTask SelectedNodeChanged(
-        ObservableTreeNode<ITreePage, NavId>? node,
+        ObservableTreeNode<ITreePageMenuItem, NavId>? node,
         CancellationToken cancel
     )
     {

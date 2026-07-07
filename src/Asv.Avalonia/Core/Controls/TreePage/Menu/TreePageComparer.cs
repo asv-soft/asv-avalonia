@@ -1,12 +1,12 @@
 namespace Asv.Avalonia;
 
-public class TreePageComparer : IComparer<ITreePage>
+public class TreePageComparer : IComparer<ITreePageMenuItem>
 {
-    public static IComparer<ITreePage> Instance { get; } = new TreePageComparer();
+    public static IComparer<ITreePageMenuItem> Instance { get; } = new TreePageComparer();
 
     private TreePageComparer() { }
 
-    public int Compare(ITreePage? x, ITreePage? y)
+    public int Compare(ITreePageMenuItem? x, ITreePageMenuItem? y)
     {
         if (ReferenceEquals(x, y))
         {

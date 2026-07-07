@@ -1,4 +1,4 @@
-﻿using Asv.Common;
+using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -13,7 +13,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
         : base(DesignTime.Id.TypeId, default)
     {
         DesignTime.ThrowIfNotDesignMode();
-        var root = new TreePage(
+        var root = new TreePageMenuItem(
             "item1",
             "Item 1",
             MaterialIconKind.Abacus,
@@ -24,20 +24,20 @@ public class GroupTreePageItemViewModel : TreeSubpage
             Description = "This is a description for Item 1",
             IconColor = AsvColorKind.Error | AsvColorKind.Blink,
         };
-        var flatList = new ObservableList<ITreePage>
+        var flatList = new ObservableList<ITreePageMenuItem>
         {
             root,
-            new TreePage("item2", "Item 2", MaterialIconKind.Abacus, NavId.Empty, root.Id)
+            new TreePageMenuItem("item2", "Item 2", MaterialIconKind.Abacus, NavId.Empty, root.Id)
             {
                 Description = "This is a description for Item 2",
                 IconColor = AsvColorKind.Error | AsvColorKind.Blink,
             },
-            new TreePage("item3", "Item 3", MaterialIconKind.Abacus, NavId.Empty, root.Id)
+            new TreePageMenuItem("item3", "Item 3", MaterialIconKind.Abacus, NavId.Empty, root.Id)
             {
                 Description = "This is a description for Item 3",
             },
         };
-        var tree = new ObservableTree<ITreePage, NavId>(
+        var tree = new ObservableTree<ITreePageMenuItem, NavId>(
             flatList,
             NavId.Empty,
             x => x.Id,
@@ -50,7 +50,7 @@ public class GroupTreePageItemViewModel : TreeSubpage
     }
 
     public GroupTreePageItemViewModel(
-        ObservableTreeNode<ITreePage, NavId> node,
+        ObservableTreeNode<ITreePageMenuItem, NavId> node,
         Func<NavId, ValueTask<IViewModel>> navigateCallback,
         ILoggerFactory loggerFactory
     )
@@ -62,6 +62,6 @@ public class GroupTreePageItemViewModel : TreeSubpage
         );
     }
 
-    public ObservableTreeNode<ITreePage, NavId> Node { get; }
+    public ObservableTreeNode<ITreePageMenuItem, NavId> Node { get; }
     public ReactiveCommand<NavId> NavigateCommand { get; }
 }

@@ -1,9 +1,9 @@
-﻿using Asv.Modeling;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.Example;
 
-public class DialogControlsTreeMenu : TreePage
+public class DialogControlsTreeMenu : TreePageMenuItem
 {
     public DialogControlsTreeMenu(ILoggerFactory loggerFactory)
         : base(

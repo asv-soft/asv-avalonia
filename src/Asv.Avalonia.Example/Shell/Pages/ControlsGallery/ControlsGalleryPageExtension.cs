@@ -12,10 +12,10 @@ public class ControlsGalleryPageExtension : IExtensionFor<IControlsGalleryPage>
 
     string ISupportId<string>.Id => StaticId;
 
-    private readonly IEnumerable<ITreePage> _subPagesMenu;
+    private readonly IEnumerable<ITreePageMenuItem> _subPagesMenu;
 
     public ControlsGalleryPageExtension(
-        [FromKeyedServices(Contract)] IEnumerable<ITreePage> subPagesMenu
+        [FromKeyedServices(Contract)] IEnumerable<ITreePageMenuItem> subPagesMenu
     )
     {
         _subPagesMenu = subPagesMenu;
@@ -25,10 +25,10 @@ public class ControlsGalleryPageExtension : IExtensionFor<IControlsGalleryPage>
 
     public void Extend(IControlsGalleryPage context, CompositeDisposable contextDispose)
     {
-        foreach (var treePage in _subPagesMenu)
+        foreach (var treePageMenuItem in _subPagesMenu)
         {
-            context.Nodes.Add(treePage);
-            treePage.DisposeItWith(contextDispose);
+            context.Nodes.Add(treePageMenuItem);
+            treePageMenuItem.DisposeItWith(contextDispose);
         }
     }
 }

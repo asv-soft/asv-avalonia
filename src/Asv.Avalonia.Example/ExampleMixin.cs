@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics.CodeAnalysis;
 using Asv.Avalonia.IO;
 using Avalonia.Controls;
@@ -163,11 +163,11 @@ public static class ExampleMixin
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
                 TTreeMenu
         >(string subPageId)
-            where TTreeMenu : class, ITreePage
+            where TTreeMenu : class, ITreePageMenuItem
             where TViewModel : class, IControlsGallerySubPage
             where TView : Control
         {
-            builder.Parent.Parent.Services.AddKeyedTransient<ITreePage, TTreeMenu>(
+            builder.Parent.Parent.Services.AddKeyedTransient<ITreePageMenuItem, TTreeMenu>(
                 ControlsGalleryPageExtension.Contract
             );
             return UseSubPage<TViewModel, TView>(subPageId);

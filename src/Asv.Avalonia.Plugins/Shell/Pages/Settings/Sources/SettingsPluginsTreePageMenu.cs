@@ -1,4 +1,4 @@
-﻿using Asv.Common;
+using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -6,7 +6,7 @@ using R3;
 
 namespace Asv.Avalonia.Plugins;
 
-public class SettingsPluginsTreePageMenu : TreePage
+public class SettingsPluginsTreePageMenu : TreePageMenuItem
 {
     public SettingsPluginsTreePageMenu(ILoggerFactory loggerFactory)
         : base(

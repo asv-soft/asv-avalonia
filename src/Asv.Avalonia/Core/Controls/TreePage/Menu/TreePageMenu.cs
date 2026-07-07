@@ -3,9 +3,9 @@ using ObservableCollections;
 
 namespace Asv.Avalonia;
 
-public class TreePageMenu : ObservableTree<ITreePage, NavId>
+public class TreePageMenu : ObservableTree<ITreePageMenuItem, NavId>
 {
-    public TreePageMenu(IReadOnlyObservableList<ITreePage> flatList)
+    public TreePageMenu(IReadOnlyObservableList<ITreePageMenuItem> flatList)
         : base(
             flatList,
             NavId.Empty,
