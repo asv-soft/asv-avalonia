@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Text.Json;
+using Asv.Avalonia;
 using Asv.Common;
 using Asv.IO;
 using Asv.Modeling;
@@ -217,10 +218,9 @@ public class SettingsConnectionViewModel
 
     private IPortViewModel CreatePort(IProtocolPort protocolPort)
     {
-        var factory = _containerHost.GetKeyedService<ViewModelMixin.FactoryDelegate<
-            IPortViewModel,
-            IProtocolPort
-        >>(protocolPort.TypeInfo.Scheme);
+        var factory = _containerHost.GetKeyedService<
+            ViewModelFactoryDelegate<IPortViewModel, IProtocolPort>
+        >(protocolPort.TypeInfo.Scheme);
         var viewModel =
             factory?.Invoke(protocolPort)
             ?? ActivatorUtilities.CreateInstance<PortViewModel>(_containerHost, protocolPort);

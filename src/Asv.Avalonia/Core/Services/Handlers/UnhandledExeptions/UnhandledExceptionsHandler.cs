@@ -10,12 +10,15 @@ namespace Asv.Avalonia;
 
 public static class UnhandledExceptions
 {
-    extension(IHostApplicationBuilder builder)
+    extension(ServicesRegistrations.Builder builder)
     {
-        public IHostApplicationBuilder UseUnhandledExceptionsHandler()
+        public ServicesRegistrations.Builder RegisterUnhandledExceptionsHandler()
         {
             builder
-                .Services.AddSingleton<IUnhandledExceptionHandler, UnhandledExceptionsHandler>()
+                .AppBuilder.Services.AddSingleton<
+                    IUnhandledExceptionHandler,
+                    UnhandledExceptionsHandler
+                >()
                 .AddHostedService<UnhandledExceptionsHandler>()
                 .AddOptions<UnhandledExceptionsHandlerOptions>()
                 .BindConfiguration(UnhandledExceptionsHandlerOptions.ConfigurationSection)

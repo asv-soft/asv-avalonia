@@ -69,7 +69,7 @@ public class MemoryTileCache : TileCache
             }
         );
 
-        var meter = meterFactory.Create(GeoMapMixin.MetricName);
+        var meter = meterFactory.Create(GeoMapRegistrations.MetricName);
         _meterGet = meter.CreateCounter<int>("cache_memory_get");
         _meterSet = meter.CreateCounter<int>("cache_memory_set");
         _meterClear = meter.CreateCounter<int>("cache_memory_evict");

@@ -1,0 +1,29 @@
+﻿using Asv.Avalonia.Plugins;
+using Asv.Cfg;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+
+namespace Asv.Avalonia.Example.Plugin.PluginExample;
+
+public static class PluginExampleRegistrations
+{
+    extension(IHostApplicationBuilder builder)
+    {
+        public IHostApplicationBuilder UsePluginExample()
+        {
+            builder.Shell.Pages.Register<ExamplePageViewModel, ExamplePageView>(
+                ExamplePageViewModel.PageId
+            );
+            builder.Shell.Pages.Home.UseExtension<HomePagePluginExtension>();
+            return builder;
+        }
+    }
+}
+
+public class PluginEntryPoint : IPluginAppBuilder
+{
+    public void Register(IHostApplicationBuilder builder)
+    {
+        builder.UsePluginExample();
+    }
+}

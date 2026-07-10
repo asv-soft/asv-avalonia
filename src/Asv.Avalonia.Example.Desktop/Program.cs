@@ -13,6 +13,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Logging;
 using Microsoft.Extensions.Logging;
+using ZstdSharp.Unsafe;
 
 namespace Asv.Avalonia.Example.Desktop;
 
@@ -51,36 +52,72 @@ sealed class Program
             .UseAsv(builder =>
             {
                 builder
-                    .UseDefault()
-                    .UseOptionalLogToFile()
-                    .UseOptionalLogViewer()
-                    .UseOptionalSoloRun(opt =>
-                        opt.WithArgumentForwarding().WithMutexName("Asv.Avalonia.Example.Desktop")
-                    )
-                    .UsePluginManager(options =>
+                    .EnableLogging()
+                    .RegisterCore(opt =>
                     {
-                        options.WithApiPackage(
-                            "Asv.Avalonia.Example.Api",
-                            SemVersion.Parse("1.0.0")
+                        opt.RegisterControls();
+                        opt.RegisterServices(services =>
+                        {
+                            services
+                                .RegisterSoloRun(solo =>
+                                    solo.WithArgumentForwarding()
+                                        .WithMutexName("Asv.Avalonia.Example.Desktop")
+                                )
+                                .RegisterAppArgsStore()
+                                .RegisterAppInfo()
+                                .RegisterAppPath()
+                                .RegisterRestartFeature()
+                                .RegisterDialogs()
+                                .RegisterExtensions()
+                                .RegisterFileAssociation()
+                                .RegisterUnhandledExceptionsHandler()
+                                .RegisterHotKeys()
+                                .RegisterLocalizationService()
+                                .RegisterLogViewer()
+                                .RegisterLogToFile()
+                                .RegisterSearchService()
+                                .RegisterShellHost()
+                                .RegisterThemeService()
+                                .RegisterTimeProvider()
+                                .RegisterUnitService()
+                                .RegisterUserConfig()
+                                .RegisterViewLocator();
+                        });
+                    })
+                    .RegisterDesktopShell()
+                    .RegisterModulePlugins(configure =>
+                    {
+                        configure.RegisterCore(core =>
+                            core.RegisterServices(services =>
+                            {
+                                services.RegisterPluginBootloader(bootloader =>
+                                    bootloader.WithApiPackage(typeof(Command1).Assembly)
+                                );
+                                services.RegisterPluginManager(options =>
+                                {
+                                    options.WithApiPackage(
+                                        "Asv.Avalonia.Example.Api",
+                                        SemVersion.Parse("1.0.0")
+                                    );
+                                    options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
+                                });
+                            })
                         );
-                        options.WithPluginPrefix("Asv.Avalonia.Example.Plugin.");
+                        configure.RegisterShell(shell =>
+                            shell.RegisterPages(pages =>
+                                pages.RegisterSettings(settings =>
+                                    settings
+                                        .RegisterInstalled() // register installed plugins page
+                                        .RegisterMarket()
+                                )
+                            )
+                        );
                     })
-                    .UseDesktopShell()
-                    .UseModulePlugins(configure =>
-                    {
-                        configure
-                            .WithApiPackage(typeof(Command1).Assembly)
-                            .UseOptionalInstalled() // register installed plugins page
-                            .UseOptionalMarket(); // register market plugins page
-                    })
-                    .UseModuleGeoMap()
-                    .UseModuleCharts()
-                    .UseLauncher(cfg =>
-                    {
-                        cfg.IsOptional();
-                    })
-                    .UseModuleIo()
-                    .UseExampleApp();
+                    .RegisterModuleGeoMap()
+                    .RegisterModuleCharts()
+                    .RegisterLauncher(cfg => cfg.IsOptional())
+                    .RegisterModuleIo()
+                    .RegisterExampleApp();
             });
     }
 }

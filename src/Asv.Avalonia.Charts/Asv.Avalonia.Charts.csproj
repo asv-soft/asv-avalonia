@@ -14,10 +14,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Core\Controls\Dashboard\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <AdditionalFiles Include="Core\Controls\Plot\PlotView.axaml" />
     </ItemGroup>
 

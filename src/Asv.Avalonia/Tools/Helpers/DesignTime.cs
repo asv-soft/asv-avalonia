@@ -3,7 +3,6 @@ using Asv.Cfg;
 using Asv.Modeling;
 using Avalonia.Controls;
 using Material.Icons;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using ObservableCollections;
@@ -13,6 +12,8 @@ namespace Asv.Avalonia;
 
 public static class DesignTime
 {
+    public const string EnvironmentName = "Design";
+
     static DesignTime()
     {
         ThrowIfNotDesignMode();

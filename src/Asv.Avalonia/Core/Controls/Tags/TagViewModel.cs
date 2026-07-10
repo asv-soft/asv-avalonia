@@ -28,9 +28,4 @@ public class TagViewModel(string id) : ViewModel(id)
         get;
         set => SetField(ref field, value);
     }
-
-    protected override void Dispose(bool disposing)
-    {
-        // do nothing
-    }
 }

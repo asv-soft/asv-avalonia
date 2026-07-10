@@ -55,7 +55,7 @@ public class FileSystemCache : TileCache
 
         DirectoryHelper.GetDirectorySize(_cacheDirectory, ref _fileCount, ref _dirSizeInBytes);
 
-        var meter = meterFactory.Create(GeoMapMixin.MetricName);
+        var meter = meterFactory.Create(GeoMapRegistrations.MetricName);
         _meterGet = meter.CreateCounter<int>("cache_file_get");
         _meterSet = meter.CreateCounter<int>("cache_file_set");
         meter.CreateObservableGauge("cache_file_count", () => _fileCount);
