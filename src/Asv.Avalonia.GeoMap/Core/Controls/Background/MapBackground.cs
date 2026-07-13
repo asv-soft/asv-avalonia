@@ -96,46 +96,49 @@ public partial class MapBackground : Control
 
         using (context.PushTransform(matrix))
         {
-            for (var x = startX; x < startX + tilesX; x++)
+            using (context.PushRenderOptions(new RenderOptions { EdgeMode = EdgeMode.Aliased }))
             {
-                if (x < 0 || x >= tilesCount)
+                for (var x = startX; x < startX + tilesX; x++)
                 {
-                    continue;
-                }
-
-                for (var y = startY; y < startY + tilesY; y++)
-                {
-                    if (y < 0 || y >= tilesCount)
+                    if (x < 0 || x >= tilesCount)
                     {
                         continue;
                     }
 
-                    var key = new TileKey(x, y, zoom, Provider);
-
-                    var px = (key.X * tileSize) + offset.X;
-                    var py = (key.Y * tileSize) + offset.Y;
-
-                    _tileLoader.Render(context, px, py, key);
-
-                    if (IsDebug)
+                    for (var y = startY; y < startY + tilesY; y++)
                     {
-                        context.DrawRectangle(
-                            Brushes.Transparent,
-                            new Pen(Brushes.Red),
-                            new Rect(px, py, tileSize, tileSize)
-                        );
+                        if (y < 0 || y >= tilesCount)
+                        {
+                            continue;
+                        }
 
-                        context.DrawText(
-                            new FormattedText(
-                                $"{x},{y}[{px:F0},{py:F0}]",
-                                CultureInfo.CurrentUICulture,
-                                FlowDirection.LeftToRight,
-                                Typeface.Default,
-                                12.0,
-                                Brushes.Violet
-                            ),
-                            new Point(px, py)
-                        );
+                        var key = new TileKey(x, y, zoom, Provider);
+
+                        var px = (key.X * tileSize) + offset.X;
+                        var py = (key.Y * tileSize) + offset.Y;
+
+                        _tileLoader.Render(context, px, py, key);
+
+                        if (IsDebug)
+                        {
+                            context.DrawRectangle(
+                                Brushes.Transparent,
+                                new Pen(Brushes.Red),
+                                new Rect(px, py, tileSize, tileSize)
+                            );
+
+                            context.DrawText(
+                                new FormattedText(
+                                    $"{x},{y}[{px:F0},{py:F0}]",
+                                    CultureInfo.CurrentUICulture,
+                                    FlowDirection.LeftToRight,
+                                    Typeface.Default,
+                                    12.0,
+                                    Brushes.Violet
+                                ),
+                                new Point(px, py)
+                            );
+                        }
                     }
                 }
             }
