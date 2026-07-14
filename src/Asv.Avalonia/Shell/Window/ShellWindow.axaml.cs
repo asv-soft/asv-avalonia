@@ -134,14 +134,16 @@ public partial class ShellWindow : Window
                 totalHeight += scr.Bounds.Height;
             }
 
-            if (config.PositionX > totalWidth || config.PositionY > totalHeight)
-            {
-                Position = new PixelPoint(0, 0);
-            }
-            else
-            {
-                Position = new PixelPoint(config.PositionX, config.PositionY);
-            }
+            var restoredBounds = new PixelRect(
+                config.PositionX,
+                config.PositionY,
+                (int)config.Width,
+                (int)config.Height
+            );
+
+            Position = Screens.All.Any(scr => scr.Bounds.Intersects(restoredBounds))
+                ? new PixelPoint(config.PositionX, config.PositionY)
+                : new PixelPoint(0, 0);
 
             if (config.Height > totalHeight || config.Width > totalWidth)
             {
@@ -176,7 +178,12 @@ public partial class ShellWindow : Window
 
     private ShellWindowConfig? SaveLayout()
     {
-        if (_internalChange || !IsValidSize(Width) || !IsValidSize(Height))
+        if (
+            _internalChange
+            || WindowState == WindowState.Minimized
+            || !IsValidSize(Width)
+            || !IsValidSize(Height)
+        )
         {
             return null;
         }
