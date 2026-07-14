@@ -4,6 +4,8 @@ namespace Asv.Avalonia.Test;
 
 public class ExceptionReportTest
 {
+    public static bool IsWindows => OperatingSystem.IsWindows();
+
     [Fact]
     public void WriteToFile_DefaultPrefix_CreatesExpectedCrashFileName()
     {
@@ -77,6 +79,40 @@ public class ExceptionReportTest
     }
 
     [Fact]
+    public void WriteToFile_DefaultPrefix_PreservesReportWhenCurrentCrashFileIsLocked()
+    {
+        // Arrange
+        var dir = CreateTempDirectory();
+        var lockedCrashFile = Path.Combine(dir, "#crash_0.log");
+
+        try
+        {
+            using var lockStream = new FileStream(
+                lockedCrashFile,
+                FileMode.Create,
+                FileAccess.ReadWrite,
+                FileShare.None
+            );
+
+            // Act
+            ExceptionReport.WriteToFile(dir, "new report");
+
+            // Assert
+            Assert.Contains(
+                Directory.EnumerateFiles(dir, "#crash_*.log"),
+                file => TryReadAllText(file) == "new report"
+            );
+        }
+        finally
+        {
+            Directory.Delete(dir, true);
+        }
+    }
+
+    [Fact(
+        Skip = "FileShare.None lock behavior is Windows-specific.",
+        SkipUnless = nameof(IsWindows)
+    )]
     public void WriteToFile_DefaultPrefix_FallsBackWhenCurrentCrashFileIsLocked()
     {
         // Arrange
@@ -102,7 +138,7 @@ public class ExceptionReportTest
                     !string.Equals(file, lockedCrashFile, StringComparison.OrdinalIgnoreCase)
                 )
                 .ToArray();
-            Assert.Contains(fallbackFiles, file => File.ReadAllText(file) == "new report");
+            Assert.Contains(fallbackFiles, file => TryReadAllText(file) == "new report");
         }
         finally
         {
@@ -115,5 +151,17 @@ public class ExceptionReportTest
         var dir = Path.Combine(Path.GetTempPath(), $"asv-avalonia-test-{Guid.NewGuid():N}");
         Directory.CreateDirectory(dir);
         return dir;
+    }
+
+    private static string? TryReadAllText(string path)
+    {
+        try
+        {
+            return File.ReadAllText(path);
+        }
+        catch (IOException)
+        {
+            return null;
+        }
     }
 }
