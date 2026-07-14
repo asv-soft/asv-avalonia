@@ -211,6 +211,15 @@ namespace Asv.Avalonia {
                 return ResourceManager.GetString("Capacity_UnitItem_Description", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Capacity.
+        /// </summary>
+        public static string Capacity_Name {
+            get {
+                return ResourceManager.GetString("Capacity_Name", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Temperature in celsius.
@@ -2741,6 +2750,213 @@ namespace Asv.Avalonia {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Data size in bytes.
+        /// </summary>
+        public static string Byte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Byte_DataSize_Description", resourceCulture);
+            }
+        }
+
+        public static string Byte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Byte_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string DataSize_Description {
+            get {
+                return ResourceManager.GetString("DataSize_Description", resourceCulture);
+            }
+        }
+
+        public static string DataSize_Name {
+            get {
+                return ResourceManager.GetString("DataSize_Name", resourceCulture);
+            }
+        }
+
+        public static string DataRate_Name {
+            get {
+                return ResourceManager.GetString("DataRate_Name", resourceCulture);
+            }
+        }
+
+        public static string DataRate_Description {
+            get {
+                return ResourceManager.GetString("DataRate_Description", resourceCulture);
+            }
+        }
+
+        public static string BytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("BytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string BytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("BytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+
+        public static string BytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("BytePerSecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+
+        public static string KilobytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("KilobytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string KilobytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("KilobytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+
+        public static string KilobytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("KilobytePerSecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+
+        public static string MegabytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("MegabytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string MegabytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("MegabytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+
+        public static string MegabytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("MegabytePerSecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+
+        public static string GigabytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("GigabytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string GigabytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("GigabytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+
+        public static string GigabytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("GigabytePerSecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+
+        public static string TerabytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("TerabytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string TerabytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("TerabytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+
+        public static string TerabytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("TerabytePerSecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+
+        public static string Gigabyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Gigabyte_DataSize_Description", resourceCulture);
+            }
+        }
+
+        public static string Gigabyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Gigabyte_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string Kilobyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Kilobyte_DataSize_Description", resourceCulture);
+            }
+        }
+
+        public static string Kilobyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Kilobyte_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string Megabyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Megabyte_DataSize_Description", resourceCulture);
+            }
+        }
+
+        public static string Megabyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Megabyte_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string Terabyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Terabyte_DataSize_Description", resourceCulture);
+            }
+        }
+
+        public static string Terabyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Terabyte_UnitItem_Name", resourceCulture);
+            }
+        }
+
+        public static string Unit_Byte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Byte_Abbreviation", resourceCulture);
+            }
+        }
+
+        public static string Unit_Gigabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Gigabyte_Abbreviation", resourceCulture);
+            }
+        }
+
+        public static string Unit_Kilobyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Kilobyte_Abbreviation", resourceCulture);
+            }
+        }
+
+        public static string Unit_Megabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Megabyte_Abbreviation", resourceCulture);
+            }
+        }
+
+        public static string Unit_Terabyte_Abbreviation {
+            get {
+                return ResourceManager.GetString("Unit_Terabyte_Abbreviation", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to Value is not a number.
         /// </summary>

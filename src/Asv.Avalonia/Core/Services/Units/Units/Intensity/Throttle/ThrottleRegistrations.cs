@@ -7,9 +7,9 @@ public static class ThrottleRegistrations
     )
     {
         builder
-            .AddUnit<ThrottleUnit>(ThrottleUnit.Id)
-            .AddItem<ThrottleNormalizedUnitItem>()
-            .AddItem<ThrottlePercentUnitItem>();
+            .RegisterUnit<ThrottleUnit>(ThrottleUnit.Id)
+            .RegisterItem<ThrottleNormalizedUnitItem>()
+            .RegisterItem<ThrottlePercentUnitItem>();
         return builder;
     }
 

@@ -7,10 +7,10 @@ public static class AngleRegistrations
     )
     {
         builder
-            .AddUnit<AngleUnit>(AngleUnit.Id)
-            .AddItem<AngleDegreeUnitItem>()
-            .AddItem<AngleDmsUnitItem>()
-            .AddItem<AngleMsUnitItem>();
+            .RegisterUnit<AngleUnit>(AngleUnit.Id)
+            .RegisterItem<AngleDegreeUnitItem>()
+            .RegisterItem<AngleDmsUnitItem>()
+            .RegisterItem<AngleMsUnitItem>();
         return builder;
     }
 

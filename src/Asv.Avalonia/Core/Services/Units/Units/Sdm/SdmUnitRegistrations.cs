@@ -7,9 +7,9 @@ public static class SdmUnitRegistrations
     )
     {
         builder
-            .AddUnit<SdmUnit>(SdmUnit.Id)
-            .AddItem<SdmPercentUnitItem>()
-            .AddItem<SdmNormalizedUnitItem>();
+            .RegisterUnit<SdmUnit>(SdmUnit.Id)
+            .RegisterItem<SdmPercentUnitItem>()
+            .RegisterItem<SdmNormalizedUnitItem>();
         return builder;
     }
 

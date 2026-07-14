@@ -7,9 +7,9 @@ public static class BearingRegistrations
     )
     {
         builder
-            .AddUnit<BearingUnit>(BearingUnit.Id)
-            .AddItem<BearingDegreeUnitItem>()
-            .AddItem<BearingDmUnitItem>();
+            .RegisterUnit<BearingUnit>(BearingUnit.Id)
+            .RegisterItem<BearingDegreeUnitItem>()
+            .RegisterItem<BearingDmUnitItem>();
         return builder;
     }
 

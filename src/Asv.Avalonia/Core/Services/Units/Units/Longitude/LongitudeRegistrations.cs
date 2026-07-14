@@ -7,9 +7,9 @@ public static class LongitudeRegistrations
     )
     {
         builder
-            .AddUnit<LongitudeUnit>(LongitudeUnit.Id)
-            .AddItem<LongitudeDmsUnitItem>()
-            .AddItem<LongitudeDegreeUnitItem>();
+            .RegisterUnit<LongitudeUnit>(LongitudeUnit.Id)
+            .RegisterItem<LongitudeDmsUnitItem>()
+            .RegisterItem<LongitudeDegreeUnitItem>();
         return builder;
     }
 

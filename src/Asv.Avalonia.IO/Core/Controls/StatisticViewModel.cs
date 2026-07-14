@@ -11,9 +11,11 @@ public class StatisticViewModel : ViewModel
     private readonly IncrementalRateCounter _txBytes;
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
+    private readonly IDataFormatter _dataSizeFormatter;
+    private readonly IDataFormatter _byteRateFormatter;
 
     public StatisticViewModel()
-        : this(DesignTime.Id.TypeId, TimeProvider.System)
+        : this(DesignTime.Id.TypeId, DesignTime.UnitService, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
         var stat = new Statistic();
@@ -37,9 +39,24 @@ public class StatisticViewModel : ViewModel
             });
     }
 
-    public StatisticViewModel(string typeId, TimeProvider timeProvider)
+    public StatisticViewModel(string typeId, IUnitService unitService, TimeProvider timeProvider)
+        : this(
+            typeId,
+            timeProvider,
+            unitService.CreateDataSizeFormatter(),
+            unitService.CreateByteRateFormatter()
+        ) { }
+
+    public StatisticViewModel(
+        string typeId,
+        TimeProvider timeProvider,
+        IDataFormatter dataSizeFormatter,
+        IDataFormatter byteRateFormatter
+    )
         : base(typeId)
     {
+        _dataSizeFormatter = dataSizeFormatter;
+        _byteRateFormatter = byteRateFormatter;
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
@@ -71,22 +88,22 @@ public class StatisticViewModel : ViewModel
 
     public void Update(IStatistic statistic)
     {
-        Rx = DataFormatter.DataSize.Print(statistic.RxBytes);
-        RxRate = DataFormatter.ByteRate.Print(_rxBytes.Calculate(statistic.RxBytes));
+        Rx = _dataSizeFormatter.Print(statistic.RxBytes);
+        RxRate = _byteRateFormatter.Print(_rxBytes.Calculate(statistic.RxBytes));
         RxMessages = statistic.RxMessages.ToString("N0");
         RxMessagesRate = _rxPackets.Calculate(statistic.RxMessages).ToString("N1");
         RxDropped = statistic.DroppedRxMessages.ToString("N0");
         RxErrors = statistic.RxError.ToString("N0");
 
-        Tx = DataFormatter.DataSize.Print(statistic.TxBytes);
-        TxRate = DataFormatter.ByteRate.Print(_txBytes.Calculate(statistic.TxBytes));
+        Tx = _dataSizeFormatter.Print(statistic.TxBytes);
+        TxRate = _byteRateFormatter.Print(_txBytes.Calculate(statistic.TxBytes));
         TxMessages = statistic.TxMessages.ToString("N0");
         TxMessagesRate = _txPackets.Calculate(statistic.TxMessages).ToString("N1");
         TxDropped = statistic.DroppedTxMessages.ToString("N0");
         TxErrors = statistic.TxError.ToString("N0");
 
         BadCrcError = statistic.BadCrcError.ToString("N0");
-        ParsedBytes = DataFormatter.DataSize.Print(statistic.ParsedBytes);
+        ParsedBytes = _dataSizeFormatter.Print(statistic.ParsedBytes);
         ParsedPackets = statistic.ParsedMessages.ToString("N0");
         MessagePublishError = statistic.MessagePublishError.ToString("N0");
         DeserializeError = statistic.DeserializeError.ToString("N0");

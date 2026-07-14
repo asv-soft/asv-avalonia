@@ -7,11 +7,11 @@ public static class DdmGpRegistrations
     )
     {
         builder
-            .AddUnit<DdmGpUnit>(DdmGpUnit.Id)
-            .AddItem<DdmGpNormalizedUnitItem>()
-            .AddItem<DdmGpMicroAmpRuUnitItem>()
-            .AddItem<DdmGpMicroAmpUnitItem>()
-            .AddItem<DdmGpPercentUnitItem>();
+            .RegisterUnit<DdmGpUnit>(DdmGpUnit.Id)
+            .RegisterItem<DdmGpNormalizedUnitItem>()
+            .RegisterItem<DdmGpMicroAmpRuUnitItem>()
+            .RegisterItem<DdmGpMicroAmpUnitItem>()
+            .RegisterItem<DdmGpPercentUnitItem>();
         return builder;
     }
 

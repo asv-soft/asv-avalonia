@@ -7,9 +7,9 @@ public static class AmperageRegistrations
     )
     {
         builder
-            .AddUnit<AmperageUnit>(AmperageUnit.Id)
-            .AddItem<AmperageAmpereUnitItem>()
-            .AddItem<AmperageMilliAmpereUnitItem>();
+            .RegisterUnit<AmperageUnit>(AmperageUnit.Id)
+            .RegisterItem<AmperageAmpereUnitItem>()
+            .RegisterItem<AmperageMilliAmpereUnitItem>();
         return builder;
     }
 

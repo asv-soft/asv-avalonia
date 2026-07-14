@@ -7,8 +7,8 @@ public static class CapacityRegistrations
     )
     {
         builder
-            .AddUnit<CapacityUnit>(CapacityUnit.Id)
-            .AddItem<CapacityMilliAmperePerHourUnitItem>();
+            .RegisterUnit<CapacityUnit>(CapacityUnit.Id)
+            .RegisterItem<CapacityMilliAmperePerHourUnitItem>();
         return builder;
     }
 

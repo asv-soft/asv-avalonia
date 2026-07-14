@@ -7,8 +7,8 @@ public static class FieldStrengthRegistrations
     )
     {
         builder
-            .AddUnit<FieldStrengthUnit>(FieldStrengthUnit.Id)
-            .AddItem<FieldStrengthMicroVoltsPerMeterUnitItem>();
+            .RegisterUnit<FieldStrengthUnit>(FieldStrengthUnit.Id)
+            .RegisterItem<FieldStrengthMicroVoltsPerMeterUnitItem>();
         return builder;
     }
 

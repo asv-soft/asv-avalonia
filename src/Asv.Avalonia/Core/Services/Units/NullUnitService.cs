@@ -39,6 +39,26 @@ public class NullUnitService : IUnitService
         DesignTime.Configuration,
         [new DistanceMeterUnitItem(), new DistanceNauticalMileUnitItem()]
     );
+    private readonly IUnit _dataSize = new DataSizeUnit(
+        DesignTime.Configuration,
+        [
+            new DataSizeByteUnitItem(),
+            new DataSizeKilobyteUnitItem(),
+            new DataSizeMegabyteUnitItem(),
+            new DataSizeGigabyteUnitItem(),
+            new DataSizeTerabyteUnitItem(),
+        ]
+    );
+    private readonly IUnit _dataRate = new DataRateUnit(
+        DesignTime.Configuration,
+        [
+            new DataRateBytePerSecondUnitItem(),
+            new DataRateKilobytePerSecondUnitItem(),
+            new DataRateMegabytePerSecondUnitItem(),
+            new DataRateGigabytePerSecondUnitItem(),
+            new DataRateTerabytePerSecondUnitItem(),
+        ]
+    );
 
     private readonly Dictionary<string, IUnit> _units;
 
@@ -51,6 +71,8 @@ public class NullUnitService : IUnitService
             new(_angle.UnitId, _angle),
             new(_frequency.UnitId, _frequency),
             new(_meter.UnitId, _meter),
+            new(_dataSize.UnitId, _dataSize),
+            new(_dataRate.UnitId, _dataRate),
         ]);
     }
 

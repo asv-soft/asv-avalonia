@@ -7,9 +7,9 @@ public static class VoltageRegistrations
     )
     {
         builder
-            .AddUnit<VoltageUnit>(VoltageUnit.Id)
-            .AddItem<VoltageMilliVoltUnitItem>()
-            .AddItem<VoltageVoltUnitItem>();
+            .RegisterUnit<VoltageUnit>(VoltageUnit.Id)
+            .RegisterItem<VoltageMilliVoltUnitItem>()
+            .RegisterItem<VoltageVoltUnitItem>();
         return builder;
     }
 

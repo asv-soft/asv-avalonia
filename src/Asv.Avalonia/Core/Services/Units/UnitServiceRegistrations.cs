@@ -43,7 +43,7 @@ public static class UnitServiceRegistrations
 
         public IHostApplicationBuilder AppBuilder => _builder.AppBuilder;
 
-        public ItemBuilder AddUnit<
+        public ItemBuilder RegisterUnit<
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TUnit
         >(string unitId)
             where TUnit : class, IUnit
@@ -62,6 +62,8 @@ public static class UnitServiceRegistrations
                 .RegisterCapacity()
                 .RegisterDdmGp()
                 .RegisterDdmLlz()
+                .RegisterDataRate()
+                .RegisterDataSize()
                 .RegisterDistance()
                 .RegisterFieldStrength()
                 .RegisterFrequency()
@@ -90,7 +92,7 @@ public static class UnitServiceRegistrations
             _itemId = itemId;
         }
 
-        public ItemBuilder AddItem<
+        public ItemBuilder RegisterItem<
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
                 TUnitItem
         >()

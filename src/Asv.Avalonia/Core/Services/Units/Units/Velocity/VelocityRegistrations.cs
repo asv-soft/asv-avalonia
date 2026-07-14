@@ -7,10 +7,10 @@ public static class VelocityRegistrations
     )
     {
         builder
-            .AddUnit<VelocityUnit>(VelocityUnit.Id)
-            .AddItem<VelocityMetersPerSecondUnitItem>()
-            .AddItem<VelocityKilometersPerHourUnitItem>()
-            .AddItem<VelocityMilesPerHourUnitItem>();
+            .RegisterUnit<VelocityUnit>(VelocityUnit.Id)
+            .RegisterItem<VelocityMetersPerSecondUnitItem>()
+            .RegisterItem<VelocityKilometersPerHourUnitItem>()
+            .RegisterItem<VelocityMilesPerHourUnitItem>();
         return builder;
     }
 

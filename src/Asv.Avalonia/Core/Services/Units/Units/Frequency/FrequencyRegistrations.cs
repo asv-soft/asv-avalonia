@@ -7,11 +7,11 @@ public static class FrequencyRegistrations
     )
     {
         builder
-            .AddUnit<FrequencyUnit>(FrequencyUnit.Id)
-            .AddItem<FrequencyGigahertzUnitItem>()
-            .AddItem<FrequencyMegahertzUnitItem>()
-            .AddItem<FrequencyKilohertzUnitItem>()
-            .AddItem<FrequencyHertzUnitItem>();
+            .RegisterUnit<FrequencyUnit>(FrequencyUnit.Id)
+            .RegisterItem<FrequencyGigahertzUnitItem>()
+            .RegisterItem<FrequencyMegahertzUnitItem>()
+            .RegisterItem<FrequencyKilohertzUnitItem>()
+            .RegisterItem<FrequencyHertzUnitItem>();
         return builder;
     }
 
