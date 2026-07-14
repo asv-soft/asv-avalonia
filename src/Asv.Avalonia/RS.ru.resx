@@ -516,6 +516,93 @@
     <data name="LanguageProperty_RestartDialog_Message" xml:space="preserve">
         <value>Чтобы изменения вступили в силу, требуется перезапустить приложение</value>
     </data>
+    <data name="DataSize_Name" xml:space="preserve">
+        <value>Размер данных</value>
+    </data>
+    <data name="DataSize_Description" xml:space="preserve">
+        <value>Единица измерения размера данных</value>
+    </data>
+    <data name="DataRate_Name" xml:space="preserve">
+        <value>Скорость передачи данных</value>
+    </data>
+    <data name="DataRate_Description" xml:space="preserve">
+        <value>Единица измерения скорости передачи данных</value>
+    </data>
+    <data name="BytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Байт в секунду</value>
+    </data>
+    <data name="BytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Скорость передачи данных в байтах в секунду</value>
+    </data>
+    <data name="BytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>Б/с</value>
+    </data>
+    <data name="KilobytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Килобайт в секунду</value>
+    </data>
+    <data name="KilobytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Скорость передачи данных в килобайтах в секунду</value>
+    </data>
+    <data name="KilobytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>кБ/с</value>
+    </data>
+    <data name="MegabytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Мегабайт в секунду</value>
+    </data>
+    <data name="MegabytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Скорость передачи данных в мегабайтах в секунду</value>
+    </data>
+    <data name="MegabytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>МБ/с</value>
+    </data>
+    <data name="GigabytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Гигабайт в секунду</value>
+    </data>
+    <data name="GigabytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Скорость передачи данных в гигабайтах в секунду</value>
+    </data>
+    <data name="GigabytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>ГБ/с</value>
+    </data>
+    <data name="TerabytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Терабайт в секунду</value>
+    </data>
+    <data name="TerabytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Скорость передачи данных в терабайтах в секунду</value>
+    </data>
+    <data name="TerabytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>ТБ/с</value>
+    </data>
+    <data name="Byte_UnitItem_Name" xml:space="preserve">
+        <value>Байт</value>
+    </data>
+    <data name="Byte_DataSize_Description" xml:space="preserve">
+        <value>Размер данных в байтах</value>
+    </data>
+    <data name="Kilobyte_UnitItem_Name" xml:space="preserve">
+        <value>Килобайт</value>
+    </data>
+    <data name="Kilobyte_DataSize_Description" xml:space="preserve">
+        <value>Размер данных в килобайтах</value>
+    </data>
+    <data name="Megabyte_UnitItem_Name" xml:space="preserve">
+        <value>Мегабайт</value>
+    </data>
+    <data name="Megabyte_DataSize_Description" xml:space="preserve">
+        <value>Размер данных в мегабайтах</value>
+    </data>
+    <data name="Gigabyte_UnitItem_Name" xml:space="preserve">
+        <value>Гигабайт</value>
+    </data>
+    <data name="Gigabyte_DataSize_Description" xml:space="preserve">
+        <value>Размер данных в гигабайтах</value>
+    </data>
+    <data name="Terabyte_UnitItem_Name" xml:space="preserve">
+        <value>Терабайт</value>
+    </data>
+    <data name="Terabyte_DataSize_Description" xml:space="preserve">
+        <value>Размер данных в терабайтах</value>
+    </data>
     <data name="Unit_Terabyte_Abbreviation" xml:space="preserve">
         <value>ТБ</value>
     </data>
@@ -563,6 +650,9 @@
     </data>
     <data name="Capacity_UnitItem_Description" xml:space="preserve">
         <value>Ёмкость батареи</value>
+    </data>
+    <data name="Capacity_Name" xml:space="preserve">
+        <value>Ёмкость</value>
     </data>
     <data name="ChangeBoolPropertyCommand_CommandInfo_Name" xml:space="preserve">
         <value>Измнить свойство типа бул</value>

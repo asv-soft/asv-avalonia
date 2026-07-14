@@ -66,7 +66,9 @@ public class AsvHostApplicationBuilderTest
                 )
         );
         Assert.NotNull(host.Services.GetRequiredService<IDialogService>());
-        Assert.NotEmpty(host.Services.GetRequiredService<IUnitService>().Units);
+        var unitService = host.Services.GetRequiredService<IUnitService>();
+        Assert.NotEmpty(unitService.Units);
+        Assert.NotNull(unitService[DataRateUnit.Id]);
     }
 
     [Fact]

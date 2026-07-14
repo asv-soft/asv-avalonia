@@ -23,6 +23,8 @@ public class ConnectionRateStatusViewModel : StatusItem
     private readonly IncrementalRateCounter _txBytes;
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
+    private readonly IDataFormatter _dataSizeFormatter;
+    private readonly IDataFormatter _byteRateFormatter;
 
     public ConnectionRateStatusViewModel()
         : this(DesignTime.UnitService, NullLoggerFactory.Instance, TimeProvider.System)
@@ -78,6 +80,8 @@ public class ConnectionRateStatusViewModel : StatusItem
         _frequencyUnit =
             unitService.Units[FrequencyUnit.Id]
             ?? throw new UnitException($"Unit {FrequencyUnit.Id} was not found");
+        _dataSizeFormatter = unitService.CreateDataSizeFormatter();
+        _byteRateFormatter = unitService.CreateByteRateFormatter();
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
@@ -88,7 +92,15 @@ public class ConnectionRateStatusViewModel : StatusItem
     [field: MaybeNull]
     public StatisticViewModel FullStatistic
     {
-        get { return field ??= new StatisticViewModel($"{TypeId}-statistic", _timeProvider); }
+        get
+        {
+            return field ??= new StatisticViewModel(
+                $"{TypeId}-statistic",
+                _timeProvider,
+                _dataSizeFormatter,
+                _byteRateFormatter
+            );
+        }
     }
 
     public override int Order => 256;
@@ -129,8 +141,8 @@ public class ConnectionRateStatusViewModel : StatusItem
 
     private void UpdateStatistic(IStatistic stat)
     {
-        var rxBytes = DataFormatter.ByteRate.Print(_rxBytes.Calculate(stat.RxBytes));
-        var txBytes = DataFormatter.ByteRate.Print(_txBytes.Calculate(stat.TxBytes));
+        var rxBytes = _byteRateFormatter.Print(_rxBytes.Calculate(stat.RxBytes));
+        var txBytes = _byteRateFormatter.Print(_txBytes.Calculate(stat.TxBytes));
         var rxPackets = _rxPackets.Calculate(stat.RxMessages).ToString("F1");
         var txPackets = _txPackets.Calculate(stat.TxMessages).ToString("F1");
         var gzUnitSymbol = _frequencyUnit.AvailableUnits[FrequencyHertzUnitItem.Id].Symbol;

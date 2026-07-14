@@ -7,10 +7,10 @@ public static class TemperatureRegistrations
     )
     {
         builder
-            .AddUnit<TemperatureUnit>(TemperatureUnit.Id)
-            .AddItem<TemperatureCelsiusUnitItem>()
-            .AddItem<TemperatureFahrenheitUnitItem>()
-            .AddItem<TemperatureKelvinUnitItem>();
+            .RegisterUnit<TemperatureUnit>(TemperatureUnit.Id)
+            .RegisterItem<TemperatureCelsiusUnitItem>()
+            .RegisterItem<TemperatureFahrenheitUnitItem>()
+            .RegisterItem<TemperatureKelvinUnitItem>();
         return builder;
     }
 

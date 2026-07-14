@@ -7,11 +7,11 @@ public static class DdmLlzRegistrations
     )
     {
         builder
-            .AddUnit<DdmLlzUnit>(DdmLlzUnit.Id)
-            .AddItem<DdmLlzNormalizedUnitItem>()
-            .AddItem<DdmLlzMicroAmpRuUnitItem>()
-            .AddItem<DdmLlzMicroAmpUnitItem>()
-            .AddItem<DdmLlzPercentUnitItem>();
+            .RegisterUnit<DdmLlzUnit>(DdmLlzUnit.Id)
+            .RegisterItem<DdmLlzNormalizedUnitItem>()
+            .RegisterItem<DdmLlzMicroAmpRuUnitItem>()
+            .RegisterItem<DdmLlzMicroAmpUnitItem>()
+            .RegisterItem<DdmLlzPercentUnitItem>();
         return builder;
     }
 

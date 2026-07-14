@@ -7,9 +7,9 @@ public static class AltitudeRegistrations
     )
     {
         builder
-            .AddUnit<AltitudeUnit>(AltitudeUnit.Id)
-            .AddItem<AltitudeMeterUnitItem>()
-            .AddItem<AltitudeFeetUnitItem>();
+            .RegisterUnit<AltitudeUnit>(AltitudeUnit.Id)
+            .RegisterItem<AltitudeMeterUnitItem>()
+            .RegisterItem<AltitudeFeetUnitItem>();
         return builder;
     }
 

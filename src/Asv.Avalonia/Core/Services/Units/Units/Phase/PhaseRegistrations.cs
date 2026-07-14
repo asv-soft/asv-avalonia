@@ -7,9 +7,9 @@ public static class PhaseRegistrations
     )
     {
         builder
-            .AddUnit<PhaseUnit>(PhaseUnit.Id)
-            .AddItem<PhaseDegreeUnitItem>()
-            .AddItem<PhaseRadianUnitItem>();
+            .RegisterUnit<PhaseUnit>(PhaseUnit.Id)
+            .RegisterItem<PhaseDegreeUnitItem>()
+            .RegisterItem<PhaseRadianUnitItem>();
         return builder;
     }
 

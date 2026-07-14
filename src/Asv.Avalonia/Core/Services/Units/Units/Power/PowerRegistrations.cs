@@ -6,7 +6,7 @@ public static class PowerRegistrations
         this UnitServiceRegistrations.Builder builder
     )
     {
-        builder.AddUnit<PowerUnit>(PowerUnit.Id).AddItem<PowerDbmUnitItem>();
+        builder.RegisterUnit<PowerUnit>(PowerUnit.Id).RegisterItem<PowerDbmUnitItem>();
         return builder;
     }
 

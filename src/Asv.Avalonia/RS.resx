@@ -503,6 +503,108 @@
     <data name="LanguageProperty_RestartDialog_Message" xml:space="preserve">
         <value>For the changes to take effect, you need to restart the application</value>
     </data>
+    <data name="DataSize_Name" xml:space="preserve">
+        <value>Data size</value>
+    </data>
+    <data name="DataSize_Description" xml:space="preserve">
+        <value>Data size unit</value>
+    </data>
+    <data name="DataRate_Name" xml:space="preserve">
+        <value>Data rate</value>
+    </data>
+    <data name="DataRate_Description" xml:space="preserve">
+        <value>Data transfer rate unit</value>
+    </data>
+    <data name="BytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Byte per second</value>
+    </data>
+    <data name="BytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Data rate in bytes per second</value>
+    </data>
+    <data name="BytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>B/s</value>
+    </data>
+    <data name="KilobytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Kilobyte per second</value>
+    </data>
+    <data name="KilobytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Data rate in kilobytes per second</value>
+    </data>
+    <data name="KilobytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>kB/s</value>
+    </data>
+    <data name="MegabytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Megabyte per second</value>
+    </data>
+    <data name="MegabytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Data rate in megabytes per second</value>
+    </data>
+    <data name="MegabytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>MB/s</value>
+    </data>
+    <data name="GigabytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Gigabyte per second</value>
+    </data>
+    <data name="GigabytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Data rate in gigabytes per second</value>
+    </data>
+    <data name="GigabytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>GB/s</value>
+    </data>
+    <data name="TerabytePerSecond_UnitItem_Name" xml:space="preserve">
+        <value>Terabyte per second</value>
+    </data>
+    <data name="TerabytePerSecond_DataRate_Description" xml:space="preserve">
+        <value>Data rate in terabytes per second</value>
+    </data>
+    <data name="TerabytePerSecond_UnitItem_Symbol" xml:space="preserve">
+        <value>TB/s</value>
+    </data>
+    <data name="Byte_UnitItem_Name" xml:space="preserve">
+        <value>Byte</value>
+    </data>
+    <data name="Byte_DataSize_Description" xml:space="preserve">
+        <value>Data size in bytes</value>
+    </data>
+    <data name="Kilobyte_UnitItem_Name" xml:space="preserve">
+        <value>Kilobyte</value>
+    </data>
+    <data name="Kilobyte_DataSize_Description" xml:space="preserve">
+        <value>Data size in kilobytes</value>
+    </data>
+    <data name="Megabyte_UnitItem_Name" xml:space="preserve">
+        <value>Megabyte</value>
+    </data>
+    <data name="Megabyte_DataSize_Description" xml:space="preserve">
+        <value>Data size in megabytes</value>
+    </data>
+    <data name="Gigabyte_UnitItem_Name" xml:space="preserve">
+        <value>Gigabyte</value>
+    </data>
+    <data name="Gigabyte_DataSize_Description" xml:space="preserve">
+        <value>Data size in gigabytes</value>
+    </data>
+    <data name="Terabyte_UnitItem_Name" xml:space="preserve">
+        <value>Terabyte</value>
+    </data>
+    <data name="Terabyte_DataSize_Description" xml:space="preserve">
+        <value>Data size in terabytes</value>
+    </data>
+    <data name="Unit_Byte_Abbreviation" xml:space="preserve">
+        <value>B</value>
+    </data>
+    <data name="Unit_Kilobyte_Abbreviation" xml:space="preserve">
+        <value>KB</value>
+    </data>
+    <data name="Unit_Megabyte_Abbreviation" xml:space="preserve">
+        <value>MB</value>
+    </data>
+    <data name="Unit_Gigabyte_Abbreviation" xml:space="preserve">
+        <value>GB</value>
+    </data>
+    <data name="Unit_Terabyte_Abbreviation" xml:space="preserve">
+        <value>TB</value>
+    </data>
     <data name="ChangeStringPropertyCommand_CommandInfo_Name" xml:space="preserve">
         <value>Change string property</value>
     </data>
@@ -529,6 +631,9 @@
     </data>
     <data name="Capacity_UnitItem_Description" xml:space="preserve">
         <value>Capacity of battery</value>
+    </data>
+    <data name="Capacity_Name" xml:space="preserve">
+        <value>Capacity</value>
     </data>
     <data name="Mah_UnitItem_Symbol" xml:space="preserve">
         <value>mAh</value>

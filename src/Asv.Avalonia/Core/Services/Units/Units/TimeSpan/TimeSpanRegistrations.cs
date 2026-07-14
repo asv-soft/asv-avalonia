@@ -7,14 +7,14 @@ public static class TimeSpanRegistrations
     )
     {
         builder
-            .AddUnit<TimeSpanUnit>(TimeSpanUnit.Id)
-            .AddItem<TimeSpanMillisecondUnitItem>()
-            .AddItem<TimeSpanMinuteSecondUnitItem>()
-            .AddItem<TimeSpanHourMinuteUnitItem>()
-            .AddItem<TimeSpanMinuteUnitItem>()
-            .AddItem<TimeSpanHourMinuteSecondUnitItem>()
-            .AddItem<TimeSpanHourUnitItem>()
-            .AddItem<TimeSpanSecondUnitItem>();
+            .RegisterUnit<TimeSpanUnit>(TimeSpanUnit.Id)
+            .RegisterItem<TimeSpanMillisecondUnitItem>()
+            .RegisterItem<TimeSpanMinuteSecondUnitItem>()
+            .RegisterItem<TimeSpanHourMinuteUnitItem>()
+            .RegisterItem<TimeSpanMinuteUnitItem>()
+            .RegisterItem<TimeSpanHourMinuteSecondUnitItem>()
+            .RegisterItem<TimeSpanHourUnitItem>()
+            .RegisterItem<TimeSpanSecondUnitItem>();
         return builder;
     }
 

@@ -11,9 +11,11 @@ public class MapStatusViewModel : StatusItem
 
     private readonly IncrementalRateCounter _downloadBytes;
     private readonly IncrementalRateCounter _downloadTiles;
+    private readonly IDataFormatter _dataSizeFormatter;
+    private readonly IDataFormatter _byteRateFormatter;
 
     public MapStatusViewModel()
-        : this(TimeProvider.System)
+        : this(DesignTime.UnitService, TimeProvider.System)
     {
         DesignTime.ThrowIfNotDesignMode();
 
@@ -57,9 +59,10 @@ public class MapStatusViewModel : StatusItem
         ITileLoader tileLoader,
         [FromKeyedServices(TileLoader.FastTileCacheContract)] ITileCache fastCache,
         [FromKeyedServices(TileLoader.SlowTileCacheContract)] ITileCache slowCache,
+        IUnitService unitService,
         TimeProvider timeProvider
     )
-        : this(timeProvider)
+        : this(unitService, timeProvider)
     {
         Observable
             .Timer(TimeSpan.Zero, TimeSpan.FromSeconds(1))
@@ -82,9 +85,11 @@ public class MapStatusViewModel : StatusItem
             .DisposeItWith(Disposable);
     }
 
-    private MapStatusViewModel(TimeProvider timeProvider)
+    private MapStatusViewModel(IUnitService unitService, TimeProvider timeProvider)
         : base(TypeId, default)
     {
+        _dataSizeFormatter = unitService.CreateDataSizeFormatter();
+        _byteRateFormatter = unitService.CreateByteRateFormatter();
         _downloadBytes = new IncrementalRateCounter(5, timeProvider);
         _downloadTiles = new IncrementalRateCounter(5, timeProvider);
         UpdateStatistic(
@@ -253,7 +258,7 @@ public class MapStatusViewModel : StatusItem
         var bytesRate = _downloadBytes.Calculate(loader.DownloadedBytes);
         var tilesRate = _downloadTiles.Calculate(loader.DownloadedTiles);
 
-        NetworkRateText = DataFormatter.ByteRate.Print(bytesRate);
+        NetworkRateText = _byteRateFormatter.Print(bytesRate);
         QueueSizeText = $"{loader.QueuedRequests:N0}/{loader.RequestQueueCapacity:N0}";
 
         MapModeText = FormatMapMode(loader.MapMode);
@@ -264,7 +269,7 @@ public class MapStatusViewModel : StatusItem
         QueuedRequestsTotalText = loader.QueuedRequestsTotal.ToString("N0");
         NetworkRequestsText = loader.NetworkRequests.ToString("N0");
         NetworkDownloadedTilesText = $"{loader.DownloadedTiles:N0} ({tilesRate:F1}/s)";
-        NetworkDownloadedSizeText = DataFormatter.DataSize.Print(loader.DownloadedBytes);
+        NetworkDownloadedSizeText = _dataSizeFormatter.Print(loader.DownloadedBytes);
         FailedDownloadsText = loader.FailedDownloads.ToString("N0");
 
         MemoryCacheSizeText = FormatSizeWithCapacity(fastCache.Size, fastCache.CapacitySize);
@@ -272,16 +277,16 @@ public class MapStatusViewModel : StatusItem
         MemoryCacheHitsText = fastCache.Hits.ToString("N0");
         MemoryCacheMissesText = fastCache.Misses.ToString("N0");
 
-        MapFolderSizeText = DataFormatter.DataSize.Print(slowCache.Size);
-        MapFolderCapacityText = DataFormatter.DataSize.Print(slowCache.CapacitySize);
+        MapFolderSizeText = _dataSizeFormatter.Print(slowCache.Size);
+        MapFolderCapacityText = _dataSizeFormatter.Print(slowCache.CapacitySize);
         DownloadedTilesText = slowCache.TileCount.ToString("N0");
         FileCacheHitsText = slowCache.Hits.ToString("N0");
         FileCacheMissesText = slowCache.Misses.ToString("N0");
     }
 
-    private static string FormatSizeWithCapacity(long size, long capacity)
+    private string FormatSizeWithCapacity(long size, long capacity)
     {
-        return $"{DataFormatter.DataSize.Print(size)} / {DataFormatter.DataSize.Print(capacity)}";
+        return $"{_dataSizeFormatter.Print(size)} / {_dataSizeFormatter.Print(capacity)}";
     }
 
     private static string FormatMapMode(MapModeType mode)

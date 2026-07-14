@@ -7,9 +7,9 @@ public static class DistanceRegistrations
     )
     {
         builder
-            .AddUnit<DistanceUnit>(DistanceUnit.Id)
-            .AddItem<DistanceMeterUnitItem>()
-            .AddItem<DistanceNauticalMileUnitItem>();
+            .RegisterUnit<DistanceUnit>(DistanceUnit.Id)
+            .RegisterItem<DistanceMeterUnitItem>()
+            .RegisterItem<DistanceNauticalMileUnitItem>();
         return builder;
     }
 

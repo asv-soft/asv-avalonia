@@ -22,6 +22,7 @@ public class PortViewModel : ViewModel, IPortViewModel
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
     private readonly IUnit _frequencyUnit;
+    private readonly IDataFormatter _byteRateFormatter;
 
     private const int MaxPortNameLength = 50;
 
@@ -95,6 +96,7 @@ public class PortViewModel : ViewModel, IPortViewModel
         _frequencyUnit =
             unitService.Units[FrequencyUnit.Id]
             ?? throw new UnitException($"Unit {FrequencyUnit.Id} was not found");
+        _byteRateFormatter = unitService.CreateByteRateFormatter();
         _rxBytes = new IncrementalRateCounter(5, timeProvider);
         _txBytes = new IncrementalRateCounter(5, timeProvider);
         _rxPackets = new IncrementalRateCounter(5, timeProvider);
@@ -133,7 +135,7 @@ public class PortViewModel : ViewModel, IPortViewModel
             {
                 Icon = null,
                 Color = AsvColorKind.Success,
-                Value = DataFormatter.ByteRate.Print(double.NaN),
+                Value = _byteRateFormatter.Print(double.NaN),
             }
         );
         TagsSource.Add(
@@ -141,7 +143,7 @@ public class PortViewModel : ViewModel, IPortViewModel
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 Color = AsvColorKind.Success,
-                Value = DataFormatter.ByteRate.Print(double.NaN),
+                Value = _byteRateFormatter.Print(double.NaN),
             }
         );
         TagsSource.Add(
@@ -149,7 +151,7 @@ public class PortViewModel : ViewModel, IPortViewModel
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 Color = AsvColorKind.Success,
-                Value = DataFormatter.ByteRate.Print(double.NaN),
+                Value = _byteRateFormatter.Print(double.NaN),
             }
         );
     }
@@ -296,12 +298,8 @@ public class PortViewModel : ViewModel, IPortViewModel
 
     private void UpdateStatistic(Unit unit)
     {
-        var rxBytes = DataFormatter.ByteRate.Print(
-            _rxBytes.Calculate(Port?.Statistic.RxBytes ?? 0)
-        );
-        var txBytes = DataFormatter.ByteRate.Print(
-            _txBytes.Calculate(Port?.Statistic.TxBytes ?? 0)
-        );
+        var rxBytes = _byteRateFormatter.Print(_rxBytes.Calculate(Port?.Statistic.RxBytes ?? 0));
+        var txBytes = _byteRateFormatter.Print(_txBytes.Calculate(Port?.Statistic.TxBytes ?? 0));
         var rxPackets = _rxPackets.Calculate(Port?.Statistic.RxMessages ?? 0).ToString("F1");
         var txPackets = _txPackets.Calculate(Port?.Statistic.TxMessages ?? 0).ToString("F1");
         var gzUnitSymbol = _frequencyUnit.AvailableUnits[FrequencyHertzUnitItem.Id].Symbol;

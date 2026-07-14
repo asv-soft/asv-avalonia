@@ -17,7 +17,7 @@ public sealed class CapacityUnit(
     public const string Id = "capacity";
 
     public override MaterialIconKind Icon => MaterialIconKind.Battery;
-    public override string Name => RS.Mah_UnitItem_Name;
+    public override string Name => RS.Capacity_Name;
     public override string Description => RS.Capacity_UnitItem_Description;
     public override string UnitId => Id;
 }

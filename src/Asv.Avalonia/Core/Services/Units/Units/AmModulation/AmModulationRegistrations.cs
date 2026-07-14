@@ -7,9 +7,9 @@ public static class AmModulationRegistrations
     )
     {
         builder
-            .AddUnit<AmModulationUnit>(AmModulationUnit.Id)
-            .AddItem<AmModulationNormalizedUnitItem>()
-            .AddItem<AmModulationPercentUnitItem>();
+            .RegisterUnit<AmModulationUnit>(AmModulationUnit.Id)
+            .RegisterItem<AmModulationNormalizedUnitItem>()
+            .RegisterItem<AmModulationPercentUnitItem>();
         return builder;
     }
 

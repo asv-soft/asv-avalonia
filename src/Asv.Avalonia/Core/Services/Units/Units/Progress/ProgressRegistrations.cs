@@ -7,9 +7,9 @@ public static class ProgressRegistrations
     )
     {
         builder
-            .AddUnit<ProgressUnit>(ProgressUnit.Id)
-            .AddItem<ProgressPercentUnitItem>()
-            .AddItem<ProgressNormalizedUnitItem>();
+            .RegisterUnit<ProgressUnit>(ProgressUnit.Id)
+            .RegisterItem<ProgressPercentUnitItem>()
+            .RegisterItem<ProgressNormalizedUnitItem>();
         return builder;
     }
 

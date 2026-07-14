@@ -14,6 +14,7 @@ public class EndpointViewModel : HeadlinedViewModel
     private readonly IncrementalRateCounter _txBytes;
     private readonly IncrementalRateCounter _rxPackets;
     private readonly IncrementalRateCounter _txPackets;
+    private readonly IDataFormatter _byteRateFormatter;
 
     private readonly IUnit _frequencyUnit;
 
@@ -27,6 +28,7 @@ public class EndpointViewModel : HeadlinedViewModel
         _frequencyUnit =
             unitService.Units[FrequencyUnit.Id]
             ?? throw new UnitException($"Unit {FrequencyUnit.Id} was not found");
+        _byteRateFormatter = unitService.CreateByteRateFormatter();
         Icon = MaterialIconKind.SwapVertical;
         TagsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         TagsView = TagsSource
@@ -37,7 +39,7 @@ public class EndpointViewModel : HeadlinedViewModel
             {
                 Icon = MaterialIconKind.ArrowDownBold,
                 Color = AsvColorKind.Success,
-                Value = DataFormatter.ByteRate.Print(double.NaN),
+                Value = _byteRateFormatter.Print(double.NaN),
             }
         );
         TagsSource.Add(
@@ -45,7 +47,7 @@ public class EndpointViewModel : HeadlinedViewModel
             {
                 Icon = MaterialIconKind.ArrowUpBold,
                 Color = AsvColorKind.Success,
-                Value = DataFormatter.ByteRate.Print(double.NaN),
+                Value = _byteRateFormatter.Print(double.NaN),
             }
         );
     }
@@ -71,10 +73,10 @@ public class EndpointViewModel : HeadlinedViewModel
 
     public void UpdateStatistic()
     {
-        var rxBytes = DataFormatter.ByteRate.Print(
+        var rxBytes = _byteRateFormatter.Print(
             _rxBytes.Calculate(_protocolEndpoint?.Statistic.RxBytes ?? 0)
         );
-        var txBytes = DataFormatter.ByteRate.Print(
+        var txBytes = _byteRateFormatter.Print(
             _txBytes.Calculate(_protocolEndpoint?.Statistic.TxBytes ?? 0)
         );
         var rxPackets = _rxPackets
