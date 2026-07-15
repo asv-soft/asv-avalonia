@@ -6,6 +6,9 @@ using ArgumentException = System.ArgumentException;
 
 namespace Asv.Avalonia;
 
+/// <summary>
+/// Represents the default <see cref="ILanguageInfo"/> implementation.
+/// </summary>
 public class LanguageInfo : ILanguageInfo
 {
     private readonly Func<CultureInfo> _getCulture;
@@ -23,6 +26,10 @@ public class LanguageInfo : ILanguageInfo
 
     public string Id { get; }
     public string DisplayName { get; }
+
+    /// <summary>
+    /// Gets the culture applied when the language is selected. The culture is resolved lazily on first access.
+    /// </summary>
     public CultureInfo Culture => field ??= _getCulture();
 }
 

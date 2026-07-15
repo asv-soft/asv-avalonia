@@ -34,10 +34,20 @@ public static class ExtensionsRegistrations
         }
     }
 
+    /// <summary>
+    /// Registers extensions and extension policies.
+    /// </summary>
+    /// <param name="builder">The core service registration builder.</param>
     public class Builder(ServicesRegistrations.Builder builder) : IDependencyBuilder
     {
         public IHostApplicationBuilder AppBuilder => builder.AppBuilder;
 
+        /// <summary>
+        /// Registers an extension for every owner exposing the specified context type.
+        /// </summary>
+        /// <typeparam name="TContext">The type of object to extend.</typeparam>
+        /// <typeparam name="TExtension">The extension implementation type.</typeparam>
+        /// <returns>This builder.</returns>
         public Builder Register<
             TContext,
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
@@ -49,6 +59,13 @@ public static class ExtensionsRegistrations
             return this;
         }
 
+        /// <summary>
+        /// Registers an extension for owners whose type identifier matches the specified key.
+        /// </summary>
+        /// <typeparam name="TContext">The type of object to extend.</typeparam>
+        /// <typeparam name="TExtension">The extension implementation type.</typeparam>
+        /// <param name="key">The owner type identifier used as the dependency injection key.</param>
+        /// <returns>This builder.</returns>
         public Builder Register<
             TContext,
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)]
@@ -60,6 +77,12 @@ public static class ExtensionsRegistrations
             return this;
         }
 
+        /// <summary>
+        /// Registers an extension policy for every owner exposing the specified context type.
+        /// </summary>
+        /// <typeparam name="TContext">The type of object whose extensions are filtered.</typeparam>
+        /// <typeparam name="TPolicy">The extension policy implementation type.</typeparam>
+        /// <returns>This builder.</returns>
         public Builder RegisterPolicy<
             TContext,
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TPolicy
@@ -70,6 +93,13 @@ public static class ExtensionsRegistrations
             return this;
         }
 
+        /// <summary>
+        /// Registers an extension policy for owners whose type identifier matches the specified key.
+        /// </summary>
+        /// <typeparam name="TContext">The type of object whose extensions are filtered.</typeparam>
+        /// <typeparam name="TPolicy">The extension policy implementation type.</typeparam>
+        /// <param name="key">The owner type identifier used as the dependency injection key.</param>
+        /// <returns>This builder.</returns>
         public Builder RegisterPolicy<
             TContext,
             [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicConstructors)] TPolicy

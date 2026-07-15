@@ -67,12 +67,38 @@ public static class Units
     }
 }
 
+/// <summary>
+/// Represents a registry of all registered measurement quantities.
+/// </summary>
 public interface IUnitService
 {
+    /// <summary>
+    /// Gets all registered quantities keyed by <see cref="IUnit.UnitId"/>.
+    /// </summary>
     IReadOnlyDictionary<string, IUnit> Units { get; }
+
+    /// <summary>
+    /// Gets a registered quantity by identifier.
+    /// </summary>
+    /// <param name="unit">The quantity identifier.</param>
+    /// <returns>The registered quantity, or <see langword="null"/> when it is not found.</returns>
     IUnit? this[string unit] => Units.GetValueOrDefault(unit);
+
+    /// <summary>
+    /// Resolves a specific unit item within a quantity.
+    /// </summary>
+    /// <param name="unit">The quantity identifier.</param>
+    /// <param name="item">The unit item identifier.</param>
+    /// <returns>The unit item, or <see langword="null"/> when the quantity is not registered.</returns>
     IUnitItem? this[string unit, string item] => this[unit]?[item];
 
+    /// <summary>
+    /// Gets a required quantity and verifies its concrete type.
+    /// </summary>
+    /// <typeparam name="TUnit">The expected quantity type.</typeparam>
+    /// <param name="unitId">The quantity identifier.</param>
+    /// <returns>The registered quantity.</returns>
+    /// <exception cref="UnitException">The quantity is not registered or has a different type.</exception>
     public TUnit GetRequiredUnitOfType<TUnit>(string unitId)
         where TUnit : IUnit
     {

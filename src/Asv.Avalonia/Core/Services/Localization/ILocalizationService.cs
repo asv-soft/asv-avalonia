@@ -2,15 +2,19 @@ using R3;
 
 namespace Asv.Avalonia;
 
+/// <summary>
+/// Manages the application's current UI language and available language choices.
+/// </summary>
 public interface ILocalizationService
 {
     /// <summary>
-    /// Allows you to select or get the current application language.
+    /// Gets the active language. Assigning an item from <see cref="AvailableLanguages"/> applies its
+    /// culture and persists the choice. Other <see cref="ILanguageInfo"/> implementations are rejected.
     /// </summary>
     SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
 
     /// <summary>
-    /// Returns the list of available languages.
+    /// Gets all available languages.
     /// </summary>
     IEnumerable<ILanguageInfo> AvailableLanguages { get; }
 }

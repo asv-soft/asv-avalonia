@@ -21,7 +21,7 @@ This allows them to perform asynchronous cleanup when the application shuts down
 
 ### 2. Global State
 Services are the perfect place to store state that needs to persist as the user navigates between pages. For example, 
-the `NavigationService` keeps track of the navigation history, and the `ThemeService` remembers whether the user prefers Dark or Light mode.
+the `ThemeService` remembers whether the user prefers Dark or Light mode, and the `HotKeyService` keeps the user's custom key bindings.
 
 ### 3. Configuration
 Some services need settings. By inheriting from `ServiceWithConfigBase<TConfig>`, 
@@ -32,10 +32,11 @@ See our [`LocalizationService`](https://github.com/asv-soft/asv-avalonia/blob/ma
 
 The framework provides several essential services out of the box. For example:
 
-*   **[Navigation Service](navigation-service.md):** Manages page switching, back/forward history, and focus tracking.
-*   **[Command Service](command-service.md):** Centralizes command execution, global hotkeys, and Undo/Redo history.
 *   **[Localization Service](localization-service.md):** Manages language switching and string translations.
 *   **[Theme Service](theme-service.md):** Controls the visual appearance (Dark/Light themes, accent colors).
+*   **[Extension Service](extension-service.md):** Applies modular extensions to extendable view models.
+*   **[Hot Key Service](hot-key-service.md):** Dispatches global keyboard shortcuts and stores user overrides.
+*   **[Unit Service](unit-service.md):** Manages measurement units and converts values to and from SI.
 
 ## When to Create a Service?
 
@@ -79,12 +80,12 @@ public class MyCustomService : AsyncDisposableOnce, IMyCustomService
 To use it, simply request it in a constructor:
 
 ```C#
-public class MyViewModel: RoutableViewModel
+public class MyViewModel : ViewModel
 {
     private readonly IMyCustomService _service;
 
-    public MyViewModel(IMyCustomService service, ILoggerFactory loggerFactory)
-        : base("view-model-id", loggerFactory)
+    public MyViewModel(IMyCustomService service)
+        : base("view-model-id")
     {
         _service = service;
         _service.DoSomething();
@@ -103,11 +104,11 @@ inside a mixin extension method for your module (see [Registration via Mixin](#r
 
 The full list of registration methods and their semantics is covered in the [official docs](https://learn.microsoft.com/en-us/dotnet/api/microsoft.extensions.dependencyinjection.iservicecollection?view=net-10.0-pp); below are the lifetimes used in this framework:
 
-| Method                                    | Lifetime                                | Typical use in this framework                        |
-|-------------------------------------------|-----------------------------------------|------------------------------------------------------|
-| `AddSingleton<TService, TImpl>()`         | One instance for the whole app          | Services (navigation, theme, commands, …)            |
-| `AddTransient<TService, TImpl>()`         | New instance every time it is requested | Extensions (`IExtensionFor<T>`), custom dialogs      |
-| `AddKeyedTransient<TService, TImpl>(key)` | New instance per key per request        | Views (ViewLocator), keyed extensions                |
+| Method                                    | Lifetime                                | Typical use in this framework                    |
+|-------------------------------------------|-----------------------------------------|--------------------------------------------------|
+| `AddSingleton<TService, TImpl>()`         | One instance for the whole app          | Services (theme, localization, hot-key, unit, …) |
+| `AddTransient<TService, TImpl>()`         | New instance every time it is requested | Extensions (`IExtensionFor<T>`), custom dialogs  |
+| `AddKeyedTransient<TService, TImpl>(key)` | New instance per key per request        | Views (ViewLocator), keyed extensions            |
 
 ```C#
 // Most services are singletons:

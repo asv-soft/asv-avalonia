@@ -14,6 +14,6 @@ public interface IExtensionFor<in TContext> : ISupportId<string>
     /// Applies the extension logic to the given context.
     /// </summary>
     /// <param name="context">The target object to extend.</param>
-    /// <param name="contextDispose">Disposable collection, that disposed with context.</param>
+    /// <param name="contextDispose">Disposable collection that is disposed with the context.</param>
     void Extend(TContext context, CompositeDisposable contextDispose);
 }
