@@ -1,0 +1,82 @@
+name: Deploy Launcher Release Nuget
+
+on:
+  push:
+    tags:
+      - "launcher-v[0-9]+.[0-9]+.[0-9]+"
+      - "launcher-v[0-9]+.[0-9]+.[0-9]+-rc.[0-9]+"
+      - "launcher-v[0-9]+.[0-9]+.[0-9]+-rc"
+
+env:
+  GITHUB_PACKAGES_URL: 'https://nuget.pkg.github.com/asv-soft/index.json'
+  NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
+  PROJECT_NAME: 'Asv.Avalonia.Launcher'
+  API_PROJECT_NAME: 'Asv.Avalonia.Launcher.Api'
+  PROPS_VERSION_VAR_NAME: 'LauncherVersion'
+
+jobs:
+  deploy:
+    name: 'Deploy Launcher Release'
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/launcher-v')
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@v4
+
+      - name: Setup .Net
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.x.x
+
+      - name: Add NuGet source
+        run: dotnet nuget add source ${{ env.GITHUB_PACKAGES_URL }} \--username '${{secrets.USER_NAME}}' \--password '${{secrets.GIHUB_NUGET_AUTH_TOKEN}}' \--store-password-in-clear-text
+
+      - name: Set version variable
+        env:
+          TAG: ${{ github.ref_name }}
+        run: echo "VERSION=${TAG#launcher-v}" >> $GITHUB_ENV
+
+      - name: Read version from Directory.Build.props
+        id: read-version
+        run: |
+          version=$(grep -oP '<${{env.PROPS_VERSION_VAR_NAME}}>\K[^<]+' ./src/Directory.Build.props)
+          echo "PropsVersion=${version}" >> $GITHUB_ENV
+
+      - name: Compare tag with NuGet package version
+        run: |
+          if [ "${{ env.PropsVersion }}" != "${{ env.VERSION }}" ]; then
+            echo "Error: Tag does not match NuGet package version"
+            exit 1
+          fi
+
+      - name: Check version
+        run: echo ${{ env.VERSION }}
+
+      - name: Restore dependencies
+        run: |
+          dotnet restore ./src/${{ env.API_PROJECT_NAME }}/${{ env.API_PROJECT_NAME }}.csproj
+          dotnet restore ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj
+
+      - name: Build projects
+        run: |
+          dotnet build ./src/${{ env.API_PROJECT_NAME }}/${{ env.API_PROJECT_NAME }}.csproj --configuration Release --no-restore /p:Version="${{ env.VERSION }}" /p:PackageVersion="${{ env.VERSION }}"
+          dotnet build ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj --configuration Release --no-restore /p:Version="${{ env.VERSION }}" /p:PackageVersion="${{ env.VERSION }}"
+
+      - name: Pack projects to Nuget
+        run: |
+          dotnet pack ./src/${{ env.API_PROJECT_NAME }}/${{ env.API_PROJECT_NAME }}.csproj -c Release /p:Version="${{ env.VERSION }}" /p:PackageVersion="${{ env.VERSION }}" --no-build -o .
+          dotnet pack ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj -c Release /p:Version="${{ env.VERSION }}" /p:PackageVersion="${{ env.VERSION }}" --no-build -o .
+
+      - name: List output files
+        run: ls -la
+
+      - name: Push packages to Github
+        run: |
+          dotnet nuget push ${{ env.API_PROJECT_NAME }}.${{ env.VERSION }}.nupkg -k ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.GITHUB_PACKAGES_URL }}
+          dotnet nuget push ${{ env.PROJECT_NAME }}.${{ env.VERSION }}.nupkg -k ${{ secrets.GIHUB_NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.GITHUB_PACKAGES_URL }}
+
+      - name: Push packages to Nuget
+        run: |
+          dotnet nuget push ${{ env.API_PROJECT_NAME }}.${{ env.VERSION }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.NUGET_SOURCE_URL }}
+          dotnet nuget push ${{ env.PROJECT_NAME }}.${{ env.VERSION }}.nupkg -k ${{ secrets.NUGET_AUTH_TOKEN }} --skip-duplicate -s ${{ env.NUGET_SOURCE_URL }}
