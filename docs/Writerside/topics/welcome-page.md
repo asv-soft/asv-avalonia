@@ -2,9 +2,9 @@
 
 ## Introduction
 
-**Asv.Avalonia** is a lightweight toolkit for building cross-platform applications
+**Asv.Avalonia** is a framework for building cross-platform applications
 with [Avalonia UI](https://github.com/AvaloniaUI/Avalonia).
-It provides ready-to-use controls, utility systems (shortcut manager with undo/redo, layout persistence, theming
+It provides ready-to-use controls, utility systems (hotkey actions, undo/redo, layout persistence, theming
 helpers, and more), as well as an example application that demonstrates real usage patterns.
 
 ![Shell page screenshot](shell-page.png)
