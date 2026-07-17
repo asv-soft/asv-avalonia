@@ -9,7 +9,10 @@ public class ThemeItem(string id, string name, ThemeVariant theme)
     : IThemeInfo,
         IEqualityComparer<ThemeItem>
 {
+    /// <inheritdoc />
     public string Id { get; } = id;
+
+    /// <inheritdoc />
     public string Name { get; } = name;
 
     /// <summary>

@@ -29,8 +29,7 @@ public interface IThemeService
     IEnumerable<IThemeInfo> Themes { get; }
 
     /// <summary>
-    /// Gets the active theme. Assigning a <see cref="ThemeItem"/> applies its variant and persists its
-    /// identifier when it changes. Other <see cref="IThemeInfo"/> implementations are rejected.
+    /// Gets the active theme selected from <see cref="Themes"/>.
     /// </summary>
     SynchronizedReactiveProperty<IThemeInfo> CurrentTheme { get; }
 

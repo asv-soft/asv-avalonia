@@ -8,8 +8,7 @@ namespace Asv.Avalonia;
 public interface ILocalizationService
 {
     /// <summary>
-    /// Gets the active language. Assigning an item from <see cref="AvailableLanguages"/> applies its
-    /// culture and persists the choice. Other <see cref="ILanguageInfo"/> implementations are rejected.
+    /// Gets the active language selected from <see cref="AvailableLanguages"/>.
     /// </summary>
     SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
 

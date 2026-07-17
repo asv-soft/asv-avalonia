@@ -24,7 +24,10 @@ public class LanguageInfo : ILanguageInfo
         _getCulture = getCulture;
     }
 
+    /// <inheritdoc />
     public string Id { get; }
+
+    /// <inheritdoc />
     public string DisplayName { get; }
 
     /// <summary>
@@ -48,7 +51,14 @@ public class LocalizationService
         new("ru", "Русский (RU)", () => CultureInfo.GetCultureInfo("ru")),
     ];
 
+    /// <inheritdoc />
+    /// <remarks>
+    /// This implementation requires assigned values to be <see cref="LanguageInfo"/> instances because
+    /// the culture is stored on the concrete type.
+    /// </remarks>
     public SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
+
+    /// <inheritdoc />
     public IEnumerable<ILanguageInfo> AvailableLanguages => _languages;
 
     public LocalizationService(IConfiguration cfgSvc)

@@ -69,10 +69,10 @@ the load and save plumbing for its configuration — see [What is a Service?](wh
 
 Manages the application's current UI language and available language choices.
 
-| Property             | Type                                          | Description                                                                                                                                                                                      |
-|----------------------|-----------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `CurrentLanguage`    | `SynchronizedReactiveProperty<ILanguageInfo>` | The active language. Assign an instance from `AvailableLanguages`: the culture is applied and the choice persisted. Any other `ILanguageInfo` implementation is rejected and nothing is applied. |
-| `AvailableLanguages` | `IEnumerable<ILanguageInfo>`                  | All available languages.                                                                                                                                                                         |
+| Property             | Type                                          | Description                                                 |
+|----------------------|-----------------------------------------------|-------------------------------------------------------------|
+| `CurrentLanguage`    | `SynchronizedReactiveProperty<ILanguageInfo>` | Gets the active language selected from `AvailableLanguages` |
+| `AvailableLanguages` | `IEnumerable<ILanguageInfo>`                  | All available languages.                                    |
 
 ### [ILanguageInfo](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Services/Localization/ILanguageInfo.cs)
 

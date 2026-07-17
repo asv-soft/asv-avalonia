@@ -67,11 +67,11 @@ In a design-time environment the registration substitutes `NullThemeService.Inst
 
 Manages the application's theme and control density.
 
-| Property       | Type                                       | Description                                                                                                                                                     |
-|----------------|--------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Themes`       | `IEnumerable<IThemeInfo>`                  | All available themes.                                                                                                                                           |
-| `CurrentTheme` | `SynchronizedReactiveProperty<IThemeInfo>` | The active theme. Assigning a `ThemeItem` applies its variant and persists the id when it changes; any other `IThemeInfo` is rejected with an error in the log. |
-| `IsCompact`    | `SynchronizedReactiveProperty<bool>`       | Whether compact density is on. Assigning it applies the density and persists it.                                                                                |
+| Property       | Type                                       | Description                                                                      |
+|----------------|--------------------------------------------|----------------------------------------------------------------------------------|
+| `Themes`       | `IEnumerable<IThemeInfo>`                  | All available themes.                                                            |
+| `CurrentTheme` | `SynchronizedReactiveProperty<IThemeInfo>` | Gets the active theme selected from `Themes`                                     |
+| `IsCompact`    | `SynchronizedReactiveProperty<bool>`       | Whether compact density is on. Assigning it applies the density and persists it. |
 
 ### [IThemeInfo](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Services/Theme/IThemeService.cs)
 
