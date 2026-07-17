@@ -12,38 +12,41 @@ Let's create the view model first. Create a file named `HelloWorldPageViewModel.
 
 ```C#
 using System.Collections.Generic;
+using Asv.Avalonia;
 using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.Samples.GetStarted;
+namespace AsvAvaloniaTest;
 
 // The View Model must implement a basic page class (e.g., PageViewModel or TreePageViewModel)
-public class HelloWorldPageViewModel: PageViewModel<HelloWorldPageViewModel>
+public class HelloWorldPageViewModel : PageViewModel<HelloWorldPageViewModel>
 {
     // A unique ID for the page, used for routing
     public const string PageId = "hello_world_page";
 
-    // Dependencies are injected via the constructor from the IServiceCollection container
+    // Dependencies are injected via the constructor from the DI container
     public HelloWorldPageViewModel(
-        ICommandService cmd,
+        IPageContext context,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
+        IExtensionService ext) : base(PageId, context, loggerFactory, dialogService, ext)
     {
     }
 
-    // -- Required Overrides --
-
-    // If this page contains other routable controls (e.g., a list with custom VMs), return them here
-    public override IEnumerable<IRoutable> GetChildren()
+    // If this page contains other routable components (e.g., a list with custom VMs), return them here
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }
 
+    // This method runs after all extensions have been applied to the page
     protected override void AfterLoadExtensions()
     {
     }
 }
 ```
+
+`IPageContext` carries the page infrastructure: navigation arguments and the stores where the page persists its
+layout and undo history. You don't use it directly here — just pass it to the base class.
 
 ### 2. View for the page
 
@@ -54,9 +57,9 @@ Next, create the new UserControl `HelloWorldPage.axaml`:
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Asv.Avalonia.Samples.GetStarted"
+             xmlns:local="clr-namespace:AsvAvaloniaTest"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Samples.GetStarted.HelloWorldPage"
+             x:Class="AsvAvaloniaTest.HelloWorldPage"
              x:DataType="local:HelloWorldPageViewModel">
     Hello world
 </UserControl>
@@ -64,79 +67,61 @@ Next, create the new UserControl `HelloWorldPage.axaml`:
 
 ## Accessing the Page
 
-We have created the page, but how do we navigate to it?
-We need to create an Asv.Avalonia Command that opens the page, and then add that command to the tools list on the Home
-Page.
+We have created the page, but how do we open it?
+Any view model can navigate to a page by its ID using the `GoTo` method. For our page we will wire that call to a tool button on the Home Page.
 
-### 1. Create the Command
+### 1. Extending the home page with a new tool
 
-Create a command class, for example, `OpenHelloWorldPageCommand.cs`:
-
-```C#
-using Material.Icons;
-
-namespace Asv.Avalonia.Samples.GetStarted;
-
-public class OpenHelloWorldPageCommand(INavigationService nav)
-    : OpenPageCommandBase(HelloWorldPageViewModel.PageId, nav)
-{
-    public override ICommandInfo Info => StaticInfo;
-
-    #region Static
-
-    // An unique id for the command
-    public const string Id = $"{BaseId}.open.hello_world_page";
-
-    // You can customize command metadata however you like
-    public static readonly ICommandInfo StaticInfo = new CommandInfo
-    {
-        Id = Id,
-        Name = "Open HelloWorldPage",
-        Description = "Opens HelloWorldPage",
-        Icon = MaterialIconKind.Abacus, // The icon will be used in the tools list
-        IconColor = AsvColorKind.Info20,
-        DefaultHotKey = null, // You can assign a hotkey to open this page from anywhere in the app
-    };
-
-    #endregion
-}
-```
-
-### 2. Extending the home page with a new tool
-
-We use an "Extension" to inject our command into the Home Page's tool list. Create `HomePageHelloWorldPageExtension.cs`:
+We use an "Extension" to inject our button into the Home Page's tool list. Create `HomePageHelloWorldPageExtension.cs`:
 
 ```C#
+using Asv.Avalonia;
 using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Asv.Modeling;
+using Material.Icons;
 using R3;
 
-namespace Asv.Avalonia.Samples.GetStarted;
+namespace AsvAvaloniaTest;
 
-public class HomePageHelloWorldPageExtension(ILoggerFactory loggerFactory)
-    : AsyncDisposableOnce,
-        IExtensionFor<IHomePage>
+public class HomePageHelloWorldPageExtension : IExtensionFor<IHomePage>
 {
+    // A unique ID for the extension
+    public const string StaticId = "ext.home.hello-world";
+
+    string ISupportId<string>.Id => StaticId;
+
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        context.Tools.Add(
-            OpenHelloWorldPageCommand
-                .StaticInfo.CreateAction(loggerFactory)
-                .DisposeItWith(contextDispose)
-        );
+        var action = new ActionViewModel("open-hello-world")
+        {
+            Header = "Open HelloWorldPage",
+            Description = "Opens HelloWorldPage",
+            Icon = MaterialIconKind.Abacus, // The icon will be used in the tools list
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(HelloWorldPageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
     }
 }
 ```
 
-### 3. Register everything in Program.cs
+When the Home Page is created, the framework applies all extensions registered for `IHomePage`.
+Our extension adds an `ActionViewModel` — a header, a description, an icon, and a command — to the page's tools list.
+The command calls `context.GoTo(...)` with the page's ID to open it; `GoTo` is an extension method available on any view model, 
+so the `IHomePage` context can call it directly.
+Everything we create here is tied to `contextDispose`, so it is disposed together with the page.
 
-All components (pages, views, commands, extensions) must be registered in the builder chain in `Program.cs`:
+### 2. Register everything in Program.cs
+
+All components (pages, views, extensions) must be registered in the builder chain in `Program.cs`:
 
 ```C#
-class Program 
+class Program
 {
     // ...
-    
+
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
@@ -145,16 +130,11 @@ class Program
             .UseAsv(builder =>
             {
                 builder
-                    .UseDefault()
-                    .UseOptionalLogViewer()
-                    .UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
-                    .UseDesktopShell();
+                    .RegisterDefault()
+                    .RegisterDesktopShell();
 
                 // Register the View and ViewModel
-                builder.Shell.Pages.Register<HelloWorldPageViewModel, HelloWorldPage>(HelloWorldPageViewModel.PageId);
-
-                // Register the command
-                builder.Commands.Register<OpenHelloWorldPageCommand>();
+                builder.Pages.Register<HelloWorldPageViewModel, HelloWorldPage>(HelloWorldPageViewModel.PageId);
 
                 // Register the extension that adds the tool to the home page
                 builder.Extensions.Register<IHomePage, HomePageHelloWorldPageExtension>();

@@ -11,17 +11,17 @@ First, update the View Model `HelloWorldPageViewModel.cs`. We need to add a prop
 
 ```C#
 public HelloWorldPageViewModel(
-    ICommandService cmd,
+    IPageContext context,
     ILoggerFactory loggerFactory,
     IDialogService dialogService,
-    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
+    IExtensionService ext) : base(PageId, context, loggerFactory, dialogService, ext)
 {
     // Initialize it in the constructor
-    Text = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
+    Text = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
 }
 
 // Add a property
-public BindableReactiveProperty<string?> Text { get; }
+public BindableReactiveProperty<string> Text { get; }
 ```
 
 > `BindableReactiveProperty` implements `IDisposable`. It must be disposed when the View Model is destroyed to prevent
@@ -48,31 +48,31 @@ Now let's create a button to reset the text. Add a command property to the View 
 
 ```C#
 public HelloWorldPageViewModel(
-    ICommandService cmd,
+    IPageContext context,
     ILoggerFactory loggerFactory,
     IDialogService dialogService,
-    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
+    IExtensionService ext) : base(PageId, context, loggerFactory, dialogService, ext)
 {
     // Initialize it in the constructor
-    ResetTextCommand = new ReactiveCommand(c =>
+    Text = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+
+    ResetTextCommand = new ReactiveCommand(_ =>
     {
         Text.Value = string.Empty;
     }).DisposeItWith(Disposable);
-    
-    Text = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
 }
 
 // A new property
 public ReactiveCommand ResetTextCommand { get; }
 
-public BindableReactiveProperty<string?> Text { get; }
+public BindableReactiveProperty<string> Text { get; }
 ```
 
 Finally, add the button to the XAML template:
 
 ```xml
 <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10" Spacing="5">
-    <TextBlock Text="{Binding Text.Value}">Hello world</TextBlock>
+    <TextBlock Text="{Binding Text.Value}"/>
     <StackPanel Orientation="Horizontal" Spacing="5">
         <TextBox Text="{Binding Text.Value}"/>
         <Button Content="Reset" Command="{Binding ResetTextCommand}"/>
@@ -106,29 +106,30 @@ Update your View Model properties:
 private readonly ReactiveProperty<string?> _inputText;
 
 public HelloWorldPageViewModel(
-    ICommandService cmd,
+    IPageContext context,
     ILoggerFactory loggerFactory,
     IDialogService dialogService,
-    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
+    IExtensionService ext) : base(PageId, context, loggerFactory, dialogService, ext)
 {
+    Text = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+
     // Initialize them in the constructor
     _inputText = new ReactiveProperty<string?>().DisposeItWith(Disposable);
     InputText = new HistoricalStringProperty(nameof(InputText), _inputText, loggerFactory)
         .SetRoutableParent(this)
         .DisposeItWith(Disposable);
 
-    ResetTextCommand = new ReactiveCommand(c =>
+    ResetTextCommand = new ReactiveCommand(_ =>
     {
         Text.Value = string.Empty;
     }).DisposeItWith(Disposable);
-    Text = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
 }
 
 // A new property
 public HistoricalStringProperty InputText { get; }
 
 public ReactiveCommand ResetTextCommand { get; }
-public BindableReactiveProperty<string?> Text { get; }
+public BindableReactiveProperty<string> Text { get; }
 ```
 
 > Note that `SetRoutableParent` is called on the `InputText` property. This is necessary to inform the component who its
@@ -136,16 +137,17 @@ public BindableReactiveProperty<string?> Text { get; }
 > navigation and context handling.
 > {style="info"}
 
-We must also expose this property in `GetChildren` so the application knows this property exists for navigation purposes:
+We must also expose this property in `GetChildren`. Together with `SetRoutableParent`, this makes the property a part
+of the view model tree: the undo history records which component produced each change and finds it again by walking
+this tree when you press Undo.
 
 ```C#
 public HistoricalStringProperty InputText { get; }
 public ReactiveCommand ResetTextCommand { get; }
-public ReactiveCommand SaveTextCommand { get; }
 
-public override IEnumerable<IRoutable> GetChildren()
+public override IEnumerable<IViewModel> GetChildren()
 {
-    // Expose the property 
+    // Expose the property
     yield return InputText;
 }
 
@@ -166,133 +168,73 @@ Now, update the XAML. Note that for historical properties, we usually bind to `V
 </StackPanel>
 ```
 
-If you run the app now, you can type in the text field and use Ctrl+Z to undo (or Ctrl-Y to redo) your typing changes.
+If you run the app now, you can type in the text field and use Ctrl+Z to undo (or Ctrl+Y to redo) your typing changes.
 
-## Making Commands Undoable
+## Making the Save Action Undoable
 
-Now let's implement the "Save" button. When clicked, it updates the text block. We want to be able to Undo/Redo this "
-Save" action.
+Now let's implement the "Save" button. When clicked, it copies the input text into the text block. We want to be able
+to Undo/Redo this "Save" action.
 
-First, rename our original `Text` property to `SavedText` in the View Model, and add a new command:
+### How Undo/Redo works
+
+Every view model has an `Undo` controller where its components register the changes they can revert.
+Historical properties do this automatically — that is why typing in the `InputText` field is already undoable.
+
+For our own property we can use `Undo.TrackProperty`: it watches a reactive property and publishes every change of its
+value to the undo system. Each published change travels up the view model tree to the page, which stores it in its
+`UndoHistory`. When you press Undo, the page pops the last change and asks the component that produced it to revert the
+value.
+
+### Tracking the property
+
+First, rename our original `Text` property to `SavedText` and start tracking it. Then add the new `Save` command.
+The `Reset` command keeps working with the same property, so both actions become undoable:
 
 ```C#
 public HelloWorldPageViewModel(
-    ICommandService cmd,
+    IPageContext context,
     ILoggerFactory loggerFactory,
     IDialogService dialogService,
-    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
+    IExtensionService ext) : base(PageId, context, loggerFactory, dialogService, ext)
 {
-    // ...
+    // A renamed property
+    SavedText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+
+    // Publish every change of SavedText to the undo system
+    Undo.TrackProperty(nameof(SavedText), SavedText).DisposeItWith(Disposable);
+
+    _inputText = new ReactiveProperty<string?>().DisposeItWith(Disposable);
+    InputText = new HistoricalStringProperty(nameof(InputText), _inputText, loggerFactory)
+        .SetRoutableParent(this)
+        .DisposeItWith(Disposable);
+
+    // A new command
+    SaveTextCommand = new ReactiveCommand(_ =>
+    {
+        // The change is recorded automatically because the property is tracked
+        SavedText.Value = InputText.ModelValue.Value ?? string.Empty;
+    }).DisposeItWith(Disposable);
+
+    ResetTextCommand = new ReactiveCommand(_ =>
+    {
+        SavedText.Value = string.Empty;
+    }).DisposeItWith(Disposable);
 }
 
 // A renamed property
-public BindableReactiveProperty<string?> SavedText { get; }
+public BindableReactiveProperty<string> SavedText { get; }
+public HistoricalStringProperty InputText { get; }
+
+public ReactiveCommand ResetTextCommand { get; }
 
 // A new property
 public ReactiveCommand SaveTextCommand { get; }
-
-public HistoricalStringProperty InputText { get; }
-public ReactiveCommand ResetTextCommand { get; }
 ```
 
-### Creating the Command Class
-
-To support Undo/Redo, we need to create a specific command class. Create a new file `ChangeSavedTextPropertyCommand.cs`:
-
-```C#
-using System.Threading;
-using System.Threading.Tasks;
-using Material.Icons;
-
-namespace Asv.Avalonia.Samples.GetStarted;
-
-// This is a context command. It is generic: <ContextType, ArgumentType>
-public class ChangeSavedTextPropertyCommand : ContextCommand<HelloWorldPageViewModel, StringArg>
-{
-    #region Static
-
-    public const string Id = $"{BaseId}.hello_world_page.change";
-
-    public static readonly ICommandInfo StaticInfo = new CommandInfo
-    {
-        Id = Id,
-        Name = "Change text",
-        Description = "Changes text",
-        Icon = MaterialIconKind.PropertyTag,
-        DefaultHotKey = null,
-    };
-
-    public override ICommandInfo Info => StaticInfo;
-
-    #endregion
-
-    // This method runs when the command is executed
-    public override ValueTask<StringArg?> InternalExecute(
-        HelloWorldPageViewModel context,
-        // This is the value passed when calling the command
-        StringArg newValue,
-        CancellationToken cancel
-    )
-    {
-        // 1. Capture the current (old) value
-        var oldValue = new StringArg(context.SavedText.Value ?? string.Empty);
-        
-        // 2. Apply the new value
-        context.SavedText.Value = newValue.Value;
-        
-        // 3. Return the OLD value
-        // This returned value is stored and used in undo/redo actions
-        return ValueTask.FromResult<StringArg?>(oldValue);
-    }
-}
-```
-
-### Initializing the Commands
-
-Back in `HelloWorldPageViewModel.cs`, initialize the `SavedText` and the commands in the constructor.
-
-Instead of changing the property directly, we now use `this.ExecuteCommand(...)`.
-This routes the action through the Undo/Redo system.
-
-```C#
-public HelloWorldPageViewModel(
-    ICommandService cmd,
-    ILoggerFactory loggerFactory,
-    IDialogService dialogService,
-    IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
-{
-    // ...
-    
-    // Initializing a properties
-    
-    SavedText = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
-    
-    SaveTextCommand = new ReactiveCommand(async (_, cancel) =>
-    {
-        // Execute the undoable command using the ID we defined earlier
-        // We pass the current value of InputText as the argument
-        await this.ExecuteCommand(
-            ChangeSavedTextPropertyCommand.Id, 
-            CommandArg.CreateString(InputText.ModelValue.Value ?? string.Empty),
-            cancel);
-    }).DisposeItWith(Disposable);
-    
-    // Update Reset command to also use the undoable system
-    ResetTextCommand = new ReactiveCommand(async (_, cancel) =>
-    {
-        await this.ExecuteCommand(
-            ChangeSavedTextPropertyCommand.Id, 
-            CommandArg.CreateString(string.Empty),
-            cancel);
-    }).DisposeItWith(Disposable);
-}
-
-public BindableReactiveProperty<string?> SavedText { get; }
-public HistoricalStringProperty InputText { get; }
-
-public ReactiveCommand ResetTextCommand { get; }
-public ReactiveCommand SaveTextCommand { get; }
-```
+> `TrackProperty` covers the common case where undoing a change simply restores the previous value of a property.
+> When undo/redo must run custom logic, register a handler manually via `Undo.RegisterValue(...)` and publish changes
+> with `PublishUpdate(oldValue, newValue)` — this is exactly how historical properties are implemented internally.
+> {style="info"}
 
 ### Final XAML Update
 
@@ -322,7 +264,7 @@ You can run the app again.
 
 ![Hello world page with some controls](hw-page-with-asv-controls.png)
 
-## Whats next?
+## What's next?
 
 * Check out the [Asv.Avalonia.Example](https://github.com/asv-soft/asv-avalonia/tree/main/src/Asv.Avalonia.Example) for
   more complex example.
@@ -333,10 +275,11 @@ You can run the app again.
 ```C#
 using System;
 using System.Threading.Tasks;
+using Asv.Avalonia;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace Asv.Avalonia.Samples.GetStarted;
+namespace AsvAvaloniaTest;
 
 class Program
 {
@@ -344,7 +287,7 @@ class Program
     // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
     // yet and stuff might break.
     [STAThread]
-    public static void Main(string[] args) 
+    public static void Main(string[] args)
     {
         try
         {
@@ -368,14 +311,10 @@ class Program
             .UseAsv(builder =>
             {
                 builder
-                    .UseDefault()
-                    .UseOptionalLogViewer()
-                    .UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
-                    .UseDesktopShell();
-                
-                builder.Shell.Pages.Register<HelloWorldPageViewModel, HelloWorldPage>(HelloWorldPageViewModel.PageId);
-                builder.Commands.Register<OpenHelloWorldPageCommand>();
-                builder.Commands.Register<ChangeSavedTextPropertyCommand>();
+                    .RegisterDefault()
+                    .RegisterDesktopShell();
+
+                builder.Pages.Register<HelloWorldPageViewModel, HelloWorldPage>(HelloWorldPageViewModel.PageId);
                 builder.Extensions.Register<IHomePage, HomePageHelloWorldPageExtension>();
             });
 }
@@ -384,9 +323,10 @@ class Program
 {collapsible="true" collapsed-title="Program.cs"}
 
 ```C#
+using Asv.Avalonia;
 using Avalonia.Markup.Xaml;
 
-namespace Asv.Avalonia.Samples.GetStarted;
+namespace AsvAvaloniaTest;
 
 public class App : AsvApplication
 {
@@ -402,10 +342,10 @@ public class App : AsvApplication
 ```xml
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="Asv.Avalonia.Samples.GetStarted.App"
+             x:Class="AsvAvaloniaTest.App"
              RequestedThemeVariant="Default">
     <Application.Styles>
-        <StyleInclude Source="avares://Asv.Avalonia/Styling/Theme.axaml" />
+        <StyleInclude Source="avares://Asv.Avalonia/Theme.axaml" />
     </Application.Styles>
 </Application>
 ```
@@ -417,9 +357,9 @@ public class App : AsvApplication
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Asv.Avalonia.Samples.GetStarted"
+             xmlns:local="clr-namespace:AsvAvaloniaTest"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Samples.GetStarted.HelloWorldPage"
+             x:Class="AsvAvaloniaTest.HelloWorldPage"
              x:DataType="local:HelloWorldPageViewModel">
     <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10" Spacing="5">
         <TextBlock Text="{Binding SavedText.Value}"/>
@@ -438,7 +378,7 @@ public class App : AsvApplication
 ```C#
 using Avalonia.Controls;
 
-namespace Asv.Avalonia.Samples.GetStarted;
+namespace AsvAvaloniaTest;
 
 public partial class HelloWorldPage : UserControl
 {
@@ -453,68 +393,65 @@ public partial class HelloWorldPage : UserControl
 
 ```C#
 using System.Collections.Generic;
+using Asv.Avalonia;
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Samples.GetStarted;
+namespace AsvAvaloniaTest;
 
 // The View Model must implement a basic page class (e.g., PageViewModel or TreePageViewModel)
-public class HelloWorldPageViewModel: PageViewModel<HelloWorldPageViewModel>
+public class HelloWorldPageViewModel : PageViewModel<HelloWorldPageViewModel>
 {
     // A unique ID for the page, used for routing
     public const string PageId = "hello_world_page";
 
     private readonly ReactiveProperty<string?> _inputText;
 
-    // Dependencies are injected via the constructor from the IServiceCollection container
+    // Dependencies are injected via the constructor from the DI container
     public HelloWorldPageViewModel(
-        ICommandService cmd,
+        IPageContext context,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
-        IExtensionService ext) : base(PageId, cmd, loggerFactory, dialogService, ext)
+        IExtensionService ext) : base(PageId, context, loggerFactory, dialogService, ext)
     {
-        SavedText = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
-        
+        SavedText = new BindableReactiveProperty<string>(string.Empty).DisposeItWith(Disposable);
+
+        // Publish every change of SavedText to the undo system
+        Undo.TrackProperty(nameof(SavedText), SavedText).DisposeItWith(Disposable);
+
         _inputText = new ReactiveProperty<string?>().DisposeItWith(Disposable);
         InputText = new HistoricalStringProperty(nameof(InputText), _inputText, loggerFactory)
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        
-        SaveTextCommand = new ReactiveCommand(async (_, cancel) =>
+
+        SaveTextCommand = new ReactiveCommand(_ =>
         {
-            // Execute the undoable command using the ID we defined earlier
-            // We pass the current value of InputText as the argument
-            await this.ExecuteCommand(
-                ChangeSavedTextPropertyCommand.Id, 
-                CommandArg.CreateString(InputText.ModelValue.Value ?? string.Empty),
-                cancel);
+            // The change is recorded automatically because the property is tracked
+            SavedText.Value = InputText.ModelValue.Value ?? string.Empty;
         }).DisposeItWith(Disposable);
-        
-        // Update Reset command to also use the undoable system
-        ResetTextCommand = new ReactiveCommand(async (_, cancel) =>
+
+        ResetTextCommand = new ReactiveCommand(_ =>
         {
-            await this.ExecuteCommand(
-                ChangeSavedTextPropertyCommand.Id, 
-                CommandArg.CreateString(string.Empty),
-                cancel);
+            SavedText.Value = string.Empty;
         }).DisposeItWith(Disposable);
     }
-    
-    public BindableReactiveProperty<string?> SavedText { get; }
+
+    public BindableReactiveProperty<string> SavedText { get; }
     public HistoricalStringProperty InputText { get; }
-    
+
     public ReactiveCommand ResetTextCommand { get; }
     public ReactiveCommand SaveTextCommand { get; }
 
-    // -- Required Overrides --
-
-    // If this page contains other routable controls (e.g., a list with custom VMs), return them here
-    public override IEnumerable<IRoutable> GetChildren()
+    // If this page contains other routable components (e.g., historical properties
+    // or a list with custom VMs), return them here
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return InputText;
     }
 
+    // This method runs after all extensions have been applied to the page
     protected override void AfterLoadExtensions()
     {
     }
@@ -524,107 +461,36 @@ public class HelloWorldPageViewModel: PageViewModel<HelloWorldPageViewModel>
 {collapsible="true" collapsed-title="HelloWorldPageViewModel.cs"}
 
 ```C#
+using Asv.Avalonia;
 using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Asv.Modeling;
+using Material.Icons;
 using R3;
 
-namespace Asv.Avalonia.Samples.GetStarted;
+namespace AsvAvaloniaTest;
 
-public class HomePageHelloWorldPageExtension(ILoggerFactory loggerFactory)
-    : AsyncDisposableOnce,
-        IExtensionFor<IHomePage>
+public class HomePageHelloWorldPageExtension : IExtensionFor<IHomePage>
 {
+    // A unique ID for the extension
+    public const string StaticId = "ext.home.hello-world";
+
+    string ISupportId<string>.Id => StaticId;
+
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        context.Tools.Add(
-            OpenHelloWorldPageCommand
-                .StaticInfo.CreateAction(loggerFactory)
-                .DisposeItWith(contextDispose)
-        );
+        var action = new ActionViewModel("open-hello-world")
+        {
+            Header = "Open HelloWorldPage",
+            Description = "Opens HelloWorldPage",
+            Icon = MaterialIconKind.Abacus, // The icon will be used in the tools list
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(HelloWorldPageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
     }
 }
 ```
 
 {collapsible="true" collapsed-title="HomePageHelloWorldPageExtension.cs"}
-
-```C#
-using Material.Icons;
-
-namespace Asv.Avalonia.Samples.GetStarted;
-
-public class OpenHelloWorldPageCommand(INavigationService nav)
-    : OpenPageCommandBase(HelloWorldPageViewModel.PageId, nav)
-{
-    public override ICommandInfo Info => StaticInfo;
-
-    #region Static
-
-    // A unique id for the command
-    public const string Id = $"{BaseId}.open.hello_world_page";
-
-    // You can customize command metadata however you like
-    public static readonly ICommandInfo StaticInfo = new CommandInfo
-    {
-        Id = Id,
-        Name = "Open HelloWorldPage",
-        Description = "Opens HelloWorldPage",
-        Icon = MaterialIconKind.Abacus, // The icon will be used in the tools list
-        IconColor = AsvColorKind.Info20,
-        DefaultHotKey = null, // You can assign a hotkey to open this page from anywhere in the app
-    };
-
-    #endregion
-}
-```
-
-{collapsible="true" collapsed-title="OpenHelloWorldPageCommand.cs"}
-
-```C#
-using System.Threading;
-using System.Threading.Tasks;
-using Material.Icons;
-
-namespace Asv.Avalonia.Samples.GetStarted;
-
-// This is a context command. It is generic: <ContextType, ArgumentType>
-public class ChangeSavedTextPropertyCommand : ContextCommand<HelloWorldPageViewModel, StringArg>
-{
-    #region Static
-
-    public const string Id = $"{BaseId}.hello_world_page.change";
-
-    public static readonly ICommandInfo StaticInfo = new CommandInfo
-    {
-        Id = Id,
-        Name = "Change text",
-        Description = "Changes text",
-        Icon = MaterialIconKind.PropertyTag,
-        DefaultHotKey = null,
-    };
-
-    public override ICommandInfo Info => StaticInfo;
-
-    #endregion
-
-    // This method runs when the command is executed
-    public override ValueTask<StringArg?> InternalExecute(
-        HelloWorldPageViewModel context,
-        // This is the value passed when calling the command
-        StringArg newValue,
-        CancellationToken cancel
-    )
-    {
-        // 1. Capture the current (old) value
-        var oldValue = new StringArg(context.SavedText.Value ?? string.Empty);
-        
-        // 2. Apply the new value
-        context.SavedText.Value = newValue.Value;
-        
-        // 3. Return the OLD value
-        // This returned value is stored and used in undo/redo actions
-        return ValueTask.FromResult<StringArg?>(oldValue);
-    }
-}
-```
-
-{collapsible="true" collapsed-title="ChangeSavedTextPropertyCommand.cs"}
