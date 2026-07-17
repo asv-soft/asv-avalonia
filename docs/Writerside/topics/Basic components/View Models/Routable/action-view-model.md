@@ -4,7 +4,7 @@
 
 [`ActionViewModel`](#actionviewmodel)
 is a view model that extends [`HeadlinedViewModel`](headlined-view-model.md) and adds action functionality. 
-It is often used for menu items that trigger [commands](command-service.md).
+It is often used for menu items that trigger commands.
 
 ## API {collapsible="true" default-state="collapsed"}
 

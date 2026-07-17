@@ -6,6 +6,9 @@ using ArgumentException = System.ArgumentException;
 
 namespace Asv.Avalonia;
 
+/// <summary>
+/// Represents the default <see cref="ILanguageInfo"/> implementation.
+/// </summary>
 public class LanguageInfo : ILanguageInfo
 {
     private readonly Func<CultureInfo> _getCulture;
@@ -21,8 +24,15 @@ public class LanguageInfo : ILanguageInfo
         _getCulture = getCulture;
     }
 
+    /// <inheritdoc />
     public string Id { get; }
+
+    /// <inheritdoc />
     public string DisplayName { get; }
+
+    /// <summary>
+    /// Gets the culture applied when the language is selected. The culture is resolved lazily on first access.
+    /// </summary>
     public CultureInfo Culture => field ??= _getCulture();
 }
 
@@ -41,7 +51,14 @@ public class LocalizationService
         new("ru", "Русский (RU)", () => CultureInfo.GetCultureInfo("ru")),
     ];
 
+    /// <inheritdoc />
+    /// <remarks>
+    /// This implementation requires assigned values to be <see cref="LanguageInfo"/> instances because
+    /// the culture is stored on the concrete type.
+    /// </remarks>
     public SynchronizedReactiveProperty<ILanguageInfo> CurrentLanguage { get; }
+
+    /// <inheritdoc />
     public IEnumerable<ILanguageInfo> AvailableLanguages => _languages;
 
     public LocalizationService(IConfiguration cfgSvc)

@@ -39,7 +39,7 @@ When a page is closed via a tab, the `TryCloseAsync` method is called with the f
 ### Command History
 
 Each page contains its `ICommandHistory` property. It is used to store all commands executed on the page for undo and redo actions. 
-See the [Command Service](command-service.md) article for more details.
+The application's Undo and Redo commands operate on this history.
 
 ## Example
 

@@ -85,8 +85,17 @@ public class ThemeService : AsyncDisposableOnce, IThemeService
         }
     }
 
+    /// <inheritdoc />
     public IEnumerable<IThemeInfo> Themes => _themes;
+
+    /// <inheritdoc />
+    /// <remarks>
+    /// This implementation requires assigned values to be <see cref="ThemeItem"/> instances because
+    /// the Avalonia theme variant is stored on the concrete type.
+    /// </remarks>
     public SynchronizedReactiveProperty<IThemeInfo> CurrentTheme { get; }
+
+    /// <inheritdoc />
     public SynchronizedReactiveProperty<bool> IsCompact { get; }
 
     protected override void Dispose(bool disposing)
