@@ -2,128 +2,153 @@
 
 ## Overview
 
-[`TreeSubpage`](#treesubpage-itreesubpage) is an abstract base class for content pages displayed within a [`TreePageViewModel`](tree-page-view-model.md).
+[`TreeSubpage`](#treesubpage-itreesubpage) is an abstract base class for content pages displayed within a
+[`TreePageViewModel`](tree-page-view-model.md).
 
-It extends [`RoutableViewModel`](routable-view-model.md) and implements the [`ITreeSubpage`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/ITreeSubpage.cs) interface.
+It extends [`ViewModel`](view-model.md) and implements the [`ITreeSubpage`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/ITreeSubpage.cs) interface.
 
-TreeSubpage serves as the detail view that appears on the right side when a user selects a node in the tree menu. It includes its own menu system and can be extended through the DI container.
+TreeSubpage serves as the detail view that appears on the right side when a user selects a node in the tree menu. It
+includes its own menu system.
 
 ## Core Components
 
 ### Menu System
 
-Each subpage has its own `Menu` collection and `MenuView` tree structure. This allows subpages to have their own toolbar or contextual menu items.
+Each subpage has its own `Menu` collection and `MenuView` tree structure. This allows subpages to have their own toolbar
+or contextual menu items.
 
-The menu items are automatically disposed when the subpage is disposed, and they inherit the routing parent from the subpage itself.
+The menu items are automatically disposed when the subpage is disposed, and they inherit the routing parent from the
+subpage itself.
 
 ### Generic Context
 
-`TreeSubpage<TContext>` is a generic variant that receives a context object during initialization via the `Init` method. This context is typically the parent page that hosts the subpage, allowing the subpage to access shared data or services.
+`TreeSubpage<TContext>` is a generic variant that receives an `ITreeSubPageContext<TContext>` through its constructor.
+The context carries both the navigation `Args` — forwarded to the base `TreeSubpage` — and the `Context` object itself,
+which is typically the parent page that hosts the subpage. The base class does not store or expose `Context`; a derived
+class that needs it after construction must retain it explicitly.
 
 ## Example
 
 A typical usage pattern involves creating a subpage interface, a base implementation, and then concrete subpages.
 
-First, create an interface for your tree subpage (e.g., [`ISettingsSubPage`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Shell/Pages/Settings/Subpages/ISettingsSubPage.cs)):
+First, create an interface for your tree subpage (e.g., [`ISettingsSubPage`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Shell/Pages/Settings/Subpages/ISettingsSubPage.cs)). The context type is bound on the base *class*, not on the interface:
 
 ```C#
-public interface ISettingsSubPage : ITreeSubpage<ISettingsPage> 
-{ 
-}
+public interface ISettingsSubPage : ITreeSubpage { }
 ```
 
 Next, implement a base class (e.g., [`SettingsSubPage`](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Shell/Pages/Settings/Subpages/SettingsSubPage.cs)):
 
 ```C#
-public abstract class SettingsSubPage(NavigationId id, ILoggerFactory loggerFactory)
-    : TreeSubpage<ISettingsPage>(id, loggerFactory),
-        ISettingsSubPage
-{
-    public override ValueTask Init(ISettingsPage context) => ValueTask.CompletedTask;
-}
+public abstract class SettingsSubPage(string typeId, ITreeSubPageContext<ISettingsPage> context)
+    : TreeSubpage<ISettingsPage>(typeId, context),
+        ISettingsSubPage { }
 ```
 
-Now create a concrete subpage view model. Simply inherit from the base class created above:
+Now create a concrete subpage view model. Simply inherit from the base class created above and pass the context through:
 
 ```C#
 public class SettingsUnitsViewModel : SettingsSubPage
 {
     public const string PageId = "units";
 
-    public SettingsUnitsViewModel(ILoggerFactory loggerFactory)
-        : base(PageId, loggerFactory)
+    public SettingsUnitsViewModel(
+        ITreeSubPageContext<ISettingsPage> context,
+        ILoggerFactory loggerFactory
+    )
+        : base(PageId, context)
     {
         // Initialize your properties and commands here
     }
-
-    public override IEnumerable<IRoutable> GetChildren() => [];
 }
 ```
 
-> If the subpage needs extensibility (e.g., allowing plugins to add sections), inherit from [`ExtendableTreeSubpage`](extendable-tree-subpage.md) instead.
+>  If the subpage needs extensibility (e.g., allowing plugins to add sections), inherit from
+> [`ExtendableTreeSubpage`](extendable-tree-subpage.md) instead.
 > {style="note"}
 
-Each subpage needs a tree menu node — this is what appears in the left-hand tree. Create a class that inherits from `TreePage`:
+Each subpage needs a tree menu node — this is what appears in the left-hand tree. Create a class that inherits from
+`TreePageMenuItem`:
 
 ```C#
-public class SettingsUnitTreePageMenu : TreePage
+public class SettingsUnitTreePageMenu : TreePageMenuItem
 {
-    public SettingsUnitTreePageMenu(ILoggerFactory loggerFactory)
+    public SettingsUnitTreePageMenu()
         : base(
-            SettingsUnitsViewModel.PageId,   // node ID
-            "Units",                         // display name
-            MaterialIconKind.KeyboardSettings, // icon
-            SettingsUnitsViewModel.PageId,   // navigation target (subpage ID)
-            NavigationId.Empty,              // parent node (empty = root level)
-            loggerFactory
+            SettingsUnitsViewModel.PageId,          // node ID
+            "Units",                                // display name
+            MaterialIconKind.KeyboardSettings,      // icon
+            new NavId(SettingsUnitsViewModel.PageId), // navigation target (subpage ID)
+            NavId.Empty                             // parent node (empty = root level)
         ) { }
 }
 ```
 
-Finally, register the subpage, its view, and the tree menu node:
+Finally, register the subpage, its view, and the tree menu node. The settings builder wraps all three registrations into
+one call:
 
 ```C#
-// Register the subpage view model (keyed by subpage ID)
-builder.Services.AddKeyedTransient<ISettingsSubPage, SettingsUnitsViewModel>(
-    SettingsUnitsViewModel.PageId);
-
-// Register the view
-builder.ViewLocator.RegisterViewFor<SettingsUnitsViewModel, SettingsUnitsView>();
-
-// Register the tree menu node (keyed by the parent page ID)
-builder.Services.AddKeyedTransient<ITreePage, SettingsUnitTreePageMenu>(
-    SettingsPageViewModel.PageId);
+public static class UnitsSubPageRegistrations
+{
+    extension(SettingsPageRegistrations.Builder builder)
+    {
+        public SettingsPageRegistrations.Builder RegisterUnitsSubPage()
+        {
+            return builder.AddSubPage<
+                SettingsUnitsViewModel,
+                SettingsUnitsView,
+                SettingsUnitTreePageMenu
+            >(SettingsUnitsViewModel.PageId);
+        }
+    }
+}
 ```
+
+> A subpage cannot be registered with a plain `AddKeyedTransient`: its constructor takes an
+> `ITreeSubPageContext<TContext>`, which is a per-navigation runtime argument rather than a registered service.
+> Registration goes through the `TreePage` builder, which is what `AddSubPage` calls for you.
+> {style="note"}
 
 ## API {collapsible="true" default-state="collapsed"}
 
 ### [ITreeSubpage](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/ITreeSubpage.cs)
 
 Represents a subpage that can be displayed in a tree-based page structure. 
-Extends `IRoutable` to provide routing capabilities.
+Extends `IViewModel` to provide identity, parent/child routing, undo and layout support.
 
 | Property   | Type                        | Description                                                 |
 |------------|-----------------------------|-------------------------------------------------------------|
 | `MenuView` | `MenuTree`                  | Gets the tree structure for the subpage's menu.             |
 | `Menu`     | `ObservableList<IMenuItem>` | Gets the collection of menu items associated with the page. |
 
-### [ITreeSubpage&lt;TContext&gt;](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/ITreeSubpage.cs)
+### [ITreeSubPageContext&lt;TContext&gt;](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/ITreeSubpage.cs)
 
-Generic variant of `ITreeSubpage` that receives a context during initialization.
+Carries what a subpage receives at construction. `TreeSubPageContext<TContext>` is the standard implementation;
+`NullTreeSubPageContext<TContext>` is used at design time.
 
-| Method                   | Return Type | Description                                                |
-|--------------------------|-------------|------------------------------------------------------------|
-| `Init(TContext context)` | `ValueTask` | Initializes the subpage with the specified context object. |
+| Property  | Type       | Description                                                       |
+|-----------|------------|-------------------------------------------------------------------|
+| `Args`    | `NavArgs`  | Navigation arguments, forwarded to the base `TreeSubpage`.        |
+| `Context` | `TContext` | The page that hosts the subpage.                                  |
 
 ### [TreeSubpage: ITreeSubpage](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/TreeSubpage.cs)
 
 Base implementation of `ITreeSubpage`. Provides menu management and proper disposal of resources.
 
-| Method                    | Return Type              | Description                                        |
-|---------------------------|--------------------------|----------------------------------------------------|
-| `GetChildren()`           | `IEnumerable<IRoutable>` | Returns the menu items as child routable elements. |
-| `Dispose(bool disposing)` | `void`                   | Releases resources and clears the menu.            |
+| Constructor                                | Description                                       |
+|--------------------------------------------|---------------------------------------------------|
+| `TreeSubpage(string typeId, NavArgs args)` | Protected. Creates the subpage and its menu tree. |
 
-### [TreeSubpage&lt;TContext&gt;: ITreeSubpage&lt;TContext&gt;](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/TreeSubpage.cs)
+| Method                    | Return Type               | Description                                        |
+|---------------------------|---------------------------|----------------------------------------------------|
+| `GetChildren()`           | `IEnumerable<IViewModel>` | Returns the menu items as child view models.       |
+| `Dispose(bool disposing)` | `void`                    | Releases resources and clears the menu.            |
 
-Generic base implementation that adds context initialization support.
+### [TreeSubpage&lt;TContext&gt;: TreeSubpage](https://github.com/asv-soft/asv-avalonia/blob/main/src/Asv.Avalonia/Core/Controls/TreePage/TreeSubpage/TreeSubpage.cs)
+
+Generic base implementation that binds a page context type. It adds no members of its own — it forwards `context.Args`
+to the base constructor. Constrained to `where TContext : class, IPage`.
+
+| Constructor                                                                   | Description                                     |
+|-------------------------------------------------------------------------------|-------------------------------------------------|
+| `TreeSubpage<TContext>(string typeId, ITreeSubPageContext<TContext> context)` | Protected. Forwards `context.Args` to the base. |
