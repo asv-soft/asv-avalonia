@@ -36,12 +36,14 @@ dotnet nuget add source "/local/nuget/folder" --name YourName
 
 After that, you can install your module from the local feed.
 Open your NuGet package manager and install the package from the newly added source.
+In any compatible Asv.Avalonia application, call `RegisterModuleModule()` during application setup after installing the package. 
+The demo application used in this guide is only one possible host for the module.
 
 ![install-module](how-to-create-module-install-nuget.png)
 
 ## Summary
 
 In this tutorial, we created a simple module with two pages and packaged it as a NuGet package.
-The module includes a configurable builder that allows optional features to be enabled or disabled.
+The module uses a hierarchical registration builder so applications can register all default features or select individual pages.
 
 You can find the complete source code for the module [here](how-to-create-module-source-code.md)
