@@ -19,7 +19,7 @@ public class UdpPortMenu : MenuItem
         var defaultConfig = UdpProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
         defaultConfig.Name = RS.SettingsConnectionUdpPortExtension_DefaultConfig_Name;
-        return this.FindParentOfType<SettingsConnectionViewModel>()?.AddPortAsync(defaultConfig)
-            ?? ValueTask.CompletedTask;
+        return this.FindParentOfType<SettingsConnectionViewModel>()
+                ?.AddPortAsync(defaultConfig, cancel) ?? ValueTask.CompletedTask;
     }
 }

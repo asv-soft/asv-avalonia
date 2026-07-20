@@ -26,13 +26,11 @@ public class HomePageItemDecorator : ViewModel
 
     public override IEnumerable<IViewModel> GetChildren()
     {
-        // this is a decorator, it should not be routable
-        throw new NotImplementedException();
+        throw new NotImplementedException("this is a decorator, it should not be routable");
     }
 
-    public override ValueTask<IViewModel> Navigate(NavId id)
+    public override ValueTask<IViewModel> Navigate(NavId id, CancellationToken cancel = default)
     {
-        // this is a decorator, it should not be routable
-        throw new NotImplementedException();
+        throw new NotImplementedException("this is a decorator, it should not be routable");
     }
 }

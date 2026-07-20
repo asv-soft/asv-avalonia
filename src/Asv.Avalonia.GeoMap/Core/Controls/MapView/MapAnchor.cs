@@ -320,7 +320,7 @@ internal sealed class MapAnchorCore : ISupportChildren<IViewModel>
 
         PolygonView = Polygon.ToNotifyCollectionChangedSlim().DisposeItWith(disposable);
 
-        Menu.SetRoutableParent(owner).DisposeItWith(disposable);
+        Menu.SetParent(owner).DisposeItWith(disposable);
         Menu.DisposeRemovedItems().DisposeItWith(disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(disposable);
     }

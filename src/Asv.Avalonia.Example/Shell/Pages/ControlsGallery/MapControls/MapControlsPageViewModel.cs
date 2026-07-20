@@ -49,7 +49,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
             .SetRoutableParent(this);
 
         MapViewModel.Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
-        MapViewModel.Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
+        MapViewModel.Anchors.SetParent(this).DisposeItWith(Disposable);
 
         var centerPoint = MapViewModel.CenterMap.Value;
         var pointCount = 36;

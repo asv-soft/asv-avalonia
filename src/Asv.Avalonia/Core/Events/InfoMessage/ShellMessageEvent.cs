@@ -17,7 +17,7 @@ public class ShellMessageEvent(IViewModel source, ShellMessage message)
 public static class ShellMessageEventMixin
 {
     private static readonly ReactiveCommand<MarkdownDetailsDialogPayload> ShowMessageDetailsCommand =
-        new((payload, cancel) => ShowDetails(payload, cancel), AwaitOperation.Drop);
+        new(ShowDetails, AwaitOperation.Drop);
 
     public static ValueTask RiseShellInfoMessage(
         this IViewModel source,
@@ -152,14 +152,15 @@ public static class ShellMessageEventMixin
 
         if (copyFallback)
         {
-            await CopyToClipboard(payload.OriginalText);
+            await CopyToClipboard(payload.OriginalText, cancel);
         }
     }
 
-    private static async ValueTask CopyToClipboard(string text)
+    private static async ValueTask CopyToClipboard(string text, CancellationToken cancel)
     {
         try
         {
+            cancel.ThrowIfCancellationRequested();
             var clipboard = TopLevelHelper.GetTopLevel()?.Clipboard;
             if (clipboard is null || string.IsNullOrWhiteSpace(text))
             {
@@ -175,6 +176,10 @@ public static class ShellMessageEventMixin
         catch (InvalidOperationException)
         {
             // The application host can be unavailable in design-time or test contexts.
+        }
+        catch (OperationCanceledException)
+        {
+            return;
         }
     }
 

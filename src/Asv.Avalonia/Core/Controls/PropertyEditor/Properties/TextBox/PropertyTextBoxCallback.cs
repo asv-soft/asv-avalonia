@@ -46,7 +46,7 @@ public class PropertyTextBoxCallback : PropertyTextBoxViewModel, ISupportRefresh
         return _validator?.Invoke(value);
     }
 
-    protected override async ValueTask ApplyFromUser(CancellationToken cancel)
+    protected override async ValueTask ApplyFromUserCore(CancellationToken cancel)
     {
         await _write(Text.Value, cancel).ConfigureAwait(false);
     }

@@ -13,7 +13,7 @@ public abstract class PropertyViewModel : HeadlinedViewModel, IPropertyViewModel
     protected PropertyViewModel(string typeId)
         : base(typeId)
     {
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         _menuView.DisposeItWith(Disposable);
         Menu.ObserveCountChanged().Subscribe(_ => UpdateMenuView()).AddTo(ref DisposableBag);

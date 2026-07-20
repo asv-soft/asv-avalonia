@@ -10,7 +10,7 @@ public abstract class PlotWidget : PlotViewModel, IPlotWidget
     public PlotWidget(string typeId, IThemeService themeService)
         : base(typeId, themeService)
     {
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }

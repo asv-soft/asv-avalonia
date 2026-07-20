@@ -2,5 +2,5 @@
 
 public interface ISupportSave : IViewModel
 {
-    ValueTask Save();
+    ValueTask Save(CancellationToken cancel = default);
 }

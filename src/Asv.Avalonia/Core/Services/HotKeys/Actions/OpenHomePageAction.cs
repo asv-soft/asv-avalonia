@@ -16,6 +16,6 @@ public class OpenHomePageAction : HotKeyAction<IViewModel>
 
     protected override async ValueTask InternalExecute(IViewModel target, CancellationToken cancel)
     {
-        await target.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)));
+        await target.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)), cancel);
     }
 }

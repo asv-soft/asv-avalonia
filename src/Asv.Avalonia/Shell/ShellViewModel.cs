@@ -80,7 +80,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         _pages = [];
         _pages.DisposeRemovedItems().DisposeItWith(Disposable);
-        _pages.SetRoutableParent(this).DisposeItWith(Disposable);
+        _pages.SetParent(this).DisposeItWith(Disposable);
         R3.Disposable.Create(() => _pages.ClearWithItemsDispose()).AddTo(ref DisposableBag);
 
         PagesView = _pages.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
@@ -100,7 +100,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         MainMenu = new ObservableList<IMenuItem>();
         MainMenuView = new MenuTree(MainMenu).DisposeItWith(Disposable);
-        MainMenu.SetRoutableParent(this).DisposeItWith(Disposable);
+        MainMenu.SetParent(this).DisposeItWith(Disposable);
         MainMenu.DisposeRemovedItems().DisposeItWith(Disposable);
 
         StatusItems = [];
@@ -110,7 +110,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .ObserveAdd()
             .Subscribe(_ => StatusItems.Sort(StatusItemComparer.Instance))
             .DisposeItWith(Disposable);
-        StatusItems.SetRoutableParent(this).DisposeItWith(Disposable);
+        StatusItems.SetParent(this).DisposeItWith(Disposable);
         StatusItems.DisposeRemovedItems().DisposeItWith(Disposable);
 
         LeftMenu = new ObservableList<IMenuItem>();
@@ -120,7 +120,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .ObserveAdd()
             .Subscribe(_ => LeftMenu.Sort(ISupportOrder.Comparer.Instance))
             .DisposeItWith(Disposable);
-        LeftMenu.SetRoutableParent(this).DisposeItWith(Disposable);
+        LeftMenu.SetParent(this).DisposeItWith(Disposable);
         LeftMenu.DisposeRemovedItems().DisposeItWith(Disposable);
 
         RightMenu = new ObservableList<IMenuItem>();
@@ -130,7 +130,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             .ObserveAdd()
             .Subscribe(_ => RightMenu.Sort(ISupportOrder.Comparer.Instance))
             .DisposeItWith(Disposable);
-        RightMenu.SetRoutableParent(this).DisposeItWith(Disposable);
+        RightMenu.SetParent(this).DisposeItWith(Disposable);
         RightMenu.DisposeRemovedItems().DisposeItWith(Disposable);
 
         Messages = new ShellMessageCollection().AddTo(ref DisposableBag);
@@ -143,7 +143,9 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         Events
             .Catch<RestartApplicationEvent>(OnRestartApplicationRequested)
             .DisposeItWith(Disposable);
-        Events.Catch<PageCloseRequestedEvent>((_, e, _) => ClosePage(e)).DisposeItWith(Disposable);
+        Events
+            .Catch<PageCloseRequestedEvent>((_, e, cancel) => ClosePage(e, cancel))
+            .DisposeItWith(Disposable);
     }
 
     public ShellMessageCollection Messages { get; }
@@ -195,8 +197,16 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         this.GoTo(new NavPath(new NavId(SettingsPageViewModel.PageId))).SafeFireAndForget();
     }
 
-    public override async ValueTask<IViewModel> Navigate(NavId id)
+    public override async ValueTask<IViewModel> Navigate(
+        NavId id,
+        CancellationToken cancel = default
+    )
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return this;
+        }
+
         var page = _pages.FirstOrDefault(x => x.Id == id);
         if (page is null)
         {
@@ -219,7 +229,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         }
 
         SelectedPage.Value = page;
-        return await base.Navigate(id);
+        return await base.Navigate(id, cancel);
     }
 
     public override IEnumerable<IViewModel> GetChildren() => _pages;
@@ -240,8 +250,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             {
                 foreach (var page in pages)
                 {
-                    cancel.ThrowIfCancellationRequested();
-                    await Navigate(new NavId(page));
+                    await Navigate(new NavId(page), cancel);
                 }
             }
         );
@@ -342,7 +351,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
                     continue;
                 }
 
-                await Navigation.GoTo(page.GetPathFromRoot());
+                await Navigation.GoTo(page.GetPathFromRoot(), cancellationToken);
                 var prefab = _dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
                 var result = await prefab.ShowDialogAsync(
                     new UnsavedChangesDialogPayload
@@ -355,6 +364,10 @@ public class ShellViewModel : ViewModel<IShell>, IShell
                 {
                     return false;
                 }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
             }
             catch (Exception e)
             {
@@ -414,8 +427,9 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         }
     }
 
-    private ValueTask ClosePage(PageCloseRequestedEvent close)
+    private ValueTask ClosePage(PageCloseRequestedEvent close, CancellationToken cancel)
     {
+        cancel.ThrowIfCancellationRequested();
         _logger.ZLogInformation($"Close page [{close.Page.Id}]");
 
         var current = SelectedPage.Value;
@@ -456,7 +470,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         try
         {
             cancel.ThrowIfCancellationRequested();
-            await this.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)));
+            await this.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)), cancel);
         }
         finally
         {

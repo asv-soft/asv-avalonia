@@ -12,5 +12,5 @@ public interface IPage
         IHasHeader
 {
     ICommand TryClose { get; }
-    ValueTask TryCloseAsync(bool force);
+    ValueTask TryCloseAsync(bool force, CancellationToken cancel = default);
 }

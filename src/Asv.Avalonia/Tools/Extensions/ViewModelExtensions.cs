@@ -6,7 +6,7 @@ public static class ViewModelExtensions
 {
     extension(IViewModel sender)
     {
-        public ValueTask GoTo(NavPath path)
+        public ValueTask GoTo(NavPath path, CancellationToken cancel = default)
         {
             var rootId = new NavId(ShellViewModel.TypeId);
 
@@ -24,15 +24,15 @@ public static class ViewModelExtensions
 
             if (sender is IShell shell)
             {
-                return GoToShell(shell, fullPath);
+                return GoToShell(shell, fullPath, cancel);
             }
 
-            return sender.Events.Rise(new NavigateEvent<IViewModel>(sender, fullPath));
+            return sender.Events.Rise(new NavigateEvent<IViewModel>(sender, fullPath), cancel);
         }
     }
 
-    private static async ValueTask GoToShell(IShell shell, NavPath path)
+    private static async ValueTask GoToShell(IShell shell, NavPath path, CancellationToken cancel)
     {
-        await shell.Navigation.GoTo(path);
+        await shell.Navigation.GoTo(path, cancel);
     }
 }

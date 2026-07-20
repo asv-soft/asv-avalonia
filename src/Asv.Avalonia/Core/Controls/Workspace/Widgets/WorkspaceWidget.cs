@@ -11,7 +11,7 @@ public class WorkspaceWidget : HeadlinedViewModel, IWorkspaceWidget
         : base(id)
     {
         Menu = [];
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }

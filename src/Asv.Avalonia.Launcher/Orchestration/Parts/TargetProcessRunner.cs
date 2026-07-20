@@ -30,7 +30,7 @@ public sealed class TargetProcessRunner
         }
     }
 
-    public async Task TerminateAsync(Process process)
+    public async Task TerminateAsync(Process process, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(process);
 
@@ -55,7 +55,10 @@ public sealed class TargetProcessRunner
 
         try
         {
-            using var timeoutCts = new CancellationTokenSource(ProcessTerminationWaitTimeout);
+            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(
+                cancellationToken
+            );
+            timeoutCts.CancelAfter(ProcessTerminationWaitTimeout);
             await process.WaitForExitAsync(timeoutCts.Token).ConfigureAwait(false);
         }
         catch

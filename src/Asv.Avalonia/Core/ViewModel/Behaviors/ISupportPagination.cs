@@ -10,7 +10,7 @@ public interface ISupportPagination : IViewModel
 
 public interface ISupportPaginationCommands
 {
-    ValueTask NextPage(IViewModel context);
-    ValueTask PreviousPage(IViewModel context);
-    ValueTask GoToPage(IViewModel context, int skip, int take);
+    ValueTask NextPage(IViewModel context, CancellationToken cancel = default);
+    ValueTask PreviousPage(IViewModel context, CancellationToken cancel = default);
+    ValueTask GoToPage(IViewModel context, int skip, int take, CancellationToken cancel = default);
 }

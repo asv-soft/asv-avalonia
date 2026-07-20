@@ -88,7 +88,7 @@ public class SettingsConnectionViewModel
         ObservableList<IProtocolPort> source = [];
         var sourceSyncView = source.CreateView(CreatePort).DisposeItWith(Disposable);
         sourceSyncView.DisposeMany().DisposeItWith(Disposable);
-        sourceSyncView.SetRoutableParent(this).DisposeItWith(Disposable);
+        sourceSyncView.SetParent(this).DisposeItWith(Disposable);
 
         View = sourceSyncView
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
@@ -97,7 +97,7 @@ public class SettingsConnectionViewModel
         View.CollectionChanged += OnChanged;
 
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
 
         source.AddRange(deviceManager.Router.Ports);
@@ -119,20 +119,25 @@ public class SettingsConnectionViewModel
         }
     }
 
-    public ValueTask Init(ISettingsPage context)
-    {
-        return ValueTask.CompletedTask;
-    }
-
     [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
         "Uses System.Text.Json reflection-based serialization, which is not trim safe."
     )]
-    public async ValueTask AddPortAsync(ProtocolPortConfig config)
+    public async ValueTask AddPortAsync(
+        ProtocolPortConfig config,
+        CancellationToken cancel = default
+    )
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+
         var oldSnapshot = CapturePortsSnapshot();
         await Task.Factory.StartNew(
             () => _deviceManager.Router.AddPort(config.AsUri()),
-            TaskCreationOptions.LongRunning
+            cancel,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default
         );
         _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
@@ -140,8 +145,17 @@ public class SettingsConnectionViewModel
     [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
         "Uses System.Text.Json reflection-based serialization, which is not trim safe."
     )]
-    public async ValueTask UpdatePortAsync(string portId, ProtocolPortConfig config)
+    public async ValueTask UpdatePortAsync(
+        string portId,
+        ProtocolPortConfig config,
+        CancellationToken cancel = default
+    )
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+
         var oldSnapshot = CapturePortsSnapshot();
         await Task.Factory.StartNew(
             () =>
@@ -150,16 +164,24 @@ public class SettingsConnectionViewModel
                 _deviceManager.Router.RemovePort(port);
                 _deviceManager.Router.AddPort(config.AsUri());
             },
-            TaskCreationOptions.LongRunning
+            cancel,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default
         );
+
         _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
 
     [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode(
         "Uses System.Text.Json reflection-based serialization, which is not trim safe."
     )]
-    public async ValueTask RemovePortAsync(string portId)
+    public async ValueTask RemovePortAsync(string portId, CancellationToken cancel = default)
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+
         var oldSnapshot = CapturePortsSnapshot();
         await Task.Factory.StartNew(
             () =>
@@ -167,8 +189,11 @@ public class SettingsConnectionViewModel
                 var port = _deviceManager.Router.Ports.First(x => x.Id == portId);
                 _deviceManager.Router.RemovePort(port);
             },
-            TaskCreationOptions.LongRunning
+            cancel,
+            TaskCreationOptions.LongRunning,
+            TaskScheduler.Default
         );
+
         _undoSink.PublishUpdate(oldSnapshot, CapturePortsSnapshot());
     }
 

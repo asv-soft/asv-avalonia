@@ -16,7 +16,7 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
     {
         Text = new BindableReactiveProperty<string?>().AddTo(ref DisposableBag);
         ApplyFromUserCommand = new ReactiveCommand(
-            (_, _) => ApplyFromUser(),
+            (_, cancel) => ApplyFromUser(cancel),
             AwaitOperation.Drop
         ).AddTo(ref DisposableBag);
         CancelCommand = new ReactiveCommand(_ => Cancel()).AddTo(ref DisposableBag);
@@ -48,13 +48,13 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
     private ValueTask OnRedoValue(ValueUndoChange<string?> change, CancellationToken cancel)
     {
         Text.Value = change.NewValue;
-        return ApplyFromUser();
+        return ApplyFromUser(cancel);
     }
 
     private ValueTask OnUndoValue(ValueUndoChange<string?> change, CancellationToken cancel)
     {
         Text.Value = change.OldValue;
-        return ApplyFromUser();
+        return ApplyFromUser(cancel);
     }
 
     protected void ApplyValueFromModel(string? newValue)
@@ -116,7 +116,7 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
         set => SetField(ref field, value);
     }
 
-    public async ValueTask ApplyFromUser()
+    public async ValueTask ApplyFromUser(CancellationToken cancel = default)
     {
         if (IsBusy)
         {
@@ -137,16 +137,20 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
         ClearModelErrors();
         var oldValue = _lastTextValue;
         var newValue = Text.Value;
-        var applyCancel = new CancellationTokenSource();
+        var applyCancel = CancellationTokenSource.CreateLinkedTokenSource(cancel);
         _applyCancel = applyCancel;
         IsBusy = true;
         try
         {
-            await ApplyFromUser(applyCancel.Token);
+            await ApplyFromUserCore(applyCancel.Token);
             if (!EqualityComparer<string?>.Default.Equals(oldValue, newValue))
             {
                 _undoValueSink?.PublishUpdate(oldValue, newValue);
             }
+        }
+        catch (OperationCanceledException) when (cancel.IsCancellationRequested)
+        {
+            // do nothing
         }
         catch (Exception e)
         {
@@ -165,7 +169,7 @@ public abstract class PropertyTextBoxViewModel : PropertyViewModel, ISupportCanc
         }
     }
 
-    protected abstract ValueTask ApplyFromUser(CancellationToken cancel);
+    protected abstract ValueTask ApplyFromUserCore(CancellationToken cancel);
 
     public void Cancel()
     {

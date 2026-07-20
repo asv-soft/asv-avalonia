@@ -76,15 +76,15 @@ public class FileSystemCache : TileCache
 
         for (var i = 0; i < config.Value.WriteParallelThreads; i++)
         {
-            Task.Run(WriteQueue);
+            Task.Run(() => WriteQueue(DisposeCancel), DisposeCancel);
         }
     }
 
-    private async void WriteQueue()
+    private async Task WriteQueue(CancellationToken cancel)
     {
         try
         {
-            await foreach (var tile in _writerQueue.Reader.ReadAllAsync(DisposeCancel))
+            await foreach (var tile in _writerQueue.Reader.ReadAllAsync(cancel))
             {
                 var persisted = false;
                 try

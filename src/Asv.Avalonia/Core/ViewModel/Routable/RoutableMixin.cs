@@ -13,29 +13,22 @@ namespace Asv.Avalonia;
 /// </summary>
 public static class RoutableMixin
 {
-    public static IDisposable SetRoutableParent<TModel, TView>(
+    public static IDisposable SetParent<TModel, TView>(
         this ISynchronizedView<TModel, TView> src,
         IViewModel parent
     )
         where TView : class, IViewModel
     {
-        src.ForEach(item => item.SetParent(parent));
-        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.View.SetParent(parent));
-        var sub2 = src.ObserveRemove().Subscribe(x => x.Value.View.SetParent(null));
-        return Disposable.Combine(sub1, sub2);
+        return src.SetParent<TModel, TView, IViewModel>(parent);
     }
 
-    public static ISynchronizedView<TModel, TView> SetRoutableParent<TModel, TView>(
-        this ISynchronizedView<TModel, TView> src,
-        IViewModel parent,
-        CompositeDisposable dispose
+    public static IDisposable SetParent<TModel>(
+        this IObservableCollection<TModel> src,
+        IViewModel parent
     )
-        where TView : class, IViewModel
+        where TModel : class, IViewModel
     {
-        src.ForEach(item => item.SetParent(parent));
-        src.ObserveAdd().Subscribe(x => x.Value.View.SetParent(parent)).DisposeItWith(dispose);
-        src.ObserveRemove().Subscribe(x => x.Value.View.SetParent(null)).DisposeItWith(dispose);
-        return src;
+        return src.SetParent<TModel, IViewModel>(parent);
     }
 
     public static INotifyCollectionChangedSynchronizedViewList<TView> SetRoutableParent<TView>(
@@ -166,39 +159,9 @@ public static class RoutableMixin
         return src;
     }
 
-    public static IDisposable SetRoutableParent<T>(
-        this IObservableCollection<T> src,
-        IViewModel parent
-    )
-        where T : class, IViewModel
-    {
-        var sub1 = src.ObserveAdd().Subscribe(x => x.Value.SetParent(parent));
-        var sub2 = src.ObserveRemove().Subscribe(x => x.Value.SetParent(null));
-        foreach (var routable in src)
-        {
-            routable.SetParent(parent);
-        }
-        return Disposable.Combine(sub1, sub2);
-    }
-
     public static NavPath GetPathFromRoot(this IViewModel src)
     {
         return new NavPath(src.GetPathFromRoot<IViewModel, NavId>());
-    }
-
-    public static async ValueTask<IViewModel> NavigateByPath(this IViewModel src, NavPath path)
-    {
-        var index = 0;
-        while (true)
-        {
-            if (path.Count <= index)
-            {
-                return src;
-            }
-
-            src = await src.Navigate(path[index]);
-            index++;
-        }
     }
 
     /// <summary>

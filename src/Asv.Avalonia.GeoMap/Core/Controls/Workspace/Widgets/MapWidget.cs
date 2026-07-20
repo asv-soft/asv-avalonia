@@ -12,7 +12,7 @@ public class MapWidget : MapViewModel, IWorkspaceWidget
     public MapWidget(string id, ILoggerFactory loggerFactory, IMapService mapService)
         : base(id, mapService)
     {
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }

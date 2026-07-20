@@ -12,8 +12,8 @@ public class PluginsSourceViewModel : ViewModel
     public PluginsSourceViewModel()
         : this(
             NullPluginServerInfo.Instance,
-            _ => ValueTask.CompletedTask,
-            _ => ValueTask.CompletedTask
+            (_, _) => ValueTask.CompletedTask,
+            (_, _) => ValueTask.CompletedTask
         )
     {
         DesignTime.ThrowIfNotDesignMode();
@@ -21,12 +21,12 @@ public class PluginsSourceViewModel : ViewModel
 
     public PluginsSourceViewModel(
         IPluginServerInfo pluginServerInfo,
-        Func<PluginsSourceViewModel, ValueTask> edit,
-        Func<PluginsSourceViewModel, ValueTask> remove
+        Func<PluginsSourceViewModel, CancellationToken, ValueTask> edit,
+        Func<PluginsSourceViewModel, CancellationToken, ValueTask> remove
     )
         : base(
             ViewModelIdPart,
-            new NavArgs(new KeyValuePair<string, string>("source", pluginServerInfo.SourceUri))
+            new NavArgs(new KeyValuePair<string, string?>("source", pluginServerInfo.SourceUri))
         )
     {
         ArgumentNullException.ThrowIfNull(pluginServerInfo);
@@ -36,8 +36,8 @@ public class PluginsSourceViewModel : ViewModel
         Name = pluginServerInfo.Name;
         SourceUri = pluginServerInfo.SourceUri;
         Model = pluginServerInfo;
-        Edit = new ReactiveCommand((_, _) => edit(this)).DisposeItWith(Disposable);
-        Remove = new ReactiveCommand((_, _) => remove(this)).DisposeItWith(Disposable);
+        Edit = new ReactiveCommand((_, cancel) => edit(this, cancel)).DisposeItWith(Disposable);
+        Remove = new ReactiveCommand((_, cancel) => remove(this, cancel)).DisposeItWith(Disposable);
     }
 
     public IPluginServerInfo Model { get; }

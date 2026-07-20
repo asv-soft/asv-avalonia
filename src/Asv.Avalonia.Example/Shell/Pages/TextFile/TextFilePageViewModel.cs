@@ -70,7 +70,7 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         CancellationToken cancel
     )
     {
-        var files = await GetDraggedFilePaths(e.Args);
+        var files = await GetDraggedFilePaths(e.Args, cancel);
         if (files.Length == 0)
         {
             return;
@@ -130,14 +130,14 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         return new NavArgs(new KeyValuePair<string, string?>(FilePathArg, filePath));
     }
 
-    public async ValueTask Save()
+    public async ValueTask Save(CancellationToken cancel = default)
     {
         if (CurrentFilePath == null)
         {
             return;
         }
 
-        await SaveAs(CurrentFilePath);
+        await SaveAs(CurrentFilePath, cancel);
     }
 
     public async ValueTask SaveAs(string filePath, CancellationToken cancel = default)
@@ -189,12 +189,15 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
             currentText.Length == 0 ? text : $"{currentText}{Environment.NewLine}{text}";
     }
 
-    private static async ValueTask<string[]> GetDraggedFilePaths(DragEventArgs args)
+    private static async ValueTask<string[]> GetDraggedFilePaths(
+        DragEventArgs args,
+        CancellationToken cancel
+    )
     {
         var paths = new List<string>();
         if (args.DataTransfer is IAsyncDataTransfer asyncDataTransfer)
         {
-            var asyncFiles = await asyncDataTransfer.TryGetFilesAsync();
+            var asyncFiles = await asyncDataTransfer.TryGetFilesAsync().WaitAsync(cancel);
             AddStorageItems(paths, asyncFiles);
         }
 

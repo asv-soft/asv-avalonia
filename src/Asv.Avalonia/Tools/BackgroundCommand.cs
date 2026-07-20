@@ -34,15 +34,15 @@ public class BackgroundCommand<TArg> : ViewModel
         _logger = loggerFactory.CreateLogger<BackgroundCommand<TArg>>();
     }
 
-    public void Execute(TArg arg)
+    public void Execute(TArg arg, CancellationToken cancel = default)
     {
         if (IsExecuting.Value)
         {
             Cancel();
         }
 
-        _cancellationTokenSource = new CancellationTokenSource();
-        InternalExecute(arg).SafeFireAndForget(ErrorHandler);
+        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancel);
+        InternalExecute(arg, _cancellationTokenSource.Token).SafeFireAndForget(ErrorHandler);
     }
 
     private void ErrorHandler(Exception err)
@@ -54,7 +54,7 @@ public class BackgroundCommand<TArg> : ViewModel
         _progressMessage.Value = "Execution failed";
     }
 
-    private async Task InternalExecute(TArg arg)
+    private async Task InternalExecute(TArg arg, CancellationToken cancel)
     {
         _isExecuting.Value = true;
         _canExecute.Value = false;
@@ -74,7 +74,7 @@ public class BackgroundCommand<TArg> : ViewModel
                     _progressMessage.Value = text;
                     _progress.Value = progress;
                 },
-                _cancellationTokenSource.Token
+                cancel
             );
         }
         catch (OperationCanceledException)

@@ -34,13 +34,13 @@ public interface IFileHandler
     int Priority { get; }
     IEnumerable<FileTypeInfo> SupportedFiles { get; }
     bool CanOpen(string path);
-    ValueTask Open(string path);
-    ValueTask Create(string path, FileTypeInfo type);
+    ValueTask Open(string path, CancellationToken cancel = default);
+    ValueTask Create(string path, FileTypeInfo type, CancellationToken cancel = default);
 }
 
 public interface IFileAssociationService
 {
     IEnumerable<FileTypeInfo> SupportedFiles { get; }
-    ValueTask Open(string path);
-    ValueTask Create(string path, FileTypeInfo type);
+    ValueTask Open(string path, CancellationToken cancel = default);
+    ValueTask Create(string path, FileTypeInfo type, CancellationToken cancel = default);
 }

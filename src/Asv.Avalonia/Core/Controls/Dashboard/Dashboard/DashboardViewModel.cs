@@ -61,7 +61,7 @@ public class DashboardViewModel : ViewModel, IDashboard
     public DashboardViewModel(string typeId, NavArgs args = default)
         : base(typeId, args)
     {
-        Tiles.SetRoutableParent(this).DisposeItWith(Disposable);
+        Tiles.SetParent(this).DisposeItWith(Disposable);
         Tiles.DisposeRemovedItems().DisposeItWith(Disposable);
         Tiles.ObserveAdd().Subscribe(x => AddTile(x.Value)).DisposeItWith(Disposable);
         Tiles.ObserveRemove().Subscribe(x => RemoveTile(x.Value)).DisposeItWith(Disposable);

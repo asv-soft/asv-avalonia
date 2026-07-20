@@ -24,7 +24,7 @@ public class SettingsAppearanceViewModel
         : base(PageId, context, ext)
     {
         Sections = [];
-        Sections.SetRoutableParent(this).DisposeItWith(Disposable);
+        Sections.SetParent(this).DisposeItWith(Disposable);
         Sections.DisposeRemovedItems().DisposeItWith(Disposable);
 
         Views = Sections.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);

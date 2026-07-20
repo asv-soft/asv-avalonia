@@ -93,7 +93,7 @@ public class PropertyTextBoxDesign : PropertyTextBoxViewModel
         Text.ForceValidate();
     }
 
-    protected override ValueTask ApplyFromUser(CancellationToken cancel)
+    protected override ValueTask ApplyFromUserCore(CancellationToken cancel)
     {
         return ValueTask.CompletedTask;
     }

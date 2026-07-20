@@ -34,7 +34,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         _container = container;
         _loggerFactory = loggerFactory;
         Nodes = [];
-        Nodes.SetRoutableParent(this).AddTo(ref DisposableBag);
+        Nodes.SetParent(this).AddTo(ref DisposableBag);
         Nodes.DisposeRemovedItems().AddTo(ref DisposableBag);
         TreeView = new TreePageMenu(Nodes).AddTo(ref DisposableBag);
         SelectedNode = new BindableReactiveProperty<ObservableTreeNode<
@@ -86,10 +86,15 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
     public ObservableList<ITreePageMenuItem> Nodes { get; }
 
-    public override ValueTask<IViewModel> Navigate(NavId id)
+    public override ValueTask<IViewModel> Navigate(NavId id, CancellationToken cancel = default)
     {
         try
         {
+            if (cancel.IsCancellationRequested)
+            {
+                return ValueTask.FromResult<IViewModel>(this);
+            }
+
             if (SelectedPage.Value != null && SelectedPage.Value.Id == id)
             {
                 return ValueTask.FromResult<IViewModel>(SelectedPage.Value);
@@ -208,7 +213,7 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     protected virtual ITreeSubpage? CreateDefaultPage()
     {
         return SelectedNode.Value != null
-            ? new GroupTreePageItemViewModel(SelectedNode.Value, Navigate, _loggerFactory)
+            ? new GroupTreePageItemViewModel(SelectedNode.Value, Navigate)
             : null;
     }
 
@@ -235,6 +240,11 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         CancellationToken cancel
     )
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+
         if (node?.Base.NavigateTo is null || _internalNavigate)
         {
             return;
@@ -250,6 +260,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             );
         }
 
-        await Navigate(node.Base.NavigateTo);
+        await Navigate(node.Base.NavigateTo, cancel);
     }
 }

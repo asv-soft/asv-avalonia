@@ -15,7 +15,7 @@ public class ShellMessageCollection : ViewModel
     {
         ItemsSource = [];
         ItemsView = ItemsSource.ToNotifyCollectionChangedSlim().AddTo(ref DisposableBag);
-        ItemsSource.SetRoutableParent(this).AddTo(ref DisposableBag);
+        ItemsSource.SetParent(this).AddTo(ref DisposableBag);
         ItemsSource.DisposeRemovedItems().AddTo(ref DisposableBag);
         ItemsSource
             .ObserveCountChanged()

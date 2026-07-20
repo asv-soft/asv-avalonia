@@ -78,7 +78,7 @@ public class InstalledPluginsPageViewModel : SettingsSubPage
         _view = _plugins
             .CreateView(info => new InstalledPluginInfoViewModel(info, manager, loggerFactory))
             .DisposeItWith(Disposable);
-        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        _view.SetParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         InstalledPluginsView = _view
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
