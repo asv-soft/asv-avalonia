@@ -1,164 +1,39 @@
-# Make Module truly modular
+﻿# Make the module modular
 
-The key feature of modules is the ability to be disabled entirely or partially.
-Currently, the module cannot do this, so we need to extend its capabilities.
+The registration hierarchy created in the previous step makes features composable without introducing a separate options model.
+Every `Register...` method accepts an optional callback. 
+With no callback, it registers the defaults for that scope; with a callback, the application selects the registrations explicitly.
 
-## Adding AppHost extension
+This section adds a Dogs page and shows how an application can load both pages or only one of them.
 
-Create an AppHost folder in the root directory of Asv.Avalonia.Samples.CreateModule.
-Inside this folder, add three files: ModuleModuleMixin, ModuleModuleOptionsBuilder, and ModuleModuleOptions.
+## Add the Dogs page
 
-### ModuleModuleOptions
+Add `dog.jpg` to the module's `Assets` folder and register it in the project file:
 
-In this file, we define the configuration options for the module.
-These options will later be used by the builder.
+```xml
+<ItemGroup>
+    <AvaloniaResource Include="Assets\cat.jpg" />
+    <AvaloniaResource Include="Assets\dog.jpg" />
+</ItemGroup>
 
-```c#
-public class ModuleModuleOptions
-{
-    public const string Section = "Module"; // Configuration section for the module
-    public required bool IsEnabled { get; set; }
-}
+<ItemGroup>
+    <AdditionalFiles Include="Shell\Pages\Cats\CatsPageView.axaml" />
+    <AdditionalFiles Include="Shell\Pages\Dogs\DogsPageView.axaml" />
+</ItemGroup>
 ```
-
-### ModuleModuleOptionsBuilder
-
-Add one base method for the builder.
-We will extend this class later, but for now this method is enough.
-
-```c#
-internal OptionsBuilder<ModuleModuleOptions> Build(OptionsBuilder<ModuleModuleOptions> options)
-{
-    return options.Configure(config =>
-    {
-        config.IsEnabled = true;
-    });
-}
-```
-
-### ModuleModuleMixin
-
-This file extends the builder in Program.cs. We use this method to set up our module.
-
-```c#
-public static class ModuleModuleMixin
-{
-    extension(IHostApplicationBuilder builder)
-    {
-        public IHostApplicationBuilder UseModuleModule()
-        {
-            var options = builder
-                .Services.AddOptions<ModuleModuleOptions>()
-                .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
-
-            var optionsBuilder = new ModuleModuleOptionsBuilder();
-            optionsBuilder.Build(options);
-            return builder;
-        }
-    }
-}
-```
-
-## Updating the mixin to use options
-
-Now we need to update the module's mixin to conditionally register components based on the options:
-
-```c#
-public static class ModuleModuleMixin
-{
-    extension(IHostApplicationBuilder builder)
-    {
-        public IHostApplicationBuilder UseModuleModule(
-            Action<ModuleModuleOptionsBuilder>? configure = null)
-        {
-            var options = builder
-                .Services.AddOptions<ModuleModuleOptions>()
-                .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
-
-            var defaultOptions = builder
-                .Configuration.GetSection(ModuleModuleOptions.Section)
-                .Get<ModuleModuleOptions>();
-
-            var optionsBuilder = defaultOptions is null
-                ? new ModuleModuleOptionsBuilder()
-                : new ModuleModuleOptionsBuilder(defaultOptions);
-
-            if (configure is null)
-            {
-                return builder;
-            }
-
-            configure.Invoke(optionsBuilder);
-            optionsBuilder.Build(options);
-
-            var resolvedOptions = optionsBuilder.Resolve();
-
-            if (!resolvedOptions.IsEnabled)
-            {
-                return builder;
-            }
-
-            if (resolvedOptions.IsCatsPageEnabled)
-            {
-                builder.Shell.Pages.Register<CatsPageViewModel, CatsPageView>(CatsPageViewModel.PageId);
-                builder.Commands.Register<OpenCatsPageCommand>();
-                builder.Extensions.Register<IHomePage, HomePageCatsPageExtension>();
-            }
-
-            return builder;
-        }
-    }
-}
-```
-
-## Adding modularity to the app
-
-Now our module is fully modular, and we need to enable it in the application.
-
-Go to `Program.cs` and add the following line to the builder:
-
-```c#
-builder.UseModuleModule(opt => opt.WithCats());
-```
-
-Run the application. You should see the Cats page.
-
-Now remove `UseModuleModule` from the builder.
-Run the application again. The page should no longer be visible.
-
-If you did everything right, now your module meets our standards for modules.
-Next we will show you how to extend your module and add more settings to it so that you will be able to split your module into smaller parts.
-
-## Extending the module
-
-We have already implemented the basic module structure with some simple features.
-In this section we are going to extend our module with new features. We will also add new settings to the builder.
-This section is useful if you want to add to your module optional features.
-
-### Adding a new page
-
-We want to provide additional customization options for the user.
-Let's add the ability to open a page with dogs.
-
-Download a picture with dogs from the internet.
-
-Add a new picture to the assets folder.
 
 ![new-pictures](how-to-create-module-dog-picture.png)
 
-Create a new View and ViewModel for the dogs page.
-We will skip the details of this step as it is similar to the Cats page implementation.
+Create `Shell/Pages/Dogs` with the following files.
 
-You can copy the following code to the files:
-
-```XML
+```xml
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:local="clr-namespace:Asv.Avalonia.Samples.CreateModule"
+             xmlns:local="clr-namespace:Asv.Avalonia.Module"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Asv.Avalonia.Samples.CreateModule.DogsPageView"
+             x:Class="Asv.Avalonia.Module.DogsPageView"
              x:DataType="local:DogsPageViewModel">
     <Design.DataContext>
         <local:DogsPageViewModel/>
@@ -172,7 +47,11 @@ You can copy the following code to the files:
 ```
 {collapsible="true" collapsed-title="DogsPageView.axaml"}
 
-```C#
+```c#
+using Avalonia.Controls;
+
+namespace Asv.Avalonia.Module;
+
 public partial class DogsPageView : UserControl
 {
     public DogsPageView()
@@ -183,244 +62,187 @@ public partial class DogsPageView : UserControl
 ```
 {collapsible="true" collapsed-title="DogsPageView.axaml.cs"}
 
-```C#
+```c#
 using Asv.Common;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
-namespace Asv.Avalonia.Samples.CreateModule;
+namespace Asv.Avalonia.Module;
 
 public class DogsPageViewModel : PageViewModel<DogsPageViewModel>
 {
     public const string PageId = "dogs";
-    public const MaterialIconKind PageIcon =  MaterialIconKind.Dog;
+    public const MaterialIconKind PageIcon = MaterialIconKind.Dog;
     public const AsvColorKind PageIconColor = AsvColorKind.Info7;
 
     public DogsPageViewModel()
-        : this(DesignTime.CommandService, DesignTime.LoggerFactory, DesignTime.DialogService, DesignTime.ExtensionService)
+        : this(
+            DesignTime.PageContext,
+            NullLoggerFactory.Instance,
+            DesignTime.DialogService,
+            DesignTime.ExtensionService)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
-    
+
     public DogsPageViewModel(
-        ICommandService cmd,
+        IPageContext context,
         ILoggerFactory loggerFactory,
         IDialogService dialogService,
         IExtensionService ext)
-        : base(PageId, cmd, loggerFactory, dialogService, ext)
+        : base(PageId, context, loggerFactory, dialogService, ext)
     {
+        Header = "Dogs";
+        Icon = PageIcon;
+        IconColor = PageIconColor;
+
         var stream = AssetLoader
-            .Open(new Uri("avares://Asv.Avalonia.Samples.CreateModule/Assets/dog.jpg"))
+            .Open(new Uri("avares://Asv.Avalonia.Module/Assets/dog.jpg"))
             .DisposeItWith(Disposable);
         var defaultPicture = new Bitmap(stream).DisposeItWith(Disposable);
 
         SelectedImage = defaultPicture;
     }
-    
+
     public IImage? SelectedImage
     {
         get;
         private init => SetField(ref field, value);
     }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         return [];
     }
 
     protected override void AfterLoadExtensions()
     {
-        // ignore
+        // No page extensions need post-load processing.
     }
-
 }
 ```
 {collapsible="true" collapsed-title="DogsPageViewModel.cs"}
 
-```C#
+## Add the Dogs home page action
+
+The Dogs action follows the same direct-navigation pattern as the Cats action:
+
+```c#
 using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Asv.Modeling;
 using R3;
 
-namespace Asv.Avalonia.Samples.CreateModule;
+namespace Asv.Avalonia.Module;
 
-public sealed class HomePageDogsPageExtension(ILoggerFactory loggerFactory)
-    : AsyncDisposableOnce,
-        IExtensionFor<IHomePage>
+public sealed class HomePageDogsPageExtension : IExtensionFor<IHomePage>
 {
+    public const string StaticId = "ext.home.dogs";
+
+    public string Id => StaticId;
+
     public void Extend(IHomePage context, CompositeDisposable contextDispose)
     {
-        context.Tools.Add(
-            OpenDogsPageCommand
-                .StaticInfo
-                .CreateAction(loggerFactory)
-                .DisposeItWith(contextDispose)
-        );
+        var action = new ActionViewModel("open-dogs")
+        {
+            Header = "Open dogs page",
+            Description = "Opens the dogs page",
+            Icon = DogsPageViewModel.PageIcon,
+            IconColor = DogsPageViewModel.PageIconColor,
+            Command = new ReactiveCommand(async (_, _) =>
+                await context.GoTo(new NavPath(new NavId(DogsPageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
     }
 }
 ```
 {collapsible="true" collapsed-title="HomePageDogsPageExtension.cs"}
 
-```C#
-public class OpenDogsPageCommand(INavigationService nav)
-    : OpenPageCommandBase(DogsPageViewModel.PageId, nav)
-{
-    public override ICommandInfo Info => StaticInfo;
+## Register the Dogs feature
 
-    #region Static
-
-    public const string Id = $"{BaseId}.open.dogs";
-
-    public static readonly ICommandInfo StaticInfo = new CommandInfo
-    {
-        Id = Id,
-        Name = "Open dogs page",
-        Description = "Command opens dogs page",
-        Icon = DogsPageViewModel.PageIcon,
-        IconColor = DogsPageViewModel.PageIconColor,
-        DefaultHotKey = null,
-    };
-
-    #endregion
-}
-```
-{collapsible="true" collapsed-title="OpenDogsPageCommand.cs"}
-
-### Adding options to the builder
-
-Add new options to the ModuleModuleOptions:
+Create `DogsRegistrations.cs` in `Shell/Pages/Dogs`:
 
 ```c#
-...
-    public required bool IsDogsPageEnabled { get; set; }
-    public required bool IsCatsPageEnabled { get; set; }
-}
-```
+namespace Asv.Avalonia.Module;
 
-### Extending ModuleModuleOptionsBuilder
-
-```c#
-public class ModuleModuleOptionsBuilder
+public static class DogsRegistrations
 {
-    private bool _isCatsPageEnabled;
-    private bool _isDogsPageEnabled;
-
-    internal ModuleModuleOptionsBuilder() { }
-
-    internal ModuleModuleOptionsBuilder(ModuleModuleOptions defaultOptions)
+    extension(PagesRegistrations.Builder builder)
     {
-        _isCatsPageEnabled = defaultOptions.IsCatsPageEnabled;
-        _isDogsPageEnabled = defaultOptions.IsDogsPageEnabled;
-    }
-    
-    public ModuleModuleOptionsBuilder WithCats()
-    {
-        _isCatsPageEnabled = true;
-        return this;
-    }
-
-    public ModuleModuleOptionsBuilder WithDogs()
-    {
-        _isDogsPageEnabled = true;
-        return this;
-    }
-    
-    internal OptionsBuilder<ModuleModuleOptions> Build(OptionsBuilder<ModuleModuleOptions> options)
-    {
-        return options.Configure(config =>
+        public PagesRegistrations.Builder RegisterDogs()
         {
-            config.IsDogsPageEnabled = _isDogsPageEnabled;
-            config.IsCatsPageEnabled = _isCatsPageEnabled;
-            config.IsEnabled = true;
-        });
-    }
-
-    internal ModuleModuleOptions Resolve()
-    {
-        return new ModuleModuleOptions
-        {
-            IsEnabled = true,
-            IsCatsPageEnabled = _isCatsPageEnabled,
-            IsDogsPageEnabled = _isDogsPageEnabled,
-        };
-    }
-}
-```
-
-### Changing ModuleModuleMixin to use the new options
-
-We need to change the builder extension to use our new options.
-Here we will show you the advanced version of the builder extension that can take default options from the `appsettings.json`.
-It also conditionally registers both cats and dogs pages based on the resolved options:
-
-```c#
-public static class ModuleModuleMixin
-{
-    extension(IHostApplicationBuilder builder)
-    {
-        public IHostApplicationBuilder UseModuleModule(
-            Action<ModuleModuleOptionsBuilder>? configure = null)
-        {
-            var options = builder
-                .Services.AddOptions<ModuleModuleOptions>()
-                .Bind(builder.Configuration.GetSection(ModuleModuleOptions.Section));
-
-            var defaultOptions = builder
-                .Configuration.GetSection(ModuleModuleOptions.Section)
-                .Get<ModuleModuleOptions>();
-
-            var optionsBuilder = defaultOptions is null
-                ? new ModuleModuleOptionsBuilder()
-                : new ModuleModuleOptionsBuilder(defaultOptions);
-
-            if (configure is null)
-            {
-                return builder;
-            }
-
-            configure.Invoke(optionsBuilder);
-            optionsBuilder.Build(options);
-
-            var resolvedOptions = optionsBuilder.Resolve();
-
-            if (!resolvedOptions.IsEnabled)
-            {
-                return builder;
-            }
-
-            if (resolvedOptions.IsCatsPageEnabled)
-            {
-                builder.Shell.Pages.Register<CatsPageViewModel, CatsPageView>(CatsPageViewModel.PageId);
-                builder.Services.AddSingleton<IAsyncCommand, OpenCatsPageCommand>();
-                builder.Extensions.Register<IHomePage, HomePageCatsPageExtension>();
-            }
-
-            if (resolvedOptions.IsDogsPageEnabled)
-            {
-                builder.Shell.Pages.Register<DogsPageViewModel, DogsPageView>(DogsPageViewModel.PageId);
-                builder.Commands.Register<OpenDogsPageCommand>();
-                builder.Extensions.Register<IHomePage, HomePageDogsPageExtension>();
-            }
-
+            builder.AppBuilder.Pages.Register<DogsPageViewModel, DogsPageView>(
+                DogsPageViewModel.PageId
+            );
+            builder.AppBuilder.Extensions.Register<IHomePage, HomePageDogsPageExtension>();
             return builder;
         }
     }
 }
 ```
 
-Now you can run the application and see that all pages are disabled.
-To enable them, modify the `UseModuleModule` call in `Program.cs` as follows:
+Update `PagesRegistrations.Builder.RegisterDefault()` so the default module contains both pages:
 
 ```c#
-builder.UseModuleModule(opt => opt.WithCats().WithDogs());
+public Builder RegisterDefault()
+{
+    this.RegisterDogs();
+    this.RegisterCats();
+    return this;
+}
 ```
 
-You should now see both pages.
-Each page can be enabled or disabled individually.
+No changes are required in the top-level or shell builders. Their default chain reaches `PagesRegistrations.Builder.RegisterDefault()` automatically.
+
+## Select module features
+
+The shortest application setup registers every default feature:
+
+```c#
+builder
+    .RegisterDefault()
+    .RegisterDesktopShell()
+    .RegisterModuleModule();
+```
+
+To register only the Cats page, provide callbacks at each scope whose defaults you want to replace:
+
+```c#
+builder
+    .RegisterDefault()
+    .RegisterDesktopShell()
+    .RegisterModuleModule(module =>
+        module.RegisterShell(shell =>
+            shell.RegisterPages(pages => pages.RegisterCats())
+        )
+    );
+```
+
+To register only the Dogs page, replace the final call with `pages.RegisterDogs()`.
+
+Multiple page registrations remain chainable:
+
+```c#
+builder.RegisterModuleModule(module =>
+    module.RegisterShell(shell =>
+        shell.RegisterPages(pages =>
+            pages
+                .RegisterCats()
+                .RegisterDogs()
+        )
+    )
+);
+```
+
+If `RegisterModuleModule()` is omitted, none of the module's services, pages, or extensions are registered.
+
+This design keeps registration close to each feature and lets new scopes or features participate in the same hierarchy without a central list of Boolean options.
 
 ![dogs-and-cats-pages](how-to-create-module-dogs-and-cats.png)
 
-The next step is to make a NuGet package of your module.
+The next step is to [create a NuGet package](how-to-create-module-make-nuget.md).
