@@ -1,103 +1,247 @@
-﻿# Source code
+# Source code
 
 ```
-Asv.Avalonia.Samples.RecipeBook
-├── Dependencies/
+AsvAvaloniaTest/
 ├── Assets/
-├── Commands/
-│   └── Recipes/
-│       └── OpenRecipePageCommand.cs
-├── Pages/
-│   ├── Events/
-│   │   └── RemoveIngredientEvent.cs
-│   ├── Ingredients/
-│   │   └── IngredientViewModel.cs
-│   └── Recipes/
-│       ├── Dialog/
-│       │   ├── RecipeEditDialogPrefab.cs
-│       │   ├── RecipeEditDialogView.axaml
-│       │   ├── RecipeEditDialogView.axaml.cs
-│       │   └── RecipeEditDialogViewModel.cs
-│       ├── HomePageRecipeExtension.cs
-│       ├── RecipePageView.axaml
-│       ├── RecipePageView.axaml.cs
-│       ├── RecipePageViewModel.cs
-│       └── RecipeViewModel.cs
+├── Shell/
+│   ├── ShellRegistrations.cs
+│   └── Pages/
+│       ├── PagesRegistrations.cs
+│       └── Recipes/
+│           ├── Dialogs/
+│           │   ├── RecipeEditDialogPrefab.cs
+│           │   ├── RecipeEditDialogView.axaml
+│           │   ├── RecipeEditDialogView.axaml.cs
+│           │   └── RecipeEditDialogViewModel.cs
+│           ├── Events/
+│           │   └── RemoveIngredientEvent.cs
+│           ├── Ingredients/
+│           │   └── IngredientViewModel.cs
+│           ├── HomePageRecipeExtension.cs
+│           ├── RecipePageRegistrations.cs
+│           ├── RecipePageView.axaml
+│           ├── RecipePageView.axaml.cs
+│           ├── RecipePageViewModel.cs
+│           └── RecipeViewModel.cs
 ├── App.axaml
 ├── App.axaml.cs
+├── RecipeBookRegistrations.cs
 ├── app.manifest
-├── Asv.Avalonia.Samples.RecipeBook.csproj.DotSettings
 └── Program.cs
 ```
 
-```c#
+```C#
 using System;
 using System.Threading.Tasks;
+using Asv.Avalonia;
 using Avalonia;
 using Avalonia.Controls;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
-sealed class Program
+class Program
 {
-	[STAThread]
-	public static void Main(string[] args)
-	{
-		try
-		{
-			BuildAvaloniaApp()
-				.StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
-			AppHost.Instance.StopAsync().GetAwaiter().GetResult();
-			Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
-		}
-		catch (Exception e)
-		{
-			AppHost.HandleApplicationCrash(e);
-		}
-	}
+    // Initialization code. Don't use any Avalonia, third-party APIs or any
+    // SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+    // yet and stuff might break.
+    [STAThread]
+    public static void Main(string[] args)
+    {
+        try
+        {
+            BuildAvaloniaApp()
+                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+            AppHost.Instance.StopAsync().GetAwaiter().GetResult();
+            Task.Factory.StartNew(AppHost.Instance.Dispose).GetAwaiter().GetResult();
+        }
+        catch (Exception e)
+        {
+            AppHost.HandleApplicationCrash(e);
+        }
+    }
 
-	public static AppBuilder BuildAvaloniaApp()
-		=> AppBuilder.Configure<App>()
-			.UsePlatformDetect()
-			.WithInterFont()
-			.LogToTrace()
-			.UseAsv(builder =>
-			{
-				// Register recipe page
-				builder.Shell.Pages.Register<RecipePageViewModel, RecipePageView>(RecipePageViewModel.PageId);
-
-				// Register command
-				builder.Commands.Register<OpenRecipePageCommand>();
-
-				// Register home page extension
-				builder.Extensions.Register<IHomePage, HomePageRecipeExtension>();
-
-				// Register dialog prefab and its view
-				builder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
-				builder.ViewLocator.RegisterViewFor<RecipeEditDialogViewModel, RecipeEditDialogView>();
-
-				builder
-					.UseDefault()
-					.UseOptionalLogViewer()
-					.UseOptionalSoloRun(opt => opt.WithArgumentForwarding())
-					.UseDesktopShell();
-			});
+    // Avalonia configuration, don't remove; also used by visual designer.
+    public static AppBuilder BuildAvaloniaApp()
+        => AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace()
+            .UseAsv(builder =>
+            {
+                builder
+                    .RegisterDefault()
+                    .RegisterDesktopShell()
+                    .RegisterRecipeBookApp();
+            });
 }
 ```
 
 {collapsible="true" collapsed-title="Program.cs"}
 
-```c#
+```C#
+using System;
+using Asv.Avalonia;
+using Microsoft.Extensions.Hosting;
+
+namespace AsvAvaloniaTest;
+
+public static class RecipeBookRegistrations
+{
+    extension(IHostApplicationBuilder builder)
+    {
+        public Builder RecipeBook => new(builder);
+
+        public IHostApplicationBuilder RegisterRecipeBookApp(Action<Builder>? configure = null)
+        {
+            configure ??= recipeBook => recipeBook.RegisterDefault();
+            configure(new Builder(builder));
+            return builder;
+        }
+    }
+
+    public class Builder(IHostApplicationBuilder builder) : IDependencyBuilder
+    {
+        public IHostApplicationBuilder AppBuilder => builder;
+
+        public Builder RegisterDefault()
+        {
+            this.RegisterShell();
+            return this;
+        }
+    }
+}
+```
+
+{collapsible="true" collapsed-title="RecipeBookRegistrations.cs"}
+
+```C#
+using System;
+using Asv.Avalonia;
+using Microsoft.Extensions.Hosting;
+
+namespace AsvAvaloniaTest;
+
+public static class ShellRegistrations
+{
+    extension(RecipeBookRegistrations.Builder builder)
+    {
+        public Builder Shell => new(builder);
+
+        public RecipeBookRegistrations.Builder RegisterShell(Action<Builder>? configure = null)
+        {
+            configure ??= shell => shell.RegisterDefault();
+            configure(new Builder(builder));
+            return builder;
+        }
+    }
+
+    public class Builder(RecipeBookRegistrations.Builder builder) : IDependencyBuilder
+    {
+        public IHostApplicationBuilder AppBuilder => builder.AppBuilder;
+
+        public Builder RegisterDefault()
+        {
+            this.RegisterPages();
+            return this;
+        }
+    }
+}
+```
+
+{collapsible="true" collapsed-title="ShellRegistrations.cs"}
+
+```C#
+using System;
+using Asv.Avalonia;
+using Microsoft.Extensions.Hosting;
+
+namespace AsvAvaloniaTest;
+
+public static class PagesRegistrations
+{
+    extension(ShellRegistrations.Builder builder)
+    {
+        public Builder Pages => new(builder);
+
+        public ShellRegistrations.Builder RegisterPages(Action<Builder>? configure = null)
+        {
+            configure ??= pages => pages.RegisterDefault();
+            configure(new Builder(builder));
+            return builder;
+        }
+    }
+
+    public class Builder(ShellRegistrations.Builder builder) : IDependencyBuilder
+    {
+        public IHostApplicationBuilder AppBuilder => builder.AppBuilder;
+
+        public Builder RegisterDefault()
+        {
+            this.RegisterRecipePage();
+            return this;
+        }
+    }
+}
+```
+
+{collapsible="true" collapsed-title="PagesRegistrations.cs"}
+
+```C#
+using System;
+using Asv.Avalonia;
+using Microsoft.Extensions.Hosting;
+
+namespace AsvAvaloniaTest;
+
+public static class RecipePageRegistrations
+{
+    extension(PagesRegistrations.Builder builder)
+    {
+        public Builder RecipePage => new(builder);
+
+        public PagesRegistrations.Builder RegisterRecipePage(Action<Builder>? configure = null)
+        {
+            configure ??= recipePage => recipePage.RegisterDefault();
+            configure(new Builder(builder));
+            return builder;
+        }
+    }
+
+    public class Builder(PagesRegistrations.Builder builder) : IDependencyBuilder
+    {
+        public IHostApplicationBuilder AppBuilder => builder.AppBuilder;
+
+        public Builder RegisterDefault()
+        {
+            AppBuilder.Pages.Register<RecipePageViewModel, RecipePageView>(
+                RecipePageViewModel.PageId
+            );
+            AppBuilder.Extensions.Register<IHomePage, HomePageRecipeExtension>();
+            AppBuilder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
+            AppBuilder.ViewLocator.RegisterViewFor<
+                RecipeEditDialogViewModel,
+                RecipeEditDialogView
+            >();
+            return this;
+        }
+    }
+}
+```
+
+{collapsible="true" collapsed-title="RecipePageRegistrations.cs"}
+
+```C#
+using Asv.Avalonia;
 using Avalonia.Markup.Xaml;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public class App : AsvApplication
 {
-	public override void Initialize()
-	{
-		AvaloniaXamlLoader.Load(this);
-	}
+    public override void Initialize()
+    {
+        AvaloniaXamlLoader.Load(this);
+    }
 }
 ```
 
@@ -105,12 +249,12 @@ public class App : AsvApplication
 
 ```xml
 <Application xmlns="https://github.com/avaloniaui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 x:Class="Asv.Avalonia.Samples.RecipeBook.App"
-			 RequestedThemeVariant="Default">
-	<Application.Styles>
-		<StyleInclude Source="avares://Asv.Avalonia/Styling/Theme.axaml" />
-	</Application.Styles>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="AsvAvaloniaTest.App"
+             RequestedThemeVariant="Default">
+    <Application.Styles>
+        <StyleInclude Source="avares://Asv.Avalonia/Theme.axaml" />
+    </Application.Styles>
 </Application>
 ```
 
@@ -118,16 +262,16 @@ public class App : AsvApplication
 
 ```xml
 <UserControl xmlns="https://github.com/avaloniaui"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
-	xmlns:local="clr-namespace:Asv.Avalonia.Samples.RecipeBook"
-	mc:Ignorable="d"
-	d:DesignWidth="800"
-	d:DesignHeight="450"
-	x:Class="Asv.Avalonia.Samples.RecipeBook.RecipePageView"
-	x:DataType="local:RecipePageViewModel">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    xmlns:local="clr-namespace:AsvAvaloniaTest"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="AsvAvaloniaTest.RecipePageView"
+    x:DataType="local:RecipePageViewModel">
     <Grid Margin="0,30,0,0">
 
         <Grid.ColumnDefinitions>
@@ -276,7 +420,7 @@ public class App : AsvApplication
                                                                  Background="Transparent"
                                                                  BorderThickness="0"
                                                                  Foreground="#DDD"
-                                                                 Watermark="Name" />
+                                                                 PlaceholderText="Name" />
 
                                                         <!-- Amount -->
                                                         <TextBox Grid.Column="2"
@@ -286,7 +430,7 @@ public class App : AsvApplication
                                                                  CornerRadius="3"
                                                                  Foreground="#AAA"
                                                                  HorizontalContentAlignment="Center"
-                                                                 Watermark="Qty" />
+                                                                 PlaceholderText="Qty" />
 
                                                         <!-- Delete -->
                                                         <Button Grid.Column="3"
@@ -335,18 +479,17 @@ public class App : AsvApplication
 
 {collapsible="true" collapsed-title="RecipePageView.axaml"}
 
-```c#
-using Asv.Avalonia;
+```C#
 using Avalonia.Controls;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public partial class RecipePageView : UserControl
 {
-	public RecipePageView()
-	{
-		InitializeComponent();
-	}
+    public RecipePageView()
+    {
+        InitializeComponent();
+    }
 }
 ```
 
@@ -354,140 +497,127 @@ public partial class RecipePageView : UserControl
 
 ```xml
 <UserControl xmlns="https://github.com/avaloniaui"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-	xmlns:local="clr-namespace:Asv.Avalonia.Samples.RecipeBook"
-	mc:Ignorable="d"
-	d:DesignWidth="800"
-	d:DesignHeight="450"
-	x:Class="Asv.Avalonia.Samples.RecipeBook.RecipeEditDialogView"
-	x:DataType="local:RecipeEditDialogViewModel">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:local="clr-namespace:AsvAvaloniaTest"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="450"
+    x:Class="AsvAvaloniaTest.RecipeEditDialogView"
+    x:DataType="local:RecipeEditDialogViewModel">
+    <StackPanel>
+        <TextBlock Text="Recipe Title" />
+        <TextBox Text="{CompiledBinding Title.Value}" />
 
-	<StackPanel>
-		<TextBlock Text="Recipe Title" />
-		<TextBox Text="{CompiledBinding Title.Value}" />
-
-		<TextBlock Text="Category" />
-		<TextBox Text="{CompiledBinding Category.Value}" />
-	</StackPanel>
+        <TextBlock Text="Category" />
+        <TextBox Text="{CompiledBinding Category.Value}" />
+    </StackPanel>
 </UserControl>
 ```
 
 {collapsible="true" collapsed-title="RecipeEditDialogView.axaml"}
 
-```c#
-using Asv.Avalonia;
+```C#
 using Avalonia.Controls;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public partial class RecipeEditDialogView : UserControl
 {
-	public RecipeEditDialogView()
-	{
-		InitializeComponent();
-	}
+    public RecipeEditDialogView()
+    {
+        InitializeComponent();
+    }
 }
 ```
 
 {collapsible="true" collapsed-title="RecipeEditDialogView.axaml.cs"}
 
-```c#
+```C#
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia;
-using Asv.Common;
+using Asv.Modeling;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
-public sealed class RemoveIngredientEvent(IRoutable source) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble);
+public sealed class RemoveIngredientEvent(IViewModel source)
+    : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Bubble);
 
 public static class RemoveIngredientEventMixin
 {
-	public static ValueTask RequestRemoveIngredient(this IRoutable src, CancellationToken cancel = default)
-	{
-		return src.Rise(new RemoveIngredientEvent(src), cancel);
-	}
+    public static ValueTask RequestRemoveIngredient(
+        this IViewModel src,
+        CancellationToken cancel = default
+    )
+    {
+        return src.Rise(new RemoveIngredientEvent(src), cancel);
+    }
 }
 ```
 
 {collapsible="true" collapsed-title="RemoveIngredientEvent.cs"}
 
-```c#
+```C#
 using Asv.Avalonia;
-
-namespace Asv.Avalonia.Samples.RecipeBook;
-
-public class OpenRecipePageCommand(INavigationService nav)
-	: OpenPageCommandBase(RecipePageViewModel.PageId, nav)
-{
-	public override ICommandInfo Info => StaticInfo;
-
-	public const string Id = $"{BaseId}.open.{RecipePageViewModel.PageId}";
-
-	public static readonly ICommandInfo StaticInfo = new CommandInfo
-	{
-		Id = Id,
-		Name = "Recipe Book",
-		Description = "Open recipes",
-		Icon = RecipePageViewModel.PageIcon,
-		DefaultHotKey = null,
-	};
-}
-```
-
-{collapsible="true" collapsed-title="OpenRecipePageCommand.cs"}
-
-```c#
 using Asv.Common;
-using Microsoft.Extensions.Logging;
+using Asv.Modeling;
 using R3;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
-public class HomePageRecipeExtension(ILoggerFactory loggerFactory)
-	: AsyncDisposableOnce,
-		IExtensionFor<IHomePage>
+public class HomePageRecipeExtension : IExtensionFor<IHomePage>
 {
-	public void Extend(IHomePage context, CompositeDisposable contextDispose)
-	{
-		context.Tools.Add(
-			OpenRecipePageCommand
-				.StaticInfo.CreateAction(
-					loggerFactory,
-					"Recipe Book",
-					"Open recipes"
-				)
-				.DisposeItWith(contextDispose)
-		);
-	}
+    // A unique ID for the extension
+    public const string StaticId = "ext.home.recipe-book";
+
+    public string Id => StaticId;
+
+    public void Extend(IHomePage context, CompositeDisposable contextDispose)
+    {
+        var action = new ActionViewModel("open-recipe-book")
+        {
+            Header = "Recipe Book",
+            Description = "Open recipes",
+            Icon = RecipePageViewModel.PageIcon,
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(RecipePageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
+        }.DisposeItWith(contextDispose);
+
+        context.Tools.Add(action);
+    }
 }
 ```
 
 {collapsible="true" collapsed-title="HomePageRecipeExtension.cs"}
 
-```c#
+```C#
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Avalonia;
 using Asv.Common;
+using Asv.Modeling;
 using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
-public class IngredientViewModel : RoutableViewModel
+public class IngredientViewModel : ViewModel
 {
-	public const string BaseId = "ingredient";
-    
-    private ReactiveProperty<string?> _name;
-    private ReactiveProperty<string?> _amount;
+    public const string BaseId = "ingredient";
+
+    private readonly ReactiveProperty<string?> _name;
+    private readonly ReactiveProperty<string?> _amount;
 
     public IngredientViewModel(string id, string name, string amount, ILoggerFactory loggerFactory)
-        : base(new NavigationId(BaseId, id), loggerFactory)
+        : base(BaseId, new NavArgs(new KeyValuePair<string, string?>("id", id)))
     {
-        _name = new ReactiveProperty<string?>(name);
+        IngredientId = id;
+
+        _name = new ReactiveProperty<string?>(name).DisposeItWith(Disposable);
         Name = new HistoricalStringProperty(
                 nameof(Name),
                 _name,
@@ -495,26 +625,28 @@ public class IngredientViewModel : RoutableViewModel
             ).SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        _amount = new ReactiveProperty<string?>(amount);
+        _amount = new ReactiveProperty<string?>(amount).DisposeItWith(Disposable);
         Amount = new HistoricalStringProperty(
                 nameof(Amount),
                 _amount,
                 loggerFactory
             ).SetRoutableParent(this)
             .DisposeItWith(Disposable);
+
         DeleteIngredientCommand = new ReactiveCommand(RemoveIngredientAsync).DisposeItWith(Disposable);
     }
 
+    public string IngredientId { get; }
     public HistoricalStringProperty Name { get; }
     public HistoricalStringProperty Amount { get; }
     public ReactiveCommand DeleteIngredientCommand { get; }
 
-    public override IEnumerable<IRoutable> GetChildren()
+    public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Name;
         yield return Amount;
     }
-    
+
     private async ValueTask RemoveIngredientAsync(Unit unit, CancellationToken cancellationToken)
     {
         await this.RequestRemoveIngredient(cancellationToken);
@@ -524,67 +656,66 @@ public class IngredientViewModel : RoutableViewModel
 
 {collapsible="true" collapsed-title="IngredientViewModel.cs"}
 
-```c#
+```C#
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Asv.Avalonia;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public sealed class RecipeEditDialogPayload
 {
-	public required string Title { get; init; }
-	public required string Category { get; init; }
+    public required string Title { get; init; }
+    public required string Category { get; init; }
 }
 
-public sealed class RecipeEditDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
-	: IDialogPrefab<RecipeEditDialogPayload, RecipeEditDialogPayload?>
+public sealed class RecipeEditDialogPrefab
+    : IDialogPrefab<RecipeEditDialogPayload, RecipeEditDialogPayload?>
 {
-	public async Task<RecipeEditDialogPayload?> ShowDialogAsync(RecipeEditDialogPayload dialogPayload)
-	{
-		using var vm = new RecipeEditDialogViewModel(loggerFactory);
+    public async Task<RecipeEditDialogPayload?> ShowDialogAsync(RecipeEditDialogPayload dialogPayload)
+    {
+        using var vm = new RecipeEditDialogViewModel();
 
-		vm.Title.Value = dialogPayload.Title;
-		vm.Category.Value = dialogPayload.Category;
+        vm.Title.Value = dialogPayload.Title;
+        vm.Category.Value = dialogPayload.Category;
 
-		var dialogContent = new ContentDialog(vm, nav)
-		{
-			Title = dialogPayload.Title,
-			PrimaryButtonText = RS.DialogButton_Yes,
-			SecondaryButtonText = RS.DialogButton_No,
-			DefaultButton = ContentDialogButton.Primary,
-		};
+        var dialogContent = new ContentDialog(vm)
+        {
+            Title = dialogPayload.Title,
+            PrimaryButtonText = RS.DialogButton_Yes,
+            SecondaryButtonText = RS.DialogButton_No,
+            DefaultButton = ContentDialogButton.Primary,
+        };
 
-		var result = await dialogContent.ShowAsync();
-		if (result != ContentDialogResult.Primary)
-		{
-			return null;
-		}
+        var result = await dialogContent.ShowAsync();
+        if (result != ContentDialogResult.Primary)
+        {
+            return null;
+        }
 
-		return new RecipeEditDialogPayload
-		{
-			Title = vm.Title.Value,
-			Category = vm.Category.Value
-		};
-	}
+        return new RecipeEditDialogPayload
+        {
+            Title = vm.Title.Value,
+            Category = vm.Category.Value
+        };
+    }
 }
 ```
 
 {collapsible="true" collapsed-title="RecipeEditDialogPrefab.cs"}
 
-```c#
-using System.Collections.Generic;
+```C#
+using Asv.Avalonia;
 using Asv.Common;
-using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public class RecipeEditDialogViewModel : DialogViewModelBase
 {
-	public const string DialogId = $"{BaseId}.recipe_edit";
+    public const string DialogId = $"{BaseId}.recipe_edit";
 
-    public RecipeEditDialogViewModel(ILoggerFactory loggerFactory)
-        : base(DialogId, loggerFactory)
+    public RecipeEditDialogViewModel()
+        : base(DialogId)
     {
         Title = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
         Category = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
@@ -592,227 +723,213 @@ public class RecipeEditDialogViewModel : DialogViewModelBase
 
     public BindableReactiveProperty<string?> Title { get; }
     public BindableReactiveProperty<string?> Category { get; }
-
-    public override IEnumerable<IRoutable> GetChildren()
-    {
-        return [];
-    }
 }
 ```
 
 {collapsible="true" collapsed-title="RecipeEditDialogViewModel.cs"}
 
-```c#
+```C#
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Avalonia;
 using Asv.Cfg;
 using Asv.Common;
-using Asv.IO;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
-
-public interface IRecipePageViewModel : IPage;
+namespace AsvAvaloniaTest;
 
 public class RecipePageViewModelLayoutConfig
 {
-	public string? SelectedRecipe { get; set; }
+    public string? SelectedRecipe { get; set; }
 }
 
 public class RecipePageViewModelConfig
 {
-	public IEnumerable<RecipeDto> Recipes { get; init; } = [];
+    public IEnumerable<RecipeDto> Recipes { get; init; } = [];
 }
 
 public record RecipeDto
 {
-	public required string Id { get; init; }
-	public required string Title { get; init; }
-	public string? Category { get; init; }
-	public string? Instruction { get; init; }
-	public IEnumerable<IngredientDto> Ingredients { get; init; } = [];
+    public required string Id { get; init; }
+    public required string Title { get; init; }
+    public string? Category { get; init; }
+    public string? Instruction { get; init; }
+    public IEnumerable<IngredientDto> Ingredients { get; init; } = [];
 }
 
 public record IngredientDto(string Id, string Name, string? Amount);
 
-public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipePageViewModel
+public class RecipePageViewModel : PageViewModel<RecipePageViewModel>
 {
-	private readonly ILoggerFactory _loggerFactory;
-	public const string PageId = "recipe_page";
-	public const MaterialIconKind PageIcon = MaterialIconKind.ViewGallery;
+    public const string PageId = "recipe_page";
+    public const MaterialIconKind PageIcon = MaterialIconKind.ViewGallery;
 
-	private ObservableList<RecipeViewModel> _recipes { get; } = [];
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly IConfiguration _configuration;
+    private readonly RecipeEditDialogPrefab _recipeEditDialog;
+    private readonly ObservableList<RecipeViewModel> _recipes = [];
+    private readonly ISynchronizedView<RecipeViewModel, RecipeViewModel> _view;
 
-	private readonly RecipeEditDialogPrefab _recipeEditDialog;
+    public RecipePageViewModel(IPageContext context, IConfiguration configuration, ILoggerFactory loggerFactory,
+        IDialogService dialogService, IExtensionService ext)
+        : base(PageId, context, loggerFactory, dialogService, ext)
+    {
+        _loggerFactory = loggerFactory;
 
-	private readonly IConfiguration _configuration;
-	private RecipePageViewModelLayoutConfig? _layoutConfig;
-	private readonly ISynchronizedView<RecipeViewModel, RecipeViewModel> _view;
+        Header = "Recipe Book";
+        Icon = PageIcon;
 
-	public RecipePageViewModel(ICommandService cmd, IConfiguration configuration, ILoggerFactory loggerFactory,
-		IDialogService dialogService, IExtensionService ext)
-		: base(PageId, cmd, loggerFactory, dialogService, ext)
-	{
-		_loggerFactory = loggerFactory;
+        SelectedRecipe = new BindableReactiveProperty<RecipeViewModel?>().DisposeItWith(Disposable);
 
-		SelectedRecipe = new BindableReactiveProperty<RecipeViewModel?>();
+        _recipes.SetRoutableParent(this).DisposeItWith(Disposable);
+        _recipes.DisposeRemovedItems().DisposeItWith(Disposable);
 
-		_recipes.SetRoutableParent(this).DisposeItWith(Disposable);
-		_recipes.DisposeRemovedItems().DisposeItWith(Disposable);
+        _recipeEditDialog = dialogService.GetDialogPrefab<RecipeEditDialogPrefab>();
+        CreateRecipeCommand = new ReactiveCommand(CreateRecipeAsync).DisposeItWith(Disposable);
 
-		_recipeEditDialog = dialogService.GetDialogPrefab<RecipeEditDialogPrefab>();
-		CreateRecipeCommand = new ReactiveCommand(CreateRecipeAsync).DisposeItWith(Disposable);
+        _configuration = configuration;
+        var recipeConfig = configuration.Get<RecipePageViewModelConfig>();
+        Load(recipeConfig);
 
-		_configuration = configuration;
-		var recipeConfig = configuration.Get<RecipePageViewModelConfig>();
-		Load(recipeConfig);
+        Search = new SearchBoxViewModel(
+                nameof(Search),
+                loggerFactory,
+                UpdateRecipeList,
+                TimeSpan.FromMilliseconds(500)
+            )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
-		Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        _view = _recipes.CreateView(x => x).DisposeItWith(Disposable);
+        Recipes = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
+    }
 
-		Search = new SearchBoxViewModel(
-				nameof(Search),
-				loggerFactory,
-				UpdateRecipeList,
-				TimeSpan.FromMilliseconds(500)
-			)
-			.SetRoutableParent(this)
-			.DisposeItWith(Disposable);
+    public NotifyCollectionChangedSynchronizedViewList<RecipeViewModel> Recipes { get; }
 
-		_view = _recipes.CreateView(x => x).DisposeItWith(Disposable);
-		Recipes = _view.ToNotifyCollectionChanged().DisposeItWith(Disposable);
-	}
+    public BindableReactiveProperty<RecipeViewModel?> SelectedRecipe { get; }
 
-	public NotifyCollectionChangedSynchronizedViewList<RecipeViewModel> Recipes { get; }
+    public ReactiveCommand CreateRecipeCommand { get; }
 
-	public BindableReactiveProperty<RecipeViewModel?> SelectedRecipe { get; }
+    public SearchBoxViewModel Search { get; }
 
-	public ReactiveCommand CreateRecipeCommand { get; }
+    public override IEnumerable<IViewModel> GetChildren()
+    {
+        yield return Search;
 
-	public SearchBoxViewModel Search { get; }
+        foreach (var recipe in _recipes)
+        {
+            yield return recipe;
+        }
+    }
 
-	public override IEnumerable<IRoutable> GetChildren()
-	{
-		yield return Search;
+    protected override void AfterLoadExtensions()
+    {
+        var layoutSink = Layout.Register<RecipePageViewModelLayoutConfig>(
+            nameof(RecipePageViewModel),
+            (config, _) =>
+            {
+                SelectedRecipe.Value = _recipes.FirstOrDefault(x => x.RecipeId == config.SelectedRecipe);
+                return ValueTask.CompletedTask;
+            }
+        );
+        layoutSink.DisposeItWith(Disposable);
 
-		foreach (var recipe in _recipes)
-		{
-			yield return recipe;
-		}
-	}
+        SelectedRecipe
+            .Skip(1)
+            .SubscribeAwait(
+                (recipe, cancel) => layoutSink.SaveAsync(
+                    new RecipePageViewModelLayoutConfig { SelectedRecipe = recipe?.RecipeId },
+                    cancel
+                ),
+                AwaitOperation.Drop
+            )
+            .DisposeItWith(Disposable);
 
-	protected override void AfterLoadExtensions() { }
+        Layout.LoadWhenRootAttached(RootTracking).DisposeItWith(Disposable);
+    }
 
-	private async ValueTask CreateRecipeAsync(Unit unit, CancellationToken cancellationToken)
-	{
-		var payload = new RecipeEditDialogPayload
-		{
-			Title = "Recipe Title",
-			Category = "Category",
-		};
+    private async ValueTask CreateRecipeAsync(Unit unit, CancellationToken cancellationToken)
+    {
+        var payload = new RecipeEditDialogPayload
+        {
+            Title = "Recipe Title",
+            Category = "Category",
+        };
 
-		var createdRecipePayload = await _recipeEditDialog.ShowDialogAsync(payload);
+        var createdRecipePayload = await _recipeEditDialog.ShowDialogAsync(payload);
 
-		if (createdRecipePayload == null)
-		{
-			return;
-		}
+        if (createdRecipePayload == null)
+        {
+            return;
+        }
 
-		var recipeViewModel = new RecipeViewModel(
-			Guid.NewGuid().ToString(),
-			createdRecipePayload.Title,
-			createdRecipePayload.Category,
-			string.Empty,
-			[],
-			_loggerFactory);
+        var recipeViewModel = new RecipeViewModel(
+            Guid.NewGuid().ToString(),
+            createdRecipePayload.Title,
+            createdRecipePayload.Category,
+            string.Empty,
+            [],
+            _loggerFactory);
 
-		_recipes.Add(recipeViewModel);
-		SelectedRecipe.Value = recipeViewModel;
+        _recipes.Add(recipeViewModel);
+        SelectedRecipe.Value = recipeViewModel;
 
-		Save();
-	}
+        Save();
+    }
 
-	private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
-	{
-		switch (e)
-		{
-			case SaveLayoutEvent saveLayoutEvent:
-				if (_layoutConfig is null)
-				{
-					break;
-				}
+    private Task UpdateRecipeList(string? text, IProgress<double> progress, CancellationToken cancel)
+    {
+        progress.Report(0);
 
-				this.HandleSaveLayout(
-					saveLayoutEvent,
-					_layoutConfig,
-					cfg => { cfg.SelectedRecipe = SelectedRecipe.Value?.Id.ToString(); }
-				);
-				break;
-			case LoadLayoutEvent loadLayoutEvent:
-				_layoutConfig = this.HandleLoadLayout<RecipePageViewModelLayoutConfig>(
-					loadLayoutEvent,
-					cfg =>
-					{
-						var t = _recipes.FirstOrDefault(x => x.Id.ToString() == (cfg.SelectedRecipe ?? string.Empty));
-						SelectedRecipe.Value = t;
-					}
-				);
-				break;
-		}
+        if (string.IsNullOrWhiteSpace(text))
+        {
+            _view.ResetFilter();
+            return Task.CompletedTask;
+        }
 
-		return default;
-	}
+        _view.AttachFilter(x => x.Title.ViewValue.Value != null
+            && x.Title.ViewValue.Value.Contains(text, StringComparison.InvariantCultureIgnoreCase));
 
-	private Task UpdateRecipeList(string? text, IProgress<double> progress, CancellationToken cancel)
-	{
-		progress.Report(0);
+        progress.Report(1);
 
-		if (string.IsNullOrWhiteSpace(text))
-		{
-			_view.ResetFilter();
-			return Task.CompletedTask;
-		}
+        return Task.CompletedTask;
+    }
 
-		_view.AttachFilter(x => x.Title.ViewValue.Value != null && x.Title.ViewValue.Value.Contains(text));
+    private void Load(RecipePageViewModelConfig recipeConfig)
+    {
+        var recipeVms = recipeConfig.Recipes.Select(r =>
+            new RecipeViewModel(
+                r.Id,
+                r.Title,
+                r.Category,
+                r.Instruction,
+                r.Ingredients.Select(i => new IngredientViewModel(i.Id, i.Name, i.Amount ?? string.Empty, _loggerFactory)),
+                _loggerFactory));
 
-		progress.Report(1);
+        _recipes.AddRange(recipeVms);
+    }
 
-		return Task.CompletedTask;
-	}
-
-	private void Load(RecipePageViewModelConfig recipeConfig)
-	{
-		var recipeVms = recipeConfig.Recipes.Select(r =>
-			new RecipeViewModel(
-				r.Id,
-				r.Title,
-				r.Category,
-				r.Instruction,
-				r.Ingredients.Select(i => new IngredientViewModel(i.Id, i.Name, i.Amount ?? string.Empty, _loggerFactory)),
-				_loggerFactory));
-
-		_recipes.AddRange(recipeVms);
-	}
-
-	private void Save()
-	{
-		var config = new RecipePageViewModelConfig
+    private void Save()
+    {
+        var config = new RecipePageViewModelConfig
         {
             Recipes = _recipes.Select(r => new RecipeDto
             {
-                Id = r.Id.Args ?? r.Id.ToString(),
+                Id = r.RecipeId,
                 Title = r.Title.ViewValue.Value ?? string.Empty,
                 Category = r.Category.ViewValue.Value,
                 Instruction = r.Instruction.ViewValue.Value,
-                Ingredients = r.Ingredients.Select(i => 
+                Ingredients = r.Ingredients.Select(i =>
                     new IngredientDto(
-                        i.Id.Args ?? i.Id.ToString(), 
-                        i.Name.ViewValue.Value ?? string.Empty, 
+                        i.IngredientId,
+                        i.Name.ViewValue.Value ?? string.Empty,
                         i.Amount.ViewValue.Value ?? string.Empty
                     )
                 )
@@ -820,132 +937,133 @@ public class RecipePageViewModel : PageViewModel<IRecipePageViewModel>, IRecipeP
         };
 
         _configuration.Set(config);
-	}
-
+    }
 }
 ```
 
 {collapsible="true" collapsed-title="RecipePageViewModel.cs"}
 
-
-```c#
+```C#
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Asv.Avalonia;
 using Asv.Avalonia.InfoMessage;
 using Asv.Common;
-using Asv.IO;
+using Asv.Modeling;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using ObservableCollections;
 using R3;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
-public class RecipeViewModel : RoutableViewModel
+public class RecipeViewModel : ViewModel
 {
-	private readonly ILoggerFactory _loggerFactory;
-	public const string BaseId = "recipe";
+    public const string BaseId = "recipe";
 
-	private readonly ReactiveProperty<string?> _title;
-	private readonly ReactiveProperty<string?> _category;
-	private readonly ReactiveProperty<string?> _instruction;
+    private readonly ILoggerFactory _loggerFactory;
+    private readonly ReactiveProperty<string?> _title;
+    private readonly ReactiveProperty<string?> _category;
+    private readonly ReactiveProperty<string?> _instruction;
 
-	private readonly ObservableList<IngredientViewModel> _ingredients = [];
+    private readonly ObservableList<IngredientViewModel> _ingredients = [];
 
-	public RecipeViewModel(NavigationId id, string title, string? category, string? instruction,
-		IEnumerable<IngredientViewModel> ingredients,
-		ILoggerFactory loggerFactory)
-		: base(id, loggerFactory)
-	{
-		_loggerFactory = loggerFactory;
+    public RecipeViewModel(string id, string title, string? category, string? instruction,
+        IEnumerable<IngredientViewModel> ingredients,
+        ILoggerFactory loggerFactory)
+        : base(BaseId, new NavArgs(new KeyValuePair<string, string?>("id", id)))
+    {
+        _loggerFactory = loggerFactory;
+        RecipeId = id;
 
-		_title = new ReactiveProperty<string?>(title).DisposeItWith(Disposable);
-		Title = new HistoricalStringProperty(
-				nameof(Title),
-				_title,
-				loggerFactory
-			).SetRoutableParent(this)
-			.DisposeItWith(Disposable);
+        _title = new ReactiveProperty<string?>(title).DisposeItWith(Disposable);
+        Title = new HistoricalStringProperty(
+                nameof(Title),
+                _title,
+                loggerFactory
+            ).SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
-		_category = new ReactiveProperty<string?>(category).DisposeItWith(Disposable);
-		Category = new HistoricalStringProperty(
-				nameof(Category),
-				_category,
-				loggerFactory
-			).SetRoutableParent(this)
-			.DisposeItWith(Disposable);
+        _category = new ReactiveProperty<string?>(category).DisposeItWith(Disposable);
+        Category = new HistoricalStringProperty(
+                nameof(Category),
+                _category,
+                loggerFactory
+            ).SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
-		_instruction = new ReactiveProperty<string?>(instruction).DisposeItWith(Disposable);
-		Instruction = new HistoricalStringProperty(
-				nameof(Instruction),
-				_instruction,
-				loggerFactory
-			).SetRoutableParent(this)
-			.DisposeItWith(Disposable);
+        _instruction = new ReactiveProperty<string?>(instruction).DisposeItWith(Disposable);
+        Instruction = new HistoricalStringProperty(
+                nameof(Instruction),
+                _instruction,
+                loggerFactory
+            ).SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
-		_ingredients.AddRange(ingredients);
-		_ingredients.SetRoutableParent(this).DisposeItWith(Disposable);
-		_ingredients.DisposeRemovedItems().DisposeItWith(Disposable);
+        _ingredients.AddRange(ingredients);
+        _ingredients.SetRoutableParent(this).DisposeItWith(Disposable);
+        _ingredients.DisposeRemovedItems().DisposeItWith(Disposable);
 
-		Ingredients = _ingredients.ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
-			.DisposeItWith(Disposable);
+        Ingredients = _ingredients.ToNotifyCollectionChangedSlim(SynchronizationContextCollectionEventDispatcher.Current)
+            .DisposeItWith(Disposable);
 
-		Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+        CreateIngredientCommand = new ReactiveCommand(AddIngredientAsync).DisposeItWith(Disposable);
 
-		CreateIngredientCommand = new ReactiveCommand(AddIngredientAsync).DisposeItWith(Disposable);
-	}
+        Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
+    }
 
-	public HistoricalStringProperty Title { get; }
-	public HistoricalStringProperty Category { get; }
-	public HistoricalStringProperty Instruction { get; }
-	public NotifyCollectionChangedSynchronizedViewList<IngredientViewModel> Ingredients { get; }
+    public string RecipeId { get; }
+    public HistoricalStringProperty Title { get; }
+    public HistoricalStringProperty Category { get; }
+    public HistoricalStringProperty Instruction { get; }
+    public NotifyCollectionChangedSynchronizedViewList<IngredientViewModel> Ingredients { get; }
 
-	public ReactiveCommand CreateIngredientCommand { get; }
+    public ReactiveCommand CreateIngredientCommand { get; }
 
-	public async ValueTask AddIngredientAsync(Unit unit, CancellationToken cancellationToken)
-	{
-		var ingredient = new IngredientViewModel(Guid.NewGuid().ToString(),
-			"Ingredient", string.Empty, _loggerFactory);
-		_ingredients.Add(ingredient);
+    public async ValueTask AddIngredientAsync(Unit unit, CancellationToken cancellationToken)
+    {
+        var ingredient = new IngredientViewModel(Guid.NewGuid().ToString(),
+            "Ingredient", string.Empty, _loggerFactory);
+        _ingredients.Add(ingredient);
 
-		var msg = new ShellMessage(
-			"Added ingredient",
-			"Ingredient was created",
-			ShellErrorState.Normal,
-			"This is description",
-			MaterialIconKind.Info
-		);
+        var msg = new ShellMessage(
+            "Added ingredient",
+            "Ingredient was created",
+            ShellErrorState.Normal,
+            "This is description",
+            MaterialIconKind.Info
+        );
 
-		await this.RaiseShellInfoMessage(msg, cancellationToken);
-	}
+        await this.RiseShellInfoMessage(msg, cancellationToken);
+    }
 
-	public override IEnumerable<IRoutable> GetChildren()
-	{
-		foreach (var ingredient in _ingredients)
-		{
-			yield return ingredient;
-		}
+    public override IEnumerable<IViewModel> GetChildren()
+    {
+        foreach (var ingredient in _ingredients)
+        {
+            yield return ingredient;
+        }
 
-		yield return Title;
-		yield return Category;
-		yield return Instruction;
-	}
+        yield return Title;
+        yield return Category;
+        yield return Instruction;
+    }
 
-	private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
-	{
-		if (e is not RemoveIngredientEvent)
-		{
-			return default;
-		}
+    private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
+    {
+        if (e is not RemoveIngredientEvent)
+        {
+            return default;
+        }
 
-		var vm = _ingredients.First(i => i.Id == e.Sender.Id);
-		_ingredients.Remove(vm);
+        var vm = _ingredients.First(i => i.Id == e.Sender.Id);
+        _ingredients.Remove(vm);
 
-		return default;
-	}
+        return default;
+    }
 }
 ```
 
