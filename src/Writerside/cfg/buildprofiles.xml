@@ -15,6 +15,15 @@
             <noindex-content>false</noindex-content>
             <ignore-problems>MRK056</ignore-problems>
         </variables>
+
+        <footer>
+            <link href="https://docs.asv.me/">Official website</link>
+            <link href="https://github.com/asv-soft/asv-avalonia/issues">Issue tracker and Support</link>
+            <link href="mailto:asv@me.com">Contact us</link>
+            <link href="https://github.com/asv-soft/asv-drones">Asv.Drones</link>
+
+            <copyright>(c) 2026 Asv Soft LLC</copyright>
+        </footer>
     </build-profile>
 
 </buildprofiles>
