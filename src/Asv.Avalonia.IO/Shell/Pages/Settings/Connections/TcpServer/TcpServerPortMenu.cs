@@ -22,7 +22,7 @@ public class TcpServerPortMenu : MenuItem
         var defaultConfig = TcpServerProtocolPortConfig.CreateDefault();
         defaultConfig.IsEnabled = false;
         defaultConfig.Name = RS.SettingsConnectionTcpServerPortExtension_DefaultConfig_Name;
-        return this.FindParentOfType<SettingsConnectionViewModel>()?.AddPortAsync(defaultConfig)
-            ?? ValueTask.CompletedTask;
+        return this.FindParentOfType<SettingsConnectionViewModel>()
+                ?.AddPortAsync(defaultConfig, cancel) ?? ValueTask.CompletedTask;
     }
 }

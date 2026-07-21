@@ -22,7 +22,7 @@ public class SignalPlotWidget : SignalPlotViewModel, ISignalPlotWidget
     public SignalPlotWidget(string typeId, IThemeService themeService)
         : base(typeId, themeService)
     {
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
         AddHistorySizeMenu();

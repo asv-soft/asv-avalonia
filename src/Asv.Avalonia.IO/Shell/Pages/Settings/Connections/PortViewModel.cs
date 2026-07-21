@@ -104,7 +104,7 @@ public class PortViewModel : ViewModel, IPortViewModel
 
         var view = _endpoints.CreateView(EndpointFactory).DisposeItWith(Disposable);
         view.DisposeMany().DisposeItWith(Disposable);
-        view.SetRoutableParent(this).DisposeItWith(Disposable);
+        view.SetParent(this).DisposeItWith(Disposable);
         EndpointsView = view.ToNotifyCollectionChanged(
                 SynchronizationContextCollectionEventDispatcher.Current
             )
@@ -373,7 +373,7 @@ public class PortViewModel : ViewModel, IPortViewModel
             var page = this.FindParentOfType<SettingsConnectionViewModel>();
             if (page is not null)
             {
-                await page.UpdatePortAsync(Port.Id, cfg);
+                await page.UpdatePortAsync(Port.Id, cfg, cancel);
             }
         }
         catch (Exception e)
@@ -382,10 +382,10 @@ public class PortViewModel : ViewModel, IPortViewModel
         }
     }
 
-    private ValueTask RemovePort(Unit arg1, CancellationToken arg2)
+    private ValueTask RemovePort(Unit arg1, CancellationToken cancel)
     {
         Debug.Assert(Port != null, "Port should not be null when removing port");
-        return this.FindParentOfType<SettingsConnectionViewModel>()?.RemovePortAsync(Port.Id)
-            ?? ValueTask.CompletedTask;
+        return this.FindParentOfType<SettingsConnectionViewModel>()
+                ?.RemovePortAsync(Port.Id, cancel) ?? ValueTask.CompletedTask;
     }
 }

@@ -51,15 +51,14 @@ public class GroupTreePageItemViewModel : TreeSubpage
 
     public GroupTreePageItemViewModel(
         ObservableTreeNode<ITreePageMenuItem, NavId> node,
-        Func<NavId, ValueTask<IViewModel>> navigateCallback,
-        ILoggerFactory loggerFactory
+        Func<NavId, CancellationToken, ValueTask<IViewModel>> navigateCallback
     )
         : base(NavId.GenerateRandomAsString(), default)
     {
         Node = node;
-        NavigateCommand = new ReactiveCommand<NavId>(x => navigateCallback(x)).DisposeItWith(
-            Disposable
-        );
+        NavigateCommand = new ReactiveCommand<NavId>(
+            async (x, cancel) => await navigateCallback(x, cancel)
+        ).DisposeItWith(Disposable);
     }
 
     public ObservableTreeNode<ITreePageMenuItem, NavId> Node { get; }

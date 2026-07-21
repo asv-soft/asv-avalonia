@@ -30,7 +30,7 @@ public class PropertyEditorWidgetViewModel : PropertyEditorViewModel, IWorkspace
         : base(id)
     {
         Header = header;
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }

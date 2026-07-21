@@ -29,20 +29,21 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
         UndoHistory = new UndoHistory<IViewModel>(this, context.UndoStore).AddTo(ref DisposableBag);
         Icon = MaterialIconKind.Window;
         Header = typeId;
-        TryClose = new ReactiveCommand((_, _) => TryCloseAsync(false), AwaitOperation.Drop).AddTo(
-            ref DisposableBag
-        );
+        TryClose = new ReactiveCommand(
+            (_, cancel) => TryCloseAsync(false, cancel),
+            AwaitOperation.Drop
+        ).AddTo(ref DisposableBag);
         _unsavedChangesDialogPrefab = dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
     }
 
-    public async ValueTask TryCloseAsync(bool isForce)
+    public async ValueTask TryCloseAsync(bool isForce, CancellationToken cancel = default)
     {
         _logger.ZLogTrace($"Try close page {Header}[{Id}]");
         try
         {
             if (!isForce)
             {
-                var reasons = await this.RequestChildCloseApproval();
+                var reasons = await this.RequestChildCloseApproval(cancel);
                 if (reasons.Count != 0)
                 {
                     var result = await _unsavedChangesDialogPrefab.ShowDialogAsync(
@@ -60,7 +61,11 @@ public abstract class PageViewModel<TContext> : ViewModel<TContext>, IPage
                 }
             }
 
-            await this.RequestClose();
+            await this.RequestClose(cancel);
+        }
+        catch (OperationCanceledException e) when (cancel.IsCancellationRequested)
+        {
+            _logger.ZLogWarning(e, $"Cancelled try close for page {Header}[{Id}]: {e.Message}");
         }
         catch (Exception e)
         {

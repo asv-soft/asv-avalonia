@@ -64,7 +64,7 @@ public class PluginsMarketPageViewModel : SettingsSubPage
         _view = _plugins
             .CreateView(info => new PluginInfoViewModel(info, _manager, bootloader, loggerFactory))
             .DisposeItWith(Disposable);
-        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        _view.SetParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         PluginsView = _view
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)

@@ -182,7 +182,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             },
         ];
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
-        _itemsSource.SetRoutableParent(this).DisposeItWith(Disposable);
+        _itemsSource.SetParent(this).DisposeItWith(Disposable);
         Items = _itemsSource.ToNotifyCollectionChangedSlim();
     }
 

@@ -1,5 +1,6 @@
 using Asv.Avalonia.GeoMap;
 using Asv.Common;
+using Asv.Modeling;
 using Avalonia.Media;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
@@ -54,7 +55,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        MapViewModel.Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
+        MapViewModel.Anchors.SetParent(this).DisposeItWith(Disposable);
 
         _centerPoint = MapViewModel.CenterMap.Value;
 

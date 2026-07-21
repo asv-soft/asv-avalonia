@@ -47,7 +47,7 @@ public sealed class StartupMonitor
 
             if (ReferenceEquals(completedTask, processExitTask))
             {
-                await CancelSignalWaitAsync(waitCts, signalTask).ConfigureAwait(false);
+                await CancelSignalWaitAsync(signalTask, waitCts).ConfigureAwait(false);
                 await processExitTask.ConfigureAwait(false);
                 return new LauncherRunResult(
                     LauncherExitCode.TargetExitedBeforeReady,
@@ -66,7 +66,9 @@ public sealed class StartupMonitor
                     && !cancellationToken.IsCancellationRequested
                 )
             {
-                await _targetProcessRunner.TerminateAsync(process).ConfigureAwait(false);
+                await _targetProcessRunner
+                    .TerminateAsync(process, cancellationToken)
+                    .ConfigureAwait(false);
                 return new LauncherRunResult(
                     LauncherExitCode.StartupTimeout,
                     $"Startup timeout ({options.StartupTimeout}). Target process did not report READY."
@@ -137,8 +139,8 @@ public sealed class StartupMonitor
     }
 
     private static async Task CancelSignalWaitAsync(
-        CancellationTokenSource cancellationTokenSource,
-        Task<LauncherIpcMessage> signalTask
+        Task<LauncherIpcMessage> signalTask,
+        CancellationTokenSource cancellationTokenSource
     )
     {
         if (!signalTask.IsCompleted)
@@ -148,7 +150,7 @@ public sealed class StartupMonitor
 
         try
         {
-            await signalTask.ConfigureAwait(false);
+            await signalTask.WaitAsync(cancellationTokenSource.Token).ConfigureAwait(false);
         }
         catch
         {

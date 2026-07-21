@@ -33,7 +33,7 @@ public class TextFileHandler(IShellHost shellHost) : IFileHandler
         );
     }
 
-    public async ValueTask Open(string path)
+    public async ValueTask Open(string path, CancellationToken cancel = default)
     {
         var shell = shellHost.Shell;
         if (shell == null)
@@ -44,13 +44,18 @@ public class TextFileHandler(IShellHost shellHost) : IFileHandler
         await shell.GoTo(
             new NavPath(
                 new NavId(TextFilePageViewModel.PageId, TextFilePageViewModel.CreateOpenArgs(path))
-            )
+            ),
+            cancel
         );
     }
 
-    public async ValueTask Create(string path, FileTypeInfo type)
+    public async ValueTask Create(
+        string path,
+        FileTypeInfo type,
+        CancellationToken cancel = default
+    )
     {
-        await File.WriteAllTextAsync(path, string.Empty);
-        await Open(path);
+        await File.WriteAllTextAsync(path, string.Empty, cancel);
+        await Open(path, cancel);
     }
 }

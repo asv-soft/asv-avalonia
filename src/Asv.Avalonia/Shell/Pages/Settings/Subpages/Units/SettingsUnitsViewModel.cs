@@ -53,7 +53,7 @@ public class SettingsUnitsViewModel : SettingsSubPage
         _view = observableList
             .CreateView(u => new MeasureUnitViewModel(u, searchService))
             .DisposeItWith(Disposable);
-        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        _view.SetParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         Items = _view
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)

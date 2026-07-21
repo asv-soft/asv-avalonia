@@ -75,7 +75,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
                 RemoveSourceAsync
             ))
             .DisposeItWith(Disposable);
-        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        _view.SetParent(this).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
         Items = _view
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
@@ -135,6 +135,11 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     )]
     private async ValueTask AddSourceAsync(Unit unit, CancellationToken cancel)
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+
         var oldSnapshot = CaptureSourcesSnapshot();
         var server = await ShowSourceDialogAsync(
             new SourceDialogViewModel(_loggerFactory),
@@ -155,8 +160,13 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     [RequiresUnreferencedCode(
         "Uses System.Text.Json reflection-based serialization, which is not trim safe."
     )]
-    private async ValueTask EditSourceAsync(PluginsSourceViewModel source)
+    private async ValueTask EditSourceAsync(PluginsSourceViewModel source, CancellationToken cancel)
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+
         var oldSnapshot = CaptureSourcesSnapshot();
         var server = await ShowSourceDialogAsync(
             new SourceDialogViewModel(_loggerFactory, source),
@@ -181,8 +191,16 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     [RequiresUnreferencedCode(
         "Uses System.Text.Json reflection-based serialization, which is not trim safe."
     )]
-    private async ValueTask RemoveSourceAsync(PluginsSourceViewModel source)
+    private async ValueTask RemoveSourceAsync(
+        PluginsSourceViewModel source,
+        CancellationToken cancel
+    )
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return;
+        }
+
         var payload = new YesOrNoDialogPayload
         {
             Title = RS.PluginsSourceViewModel_RemoveDialog_Title,
@@ -267,7 +285,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     private static string AddSourceSnapshot(string snapshot, PluginSourceSnapshot source)
     {
         var sources = Deserialize(snapshot).ToList();
-        sources.RemoveAll(x => x.sourceUri == source.sourceUri);
+        sources.RemoveAll(x => x.SourceUri == source.SourceUri);
         sources.Add(source);
         return Serialize(sources);
     }
@@ -282,7 +300,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     )
     {
         var sources = Deserialize(snapshot).ToList();
-        var index = sources.FindIndex(x => x.sourceUri == oldSourceUri);
+        var index = sources.FindIndex(x => x.SourceUri == oldSourceUri);
         if (index < 0)
         {
             sources.Add(source);
@@ -301,7 +319,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     private static string RemoveSourceSnapshot(string snapshot, string sourceUri)
     {
         var sources = Deserialize(snapshot).ToList();
-        sources.RemoveAll(x => x.sourceUri == sourceUri);
+        sources.RemoveAll(x => x.SourceUri == sourceUri);
         return Serialize(sources);
     }
 
@@ -346,16 +364,18 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         base.Dispose(disposing);
     }
 
+#pragma warning disable SA1313
     private sealed record PluginSourceSnapshot(
-        string name,
-        string sourceUri,
-        string? username,
-        string? password
+        string Name,
+        string SourceUri,
+        string? Username,
+        string? Password
     )
     {
         public PluginServer ToPluginServer()
         {
-            return new PluginServer(name, sourceUri, username, password);
+            return new PluginServer(Name, SourceUri, Username, Password);
         }
     }
+#pragma warning restore SA1313
 }

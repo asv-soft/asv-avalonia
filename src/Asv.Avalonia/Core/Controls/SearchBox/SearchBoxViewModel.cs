@@ -69,7 +69,7 @@ public class SearchBoxViewModel
         textValueObservable
             .DistinctUntilChanged()
             .WhereNotNull()
-            .SubscribeAwait((x, _) => QueryAsync(x), AwaitOperation.Parallel)
+            .SubscribeAwait((x, cancel) => QueryAsync(x, cancel), AwaitOperation.Parallel)
             .DisposeItWith(Disposable);
 
         Disposable.AddAction(() => _cancellationTokenSource?.Cancel(false));
@@ -93,7 +93,7 @@ public class SearchBoxViewModel
 
     public ValueTask Refresh(CancellationToken cancel = default)
     {
-        Query(Text.ViewValue.Value);
+        Query(Text.ViewValue.Value, cancel);
         return ValueTask.CompletedTask;
     }
 
@@ -102,8 +102,13 @@ public class SearchBoxViewModel
         Text.ViewValue.Value = string.Empty;
     }
 
-    public ValueTask ClearCommandCall()
+    public ValueTask ClearCommandCall(CancellationToken cancel = default)
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         Clear();
         return ValueTask.CompletedTask;
     }
@@ -113,25 +118,35 @@ public class SearchBoxViewModel
         yield return Text;
     }
 
-    public override ValueTask<IViewModel> Navigate(NavId id)
+    public override ValueTask<IViewModel> Navigate(NavId id, CancellationToken cancel = default)
     {
+        if (cancel.IsCancellationRequested)
+        {
+            return ValueTask.FromResult<IViewModel>(this);
+        }
+
         Focus();
-        return base.Navigate(id);
+        return base.Navigate(id, cancel);
     }
 
     public void Query(string? text)
+    {
+        Query(text, CancellationToken.None);
+    }
+
+    public void Query(string? text, CancellationToken cancel)
     {
         if (_isExecuting.Value)
         {
             Cancel();
         }
 
-        InternalExecuteAsync(text ?? string.Empty).SafeFireAndForget(ErrorHandler);
+        InternalExecuteAsync(text ?? string.Empty, cancel).SafeFireAndForget(ErrorHandler);
     }
 
-    private ValueTask QueryAsync(string text)
+    private ValueTask QueryAsync(string text, CancellationToken cancel)
     {
-        Query(text);
+        Query(text, cancel);
         return ValueTask.CompletedTask;
     }
 
@@ -140,12 +155,12 @@ public class SearchBoxViewModel
         Text.Focus();
     }
 
-    private async Task InternalExecuteAsync(string text)
+    private async Task InternalExecuteAsync(string text, CancellationToken cancel)
     {
         _isExecuting.Value = true;
         _canExecute.Value = false;
         _progress.Value = double.NaN;
-        _cancellationTokenSource = new CancellationTokenSource();
+        _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancel);
 
         try
         {

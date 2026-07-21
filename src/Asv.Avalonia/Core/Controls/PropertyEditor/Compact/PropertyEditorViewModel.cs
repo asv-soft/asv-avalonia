@@ -29,7 +29,7 @@ public class PropertyEditorViewModel : ViewModel
         : base(id)
     {
         _itemsSource = [];
-        _itemsSource.SetRoutableParent(this).DisposeItWith(Disposable);
+        _itemsSource.SetParent(this).DisposeItWith(Disposable);
         _itemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         _itemsView = _itemsSource.CreateView(x => x).DisposeItWith(Disposable);
         RefreshDisplayScopeFilter();

@@ -32,10 +32,10 @@ public class HomePageItem : ExtendableHeadlinedViewModel<IHomePageItem>, IHomePa
         Disposable.AddAction(() => Actions.Clear());
         Disposable.AddAction(() => Info.Clear());
 
-        Actions.SetRoutableParent(this).DisposeItWith(Disposable);
+        Actions.SetParent(this).DisposeItWith(Disposable);
         Actions.DisposeRemovedItems().DisposeItWith(Disposable);
 
-        Info.SetRoutableParent(this).DisposeItWith(Disposable);
+        Info.SetParent(this).DisposeItWith(Disposable);
         Info.DisposeRemovedItems().DisposeItWith(Disposable);
     }
 

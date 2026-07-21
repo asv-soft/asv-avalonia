@@ -92,7 +92,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
 
         for (var i = 0; i < _config.RequestParallelThreads; i++)
         {
-            Task.Run(ProcessQueue);
+            Task.Run(() => ProcessQueue(DisposeCancel), DisposeCancel);
         }
 
         var meter = meterFactory.Create(GeoMapRegistrations.MetricName);
@@ -157,9 +157,9 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
         );
     }
 
-    private async Task ProcessQueue()
+    private async Task ProcessQueue(CancellationToken cancel)
     {
-        await foreach (var key in _requestQueue.Reader.ReadAllAsync(DisposeCancel))
+        await foreach (var key in _requestQueue.Reader.ReadAllAsync(cancel))
         {
             _meterQueue.Add(1);
             Interlocked.Increment(ref _activeRequests);
@@ -188,7 +188,7 @@ public class TileLoader : AsyncDisposableWithCancel, ITileLoader
                 _meterDownload.Add(1);
                 Interlocked.Increment(ref _totalNetworkRequests);
 
-                var downloadedTile = await key.Provider.DownloadAsync(key, DisposeCancel);
+                var downloadedTile = await key.Provider.DownloadAsync(key, cancel);
                 if (downloadedTile is null)
                 {
                     continue;

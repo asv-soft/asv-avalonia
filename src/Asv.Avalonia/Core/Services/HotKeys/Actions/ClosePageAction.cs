@@ -14,7 +14,6 @@ public class ClosePageAction : HotKeyAction<IPage>
 
     protected override ValueTask InternalExecute(IPage target, CancellationToken cancel)
     {
-        target.TryCloseAsync(false);
-        return ValueTask.CompletedTask;
+        return target.TryCloseAsync(false, cancel);
     }
 }

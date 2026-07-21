@@ -36,7 +36,7 @@ public class MapViewModel : ViewModel, IMap
         : base(id)
     {
         Anchors = [];
-        Anchors.SetRoutableParent(this).DisposeItWith(Disposable);
+        Anchors.SetParent(this).DisposeItWith(Disposable);
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         AnchorsView = Anchors.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         SelectedAnchor = new BindableReactiveProperty<IMapAnchor?>().DisposeItWith(Disposable);

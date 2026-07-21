@@ -159,7 +159,7 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
         ApplyTextFromModel(textValue, lastTextValue, isSync, false);
     }
 
-    protected override ValueTask ApplyFromUser(CancellationToken cancel)
+    protected override ValueTask ApplyFromUserCore(CancellationToken cancel)
     {
         var value = Unit.CurrentUnitItem.CurrentValue.ParseToSi(Text.Value);
         _undoValueSink?.PublishUpdate(_lastValue, value);

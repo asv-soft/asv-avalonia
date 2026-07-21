@@ -113,7 +113,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         Header = RS.HomePageViewModel_Title;
 
         Tools = [];
-        Tools.SetRoutableParent(this).DisposeItWith(Disposable);
+        Tools.SetParent(this).DisposeItWith(Disposable);
         Tools.DisposeRemovedItems().DisposeItWith(Disposable);
         ToolsView = Tools.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
 
@@ -122,7 +122,7 @@ public class HomePageViewModel : PageViewModel<IHomePage>, IHomePage
         ItemsList = Items.CreateView(x => new HomePageItemDecorator(x)).DisposeItWith(Disposable);
 
         ItemsList.DisposeMany().DisposeItWith(Disposable);
-        ItemsList.SetRoutableParent(this).DisposeItWith(Disposable);
+        ItemsList.SetParent(this).DisposeItWith(Disposable);
 
         ItemsView = ItemsList.ToNotifyCollectionChanged().DisposeItWith(Disposable);
     }

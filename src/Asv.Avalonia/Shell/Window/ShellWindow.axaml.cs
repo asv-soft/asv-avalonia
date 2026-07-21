@@ -1,3 +1,4 @@
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Microsoft.Extensions.Logging;
@@ -86,15 +87,15 @@ public partial class ShellWindow : Window
         }
 
         _isCloseRequested = true;
-        TryCloseFromViewModel(vm);
+        TryCloseFromViewModel(vm, CancellationToken.None).SafeFireAndForget();
         return true;
     }
 
-    private async void TryCloseFromViewModel(DesktopShellViewModel vm)
+    private async Task TryCloseFromViewModel(DesktopShellViewModel vm, CancellationToken cancel)
     {
         try
         {
-            if (!await vm.TryCloseFromWindowAsync(CancellationToken.None))
+            if (!await vm.TryCloseFromWindowAsync(cancel))
             {
                 _isCloseRequested = false;
             }

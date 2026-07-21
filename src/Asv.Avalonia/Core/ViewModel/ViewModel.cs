@@ -72,8 +72,16 @@ public abstract class ViewModel : IViewModel
         return [];
     }
 
-    public virtual ValueTask<IViewModel> Navigate(NavId id)
+    public virtual ValueTask<IViewModel> Navigate(
+        NavId id,
+        CancellationToken cancellationToken = default
+    )
     {
+        if (cancellationToken.IsCancellationRequested)
+        {
+            return ValueTask.FromResult<IViewModel>(this);
+        }
+
         return ValueTask.FromResult(GetChildren().FirstOrDefault(x => x.Id == id) ?? this);
     }
 

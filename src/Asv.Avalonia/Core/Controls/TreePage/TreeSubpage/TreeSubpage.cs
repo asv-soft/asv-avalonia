@@ -10,7 +10,7 @@ public abstract class TreeSubpage : ViewModel, ITreeSubpage
     protected TreeSubpage(string typeId, NavArgs args)
         : base(typeId, args)
     {
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }

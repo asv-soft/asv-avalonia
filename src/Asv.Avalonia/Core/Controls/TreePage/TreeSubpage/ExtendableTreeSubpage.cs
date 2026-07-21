@@ -18,7 +18,7 @@ public abstract class ExtendableTreeSubpage<TContext, TSubContext>
     )
         : base(id, context.Args, ext)
     {
-        Menu.SetRoutableParent(this).DisposeItWith(Disposable);
+        Menu.SetParent(this).DisposeItWith(Disposable);
         Menu.DisposeRemovedItems().DisposeItWith(Disposable);
         MenuView = new MenuTree(Menu).DisposeItWith(Disposable);
     }

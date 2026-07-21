@@ -42,7 +42,7 @@ public class PropertyTextBoxReactive : PropertyTextBoxViewModel
         return _validator?.Invoke(value);
     }
 
-    protected override ValueTask ApplyFromUser(CancellationToken cancel)
+    protected override ValueTask ApplyFromUserCore(CancellationToken cancel)
     {
         _model.OnNext(Text.Value);
         return ValueTask.CompletedTask;

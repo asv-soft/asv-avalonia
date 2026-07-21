@@ -14,6 +14,6 @@ public class SaveAction : HotKeyAction<ISupportSave>
 
     protected override ValueTask InternalExecute(ISupportSave target, CancellationToken cancel)
     {
-        return target.Save();
+        return target.Save(cancel);
     }
 }

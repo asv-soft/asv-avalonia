@@ -32,7 +32,7 @@ public class TileProviderSelectorViewModel : ViewModel
         );
         _view = itemsSource.CreateView(p => new TileProviderViewModel(p)).DisposeItWith(Disposable);
         _view.DisposeMany().DisposeItWith(Disposable);
-        _view.SetRoutableParent(this).DisposeItWith(Disposable);
+        _view.SetParent(this).DisposeItWith(Disposable);
         Items = _view
             .ToNotifyCollectionChanged(SynchronizationContextCollectionEventDispatcher.Current)
             .DisposeItWith(Disposable);

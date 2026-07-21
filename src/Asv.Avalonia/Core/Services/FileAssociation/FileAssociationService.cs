@@ -25,17 +25,17 @@ public class FileAssociationService : IFileAssociationService
 
     public IEnumerable<FileTypeInfo> SupportedFiles => _handlers.SelectMany(x => x.SupportedFiles);
 
-    public ValueTask Open(string path)
+    public ValueTask Open(string path, CancellationToken cancel = default)
     {
         foreach (var handler in _handlers.Where(handler => handler.CanOpen(path)))
         {
-            return handler.Open(path);
+            return handler.Open(path, cancel);
         }
 
         throw new NotSupportedException($"No handler found for file {path}");
     }
 
-    public ValueTask Create(string path, FileTypeInfo type)
+    public ValueTask Create(string path, FileTypeInfo type, CancellationToken cancel = default)
     {
         var handler = _handlers.FirstOrDefault(x => x.SupportedFiles.Any(y => y.Id == type.Id));
         if (handler == null)
@@ -43,6 +43,6 @@ public class FileAssociationService : IFileAssociationService
             throw new InvalidOperationException($"File type {type.Id} is not supported");
         }
 
-        return handler.Create(path, type);
+        return handler.Create(path, type, cancel);
     }
 }

@@ -12,7 +12,7 @@ public abstract class PanelWidgetViewModel : WorkspaceWidget
         : base(id)
     {
         ItemsSource = new ObservableList<IViewModel>();
-        ItemsSource.SetRoutableParent(this).DisposeItWith(Disposable);
+        ItemsSource.SetParent(this).DisposeItWith(Disposable);
         ItemsSource.DisposeRemovedItems().DisposeItWith(Disposable);
         ItemsView = ItemsSource.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
     }
