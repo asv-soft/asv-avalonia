@@ -280,13 +280,14 @@ public abstract class ViewModel<TExtensionIfc> : ViewModel
     protected ViewModel(string typeId, NavArgs args, IExtensionService extensionService)
         : base(typeId, args)
     {
+        Dispatcher.UIThread.VerifyAccess();
+
         _self =
             this as TExtensionIfc
             ?? throw new Exception(
                 $"The class {GetType().FullName} does not implement {typeof(TExtensionIfc).FullName}"
             );
 
-        // we load extensions on the UI thread to avoid deadlocks
         Dispatcher.UIThread.Post(
             () =>
             {

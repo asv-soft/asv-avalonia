@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="d266e7e6-5b3d-4a46-9d3c-b14f74f52338" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../../src/Asv.Avalonia.Plugins/Asv.Avalonia.Plugins.csproj.DotSettings" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Asv.Avalonia.Plugins/Asv.Avalonia.Plugins.csproj.DotSettings" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../src/Asv.Avalonia/Core/Services/HotKeys/HotKeyService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/../../src/Asv.Avalonia/Core/Services/HotKeys/HotKeyService.cs" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="EmbeddingIndexingInfo">
+    <option name="cachedIndexableFilesCount" value="79" />
+    <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="shinoxzu &lt;shinoxzu@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$/../.." value="docs/make-services-actual" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;history&quot;: [
+    {
+      &quot;state&quot;: &quot;OPEN&quot;
+    }
+  ],
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;
+  }
+}</component>
+  <component name="GitHubPullRequestState"><![CDATA[{
+  "prStates": [
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM63Be6H",
+        "number": 161
+      },
+      "lastSeen": 1765375524964
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM64VDyp",
+        "number": 165
+      },
+      "lastSeen": 1765460896727
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM64WHn1",
+        "number": 166
+      },
+      "lastSeen": 1765466047851
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM64gzpM",
+        "number": 168
+      },
+      "lastSeen": 1765525460333
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM65IpGQ",
+        "number": 171
+      },
+      "lastSeen": 1765959664426
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM63xi_6",
+        "number": 162
+      },
+      "lastSeen": 1765960445988
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM65zS55",
+        "number": 176
+      },
+      "lastSeen": 1766149304429
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM65jw0z",
+        "number": 174
+      },
+      "lastSeen": 1766149381315
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM66zXho",
+        "number": 178
+      },
+      "lastSeen": 1768381249351
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM66hcwW",
+        "number": 177
+      },
+      "lastSeen": 1768550978868
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM6-rqip",
+        "number": 183
+      },
+      "lastSeen": 1769175741816
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM7xzTMT",
+        "number": 265
+      },
+      "lastSeen": 1784193233833
+    },
+    {
+      "id": {
+        "id": "PR_kwDONp9-SM7yRX_9",
+        "number": 267
+      },
+      "lastSeen": 1784195541980
+    }
+  ]
+}]]></component>
+  <component name="GitRewordedCommitMessages">
+    <option name="commitMessagesMapping">
+      <RewordedCommitMessageMapping>
+        <option name="originalMessage" value="docs: add Recipe book app tutorial&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1211373667593556/task/1212201697285684?focus=true" />
+        <option name="rewordedMessage" value="docs: add Recipe book app tutorial&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1211373667593556/task/1212201697285684?focus=true" />
+      </RewordedCommitMessageMapping>
+    </option>
+    <option name="currentCommit" value="1" />
+    <option name="onto" value="aad2783d53f2b9a6c004281d86da3253c8050d28" />
+  </component>
+  <component name="GithubDefaultAccount">
+    <option name="defaultAccountId" value="72692b65-de3d-4eac-a5b1-cbfc05b42f38" />
+  </component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/asv-soft/asv-avalonia.git&quot;,
+    &quot;accountId&quot;: &quot;72692b65-de3d-4eac-a5b1-cbfc05b42f38&quot;
+  }
+}</component>
+  <component name="InstanceColorv3">
+    <option name="map">
+      <map>
+        <entry key="$PROJECT_DIR$/am.tree">
+          <value>
+            <ColorState>
+              <option name="customOrder" value="1" />
+              <option name="first">
+                <RgbState>
+                  <option name="blue" value="60" />
+                  <option name="darkBlue" value="60" />
+                  <option name="darkGreen" value="68" />
+                  <option name="darkRed" value="206" />
+                  <option name="green" value="68" />
+                  <option name="red" value="206" />
+                </RgbState>
+              </option>
+              <option name="second">
+                <RgbState>
+                  <option name="blue" value="65" />
+                  <option name="darkBlue" value="65" />
+                  <option name="darkGreen" value="126" />
+                  <option name="darkRed" value="231" />
+                  <option name="green" value="126" />
+                  <option name="red" value="231" />
+                </RgbState>
+              </option>
+            </ColorState>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
+  <component name="NextEditCompletionFeaturesState">
+    <decayedCancelled>
+      <entry key="MS100" value="1.0004996628716303" />
+      <entry key="MS500" value="1.392512747324008" />
+      <entry key="S2" value="3.721378157037197" />
+      <entry key="S5" value="7.950205636267566" />
+      <entry key="S10" value="12.68233300782552" />
+      <entry key="S30" value="19.862012291664005" />
+      <entry key="S60" value="27.28498789635818" />
+      <entry key="M2" value="42.994647771852065" />
+      <entry key="M5" value="68.90324419036855" />
+      <entry key="M10" value="85.99430874457917" />
+      <entry key="M15" value="96.9224992801907" />
+      <entry key="M30" value="122.61640100641804" />
+      <entry key="H1" value="154.0072285912319" />
+      <entry key="H2" value="180.9345603640961" />
+      <entry key="H4" value="198.9429412581203" />
+      <entry key="D1" value="217.0025749465235" />
+      <entry key="W1" value="220.42048755912128" />
+    </decayedCancelled>
+    <decayedSelected>
+      <entry key="MS100" value="0.0" />
+      <entry key="MS500" value="0.0" />
+      <entry key="S2" value="0.0" />
+      <entry key="S5" value="0.0" />
+      <entry key="S10" value="0.0" />
+      <entry key="S30" value="0.0" />
+      <entry key="S60" value="0.0" />
+      <entry key="M2" value="0.0" />
+      <entry key="M5" value="0.0" />
+      <entry key="M10" value="0.0" />
+      <entry key="M15" value="0.0" />
+      <entry key="M30" value="0.0" />
+      <entry key="H1" value="0.0" />
+      <entry key="H2" value="0.0" />
+      <entry key="H4" value="0.0" />
+      <entry key="D1" value="0.0" />
+      <entry key="W1" value="0.0" />
+    </decayedSelected>
+    <decayedShown>
+      <entry key="MS100" value="0.9731441357011901" />
+      <entry key="MS500" value="1.385041394308238" />
+      <entry key="S2" value="3.7162585555801413" />
+      <entry key="S5" value="7.945537407181883" />
+      <entry key="S10" value="12.678372497456811" />
+      <entry key="S30" value="19.859805926261345" />
+      <entry key="S60" value="27.283406686266787" />
+      <entry key="M2" value="42.99334820320353" />
+      <entry key="M5" value="68.9023873652187" />
+      <entry key="M10" value="85.99376584122318" />
+      <entry key="M15" value="96.92208146031474" />
+      <entry key="M30" value="122.61610993841904" />
+      <entry key="H1" value="154.00702416885088" />
+      <entry key="H2" value="180.934431042531" />
+      <entry key="H4" value="198.94286723494238" />
+      <entry key="D1" value="217.00256101476762" />
+      <entry key="W1" value="220.42048552534973" />
+    </decayedShown>
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 8
+}</component>
+  <component name="ProjectId" id="36K8xmtbFNriaBtQGQwi0h3om0z" />
+  <component name="ProjectReloadState">
+    <option name="STATE" value="1" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.MCP Project settings loaded": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
+    "git-widget-placeholder": "#267 on docs/actualize-components",
+    "junie.onboarding.icon.badge.shown": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "to.speed.mode.migration.done": "true",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "stardust.markdown.MarkdownSplitEditorSuppressor:keyList": [
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Basic components/View Models/Routable/Tree Page/extendable-tree-subpage.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Basic components/View Models/Routable/Tree Page/tree-page-view-model.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Basic components/View Models/Routable/action-view-model.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Basic components/View Models/Routable/extendable-headlined-view-model.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Basic components/View Models/Routable/page-view-model.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Modules/geomap-module.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/How to create module/how-to-create-module-make-nuget.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/How to create module/how-to-create-module-source-code.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/How to create module/how-to-create-module.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/Recipe Book App/recipe-book-app-dialogs-and-notifications.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/Recipe Book App/recipe-book-app-layout-persistence.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/Recipe Book App/recipe-book-app-recipe-persistence.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/Recipe Book App/recipe-book-app-search.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/Recipe Book App/recipe-book-app-source-code.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Samples and Tutorials/Recipe Book App/recipe-book-app.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/Services/what-is-a-service.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/dependency-injection.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/for-developers.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/supported-platforms.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/welcome-page.md",
+      "/Users/levmyts/RiderProjects/asv-avalonia/docs/Writerside/topics/what-is-asv-avalonia.md"
+    ]
+  }
+}]]></component>
+  <component name="RecapSpentCounter">
+    <option name="endsOfQuotaMs" value="1771534800000" />
+    <option name="spentUsd" value="0.053720452" />
+  </component>
+  <component name="RecapUselessUpdatesCounter">
+    <option name="suspendCountdown" value="0" />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d266e7e6-5b3d-4a46-9d3c-b14f74f52338" name="Changes" comment="" />
+      <created>1764744152270</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1764744152270</updated>
+      <workItem from="1764744153171" duration="3942000" />
+      <workItem from="1764923726893" duration="989000" />
+      <workItem from="1765209523741" duration="2249000" />
+      <workItem from="1765288267949" duration="5868000" />
+      <workItem from="1765374745329" duration="1110000" />
+      <workItem from="1765459677252" duration="5905000" />
+      <workItem from="1765467924575" duration="3349000" />
+      <workItem from="1765524072362" duration="13132000" />
+      <workItem from="1765543204408" duration="92000" />
+      <workItem from="1765543458366" duration="5221000" />
+      <workItem from="1765785145713" duration="13244000" />
+      <workItem from="1765887124683" duration="10387000" />
+      <workItem from="1765954100553" duration="14580000" />
+      <workItem from="1766073940689" duration="859000" />
+      <workItem from="1766149246760" duration="806000" />
+      <workItem from="1767083077541" duration="4880000" />
+      <workItem from="1768379186721" duration="607000" />
+      <workItem from="1768380258601" duration="2450000" />
+      <workItem from="1768382732770" duration="1598000" />
+      <workItem from="1768488932364" duration="1855000" />
+      <workItem from="1768545854604" duration="1558000" />
+      <workItem from="1768925071328" duration="503000" />
+      <workItem from="1769161411015" duration="10654000" />
+      <workItem from="1770734516727" duration="4255000" />
+      <workItem from="1770797317856" duration="10569000" />
+      <workItem from="1771944481476" duration="43000" />
+      <workItem from="1784189854060" duration="4990000" />
+    </task>
+    <task id="LOCAL-00001" summary="docs: add basic structure for docs&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212201697285660?focus=true">
+      <option name="closed" value="true" />
+      <created>1764751409770</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1764751409770</updated>
+    </task>
+    <task id="LOCAL-00002" summary="some progress">
+      <option name="closed" value="true" />
+      <created>1765469969406</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1765469969406</updated>
+    </task>
+    <task id="LOCAL-00003" summary="some progress">
+      <option name="closed" value="true" />
+      <created>1765470645368</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1765470645368</updated>
+    </task>
+    <task id="LOCAL-00004" summary="docs: add page for samples and tutorial&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1211019843841805?focus=true">
+      <option name="closed" value="true" />
+      <created>1765525106562</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1765525106562</updated>
+    </task>
+    <task id="LOCAL-00005" summary="some progress with how to create module">
+      <option name="closed" value="true" />
+      <created>1765548150242</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1765548150242</updated>
+    </task>
+    <task id="LOCAL-00006" summary="make some changes">
+      <option name="closed" value="true" />
+      <created>1765549137591</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1765549137591</updated>
+    </task>
+    <task id="LOCAL-00007" summary="more progress">
+      <option name="closed" value="true" />
+      <created>1765801254958</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1765801254958</updated>
+    </task>
+    <task id="LOCAL-00008" summary="add base info about the module creation">
+      <option name="closed" value="true" />
+      <created>1765805510910</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1765805510910</updated>
+    </task>
+    <task id="LOCAL-00009" summary="add basic how-to-create-module guide">
+      <option name="closed" value="true" />
+      <created>1765899493781</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1765899493781</updated>
+    </task>
+    <task id="LOCAL-00010" summary="docs: add get started guide&#10;&#10;Implement the Get Started Guide explaining basic project setup, page creation and reactive properties.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1211019843841813?focus=true">
+      <option name="closed" value="true" />
+      <created>1765899902779</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1765899902779</updated>
+    </task>
+    <task id="LOCAL-00011" summary="docs: add get started guide&#10;&#10;Implement the Get Started Guide explaining basic project setup, page creation and reactive properties.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1211019843841813?focus=true">
+      <option name="closed" value="true" />
+      <created>1765900734974</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1765900734974</updated>
+    </task>
+    <task id="LOCAL-00012" summary="docs: add composition-view-locator docs&#10;&#10;Add docs for the CompositionViewLocator component.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212444178273125?focus=true">
+      <option name="closed" value="true" />
+      <created>1765955268869</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1765955268869</updated>
+    </task>
+    <task id="LOCAL-00013" summary="docs: add composition-view-locator docs&#10;&#10;Add docs for the CompositionViewLocator component.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212444178273125?focus=true">
+      <option name="closed" value="true" />
+      <created>1765959567095</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1765959567095</updated>
+    </task>
+    <task id="LOCAL-00014" summary="add info about nuget creation">
+      <option name="closed" value="true" />
+      <created>1765963400309</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1765963400309</updated>
+    </task>
+    <task id="LOCAL-00015" summary="change structure">
+      <option name="closed" value="true" />
+      <created>1765965614018</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1765965614018</updated>
+    </task>
+    <task id="LOCAL-00016" summary="docs: add tutorial about how to create a module&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212201697285685?focus=true">
+      <option name="closed" value="true" />
+      <created>1765973431082</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1765973431082</updated>
+    </task>
+    <task id="LOCAL-00017" summary="docs: add tutorial about how to create a module&#10;&#10;change tag patterns in docs.yml&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212201697285685?focus=true">
+      <option name="closed" value="true" />
+      <created>1765974995478</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1765974995478</updated>
+    </task>
+    <task id="LOCAL-00018" summary="docs: add docs for navigation service&#10;&#10;Add docs for the NavigationService.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212531506126204?focus=true">
+      <option name="closed" value="true" />
+      <created>1768382954940</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1768382954940</updated>
+    </task>
+    <task id="LOCAL-00019" summary="some fixes">
+      <option name="closed" value="true" />
+      <created>1770738773999</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1770738773999</updated>
+    </task>
+    <task id="LOCAL-00020" summary="some more progress">
+      <option name="closed" value="true" />
+      <created>1770803103279</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1770803103279</updated>
+    </task>
+    <task id="LOCAL-00021" summary="some changes more">
+      <option name="closed" value="true" />
+      <created>1770803665734</created>
+      <option name="number" value="00021" />
+      <option name="presentableId" value="LOCAL-00021" />
+      <option name="project" value="LOCAL" />
+      <updated>1770803665734</updated>
+    </task>
+    <task id="LOCAL-00022" summary="11">
+      <option name="closed" value="true" />
+      <created>1770814109389</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1770814109389</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+    <MESSAGE value="docs: add basic structure for docs&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212201697285660?focus=true" />
+    <MESSAGE value="some progress" />
+    <MESSAGE value="docs: add page for samples and tutorial&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1211019843841805?focus=true" />
+    <MESSAGE value="some progress with how to create module" />
+    <MESSAGE value="make some changes" />
+    <MESSAGE value="more progress" />
+    <MESSAGE value="add base info about the module creation" />
+    <MESSAGE value="add basic how-to-create-module guide" />
+    <MESSAGE value="docs: add get started guide&#10;&#10;Implement the Get Started Guide explaining basic project setup, page creation and reactive properties.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1211019843841813?focus=true" />
+    <MESSAGE value="docs: add composition-view-locator docs&#10;&#10;Add docs for the CompositionViewLocator component.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212444178273125?focus=true" />
+    <MESSAGE value="add info about nuget creation" />
+    <MESSAGE value="change structure" />
+    <MESSAGE value="docs: add tutorial about how to create a module&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212201697285685?focus=true" />
+    <MESSAGE value="docs: add tutorial about how to create a module&#10;&#10;change tag patterns in docs.yml&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212201697285685?focus=true" />
+    <MESSAGE value="docs: add docs for navigation service&#10;&#10;Add docs for the NavigationService.&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1203851531040615/task/1212531506126204?focus=true" />
+    <MESSAGE value="some fixes" />
+    <MESSAGE value="some more progress" />
+    <MESSAGE value="some changes more" />
+    <MESSAGE value="11" />
+    <MESSAGE value="docs: add Recipe book app tutorial&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1211373667593556/task/1212201697285684?focus=true" />
+    <option name="LAST_COMMIT_MESSAGE" value="docs: add Recipe book app tutorial&#10;&#10;Asana: https://app.asana.com/1/1200746044236722/project/1211373667593556/task/1212201697285684?focus=true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.OperationCanceledException" breakIfHandledByOtherCode="false" displayValue="System.OperationCanceledException" />
+          <option name="timeStamp" value="1" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.Tasks.TaskCanceledException" breakIfHandledByOtherCode="false" displayValue="System.Threading.Tasks.TaskCanceledException" />
+          <option name="timeStamp" value="2" />
+        </breakpoint>
+        <breakpoint enabled="true" type="DotNet_Exception_Breakpoints">
+          <properties exception="System.Threading.ThreadAbortException" breakIfHandledByOtherCode="false" displayValue="System.Threading.ThreadAbortException" />
+          <option name="timeStamp" value="3" />
+        </breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>

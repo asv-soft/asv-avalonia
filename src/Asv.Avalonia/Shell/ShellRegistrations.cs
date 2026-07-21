@@ -16,7 +16,8 @@ public static class ShellRegistrations
                 return builder.RegisterDesignTimeShell(configure);
             }
 
-            builder.RegisterShell(configure).Services.AddTransient<IShell, MobileShellViewModel>();
+            builder.RegisterShell(configure);
+            builder.ViewModel.Register<IShell, MobileShellViewModel>();
             configure ??= b => b.RegisterDefault();
             configure.Invoke(new Builder(builder));
             return builder;
@@ -29,10 +30,10 @@ public static class ShellRegistrations
                 return builder.RegisterDesignTimeShell(configure);
             }
 
+            builder.RegisterShell(configure);
+            builder.ViewModel.Register<IShell, DesktopShellViewModel>();
             builder
-                .RegisterShell(configure)
-                .Services.AddTransient<IShell, DesktopShellViewModel>()
-                .AddTransient<ShellWindow>()
+                .Services.AddTransient<ShellWindow>()
                 .AddTransient<IDebugWindow, DebugWindowViewModel>();
 
             builder.ViewLocator.RegisterViewFor<DebugWindowViewModel, DebugWindow>();
@@ -43,9 +44,8 @@ public static class ShellRegistrations
 
         private IHostApplicationBuilder RegisterDesignTimeShell(Action<Builder>? configure = null)
         {
-            builder
-                .RegisterShell(configure)
-                .Services.AddTransient<IShell, DesignTimeShellViewModel>();
+            builder.RegisterShell(configure);
+            builder.ViewModel.Register<IShell, DesignTimeShellViewModel>();
             configure?.Invoke(new Builder(builder));
             return builder;
         }

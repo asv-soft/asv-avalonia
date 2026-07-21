@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
         <PackageReference Include="Asv.XUnit" Version="3.6.0-dev.29" />
+        <PackageReference Include="Avalonia.Headless.XUnit" Version="$(AvaloniaVersion)" />
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
         <PackageReference Include="AutoFixture.Xunit3" Version="4.19.0" />
         <PackageReference Include="DeepEqual" Version="5.1.0" />
@@ -19,5 +20,9 @@
       <ProjectReference Include="..\Asv.Avalonia.GeoMap\Asv.Avalonia.GeoMap.csproj" />
       <ProjectReference Include="..\Asv.Avalonia.IO\Asv.Avalonia.IO.csproj" />
       <ProjectReference Include="..\Asv.Avalonia.Plugins\Asv.Avalonia.Plugins.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Shell\" />
     </ItemGroup>
 </Project>

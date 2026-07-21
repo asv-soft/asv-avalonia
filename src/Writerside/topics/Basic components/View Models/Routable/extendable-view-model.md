@@ -14,6 +14,7 @@ additional features.
 3. `AfterLoadExtensions` is called to allow for any final setup in your view model.
 
 Extensions are loaded on the UI thread (via `Dispatcher.UIThread.Post`) to avoid deadlocks.
+Instances of `ViewModel<TExtensionIfc>` must therefore be created on the UI thread.
 
 ## Core Components
 
