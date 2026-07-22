@@ -187,9 +187,7 @@ public static class PagesRegistrations
 {collapsible="true" collapsed-title="PagesRegistrations.cs"}
 
 ```C#
-using System;
 using Asv.Avalonia;
-using Microsoft.Extensions.Hosting;
 
 namespace AsvAvaloniaTest;
 
@@ -197,32 +195,18 @@ public static class RecipePageRegistrations
 {
     extension(PagesRegistrations.Builder builder)
     {
-        public Builder RecipePage => new(builder);
-
-        public PagesRegistrations.Builder RegisterRecipePage(Action<Builder>? configure = null)
+        public PagesRegistrations.Builder RegisterRecipePage()
         {
-            configure ??= recipePage => recipePage.RegisterDefault();
-            configure(new Builder(builder));
-            return builder;
-        }
-    }
-
-    public class Builder(PagesRegistrations.Builder builder) : IDependencyBuilder
-    {
-        public IHostApplicationBuilder AppBuilder => builder.AppBuilder;
-
-        public Builder RegisterDefault()
-        {
-            AppBuilder.Pages.Register<RecipePageViewModel, RecipePageView>(
+            builder.AppBuilder.Pages.Register<RecipePageViewModel, RecipePageView>(
                 RecipePageViewModel.PageId
             );
-            AppBuilder.Extensions.Register<IHomePage, HomePageRecipeExtension>();
-            AppBuilder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
-            AppBuilder.ViewLocator.RegisterViewFor<
+            builder.AppBuilder.Extensions.Register<IHomePage, HomePageRecipeExtension>();
+            builder.AppBuilder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
+            builder.AppBuilder.ViewLocator.RegisterViewFor<
                 RecipeEditDialogViewModel,
                 RecipeEditDialogView
             >();
-            return this;
+            return builder;
         }
     }
 }

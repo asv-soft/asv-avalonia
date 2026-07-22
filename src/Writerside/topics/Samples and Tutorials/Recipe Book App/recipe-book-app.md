@@ -299,13 +299,11 @@ public static class PagesRegistrations
 }
 ```
 
-Finally, create `Shell/Pages/Recipes/RecipePageRegistrations.cs`. This feature builder owns the page and
-its Home Page extension as one registration unit:
+Finally, create `Shell/Pages/Recipes/RecipePageRegistrations.cs`. This registration method owns the page and
+its Home Page extension as one unit:
 
 ```C#
-using System;
 using Asv.Avalonia;
-using Microsoft.Extensions.Hosting;
 
 namespace AsvAvaloniaTest;
 
@@ -313,27 +311,13 @@ public static class RecipePageRegistrations
 {
     extension(PagesRegistrations.Builder builder)
     {
-        public Builder RecipePage => new(builder);
-
-        public PagesRegistrations.Builder RegisterRecipePage(Action<Builder>? configure = null)
+        public PagesRegistrations.Builder RegisterRecipePage()
         {
-            configure ??= recipePage => recipePage.RegisterDefault();
-            configure(new Builder(builder));
-            return builder;
-        }
-    }
-
-    public class Builder(PagesRegistrations.Builder builder) : IDependencyBuilder
-    {
-        public IHostApplicationBuilder AppBuilder => builder.AppBuilder;
-
-        public Builder RegisterDefault()
-        {
-            AppBuilder.Pages.Register<RecipePageViewModel, RecipePageView>(
+            builder.AppBuilder.Pages.Register<RecipePageViewModel, RecipePageView>(
                 RecipePageViewModel.PageId
             );
-            AppBuilder.Extensions.Register<IHomePage, HomePageRecipeExtension>();
-            return this;
+            builder.AppBuilder.Extensions.Register<IHomePage, HomePageRecipeExtension>();
+            return builder;
         }
     }
 }
@@ -358,9 +342,10 @@ public static class RecipePageRegistrations
             });
 ```
 
-Each builder implements `IDependencyBuilder` and forwards `AppBuilder`, but exposes only the registration methods
-for its own zone. Supplying a configure callback replaces that builder's default preset, which makes selective
-composition possible without moving feature details back into `Program.cs`.
+The application, shell, and pages builders implement `IDependencyBuilder` and forward `AppBuilder`, but expose only
+the registration methods for their own zones. Supplying a configure callback replaces the corresponding default
+preset, which makes selective composition possible without moving feature details back into `Program.cs`. The Recipe
+Page itself has no alternative presets, so `RegisterRecipePage` registers the complete page feature directly.
 
 Current project structure:
 
