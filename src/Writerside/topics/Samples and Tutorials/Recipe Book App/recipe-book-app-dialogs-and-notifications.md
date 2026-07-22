@@ -4,25 +4,23 @@
 
 We will use the `DialogPrefab` mechanism from **Asv.Avalonia** to create modal windows that can be invoked directly from the ViewModel.
 
-Place the `RecipeEditDialogViewModel` in the `Pages/Recipes/Dialogs` directory of your project.
+Place the dialog files in the `Shell/Pages/Recipes/Dialogs` directory of your project.
 
-```c#
+```C#
 // RecipeEditDialogViewModel.cs
 
-using System.Collections.Generic;
 using Asv.Avalonia;
 using Asv.Common;
-using Microsoft.Extensions.Logging;
 using R3;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public class RecipeEditDialogViewModel : DialogViewModelBase
 {
-	public const string DialogId = $"{BaseId}.recipe_edit";
+    public const string DialogId = $"{BaseId}.recipe_edit";
 
-    public RecipeEditDialogViewModel(ILoggerFactory loggerFactory)
-        : base(DialogId, loggerFactory)
+    public RecipeEditDialogViewModel()
+        : base(DialogId)
     {
         Title = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
         Category = new BindableReactiveProperty<string?>().DisposeItWith(Disposable);
@@ -30,42 +28,36 @@ public class RecipeEditDialogViewModel : DialogViewModelBase
 
     public BindableReactiveProperty<string?> Title { get; }
     public BindableReactiveProperty<string?> Category { get; }
-
-    public override IEnumerable<IRoutable> GetChildren()
-    {
-        return [];
-    }
 }
 ```
 
 Define `RecipeEditDialogPrefab` to handle data exchange with the dialog, enabling both payload injection and result retrieval.
 
-```c#
+```C#
 // RecipeEditDialogPrefab.cs
 
 using System.Threading.Tasks;
 using Asv.Avalonia;
-using Microsoft.Extensions.Logging;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public sealed class RecipeEditDialogPayload
 {
-	public required string Title { get; init; }
-	public required string Category { get; init; }
+    public required string Title { get; init; }
+    public required string Category { get; init; }
 }
 
-public sealed class RecipeEditDialogPrefab(INavigationService nav, ILoggerFactory loggerFactory)
-	: IDialogPrefab<RecipeEditDialogPayload, RecipeEditDialogPayload?>
+public sealed class RecipeEditDialogPrefab
+    : IDialogPrefab<RecipeEditDialogPayload, RecipeEditDialogPayload?>
 {
-	public async Task<RecipeEditDialogPayload?> ShowDialogAsync(RecipeEditDialogPayload dialogPayload)
+    public async Task<RecipeEditDialogPayload?> ShowDialogAsync(RecipeEditDialogPayload dialogPayload)
     {
-        using var vm = new RecipeEditDialogViewModel(loggerFactory);
+        using var vm = new RecipeEditDialogViewModel();
 
         vm.Title.Value = dialogPayload.Title;
         vm.Category.Value = dialogPayload.Category;
 
-        var dialogContent = new ContentDialog(vm, nav)
+        var dialogContent = new ContentDialog(vm)
         {
             Title = dialogPayload.Title,
             PrimaryButtonText = RS.DialogButton_Yes,
@@ -97,11 +89,11 @@ Design the `RecipeEditDialogView` layout to allow users to input the recipe titl
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 xmlns:local="clr-namespace:Asv.Avalonia.Samples.RecipeBook"
+			 xmlns:local="clr-namespace:AsvAvaloniaTest"
 			 mc:Ignorable="d"
 			 d:DesignWidth="800"
 			 d:DesignHeight="450"
-			 x:Class="Asv.Avalonia.Samples.RecipeBook.RecipeEditDialogView"
+			 x:Class="AsvAvaloniaTest.RecipeEditDialogView"
 			 x:DataType="local:RecipeEditDialogViewModel">
 
 	<StackPanel>
@@ -114,13 +106,12 @@ Design the `RecipeEditDialogView` layout to allow users to input the recipe titl
 </UserControl>
 ```
 
-```c#
-//RecipeEditDialogView.axaml.cs
+```C#
+// RecipeEditDialogView.axaml.cs
 
-using Asv.Avalonia;
 using Avalonia.Controls;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
 public partial class RecipeEditDialogView : UserControl
 {
@@ -131,24 +122,37 @@ public partial class RecipeEditDialogView : UserControl
 }
 ```
 
+Keep the dialog wiring with the Recipe Page feature. Add these registrations to
+`RecipePageRegistrations.Builder.RegisterDefault` after the page and Home Page extension registrations:
+
+```C#
+// Shell/Pages/Recipes/RecipePageRegistrations.cs
+
+AppBuilder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
+AppBuilder.ViewLocator.RegisterViewFor<
+    RecipeEditDialogViewModel,
+    RecipeEditDialogView
+>();
+```
+
 Inside `RecipePageViewModel`, add a field to store the dialog prefab retrieved from the dialog service,
 along with a command to create a new recipe.
 
-```c#
+```C#
     private readonly RecipeEditDialogPrefab _recipeEditDialog;
    	public ReactiveCommand CreateRecipeCommand { get; }
 ```
 
-Initialize the command and retrieve `DialogPrefab` in `RecipePageViewModel` constructor.
+Initialize the command and retrieve `DialogPrefab` in the `RecipePageViewModel` constructor.
 
-```c#
+```C#
       _recipeEditDialog = dialogService.GetDialogPrefab<RecipeEditDialogPrefab>();
 	  CreateRecipeCommand = new ReactiveCommand(CreateRecipeAsync).DisposeItWith(Disposable);
 ```
 
 Define the handler for the recipe creation process.
 
-```c#
+```C#
 // RecipePageViewModel.cs
 
 	private async ValueTask CreateRecipeAsync(Unit unit, CancellationToken cancellationToken)
@@ -208,7 +212,7 @@ Place the "Add Recipe" button immediately after the recipe list container within
 ...
 ```
 
-Overview of recipe adding
+The recipe creation flow looks like this:
 
 ![recipe-add](recipe-book-app-adding-recipe.png)
 
@@ -219,7 +223,7 @@ Overview of recipe adding
 ## Notifications
 
 Let's implement the notification system, starting with a confirmation message when an ingredient is added.
-But first, we need to ensure we can create recipes.
+But first, we need to ensure we can create ingredients.
 
 The "Add Ingredient" button:
 
@@ -255,25 +259,25 @@ The "Add Ingredient" button:
 
 Add the ingredient creation command to `RecipeViewModel`:
 
-```c#
+```C#
     public ReactiveCommand CreateIngredientCommand { get; }
 ```
 
-Add an initialization in `RecipeViewModel` constructor:
+Add an initialization in the `RecipeViewModel` constructor:
 
-```c#
+```C#
 	CreateIngredientCommand = new ReactiveCommand(AddIngredientAsync).DisposeItWith(Disposable);
 ```
 
 Handle ingredient addition and send a toast notification:
 
-```c#
+```C#
 	public async ValueTask AddIngredientAsync(Unit unit, CancellationToken cancellationToken)
 	{
 		var ingredient = new IngredientViewModel(
             Guid.NewGuid().ToString(),
-            "Ingredient", 
-            string.Empty, 
+            "Ingredient",
+            string.Empty,
             _loggerFactory
         );
 		_ingredients.Add(ingredient);
@@ -286,56 +290,70 @@ Handle ingredient addition and send a toast notification:
 			MaterialIconKind.Info
 		);
 
-		await this.RaiseShellInfoMessage(msg, cancellationToken);
+		await this.RiseShellInfoMessage(msg, cancellationToken);
 	}
 ```
 
-Notification on Recipe Creation
+> The `RiseShellInfoMessage` extension method lives in the `Asv.Avalonia.InfoMessage` namespace — don't forget
+> the corresponding `using` directive. The snippets omit repeating `using` lists; you can always check the full
+> files in the [source code](recipe-book-app-source-code.md).
+> {style="note"}
+
+Under the hood, `RiseShellInfoMessage` rises a routed event that bubbles up the view model tree to the shell,
+which displays the message as a toast notification.
+
+The ingredient creation notification appears in the lower-right corner:
 
 ![notification](recipe-book-app-notification.png)
-
-![huge-notification](recipe-book-app-huge-notification.png)
 
 ## Events
 
 ### Removing Ingredients
 
 We need to notify the parent viewmodel that an ingredient has been removed.
-To achieve this, create a `RemoveIngredientEvent` in the **Events** directory at **Pages** directory.
+To achieve this, create `RemoveIngredientEvent.cs` in the
+`Shell/Pages/Recipes/Events` directory.
 
-```c#
+```C#
 // RemoveIngredientEvent.cs
 
 using System.Threading;
 using System.Threading.Tasks;
 using Asv.Avalonia;
-using Asv.Common;
+using Asv.Modeling;
 
-namespace Asv.Avalonia.Samples.RecipeBook;
+namespace AsvAvaloniaTest;
 
-public sealed class RemoveIngredientEvent(IRoutable source) : AsyncRoutedEvent<IRoutable>(source, RoutingStrategy.Bubble);
+public sealed class RemoveIngredientEvent(IViewModel source)
+    : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Bubble);
 
 public static class RemoveIngredientEventMixin
 {
-	public static ValueTask RequestRemoveIngredient(this IRoutable src, CancellationToken cancel = default)
-	{
-		return src.Rise(new RemoveIngredientEvent(src), cancel);
-	}
+    public static ValueTask RequestRemoveIngredient(
+        this IViewModel src,
+        CancellationToken cancel = default
+    )
+    {
+        return src.Rise(new RemoveIngredientEvent(src), cancel);
+    }
 }
 ```
 
+The event uses the `Bubble` routing strategy: it travels from the source up the view model tree, so any ancestor
+can intercept it.
+
 Add the `DeleteIngredientCommand` to the `IngredientViewModel`.
 
-```c#
+```C#
 	public ReactiveCommand DeleteIngredientCommand { get; }
 ```
 
 Initialize the command in the constructor:
 
-```c#
+```C#
 ...
     public IngredientViewModel(string id, string name, string amount, ILoggerFactory loggerFactory)
-		: base(new NavigationId(BaseId, id), loggerFactory)
+        : base(BaseId, new NavArgs(new KeyValuePair<string, string?>("id", id)))
 	{
         ...
 		Amount = new HistoricalStringProperty(
@@ -344,7 +362,7 @@ Initialize the command in the constructor:
                 loggerFactory
             ).SetRoutableParent(this)
             .DisposeItWith(Disposable);
-        
+
         // new command
 		DeleteIngredientCommand = new ReactiveCommand(RemoveIngredientAsync).DisposeItWith(Disposable);
 	}
@@ -353,7 +371,7 @@ Initialize the command in the constructor:
 
 Raise the event using the extension method defined in `RemoveIngredientEvent`.
 
-```c#
+```C#
 	private async ValueTask RemoveIngredientAsync(Unit unit, CancellationToken cancellationToken)
 	{
 		await this.RequestRemoveIngredient(cancellationToken);
@@ -362,8 +380,8 @@ Raise the event using the extension method defined in `RemoveIngredientEvent`.
 
 Intercept the bubbling events by implementing `InternalCatchEvent` in the `RecipeViewModel`.
 
-```c#
-private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> e)
+```C#
+	private ValueTask InternalCatchEvent(IViewModel src, AsyncRoutedEvent<IViewModel> e, CancellationToken cancel)
 	{
 		if (e is not RemoveIngredientEvent)
 		{
@@ -377,24 +395,27 @@ private ValueTask InternalCatchEvent(IRoutable src, AsyncRoutedEvent<IRoutable> 
 	}
 ```
 
-Subscribe to events in `RecipeViewModel` constructor.
+The `Sender` property of the event gives us the ingredient that requested its own removal, and we find it in the
+list by its unique `NavId`.
 
-```c#
+Subscribe to events in the `RecipeViewModel` constructor.
+
+```C#
 ...
-	public RecipeViewModel(string id, string title, string? category, string? instruction, 
+	public RecipeViewModel(string id, string title, string? category, string? instruction,
         IEnumerable<IngredientViewModel> ingredients, ILoggerFactory loggerFactory)
-		: base(new NavigationId(BaseId, id), loggerFactory)
+        : base(BaseId, new NavArgs(new KeyValuePair<string, string?>("id", id)))
 	{
         ...
 	    CreateIngredientCommand = new ReactiveCommand(AddIngredientAsync).DisposeItWith(Disposable);
-        
+
         // here we subscribe to events
-		Events.Subscribe(InternalCatchEvent).DisposeItWith(Disposable);
+		Events.Catch(InternalCatchEvent).DisposeItWith(Disposable);
 	}
 ...
 ```
 
-Add the delete button to **RecipePageView.axaml**.
+Add the delete button to `RecipePageView.axaml`.
 
 ```xml
 ...
