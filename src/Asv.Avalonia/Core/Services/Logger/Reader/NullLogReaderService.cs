@@ -1,6 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
-using Microsoft.Extensions.Logging.Abstractions;
 
 namespace Asv.Avalonia;
 
@@ -10,6 +9,7 @@ public class NullLogReaderService : ILogReaderService
 
     private NullLogReaderService() { }
 
+    /// <inheritdoc />
     [RequiresUnreferencedCode(
         "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
     )]
