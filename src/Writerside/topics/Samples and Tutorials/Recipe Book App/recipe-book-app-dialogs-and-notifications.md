@@ -123,13 +123,13 @@ public partial class RecipeEditDialogView : UserControl
 ```
 
 Keep the dialog wiring with the Recipe Page feature. Add these registrations to
-`RecipePageRegistrations.Builder.RegisterDefault` after the page and Home Page extension registrations:
+`RecipePageRegistrations.RegisterRecipePage` after the page and Home Page extension registrations:
 
 ```C#
 // Shell/Pages/Recipes/RecipePageRegistrations.cs
 
-AppBuilder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
-AppBuilder.ViewLocator.RegisterViewFor<
+builder.AppBuilder.Dialogs.RegisterPrefab<RecipeEditDialogPrefab>();
+builder.AppBuilder.ViewLocator.RegisterViewFor<
     RecipeEditDialogViewModel,
     RecipeEditDialogView
 >();
