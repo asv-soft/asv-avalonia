@@ -36,6 +36,7 @@ The framework provides several essential services out of the box. For example:
 *   **[Theme Service](theme-service.md):** Controls the visual appearance (Dark/Light themes, accent colors).
 *   **[Extension Service](extension-service.md):** Applies modular extensions to extendable view models.
 *   **[Hot Key Service](hot-key-service.md):** Dispatches global keyboard shortcuts and stores user overrides.
+*   **[File Association Service](file-association-service.md):** Dispatches file open and create operations to application-specific handlers.
 *   **[Unit Service](unit-service.md):** Manages measurement units and converts values to and from SI.
 
 ## When to Create a Service?

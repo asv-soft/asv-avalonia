@@ -54,6 +54,7 @@
         <toc-element topic="theme-service.md"/>
         <toc-element topic="extension-service.md"/>
         <toc-element topic="hot-key-service.md"/>
+        <toc-element topic="file-association-service.md"/>
         <toc-element topic="unit-service.md"/>
     </toc-element>
     <toc-element toc-title="Modules">
