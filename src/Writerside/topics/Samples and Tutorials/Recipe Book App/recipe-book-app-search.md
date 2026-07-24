@@ -1,14 +1,9 @@
 # Recipe Search
 
 We will use the framework's `SearchBoxViewModel` control to filter the list of recipes by name.
-The **SearchBox** control is fully integrated into the **Asv.Avalonia** framework and provides the following features:
+For a complete description of its behavior and public API, see [Search Box](search-box.md).
 
-- **Progress indication** during search operations
-- **Cancellation support** for long-running queries
-- **Built-in Undo/Redo** for search input
-- **Debouncing** to optimize performance while typing
-
-Add a view field to `RecipePageViewModel` to manage the filtered list.
+Add a synchronized view field and the search box property to `RecipePageViewModel`:
 
 ```C#
 	private readonly ISynchronizedView<RecipeViewModel, RecipeViewModel> _view;

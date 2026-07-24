@@ -34,6 +34,9 @@
     </toc-element>
     <toc-element toc-title="Basic components">
         <toc-element topic="view-locator.md"/>
+        <toc-element toc-title="Controls">
+            <toc-element topic="search-box.md"/>
+        </toc-element>
         <toc-element toc-title="View Models">
             <toc-element topic="view-model.md"/>
             <toc-element topic="extendable-view-model.md"/>
