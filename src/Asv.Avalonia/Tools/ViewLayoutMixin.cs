@@ -9,10 +9,33 @@ using R3;
 
 namespace Asv.Avalonia;
 
+/// <summary>
+/// Provides layout persistence helpers for layout controllers and Avalonia controls.
+/// </summary>
 public static class ViewLayoutMixin
 {
     extension(ILayoutController layout)
     {
+        /// <summary>
+        /// Registers a reference-type layout snapshot and saves it whenever the trigger emits.
+        /// </summary>
+        /// <typeparam name="TData">The reference-type snapshot to persist.</typeparam>
+        /// <typeparam name="TTrigger">The type of value emitted by the save trigger.</typeparam>
+        /// <param name="layoutId">The non-empty layout identifier within the controller.</param>
+        /// <param name="load">The action that applies a loaded snapshot.</param>
+        /// <param name="save">
+        /// The function that captures the current snapshot, or returns <see langword="null"/> to skip
+        /// saving.
+        /// </param>
+        /// <param name="trigger">The observable whose emissions request a save.</param>
+        /// <returns>
+        /// A disposable that owns the layout registration and the trigger subscription.
+        /// </returns>
+        /// <remarks>
+        /// This method does not load the registered value. Call
+        /// <see cref="ILayoutController.LoadAllAsync"/> after completing registration. Trigger
+        /// emissions are dropped while a previous save is still running.
+        /// </remarks>
         public IDisposable Register<TData, TTrigger>(
             string layoutId,
             Action<TData> load,
@@ -47,6 +70,26 @@ public static class ViewLayoutMixin
             return Disposable.Combine(sink, sub);
         }
 
+        /// <summary>
+        /// Registers a value-type layout snapshot and saves it whenever the trigger emits.
+        /// </summary>
+        /// <typeparam name="TValue">The value-type snapshot to persist.</typeparam>
+        /// <typeparam name="TTrigger">The type of value emitted by the save trigger.</typeparam>
+        /// <param name="layoutId">The non-empty layout identifier within the controller.</param>
+        /// <param name="load">The action that applies a loaded value.</param>
+        /// <param name="save">
+        /// The function that captures the current value, or returns <see langword="null"/> to skip
+        /// saving.
+        /// </param>
+        /// <param name="trigger">The observable whose emissions request a save.</param>
+        /// <returns>
+        /// A disposable that owns the layout registration and the trigger subscription.
+        /// </returns>
+        /// <remarks>
+        /// This method does not load the registered value. Call
+        /// <see cref="ILayoutController.LoadAllAsync"/> after completing registration. Trigger
+        /// emissions are dropped while a previous save is still running.
+        /// </remarks>
         public IDisposable Register<TValue, TTrigger>(
             string layoutId,
             Action<TValue> load,
@@ -84,6 +127,27 @@ public static class ViewLayoutMixin
 
     extension(Control view)
     {
+        /// <summary>
+        /// Persists a reference-type layout snapshot against the current view model data context.
+        /// </summary>
+        /// <typeparam name="TData">The reference-type snapshot to persist.</typeparam>
+        /// <typeparam name="TTrigger">The type of value emitted by the save trigger.</typeparam>
+        /// <param name="layoutId">The non-empty layout identifier within each data context.</param>
+        /// <param name="load">The action that applies a loaded snapshot on the UI thread.</param>
+        /// <param name="save">
+        /// The function that captures a snapshot on the UI thread, or returns
+        /// <see langword="null"/> to skip saving.
+        /// </param>
+        /// <param name="trigger">The observable whose emissions request a save.</param>
+        /// <returns>
+        /// A disposable that owns data context tracking, the current layout registration, and its
+        /// trigger subscription.
+        /// </returns>
+        /// <remarks>
+        /// The helper registers whenever the data context implements <see cref="IViewModel"/>, loads
+        /// the value immediately, and re-registers after data context changes. Trigger emissions are
+        /// dropped while a previous save is still running.
+        /// </remarks>
         public IDisposable RegisterLayout<TData, TTrigger>(
             string layoutId,
             Action<TData> load,
@@ -139,6 +203,27 @@ public static class ViewLayoutMixin
             }
         }
 
+        /// <summary>
+        /// Persists a value-type layout snapshot against the current view model data context.
+        /// </summary>
+        /// <typeparam name="TValue">The value-type snapshot to persist.</typeparam>
+        /// <typeparam name="TTrigger">The type of value emitted by the save trigger.</typeparam>
+        /// <param name="layoutId">The non-empty layout identifier within each data context.</param>
+        /// <param name="load">The action that applies a loaded value on the UI thread.</param>
+        /// <param name="save">
+        /// The function that captures a value on the UI thread, or returns
+        /// <see langword="null"/> to skip saving.
+        /// </param>
+        /// <param name="trigger">The observable whose emissions request a save.</param>
+        /// <returns>
+        /// A disposable that owns data context tracking, the current layout registration, and its
+        /// trigger subscription.
+        /// </returns>
+        /// <remarks>
+        /// The helper registers whenever the data context implements <see cref="IViewModel"/>, loads
+        /// the value immediately, and re-registers after data context changes. Trigger emissions are
+        /// dropped while a previous save is still running.
+        /// </remarks>
         public IDisposable RegisterLayoutValue<TValue, TTrigger>(
             string layoutId,
             Action<TValue> load,
@@ -194,6 +279,19 @@ public static class ViewLayoutMixin
             }
         }
 
+        /// <summary>
+        /// Persists one grid column's finite, positive pixel width.
+        /// </summary>
+        /// <param name="layoutId">The layout identifier associated with the column.</param>
+        /// <param name="grid">The grid that owns the column and relevant splitters.</param>
+        /// <param name="columnIndex">The zero-based column definition index.</param>
+        /// <returns>
+        /// A disposable that owns the layout registration, width observation, and splitter event
+        /// handlers.
+        /// </returns>
+        /// <exception cref="ArgumentOutOfRangeException">
+        /// <paramref name="columnIndex"/> does not identify a column in <paramref name="grid"/>.
+        /// </exception>
         public IDisposable RegisterGridColumnPixelWidth(string layoutId, Grid grid, int columnIndex)
         {
             ArgumentNullException.ThrowIfNull(grid);
@@ -243,6 +341,18 @@ public static class ViewLayoutMixin
             }
         }
 
+        /// <summary>
+        /// Persists the generated panel sizes of a workspace.
+        /// </summary>
+        /// <param name="layoutId">The layout identifier associated with the workspace.</param>
+        /// <param name="workspace">The workspace whose generated panel should be tracked.</param>
+        /// <returns>
+        /// A disposable that owns the pending loaded handler or the active panel registration.
+        /// </returns>
+        /// <remarks>
+        /// Registration occurs immediately when the workspace panel is available; otherwise the
+        /// helper waits until the workspace is loaded.
+        /// </remarks>
         public IDisposable RegisterWorkspaceLayout(string layoutId, Workspace workspace)
         {
             ArgumentException.ThrowIfNullOrWhiteSpace(layoutId);
@@ -270,6 +380,19 @@ public static class ViewLayoutMixin
             }
         }
 
+        /// <summary>
+        /// Persists the left, right, and bottom dimensions of a workspace panel.
+        /// </summary>
+        /// <param name="layoutId">The layout identifier associated with the panel.</param>
+        /// <param name="panel">The workspace panel to track.</param>
+        /// <returns>
+        /// A disposable that owns the layout registration, workspace event handler, and internal
+        /// change observable.
+        /// </returns>
+        /// <remarks>
+        /// Restored values are limited to finite, positive pixel sizes and clamped to the panel's
+        /// minimum dimensions. No snapshot is saved when all three dimensions are unavailable.
+        /// </remarks>
         public IDisposable RegisterWorkspaceLayout(string layoutId, WorkspacePanel panel)
         {
             ArgumentNullException.ThrowIfNull(panel);
