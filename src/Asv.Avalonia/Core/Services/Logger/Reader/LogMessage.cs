@@ -2,6 +2,9 @@ using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia;
 
+/// <summary>
+/// Represents a single log entry.
+/// </summary>
 public class LogMessage(
     DateTime timestamp,
     LogLevel logLevel,

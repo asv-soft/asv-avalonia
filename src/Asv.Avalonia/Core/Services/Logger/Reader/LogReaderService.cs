@@ -12,6 +12,10 @@ public class LogReaderOptions
     public string Folder { get; set; } = "logs";
 }
 
+/// <summary>
+/// Default <see cref="ILogReaderService"/> implementation that reads the rolling JSON log files
+/// written by the file logging provider to the application log folder.
+/// </summary>
 public class LogReaderService : ILogReaderService
 {
     private readonly string _logsFolder;
@@ -24,6 +28,7 @@ public class LogReaderService : ILogReaderService
         ArgumentNullException.ThrowIfNull(_logsFolder);
     }
 
+    /// <inheritdoc />
     [RequiresUnreferencedCode(
         "Uses Newtonsoft.Json reflection-based serialization, which is not trim safe."
     )]
