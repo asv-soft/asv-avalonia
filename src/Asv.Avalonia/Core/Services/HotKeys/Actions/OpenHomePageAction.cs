@@ -1,10 +1,11 @@
 using Asv.Modeling;
 using Avalonia.Input;
 using Material.Icons;
+using Microsoft.Extensions.Options;
 
 namespace Asv.Avalonia;
 
-public class OpenHomePageAction : HotKeyAction<IViewModel>
+public class OpenHomePageAction(IOptions<HomePageOptions> options) : HotKeyAction<IViewModel>
 {
     public const string Id = "open.home";
 
@@ -16,6 +17,6 @@ public class OpenHomePageAction : HotKeyAction<IViewModel>
 
     protected override async ValueTask InternalExecute(IViewModel target, CancellationToken cancel)
     {
-        await target.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)), cancel);
+        await target.GoTo(new NavPath(new NavId(options.Value.PageId)), cancel);
     }
 }

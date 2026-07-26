@@ -177,6 +177,92 @@ public class AsvHostApplicationBuilderTest
     }
 
     [Fact]
+    public void Build_WithDefaultPages_SetsDefaultHomePageId()
+    {
+        // Act
+        using var host = MockAppHost.Build(builder =>
+            builder.RegisterDefault().RegisterDesktopShell()
+        );
+
+        // Assert
+        var options = host.Services.GetRequiredService<IOptions<HomePageOptions>>().Value;
+        Assert.Equal(HomePageViewModel.PageId, options.PageId);
+    }
+
+    [Fact]
+    public void Build_WithUseHomePage_OverridesDefaultHomePageId()
+    {
+        // Arrange
+        const string expectedPageId = "custom-home";
+
+        // Act
+        using var host = MockAppHost.Build(builder =>
+            builder
+                .RegisterDefault()
+                .RegisterDesktopShell(shell =>
+                    shell.RegisterPages(pages =>
+                        pages.RegisterHomePage().SetHomePage(expectedPageId)
+                    )
+                )
+        );
+
+        // Assert
+        var options = host.Services.GetRequiredService<IOptions<HomePageOptions>>().Value;
+        Assert.Equal(expectedPageId, options.PageId);
+    }
+
+    [Fact]
+    public void Build_WithCustomHomePage_SetsHomePageIdWithoutDefaultPage()
+    {
+        // Arrange
+        IServiceCollection? registeredServices = null;
+
+        // Act
+        using var host = MockAppHost.Build(
+            builder =>
+                builder
+                    .RegisterDefault()
+                    .RegisterDesktopShell(shell =>
+                        shell.RegisterPages(pages =>
+                            pages.RegisterSettingsPage().SetHomePage(SettingsPageViewModel.PageId)
+                        )
+                    ),
+            services => registeredServices = services
+        );
+
+        // Assert
+        Assert.NotNull(registeredServices);
+        Assert.True(HasPage(SettingsPageViewModel.PageId, registeredServices));
+        Assert.False(HasPage(HomePageViewModel.PageId, registeredServices));
+        var options = host.Services.GetRequiredService<IOptions<HomePageOptions>>().Value;
+        Assert.Equal(SettingsPageViewModel.PageId, options.PageId);
+    }
+
+    [Fact]
+    public void Build_WithoutHomePage_KeepsDefaultHomePageId()
+    {
+        // Arrange
+        IServiceCollection? registeredServices = null;
+
+        // Act
+        using var host = MockAppHost.Build(
+            builder =>
+                builder
+                    .RegisterDefault()
+                    .RegisterDesktopShell(shell =>
+                        shell.RegisterPages(pages => pages.RegisterSettingsPage())
+                    ),
+            services => registeredServices = services
+        );
+
+        // Assert
+        Assert.NotNull(registeredServices);
+        Assert.False(HasPage(HomePageViewModel.PageId, registeredServices));
+        var options = host.Services.GetRequiredService<IOptions<HomePageOptions>>().Value;
+        Assert.Equal(HomePageViewModel.PageId, options.PageId);
+    }
+
+    [Fact]
     public void Build_WithDefaultCore_RegistersLogViewerPageWithoutShellPages()
     {
         // Arrange

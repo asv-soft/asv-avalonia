@@ -9,6 +9,7 @@ using Avalonia.Threading;
 using Material.Icons;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using ObservableCollections;
 using R3;
 using ZLogger;
@@ -25,6 +26,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     private readonly ObservableList<IPage> _pages;
     private readonly ILogger<ShellViewModel> _logger;
     private readonly IAppRestartScheduler? _appRestartScheduler;
+    private readonly string _homePageId;
 
     private readonly IThemeService _themeService;
     private readonly IDialogService _dialogService;
@@ -54,6 +56,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         _themeService = themeService;
         _dialogService = dialogService;
         _appRestartScheduler = ioc.GetService<IAppRestartScheduler>();
+        _homePageId = ioc.GetRequiredService<IOptions<HomePageOptions>>().Value.PageId;
 
         InputElement
             .GotFocusEvent.AddClassHandler<TopLevel>(GotFocusHandler, handledEventsToo: true)
@@ -470,7 +473,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         try
         {
             cancel.ThrowIfCancellationRequested();
-            await this.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)), cancel);
+            await this.GoTo(new NavPath(new NavId(_homePageId)), cancel);
         }
         finally
         {
