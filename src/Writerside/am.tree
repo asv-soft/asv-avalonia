@@ -37,6 +37,7 @@
         <toc-element toc-title="Controls">
             <toc-element topic="search-box.md"/>
             <toc-element topic="splash-screens.md"/>
+            <toc-element topic="tags.md"/>
         </toc-element>
         <toc-element toc-title="View Models">
             <toc-element topic="view-model.md"/>
