@@ -50,7 +50,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         Init(context.Context);
         _loggerFactory = loggerFactory;
         MapViewModel = new MapViewModel("map-view", mapService).DisposeItWith(Disposable);
-        var hideAll = new MenuItem("hide-all", "Hide all")
+        var hideAll = new MenuItem("hide-all", RS.WorkspacePageViewModel_HideAll_Header)
         {
             Command = new ReactiveCommand(x =>
             {
@@ -64,7 +64,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             }),
         };
 
-        var showAll = new MenuItem("show-all", "Show all")
+        var showAll = new MenuItem("show-all", RS.WorkspacePageViewModel_ShowAll_Header)
         {
             Command = new ReactiveCommand(x =>
             {
@@ -78,21 +78,21 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             }),
         };
 
-        var showError = new MenuItem("show-error", "Show error")
+        var showError = new MenuItem("show-error", RS.WorkspacePageViewModel_ShowError_Header)
         {
             Command = new ReactiveCommand(
                 async (_, cancel) =>
                 {
                     await this.RiseShellInfoMessage(
                         new ShellMessage(
-                            "Error",
-                            "This is test error message",
+                            RS.WorkspacePageViewModel_ErrorMessage_Title,
+                            RS.WorkspacePageViewModel_ErrorMessage_Message,
                             ShellErrorState.Error,
-                            "This is description for test error message",
+                            RS.WorkspacePageViewModel_ErrorMessage_Description,
                             MaterialIconKind.Cross,
                             showAll.Command,
                             null,
-                            commandTitle: "ShowAll",
+                            commandTitle: RS.WorkspacePageViewModel_ErrorMessage_CommandTitle,
                             TimeSpan.FromSeconds(5)
                         ),
                         cancel
@@ -100,7 +100,10 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 }
             ),
         };
-        var generateException = new MenuItem("generate-exception", "Generate Exception")
+        var generateException = new MenuItem(
+            "generate-exception",
+            RS.WorkspacePageViewModel_GenerateException_Header
+        )
         {
             Icon = MaterialIconKind.AlertCircle,
             IconColor = AsvColorKind.Error,
@@ -119,7 +122,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         [
             new PropertyEditorWidgetViewModel(
                 "left-property-editor",
-                "Property editor",
+                RS.WorkspacePageViewModel_PropertyEditor_Header,
                 loggerFactory
             )
             {
@@ -138,7 +141,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                         dialogService
                     )
                     {
-                        Header = "Location 1",
+                        Header = RS.WorkspacePageViewModel_Location1_Header,
                     },
                     new PropertyGeoPointReactive(
                         "location2",
@@ -147,7 +150,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                         dialogService
                     )
                     {
-                        Header = "Location 2",
+                        Header = RS.WorkspacePageViewModel_Location2_Header,
                     },
                 },
             },
@@ -158,7 +161,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,
                 IconColor = AsvColorKind.Error | AsvColorKind.Blink,
-                Header = "Map Widget",
+                Header = RS.WorkspacePageViewModel_MapWidget_Header,
                 IsExpanded = true,
                 CanExpand = true,
             },
@@ -167,14 +170,14 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
                 Position = WorkspaceDock.Bottom,
                 Icon = MaterialIconKind.Map,
                 IconColor = AsvColorKind.Error | AsvColorKind.Blink,
-                Header = "Map Widget2",
+                Header = RS.WorkspacePageViewModel_MapWidget2_Header,
                 IsExpanded = true,
                 CanExpand = true,
                 Anchors =
                 {
                     new MapAnchor("drone-1")
                     {
-                        Header = "Drone 1",
+                        Header = RS.WorkspacePageViewModel_Drone1_Header,
                         Location = new GeoPoint(53.0, 53.0, 100),
                         Icon = MaterialIconKind.Airplane,
                     },
@@ -188,7 +191,10 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
 
     public void Init(IControlsGalleryPage context)
     {
-        var changeStatus = new MenuItem("change-status", "Change status")
+        var changeStatus = new MenuItem(
+            "change-status",
+            RS.WorkspacePageViewModel_ChangeStatus_Header
+        )
         {
             Command = new ReactiveCommand(x =>
             {
@@ -232,7 +238,9 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
     {
         if (e is PageCloseAttemptEvent close)
         {
-            close.AddRestriction(new Restriction(this, "Test restriction for close"));
+            close.AddRestriction(
+                new Restriction(this, RS.WorkspacePageViewModel_CloseRestriction_Message)
+            );
         }
 
         return ValueTask.CompletedTask;
@@ -243,7 +251,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         return new SignalPlotWidget("signal-plot-widget", themeService)
         {
             Position = WorkspaceDock.Right,
-            Header = "Signal Plot",
+            Header = RS.WorkspacePageViewModel_SignalPlot_Header,
             Icon = MaterialIconKind.Signal,
             IconColor = AsvColorKind.Info5,
             IsExpanded = true,
@@ -259,7 +267,7 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         var dashboard = new DashboardWidget("telemetry-dashboard")
         {
             Position = WorkspaceDock.Right,
-            Header = "Telemetry Dashboard",
+            Header = RS.WorkspacePageViewModel_TelemetryDashboard_Header,
             Icon = MaterialIconKind.ViewGallery,
             IconColor = AsvColorKind.Info4,
             IsExpanded = true,
@@ -272,8 +280,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             new TextTileViewModel("workspace-dashboard-battery")
             {
                 Density = TileDensity.Regular,
-                Header = "Battery",
-                ShortHeader = "BAT",
+                Header = RS.WorkspacePageViewModel_Battery_Header,
+                ShortHeader = RS.WorkspacePageViewModel_Battery_ShortHeader,
                 Icon = MaterialIconKind.Battery80,
                 IconColor = AsvColorKind.Warning,
                 StatusIcon = MaterialIconKind.CheckCircle,
@@ -292,13 +300,13 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
             new TextTileViewModel("workspace-dashboard-fix")
             {
                 Density = TileDensity.Inline,
-                Header = "GNSS Fix",
-                ShortHeader = "GNSS",
+                Header = RS.WorkspacePageViewModel_GnssFix_Header,
+                ShortHeader = RS.WorkspacePageViewModel_GnssFix_ShortHeader,
                 Icon = MaterialIconKind.CrosshairsGps,
                 IconColor = AsvColorKind.Info5,
                 StatusIcon = MaterialIconKind.CheckCircle,
                 StatusIconColor = AsvColorKind.Success,
-                Text = "RTK Fixed",
+                Text = RS.WorkspacePageViewModel_GnssFix_Text,
                 TextColor = AsvColorKind.Success,
             }
         );
@@ -341,8 +349,8 @@ public class WorkspacePageViewModel : ControlsGallerySubPage
         catch (Exception exception)
         {
             await this.RiseShellErrorMessage(
-                "Workspace exception",
-                "Generated exception for ShellView popup demo.",
+                RS.WorkspacePageViewModel_Exception_Title,
+                RS.WorkspacePageViewModel_Exception_Message,
                 exception,
                 cancel
             );

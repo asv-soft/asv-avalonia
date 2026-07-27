@@ -64,7 +64,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         {
             var anchor = new MapAnchor($"editable-anchor-{i}");
             anchor.Icon = MaterialIconKind.MapMarker;
-            anchor.Header = $"Anchor {i}";
+            anchor.Header = string.Format(RS.MapControlsPageViewModel_Anchor_Header, i);
             anchor.IsAnnotationVisible = false;
             anchor.CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0);
             anchor.Location = centerPoint.RadialPoint(1000, 360.0 / pointCount * i);
@@ -82,7 +82,7 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         }
         var plane = new MapAnchor("plane");
         plane.Icon = MaterialIconKind.Navigation;
-        plane.Header = "Plane";
+        plane.Header = RS.MapControlsPageViewModel_Plane_Header;
         plane.IsReadOnly = true;
         plane.IsAnnotationVisible = true;
         plane.CenterX = new HorizontalOffset(HorizontalOffsetEnum.Center, 0);
@@ -143,7 +143,10 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
 
         plane.Location = OffsetFromCenter(centerPoint, eastOffset, northOffset);
         plane.Azimuth = Math.Atan2(eastVelocity, northVelocity) * 180.0 / Math.PI;
-        plane.Header = $"Plane {NormalizeAngle(plane.Azimuth):F0}°";
+        plane.Header = string.Format(
+            RS.MapControlsPageViewModel_PlaneAzimuth_Header,
+            NormalizeAngle(plane.Azimuth).ToString("F0")
+        );
 
         planeTrail.Polygon.Add(plane.Location);
         while (planeTrail.Polygon.Count > PlaneTrailLength)

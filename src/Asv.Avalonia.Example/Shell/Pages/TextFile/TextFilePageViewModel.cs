@@ -50,7 +50,7 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
             .DisposeItWith(Disposable);
         FilePath = new BindableReactiveProperty<string>(NewFileTitle).DisposeItWith(Disposable);
 
-        Header = "ASV Markdown file";
+        Header = RS.TextFilePageViewModel_Title;
         Icon = PageIcon;
 
         var filePath = context.NavArgs.FirstOrDefault(x => x.Key == FilePathArg).Value;
@@ -123,7 +123,7 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
 
     public string? TypeFilter => $"{FileExtension},*";
 
-    private static string NewFileTitle => "New ASV Markdown file";
+    private static string NewFileTitle => RS.TextFilePageViewModel_NewFile_Title;
 
     public static NavArgs CreateOpenArgs(string filePath)
     {

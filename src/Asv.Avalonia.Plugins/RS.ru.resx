@@ -184,4 +184,7 @@
     <data name="PluginInfoViewModel_InstallCommand_Title" xml:space="preserve">
         <value>Установка...</value>
     </data>
+    <data name="PluginSettingsTreePageMenu_Name" xml:space="preserve">
+        <value>Плагины</value>
+    </data>
 </root>
