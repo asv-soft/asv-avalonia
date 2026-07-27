@@ -37,10 +37,8 @@ public class LogReaderService : ILogReaderService
     )
     {
         var serializer = JsonSerializer.CreateDefault();
-        var result = new Stack<LogMessage>();
-        foreach (
-            var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs").OrderDescending()
-        )
+        var result = new List<LogMessage>();
+        foreach (var logFilePath in Directory.EnumerateFiles(_logsFolder, "*.logs"))
         {
             if (cancel.IsCancellationRequested)
             {
@@ -71,12 +69,12 @@ public class LogReaderService : ILogReaderService
                 var item = serializer.Deserialize<LogMessage>(rdr);
                 if (item is not null)
                 {
-                    result.Push(item);
+                    result.Add(item);
                 }
             }
         }
 
-        foreach (var logMessage in result)
+        foreach (var logMessage in result.OrderByDescending(x => x.Timestamp))
         {
             yield return logMessage;
         }
