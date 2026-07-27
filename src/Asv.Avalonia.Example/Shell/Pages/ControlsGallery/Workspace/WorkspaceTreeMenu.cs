@@ -8,13 +8,13 @@ public class WorkspaceTreeMenu : TreePageMenuItem
     public WorkspaceTreeMenu(ILoggerFactory loggerFactory)
         : base(
             WorkspacePageViewModel.PageId,
-            "Workspace",
+            RS.WorkspaceTreeMenu_Name,
             WorkspacePageViewModel.PageIcon,
             new NavId(WorkspacePageViewModel.PageId),
             NavId.Empty,
             new TagViewModel("status")
             {
-                Value = "Active",
+                Value = RS.WorkspaceTreeMenu_StatusTag_Value,
                 Color = AsvColorKind.Success | AsvColorKind.Blink,
             }
         ) { }

@@ -1055,4 +1055,16 @@
     <data name="ResetCommandHotKeysCommand_CommandInfo_Description" xml:space="preserve">
         <value>Command that resets all hotkeys</value>
     </data>
+    <data name="OpenMenuExtender_ClearRecent_Header" xml:space="preserve">
+        <value>Clear Recent</value>
+    </data>
+    <data name="DashboardWidget_TileVisibility_Header" xml:space="preserve">
+        <value>Show/Hide</value>
+    </data>
+    <data name="TileDensity_Regular" xml:space="preserve">
+        <value>Regular</value>
+    </data>
+    <data name="TileDensity_Inline" xml:space="preserve">
+        <value>Inline</value>
+    </data>
 </root>

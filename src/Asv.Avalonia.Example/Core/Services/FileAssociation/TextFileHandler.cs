@@ -13,7 +13,7 @@ public class TextFileHandler(IShellHost shellHost) : IFileHandler
     [
         new(
             "asvmd",
-            "ASV Markdown file",
+            RS.TextFileHandler_FileType_Title,
             TextFilePageViewModel.FileExtension,
             true,
             true,

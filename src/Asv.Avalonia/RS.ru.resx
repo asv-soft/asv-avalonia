@@ -1086,4 +1086,16 @@
     <data name="ResetCommandHotKeysCommand_CommandInfo_Name" xml:space="preserve">
         <value>Сбросить горячие клавиши</value>
     </data>
+    <data name="OpenMenuExtender_ClearRecent_Header" xml:space="preserve">
+        <value>Очистить недавние</value>
+    </data>
+    <data name="DashboardWidget_TileVisibility_Header" xml:space="preserve">
+        <value>Показать/скрыть</value>
+    </data>
+    <data name="TileDensity_Regular" xml:space="preserve">
+        <value>Обычный</value>
+    </data>
+    <data name="TileDensity_Inline" xml:space="preserve">
+        <value>Компактный</value>
+    </data>
 </root>

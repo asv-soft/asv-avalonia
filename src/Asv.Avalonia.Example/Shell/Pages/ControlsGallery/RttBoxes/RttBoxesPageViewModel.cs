@@ -79,20 +79,20 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
             return new RttBoxViewModel
             {
                 Icon = MaterialIconKind.Velocity,
-                Header = "Velocity",
-                Description = "Current vehicle speed in the selected telemetry stream.",
+                Header = RS.RttBoxesPageViewModel_Velocity_Header,
+                Description = RS.RttBoxesPageViewModel_Velocity_Description,
                 IsNetworkError = true,
-                ShortHeader = "vel",
+                ShortHeader = RS.RttBoxesPageViewModel_Velocity_ShortHeader,
             };
         }
 
         var viewModel = new RttBoxViewModel("base");
 
         viewModel.Icon = MaterialIconKind.Velocity;
-        viewModel.Header = "Velocity";
-        viewModel.Description = "Current vehicle speed in the selected telemetry stream.";
+        viewModel.Header = RS.RttBoxesPageViewModel_Velocity_Header;
+        viewModel.Description = RS.RttBoxesPageViewModel_Velocity_Description;
         viewModel.IsNetworkError = true;
-        viewModel.ShortHeader = "vel";
+        viewModel.ShortHeader = RS.RttBoxesPageViewModel_Velocity_ShortHeader;
         return viewModel;
     }
 
@@ -106,10 +106,10 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         var viewModel = new TwoColumnRttBoxViewModel("two-column");
 
         viewModel.Icon = MaterialIconKind.Ruler;
-        viewModel.Header = "Distance";
-        viewModel.Description = "Left and right distance channels updated independently.";
-        viewModel.Left.Header = "Left";
-        viewModel.Right.Header = "Right";
+        viewModel.Header = RS.RttBoxesPageViewModel_Distance_Header;
+        viewModel.Description = RS.RttBoxesPageViewModel_TwoColumn_Description;
+        viewModel.Left.Header = RS.RttBoxesPageViewModel_Left_Header;
+        viewModel.Right.Header = RS.RttBoxesPageViewModel_Right_Header;
         viewModel.Left.UnitSymbol = "mm";
         viewModel.Right.UnitSymbol = "km/h";
         int index = 0;
@@ -132,8 +132,8 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
                 }
                 else
                 {
-                    viewModel.Left.Header = "Left";
-                    viewModel.Right.Header = "Right";
+                    viewModel.Left.Header = RS.RttBoxesPageViewModel_Left_Header;
+                    viewModel.Right.Header = RS.RttBoxesPageViewModel_Right_Header;
                 }
                 if (Random.Shared.NextDouble() > 0.9)
                 {
@@ -169,8 +169,8 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         var viewModel = new SingleRttBoxViewModel("single");
 
         viewModel.Icon = MaterialIconKind.Ruler;
-        viewModel.Header = "Distance";
-        viewModel.Description = "Single live distance value with progress and status.";
+        viewModel.Header = RS.RttBoxesPageViewModel_Distance_Header;
+        viewModel.Description = RS.RttBoxesPageViewModel_Single_Description;
         viewModel.UnitSymbol = "mm";
 
         int index = 0;
@@ -189,7 +189,7 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
                 if (Random.Shared.NextDouble() > 0.9)
                 {
                     viewModel.ValueString = Asv.Avalonia.Units.NotAvailableString;
-                    viewModel.StatusText = "No data";
+                    viewModel.StatusText = RS.RttBoxesPageViewModel_NoData_StatusText;
                 }
                 else
                 {
@@ -217,20 +217,36 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         var viewModel = new KeyValueRttBoxViewModel("key-value");
 
-        viewModel.ShortHeader = "Short";
+        viewModel.ShortHeader = RS.RttBoxesPageViewModel_KeyValue_ShortHeader;
         viewModel.ShortValueString = "0.00";
         viewModel.ShortUnitSymbol = "ms";
         viewModel.Icon = MaterialIconKind.Radar;
-        viewModel.Header = "Common RTT";
-        viewModel.Description = "Common round-trip telemetry values shown as key-value rows.";
+        viewModel.Header = RS.RttBoxesPageViewModel_KeyValue_Header;
+        viewModel.Description = RS.RttBoxesPageViewModel_KeyValue_Description;
 
         KeyValueViewModel[] items =
         [
-            new KeyValueViewModel(0) { Header = "Power", UnitSymbol = "dBm" },
-            new KeyValueViewModel(1) { Header = "Rise time", UnitSymbol = "ms" },
-            new KeyValueViewModel(2) { Header = "Fall time", UnitSymbol = "ms" },
-            new KeyValueViewModel(3) { Header = "Status", ValueString = "Normal" },
-            new KeyValueViewModel(4) { Header = "Unknown" },
+            new KeyValueViewModel(0)
+            {
+                Header = RS.RttBoxesPageViewModel_Power_Header,
+                UnitSymbol = "dBm",
+            },
+            new KeyValueViewModel(1)
+            {
+                Header = RS.RttBoxesPageViewModel_RiseTime_Header,
+                UnitSymbol = "ms",
+            },
+            new KeyValueViewModel(2)
+            {
+                Header = RS.RttBoxesPageViewModel_FallTime_Header,
+                UnitSymbol = "ms",
+            },
+            new KeyValueViewModel(3)
+            {
+                Header = RS.RttBoxesPageViewModel_Status_Header,
+                ValueString = RS.RttBoxesPageViewModel_Status_Value,
+            },
+            new KeyValueViewModel(4) { Header = RS.RttBoxesPageViewModel_Unknown_Header },
         ];
 
         viewModel.ItemsSource.AddRange(items);
@@ -281,8 +297,8 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
         );
 
         viewModel.Icon = MaterialIconKind.Ruler;
-        viewModel.Header = "Distance";
-        viewModel.Description = "Distance value split into integer and fractional runs.";
+        viewModel.Header = RS.RttBoxesPageViewModel_Distance_Header;
+        viewModel.Description = RS.RttBoxesPageViewModel_SplitDigit_Description;
         viewModel.FormatString = "## 000.000";
         int index = 0;
         int maxIndex = Enum.GetValues<AsvColorKind>().Length;
@@ -329,9 +345,9 @@ public sealed class RttBoxesPageViewModel : ControlsGallerySubPage
 
         viewModel.GeoPointProperty.ModelValue.Value = new GeoPoint(55.75, 37.6173, 250.0);
         viewModel.Icon = MaterialIconKind.AddressMarker;
-        viewModel.Header = "UAV position";
-        viewModel.Description = "Live UAV latitude, longitude, and altitude.";
-        viewModel.ShortHeader = "UAV";
+        viewModel.Header = RS.RttBoxesPageViewModel_GeoPoint_Header;
+        viewModel.Description = RS.RttBoxesPageViewModel_GeoPoint_Description;
+        viewModel.ShortHeader = RS.RttBoxesPageViewModel_GeoPoint_ShortHeader;
 
         var index = 0;
         var maxIndex = Enum.GetValues<AsvColorKind>().Length;

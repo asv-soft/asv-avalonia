@@ -8,7 +8,7 @@ public class RttBoxesTreeMenu : TreePageMenuItem
     public RttBoxesTreeMenu(ILoggerFactory loggerFactory)
         : base(
             RttBoxesPageViewModel.PageId,
-            "Rtt boxes",
+            RS.RttBoxesTreeMenu_Name,
             RttBoxesPageViewModel.PageIcon,
             new NavId(RttBoxesPageViewModel.PageId),
             NavId.Empty
