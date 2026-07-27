@@ -61,6 +61,9 @@ jobs:
           dotnet build ./src/${{ env.API_PROJECT_NAME }}/${{ env.API_PROJECT_NAME }}.csproj --configuration Release --no-restore /p:Version="${{ env.VERSION }}" /p:PackageVersion="${{ env.VERSION }}"
           dotnet build ./src/${{ env.PROJECT_NAME }}/${{ env.PROJECT_NAME }}.csproj --configuration Release --no-restore /p:Version="${{ env.VERSION }}" /p:PackageVersion="${{ env.VERSION }}"
 
+      - name: Run tests
+        run: dotnet test ./src/Asv.Avalonia.Test/Asv.Avalonia.Test.csproj --configuration Release
+
       - name: Pack projects to Nuget
         run: |
           dotnet pack ./src/${{ env.API_PROJECT_NAME }}/${{ env.API_PROJECT_NAME }}.csproj -c Release /p:Version="${{ env.VERSION }}" /p:PackageVersion="${{ env.VERSION }}" --no-build -o .

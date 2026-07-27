@@ -53,6 +53,9 @@ jobs:
           dotnet build ./src/${{ env.PROJECT_NAME }}.LauncherReady/${{ env.PROJECT_NAME }}.LauncherReady.csproj --configuration Release --no-restore
           dotnet build ./src/${{ env.PROJECT_NAME }}.Plugins/${{ env.PROJECT_NAME }}.Plugins.csproj --configuration Release --no-restore
 
+      - name: Run tests
+        run: dotnet test ./src/Asv.Avalonia.Test/Asv.Avalonia.Test.csproj --configuration Release
+
       - name: Set version variable
         env:
           TAG: ${{ github.ref_name }}
