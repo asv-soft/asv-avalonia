@@ -381,7 +381,7 @@ public class MarkdownViewer : ContentControl
         };
         if (color != AsvColorKind.None)
         {
-            AsvPallete.SetColor(icon, color);
+            AsvPalette.SetColor(icon, color);
         }
 
         inlines.Add(new InlineUIContainer(icon));
@@ -444,9 +444,10 @@ public class MarkdownViewer : ContentControl
                 | AsvColorKind.Fadein
                 | AsvColorKind.FadeinBlink
                 | AsvColorKind.Fadeout
+                | AsvColorKind.Smallest
                 | AsvColorKind.Small
                 | AsvColorKind.Medium
-                | AsvColorKind.Large
+                | AsvColorKind.Big
             );
 
         return paletteColor switch

@@ -36,7 +36,7 @@
         </Viewbox>
         <Viewbox Height="200" Width="200" VerticalAlignment="Top">
             <avalonia:RttBox
-                avalonia:AsvPallete.Color="Info1"
+                avalonia:AsvPalette.Color="Info1"
                 Icon="{CompiledBinding Icon}"
                 Header="{CompiledBinding Header}"
                 Description="{CompiledBinding Description}"
@@ -44,7 +44,7 @@
                 SmallHeader="{CompiledBinding ShortHeader}"
                 DataContext="{CompiledBinding RttBoxViewModel}"
             >
-                <TextBlock Text="123.29" avalonia:AsvPallete.Color="Unknown" />
+                <TextBlock Text="123.29" avalonia:AsvPalette.Color="Unknown" />
             </avalonia:RttBox>
         </Viewbox>
     </WrapPanel>

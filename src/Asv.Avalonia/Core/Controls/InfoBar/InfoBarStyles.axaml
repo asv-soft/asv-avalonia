@@ -123,7 +123,7 @@
                 <Border
                     Name="ContentRoot"
                     VerticalAlignment="Top"
-                    BorderBrush="{DynamicResource AsvBackgroundInfoBrush}"
+                    BorderBrush="{DynamicResource AsvBackgroundInfo1Brush}"
                     BorderThickness="{DynamicResource InfoBarBorderThickness}"
                     CornerRadius="{TemplateBinding CornerRadius}"
                     BackgroundSizing="{TemplateBinding BackgroundSizing}"
@@ -241,7 +241,7 @@
 
         <Style Selector="^:informational">
             <Style Selector="^ /template/ Border#ContentRoot">
-                <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfoBrush}" />
+                <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo1Brush}" />
             </Style>
             <Style Selector="^ /template/ Ellipse#IconBackground">
                 <Setter Property="Fill" Value="{DynamicResource AsvForegroundInfo1Brush}" />

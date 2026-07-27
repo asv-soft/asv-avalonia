@@ -22,7 +22,7 @@
                 <Panel Height="{TemplateBinding Height}" MinHeight="0" ClipToBounds="False">
                     <Border
                         Classes="compact-slider-accent"
-                        controls:AsvPallete.Color="{TemplateBinding SliderColor}"
+                        controls:AsvPalette.Color="{TemplateBinding SliderColor}"
                         Height="{TemplateBinding TrackHeight}"
                         VerticalAlignment="Center"
                         CornerRadius="2"
@@ -31,7 +31,7 @@
                     <Canvas Height="{TemplateBinding Height}" ClipToBounds="False">
                         <Border
                             Classes="compact-slider-thumb compact-slider-accent"
-                            controls:AsvPallete.Color="{TemplateBinding SliderColor}"
+                            controls:AsvPalette.Color="{TemplateBinding SliderColor}"
                             Canvas.Left="{TemplateBinding ThumbLeft}"
                             Canvas.Top="{TemplateBinding ThumbTop}"
                             Width="{TemplateBinding ThumbWidth}"

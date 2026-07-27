@@ -23,7 +23,7 @@
                 Margin="0,0,100,0"
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
-                Classes="warning blink-once"
+                Classes="warning blinkonce"
                 Kind="ArrowUpRightBold"
             />
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
@@ -185,7 +185,7 @@
                                             Key="{Binding Key}"
                                             Value="{Binding Value}"
                                             Icon="{Binding Icon}"
-                                            avalonia1:AsvPallete.Color="{Binding Color}"
+                                            avalonia1:AsvPalette.Color="{Binding Color}"
                                         />
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>

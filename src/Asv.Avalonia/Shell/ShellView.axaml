@@ -237,7 +237,7 @@
                                 CommandParameter="{Binding Base.CommandParameter}"
                             >
                                 <avalonia1:MaterialIcon
-                                    avalonia:AsvPallete.Color="{Binding Base.IconColor}"
+                                    avalonia:AsvPalette.Color="{Binding Base.IconColor}"
                                     Kind="{Binding Base.Icon}"
                                 />
                                 <Button.Styles>
@@ -285,7 +285,7 @@
                                 CommandParameter="{Binding Base.CommandParameter}"
                             >
                                 <avalonia1:MaterialIcon
-                                    avalonia:AsvPallete.Color="{Binding Base.IconColor}"
+                                    avalonia:AsvPalette.Color="{Binding Base.IconColor}"
                                     Kind="{Binding Base.Icon}"
                                 />
                                 <Button.Styles>

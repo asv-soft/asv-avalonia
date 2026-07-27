@@ -95,7 +95,7 @@
                         <avalonia1:MaterialIcon
                             Margin="0,0,4,0"
                             DockPanel.Dock="Left"
-                            avalonia:AsvPallete.Color="{Binding Base.IconColor}"
+                            avalonia:AsvPalette.Color="{Binding Base.IconColor}"
                             Kind="{Binding Base.Icon}"
                             Width="15"
                             Height="15"
@@ -111,7 +111,7 @@
                             Key="{Binding Key}"
                             Value="{Binding Value}"
                             Icon="{Binding Icon}"
-                            avalonia:AsvPallete.Color="{Binding Color}"
+                            avalonia:AsvPalette.Color="{Binding Color}"
                         />
                         <TextBlock VerticalAlignment="Center" Text="{Binding Base.Header}" />
                     </DockPanel>
@@ -170,7 +170,7 @@
         >
             <StackPanel Spacing="4" Orientation="Horizontal" Margin="4">
                 <avalonia1:MaterialIcon
-                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                    avalonia:AsvPalette.Color="{Binding IconColor}"
                     Kind="ChevronDoubleRight"
                 />
             </StackPanel>
@@ -197,7 +197,7 @@
                         >
                             <StackPanel Orientation="Horizontal" Spacing="4">
                                 <avalonia1:MaterialIcon
-                                    avalonia:AsvPallete.Color="{Binding Base.IconColor}"
+                                    avalonia:AsvPalette.Color="{Binding Base.IconColor}"
                                     Kind="{Binding Base.Icon}"
                                     IsVisible="{Binding Base.Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                                     VerticalAlignment="Center"
@@ -247,7 +247,7 @@
                                 VerticalAlignment="Center"
                                 Width="18"
                                 Height="18"
-                                avalonia:AsvPallete.Color="{Binding Item.IconColor}"
+                                avalonia:AsvPalette.Color="{Binding Item.IconColor}"
                                 Kind="{Binding Item.Icon}"
                             />
                             <TextBlock

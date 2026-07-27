@@ -25,7 +25,7 @@
                 <avalonia1:MaterialIcon
                     IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                     Kind="{Binding Icon}"
-                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                    avalonia:AsvPalette.Color="{Binding IconColor}"
                 />
                 <TextBlock VerticalAlignment="Center" Text="{Binding Header}" />
             </StackPanel>
@@ -42,7 +42,7 @@
                     VerticalAlignment="Center"
                     IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                     Kind="{Binding Icon}"
-                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                    avalonia:AsvPalette.Color="{Binding IconColor}"
                 />
                 <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Header}" />
                 <TextBlock
@@ -154,7 +154,7 @@
             <avalonia1:MaterialIcon
                 Grid.Column="0"
                 Margin="2,0,0,0"
-                avalonia:AsvPallete.Color="{Binding IconColor}"
+                avalonia:AsvPalette.Color="{Binding IconColor}"
                 Kind="{Binding Icon}"
             >
                 <avalonia1:MaterialIcon.IsVisible>
@@ -235,7 +235,7 @@
                                                 VerticalAlignment="Center"
                                                 IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                                                 Kind="{Binding Icon}"
-                                                avalonia:AsvPallete.Color="{Binding IconColor}"
+                                                avalonia:AsvPalette.Color="{Binding IconColor}"
                                             />
                                             <TextBlock
                                                 Grid.Row="0"

@@ -57,7 +57,7 @@
                             Grid.Column="0"
                             Grid.Row="0"
                             Grid.RowSpan="5"
-                            avalonia:AsvPallete.Color="{Binding Base.IconColor}"
+                            avalonia:AsvPalette.Color="{Binding Base.IconColor}"
                             Kind="{Binding Base.Icon}"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Top"
