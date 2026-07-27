@@ -79,7 +79,7 @@
                     <avalonia:MaterialIcon
                         Width="{Binding IconSize}"
                         Height="{Binding IconSize}"
-                        avalonia1:AsvPallete.Color="{Binding IconColor}"
+                        avalonia1:AsvPalette.Color="{Binding IconColor}"
                         Kind="{Binding Icon}"
                     />
                 </DataTemplate>
@@ -116,7 +116,7 @@
         </map:MapItemsControl>
 
         <Border
-            avalonia1:AsvPallete.Color="{Binding Interaction.Accent.Value}"
+            avalonia1:AsvPalette.Color="{Binding Interaction.Accent.Value}"
             IsVisible="{Binding Interaction.Accent.Value, Converter={x:Static ObjectConverters.IsNotNull}}"
             Background="Transparent"
             BorderThickness="3"

@@ -86,7 +86,7 @@
             <avalonia1:MaterialIcon
                 Grid.Column="0"
                 Margin="2,0,0,0"
-                avalonia:AsvPallete.Color="{Binding IconColor}"
+                avalonia:AsvPalette.Color="{Binding IconColor}"
                 Kind="{Binding Icon}"
             >
                 <avalonia1:MaterialIcon.IsVisible>

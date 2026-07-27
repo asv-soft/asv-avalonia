@@ -38,7 +38,7 @@
                                     >
                                         <avalonia:MaterialIcon
                                             Classes="big"
-                                            asv:AsvPallete.Color="{Binding IconColor}"
+                                            asv:AsvPalette.Color="{Binding IconColor}"
                                             Grid.Row="0"
                                             Grid.Column="0"
                                             Grid.RowSpan="3"

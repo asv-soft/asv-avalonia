@@ -20,7 +20,7 @@
         Description="{Binding Description}"
         IsNetworkError="{Binding IsNetworkError}"
         SmallHeader="{Binding ShortHeader}"
-        avalonia:AsvPallete.Color="{Binding Status}"
+        avalonia:AsvPalette.Color="{Binding Status}"
     >
         <avalonia:RttBox.SmallContent>
             <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">
@@ -50,7 +50,7 @@
                 Maximum="1"
                 Value="{Binding Progress}"
                 IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}"
-                avalonia:AsvPallete.Color="{Binding ProgressStatus}"
+                avalonia:AsvPalette.Color="{Binding ProgressStatus}"
             />
             <TextBlock
                 Margin="0,4,0,0"

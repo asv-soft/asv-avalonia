@@ -56,7 +56,7 @@
                                     Height="20"
                                     IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
                                     Kind="{Binding Icon}"
-                                    avalonia:AsvPallete.Color="{Binding IconColor}"
+                                    avalonia:AsvPalette.Color="{Binding IconColor}"
                                 />
                                 <TextBlock
                                     Grid.Row="0"

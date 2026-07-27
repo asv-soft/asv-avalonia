@@ -36,7 +36,7 @@
             <ControlTemplate>
                 <Border
                     Classes="state-toggle-track"
-                    controls:AsvPallete.Color="{TemplateBinding StateStatus}"
+                    controls:AsvPalette.Color="{TemplateBinding StateStatus}"
                     Width="{TemplateBinding Width}"
                     Height="{TemplateBinding Height}"
                     Background="{DynamicResource AsvForegroundUnknownBrush}"

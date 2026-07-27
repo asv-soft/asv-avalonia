@@ -21,7 +21,7 @@
         Header="{Binding Header}"
         Description="{Binding Description}"
         IsNetworkError="{Binding IsNetworkError}"
-        avalonia:AsvPallete.Color="{Binding Status}"
+        avalonia:AsvPalette.Color="{Binding Status}"
     >
         <avalonia:RttBox.SmallContent>
             <TextBlock VerticalAlignment="Center" Margin="0,0,4,0">

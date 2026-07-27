@@ -34,7 +34,7 @@
                             VerticalAlignment="Center"
                             Width="{DynamicResource AsvFontSizeSmall}"
                             Height="{DynamicResource AsvFontSizeSmall}"
-                            avalonia:AsvPallete.Color="{Binding IconColor}"
+                            avalonia:AsvPalette.Color="{Binding IconColor}"
                             Kind="{Binding Icon}"
                             IsVisible="{Binding HasIcon}"
                         />

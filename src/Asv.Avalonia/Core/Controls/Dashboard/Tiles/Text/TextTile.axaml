@@ -79,14 +79,14 @@
                                 DockPanel.Dock="Left"
                                 Classes="medium"
                                 VerticalAlignment="Center"
-                                controls:AsvPallete.Color="{TemplateBinding IconColor}"
+                                controls:AsvPalette.Color="{TemplateBinding IconColor}"
                                 Kind="{TemplateBinding Icon}"
                             />
                             <avalonia:MaterialIcon
                                 IsVisible="{TemplateBinding StatusIcon, Converter={x:Static ObjectConverters.IsNotNull}}"
                                 DockPanel.Dock="Right"
                                 HorizontalAlignment="Right"
-                                controls:AsvPallete.Color="{TemplateBinding StatusIconColor}"
+                                controls:AsvPalette.Color="{TemplateBinding StatusIconColor}"
                                 Kind="{TemplateBinding StatusIcon}"
                             />
                             <TextBlock
@@ -109,7 +109,7 @@
                             IsVisible="{TemplateBinding StatusText, Converter={x:Static ObjectConverters.IsNotNull}}"
                             DockPanel.Dock="Bottom"
                             Text="{TemplateBinding StatusText}"
-                            controls:AsvPallete.Color="{TemplateBinding StatusTextColor}"
+                            controls:AsvPalette.Color="{TemplateBinding StatusTextColor}"
                             HorizontalAlignment="Center"
                         />
                         <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
@@ -124,7 +124,7 @@
                             </Grid.RowDefinitions>
                             <TextBlock
                                 Grid.RowSpan="2"
-                                controls:AsvPallete.Color="{TemplateBinding TextColor}"
+                                controls:AsvPalette.Color="{TemplateBinding TextColor}"
                                 VerticalAlignment="Center"
                                 FontWeight="Bold"
                                 Text="{TemplateBinding Text}"
@@ -137,7 +137,7 @@
                                 FontWeight="Light"
                                 VerticalAlignment="Center"
                                 Text="{TemplateBinding SuperScriptText}"
-                                controls:AsvPallete.Color="{TemplateBinding SuperScriptTextColor}"
+                                controls:AsvPalette.Color="{TemplateBinding SuperScriptTextColor}"
                                 HorizontalAlignment="Left"
                             />
                             <TextBlock
@@ -147,7 +147,7 @@
                                 FontWeight="Light"
                                 Margin="0,0,0,4"
                                 Text="{TemplateBinding SubScriptText}"
-                                controls:AsvPallete.Color="{TemplateBinding SubScriptTextColor}"
+                                controls:AsvPalette.Color="{TemplateBinding SubScriptTextColor}"
                                 HorizontalAlignment="Left"
                             />
                             <TextBlock
@@ -199,7 +199,7 @@
                             Width="12"
                             Height="12"
                             VerticalAlignment="Center"
-                            controls:AsvPallete.Color="{TemplateBinding IconColor}"
+                            controls:AsvPalette.Color="{TemplateBinding IconColor}"
                             Kind="{TemplateBinding Icon}"
                         />
                         <TextBlock
@@ -213,7 +213,7 @@
                             Grid.Column="2"
                             HorizontalAlignment="Left"
                             Text="{TemplateBinding Text}"
-                            controls:AsvPallete.Color="{TemplateBinding TextColor}"
+                            controls:AsvPalette.Color="{TemplateBinding TextColor}"
                         />
                         <TextBlock
                             Grid.Column="3"
@@ -226,7 +226,7 @@
                             IsVisible="{TemplateBinding StatusIcon, Converter={x:Static ObjectConverters.IsNotNull}}"
                             Grid.Column="4"
                             HorizontalAlignment="Right"
-                            controls:AsvPallete.Color="{TemplateBinding StatusIconColor}"
+                            controls:AsvPalette.Color="{TemplateBinding StatusIconColor}"
                             Kind="{TemplateBinding StatusIcon}"
                         />
                     </Grid>

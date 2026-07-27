@@ -25,7 +25,7 @@
         Description="{Binding Description}"
         SmallContent="{Binding ShortStatusText}"
         SmallHeader="{Binding ShortHeader}"
-        avalonia:AsvPallete.Color="{Binding Status}"
+        avalonia:AsvPalette.Color="{Binding Status}"
     >
         <Grid RowDefinitions="*,*,*,4,Auto,4,Auto" ColumnDefinitions="Auto,5,*">
             <TextBlock
@@ -73,7 +73,7 @@
                 Maximum="1"
                 Value="{Binding Progress}"
                 IsIndeterminate="{Binding Progress, Converter={x:Static avalonia:DoubleTrueIfNanConverter.Instance}}"
-                avalonia:AsvPallete.Color="{Binding ProgressStatus}"
+                avalonia:AsvPalette.Color="{Binding ProgressStatus}"
             />
             <TextBlock
                 Foreground="{DynamicResource AsvForegroundUnknownBrush}"

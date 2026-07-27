@@ -53,9 +53,10 @@ public enum AsvColorKind : ulong
     Fadeout = 1ul << 34,
 
     // === sizes ===
+    Smallest = 1ul << 39,
     Small = 1ul << 40,
     Medium = 1ul << 41,
-    Large = 1ul << 42,
+    Big = 1ul << 42,
 }
 
 /// <summary>
@@ -63,10 +64,10 @@ public enum AsvColorKind : ulong
 /// with CSS classes on any StyledElement.
 /// Class name = lowercase name of the enum member (e.g. Info7 → "info7").
 /// </summary>
-public class AsvPallete
+public class AsvPalette
 {
     public static readonly AttachedProperty<AsvColorKind> ColorProperty =
-        AvaloniaProperty.RegisterAttached<AsvPallete, StyledElement, AsvColorKind>(
+        AvaloniaProperty.RegisterAttached<AsvPalette, StyledElement, AsvColorKind>(
             "Color",
             defaultValue: AsvColorKind.None,
             inherits: false,
@@ -78,7 +79,7 @@ public class AsvPallete
 
     public static AsvColorKind GetColor(AvaloniaObject target) => target.GetValue(ColorProperty);
 
-    static AsvPallete()
+    static AsvPalette()
     {
         ColorProperty.Changed.AddClassHandler<StyledElement>(OnColorChanged);
     }

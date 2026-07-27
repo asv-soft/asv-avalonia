@@ -19,7 +19,7 @@
                 Width="16"
                 Height="16"
                 Kind="{Binding Icon}"
-                control:AsvPallete.Color="{Binding IconColor}"
+                control:AsvPalette.Color="{Binding IconColor}"
             />
             <TextBlock FontSize="14" VerticalAlignment="Center" Text="{Binding Header}" />
             <avalonia:MaterialIcon
@@ -27,7 +27,7 @@
                 Width="16"
                 Height="16"
                 Kind="{Binding Status}"
-                control:AsvPallete.Color="{Binding StatusColor}"
+                control:AsvPalette.Color="{Binding StatusColor}"
             />
             <Button
                 CornerRadius="10"
