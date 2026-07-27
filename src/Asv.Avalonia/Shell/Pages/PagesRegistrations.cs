@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Avalonia.Controls;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
@@ -46,6 +47,12 @@ public static class PagesRegistrations
         {
             AppBuilder.ViewModel.RegisterKeyedWithArgs<IPage, TPageViewModel, IPageContext>(pageId);
             AppBuilder.ViewLocator.RegisterViewFor<TPageViewModel, TPageView>();
+            return this;
+        }
+
+        public Builder SetHomePage(string pageId)
+        {
+            AppBuilder.Services.Configure<HomePageOptions>(o => o.PageId = pageId);
             return this;
         }
     }

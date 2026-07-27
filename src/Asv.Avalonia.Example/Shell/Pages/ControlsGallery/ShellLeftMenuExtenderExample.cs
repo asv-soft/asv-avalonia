@@ -1,11 +1,12 @@
 using Asv.Common;
 using Asv.Modeling;
 using Material.Icons;
+using Microsoft.Extensions.Options;
 using R3;
 
 namespace Asv.Avalonia.Example;
 
-public class ShellLeftMenuExtenderExample : IExtensionFor<IShell>
+public class ShellLeftMenuExtenderExample(IOptions<HomePageOptions> options) : IExtensionFor<IShell>
 {
     public const string StaticId = "ext.shell.left-menu.example";
 
@@ -18,7 +19,7 @@ public class ShellLeftMenuExtenderExample : IExtensionFor<IShell>
             {
                 Icon = MaterialIconKind.Home,
                 Command = new ReactiveCommand(_ =>
-                    context.GoTo(new NavPath(new NavId(HomePageViewModel.PageId)))
+                    context.GoTo(new NavPath(new NavId(options.Value.PageId)))
                 ).DisposeItWith(contextDispose),
             }.DisposeItWith(contextDispose)
         );
