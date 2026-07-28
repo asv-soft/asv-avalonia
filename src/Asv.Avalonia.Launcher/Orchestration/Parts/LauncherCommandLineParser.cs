@@ -11,10 +11,64 @@ public static class LauncherCommandLineParser
         out string errorMessage
     )
     {
+        return TryParseCore(args, null, out options, out errorMessage, out _, out _);
+    }
+
+    /// <summary>
+    /// Adds a default target executable when the launcher arguments are otherwise valid and do not
+    /// specify one. Relative target paths are resolved against
+    /// <see cref="AppContext.BaseDirectory"/>.
+    /// </summary>
+    /// <param name="args">The launcher command-line arguments.</param>
+    /// <param name="defaultTargetPath">The default target executable path.</param>
+    /// <returns>
+    /// The original arguments when they specify a target or are invalid; otherwise, a new argument
+    /// array containing the default target.
+    /// </returns>
+    public static string[] WithDefaultTarget(string[] args, string defaultTargetPath)
+    {
+        ArgumentNullException.ThrowIfNull(args);
+        ArgumentException.ThrowIfNullOrWhiteSpace(defaultTargetPath);
+
+        var resolvedTargetPath = Path.GetFullPath(defaultTargetPath, AppContext.BaseDirectory);
+        if (
+            !TryParseCore(
+                args,
+                resolvedTargetPath,
+                out _,
+                out _,
+                out var insertionIndex,
+                out var usedDefaultTarget
+            ) || !usedDefaultTarget
+        )
+        {
+            return args;
+        }
+
+        var result = new string[args.Length + 2];
+        Array.Copy(args, 0, result, 0, insertionIndex);
+        result[insertionIndex] = LauncherCommandLineArguments.TargetArg;
+        result[insertionIndex + 1] = resolvedTargetPath;
+        Array.Copy(args, insertionIndex, result, insertionIndex + 2, args.Length - insertionIndex);
+
+        return result;
+    }
+
+    private static bool TryParseCore(
+        IReadOnlyList<string> args,
+        string? defaultTargetPath,
+        out LauncherStartOptions? options,
+        out string errorMessage,
+        out int targetInsertionIndex,
+        out bool usedDefaultTarget
+    )
+    {
         options = null;
         errorMessage = string.Empty;
+        targetInsertionIndex = args.Count;
+        usedDefaultTarget = false;
 
-        if (args.Count == 0)
+        if (args.Count == 0 && string.IsNullOrWhiteSpace(defaultTargetPath))
         {
             errorMessage = "Missing launcher arguments.";
             return false;
@@ -26,6 +80,7 @@ public static class LauncherCommandLineParser
         var sessionToken = Guid.NewGuid().ToString("N");
         var startupTimeout = TimeSpan.FromSeconds(10);
         var passthroughMode = false;
+        var targetArgumentSpecified = false;
 
         for (var i = 0; i < args.Count; i++)
         {
@@ -41,8 +96,10 @@ public static class LauncherCommandLineParser
             {
                 case LauncherCommandLineArguments.PassthroughArgsSeparator:
                     passthroughMode = true;
+                    targetInsertionIndex = i;
                     break;
                 case LauncherCommandLineArguments.TargetArg:
+                    targetArgumentSpecified = true;
                     if (!TryReadValue(args, ref i, out targetPath, out errorMessage))
                     {
                         return false;
@@ -79,6 +136,16 @@ public static class LauncherCommandLineParser
                     errorMessage = $"Unknown launcher argument: '{current}'.";
                     return false;
             }
+        }
+
+        if (
+            !targetArgumentSpecified
+            && string.IsNullOrWhiteSpace(targetPath)
+            && !string.IsNullOrWhiteSpace(defaultTargetPath)
+        )
+        {
+            targetPath = defaultTargetPath;
+            usedDefaultTarget = true;
         }
 
         if (string.IsNullOrWhiteSpace(targetPath))

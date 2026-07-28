@@ -1,4 +1,5 @@
 using Asv.Avalonia.Launcher.Contracts;
+using Asv.Avalonia.Launcher.Orchestration;
 using Avalonia;
 using Avalonia.Controls;
 
@@ -6,13 +7,18 @@ namespace Asv.Avalonia.Example.Launcher;
 
 internal static class Program
 {
+    private const string DefaultTargetExecutableName = "Asv.Avalonia.Example.Desktop.exe";
+
     [STAThread]
     public static void Main(string[] args)
     {
         try
         {
             BuildAvaloniaApp()
-                .StartWithClassicDesktopLifetime(args, ShutdownMode.OnMainWindowClose);
+                .StartWithClassicDesktopLifetime(
+                    LauncherCommandLineParser.WithDefaultTarget(args, DefaultTargetExecutableName),
+                    ShutdownMode.OnMainWindowClose
+                );
         }
         catch (Exception ex)
         {
