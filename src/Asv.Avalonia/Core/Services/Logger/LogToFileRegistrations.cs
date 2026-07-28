@@ -37,7 +37,10 @@ public static class LogToFileRegistrations
             builder.AppBuilder.Logging.AddZLoggerRollingFile(options =>
             {
                 options.FilePathSelector = (dt, index) =>
-                    Path.Combine(logFileOptions.Folder, $"{dt:yyyy-MM-dd}_{index}.logs");
+                    Path.Combine(
+                        logFileOptions.Folder,
+                        $"{dt:yyyy-MM-dd}_{Environment.ProcessId}_{index}.logs"
+                    );
                 options.UseJsonFormatter();
                 options.RollingSizeKB = logFileOptions.RollingSizeKb;
             });
