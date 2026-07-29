@@ -109,7 +109,7 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
             var density = DensityItems[index];
             var item = new MenuItem(
                 GetTileDensityMenuId(tile, density),
-                density.ToString(),
+                GetDensityHeader(density),
                 tileMenu.Id.TypeId
             )
             {
@@ -126,7 +126,7 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
 
         state.VisibilityItem = new MenuItem(
             GetTileVisibilityMenuId(tile),
-            "Show/Hide",
+            RS.DashboardWidget_TileVisibility_Header,
             tileMenu.Id.TypeId
         )
         {
@@ -215,6 +215,16 @@ public class DashboardWidget : DashboardViewModel, IWorkspaceWidget
     private static string GetTileHeader(ITileViewModel tile)
     {
         return string.IsNullOrWhiteSpace(tile.Header) ? tile.Id.TypeId : tile.Header;
+    }
+
+    private static string GetDensityHeader(TileDensity density)
+    {
+        return density switch
+        {
+            TileDensity.Regular => RS.TileDensity_Regular,
+            TileDensity.Inline => RS.TileDensity_Inline,
+            _ => throw new ArgumentOutOfRangeException(nameof(density), density, null),
+        };
     }
 
     private static string GetTileMenuId(ITileViewModel tile)

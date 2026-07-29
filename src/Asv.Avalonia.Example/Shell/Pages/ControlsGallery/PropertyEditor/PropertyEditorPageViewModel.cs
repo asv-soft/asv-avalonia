@@ -44,9 +44,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         AltitudeUnitProperty = CreateUnitProperty(
             "altitude-unit",
             unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
-            "Altitude V2",
-            "Alt",
-            "V2 unit property with a text value and unit selector.",
+            RS.PropertyEditorPageViewModel_AltitudeUnit_Header,
+            RS.PropertyEditorPageViewModel_AltitudeUnit_ShortHeader,
+            RS.PropertyEditorPageViewModel_AltitudeUnit_Description,
             MaterialIconKind.Altimeter,
             AsvColorKind.Info3,
             AltitudeUnitValue
@@ -54,9 +54,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         ThrottleUnitProperty = CreateUnitProperty(
             "throttle-unit",
             unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
-            "Throttle V2",
-            "Thr",
-            "V2 unit property using the throttle unit selector.",
+            RS.PropertyEditorPageViewModel_ThrottleUnit_Header,
+            RS.PropertyEditorPageViewModel_ThrottleUnit_ShortHeader,
+            RS.PropertyEditorPageViewModel_ThrottleUnit_Description,
             MaterialIconKind.Signal,
             AsvColorKind.Success,
             ThrottleUnitValue
@@ -88,9 +88,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 CreateUnitProperty(
                     "altitude-unit",
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
-                    "Altitude V2",
-                    "Alt",
-                    "V2 unit property with a text value and unit selector.",
+                    RS.PropertyEditorPageViewModel_AltitudeUnit_Header,
+                    RS.PropertyEditorPageViewModel_AltitudeUnit_ShortHeader,
+                    RS.PropertyEditorPageViewModel_AltitudeUnit_Description,
                     MaterialIconKind.Altimeter,
                     AsvColorKind.Info3,
                     AltitudeUnitValue
@@ -98,9 +98,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 CreateUnitProperty(
                     "throttle-unit",
                     unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
-                    "Throttle V2",
-                    "Thr",
-                    "V2 unit property using the throttle unit selector.",
+                    RS.PropertyEditorPageViewModel_ThrottleUnit_Header,
+                    RS.PropertyEditorPageViewModel_ThrottleUnit_ShortHeader,
+                    RS.PropertyEditorPageViewModel_ThrottleUnit_Description,
                     MaterialIconKind.Signal,
                     AsvColorKind.Success,
                     ThrottleUnitValue
@@ -120,9 +120,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 CreateUnitProperty(
                     "altitude-unit",
                     unit[AltitudeUnit.Id] ?? throw new ArgumentNullException(),
-                    "Altitude V2",
-                    "Alt",
-                    "V2 unit property with a text value and unit selector.",
+                    RS.PropertyEditorPageViewModel_AltitudeUnit_Header,
+                    RS.PropertyEditorPageViewModel_AltitudeUnit_ShortHeader,
+                    RS.PropertyEditorPageViewModel_AltitudeUnit_Description,
                     MaterialIconKind.Altimeter,
                     AsvColorKind.Info3,
                     AltitudeUnitValue
@@ -130,9 +130,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                 CreateUnitProperty(
                     "throttle-unit",
                     unit[ThrottleUnit.Id] ?? throw new ArgumentNullException(),
-                    "Throttle V2",
-                    "Thr",
-                    "V2 unit property using the throttle unit selector.",
+                    RS.PropertyEditorPageViewModel_ThrottleUnit_Header,
+                    RS.PropertyEditorPageViewModel_ThrottleUnit_ShortHeader,
+                    RS.PropertyEditorPageViewModel_ThrottleUnit_Description,
                     MaterialIconKind.Signal,
                     AsvColorKind.Success,
                     ThrottleUnitValue
@@ -238,9 +238,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Latitude
                 )
                 {
-                    Header = "Position",
-                    ShortHeader = "Lat",
-                    Description = "Latitude description",
+                    Header = RS.PropertyEditorPageViewModel_Latitude_Header,
+                    ShortHeader = RS.PropertyEditorPageViewModel_Latitude_ShortHeader,
+                    Description = RS.PropertyEditorPageViewModel_Latitude_Description,
                     Icon = MaterialIconKind.Latitude,
                 }
             )
@@ -253,9 +253,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Longitude
                 )
                 {
-                    Header = "Longitude",
-                    ShortHeader = "Lon",
-                    Description = "Latitude description",
+                    Header = RS.PropertyEditorPageViewModel_Longitude_Header,
+                    ShortHeader = RS.PropertyEditorPageViewModel_Longitude_ShortHeader,
+                    Description = RS.PropertyEditorPageViewModel_Latitude_Description,
                     Icon = MaterialIconKind.Latitude,
                 }
             )
@@ -268,9 +268,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Altitude
                 )
                 {
-                    Header = "Altitude",
-                    ShortHeader = "Alt",
-                    Description = "Altitude description",
+                    Header = RS.PropertyEditorPageViewModel_Altitude_Header,
+                    ShortHeader = RS.PropertyEditorPageViewModel_Altitude_ShortHeader,
+                    Description = RS.PropertyEditorPageViewModel_Altitude_Description,
                     Icon = MaterialIconKind.Altimeter,
                 }
             )
@@ -279,8 +279,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             AddExampleErrorMenu(
                 new PropertyGeoPointReactive("geo-point", GeoPoint, unit, dialogService)
                 {
-                    Header = "Geo Point",
-                    Description = "Geo Point description",
+                    Header = RS.PropertyEditorPageViewModel_GeoPoint_Header,
+                    Description = RS.PropertyEditorPageViewModel_GeoPoint_Description,
                     Icon = MaterialIconKind.Earth,
                 }
             )
@@ -293,9 +293,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Time
                 )
                 {
-                    Header = "Time",
-                    ShortHeader = "Time",
-                    Description = "Time description",
+                    Header = RS.PropertyEditorPageViewModel_Time_Header,
+                    ShortHeader = RS.PropertyEditorPageViewModel_Time_ShortHeader,
+                    Description = RS.PropertyEditorPageViewModel_Time_Description,
                     Icon = MaterialIconKind.Timelapse,
                 }
             )
@@ -308,9 +308,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
                     Throttle
                 )
                 {
-                    Header = "Throttle",
-                    ShortHeader = "Throttle",
-                    Description = "Throttle description",
+                    Header = RS.PropertyEditorPageViewModel_Throttle_Header,
+                    ShortHeader = RS.PropertyEditorPageViewModel_Throttle_ShortHeader,
+                    Description = RS.PropertyEditorPageViewModel_Throttle_Description,
                     Icon = MaterialIconKind.Signal,
                 }
             )
@@ -323,10 +323,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         var property = new PropertyTextBoxReactive("display-name", DisplayName)
         {
-            Header = "Display name",
-            ShortHeader = "Name",
-            Description =
-                "Text editor with validation, icon, remote update marker, and menu button.",
+            Header = RS.PropertyEditorPageViewModel_DisplayName_Header,
+            ShortHeader = RS.PropertyEditorPageViewModel_DisplayName_ShortHeader,
+            Description = RS.PropertyEditorPageViewModel_DisplayName_Description,
             Icon = MaterialIconKind.FormTextbox,
             IconColor = AsvColorKind.Info5,
         };
@@ -335,7 +334,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             {
                 if (string.IsNullOrWhiteSpace(value))
                 {
-                    return new ValidationException("Display name is required");
+                    return new ValidationException(
+                        RS.PropertyEditorPageViewModel_DisplayName_Required
+                    );
                 }
 
                 return null;
@@ -351,9 +352,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         return AddExampleErrorMenu(
             new PropertyButtonViewModel("run-check", ExecuteActionButton, canExecute)
             {
-                Header = "Run check",
-                ShortHeader = "Run",
-                Description = "Button property with async command, busy state, and update marker.",
+                Header = RS.PropertyEditorPageViewModel_ActionButton_Header,
+                ShortHeader = RS.PropertyEditorPageViewModel_ActionButton_ShortHeader,
+                Description = RS.PropertyEditorPageViewModel_ActionButton_Description,
                 Icon = MaterialIconKind.PlayCircle,
                 IconColor = AsvColorKind.Success,
             }
@@ -374,9 +375,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         return AddExampleErrorMenu(
             new PropertyToggleSwitchReactive(id, model)
             {
-                Header = "Telemetry",
-                ShortHeader = "Tel",
-                Description = "Toggle switch property with boolean model and update marker.",
+                Header = RS.PropertyEditorPageViewModel_ToggleSwitch_Header,
+                ShortHeader = RS.PropertyEditorPageViewModel_ToggleSwitch_ShortHeader,
+                Description = RS.PropertyEditorPageViewModel_ToggleSwitch_Description,
                 Icon = MaterialIconKind.ToggleSwitch,
                 IconColor = AsvColorKind.Info5,
             }
@@ -391,9 +392,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         return AddExampleErrorMenu(
             new PropertySliderReactive(id, model, 0, 100)
             {
-                Header = "Throttle slider",
-                ShortHeader = "Thr",
-                Description = "Slider property with live value, units, and update marker.",
+                Header = RS.PropertyEditorPageViewModel_ThrottleSlider_Header,
+                ShortHeader = RS.PropertyEditorPageViewModel_ThrottleSlider_ShortHeader,
+                Description = RS.PropertyEditorPageViewModel_ThrottleSlider_Description,
                 Icon = MaterialIconKind.Signal,
                 IconColor = AsvColorKind.Success,
                 TickFrequency = 5,
@@ -433,9 +434,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         var property = new PropertyComboBoxReactive("operation-profile", OperationProfile)
         {
-            Header = "Operation profile",
-            Description =
-                "Combo box with test view models: icon, text-only, and different accent styles.",
+            Header = RS.PropertyEditorPageViewModel_OperationProfile_Header,
+            Description = RS.PropertyEditorPageViewModel_OperationProfile_Description,
             Icon = MaterialIconKind.FormDropdown,
             IconColor = AsvColorKind.Info7,
         };
@@ -443,80 +443,80 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         var firstItem = AddOperationProfileItem(
             property,
             "manual",
-            "Manual",
-            "Operator controls every step directly.",
+            RS.PropertyEditorPageViewModel_Profile_Manual_Header,
+            RS.PropertyEditorPageViewModel_Profile_Manual_Description,
             MaterialIconKind.Hand,
             AsvColorKind.Info1
         );
         AddOperationProfileItem(
             property,
             "guided",
-            "Guided",
-            "Assisted flow with validation after each step.",
+            RS.PropertyEditorPageViewModel_Profile_Guided_Header,
+            RS.PropertyEditorPageViewModel_Profile_Guided_Description,
             MaterialIconKind.Compass,
             AsvColorKind.Info5
         );
         AddOperationProfileItem(
             property,
             "survey",
-            "Survey",
-            "Collects structured measurements for later analysis.",
+            RS.PropertyEditorPageViewModel_Profile_Survey_Header,
+            RS.PropertyEditorPageViewModel_Profile_Survey_Description,
             MaterialIconKind.MapMarkerRadius,
             AsvColorKind.Success
         );
         AddOperationProfileItem(
             property,
             "silent",
-            "Silent",
-            "Runs without icon or accent decoration.",
+            RS.PropertyEditorPageViewModel_Profile_Silent_Header,
+            RS.PropertyEditorPageViewModel_Profile_Silent_Description,
             null,
             AsvColorKind.None
         );
         AddOperationProfileItem(
             property,
             "inspection",
-            "Inspection",
-            "Highlights issues and requires operator confirmation.",
+            RS.PropertyEditorPageViewModel_Profile_Inspection_Header,
+            RS.PropertyEditorPageViewModel_Profile_Inspection_Description,
             MaterialIconKind.MagnifyScan,
             AsvColorKind.Warning
         );
         AddOperationProfileItem(
             property,
             "minimal",
-            "Minimal",
-            "Text-only item for compact layouts.",
+            RS.PropertyEditorPageViewModel_Profile_Minimal_Header,
+            RS.PropertyEditorPageViewModel_Profile_Minimal_Description,
             null,
             AsvColorKind.None
         );
         AddOperationProfileItem(
             property,
             "diagnostics",
-            "Diagnostics",
-            "Shows service information and hardware status.",
+            RS.PropertyEditorPageViewModel_Profile_Diagnostics_Header,
+            RS.PropertyEditorPageViewModel_Profile_Diagnostics_Description,
             MaterialIconKind.Stethoscope,
             AsvColorKind.Info12
         );
         AddOperationProfileItem(
             property,
             "offline-cache",
-            "Offline cache",
-            "No image, useful when external data is unavailable.",
+            RS.PropertyEditorPageViewModel_Profile_OfflineCache_Header,
+            RS.PropertyEditorPageViewModel_Profile_OfflineCache_Description,
             null,
             AsvColorKind.None
         );
         AddOperationProfileItem(
             property,
             "emergency",
-            "Emergency",
-            "Critical action style with a warning-colored icon.",
+            RS.PropertyEditorPageViewModel_Profile_Emergency_Header,
+            RS.PropertyEditorPageViewModel_Profile_Emergency_Description,
             MaterialIconKind.AlertOctagon,
             AsvColorKind.Error
         );
         AddOperationProfileItem(
             property,
             "custom-profile",
-            "Custom profile",
-            "Plain item with only header and description.",
+            RS.PropertyEditorPageViewModel_Profile_Custom_Header,
+            RS.PropertyEditorPageViewModel_Profile_Custom_Description,
             null,
             AsvColorKind.None
         );
@@ -529,9 +529,9 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     {
         var property = new PropertyToggleButtonGroupReactive("optimization-mode", OptimizationMode)
         {
-            Header = "Optimization mode",
-            ShortHeader = "Mode",
-            Description = "Button group property based on combo box selection.",
+            Header = RS.PropertyEditorPageViewModel_OptimizationMode_Header,
+            ShortHeader = RS.PropertyEditorPageViewModel_OptimizationMode_ShortHeader,
+            Description = RS.PropertyEditorPageViewModel_OptimizationMode_Description,
             Icon = MaterialIconKind.Tune,
             IconColor = AsvColorKind.Success,
         };
@@ -539,24 +539,24 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
         var firstItem = AddSelectionItem(
             property,
             "speed",
-            "Speed",
-            "Prefer faster processing.",
+            RS.PropertyEditorPageViewModel_Mode_Speed_Header,
+            RS.PropertyEditorPageViewModel_Mode_Speed_Description,
             MaterialIconKind.Signal,
             AsvColorKind.Success
         );
         AddSelectionItem(
             property,
             "quality",
-            "Quality",
-            "Prefer higher quality.",
+            RS.PropertyEditorPageViewModel_Mode_Quality_Header,
+            RS.PropertyEditorPageViewModel_Mode_Quality_Description,
             MaterialIconKind.CheckCircle,
             AsvColorKind.Success
         );
         AddSelectionItem(
             property,
             "balanced",
-            "Balanced",
-            "Use a balanced preset.",
+            RS.PropertyEditorPageViewModel_Mode_Balanced_Header,
+            RS.PropertyEditorPageViewModel_Mode_Balanced_Description,
             MaterialIconKind.Tune,
             AsvColorKind.Success
         );
@@ -572,8 +572,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             CreateSetErrorMenuItem(
                 property,
                 "set-validation-error",
-                "Validation error",
-                "Validation error from property menu.",
+                RS.PropertyEditorPageViewModel_ErrorMenu_Validation_Header,
+                RS.PropertyEditorPageViewModel_ErrorMenu_Validation_Message,
                 MaterialIconKind.AlertCircle,
                 0
             )
@@ -582,8 +582,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             CreateSetErrorMenuItem(
                 property,
                 "set-sync-error",
-                "Sync error",
-                "Synchronization error from property menu.",
+                RS.PropertyEditorPageViewModel_ErrorMenu_Sync_Header,
+                RS.PropertyEditorPageViewModel_ErrorMenu_Sync_Message,
                 MaterialIconKind.SyncAlert,
                 1
             )
@@ -592,14 +592,14 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
             CreateSetErrorMenuItem(
                 property,
                 "set-network-error",
-                "Network error",
-                "Network error from property menu.",
+                RS.PropertyEditorPageViewModel_ErrorMenu_Network_Header,
+                RS.PropertyEditorPageViewModel_ErrorMenu_Network_Message,
                 MaterialIconKind.CloseNetwork,
                 2
             )
         );
         property.Menu.Add(
-            new MenuItem("clear-error", "Clear error")
+            new MenuItem("clear-error", RS.PropertyEditorPageViewModel_ErrorMenu_Clear_Header)
             {
                 Icon = MaterialIconKind.Restore,
                 Order = 3,
@@ -638,11 +638,11 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
 
         foreach (var property in PropertyEditor.ItemsSource)
         {
-            switch (property.Header)
+            switch (property.Id.TypeId)
             {
-                case "Geo Point":
-                case "Time":
-                case "Throttle":
+                case "geo-point":
+                case "time":
+                case "throttle":
                     property.DisplayScopes.Add(AdvancedScope);
                     break;
             }
@@ -704,7 +704,8 @@ public class PropertyEditorPageViewModel : ControlsGallerySubPage
     public BindableReactiveProperty<double> Latitude { get; } = new();
     public BindableReactiveProperty<double> Longitude { get; } = new();
 
-    public BindableReactiveProperty<string?> DisplayName { get; } = new("Survey mission");
+    public BindableReactiveProperty<string?> DisplayName { get; } =
+        new(RS.PropertyEditorPageViewModel_DisplayName_DefaultValue);
     public BindableReactiveProperty<IHeadlinedViewModel?> OperationProfile { get; } = new();
     public BindableReactiveProperty<IHeadlinedViewModel?> OptimizationMode { get; } = new();
     public BindableReactiveProperty<bool> TelemetryEnabled { get; } = new(true);

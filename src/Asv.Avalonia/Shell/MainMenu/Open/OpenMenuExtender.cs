@@ -89,7 +89,11 @@ public class OpenMenuExtender(
             return;
         }
 
-        var clearRecent = new MenuItem(ClearRecentMenuId, "Clear Recent", OpenMenu.MenuId)
+        var clearRecent = new MenuItem(
+            ClearRecentMenuId,
+            RS.OpenMenuExtender_ClearRecent_Header,
+            OpenMenu.MenuId
+        )
         {
             Icon = MaterialIconKind.DeleteSweep,
             Order = 10 + FileCommandConfig.MaxRecentFiles,

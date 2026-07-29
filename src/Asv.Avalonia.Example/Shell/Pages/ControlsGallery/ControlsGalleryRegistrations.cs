@@ -45,8 +45,11 @@ public static class ControlsGalleryRegistrations
                 .RegisterMapControlsSubPage()
                 .RegisterMarkdownSubPage()
                 .RegisterPropertyEditorSubPage()
-                .RegisterWorkspaceSubPage()
-                .RegisterRttBoxesSubPage();
+                .RegisterWorkspaceSubPage();
+
+#if DEBUG
+            RegisterRttBoxesSubPage();
+#endif
             return this;
         }
 

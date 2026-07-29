@@ -35,12 +35,12 @@
                 <TextBlock
                     VerticalAlignment="Center"
                     Classes="description"
-                    Text="Show property headers"
+                    Text="{x:Static example:RS.PropertyEditorPageView_ShowHeaders_Text}"
                 />
                 <ToggleButton
                     Margin="16,0,0,0"
                     IsChecked="{Binding ShowLeftEditorAdvancedScope, Mode=TwoWay}"
-                    Content="Advanced left scope"
+                    Content="{x:Static example:RS.PropertyEditorPageView_AdvancedScope_Content}"
                 />
             </StackPanel>
 
@@ -55,7 +55,11 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock Classes="h1" Margin="0,0,0,12" Text="PropertyEditor" />
+                    <TextBlock
+                        Classes="h1"
+                        Margin="0,0,0,12"
+                        Text="{x:Static example:RS.PropertyEditorPageView_Editor_Title}"
+                    />
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <ContentControl Content="{Binding PropertyEditor}" />
                     </ScrollViewer>
@@ -63,7 +67,10 @@
 
                 <ScrollViewer Grid.Column="1" Margin="24,0" VerticalScrollBarVisibility="Auto">
                     <StackPanel MaxWidth="520" VerticalAlignment="Center" Spacing="12">
-                        <TextBlock Classes="h1" Text="Model values" />
+                        <TextBlock
+                            Classes="h1"
+                            Text="{x:Static example:RS.PropertyEditorPageView_ModelValues_Title}"
+                        />
 
                         <Grid
                             ColumnDefinitions="180,*"
@@ -74,7 +81,7 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Display name"
+                                Text="{x:Static example:RS.PropertyEditorPageView_DisplayName_Label}"
                             />
                             <TextBlock
                                 Grid.Row="0"
@@ -87,7 +94,7 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Operation profile"
+                                Text="{x:Static example:RS.PropertyEditorPageView_OperationProfile_Label}"
                             />
                             <TextBlock
                                 Grid.Row="1"
@@ -100,7 +107,7 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Run check count"
+                                Text="{x:Static example:RS.PropertyEditorPageView_RunCheckCount_Label}"
                             />
                             <TextBlock
                                 Grid.Row="2"
@@ -113,7 +120,7 @@
                                 Grid.Row="3"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Telemetry"
+                                Text="{x:Static example:RS.PropertyEditorPageView_Telemetry_Label}"
                             />
                             <TextBlock
                                 Grid.Row="3"
@@ -126,7 +133,7 @@
                                 Grid.Row="4"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="GeoPoint"
+                                Text="{x:Static example:RS.PropertyEditorPageView_GeoPoint_Label}"
                             />
                             <TextBlock
                                 Grid.Row="4"
@@ -136,7 +143,11 @@
                             />
                         </Grid>
 
-                        <TextBlock Classes="h2" Margin="0,8,0,0" Text="Units" />
+                        <TextBlock
+                            Classes="h2"
+                            Margin="0,8,0,0"
+                            Text="{x:Static example:RS.PropertyEditorPageView_Units_Title}"
+                        />
                         <Grid
                             ColumnDefinitions="180,*"
                             RowDefinitions="Auto,Auto,Auto,Auto,Auto"
@@ -146,7 +157,7 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Altitude V2 model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_AltitudeV2Model_Label}"
                             />
                             <TextBlock
                                 Grid.Row="0"
@@ -159,7 +170,7 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Throttle V2 model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_ThrottleV2Model_Label}"
                             />
                             <TextBlock
                                 Grid.Row="1"
@@ -172,7 +183,7 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Time model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_TimeModel_Label}"
                             />
                             <TextBlock
                                 Grid.Row="2"
@@ -185,7 +196,7 @@
                                 Grid.Row="3"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Throttle model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_ThrottleModel_Label}"
                             />
                             <TextBlock
                                 Grid.Row="3"
@@ -198,7 +209,7 @@
                                 Grid.Row="4"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Altitude model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_AltitudeModel_Label}"
                             />
                             <TextBlock
                                 Grid.Row="4"
@@ -208,7 +219,11 @@
                             />
                         </Grid>
 
-                        <TextBlock Classes="h2" Margin="0,8,0,0" Text="Position" />
+                        <TextBlock
+                            Classes="h2"
+                            Margin="0,8,0,0"
+                            Text="{x:Static example:RS.PropertyEditorPageView_Position_Title}"
+                        />
                         <Grid
                             ColumnDefinitions="180,*"
                             RowDefinitions="Auto,Auto,Auto"
@@ -218,7 +233,7 @@
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Latitude model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_LatitudeModel_Label}"
                             />
                             <TextBlock
                                 Grid.Row="0"
@@ -231,7 +246,7 @@
                                 Grid.Row="1"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Longitude model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_LongitudeModel_Label}"
                             />
                             <TextBlock
                                 Grid.Row="1"
@@ -244,7 +259,7 @@
                                 Grid.Row="2"
                                 Grid.Column="0"
                                 Classes="description value-label"
-                                Text="Altitude model"
+                                Text="{x:Static example:RS.PropertyEditorPageView_AltitudeModel_Label}"
                             />
                             <TextBlock
                                 Grid.Row="2"
@@ -266,7 +281,11 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
-                    <TextBlock Classes="h1" Margin="0,0,0,12" Text="PropertyEditor copy" />
+                    <TextBlock
+                        Classes="h1"
+                        Margin="0,0,0,12"
+                        Text="{x:Static example:RS.PropertyEditorPageView_EditorCopy_Title}"
+                    />
                     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                         <ContentControl Content="{Binding PropertyEditorCopy}" />
                     </ScrollViewer>
@@ -274,7 +293,10 @@
             </Grid>
 
             <StackPanel Grid.Row="4" Spacing="12">
-                <TextBlock Classes="h1" Text="ExtendedPropertyEditor" />
+                <TextBlock
+                    Classes="h1"
+                    Text="{x:Static example:RS.PropertyEditorPageView_ExtendedEditor_Title}"
+                />
                 <ContentControl Content="{Binding ExtendedPropertyEditor}" />
             </StackPanel>
         </Grid>

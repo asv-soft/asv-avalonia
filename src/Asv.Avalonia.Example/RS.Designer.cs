@@ -69,6 +69,12 @@ namespace Asv.Avalonia.Example {
             }
         }
         
+        public static string MarkdownPageViewModel_Title {
+            get {
+                return ResourceManager.GetString("MarkdownPageViewModel_Title", resourceCulture);
+            }
+        }
+        
         public static string ControlsGalleryPageViewModel_Title {
             get {
                 return ResourceManager.GetString("ControlsGalleryPageViewModel_Title", resourceCulture);
@@ -747,16 +753,916 @@ namespace Asv.Avalonia.Example {
                 return ResourceManager.GetString("MapTestPageViewModel_HeavyPolygon", resourceCulture);
             }
         }
-
+        
         public static string MapTestPageViewModel_Menu_Info {
             get {
                 return ResourceManager.GetString("MapTestPageViewModel_Menu_Info", resourceCulture);
             }
         }
-
+        
         public static string MapTestPageViewModel_Menu_Action {
             get {
                 return ResourceManager.GetString("MapTestPageViewModel_Menu_Action", resourceCulture);
+            }
+        }
+        
+        public static string TextFileHandler_FileType_Title {
+            get {
+                return ResourceManager.GetString("TextFileHandler_FileType_Title", resourceCulture);
+            }
+        }
+        
+        public static string TextFilePageViewModel_Title {
+            get {
+                return ResourceManager.GetString("TextFilePageViewModel_Title", resourceCulture);
+            }
+        }
+        
+        public static string TextFilePageViewModel_NewFile_Title {
+            get {
+                return ResourceManager.GetString("TextFilePageViewModel_NewFile_Title", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesTreeMenu_Name {
+            get {
+                return ResourceManager.GetString("RttBoxesTreeMenu_Name", resourceCulture);
+            }
+        }
+        
+        public static string WorkspaceTreeMenu_Name {
+            get {
+                return ResourceManager.GetString("WorkspaceTreeMenu_Name", resourceCulture);
+            }
+        }
+        
+        public static string WorkspaceTreeMenu_StatusTag_Value {
+            get {
+                return ResourceManager.GetString("WorkspaceTreeMenu_StatusTag_Value", resourceCulture);
+            }
+        }
+        
+        public static string MapControlsPageViewModel_Anchor_Header {
+            get {
+                return ResourceManager.GetString("MapControlsPageViewModel_Anchor_Header", resourceCulture);
+            }
+        }
+        
+        public static string MapControlsPageViewModel_Plane_Header {
+            get {
+                return ResourceManager.GetString("MapControlsPageViewModel_Plane_Header", resourceCulture);
+            }
+        }
+        
+        public static string MapControlsPageViewModel_PlaneAzimuth_Header {
+            get {
+                return ResourceManager.GetString("MapControlsPageViewModel_PlaneAzimuth_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Velocity_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Velocity_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Velocity_ShortHeader {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Velocity_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Velocity_Description {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Velocity_Description", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Distance_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Distance_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_TwoColumn_Description {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_TwoColumn_Description", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Left_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Left_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Right_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Right_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Single_Description {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Single_Description", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_NoData_StatusText {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_NoData_StatusText", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_KeyValue_ShortHeader {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_KeyValue_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_KeyValue_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_KeyValue_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_KeyValue_Description {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_KeyValue_Description", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Power_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Power_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_RiseTime_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_RiseTime_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_FallTime_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_FallTime_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Status_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Status_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Status_Value {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Status_Value", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_Unknown_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_Unknown_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_SplitDigit_Description {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_SplitDigit_Description", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_GeoPoint_Header {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_GeoPoint_Header", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_GeoPoint_ShortHeader {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_GeoPoint_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string RttBoxesPageViewModel_GeoPoint_Description {
+            get {
+                return ResourceManager.GetString("RttBoxesPageViewModel_GeoPoint_Description", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_HideAll_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_HideAll_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_ShowAll_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_ShowAll_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_ShowError_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_ShowError_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_GenerateException_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_GenerateException_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_ChangeStatus_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_ChangeStatus_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_PropertyEditor_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_PropertyEditor_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_Location1_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_Location1_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_Location2_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_Location2_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_MapWidget_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_MapWidget_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_MapWidget2_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_MapWidget2_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_Drone1_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_Drone1_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_SignalPlot_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_SignalPlot_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_TelemetryDashboard_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_TelemetryDashboard_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_Battery_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_Battery_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_Battery_ShortHeader {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_Battery_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_GnssFix_Header {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_GnssFix_Header", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_GnssFix_ShortHeader {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_GnssFix_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_GnssFix_Text {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_GnssFix_Text", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_AltitudeUnit_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_AltitudeUnit_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_AltitudeUnit_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_AltitudeUnit_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_AltitudeUnit_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_AltitudeUnit_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ThrottleUnit_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ThrottleUnit_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ThrottleUnit_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ThrottleUnit_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ThrottleUnit_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ThrottleUnit_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Latitude_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Latitude_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Latitude_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Latitude_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Latitude_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Latitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Longitude_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Longitude_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Longitude_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Longitude_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Altitude_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Altitude_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Altitude_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Altitude_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Altitude_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Altitude_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_GeoPoint_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_GeoPoint_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_GeoPoint_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_GeoPoint_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Time_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Time_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Time_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Time_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Time_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Time_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Throttle_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Throttle_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Throttle_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Throttle_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Throttle_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Throttle_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_DisplayName_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_DisplayName_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_DisplayName_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_DisplayName_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_DisplayName_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_DisplayName_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_DisplayName_Required {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_DisplayName_Required", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_DisplayName_DefaultValue {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_DisplayName_DefaultValue", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ActionButton_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ActionButton_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ActionButton_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ActionButton_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ActionButton_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ActionButton_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ToggleSwitch_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ToggleSwitch_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ToggleSwitch_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ToggleSwitch_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ToggleSwitch_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ToggleSwitch_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ThrottleSlider_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ThrottleSlider_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ThrottleSlider_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ThrottleSlider_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ThrottleSlider_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ThrottleSlider_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_OperationProfile_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_OperationProfile_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_OperationProfile_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_OperationProfile_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Manual_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Manual_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Manual_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Manual_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Guided_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Guided_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Guided_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Guided_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Survey_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Survey_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Survey_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Survey_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Silent_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Silent_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Silent_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Silent_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Inspection_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Inspection_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Inspection_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Inspection_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Minimal_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Minimal_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Minimal_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Minimal_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Diagnostics_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Diagnostics_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Diagnostics_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Diagnostics_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_OfflineCache_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_OfflineCache_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_OfflineCache_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_OfflineCache_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Emergency_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Emergency_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Emergency_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Emergency_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Custom_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Custom_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Profile_Custom_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Profile_Custom_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_OptimizationMode_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_OptimizationMode_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_OptimizationMode_ShortHeader {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_OptimizationMode_ShortHeader", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_OptimizationMode_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_OptimizationMode_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Mode_Speed_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Mode_Speed_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Mode_Speed_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Mode_Speed_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Mode_Quality_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Mode_Quality_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Mode_Quality_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Mode_Quality_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Mode_Balanced_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Mode_Balanced_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_Mode_Balanced_Description {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_Mode_Balanced_Description", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ErrorMenu_Validation_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ErrorMenu_Validation_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ErrorMenu_Validation_Message {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ErrorMenu_Validation_Message", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ErrorMenu_Sync_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ErrorMenu_Sync_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ErrorMenu_Sync_Message {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ErrorMenu_Sync_Message", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ErrorMenu_Network_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ErrorMenu_Network_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ErrorMenu_Network_Message {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ErrorMenu_Network_Message", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageViewModel_ErrorMenu_Clear_Header {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageViewModel_ErrorMenu_Clear_Header", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_ShowHeaders_Text {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_ShowHeaders_Text", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_AdvancedScope_Content {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_AdvancedScope_Content", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_Editor_Title {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_Editor_Title", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_EditorCopy_Title {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_EditorCopy_Title", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_ExtendedEditor_Title {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_ExtendedEditor_Title", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_ModelValues_Title {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_ModelValues_Title", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_DisplayName_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_DisplayName_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_OperationProfile_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_OperationProfile_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_RunCheckCount_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_RunCheckCount_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_Telemetry_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_Telemetry_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_GeoPoint_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_GeoPoint_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_Units_Title {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_Units_Title", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_AltitudeV2Model_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_AltitudeV2Model_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_ThrottleV2Model_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_ThrottleV2Model_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_TimeModel_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_TimeModel_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_ThrottleModel_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_ThrottleModel_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_AltitudeModel_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_AltitudeModel_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_Position_Title {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_Position_Title", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_LatitudeModel_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_LatitudeModel_Label", resourceCulture);
+            }
+        }
+        
+        public static string PropertyEditorPageView_LongitudeModel_Label {
+            get {
+                return ResourceManager.GetString("PropertyEditorPageView_LongitudeModel_Label", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_ErrorMessage_Title {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_ErrorMessage_Title", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_ErrorMessage_Message {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_ErrorMessage_Message", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_ErrorMessage_Description {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_ErrorMessage_Description", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_ErrorMessage_CommandTitle {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_ErrorMessage_CommandTitle", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_CloseRestriction_Message {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_CloseRestriction_Message", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_Exception_Title {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_Exception_Title", resourceCulture);
+            }
+        }
+        
+        public static string WorkspacePageViewModel_Exception_Message {
+            get {
+                return ResourceManager.GetString("WorkspacePageViewModel_Exception_Message", resourceCulture);
             }
         }
     }

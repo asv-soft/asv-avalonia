@@ -81,7 +81,10 @@ public class SignalPlotWidget : SignalPlotViewModel, ISignalPlotWidget
 
     private void AddHistorySizeMenu()
     {
-        var historySizeMenu = new MenuItem(HistorySizeMenuId, "History size")
+        var historySizeMenu = new MenuItem(
+            HistorySizeMenuId,
+            RS.SignalPlotWidget_HistorySize_Header
+        )
         {
             Icon = MaterialIconKind.History,
         };
