@@ -36,6 +36,7 @@ public class PluginManager : IPluginManager
     private readonly string _sharedPluginFolder;
     private readonly string _nugetFolder;
     private readonly string _apiPackageId;
+    private readonly string _nugetPluginPrefix;
     private readonly SourceCacheContext _cache;
     private readonly List<AssemblyLoadContext> _pluginContexts = [];
 
@@ -48,6 +49,7 @@ public class PluginManager : IPluginManager
     {
         _assemblies = new List<Assembly>();
         _apiPackageId = options.Value.ApiPackageId;
+        _nugetPluginPrefix = options.Value.NugetPluginPrefix;
 
         _nugetFolder = options.Value.NugetDirectory;
 
@@ -351,6 +353,17 @@ public class PluginManager : IPluginManager
 
                 foreach (var package in packages)
                 {
+                    if (
+                        !string.IsNullOrEmpty(_nugetPluginPrefix)
+                        && !package.Identity.Id.StartsWith(
+                            _nugetPluginPrefix,
+                            StringComparison.OrdinalIgnoreCase
+                        )
+                    )
+                    {
+                        continue;
+                    }
+
                     try
                     {
                         var dependencyInfoResource =
