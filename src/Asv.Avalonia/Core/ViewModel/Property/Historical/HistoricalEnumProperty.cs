@@ -5,14 +5,14 @@ using R3;
 namespace Asv.Avalonia;
 
 public sealed class HistoricalEnumProperty<TEnum>
-    : BindablePropertyBase<Enum, TEnum>,
-        IHistoricalProperty<Enum>
+    : BindablePropertyBase<TEnum, TEnum>,
+        IHistoricalProperty<TEnum>
     where TEnum : struct, Enum
 {
     private bool _internalChange;
-    private readonly IUndoChangeSink<ValueUndoChange<Enum>> _undoSink;
+    private readonly IUndoChangeSink<ValueUndoChange<TEnum>> _undoSink;
 
-    public HistoricalEnumProperty(string typeId, ReactiveProperty<Enum> modelValue)
+    public HistoricalEnumProperty(string typeId, ReactiveProperty<TEnum> modelValue)
         : base(typeId)
     {
         ModelValue = modelValue;
@@ -24,16 +24,16 @@ public sealed class HistoricalEnumProperty<TEnum>
         _internalChange = false;
 
         ModelValue.Subscribe(OnChangeByModel).DisposeItWith(Disposable);
-        _undoSink = Undo.RegisterValue<Enum>("default", ApplyEnumValue, ApplyEnumValue)
+        _undoSink = Undo.RegisterValue<TEnum>("default", ApplyEnumValue, ApplyEnumValue)
             .DisposeItWith(Disposable);
     }
 
-    private void ApplyEnumValue(Enum value)
+    private void ApplyEnumValue(TEnum value)
     {
         ModelValue.Value = value;
     }
 
-    public override ReactiveProperty<Enum> ModelValue { get; }
+    public override ReactiveProperty<TEnum> ModelValue { get; }
     public override BindableReactiveProperty<TEnum> ViewValue { get; }
 
     public TEnum[] EnumItems => Enum.GetValues<TEnum>();
@@ -73,27 +73,11 @@ public sealed class HistoricalEnumProperty<TEnum>
         }
     }
 
-    protected override void OnChangeByModel(Enum modelValue)
+    protected override void OnChangeByModel(TEnum modelValue)
     {
         _internalChange = true;
-        ViewValue.OnNext(GetViewValue(modelValue));
+        ViewValue.OnNext(modelValue);
         _internalChange = false;
-    }
-
-    private static TEnum GetViewValue(Enum modelValue)
-    {
-        if (modelValue is not TEnum newEnum)
-        {
-            throw new Exception($"{modelValue} is not a valid enum type for {nameof(TEnum)}");
-        }
-
-        return newEnum;
-    }
-
-    protected override ValueTask ApplyValueToModel(Enum value, CancellationToken cancel)
-    {
-        ApplyEnumValue(value);
-        return ValueTask.CompletedTask;
     }
 
     public override IEnumerable<IViewModel> GetChildren()
