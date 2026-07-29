@@ -27,12 +27,21 @@ public sealed class DevicePageCore : IDisposable
     private readonly IDeviceManager _devices;
     private readonly ILogger _logger;
     private readonly IPage _owner;
+    private readonly bool _loadLayoutOnInitialized;
 
     private bool _disposed;
     private string? _targetDeviceId;
     private CancellationTokenSource? _deviceDisconnectedToken;
 
     public DevicePageCore(IDeviceManager devices, ILogger logger, IPage owner)
+        : this(devices, logger, owner, loadLayoutOnInitialized: true) { }
+
+    internal DevicePageCore(
+        IDeviceManager devices,
+        ILogger logger,
+        IPage owner,
+        bool loadLayoutOnInitialized
+    )
     {
         if (Design.IsDesignMode)
         {
@@ -50,6 +59,7 @@ public sealed class DevicePageCore : IDisposable
         _devices = devices;
         _logger = logger;
         _owner = owner;
+        _loadLayoutOnInitialized = loadLayoutOnInitialized;
 
         OnDeviceDisconnected = _onDeviceDisconnected.AsObservable();
         OnDeviceDisconnecting = _onDeviceDisconnecting.AsObservable();
@@ -78,13 +88,17 @@ public sealed class DevicePageCore : IDisposable
             );
         }
 
-        _isDeviceInitialized
-            .Where(isInit => isInit)
-            .SubscribeAwait(
-                async (_, ct) => await _owner.Layout.LoadAllAsync(ct),
-                AwaitOperation.Switch
-            )
-            .DisposeItWith(_disposable);
+        if (_loadLayoutOnInitialized)
+        {
+            _isDeviceInitialized
+                .Where(isInitialized => isInitialized)
+                .SubscribeAwait(
+                    async (_, cancel) => await _owner.Layout.LoadAllAsync(cancel),
+                    AwaitOperation.Switch
+                )
+                .DisposeItWith(_disposable);
+        }
+
         _onDeviceDisconnected
             .Synchronize()
             .Subscribe(_ => _isDeviceInitialized.Value = false)
@@ -117,6 +131,32 @@ public sealed class DevicePageCore : IDisposable
         )
         {
             DeviceFoundButNotInitialized(device.Value);
+        }
+    }
+
+    internal ValueTask WaitUntilInitialized(CancellationToken cancel)
+    {
+        ThrowIfDisposed();
+        if (_isDeviceInitialized.Value)
+        {
+            return ValueTask.CompletedTask;
+        }
+
+        return new ValueTask(WaitAsync(cancel));
+
+        async Task WaitAsync(CancellationToken cancellationToken)
+        {
+            var completion = new TaskCompletionSource(
+                TaskCreationOptions.RunContinuationsAsynchronously
+            );
+            using var registration = cancellationToken.Register(() =>
+                completion.TrySetCanceled(cancellationToken)
+            );
+            using var subscription = _isDeviceInitialized
+                .Where(isInitialized => isInitialized)
+                .Take(1)
+                .Subscribe(_ => completion.TrySetResult());
+            await completion.Task;
         }
     }
 
