@@ -54,9 +54,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<string?> _customDialogSecondaryButtonText;
     private readonly ReactiveProperty<bool> _customDialogIsSecondaryButtonEnabled;
 
-    private readonly ReactiveProperty<Enum> _customDialogResult;
-    private readonly ReactiveProperty<Enum> _yesOrNoDialogResult;
-    private readonly ReactiveProperty<Enum> _saveCancelDialogResult;
+    private readonly ReactiveProperty<ContentDialogResult> _customDialogResult;
+    private readonly ReactiveProperty<ConfirmationStatus> _yesOrNoDialogResult;
+    private readonly ReactiveProperty<ConfirmationStatus> _saveCancelDialogResult;
     private readonly ReactiveProperty<string?> _showInputDialogResult;
     private readonly ReactiveProperty<string?> _showHotKeyCaptureDialogResult;
     private readonly ReactiveProperty<GeoPoint> _geoPointDialogResult;
@@ -220,13 +220,13 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         #region Dialog results
 
-        _customDialogResult = new ReactiveProperty<Enum>(ContentDialogResult.None).DisposeItWith(
-            Disposable
-        );
-        _yesOrNoDialogResult = new ReactiveProperty<Enum>(
+        _customDialogResult = new ReactiveProperty<ContentDialogResult>(
+            ContentDialogResult.None
+        ).DisposeItWith(Disposable);
+        _yesOrNoDialogResult = new ReactiveProperty<ConfirmationStatus>(
             ConfirmationStatus.Undefined
         ).DisposeItWith(Disposable);
-        _saveCancelDialogResult = new ReactiveProperty<Enum>(
+        _saveCancelDialogResult = new ReactiveProperty<ConfirmationStatus>(
             ConfirmationStatus.Undefined
         ).DisposeItWith(Disposable);
         _showInputDialogResult = new ReactiveProperty<string?>().DisposeItWith(Disposable);

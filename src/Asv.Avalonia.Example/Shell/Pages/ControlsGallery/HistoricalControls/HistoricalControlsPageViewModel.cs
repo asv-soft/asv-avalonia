@@ -35,8 +35,8 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
     private readonly ReactiveProperty<string?> _stringWithOneValidation;
     private readonly ReactiveProperty<string?> _stringWithoutValidation;
     private readonly ReactiveProperty<GeoPoint> _geoPointProperty;
-    private readonly ReactiveProperty<Enum> _tagTypeProp;
-    private readonly ReactiveProperty<Enum> _rttBoxStatusProp;
+    private readonly ReactiveProperty<AsvColorKind> _tagTypeProp;
+    private readonly ReactiveProperty<AsvColorKind> _rttBoxStatusProp;
     private readonly Subject<Unit> _layoutChanged = new();
 
     public HistoricalControlsPageViewModel()
@@ -67,8 +67,10 @@ public class HistoricalControlsPageViewModel : ControlsGallerySubPage
         _stringWithOneValidation = new ReactiveProperty<string?>().DisposeItWith(Disposable);
         _stringWithManyValidations = new ReactiveProperty<string?>().DisposeItWith(Disposable);
         _geoPointProperty = new ReactiveProperty<GeoPoint>().DisposeItWith(Disposable);
-        _tagTypeProp = new ReactiveProperty<Enum>(AsvColorKind.Error).DisposeItWith(Disposable);
-        _rttBoxStatusProp = new ReactiveProperty<Enum>(AsvColorKind.Success).DisposeItWith(
+        _tagTypeProp = new ReactiveProperty<AsvColorKind>(AsvColorKind.Error).DisposeItWith(
+            Disposable
+        );
+        _rttBoxStatusProp = new ReactiveProperty<AsvColorKind>(AsvColorKind.Success).DisposeItWith(
             Disposable
         );
 

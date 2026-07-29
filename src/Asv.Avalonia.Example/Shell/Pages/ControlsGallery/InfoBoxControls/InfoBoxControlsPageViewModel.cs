@@ -13,7 +13,7 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
     public const string PageId = "info-box-controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.InfoBox;
 
-    private readonly ReactiveProperty<Enum> _severity;
+    private readonly ReactiveProperty<InfoBarSeverity> _severity;
     private readonly ReactiveProperty<string?> _infoBoxMessage;
     private readonly ReactiveProperty<string?> _infoBoxTitle;
 
@@ -32,9 +32,9 @@ public class InfoBoxControlsPageViewModel : ControlsGallerySubPage
     )
         : base(PageId, context)
     {
-        _severity = new ReactiveProperty<Enum>(InfoBarSeverity.Informational).DisposeItWith(
-            Disposable
-        );
+        _severity = new ReactiveProperty<InfoBarSeverity>(
+            InfoBarSeverity.Informational
+        ).DisposeItWith(Disposable);
         _infoBoxTitle = new ReactiveProperty<string?>(
             RS.InfoBoxControlsPageViewModel_Example_Title
         ).DisposeItWith(Disposable);
