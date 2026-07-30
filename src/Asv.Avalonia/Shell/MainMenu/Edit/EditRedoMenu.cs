@@ -1,5 +1,3 @@
-using R3;
-
 namespace Asv.Avalonia;
 
 public class EditRedoMenu : MenuItem
@@ -9,23 +7,9 @@ public class EditRedoMenu : MenuItem
     public EditRedoMenu(IShellHost shellHost, IHotKeyService hotKeys)
         : base(MenuId, RS.RedoCommand_CommandInfo_Name, EditMenu.MenuId)
     {
-        shellHost.ExecuteNowOrWhenShellLoaded(InitShell).AddTo(ref DisposableBag);
+        this.BindHistoryCommand(shellHost, page => page.UndoHistory.Redo, Disposable);
         Icon = RedoAction.IconKind;
-        BindHotKey(hotKeys, RedoAction.Id);
+        BindHotKey(hotKeys, RedoAction.Id, true);
         Order = 1;
-    }
-
-    private void InitShell(IShell shell)
-    {
-        shell
-            .SelectedPage.DistinctUntilChanged()
-            .Subscribe(SelectedPageChanged)
-            .AddTo(ref DisposableBag);
-    }
-
-    private void SelectedPageChanged(IPage? page)
-    {
-        Command = page?.UndoHistory.Redo;
-        IsEnabled = Command is not null;
     }
 }
