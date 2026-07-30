@@ -429,6 +429,9 @@
     <data name="TextFilePageViewModel_NewFile_Title" xml:space="preserve">
         <value>Новый файл ASV Markdown</value>
     </data>
+    <data name="TextFilePageViewModel_CloseRestriction_Message" xml:space="preserve">
+        <value>Файл содержит несохранённые изменения</value>
+    </data>
     <data name="RttBoxesTreeMenu_Name" xml:space="preserve">
         <value>RTT-боксы</value>
     </data>
