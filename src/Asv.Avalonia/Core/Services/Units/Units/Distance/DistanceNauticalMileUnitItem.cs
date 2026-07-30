@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public sealed class DistanceNauticalMileUnitItem() : UnitItemBase(0.00053995680345572)
+public sealed class DistanceNauticalMileUnitItem() : UnitItemBase(1.0 / 1852.0)
 {
     public const string Id = $"{DistanceUnit.Id}.nautical.mile";
 
