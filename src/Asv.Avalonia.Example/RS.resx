@@ -437,6 +437,9 @@ Used to confirm saving information.
     <data name="TextFilePageViewModel_NewFile_Title" xml:space="preserve">
         <value>New ASV Markdown file</value>
     </data>
+    <data name="TextFilePageViewModel_CloseRestriction_Message" xml:space="preserve">
+        <value>The file has unsaved changes</value>
+    </data>
     <data name="RttBoxesTreeMenu_Name" xml:space="preserve">
         <value>Rtt boxes</value>
     </data>
