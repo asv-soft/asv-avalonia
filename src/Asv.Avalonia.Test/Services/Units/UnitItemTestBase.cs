@@ -18,6 +18,8 @@ public abstract class UnitItemTestBase<TTestCases> : IDisposable
         _siValuePerUnit = siValuePerUnit;
     }
 
+    protected IUnitItem Item => _item;
+
     public static TheoryData<string> ValidTextCases => TTestCases.ValidTextCases;
     public static TheoryData<string> InvalidTextCases => TTestCases.InvalidTextCases;
     public static TheoryData<string, double> ParseCases => TTestCases.ParseCases;
@@ -181,6 +183,43 @@ public abstract class UnitItemTestBase<TTestCases> : IDisposable
         Assert.True(expected.ApproximatelyEquals(actual, GetEpsilon(expected)));
     }
 
+    [Theory]
+    [MemberData(nameof(NumericCases))]
+    public void Convert_ToAndFromSi_ReturnsInitialValue(double value)
+    {
+        // Act
+        var siValue = _item.ToSi(value);
+        var actual = _item.FromSi(siValue);
+
+        // Assert
+        Assert.True(value.ApproximatelyEquals(actual, GetEpsilon(value)));
+    }
+
+    [Theory]
+    [InlineData(3)]
+    [InlineData(4)]
+    [InlineData(int.MaxValue)]
+    public void ToSi_EqualForwardAndBackwardSteps_ReturnsApproximatelyInitialValue(int steps)
+    {
+        // Arrange
+        var step = _item.ToSi(1);
+        var actual = 0.0;
+
+        // Act
+        for (var i = 0; i < steps; i++)
+        {
+            actual += step;
+        }
+
+        for (var i = 0; i < steps; i++)
+        {
+            actual -= step;
+        }
+
+        // Assert
+        Assert.True(0.0.ApproximatelyEquals(actual, GetEpsilon(step * steps)));
+    }
+
     private static double GetEpsilon(double expected)
     {
         return Math.Max(FloatingPointComparer.Epsilon, Math.Abs(expected) * 1e-12);
@@ -227,5 +266,6 @@ public sealed class UnitItemDefaultTestCases : IUnitItemTestCases
             { 10.25, "10.25" },
         };
 
-    public static TheoryData<double> NumericCases => [0.0, 0.5, 1.0, 1.5, 10.25];
+    public static TheoryData<double> NumericCases =>
+        [-100.0, -1.0, 0.0, 0.5, 1.0, 1.5, 10.0, 10.25, 100.0];
 }
