@@ -7,13 +7,13 @@
         <Grid ColumnDefinitions="*,8,*" Height="70">
             <ThemeVariantScope Grid.Column="0" RequestedThemeVariant="Dark">
                 <Border Padding="20" Background="{DynamicResource SystemBaseHighColor}">
-                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C;A" />
+                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C" />
                 </Border>
             </ThemeVariantScope>
 
             <ThemeVariantScope Grid.Column="2" RequestedThemeVariant="Light">
                 <Border Padding="20" Background="{DynamicResource SystemBaseHighColor}">
-                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C;A" />
+                    <local:HotKeyBox Width="200" HotKey="Ctrl+Shift+C" />
                 </Border>
             </ThemeVariantScope>
         </Grid>

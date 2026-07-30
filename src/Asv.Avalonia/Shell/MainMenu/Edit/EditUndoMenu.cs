@@ -1,5 +1,3 @@
-using R3;
-
 namespace Asv.Avalonia;
 
 public class EditUndoMenu : MenuItem
@@ -9,23 +7,9 @@ public class EditUndoMenu : MenuItem
     public EditUndoMenu(IShellHost shellHost, IHotKeyService hotKeys)
         : base(MenuId, RS.UndoCommand_CommandInfo_Name, EditMenu.MenuId)
     {
-        shellHost.ExecuteNowOrWhenShellLoaded(InitShell).AddTo(ref DisposableBag);
+        this.BindHistoryCommand(shellHost, page => page.UndoHistory.Undo, Disposable);
         Icon = UndoAction.IconKind;
-        BindHotKey(hotKeys, UndoAction.Id);
+        BindHotKey(hotKeys, UndoAction.Id, true);
         Order = 0;
-    }
-
-    private void InitShell(IShell shell)
-    {
-        shell
-            .SelectedPage.DistinctUntilChanged()
-            .Subscribe(SelectedPageChanged)
-            .AddTo(ref DisposableBag);
-    }
-
-    private void SelectedPageChanged(IPage? page)
-    {
-        Command = page?.UndoHistory.Undo;
-        IsEnabled = Command is not null;
     }
 }
