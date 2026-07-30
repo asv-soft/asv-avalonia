@@ -2275,6 +2275,15 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The file has unsaved changes.
+        /// </summary>
+        public static string TextFilePageViewModel_CloseRestriction_Message {
+            get {
+                return ResourceManager.GetString("TextFilePageViewModel_CloseRestriction_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New ASV Markdown file.
         /// </summary>
         public static string TextFilePageViewModel_NewFile_Title {
