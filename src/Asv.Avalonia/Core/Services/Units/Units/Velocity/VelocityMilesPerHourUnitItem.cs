@@ -1,6 +1,6 @@
 namespace Asv.Avalonia;
 
-public sealed class VelocityMilesPerHourUnitItem() : UnitItemBase(2.236936)
+public sealed class VelocityMilesPerHourUnitItem() : UnitItemBase(1.0 / 0.44704)
 {
     public const string Id = $"{VelocityUnit.Id}.mih";
 
