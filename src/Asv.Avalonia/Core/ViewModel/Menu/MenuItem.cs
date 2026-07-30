@@ -56,7 +56,7 @@ namespace Asv.Avalonia
         public void BindHotKey(
             IHotKeyService hotKeys,
             string actionId,
-            bool visibleWhenCantExecute = false
+            bool visibleWhenNoExecute = false
         )
         {
             HotKey = hotKeys[actionId];
@@ -69,7 +69,7 @@ namespace Asv.Avalonia
                 .ObserveCanExecute(actionId)
                 .Subscribe(canExecute =>
                 {
-                    if (visibleWhenCantExecute)
+                    if (visibleWhenNoExecute)
                     {
                         IsVisible = true;
                         IsEnabled = canExecute;
