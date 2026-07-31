@@ -18,6 +18,8 @@ public abstract class TreePageViewModel<TContext, TSubPage>
     private readonly IServiceProvider _container;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ObservableList<BreadCrumbItem> _breadCrumbSource;
+    private readonly SerialDisposable _navigationSelection;
+    private readonly SemaphoreSlim _layoutLoadLock = new(1, 1);
     private bool _internalNavigate;
     private bool _isLayoutLoaded;
 
@@ -45,6 +47,8 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         SelectedPage = _selectedPage.ToBindableReactiveProperty().AddTo(ref DisposableBag);
         _breadCrumbSource = [];
         BreadCrumb = _breadCrumbSource.ToViewList().AddTo(ref DisposableBag);
+        _navigationSelection = new SerialDisposable().AddTo(ref DisposableBag);
+        RootTracking.Root.Subscribe(SubscribeToNavigation).AddTo(ref DisposableBag);
         SelectedNode.SubscribeAwait(SelectedNodeChanged).AddTo(ref DisposableBag);
         ShowMenuCommand = new ReactiveCommand(_ => ShowMenu(true)).AddTo(ref DisposableBag);
         HideMenuCommand = new ReactiveCommand(_ => ShowMenu(false)).AddTo(ref DisposableBag);
@@ -145,6 +149,32 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         }
     }
 
+    /// <summary>
+    /// Waits until dependencies required for loading the page layout are ready.
+    /// </summary>
+    protected virtual ValueTask WaitForLayoutReady(CancellationToken cancel)
+    {
+        cancel.ThrowIfCancellationRequested();
+        return ValueTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// Reloads all registered layout values after the page dependencies have become ready again.
+    /// </summary>
+    protected async ValueTask ReloadLayoutAsync(CancellationToken cancel)
+    {
+        if (RootTracking.Root.CurrentValue is not { } root)
+        {
+            return;
+        }
+
+        await LoadLayoutAsync(
+            root,
+            cancellationToken => Layout.LoadAllAsync(cancellationToken),
+            cancel
+        );
+    }
+
     protected override void AfterLoadExtensions()
     {
         var selectedNodeLayout = Layout.Register<string>(
@@ -187,20 +217,48 @@ public abstract class TreePageViewModel<TContext, TSubPage>
 
         async ValueTask LoadLayoutWhenRootAttached(IShell root, CancellationToken cancel)
         {
-            _ = root;
+            await LoadLayoutAsync(
+                root,
+                async cancellationToken =>
+                {
+                    await selectedNodeLayout.LoadAsync(cancellationToken);
+                    await isMenuVisibleLayout.LoadAsync(cancellationToken);
+                },
+                cancel
+            );
+        }
+    }
+
+    private async ValueTask LoadLayoutAsync(
+        IShell root,
+        Func<CancellationToken, ValueTask> load,
+        CancellationToken cancel
+    )
+    {
+        await _layoutLoadLock.WaitAsync(cancel);
+        try
+        {
             _isLayoutLoaded = false;
             try
             {
-                await selectedNodeLayout.LoadAsync(cancel);
-                await isMenuVisibleLayout.LoadAsync(cancel);
+                await WaitForLayoutReady(cancel);
+                await load(cancel);
             }
             finally
             {
                 if (!cancel.IsCancellationRequested && !IsDisposed)
                 {
                     _isLayoutLoaded = true;
+                    if (ReferenceEquals(root.Navigation.SelectedControl.CurrentValue, this))
+                    {
+                        await GoToSelectedNode(cancel);
+                    }
                 }
             }
+        }
+        finally
+        {
+            _layoutLoadLock.Release();
         }
     }
 
@@ -235,6 +293,20 @@ public abstract class TreePageViewModel<TContext, TSubPage>
         IsMenuVisible = value;
     }
 
+    private void SubscribeToNavigation(IShell? root)
+    {
+        _navigationSelection.Disposable = root
+            ?.Navigation.SelectedControl.Where(selected => ReferenceEquals(selected, this))
+            .SubscribeAwait((_, cancel) => GoToSelectedNode(cancel), AwaitOperation.Drop);
+    }
+
+    private ValueTask GoToSelectedNode(CancellationToken cancel)
+    {
+        return _isLayoutLoaded && SelectedNode.Value?.Base.NavigateTo is { } id
+            ? this.GoTo(new NavPath(this.GetPathFromRoot().Append(id)), cancel)
+            : ValueTask.CompletedTask;
+    }
+
     private async ValueTask SelectedNodeChanged(
         ObservableTreeNode<ITreePageMenuItem, NavId>? node,
         CancellationToken cancel
@@ -260,6 +332,6 @@ public abstract class TreePageViewModel<TContext, TSubPage>
             );
         }
 
-        await Navigate(node.Base.NavigateTo, cancel);
+        await GoToSelectedNode(cancel);
     }
 }
