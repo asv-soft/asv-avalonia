@@ -177,7 +177,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     protected ObservableList<IPage> InternalPages => _pages;
 
-    public string Header
+    public string? Header
     {
         get;
         set => SetField(ref field, value);
