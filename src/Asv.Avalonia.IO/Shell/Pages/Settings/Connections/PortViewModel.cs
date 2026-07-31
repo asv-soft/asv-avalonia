@@ -233,7 +233,7 @@ public class PortViewModel : ViewModel, IPortViewModel
 
         Port.EndpointAdded.Subscribe(x => _endpoints.Add(x)).DisposeItWith(Disposable);
         Port.EndpointRemoved.Subscribe(x => _endpoints.Remove(x)).DisposeItWith(Disposable);
-        _endpoints.AddRange(_endpoints);
+        _endpoints.AddRange(protocolPort.Endpoints);
     }
 
     public override IEnumerable<IViewModel> GetChildren()
@@ -337,14 +337,19 @@ public class PortViewModel : ViewModel, IPortViewModel
 
     private ValueTask ChangeEnabled(bool isEnabled, CancellationToken cancel)
     {
+        if (Port is null || Port.IsEnabled.CurrentValue == isEnabled)
+        {
+            return ValueTask.CompletedTask;
+        }
+
         if (isEnabled)
         {
-            Port?.Enable();
+            Port.Enable();
             StatusMessage = null;
         }
         else
         {
-            Port?.Disable();
+            Port.Disable();
             StatusMessage = RS.PortViewModel_StatusMessage_Disabled;
         }
 
