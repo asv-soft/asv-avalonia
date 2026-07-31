@@ -420,4 +420,457 @@
     <data name="MapTestPageViewModel_Menu_Action" xml:space="preserve">
         <value>Пример действия</value>
     </data>
+    <data name="TextFileHandler_FileType_Title" xml:space="preserve">
+        <value>Файл ASV Markdown</value>
+    </data>
+    <data name="TextFilePageViewModel_Title" xml:space="preserve">
+        <value>Файл ASV Markdown</value>
+    </data>
+    <data name="TextFilePageViewModel_NewFile_Title" xml:space="preserve">
+        <value>Новый файл ASV Markdown</value>
+    </data>
+    <data name="TextFilePageViewModel_CloseRestriction_Message" xml:space="preserve">
+        <value>Файл содержит несохранённые изменения</value>
+    </data>
+    <data name="RttBoxesTreeMenu_Name" xml:space="preserve">
+        <value>RTT-боксы</value>
+    </data>
+    <data name="WorkspaceTreeMenu_Name" xml:space="preserve">
+        <value>Рабочая область</value>
+    </data>
+    <data name="WorkspaceTreeMenu_StatusTag_Value" xml:space="preserve">
+        <value>Активно</value>
+    </data>
+    <data name="MapControlsPageViewModel_Anchor_Header" xml:space="preserve">
+        <value>Якорь {0}</value>
+    </data>
+    <data name="MapControlsPageViewModel_Plane_Header" xml:space="preserve">
+        <value>Самолёт</value>
+    </data>
+    <data name="MapControlsPageViewModel_PlaneAzimuth_Header" xml:space="preserve">
+        <value>Самолёт {0}°</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Velocity_Header" xml:space="preserve">
+        <value>Скорость</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Velocity_ShortHeader" xml:space="preserve">
+        <value>скор</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Velocity_Description" xml:space="preserve">
+        <value>Текущая скорость аппарата в выбранном потоке телеметрии.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Distance_Header" xml:space="preserve">
+        <value>Расстояние</value>
+    </data>
+    <data name="RttBoxesPageViewModel_TwoColumn_Description" xml:space="preserve">
+        <value>Левый и правый каналы расстояния обновляются независимо.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Left_Header" xml:space="preserve">
+        <value>Левый</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Right_Header" xml:space="preserve">
+        <value>Правый</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Single_Description" xml:space="preserve">
+        <value>Одно живое значение расстояния с прогрессом и статусом.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_NoData_StatusText" xml:space="preserve">
+        <value>Нет данных</value>
+    </data>
+    <data name="RttBoxesPageViewModel_KeyValue_ShortHeader" xml:space="preserve">
+        <value>Кратко</value>
+    </data>
+    <data name="RttBoxesPageViewModel_KeyValue_Header" xml:space="preserve">
+        <value>Общий RTT</value>
+    </data>
+    <data name="RttBoxesPageViewModel_KeyValue_Description" xml:space="preserve">
+        <value>Общие значения телеметрии RTT в виде строк «ключ — значение».</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Power_Header" xml:space="preserve">
+        <value>Мощность</value>
+    </data>
+    <data name="RttBoxesPageViewModel_RiseTime_Header" xml:space="preserve">
+        <value>Время нарастания</value>
+    </data>
+    <data name="RttBoxesPageViewModel_FallTime_Header" xml:space="preserve">
+        <value>Время спада</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Status_Header" xml:space="preserve">
+        <value>Статус</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Status_Value" xml:space="preserve">
+        <value>Норма</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Unknown_Header" xml:space="preserve">
+        <value>Неизвестно</value>
+    </data>
+    <data name="RttBoxesPageViewModel_SplitDigit_Description" xml:space="preserve">
+        <value>Значение расстояния, разбитое на целую и дробную части.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_GeoPoint_Header" xml:space="preserve">
+        <value>Положение БПЛА</value>
+    </data>
+    <data name="RttBoxesPageViewModel_GeoPoint_ShortHeader" xml:space="preserve">
+        <value>БПЛА</value>
+    </data>
+    <data name="RttBoxesPageViewModel_GeoPoint_Description" xml:space="preserve">
+        <value>Живые широта, долгота и высота БПЛА.</value>
+    </data>
+    <data name="WorkspacePageViewModel_HideAll_Header" xml:space="preserve">
+        <value>Скрыть все</value>
+    </data>
+    <data name="WorkspacePageViewModel_ShowAll_Header" xml:space="preserve">
+        <value>Показать все</value>
+    </data>
+    <data name="WorkspacePageViewModel_ShowError_Header" xml:space="preserve">
+        <value>Показать ошибку</value>
+    </data>
+    <data name="WorkspacePageViewModel_GenerateException_Header" xml:space="preserve">
+        <value>Сгенерировать исключение</value>
+    </data>
+    <data name="WorkspacePageViewModel_ChangeStatus_Header" xml:space="preserve">
+        <value>Изменить статус</value>
+    </data>
+    <data name="WorkspacePageViewModel_PropertyEditor_Header" xml:space="preserve">
+        <value>Редактор свойств</value>
+    </data>
+    <data name="WorkspacePageViewModel_Location1_Header" xml:space="preserve">
+        <value>Расположение 1</value>
+    </data>
+    <data name="WorkspacePageViewModel_Location2_Header" xml:space="preserve">
+        <value>Расположение 2</value>
+    </data>
+    <data name="WorkspacePageViewModel_MapWidget_Header" xml:space="preserve">
+        <value>Виджет карты</value>
+    </data>
+    <data name="WorkspacePageViewModel_MapWidget2_Header" xml:space="preserve">
+        <value>Виджет карты 2</value>
+    </data>
+    <data name="WorkspacePageViewModel_Drone1_Header" xml:space="preserve">
+        <value>Дрон 1</value>
+    </data>
+    <data name="WorkspacePageViewModel_SignalPlot_Header" xml:space="preserve">
+        <value>График сигнала</value>
+    </data>
+    <data name="WorkspacePageViewModel_TelemetryDashboard_Header" xml:space="preserve">
+        <value>Панель телеметрии</value>
+    </data>
+    <data name="WorkspacePageViewModel_Battery_Header" xml:space="preserve">
+        <value>Батарея</value>
+    </data>
+    <data name="WorkspacePageViewModel_Battery_ShortHeader" xml:space="preserve">
+        <value>БАТ</value>
+    </data>
+    <data name="WorkspacePageViewModel_GnssFix_Header" xml:space="preserve">
+        <value>Решение GNSS</value>
+    </data>
+    <data name="WorkspacePageViewModel_GnssFix_ShortHeader" xml:space="preserve">
+        <value>GNSS</value>
+    </data>
+    <data name="WorkspacePageViewModel_GnssFix_Text" xml:space="preserve">
+        <value>RTK Fixed</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_AltitudeUnit_Header" xml:space="preserve">
+        <value>Высота V2</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_AltitudeUnit_ShortHeader" xml:space="preserve">
+        <value>Выс</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_AltitudeUnit_Description" xml:space="preserve">
+        <value>Свойство единиц V2 с текстовым значением и выбором единицы.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleUnit_Header" xml:space="preserve">
+        <value>Газ V2</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleUnit_ShortHeader" xml:space="preserve">
+        <value>Газ</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleUnit_Description" xml:space="preserve">
+        <value>Свойство единиц V2 с выбором единицы газа.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Latitude_Header" xml:space="preserve">
+        <value>Положение</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Latitude_ShortHeader" xml:space="preserve">
+        <value>Шир</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Latitude_Description" xml:space="preserve">
+        <value>Описание широты</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Longitude_Header" xml:space="preserve">
+        <value>Долгота</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Longitude_ShortHeader" xml:space="preserve">
+        <value>Долг</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Altitude_Header" xml:space="preserve">
+        <value>Высота</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Altitude_ShortHeader" xml:space="preserve">
+        <value>Выс</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Altitude_Description" xml:space="preserve">
+        <value>Описание высоты</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_GeoPoint_Header" xml:space="preserve">
+        <value>Геоточка</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_GeoPoint_Description" xml:space="preserve">
+        <value>Описание геоточки</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Time_Header" xml:space="preserve">
+        <value>Время</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Time_ShortHeader" xml:space="preserve">
+        <value>Время</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Time_Description" xml:space="preserve">
+        <value>Описание времени</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Throttle_Header" xml:space="preserve">
+        <value>Газ</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Throttle_ShortHeader" xml:space="preserve">
+        <value>Газ</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Throttle_Description" xml:space="preserve">
+        <value>Описание газа</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_Header" xml:space="preserve">
+        <value>Отображаемое имя</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_ShortHeader" xml:space="preserve">
+        <value>Имя</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_Description" xml:space="preserve">
+        <value>Текстовый редактор с валидацией, иконкой, маркером удалённого обновления и кнопкой меню.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_Required" xml:space="preserve">
+        <value>Отображаемое имя обязательно</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_DefaultValue" xml:space="preserve">
+        <value>Съёмочная миссия</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ActionButton_Header" xml:space="preserve">
+        <value>Запустить проверку</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ActionButton_ShortHeader" xml:space="preserve">
+        <value>Пуск</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ActionButton_Description" xml:space="preserve">
+        <value>Свойство-кнопка с асинхронной командой, состоянием занятости и маркером обновления.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ToggleSwitch_Header" xml:space="preserve">
+        <value>Телеметрия</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ToggleSwitch_ShortHeader" xml:space="preserve">
+        <value>Тлм</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ToggleSwitch_Description" xml:space="preserve">
+        <value>Свойство-переключатель с булевой моделью и маркером обновления.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleSlider_Header" xml:space="preserve">
+        <value>Ползунок газа</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleSlider_ShortHeader" xml:space="preserve">
+        <value>Газ</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleSlider_Description" xml:space="preserve">
+        <value>Свойство-ползунок с живым значением, единицами и маркером обновления.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OperationProfile_Header" xml:space="preserve">
+        <value>Профиль работы</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OperationProfile_Description" xml:space="preserve">
+        <value>Выпадающий список с тестовыми моделями: иконка, только текст и разные акцентные стили.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Manual_Header" xml:space="preserve">
+        <value>Ручной</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Manual_Description" xml:space="preserve">
+        <value>Оператор напрямую управляет каждым шагом.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Guided_Header" xml:space="preserve">
+        <value>С подсказками</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Guided_Description" xml:space="preserve">
+        <value>Сопровождаемый процесс с проверкой после каждого шага.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Survey_Header" xml:space="preserve">
+        <value>Съёмка</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Survey_Description" xml:space="preserve">
+        <value>Собирает структурированные измерения для последующего анализа.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Silent_Header" xml:space="preserve">
+        <value>Тихий</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Silent_Description" xml:space="preserve">
+        <value>Работает без иконки и акцентного оформления.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Inspection_Header" xml:space="preserve">
+        <value>Инспекция</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Inspection_Description" xml:space="preserve">
+        <value>Подсвечивает проблемы и требует подтверждения оператора.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Minimal_Header" xml:space="preserve">
+        <value>Минимальный</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Minimal_Description" xml:space="preserve">
+        <value>Только текст, для компактной вёрстки.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Diagnostics_Header" xml:space="preserve">
+        <value>Диагностика</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Diagnostics_Description" xml:space="preserve">
+        <value>Показывает служебную информацию и состояние оборудования.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_OfflineCache_Header" xml:space="preserve">
+        <value>Офлайн-кеш</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_OfflineCache_Description" xml:space="preserve">
+        <value>Без изображения, полезно когда внешние данные недоступны.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Emergency_Header" xml:space="preserve">
+        <value>Аварийный</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Emergency_Description" xml:space="preserve">
+        <value>Стиль критического действия с иконкой предупреждающего цвета.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Custom_Header" xml:space="preserve">
+        <value>Свой профиль</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Custom_Description" xml:space="preserve">
+        <value>Простой элемент только с заголовком и описанием.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OptimizationMode_Header" xml:space="preserve">
+        <value>Режим оптимизации</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OptimizationMode_ShortHeader" xml:space="preserve">
+        <value>Режим</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OptimizationMode_Description" xml:space="preserve">
+        <value>Свойство-группа кнопок на основе выбора из списка.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Speed_Header" xml:space="preserve">
+        <value>Скорость</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Speed_Description" xml:space="preserve">
+        <value>Предпочитать более быструю обработку.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Quality_Header" xml:space="preserve">
+        <value>Качество</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Quality_Description" xml:space="preserve">
+        <value>Предпочитать более высокое качество.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Balanced_Header" xml:space="preserve">
+        <value>Сбалансированный</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Balanced_Description" xml:space="preserve">
+        <value>Использовать сбалансированный пресет.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Validation_Header" xml:space="preserve">
+        <value>Ошибка валидации</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Validation_Message" xml:space="preserve">
+        <value>Ошибка валидации из меню свойства.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Sync_Header" xml:space="preserve">
+        <value>Ошибка синхронизации</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Sync_Message" xml:space="preserve">
+        <value>Ошибка синхронизации из меню свойства.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Network_Header" xml:space="preserve">
+        <value>Ошибка сети</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Network_Message" xml:space="preserve">
+        <value>Ошибка сети из меню свойства.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Clear_Header" xml:space="preserve">
+        <value>Очистить ошибку</value>
+    </data>
+    <data name="PropertyEditorPageView_ShowHeaders_Text" xml:space="preserve">
+        <value>Показывать заголовки свойств</value>
+    </data>
+    <data name="PropertyEditorPageView_AdvancedScope_Content" xml:space="preserve">
+        <value>Расширенная левая область</value>
+    </data>
+    <data name="PropertyEditorPageView_Editor_Title" xml:space="preserve">
+        <value>PropertyEditor</value>
+    </data>
+    <data name="PropertyEditorPageView_EditorCopy_Title" xml:space="preserve">
+        <value>Копия PropertyEditor</value>
+    </data>
+    <data name="PropertyEditorPageView_ExtendedEditor_Title" xml:space="preserve">
+        <value>ExtendedPropertyEditor</value>
+    </data>
+    <data name="PropertyEditorPageView_ModelValues_Title" xml:space="preserve">
+        <value>Значения модели</value>
+    </data>
+    <data name="PropertyEditorPageView_DisplayName_Label" xml:space="preserve">
+        <value>Отображаемое имя</value>
+    </data>
+    <data name="PropertyEditorPageView_OperationProfile_Label" xml:space="preserve">
+        <value>Профиль работы</value>
+    </data>
+    <data name="PropertyEditorPageView_RunCheckCount_Label" xml:space="preserve">
+        <value>Число запусков проверки</value>
+    </data>
+    <data name="PropertyEditorPageView_Telemetry_Label" xml:space="preserve">
+        <value>Телеметрия</value>
+    </data>
+    <data name="PropertyEditorPageView_GeoPoint_Label" xml:space="preserve">
+        <value>Геоточка</value>
+    </data>
+    <data name="PropertyEditorPageView_Units_Title" xml:space="preserve">
+        <value>Единицы</value>
+    </data>
+    <data name="PropertyEditorPageView_AltitudeV2Model_Label" xml:space="preserve">
+        <value>Модель высоты V2</value>
+    </data>
+    <data name="PropertyEditorPageView_ThrottleV2Model_Label" xml:space="preserve">
+        <value>Модель газа V2</value>
+    </data>
+    <data name="PropertyEditorPageView_TimeModel_Label" xml:space="preserve">
+        <value>Модель времени</value>
+    </data>
+    <data name="PropertyEditorPageView_ThrottleModel_Label" xml:space="preserve">
+        <value>Модель газа</value>
+    </data>
+    <data name="PropertyEditorPageView_AltitudeModel_Label" xml:space="preserve">
+        <value>Модель высоты</value>
+    </data>
+    <data name="PropertyEditorPageView_Position_Title" xml:space="preserve">
+        <value>Положение</value>
+    </data>
+    <data name="PropertyEditorPageView_LatitudeModel_Label" xml:space="preserve">
+        <value>Модель широты</value>
+    </data>
+    <data name="PropertyEditorPageView_LongitudeModel_Label" xml:space="preserve">
+        <value>Модель долготы</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_Title" xml:space="preserve">
+        <value>Ошибка</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_Message" xml:space="preserve">
+        <value>Это тестовое сообщение об ошибке</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_Description" xml:space="preserve">
+        <value>Это описание тестового сообщения об ошибке</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_CommandTitle" xml:space="preserve">
+        <value>Показать все</value>
+    </data>
+    <data name="WorkspacePageViewModel_CloseRestriction_Message" xml:space="preserve">
+        <value>Тестовое ограничение на закрытие</value>
+    </data>
+    <data name="WorkspacePageViewModel_Exception_Title" xml:space="preserve">
+        <value>Исключение рабочей области</value>
+    </data>
+    <data name="WorkspacePageViewModel_Exception_Message" xml:space="preserve">
+        <value>Сгенерированное исключение для демонстрации всплывающего окна ShellView.</value>
+    </data>
 </root>

@@ -428,4 +428,457 @@ Used to confirm saving information.
     <data name="MapTestPageViewModel_Menu_Action" xml:space="preserve">
         <value>Sample action</value>
     </data>
+    <data name="TextFileHandler_FileType_Title" xml:space="preserve">
+        <value>ASV Markdown file</value>
+    </data>
+    <data name="TextFilePageViewModel_Title" xml:space="preserve">
+        <value>ASV Markdown file</value>
+    </data>
+    <data name="TextFilePageViewModel_NewFile_Title" xml:space="preserve">
+        <value>New ASV Markdown file</value>
+    </data>
+    <data name="TextFilePageViewModel_CloseRestriction_Message" xml:space="preserve">
+        <value>The file has unsaved changes</value>
+    </data>
+    <data name="RttBoxesTreeMenu_Name" xml:space="preserve">
+        <value>Rtt boxes</value>
+    </data>
+    <data name="WorkspaceTreeMenu_Name" xml:space="preserve">
+        <value>Workspace</value>
+    </data>
+    <data name="WorkspaceTreeMenu_StatusTag_Value" xml:space="preserve">
+        <value>Active</value>
+    </data>
+    <data name="MapControlsPageViewModel_Anchor_Header" xml:space="preserve">
+        <value>Anchor {0}</value>
+    </data>
+    <data name="MapControlsPageViewModel_Plane_Header" xml:space="preserve">
+        <value>Plane</value>
+    </data>
+    <data name="MapControlsPageViewModel_PlaneAzimuth_Header" xml:space="preserve">
+        <value>Plane {0}°</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Velocity_Header" xml:space="preserve">
+        <value>Velocity</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Velocity_ShortHeader" xml:space="preserve">
+        <value>vel</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Velocity_Description" xml:space="preserve">
+        <value>Current vehicle speed in the selected telemetry stream.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Distance_Header" xml:space="preserve">
+        <value>Distance</value>
+    </data>
+    <data name="RttBoxesPageViewModel_TwoColumn_Description" xml:space="preserve">
+        <value>Left and right distance channels updated independently.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Left_Header" xml:space="preserve">
+        <value>Left</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Right_Header" xml:space="preserve">
+        <value>Right</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Single_Description" xml:space="preserve">
+        <value>Single live distance value with progress and status.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_NoData_StatusText" xml:space="preserve">
+        <value>No data</value>
+    </data>
+    <data name="RttBoxesPageViewModel_KeyValue_ShortHeader" xml:space="preserve">
+        <value>Short</value>
+    </data>
+    <data name="RttBoxesPageViewModel_KeyValue_Header" xml:space="preserve">
+        <value>Common RTT</value>
+    </data>
+    <data name="RttBoxesPageViewModel_KeyValue_Description" xml:space="preserve">
+        <value>Common round-trip telemetry values shown as key-value rows.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Power_Header" xml:space="preserve">
+        <value>Power</value>
+    </data>
+    <data name="RttBoxesPageViewModel_RiseTime_Header" xml:space="preserve">
+        <value>Rise time</value>
+    </data>
+    <data name="RttBoxesPageViewModel_FallTime_Header" xml:space="preserve">
+        <value>Fall time</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Status_Header" xml:space="preserve">
+        <value>Status</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Status_Value" xml:space="preserve">
+        <value>Normal</value>
+    </data>
+    <data name="RttBoxesPageViewModel_Unknown_Header" xml:space="preserve">
+        <value>Unknown</value>
+    </data>
+    <data name="RttBoxesPageViewModel_SplitDigit_Description" xml:space="preserve">
+        <value>Distance value split into integer and fractional runs.</value>
+    </data>
+    <data name="RttBoxesPageViewModel_GeoPoint_Header" xml:space="preserve">
+        <value>UAV position</value>
+    </data>
+    <data name="RttBoxesPageViewModel_GeoPoint_ShortHeader" xml:space="preserve">
+        <value>UAV</value>
+    </data>
+    <data name="RttBoxesPageViewModel_GeoPoint_Description" xml:space="preserve">
+        <value>Live UAV latitude, longitude, and altitude.</value>
+    </data>
+    <data name="WorkspacePageViewModel_HideAll_Header" xml:space="preserve">
+        <value>Hide all</value>
+    </data>
+    <data name="WorkspacePageViewModel_ShowAll_Header" xml:space="preserve">
+        <value>Show all</value>
+    </data>
+    <data name="WorkspacePageViewModel_ShowError_Header" xml:space="preserve">
+        <value>Show error</value>
+    </data>
+    <data name="WorkspacePageViewModel_GenerateException_Header" xml:space="preserve">
+        <value>Generate Exception</value>
+    </data>
+    <data name="WorkspacePageViewModel_ChangeStatus_Header" xml:space="preserve">
+        <value>Change status</value>
+    </data>
+    <data name="WorkspacePageViewModel_PropertyEditor_Header" xml:space="preserve">
+        <value>Property editor</value>
+    </data>
+    <data name="WorkspacePageViewModel_Location1_Header" xml:space="preserve">
+        <value>Location 1</value>
+    </data>
+    <data name="WorkspacePageViewModel_Location2_Header" xml:space="preserve">
+        <value>Location 2</value>
+    </data>
+    <data name="WorkspacePageViewModel_MapWidget_Header" xml:space="preserve">
+        <value>Map Widget</value>
+    </data>
+    <data name="WorkspacePageViewModel_MapWidget2_Header" xml:space="preserve">
+        <value>Map Widget2</value>
+    </data>
+    <data name="WorkspacePageViewModel_Drone1_Header" xml:space="preserve">
+        <value>Drone 1</value>
+    </data>
+    <data name="WorkspacePageViewModel_SignalPlot_Header" xml:space="preserve">
+        <value>Signal Plot</value>
+    </data>
+    <data name="WorkspacePageViewModel_TelemetryDashboard_Header" xml:space="preserve">
+        <value>Telemetry Dashboard</value>
+    </data>
+    <data name="WorkspacePageViewModel_Battery_Header" xml:space="preserve">
+        <value>Battery</value>
+    </data>
+    <data name="WorkspacePageViewModel_Battery_ShortHeader" xml:space="preserve">
+        <value>BAT</value>
+    </data>
+    <data name="WorkspacePageViewModel_GnssFix_Header" xml:space="preserve">
+        <value>GNSS Fix</value>
+    </data>
+    <data name="WorkspacePageViewModel_GnssFix_ShortHeader" xml:space="preserve">
+        <value>GNSS</value>
+    </data>
+    <data name="WorkspacePageViewModel_GnssFix_Text" xml:space="preserve">
+        <value>RTK Fixed</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_AltitudeUnit_Header" xml:space="preserve">
+        <value>Altitude V2</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_AltitudeUnit_ShortHeader" xml:space="preserve">
+        <value>Alt</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_AltitudeUnit_Description" xml:space="preserve">
+        <value>V2 unit property with a text value and unit selector.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleUnit_Header" xml:space="preserve">
+        <value>Throttle V2</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleUnit_ShortHeader" xml:space="preserve">
+        <value>Thr</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleUnit_Description" xml:space="preserve">
+        <value>V2 unit property using the throttle unit selector.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Latitude_Header" xml:space="preserve">
+        <value>Position</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Latitude_ShortHeader" xml:space="preserve">
+        <value>Lat</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Latitude_Description" xml:space="preserve">
+        <value>Latitude description</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Longitude_Header" xml:space="preserve">
+        <value>Longitude</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Longitude_ShortHeader" xml:space="preserve">
+        <value>Lon</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Altitude_Header" xml:space="preserve">
+        <value>Altitude</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Altitude_ShortHeader" xml:space="preserve">
+        <value>Alt</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Altitude_Description" xml:space="preserve">
+        <value>Altitude description</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_GeoPoint_Header" xml:space="preserve">
+        <value>Geo Point</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_GeoPoint_Description" xml:space="preserve">
+        <value>Geo Point description</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Time_Header" xml:space="preserve">
+        <value>Time</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Time_ShortHeader" xml:space="preserve">
+        <value>Time</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Time_Description" xml:space="preserve">
+        <value>Time description</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Throttle_Header" xml:space="preserve">
+        <value>Throttle</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Throttle_ShortHeader" xml:space="preserve">
+        <value>Throttle</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Throttle_Description" xml:space="preserve">
+        <value>Throttle description</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_Header" xml:space="preserve">
+        <value>Display name</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_ShortHeader" xml:space="preserve">
+        <value>Name</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_Description" xml:space="preserve">
+        <value>Text editor with validation, icon, remote update marker, and menu button.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_Required" xml:space="preserve">
+        <value>Display name is required</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_DisplayName_DefaultValue" xml:space="preserve">
+        <value>Survey mission</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ActionButton_Header" xml:space="preserve">
+        <value>Run check</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ActionButton_ShortHeader" xml:space="preserve">
+        <value>Run</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ActionButton_Description" xml:space="preserve">
+        <value>Button property with async command, busy state, and update marker.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ToggleSwitch_Header" xml:space="preserve">
+        <value>Telemetry</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ToggleSwitch_ShortHeader" xml:space="preserve">
+        <value>Tel</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ToggleSwitch_Description" xml:space="preserve">
+        <value>Toggle switch property with boolean model and update marker.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleSlider_Header" xml:space="preserve">
+        <value>Throttle slider</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleSlider_ShortHeader" xml:space="preserve">
+        <value>Thr</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ThrottleSlider_Description" xml:space="preserve">
+        <value>Slider property with live value, units, and update marker.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OperationProfile_Header" xml:space="preserve">
+        <value>Operation profile</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OperationProfile_Description" xml:space="preserve">
+        <value>Combo box with test view models: icon, text-only, and different accent styles.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Manual_Header" xml:space="preserve">
+        <value>Manual</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Manual_Description" xml:space="preserve">
+        <value>Operator controls every step directly.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Guided_Header" xml:space="preserve">
+        <value>Guided</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Guided_Description" xml:space="preserve">
+        <value>Assisted flow with validation after each step.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Survey_Header" xml:space="preserve">
+        <value>Survey</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Survey_Description" xml:space="preserve">
+        <value>Collects structured measurements for later analysis.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Silent_Header" xml:space="preserve">
+        <value>Silent</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Silent_Description" xml:space="preserve">
+        <value>Runs without icon or accent decoration.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Inspection_Header" xml:space="preserve">
+        <value>Inspection</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Inspection_Description" xml:space="preserve">
+        <value>Highlights issues and requires operator confirmation.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Minimal_Header" xml:space="preserve">
+        <value>Minimal</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Minimal_Description" xml:space="preserve">
+        <value>Text-only item for compact layouts.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Diagnostics_Header" xml:space="preserve">
+        <value>Diagnostics</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Diagnostics_Description" xml:space="preserve">
+        <value>Shows service information and hardware status.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_OfflineCache_Header" xml:space="preserve">
+        <value>Offline cache</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_OfflineCache_Description" xml:space="preserve">
+        <value>No image, useful when external data is unavailable.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Emergency_Header" xml:space="preserve">
+        <value>Emergency</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Emergency_Description" xml:space="preserve">
+        <value>Critical action style with a warning-colored icon.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Custom_Header" xml:space="preserve">
+        <value>Custom profile</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Profile_Custom_Description" xml:space="preserve">
+        <value>Plain item with only header and description.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OptimizationMode_Header" xml:space="preserve">
+        <value>Optimization mode</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OptimizationMode_ShortHeader" xml:space="preserve">
+        <value>Mode</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_OptimizationMode_Description" xml:space="preserve">
+        <value>Button group property based on combo box selection.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Speed_Header" xml:space="preserve">
+        <value>Speed</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Speed_Description" xml:space="preserve">
+        <value>Prefer faster processing.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Quality_Header" xml:space="preserve">
+        <value>Quality</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Quality_Description" xml:space="preserve">
+        <value>Prefer higher quality.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Balanced_Header" xml:space="preserve">
+        <value>Balanced</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_Mode_Balanced_Description" xml:space="preserve">
+        <value>Use a balanced preset.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Validation_Header" xml:space="preserve">
+        <value>Validation error</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Validation_Message" xml:space="preserve">
+        <value>Validation error from property menu.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Sync_Header" xml:space="preserve">
+        <value>Sync error</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Sync_Message" xml:space="preserve">
+        <value>Synchronization error from property menu.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Network_Header" xml:space="preserve">
+        <value>Network error</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Network_Message" xml:space="preserve">
+        <value>Network error from property menu.</value>
+    </data>
+    <data name="PropertyEditorPageViewModel_ErrorMenu_Clear_Header" xml:space="preserve">
+        <value>Clear error</value>
+    </data>
+    <data name="PropertyEditorPageView_ShowHeaders_Text" xml:space="preserve">
+        <value>Show property headers</value>
+    </data>
+    <data name="PropertyEditorPageView_AdvancedScope_Content" xml:space="preserve">
+        <value>Advanced left scope</value>
+    </data>
+    <data name="PropertyEditorPageView_Editor_Title" xml:space="preserve">
+        <value>PropertyEditor</value>
+    </data>
+    <data name="PropertyEditorPageView_EditorCopy_Title" xml:space="preserve">
+        <value>PropertyEditor copy</value>
+    </data>
+    <data name="PropertyEditorPageView_ExtendedEditor_Title" xml:space="preserve">
+        <value>ExtendedPropertyEditor</value>
+    </data>
+    <data name="PropertyEditorPageView_ModelValues_Title" xml:space="preserve">
+        <value>Model values</value>
+    </data>
+    <data name="PropertyEditorPageView_DisplayName_Label" xml:space="preserve">
+        <value>Display name</value>
+    </data>
+    <data name="PropertyEditorPageView_OperationProfile_Label" xml:space="preserve">
+        <value>Operation profile</value>
+    </data>
+    <data name="PropertyEditorPageView_RunCheckCount_Label" xml:space="preserve">
+        <value>Run check count</value>
+    </data>
+    <data name="PropertyEditorPageView_Telemetry_Label" xml:space="preserve">
+        <value>Telemetry</value>
+    </data>
+    <data name="PropertyEditorPageView_GeoPoint_Label" xml:space="preserve">
+        <value>GeoPoint</value>
+    </data>
+    <data name="PropertyEditorPageView_Units_Title" xml:space="preserve">
+        <value>Units</value>
+    </data>
+    <data name="PropertyEditorPageView_AltitudeV2Model_Label" xml:space="preserve">
+        <value>Altitude V2 model</value>
+    </data>
+    <data name="PropertyEditorPageView_ThrottleV2Model_Label" xml:space="preserve">
+        <value>Throttle V2 model</value>
+    </data>
+    <data name="PropertyEditorPageView_TimeModel_Label" xml:space="preserve">
+        <value>Time model</value>
+    </data>
+    <data name="PropertyEditorPageView_ThrottleModel_Label" xml:space="preserve">
+        <value>Throttle model</value>
+    </data>
+    <data name="PropertyEditorPageView_AltitudeModel_Label" xml:space="preserve">
+        <value>Altitude model</value>
+    </data>
+    <data name="PropertyEditorPageView_Position_Title" xml:space="preserve">
+        <value>Position</value>
+    </data>
+    <data name="PropertyEditorPageView_LatitudeModel_Label" xml:space="preserve">
+        <value>Latitude model</value>
+    </data>
+    <data name="PropertyEditorPageView_LongitudeModel_Label" xml:space="preserve">
+        <value>Longitude model</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_Title" xml:space="preserve">
+        <value>Error</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_Message" xml:space="preserve">
+        <value>This is test error message</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_Description" xml:space="preserve">
+        <value>This is description for test error message</value>
+    </data>
+    <data name="WorkspacePageViewModel_ErrorMessage_CommandTitle" xml:space="preserve">
+        <value>ShowAll</value>
+    </data>
+    <data name="WorkspacePageViewModel_CloseRestriction_Message" xml:space="preserve">
+        <value>Test restriction for close</value>
+    </data>
+    <data name="WorkspacePageViewModel_Exception_Title" xml:space="preserve">
+        <value>Workspace exception</value>
+    </data>
+    <data name="WorkspacePageViewModel_Exception_Message" xml:space="preserve">
+        <value>Generated exception for ShellView popup demo.</value>
+    </data>
 </root>

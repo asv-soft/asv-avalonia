@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -206,16 +207,16 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
 
         var source = e.Source as Visual;
         var tab = source as DockTabItem ?? source?.FindAncestorOfType<DockTabItem>();
-        if (tab is not null)
+        if (tab?.Content is { } page)
         {
-            if (SelectedItem is IPage current && current.Id != tab.Content?.Id)
+            if (SelectedItem is not IPage current || current.Id != page.Id)
             {
                 _config.SelectedDockTabItemId = tab.Id;
                 NotifyLayoutChanged();
+                page.GoTo(page.GetPathFromRoot()).SafeFireAndForget();
             }
 
             _selectedTab = tab;
-            SetCurrentValue(SelectedItemProperty, tab.Content);
         }
 
         e.Pointer.Capture(tabStrip);
@@ -271,6 +272,7 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
             _mainTabControl.Items.Remove(dockTabItem);
             _selectedTab = _mainTabControl.SelectedItem as DockTabItem;
             _config.SelectedDockTabItemId = _selectedTab?.Id;
+            UpdateLayout();
         }
 
         var win = new DockWindow
@@ -284,15 +286,24 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
         _config.DockItemStates[page.Id.ToString()] = DockItemState.Window;
         NotifyLayoutChanged();
 
+        var isShutdown = false;
+
         win.Closing += OnWindowClosing;
+        win.Closed += OnWindowClosed;
         win.Show();
         return;
 
         void OnWindowClosing(object? source, WindowClosingEventArgs args)
         {
-            win.Closing -= OnWindowClosing;
+            isShutdown = args.CloseReason == WindowCloseReason.ApplicationShutdown;
+        }
 
-            if (args.CloseReason == WindowCloseReason.ApplicationShutdown)
+        void OnWindowClosed(object? source, EventArgs args)
+        {
+            win.Closing -= OnWindowClosing;
+            win.Closed -= OnWindowClosed;
+
+            if (isShutdown)
             {
                 return;
             }

@@ -16,6 +16,33 @@ public class DeviceManagerConfig
 
 public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
 {
+    private static readonly ImmutableArray<AsvColorKind> DefaultDeviceColors =
+    [
+        AsvColorKind.Error,
+        AsvColorKind.Warning,
+        AsvColorKind.Success,
+        AsvColorKind.Info1,
+        AsvColorKind.Info2,
+        AsvColorKind.Info3,
+        AsvColorKind.Info4,
+        AsvColorKind.Info5,
+        AsvColorKind.Info6,
+        AsvColorKind.Info7,
+        AsvColorKind.Info8,
+        AsvColorKind.Info9,
+        AsvColorKind.Info10,
+        AsvColorKind.Info11,
+        AsvColorKind.Info12,
+        AsvColorKind.Info13,
+        AsvColorKind.Info14,
+        AsvColorKind.Info15,
+        AsvColorKind.Info16,
+        AsvColorKind.Info17,
+        AsvColorKind.Info18,
+        AsvColorKind.Info19,
+        AsvColorKind.Info20,
+    ];
+
     private readonly IConfiguration _cfgSvc;
     private readonly ImmutableArray<IDeviceManagerExtension> _extensions;
     private readonly SerialDisposable _sub1 = new();
@@ -116,9 +143,9 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
             }
         }
 
-        var values = Enum.GetValues<AsvColorKind>();
-
-        return values[Math.Abs(id.GetHashCode()) % values.Length];
+        var hash = Math.Abs((long)id.GetHashCode());
+        var index = (int)(hash % DefaultDeviceColors.Length);
+        return DefaultDeviceColors[index];
     }
 
     public IProtocolRouter Router { get; }

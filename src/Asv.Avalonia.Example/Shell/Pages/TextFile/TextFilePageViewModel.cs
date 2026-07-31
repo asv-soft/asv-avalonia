@@ -1,10 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Asv.Common;
 using Asv.Modeling;
 using Avalonia.Input;
@@ -50,7 +44,7 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
             .DisposeItWith(Disposable);
         FilePath = new BindableReactiveProperty<string>(NewFileTitle).DisposeItWith(Disposable);
 
-        Header = "ASV Markdown file";
+        Header = RS.TextFilePageViewModel_Title;
         Icon = PageIcon;
 
         var filePath = context.NavArgs.FirstOrDefault(x => x.Key == FilePathArg).Value;
@@ -62,6 +56,23 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         Text.ModelValue.Subscribe(_ => UpdateStateIcon()).DisposeItWith(Disposable);
         UpdateStateIcon();
         Events.Catch<DesktopDragEvent>(OnDesktopDragEvent).DisposeItWith(Disposable);
+        Events.Catch<PageCloseAttemptEvent>(OnPageCloseAttempt).DisposeItWith(Disposable);
+    }
+
+    private ValueTask OnPageCloseAttempt(
+        IViewModel owner,
+        PageCloseAttemptEvent e,
+        CancellationToken cancel
+    )
+    {
+        if (IsModified)
+        {
+            e.AddRestriction(
+                new Restriction(this, RS.TextFilePageViewModel_CloseRestriction_Message)
+            );
+        }
+
+        return ValueTask.CompletedTask;
     }
 
     private async ValueTask OnDesktopDragEvent(
@@ -116,14 +127,14 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         private set => SetField(ref field, value);
     }
 
-    public string? DefaultFileName =>
+    public string DefaultFileName =>
         CurrentFilePath != null ? Path.GetFileName(CurrentFilePath) : $"document.{FileExtension}";
 
-    public string? DefaultExtension => FileExtension;
+    public string DefaultExtension => FileExtension;
 
-    public string? TypeFilter => $"{FileExtension},*";
+    public string TypeFilter => $"{FileExtension},*";
 
-    private static string NewFileTitle => "New ASV Markdown file";
+    private static string NewFileTitle => RS.TextFilePageViewModel_NewFile_Title;
 
     public static NavArgs CreateOpenArgs(string filePath)
     {
@@ -175,11 +186,12 @@ public class TextFilePageViewModel : PageViewModel<TextFilePageViewModel>, ISupp
         Header = Path.GetFileName(filePath);
     }
 
+    private bool IsModified => !string.Equals(GetText(), _savedText, StringComparison.Ordinal);
+
     private void UpdateStateIcon()
     {
-        var isModified = !string.Equals(GetText(), _savedText, StringComparison.Ordinal);
-        Status = isModified ? MaterialIconKind.Pencil : null;
-        StatusColor = isModified ? AsvColorKind.Warning : AsvColorKind.None;
+        Status = IsModified ? MaterialIconKind.Pencil : null;
+        StatusColor = IsModified ? AsvColorKind.Warning : AsvColorKind.None;
     }
 
     private void InsertText(string text)

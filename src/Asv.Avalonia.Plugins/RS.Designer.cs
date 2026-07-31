@@ -366,6 +366,15 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Plugins.
+        /// </summary>
+        public static string PluginSettingsTreePageMenu_Name {
+            get {
+                return ResourceManager.GetString("PluginSettingsTreePageMenu_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This plugin is verified by developers.
         /// </summary>
         public static string PluginsMarketPageView_InfoBar_IsVerified_Message {

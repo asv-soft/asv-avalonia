@@ -186,6 +186,51 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data size in bytes.
+        /// </summary>
+        public static string Byte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Byte_DataSize_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Byte.
+        /// </summary>
+        public static string Byte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Byte_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data rate in bytes per second.
+        /// </summary>
+        public static string BytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("BytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Byte per second.
+        /// </summary>
+        public static string BytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("BytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to B/s.
+        /// </summary>
+        public static string BytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("BytePerSecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command that cancels current operation.
         /// </summary>
         public static string CancelCommand_CommandInfo_Description {
@@ -204,20 +249,20 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Capacity of battery.
-        /// </summary>
-        public static string Capacity_UnitItem_Description {
-            get {
-                return ResourceManager.GetString("Capacity_UnitItem_Description", resourceCulture);
-            }
-        }
-
-        /// <summary>
         ///   Looks up a localized string similar to Capacity.
         /// </summary>
         public static string Capacity_Name {
             get {
                 return ResourceManager.GetString("Capacity_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Capacity of battery.
+        /// </summary>
+        public static string Capacity_UnitItem_Description {
+            get {
+                return ResourceManager.GetString("Capacity_UnitItem_Description", resourceCulture);
             }
         }
         
@@ -456,6 +501,51 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show/Hide.
+        /// </summary>
+        public static string DashboardWidget_TileVisibility_Header {
+            get {
+                return ResourceManager.GetString("DashboardWidget_TileVisibility_Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data transfer rate unit.
+        /// </summary>
+        public static string DataRate_Description {
+            get {
+                return ResourceManager.GetString("DataRate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data rate.
+        /// </summary>
+        public static string DataRate_Name {
+            get {
+                return ResourceManager.GetString("DataRate_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data size unit.
+        /// </summary>
+        public static string DataSize_Description {
+            get {
+                return ResourceManager.GetString("DataSize_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data size.
+        /// </summary>
+        public static string DataSize_Name {
+            get {
+                return ResourceManager.GetString("DataSize_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Power in decibels to 1 milliwatt.
         /// </summary>
         public static string Dbm_Power_Description {
@@ -582,7 +672,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to D°.
+        ///   Looks up a localized string similar to °.
         /// </summary>
         public static string Degree_UnitItem_Symbol {
             get {
@@ -681,7 +771,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to D°M&apos;.
+        ///   Looks up a localized string similar to °′.
         /// </summary>
         public static string DM_UnitItem_Symbol {
             get {
@@ -726,7 +816,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to D°M′S′′.
+        ///   Looks up a localized string similar to °′″.
         /// </summary>
         public static string Dms_UnitItem_Symbol {
             get {
@@ -857,6 +947,51 @@ namespace Asv.Avalonia {
         public static string GeoPointPropertyViewModel_Title {
             get {
                 return ResourceManager.GetString("GeoPointPropertyViewModel_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data size in gigabytes.
+        /// </summary>
+        public static string Gigabyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Gigabyte_DataSize_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gigabyte.
+        /// </summary>
+        public static string Gigabyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Gigabyte_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data rate in gigabytes per second.
+        /// </summary>
+        public static string GigabytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("GigabytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gigabyte per second.
+        /// </summary>
+        public static string GigabytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("GigabytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GB/s.
+        /// </summary>
+        public static string GigabytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("GigabytePerSecond_UnitItem_Symbol", resourceCulture);
             }
         }
         
@@ -1064,6 +1199,51 @@ namespace Asv.Avalonia {
         public static string Kelvin_UnitItem_Name {
             get {
                 return ResourceManager.GetString("Kelvin_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data size in kilobytes.
+        /// </summary>
+        public static string Kilobyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Kilobyte_DataSize_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kilobyte.
+        /// </summary>
+        public static string Kilobyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Kilobyte_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data rate in kilobytes per second.
+        /// </summary>
+        public static string KilobytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("KilobytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kilobyte per second.
+        /// </summary>
+        public static string KilobytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("KilobytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to kB/s.
+        /// </summary>
+        public static string KilobytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("KilobytePerSecond_UnitItem_Symbol", resourceCulture);
             }
         }
         
@@ -1298,6 +1478,51 @@ namespace Asv.Avalonia {
         public static string Mah_UnitItem_Symbol {
             get {
                 return ResourceManager.GetString("Mah_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data size in megabytes.
+        /// </summary>
+        public static string Megabyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Megabyte_DataSize_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Megabyte.
+        /// </summary>
+        public static string Megabyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Megabyte_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data rate in megabytes per second.
+        /// </summary>
+        public static string MegabytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("MegabytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Megabyte per second.
+        /// </summary>
+        public static string MegabytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("MegabytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MB/s.
+        /// </summary>
+        public static string MegabytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("MegabytePerSecond_UnitItem_Symbol", resourceCulture);
             }
         }
         
@@ -1653,7 +1878,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to [M]′[S]′′.
+        ///   Looks up a localized string similar to ′″.
         /// </summary>
         public static string Ms_UnitItem_Symbol {
             get {
@@ -1847,6 +2072,15 @@ namespace Asv.Avalonia {
         public static string OpenLogViewerCommand_Action_Title {
             get {
                 return ResourceManager.GetString("OpenLogViewerCommand_Action_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Clear Recent.
+        /// </summary>
+        public static string OpenMenuExtender_ClearRecent_Header {
+            get {
+                return ResourceManager.GetString("OpenMenuExtender_ClearRecent_Header", resourceCulture);
             }
         }
         
@@ -2499,6 +2733,24 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Copy details.
+        /// </summary>
+        public static string ShellMessage_CopyDetails {
+            get {
+                return ResourceManager.GetString("ShellMessage_CopyDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show details.
+        /// </summary>
+        public static string ShellMessage_ShowDetails {
+            get {
+                return ResourceManager.GetString("ShellMessage_ShowDetails", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit.
         /// </summary>
         public static string ShellView_Toolbar_Edit {
@@ -2540,24 +2792,6 @@ namespace Asv.Avalonia {
         public static string ShellView_UnsplitAllTabsButton_ToolTip {
             get {
                 return ResourceManager.GetString("ShellView_UnsplitAllTabsButton_ToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Copy details.
-        /// </summary>
-        public static string ShellMessage_CopyDetails {
-            get {
-                return ResourceManager.GetString("ShellMessage_CopyDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show details.
-        /// </summary>
-        public static string ShellMessage_ShowDetails {
-            get {
-                return ResourceManager.GetString("ShellMessage_ShowDetails", resourceCulture);
             }
         }
         
@@ -2616,6 +2850,51 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Data size in terabytes.
+        /// </summary>
+        public static string Terabyte_DataSize_Description {
+            get {
+                return ResourceManager.GetString("Terabyte_DataSize_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terabyte.
+        /// </summary>
+        public static string Terabyte_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("Terabyte_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data rate in terabytes per second.
+        /// </summary>
+        public static string TerabytePerSecond_DataRate_Description {
+            get {
+                return ResourceManager.GetString("TerabytePerSecond_DataRate_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Terabyte per second.
+        /// </summary>
+        public static string TerabytePerSecond_UnitItem_Name {
+            get {
+                return ResourceManager.GetString("TerabytePerSecond_UnitItem_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TB/s.
+        /// </summary>
+        public static string TerabytePerSecond_UnitItem_Symbol {
+            get {
+                return ResourceManager.GetString("TerabytePerSecond_UnitItem_Symbol", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Command for searching text in the current context.
         /// </summary>
         public static string TextSearchCommand_CommandInfo_Description {
@@ -2666,6 +2945,24 @@ namespace Asv.Avalonia {
         public static string Throttle_Name {
             get {
                 return ResourceManager.GetString("Throttle_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inline.
+        /// </summary>
+        public static string TileDensity_Inline {
+            get {
+                return ResourceManager.GetString("TileDensity_Inline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Regular.
+        /// </summary>
+        public static string TileDensity_Regular {
+            get {
+                return ResourceManager.GetString("TileDensity_Regular", resourceCulture);
             }
         }
         
@@ -2751,212 +3048,50 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Data size in bytes.
+        ///   Looks up a localized string similar to B.
         /// </summary>
-        public static string Byte_DataSize_Description {
-            get {
-                return ResourceManager.GetString("Byte_DataSize_Description", resourceCulture);
-            }
-        }
-
-        public static string Byte_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("Byte_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string DataSize_Description {
-            get {
-                return ResourceManager.GetString("DataSize_Description", resourceCulture);
-            }
-        }
-
-        public static string DataSize_Name {
-            get {
-                return ResourceManager.GetString("DataSize_Name", resourceCulture);
-            }
-        }
-
-        public static string DataRate_Name {
-            get {
-                return ResourceManager.GetString("DataRate_Name", resourceCulture);
-            }
-        }
-
-        public static string DataRate_Description {
-            get {
-                return ResourceManager.GetString("DataRate_Description", resourceCulture);
-            }
-        }
-
-        public static string BytePerSecond_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("BytePerSecond_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string BytePerSecond_DataRate_Description {
-            get {
-                return ResourceManager.GetString("BytePerSecond_DataRate_Description", resourceCulture);
-            }
-        }
-
-        public static string BytePerSecond_UnitItem_Symbol {
-            get {
-                return ResourceManager.GetString("BytePerSecond_UnitItem_Symbol", resourceCulture);
-            }
-        }
-
-        public static string KilobytePerSecond_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("KilobytePerSecond_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string KilobytePerSecond_DataRate_Description {
-            get {
-                return ResourceManager.GetString("KilobytePerSecond_DataRate_Description", resourceCulture);
-            }
-        }
-
-        public static string KilobytePerSecond_UnitItem_Symbol {
-            get {
-                return ResourceManager.GetString("KilobytePerSecond_UnitItem_Symbol", resourceCulture);
-            }
-        }
-
-        public static string MegabytePerSecond_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("MegabytePerSecond_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string MegabytePerSecond_DataRate_Description {
-            get {
-                return ResourceManager.GetString("MegabytePerSecond_DataRate_Description", resourceCulture);
-            }
-        }
-
-        public static string MegabytePerSecond_UnitItem_Symbol {
-            get {
-                return ResourceManager.GetString("MegabytePerSecond_UnitItem_Symbol", resourceCulture);
-            }
-        }
-
-        public static string GigabytePerSecond_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("GigabytePerSecond_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string GigabytePerSecond_DataRate_Description {
-            get {
-                return ResourceManager.GetString("GigabytePerSecond_DataRate_Description", resourceCulture);
-            }
-        }
-
-        public static string GigabytePerSecond_UnitItem_Symbol {
-            get {
-                return ResourceManager.GetString("GigabytePerSecond_UnitItem_Symbol", resourceCulture);
-            }
-        }
-
-        public static string TerabytePerSecond_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("TerabytePerSecond_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string TerabytePerSecond_DataRate_Description {
-            get {
-                return ResourceManager.GetString("TerabytePerSecond_DataRate_Description", resourceCulture);
-            }
-        }
-
-        public static string TerabytePerSecond_UnitItem_Symbol {
-            get {
-                return ResourceManager.GetString("TerabytePerSecond_UnitItem_Symbol", resourceCulture);
-            }
-        }
-
-        public static string Gigabyte_DataSize_Description {
-            get {
-                return ResourceManager.GetString("Gigabyte_DataSize_Description", resourceCulture);
-            }
-        }
-
-        public static string Gigabyte_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("Gigabyte_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string Kilobyte_DataSize_Description {
-            get {
-                return ResourceManager.GetString("Kilobyte_DataSize_Description", resourceCulture);
-            }
-        }
-
-        public static string Kilobyte_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("Kilobyte_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string Megabyte_DataSize_Description {
-            get {
-                return ResourceManager.GetString("Megabyte_DataSize_Description", resourceCulture);
-            }
-        }
-
-        public static string Megabyte_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("Megabyte_UnitItem_Name", resourceCulture);
-            }
-        }
-
-        public static string Terabyte_DataSize_Description {
-            get {
-                return ResourceManager.GetString("Terabyte_DataSize_Description", resourceCulture);
-            }
-        }
-
-        public static string Terabyte_UnitItem_Name {
-            get {
-                return ResourceManager.GetString("Terabyte_UnitItem_Name", resourceCulture);
-            }
-        }
-
         public static string Unit_Byte_Abbreviation {
             get {
                 return ResourceManager.GetString("Unit_Byte_Abbreviation", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GB.
+        /// </summary>
         public static string Unit_Gigabyte_Abbreviation {
             get {
                 return ResourceManager.GetString("Unit_Gigabyte_Abbreviation", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to KB.
+        /// </summary>
         public static string Unit_Kilobyte_Abbreviation {
             get {
                 return ResourceManager.GetString("Unit_Kilobyte_Abbreviation", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MB.
+        /// </summary>
         public static string Unit_Megabyte_Abbreviation {
             get {
                 return ResourceManager.GetString("Unit_Megabyte_Abbreviation", resourceCulture);
             }
         }
-
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TB.
+        /// </summary>
         public static string Unit_Terabyte_Abbreviation {
             get {
                 return ResourceManager.GetString("Unit_Terabyte_Abbreviation", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Value is not a number.
         /// </summary>
