@@ -27,7 +27,8 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         _deviceCore = new DevicePageCore(
             devices,
             loggerFactory.CreateLogger<DevicePageCore>(),
-            this
+            this,
+            loadLayoutOnInitialized: false
         ).DisposeItWith(Disposable);
         _deviceCore.Init(context.NavArgs);
 
@@ -50,10 +51,21 @@ public abstract class TreeDevicePageViewModel<TContext, TSubPage>
         IsDeviceInitialized = _deviceCore
             .IsDeviceInitialized.ToReadOnlyBindableReactiveProperty()
             .DisposeItWith(Disposable);
+
+        _deviceCore
+            .IsDeviceInitialized.Where(isInitialized => isInitialized)
+            .Skip(1)
+            .SubscribeAwait((_, cancel) => ReloadLayoutAsync(cancel), AwaitOperation.Switch)
+            .DisposeItWith(Disposable);
     }
 
     public ReadOnlyReactiveProperty<DeviceWrapper?> Target => _deviceCore.Target;
     public IReadOnlyBindableReactiveProperty<bool> IsDeviceInitialized { get; }
     public Observable<Unit> OnDeviceDisconnecting => _deviceCore.OnDeviceDisconnecting;
     public Observable<Unit> OnDeviceDisconnected => _deviceCore.OnDeviceDisconnected;
+
+    protected override ValueTask WaitForLayoutReady(CancellationToken cancel)
+    {
+        return _deviceCore.WaitUntilInitialized(cancel);
+    }
 }

@@ -95,6 +95,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         );
 
         SelectedPage = new BindableReactiveProperty<IPage?>().DisposeItWith(Disposable);
+        SelectedPage.Subscribe(x => Navigation.ForceSelect(x)).DisposeItWith(Disposable);
         _pages
             .ObserveChanged()
             .ObserveOnUIThreadDispatcher()
@@ -176,7 +177,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
     protected ObservableList<IPage> InternalPages => _pages;
 
-    public string Header
+    public string? Header
     {
         get;
         set => SetField(ref field, value);
@@ -442,22 +443,27 @@ public class ShellViewModel : ViewModel<IShell>, IShell
             return ValueTask.CompletedTask;
         }
 
+        var selectedPath = Navigation.SelectedPath.CurrentValue;
+        var selectionPointsToClosedPage =
+            selectedPath.Count > 1 && selectedPath[1] == close.Page.Id;
+
         _pages.Remove(close.Page);
 
         if (_pages.Count == 0)
         {
             SelectedPage.Value = null;
-            return ValueTask.CompletedTask;
         }
-
-        if (current?.Id != close.Page.Id)
+        else if (current?.Id == close.Page.Id)
         {
-            return ValueTask.CompletedTask;
+            SelectedPage.Value = null;
+            var newIndex = removedIndex < _pages.Count ? removedIndex : _pages.Count - 1;
+            SelectedPage.Value = _pages[newIndex];
         }
 
-        SelectedPage.Value = null;
-        var newIndex = removedIndex < _pages.Count ? removedIndex : _pages.Count - 1;
-        SelectedPage.Value = _pages[newIndex];
+        if (selectionPointsToClosedPage)
+        {
+            Navigation.ForceSelect((IViewModel?)SelectedPage.Value ?? this);
+        }
 
         return ValueTask.CompletedTask;
     }

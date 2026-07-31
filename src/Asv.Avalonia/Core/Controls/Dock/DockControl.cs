@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -206,16 +207,16 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
 
         var source = e.Source as Visual;
         var tab = source as DockTabItem ?? source?.FindAncestorOfType<DockTabItem>();
-        if (tab is not null)
+        if (tab?.Content is { } page)
         {
-            if (SelectedItem is IPage current && current.Id != tab.Content?.Id)
+            if (SelectedItem is not IPage current || current.Id != page.Id)
             {
                 _config.SelectedDockTabItemId = tab.Id;
                 NotifyLayoutChanged();
+                page.GoTo(page.GetPathFromRoot()).SafeFireAndForget();
             }
 
             _selectedTab = tab;
-            SetCurrentValue(SelectedItemProperty, tab.Content);
         }
 
         e.Pointer.Capture(tabStrip);
