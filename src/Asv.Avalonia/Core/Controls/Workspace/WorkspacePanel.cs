@@ -94,13 +94,13 @@ public partial class WorkspacePanel : Panel
         Grid.SetColumn(centerGrid, 2);
 
         // Left ScrollViewer with the StackPanel
-        _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = 4 };
+        _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = SplitterSize };
         var leftScrollViewer = new ScrollViewer { Background = null, Content = _leftPanel };
         Grid.SetRow(leftScrollViewer, 0);
         Grid.SetColumn(leftScrollViewer, 0);
 
         // Right ScrollViewer with the StackPanel
-        _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = 4 };
+        _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = SplitterSize };
         var rightScrollViewer = new ScrollViewer { Background = null, Content = _rightPanel };
         Grid.SetRow(rightScrollViewer, 0);
         Grid.SetColumn(rightScrollViewer, 4);
@@ -184,6 +184,42 @@ public partial class WorkspacePanel : Panel
         // Add the Grid as the only child element of the panel
         LogicalChildren.Add(mainGrid);
         VisualChildren.Add(mainGrid);
+    }
+
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+
+        if (change.Property == SplitterSizeProperty)
+        {
+            UpdateSplitterSize();
+        }
+    }
+
+    private void UpdateSplitterSize()
+    {
+        var splitterLength = new GridLength(SplitterSize, GridUnitType.Pixel);
+
+        _leftPanel.Spacing = SplitterSize;
+        _rightPanel.Spacing = SplitterSize;
+
+        _verticalSplitter1.Width = SplitterSize;
+        _verticalSplitter2.Width = SplitterSize;
+        _horizontalSplitter.Height = SplitterSize;
+
+        _verticalSplitterRaw1.MaxWidth = SplitterSize;
+        _verticalSplitterRaw2.MaxWidth = SplitterSize;
+        _horizontalSplitterRaw.MaxHeight = SplitterSize;
+
+        _verticalSplitterRaw1.Width = _verticalSplitter1.IsVisible
+            ? splitterLength
+            : GridLength.Auto;
+        _verticalSplitterRaw2.Width = _verticalSplitter2.IsVisible
+            ? splitterLength
+            : GridLength.Auto;
+        _horizontalSplitterRaw.Height = _horizontalSplitter.IsVisible
+            ? splitterLength
+            : GridLength.Auto;
     }
 
     internal double? LeftColumnPixelWidth =>

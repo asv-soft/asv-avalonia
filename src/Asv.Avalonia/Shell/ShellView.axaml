@@ -335,7 +335,7 @@
                 <avalonia:DockControl
                     BorderBrush="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                     BorderThickness="1"
-                    CornerRadius="{StaticResource ControlCornerRadius}"
+                    CornerRadius="{StaticResource PanelCornerRadius}"
                     x:Name="DockControl"
                     Padding="100,0,210,0"
                     DisabledHitTestHeight="40"

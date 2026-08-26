@@ -4,8 +4,8 @@
     xmlns:avalonia="clr-namespace:Asv.Avalonia"
 >
     <Design.PreviewWith>
-        <Panel Width="1024" Height="500" Background="Gray">
-            <avalonia:Workspace BorderThickness="3">
+        <Panel Width="1024" Height="500">
+            <avalonia:Workspace BorderThickness="3" >
                 <avalonia:PropertyEditorWidgetViewModel />
                 <avalonia:WorkspaceItem Header="HEADER1" Position="Right">
                     <StackPanel>
@@ -66,6 +66,7 @@
         </Panel>
     </Design.PreviewWith>
     <Style Selector="avalonia|Workspace">
+        
         <Style Selector="^ GridSplitter:pointerover">
             <Setter
                 Property="Background"
@@ -76,9 +77,10 @@
             <Setter Property="Background" Value="Transparent" />
         </Style>
         <!-- Set Defaults -->
+        
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>
-                <avalonia:WorkspacePanel LeftWidth="*" CentralWidth="4*" RightWidth="2*" />
+                <avalonia:WorkspacePanel SplitterSize="0" LeftWidth="*" CentralWidth="4*" RightWidth="2*" />
             </ItemsPanelTemplate>
         </Setter>
         <Setter Property="Template">

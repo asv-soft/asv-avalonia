@@ -136,7 +136,7 @@ public partial class WorkspacePanel
     {
         get;
         set => SetAndRaise(SplitterSizeProperty, ref field, value);
-    } = 4;
+    } = 0;
 
     public static readonly RoutedEvent<WorkspaceEventArgs> WorkspaceChangedEvent =
         RoutedEvent.Register<WorkspacePanel, WorkspaceEventArgs>(
