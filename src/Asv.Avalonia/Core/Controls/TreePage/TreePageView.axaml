@@ -24,10 +24,11 @@
                 />
             </Style>
         </Style>
+
     </UserControl.Styles>
     <Grid Name="PART_MainGrid">
         <Grid.RowDefinitions>
-            <RowDefinition MinHeight="40" MaxHeight="40" Height="40" />
+            <RowDefinition MinHeight="36" MaxHeight="36" Height="36" />
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -40,7 +41,8 @@
         </Grid.ColumnDefinitions>
 
         <Button
-            Margin="4,0,0,0"
+            x:Name="PART_HeaderButton"
+            Margin="4,0,4,0"
             IsVisible="{Binding IsMenuVisible}"
             Command="{Binding HideMenuCommand}"
             HorizontalAlignment="Stretch"
@@ -50,7 +52,13 @@
             Padding="0"
         >
             <StackPanel Spacing="4" Orientation="Horizontal" Margin="4">
-                <avalonia1:MaterialIcon>
+                <avalonia1:MaterialIcon
+                    Kind="ChevronDoubleLeft"
+                    IsVisible="{Binding IsPointerOver, ElementName=PART_HeaderButton}"
+                />
+                <avalonia1:MaterialIcon
+                    IsVisible="{Binding !IsPointerOver, ElementName=PART_HeaderButton}">
+                    
                     <avalonia1:MaterialIcon.Kind>
                         <MultiBinding Converter="{x:Static avalonia:CoalesceConverter.Instance}">
                             <Binding Path="TreeHeaderIcon" />
@@ -66,13 +74,13 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
+                
             </StackPanel>
         </Button>
 
         <TreeView
             Name="PART_TreeMenu"
-            Margin="0,8,0,0"
-            MinWidth="150"
+            Margin="4,4,4,4"
             Grid.Column="0"
             Grid.Row="1"
             IsVisible="{Binding IsMenuVisible}"
@@ -87,6 +95,16 @@
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter
+                        Property="CornerRadius"
+                        Value="{DynamicResource PanelCornerRadius}"
+                    />
+                </Style>
+                <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
+                    <Setter
+                        Property="CornerRadius"
+                        Value="{DynamicResource PanelCornerRadius}"
+                    />
                 </Style>
             </TreeView.Styles>
             <TreeView.ItemTemplate>
@@ -132,7 +150,8 @@
             Grid.Column="1"
             Grid.Row="0"
             Grid.RowSpan="2"
-            Width="10"
+            Width="8"
+            Margin="-4"
             HorizontalAlignment="Stretch"
         />
 
@@ -142,7 +161,7 @@
             Grid.Row="0"
             Grid.RowSpan="2"
             Fill="{StaticResource SystemChromeDisabledLowColor}"
-            Width="0.5"
+            Width="1"
             VerticalAlignment="Stretch"
         />
 
@@ -156,27 +175,22 @@
             Content="{Binding}"
         />
 
-        <Button
-            Grid.Row="0"
-            Grid.Column="2"
-            Height="100"
-            Grid.RowSpan="2"
-            VerticalAlignment="Center"
-            HorizontalAlignment="Left"
-            IsVisible="{Binding !IsMenuVisible}"
-            Command="{Binding ShowMenuCommand}"
-            Background="Transparent"
-            Padding="0"
-        >
-            <StackPanel Spacing="4" Orientation="Horizontal" Margin="4">
-                <avalonia1:MaterialIcon
-                    avalonia:AsvPalette.Color="{Binding IconColor}"
-                    Kind="ChevronDoubleRight"
-                />
-            </StackPanel>
-        </Button>
+
 
         <DockPanel Grid.Column="2" Grid.Row="0" Margin="4">
+            <Button
+                DockPanel.Dock="Left"
+                VerticalAlignment="Stretch"
+                IsVisible="{Binding !IsMenuVisible}"
+                Command="{Binding ShowMenuCommand}"
+                Background="Transparent"
+                Margin="0,0,4,0"
+            >
+                <avalonia1:MaterialIcon
+                    Classes="medium"
+                    Kind="DockLeft"
+                />
+            </Button>
             <ItemsControl
                 ItemsSource="{Binding SelectedPage.Value.MenuView.Items}"
                 DockPanel.Dock="Right"
