@@ -34,6 +34,29 @@
             >
                 <Panel>
                     <geoMap:MapView x:Name="PART_Map" DataContext="{Binding MapPreview}" />
+                    <geoMap:MapZoomControl
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="8"
+                        Zoom="{Binding MapPreview.Zoom.Value, Mode=TwoWay}"
+                        MinZoom="{Binding MapPreview.MinZoom.Value}"
+                        MaxZoom="{Binding MapPreview.MaxZoom.Value}"
+                    />
+                    <geoMap:TileProviderSelectorView
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Top"
+                        Margin="8"
+                        DataContext="{Binding TileProviderSelectorViewModel}"
+                    />
+                    <geoMap:MapScaleControl
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Margin="8,8,8,60"
+                        CenterMap="{Binding MapPreview.CenterMap.Value}"
+                        Zoom="{Binding MapPreview.Zoom.Value}"
+                        Provider="{Binding MapPreview.CurrentProvider.Value}"
+                        UnitService="{Binding UnitService}"
+                    />
                     <geoMap:MapCompass
                         HorizontalAlignment="Right"
                         VerticalAlignment="Bottom"

@@ -1,0 +1,163 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+    mc:Ignorable="d"
+    d:DesignWidth="180"
+    d:DesignHeight="50"
+    x:Class="Asv.Avalonia.GeoMap.MapScaleControl"
+    x:DataType="map:MapScaleControl"
+    x:Name="PART_Root"
+    IsHitTestVisible="False"
+>
+    <UserControl.Styles>
+        <Style Selector="TextBlock.map-scale-label">
+            <Setter Property="Foreground" Value="#F8FBFF" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+    </UserControl.Styles>
+
+    <Design.PreviewWith>
+        <Border Width="220" Height="50" Padding="8" Background="#435A69">
+            <Grid ColumnDefinitions="40,Auto,40">
+                <Grid
+                    Grid.Column="1"
+                    Width="120"
+                    RowDefinitions="18,7"
+                    ColumnDefinitions="*,*"
+                >
+                    <TextBlock
+                        Width="80"
+                        Margin="-40,0,0,0"
+                        HorizontalAlignment="Left"
+                        TextAlignment="Center"
+                        Classes="map-scale-label"
+                        Text="0"
+                    />
+                    <TextBlock
+                        Width="80"
+                        Grid.ColumnSpan="2"
+                        HorizontalAlignment="Center"
+                        TextAlignment="Center"
+                        Classes="map-scale-label"
+                        Text="500"
+                    />
+                    <TextBlock
+                        Width="80"
+                        Grid.Column="1"
+                        Margin="0,0,-40,0"
+                        HorizontalAlignment="Right"
+                        TextAlignment="Center"
+                        Classes="map-scale-label"
+                        Text="1000 m"
+                    />
+                    <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="7">
+                        <Border
+                            Margin="0,1,0,-1"
+                            BorderBrush="#B0000000"
+                            BorderThickness="1,0,1,2"
+                        />
+                        <Border
+                            BorderBrush="#E6F8FBFF"
+                            BorderThickness="1,0,1,2"
+                        />
+                        <Border
+                            Width="1"
+                            HorizontalAlignment="Center"
+                            Background="#E6F8FBFF"
+                        />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+    </Design.PreviewWith>
+
+    <Grid
+        ColumnDefinitions="40,Auto,40"
+        IsVisible="{Binding #PART_Root.IsScaleValid}"
+        AutomationProperties.Name="{Binding #PART_Root.MaximumText}"
+    >
+        <Grid
+            Grid.Column="1"
+            Width="{Binding #PART_Root.ActualBarWidth}"
+            MinHeight="25"
+            RowDefinitions="18,7"
+            ColumnDefinitions="*,*"
+        >
+            <TextBlock
+                Width="80"
+                Margin="-40,0,0,0"
+                HorizontalAlignment="Left"
+                TextAlignment="Center"
+                Classes="map-scale-label"
+                Text="0"
+            >
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                        BlurRadius="2"
+                        Color="Black"
+                        Opacity="0.8"
+                        OffsetX="0"
+                        OffsetY="1"
+                    />
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock
+                Width="80"
+                Grid.ColumnSpan="2"
+                HorizontalAlignment="Center"
+                TextAlignment="Center"
+                Classes="map-scale-label"
+                Text="{Binding #PART_Root.MiddleText}"
+            >
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                        BlurRadius="2"
+                        Color="Black"
+                        Opacity="0.8"
+                        OffsetX="0"
+                        OffsetY="1"
+                    />
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <TextBlock
+                Width="80"
+                Grid.Column="1"
+                Margin="0,0,-40,0"
+                HorizontalAlignment="Right"
+                TextAlignment="Center"
+                Classes="map-scale-label"
+                Text="{Binding #PART_Root.MaximumText}"
+            >
+                <TextBlock.Effect>
+                    <DropShadowEffect
+                        BlurRadius="2"
+                        Color="Black"
+                        Opacity="0.8"
+                        OffsetX="0"
+                        OffsetY="1"
+                    />
+                </TextBlock.Effect>
+            </TextBlock>
+
+            <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="7">
+                <Border
+                    Margin="0,1,0,-1"
+                    BorderBrush="#B0000000"
+                    BorderThickness="1,0,1,2"
+                />
+                <Border BorderBrush="#E6F8FBFF" BorderThickness="1,0,1,2" />
+                <Border
+                    Width="1"
+                    HorizontalAlignment="Center"
+                    Background="#E6F8FBFF"
+                />
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

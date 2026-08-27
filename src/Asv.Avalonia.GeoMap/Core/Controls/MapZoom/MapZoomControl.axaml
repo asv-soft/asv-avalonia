@@ -1,0 +1,157 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+    mc:Ignorable="d"
+    d:DesignWidth="80"
+    d:DesignHeight="170"
+    x:Class="Asv.Avalonia.GeoMap.MapZoomControl"
+    x:DataType="map:MapZoomControl"
+    x:Name="PART_Root"
+>
+    <UserControl.Resources>
+        <LinearGradientBrush
+            x:Key="MapZoomSurfaceBrush"
+            StartPoint="50%,0%"
+            EndPoint="50%,100%"
+        >
+            <GradientStop Offset="0" Color="#E02D3943" />
+            <GradientStop Offset="1" Color="#E029343D" />
+        </LinearGradientBrush>
+
+        <ControlTheme x:Key="MapZoomButtonTheme" TargetType="Button">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        x:Name="PART_ButtonBackground"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                    >
+                        <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}"
+                        />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_ButtonBackground">
+                <Setter Property="Background" Value="#20FFFFFF" />
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_ButtonBackground">
+                <Setter Property="Background" Value="#38FFFFFF" />
+            </Style>
+            <Style Selector="^:focus-visible /template/ Border#PART_ButtonBackground">
+                <Setter Property="BorderBrush" Value="#B3FFFFFF" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+            <Style Selector="^:disabled /template/ ContentPresenter">
+                <Setter Property="Opacity" Value="0.35" />
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Border.map-zoom-surface">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="96" />
+            <Setter Property="ClipToBounds" Value="True" />
+            <Setter Property="CornerRadius" Value="999" />
+            <Setter Property="Background" Value="{StaticResource MapZoomSurfaceBrush}" />
+            <Setter Property="BorderBrush" Value="#3DF3F7FA" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BoxShadow" Value="0 2 6 0 #40000000" />
+        </Style>
+        <Style Selector="TextBlock.map-zoom-glyph">
+            <Setter Property="Foreground" Value="#F8FBFF" />
+            <Setter Property="FontSize" Value="18" />
+            <Setter Property="FontWeight" Value="Normal" />
+        </Style>
+        <Style Selector="Border.map-zoom-level">
+            <Setter Property="Background" Value="#18000000" />
+        </Style>
+    </UserControl.Styles>
+
+    <Design.PreviewWith>
+        <Border Padding="20" Background="#435A69">
+            <Border Classes="map-zoom-surface">
+                <Grid RowDefinitions="38,20,38">
+                    <Button
+                        CornerRadius="999,999,0,0"
+                        Theme="{StaticResource MapZoomButtonTheme}"
+                    >
+                        <TextBlock Classes="map-zoom-glyph" Text="+" />
+                    </Button>
+                    <Button
+                        Grid.Row="2"
+                        CornerRadius="0,0,999,999"
+                        Theme="{StaticResource MapZoomButtonTheme}"
+                    >
+                        <TextBlock Classes="map-zoom-glyph" Text="−" />
+                    </Button>
+                    <Border Grid.Row="1" Classes="map-zoom-level">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Foreground="#E6F8FBFF"
+                            FontSize="10"
+                            FontWeight="SemiBold"
+                            Text="10"
+                        />
+                    </Border>
+                </Grid>
+            </Border>
+        </Border>
+    </Design.PreviewWith>
+
+    <Border Classes="map-zoom-surface">
+        <Grid RowDefinitions="38,20,38">
+            <Button
+                x:Name="PART_ZoomInButton"
+                CornerRadius="999,999,0,0"
+                Theme="{StaticResource MapZoomButtonTheme}"
+                Click="OnZoomInClick"
+                ToolTip.Tip="{Binding #PART_Root.ZoomInText}"
+                AutomationProperties.Name="{Binding #PART_Root.ZoomInText}"
+            >
+                <TextBlock Classes="map-zoom-glyph" Text="+" />
+            </Button>
+
+            <Button
+                x:Name="PART_ZoomOutButton"
+                Grid.Row="2"
+                CornerRadius="0,0,999,999"
+                Theme="{StaticResource MapZoomButtonTheme}"
+                Click="OnZoomOutClick"
+                ToolTip.Tip="{Binding #PART_Root.ZoomOutText}"
+                AutomationProperties.Name="{Binding #PART_Root.ZoomOutText}"
+            >
+                <TextBlock Classes="map-zoom-glyph" Text="−" />
+            </Button>
+
+            <Border
+                Grid.Row="1"
+                Classes="map-zoom-level"
+                IsHitTestVisible="False"
+            >
+                <TextBlock
+                    x:Name="PART_ZoomText"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="#E6F8FBFF"
+                    FontSize="10"
+                    FontWeight="SemiBold"
+                />
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

@@ -4,30 +4,244 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
-    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     mc:Ignorable="d"
-    d:DesignWidth="200"
-    d:DesignHeight="150"
+    d:DesignWidth="280"
+    d:DesignHeight="320"
     x:Class="Asv.Avalonia.GeoMap.TileProviderSelectorView"
     x:DataType="map:TileProviderSelectorViewModel"
 >
     <Design.DataContext>
         <map:TileProviderSelectorViewModel />
     </Design.DataContext>
+
+    <UserControl.Resources>
+        <LinearGradientBrush
+            x:Key="TileProviderSurfaceBrush"
+            StartPoint="50%,0%"
+            EndPoint="50%,100%"
+        >
+            <GradientStop Offset="0" Color="#E02D3943" />
+            <GradientStop Offset="1" Color="#E029343D" />
+        </LinearGradientBrush>
+
+        <LinearGradientBrush
+            x:Key="TileProviderPopupBrush"
+            StartPoint="50%,0%"
+            EndPoint="50%,100%"
+        >
+            <GradientStop Offset="0" Color="#F2323D46" />
+            <GradientStop Offset="1" Color="#F22A343C" />
+        </LinearGradientBrush>
+
+        <ControlTheme x:Key="TileProviderItemTheme" TargetType="ComboBoxItem">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Foreground" Value="#F8FBFF" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        x:Name="PART_ItemBackground"
+                        MinHeight="42"
+                        Padding="8,5"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                    >
+                        <Grid ColumnDefinitions="16,*">
+                            <Path
+                                x:Name="PART_SelectedIndicator"
+                                Width="10"
+                                Height="8"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M 1 4 L 3.6 6.5 L 9 1"
+                                Opacity="0"
+                                Stroke="#F8FBFF"
+                                StrokeThickness="1.5"
+                                Stretch="Fill"
+                            />
+                            <ContentPresenter
+                                Grid.Column="1"
+                                Margin="7,0,2,0"
+                                HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Foreground="{TemplateBinding Foreground}"
+                            />
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_ItemBackground">
+                <Setter Property="Background" Value="#20FFFFFF" />
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_ItemBackground">
+                <Setter Property="Background" Value="#38FFFFFF" />
+            </Style>
+            <Style Selector="^:selected /template/ Border#PART_ItemBackground">
+                <Setter Property="Background" Value="#2CFFFFFF" />
+            </Style>
+            <Style Selector="^:selected:pointerover /template/ Border#PART_ItemBackground">
+                <Setter Property="Background" Value="#3AFFFFFF" />
+            </Style>
+            <Style Selector="^:selected /template/ Path#PART_SelectedIndicator">
+                <Setter Property="Opacity" Value="1" />
+            </Style>
+            <Style Selector="^:disabled /template/ Border#PART_ItemBackground">
+                <Setter Property="Opacity" Value="0.35" />
+            </Style>
+        </ControlTheme>
+
+        <ControlTheme x:Key="TileProviderComboBoxTheme" TargetType="ComboBox">
+            <Setter Property="Width" Value="38" />
+            <Setter Property="Height" Value="38" />
+            <Setter Property="MinWidth" Value="38" />
+            <Setter Property="MinHeight" Value="38" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="FocusAdorner" Value="{x:Null}" />
+            <Setter Property="MaxDropDownHeight" Value="360" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>
+                        <Border
+                            x:Name="PART_Surface"
+                            Background="{StaticResource TileProviderSurfaceBrush}"
+                            BorderBrush="#3DF3F7FA"
+                            BorderThickness="1"
+                            BoxShadow="0 2 6 0 #40000000"
+                            ClipToBounds="True"
+                            CornerRadius="999"
+                        >
+                            <Canvas
+                                Width="18"
+                                Height="18"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                IsHitTestVisible="False"
+                            >
+                                <Path
+                                    Data="M 9 2 L 16 6 L 9 10 L 2 6 Z"
+                                    Fill="#12F8FBFF"
+                                    Stroke="#F2F8FBFF"
+                                    StrokeThickness="1.25"
+                                />
+                                <Path
+                                    Data="M 2 9 L 9 13 L 16 9"
+                                    Stroke="#DDF8FBFF"
+                                    StrokeThickness="1.25"
+                                />
+                                <Path
+                                    Data="M 2 12 L 9 16 L 16 12"
+                                    Stroke="#B8F8FBFF"
+                                    StrokeThickness="1.25"
+                                />
+                            </Canvas>
+                        </Border>
+
+                        <Border
+                            x:Name="PART_InteractionOverlay"
+                            IsHitTestVisible="False"
+                            CornerRadius="999"
+                        />
+                        <Border
+                            x:Name="PART_FocusRing"
+                            IsHitTestVisible="False"
+                            CornerRadius="999"
+                        />
+
+                        <Popup
+                            Name="PART_Popup"
+                            MinWidth="232"
+                            MaxHeight="{TemplateBinding MaxDropDownHeight}"
+                            IsLightDismissEnabled="True"
+                            IsOpen="{TemplateBinding IsDropDownOpen, Mode=TwoWay}"
+                            InheritsTransform="True"
+                            Placement="BottomEdgeAlignedRight"
+                            PlacementTarget="PART_Surface"
+                            VerticalOffset="6"
+                            WindowManagerAddShadowHint="False"
+                        >
+                            <Border
+                                x:Name="PART_PopupSurface"
+                                MinWidth="232"
+                                Padding="5"
+                                Background="{StaticResource TileProviderPopupBrush}"
+                                BorderBrush="#52F3F7FA"
+                                BorderThickness="1"
+                                BoxShadow="0 5 18 0 #59000000"
+                                CornerRadius="12"
+                            >
+                                <ScrollViewer
+                                    HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                    IsScrollChainingEnabled="False"
+                                    VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                >
+                                    <ItemsPresenter
+                                        Name="PART_ItemsPresenter"
+                                        ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_InteractionOverlay">
+                <Setter Property="Background" Value="#20FFFFFF" />
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_InteractionOverlay">
+                <Setter Property="Background" Value="#38FFFFFF" />
+            </Style>
+            <Style Selector="^:dropdownopen /template/ Border#PART_InteractionOverlay">
+                <Setter Property="Background" Value="#2CFFFFFF" />
+            </Style>
+            <Style Selector="^:focus-visible /template/ Border#PART_FocusRing">
+                <Setter Property="BorderBrush" Value="#B3FFFFFF" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+            <Style Selector="^:disabled">
+                <Setter Property="Opacity" Value="0.35" />
+            </Style>
+        </ControlTheme>
+    </UserControl.Resources>
+
     <ComboBox
-        DropDownOpened="OnDropDownOpened"
         x:Name="ProvidersComboBox"
+        Theme="{StaticResource TileProviderComboBoxTheme}"
+        ItemContainerTheme="{StaticResource TileProviderItemTheme}"
         ItemsSource="{Binding Items}"
-        SelectedItem="{Binding SelectedItem.Value}"
+        SelectedItem="{Binding SelectedItem.Value, Mode=TwoWay}"
+        DropDownOpened="OnDropDownOpened"
+        ToolTip.Tip="{x:Static map:RS.SettingsGeoMapView_TileProviderProperty_Title}"
+        AutomationProperties.Name="{x:Static map:RS.SettingsGeoMapView_TileProviderProperty_Title}"
     >
-        <ComboBox.SelectionBoxItemTemplate>
-            <DataTemplate>
-                <avalonia:MaterialIcon Kind="MapOutline" />
-            </DataTemplate>
-        </ComboBox.SelectionBoxItemTemplate>
         <ComboBox.ItemTemplate>
             <DataTemplate x:DataType="map:TileProviderViewModel">
-                <TextBlock Text="{CompiledBinding Header}" />
+                <Grid MinWidth="188" RowDefinitions="Auto,Auto">
+                    <TextBlock
+                        FontSize="13"
+                        FontWeight="SemiBold"
+                        Foreground="#F8FBFF"
+                        Text="{CompiledBinding Name}"
+                        TextTrimming="CharacterEllipsis"
+                    />
+                    <TextBlock
+                        Grid.Row="1"
+                        Margin="0,1,0,0"
+                        FontSize="11"
+                        Foreground="#99F8FBFF"
+                        Text="{CompiledBinding Group}"
+                        TextTrimming="CharacterEllipsis"
+                    />
+                </Grid>
             </DataTemplate>
         </ComboBox.ItemTemplate>
     </ComboBox>

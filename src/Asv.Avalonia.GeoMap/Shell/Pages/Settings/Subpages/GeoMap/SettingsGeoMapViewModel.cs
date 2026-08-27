@@ -33,6 +33,10 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         UnitService = unitService;
         LoggerFactory = loggerFactory;
 
+        TileProviderSelectorViewModel = new TileProviderSelectorViewModel(mapService, loggerFactory)
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+
         Editor = new ExtendedPropertyEditorViewModel("editor")
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
@@ -78,6 +82,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     }
 
     public ExtendedPropertyEditorViewModel Editor { get; }
+    public TileProviderSelectorViewModel TileProviderSelectorViewModel { get; }
     public MapViewModel MapPreview { get; }
     public string MapPreviewHeader => RS.SettingsGeoMapView_MapPreview_Title;
     public string MapPreviewDescription => RS.SettingsGeoMapView_MapPreview_Description;
@@ -91,6 +96,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return Editor;
+        yield return TileProviderSelectorViewModel;
         yield return MapPreview;
     }
 
