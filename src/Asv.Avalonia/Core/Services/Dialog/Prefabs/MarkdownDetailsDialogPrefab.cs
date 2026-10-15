@@ -1,3 +1,4 @@
+using Material.Icons;
 using Avalonia.Input.Platform;
 
 namespace Asv.Avalonia;
@@ -7,6 +8,26 @@ namespace Asv.Avalonia;
 /// </summary>
 public sealed class MarkdownDetailsDialogPayload
 {
+    /// <summary>
+    /// Gets or inits the optional icon displayed before the dialog title.
+    /// </summary>
+    public MaterialIconKind? Icon { get; init; } = MaterialIconKind.FileDocumentOutline;
+
+    /// <summary>
+    /// Gets or inits the palette color of the dialog icon.
+    /// </summary>
+    public AsvColorKind IconColor { get; init; } = AsvColorKind.None;
+
+    /// <summary>
+    /// Gets or inits the dialog sizing mode.
+    /// </summary>
+    public DialogSizeMode SizeMode { get; init; } = DialogSizeMode.Compact;
+
+    /// <summary>
+    /// Gets or inits the dialog status that determines the frame color.
+    /// </summary>
+    public ShellErrorState Status { get; init; } = ShellErrorState.Normal;
+
     /// <summary>
     /// Gets or inits the title of the dialog.
     /// </summary>
@@ -34,6 +55,10 @@ public sealed class MarkdownDetailsDialogPrefab : IDialogPrefab<MarkdownDetailsD
 
         var dialogContent = new ContentDialog(vm)
         {
+            SizeMode = dialogPayload.SizeMode,
+            Icon = dialogPayload.Icon,
+            IconColor = dialogPayload.IconColor,
+            Status = dialogPayload.Status,
             Title = dialogPayload.Title,
             PrimaryButtonText = RS.ShellMessage_CopyDetails,
             CloseButtonText = RS.ShellView_WindowControlButton_Close,

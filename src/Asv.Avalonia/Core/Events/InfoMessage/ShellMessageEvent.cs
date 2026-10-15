@@ -126,7 +126,15 @@ public static class ShellMessageEventMixin
                 && dialog is not null
             )
             {
-                await dialog.ShowDialogAsync(payload);
+                await dialogService.ShowMarkdownDetailsDialogAsync(
+                    payload.Title,
+                    payload.MarkdownText,
+                    payload.OriginalText,
+                    payload.Icon,
+                    payload.Status,
+                    payload.IconColor,
+                    payload.SizeMode
+                );
                 return;
             }
 

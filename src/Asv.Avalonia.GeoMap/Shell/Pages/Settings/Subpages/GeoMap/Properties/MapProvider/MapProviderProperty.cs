@@ -12,7 +12,7 @@ public class MapProviderProperty : PropertyComboBoxViewModel
     public const string ViewModelId = "map-provider";
 
     private readonly IMapService _mapService;
-    private readonly EditApiKeyDialogPrefab _editApiKeyDialog;
+    private readonly IDialogService _dialogService;
     private readonly MenuItem _editApiKeyMenuItem;
 
     public MapProviderProperty()
@@ -29,7 +29,7 @@ public class MapProviderProperty : PropertyComboBoxViewModel
         : base(ViewModelId)
     {
         _mapService = mapService;
-        _editApiKeyDialog = dialogService.GetDialogPrefab<EditApiKeyDialogPrefab>();
+        _dialogService = dialogService;
 
         Header = RS.SettingsGeoMapView_TileProviderProperty_Title;
         Description = RS.SettingsGeoMapView_TileProviderProperty_Description;
@@ -122,8 +122,8 @@ public class MapProviderProperty : PropertyComboBoxViewModel
         }
 
         var currentKey = _mapService.GetProviderApiKey(CurrentProvider.Value.Provider.Info.Id);
-        var result = await _editApiKeyDialog.ShowDialogAsync(
-            new EditApiKeyDialogPayload { CurrentApiKey = currentKey }
+        var result = await _dialogService.ShowEditApiKeyDialogAsync(
+            currentApiKey: currentKey
         );
 
         if (result != currentKey)

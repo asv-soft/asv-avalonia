@@ -2,6 +2,7 @@
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ui="clr-namespace:Asv.Avalonia"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
     x:CompileBindings="True"
 >
     <Design.PreviewWith>
@@ -23,13 +24,18 @@
 
     <Thickness x:Key="ContentDialogTitleMargin">0,0,0,12</Thickness>
     <Thickness x:Key="ContentDialogBorderWidth">1</Thickness>
-    <Thickness x:Key="ContentDialogPadding">24</Thickness>
+    <Thickness x:Key="ContentDialogPadding">12</Thickness>
+    <Thickness x:Key="ContentDialogWideMargin">60</Thickness>
+    <Thickness x:Key="ContentDialogExpandedMargin">60</Thickness>
+    <Thickness x:Key="ContentDialogTitlePadding">12,12,12,0</Thickness>
+    <Thickness x:Key="ContentDialogCommandPadding">12</Thickness>
+    <Thickness x:Key="ContentDialogButtonPadding">12,4</Thickness>
     <Thickness x:Key="ContentDialogSeparatorThickness">0,0,0,1</Thickness>
 
     <ControlTheme x:Key="{x:Type ui:ContentDialog}" TargetType="ui:ContentDialog">
         <Setter Property="Foreground" Value="{DynamicResource TextControlForeground}" />
-        <Setter Property="Background" Value="{DynamicResource AsvBackgroundUnknownBrush}" />
-        <Setter Property="BorderBrush" Value="{DynamicResource AsvBackgroundUnknownBrush}" />
+        <Setter Property="Background" Value="{DynamicResource AsvPopupCommonBrush}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColorDark3}" />
         <Setter Property="BorderThickness" Value="{DynamicResource ContentDialogBorderWidth}" />
         <Setter Property="CornerRadius" Value="{DynamicResource OverlayCornerRadius}" />
         <Setter Property="BackgroundSizing" Value="InnerBorderEdge" />
@@ -67,20 +73,72 @@
                                 <Grid
                                     Name="DialogSpace"
                                     ClipToBounds="True"
-                                    RowDefinitions="*,Auto"
+                                    RowDefinitions="Auto,*,Auto"
                                 >
+                                    <Border
+                                        Padding="{DynamicResource ContentDialogTitlePadding}"
+                                    >
+                                        <DockPanel LastChildFill="True">
+                                            <Button
+                                                Name="HeaderCloseButton"
+                                                DockPanel.Dock="Right"
+                                                Width="28"
+                                                Height="28"
+                                                Padding="4"
+                                                Margin="8,0,0,0"
+                                                VerticalAlignment="Top"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                ToolTip.Tip="{x:Static ui:RS.ShellView_WindowControlButton_Close}"
+                                                AutomationProperties.Name="{x:Static ui:RS.ShellView_WindowControlButton_Close}"
+                                            >
+                                                <icons:MaterialIcon Kind="Close" Width="16" Height="16" />
+                                            </Button>
+                                            <icons:MaterialIcon
+                                                DockPanel.Dock="Left"
+                                                Width="20"
+                                                Height="20"
+                                                Margin="0,0,8,0"
+                                                VerticalAlignment="Center"
+                                                Kind="{TemplateBinding Icon}"
+                                                IsVisible="{TemplateBinding Icon, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                                ui:AsvPalette.Color="{TemplateBinding IconColor}"
+                                            />
+                                            <ContentControl
+                                                Name="Title"
+                                                Content="{TemplateBinding Title}"
+                                                ContentTemplate="{TemplateBinding TitleTemplate}"
+                                                FontSize="20"
+                                                FontFamily="Default"
+                                                FontWeight="SemiBold"
+                                                Foreground="{TemplateBinding Foreground}"
+                                                HorizontalAlignment="Left"
+                                                VerticalAlignment="Center"
+                                            >
+                                                <ContentControl.Template>
+                                                    <ControlTemplate>
+                                                        <ContentPresenter
+                                                            Content="{TemplateBinding Content}"
+                                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                            Margin="{TemplateBinding Padding}"
+                                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                        />
+                                                    </ControlTemplate>
+                                                </ContentControl.Template>
+                                            </ContentControl>
+                                        </DockPanel>
+                                    </Border>
                                     <ScrollViewer
                                         Name="ContentScrollViewer"
+                                        Grid.Row="1"
                                         HorizontalScrollBarVisibility="Disabled"
                                         VerticalScrollBarVisibility="Auto"
                                     >
                                         <Border
-                                            Background="{DynamicResource AsvPopupCommonBrush}"
-                                            Padding="{DynamicResource ContentDialogPadding}"
-                                            BorderThickness="{StaticResource ContentDialogSeparatorThickness}"
-                                            BorderBrush="{DynamicResource AsvBackgroundUnknownBrush}"
+                                            Background="{TemplateBinding Background}"
                                         >
-                                            <Grid RowDefinitions="Auto,*">
+                                            <Grid>
                                                 <Grid.Styles>
                                                     <!--Make sure text wrapping is on-->
                                                     <Style Selector="TextBlock">
@@ -90,52 +148,34 @@
                                                         />
                                                     </Style>
                                                 </Grid.Styles>
-                                                <ContentControl
-                                                    Name="Title"
-                                                    Margin="{StaticResource ContentDialogTitleMargin}"
-                                                    Content="{TemplateBinding Title}"
-                                                    ContentTemplate="{TemplateBinding TitleTemplate}"
-                                                    FontSize="20"
-                                                    FontFamily="Default"
-                                                    FontWeight="SemiBold"
-                                                    Foreground="{TemplateBinding Foreground}"
-                                                    HorizontalAlignment="Left"
-                                                    VerticalAlignment="Top"
-                                                >
-                                                    <ContentControl.Template>
-                                                        <ControlTemplate>
-                                                            <ContentPresenter
-                                                                Content="{TemplateBinding Content}"
-                                                                ContentTemplate="{TemplateBinding ContentTemplate}"
-                                                                Margin="{TemplateBinding Padding}"
-                                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                                            />
-                                                        </ControlTemplate>
-                                                    </ContentControl.Template>
-                                                </ContentControl>
-
                                                 <ContentPresenter
                                                     Name="Content"
+                                                    Margin="{DynamicResource ContentDialogPadding}"
                                                     ContentTemplate="{TemplateBinding ContentTemplate}"
                                                     Content="{TemplateBinding Content}"
                                                     FontSize="{StaticResource ControlContentThemeFontSize}"
                                                     FontFamily="{StaticResource ContentControlThemeFontFamily}"
                                                     Foreground="{TemplateBinding Foreground}"
-                                                    Grid.Row="1"
                                                 />
                                             </Grid>
                                         </Border>
                                     </ScrollViewer>
 
                                     <Border
-                                        Padding="{StaticResource ContentDialogPadding}"
-                                        Grid.Row="1"
+                                        Padding="{StaticResource ContentDialogCommandPadding}"
+                                        BorderThickness="0,1,0,0"
+                                        BorderBrush="{DynamicResource SystemChromeDisabledLowColor}"
+                                        Grid.Row="2"
                                         HorizontalAlignment="Stretch"
                                         VerticalAlignment="Bottom"
                                         Background="{TemplateBinding Background}"
                                     >
                                         <Grid Name="CommandSpace">
+                                            <Grid.Styles>
+                                                <Style Selector="Button">
+                                                    <Setter Property="Padding" Value="{DynamicResource ContentDialogButtonPadding}" />
+                                                </Style>
+                                            </Grid.Styles>
                                             <!--
                                             B/C we can't target Row/Column defs in Styles like WinUI
                                             this still uses the old Col defs, but it works the same
@@ -187,6 +227,13 @@
                 </Border>
             </ControlTemplate>
         </Setter>
+
+        <Style Selector="^[Status=Warning]">
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundWarningBrush}" />
+        </Style>
+        <Style Selector="^[Status=Error]">
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}" />
+        </Style>
 
         <!--Handle hidden dialog-->
         <Style Selector="^:hidden /template/ Panel#LayoutRoot">
@@ -259,6 +306,30 @@
         <!--Handle FullDialogSizing-->
         <Style Selector="^:fullsize /template/ Border#BackgroundElement">
             <Setter Property="VerticalAlignment" Value="Stretch" />
+        </Style>
+
+        <Style Selector="^[SizeMode=Wide] /template/ Border#BackgroundElement">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="MaxWidth" Value="Infinity" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Margin" Value="{DynamicResource ContentDialogWideMargin}" />
+        </Style>
+        <Style Selector="^[SizeMode=Expanded] /template/ Border#BackgroundElement">
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="MaxWidth" Value="Infinity" />
+            <Setter Property="MaxHeight" Value="Infinity" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Margin" Value="{DynamicResource ContentDialogExpandedMargin}" />
+        </Style>
+
+        <Style Selector="^[SizeMode=Wide] /template/ Grid#CommandSpace">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+        </Style>
+        <Style Selector="^[SizeMode=Expanded] /template/ Grid#CommandSpace">
+            <Setter Property="HorizontalAlignment" Value="Right" />
         </Style>
 
         <!-- Primary Button Only -->

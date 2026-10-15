@@ -26,7 +26,6 @@ public class OpenMenuExtender(
 
     public void Extend(IShell context, CompositeDisposable contextDispose)
     {
-        var dialog = dialogs.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
         var openMenu = new MenuItem(OpenDialogMenuId, RS.ShellView_Toolbar_Open, OpenMenu.MenuId)
         {
             Icon = MaterialIconKind.FileOutline,
@@ -34,7 +33,7 @@ public class OpenMenuExtender(
             Command = new ReactiveCommand(
                 async (_, cancel) =>
                 {
-                    await OpenFileAction.OpenAsync(files, dialog, path, config, cancel);
+                    await OpenFileAction.OpenAsync(files, dialogs, path, config, cancel);
                     RefreshRecentFiles(context, contextDispose);
                 }
             ),

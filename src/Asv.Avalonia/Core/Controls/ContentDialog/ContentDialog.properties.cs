@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Metadata;
 using Avalonia.Controls.Templates;
+using Material.Icons;
 
 namespace Asv.Avalonia;
 
@@ -11,11 +12,13 @@ namespace Asv.Avalonia;
 [TemplatePart(s_tpPrimaryButton, typeof(Button))]
 [TemplatePart(s_tpSecondaryButton, typeof(Button))]
 [TemplatePart(s_tpCloseButton, typeof(Button))]
+[TemplatePart(s_tpHeaderCloseButton, typeof(Button))]
 public partial class ContentDialog
 {
     private const string s_tpPrimaryButton = "PrimaryButton";
     private const string s_tpSecondaryButton = "SecondaryButton";
     private const string s_tpCloseButton = "CloseButton";
+    private const string s_tpHeaderCloseButton = "HeaderCloseButton";
 
     private const string s_pcPrimary = ":primary";
     private const string s_pcSecondary = ":secondary";
@@ -59,6 +62,51 @@ public partial class ContentDialog
         AvaloniaProperty.Register<ContentDialog, string>(nameof(SecondaryButtonText));
 
     /// <summary>
+    /// Defines the <see cref="Icon"/> property.
+    /// </summary>
+    public static readonly StyledProperty<MaterialIconKind?> IconProperty =
+        AvaloniaProperty.Register<ContentDialog, MaterialIconKind?>(nameof(Icon));
+
+    /// <summary>
+    /// Defines the <see cref="IconColor"/> property.
+    /// </summary>
+    public static readonly StyledProperty<AsvColorKind> IconColorProperty =
+        AvaloniaProperty.Register<ContentDialog, AsvColorKind>(nameof(IconColor), AsvColorKind.None);
+
+    /// <summary>
+    /// Gets or sets the palette color of the title icon.
+    /// </summary>
+    public AsvColorKind IconColor
+    {
+        get => GetValue(IconColorProperty);
+        set => SetValue(IconColorProperty, value);
+    }
+
+    /// <summary>
+    /// Defines the <see cref="Status"/> property.
+    /// </summary>
+    public static readonly StyledProperty<ShellErrorState> StatusProperty =
+        AvaloniaProperty.Register<ContentDialog, ShellErrorState>(nameof(Status), ShellErrorState.Normal);
+
+    /// <summary>
+    /// Gets or sets the optional icon displayed before the title.
+    /// </summary>
+    public MaterialIconKind? Icon
+    {
+        get => GetValue(IconProperty);
+        set => SetValue(IconProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets the dialog status that determines the frame color.
+    /// </summary>
+    public ShellErrorState Status
+    {
+        get => GetValue(StatusProperty);
+        set => SetValue(StatusProperty, value);
+    }
+
+    /// <summary>
     /// Defines the <see cref="Title"/> property.
     /// </summary>
     public static readonly StyledProperty<object> TitleProperty = AvaloniaProperty.Register<
@@ -71,6 +119,21 @@ public partial class ContentDialog
     /// </summary>
     public static readonly StyledProperty<IDataTemplate> TitleTemplateProperty =
         AvaloniaProperty.Register<ContentDialog, IDataTemplate>(nameof(TitleTemplate));
+
+    /// <summary>
+    /// Defines the <see cref="SizeMode"/> property.
+    /// </summary>
+    public static readonly StyledProperty<DialogSizeMode> SizeModeProperty =
+        AvaloniaProperty.Register<ContentDialog, DialogSizeMode>(nameof(SizeMode), DialogSizeMode.Compact);
+
+    /// <summary>
+    /// Gets or sets how much of the dialog host is occupied by the dialog.
+    /// </summary>
+    public DialogSizeMode SizeMode
+    {
+        get => GetValue(SizeModeProperty);
+        set => SetValue(SizeModeProperty, value);
+    }
 
     /// <summary>
     /// Defines the <see cref="FullSizeDesired"/> property.

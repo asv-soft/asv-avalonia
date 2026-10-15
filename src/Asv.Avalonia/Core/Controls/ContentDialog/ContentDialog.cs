@@ -27,6 +27,8 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
     private Button? _primaryButton;
     private Button? _secondaryButton;
     private Button? _closeButton;
+    private Button? _headerCloseButton;
+    private Grid? _commandSpace;
     private bool _hasDeferralActive;
     private Visual? _hotkeyDownVisual;
 
@@ -59,6 +61,11 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
             _closeButton.Click -= OnButtonClick;
         }
 
+        if (_headerCloseButton != null)
+        {
+            _headerCloseButton.Click -= OnHeaderCloseButtonClick;
+        }
+
         base.OnApplyTemplate(e);
 
         _primaryButton = e.NameScope.Get<Button>(s_tpPrimaryButton);
@@ -67,11 +74,84 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
         _secondaryButton.Click += OnButtonClick;
         _closeButton = e.NameScope.Get<Button>(s_tpCloseButton);
         _closeButton.Click += OnButtonClick;
+        _commandSpace = e.NameScope.Find<Grid>("CommandSpace");
+        UpdateCommandSpaceColumns();
+        _headerCloseButton = e.NameScope.Find<Button>(s_tpHeaderCloseButton);
+        if (_headerCloseButton != null)
+        {
+            _headerCloseButton.Click += OnHeaderCloseButtonClick;
+        }
+    }
+
+    private void UpdateCommandSpaceColumns()
+    {
+        if (_commandSpace is null)
+        {
+            return;
+        }
+
+        var buttons = new[]
+        {
+            (_primaryButton, PrimaryButtonText),
+            (_secondaryButton, SecondaryButtonText),
+            (_closeButton, CloseButtonText),
+        };
+        var isCompact = SizeMode == DialogSizeMode.Compact;
+        Grid.SetIsSharedSizeScope(_commandSpace, !isCompact);
+        _commandSpace.ColumnSpacing = isCompact ? 0 : 8;
+        var columns = new ColumnDefinitions();
+        var columnIndex = 0;
+        foreach (var (button, text) in buttons)
+        {
+            if (button is null)
+            {
+                continue;
+            }
+
+            if (isCompact)
+            {
+                button.ClearValue(Grid.ColumnProperty);
+                button.ClearValue(Grid.ColumnSpanProperty);
+                button.ClearValue(MarginProperty);
+                continue;
+            }
+
+            Grid.SetColumn(button, columnIndex);
+            Grid.SetColumnSpan(button, 1);
+            button.Margin = default;
+            if (!string.IsNullOrEmpty(text))
+            {
+                columns.Add(new ColumnDefinition
+                {
+                    Width = GridLength.Auto,
+                    SharedSizeGroup = "DialogButton",
+                });
+                columnIndex++;
+            }
+        }
+
+        _commandSpace.ColumnDefinitions = isCompact
+            ? new ColumnDefinitions("*,0.5*,0.5*,*")
+            : columns;
+    }
+
+    private void OnHeaderCloseButtonClick(object? sender, RoutedEventArgs e)
+    {
+        Hide();
+        e.Handled = true;
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+
+        if (change.Property == SizeModeProperty
+            || change.Property == PrimaryButtonTextProperty
+            || change.Property == SecondaryButtonTextProperty
+            || change.Property == CloseButtonTextProperty)
+        {
+            UpdateCommandSpaceColumns();
+        }
 
         if (change.Property == FullSizeDesiredProperty)
         {

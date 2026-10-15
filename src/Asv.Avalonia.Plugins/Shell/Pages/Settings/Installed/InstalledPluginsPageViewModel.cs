@@ -17,7 +17,7 @@ public class InstalledPluginsPageViewModel : SettingsSubPage
 
     private readonly IPluginManager _manager;
     private readonly IPluginBootloader _bootloader;
-    private readonly OpenFileDialogDesktopPrefab _openFileDialog;
+    private readonly IDialogService _dialogService;
     private readonly ObservableList<ILocalPluginInfo> _plugins;
     private readonly ISynchronizedView<ILocalPluginInfo, InstalledPluginInfoViewModel> _view;
     private readonly ILogger<InstalledPluginsPageViewModel> _logger;
@@ -49,7 +49,7 @@ public class InstalledPluginsPageViewModel : SettingsSubPage
         _logger = loggerFactory.CreateLogger<InstalledPluginsPageViewModel>();
         _manager = manager;
         _bootloader = bootloader;
-        _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
+        _dialogService = dialogService;
         _plugins = new ObservableList<ILocalPluginInfo>(bootloader.Installed);
 
         Search = new SearchBoxViewModel(
@@ -165,13 +165,10 @@ public class InstalledPluginsPageViewModel : SettingsSubPage
         CancellationToken cancel
     )
     {
-        var payload = new OpenFileDialogPayload
-        {
-            Title = RS.InstalledPluginsPageViewModel_IntallManuallyDialog_Title,
-            TypeFilter = "nupkg",
-        };
-
-        var pathToPlugin = await _openFileDialog.ShowDialogAsync(payload);
+        var pathToPlugin = await _dialogService.ShowOpenFileDialogAsync(
+            title: RS.InstalledPluginsPageViewModel_IntallManuallyDialog_Title,
+            typeFilter: "nupkg"
+        );
 
         if (string.IsNullOrWhiteSpace(pathToPlugin) || !NugetHelper.IsPathToNugetFile(pathToPlugin))
         {

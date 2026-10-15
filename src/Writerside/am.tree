@@ -59,6 +59,7 @@
         <toc-element topic="what-is-a-service.md"/>
         <toc-element topic="localization-service.md"/>
         <toc-element topic="theme-service.md"/>
+        <toc-element topic="dialog-service.md"/>
         <toc-element topic="extension-service.md"/>
         <toc-element topic="hot-key-service.md"/>
         <toc-element topic="file-association-service.md"/>

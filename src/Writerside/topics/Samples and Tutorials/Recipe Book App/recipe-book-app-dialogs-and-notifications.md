@@ -1,5 +1,7 @@
 # Dialogs and Notifications
 
+For standard dialogs, appearance options, and sizing modes, see [Dialog Service](dialog-service.md).
+
 ## Modal Window
 
 We will use the `DialogPrefab` mechanism from **Asv.Avalonia** to create modal windows that can be invoked directly from the ViewModel.

@@ -12,7 +12,7 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
     private readonly ReactiveProperty<double> _altitude;
     private readonly ReactiveProperty<double> _latitude;
     private readonly ReactiveProperty<double> _longitude;
-    private readonly GeoPointDialogPrefab? _geoPointDialog;
+    private readonly IDialogService _dialogService;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoValueSink;
     private GeoPoint _lastValue;
     private bool _updatingFromModel;
@@ -38,8 +38,8 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
         _undoValueSink = Undo.Register<ValueUndoChange<string>>("Value", OnUndoValue, OnRedoValue)
             .AddTo(ref DisposableBag);
 
-        CanOpenGeoPointDialog =
-            dialogService.TryGetDialogPrefab(out _geoPointDialog) && _geoPointDialog is not null;
+        _dialogService = dialogService;
+        CanOpenGeoPointDialog = dialogService.TryGetDialogPrefab<GeoPointDialogPrefab>(out _);
         OpenGeoPointDialogCommand = new ReactiveCommand(
             (_, cancel) => OpenGeoPointDialog(cancel),
             AwaitOperation.Drop
@@ -140,7 +140,7 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
 
     private async ValueTask OpenGeoPointDialog(CancellationToken cancel)
     {
-        if (_geoPointDialog is null || IsBusy)
+        if (!CanOpenGeoPointDialog || IsBusy)
         {
             return;
         }
@@ -149,8 +149,8 @@ public abstract class PropertyGeoPointViewModel : PropertyViewModel
         IsBusy = true;
         try
         {
-            var value = await _geoPointDialog.ShowDialogAsync(
-                new GeoPointDialogPayload { InitialLocation = GetCurrentValue() }
+            var value = await _dialogService.ShowGeoPointDialogAsync(
+                initialLocation: GetCurrentValue()
             );
 
             if (value is null)

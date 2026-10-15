@@ -26,16 +26,12 @@ public class SaveAsAction(IDialogService dialogs, IHostEnvironment path, IConfig
             return;
         }
 
-        var dialog = dialogs.GetDialogPrefab<SaveFileDialogDesktopPrefab>();
-        var filePath = await dialog.ShowDialogAsync(
-            new SaveFileDialogPayload
-            {
-                Title = Name,
-                DefaultExt = target.DefaultExtension,
-                SuggestedFileName = target.DefaultFileName,
-                TypeFilter = target.TypeFilter,
-                InitialDirectory = GetInitialDirectory(target),
-            }
+        var filePath = await dialogs.ShowSaveFileDialogAsync(
+            title: Name,
+            defaultExt: target.DefaultExtension,
+            suggestedFileName: target.DefaultFileName,
+            typeFilter: target.TypeFilter,
+            initialDirectory: GetInitialDirectory(target)
         );
 
         if (string.IsNullOrWhiteSpace(filePath))

@@ -30,13 +30,12 @@ public class OpenFileAction(
 
     protected override async ValueTask InternalExecute(IShell target, CancellationToken cancel)
     {
-        var dialog = dialogs.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
-        await OpenAsync(files, dialog, path, config, cancel);
+        await OpenAsync(files, dialogs, path, config, cancel);
     }
 
     public static async ValueTask OpenAsync(
         IFileAssociationService files,
-        OpenFileDialogDesktopPrefab dialog,
+        IDialogService dialog,
         IHostEnvironment path,
         IConfiguration config,
         CancellationToken cancel = default
@@ -58,13 +57,10 @@ public class OpenFileAction(
             ",",
             files.SupportedFiles.Select(x => x.Extension).Distinct().Append("*")
         );
-        var filePath = await dialog.ShowDialogAsync(
-            new OpenFileDialogPayload
-            {
-                Title = RS.OpenFileCommand_SelectFile,
-                TypeFilter = typeFilter,
-                InitialDirectory = lastDirectory,
-            }
+        var filePath = await dialog.ShowOpenFileDialogAsync(
+            title: RS.OpenFileCommand_SelectFile,
+            typeFilter: typeFilter,
+            initialDirectory: lastDirectory
         );
 
         if (string.IsNullOrWhiteSpace(filePath))

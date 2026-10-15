@@ -6,6 +6,7 @@ using Asv.Avalonia.GeoMap;
 using Asv.Common;
 using Asv.Modeling;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -44,6 +45,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public const string PageId = "dialog-controls";
     public const MaterialIconKind PageIcon = MaterialIconKind.Dialogue;
 
+    private readonly IDialogService _dialogService;
     private readonly ILoggerFactory _loggerFactory;
     private readonly ReactiveProperty<string?> _customDialogTitle;
     private readonly ReactiveProperty<bool> _customDialogIsImageContent;
@@ -68,15 +70,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     #region Prefabs
 
-    private readonly HotKeyCaptureDialogPrefab _hotKeyCaptureDialog;
-    private readonly InputDialogPrefab _inputDialog;
-    private readonly ObserveFolderDialogPrefab _observeFolderDialog;
-    private readonly OpenFileDialogDesktopPrefab _openFileDialog;
-    private readonly SaveCancelDialogPrefab _saveCancelDialog;
-    private readonly SaveFileDialogDesktopPrefab _saveFileDialog;
-    private readonly SelectFolderDialogDesktopPrefab _selectFolderDialog;
-    private readonly YesOrNoDialogPrefab _yesOrNoDialog;
-    private readonly GeoPointDialogPrefab _geoPointDialog;
     private readonly ILogger<DialogControlsPageViewModel> _logger;
 
     #endregion
@@ -102,6 +95,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     {
         _layoutChanged.DisposeItWith(Disposable);
         _loggerFactory = loggerFactory;
+        _dialogService = dialogService;
         _logger = loggerFactory.CreateLogger<DialogControlsPageViewModel>();
 
         #region Units
@@ -127,15 +121,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         #region Fetching prefabs
 
-        _openFileDialog = dialogService.GetDialogPrefab<OpenFileDialogDesktopPrefab>();
-        _saveFileDialog = dialogService.GetDialogPrefab<SaveFileDialogDesktopPrefab>();
-        _selectFolderDialog = dialogService.GetDialogPrefab<SelectFolderDialogDesktopPrefab>();
-        _observeFolderDialog = dialogService.GetDialogPrefab<ObserveFolderDialogPrefab>();
-        _yesOrNoDialog = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
-        _saveCancelDialog = dialogService.GetDialogPrefab<SaveCancelDialogPrefab>();
-        _inputDialog = dialogService.GetDialogPrefab<InputDialogPrefab>();
-        _hotKeyCaptureDialog = dialogService.GetDialogPrefab<HotKeyCaptureDialogPrefab>();
-        _geoPointDialog = dialogService.GetDialogPrefab<GeoPointDialogPrefab>();
 
         #endregion
 
@@ -332,6 +317,48 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
         #endregion
 
+        SelectedSizeMode.DisposeItWith(Disposable);
+        MarkdownDetailsResult.DisposeItWith(Disposable);
+        UnsavedChangesResult.DisposeItWith(Disposable);
+        EditApiKeyResult.DisposeItWith(Disposable);
+        ShowMarkdownDetailsCommand = new ReactiveCommand(
+            async (_, cancel) =>
+            {
+                var text = LoadMarkdownExample();
+                var result = await _dialogService.ShowMarkdownDetailsDialogAsync(
+                    RS.DialogControlsPageView_ContentDialog_Title,
+                    text,
+                    text,
+                    sizeMode: SelectedSizeMode.Value
+                );
+                cancel.ThrowIfCancellationRequested();
+                MarkdownDetailsResult.Value = result.ToString();
+            },
+            AwaitOperation.Drop
+        ).DisposeItWith(Disposable);
+        ShowUnsavedChangesCommand = new ReactiveCommand(
+            async (_, cancel) =>
+            {
+                var result = await _dialogService.ShowUnsavedChangesDialogAsync(
+                    RS.DialogControlsPageViewModel_SavePrefab_Title,
+                    [new Restriction(this, RS.DialogControlsPageViewModel_SavePrefab_Message)],
+                    sizeMode: SelectedSizeMode.Value
+                );
+                cancel.ThrowIfCancellationRequested();
+                UnsavedChangesResult.Value = result.ToString();
+            },
+            AwaitOperation.Drop
+        ).DisposeItWith(Disposable);
+        ShowEditApiKeyCommand = new ReactiveCommand(
+            async (_, cancel) =>
+            {
+                var result = await _dialogService.ShowEditApiKeyDialogAsync(EditApiKeyResult.Value, sizeMode: SelectedSizeMode.Value);
+                cancel.ThrowIfCancellationRequested();
+                EditApiKeyResult.Value = result;
+            },
+            AwaitOperation.Drop
+        ).DisposeItWith(Disposable);
+
         #region Reset commands
 
         ResetCustomResultCommand = new ReactiveCommand(_ =>
@@ -402,6 +429,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
             .DisposeItWith(Disposable);
     }
 
+    public IReadOnlyList<DialogSizeMode> SizeModes { get; } = Enum.GetValues<DialogSizeMode>();
+    public BindableReactiveProperty<DialogSizeMode> SelectedSizeMode { get; } = new(DialogSizeMode.Compact);
+
     public ReactiveCommand ShowCustomDialogCommand { get; }
     public ReactiveCommand OpenImageForCustomDialogAsyncCommand { get; }
     public ReactiveCommand YesOrNoCommand { get; }
@@ -413,6 +443,13 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public ReactiveCommand SaveFileCommand { get; }
     public ReactiveCommand SelectFolderCommand { get; }
     public ReactiveCommand ObserveFolderCommand { get; }
+
+    public ReactiveCommand ShowMarkdownDetailsCommand { get; }
+    public ReactiveCommand ShowUnsavedChangesCommand { get; }
+    public ReactiveCommand ShowEditApiKeyCommand { get; }
+    public BindableReactiveProperty<string?> MarkdownDetailsResult { get; } = new();
+    public BindableReactiveProperty<string?> UnsavedChangesResult { get; } = new();
+    public BindableReactiveProperty<string?> EditApiKeyResult { get; } = new();
 
     public ReactiveCommand ResetCustomResultCommand { get; }
     public ReactiveCommand ResetYesOrNoCommand { get; }
@@ -470,6 +507,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
             var dialogContent = new ContentDialog(vm)
             {
+                SizeMode = SelectedSizeMode.Value,
                 Title = CustomDialogTitle.ViewValue.Value ?? string.Empty,
                 PrimaryButtonText = CustomDialogPrimaryButtonText.ViewValue.Value ?? string.Empty,
                 SecondaryButtonText =
@@ -515,13 +553,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     {
         if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
         {
-            var payload = new OpenFileDialogPayload
-            {
-                Title = RS.DialogControlsPageViewModel_OpenFilePrefab_Title,
-                TypeFilter = "jpeg,jpg,png",
-            };
-
-            CustomDialogImagePath.ViewValue.Value = await _openFileDialog.ShowDialogAsync(payload);
+            CustomDialogImagePath.ViewValue.Value = await _dialogService.ShowOpenFileDialogAsync(
+                title: RS.DialogControlsPageViewModel_OpenFilePrefab_Title,
+                typeFilter: "jpeg,jpg,png"
+            );
         }
     }
 
@@ -529,12 +564,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     {
         if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
         {
-            var payload = new OpenFileDialogPayload
-            {
-                Title = RS.DialogControlsPageViewModel_OpenFilePrefab_Title,
-            };
-
-            var rawResult = await _openFileDialog.ShowDialogAsync(payload);
+            var rawResult = await _dialogService.ShowOpenFileDialogAsync(
+                title: RS.DialogControlsPageViewModel_OpenFilePrefab_Title
+            );
             var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
 
             OpenFileDialogResult.ViewValue.Value = result;
@@ -549,12 +581,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     {
         if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
         {
-            var payload = new SaveFileDialogPayload
-            {
-                Title = RS.DialogControlsPageViewModel_SaveFilePrefab_Title,
-            };
-
-            var rawResult = await _saveFileDialog.ShowDialogAsync(payload);
+            var rawResult = await _dialogService.ShowSaveFileDialogAsync(
+                title: RS.DialogControlsPageViewModel_SaveFilePrefab_Title
+            );
             var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
 
             SaveFileDialogResult.ViewValue.Value = result;
@@ -569,12 +598,9 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     {
         if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
         {
-            var payload = new SelectFolderDialogPayload
-            {
-                Title = RS.DialogControlsPageViewModel_SelectFolderPrefab_Title,
-            };
-
-            var rawResult = await _selectFolderDialog.ShowDialogAsync(payload);
+            var rawResult = await _dialogService.ShowSelectFolderDialogAsync(
+                title: RS.DialogControlsPageViewModel_SelectFolderPrefab_Title
+            );
             var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
 
             SelectFolderDialogResult.ViewValue.Value = result;
@@ -592,20 +618,17 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     {
         if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
         {
-            var payload = new ObserveFolderDialogPayload
-            {
-                Title = RS.DialogControlsPageViewModel_ObserveFolderPrefab_Title,
-                DefaultPath = Environment.CurrentDirectory,
-            };
-
-            await _observeFolderDialog.ShowDialogAsync(payload);
+            await _dialogService.ShowObserveFolderDialogAsync(
+                title: RS.DialogControlsPageViewModel_ObserveFolderPrefab_Title,
+                defaultPath: Environment.CurrentDirectory
+            );
 
             ObserveFolderDialogResult.ViewValue.Value =
                 RS.DialogControlsPageViewModel_ObserveFolderPrefab_ResultShort;
 
             var msg = string.Format(
                 RS.DialogControlsPageViewModel_ObserveFolderPrefab_Result,
-                payload.DefaultPath
+                Environment.CurrentDirectory
             );
             const string dialogName = nameof(ObserveFolderDialogPrefab);
             _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
@@ -614,17 +637,19 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask YesOrNoMessageAsync(Unit unit, CancellationToken cancellationToken)
     {
-        var payload = new YesOrNoDialogPayload
+
+        var result = await _dialogService.ShowYesOrNoDialogAsync(
+            title: RS.DialogControlsPageViewModel_YesOrNoPrefab_Title,
+            message: RS.DialogControlsPageViewModel_YesOrNoPrefab_Message,
+            sizeMode: SelectedSizeMode.Value
+        );
+
+        YesOrNoDialogResult.ViewValue.Value = result switch
         {
-            Title = RS.DialogControlsPageViewModel_YesOrNoPrefab_Title,
-            Message = RS.DialogControlsPageViewModel_YesOrNoPrefab_Message,
+            true => ConfirmationStatus.Yes,
+            false => ConfirmationStatus.No,
+            null => ConfirmationStatus.Undefined,
         };
-
-        var result = await _yesOrNoDialog.ShowDialogAsync(payload);
-
-        YesOrNoDialogResult.ViewValue.Value = result
-            ? ConfirmationStatus.Yes
-            : ConfirmationStatus.No;
 
         var msg = string.Format(RS.DialogControlsPageViewModel_YesOrNoPrefab_Result, result);
         const string dialogName = nameof(YesOrNoDialogPrefab);
@@ -633,13 +658,12 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask SaveCancelAsync(Unit unit, CancellationToken cancellationToken)
     {
-        var payload = new SaveCancelDialogPayload
-        {
-            Title = RS.DialogControlsPageViewModel_SavePrefab_Title,
-            Message = RS.DialogControlsPageViewModel_SavePrefab_Message,
-        };
 
-        var result = await _saveCancelDialog.ShowDialogAsync(payload);
+        var result = await _dialogService.ShowSaveCancelDialogAsync(
+            title: RS.DialogControlsPageViewModel_SavePrefab_Title,
+            message: RS.DialogControlsPageViewModel_SavePrefab_Message,
+            sizeMode: SelectedSizeMode.Value
+        );
 
         SaveCancelDialogResult.ViewValue.Value = result
             ? ConfirmationStatus.Yes
@@ -652,13 +676,12 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask ShowInputAsync(Unit unit, CancellationToken cancellationToken)
     {
-        var payload = new InputDialogPayload
-        {
-            Title = RS.DialogControlsPageViewModel_InputPrefab_Title,
-            Message = RS.DialogControlsPageViewModel_InputPrefab_Message,
-        };
 
-        var rawResult = await _inputDialog.ShowDialogAsync(payload);
+        var rawResult = await _dialogService.ShowInputDialogAsync(
+            title: RS.DialogControlsPageViewModel_InputPrefab_Title,
+            message: RS.DialogControlsPageViewModel_InputPrefab_Message,
+            sizeMode: SelectedSizeMode.Value
+        );
         var result = rawResult ?? $"({RS.DialogControlsPageViewModel_CancelResult})";
 
         ShowInputDialogResult.ViewValue.Value = result;
@@ -670,13 +693,12 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask ShowHotKeyCaptureAsync(Unit unit, CancellationToken cancellationToken)
     {
-        var payload = new HotKeyCaptureDialogPayload
-        {
-            Title = RS.DialogControlsPageViewModel_HotKeyCapturePrefab_Title,
-            Message = RS.DialogControlsPageViewModel_HotKeyCapturePrefab_Message,
-        };
 
-        var result = await _hotKeyCaptureDialog.ShowDialogAsync(payload);
+        var result = await _dialogService.ShowHotKeyCaptureDialogAsync(
+            title: RS.DialogControlsPageViewModel_HotKeyCapturePrefab_Title,
+            message: RS.DialogControlsPageViewModel_HotKeyCapturePrefab_Message,
+            sizeMode: SelectedSizeMode.Value
+        );
 
         ShowHotKeyCaptureDialogResult.ViewValue.Value = result?.ToString();
 
@@ -690,12 +712,11 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask ShowGeoPointDialog(Unit unit, CancellationToken cancellationToken)
     {
-        var payload = new GeoPointDialogPayload
-        {
-            InitialLocation = GeoPointDialogResult.ModelValue.CurrentValue,
-        };
 
-        var rawResult = await _geoPointDialog.ShowDialogAsync(payload);
+        var rawResult = await _dialogService.ShowGeoPointDialogAsync(
+            initialLocation: GeoPointDialogResult.ModelValue.CurrentValue,
+            sizeMode: SelectedSizeMode.Value
+        );
 
         if (rawResult is not null)
         {
@@ -706,6 +727,21 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         var msg = string.Format(RS.DialogControlsPageViewModel_GeoPointPrefab_Result, result);
         const string dialogName = nameof(GeoPointDialogPrefab);
         _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+    }
+
+    private static string LoadMarkdownExample()
+    {
+        const string asset = "avares://Asv.Avalonia.Example/Assets/Markdown/Documentation";
+        var language = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+        var uri = new Uri($"{asset}.{language}.md");
+        if (!AssetLoader.Exists(uri))
+        {
+            uri = new Uri($"{asset}.md");
+        }
+
+        using var stream = AssetLoader.Open(uri);
+        using var reader = new System.IO.StreamReader(stream);
+        return reader.ReadToEnd();
     }
 
     private void TrackLayout<T>(Observable<T> observable)

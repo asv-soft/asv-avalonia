@@ -20,7 +20,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
     private readonly ObservableList<IPluginServerInfo> _sources;
     private readonly ISynchronizedView<IPluginServerInfo, PluginsSourceViewModel> _view;
     private readonly ILogger<SettingsPluginsSourcesViewModel> _logger;
-    private readonly YesOrNoDialogPrefab? _yesOrNoDialogPrefab;
+    private readonly IDialogService? _dialogService;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
     [RequiresUnreferencedCode(
@@ -55,7 +55,7 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
         _logger = loggerFactory.CreateLogger<SettingsPluginsSourcesViewModel>();
         _pluginManager = pluginManager;
         _loggerFactory = loggerFactory;
-        _yesOrNoDialogPrefab = dialogService.GetDialogPrefab<YesOrNoDialogPrefab>();
+        _dialogService = dialogService;
         _undoSink = Undo.RegisterValue<string>(
                 "default",
                 ApplySourcesSnapshot,
@@ -201,13 +201,16 @@ public class SettingsPluginsSourcesViewModel : SettingsSubPage
             return;
         }
 
-        var payload = new YesOrNoDialogPayload
+        if (_dialogService is null)
         {
-            Title = RS.PluginsSourceViewModel_RemoveDialog_Title,
-            Message = RS.PluginsSourceViewModel_RemoveDialog_Message,
-        };
+            return;
+        }
 
-        if (_yesOrNoDialogPrefab is null || !await _yesOrNoDialogPrefab.ShowDialogAsync(payload))
+        var confirmed = await _dialogService.ShowYesOrNoDialogAsync(
+            title: RS.PluginsSourceViewModel_RemoveDialog_Title,
+            message: RS.PluginsSourceViewModel_RemoveDialog_Message
+        );
+        if (confirmed != true)
         {
             return;
         }

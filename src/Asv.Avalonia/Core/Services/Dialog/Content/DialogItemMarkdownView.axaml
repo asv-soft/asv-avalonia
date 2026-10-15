@@ -13,11 +13,5 @@
     <Design.DataContext>
         <avalonia:DialogItemMarkdownViewModel />
     </Design.DataContext>
-    <ScrollViewer
-        MaxHeight="520"
-        HorizontalScrollBarVisibility="Disabled"
-        VerticalScrollBarVisibility="Auto"
-    >
-        <avalonia:MarkdownViewer Text="{CompiledBinding MarkdownText}" TextWrapping="Wrap" />
-    </ScrollViewer>
+    <avalonia:MarkdownViewer Text="{CompiledBinding MarkdownText}" TextWrapping="Wrap" />
 </UserControl>

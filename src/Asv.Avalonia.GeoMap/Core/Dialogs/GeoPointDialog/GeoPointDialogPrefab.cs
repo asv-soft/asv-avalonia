@@ -1,4 +1,5 @@
-﻿using Asv.Common;
+﻿using Material.Icons;
+using Asv.Common;
 using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.GeoMap;
@@ -8,6 +9,26 @@ namespace Asv.Avalonia.GeoMap;
 /// </summary>
 public sealed class GeoPointDialogPayload
 {
+    /// <summary>
+    /// Gets or inits the optional icon displayed before the dialog title.
+    /// </summary>
+    public MaterialIconKind? Icon { get; init; } = MaterialIconKind.MapMarker;
+
+    /// <summary>
+    /// Gets or inits the palette color of the dialog icon.
+    /// </summary>
+    public AsvColorKind IconColor { get; init; } = AsvColorKind.None;
+
+    /// <summary>
+    /// Gets or inits the dialog sizing mode.
+    /// </summary>
+    public DialogSizeMode SizeMode { get; init; } = DialogSizeMode.Compact;
+
+    /// <summary>
+    /// Gets or inits the dialog status that determines the frame color.
+    /// </summary>
+    public ShellErrorState Status { get; init; } = ShellErrorState.Normal;
+
     public GeoPoint InitialLocation { get; init; }
 }
 
@@ -28,6 +49,10 @@ public sealed class GeoPointDialogPrefab(
 
         var dialogContent = new ContentDialog(vm)
         {
+            SizeMode = dialogPayload.SizeMode,
+            Icon = dialogPayload.Icon,
+            IconColor = dialogPayload.IconColor,
+            Status = dialogPayload.Status,
             Title = RS.GeoPointDialogPrefab_Content_Title,
             PrimaryButtonText = Avalonia.RS.DialogButton_Save,
             SecondaryButtonText = Avalonia.RS.DialogButton_Cancel,

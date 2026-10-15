@@ -10,7 +10,7 @@ public class LanguageProperty : PropertyComboBoxViewModel
     public const string ViewModelId = "language";
 
     private readonly ILocalizationService _svc;
-    private readonly YesOrNoDialogPrefab _dialog;
+    private readonly IDialogService _dialogService;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoSink;
 
     public LanguageProperty()
@@ -23,7 +23,7 @@ public class LanguageProperty : PropertyComboBoxViewModel
         : base(ViewModelId, false)
     {
         _svc = svc;
-        _dialog = dialog.GetDialogPrefab<YesOrNoDialogPrefab>();
+        _dialogService = dialog;
 
         Header = RS.SettingsAppearanceView_AppLanguage_Title;
         Description = RS.ChangeLanguageCommand_CommandInfo_Description;
@@ -68,14 +68,11 @@ public class LanguageProperty : PropertyComboBoxViewModel
             _undoSink.PublishUpdate(oldValue, option.Language.Id);
         }
 
-        var dialogPayload = new YesOrNoDialogPayload
-        {
-            Title = RS.LanguageProperty_RestartDialog_Title,
-            Message = RS.LanguageProperty_RestartDialog_Message,
-        };
-
-        var isReloadReady = await _dialog.ShowDialogAsync(dialogPayload);
-        if (!isReloadReady)
+        var isReloadReady = await _dialogService.ShowYesOrNoDialogAsync(
+            title: RS.LanguageProperty_RestartDialog_Title,
+            message: RS.LanguageProperty_RestartDialog_Message
+        );
+        if (isReloadReady != true)
         {
             return;
         }

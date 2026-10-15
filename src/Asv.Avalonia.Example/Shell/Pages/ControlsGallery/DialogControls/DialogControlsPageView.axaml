@@ -27,6 +27,15 @@
             Description="{x:Static example:RS.DialogControlsPageView_Description}"
         />
 
+        <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Spacing="12" Margin="0,0,0,12">
+            <TextBlock Text="SizeMode" VerticalAlignment="Center" />
+            <ComboBox
+                MinWidth="160"
+                ItemsSource="{Binding SizeModes}"
+                SelectedItem="{Binding SelectedSizeMode.Value, Mode=TwoWay}"
+            />
+        </StackPanel>
+
         <ScrollViewer
             VerticalScrollBarVisibility="Auto"
             x:Name="MainScrollViewer"
@@ -41,33 +50,22 @@
 
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
-                    <!-- Custom dialog header -->
                     <RowDefinition Height="Auto" />
-                    <!-- Custom dialog block -->
                     <RowDefinition Height="Auto" />
-                    <!-- Ready dialog prefabs header -->
                     <RowDefinition Height="Auto" />
-                    <!-- Custom dialogs header -->
                     <RowDefinition Height="Auto" />
-                    <!-- Yes/no dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- Save/cancel dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- Input dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- HotKey capture dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- GeoPoint dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- System dialogs header -->
                     <RowDefinition Height="Auto" />
-                    <!-- Open file dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- Save file dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- Select folder dialog -->
                     <RowDefinition Height="Auto" />
-                    <!-- Observe folder dialog -->
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- Custom dialog header -->
@@ -444,9 +442,58 @@
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
 
+                <example:AboutExampleBlock
+                    Grid.Row="9"
+                    Grid.Column="0"
+                    Title="MarkdownDetailsDialog"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="9"
+                    Grid.Column="1"
+                    ButtonCommand="{Binding ShowMarkdownDetailsCommand}"
+                    ButtonText="MarkdownDetailsDialog"
+                />
+                <example:PreviewExampleBlock Grid.Row="9" Grid.Column="2">
+                    <example:PreviewExampleBlock.PreviewContent>
+                        <TextBlock Text="{Binding MarkdownDetailsResult.Value}" TextWrapping="Wrap" />
+                    </example:PreviewExampleBlock.PreviewContent>
+                </example:PreviewExampleBlock>
+                <example:AboutExampleBlock
+                    Grid.Row="10"
+                    Grid.Column="0"
+                    Title="UnsavedChangesDialog"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="10"
+                    Grid.Column="1"
+                    ButtonCommand="{Binding ShowUnsavedChangesCommand}"
+                    ButtonText="UnsavedChangesDialog"
+                />
+                <example:PreviewExampleBlock Grid.Row="10" Grid.Column="2">
+                    <example:PreviewExampleBlock.PreviewContent>
+                        <TextBlock Text="{Binding UnsavedChangesResult.Value}" TextWrapping="Wrap" />
+                    </example:PreviewExampleBlock.PreviewContent>
+                </example:PreviewExampleBlock>
+                <example:AboutExampleBlock
+                    Grid.Row="11"
+                    Grid.Column="0"
+                    Title="EditApiKeyDialog"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="11"
+                    Grid.Column="1"
+                    ButtonCommand="{Binding ShowEditApiKeyCommand}"
+                    ButtonText="EditApiKeyDialog"
+                />
+                <example:PreviewExampleBlock Grid.Row="11" Grid.Column="2">
+                    <example:PreviewExampleBlock.PreviewContent>
+                        <TextBlock Text="{Binding EditApiKeyResult.Value}" TextWrapping="Wrap" />
+                    </example:PreviewExampleBlock.PreviewContent>
+                </example:PreviewExampleBlock>
+
                 <!-- System dialogs header -->
                 <example:HeaderBlock
-                    Grid.Row="9"
+                    Grid.Row="12"
                     Grid.Column="0"
                     Grid.ColumnSpan="3"
                     TitleH3="{x:Static example:RS.DialogControlsPageView_System_Title}"
@@ -455,19 +502,19 @@
 
                 <!-- Open file dialog -->
                 <example:AboutExampleBlock
-                    Grid.Row="10"
+                    Grid.Row="13"
                     Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Title}"
                     Description="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Description}"
                 />
                 <example:ActionExampleBlock
-                    Grid.Row="10"
+                    Grid.Row="13"
                     Grid.Column="1"
                     ButtonCommand="{Binding OpenFileCommand}"
                     ButtonText="{x:Static example:RS.DialogControlsPageView_OpenFilePrefab_Title}"
                 />
                 <example:PreviewExampleBlock
-                    Grid.Row="10"
+                    Grid.Row="13"
                     Grid.Column="2"
                     VerticalAlignment="Stretch"
                     RestoreCommand="{Binding ResetOpenFileCommand}"
@@ -496,19 +543,19 @@
 
                 <!-- Save file dialog -->
                 <example:AboutExampleBlock
-                    Grid.Row="11"
+                    Grid.Row="14"
                     Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Title}"
                     Description="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Description}"
                 />
                 <example:ActionExampleBlock
-                    Grid.Row="11"
+                    Grid.Row="14"
                     Grid.Column="1"
                     ButtonCommand="{Binding SaveFileCommand}"
                     ButtonText="{x:Static example:RS.DialogControlsPageView_SaveFilePrefab_Title}"
                 />
                 <example:PreviewExampleBlock
-                    Grid.Row="11"
+                    Grid.Row="14"
                     Grid.Column="2"
                     VerticalAlignment="Stretch"
                     RestoreCommand="{Binding ResetSaveFileCommand}"
@@ -537,19 +584,19 @@
 
                 <!-- Select folder dialog -->
                 <example:AboutExampleBlock
-                    Grid.Row="12"
+                    Grid.Row="15"
                     Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Title}"
                     Description="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Description}"
                 />
                 <example:ActionExampleBlock
-                    Grid.Row="12"
+                    Grid.Row="15"
                     Grid.Column="1"
                     ButtonCommand="{Binding SelectFolderCommand}"
                     ButtonText="{x:Static example:RS.DialogControlsPageView_SelectFolderPrefab_Title}"
                 />
                 <example:PreviewExampleBlock
-                    Grid.Row="12"
+                    Grid.Row="15"
                     Grid.Column="2"
                     VerticalAlignment="Stretch"
                     RestoreCommand="{Binding ResetSelectFolderCommand}"
@@ -578,19 +625,19 @@
 
                 <!-- Observe folder dialog -->
                 <example:AboutExampleBlock
-                    Grid.Row="13"
+                    Grid.Row="16"
                     Grid.Column="0"
                     Title="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Title}"
                     Description="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Description}"
                 />
                 <example:ActionExampleBlock
-                    Grid.Row="13"
+                    Grid.Row="16"
                     Grid.Column="1"
                     ButtonCommand="{Binding ObserveFolderCommand}"
                     ButtonText="{x:Static example:RS.DialogControlsPageView_ObserveFolderPrefab_Title}"
                 />
                 <example:PreviewExampleBlock
-                    Grid.Row="13"
+                    Grid.Row="16"
                     Grid.Column="2"
                     VerticalAlignment="Stretch"
                     RestoreCommand="{Binding ResetObserveFolderCommand}"

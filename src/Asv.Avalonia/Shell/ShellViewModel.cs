@@ -356,13 +356,9 @@ public class ShellViewModel : ViewModel<IShell>, IShell
                 }
 
                 await Navigation.GoTo(page.GetPathFromRoot(), cancellationToken);
-                var prefab = _dialogService.GetDialogPrefab<UnsavedChangesDialogPrefab>();
-                var result = await prefab.ShowDialogAsync(
-                    new UnsavedChangesDialogPayload
-                    {
-                        Restrictions = reasons,
-                        Title = RS.DesktopShellViewModel_ExitConfirmDialog_Title,
-                    }
+                var result = await _dialogService.ShowUnsavedChangesDialogAsync(
+                    restrictions: reasons,
+                    title: RS.DesktopShellViewModel_ExitConfirmDialog_Title
                 );
                 if (!result)
                 {

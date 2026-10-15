@@ -23,19 +23,19 @@ public class DialogHost : ContentControl
 
     protected override Size MeasureOverride(Size availableSize)
     {
-        _ = base.MeasureOverride(availableSize);
-
-        if (VisualRoot is TopLevel tl)
+        var hostSize = VisualRoot switch
         {
-            return tl.ClientSize;
-        }
+            TopLevel topLevel => topLevel.ClientSize,
+            Control control => control.Bounds.Size,
+            _ => default,
+        };
 
-        if (VisualRoot is Control c)
-        {
-            return c.Bounds.Size;
-        }
-
-        return default;
+        // The overlay can measure with infinite space; expanded dialogs need the window bounds.
+        var measureSize = Content is ContentDialog { SizeMode: not DialogSizeMode.Compact }
+            ? hostSize
+            : availableSize;
+        _ = base.MeasureOverride(measureSize);
+        return hostSize;
     }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)

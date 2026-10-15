@@ -45,14 +45,10 @@ public class CreateMenuExtender(
             lastDirectory = cfg.LastDirectory;
         }
 
-        var dialog = dialogs.GetDialogPrefab<SaveFileDialogDesktopPrefab>();
-        var filePath = await dialog.ShowDialogAsync(
-            new SaveFileDialogPayload
-            {
-                Title = RS.CreateFileCommand_SelectFile,
-                TypeFilter = fileType.Extension,
-                InitialDirectory = lastDirectory,
-            }
+        var filePath = await dialogs.ShowSaveFileDialogAsync(
+            title: RS.CreateFileCommand_SelectFile,
+            typeFilter: fileType.Extension,
+            initialDirectory: lastDirectory
         );
 
         if (string.IsNullOrWhiteSpace(filePath))
