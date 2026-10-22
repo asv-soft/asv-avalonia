@@ -1,0 +1,32 @@
+<Styles xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style Selector="DataGrid">
+        <Setter Property="CanUserResizeColumns" Value="True" />
+    </Style>
+    <Style Selector="DataGrid DataGridColumnHeader">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}" />
+        <Setter Property="FontWeight" Value="SemiBold" />
+        <Setter Property="FontSize" Value="12" />
+        <Setter Property="MinHeight" Value="28" />
+        <Setter Property="Padding" Value="6,0" />
+        <Setter Property="BorderThickness" Value="0" />
+    </Style>
+    <Style Selector="DataGrid DataGridColumnHeader /template/ Rectangle#VerticalSeparator[IsVisible=True]">
+        <Setter Property="Height" Value="14" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="IsHitTestVisible" Value="False" />
+    </Style>
+    <Style Selector="DataGrid /template/ Rectangle#PART_ColumnHeadersAndRowsSeparator">
+        <Setter Property="IsVisible" Value="False" />
+    </Style>
+    <Style Selector="DataGrid DataGridCell > TextBlock">
+        <Setter Property="Margin" Value="6,0" />
+    </Style>
+    <Style Selector="DataGrid DataGridRow">
+        <Setter Property="MinHeight" Value="28" />
+    </Style>
+    <Style Selector="DataGrid DataGridCell">
+        <Setter Property="MinHeight" Value="28" />
+    </Style>
+</Styles>

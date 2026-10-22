@@ -125,18 +125,22 @@ public partial class WorkspacePanel
         set => SetValue(MinCentralWidthProperty, value);
     }
 
-    public static readonly DirectProperty<WorkspacePanel, double> SplitterSizeProperty =
-        AvaloniaProperty.RegisterDirect<WorkspacePanel, double>(
-            nameof(SplitterSize),
-            o => o.SplitterSize,
-            (o, v) => o.SplitterSize = v
+    public static readonly StyledProperty<double> WidgetSpacingProperty =
+        AvaloniaProperty.Register<WorkspacePanel, double>(
+            nameof(WidgetSpacing),
+            defaultValue: 4,
+            inherits: true,
+            validate: value => double.IsFinite(value) && value >= 0
         );
 
-    public double SplitterSize
+    /// <summary>
+    /// Gets or sets the spacing between widgets and the size of the resize areas.
+    /// </summary>
+    public double WidgetSpacing
     {
-        get;
-        set => SetAndRaise(SplitterSizeProperty, ref field, value);
-    } = 0;
+        get => GetValue(WidgetSpacingProperty);
+        set => SetValue(WidgetSpacingProperty, value);
+    }
 
     public static readonly RoutedEvent<WorkspaceEventArgs> WorkspaceChangedEvent =
         RoutedEvent.Register<WorkspacePanel, WorkspaceEventArgs>(

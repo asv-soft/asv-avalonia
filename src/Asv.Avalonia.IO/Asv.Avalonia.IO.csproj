@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Asv.Avalonia\Asv.Avalonia.csproj" />
+      <ProjectReference Include="..\Asv.Avalonia.Charts\Asv.Avalonia.Charts.csproj" />
     </ItemGroup>
 
     <ItemGroup>

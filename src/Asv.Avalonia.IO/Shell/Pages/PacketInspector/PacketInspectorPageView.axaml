@@ -1,0 +1,265 @@
+<a:Workspace xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1400" d:DesignHeight="800"
+             xmlns:a="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+             xmlns:io="clr-namespace:Asv.Avalonia.IO"
+             xmlns:charts="clr-namespace:Asv.Avalonia.Charts;assembly=Asv.Avalonia.Charts"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             Background="{DynamicResource SystemRegionBrush}"
+             x:Class="Asv.Avalonia.IO.PacketInspectorPageView"
+             x:DataType="io:PacketInspectorPageViewModel" x:CompileBindings="True">
+    <Design.DataContext>
+        <io:PacketInspectorPageViewModel />
+    </Design.DataContext>
+    <a:Workspace.Resources>
+        <DataTemplate x:Key="FilterTemplate" x:DataType="io:PacketFilterItem">
+            <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Margin="4,0" />
+        </DataTemplate>
+        <DataTemplate x:Key="DeviceTemplate" x:DataType="io:PacketDevicePresentation">
+            <StackPanel Orientation="Horizontal" Spacing="6">
+                <icons:MaterialIcon Kind="{Binding Icon, TargetNullValue=HelpCircleOutline}" IsVisible="{Binding Icon, Converter={x:Static ObjectConverters.IsNotNull}}" a:AsvPalette.Color="{Binding Color}"
+                                    Width="18" Height="18" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" />
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="DeviceFilterTemplate" x:DataType="io:PacketFilterItem">
+            <CheckBox Content="{Binding DevicePresentation}" ContentTemplate="{StaticResource DeviceTemplate}"
+                      IsChecked="{Binding IsChecked, Mode=TwoWay}" Margin="4,0" />
+        </DataTemplate>
+    </a:Workspace.Resources>
+    <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate>
+            <a:WorkspacePanel LeftWidth="240" MinLeftWidth="180" CentralWidth="*"
+                              RightWidth="320" MinRightWidth="220" BottomHeight="260" MinBottomHeight="160" />
+        </ItemsPanelTemplate>
+    </ItemsControl.ItemsPanel>
+    <a:WorkspaceItem DataContext="{Binding SourceWidget}" x:DataType="io:PacketInspectorWidget" Header="{x:Static io:RS.PacketInspector_Sources}" Position="Left">
+        <TreeView DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel" ItemsSource="{Binding Sources}" Classes="packet-sources" Margin="4,0" Padding="0">
+            <TreeView.ItemTemplate>
+                <TreeDataTemplate x:DataType="io:PacketFilterItem" ItemsSource="{Binding Children}">
+                    <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                              ToolTip.Tip="{Binding Description}" />
+                </TreeDataTemplate>
+            </TreeView.ItemTemplate>
+            <TreeView.Styles>
+                <Style Selector="TreeViewItem">
+                    <Setter Property="HorizontalAlignment" Value="Stretch" />
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="IsExpanded" Value="True" />
+                    <Setter Property="CornerRadius" Value="{DynamicResource PanelCornerRadius}" />
+                </Style>
+                <Style Selector="TreeView.packet-sources TreeViewItem /template/ Panel#PART_ExpandCollapseChevronContainer">
+                    <Setter Property="Margin" Value="4,0,6,0" />
+                </Style>
+                <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
+                    <Setter Property="CornerRadius" Value="{DynamicResource PanelCornerRadius}" />
+                </Style>
+            </TreeView.Styles>
+        </TreeView>
+    </a:WorkspaceItem>
+    <a:WorkspaceItem DataContext="{Binding ProtocolWidget}" x:DataType="io:PacketInspectorWidget" Header="{x:Static io:RS.PacketInspector_Protocols}" Position="Left">
+        <ScrollViewer DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel" MaxHeight="220">
+            <ItemsControl ItemsSource="{Binding Protocols}" ItemTemplate="{StaticResource FilterTemplate}" />
+        </ScrollViewer>
+    </a:WorkspaceItem>
+    <a:WorkspaceItem DataContext="{Binding DeviceWidget}" x:DataType="io:PacketInspectorWidget" Header="{x:Static io:RS.PacketInspector_Devices}" Position="Left">
+        <ScrollViewer DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel" MaxHeight="280">
+            <ItemsControl ItemsSource="{Binding Devices}" ItemTemplate="{StaticResource DeviceFilterTemplate}" />
+        </ScrollViewer>
+    </a:WorkspaceItem>
+    <a:WorkspaceItem DataContext="{Binding TrafficWidget}" x:DataType="io:PacketInspectorWidget" Header="{x:Static io:RS.PacketInspector_Title}" Position="Center" CanExpand="False">
+        <DockPanel DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel">
+            <TextBlock DockPanel.Dock="Bottom" Text="{x:Static io:RS.PacketInspector_Empty}" IsVisible="{Binding IsEmpty}" Margin="12" />
+            <TabControl SelectedIndex="{Binding ActiveTab, Mode=TwoWay}">
+                <TabControl.Template>
+                    <ControlTemplate>
+                        <Border Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}">
+                            <Grid RowDefinitions="Auto,*">
+                                <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="8" Margin="4,4,8,6">
+                                    <ItemsPresenter Name="PART_ItemsPresenter" ItemsPanel="{TemplateBinding ItemsPanel}"
+                                                    VerticalAlignment="Center" />
+                                    <TextBox Grid.Column="1" Name="PART_PacketSearch"
+                                             Text="{Binding Search, Mode=TwoWay}"
+                                             PlaceholderText="{x:Static io:RS.PacketInspector_Search}"
+                                             AutomationProperties.Name="{x:Static io:RS.PacketInspector_Search}"
+                                             MinWidth="80" MaxWidth="240" Height="32" MinHeight="32"
+                                             HorizontalAlignment="Right" VerticalAlignment="Center"
+                                             VerticalContentAlignment="Center"
+                                             CornerRadius="16" Padding="8,0">
+                                        <TextBox.InnerLeftContent>
+                                            <icons:MaterialIcon Kind="Magnify" Width="16" Height="16"
+                                                                Margin="8,0,0,0" Opacity="0.6" VerticalAlignment="Center" />
+                                        </TextBox.InnerLeftContent>
+                                    </TextBox>
+                                    <ComboBox Grid.Column="2" Name="PART_PacketDirection"
+                                              ItemsSource="{Binding Directions}"
+                                              SelectedIndex="{Binding DirectionIndex, Mode=TwoWay}"
+                                              AutomationProperties.Name="{x:Static io:RS.PacketInspector_Direction}"
+                                              Width="100" MinWidth="84" Height="32" MinHeight="32" FontSize="12" VerticalAlignment="Center"
+                                              VerticalContentAlignment="Center"
+                                              CornerRadius="16" Padding="10,0" />
+                                    <Button Grid.Column="3" Name="PART_PacketPause"
+                                            Theme="{DynamicResource TransparentButton}"
+                                            Command="{Binding PauseCommand}" ToolTip.Tip="{Binding PauseActionText}"
+                                            AutomationProperties.Name="{Binding PauseActionText}"
+                                            Width="32" Height="32" MinHeight="32" Padding="0"
+                                            CornerRadius="16" BorderThickness="1"
+                                            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+                                            VerticalAlignment="Center">
+                                        <Panel>
+                                            <icons:MaterialIcon Kind="Pause" Width="18" Height="18" IsVisible="{Binding !IsPaused}" />
+                                            <icons:MaterialIcon Kind="Play" Width="18" Height="18" IsVisible="{Binding IsPaused}" />
+                                        </Panel>
+                                    </Button>
+                                </Grid>
+                                <Panel Grid.Row="1" ClipToBounds="True">
+                                    <ContentPresenter Name="PART_SelectedContentHost2" IsVisible="False"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                    <ContentPresenter Name="PART_SelectedContentHost"
+                                                      Margin="{TemplateBinding Padding}"
+                                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                </Panel>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </TabControl.Template>
+                <TabItem Header="{x:Static io:RS.PacketInspector_Messages}">
+                    <DataGrid ItemsSource="{Binding Messages}" SelectedItem="{Binding SelectedMessage, Mode=TwoWay}"
+                              IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Name}" Binding="{Binding Name}" />
+                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="ID" Binding="{Binding MessageId}" />
+                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Protocol}" Binding="{Binding Protocol}" />
+                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Source}" Binding="{Binding Endpoint}" />
+                            <DataGridTemplateColumn Header="{x:Static io:RS.PacketInspector_Device}" SortMemberPath="Device">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="io:PacketMessageRow">
+                                        <ContentControl Content="{Binding DevicePresentation}" ContentTemplate="{StaticResource DeviceTemplate}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Direction}" Binding="{Binding Direction}" />
+                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Frequency}" Binding="{Binding Rate}" />
+                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Count}" Binding="{Binding Count}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+                <TabItem Header="{x:Static io:RS.PacketInspector_Journal}">
+                    <DataGrid ItemsSource="{Binding Journal}" SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
+                              IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="#" Binding="{Binding Sequence}" />
+                            <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="{x:Static io:RS.PacketInspector_Time}" Binding="{Binding Time}" />
+                            <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="{x:Static io:RS.PacketInspector_Name}" Binding="{Binding Name}" />
+                            <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="{x:Static io:RS.PacketInspector_Protocol}" Binding="{Binding Protocol}" />
+                            <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="{x:Static io:RS.PacketInspector_Source}" Binding="{Binding Endpoint}" />
+                            <DataGridTemplateColumn Header="{x:Static io:RS.PacketInspector_Device}" SortMemberPath="Device">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="io:PacketJournalRow">
+                                        <ContentControl Content="{Binding DevicePresentation}" ContentTemplate="{StaticResource DeviceTemplate}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="{x:Static io:RS.PacketInspector_Direction}" Binding="{Binding Direction}" />
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </TabItem>
+            </TabControl>
+        </DockPanel>
+    </a:WorkspaceItem>
+    <a:WorkspaceItem DataContext="{Binding DetailsWidget}" x:DataType="io:PacketInspectorWidget" Header="{x:Static io:RS.PacketInspector_Details}" Position="Right">
+        <Grid DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel"
+              RowDefinitions="Auto,Auto,*,Auto" Margin="8">
+            <StackPanel Grid.Row="0" Spacing="10" Margin="0,2,0,12">
+                <TextBlock Text="{Binding DetailsTitle}" FontSize="17" FontWeight="SemiBold" TextWrapping="Wrap" />
+                <Grid ColumnDefinitions="80,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" RowSpacing="6"
+                      ColumnSpacing="8" IsVisible="{Binding HasDetails}">
+                    <TextBlock Text="{x:Static io:RS.PacketInspector_Protocol}" Opacity="0.65" FontSize="12" />
+                    <TextBlock Grid.Column="1" Text="{Binding DetailsProtocol}" TextWrapping="Wrap" FontSize="12" />
+                    <TextBlock Grid.Row="1" Text="{x:Static io:RS.PacketInspector_Direction}" Opacity="0.65" FontSize="12" />
+                    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DetailsDirection}" FontSize="12"
+                               Foreground="{DynamicResource SystemControlHighlightAccentBrush}" />
+                    <TextBlock Grid.Row="2" Text="{x:Static io:RS.PacketInspector_Time}" Opacity="0.65" FontSize="12" />
+                    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding DetailsTime}" FontSize="12" />
+                    <TextBlock Grid.Row="3" Text="{x:Static io:RS.PacketInspector_Device}" Opacity="0.65" FontSize="12" />
+                    <ContentControl Grid.Row="3" Grid.Column="1" Content="{Binding DetailsDevice}"
+                                    ContentTemplate="{StaticResource DeviceTemplate}" FontSize="12" />
+                    <TextBlock Grid.Row="4" Text="{x:Static io:RS.PacketInspector_Source}" Opacity="0.65" FontSize="12" />
+                    <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding DetailsEndpoint}" FontSize="12"
+                               TextWrapping="Wrap" ToolTip.Tip="{Binding DetailsEndpointDescription}" />
+                </Grid>
+                <TextBlock Text="{Binding DetailsError}" TextWrapping="Wrap"
+                           IsVisible="{Binding DetailsError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            </StackPanel>
+            <Border Grid.Row="1" BorderThickness="0,1" Padding="0,4"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" IsVisible="{Binding HasDetails}">
+                <DockPanel>
+                    <Button DockPanel.Dock="Right" Name="PART_CopyDetails" Click="CopyDetailsOnClick"
+                            Theme="{DynamicResource TransparentButton}" MinHeight="28"
+                            IsEnabled="{Binding DetailsText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <icons:MaterialIcon Kind="ContentCopy" Width="16" Height="16" VerticalAlignment="Center" />
+                            <TextBlock Text="{x:Static io:RS.PacketInspector_Copy}" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Button>
+                    <TextBlock Text="{x:Static io:RS.PacketInspector_Content}" Opacity="0.65" FontSize="12"
+                               VerticalAlignment="Center" />
+                </DockPanel>
+            </Border>
+            <ScrollViewer Grid.Row="2" Margin="0,10,0,8" HorizontalScrollBarVisibility="Disabled">
+                <io:PacketDetailsTextBlock Name="PART_DetailsText" Fields="{Binding DetailsFields}" Packet="{Binding DetailsPacket}" ToChartCommand="{Binding AddToChartCommand}" FontFamily="Menlo, Cascadia Mono, Consolas, monospace"
+                                     FontSize="12" />
+            </ScrollViewer>
+            <Border Grid.Row="3" BorderThickness="0,1,0,0" Padding="0,4,0,0"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" IsVisible="{Binding HasDetails}">
+                <Button HorizontalAlignment="Right" Theme="{DynamicResource TransparentButton}"
+                        Command="{Binding HistoryCommand}" MinHeight="28">
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <icons:MaterialIcon Kind="History" Width="16" Height="16" VerticalAlignment="Center" />
+                        <TextBlock Text="{x:Static io:RS.PacketInspector_History}" VerticalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+            </Border>
+        </Grid>
+    </a:WorkspaceItem>
+    <a:WorkspaceItem DataContext="{Binding ChartsWidget}" x:DataType="io:PacketInspectorWidget"
+                     Header="{x:Static io:RS.PacketInspector_Charts}" Position="Bottom" CanExpand="False" Padding="4">
+        <Grid DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel">
+            <TextBlock Text="{x:Static io:RS.PacketInspector_ChartsEmpty}" IsVisible="{Binding !HasCharts}"
+                       VerticalAlignment="Center" HorizontalAlignment="Center" TextWrapping="Wrap" Margin="12" Opacity="0.65" />
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" IsVisible="{Binding HasCharts}">
+                <ItemsControl ItemsSource="{Binding Charts}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><StackPanel Orientation="Horizontal" Spacing="4" /></ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="io:PacketFieldChart">
+                            <Grid Width="420" RowDefinitions="Auto,*">
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Right" Command="{Binding RemoveCommand}" Theme="{DynamicResource TransparentButton}"
+                                            ToolTip.Tip="{x:Static io:RS.PacketInspector_RemoveChart}" AutomationProperties.Name="{x:Static io:RS.PacketInspector_RemoveChart}">
+                                        <icons:MaterialIcon Kind="Close" Width="16" Height="16" />
+                                    </Button>
+                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6" VerticalAlignment="Center"
+                                          ToolTip.Tip="{Binding Description}">
+                                        <icons:MaterialIcon Kind="ChartLine" Width="16" Height="16" VerticalAlignment="Center" />
+                                        <TextBlock Grid.Column="1" Text="{Binding Header}" TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                </DockPanel>
+                                <charts:PlotView Grid.Row="1" DataContext="{Binding}" MinHeight="120" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </a:WorkspaceItem>
+</a:Workspace>

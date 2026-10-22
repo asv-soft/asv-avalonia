@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Asv.IO;
 using Avalonia.Media;
 using Material.Icons;
@@ -17,6 +18,11 @@ public class NullDeviceManager : IDeviceManager
 
         Router = ProtocolFactory.CreateRouter("DesignTime");
         Explorer = DeviceExplorer.Create(Router, builder => { });
+    }
+
+    public bool TryIdentify(IProtocolMessage message, [NotNullWhen(true)] out DeviceId? deviceId)
+    {
+        return Explorer.TryIdentify(message, out deviceId);
     }
 
     public IProtocolFactory ProtocolFactory { get; }

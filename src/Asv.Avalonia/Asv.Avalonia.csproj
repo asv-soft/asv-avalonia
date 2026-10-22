@@ -36,7 +36,9 @@
         </PackageReference>
         <PackageReference Include="Asv.Common" Version="$(AsvCommonVersion)" />
         <PackageReference Include="Asv.Cfg" Version="$(AsvCommonVersion)" />
-        <PackageReference Include="Asv.IO" Version="$(AsvCommonVersion)" />
+        <PackageReference Include="Asv.IO" Version="$(AsvCommonVersion)"
+                          Condition="!Exists('$(AsvIoProject)')" />
+        <ProjectReference Include="$(AsvIoProject)" Condition="Exists('$(AsvIoProject)')" />
         <PackageReference Include="Asv.Modeling" Version="$(AsvCommonVersion)" />
         <PackageReference Include="ZLogger" Version="2.5.10" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="10.0.8" />

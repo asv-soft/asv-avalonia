@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
@@ -227,5 +227,138 @@
     </data>
     <data name="PortViewModel_ValidationException_TooLong" xml:space="preserve">
         <value>Port name is too long. Max length is {0} characters</value>
+    </data>
+
+    <data name="PacketInspector_Title" xml:space="preserve">
+        <value>Traffic Inspector</value>
+    </data>
+    <data name="PacketInspector_Sources" xml:space="preserve">
+        <value>Sources</value>
+    </data>
+    <data name="PacketInspector_Protocols" xml:space="preserve">
+        <value>Protocols</value>
+    </data>
+    <data name="PacketInspector_Devices" xml:space="preserve">
+        <value>Devices</value>
+    </data>
+    <data name="PacketInspector_Messages" xml:space="preserve">
+        <value>Messages</value>
+    </data>
+    <data name="PacketInspector_Journal" xml:space="preserve">
+        <value>Journal</value>
+    </data>
+    <data name="PacketInspector_Details" xml:space="preserve">
+        <value>Message details</value>
+    </data>
+    <data name="PacketInspector_Fields" xml:space="preserve">
+        <value>Fields</value>
+    </data>
+    <data name="PacketInspector_Text" xml:space="preserve">
+        <value>Text</value>
+    </data>
+    <data name="PacketInspector_Pause" xml:space="preserve">
+        <value>Pause display</value>
+    </data>
+    <data name="PacketInspector_Clear" xml:space="preserve">
+        <value>Clear capture</value>
+    </data>
+    <data name="PacketInspector_Reset" xml:space="preserve">
+        <value>Reset filters</value>
+    </data>
+    <data name="PacketInspector_Search" xml:space="preserve">
+        <value>Search name or ID…</value>
+    </data>
+    <data name="PacketInspector_Name" xml:space="preserve">
+        <value>Message</value>
+    </data>
+    <data name="PacketInspector_Source" xml:space="preserve">
+        <value>Endpoint</value>
+    </data>
+    <data name="PacketInspector_Device" xml:space="preserve">
+        <value>Device</value>
+    </data>
+    <data name="PacketInspector_Protocol" xml:space="preserve">
+        <value>Protocol</value>
+    </data>
+    <data name="PacketInspector_Direction" xml:space="preserve">
+        <value>RX / TX</value>
+    </data>
+    <data name="PacketInspector_Frequency" xml:space="preserve">
+        <value>Hz</value>
+    </data>
+    <data name="PacketInspector_Count" xml:space="preserve">
+        <value>Count</value>
+    </data>
+    <data name="PacketInspector_Time" xml:space="preserve">
+        <value>Time</value>
+    </data>
+    <data name="PacketInspector_Type" xml:space="preserve">
+        <value>Type</value>
+    </data>
+    <data name="PacketInspector_Value" xml:space="preserve">
+        <value>Value</value>
+    </data>
+    <data name="PacketInspector_Units" xml:space="preserve">
+        <value>Units</value>
+    </data>
+    <data name="PacketInspector_History" xml:space="preserve">
+        <value>Show message history</value>
+    </data>
+    <data name="PacketInspector_Empty" xml:space="preserve">
+        <value>No matching messages</value>
+    </data>
+    <data name="PacketInspector_Unidentified" xml:space="preserve">
+        <value>Unidentified</value>
+    </data>
+    <data name="PacketInspector_FieldLimit" xml:space="preserve">
+        <value>Field inspection limit exceeded</value>
+    </data>
+    <data name="PacketInspector_AllSources" xml:space="preserve">
+        <value>All sources</value>
+    </data>
+    <data name="PacketInspector_NoFields" xml:space="preserve">
+        <value>No visitable fields available</value>
+    </data>
+    <data name="PacketInspector_SelectMessage" xml:space="preserve">
+        <value>Select a message</value>
+    </data>
+    <data name="PacketInspector_Status" xml:space="preserve">
+        <value>Buffered: {0} · evicted: {1} · errors: {2}</value>
+    </data>
+    <data name="PacketInspector_Paused" xml:space="preserve">
+        <value>Display paused; capture continues</value>
+    </data>
+    <data name="PacketInspector_Active" xml:space="preserve">
+        <value>Capture active</value>
+    </data>
+    <data name="PacketInspector_Window" xml:space="preserve">
+        <value>Statistics within the retained capture window</value>
+    </data>
+    <data name="PacketInspector_Resume" xml:space="preserve">
+        <value>Resume display</value>
+    </data>
+    <data name="PacketInspector_Description" xml:space="preserve">
+        <value>Incoming and outgoing messages</value>
+    </data>
+    <data name="PacketInspector_Copy" xml:space="preserve">
+        <value>Copy</value>
+    </data>
+    <data name="PacketInspector_Content" xml:space="preserve">
+        <value>Content</value>
+    </data>
+    <data name="PacketInspector_Charts" xml:space="preserve">
+        <value>Charts</value>
+    </data>
+    <data name="PacketInspector_ChartsEmpty" xml:space="preserve">
+        <value>Select a numeric value and choose “To chart”.</value>
+    </data>
+    <data name="PacketInspector_ToChart" xml:space="preserve">
+        <value>To chart</value>
+    </data>
+    <data name="PacketInspector_RemoveChart" xml:space="preserve">
+        <value>Remove chart</value>
+    </data>
+    <data name="PacketInspector_ChartTime" xml:space="preserve">
+        <value>Time, s</value>
     </data>
 </root>

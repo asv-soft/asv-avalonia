@@ -285,7 +285,7 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Installed Plugins.
+        ///   Looks up a localized string similar to Installed plugins management.
         /// </summary>
         public static string OpenInstalledPluginsCommand_Action_Description {
             get {
@@ -321,7 +321,7 @@ namespace Asv.Avalonia.Plugins {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open plugins market page.
+        ///   Looks up a localized string similar to Available plugins catalog.
         /// </summary>
         public static string OpenPluginsMarketCommand_Action_Description {
             get {

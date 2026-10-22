@@ -2058,7 +2058,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Log Viewer.
+        ///   Looks up a localized string similar to Application log viewer.
         /// </summary>
         public static string OpenLogViewerCommand_Action_Description {
             get {
@@ -2085,7 +2085,7 @@ namespace Asv.Avalonia {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open Settings.
+        ///   Looks up a localized string similar to Application settings.
         /// </summary>
         public static string OpenSettingsCommand_Action_Description {
             get {

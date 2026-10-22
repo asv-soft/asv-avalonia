@@ -847,13 +847,13 @@
         <value>Просмотр логов</value>
     </data>
     <data name="OpenLogViewerCommand_Action_Description" xml:space="preserve">
-        <value>Открыть просмотр логов</value>
+        <value>Просмотр журнала приложения</value>
     </data>
     <data name="OpenSettingsCommand_Action_Title" xml:space="preserve">
         <value>Настройки</value>
     </data>
     <data name="OpenSettingsCommand_Action_Description" xml:space="preserve">
-        <value>Открыть настройки</value>
+        <value>Настройки приложения</value>
     </data>
     <data name="ClearCommand_CommandInfo_Name" xml:space="preserve">
         <value>Очистка</value>

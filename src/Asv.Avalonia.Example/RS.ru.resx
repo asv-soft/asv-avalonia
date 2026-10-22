@@ -205,7 +205,7 @@
         <value>Открыт файл: {0}</value>
     </data>
     <data name="OpenControlsGalleryPageCommand_Action_Description" xml:space="preserve">
-        <value>Открыть галерею контролов</value>
+        <value>Галерея элементов интерфейса</value>
     </data>
     <data name="OpenControlsGalleryPageCommand_Action_Title" xml:space="preserve">
         <value>Галерея контролов</value>
@@ -370,7 +370,7 @@
         <value>Команда, которая открывает карту для тестов</value>
     </data>
     <data name="OpenMapTestPageCommand_Action_Description" xml:space="preserve">
-        <value>Открыть карту для тестов</value>
+        <value>Инструменты тестирования карты</value>
     </data>
     <data name="OpenMapTestPageCommand_Action_Name" xml:space="preserve">
         <value>Карта для тестов</value>

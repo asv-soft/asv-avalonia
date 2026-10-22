@@ -816,13 +816,13 @@
         <value>Log Viewer</value>
     </data>
     <data name="OpenLogViewerCommand_Action_Description" xml:space="preserve">
-        <value>Open Log Viewer</value>
+        <value>Application log viewer</value>
     </data>
     <data name="OpenSettingsCommand_Action_Title" xml:space="preserve">
         <value>Settings</value>
     </data>
     <data name="OpenSettingsCommand_Action_Description" xml:space="preserve">
-        <value>Open Settings</value>
+        <value>Application settings</value>
     </data>
     <data name="ClearCommand_CommandInfo_Name" xml:space="preserve">
         <value>Clear</value>

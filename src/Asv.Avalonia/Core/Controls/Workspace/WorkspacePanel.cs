@@ -43,10 +43,10 @@ public partial class WorkspacePanel : Panel
                 [!ColumnDefinition.MinWidthProperty] = this[!MinLeftWidthProperty],
             },
             _verticalSplitterRaw1 = new ColumnDefinition(
-                new GridLength(SplitterSize, GridUnitType.Pixel)
+                new GridLength(WidgetSpacing, GridUnitType.Pixel)
             )
             {
-                MaxWidth = SplitterSize,
+                MaxWidth = WidgetSpacing,
             },
             _centerColumn = new ColumnDefinition
             {
@@ -54,10 +54,10 @@ public partial class WorkspacePanel : Panel
                 [!ColumnDefinition.MinWidthProperty] = this[!MinCentralWidthProperty],
             },
             _verticalSplitterRaw2 = new ColumnDefinition(
-                new GridLength(SplitterSize, GridUnitType.Pixel)
+                new GridLength(WidgetSpacing, GridUnitType.Pixel)
             )
             {
-                MaxWidth = SplitterSize,
+                MaxWidth = WidgetSpacing,
             },
             _rightColumn = new ColumnDefinition
             {
@@ -79,10 +79,10 @@ public partial class WorkspacePanel : Panel
                 [!RowDefinition.MinHeightProperty] = this[!MinCentralHeightProperty],
             },
             _horizontalSplitterRaw = new RowDefinition(
-                new GridLength(SplitterSize, GridUnitType.Pixel)
+                new GridLength(WidgetSpacing, GridUnitType.Pixel)
             )
             {
-                MaxHeight = SplitterSize,
+                MaxHeight = WidgetSpacing,
             },
             _bottomRow = new RowDefinition
             {
@@ -94,13 +94,21 @@ public partial class WorkspacePanel : Panel
         Grid.SetColumn(centerGrid, 2);
 
         // Left ScrollViewer with the StackPanel
-        _leftPanel = new StackPanel { Name = "PART_LeftPanel", Spacing = SplitterSize };
+        _leftPanel = new StackPanel
+        {
+            Name = "PART_LeftPanel",
+            [!StackPanel.SpacingProperty] = this[!WidgetSpacingProperty],
+        };
         var leftScrollViewer = new ScrollViewer { Background = null, Content = _leftPanel };
         Grid.SetRow(leftScrollViewer, 0);
         Grid.SetColumn(leftScrollViewer, 0);
 
         // Right ScrollViewer with the StackPanel
-        _rightPanel = new StackPanel { Name = "PART_RightPanel", Spacing = SplitterSize };
+        _rightPanel = new StackPanel
+        {
+            Name = "PART_RightPanel",
+            [!StackPanel.SpacingProperty] = this[!WidgetSpacingProperty],
+        };
         var rightScrollViewer = new ScrollViewer { Background = null, Content = _rightPanel };
         Grid.SetRow(rightScrollViewer, 0);
         Grid.SetColumn(rightScrollViewer, 4);
@@ -132,9 +140,10 @@ public partial class WorkspacePanel : Panel
         // Vertical GridSplitter between columns 0 and 2
         _verticalSplitter1 = new GridSplitter
         {
-            Width = SplitterSize,
+            Width = WidgetSpacing,
+            ResizeDirection = GridResizeDirection.Columns,
             IsHitTestVisible = true,
-            Cursor = Cursor.Parse("DragMove"),
+            Cursor = new Cursor(StandardCursorType.SizeWestEast),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
         _verticalSplitter1.DragCompleted += HorizontalSplitterOnDragCompleted;
@@ -145,9 +154,10 @@ public partial class WorkspacePanel : Panel
         // Vertical GridSplitter between columns 2 and 4
         _verticalSplitter2 = new GridSplitter
         {
-            Width = SplitterSize,
+            Width = WidgetSpacing,
+            ResizeDirection = GridResizeDirection.Columns,
             IsHitTestVisible = true,
-            Cursor = Cursor.Parse("DragMove"),
+            Cursor = new Cursor(StandardCursorType.SizeWestEast),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
         _verticalSplitter2.DragCompleted += HorizontalSplitterOnDragCompleted;
@@ -158,10 +168,11 @@ public partial class WorkspacePanel : Panel
         // Horizontal GridSplitter in row 2
         _horizontalSplitter = new GridSplitter
         {
-            Height = SplitterSize,
+            Height = WidgetSpacing,
+            ResizeDirection = GridResizeDirection.Rows,
             HorizontalAlignment = HorizontalAlignment.Stretch,
             IsHitTestVisible = true,
-            Cursor = Cursor.Parse("DragMove"),
+            Cursor = new Cursor(StandardCursorType.SizeNorthSouth),
             ResizeBehavior = GridResizeBehavior.PreviousAndNext,
         };
 
@@ -190,26 +201,23 @@ public partial class WorkspacePanel : Panel
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == SplitterSizeProperty)
+        if (change.Property == WidgetSpacingProperty)
         {
-            UpdateSplitterSize();
+            UpdateWidgetSpacing();
         }
     }
 
-    private void UpdateSplitterSize()
+    private void UpdateWidgetSpacing()
     {
-        var splitterLength = new GridLength(SplitterSize, GridUnitType.Pixel);
+        var splitterLength = new GridLength(WidgetSpacing, GridUnitType.Pixel);
 
-        _leftPanel.Spacing = SplitterSize;
-        _rightPanel.Spacing = SplitterSize;
+        _verticalSplitter1.Width = WidgetSpacing;
+        _verticalSplitter2.Width = WidgetSpacing;
+        _horizontalSplitter.Height = WidgetSpacing;
 
-        _verticalSplitter1.Width = SplitterSize;
-        _verticalSplitter2.Width = SplitterSize;
-        _horizontalSplitter.Height = SplitterSize;
-
-        _verticalSplitterRaw1.MaxWidth = SplitterSize;
-        _verticalSplitterRaw2.MaxWidth = SplitterSize;
-        _horizontalSplitterRaw.MaxHeight = SplitterSize;
+        _verticalSplitterRaw1.MaxWidth = WidgetSpacing;
+        _verticalSplitterRaw2.MaxWidth = WidgetSpacing;
+        _horizontalSplitterRaw.MaxHeight = WidgetSpacing;
 
         _verticalSplitterRaw1.Width = _verticalSplitter1.IsVisible
             ? splitterLength
@@ -352,7 +360,7 @@ public partial class WorkspacePanel : Panel
         {
             _leftColumn.MaxWidth = double.PositiveInfinity;
             _verticalSplitter1.IsVisible = true;
-            _verticalSplitterRaw1.Width = new GridLength(SplitterSize, GridUnitType.Pixel);
+            _verticalSplitterRaw1.Width = new GridLength(WidgetSpacing, GridUnitType.Pixel);
         }
 
         if (!_rightPanel.Children.Any(x => x.IsVisible))
@@ -365,7 +373,7 @@ public partial class WorkspacePanel : Panel
         {
             _rightColumn.MaxWidth = double.PositiveInfinity;
             _verticalSplitter2.IsVisible = true;
-            _verticalSplitterRaw2.Width = new GridLength(SplitterSize, GridUnitType.Pixel);
+            _verticalSplitterRaw2.Width = new GridLength(WidgetSpacing, GridUnitType.Pixel);
         }
 
         if (!_bottomPanel.Any(x => x.IsVisible))
@@ -378,7 +386,7 @@ public partial class WorkspacePanel : Panel
         {
             _bottomRow.MaxHeight = double.PositiveInfinity;
             _horizontalSplitter.IsVisible = true;
-            _horizontalSplitterRaw.Height = new GridLength(SplitterSize, GridUnitType.Pixel);
+            _horizontalSplitterRaw.Height = new GridLength(WidgetSpacing, GridUnitType.Pixel);
         }
 
         for (int i = 0; i < _centerPanel.Children.Count; i++)

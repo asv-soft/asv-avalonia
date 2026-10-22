@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
 
 namespace Asv.Avalonia;
 
@@ -9,7 +8,8 @@ public class NullSoloRunFeature : IHostedService
 
     public NullSoloRunFeature()
     {
-        Mutex = new Mutex(true, Process.GetCurrentProcess().ProcessName + ".Design", out _);
+        // The designer does not need a system-wide lock or its backing files.
+        Mutex = new Mutex(initiallyOwned: true);
         IsFirstInstance = true;
     }
 

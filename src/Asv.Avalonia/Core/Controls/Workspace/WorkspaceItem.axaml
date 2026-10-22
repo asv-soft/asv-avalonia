@@ -55,7 +55,7 @@
 
     <Style Selector="avalonia|WorkspaceItem">
         <!-- Set Defaults -->
-        <Setter Property="Padding" Value="4"></Setter>
+        <Setter Property="Padding" Value="2" />
         <Setter
             Property="avalonia:WorkspacePanel.Dock"
             Value="{Binding Position, RelativeSource={RelativeSource Self}}"
@@ -70,7 +70,7 @@
         />
         <Setter Property="BorderThickness" Value="{DynamicResource ThemeBorderThickness}" />
         <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
-        <Setter Property="Margin" Value="4" />
+        <Setter Property="Margin" Value="0" />
         <Style Selector="^[Position=Bottom] DockPanel#PART_Header">
             <Setter Property="IsVisible" Value="False" />
         </Style>
@@ -138,12 +138,13 @@
                         Opacity="0.8"
                     />
                     <DockPanel Margin="{TemplateBinding Padding}">
-                        <DockPanel x:Name="PART_Header" Margin="0,0,0,0" DockPanel.Dock="Top">
+                        <DockPanel x:Name="PART_Header" MinHeight="28" DockPanel.Dock="Top">
                             <ToggleButton
                                 IsVisible="{TemplateBinding CanExpand}"
                                 DockPanel.Dock="Right"
                                 Margin="0"
-                                Padding="2,4"
+                                Padding="2,0"
+                                MinHeight="24"
                                 VerticalAlignment="Center"
                                 IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
                                 Theme="{DynamicResource TransparentButton}"
@@ -166,7 +167,8 @@
                             <Button
                                 IsVisible="{TemplateBinding Flyout, Converter={x:Static ObjectConverters.IsNotNull}}"
                                 Margin="0"
-                                Padding="5,4"
+                                Padding="4,0"
+                                MinHeight="24"
                                 DockPanel.Dock="Right"
                                 Theme="{DynamicResource TransparentButton}"
                                 Flyout="{TemplateBinding Flyout}"
@@ -190,7 +192,8 @@
                             <Button
                                 IsVisible="{TemplateBinding HasActions}"
                                 Margin="0"
-                                Padding="5,4"
+                                Padding="4,0"
+                                MinHeight="24"
                                 DockPanel.Dock="Right"
                                 Theme="{DynamicResource TransparentButton}"
                                 Command="{TemplateBinding OpenContextMenu}"
@@ -231,7 +234,8 @@
                                 IsVisible="{TemplateBinding CanExpand}"
                                 HorizontalContentAlignment="Stretch"
                                 VerticalContentAlignment="Center"
-                                Padding="2,4"
+                                Padding="2,0"
+                                MinHeight="24"
                                 IsChecked="{TemplateBinding IsExpanded, Mode=TwoWay}"
                                 HorizontalAlignment="Stretch"
                                 Theme="{DynamicResource TransparentButton}"

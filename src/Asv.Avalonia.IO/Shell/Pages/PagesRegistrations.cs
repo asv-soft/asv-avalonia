@@ -24,6 +24,7 @@ public static class PagesRegistrations
         public Builder RegisterDefault()
         {
             this.RegisterSettings();
+            this.RegisterPacketInspector();
             return this;
         }
     }

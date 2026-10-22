@@ -101,7 +101,7 @@
         <value>Установленные плагины</value>
     </data>
     <data name="OpenInstalledPluginsCommand_Action_Description" xml:space="preserve">
-        <value>Открыть установленные плагины</value>
+        <value>Управление установленными плагинами</value>
     </data>
     <data name="SettingsPluginsSourcesViewModel_Name" xml:space="preserve">
         <value>Источники плагинов</value>
@@ -140,7 +140,7 @@
         <value>Магазин плагинов</value>
     </data>
     <data name="OpenPluginsMarketCommand_Action_Description" xml:space="preserve">
-        <value>Открыть страницу магазина плагинов</value>
+        <value>Каталог доступных плагинов</value>
     </data>
     <data name="SettingsPluginsSourcesViewModel_MenuItem_Add_Title" xml:space="preserve">
         <value>Добавить источник</value>

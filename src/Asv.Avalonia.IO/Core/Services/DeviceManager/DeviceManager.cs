@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
 using Asv.Cfg;
 using Asv.Common;
@@ -96,6 +97,11 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
         {
             extension.Run(this);
         }
+    }
+
+    public bool TryIdentify(IProtocolMessage message, [NotNullWhen(true)] out DeviceId? deviceId)
+    {
+        return Explorer.TryIdentify(message, out deviceId);
     }
 
     public IProtocolFactory ProtocolFactory { get; }

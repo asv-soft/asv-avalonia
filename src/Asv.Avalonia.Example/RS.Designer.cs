@@ -1105,7 +1105,7 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open controls gallery.
+        ///   Looks up a localized string similar to UI controls gallery.
         /// </summary>
         public static string OpenControlsGalleryPageCommand_Action_Description {
             get {
@@ -1141,7 +1141,7 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Open map test.
+        ///   Looks up a localized string similar to Map testing tools.
         /// </summary>
         public static string OpenMapTestPageCommand_Action_Description {
             get {

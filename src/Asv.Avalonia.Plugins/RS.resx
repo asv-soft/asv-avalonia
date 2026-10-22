@@ -106,7 +106,7 @@
         <value>Installed Plugins</value>
     </data>
     <data name="OpenInstalledPluginsCommand_Action_Description" xml:space="preserve">
-        <value>Open Installed Plugins</value>
+        <value>Installed plugins management</value>
     </data>
     <data name="SettingsPluginsSourcesViewModel_Name" xml:space="preserve">
         <value>Plugins Sources</value>
@@ -145,7 +145,7 @@
         <value>Plugins Market</value>
     </data>
     <data name="OpenPluginsMarketCommand_Action_Description" xml:space="preserve">
-        <value>Open plugins market page</value>
+        <value>Available plugins catalog</value>
     </data>
     <data name="SettingsPluginsSourcesViewModel_MenuItem_Add_Title" xml:space="preserve">
         <value>Add Source</value>

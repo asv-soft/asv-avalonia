@@ -1,4 +1,4 @@
-﻿<root>
+<root>
     <resheader name="resmimetype">
         <value>text/microsoft-resx</value>
     </resheader>
@@ -220,5 +220,138 @@
     </data>
     <data name="PortViewModel_ValidationException_TooLong" xml:space="preserve">
         <value>Название порта слишком длинное. Максимальная длина {0} символов</value>
+    </data>
+
+    <data name="PacketInspector_Title" xml:space="preserve">
+        <value>Инспектор трафика</value>
+    </data>
+    <data name="PacketInspector_Sources" xml:space="preserve">
+        <value>Источники</value>
+    </data>
+    <data name="PacketInspector_Protocols" xml:space="preserve">
+        <value>Протоколы</value>
+    </data>
+    <data name="PacketInspector_Devices" xml:space="preserve">
+        <value>Устройства</value>
+    </data>
+    <data name="PacketInspector_Messages" xml:space="preserve">
+        <value>Сообщения</value>
+    </data>
+    <data name="PacketInspector_Journal" xml:space="preserve">
+        <value>Журнал</value>
+    </data>
+    <data name="PacketInspector_Details" xml:space="preserve">
+        <value>Детали сообщения</value>
+    </data>
+    <data name="PacketInspector_Fields" xml:space="preserve">
+        <value>Поля</value>
+    </data>
+    <data name="PacketInspector_Text" xml:space="preserve">
+        <value>Текст</value>
+    </data>
+    <data name="PacketInspector_Pause" xml:space="preserve">
+        <value>Пауза экрана</value>
+    </data>
+    <data name="PacketInspector_Clear" xml:space="preserve">
+        <value>Очистить захват</value>
+    </data>
+    <data name="PacketInspector_Reset" xml:space="preserve">
+        <value>Сбросить фильтры</value>
+    </data>
+    <data name="PacketInspector_Search" xml:space="preserve">
+        <value>Поиск по имени или ID…</value>
+    </data>
+    <data name="PacketInspector_Name" xml:space="preserve">
+        <value>Сообщение</value>
+    </data>
+    <data name="PacketInspector_Source" xml:space="preserve">
+        <value>Endpoint</value>
+    </data>
+    <data name="PacketInspector_Device" xml:space="preserve">
+        <value>Устройство</value>
+    </data>
+    <data name="PacketInspector_Protocol" xml:space="preserve">
+        <value>Протокол</value>
+    </data>
+    <data name="PacketInspector_Direction" xml:space="preserve">
+        <value>RX / TX</value>
+    </data>
+    <data name="PacketInspector_Frequency" xml:space="preserve">
+        <value>Гц</value>
+    </data>
+    <data name="PacketInspector_Count" xml:space="preserve">
+        <value>Количество</value>
+    </data>
+    <data name="PacketInspector_Time" xml:space="preserve">
+        <value>Время</value>
+    </data>
+    <data name="PacketInspector_Type" xml:space="preserve">
+        <value>Тип</value>
+    </data>
+    <data name="PacketInspector_Value" xml:space="preserve">
+        <value>Значение</value>
+    </data>
+    <data name="PacketInspector_Units" xml:space="preserve">
+        <value>Единицы</value>
+    </data>
+    <data name="PacketInspector_History" xml:space="preserve">
+        <value>История сообщения</value>
+    </data>
+    <data name="PacketInspector_Empty" xml:space="preserve">
+        <value>Нет сообщений по выбранным фильтрам</value>
+    </data>
+    <data name="PacketInspector_Unidentified" xml:space="preserve">
+        <value>Не определено</value>
+    </data>
+    <data name="PacketInspector_FieldLimit" xml:space="preserve">
+        <value>Превышен предел обхода полей</value>
+    </data>
+    <data name="PacketInspector_AllSources" xml:space="preserve">
+        <value>Все источники</value>
+    </data>
+    <data name="PacketInspector_NoFields" xml:space="preserve">
+        <value>Нет полей, доступных через IVisitor</value>
+    </data>
+    <data name="PacketInspector_SelectMessage" xml:space="preserve">
+        <value>Выберите сообщение</value>
+    </data>
+    <data name="PacketInspector_Status" xml:space="preserve">
+        <value>В буфере: {0} · вытеснено: {1} · ошибок: {2}</value>
+    </data>
+    <data name="PacketInspector_Paused" xml:space="preserve">
+        <value>Экран на паузе; захват продолжается</value>
+    </data>
+    <data name="PacketInspector_Active" xml:space="preserve">
+        <value>Захват активен</value>
+    </data>
+    <data name="PacketInspector_Window" xml:space="preserve">
+        <value>Статистика в пределах сохранённого буфера</value>
+    </data>
+    <data name="PacketInspector_Resume" xml:space="preserve">
+        <value>Продолжить отображение</value>
+    </data>
+    <data name="PacketInspector_Description" xml:space="preserve">
+        <value>Входящие и исходящие сообщения</value>
+    </data>
+    <data name="PacketInspector_Copy" xml:space="preserve">
+        <value>Копировать</value>
+    </data>
+    <data name="PacketInspector_Content" xml:space="preserve">
+        <value>Содержимое</value>
+    </data>
+    <data name="PacketInspector_Charts" xml:space="preserve">
+        <value>Графики</value>
+    </data>
+    <data name="PacketInspector_ChartsEmpty" xml:space="preserve">
+        <value>Выберите числовое поле и нажмите «На график».</value>
+    </data>
+    <data name="PacketInspector_ToChart" xml:space="preserve">
+        <value>На график</value>
+    </data>
+    <data name="PacketInspector_RemoveChart" xml:space="preserve">
+        <value>Удалить график</value>
+    </data>
+    <data name="PacketInspector_ChartTime" xml:space="preserve">
+        <value>Время, с</value>
     </data>
 </root>

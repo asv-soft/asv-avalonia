@@ -55,7 +55,10 @@ public static class MainMenuRegistrations
                 .Register<ToolsMenu>()
                 .Register<ToolsHomeMenu>()
                 .Register<ToolsSettingsMenu>()
-                .Register<ViewMenu>();
+                .Register<ViewMenu>()
+                .Register<ViewWindowSize720Menu>()
+                .Register<ViewWindowSizeMenu>()
+                .Register<ViewWindowSize1440Menu>();
         }
     }
 }
