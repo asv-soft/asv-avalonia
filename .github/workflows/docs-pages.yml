@@ -1,0 +1,76 @@
+name: Publish documentation
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/Writerside/**'
+      - '.github/workflows/docs-pages.yml'
+  pull_request:
+    paths:
+      - 'src/Writerside/**'
+      - '.github/workflows/docs-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  INSTANCE: Writerside/am
+  ARTIFACT: webHelpAM2-all.zip
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Writerside documentation
+        run: |
+          mkdir -p artifacts
+          docker run --rm \
+            -v "$GITHUB_WORKSPACE:/opt/sources" \
+            -e SOURCE_DIR=/opt/sources/src \
+            -e MODULE_INSTANCE="$INSTANCE" \
+            -e OUTPUT_DIR=/opt/sources/artifacts \
+            -e RUNNER=other \
+            jetbrains/writerside-builder:2026.08.0328
+
+      - name: Check documentation
+        uses: JetBrains/writerside-checker-action@v1
+        with:
+          instance: ${{ env.INSTANCE }}
+
+      - name: Unpack website
+        run: |
+          unzip -q "artifacts/$ARTIFACT" -d site
+          test -f site/index.html
+          touch site/.nojekyll
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v4
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

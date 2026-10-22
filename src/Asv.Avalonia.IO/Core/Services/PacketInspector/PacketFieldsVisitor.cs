@@ -31,6 +31,8 @@ internal sealed class PacketFieldsVisitor : FullVisitorBase
         }
         _children.Peek().Add(new(ElementName(field), type.Name, text, field.GetUnits(), field.GetDescription(), [])
         {
+            Definition = field,
+            DataType = type,
             NumericValue = value is Half half ? (double)half : value is sbyte or byte or short or ushort or int or uint or long or ulong or float or double
                 ? Convert.ToDouble(value, CultureInfo.InvariantCulture) : null,
         });
@@ -60,7 +62,11 @@ internal sealed class PacketFieldsVisitor : FullVisitorBase
             throw new InvalidOperationException(RS.PacketInspector_FieldLimit);
         }
         _children.Peek().Add(new(parent.Name, parent.Type.Name, string.Empty,
-            field.GetUnits(), field.GetDescription(), children));
+            field.GetUnits(), field.GetDescription(), children)
+        {
+            Definition = field,
+            DataType = parent.Type,
+        });
     }
 
     public override void VisitUnknown(Field field, IFieldType type) => Add(field, type, "?");

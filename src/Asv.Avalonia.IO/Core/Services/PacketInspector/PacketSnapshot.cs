@@ -27,6 +27,10 @@ public sealed record PacketFieldSnapshot
         Children = children;
     }
 
+    public Field? Definition { get; init; }
+    public IFieldType? DataType { get; init; }
+    public string CreateDetailsMarkdown(string path) => PacketFieldDetails.CreateMarkdown(this, path);
+
     public string Name { get; init; }
     public string Type { get; init; }
     public double? NumericValue { get; init; }
@@ -101,6 +105,7 @@ public sealed record PacketSnapshot
         InspectionError = inspectionError;
     }
 
+    public long? FileEndOffset { get; init; }
     public long Sequence { get; init; }
     public DateTimeOffset Timestamp { get; init; }
     public long MonotonicTimestamp { get; init; }
@@ -118,8 +123,8 @@ public sealed record PacketSnapshot
     public string Protocol => ProtocolName;
     public string MessageId => Key.MessageId;
     public string Device => Key.DeviceId?.ToString() ?? RS.PacketInspector_Unidentified;
-    public string Direction => Key.Direction == PacketDirection.Rx ? "RX" : "TX";
-    public string Time => Timestamp.ToLocalTime().ToString("HH:mm:ss.fff");
+    public string Direction => FileEndOffset != null ? string.Empty : Key.Direction == PacketDirection.Rx ? "RX" : "TX";
+    public string Time => FileEndOffset != null ? string.Empty : Timestamp.ToLocalTime().ToString("HH:mm:ss.fff");
     internal long EstimatedBytes => 256L + ((Name.Length + PortName.Length + Endpoint.Length
             + (PortDescription?.Length ?? 0) + (EndpointName?.Length ?? 0) + (EndpointDescription?.Length ?? 0)) * 2L)
         + EstimateFields(Fields);

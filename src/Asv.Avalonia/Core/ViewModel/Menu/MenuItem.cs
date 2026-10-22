@@ -59,10 +59,10 @@ namespace Asv.Avalonia
             bool visibleWhenNoExecute = false
         )
         {
-            HotKey = hotKeys[actionId];
+            HotKey = hotKeys[actionId] is { Key: not Key.None } gesture ? gesture : null;
             hotKeys
                 .OnHotKeyGestureChanged.Where(x => x.Action.ActionId == actionId)
-                .Subscribe(x => HotKey = x.Gesture)
+                .Subscribe(x => HotKey = x.Gesture.Key == Key.None ? null : x.Gesture)
                 .AddTo(ref DisposableBag);
 
             hotKeys

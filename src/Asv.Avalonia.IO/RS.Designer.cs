@@ -67,6 +67,141 @@ namespace Asv.Avalonia.IO {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Cancel reading.
+        /// </summary>
+        public static string FileInspector_Cancel {
+            get {
+                return ResourceManager.GetString("FileInspector_Cancel", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Charts · packet number.
+        /// </summary>
+        public static string FileInspector_Charts {
+            get {
+                return ResourceManager.GetString("FileInspector_Charts", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Close file.
+        /// </summary>
+        public static string FileInspector_Close {
+            get {
+                return ResourceManager.GetString("FileInspector_Close", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Protocol messages from a file.
+        /// </summary>
+        public static string FileInspector_Description {
+            get {
+                return ResourceManager.GetString("FileInspector_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open a file to inspect its messages.
+        /// </summary>
+        public static string FileInspector_Empty {
+            get {
+                return ResourceManager.GetString("FileInspector_Empty", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to End offset (bytes).
+        /// </summary>
+        public static string FileInspector_EndOffset {
+            get {
+                return ResourceManager.GetString("FileInspector_EndOffset", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to File.
+        /// </summary>
+        public static string FileInspector_File {
+            get {
+                return ResourceManager.GetString("FileInspector_File", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to File exceeds the inspection limit (100,000 messages or 128 MiB of decoded data). Open a smaller recording..
+        /// </summary>
+        public static string FileInspector_Limit {
+            get {
+                return ResourceManager.GetString("FileInspector_Limit", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No protocol parsers are registered in this application..
+        /// </summary>
+        public static string FileInspector_NoParsers {
+            get {
+                return ResourceManager.GetString("FileInspector_NoParsers", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Raw files contain no capture time or RX/TX direction. Charts use packet numbers..
+        /// </summary>
+        public static string FileInspector_NoTime {
+            get {
+                return ResourceManager.GetString("FileInspector_NoTime", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Open file….
+        /// </summary>
+        public static string FileInspector_Open {
+            get {
+                return ResourceManager.GetString("FileInspector_Open", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Position.
+        /// </summary>
+        public static string FileInspector_Position {
+            get {
+                return ResourceManager.GetString("FileInspector_Position", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Show all messages.
+        /// </summary>
+        public static string FileInspector_ShowAll {
+            get {
+                return ResourceManager.GetString("FileInspector_ShowAll", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to {0:N0} bytes · {1:N0} messages · {2:N0} parser errors.
+        /// </summary>
+        public static string FileInspector_Status {
+            get {
+                return ResourceManager.GetString("FileInspector_Status", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to File Inspector.
+        /// </summary>
+        public static string FileInspector_Title {
+            get {
+                return ResourceManager.GetString("FileInspector_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Device {0} with address {1}.
         /// </summary>
         public static string HomePageDeviceItem_Description {
@@ -238,6 +373,78 @@ namespace Asv.Avalonia.IO {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Allowed characters.
+        /// </summary>
+        public static string PacketInspector_FieldAllowedCharacters {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldAllowedCharacters", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Default value.
+        /// </summary>
+        public static string PacketInspector_FieldDefault {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldDefault", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Elements.
+        /// </summary>
+        public static string PacketInspector_FieldElements {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldElements", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Element type.
+        /// </summary>
+        public static string PacketInspector_FieldElementType {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldElementType", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Encoding.
+        /// </summary>
+        public static string PacketInspector_FieldEncoding {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldEncoding", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Enumeration values.
+        /// </summary>
+        public static string PacketInspector_FieldEnum {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldEnum", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Format.
+        /// </summary>
+        public static string PacketInspector_FieldFormat {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldFormat", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Field information.
+        /// </summary>
+        public static string PacketInspector_FieldInformation {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldInformation", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Field inspection limit exceeded.
         /// </summary>
         public static string PacketInspector_FieldLimit {
@@ -247,11 +454,119 @@ namespace Asv.Avalonia.IO {
         }
 
         /// <summary>
+        ///   Looks up a localized string similar to Maximum.
+        /// </summary>
+        public static string PacketInspector_FieldMaximum {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldMaximum", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Maximum length.
+        /// </summary>
+        public static string PacketInspector_FieldMaximumSize {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldMaximumSize", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum.
+        /// </summary>
+        public static string PacketInspector_FieldMinimum {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldMinimum", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Minimum length.
+        /// </summary>
+        public static string PacketInspector_FieldMinimumSize {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldMinimumSize", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string PacketInspector_FieldNo {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldNo", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Path.
+        /// </summary>
+        public static string PacketInspector_FieldPath {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldPath", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Read only.
+        /// </summary>
+        public static string PacketInspector_FieldReadOnly {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldReadOnly", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Fields.
         /// </summary>
         public static string PacketInspector_Fields {
             get {
                 return ResourceManager.GetString("PacketInspector_Fields", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Length.
+        /// </summary>
+        public static string PacketInspector_FieldSize {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldSize", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string PacketInspector_FieldType {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldType", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Units.
+        /// </summary>
+        public static string PacketInspector_FieldUnits {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldUnits", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string PacketInspector_FieldValue {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldValue", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string PacketInspector_FieldYes {
+            get {
+                return ResourceManager.GetString("PacketInspector_FieldYes", resourceCulture);
             }
         }
 

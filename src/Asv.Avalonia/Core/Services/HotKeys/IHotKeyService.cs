@@ -23,8 +23,21 @@ public interface IHotKeyService
     /// </summary>
     /// <param name="hotKeyId">The action identifier.</param>
     /// <returns>The effective gesture assigned to the action.</returns>
-    /// <remarks>Setting the value to <see langword="null"/> restores the default gesture.</remarks>
+    /// <remarks>Setting the value to <see langword="null"/> restores the default gesture.
+    /// A gesture with Key.None explicitly disables the action.</remarks>
     KeyGesture? this[string hotKeyId] { get; set; }
+
+    /// <summary>
+    /// Applies user assignments. Null restores the default; Key.None disables an action.
+    /// Implementations may override this method to persist the batch in one operation.
+    /// </summary>
+    void ApplyHotKeys(IReadOnlyDictionary<string, KeyGesture?> assignments)
+    {
+        foreach (var (id, gesture) in assignments)
+        {
+            this[id] = gesture;
+        }
+    }
 
     /// <summary>
     /// Gets all registered actions.

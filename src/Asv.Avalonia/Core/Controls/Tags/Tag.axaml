@@ -55,8 +55,10 @@
     <Style Selector="controls|Tag">
         <Setter Property="Foreground" Value="{DynamicResource AsvForegroundInfo3Brush}" />
         <Setter Property="Background" Value="{DynamicResource AsvBackgroundInfo3Brush}" />
-        <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
-        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="5" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="BorderBrush" Value="Transparent" />
+        <Setter Property="Padding" Value="8,4" />
         <Setter Property="FontSize" Value="12"></Setter>
         <!-- ===================================================== -->
         <!-- UNIVERSAL ANIMATION CLASSES – works on any Avalonia control -->
@@ -262,15 +264,16 @@
             <ControlTemplate>
                 <Border
                     x:Name="MainBorder"
-                    Height="{TemplateBinding FontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=10}"
+                    MinHeight="{TemplateBinding FontSize, Converter={x:Static controls:AddDoubleConverter.Instance}, ConverterParameter=14}"
                     BorderThickness="{TemplateBinding BorderThickness}"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    BorderBrush="{TemplateBinding Foreground}"
+                    BorderBrush="{TemplateBinding BorderBrush}"
                     Background="{TemplateBinding Background}"
                     CornerRadius="{TemplateBinding CornerRadius}"
+                    Padding="{TemplateBinding Padding}"
                 >
-                    <StackPanel Margin="2" Orientation="Horizontal" Spacing="2">
+                    <StackPanel Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
                         <avalonia:MaterialIcon
                             Width="{TemplateBinding FontSize}"
                             Height="{TemplateBinding FontSize}"
@@ -282,13 +285,15 @@
                             IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}"
                             FontSize="{TemplateBinding FontSize}"
                             VerticalAlignment="Center"
-                            FontWeight="Bold"
+                            FontWeight="SemiBold"
+                            Opacity="0.75"
                             Text="{TemplateBinding Key}"
                         />
                         <TextBlock
                             IsVisible="{TemplateBinding Key, Converter={x:Static ObjectConverters.IsNotNull}}"
                             FontSize="{TemplateBinding FontSize}"
                             VerticalAlignment="Center"
+                            Opacity="0.75"
                             Text=":"
                         />
                         <TextBlock

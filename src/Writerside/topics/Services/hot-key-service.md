@@ -153,3 +153,33 @@ Defines an executable hot key action. Extends `IHotKeyInfo`.
 |-----------|---------------------|-----------------------------------------|
 | `context` | `IViewModel`        | The view model context.                 |
 | `cancel`  | `CancellationToken` | A token that cancels the operation.     |
+
+## Editing shortcuts in Settings
+
+The default Settings page includes **Keyboard shortcuts**. Applications that compose their
+settings manually can opt in with `settings.RegisterHotKeysSubPage()`.
+
+The editor lists registered `IHotKeyAction` instances, including plugin contributions. Search
+matches the display name, description, action ID, and effective shortcut. Filters show all
+commands, overrides, unassigned commands, or conflicts.
+
+Edits remain local until **Apply**. **Cancel changes** reloads the service assignments;
+**Reset** and **Reset all** restore defaults in the draft. Removing a shortcut uses
+`new KeyGesture(Key.None)` and persists an explicit disabled assignment. Assigning `null`
+through the service indexer continues to mean “restore the default”.
+
+Recording a shortcut temporarily suspends service dispatch. If the new gesture is already
+assigned, the editor asks before removing it from the other commands. Multiple unassigned
+commands do not conflict. Existing duplicate gestures are shown by the conflict filter and
+must be resolved before applying. This editor conservatively treats equal gestures as conflicts
+even when actions target different contexts.
+
+`ApplyHotKeys` on `HotKeyService` validates the batch and persists it before publishing change
+notifications. Consumers observing the first notification already see the complete new batch.
+The default interface implementation retains compatibility with custom services by applying
+entries through their indexer; custom implementations can override it for batch persistence.
+
+The capture control handles key input through Avalonia routed events. Subscriptions belong to
+view models, and service notifications are marshalled to the UI dispatcher before updating
+bound collections. See [Avalonia routed events](https://docs.avaloniaui.net/docs/input-interaction/routed-events)
+and [R3 subscription lifetime](https://github.com/Cysharp/R3/blob/1.3.1/README.md) for the underlying framework behavior.

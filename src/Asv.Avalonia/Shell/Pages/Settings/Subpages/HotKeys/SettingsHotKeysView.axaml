@@ -1,0 +1,156 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Asv.Avalonia"
+    x:Class="Asv.Avalonia.SettingsHotKeysView"
+    x:DataType="local:SettingsHotKeysViewModel"
+>
+    <Design.DataContext>
+        <local:SettingsHotKeysViewModel />
+    </Design.DataContext>
+    <Grid RowDefinitions="Auto,*,Auto" Margin="16" RowSpacing="12">
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+            <TextBox
+                Text="{Binding SearchText, Mode=TwoWay}"
+                PlaceholderText="{x:Static local:HotKeyEditorText.Search}"
+                AutomationProperties.Name="{x:Static local:HotKeyEditorText.Search}"
+            />
+            <ComboBox
+                Grid.Column="1"
+                ItemsSource="{Binding Filters}"
+                SelectedIndex="{Binding FilterIndex, Mode=TwoWay}"
+                MinWidth="160"
+                AutomationProperties.Name="{x:Static local:HotKeyEditorText.Title}"
+            />
+        </Grid>
+        <Grid Grid.Row="1">
+            <DataGrid
+                ItemsSource="{Binding Items}"
+                AutoGenerateColumns="False"
+                IsReadOnly="True"
+                CanUserResizeColumns="True"
+                GridLinesVisibility="Horizontal"
+            >
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn
+                        Header="{x:Static local:HotKeyEditorText.Command}"
+                        Width="*"
+                        MinWidth="180"
+                    >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="local:HotKeyEditorItem">
+                                <StackPanel
+                                    Margin="8"
+                                    Spacing="2"
+                                    ToolTip.Tip="{Binding Action.Description}"
+                                >
+                                    <TextBlock Text="{Binding Action.Name}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{Binding Action.ActionId}" Opacity="0.6" />
+                                    <TextBlock
+                                        Text="{x:Static local:HotKeyEditorText.Modified}"
+                                        IsVisible="{Binding IsModified}"
+                                        Opacity="0.6"
+                                    />
+                                    <TextBlock
+                                        Text="{x:Static local:HotKeyEditorText.Conflicts}"
+                                        IsVisible="{Binding HasConflict}"
+                                    />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                        Header="{x:Static local:HotKeyEditorText.Gesture}"
+                        Width="Auto"
+                        MinWidth="160"
+                    >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="local:HotKeyEditorItem">
+                                <Button
+                                    Content="{Binding GestureText}"
+                                    Command="{Binding EditCommand}"
+                                    Margin="8"
+                                    VerticalAlignment="Center"
+                                    ToolTip.Tip="{x:Static local:HotKeyEditorText.Capture}"
+                                />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn
+                        Header="{x:Static local:HotKeyEditorText.Default}"
+                        Width="Auto"
+                        MinWidth="120"
+                    >
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="local:HotKeyEditorItem">
+                                <TextBlock
+                                    Text="{Binding DefaultText}"
+                                    Margin="8"
+                                    VerticalAlignment="Center"
+                                    Opacity="0.6"
+                                />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Width="Auto">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate x:DataType="local:HotKeyEditorItem">
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    Margin="8"
+                                    VerticalAlignment="Center"
+                                >
+                                    <Button
+                                        Content="{x:Static local:HotKeyEditorText.Clear}"
+                                        Command="{Binding ClearCommand}"
+                                        IsEnabled="{Binding IsAssigned}"
+                                    />
+                                    <Button
+                                        Content="{x:Static local:HotKeyEditorText.Reset}"
+                                        Command="{Binding ResetCommand}"
+                                        IsEnabled="{Binding IsModified}"
+                                    />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+            <TextBlock
+                Text="{x:Static local:HotKeyEditorText.Empty}"
+                IsVisible="{Binding IsEmpty}"
+                IsHitTestVisible="False"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+            />
+        </Grid>
+        <Grid Grid.Row="2" RowDefinitions="Auto,Auto" RowSpacing="8">
+            <TextBlock Text="{Binding Count}" Opacity="0.6" />
+            <DockPanel Grid.Row="1" LastChildFill="True">
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" Spacing="8">
+                    <Button
+                        Content="{x:Static local:HotKeyEditorText.ResetAll}"
+                        Command="{Binding ResetAllCommand}"
+                    />
+                    <Button
+                        Content="{x:Static local:HotKeyEditorText.Cancel}"
+                        Command="{Binding CancelCommand}"
+                        IsEnabled="{Binding CanCancel}"
+                    />
+                    <Button
+                        Content="{x:Static local:HotKeyEditorText.Apply}"
+                        Command="{Binding ApplyCommand}"
+                        IsEnabled="{Binding CanApply}"
+                    />
+                </StackPanel>
+                <TextBlock
+                    Text="{Binding Status}"
+                    TextWrapping="Wrap"
+                    VerticalAlignment="Center"
+                    Margin="0,0,12,0"
+                />
+            </DockPanel>
+        </Grid>
+    </Grid>
+</UserControl>

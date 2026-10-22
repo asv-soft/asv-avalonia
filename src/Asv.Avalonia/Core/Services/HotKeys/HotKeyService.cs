@@ -168,7 +168,7 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
                     continue;
                 }
 
-                if (!actionHotKey.Equals(hotKey))
+                if (!actionHotKey.Equals(hotKey) || !action.CanExecute(context))
                 {
                     continue;
                 }
@@ -212,27 +212,55 @@ public class HotKeyService : AsyncDisposableOnceBag, IHotKeyService
                 throw new KeyNotFoundException($"Hot key action '{hotKeyId}' not found.");
             }
 
-            var config = _cfg.Get<HotKeyServiceConfig>();
-            var effectiveHotKey = value ?? action.DefaultHotKey;
-            var changed =
-                !_currentHotKeys.TryGetValue(hotKeyId, out var currentHotKey)
-                || !currentHotKey.Equals(effectiveHotKey);
-            _currentHotKeys[hotKeyId] = effectiveHotKey;
+            ApplyHotKeys(new Dictionary<string, KeyGesture?> { [hotKeyId] = value });
+        }
+    }
 
-            if (effectiveHotKey.Equals(action.DefaultHotKey))
+    /// <summary>
+    /// Persists a batch before publishing changes. Null restores the default;
+    /// Key.None explicitly disables an action.
+    /// </summary>
+    public void ApplyHotKeys(IReadOnlyDictionary<string, KeyGesture?> assignments)
+    {
+        ArgumentNullException.ThrowIfNull(assignments);
+        var next = new Dictionary<string, KeyGesture>(_currentHotKeys);
+        foreach (var (id, gesture) in assignments)
+        {
+            if (!_actions.TryGetValue(id, out var action))
             {
-                config.HotKeys.Remove(hotKeyId);
+                throw new KeyNotFoundException($"Hot key action '{id}' not found.");
+            }
+
+            next[id] = gesture ?? action.DefaultHotKey;
+        }
+
+        var previous = _cfg.Get<HotKeyServiceConfig>();
+        var config = new HotKeyServiceConfig
+        {
+            HotKeys = new Dictionary<string, string>(previous.HotKeys),
+        };
+        foreach (var id in assignments.Keys)
+        {
+            if (next[id].Equals(_actions[id].DefaultHotKey))
+            {
+                config.HotKeys.Remove(id);
             }
             else
             {
-                config.HotKeys[hotKeyId] = effectiveHotKey.ToString();
+                config.HotKeys[id] = next[id].ToString();
             }
+        }
 
-            _cfg.Set(config);
-            if (changed)
-            {
-                _onHotKeyGestureChanged.OnNext((action, effectiveHotKey));
-            }
+        _cfg.Set(config);
+        var changes = assignments.Keys.Where(id => !next[id].Equals(_currentHotKeys[id])).ToArray();
+        foreach (var id in changes)
+        {
+            _currentHotKeys[id] = next[id];
+        }
+
+        foreach (var id in changes)
+        {
+            _onHotKeyGestureChanged.OnNext((_actions[id], next[id]));
         }
     }
 

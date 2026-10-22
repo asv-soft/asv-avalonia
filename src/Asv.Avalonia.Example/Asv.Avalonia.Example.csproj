@@ -8,6 +8,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <PackageReference Include="Asv.Gnss" Version="2.5.1"/>
+        <PackageReference Include="Asv.Mavlink" Version="4.4.1"/>
         <PackageReference Include="Avalonia" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Themes.Fluent" Version="$(AvaloniaVersion)"/>
         <PackageReference Include="Avalonia.Fonts.Inter" Version="$(AvaloniaVersion)"/>

@@ -8,7 +8,8 @@
     <Design.DataContext>
         <avalonia:DialogItemHotKeyCaptureViewModel />
     </Design.DataContext>
-    <StackPanel>
+    <StackPanel Spacing="12">
+        <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
         <avalonia:HotKeyBox HotKey="{CompiledBinding HotKey.Value}" />
     </StackPanel>
 </UserControl>

@@ -23,6 +23,8 @@ public sealed class DialogItemHotKeyCaptureViewModel : DialogViewModelBase
         );
     }
 
+    public string Message { get; init; } = string.Empty;
+
     public BindableReactiveProperty<global::Avalonia.Input.KeyGesture?> HotKey { get; }
 
     public override IEnumerable<IViewModel> GetChildren() => [];

@@ -1,7 +1,9 @@
 using Asv.Avalonia.IO;
 using Asv.Cfg;
+using Asv.Gnss;
 using Asv.IO;
 using Asv.IO.Device;
+using Asv.Mavlink;
 using Material.Icons;
 using R3;
 
@@ -12,6 +14,22 @@ public class ExampleDeviceManagerExtension(IConfiguration cfgSvc) : IDeviceManag
     public void Configure(IProtocolBuilder builder)
     {
         builder.Protocols.RegisterExampleProtocol();
+        builder.Protocols.RegisterNmeaProtocol();
+        builder.Protocols.RegisterRtcmV2Protocol();
+        builder.Protocols.RegisterRtcmV3Protocol();
+        builder.Protocols.RegisterUbxProtocol();
+        builder.Protocols.RegisterAsterixProtocol();
+        builder.Protocols.RegisterAsvProtocol();
+        builder.Protocols.RegisterAdsbProtocol();
+        builder.Protocols.RegisterGbasProtocol();
+        builder.Protocols.RegisterRinexProtocol();
+        builder.Protocols.RegisterSbfProtocol();
+        builder.Protocols.RegisterComNavProtocol();
+        builder.Protocols.RegisterJavadProtocol();
+        builder.Protocols.RegisterRawGpsProtocol();
+        builder.Protocols.RegisterRawGlonassProtocol();
+        builder.RegisterMavlinkV1Protocol();
+        builder.RegisterMavlinkV2Protocol(MavlinkV2Protocol.CreateMessageFactory());
         builder.PortTypes.RegisterTcpClientPort();
         builder.PortTypes.RegisterTcpServerPort();
         builder.PortTypes.RegisterSerialPort();

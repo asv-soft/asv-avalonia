@@ -361,4 +361,109 @@
     <data name="PacketInspector_ChartTime" xml:space="preserve">
         <value>Time, s</value>
     </data>
+  <data name="FileInspector_Title" xml:space="preserve">
+    <value>File Inspector</value>
+  </data>
+  <data name="FileInspector_Description" xml:space="preserve">
+    <value>Protocol messages from a file</value>
+  </data>
+  <data name="FileInspector_File" xml:space="preserve">
+    <value>File</value>
+  </data>
+  <data name="FileInspector_Open" xml:space="preserve">
+    <value>Open file…</value>
+  </data>
+  <data name="FileInspector_Close" xml:space="preserve">
+    <value>Close file</value>
+  </data>
+  <data name="FileInspector_Cancel" xml:space="preserve">
+    <value>Cancel reading</value>
+  </data>
+  <data name="FileInspector_Empty" xml:space="preserve">
+    <value>Open a file to inspect its messages</value>
+  </data>
+  <data name="FileInspector_NoTime" xml:space="preserve">
+    <value>Raw files contain no capture time or RX/TX direction. Charts use packet numbers.</value>
+  </data>
+  <data name="FileInspector_Status" xml:space="preserve">
+    <value>{0:N0} bytes · {1:N0} messages · {2:N0} parser errors</value>
+  </data>
+  <data name="FileInspector_EndOffset" xml:space="preserve">
+    <value>End offset (bytes)</value>
+  </data>
+  <data name="FileInspector_Charts" xml:space="preserve">
+    <value>Charts · packet number</value>
+  </data>
+  <data name="FileInspector_Limit" xml:space="preserve">
+    <value>File exceeds the inspection limit (100,000 messages or 128 MiB of decoded data). Open a smaller recording.</value>
+  </data>
+  <data name="FileInspector_NoParsers" xml:space="preserve">
+    <value>No protocol parsers are registered in this application.</value>
+  </data>
+  <data name="FileInspector_ShowAll" xml:space="preserve">
+    <value>Show all messages</value>
+  </data>
+  <data name="FileInspector_Position" xml:space="preserve">
+    <value>Position</value>
+  </data>
+    <data name="PacketInspector_FieldInformation" xml:space="preserve">
+        <value>Field information</value>
+    </data>
+    <data name="PacketInspector_FieldPath" xml:space="preserve">
+        <value>Path</value>
+    </data>
+    <data name="PacketInspector_FieldType" xml:space="preserve">
+        <value>Type</value>
+    </data>
+    <data name="PacketInspector_FieldValue" xml:space="preserve">
+        <value>Value</value>
+    </data>
+    <data name="PacketInspector_FieldUnits" xml:space="preserve">
+        <value>Units</value>
+    </data>
+    <data name="PacketInspector_FieldElements" xml:space="preserve">
+        <value>Elements</value>
+    </data>
+    <data name="PacketInspector_FieldElementType" xml:space="preserve">
+        <value>Element type</value>
+    </data>
+    <data name="PacketInspector_FieldMinimumSize" xml:space="preserve">
+        <value>Minimum length</value>
+    </data>
+    <data name="PacketInspector_FieldMaximumSize" xml:space="preserve">
+        <value>Maximum length</value>
+    </data>
+    <data name="PacketInspector_FieldSize" xml:space="preserve">
+        <value>Length</value>
+    </data>
+    <data name="PacketInspector_FieldFormat" xml:space="preserve">
+        <value>Format</value>
+    </data>
+    <data name="PacketInspector_FieldReadOnly" xml:space="preserve">
+        <value>Read only</value>
+    </data>
+    <data name="PacketInspector_FieldYes" xml:space="preserve">
+        <value>Yes</value>
+    </data>
+    <data name="PacketInspector_FieldNo" xml:space="preserve">
+        <value>No</value>
+    </data>
+    <data name="PacketInspector_FieldEnum" xml:space="preserve">
+        <value>Enumeration values</value>
+    </data>
+    <data name="PacketInspector_FieldEncoding" xml:space="preserve">
+        <value>Encoding</value>
+    </data>
+    <data name="PacketInspector_FieldAllowedCharacters" xml:space="preserve">
+        <value>Allowed characters</value>
+    </data>
+    <data name="PacketInspector_FieldMinimum" xml:space="preserve">
+        <value>Minimum</value>
+    </data>
+    <data name="PacketInspector_FieldMaximum" xml:space="preserve">
+        <value>Maximum</value>
+    </data>
+    <data name="PacketInspector_FieldDefault" xml:space="preserve">
+        <value>Default value</value>
+    </data>
 </root>

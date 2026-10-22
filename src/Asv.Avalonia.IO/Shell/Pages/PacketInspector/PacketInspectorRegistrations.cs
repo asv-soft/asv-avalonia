@@ -18,7 +18,7 @@ public static class PacketInspectorRegistrations
             builder.AppBuilder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPacketFieldSource, DefaultPacketFieldSource>());
             builder.AppBuilder.Pages.Register<PacketInspectorPageViewModel, PacketInspectorPageView>(PacketInspectorPageViewModel.PageId);
             builder.AppBuilder.Extensions.Register<IHomePage, HomePagePacketInspectorExtension>();
-            return builder;
+            return builder.RegisterFileInspector();
         }
     }
 }

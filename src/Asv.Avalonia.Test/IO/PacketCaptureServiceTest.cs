@@ -41,6 +41,8 @@ public class PacketCaptureServiceTest
         Assert.Equal(PacketDirection.Tx, state.Packets[1].Key.Direction);
         var fields = Assert.Single(rx.Fields).Children;
         Assert.Equal("2", fields.Single(x => x.Name == "Value1").Value);
+        Assert.Equal("Value1", fields.Single(x => x.Name == "Value1").Definition?.Name);
+        Assert.IsType<Int32Type>(fields.Single(x => x.Name == "Value1").DataType);
         Assert.Equal(2d, fields.Single(x => x.Name == "Value1").NumericValue);
         Assert.Null(fields.Single(x => x.Name == "Value3").NumericValue);
         Assert.Equal("before", fields.Single(x => x.Name == "Value3").Value);

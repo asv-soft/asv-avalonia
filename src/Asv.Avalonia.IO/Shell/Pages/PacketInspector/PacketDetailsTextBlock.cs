@@ -35,6 +35,15 @@ public sealed class PacketDetailsTextBlock : UserControl
         set => SetValue(ToChartCommandProperty, value);
     }
 
+    public static readonly StyledProperty<ICommand?> FieldInfoCommandProperty =
+        AvaloniaProperty.Register<PacketDetailsTextBlock, ICommand?>(nameof(FieldInfoCommand));
+
+    public ICommand? FieldInfoCommand
+    {
+        get => GetValue(FieldInfoCommandProperty);
+        set => SetValue(FieldInfoCommandProperty, value);
+    }
+
     public IReadOnlyList<PacketFieldSnapshot> Fields
     {
         get => GetValue(FieldsProperty);
@@ -46,19 +55,20 @@ public sealed class PacketDetailsTextBlock : UserControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == FieldsProperty || change.Property == ToChartCommandProperty || change.Property == PacketProperty)
+        if (change.Property == FieldsProperty || change.Property == ToChartCommandProperty || change.Property == PacketProperty || change.Property == FieldInfoCommandProperty)
         {
             var rows = new StackPanel();
-            AppendFields(rows, Fields, 0);
+            AppendFields(rows, Fields, 0, string.Empty);
             Content = rows;
         }
     }
 
-    private void AppendFields(StackPanel rows, IReadOnlyList<PacketFieldSnapshot> fields, int depth)
+    private void AppendFields(StackPanel rows, IReadOnlyList<PacketFieldSnapshot> fields, int depth, string parentPath)
     {
         foreach (var field in fields)
         {
-            var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto"), MinHeight = 18 };
+            var row = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto,Auto"), MinHeight = 18 };
+            var path = string.IsNullOrEmpty(parentPath) ? field.Name : parentPath + "." + field.Name;
             var inlines = new InlineCollection();
             inlines.Add(new Run(new string(' ', depth * 2) + field.Name + ": "));
             var value = new Run(field.Value);
@@ -88,6 +98,24 @@ public sealed class PacketDetailsTextBlock : UserControl
                 Grid.SetColumn(button, 1);
                 row.Children.Add(button);
             }
+            if (FieldInfoCommand != null && !string.IsNullOrEmpty(field.Type))
+            {
+                var button = new Button
+                {
+                    Content = new MaterialIcon { Kind = MaterialIconKind.InformationOutline, Width = 16, Height = 16 },
+                    Command = FieldInfoCommand,
+                    CommandParameter = new PacketFieldInfoRequest(field, path),
+                    MinHeight = 18,
+                    Padding = new Thickness(4, 0),
+                    Margin = new Thickness(6, 0, 0, 0),
+                    VerticalAlignment = VerticalAlignment.Top,
+                };
+                ToolTip.SetTip(button, RS.PacketInspector_FieldInformation);
+                AutomationProperties.SetName(button, RS.PacketInspector_FieldInformation + ": " + field.Name);
+                button.Bind(ThemeProperty, new DynamicResourceExtension("TransparentButton"));
+                Grid.SetColumn(button, 2);
+                row.Children.Add(button);
+            }
             var text = new SelectableTextBlock
             {
                 Inlines = inlines,
@@ -97,7 +125,7 @@ public sealed class PacketDetailsTextBlock : UserControl
             };
             row.Children.Add(text);
             rows.Children.Add(row);
-            AppendFields(rows, field.Children, depth + 1);
+            AppendFields(rows, field.Children, depth + 1, path);
         }
     }
 

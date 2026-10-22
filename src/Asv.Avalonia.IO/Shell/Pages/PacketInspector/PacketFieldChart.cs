@@ -52,7 +52,15 @@ public sealed class PacketFieldChart : PlotViewModel
     public void Append(IEnumerable<PacketSnapshot> packets)
     {
         var changed = false;
-        foreach (var packet in packets)
+        var pending = packets.Where(packet => packet.Sequence > _lastSequence && packet.Key == Key).ToArray();
+        if (pending.Length > MaximumPoints && pending[0].FileEndOffset != null)
+        {
+            // File charts cover the whole recording, including its first and last samples.
+            var all = pending;
+            pending = Enumerable.Range(0, MaximumPoints)
+                .Select(index => all[(int)((long)index * (all.Length - 1) / (MaximumPoints - 1))]).ToArray();
+        }
+        foreach (var packet in pending)
         {
             if (packet.Sequence <= _lastSequence || packet.Key != Key)
             {
@@ -77,7 +85,8 @@ public sealed class PacketFieldChart : PlotViewModel
                 continue;
             }
             _origin ??= packet.Timestamp;
-            _points.Enqueue(((packet.Timestamp - _origin.Value).TotalSeconds, value));
+            var x = packet.FileEndOffset != null ? packet.Sequence : (packet.Timestamp - _origin.Value).TotalSeconds;
+            _points.Enqueue((x, value));
             while (_points.Count > MaximumPoints)
             {
                 _points.Dequeue();

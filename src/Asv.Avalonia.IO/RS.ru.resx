@@ -354,4 +354,109 @@
     <data name="PacketInspector_ChartTime" xml:space="preserve">
         <value>Время, с</value>
     </data>
+  <data name="FileInspector_Title" xml:space="preserve">
+    <value>Просмотр файлов</value>
+  </data>
+  <data name="FileInspector_Description" xml:space="preserve">
+    <value>Просмотр сообщений из файла</value>
+  </data>
+  <data name="FileInspector_File" xml:space="preserve">
+    <value>Файл</value>
+  </data>
+  <data name="FileInspector_Open" xml:space="preserve">
+    <value>Открыть файл…</value>
+  </data>
+  <data name="FileInspector_Close" xml:space="preserve">
+    <value>Закрыть файл</value>
+  </data>
+  <data name="FileInspector_Cancel" xml:space="preserve">
+    <value>Отменить чтение</value>
+  </data>
+  <data name="FileInspector_Empty" xml:space="preserve">
+    <value>Откройте файл для просмотра сообщений</value>
+  </data>
+  <data name="FileInspector_NoTime" xml:space="preserve">
+    <value>В бинарном файле нет времени приёма и направления RX/TX. Графики используют номера пакетов.</value>
+  </data>
+  <data name="FileInspector_Status" xml:space="preserve">
+    <value>{0:N0} байт · {1:N0} сообщений · {2:N0} ошибок разбора</value>
+  </data>
+  <data name="FileInspector_EndOffset" xml:space="preserve">
+    <value>Конечное смещение (байт)</value>
+  </data>
+  <data name="FileInspector_Charts" xml:space="preserve">
+    <value>Графики · номер пакета</value>
+  </data>
+  <data name="FileInspector_Limit" xml:space="preserve">
+    <value>Превышен предел просмотра: 100 000 сообщений или 128 МиБ разобранных данных. Откройте запись меньшего размера.</value>
+  </data>
+  <data name="FileInspector_NoParsers" xml:space="preserve">
+    <value>В приложении не зарегистрированы парсеры протоколов.</value>
+  </data>
+  <data name="FileInspector_ShowAll" xml:space="preserve">
+    <value>Показать все сообщения</value>
+  </data>
+  <data name="FileInspector_Position" xml:space="preserve">
+    <value>Позиция</value>
+  </data>
+    <data name="PacketInspector_FieldInformation" xml:space="preserve">
+        <value>Информация о поле</value>
+    </data>
+    <data name="PacketInspector_FieldPath" xml:space="preserve">
+        <value>Путь</value>
+    </data>
+    <data name="PacketInspector_FieldType" xml:space="preserve">
+        <value>Тип</value>
+    </data>
+    <data name="PacketInspector_FieldValue" xml:space="preserve">
+        <value>Значение</value>
+    </data>
+    <data name="PacketInspector_FieldUnits" xml:space="preserve">
+        <value>Единицы измерения</value>
+    </data>
+    <data name="PacketInspector_FieldElements" xml:space="preserve">
+        <value>Элементы</value>
+    </data>
+    <data name="PacketInspector_FieldElementType" xml:space="preserve">
+        <value>Тип элемента</value>
+    </data>
+    <data name="PacketInspector_FieldMinimumSize" xml:space="preserve">
+        <value>Минимальная длина</value>
+    </data>
+    <data name="PacketInspector_FieldMaximumSize" xml:space="preserve">
+        <value>Максимальная длина</value>
+    </data>
+    <data name="PacketInspector_FieldSize" xml:space="preserve">
+        <value>Длина</value>
+    </data>
+    <data name="PacketInspector_FieldFormat" xml:space="preserve">
+        <value>Формат</value>
+    </data>
+    <data name="PacketInspector_FieldReadOnly" xml:space="preserve">
+        <value>Только чтение</value>
+    </data>
+    <data name="PacketInspector_FieldYes" xml:space="preserve">
+        <value>Да</value>
+    </data>
+    <data name="PacketInspector_FieldNo" xml:space="preserve">
+        <value>Нет</value>
+    </data>
+    <data name="PacketInspector_FieldEnum" xml:space="preserve">
+        <value>Значения перечисления</value>
+    </data>
+    <data name="PacketInspector_FieldEncoding" xml:space="preserve">
+        <value>Кодировка</value>
+    </data>
+    <data name="PacketInspector_FieldAllowedCharacters" xml:space="preserve">
+        <value>Допустимые символы</value>
+    </data>
+    <data name="PacketInspector_FieldMinimum" xml:space="preserve">
+        <value>Минимум</value>
+    </data>
+    <data name="PacketInspector_FieldMaximum" xml:space="preserve">
+        <value>Максимум</value>
+    </data>
+    <data name="PacketInspector_FieldDefault" xml:space="preserve">
+        <value>Значение по умолчанию</value>
+    </data>
 </root>

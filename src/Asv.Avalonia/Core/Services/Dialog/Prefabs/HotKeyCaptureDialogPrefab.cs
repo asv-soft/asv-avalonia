@@ -1,5 +1,7 @@
-﻿using Material.Icons;
+﻿using Avalonia.Threading;
+using Material.Icons;
 using Microsoft.Extensions.Logging;
+using R3;
 
 namespace Asv.Avalonia;
 
@@ -25,6 +27,9 @@ public sealed class HotKeyCaptureDialogPayload
     /// </summary>
     public ShellErrorState Status { get; init; } = ShellErrorState.Normal;
 
+    /// <summary>Gets the cancellation token for the dialog lifetime.</summary>
+    public CancellationToken CancellationToken { get; init; }
+
     public required string Title { get; init; }
 
     public required string Message { get; init; }
@@ -39,7 +44,11 @@ public sealed class HotKeyCaptureDialogPrefab(ILoggerFactory loggerFactory)
         HotKeyCaptureDialogPayload dialogPayload
     )
     {
-        using var vm = new DialogItemHotKeyCaptureViewModel(loggerFactory);
+        dialogPayload.CancellationToken.ThrowIfCancellationRequested();
+        using var vm = new DialogItemHotKeyCaptureViewModel(loggerFactory)
+        {
+            Message = dialogPayload.Message,
+        };
         vm.HotKey.OnNext(dialogPayload.CurrentHotKey);
 
         var dialogContent = new ContentDialog(vm)
@@ -54,7 +63,16 @@ public sealed class HotKeyCaptureDialogPrefab(ILoggerFactory loggerFactory)
             DefaultButton = ContentDialogButton.Primary,
         };
 
-        var result = await dialogContent.ShowAsync();
+        using var subscription = vm.HotKey.Subscribe(gesture =>
+            dialogContent.IsPrimaryButtonEnabled =
+                gesture is { Key: not global::Avalonia.Input.Key.None }
+        );
+        var showTask = dialogContent.ShowAsync();
+        using var cancellation = dialogPayload.CancellationToken.Register(() =>
+            Dispatcher.UIThread.Post(() => dialogContent.Hide())
+        );
+        var result = await showTask;
+        dialogPayload.CancellationToken.ThrowIfCancellationRequested();
 
         if (result == ContentDialogResult.Primary)
         {

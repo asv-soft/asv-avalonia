@@ -12,11 +12,13 @@ using R3;
 
 namespace Asv.Avalonia.IO;
 
-public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
+public class PacketInspectorPageViewModel : PageViewModel<IPage>
 {
     public const string PageId = "io.packet-inspector";
     public const MaterialIconKind PageIcon = MaterialIconKind.SwapVertical;
-    private readonly PacketCaptureService _capture;
+    private readonly PacketCaptureService? _capture;
+    private readonly PacketFileReader? _fileReader;
+    private CancellationTokenSource? _fileRead;
     private readonly TimeProvider _time;
     private readonly IThemeService _themeService;
     private readonly IDeviceManager _deviceManager;
@@ -53,7 +55,7 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
         )
     {
         DesignTime.ThrowIfNotDesignMode();
-        _capture.DisposeItWith(Disposable);
+        _capture!.DisposeItWith(Disposable);
         var now = _time.GetUtcNow();
         var timestamp = _time.GetTimestamp();
         PacketFieldSnapshot[] fields =
@@ -93,9 +95,23 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
         IDeviceManager deviceManager,
         IThemeService? themeService = null
     )
-        : base(PageId, context, loggerFactory, dialogService, extensions)
+        : this(context, loggerFactory, dialogService, extensions, capture, time, deviceManager, themeService, PageId, null) { }
+
+    protected PacketInspectorPageViewModel(
+        IPageContext context,
+        ILoggerFactory loggerFactory,
+        IDialogService dialogService,
+        IExtensionService extensions,
+        PacketCaptureService? capture,
+        TimeProvider time,
+        IDeviceManager deviceManager,
+        IThemeService? themeService,
+        string pageId,
+        PacketFileReader? fileReader)
+        : base(pageId, context, loggerFactory, dialogService, extensions)
     {
         _capture = capture;
+        _fileReader = fileReader;
         _time = time;
         _deviceManager = deviceManager;
         _themeService = themeService ?? NullThemeService.Instance;
@@ -108,6 +124,18 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
         DetailsWidget = new PacketInspectorWidget("packet-details", RS.PacketInspector_Details, WorkspaceDock.Right, MaterialIconKind.CodeBraces, this).DisposeItWith(Disposable);
         ChartsWidget = new PacketInspectorWidget("packet-charts", RS.PacketInspector_Charts, WorkspaceDock.Bottom, MaterialIconKind.ChartLine, this).DisposeItWith(Disposable);
         AddToChartCommand = new ReactiveCommand<PacketChartRequest>(AddToChart).DisposeItWith(Disposable);
+        ShowFieldInfoCommand = new ReactiveCommand<PacketFieldInfoRequest>().DisposeItWith(Disposable);
+        ShowFieldInfoCommand.SubscribeAwait(
+            async (request, _) =>
+            {
+                var markdown = request.Field.CreateDetailsMarkdown(request.Path);
+                await dialogService.ShowMarkdownDetailsDialogAsync(
+                    RS.PacketInspector_FieldInformation,
+                    markdown,
+                    markdown,
+                    MaterialIconKind.InformationOutline);
+            },
+            AwaitOperation.Drop).DisposeItWith(Disposable);
         AllSources = new("all", RS.PacketInspector_AllSources, FiltersChanged);
         Sources.Add(AllSources);
         PauseCommand = new ReactiveCommand(_ =>
@@ -120,7 +148,7 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
         }).DisposeItWith(Disposable);
         ClearCommand = new ReactiveCommand(_ =>
         {
-            _capture.Clear();
+            _capture?.Clear();
             foreach (var chart in Charts)
             {
                 chart.Clear();
@@ -129,8 +157,11 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
             _state = null;
             SelectedEvent = null;
             SelectedMessage = null;
-            _state = _capture.Read();
-            UpdateFilters(_state);
+            _state = _capture?.Read();
+            if (_state != null)
+            {
+                UpdateFilters(_state);
+            }
             Refresh();
         }).DisposeItWith(Disposable);
         ResetCommand = new ReactiveCommand(_ =>
@@ -147,7 +178,8 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
         }).DisposeItWith(Disposable);
         HistoryCommand = new ReactiveCommand(_ =>
         {
-            _historyKey = ActiveTab == 0 ? SelectedMessage?.Packet.Key : SelectedEvent?.Packet.Key;
+            _historyKey = _fileReader != null && _historyKey != null ? null
+                : ActiveTab == 0 ? SelectedMessage?.Packet.Key : SelectedEvent?.Packet.Key;
             ActiveTab = 1;
             Refresh();
         }).DisposeItWith(Disposable);
@@ -156,11 +188,149 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
             Interval = TimeSpan.FromMilliseconds(250),
         };
         _timer.Tick += (_, _) => ReadCapture();
-        if (!Design.IsDesignMode)
+        if (!Design.IsDesignMode && _fileReader == null)
         {
             _timer.Start();
         }
+        OpenFileCommand = new ReactiveCommand().DisposeItWith(Disposable);
+        OpenFileCommand.SubscribeAwait(
+            async (_, token) =>
+            {
+                if (IsLoading || _fileReader == null)
+                {
+                    return;
+                }
+                var path = await dialogService.ShowOpenFileDialogAsync(RS.FileInspector_Open, "*");
+                if (path != null && !IsDisposed)
+                {
+                    await LoadFileAsync(path, token);
+                }
+            },
+            AwaitOperation.Drop).DisposeItWith(Disposable);
+        CloseFileCommand = new ReactiveCommand(_ => CloseFile()).DisposeItWith(Disposable);
+        CancelFileCommand = new ReactiveCommand(_ => _fileRead?.Cancel()).DisposeItWith(Disposable);
+        if (_fileReader != null)
+        {
+            Header = RS.FileInspector_Title;
+            Icon = MaterialIconKind.FileSearchOutline;
+            SourceWidget.Header = RS.FileInspector_File;
+            SourceWidget.Icon = MaterialIconKind.FileOutline;
+            TrafficWidget.Header = RS.FileInspector_Title;
+            TrafficWidget.Icon = MaterialIconKind.FileSearchOutline;
+            ActiveTab = 1;
+        }
         ReadCapture();
+    }
+
+    public ReactiveCommand OpenFileCommand { get; }
+    public ReactiveCommand CloseFileCommand { get; }
+    public ReactiveCommand CancelFileCommand { get; }
+    public string FilePath { get; private set => SetField(ref field, value); } = string.Empty;
+    public string FileName { get; private set => SetField(ref field, value); } = RS.FileInspector_Empty;
+    public string FileStatus { get; private set => SetField(ref field, value); } = RS.FileInspector_Empty;
+    public string FileError { get; private set => SetField(ref field, value); } = string.Empty;
+    public bool IsLoading { get; private set => SetField(ref field, value); }
+    public bool HasFile { get; private set => SetField(ref field, value); }
+    public double FileProgress { get; private set => SetField(ref field, value); }
+    public string HistoryActionText { get; private set => SetField(ref field, value); } = RS.PacketInspector_History;
+    public string DetailsPosition { get; private set => SetField(ref field, value); } = string.Empty;
+
+    public async Task LoadFileAsync(string path, CancellationToken cancellationToken = default)
+    {
+        if (_fileReader == null || IsLoading || IsDisposed)
+        {
+            return;
+        }
+        using var read = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, DisposeCancel);
+        _fileRead = read;
+        IsLoading = true;
+        FileProgress = 0;
+        FileError = string.Empty;
+        try
+        {
+            var progress = new Progress<double>(value =>
+            {
+                if (!IsDisposed && ReferenceEquals(_fileRead, read))
+                {
+                    FileProgress = value;
+                }
+            });
+            var result = await Task.Run(() => _fileReader.ReadAsync(path, progress, read.Token), read.Token);
+            read.Token.ThrowIfCancellationRequested();
+            if (IsDisposed)
+            {
+                return;
+            }
+            CloseFile();
+            FilePath = result.Path;
+            FileName = Path.GetFileName(result.Path);
+            HasFile = true;
+            FileStatus = string.Format(RS.FileInspector_Status, result.Bytes, result.State.Packets.Count, result.State.Errors);
+            FileProgress = 100;
+            _state = result.State;
+            UpdateFilters(_state);
+            Refresh();
+            SelectedEvent = Journal.FirstOrDefault();
+            SelectedMessage = Messages.FirstOrDefault();
+        }
+        catch (OperationCanceledException) when (read.IsCancellationRequested) { }
+        catch (Exception error)
+        {
+            if (!IsDisposed)
+            {
+                FileError = error.Message;
+            }
+        }
+        finally
+        {
+            if (ReferenceEquals(_fileRead, read))
+            {
+                _fileRead = null;
+            }
+            if (!IsDisposed)
+            {
+                IsLoading = false;
+            }
+        }
+    }
+
+    private void CloseFile()
+    {
+        foreach (var chart in Charts)
+        {
+            chart.Dispose();
+        }
+        Charts.Clear();
+        HasCharts = false;
+        foreach (var row in Messages)
+        {
+            row.Dispose();
+        }
+        Messages.Clear();
+        Journal.Clear();
+        foreach (var filter in Protocols.Concat(Devices))
+        {
+            DisposeFilter(filter);
+        }
+        Protocols.Clear();
+        Devices.Clear();
+        foreach (var filter in AllSources.Children)
+        {
+            DisposeFilter(filter);
+        }
+        AllSources.Children.Clear();
+        _devicePresentations.Clear();
+        _state = null;
+        _historyKey = null;
+        HistoryActionText = RS.PacketInspector_History;
+        SelectedMessage = null;
+        SelectedEvent = null;
+        HasFile = false;
+        IsEmpty = true;
+        FilePath = string.Empty;
+        FileName = RS.FileInspector_Empty;
+        FileStatus = RS.FileInspector_Empty;
+        FileError = string.Empty;
     }
 
     protected override void AfterLoadExtensions() { }
@@ -174,6 +344,7 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
     public ObservableCollection<PacketFieldChart> Charts { get; } = [];
     public bool HasCharts { get; private set => SetField(ref field, value); }
     public ReactiveCommand<PacketChartRequest> AddToChartCommand { get; }
+    public ReactiveCommand<PacketFieldInfoRequest> ShowFieldInfoCommand { get; }
 
     public override IEnumerable<IViewModel> GetChildren() => base.GetChildren().Concat(
         new IViewModel[] { SourceWidget, ProtocolWidget, DeviceWidget, TrafficWidget, DetailsWidget, ChartsWidget }).Concat(Charts);
@@ -282,12 +453,15 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
 
     private void ReadCapture()
     {
-        if (IsDisposed || IsPaused)
+        if (IsDisposed || IsPaused || _capture == null)
         {
             return;
         }
-        _state = _capture.Read();
-        UpdateFilters(_state);
+        _state = _capture?.Read();
+        if (_state != null)
+        {
+            UpdateFilters(_state);
+        }
         Refresh();
     }
 
@@ -442,7 +616,7 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
                 keep.Add(group.Key);
                 var elapsed = _time.GetElapsedTime(group.First().MonotonicTimestamp, _time.GetTimestamp()).TotalSeconds;
                 var count = group.Count();
-                var frequency = count > 1 && elapsed > 0 ? (count - 1) / elapsed : 0;
+                var frequency = _fileReader == null && count > 1 && elapsed > 0 ? (count - 1) / elapsed : 0;
                 if (existing.TryGetValue(group.Key, out var row))
                 {
                     row.Update(latest, count, frequency);
@@ -463,7 +637,8 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
                     Messages.RemoveAt(i);
                 }
             }
-            var journal = filtered.Where(x => _historyKey == null || x.Key == _historyKey).Reverse().ToArray();
+            var events = filtered.Where(x => _historyKey == null || x.Key == _historyKey);
+            var journal = (_fileReader == null ? events.Reverse() : events).ToArray();
             var sequences = journal.Select(x => x.Sequence).ToHashSet();
             for (var i = Journal.Count - 1; i >= 0; i--)
             {
@@ -491,6 +666,7 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
         IsEmpty = ActiveTab == 0 ? Messages.Count == 0 : Journal.Count == 0;
         CaptureStatus = (IsPaused ? RS.PacketInspector_Paused + " · " : string.Empty)
             + string.Format(RS.PacketInspector_Status, _state.Packets.Count, _state.Evicted, _state.Errors);
+        HistoryActionText = _fileReader != null && _historyKey != null ? RS.FileInspector_ShowAll : RS.PacketInspector_History;
         UpdateDetails();
     }
 
@@ -504,6 +680,7 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
         _detailsSequence = packet?.Sequence ?? -1;
         _detailsTab = ActiveTab;
         DetailsPacket = packet;
+        DetailsPosition = packet?.FileEndOffset is { } offset ? $"#{packet.Sequence} · 0x{offset:X8}" : string.Empty;
         Fields.Clear();
         DetailsTitle = packet?.Name ?? RS.PacketInspector_SelectMessage;
         DetailsMetadata = packet == null ? string.Empty
@@ -614,6 +791,7 @@ public sealed class PacketInspectorPageViewModel : PageViewModel<IPage>
     {
         if (disposing)
         {
+            _fileRead?.Cancel();
             _timer.Stop();
             foreach (var chart in Charts)
             {

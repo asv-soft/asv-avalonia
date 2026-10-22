@@ -41,6 +41,7 @@ public static class SettingsPageRegistrations
         {
             this.RegisterUnitsSubPage();
             this.RegisterAppearanceSubPage();
+            this.RegisterHotKeysSubPage();
             return this;
         }
 

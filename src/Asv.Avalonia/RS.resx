@@ -1067,4 +1067,27 @@
     <data name="TileDensity_Inline" xml:space="preserve">
         <value>Inline</value>
     </data>
+  <data name="HotKeyEditor_Title" xml:space="preserve"><value>Keyboard shortcuts</value></data>
+  <data name="HotKeyEditor_Search" xml:space="preserve"><value>Search commands or shortcuts…</value></data>
+  <data name="HotKeyEditor_All" xml:space="preserve"><value>All</value></data>
+  <data name="HotKeyEditor_Modified" xml:space="preserve"><value>Modified</value></data>
+  <data name="HotKeyEditor_Unassigned" xml:space="preserve"><value>Unassigned</value></data>
+  <data name="HotKeyEditor_Conflicts" xml:space="preserve"><value>Conflicts</value></data>
+  <data name="HotKeyEditor_Command" xml:space="preserve"><value>Command</value></data>
+  <data name="HotKeyEditor_Gesture" xml:space="preserve"><value>Shortcut</value></data>
+  <data name="HotKeyEditor_Default" xml:space="preserve"><value>Default</value></data>
+  <data name="HotKeyEditor_Reset" xml:space="preserve"><value>Reset</value></data>
+  <data name="HotKeyEditor_ResetAll" xml:space="preserve"><value>Reset all</value></data>
+  <data name="HotKeyEditor_Clear" xml:space="preserve"><value>Remove shortcut</value></data>
+  <data name="HotKeyEditor_Apply" xml:space="preserve"><value>Apply</value></data>
+  <data name="HotKeyEditor_Cancel" xml:space="preserve"><value>Cancel changes</value></data>
+  <data name="HotKeyEditor_Saved" xml:space="preserve"><value>All changes saved</value></data>
+  <data name="HotKeyEditor_Pending" xml:space="preserve"><value>Unsaved changes</value></data>
+  <data name="HotKeyEditor_Count" xml:space="preserve"><value>Showing {0} of {1} commands</value></data>
+  <data name="HotKeyEditor_Empty" xml:space="preserve"><value>No commands found</value></data>
+  <data name="HotKeyEditor_Capture" xml:space="preserve"><value>Assign shortcut</value></data>
+  <data name="HotKeyEditor_CaptureHint" xml:space="preserve"><value>Press a shortcut for “{0}”. Escape cancels.</value></data>
+  <data name="HotKeyEditor_Replace" xml:space="preserve"><value>Replace shortcut assignment?</value></data>
+  <data name="HotKeyEditor_ConflictMessage" xml:space="preserve"><value>The shortcut {0} is assigned to: {1}. Replace it? These commands will become unassigned.</value></data>
+  <data name="HotKeyEditor_ExternalChanges" xml:space="preserve"><value>Shortcuts changed elsewhere. Cancel changes to reload.</value></data>
 </root>

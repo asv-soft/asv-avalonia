@@ -1098,4 +1098,27 @@
     <data name="TileDensity_Inline" xml:space="preserve">
         <value>Компактный</value>
     </data>
+  <data name="HotKeyEditor_Title" xml:space="preserve"><value>Горячие клавиши</value></data>
+  <data name="HotKeyEditor_Search" xml:space="preserve"><value>Поиск команды или сочетания…</value></data>
+  <data name="HotKeyEditor_All" xml:space="preserve"><value>Все</value></data>
+  <data name="HotKeyEditor_Modified" xml:space="preserve"><value>Изменённые</value></data>
+  <data name="HotKeyEditor_Unassigned" xml:space="preserve"><value>Без сочетания</value></data>
+  <data name="HotKeyEditor_Conflicts" xml:space="preserve"><value>Конфликты</value></data>
+  <data name="HotKeyEditor_Command" xml:space="preserve"><value>Команда</value></data>
+  <data name="HotKeyEditor_Gesture" xml:space="preserve"><value>Сочетание</value></data>
+  <data name="HotKeyEditor_Default" xml:space="preserve"><value>По умолчанию</value></data>
+  <data name="HotKeyEditor_Reset" xml:space="preserve"><value>Сбросить</value></data>
+  <data name="HotKeyEditor_ResetAll" xml:space="preserve"><value>Сбросить все</value></data>
+  <data name="HotKeyEditor_Clear" xml:space="preserve"><value>Убрать сочетание</value></data>
+  <data name="HotKeyEditor_Apply" xml:space="preserve"><value>Применить</value></data>
+  <data name="HotKeyEditor_Cancel" xml:space="preserve"><value>Отменить изменения</value></data>
+  <data name="HotKeyEditor_Saved" xml:space="preserve"><value>Все изменения сохранены</value></data>
+  <data name="HotKeyEditor_Pending" xml:space="preserve"><value>Есть несохранённые изменения</value></data>
+  <data name="HotKeyEditor_Count" xml:space="preserve"><value>Показано {0} из {1} команд</value></data>
+  <data name="HotKeyEditor_Empty" xml:space="preserve"><value>Команды не найдены</value></data>
+  <data name="HotKeyEditor_Capture" xml:space="preserve"><value>Назначить сочетание</value></data>
+  <data name="HotKeyEditor_CaptureHint" xml:space="preserve"><value>Нажмите сочетание для команды «{0}». Escape — отмена.</value></data>
+  <data name="HotKeyEditor_Replace" xml:space="preserve"><value>Заменить назначение сочетания?</value></data>
+  <data name="HotKeyEditor_ConflictMessage" xml:space="preserve"><value>Сочетание {0} назначено командам: {1}. Заменить назначение? У этих команд сочетание будет снято.</value></data>
+  <data name="HotKeyEditor_ExternalChanges" xml:space="preserve"><value>Сочетания изменены извне. Отмените изменения, чтобы загрузить актуальные значения.</value></data>
 </root>
