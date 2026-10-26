@@ -44,6 +44,9 @@ sealed class Program
         return AppBuilder
             .Configure<App>()
             .UsePlatformDetect()
+            .AfterSetup(_ => MacOSDockIcon.Set(
+                new Uri("avares://Asv.Avalonia.Example/Assets/asv-icon.png")
+            ))
             .With(new Win32PlatformOptions { OverlayPopups = true }) // Windows
             .With(new X11PlatformOptions { OverlayPopups = true, UseDBusFilePicker = false }) // Unix/Linux
             .With(new AvaloniaNativePlatformOptions { OverlayPopups = true }) // Mac

@@ -5,6 +5,9 @@
     RequestedThemeVariant="Dark"
 >
     <Application.Styles>
+        <Style Selector=":is(Window)">
+            <Setter Property="Icon" Value="avares://Asv.Avalonia.Example/Assets/asv-icon.png" />
+        </Style>
         <StyleInclude Source="avares://Asv.Avalonia/Theme.axaml" />
         <StyleInclude Source="avares://Asv.Avalonia.GeoMap/Theme.axaml" />
 

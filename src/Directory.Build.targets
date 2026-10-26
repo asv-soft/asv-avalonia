@@ -1,0 +1,10 @@
+<Project>
+  <PropertyGroup>
+    <AsvBrandingDirectory>$(MSBuildThisFileDirectory)../assets/branding/</AsvBrandingDirectory>
+    <PackageIcon>asv-icon.png</PackageIcon>
+    <ApplicationIcon Condition="('$(OutputType)' == 'Exe' or '$(OutputType)' == 'WinExe') and '$(IsTestProject)' != 'true' and !$([System.String]::Copy('$(TargetFramework)').Contains('-android')) and !$([System.String]::Copy('$(TargetFramework)').Contains('-ios'))">$(AsvBrandingDirectory)asv-icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="$(AsvBrandingDirectory)asv-icon.png" Pack="true" PackagePath="/" Link="asv-icon.png" />
+  </ItemGroup>
+</Project>

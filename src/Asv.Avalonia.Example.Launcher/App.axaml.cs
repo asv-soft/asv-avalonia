@@ -14,7 +14,7 @@ public partial class App : LauncherApp
     {
         // Configure base launcher view
         options.IconSource = new Uri(
-            "avares://Asv.Avalonia.Example.Launcher/Assets/asv-soft-logo.png"
+            "avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png"
         );
         options.Title = "Launcher for Asv.Avalonia Example";
         options.Description = "Example application startup launcher";

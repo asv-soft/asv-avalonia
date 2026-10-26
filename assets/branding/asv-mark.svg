@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1024" height="1024" viewBox="151 201 938 872" role="img" aria-labelledby="title description">
+  <title id="title">ASV faceted A standalone mark</title>
+  <desc id="description">Editable vector reconstruction of the approved raster artwork. The graphite tile and violet/cyan letter consist entirely of vector paths and gradients; no raster image is embedded.</desc>
+  <defs>
+    <linearGradient id="tile" x1="47" y1="47" x2="1207" y2="1207" gradientUnits="userSpaceOnUse"><stop stop-color="#252831"/><stop offset="1" stop-color="#16191f"/></linearGradient>
+    <linearGradient id="violet" x1="310" y1="710" x2="619" y2="241" gradientUnits="userSpaceOnUse"><stop stop-color="#a54bff"/><stop offset="1" stop-color="#cd71f1"/></linearGradient>
+    <linearGradient id="purple" x1="191" y1="903" x2="619" y2="496" gradientUnits="userSpaceOnUse"><stop stop-color="#6813f8"/><stop offset="1" stop-color="#a640ff"/></linearGradient>
+    <linearGradient id="cyan" x1="619" y1="241" x2="908" y2="710" gradientUnits="userSpaceOnUse"><stop stop-color="#009eef"/><stop offset="1" stop-color="#06d3ec"/></linearGradient>
+    <linearGradient id="blue" x1="619" y1="496" x2="883" y2="1033" gradientUnits="userSpaceOnUse"><stop stop-color="#088dfa"/><stop offset="1" stop-color="#0754f6"/></linearGradient>
+    <linearGradient id="bar" x1="477" y1="878" x2="748" y2="752" gradientUnits="userSpaceOnUse"><stop stop-color="#aa7eff"/><stop offset="1" stop-color="#1458fa"/></linearGradient>
+    <linearGradient id="inner" x1="619" y1="496" x2="477" y2="752" gradientUnits="userSpaceOnUse"><stop stop-color="#3d1a92"/><stop offset="1" stop-color="#27164e"/></linearGradient>
+    <clipPath id="letter-clip"><path fill-rule="evenodd" d="M619 241 1049 935 883 1033 714 878 477 878 338 1029 191 903ZM619 496 477 752 748 752Z"/></clipPath>
+  </defs>
+  <g id="letter-a" inkscape:groupmode="layer" inkscape:label="Faceted A">
+    <path id="inner-left-face" d="M619 496 477 752 576 752 666 592Z" fill="url(#inner)"/>
+    <g clip-path="url(#letter-clip)">
+      <path id="a-silhouette" d="M619 241 1049 935 883 1033 714 878 477 878 338 1029 191 903Z" fill="#2453ee"/>
+      <path id="left-upper-face" d="M619 241 310 710 619 496Z" fill="url(#violet)"/>
+      <path id="left-main-face" d="M310 710 619 496 385 930Z" fill="url(#purple)"/>
+      <path id="left-lower-face" d="M310 710 191 903 338 1029 385 930Z" fill="#7824fa"/>
+      <path id="left-lower-highlight" d="M310 710 385 930 338 1029Z" fill="#9741ff"/>
+      <path id="crossbar" d="M477 752 748 752 714 878 477 878Z" fill="url(#bar)"/>
+      <path id="crossbar-left-facet" d="M477 752 576 752 477 878 420 878Z" fill="#4430cf"/>
+      <path id="crossbar-middle-facet" d="M576 752 748 752 577 878 477 878Z" fill="#725bfd"/>
+      <path id="right-main-face" d="M619 496 908 710 883 1033 714 878Z" fill="url(#blue)"/>
+      <path id="right-upper-face" d="M619 241 908 710 619 496Z" fill="url(#cyan)"/>
+      <path id="right-middle-facet" d="M619 496 908 710 830 930Z" fill="#12b6f2"/>
+      <path id="right-cyan-facet" d="M908 710 830 930 883 1033Z" fill="#0bd2ed"/>
+      <path id="right-lower-face" d="M908 710 1049 935 883 1033Z" fill="#0fb4e8"/>
+    </g>
+  </g>
+</svg>

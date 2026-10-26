@@ -25,6 +25,7 @@
 
     <ItemGroup>
         <AvaloniaResource Include="Assets/**" />
+        <Compile Include="../Asv.Avalonia.Example.Desktop/MacOSDockIcon.cs" Link="MacOSDockIcon.cs" />
     </ItemGroup>
 
     <ItemGroup>

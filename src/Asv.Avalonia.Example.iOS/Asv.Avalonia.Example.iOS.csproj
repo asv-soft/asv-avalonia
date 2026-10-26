@@ -3,6 +3,7 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>$(TargetFramework)-ios</TargetFramework>
         <SupportedOSPlatformVersion>13.0</SupportedOSPlatformVersion>
+        <AppIcon>AppIcon</AppIcon>
     </PropertyGroup>
 
     <ItemGroup>
@@ -18,6 +19,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ImageAsset Remove="Assets.xcassets/**" />
+        <ImageAsset Include="Assets.xcassets/**" />
         <ProjectReference Include="..\Asv.Avalonia.Example\Asv.Avalonia.Example.csproj"/>
     </ItemGroup>
 </Project>

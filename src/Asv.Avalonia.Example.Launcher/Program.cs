@@ -29,7 +29,12 @@ internal static class Program
 
     public static AppBuilder BuildAvaloniaApp()
     {
-        return AppBuilder.Configure<App>().UsePlatformDetect().LogToTrace();
+        return AppBuilder.Configure<App>()
+            .UsePlatformDetect()
+            .AfterSetup(_ => MacOSDockIcon.Set(
+                new Uri("avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png")
+            ))
+            .LogToTrace();
     }
 
     private static void ReportFatalError(Exception ex, IReadOnlyList<string> args)

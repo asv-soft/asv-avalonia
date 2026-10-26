@@ -27,7 +27,7 @@
                     Height="82"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
-                    Source="avares://Asv.Avalonia.Example.Launcher/Assets/asv-soft-logo.png"
+                    Source="avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png"
                     Stretch="Uniform"
                 />
             </Border>
