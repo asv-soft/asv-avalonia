@@ -12,8 +12,8 @@ The original artwork and the macOS ICNS are maintained in `asv-avalonia/assets/b
 
 ## Editable vector artwork
 
-- `asv-icon.svg`: editable reconstruction with the graphite application tile.
-- `asv-mark.svg`: the same faceted A on a transparent background.
+- `asv-icon.svg`: editable reconstruction on a transparent canvas.
+- `asv-mark.svg`: the faceted A with a tighter transparent canvas.
 
 These SVG files reconstruct the approved raster artwork using paths and gradients.
 They are not original generator source files and contain no embedded raster images.
@@ -21,3 +21,6 @@ Existing application and NuGet PNG/ICO assets retain the approved raster artwork
 
 The Example Desktop application and launcher also set the macOS process Dock icon
 after Avalonia platform setup, including direct launches from Rider or `dotnet run`.
+
+Desktop, Android and NuGet artwork uses a transparent background. The existing
+iOS AppIcon remains opaque because that platform does not accept alpha in app icons.

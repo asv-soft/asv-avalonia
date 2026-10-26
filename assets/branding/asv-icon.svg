@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1254" height="1254" viewBox="0 0 1254 1254" role="img" aria-labelledby="title description">
   <title id="title">ASV faceted A application icon</title>
-  <desc id="description">Editable vector reconstruction of the approved raster artwork. The graphite tile and violet/cyan letter consist entirely of vector paths and gradients; no raster image is embedded.</desc>
+  <desc id="description">Editable vector reconstruction of the approved raster artwork. The violet/cyan letter consists entirely of vector paths and gradients; no raster image is embedded.</desc>
   <defs>
     <linearGradient id="tile" x1="47" y1="47" x2="1207" y2="1207" gradientUnits="userSpaceOnUse"><stop stop-color="#252831"/><stop offset="1" stop-color="#16191f"/></linearGradient>
     <linearGradient id="violet" x1="310" y1="710" x2="619" y2="241" gradientUnits="userSpaceOnUse"><stop stop-color="#a54bff"/><stop offset="1" stop-color="#cd71f1"/></linearGradient>
@@ -11,9 +11,6 @@
     <linearGradient id="inner" x1="619" y1="496" x2="477" y2="752" gradientUnits="userSpaceOnUse"><stop stop-color="#3d1a92"/><stop offset="1" stop-color="#27164e"/></linearGradient>
     <clipPath id="letter-clip"><path fill-rule="evenodd" d="M619 241 1049 935 883 1033 714 878 477 878 338 1029 191 903ZM619 496 477 752 748 752Z"/></clipPath>
   </defs>
-  <g id="background" inkscape:groupmode="layer" inkscape:label="Graphite tile">
-    <rect x="47" y="47" width="1160" height="1160" rx="218" fill="url(#tile)"/>
-  </g>
   <g id="letter-a" inkscape:groupmode="layer" inkscape:label="Faceted A">
     <path id="inner-left-face" d="M619 496 477 752 576 752 666 592Z" fill="url(#inner)"/>
     <g clip-path="url(#letter-clip)">
