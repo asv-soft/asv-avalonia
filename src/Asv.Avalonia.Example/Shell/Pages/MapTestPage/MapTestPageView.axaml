@@ -16,12 +16,13 @@
     </Design.DataContext>
     <Panel>
         <map:MapView x:Name="PART_Map" DataContext="{Binding MapViewModel}" />
-        <map:MapRuler
+        <map:MapZoomControl
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Margin="8"
-            Map="{Binding MapViewModel}"
-            UnitService="{Binding UnitService}"
+            Zoom="{Binding MapViewModel.Zoom.Value, Mode=TwoWay}"
+            MinZoom="{Binding MapViewModel.MinZoom.Value}"
+            MaxZoom="{Binding MapViewModel.MaxZoom.Value}"
         />
         <map:MapCompass
             Rotation="{Binding MapViewModel.Rotation.Value}"
@@ -36,18 +37,30 @@
             Margin="8"
             DataContext="{Binding TileProviderSelectorViewModel}"
         />
-        <Border
-            HorizontalAlignment="Left"
-            VerticalAlignment="Bottom"
-            Margin="8"
-            Padding="8,4"
-            CornerRadius="4"
-            Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
-        >
-            <CheckBox
-                Content="{x:Static example:RS.MapTestPageViewModel_HeavyPolygon}"
-                IsChecked="{Binding IsHeavyPolygonVisible.Value}"
+        <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8" Spacing="8">
+            <map:MapScaleControl
+                HorizontalAlignment="Left"
+                CenterMap="{Binding MapViewModel.CenterMap.Value}"
+                Zoom="{Binding MapViewModel.Zoom.Value}"
+                Provider="{Binding MapViewModel.CurrentProvider.Value}"
+                UnitService="{Binding UnitService}"
             />
-        </Border>
+            <map:MapRuler
+                HorizontalAlignment="Left"
+                Map="{Binding MapViewModel}"
+                UnitService="{Binding UnitService}"
+            />
+            <Border
+                HorizontalAlignment="Left"
+                Padding="8,4"
+                CornerRadius="4"
+                Background="{DynamicResource AsvSmokeFillColorDefaultBrush}"
+            >
+                <CheckBox
+                    Content="{x:Static example:RS.MapTestPageViewModel_HeavyPolygon}"
+                    IsChecked="{Binding IsHeavyPolygonVisible.Value}"
+                />
+            </Border>
+        </StackPanel>
     </Panel>
 </UserControl>

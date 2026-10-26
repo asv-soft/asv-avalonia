@@ -23,6 +23,8 @@ public static class ShellRegistrations
 
         public Builder RegisterDefault()
         {
+            AppBuilder.ViewLocator.RegisterViewFor<ExampleUserHeaderViewModel, ExampleUserHeaderView>();
+            AppBuilder.Extensions.Register<IShell, ExampleUserHeaderExtension>();
             this.RegisterHome();
             this.RegisterPages();
             return this;

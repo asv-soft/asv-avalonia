@@ -84,7 +84,7 @@ public sealed record PacketCaptureState
 }
 
 /// <summary>Owns transport subscriptions and a bounded, immutable packet history.</summary>
-public sealed class PacketCaptureService : IDisposable
+public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
 {
     private readonly object _gate = new();
     private readonly IDeviceManager _manager;
@@ -101,6 +101,8 @@ public sealed class PacketCaptureService : IDisposable
     private long _evicted;
     private long _errors;
     private bool _disposed;
+    private PacketRecordingSession? _recording;
+    private Task _recordingsCompletion = Task.CompletedTask;
 
     public PacketCaptureService(
         IDeviceManager manager,
@@ -122,6 +124,33 @@ public sealed class PacketCaptureService : IDisposable
         foreach (var port in manager.Router.Ports)
         {
             AddPort(port);
+        }
+    }
+
+    public void AttachRecording(PacketRecordingSession recording)
+    {
+        lock (_gate)
+        {
+            ObjectDisposedException.ThrowIf(_disposed, this);
+            if (_recording != null)
+            {
+                throw new InvalidOperationException("A traffic recording is already attached.");
+            }
+            _recording = recording;
+        }
+    }
+
+    public void DetachRecording(PacketRecordingSession recording)
+    {
+        lock (_gate)
+        {
+            if (ReferenceEquals(_recording, recording))
+            {
+                _recording = null;
+                var completion = recording.StopAsync().AsTask();
+                _recordingsCompletion = _recordingsCompletion.IsCompleted
+                    ? completion : Task.WhenAll(_recordingsCompletion, completion);
+            }
         }
     }
 
@@ -209,6 +238,7 @@ public sealed class PacketCaptureService : IDisposable
             }
             var timestamp = _time.GetUtcNow();
             var monotonic = _time.GetTimestamp();
+            _recording?.Record(port.Id, endpoint.Id, direction, timestamp, message);
             try
             {
                 DeviceId? deviceId = null;
@@ -224,6 +254,20 @@ public sealed class PacketCaptureService : IDisposable
                 {
                     deviceId = null;
                     error = ex.Message;
+                    _errors++;
+                }
+                DeviceAddress? sourceAddress = null;
+                try
+                {
+                    if (_manager.TryGetSourceAddress(message, out var address)
+                        && !string.IsNullOrWhiteSpace(address.Family) && !string.IsNullOrWhiteSpace(address.Value))
+                    {
+                        sourceAddress = address;
+                    }
+                }
+                catch (Exception addressError)
+                {
+                    error ??= addressError.Message;
                     _errors++;
                 }
                 var fields = new List<PacketFieldSnapshot>();
@@ -248,7 +292,10 @@ public sealed class PacketCaptureService : IDisposable
                     error = ex.Message;
                     _errors++;
                 }
-                var key = new PacketGroupKey(port.Id, endpoint.Id, direction, message.Protocol.Id, message.GetIdAsString(), deviceId);
+                var key = new PacketGroupKey(port.Id, endpoint.Id, direction, message.Protocol.Id, message.GetIdAsString(), deviceId)
+                {
+                    SourceAddress = sourceAddress,
+                };
                 var snapshot = new PacketSnapshot(
                     ++_sequence,
                     timestamp,
@@ -329,6 +376,10 @@ public sealed class PacketCaptureService : IDisposable
                 return;
             }
             _disposed = true;
+            if (_recording != null)
+            {
+                DetachRecording(_recording);
+            }
             _subscriptions.Dispose();
             foreach (var entry in _endpoints.Values)
             {
@@ -342,5 +393,13 @@ public sealed class PacketCaptureService : IDisposable
             _ports.Clear();
             _packets.Clear();
         }
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        Dispose();
+        Task completion;
+        lock (_gate) { completion = _recordingsCompletion; }
+        await completion.ConfigureAwait(false);
     }
 }

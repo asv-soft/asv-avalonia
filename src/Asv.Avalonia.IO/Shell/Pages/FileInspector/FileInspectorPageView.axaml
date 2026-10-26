@@ -9,7 +9,12 @@
              xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              Background="{DynamicResource SystemRegionBrush}"
              x:Class="Asv.Avalonia.IO.FileInspectorPageView"
-             x:DataType="io:PacketInspectorPageViewModel" x:CompileBindings="True">
+             x:DataType="io:FileInspectorPageViewModel" x:CompileBindings="True">
+    <a:Workspace.Styles>
+        <Style Selector="DataGrid.packet-file-table DataGridCell /template/ Grid#FocusVisual, DataGrid.packet-file-table DataGridCell /template/ Rectangle#CurrencyVisual">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+    </a:Workspace.Styles>
     <a:Workspace.Resources>
         <DataTemplate x:Key="FilterTemplate" x:DataType="io:PacketFilterItem">
             <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Margin="4,0" />
@@ -44,6 +49,19 @@
             <TextBlock Text="{x:Static io:RS.FileInspector_NoTime}" FontSize="12" Opacity="0.65" TextWrapping="Wrap" />
             <Button Command="{Binding CloseFileCommand}" Content="{x:Static io:RS.FileInspector_Close}" IsVisible="{Binding HasFile}" IsEnabled="{Binding !IsLoading}" />
         </StackPanel>
+    </a:WorkspaceItem>
+    <a:WorkspaceItem DataContext="{Binding ExportWidget}" x:DataType="io:PacketInspectorWidget"
+                     Header="{x:Static io:FileExportStrings.Title}" Position="Left">
+        <Panel DataContext="{Binding Owner}" x:DataType="io:FileInspectorPageViewModel">
+            <StackPanel DataContext="{Binding Export}" x:DataType="io:PacketFileExportViewModel" Spacing="8" Margin="8">
+                <TextBlock Text="{x:Static io:FileExportStrings.Hint}" TextWrapping="Wrap" FontSize="12" Opacity="0.65" />
+                <Button Command="{Binding ExportCommand}" Content="{x:Static io:FileExportStrings.Export}" IsEnabled="{Binding CanExport}" />
+                <ProgressBar Minimum="0" Maximum="100" Value="{Binding Progress}" IsVisible="{Binding IsBusy}" />
+                <Button Command="{Binding CancelCommand}" Content="{x:Static io:RS.FileInspector_Cancel}" IsVisible="{Binding IsBusy}" />
+                <TextBlock Text="{Binding Status}" TextWrapping="Wrap" />
+                <TextBlock Text="{Binding Error}" TextWrapping="Wrap" a:AsvPalette.Color="Error" />
+            </StackPanel>
+        </Panel>
     </a:WorkspaceItem>
     <a:WorkspaceItem DataContext="{Binding ProtocolWidget}" x:DataType="io:PacketInspectorWidget" Header="{x:Static io:RS.PacketInspector_Protocols}" Position="Left">
         <ScrollViewer DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel" MaxHeight="220">
@@ -98,7 +116,7 @@
                     </ControlTemplate>
                 </TabControl.Template>
                 <TabItem Header="{x:Static io:RS.PacketInspector_Messages}">
-                    <DataGrid ItemsSource="{Binding Messages}" SelectedItem="{Binding SelectedMessage, Mode=TwoWay}"
+                    <DataGrid Classes="packet-file-table" ItemsSource="{Binding Messages}" SelectedItem="{Binding SelectedMessage, Mode=TwoWay}"
                               IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Name}" Binding="{Binding Name}" />
@@ -116,7 +134,7 @@
                     </DataGrid>
                 </TabItem>
                 <TabItem Header="{x:Static io:RS.PacketInspector_Journal}">
-                    <DataGrid ItemsSource="{Binding Journal}" SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
+                    <DataGrid Classes="packet-file-table" ItemsSource="{Binding Journal}" SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
                               IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="#" Binding="{Binding Sequence}" />

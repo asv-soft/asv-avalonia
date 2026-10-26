@@ -459,4 +459,40 @@
     <data name="PacketInspector_FieldDefault" xml:space="preserve">
         <value>Значение по умолчанию</value>
     </data>
+  <data name="PacketRecording_Title" xml:space="preserve"><value>Запись в файл</value></data>
+  <data name="PacketRecording_Format" xml:space="preserve"><value>Формат файла</value></data>
+  <data name="PacketRecording_Binary" xml:space="preserve"><value>Бинарный (.bin)</value></data>
+  <data name="PacketRecording_JsonLines" xml:space="preserve"><value>JSONL (.jsonl)</value></data>
+  <data name="PacketRecording_Start" xml:space="preserve"><value>Начать запись</value></data>
+  <data name="PacketRecording_Stop" xml:space="preserve"><value>Остановить</value></data>
+  <data name="PacketRecording_Stopping" xml:space="preserve"><value>Завершение записи…</value></data>
+  <data name="PacketRecording_Save" xml:space="preserve"><value>Сохранить запись трафика</value></data>
+  <data name="PacketRecording_Hint" xml:space="preserve"><value>Записывает все новые RX/TX-сообщения независимо от фильтров просмотра.</value></data>
+  <data name="PacketRecording_Counters" xml:space="preserve"><value>{0:N0} сообщений · {1:N0} байт</value></data>
+  <data name="PacketRecording_BufferFull" xml:space="preserve"><value>Запись остановлена: диск не успевает за потоком сообщений.</value></data>
+  <data name="PacketRecording_Preparing" xml:space="preserve"><value>Подготовка записи…</value></data>
+  <data name="FileExport_Title" xml:space="preserve">
+    <value>Экспорт</value>
+  </data>
+  <data name="FileExport_Export" xml:space="preserve">
+    <value>Экспорт в JSONL</value>
+  </data>
+  <data name="FileExport_Save" xml:space="preserve">
+    <value>Экспорт сообщений в JSONL</value>
+  </data>
+  <data name="FileExport_Hint" xml:space="preserve">
+    <value>Все распознанные сообщения в порядке файла, независимо от фильтров. Одна строка — одно сообщение. В исходном файле нет времени приёма и направления RX/TX.</value>
+  </data>
+  <data name="FileExport_Exporting" xml:space="preserve">
+    <value>Экспорт…</value>
+  </data>
+  <data name="FileExport_Completed" xml:space="preserve">
+    <value>Экспортировано сообщений: {0:N0} · ошибок разбора: {1:N0}</value>
+  </data>
+  <data name="FileExport_Canceled" xml:space="preserve">
+    <value>Экспорт отменён.</value>
+  </data>
+  <data name="FileExport_SameFile" xml:space="preserve">
+    <value>Выберите файл назначения, отличный от исходного.</value>
+  </data>
 </root>

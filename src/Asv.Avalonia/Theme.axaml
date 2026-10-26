@@ -91,6 +91,9 @@
     <FluentTheme></FluentTheme>
     <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
 
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/WindowStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/CheckBoxStyles.axaml" />
+    <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/TreeViewStyles.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/DataGridStyles.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/BorderStyles.axaml" />
     <StyleInclude Source="avares://Asv.Avalonia/Styles/Styles/EllipseStyles.axaml" />

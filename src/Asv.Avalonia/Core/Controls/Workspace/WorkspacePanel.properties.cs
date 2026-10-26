@@ -7,6 +7,68 @@ namespace Asv.Avalonia;
 
 public partial class WorkspacePanel
 {
+    public static readonly StyledProperty<bool> IsLeftPaneOpenProperty =
+        AvaloniaProperty.Register<WorkspacePanel, bool>(
+            nameof(IsLeftPaneOpen),
+            defaultValue: true,
+            defaultBindingMode: BindingMode.TwoWay
+        );
+
+    /// <summary>
+    /// Gets or sets whether the left group of widgets is open.
+    /// </summary>
+    public bool IsLeftPaneOpen
+    {
+        get => GetValue(IsLeftPaneOpenProperty);
+        set => SetValue(IsLeftPaneOpenProperty, value);
+    }
+
+    public static readonly StyledProperty<bool> IsRightPaneOpenProperty =
+        AvaloniaProperty.Register<WorkspacePanel, bool>(
+            nameof(IsRightPaneOpen),
+            defaultValue: true,
+            defaultBindingMode: BindingMode.TwoWay
+        );
+
+    /// <summary>
+    /// Gets or sets whether the right group of widgets is open.
+    /// </summary>
+    public bool IsRightPaneOpen
+    {
+        get => GetValue(IsRightPaneOpenProperty);
+        set => SetValue(IsRightPaneOpenProperty, value);
+    }
+
+    public static readonly DirectProperty<WorkspacePanel, bool> HasLeftPaneContentProperty =
+        AvaloniaProperty.RegisterDirect<WorkspacePanel, bool>(
+            nameof(HasLeftPaneContent),
+            panel => panel.HasLeftPaneContent
+        );
+
+    /// <summary>
+    /// Gets whether the left side contains at least one visible widget.
+    /// </summary>
+    public bool HasLeftPaneContent
+    {
+        get;
+        private set => SetAndRaise(HasLeftPaneContentProperty, ref field, value);
+    }
+
+    public static readonly DirectProperty<WorkspacePanel, bool> HasRightPaneContentProperty =
+        AvaloniaProperty.RegisterDirect<WorkspacePanel, bool>(
+            nameof(HasRightPaneContent),
+            panel => panel.HasRightPaneContent
+        );
+
+    /// <summary>
+    /// Gets whether the right side contains at least one visible widget.
+    /// </summary>
+    public bool HasRightPaneContent
+    {
+        get;
+        private set => SetAndRaise(HasRightPaneContentProperty, ref field, value);
+    }
+
     public static readonly AttachedProperty<WorkspaceDock> DockProperty =
         AvaloniaProperty.RegisterAttached<WorkspacePanel, Control, WorkspaceDock>("Dock");
 

@@ -17,6 +17,7 @@ public class HomePagePluginExtension : IExtensionFor<IHomePage>
             Header = "Plugin example action",
             Description = "This is example action from plugin",
             Icon = ExamplePageViewModel.PageIcon,
+            IconColor = ExamplePageViewModel.PageIconColor,
             Command = new ReactiveCommand(_ =>
                 context.GoTo(new NavPath(new NavId(ExamplePageViewModel.PageId)))
             ).DisposeItWith(contextDispose),

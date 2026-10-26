@@ -13,7 +13,8 @@ the [Avalonia requirements](https://docs.avaloniaui.net/docs/overview/supported-
 The current version of Asv.Avalonia targets .NET 10.0.
 The framework is cross-platform, so it supports Windows, macOS, Linux, and mobile (Android/iOS).
 
-> The only well-tested platform is Windows; mobile platforms have not been tested at all yet.
+> Platform verification varies by host and feature. The current documentation includes real macOS
+> desktop captures; mobile runtime behavior was not verified for this update. See [Supported Platforms](supported-platforms.md).
 > {style="warning"}
 
 > You can read more about supported platforms on the [Supported Platforms page](supported-platforms.md).

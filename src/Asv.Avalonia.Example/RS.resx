@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <root>
     <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root"
@@ -881,4 +881,6 @@ Used to confirm saving information.
     <data name="WorkspacePageViewModel_Exception_Message" xml:space="preserve">
         <value>Generated exception for ShellView popup demo.</value>
     </data>
+  <data name="HeaderExample_DisplayName" xml:space="preserve"><value>Demo User</value></data>
+  <data name="HeaderExample_Description" xml:space="preserve"><value>Example profile card. A plugin can provide authentication and account actions here.</value></data>
 </root>

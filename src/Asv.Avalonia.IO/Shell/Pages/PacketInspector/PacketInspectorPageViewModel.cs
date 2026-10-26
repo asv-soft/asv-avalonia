@@ -16,6 +16,7 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
 {
     public const string PageId = "io.packet-inspector";
     public const MaterialIconKind PageIcon = MaterialIconKind.SwapVertical;
+    public const AsvColorKind PageIconColor = AsvColorKind.Info3;
     private readonly PacketCaptureService? _capture;
     private readonly PacketFileReader? _fileReader;
     private CancellationTokenSource? _fileRead;
@@ -117,11 +118,15 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         _themeService = themeService ?? NullThemeService.Instance;
         Header = RS.PacketInspector_Title;
         Icon = PageIcon;
+        IconColor = PageIconColor;
         SourceWidget = new PacketInspectorWidget("packet-sources", RS.PacketInspector_Sources, WorkspaceDock.Left, MaterialIconKind.Network, this).DisposeItWith(Disposable);
         ProtocolWidget = new PacketInspectorWidget("packet-protocols", RS.PacketInspector_Protocols, WorkspaceDock.Left, MaterialIconKind.Layers, this).DisposeItWith(Disposable);
         DeviceWidget = new PacketInspectorWidget("packet-devices", RS.PacketInspector_Devices, WorkspaceDock.Left, MaterialIconKind.Devices, this).DisposeItWith(Disposable);
         TrafficWidget = new PacketInspectorWidget("packet-traffic", RS.PacketInspector_Title, WorkspaceDock.Center, PageIcon, this).DisposeItWith(Disposable);
         DetailsWidget = new PacketInspectorWidget("packet-details", RS.PacketInspector_Details, WorkspaceDock.Right, MaterialIconKind.CodeBraces, this).DisposeItWith(Disposable);
+        RecordingWidget = new PacketInspectorWidget("packet-recording", RecordingStrings.Title, WorkspaceDock.Left, MaterialIconKind.RecordCircleOutline, this).DisposeItWith(Disposable);
+        Recording = new PacketRecordingViewModel(capture, deviceManager.ProtocolFactory, dialogService).DisposeItWith(Disposable);
+        Recording.SetParent(this);
         ChartsWidget = new PacketInspectorWidget("packet-charts", RS.PacketInspector_Charts, WorkspaceDock.Bottom, MaterialIconKind.ChartLine, this).DisposeItWith(Disposable);
         AddToChartCommand = new ReactiveCommand<PacketChartRequest>(AddToChart).DisposeItWith(Disposable);
         ShowFieldInfoCommand = new ReactiveCommand<PacketFieldInfoRequest>().DisposeItWith(Disposable);
@@ -335,6 +340,8 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
 
     protected override void AfterLoadExtensions() { }
 
+    public PacketInspectorWidget RecordingWidget { get; }
+    public PacketRecordingViewModel Recording { get; }
     public PacketInspectorWidget SourceWidget { get; }
     public PacketInspectorWidget ProtocolWidget { get; }
     public PacketInspectorWidget DeviceWidget { get; }
@@ -347,7 +354,7 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
     public ReactiveCommand<PacketFieldInfoRequest> ShowFieldInfoCommand { get; }
 
     public override IEnumerable<IViewModel> GetChildren() => base.GetChildren().Concat(
-        new IViewModel[] { SourceWidget, ProtocolWidget, DeviceWidget, TrafficWidget, DetailsWidget, ChartsWidget }).Concat(Charts);
+        new IViewModel[] { SourceWidget, ProtocolWidget, DeviceWidget, RecordingWidget, Recording, TrafficWidget, DetailsWidget, ChartsWidget }).Concat(Charts);
 
     public ObservableCollection<PacketFilterItem> Sources { get; } = [];
     public PacketFilterItem AllSources { get; }
@@ -468,17 +475,22 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
     private static string SourceKey(string port, string endpoint) => $"{port.Length}:{port}{endpoint}";
     private static string DeviceKey(DeviceId? device) => device == null ? "unknown" : $"device:{device.DeviceClass.Length}:{device.DeviceClass}{device.AsString()}";
 
+    private static string SourceDeviceKey(PacketSnapshot packet) => packet.Key.SourceAddress is { } address
+        ? $"source:{address.Family.Length}:{address.Family}{address.Value}"
+        : DeviceKey(packet.Key.DeviceId);
+
     private PacketDevicePresentation GetDevicePresentation(PacketSnapshot packet)
     {
         var deviceId = packet.Key.DeviceId;
-        if (deviceId == null)
+        if (deviceId == null && packet.Key.SourceAddress == null)
         {
             return _unidentifiedDevice;
         }
-        var key = DeviceKey(deviceId);
+        var key = deviceId == null ? SourceDeviceKey(packet) : DeviceKey(deviceId);
         if (!_devicePresentations.TryGetValue(key, out var presentation))
         {
-            presentation = new(packet.Device, _deviceManager.GetIcon(deviceId), _deviceManager.GetDeviceColor(deviceId));
+            presentation = new(packet.Device, deviceId == null ? null : _deviceManager.GetIcon(deviceId),
+                deviceId == null ? AsvColorKind.Unknown : _deviceManager.GetDeviceColor(deviceId));
             _devicePresentations.Add(key, presentation);
         }
         return presentation;
@@ -536,14 +548,16 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             {
                 Protocols.Add(new(packet.Key.ProtocolId, packet.Protocol, FiltersChanged));
             }
-            var key = DeviceKey(packet.Key.DeviceId);
-            if (Devices.All(x => x.Key != key))
+            var key = SourceDeviceKey(packet);
+            var deviceFilter = Devices.FirstOrDefault(x => x.Key == key);
+            if (deviceFilter == null)
             {
-                Devices.Add(new(key, packet.Device, FiltersChanged)
-                {
-                    DevicePresentation = GetDevicePresentation(packet),
-                });
+                deviceFilter = new(key, packet.Device, FiltersChanged);
+                Devices.Add(deviceFilter);
             }
+            deviceFilter.UpdatePresentation(packet.Device, packet.Key.SourceAddress is { } sourceAddress
+                ? $"{sourceAddress.Family}/{sourceAddress.Value}" : null);
+            deviceFilter.DevicePresentation = GetDevicePresentation(packet);
         }
         var retainedSources = sources;
         foreach (var port in AllSources.Children.ToArray())
@@ -592,7 +606,7 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         var protocols = Protocols.Where(x => x.IsChecked == true).Select(x => x.Key).ToHashSet();
         var devices = Devices.Where(x => x.IsChecked == true).Select(x => x.Key).ToHashSet();
         bool MatchesFilters(PacketSnapshot packet) => sourceKeys.Contains(SourceKey(packet.Key.PortId, packet.Endpoint))
-            && protocols.Contains(packet.Key.ProtocolId) && devices.Contains(DeviceKey(packet.Key.DeviceId))
+            && protocols.Contains(packet.Key.ProtocolId) && devices.Contains(SourceDeviceKey(packet))
             && (DirectionIndex == 0 || (DirectionIndex == 1 ? packet.Key.Direction == PacketDirection.Rx : packet.Key.Direction == PacketDirection.Tx))
             && (packet.Name.Contains(Search, StringComparison.OrdinalIgnoreCase) || packet.MessageId.Contains(Search, StringComparison.OrdinalIgnoreCase));
         var filtered = _state.Packets.Where(MatchesFilters).ToArray();
@@ -620,6 +634,7 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
                 if (existing.TryGetValue(group.Key, out var row))
                 {
                     row.Update(latest, count, frequency);
+                    row.DevicePresentation = GetDevicePresentation(latest);
                 }
                 else
                 {

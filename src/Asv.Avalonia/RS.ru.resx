@@ -1121,4 +1121,6 @@
   <data name="HotKeyEditor_Replace" xml:space="preserve"><value>Заменить назначение сочетания?</value></data>
   <data name="HotKeyEditor_ConflictMessage" xml:space="preserve"><value>Сочетание {0} назначено командам: {1}. Заменить назначение? У этих команд сочетание будет снято.</value></data>
   <data name="HotKeyEditor_ExternalChanges" xml:space="preserve"><value>Сочетания изменены извне. Отмените изменения, чтобы загрузить актуальные значения.</value></data>
+  <data name="DockDrag_OpenInWindow" xml:space="preserve"><value>Отпустите, чтобы открыть в новом окне. Esc — отмена.</value></data>
+  <data name="DockDrag_KeepInWindow" xml:space="preserve"><value>Отпустите здесь, чтобы оставить вкладку в этом окне.</value></data>
 </root>

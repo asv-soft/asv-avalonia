@@ -1,5 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <ItemGroup>
+        <PackageReference Include="Avalonia.Headless" Version="$(AvaloniaVersion)" />
         <PackageReference Include="Asv.XUnit" Version="$(AsvCommonVersion)" />
         <PackageReference Include="JetBrains.Annotations" Version="2025.2.4" />
         <PackageReference Include="AutoFixture.Xunit3" Version="4.19.0" />

@@ -348,4 +348,10 @@
     <data name="HttpTileProvider_Error_NetworkError_Message" xml:space="preserve">
         <value>Failed to connect to map provider '{0}'. Check your internet connection.</value>
     </data>
+  <data name="SettingsGeoMapViewModel_OpenMapFolder_Header" xml:space="preserve">
+    <value>Map folder</value>
+  </data>
+  <data name="SettingsGeoMapViewModel_OpenMapFolder_Button" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
 </root>

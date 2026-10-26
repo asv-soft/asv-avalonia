@@ -1,4 +1,4 @@
-﻿# How to create a new module
+# How to create a new module
 
 This tutorial shows how to create an Asv.Avalonia module and load it in a desktop demo application.
 By the end of the guide, the module will add a page with a cat picture and an action on the home page that opens it.
@@ -32,7 +32,7 @@ Add the current Asv.Avalonia package and enable the image files as Avalonia reso
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asv.Avalonia" Version="3.0.0-rc.1" />
+        <PackageReference Include="Asv.Avalonia" Version="3.1.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -45,7 +45,7 @@ Add the current Asv.Avalonia package and enable the image files as Avalonia reso
 </Project>
 ```
 
-The sample project currently uses `Asv.Avalonia` 3.0.0-rc.1. If a newer compatible version is available, keep the module and demo application on the same version.
+The sample uses `Asv.Avalonia` 3.1.0, matching `ProductVersion` in this checkout’s `src/Directory.Build.props`. Keep the module and demo application on the same compatible version; check package availability before using a repository version in a separate project.
 
 ## Create the demo application
 

@@ -137,6 +137,36 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         RightMenu.SetParent(this).DisposeItWith(Disposable);
         RightMenu.DisposeRemovedItems().DisposeItWith(Disposable);
 
+        HeaderItems = [];
+        HeaderItemsView = HeaderItems.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
+        var ownedHeaderItems = new HashSet<IViewModel>(ReferenceEqualityComparer.Instance);
+        HeaderItems.ObserveChanged().Subscribe(_ =>
+        {
+            foreach (var removed in ownedHeaderItems.Except<IViewModel>(HeaderItems, ReferenceEqualityComparer.Instance).ToArray())
+            {
+                ownedHeaderItems.Remove(removed);
+                removed.SetParent(null);
+                removed.Dispose();
+            }
+            foreach (var item in HeaderItems)
+            {
+                if (ownedHeaderItems.Add(item))
+                {
+                    item.SetParent(this);
+                }
+            }
+        }).DisposeItWith(Disposable);
+        R3.Disposable.Create(() =>
+        {
+            foreach (var item in ownedHeaderItems.ToArray())
+            {
+                item.SetParent(null);
+                item.Dispose();
+            }
+            ownedHeaderItems.Clear();
+            HeaderItems.Clear();
+        }).AddTo(ref DisposableBag);
+
         Messages = new ShellMessageCollection().AddTo(ref DisposableBag);
         Messages.SetParent(this);
         CloseInfoMessageCommand = new ReactiveCommand<ShellMessageViewModel>(x =>
@@ -160,6 +190,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
     public INavigationController<IViewModel> Navigation { get; }
     public ObservableList<IMenuItem> LeftMenu { get; }
     public MenuTree LeftMenuView { get; }
+    public ObservableList<IViewModel> HeaderItems { get; }
+    public NotifyCollectionChangedSynchronizedViewList<IViewModel> HeaderItemsView { get; }
     public ObservableList<IMenuItem> RightMenu { get; }
     public MenuTree RightMenuView { get; }
     public ObservableList<IMenuItem> MainMenu { get; }
@@ -229,6 +261,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
 
         if (page.Id == SelectedPage.Value?.Id)
         {
+            await page.Rise(new PageActivationRequestedEvent(page), cancel);
             return page;
         }
 
@@ -236,7 +269,7 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         return await base.Navigate(id, cancel);
     }
 
-    public override IEnumerable<IViewModel> GetChildren() => _pages;
+    public override IEnumerable<IViewModel> GetChildren() => _pages.Cast<IViewModel>().Concat(HeaderItems);
 
     public void ShowMessage(ShellMessage message)
     {

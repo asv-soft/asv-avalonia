@@ -14,6 +14,30 @@ public enum WorkspaceDock
 
 public class Workspace : ItemsControl
 {
+    public static readonly StyledProperty<bool> IsLeftPaneOpenProperty =
+        WorkspacePanel.IsLeftPaneOpenProperty.AddOwner<Workspace>();
+
+    public static readonly StyledProperty<bool> IsRightPaneOpenProperty =
+        WorkspacePanel.IsRightPaneOpenProperty.AddOwner<Workspace>();
+
+    /// <summary>
+    /// Gets or sets whether the left group of widgets is open.
+    /// </summary>
+    public bool IsLeftPaneOpen
+    {
+        get => GetValue(IsLeftPaneOpenProperty);
+        set => SetValue(IsLeftPaneOpenProperty, value);
+    }
+
+    /// <summary>
+    /// Gets or sets whether the right group of widgets is open.
+    /// </summary>
+    public bool IsRightPaneOpen
+    {
+        get => GetValue(IsRightPaneOpenProperty);
+        set => SetValue(IsRightPaneOpenProperty, value);
+    }
+
     public static readonly FuncValueConverter<double, Thickness> SpacingToPaddingConverter =
         new(value => new Thickness(value));
 

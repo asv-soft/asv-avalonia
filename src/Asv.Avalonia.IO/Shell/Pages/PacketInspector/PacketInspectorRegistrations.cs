@@ -34,6 +34,7 @@ public sealed class HomePagePacketInspectorExtension : IExtensionFor<IHomePage>
             Header = RS.PacketInspector_Title,
             Description = RS.PacketInspector_Description,
             Icon = PacketInspectorPageViewModel.PageIcon,
+            IconColor = PacketInspectorPageViewModel.PageIconColor,
             Command = new ReactiveCommand(_ => context.GoTo(new NavPath(new NavId(PacketInspectorPageViewModel.PageId))))
                 .DisposeItWith(contextDispose),
         }.DisposeItWith(contextDispose);

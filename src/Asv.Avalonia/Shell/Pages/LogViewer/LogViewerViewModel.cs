@@ -26,7 +26,7 @@ public class LogViewerViewModel
 {
     public const string PageId = "log";
     public const MaterialIconKind PageIcon = MaterialIconKind.Journal;
-    public const AsvColorKind PageIconColor = AsvColorKind.None;
+    public const AsvColorKind PageIconColor = AsvColorKind.Info7;
 
     private readonly ILogReaderService _logReaderService;
     private readonly ISearchService _search;

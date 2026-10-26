@@ -332,7 +332,7 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
         _attached = new Subject<IShell>();
         _detached = new Subject<Unit>();
         _parentRootSubscription = new SerialDisposable();
-        _dispose = new CompositeDisposable { _root, _attached, _detached, _parentRootSubscription };
+        _dispose = new CompositeDisposable { _parentRootSubscription };
 
         _owner.ParentChanged.Subscribe(_ => UpdateRoot()).DisposeItWith(_dispose);
         UpdateRoot();
@@ -348,36 +348,46 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
     {
         ArgumentNullException.ThrowIfNull(action);
 
+        if (_isDisposed)
+        {
+            return Disposable.Empty;
+        }
         if (_currentRoot is { } root)
         {
             action(root);
         }
-
-        return _attached.Subscribe(action);
+        return _isDisposed ? Disposable.Empty : _attached.Subscribe(action);
     }
 
     public IDisposable ExecuteWhenRootAttached(Func<IShell, ValueTask> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
+        if (_isDisposed)
+        {
+            return Disposable.Empty;
+        }
         if (_currentRoot is { } root)
         {
             action(root).AsTask().SafeFireAndForget();
         }
-
-        return _attached.SubscribeAwait((root, _) => action(root), AwaitOperation.Drop);
+        return _isDisposed ? Disposable.Empty
+            : _attached.SubscribeAwait((root, _) => action(root), AwaitOperation.Drop);
     }
 
     public IDisposable ExecuteWhenRootAttached(Func<IShell, CancellationToken, ValueTask> action)
     {
         ArgumentNullException.ThrowIfNull(action);
 
+        if (_isDisposed)
+        {
+            return Disposable.Empty;
+        }
         if (_currentRoot is { } root)
         {
             action(root, CancellationToken.None).AsTask().SafeFireAndForget();
         }
-
-        return _attached.SubscribeAwait(action, AwaitOperation.Drop);
+        return _isDisposed ? Disposable.Empty : _attached.SubscribeAwait(action, AwaitOperation.Drop);
     }
 
     public void Dispose()
@@ -386,13 +396,22 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
         {
             return;
         }
-
         _isDisposed = true;
+        _currentRoot = null;
+
+        // Stop parent callbacks before completing the reactive values: completion can reenter the tree.
         _dispose.Dispose();
+        _root.Dispose();
+        _attached.Dispose();
+        _detached.Dispose();
     }
 
     private void UpdateRoot()
     {
+        if (_isDisposed)
+        {
+            return;
+        }
         _parentRootSubscription.Disposable = Disposable.Empty;
 
         if (_owner is IShell shell)
@@ -409,6 +428,10 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
         }
 
         SetRoot(parent.RootTracking.Root.CurrentValue);
+        if (_isDisposed || !ReferenceEquals(_owner.Parent, parent))
+        {
+            return;
+        }
 
         var parentRootSubscription = new CompositeDisposable
         {
@@ -420,6 +443,10 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
 
     private void SetRoot(IShell? root)
     {
+        if (_isDisposed)
+        {
+            return;
+        }
         if (root is null)
         {
             ClearRoot();
@@ -433,18 +460,24 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
 
         _currentRoot = root;
         _root.Value = root;
-        _attached.OnNext(root);
+        if (!_isDisposed && ReferenceEquals(_currentRoot, root))
+        {
+            _attached.OnNext(root);
+        }
     }
 
     private void ClearRoot()
     {
-        if (_currentRoot is null)
+        if (_isDisposed || _currentRoot is null)
         {
             return;
         }
 
         _currentRoot = null;
         _root.Value = null;
-        _detached.OnNext(Unit.Default);
+        if (!_isDisposed && _currentRoot is null)
+        {
+            _detached.OnNext(Unit.Default);
+        }
     }
 }

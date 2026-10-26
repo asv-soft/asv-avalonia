@@ -17,6 +17,7 @@ public class HomePageMapTestPageExtension : IExtensionFor<IHomePage>
             Header = RS.OpenMapTestPageCommand_Action_Name,
             Description = RS.OpenMapTestPageCommand_Action_Description,
             Icon = MapTestPageViewModel.PageIcon,
+            IconColor = MapTestPageViewModel.PageIconColor,
             Command = new ReactiveCommand(_ =>
                 context.GoTo(new NavPath(new NavId(MapTestPageViewModel.PageId)))
             ).DisposeItWith(contextDispose),

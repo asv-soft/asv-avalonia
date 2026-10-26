@@ -1,5 +1,9 @@
 # Dialog Service
 
+<img src="guide-dialog-expanded.png" dark-src="guide-dialog-expanded.png" alt="Expanded Markdown details dialog in the running example application" thumbnail="true"/>
+
+Open Home → Controls gallery → Dialogs, select Expanded, then open MarkdownDetailsDialog. The title and action buttons remain outside the scrolling body.
+
 `IDialogService` provides access to registered dialog prefabs. Use the extension methods in
 `Asv.Avalonia` to open standard dialogs with ordinary arguments instead of constructing a payload.
 Call them from the UI thread, for example from a view model command, and await the result.

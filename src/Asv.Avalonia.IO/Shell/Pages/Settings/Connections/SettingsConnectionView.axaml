@@ -10,6 +10,7 @@
     d:DesignWidth="1024"
     d:DesignHeight="450"
     x:Class="Asv.Avalonia.IO.SettingsConnectionView"
+    Padding="8"
     x:DataType="io:SettingsConnectionViewModel"
 >
     <Design.DataContext>

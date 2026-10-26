@@ -173,6 +173,16 @@
                         </ToolTip.Tip>
                     </Button>
 
+                    <ItemsControl x:Name="HeaderItemsHost" ItemsSource="{Binding HeaderItemsView}" DockPanel.Dock="Right"
+                                  IsVisible="{Binding !!HeaderItemsView.Count}" Margin="4,0"
+                                  VerticalAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate><StackPanel Orientation="Horizontal" Spacing="4" /></ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate><ContentControl Content="{Binding}" VerticalContentAlignment="Center" /></DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
                     <Button
                         Height="28"
                         Theme="{DynamicResource TransparentButton}"
@@ -337,12 +347,18 @@
                     BorderThickness="1"
                     CornerRadius="{StaticResource PanelCornerRadius}"
                     x:Name="DockControl"
-                    Padding="100,0,210,0"
                     DisabledHitTestHeight="40"
                     Margin="4,-33,4,0"
                     ItemsSource="{CompiledBinding PagesView}"
                     SelectedItem="{Binding SelectedPage.Value, Mode=TwoWay}"
-                />
+                >
+                    <avalonia:DockControl.Padding>
+                        <MultiBinding Converter="{x:Static avalonia:ShellHeaderPaddingConverter.Instance}">
+                            <Binding ElementName="HeaderItemsHost" Path="Bounds.Width" />
+                            <Binding Path="HeaderItemsView.Count" />
+                        </MultiBinding>
+                    </avalonia:DockControl.Padding>
+                </avalonia:DockControl>
             </DockPanel>
             <ItemsControl
                 HorizontalAlignment="Right"

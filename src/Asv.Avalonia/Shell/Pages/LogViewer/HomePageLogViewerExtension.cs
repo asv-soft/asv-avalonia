@@ -17,6 +17,7 @@ public sealed class HomePageLogViewerExtension : IExtensionFor<IHomePage>
             Header = RS.OpenLogViewerCommand_Action_Title,
             Description = RS.OpenLogViewerCommand_Action_Description,
             Icon = LogViewerViewModel.PageIcon,
+            IconColor = LogViewerViewModel.PageIconColor,
             Command = new ReactiveCommand(_ =>
                 context.GoTo(new NavPath(new NavId(LogViewerViewModel.PageId)))
             ).DisposeItWith(contextDispose),

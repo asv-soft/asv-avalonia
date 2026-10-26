@@ -26,8 +26,6 @@ public class ExampleDeviceManagerExtension(IConfiguration cfgSvc) : IDeviceManag
         builder.Protocols.RegisterSbfProtocol();
         builder.Protocols.RegisterComNavProtocol();
         builder.Protocols.RegisterJavadProtocol();
-        builder.Protocols.RegisterRawGpsProtocol();
-        builder.Protocols.RegisterRawGlonassProtocol();
         builder.RegisterMavlinkV1Protocol();
         builder.RegisterMavlinkV2Protocol(MavlinkV2Protocol.CreateMessageFactory());
         builder.PortTypes.RegisterTcpClientPort();
@@ -39,7 +37,7 @@ public class ExampleDeviceManagerExtension(IConfiguration cfgSvc) : IDeviceManag
     public void Configure(IDeviceExplorerBuilder builder)
     {
         builder.Factories.Register(
-            new ExampleDeviceFactory(new ExampleDeviceConfig { SelfId = 255 })
+            new ExampleAppDeviceFactory(new ExampleDeviceConfig { SelfId = 255 })
         );
     }
 

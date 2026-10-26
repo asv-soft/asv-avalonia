@@ -401,3 +401,6 @@ FodyWeavers.xsd
 
 # Graphify generated output
 graphify-out/
+
+# Local implementation plans
+/docs/superpowers/**/*.md

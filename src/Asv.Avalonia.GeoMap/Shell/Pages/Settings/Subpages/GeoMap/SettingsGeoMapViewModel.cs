@@ -1,6 +1,7 @@
 using Asv.Common;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
@@ -26,7 +27,9 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         IMapService mapService,
         IDialogService dialogService,
         IUnitService unitService,
-        ILoggerFactory loggerFactory
+        ILoggerFactory loggerFactory,
+        IAppPath? appPath = null,
+        IOptions<FileSystemCacheConfig>? cacheConfig = null
     )
         : base(PageId, pageContext)
     {
@@ -50,6 +53,30 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         Editor.ItemsSource.Add(MapProvider);
         Editor.ItemsSource.Add(MinMapZoom);
         Editor.ItemsSource.Add(MaxMapZoom);
+
+        var mapFolder = appPath?.GetAppPathFolder(
+            cacheConfig?.Value.FolderPath ?? new FileSystemCacheConfig().FolderPath
+        ) ?? Path.GetFullPath(Path.Combine("data", "map"));
+        var openMapFolderHeader = RS.ResourceManager.GetString(
+            "SettingsGeoMapViewModel_OpenMapFolder_Header", RS.Culture
+        )!;
+        OpenMapFolder = new PropertyButtonViewModel(
+            "open-map-folder",
+            async cancel =>
+            {
+                cancel.ThrowIfCancellationRequested();
+                await dialogService.ShowObserveFolderDialogAsync(openMapFolderHeader, mapFolder);
+            }
+        )
+        {
+            Header = openMapFolderHeader,
+            ShortHeader = RS.ResourceManager.GetString(
+                "SettingsGeoMapViewModel_OpenMapFolder_Button", RS.Culture
+            )!,
+            Description = mapFolder,
+            Icon = MaterialIconKind.FolderOpen,
+        };
+        Editor.ItemsSource.Add(OpenMapFolder);
 
         MapPreview = new MapViewModel("preview", mapService)
             .SetRoutableParent(this)
@@ -88,6 +115,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
     public string MapPreviewDescription => RS.SettingsGeoMapView_MapPreview_Description;
     public IUnitService UnitService { get; }
     public ILoggerFactory LoggerFactory { get; }
+    public PropertyButtonViewModel OpenMapFolder { get; }
     public MapProviderProperty MapProvider { get; }
     public MapModeProperty MapMode { get; }
     public MinMapZoomProperty MinMapZoom { get; }

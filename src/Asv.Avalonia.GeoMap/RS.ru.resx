@@ -341,4 +341,10 @@
     <data name="HttpTileProvider_Error_NetworkError_Message" xml:space="preserve">
         <value>Не удалось подключиться к провайдеру карты «{0}». Проверьте подключение к интернету.</value>
     </data>
+  <data name="SettingsGeoMapViewModel_OpenMapFolder_Header" xml:space="preserve">
+    <value>Папка карты</value>
+  </data>
+  <data name="SettingsGeoMapViewModel_OpenMapFolder_Button" xml:space="preserve">
+    <value>Открыть папку</value>
+  </data>
 </root>

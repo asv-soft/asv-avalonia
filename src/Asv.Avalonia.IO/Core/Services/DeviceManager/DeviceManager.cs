@@ -1,4 +1,4 @@
-﻿using System.Collections.Immutable;
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Metrics;
 using Asv.Cfg;
@@ -98,6 +98,9 @@ public class DeviceManager : IDeviceManager, IDisposable, IAsyncDisposable
             extension.Run(this);
         }
     }
+
+    public bool TryGetSourceAddress(IProtocolMessage message, out DeviceAddress address) =>
+        Explorer.TryGetSourceAddress(message, out address);
 
     public bool TryIdentify(IProtocolMessage message, [NotNullWhen(true)] out DeviceId? deviceId)
     {

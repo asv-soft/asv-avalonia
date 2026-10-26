@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using Asv.Avalonia.IO;
+using Asv.Avalonia.Example;
 using Asv.Common;
 using Asv.IO;
 using Asv.IO.Device;
@@ -25,6 +26,8 @@ public class PacketFileReaderTest
         Assert.Equal(new long?[] { 8191 + first.Length, 8191 + first.Length + second.Length }, result.State.Packets.Select(x => x.FileEndOffset));
         Assert.Equal(8191 + first.Length + second.Length, result.Bytes);
         Assert.Equal(2, manager.Identifications);
+        Assert.Equal(new DeviceAddress("example", "1"), result.State.Packets[0].Key.SourceAddress);
+        Assert.Equal(new DeviceAddress("example", "2"), result.State.Packets[1].Key.SourceAddress);
         Assert.NotEqual(result.State.Packets[0].Key, result.State.Packets[1].Key);
         Assert.Equal("first", Assert.Single(result.State.Packets[0].Fields).Children.Single(x => x.Name == "Value3").Value);
         Assert.Equal("second", Assert.Single(result.State.Packets[1].Fields).Children.Single(x => x.Name == "Value3").Value);
@@ -82,7 +85,30 @@ public class PacketFileReaderTest
         using var file = new TestFile(new ExampleMessage1().Serialize());
         var result = await new PacketFileReader(new TestManager { Identify = false }, [new DefaultPacketFieldSource()]).ReadAsync(file.Path, cancellationToken: TestContext.Current.CancellationToken);
         Assert.Null(Assert.Single(result.State.Packets).Key.DeviceId);
+        Assert.Equal(new DeviceAddress("example", "0"), result.State.Packets[0].Key.SourceAddress);
+        Assert.Equal("example/0", result.State.Packets[0].Device);
         Assert.NotEmpty(result.State.Packets[0].Fields);
+    }
+
+    [Fact]
+    public async Task Read_BinaryRecordingCanBeReplayedByFileInspector()
+    {
+        using var file = new TestFile([]);
+        var manager = new TestManager();
+        var stream = new FileStream(file.Path, FileMode.Create, FileAccess.Write);
+        await using (var recording = new PacketRecordingSession(manager.ProtocolFactory, PacketRecordingFormat.Binary, stream))
+        {
+            recording.Record("port", "endpoint", PacketDirection.Rx, DateTimeOffset.UtcNow,
+                new ExampleMessage1 { SenderId = 1, Value3 = "recorded RX" });
+            recording.Record("port", "endpoint", PacketDirection.Tx, DateTimeOffset.UtcNow,
+                new ExampleMessage1 { SenderId = 2, Value3 = "recorded TX" });
+        }
+        var result = await new PacketFileReader(manager, [new DefaultPacketFieldSource()])
+            .ReadAsync(file.Path, cancellationToken: TestContext.Current.CancellationToken);
+        Assert.Equal(2, result.State.Packets.Count);
+        Assert.Equal(0, result.State.Errors);
+        Assert.Equal("recorded RX", Assert.Single(result.State.Packets[0].Fields).Children.Single(x => x.Name == "Value3").Value);
+        Assert.Equal("recorded TX", Assert.Single(result.State.Packets[1].Fields).Children.Single(x => x.Name == "Value3").Value);
     }
 
     private sealed class TestFile(byte[] bytes) : IDisposable
@@ -100,6 +126,10 @@ public class PacketFileReaderTest
     private sealed class TestManager : IDeviceManager
     {
         public IProtocolFactory ProtocolFactory { get; } = Protocol.Create(builder => builder.Protocols.RegisterExampleProtocol());
+        public bool TryGetSourceAddress(IProtocolMessage message, out DeviceAddress address)
+        {
+            return new ExampleAppDeviceFactory(new ExampleDeviceConfig()).TryGetSourceAddress(message, out address);
+        }
         public bool Identify { get; init; } = true;
         public int Identifications { get; private set; }
         public bool TryIdentify(IProtocolMessage message, [NotNullWhen(true)] out DeviceId? deviceId)

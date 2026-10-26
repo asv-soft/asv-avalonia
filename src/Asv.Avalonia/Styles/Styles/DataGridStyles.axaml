@@ -27,6 +27,7 @@
         <Setter Property="MinHeight" Value="28" />
     </Style>
     <Style Selector="DataGrid DataGridCell">
+        <Setter Property="Padding" Value="2" />
         <Setter Property="MinHeight" Value="28" />
     </Style>
 </Styles>

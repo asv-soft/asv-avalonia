@@ -2,6 +2,7 @@
 using Avalonia;
 using Avalonia.Collections;
 using Avalonia.Controls;
+using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
@@ -12,6 +13,8 @@ public partial class WorkspacePanel : Panel
 {
     private readonly StackPanel _leftPanel;
     private readonly StackPanel _rightPanel;
+    private readonly ScrollViewer _leftScrollViewer;
+    private readonly ScrollViewer _rightScrollViewer;
     private readonly DockPanel _centerPanel;
     private readonly AvaloniaList<Control> _bottomPanel;
     private readonly ColumnDefinition _leftColumn;
@@ -25,6 +28,10 @@ public partial class WorkspacePanel : Panel
     private readonly RowDefinition _horizontalSplitterRaw;
     private readonly ColumnDefinition _verticalSplitterRaw1;
     private readonly ColumnDefinition _verticalSplitterRaw2;
+    private IDisposable? _workspaceBindings;
+    private readonly HashSet<Control> _trackedChildren = [];
+    private bool _isLeftPaneShown;
+    private bool _isRightPaneShown;
 
     static WorkspacePanel()
     {
@@ -34,13 +41,13 @@ public partial class WorkspacePanel : Panel
     public WorkspacePanel()
     {
         var mainGrid = new Grid { Name = "MainGrid", ShowGridLines = false };
+        mainGrid.RowDefinitions = [new RowDefinition()];
 
         mainGrid.ColumnDefinitions =
         [
             _leftColumn = new ColumnDefinition
             {
                 [!ColumnDefinition.WidthProperty] = this[!LeftWidthProperty],
-                [!ColumnDefinition.MinWidthProperty] = this[!MinLeftWidthProperty],
             },
             _verticalSplitterRaw1 = new ColumnDefinition(
                 new GridLength(WidgetSpacing, GridUnitType.Pixel)
@@ -62,7 +69,6 @@ public partial class WorkspacePanel : Panel
             _rightColumn = new ColumnDefinition
             {
                 [!ColumnDefinition.WidthProperty] = this[!RightWidthProperty],
-                [!ColumnDefinition.MinWidthProperty] = this[!MinRightWidthProperty],
             },
         ];
 
@@ -90,7 +96,6 @@ public partial class WorkspacePanel : Panel
                 [!RowDefinition.MinHeightProperty] = this[!MinBottomHeightProperty],
             },
         ];
-        Grid.SetRow(centerGrid, 0);
         Grid.SetColumn(centerGrid, 2);
 
         // Left ScrollViewer with the StackPanel
@@ -99,9 +104,8 @@ public partial class WorkspacePanel : Panel
             Name = "PART_LeftPanel",
             [!StackPanel.SpacingProperty] = this[!WidgetSpacingProperty],
         };
-        var leftScrollViewer = new ScrollViewer { Background = null, Content = _leftPanel };
-        Grid.SetRow(leftScrollViewer, 0);
-        Grid.SetColumn(leftScrollViewer, 0);
+        _leftScrollViewer = new ScrollViewer { Background = null, Content = _leftPanel };
+        Grid.SetColumn(_leftScrollViewer, 0);
 
         // Right ScrollViewer with the StackPanel
         _rightPanel = new StackPanel
@@ -109,9 +113,8 @@ public partial class WorkspacePanel : Panel
             Name = "PART_RightPanel",
             [!StackPanel.SpacingProperty] = this[!WidgetSpacingProperty],
         };
-        var rightScrollViewer = new ScrollViewer { Background = null, Content = _rightPanel };
-        Grid.SetRow(rightScrollViewer, 0);
-        Grid.SetColumn(rightScrollViewer, 4);
+        _rightScrollViewer = new ScrollViewer { Background = null, Content = _rightPanel };
+        Grid.SetColumn(_rightScrollViewer, 4);
 
         // Bottom TabControl
         var bottomTab = new TabControl
@@ -148,7 +151,6 @@ public partial class WorkspacePanel : Panel
         };
         _verticalSplitter1.DragCompleted += HorizontalSplitterOnDragCompleted;
 
-        Grid.SetRow(_verticalSplitter1, 0);
         Grid.SetColumn(_verticalSplitter1, 1);
 
         // Vertical GridSplitter between columns 2 and 4
@@ -162,7 +164,6 @@ public partial class WorkspacePanel : Panel
         };
         _verticalSplitter2.DragCompleted += HorizontalSplitterOnDragCompleted;
 
-        Grid.SetRow(_verticalSplitter2, 0);
         Grid.SetColumn(_verticalSplitter2, 3);
 
         // Horizontal GridSplitter in row 2
@@ -186,8 +187,8 @@ public partial class WorkspacePanel : Panel
         centerGrid.Children.Add(bottomTab);
 
         // Add all elements to the Grid
-        mainGrid.Children.Add(leftScrollViewer);
-        mainGrid.Children.Add(rightScrollViewer);
+        mainGrid.Children.Add(_leftScrollViewer);
+        mainGrid.Children.Add(_rightScrollViewer);
         mainGrid.Children.Add(centerGrid);
         mainGrid.Children.Add(_verticalSplitter1);
         mainGrid.Children.Add(_verticalSplitter2);
@@ -195,6 +196,7 @@ public partial class WorkspacePanel : Panel
         // Add the Grid as the only child element of the panel
         LogicalChildren.Add(mainGrid);
         VisualChildren.Add(mainGrid);
+        RefreshChildren();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -204,6 +206,115 @@ public partial class WorkspacePanel : Panel
         if (change.Property == WidgetSpacingProperty)
         {
             UpdateWidgetSpacing();
+        }
+        else if (change.Property == TemplatedParentProperty)
+        {
+            BindWorkspaceProperties();
+        }
+        else if (change.Property == IsLeftPaneOpenProperty || change.Property == IsRightPaneOpenProperty)
+        {
+            RefreshChildren();
+            InvalidateMeasure();
+            RaiseWorkspaceChanged();
+        }
+        else if (change.Property == MinLeftWidthProperty || change.Property == MinRightWidthProperty)
+        {
+            UpdateSidePaneLayout();
+            InvalidateMeasure();
+        }
+    }
+
+    private void OnChildPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs change)
+    {
+        if (change.Property == DockProperty || change.Property == IsVisibleProperty)
+        {
+            // Style bindings may reset during logical detach; move children only in a layout pass.
+            InvalidateMeasure();
+        }
+    }
+
+    private void BindWorkspaceProperties()
+    {
+        _workspaceBindings?.Dispose();
+        _workspaceBindings = null;
+        if (TemplatedParent is not Workspace workspace)
+        {
+            return;
+        }
+
+        _workspaceBindings = R3.Disposable.Combine(
+            Bind(IsLeftPaneOpenProperty, new Binding(nameof(Workspace.IsLeftPaneOpen))
+            {
+                Source = workspace,
+                Mode = BindingMode.TwoWay,
+            }),
+            Bind(IsRightPaneOpenProperty, new Binding(nameof(Workspace.IsRightPaneOpen))
+            {
+                Source = workspace,
+                Mode = BindingMode.TwoWay,
+            })
+        );
+    }
+
+    private void UpdateSidePaneLayout()
+    {
+        var leftShown = IsLeftPaneOpen && HasLeftPaneContent;
+        var rightShown = IsRightPaneOpen && HasRightPaneContent;
+        var leftChanged = _isLeftPaneShown != leftShown;
+        var rightChanged = _isRightPaneShown != rightShown;
+
+        if (leftChanged || rightChanged)
+        {
+            FreezeVisibleSideWidths();
+        }
+
+        _leftColumn.MinWidth = leftShown ? MinLeftWidth : 0;
+        _leftColumn.MaxWidth = leftShown ? double.PositiveInfinity : 0;
+        _rightColumn.MinWidth = rightShown ? MinRightWidth : 0;
+        _rightColumn.MaxWidth = rightShown ? double.PositiveInfinity : 0;
+
+        // Hidden Star columns can still participate in allocation and layout rounding.
+        // Keep the public widths intact while giving hidden columns an explicit zero width.
+        if (!leftShown || leftChanged)
+        {
+            _leftColumn.SetCurrentValue(
+                ColumnDefinition.WidthProperty,
+                leftShown ? LeftWidth : new GridLength(0)
+            );
+        }
+
+        if (!rightShown || rightChanged)
+        {
+            _rightColumn.SetCurrentValue(
+                ColumnDefinition.WidthProperty,
+                rightShown ? RightWidth : new GridLength(0)
+            );
+        }
+
+        _leftScrollViewer.IsVisible = leftShown;
+        _rightScrollViewer.IsVisible = rightShown;
+        _verticalSplitter1.IsVisible = leftShown;
+        _verticalSplitter2.IsVisible = rightShown;
+        _verticalSplitterRaw1.Width = leftShown
+            ? new GridLength(WidgetSpacing, GridUnitType.Pixel)
+            : GridLength.Auto;
+        _verticalSplitterRaw2.Width = rightShown
+            ? new GridLength(WidgetSpacing, GridUnitType.Pixel)
+            : GridLength.Auto;
+        _isLeftPaneShown = leftShown;
+        _isRightPaneShown = rightShown;
+    }
+
+    private void FreezeVisibleSideWidths()
+    {
+        if (_isLeftPaneShown && _leftColumn.ActualWidth is > 0 and var left && double.IsFinite(left))
+        {
+            SetCurrentValue(LeftWidthProperty, new GridLength(left, GridUnitType.Pixel));
+        }
+
+        if (_isRightPaneShown && _rightColumn.ActualWidth is > 0 and var right && double.IsFinite(right))
+        {
+            SetCurrentValue(RightWidthProperty, new GridLength(right, GridUnitType.Pixel));
         }
     }
 
@@ -231,9 +342,9 @@ public partial class WorkspacePanel : Panel
     }
 
     internal double? LeftColumnPixelWidth =>
-        GetPixelSize(_leftColumn.ActualWidth, _leftColumn.Width);
+        GetPixelSize(_leftColumn.ActualWidth, LeftWidth);
     internal double? RightColumnPixelWidth =>
-        GetPixelSize(_rightColumn.ActualWidth, _rightColumn.Width);
+        GetPixelSize(_rightColumn.ActualWidth, RightWidth);
     internal double? BottomRowPixelHeight =>
         GetPixelSize(_bottomRow.ActualHeight, _bottomRow.Height);
 
@@ -248,6 +359,11 @@ public partial class WorkspacePanel : Panel
     }
 
     private void HorizontalSplitterOnDragCompleted(object? sender, VectorEventArgs e)
+    {
+        RaiseWorkspaceChanged();
+    }
+
+    private void RaiseWorkspaceChanged()
     {
         RaiseEvent(
             new WorkspaceEventArgs
@@ -272,12 +388,19 @@ public partial class WorkspacePanel : Panel
             case NotifyCollectionChangedAction.Remove:
             case NotifyCollectionChangedAction.Replace:
                 RefreshChildren();
+                InvalidateMeasure();
                 break;
 
             case NotifyCollectionChangedAction.Reset:
             default:
                 throw new NotSupportedException();
         }
+    }
+
+    protected override Size MeasureOverride(Size availableSize)
+    {
+        RefreshChildren();
+        return base.MeasureOverride(availableSize);
     }
 
     protected override Size ArrangeOverride(Size finalSize)
@@ -290,6 +413,20 @@ public partial class WorkspacePanel : Panel
     private void RefreshChildren()
     {
         var current = Children.ToHashSet();
+        foreach (var stale in _trackedChildren.Where(child => !current.Contains(child)).ToArray())
+        {
+            stale.PropertyChanged -= OnChildPropertyChanged;
+            _trackedChildren.Remove(stale);
+        }
+
+        foreach (var child in current)
+        {
+            if (_trackedChildren.Add(child))
+            {
+                child.PropertyChanged += OnChildPropertyChanged;
+            }
+        }
+
         RemoveStale(_leftPanel.Children, current);
         RemoveStale(_rightPanel.Children, current);
         RemoveStale(_centerPanel.Children, current);
@@ -350,31 +487,9 @@ public partial class WorkspacePanel : Panel
             }
         }
 
-        if (!_leftPanel.Children.Any(x => x.IsVisible))
-        {
-            _leftColumn.MaxWidth = 0;
-            _verticalSplitter1.IsVisible = false;
-            _verticalSplitterRaw1.Width = GridLength.Auto;
-        }
-        else
-        {
-            _leftColumn.MaxWidth = double.PositiveInfinity;
-            _verticalSplitter1.IsVisible = true;
-            _verticalSplitterRaw1.Width = new GridLength(WidgetSpacing, GridUnitType.Pixel);
-        }
-
-        if (!_rightPanel.Children.Any(x => x.IsVisible))
-        {
-            _rightColumn.MaxWidth = 0;
-            _verticalSplitter2.IsVisible = false;
-            _verticalSplitterRaw2.Width = GridLength.Auto;
-        }
-        else
-        {
-            _rightColumn.MaxWidth = double.PositiveInfinity;
-            _verticalSplitter2.IsVisible = true;
-            _verticalSplitterRaw2.Width = new GridLength(WidgetSpacing, GridUnitType.Pixel);
-        }
+        HasLeftPaneContent = _leftPanel.Children.Any(x => x.IsVisible);
+        HasRightPaneContent = _rightPanel.Children.Any(x => x.IsVisible);
+        UpdateSidePaneLayout();
 
         if (!_bottomPanel.Any(x => x.IsVisible))
         {

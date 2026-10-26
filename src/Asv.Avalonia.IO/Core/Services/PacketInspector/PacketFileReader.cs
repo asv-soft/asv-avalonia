@@ -65,6 +65,20 @@ public sealed class PacketFileReader(IDeviceManager manager, IEnumerable<IPacket
                             inspectionError = error.Message;
                             errors++;
                         }
+                        DeviceAddress? sourceAddress = null;
+                        try
+                        {
+                            if (manager.TryGetSourceAddress(message, out var address)
+                                && !string.IsNullOrWhiteSpace(address.Family) && !string.IsNullOrWhiteSpace(address.Value))
+                            {
+                                sourceAddress = address;
+                            }
+                        }
+                        catch (Exception addressError)
+                        {
+                            inspectionError ??= addressError.Message;
+                            errors++;
+                        }
                         var fields = new List<PacketFieldSnapshot>();
                         try
                         {
@@ -91,7 +105,10 @@ public sealed class PacketFileReader(IDeviceManager manager, IEnumerable<IPacket
                             packets.Count + 1L,
                             default,
                             0,
-                            new(fullPath, fullPath, PacketDirection.Rx, message.Protocol.Id, message.GetIdAsString(), device),
+                            new(fullPath, fullPath, PacketDirection.Rx, message.Protocol.Id, message.GetIdAsString(), device)
+                            {
+                                SourceAddress = sourceAddress,
+                            },
                             Path.GetFileName(fullPath),
                             message.Protocol.Name,
                             message.Name,

@@ -191,7 +191,10 @@ public static class ViewLayoutMixin
                 var sub = trigger.SubscribeAwait(
                     async (_, cancel) =>
                     {
-                        var data = await InvokeOnUiThreadAsync(save, cancel);
+                        var data = await InvokeOnUiThreadAsync(
+                            () => ReferenceEquals(view.DataContext, viewModel) ? save() : null,
+                            cancel
+                        );
                         if (data is not null)
                         {
                             await sink.SaveAsync(data, cancel);
@@ -342,7 +345,7 @@ public static class ViewLayoutMixin
         }
 
         /// <summary>
-        /// Persists the generated panel sizes of a workspace.
+        /// Persists the generated panel sizes and side pane states of a workspace.
         /// </summary>
         /// <param name="layoutId">The layout identifier associated with the workspace.</param>
         /// <param name="workspace">The workspace whose generated panel should be tracked.</param>
@@ -381,7 +384,7 @@ public static class ViewLayoutMixin
         }
 
         /// <summary>
-        /// Persists the left, right, and bottom dimensions of a workspace panel.
+        /// Persists the dimensions and side pane states of a workspace panel.
         /// </summary>
         /// <param name="layoutId">The layout identifier associated with the panel.</param>
         /// <param name="panel">The workspace panel to track.</param>
@@ -391,13 +394,14 @@ public static class ViewLayoutMixin
         /// </returns>
         /// <remarks>
         /// Restored values are limited to finite, positive pixel sizes and clamped to the panel's
-        /// minimum dimensions. No snapshot is saved when all three dimensions are unavailable.
+        /// minimum dimensions. Side pane preferences are saved even when dimensions are unavailable.
         /// </remarks>
         public IDisposable RegisterWorkspaceLayout(string layoutId, WorkspacePanel panel)
         {
             ArgumentNullException.ThrowIfNull(panel);
 
             var changed = new Subject<Unit>();
+            var isLoading = false;
 
             panel.WorkspaceChanged += OnWorkspaceChanged;
             var unsubscribe = Disposable.Create(() => panel.WorkspaceChanged -= OnWorkspaceChanged);
@@ -406,30 +410,49 @@ public static class ViewLayoutMixin
                 layoutId,
                 config =>
                 {
-                    ApplyPixel(config.LeftWidth, panel.MinLeftWidth, x => panel.LeftWidth = x);
-                    ApplyPixel(config.RightWidth, panel.MinRightWidth, x => panel.RightWidth = x);
-                    ApplyPixel(
-                        config.BottomHeight,
-                        panel.MinBottomHeight,
-                        x => panel.BottomHeight = x
-                    );
+                    isLoading = true;
+                    try
+                    {
+                        // Toggling a measured pane preserves its current widths. Apply the saved
+                        // dimensions afterwards so those old measurements cannot overwrite them.
+                        panel.SetCurrentValue(
+                            WorkspacePanel.IsLeftPaneOpenProperty,
+                            config.IsLeftPaneOpen
+                        );
+                        panel.SetCurrentValue(
+                            WorkspacePanel.IsRightPaneOpenProperty,
+                            config.IsRightPaneOpen
+                        );
+                        ApplyPixel(
+                            config.LeftWidth,
+                            panel.MinLeftWidth,
+                            x => panel.SetCurrentValue(WorkspacePanel.LeftWidthProperty, x)
+                        );
+                        ApplyPixel(
+                            config.RightWidth,
+                            panel.MinRightWidth,
+                            x => panel.SetCurrentValue(WorkspacePanel.RightWidthProperty, x)
+                        );
+                        ApplyPixel(
+                            config.BottomHeight,
+                            panel.MinBottomHeight,
+                            x => panel.SetCurrentValue(WorkspacePanel.BottomHeightProperty, x)
+                        );
+                    }
+                    finally
+                    {
+                        isLoading = false;
+                    }
                 },
                 () =>
-                {
-                    var config = new WorkspacePanelConfig
+                    new WorkspacePanelConfig
                     {
                         LeftWidth = panel.LeftColumnPixelWidth,
                         RightWidth = panel.RightColumnPixelWidth,
                         BottomHeight = panel.BottomRowPixelHeight,
-                    };
-
-                    return
-                        config.LeftWidth is null
-                        && config.RightWidth is null
-                        && config.BottomHeight is null
-                        ? null
-                        : config;
-                },
+                        IsLeftPaneOpen = panel.IsLeftPaneOpen,
+                        IsRightPaneOpen = panel.IsRightPaneOpen,
+                    },
                 changed
             );
 
@@ -437,7 +460,10 @@ public static class ViewLayoutMixin
 
             void OnWorkspaceChanged(object? sender, WorkspaceEventArgs e)
             {
-                changed.OnNext(Unit.Default);
+                if (!isLoading)
+                {
+                    changed.OnNext(Unit.Default);
+                }
             }
         }
 

@@ -1,0 +1,91 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="AsvCheckBoxFill">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvCheckBoxStroke">#818594</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvCheckBoxHoverFill">#F0F2F5</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="AsvCheckBoxFill">#2B2D30</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvCheckBoxStroke">#6F737A</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvCheckBoxHoverFill">#393B40</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <SolidColorBrush x:Key="AsvCheckBoxAccent">#3574F0</SolidColorBrush>
+            <SolidColorBrush x:Key="AsvCheckBoxAccentHover">#467FF2</SolidColorBrush>
+            <SolidColorBrush x:Key="AsvCheckBoxAccentPressed">#2F65CA</SolidColorBrush>
+            <ControlTheme x:Key="AsvCheckBoxTheme" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                <Setter Property="Template">
+                    <ControlTemplate>
+                        <Grid x:Name="RootGrid" ColumnDefinitions="16,*">
+                            <Border x:Name="PART_Border" Grid.ColumnSpan="2"
+                                    Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" />
+                            <Grid VerticalAlignment="Top" Height="{TemplateBinding MinHeight}">
+                                <Border x:Name="NormalRectangle" Width="16" Height="16" BorderThickness="1"
+                                        CornerRadius="{TemplateBinding CornerRadius}" UseLayoutRounding="False"
+                                        Background="{DynamicResource CheckBoxCheckBackgroundFillUnchecked}"
+                                        BorderBrush="{DynamicResource CheckBoxCheckBackgroundStrokeUnchecked}" />
+                                <Viewbox UseLayoutRounding="False">
+                                    <Panel>
+                                        <Panel Width="16" Height="16" />
+                                        <Path x:Name="CheckGlyph" Opacity="0" Stretch="Uniform"
+                                              Fill="{DynamicResource CheckBoxCheckGlyphForegroundUnchecked}"
+                                              VerticalAlignment="Center" FlowDirection="LeftToRight" />
+                                    </Panel>
+                                </Viewbox>
+                            </Grid>
+                            <ContentPresenter x:Name="PART_ContentPresenter" Grid.Column="1"
+                                              Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                                              Margin="{TemplateBinding Padding}" TextWrapping="Wrap"
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                        </Grid>
+                    </ControlTemplate>
+                </Setter>
+            </ControlTheme>
+        </ResourceDictionary>
+    </Styles.Resources>
+    <Style Selector="CheckBox">
+        <Setter Property="Theme" Value="{StaticResource AsvCheckBoxTheme}" />
+        <Setter Property="MinHeight" Value="24" />
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="Padding" Value="8,0,0,0" />
+    </Style>
+    <Style Selector="CheckBox:unchecked:not(:disabled) /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AsvCheckBoxFill}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AsvCheckBoxStroke}" />
+    </Style>
+    <Style Selector="CheckBox:unchecked:not(:disabled):pointerover /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AsvCheckBoxHoverFill}" />
+    </Style>
+    <Style Selector="CheckBox:unchecked:not(:disabled):pressed /template/ Border#NormalRectangle">
+        <Setter Property="BorderBrush" Value="{DynamicResource AsvCheckBoxAccent}" />
+    </Style>
+    <Style Selector="CheckBox:checked:not(:disabled) /template/ Border#NormalRectangle, CheckBox:indeterminate:not(:disabled) /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AsvCheckBoxAccent}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AsvCheckBoxAccent}" />
+    </Style>
+    <Style Selector="CheckBox:checked:not(:disabled):pointerover /template/ Border#NormalRectangle, CheckBox:indeterminate:not(:disabled):pointerover /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AsvCheckBoxAccentHover}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AsvCheckBoxAccentHover}" />
+    </Style>
+    <Style Selector="CheckBox:checked:not(:disabled):pressed /template/ Border#NormalRectangle, CheckBox:indeterminate:not(:disabled):pressed /template/ Border#NormalRectangle">
+        <Setter Property="Background" Value="{DynamicResource AsvCheckBoxAccentPressed}" />
+        <Setter Property="BorderBrush" Value="{DynamicResource AsvCheckBoxAccentPressed}" />
+    </Style>
+    <Style Selector="CheckBox:checked:not(:disabled) /template/ Path#CheckGlyph, CheckBox:indeterminate:not(:disabled) /template/ Path#CheckGlyph">
+        <Setter Property="Fill" Value="White" />
+    </Style>
+    <Style Selector="CheckBox:indeterminate /template/ Path#CheckGlyph">
+        <Setter Property="Data" Value="M0,0 H8 V2 H0 Z" />
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Height" Value="2" />
+    </Style>
+    <Style Selector="CheckBox:checked /template/ Path#CheckGlyph">
+        <Setter Property="Width" Value="11" />
+    </Style>
+</Styles>

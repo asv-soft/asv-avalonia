@@ -69,6 +69,20 @@ public class PacketGroupKeyTest
         Assert.NotEqual(unidentified, unidentified with { MessageId = "other-message" });
     }
 
+    [Fact]
+    public void Equality_SourceAddressDistinguishesFamiliesAndSurvivesDiscovery()
+    {
+        var unknown = CreateKey(null) with { SourceAddress = new DeviceAddress("example", "1") };
+        var identified = CreateKey(new ExampleDeviceId("example", 1)) with { SourceAddress = unknown.SourceAddress };
+        var otherFamily = unknown with { SourceAddress = new DeviceAddress("mavlink", "1") };
+        Assert.Equal(unknown, identified);
+        Assert.Equal(unknown.GetHashCode(), identified.GetHashCode());
+        Assert.NotEqual(unknown, otherFamily);
+        Assert.NotEqual(unknown, CreateKey(null));
+        var groups = new Dictionary<PacketGroupKey, string> { [unknown] = "row" };
+        Assert.Equal("row", groups[identified]);
+    }
+
     private static PacketGroupKey CreateKey(DeviceId? device) =>
         new("port", "endpoint", PacketDirection.Rx, "protocol", "message", device);
 }

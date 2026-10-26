@@ -9,7 +9,7 @@ public class SettingsPageViewModel
 {
     public const string PageId = "settings";
     public const MaterialIconKind PageIcon = MaterialIconKind.Settings;
-    public const AsvColorKind PageIconColor = AsvColorKind.None;
+    public const AsvColorKind PageIconColor = AsvColorKind.Info2;
 
     public SettingsPageViewModel()
         : this(

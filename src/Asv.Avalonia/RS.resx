@@ -1090,4 +1090,6 @@
   <data name="HotKeyEditor_Replace" xml:space="preserve"><value>Replace shortcut assignment?</value></data>
   <data name="HotKeyEditor_ConflictMessage" xml:space="preserve"><value>The shortcut {0} is assigned to: {1}. Replace it? These commands will become unassigned.</value></data>
   <data name="HotKeyEditor_ExternalChanges" xml:space="preserve"><value>Shortcuts changed elsewhere. Cancel changes to reload.</value></data>
+  <data name="DockDrag_OpenInWindow" xml:space="preserve"><value>Release to open in a new window. Esc cancels.</value></data>
+  <data name="DockDrag_KeepInWindow" xml:space="preserve"><value>Release here to keep the tab in this window.</value></data>
 </root>

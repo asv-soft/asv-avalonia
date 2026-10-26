@@ -1,4 +1,4 @@
-﻿# Module example source code
+# Module example source code
 
 The completed example contains a module library and a desktop demo application.
 
@@ -45,7 +45,7 @@ Asv.Avalonia.Module.Demo/
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asv.Avalonia" Version="3.0.0-rc.1" />
+        <PackageReference Include="Asv.Avalonia" Version="3.1.0" />
     </ItemGroup>
 
     <ItemGroup>
@@ -491,7 +491,7 @@ public sealed class HomePageDogsPageExtension : IExtensionFor<IHomePage>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asv.Avalonia" Version="3.0.0-rc.1" />
+        <PackageReference Include="Asv.Avalonia" Version="3.1.0" />
         <PackageReference Include="Avalonia.Desktop" Version="12.0.4" />
         <PackageReference Include="Avalonia.Themes.Fluent" Version="12.0.4" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="12.0.4" />

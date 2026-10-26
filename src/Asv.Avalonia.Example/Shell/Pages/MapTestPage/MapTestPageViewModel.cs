@@ -13,6 +13,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 {
     public const string PageId = "map_test";
     public const MaterialIconKind PageIcon = MaterialIconKind.TestTube;
+    public const AsvColorKind PageIconColor = AsvColorKind.Info10;
     private const int PlaneTrailLength = 100;
     private const double InfinityRadius = 750.0;
     private const double InfinityPhaseStep = Math.PI / 90.0;
@@ -44,6 +45,7 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
     {
         Header = RS.MapTestPageViewModel_Title;
         Icon = PageIcon;
+        IconColor = PageIconColor;
 
         IsHeavyPolygonVisible = new BindableReactiveProperty<bool>().DisposeItWith(Disposable);
 

@@ -1,4 +1,4 @@
-# Layout Persistence
+# Recipe Page Layout Persistence
 
 For user convenience, it would be great to remember the currently edited recipe and display it when opening the page.
 For such tasks — saving user changes related to application page customization — every view model has a built-in

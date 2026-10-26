@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using System.Reflection;
 using Asv.Avalonia.IO;
+using Asv.Common;
 using Asv.IO;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
@@ -185,6 +186,118 @@ public class PacketCaptureServiceTest
         Assert.Equal("127.0.0.1:5678", packet.EndpointName);
     }
 
+    [Fact]
+    public void Capture_UnknownSourcesRemainSeparateAndDiscoveryKeepsTheSameGroup()
+    {
+        using var fixture = new Fixture();
+        fixture.SourceAddress = message => new DeviceAddress("example", ((ExampleMessageBase)message).SenderId.ToString());
+        using var capture = fixture.CreateCapture();
+        fixture.Rx.OnNext(new ExampleMessage1 { SenderId = 1 });
+        fixture.Rx.OnNext(new ExampleMessage1 { SenderId = 2 });
+        fixture.Identify = _ => new TestDeviceId("device-1");
+        fixture.Rx.OnNext(new ExampleMessage1 { SenderId = 1 });
+        var packets = capture.Read().Packets;
+        Assert.Equal("example/1", packets[0].Device);
+        Assert.Null(packets[0].Key.DeviceId);
+        Assert.NotNull(packets[2].Key.DeviceId);
+        Assert.Equal(packets[0].Key, packets[2].Key);
+        Assert.NotEqual(packets[0].Key, packets[1].Key);
+        Assert.Equal(2, packets.GroupBy(x => x.Key).Count());
+        Assert.Equal(0, capture.Read().Errors);
+    }
+
+    [Fact]
+    public void Capture_SourceExtractionFailureRetainsFieldsAndReportsError()
+    {
+        using var fixture = new Fixture();
+        fixture.SourceAddress = _ => throw new InvalidOperationException("source failure");
+        using var capture = fixture.CreateCapture();
+        fixture.Rx.OnNext(new ExampleMessage1());
+        var state = capture.Read();
+        var packet = Assert.Single(state.Packets);
+        Assert.Null(packet.Key.SourceAddress);
+        Assert.NotEmpty(packet.Fields);
+        Assert.Equal("source failure", packet.InspectionError);
+        Assert.Equal(1, state.Errors);
+    }
+
+    [Fact]
+    public async Task Recording_CapturesOnlyNewMessagesAndIgnoresHistoryEvictionAndClear()
+    {
+        using var fixture = new Fixture();
+        using var capture = fixture.CreateCapture(1);
+        fixture.Rx.OnNext(new ExampleMessage1 { Value1 = 99 });
+        var stream = new MemoryStream();
+        var factory = Protocol.Create(builder => builder.Protocols.RegisterExampleProtocol());
+        await using var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, stream);
+        capture.AttachRecording(recording);
+        var first = new ExampleMessage1 { Value1 = 1 };
+        var second = new ExampleMessage1 { Value1 = 2 };
+        var third = new ExampleMessage1 { Value1 = 3 };
+        fixture.Rx.OnNext(first);
+        fixture.Tx.OnNext(second);
+        capture.Clear();
+        fixture.Rx.OnNext(third);
+        capture.DetachRecording(recording);
+        await recording.StopAsync();
+        fixture.Rx.OnNext(new ExampleMessage1 { Value1 = 100 });
+        Assert.Equal(first.Serialize().Concat(second.Serialize()).Concat(third.Serialize()), stream.ToArray());
+        Assert.Equal(3, recording.MessagesWritten);
+        Assert.Null(recording.Error);
+    }
+
+    [Fact]
+    public async Task Recording_CaptureDisposalFinishesAndClosesTheFile()
+    {
+        using var fixture = new Fixture();
+        using var capture = fixture.CreateCapture();
+        var stream = new MemoryStream();
+        var factory = Protocol.Create(builder => builder.Protocols.RegisterExampleProtocol());
+        var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, stream);
+        capture.AttachRecording(recording);
+        var message = new ExampleMessage1 { Value1 = 1 };
+        fixture.Rx.OnNext(message);
+        await capture.DisposeAsync();
+        Assert.False(recording.IsRecording);
+        Assert.Equal(message.Serialize(), stream.ToArray());
+        Assert.False(stream.CanWrite);
+    }
+
+    [Fact]
+    public async Task Recording_ShutdownDrainsAsynchronouslyWithoutBlockingDispose()
+    {
+        using var fixture = new Fixture();
+        using var capture = fixture.CreateCapture();
+        var stream = new GatedRecordingStream();
+        var factory = Protocol.Create(builder => builder.Protocols.RegisterExampleProtocol());
+        var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, stream);
+        capture.AttachRecording(recording);
+        fixture.Rx.OnNext(new ExampleMessage1());
+        await stream.Started.Task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+        try
+        {
+            await Task.Run(capture.Dispose, TestContext.Current.CancellationToken)
+                .WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+            Assert.False(recording.IsRecording);
+            Assert.False(capture.DisposeAsync().IsCompleted);
+        }
+        finally { stream.Release.TrySetResult(); }
+        await capture.DisposeAsync();
+        Assert.Equal(1, recording.MessagesWritten);
+        Assert.False(stream.CanWrite);
+    }
+
+    private sealed class GatedRecordingStream : MemoryStream
+    {
+        public TaskCompletionSource Started { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+        {
+            Started.TrySetResult();
+            await Release.Task.ConfigureAwait(false);
+        }
+    }
+
     private sealed class TestDeviceId(string name) : DeviceId(name)
     {
         public override string AsString() => DeviceClass;
@@ -212,6 +325,7 @@ public class PacketCaptureServiceTest
         public Subject<IProtocolEndpoint> EndpointRemoved { get; } = new();
         public Subject<IProtocolPort> PortAdded { get; } = new();
         public Subject<IProtocolPort> PortRemoved { get; } = new();
+        public Func<IProtocolMessage, DeviceAddress?> SourceAddress { get; set; } = _ => null;
         public Func<IProtocolMessage, DeviceId?> Identify { get; set; } = _ => null;
         public string PortDisplayName { get; set; } = "TCP · localhost:1234";
         public string PortDescription { get; set; } = "tcp://localhost:1234/";
@@ -256,6 +370,12 @@ public class PacketCaptureServiceTest
             });
             _manager = Stub<IDeviceManager>((method, args) =>
             {
+                if (method.Name == "TryGetSourceAddress")
+                {
+                    var address = SourceAddress((IProtocolMessage)args![0]!);
+                    args[1] = address ?? default;
+                    return address.HasValue;
+                }
                 if (method.Name == "TryIdentify")
                 {
                     var device = Identify((IProtocolMessage)args![0]!);

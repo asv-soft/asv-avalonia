@@ -1,0 +1,50 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Styles.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="AsvTreeHoverBrush">#EBECF0</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvTreeSelectionBrush">#D4E2FF</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvTreeInactiveSelectionBrush">#E4E6EB</SolidColorBrush>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="AsvTreeHoverBrush">#2B2D30</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvTreeSelectionBrush">#2E436E</SolidColorBrush>
+                    <SolidColorBrush x:Key="AsvTreeInactiveSelectionBrush">#393B40</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </Styles.Resources>
+    <Style Selector="TreeViewItem">
+        <Setter Property="MinHeight" Value="24" />
+        <Setter Property="CornerRadius" Value="3" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Stretch" />
+    </Style>
+    <Style Selector="TreeViewItem /template/ Panel#PART_ExpandCollapseChevronContainer">
+        <Setter Property="Margin" Value="4,0,6,0" />
+    </Style>
+    <Style Selector="TreeViewItem /template/ ToggleButton#PART_ExpandCollapseChevron">
+        <Setter Property="Width" Value="8" />
+        <Setter Property="Height" Value="8" />
+    </Style>
+    <Style Selector="TreeViewItem:empty /template/ Panel#PART_ExpandCollapseChevronContainer">
+        <Setter Property="Width" Value="8" />
+    </Style>
+    <Style Selector="TreeViewItem:not(:disabled) /template/ Border#PART_LayoutRoot:pointerover">
+        <Setter Property="Background" Value="{DynamicResource AsvTreeHoverBrush}" />
+    </Style>
+    <Style Selector="TreeViewItem:selected:not(:disabled) /template/ Border#PART_LayoutRoot">
+        <Setter Property="Background" Value="{DynamicResource AsvTreeInactiveSelectionBrush}" />
+    </Style>
+    <Style Selector="TreeViewItem:selected:not(:disabled) /template/ Border#PART_LayoutRoot:pointerover">
+        <Setter Property="Background" Value="{DynamicResource AsvTreeInactiveSelectionBrush}" />
+    </Style>
+    <Style Selector="TreeView:focus-within TreeViewItem:selected:not(:disabled) /template/ Border#PART_LayoutRoot">
+        <Setter Property="Background" Value="{DynamicResource AsvTreeSelectionBrush}" />
+    </Style>
+    <Style Selector="TreeView:focus-within TreeViewItem:selected:not(:disabled) /template/ Border#PART_LayoutRoot:pointerover">
+        <Setter Property="Background" Value="{DynamicResource AsvTreeSelectionBrush}" />
+    </Style>
+</Styles>

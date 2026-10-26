@@ -65,19 +65,28 @@ public sealed record PacketGroupKey
     public string ProtocolId { get; init; }
     public string MessageId { get; init; }
     public DeviceId? DeviceId { get; init; }
+    public DeviceAddress? SourceAddress { get; init; }
 
-    // DeviceId's base equality only compares the device class, not the full identity.
+    // A source stays in the same group before and after discovery resolves its identity.
     public bool Equals(PacketGroupKey? other) => other is not null
         && PortId == other.PortId
         && EndpointId == other.EndpointId
         && Direction == other.Direction
         && ProtocolId == other.ProtocolId
         && MessageId == other.MessageId
-        && DeviceId?.DeviceClass == other.DeviceId?.DeviceClass
-        && DeviceId?.AsString() == other.DeviceId?.AsString();
+        && SourceAddress == other.SourceAddress
+        && (SourceAddress.HasValue || (DeviceId?.DeviceClass == other.DeviceId?.DeviceClass
+            && DeviceId?.AsString() == other.DeviceId?.AsString()));
 
     public override int GetHashCode() => HashCode.Combine(
-        PortId, EndpointId, Direction, ProtocolId, MessageId, DeviceId?.DeviceClass, DeviceId?.AsString());
+        PortId,
+        EndpointId,
+        Direction,
+        ProtocolId,
+        MessageId,
+        SourceAddress,
+        SourceAddress.HasValue ? null : DeviceId?.DeviceClass,
+        SourceAddress.HasValue ? null : DeviceId?.AsString());
 }
 
 public sealed record PacketSnapshot
@@ -122,10 +131,12 @@ public sealed record PacketSnapshot
     public string Endpoint => Key.EndpointId;
     public string Protocol => ProtocolName;
     public string MessageId => Key.MessageId;
-    public string Device => Key.DeviceId?.ToString() ?? RS.PacketInspector_Unidentified;
+    public string Device => Key.DeviceId?.ToString()
+        ?? (Key.SourceAddress is { } address ? $"{address.Family}/{address.Value}" : RS.PacketInspector_Unidentified);
     public string Direction => FileEndOffset != null ? string.Empty : Key.Direction == PacketDirection.Rx ? "RX" : "TX";
     public string Time => FileEndOffset != null ? string.Empty : Timestamp.ToLocalTime().ToString("HH:mm:ss.fff");
     internal long EstimatedBytes => 256L + ((Name.Length + PortName.Length + Endpoint.Length
+            + (Key.SourceAddress?.Family.Length ?? 0) + (Key.SourceAddress?.Value.Length ?? 0)
             + (PortDescription?.Length ?? 0) + (EndpointName?.Length ?? 0) + (EndpointDescription?.Length ?? 0)) * 2L)
         + EstimateFields(Fields);
 

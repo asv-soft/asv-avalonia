@@ -16,7 +16,7 @@ public sealed class PacketFilterItem(string key, string name, Action changed) : 
         SetField(ref _name, name, nameof(Name));
         SetField(ref _description, description, nameof(Description));
     }
-    public PacketDevicePresentation? DevicePresentation { get; init; }
+    public PacketDevicePresentation? DevicePresentation { get; set => SetField(ref field, value); }
     public ObservableCollection<PacketFilterItem> Children { get; } = [];
     public bool? IsChecked
     {
@@ -62,20 +62,27 @@ public sealed class PacketFilterItem(string key, string name, Action changed) : 
 public sealed class PacketMessageRow(PacketSnapshot packet, int count, double frequency) : ViewModel("packet-message")
 {
     public PacketSnapshot Packet { get; private set; } = packet;
-    public PacketDevicePresentation? DevicePresentation { get; init; }
+    public bool UpdatedFlag { get; private set => SetField(ref field, value); } = true;
+    public PacketDevicePresentation? DevicePresentation { get; set => SetField(ref field, value); }
     public int Count { get; private set => SetField(ref field, value); } = count;
     public double Frequency { get; private set; } = frequency;
     public string Name => Packet.Name;
     public string Protocol => Packet.Protocol;
     public string Endpoint => string.IsNullOrWhiteSpace(Packet.EndpointName) ? Packet.Endpoint : Packet.EndpointName;
-    public string Device => Packet.Device;
+    public string Device { get; private set => SetField(ref field, value); } = packet.Device;
     public string Direction => Packet.Direction;
     public string MessageId => Packet.MessageId;
     public string Rate { get; private set => SetField(ref field, value); } = frequency.ToString("0.0");
 
     internal void Update(PacketSnapshot latest, int total, double rate)
     {
+        if (latest.Sequence != Packet.Sequence)
+        {
+            UpdatedFlag = false;
+            UpdatedFlag = true;
+        }
         Packet = latest;
+        Device = latest.Device;
         Count = total;
         Frequency = rate;
         Rate = rate.ToString("0.0");

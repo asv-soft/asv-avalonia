@@ -13,6 +13,11 @@
     <Design.DataContext>
         <io:PacketInspectorPageViewModel />
     </Design.DataContext>
+    <a:Workspace.Styles>
+        <Style Selector="DataGrid.packet-traffic-table DataGridCell /template/ Grid#FocusVisual, DataGrid.packet-traffic-table DataGridCell /template/ Rectangle#CurrencyVisual">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+    </a:Workspace.Styles>
     <a:Workspace.Resources>
         <DataTemplate x:Key="FilterTemplate" x:DataType="io:PacketFilterItem">
             <CheckBox Content="{Binding Name}" IsChecked="{Binding IsChecked, Mode=TwoWay}" Margin="4,0" />
@@ -48,13 +53,6 @@
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="Padding" Value="0" />
                     <Setter Property="IsExpanded" Value="True" />
-                    <Setter Property="CornerRadius" Value="{DynamicResource PanelCornerRadius}" />
-                </Style>
-                <Style Selector="TreeView.packet-sources TreeViewItem /template/ Panel#PART_ExpandCollapseChevronContainer">
-                    <Setter Property="Margin" Value="4,0,6,0" />
-                </Style>
-                <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
-                    <Setter Property="CornerRadius" Value="{DynamicResource PanelCornerRadius}" />
                 </Style>
             </TreeView.Styles>
         </TreeView>
@@ -68,6 +66,29 @@
         <ScrollViewer DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel" MaxHeight="280">
             <ItemsControl ItemsSource="{Binding Devices}" ItemTemplate="{StaticResource DeviceFilterTemplate}" />
         </ScrollViewer>
+    </a:WorkspaceItem>
+    <a:WorkspaceItem DataContext="{Binding RecordingWidget}" x:DataType="io:PacketInspectorWidget"
+                     Header="{x:Static io:RecordingStrings.Title}" Position="Left">
+        <StackPanel DataContext="{Binding Owner.Recording}" x:DataType="io:PacketRecordingViewModel" Spacing="10" Margin="8">
+            <TextBlock Text="{x:Static io:RecordingStrings.Format}" FontSize="12" Opacity="0.65" />
+            <ComboBox ItemsSource="{Binding Formats}" SelectedIndex="{Binding FormatIndex, Mode=TwoWay}"
+                      IsEnabled="{Binding CanChooseFormat}" HorizontalAlignment="Stretch"
+                      AutomationProperties.Name="{x:Static io:RecordingStrings.Format}" />
+            <Button Command="{Binding ToggleCommand}" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="6">
+                    <icons:MaterialIcon Kind="RecordCircle" Width="16" Height="16" IsVisible="{Binding !IsRecording}"
+                                        a:AsvPalette.Color="Error" VerticalAlignment="Center" />
+                    <icons:MaterialIcon Kind="Stop" Width="16" Height="16" IsVisible="{Binding IsRecording}" VerticalAlignment="Center" />
+                    <TextBlock Text="{Binding ActionText}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Button>
+            <TextBlock Text="{Binding FileName}" ToolTip.Tip="{Binding FilePath}" TextTrimming="CharacterEllipsis"
+                       IsVisible="{Binding FileName, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            <TextBlock Text="{Binding Status}" FontSize="12" TextWrapping="Wrap" />
+            <TextBlock Text="{Binding Error}" Foreground="{DynamicResource AsvForegroundErrorBrush}" TextWrapping="Wrap"
+                       IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            <TextBlock Text="{x:Static io:RecordingStrings.Hint}" FontSize="12" Opacity="0.65" TextWrapping="Wrap" />
+        </StackPanel>
     </a:WorkspaceItem>
     <a:WorkspaceItem DataContext="{Binding TrafficWidget}" x:DataType="io:PacketInspectorWidget" Header="{x:Static io:RS.PacketInspector_Title}" Position="Center" CanExpand="False">
         <DockPanel DataContext="{Binding Owner}" x:DataType="io:PacketInspectorPageViewModel">
@@ -132,7 +153,7 @@
                     </ControlTemplate>
                 </TabControl.Template>
                 <TabItem Header="{x:Static io:RS.PacketInspector_Messages}">
-                    <DataGrid ItemsSource="{Binding Messages}" SelectedItem="{Binding SelectedMessage, Mode=TwoWay}"
+                    <DataGrid Classes="packet-traffic-table" ItemsSource="{Binding Messages}" SelectedItem="{Binding SelectedMessage, Mode=TwoWay}"
                               IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Name}" Binding="{Binding Name}" />
@@ -146,14 +167,25 @@
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
-                            <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Direction}" Binding="{Binding Direction}" />
+                            <DataGridTemplateColumn Header="{x:Static io:RS.PacketInspector_Direction}" SortMemberPath="Direction">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="io:PacketMessageRow">
+                                        <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                                            <TextBlock Text="{Binding Direction}" VerticalAlignment="Center" />
+                                            <Ellipse Width="5" Height="5" Opacity="0" VerticalAlignment="Center"
+                                                     Fill="{DynamicResource AsvForegroundInfo3Brush}"
+                                                     Classes.fadeout="{Binding UpdatedFlag}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
                             <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Frequency}" Binding="{Binding Rate}" />
                             <DataGridTextColumn x:DataType="io:PacketMessageRow" Header="{x:Static io:RS.PacketInspector_Count}" Binding="{Binding Count}" />
                         </DataGrid.Columns>
                     </DataGrid>
                 </TabItem>
                 <TabItem Header="{x:Static io:RS.PacketInspector_Journal}">
-                    <DataGrid ItemsSource="{Binding Journal}" SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
+                    <DataGrid Classes="packet-traffic-table" ItemsSource="{Binding Journal}" SelectedItem="{Binding SelectedEvent, Mode=TwoWay}"
                               IsReadOnly="True" AutoGenerateColumns="False" GridLinesVisibility="Horizontal">
                         <DataGrid.Columns>
                             <DataGridTextColumn x:DataType="io:PacketJournalRow" Header="#" Binding="{Binding Sequence}" />

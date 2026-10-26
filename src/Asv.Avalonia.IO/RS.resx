@@ -466,4 +466,40 @@
     <data name="PacketInspector_FieldDefault" xml:space="preserve">
         <value>Default value</value>
     </data>
+  <data name="PacketRecording_Title" xml:space="preserve"><value>Recording</value></data>
+  <data name="PacketRecording_Format" xml:space="preserve"><value>File format</value></data>
+  <data name="PacketRecording_Binary" xml:space="preserve"><value>Binary (.bin)</value></data>
+  <data name="PacketRecording_JsonLines" xml:space="preserve"><value>JSONL (.jsonl)</value></data>
+  <data name="PacketRecording_Start" xml:space="preserve"><value>Start recording</value></data>
+  <data name="PacketRecording_Stop" xml:space="preserve"><value>Stop recording</value></data>
+  <data name="PacketRecording_Stopping" xml:space="preserve"><value>Finishing recording…</value></data>
+  <data name="PacketRecording_Save" xml:space="preserve"><value>Save traffic recording</value></data>
+  <data name="PacketRecording_Hint" xml:space="preserve"><value>Records all new RX/TX messages, independently of view filters.</value></data>
+  <data name="PacketRecording_Counters" xml:space="preserve"><value>{0:N0} messages · {1:N0} bytes</value></data>
+  <data name="PacketRecording_BufferFull" xml:space="preserve"><value>Recording stopped: the disk cannot keep up with traffic.</value></data>
+  <data name="PacketRecording_Preparing" xml:space="preserve"><value>Preparing recording…</value></data>
+  <data name="FileExport_Title" xml:space="preserve">
+    <value>Export</value>
+  </data>
+  <data name="FileExport_Export" xml:space="preserve">
+    <value>Export to JSONL</value>
+  </data>
+  <data name="FileExport_Save" xml:space="preserve">
+    <value>Export messages to JSONL</value>
+  </data>
+  <data name="FileExport_Hint" xml:space="preserve">
+    <value>Exports all recognized messages in file order, independently of view filters. One message per line; capture timestamps and RX/TX direction are unavailable in raw files.</value>
+  </data>
+  <data name="FileExport_Exporting" xml:space="preserve">
+    <value>Exporting…</value>
+  </data>
+  <data name="FileExport_Completed" xml:space="preserve">
+    <value>{0:N0} messages exported · {1:N0} parsing errors</value>
+  </data>
+  <data name="FileExport_Canceled" xml:space="preserve">
+    <value>Export canceled.</value>
+  </data>
+  <data name="FileExport_SameFile" xml:space="preserve">
+    <value>Choose a destination different from the source file.</value>
+  </data>
 </root>

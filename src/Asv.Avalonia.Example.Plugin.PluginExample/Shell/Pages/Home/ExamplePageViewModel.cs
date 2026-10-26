@@ -13,6 +13,7 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
 {
     public const string PageId = "example";
     public const MaterialIconKind PageIcon = MaterialIconKind.Earth;
+    public const AsvColorKind PageIconColor = AsvColorKind.Info6;
 
     public ExamplePageViewModel()
         : this(
@@ -34,6 +35,8 @@ public class ExamplePageViewModel : PageViewModel<IExamplePageViewModel>, IExamp
         : base(PageId, context, loggerFactory, dialogService, extensionService)
     {
         Header = "Example page";
+        Icon = PageIcon;
+        IconColor = PageIconColor;
         Text1 = new BindableReactiveProperty<string>().DisposeItWith(Disposable);
         Text1.Value = "Hello world";
     }

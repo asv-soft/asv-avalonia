@@ -1,5 +1,40 @@
 # 🖥 For Developers
 
+## Work with this checkout
+
+Install a .NET SDK capable of building `net10.0` and a desktop development environment for the example application. `src/Directory.Build.props` defines the target framework and package versions. `src/global.json` permits SDK roll-forward to the latest major version; its minimum version is not the application target framework.
+
+From the repository root:
+
+```bash
+dotnet --info
+dotnet restore src/Asv.Avalonia.slnx
+dotnet build src/Asv.Avalonia.slnx
+dotnet test src/Asv.Avalonia.Test/Asv.Avalonia.Test.csproj
+```
+
+Run the desktop example to inspect the controls and modules:
+
+```bash
+dotnet run --project src/Asv.Avalonia.Example.Desktop/Asv.Avalonia.Example.Desktop.csproj
+```
+
+The example includes services, plugin configuration, IO, and other modules. Review its `Program.cs` when reproducing application setup. An application launch requires a graphical desktop; a successful build or unit-test run alone does not verify interactive behavior. Preserve local settings and unrelated changes when preparing a patch.
+
+### Documentation workflow
+
+Open `src/Writerside` in Writerside or an IDE with Writerside support and select the `am` instance. Topics belong in `topics`, images in `images`, and navigation entries in `am.tree`. Use English documentation and preserve canonical API names. Update the topic and navigation entry together when adding a guide, then check links, code examples, images, and the rendered page in preview.
+
+The release workflow in `.github/workflows/docs.yml` builds web and PDF documentation for release tags. `.github/workflows/docs-pages.yml` builds and checks documentation for pull requests and publishes from `main` on matching pushes or an eligible manual run. Inspect the build report as well as preview output. Editing or previewing documentation locally does not publish it.
+
+### Upgrade an application
+
+Start with the versions in the application checkout and the target version's release notes. Align related module references with the main framework version where required, then restore and rebuild before interpreting compiler errors. Launcher packages use their own `LauncherVersion`; do not apply the main framework version to them automatically.
+
+Compare the target checkout's example host and module registration hierarchy with your application. Verify page IDs, navigation arguments, service registrations, view mappings, resources, and extension ownership when changing these areas. Rebuild plugins against the intended host contracts and test loading them in that host. This guide does not promise binary compatibility across framework or Avalonia upgrades.
+
+Run focused tests for changed behavior, then the relevant solution checks. Launch the application and exercise navigation, close approval, persisted layout, and the modules used by your product. For applications using a launcher, also verify direct startup policy and startup through the launcher. Keep migration instructions for any application-specific configuration or stored-data changes with the release.
+
 ## Contributing
 
 We would love for you to contribute to our projects and help make it even better than it is today! As a contributor, here are the guidelines we would like you to follow:
@@ -75,7 +110,7 @@ The `footer` is mandatory for all commits. The Commit Message Footer format desc
   │       │             │
   │       │             └─⫸ Summary in present tense. Not capitalized. No period at the end.
   │       │
-  │       └─⫸ Commit Scope: asv-common|asv-common-test|asv-cfg|asv-cfg-test|asv-drones|asv-drones-docs|asv-drones-gui|asv-drones-gbs| ... etc
+  │       └─⫸ Commit Scope: core|io|geomap|plugins|launcher|example|docs|tests
   │
   └─⫸ Commit Type: build|ci|docs|feat|fix|perf|refactor|test
 ```
@@ -99,32 +134,16 @@ Must be one of the following:
 
 The scope should be the name of the project affected (as perceived by the person reading the changelog generated from commit messages). If the scope of changes is project scope you can skip writing this. For all other scopes - you can skip main project scope e.g: asv-drones-gui-core -> core.
 
-The following is the list of supported scopes:
+Use a scope that identifies the affected area of this repository, for example:
 
-* `asv-common`
-* `asv-common-test`
-* `asv-cfg`
-* `asv-cfg-test`
-* `asv-drones`
-* `asv-drones-docs`
-* `asv-drones-gbs`
-* `asv-drones-gui-core`
-* `asv-drones-gui-gbs`
-* `asv-drones-gui-map`
-* `asv-drones-gui-sdr`
-* `asv-drones-gui-uav`
-* `asv-gnss`
-* `asv-gnss-prometheus`
-* `asv-gnss-shell`
-* `asv-gnss-test`
-* `asv-io`
-* `asv-io-test`
-* `asv-mavlink`
-* `asv-avalonia`
-* `asv-mavlink-shell`
-* `asv-mavlink-test`
-* `asv-store`
-* `asv-store-test`
+* `core` for `Asv.Avalonia`
+* `io` for `Asv.Avalonia.IO`
+* `geomap` for `Asv.Avalonia.GeoMap`
+* `plugins` for `Asv.Avalonia.Plugins`
+* `launcher` for the launcher and readiness projects
+* `example` for example applications
+* `docs` for Writerside topics
+* `tests` for shared test infrastructure
 
 **Summary**
 
@@ -168,28 +187,16 @@ Breaking Change section should start with the phrase "BREAKING CHANGE: " followe
 
 Similarly, a Deprecation section should start with "DEPRECATED: " followed by a short description of what is deprecated, a blank line, and a detailed description of the deprecation that also mentions the recommended update path.
 
-Every commit must contain footer, for our team developers footer must contain reference of a task in Asana, for common contributors - reference of an issue on GitHub.
+Use the footer to reference the relevant issue or task in the project's issue tracker. A GitHub issue URL, an internal tracker reference, or another agreed task link can provide that context; Asana is not a required tracker.
 
 For example:
 
-Our team commit:
-
 ```
-fix(asv-drones-gui-uav): change drones goto functionality
+fix(io): preserve packet recording state
 
-Change scope of some variables of an anchor to public
+Keep the recording state when refreshing the inspector page
 
-Asana: https://app.asana.com/0/12345678901234/1234567890123456/f 
-```
-
-Common contributor commit:
-
-```
-fix(asv-drones-gui-uav): change drones goto functionality
-
-Change scope of some variables of an anchor to public
-
-Issue: https://github.com/asv-soft/asv-drones/issues/1234   
+Issue: https://github.com/asv-soft/asv-avalonia/issues/<issue-number>
 ```
 
 ### Revert commits

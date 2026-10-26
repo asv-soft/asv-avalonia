@@ -33,6 +33,7 @@ public sealed class HomePageFileInspectorExtension : IExtensionFor<IHomePage>
             Header = RS.FileInspector_Title,
             Description = RS.FileInspector_Description,
             Icon = MaterialIconKind.FileSearchOutline,
+            IconColor = FileInspectorPageViewModel.PageIconColor,
             Command = new ReactiveCommand(_ => context.GoTo(new NavPath(new NavId(FileInspectorPageViewModel.PageId))))
                 .DisposeItWith(contextDispose),
         }.DisposeItWith(contextDispose);

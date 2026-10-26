@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Asv.Avalonia"
+        xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        x:Class="Asv.Avalonia.DockDragPreview" x:DataType="local:IPage"
+        Width="300" Height="232" WindowDecorations="None" CanResize="False"
+        ShowActivated="False" ShowInTaskbar="False" Topmost="True" Focusable="False"
+        Background="Transparent" TransparencyLevelHint="Transparent" IsHitTestVisible="False"
+        Classes="dock-drag-preview">
+    <Border x:Name="PART_Card" Margin="8" CornerRadius="12" Opacity="0"
+            Background="{DynamicResource SystemRegionBrush}"
+            BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}" BorderThickness="1"
+            BoxShadow="0 5 14 0 #60000000" ClipToBounds="True" RenderTransformOrigin="50%,50%">
+        <Grid RowDefinitions="36,136,*">
+            <Grid ColumnDefinitions="20,8,*" Margin="12,8">
+                <icons:MaterialIcon Kind="{Binding Icon}" local:AsvPalette.Color="{Binding IconColor}" Width="18" Height="18" />
+                <TextBlock Grid.Column="2" Text="{Binding Header}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+            </Grid>
+            <Panel Grid.Row="1" Margin="8,0">
+                <Image x:Name="PART_Image" Stretch="Uniform" />
+                <StackPanel x:Name="PART_Fallback" VerticalAlignment="Center" HorizontalAlignment="Center" Spacing="8">
+                    <icons:MaterialIcon Kind="{Binding Icon}" Width="44" Height="44" Opacity="0.5" />
+                    <TextBlock Text="{Binding Header}" MaxWidth="240" TextTrimming="CharacterEllipsis" Opacity="0.6" />
+                </StackPanel>
+            </Panel>
+            <TextBlock x:Name="PART_Hint" Grid.Row="2" Margin="12,8" FontSize="11" Opacity="0.7" TextWrapping="Wrap" />
+        </Grid>
+    </Border>
+</Window>

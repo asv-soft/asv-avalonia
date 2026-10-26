@@ -1,4 +1,4 @@
-﻿<root>
+<root>
     <resheader name="resmimetype">
         <value>text/microsoft-resx</value>
     </resheader>
@@ -873,4 +873,6 @@
     <data name="WorkspacePageViewModel_Exception_Message" xml:space="preserve">
         <value>Сгенерированное исключение для демонстрации всплывающего окна ShellView.</value>
     </data>
+  <data name="HeaderExample_DisplayName" xml:space="preserve"><value>Демо-пользователь</value></data>
+  <data name="HeaderExample_Description" xml:space="preserve"><value>Пример карточки пользователя. Плагин может добавить здесь вход в систему и действия с аккаунтом.</value></data>
 </root>

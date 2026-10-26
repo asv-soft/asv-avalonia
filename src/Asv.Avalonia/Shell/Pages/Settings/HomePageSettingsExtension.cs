@@ -17,6 +17,7 @@ public class HomePageSettingsExtension : IExtensionFor<IHomePage>
             Header = RS.OpenSettingsCommand_Action_Title,
             Description = RS.OpenSettingsCommand_Action_Description,
             Icon = SettingsPageViewModel.PageIcon,
+            IconColor = SettingsPageViewModel.PageIconColor,
             Command = new ReactiveCommand(_ =>
                 context.GoTo(new NavPath(new NavId(SettingsPageViewModel.PageId)))
             ).DisposeItWith(contextDispose),
