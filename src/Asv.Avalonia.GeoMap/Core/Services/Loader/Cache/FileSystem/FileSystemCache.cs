@@ -1,8 +1,6 @@
-﻿using System.Diagnostics.Metrics;
+using System.Diagnostics.Metrics;
 using System.Threading.Channels;
-using Asv.Avalonia;
 using Asv.Common;
-using Avalonia.Media.Imaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ZLogger;
@@ -19,11 +17,12 @@ public class FileSystemCacheConfig : TileCacheConfig
     public int WriteParallelThreads { get; set; } = 1;
 }
 
-public class FileSystemCache : TileCache
+public class FileSystemCache : TileCache, IPersistentTileCache
 {
     private readonly string _cacheDirectory;
     private readonly ILogger<FileSystemCache> _logger;
-    private readonly Lock _syncDir = new();
+    private readonly SemaphoreSlim _writeSync = new(1, 1);
+    private readonly Task[] _writers;
     private readonly Counter<int> _meterGet;
     private readonly Counter<int> _meterSet;
     private long _fileCount;
@@ -66,84 +65,63 @@ public class FileSystemCache : TileCache
         );
 
         _writerQueue = Channel.CreateBounded<Tile>(
-            new BoundedChannelOptions(config.Value.WriteQueueSize)
-        /*{
-            FullMode = BoundedChannelFullMode.DropOldest,
-        }*/
+            new BoundedChannelOptions(Math.Max(1, config.Value.WriteQueueSize))
+            {
+                FullMode = BoundedChannelFullMode.Wait,
+            }
         );
 
-        DisposeCancel.Register(() => _writerQueue.Writer.TryComplete());
-
-        for (var i = 0; i < config.Value.WriteParallelThreads; i++)
+        _writers = new Task[Math.Max(1, config.Value.WriteParallelThreads)];
+        for (var i = 0; i < _writers.Length; i++)
         {
-            Task.Run(() => WriteQueue(DisposeCancel), DisposeCancel);
+            _writers[i] = Task.Run(WriteQueueAsync);
         }
     }
 
-    private async Task WriteQueue(CancellationToken cancel)
+    private async Task WriteQueueAsync()
+    {
+        // Complete and drain the queue during disposal; each entry owns one reference.
+        await foreach (var tile in _writerQueue.Reader.ReadAllAsync().ConfigureAwait(false))
+        {
+            WriteAndRelease(tile);
+        }
+    }
+
+    private void WriteAndRelease(Tile tile)
     {
         try
         {
-            await foreach (var tile in _writerQueue.Reader.ReadAllAsync(cancel))
-            {
-                var persisted = false;
-                try
-                {
-                    _meterSet.Add(1);
-                    var tilePath = GetTileCachePath(tile.Key);
-
-                    var hadFile = File.Exists(tilePath);
-                    var oldSize = hadFile ? new FileInfo(tilePath).Length : 0;
-                    tile.Save(tilePath);
-                    persisted = true;
-                    var newSize = new FileInfo(tilePath).Length;
-                    if (!hadFile)
-                    {
-                        Interlocked.Increment(ref _fileCount);
-                    }
-
-                    Interlocked.Add(ref _dirSizeInBytes, newSize - oldSize);
-                }
-                finally
-                {
-                    if (persisted)
-                    {
-                        tile.ReleaseCompressedBytes();
-                    }
-
-                    tile.Dispose();
-                }
-            }
-        }
-        catch (OperationCanceledException)
-        {
-            // this is normal when dispose
+            WriteTile(tile, CancellationToken.None, releaseCompressed: true);
         }
         catch (Exception e)
         {
-            _logger.ZLogError(e, $"Error write tile queue:{e.Message}");
+            _logger.ZLogError(e, $"Error writing tile cache:{e.Message}");
+        }
+        finally
+        {
+            tile.Dispose();
         }
     }
 
     protected override void SetBitmap(TileKey key, Tile? tile)
     {
-        /*if (tile == null)
-        {
-            var info = new FileInfo(tilePath);
-            if (info.Exists)
-            {
-                // ReSharper disable once InconsistentlySynchronizedField
-                _logger.ZLogInformation($"Delete tile file: {tilePath}");
-                _dirSizeInBytes -= info.Length;
-                _fileCount--;
-                File.Delete(tilePath);
-            }
-        }*/
         if (tile == null)
         {
             return;
         }
-        _writerQueue.Writer.TryWrite(tile);
+
+        if (IsDisposed)
+        {
+            tile.Dispose();
+            return;
+        }
+
+        if (!_writerQueue.Writer.TryWrite(tile))
+        {
+            // The synchronous cache API cannot await capacity. Persist on this loader
+            // thread instead, bounding memory without dropping the transferred reference.
+            WriteAndRelease(tile);
+        }
     }
 
     protected override Tile? GetBitmap(TileKey key)
@@ -166,8 +144,96 @@ public class FileSystemCache : TileCache
     {
         var providerName = key.Provider.Info.Id;
         var tileFolder = Path.Combine(_cacheDirectory, providerName, key.Zoom.ToString());
-        Directory.CreateDirectory(tileFolder);
         return Path.Combine(tileFolder, $"{key.X}_{key.Y}.{TileFileExtension}");
+    }
+
+    public bool Contains(TileKey key)
+    {
+        ThrowIfDisposed();
+        return File.Exists(GetTileCachePath(key));
+    }
+
+    public ValueTask SaveAsync(Tile tile, CancellationToken cancellationToken = default)
+    {
+        ArgumentNullException.ThrowIfNull(tile);
+        ThrowIfDisposed();
+        return new ValueTask(Task.Run(() => WriteTile(tile, cancellationToken), cancellationToken));
+    }
+
+    private void WriteTile(
+        Tile tile,
+        CancellationToken cancellationToken,
+        bool releaseCompressed = false
+    )
+    {
+        _writeSync.Wait(cancellationToken);
+        try
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var tilePath = GetTileCachePath(tile.Key);
+            Directory.CreateDirectory(Path.GetDirectoryName(tilePath)!);
+            var temporaryPath = tilePath + "." + Guid.NewGuid().ToString("N") + ".tmp";
+            try
+            {
+                tile.Save(temporaryPath);
+                using (
+                    var stream = new FileStream(
+                        temporaryPath,
+                        FileMode.Open,
+                        FileAccess.Write,
+                        FileShare.None
+                    )
+                )
+                {
+                    stream.Flush(flushToDisk: true);
+                }
+
+                var hadFile = File.Exists(tilePath);
+                var oldSize = hadFile ? new FileInfo(tilePath).Length : 0;
+                File.Move(temporaryPath, tilePath, overwrite: true);
+                var newSize = new FileInfo(tilePath).Length;
+                if (!hadFile)
+                {
+                    Interlocked.Increment(ref _fileCount);
+                }
+
+                Interlocked.Add(ref _dirSizeInBytes, newSize - oldSize);
+                _meterSet.Add(1);
+                if (releaseCompressed)
+                {
+                    tile.ReleaseCompressedBytes();
+                }
+            }
+            finally
+            {
+                if (File.Exists(temporaryPath))
+                {
+                    File.Delete(temporaryPath);
+                }
+            }
+        }
+        finally
+        {
+            _writeSync.Release();
+        }
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _writerQueue.Writer.TryComplete();
+            Task.WaitAll(_writers);
+        }
+
+        base.Dispose(disposing);
+    }
+
+    protected override async ValueTask DisposeAsyncCore()
+    {
+        _writerQueue.Writer.TryComplete();
+        await Task.WhenAll(_writers).ConfigureAwait(false);
+        await base.DisposeAsyncCore().ConfigureAwait(false);
     }
 
     public override TileCacheStatistic GetStatistic()

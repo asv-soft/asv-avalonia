@@ -15,9 +15,11 @@ public static class ServicesRegistrations
             .AddOptions<MemoryTileCacheConfig>()
             .BindConfiguration(MemoryTileCacheConfig.ConfigurationSection);
 
+        builder.AppBuilder.Services.AddSingleton<FileSystemCache>();
         builder
-            .AppBuilder.Services.AddKeyedSingleton<ITileCache, FileSystemCache>(
-                TileLoader.SlowTileCacheContract
+            .AppBuilder.Services.AddKeyedSingleton<ITileCache>(
+                TileLoader.SlowTileCacheContract,
+                (services, _) => services.GetRequiredService<FileSystemCache>()
             )
             .AddOptions<FileSystemCacheConfig>()
             .BindConfiguration(FileSystemCacheConfig.ConfigurationSection);
@@ -36,6 +38,10 @@ public static class ServicesRegistrations
         );
 
         builder.AppBuilder.Services.AddSingleton<IMapInputService, MapInputService>();
+        builder.AppBuilder.Services.AddSingleton<IPersistentTileCache>(services =>
+            services.GetRequiredService<FileSystemCache>()
+        );
+        builder.AppBuilder.Services.AddSingleton<IMapPreloadService, MapPreloadService>();
         builder.AppBuilder.Services.AddSingleton<IMapService, MapService>();
         builder.AppBuilder.Services.AddSingleton<ITileLoader, TileLoader>();
         builder.AppBuilder.Services.AddSingleton<ITileProviderService, TileProviderService>();

@@ -444,4 +444,67 @@
     <value>⌘ / Win + mouse wheel</value>
   </data>
   <data name="SettingsGeoMapView_MapPreview_PointHeight" xml:space="preserve"><value>Point {0}: {1} m</value></data>
+  <data name="MapPreloadDialog_Title" xml:space="preserve">
+    <value>Preload map</value>
+  </data>
+  <data name="MapPreloadDialog_Instructions" xml:space="preserve">
+    <value>Click the map or drag the marker to choose the center. The circle shows the download area.</value>
+  </data>
+  <data name="MapPreloadDialog_Radius" xml:space="preserve">
+    <value>Download radius, km</value>
+  </data>
+  <data name="MapPreloadDialog_MinZoom" xml:space="preserve">
+    <value>Minimum zoom</value>
+  </data>
+  <data name="MapPreloadDialog_MaxZoom" xml:space="preserve">
+    <value>Maximum zoom</value>
+  </data>
+  <data name="MapPreloadDialog_RequestDelay" xml:space="preserve">
+    <value>Delay between requests, ms (per provider)</value>
+  </data>
+  <data name="MapPreloadDialog_Concurrency" xml:space="preserve">
+    <value>Parallel requests</value>
+  </data>
+  <data name="MapPreloadDialog_Providers" xml:space="preserve">
+    <value>Providers to preload</value>
+  </data>
+  <data name="MapPreloadDialog_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="MapPreloadDialog_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="MapPreloadDialog_Estimating" xml:space="preserve">
+    <value>Calculating tile count…</value>
+  </data>
+  <data name="MapPreloadDialog_Ready" xml:space="preserve">
+    <value>Ready to download</value>
+  </data>
+  <data name="MapPreloadDialog_Downloading" xml:space="preserve">
+    <value>Downloading…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopping" xml:space="preserve">
+    <value>Stopping and saving downloaded tiles…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopped" xml:space="preserve">
+    <value>Download stopped. Saved tiles will be reused on the next run.</value>
+  </data>
+  <data name="MapPreloadDialog_Completed" xml:space="preserve">
+    <value>Download completed</value>
+  </data>
+  <data name="MapPreloadDialog_InvalidParameters" xml:space="preserve">
+    <value>Select at least one provider and check the radius, zoom range, delay and parallel requests.</value>
+  </data>
+  <data name="MapPreloadDialog_EstimateFormat" xml:space="preserve">
+    <value>Tiles to process: {0:N0}</value>
+  </data>
+  <data name="MapPreloadDialog_ProgressFormat" xml:space="preserve">
+    <value>{0:N0} / {1:N0} tiles ({2:F1}%)</value>
+  </data>
+  <data name="MapPreloadDialog_StatisticsFormat" xml:space="preserve">
+    <value>Cached: {0:N0} · Downloaded: {1:N0} · Errors: {2:N0} · Received: {3:N1} MB</value>
+  </data>
+  <data name="MapPreloadDialog_CenterFormat" xml:space="preserve">
+    <value>Center: {0:F6}, {1:F6}</value>
+  </data>
 </root>

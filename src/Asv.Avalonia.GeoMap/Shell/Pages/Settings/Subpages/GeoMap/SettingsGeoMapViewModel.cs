@@ -10,6 +10,7 @@ namespace Asv.Avalonia.GeoMap;
 public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
 {
     public const string PageId = "geo-map";
+    private bool _isPreloadDialogOpen;
 
     public SettingsGeoMapViewModel()
         : this(
@@ -87,11 +88,13 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
             Editor.ItemsSource.Add(ResetMapInput);
         }
 
-        var mapFolder = appPath?.GetAppPathFolder(
-            cacheConfig?.Value.FolderPath ?? new FileSystemCacheConfig().FolderPath
-        ) ?? Path.GetFullPath(Path.Combine("data", "map"));
+        var mapFolder =
+            appPath?.GetAppPathFolder(
+                cacheConfig?.Value.FolderPath ?? new FileSystemCacheConfig().FolderPath
+            ) ?? Path.GetFullPath(Path.Combine("data", "map"));
         var openMapFolderHeader = RS.ResourceManager.GetString(
-            "SettingsGeoMapViewModel_OpenMapFolder_Header", RS.Culture
+            "SettingsGeoMapViewModel_OpenMapFolder_Header",
+            RS.Culture
         )!;
         OpenMapFolder = new PropertyButtonViewModel(
             "open-map-folder",
@@ -104,7 +107,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         {
             Header = openMapFolderHeader,
             ShortHeader = RS.ResourceManager.GetString(
-                "SettingsGeoMapViewModel_OpenMapFolder_Button", RS.Culture
+                "SettingsGeoMapViewModel_OpenMapFolder_Button",
+                RS.Culture
             )!,
             Description = mapFolder,
             Icon = MaterialIconKind.FolderOpen,
@@ -117,6 +121,38 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         MapPreview.CenterMap.Value = new GeoPoint(56.8389, 60.6057, 0);
         MapPreview.Zoom.Value = ClampZoom(13, mapService);
         CreatePreviewPath();
+
+        PreloadMapCommand = new ReactiveCommand(
+            async (_, cancel) =>
+            {
+                cancel.ThrowIfCancellationRequested();
+                if (_isPreloadDialogOpen)
+                {
+                    return;
+                }
+
+                _isPreloadDialogOpen = true;
+                try
+                {
+                    await dialogService.ShowMapPreloadDialogAsync(MapPreview.CenterMap.Value);
+                }
+                finally
+                {
+                    _isPreloadDialogOpen = false;
+                }
+            }
+        ).DisposeItWith(Disposable);
+        Menu.Add(
+            new MenuItem(
+                "preload-map",
+                RS.ResourceManager.GetString("MapPreloadDialog_Title", RS.Culture)!
+            )
+            {
+                Icon = MaterialIconKind.Download,
+                Command = PreloadMapCommand,
+                Order = 1,
+            }
+        );
 
         mapService
             .MinZoom.Skip(1)
@@ -132,6 +168,7 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
 
     public IReadOnlyList<MapInputGestureProperty> MapInputGestures { get; } = [];
     public PropertyButtonViewModel? ResetMapInput { get; }
+    public ReactiveCommand PreloadMapCommand { get; }
     public ExtendedPropertyEditorViewModel Editor { get; }
     public TileProviderSelectorViewModel TileProviderSelectorViewModel { get; }
     public MapViewModel MapPreview { get; }
@@ -150,6 +187,10 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         yield return Editor;
         yield return TileProviderSelectorViewModel;
         yield return MapPreview;
+        foreach (var child in base.GetChildren())
+        {
+            yield return child;
+        }
     }
 
     private void CreatePreviewPath()
@@ -171,7 +212,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         double[] heights = [100, 200, 350, 250, 150];
         var center = MapPreview.CenterMap.Value;
         var headerFormat = RS.ResourceManager.GetString(
-            "SettingsGeoMapView_MapPreview_PointHeight", RS.Culture
+            "SettingsGeoMapView_MapPreview_PointHeight",
+            RS.Culture
         )!;
         for (var i = 0; i < heights.Length; i++)
         {
@@ -195,7 +237,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
             MapPreview.Anchors.Add(anchor);
             path.Polygon.Add(location);
             var index = i;
-            anchor.ObservePropertyChanged(point => point.Location)
+            anchor
+                .ObservePropertyChanged(point => point.Location)
                 .Subscribe(point => path.Polygon[index] = point)
                 .DisposeItWith(Disposable);
         }

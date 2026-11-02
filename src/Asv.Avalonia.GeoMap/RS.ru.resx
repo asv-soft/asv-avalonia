@@ -437,4 +437,67 @@
     <value>⌘ / Win + колесо мыши</value>
   </data>
   <data name="SettingsGeoMapView_MapPreview_PointHeight" xml:space="preserve"><value>Точка {0}: {1} м</value></data>
+  <data name="MapPreloadDialog_Title" xml:space="preserve">
+    <value>Предзагрузка карты</value>
+  </data>
+  <data name="MapPreloadDialog_Instructions" xml:space="preserve">
+    <value>Нажмите на карту или переместите маркер, чтобы выбрать центр. Круг показывает область загрузки.</value>
+  </data>
+  <data name="MapPreloadDialog_Radius" xml:space="preserve">
+    <value>Радиус загрузки, км</value>
+  </data>
+  <data name="MapPreloadDialog_MinZoom" xml:space="preserve">
+    <value>Минимальный масштаб</value>
+  </data>
+  <data name="MapPreloadDialog_MaxZoom" xml:space="preserve">
+    <value>Максимальный масштаб</value>
+  </data>
+  <data name="MapPreloadDialog_RequestDelay" xml:space="preserve">
+    <value>Задержка между запросами, мс (для каждого провайдера)</value>
+  </data>
+  <data name="MapPreloadDialog_Concurrency" xml:space="preserve">
+    <value>Параллельные запросы</value>
+  </data>
+  <data name="MapPreloadDialog_Providers" xml:space="preserve">
+    <value>Провайдеры для предзагрузки</value>
+  </data>
+  <data name="MapPreloadDialog_Download" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="MapPreloadDialog_Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="MapPreloadDialog_Estimating" xml:space="preserve">
+    <value>Расчёт количества тайлов…</value>
+  </data>
+  <data name="MapPreloadDialog_Ready" xml:space="preserve">
+    <value>Готово к загрузке</value>
+  </data>
+  <data name="MapPreloadDialog_Downloading" xml:space="preserve">
+    <value>Загрузка…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopping" xml:space="preserve">
+    <value>Остановка и сохранение скачанных тайлов…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopped" xml:space="preserve">
+    <value>Загрузка остановлена. Сохранённые тайлы будут использованы при следующем запуске.</value>
+  </data>
+  <data name="MapPreloadDialog_Completed" xml:space="preserve">
+    <value>Загрузка завершена</value>
+  </data>
+  <data name="MapPreloadDialog_InvalidParameters" xml:space="preserve">
+    <value>Выберите хотя бы одного провайдера и проверьте радиус, диапазон масштабов, задержку и число запросов.</value>
+  </data>
+  <data name="MapPreloadDialog_EstimateFormat" xml:space="preserve">
+    <value>Тайлов для обработки: {0:N0}</value>
+  </data>
+  <data name="MapPreloadDialog_ProgressFormat" xml:space="preserve">
+    <value>{0:N0} / {1:N0} тайлов ({2:F1}%)</value>
+  </data>
+  <data name="MapPreloadDialog_StatisticsFormat" xml:space="preserve">
+    <value>В кеше: {0:N0} · Скачано: {1:N0} · Ошибки: {2:N0} · Получено: {3:N1} МБ</value>
+  </data>
+  <data name="MapPreloadDialog_CenterFormat" xml:space="preserve">
+    <value>Центр: {0:F6}, {1:F6}</value>
+  </data>
 </root>

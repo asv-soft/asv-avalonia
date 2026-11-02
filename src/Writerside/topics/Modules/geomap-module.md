@@ -174,3 +174,44 @@ input.Reset();
 
 A custom `IMapService` can omit `Input` and retain the default gestures. For a
 standalone `MapItemsControl`, assign its `InputBindings` property directly.
+
+## Preload a map area
+
+Open **Settings → Map → Preload map** in the subpage action bar. The Expanded
+dialog starts at the map preview center. Click the map or drag the center marker
+to position the circular download area, then set its radius in kilometers.
+
+Choose an inclusive minimum/maximum zoom range and select one or more providers.
+The estimate counts unique tiles intersecting the circle, using each provider's
+supported zoom range. The preview provider and zoom are local to the dialog and
+do not change the application's map settings.
+
+**Parallel requests** limits active preload requests across all selected providers.
+**Delay between requests** is the minimum interval between request starts for each
+provider, shared by all workers. Increasing concurrency does not bypass this delay.
+
+Click **Download** to start. Parameters remain locked while the operation is active.
+Progress distinguishes existing cached tiles, newly downloaded and saved tiles,
+errors and received bytes. Preloading always saves to the configured map cache,
+regardless of the current map display mode.
+
+**Stop**, the close button, Escape and the title-bar close icon cancel outstanding
+requests. Closing waits for already downloaded tiles to be saved. Saved files are
+kept; starting again skips existing tiles and retries missing ones. A provider or
+network error is reported without deleting successfully saved tiles.
+
+Applications can open the same dialog through `IDialogService`:
+
+```c#
+MapPreloadProgress? result = await dialogs.ShowMapPreloadDialogAsync(
+    new GeoPoint(56.84, 60.61, 0));
+```
+
+The result is the last run's progress snapshot, or `null` when no download was
+started. Optional appearance parameters follow the other GeoMap dialog extensions;
+`sizeMode` defaults to `DialogSizeMode.Expanded`.
+
+For a custom UI, inject `IMapPreloadService`, call `CountTiles` on a background
+thread for an estimate, and use `DownloadAsync` with `IProgress<MapPreloadProgress>`
+and a cancellation token. Progress callbacks may originate from worker threads;
+dispatch bound state changes to the UI thread.
