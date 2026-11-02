@@ -61,7 +61,7 @@
         <value>Map preview</value>
     </data>
     <data name="SettingsGeoMapView_MapPreview_Description" xml:space="preserve">
-        <value>Shows how the map looks with the current provider and zoom settings.</value>
+        <value>Five movable points from west to east at 100, 200, 350, 250 and 150 m. Use the configured marker gesture to reshape the path.</value>
     </data>
     <data name="SettingsGeoMapView_MapPreview_Anchor" xml:space="preserve">
         <value>Preview point</value>
@@ -353,5 +353,158 @@
   </data>
   <data name="SettingsGeoMapViewModel_OpenMapFolder_Button" xml:space="preserve">
     <value>Open folder</value>
+  </data>
+  <data name="MapView_AltitudeLayer" xml:space="preserve"><value>Altitude display</value></data>
+  <data name="MapView_PolygonAltitudes" xml:space="preserve"><value>Polygon vertex altitudes</value></data>
+  <data name="MapInput_Pan_Header" xml:space="preserve">
+    <value>Move map</value>
+  </data>
+  <data name="MapInput_Pan_Description" xml:space="preserve">
+    <value>Choose a drag gesture for panning the map. Changes apply to all open maps.</value>
+  </data>
+  <data name="MapInput_MoveMarkers_Header" xml:space="preserve">
+    <value>Move markers</value>
+  </data>
+  <data name="MapInput_MoveMarkers_Description" xml:space="preserve">
+    <value>Drag selected editable markers. Read-only markers remain fixed.</value>
+  </data>
+  <data name="MapInput_SelectRectangle_Header" xml:space="preserve">
+    <value>Select markers by rectangle</value>
+  </data>
+  <data name="MapInput_SelectRectangle_Description" xml:space="preserve">
+    <value>Choose the drag gesture that draws a selection rectangle.</value>
+  </data>
+  <data name="MapInput_Zoom_Header" xml:space="preserve">
+    <value>Map zoom</value>
+  </data>
+  <data name="MapInput_Zoom_Description" xml:space="preserve">
+    <value>Use the wheel or a vertical drag gesture. Pinch zoom on a touchpad remains available.</value>
+  </data>
+  <data name="MapInput_Reset_Header" xml:space="preserve">
+    <value>Restore map controls</value>
+  </data>
+  <data name="MapInput_Reset_Button" xml:space="preserve">
+    <value>Restore defaults</value>
+  </data>
+  <data name="MapInput_Reset_Description" xml:space="preserve">
+    <value>Restore left drag, Ctrl + left drag, Shift + left drag and wheel zoom. Esc cancels active map interactions.</value>
+  </data>
+  <data name="MapInput_Conflict" xml:space="preserve">
+    <value>This gesture is already assigned to “{0}”. Change or disable that assignment first.</value>
+  </data>
+  <data name="MapInput_Unavailable" xml:space="preserve">
+    <value>This gesture is not available for this action.</value>
+  </data>
+  <data name="MapInput_Gesture_None" xml:space="preserve">
+    <value>Not assigned</value>
+  </data>
+  <data name="MapInput_Gesture_LeftDrag" xml:space="preserve">
+    <value>Left mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_ControlLeftDrag" xml:space="preserve">
+    <value>Ctrl + left mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftLeftDrag" xml:space="preserve">
+    <value>Shift + left mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_AltLeftDrag" xml:space="preserve">
+    <value>Alt + left mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_MetaLeftDrag" xml:space="preserve">
+    <value>⌘ / Win + left mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_MiddleDrag" xml:space="preserve">
+    <value>Middle mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_ControlMiddleDrag" xml:space="preserve">
+    <value>Ctrl + middle mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftMiddleDrag" xml:space="preserve">
+    <value>Shift + middle mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_AltMiddleDrag" xml:space="preserve">
+    <value>Alt + middle mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_MetaMiddleDrag" xml:space="preserve">
+    <value>⌘ / Win + middle mouse drag</value>
+  </data>
+  <data name="MapInput_Gesture_Wheel" xml:space="preserve">
+    <value>Mouse wheel</value>
+  </data>
+  <data name="MapInput_Gesture_ControlWheel" xml:space="preserve">
+    <value>Ctrl + mouse wheel</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftWheel" xml:space="preserve">
+    <value>Shift + mouse wheel</value>
+  </data>
+  <data name="MapInput_Gesture_AltWheel" xml:space="preserve">
+    <value>Alt + mouse wheel</value>
+  </data>
+  <data name="MapInput_Gesture_MetaWheel" xml:space="preserve">
+    <value>⌘ / Win + mouse wheel</value>
+  </data>
+  <data name="SettingsGeoMapView_MapPreview_PointHeight" xml:space="preserve"><value>Point {0}: {1} m</value></data>
+  <data name="MapPreloadDialog_Title" xml:space="preserve">
+    <value>Preload map</value>
+  </data>
+  <data name="MapPreloadDialog_Instructions" xml:space="preserve">
+    <value>Click the map or drag the marker to choose the center. The circle shows the download area.</value>
+  </data>
+  <data name="MapPreloadDialog_Radius" xml:space="preserve">
+    <value>Download radius, km</value>
+  </data>
+  <data name="MapPreloadDialog_MinZoom" xml:space="preserve">
+    <value>Minimum zoom</value>
+  </data>
+  <data name="MapPreloadDialog_MaxZoom" xml:space="preserve">
+    <value>Maximum zoom</value>
+  </data>
+  <data name="MapPreloadDialog_RequestDelay" xml:space="preserve">
+    <value>Delay between requests, ms (per provider)</value>
+  </data>
+  <data name="MapPreloadDialog_Concurrency" xml:space="preserve">
+    <value>Parallel requests</value>
+  </data>
+  <data name="MapPreloadDialog_Providers" xml:space="preserve">
+    <value>Providers to preload</value>
+  </data>
+  <data name="MapPreloadDialog_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="MapPreloadDialog_Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="MapPreloadDialog_Estimating" xml:space="preserve">
+    <value>Calculating tile count…</value>
+  </data>
+  <data name="MapPreloadDialog_Ready" xml:space="preserve">
+    <value>Ready to download</value>
+  </data>
+  <data name="MapPreloadDialog_Downloading" xml:space="preserve">
+    <value>Downloading…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopping" xml:space="preserve">
+    <value>Stopping and saving downloaded tiles…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopped" xml:space="preserve">
+    <value>Download stopped. Saved tiles will be reused on the next run.</value>
+  </data>
+  <data name="MapPreloadDialog_Completed" xml:space="preserve">
+    <value>Download completed</value>
+  </data>
+  <data name="MapPreloadDialog_InvalidParameters" xml:space="preserve">
+    <value>Select at least one provider and check the radius, zoom range, delay and parallel requests.</value>
+  </data>
+  <data name="MapPreloadDialog_EstimateFormat" xml:space="preserve">
+    <value>Tiles to process: {0:N0}</value>
+  </data>
+  <data name="MapPreloadDialog_ProgressFormat" xml:space="preserve">
+    <value>{0:N0} / {1:N0} tiles ({2:F1}%)</value>
+  </data>
+  <data name="MapPreloadDialog_StatisticsFormat" xml:space="preserve">
+    <value>Cached: {0:N0} · Downloaded: {1:N0} · Errors: {2:N0} · Received: {3:N1} MB</value>
+  </data>
+  <data name="MapPreloadDialog_CenterFormat" xml:space="preserve">
+    <value>Center: {0:F6}, {1:F6}</value>
   </data>
 </root>

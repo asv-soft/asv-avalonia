@@ -35,6 +35,9 @@ public class MapViewModel : ViewModel, IMap
     public MapViewModel(string id, IMapService mapService)
         : base(id)
     {
+        ShowAltitudes.DisposeItWith(Disposable);
+        ShowPolygonAltitudes.DisposeItWith(Disposable);
+        AltitudePixelsPerMeter.DisposeItWith(Disposable);
         Anchors = [];
         Anchors.SetParent(this).DisposeItWith(Disposable);
         Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
@@ -60,8 +63,23 @@ public class MapViewModel : ViewModel, IMap
             .CurrentProvider.ToReadOnlyBindableReactiveProperty<ITileProvider>()
             .DisposeItWith(Disposable);
 
+        InputBindings = (mapService.Input?.Bindings.AsObservable()
+                ?? Observable.Return(MapInputBindings.Default))
+            .ObserveOnUIThreadDispatcher()
+            .ToReadOnlyBindableReactiveProperty(mapService.Input?.Bindings.CurrentValue ?? MapInputBindings.Default)
+            .DisposeItWith(Disposable);
+
         Interaction = new MapInteractionController().DisposeItWith(Disposable);
     }
+
+    public string AltitudeLayerHeader => RS.ResourceManager.GetString("MapView_AltitudeLayer", RS.Culture)!;
+    public string PolygonAltitudesHeader => RS.ResourceManager.GetString("MapView_PolygonAltitudes", RS.Culture)!;
+
+    public BindableReactiveProperty<bool> ShowAltitudes { get; } = new(false);
+    public BindableReactiveProperty<bool> ShowPolygonAltitudes { get; } = new(true);
+    public BindableReactiveProperty<double> AltitudePixelsPerMeter { get; } = new(1.0);
+
+    public IReadOnlyBindableReactiveProperty<MapInputBindings> InputBindings { get; }
 
     public IMapInteractionController Interaction { get; }
 

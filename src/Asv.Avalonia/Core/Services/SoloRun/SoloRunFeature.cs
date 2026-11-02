@@ -154,13 +154,28 @@ public class SoloRunFeature : BackgroundService
         {
             try
             {
-                await using var pipeServer = new NamedPipeServerStream(
-                    pipeName,
-                    PipeDirection.In,
-                    NamedPipeServerStream.MaxAllowedServerInstances,
-                    PipeTransmissionMode.Byte,
-                    PipeOptions.Asynchronous
-                );
+                NamedPipeServerStream pipeServer;
+                try
+                {
+                    pipeServer = new NamedPipeServerStream(
+                        pipeName,
+                        PipeDirection.In,
+                        NamedPipeServerStream.MaxAllowedServerInstances,
+                        PipeTransmissionMode.Byte,
+                        PipeOptions.Asynchronous
+                    );
+                }
+                catch (Exception ex) when (ex is ArgumentException or NotSupportedException)
+                {
+                    _logger.LogError(
+                        ex,
+                        "Cannot create named pipe '{PipeName}'. Argument forwarding is disabled.",
+                        pipeName
+                    );
+                    return;
+                }
+
+                await using var pipeServerLifetime = pipeServer;
 
                 using (_pipeServerSync.EnterScope())
                 {
@@ -183,13 +198,21 @@ public class SoloRunFeature : BackgroundService
             {
                 break;
             }
-            catch (ObjectDisposedException) when (cancellationToken.IsCancellationRequested)
+            catch (Exception) when (cancellationToken.IsCancellationRequested || _isStopped != 0)
             {
                 break;
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Named pipe server error.");
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
             }
             finally
             {

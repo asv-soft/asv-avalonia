@@ -62,6 +62,9 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
         _centerPoint = MapViewModel.CenterMap.Value;
 
         CreateEditableAnchorCircle(pointCount: 36, radiusMeters: 1000);
+        MapViewModel.ShowAltitudes.Value = true;
+        MapViewModel.ShowPolygonAltitudes.Value = true;
+        MapViewModel.AltitudePixelsPerMeter.Value = 0.3;
         CreateRotationTestAnchors();
         CreateAnimatedPlane();
 
@@ -90,6 +93,11 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
 
     #region Anchors
 
+    private static GeoPoint WithDemoAltitude(GeoPoint point, double altitude)
+    {
+        return new GeoPoint(point.Latitude, point.Longitude, altitude);
+    }
+
     private void CreateEditableAnchorCircle(int pointCount, double radiusMeters)
     {
         var path = new MapAnchor("editable-anchor-path")
@@ -108,7 +116,10 @@ public class MapTestPageViewModel : PageViewModel<MapTestPageViewModel>
                 Header = string.Format(RS.MapTestPageViewModel_Anchor_Editable, i),
                 IsAnnotationVisible = false,
                 CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0),
-                Location = _centerPoint.RadialPoint(radiusMeters, 360.0 / pointCount * i),
+                Location = WithDemoAltitude(
+                    _centerPoint.RadialPoint(radiusMeters, 360.0 / pointCount * i),
+                    300 + (200 * Math.Sin(2 * Math.PI * i / pointCount))
+                ),
             };
             if (i % 2 == 0)
             {

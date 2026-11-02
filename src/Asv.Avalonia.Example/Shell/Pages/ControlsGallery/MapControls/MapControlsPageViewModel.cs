@@ -51,6 +51,10 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
         MapViewModel.Anchors.DisposeRemovedItems().DisposeItWith(Disposable);
         MapViewModel.Anchors.SetParent(this).DisposeItWith(Disposable);
 
+        MapViewModel.ShowAltitudes.Value = true;
+        MapViewModel.ShowPolygonAltitudes.Value = true;
+        MapViewModel.AltitudePixelsPerMeter.Value = 0.3;
+
         var centerPoint = MapViewModel.CenterMap.Value;
         var pointCount = 36;
 
@@ -67,7 +71,12 @@ public class MapControlsPageViewModel : ControlsGallerySubPage
             anchor.Header = string.Format(RS.MapControlsPageViewModel_Anchor_Header, i);
             anchor.IsAnnotationVisible = false;
             anchor.CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0);
-            anchor.Location = centerPoint.RadialPoint(1000, 360.0 / pointCount * i);
+            var location = centerPoint.RadialPoint(1000, 360.0 / pointCount * i);
+            anchor.Location = new GeoPoint(
+                location.Latitude,
+                location.Longitude,
+                300 + (200 * Math.Sin(2 * Math.PI * i / pointCount))
+            );
             MapViewModel.Anchors.Add(anchor);
 
             path.Polygon.Add(anchor.Location);

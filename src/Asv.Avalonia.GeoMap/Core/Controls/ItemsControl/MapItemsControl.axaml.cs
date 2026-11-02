@@ -1,4 +1,5 @@
-using System.Collections;
+﻿using System.Collections;
+using Asv.Common;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -13,6 +14,8 @@ public enum DragState
     DragSelection,
     DragMap,
     SelectRectangle,
+    Click,
+    Zoom,
 }
 
 public partial class MapItemsControl : SelectingItemsControl
@@ -26,6 +29,9 @@ public partial class MapItemsControl : SelectingItemsControl
     private IPointer? _activePointer;
     private Control? _selectedContainer;
     private double _touchpadZoomAccumulator;
+    private double _zoomDragAccumulator;
+    private MouseButton _pressedButton;
+    private const double ZoomDragStepPixels = 40;
 
     public MapItemsControl()
     {
@@ -48,6 +54,11 @@ public partial class MapItemsControl : SelectingItemsControl
         )
         {
             SetCurrentValue(ZoomProperty, Zoom);
+        }
+
+        if (change.Property == InputBindingsProperty && DragState != DragState.None)
+        {
+            ClearDragState(_activePointer);
         }
 
         if (change.Property == TouchpadZoomSensitivityProperty && TouchpadZoomSensitivity < 0.0)
@@ -112,34 +123,54 @@ public partial class MapItemsControl : SelectingItemsControl
 
         var properties = e.GetCurrentPoint(this).Properties;
 
-        if (!properties.IsLeftButtonPressed)
+        var button = properties.PointerUpdateKind switch
         {
-            return;
-        }
-
-        if (e.KeyModifiers.HasFlag(KeyModifiers.Shift))
+            PointerUpdateKind.LeftButtonPressed => MouseButton.Left,
+            PointerUpdateKind.MiddleButtonPressed => MouseButton.Middle,
+            _ => MouseButton.None,
+        };
+        if (button == MouseButton.None)
         {
-            BeginSelectionRectangleDrag(e.Pointer, position);
-            e.Handled = true;
             return;
         }
 
         var container = GetContainerFromEventSource(e.Source);
-
-        if (
-            container is not null
-            && (
-                e.KeyModifiers.HasFlag(KeyModifiers.Control)
-                || (container is MapItem { CanDragWithoutModifier: true })
-            )
-        )
+        var action = MapInputPresets.ResolveDrag(
+            InputBindings, button, e.KeyModifiers, container is not null,
+            container is MapItem { CanDragWithoutModifier: true });
+        _pressedButton = button;
+        switch (action)
         {
-            BeginSelectionDrag(e.Pointer, position, container);
-            e.Handled = true;
-            return;
-        }
+            case MapInputAction.Zoom:
+                _zoomDragAccumulator = 0;
+                BeginMapDrag(e.Pointer, position);
+                DragState = DragState.Zoom;
+                UpdateCursorForDragState();
+                e.Handled = true;
+                return;
+            case MapInputAction.SelectRectangle:
+                BeginSelectionRectangleDrag(e.Pointer, position);
+                e.Handled = true;
+                return;
+            case MapInputAction.MoveMarkers:
+                BeginSelectionDrag(e.Pointer, position, container!);
+                e.Handled = true;
+                return;
+            case MapInputAction.Pan:
+                BeginMapDrag(e.Pointer, position);
+                break;
+            default:
+                if (button != MouseButton.Left)
+                {
+                    return;
+                }
 
-        BeginMapDrag(e.Pointer, position);
+                // A plain click remains available for selecting points even when pan uses another button.
+                BeginMapDrag(e.Pointer, position);
+                DragState = DragState.Click;
+                UpdateCursorForDragState();
+                break;
+        }
 
         if (container is not null)
         {
@@ -180,6 +211,19 @@ public partial class MapItemsControl : SelectingItemsControl
                 UpdateSelectRectangle(position);
                 InvalidateVisual();
                 break;
+            case DragState.Zoom:
+                _zoomDragAccumulator -= position.Y - _lastMousePosition.Y;
+                var steps = (int)(_zoomDragAccumulator / ZoomDragStepPixels);
+                _zoomDragAccumulator -= steps * ZoomDragStepPixels;
+                if (steps != 0)
+                {
+                    CenterZoomOnSelection();
+                    TryApplyZoomSteps(steps);
+                }
+
+                break;
+            case DragState.Click:
+                break;
             case DragState.DragSelection:
                 DragSelectedItems(position - _lastMousePosition);
                 _selectedContainer = null;
@@ -197,7 +241,7 @@ public partial class MapItemsControl : SelectingItemsControl
     {
         base.OnPointerReleased(e);
 
-        if (_activePointer != e.Pointer)
+        if (_activePointer != e.Pointer || e.InitialPressMouseButton != _pressedButton)
         {
             return;
         }
@@ -206,7 +250,12 @@ public partial class MapItemsControl : SelectingItemsControl
 
         var wasLeftClick =
             e.InitialPressMouseButton == MouseButton.Left
-            && DragState == DragState.DragMap
+            && (
+                DragState == DragState.DragMap
+                || DragState == DragState.Click
+                || (DragState == DragState.Zoom && InputBindings.Zoom == MapGesturePreset.LeftDrag)
+                || (DragState == DragState.SelectRectangle && InputBindings.SelectRectangle == MapGesturePreset.LeftDrag)
+            )
             && (releasePosition - _startMousePosition).LengthSquared() <= ClickThresholdSquared;
 
         ClearDragState(e.Pointer);
@@ -291,6 +340,8 @@ public partial class MapItemsControl : SelectingItemsControl
         }
 
         DragState = DragState.None;
+        _zoomDragAccumulator = 0;
+        _pressedButton = MouseButton.None;
         UpdateCursorForDragState();
         pointer?.Capture(null);
         _activePointer = null;
@@ -379,7 +430,11 @@ public partial class MapItemsControl : SelectingItemsControl
                 Zoom,
                 Provider.TileSize
             );
-            ctrl.Location = newLocation;
+            ctrl.Location = new GeoPoint(
+                newLocation.Latitude,
+                newLocation.Longitude,
+                ctrl.Location.Altitude
+            );
         }
     }
 
@@ -413,7 +468,12 @@ public partial class MapItemsControl : SelectingItemsControl
 
         UpdateCursorLocation(e.GetPosition(this));
 
-        if (EnableTouchpadGestures && IsLikelyTouchpadScroll(e))
+        if (!MapInputPresets.MatchesWheel(InputBindings.Zoom, e.KeyModifiers))
+        {
+            return;
+        }
+
+        if (EnableTouchpadGestures && InputBindings.Zoom == MapGesturePreset.Wheel && IsLikelyTouchpadScroll(e))
         {
             e.Handled = true;
             return;
@@ -424,6 +484,22 @@ public partial class MapItemsControl : SelectingItemsControl
             return;
         }
 
+        CenterZoomOnSelection();
+
+        var delta = e.Delta.Y;
+        if (delta == 0 && InputBindings.Zoom != MapGesturePreset.Wheel)
+        {
+            delta = e.Delta.X;
+        }
+
+        if (TryApplyZoomStepFromDelta(delta))
+        {
+            e.Handled = true;
+        }
+    }
+
+    private void CenterZoomOnSelection()
+    {
         if (Selection.SelectedItem != null)
         {
             CenterMap =
@@ -433,10 +509,6 @@ public partial class MapItemsControl : SelectingItemsControl
                 )?.Location ?? CenterMap;
         }
 
-        if (TryApplyZoomStepFromDelta(e.Delta.Y))
-        {
-            e.Handled = true;
-        }
     }
 
     private bool IsLikelyTouchpadScroll(PointerWheelEventArgs e)
@@ -534,6 +606,7 @@ public partial class MapItemsControl : SelectingItemsControl
         Cursor = DragState switch
         {
             DragState.DragMap => _sizeAllCursor ??= new Cursor(StandardCursorType.SizeAll),
+            DragState.Zoom => _sizeAllCursor ??= new Cursor(StandardCursorType.SizeAll),
             DragState.DragSelection => _handCursor ??= new Cursor(StandardCursorType.Hand),
             DragState.SelectRectangle => _crossCursor ??= new Cursor(StandardCursorType.Cross),
             _ => Cursor.Default,
@@ -557,6 +630,8 @@ public partial class MapItemsControl : SelectingItemsControl
         _activePointer?.Capture(null);
         _activePointer = null;
         _selectedContainer = null;
+        _pressedButton = MouseButton.None;
+        _zoomDragAccumulator = 0;
         DragState = DragState.None;
         Cursor = Cursor.Default;
 

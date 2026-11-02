@@ -66,7 +66,7 @@
         <value>Предпросмотр карты</value>
     </data>
     <data name="SettingsGeoMapView_MapPreview_Description" xml:space="preserve">
-        <value>Показывает, как карта выглядит с текущим провайдером и настройками масштаба.</value>
+        <value>Пять перемещаемых точек с запада на восток: 100, 200, 350, 250 и 150 м. Меняйте маршрут жестом, выбранным для перемещения маркеров.</value>
     </data>
     <data name="SettingsGeoMapView_MapPreview_Anchor" xml:space="preserve">
         <value>Точка предпросмотра</value>
@@ -346,5 +346,158 @@
   </data>
   <data name="SettingsGeoMapViewModel_OpenMapFolder_Button" xml:space="preserve">
     <value>Открыть папку</value>
+  </data>
+  <data name="MapView_AltitudeLayer" xml:space="preserve"><value>Отображение высот</value></data>
+  <data name="MapView_PolygonAltitudes" xml:space="preserve"><value>Высоты вершин Polygon</value></data>
+  <data name="MapInput_Pan_Header" xml:space="preserve">
+    <value>Перемещение карты</value>
+  </data>
+  <data name="MapInput_Pan_Description" xml:space="preserve">
+    <value>Выберите жест перетаскивания карты. Изменения применяются ко всем открытым картам.</value>
+  </data>
+  <data name="MapInput_MoveMarkers_Header" xml:space="preserve">
+    <value>Перемещение маркеров</value>
+  </data>
+  <data name="MapInput_MoveMarkers_Description" xml:space="preserve">
+    <value>Перетаскивание выбранных редактируемых маркеров. Маркеры только для чтения остаются на месте.</value>
+  </data>
+  <data name="MapInput_SelectRectangle_Header" xml:space="preserve">
+    <value>Выделение маркеров рамкой</value>
+  </data>
+  <data name="MapInput_SelectRectangle_Description" xml:space="preserve">
+    <value>Выберите жест перетаскивания для выделения маркеров прямоугольной рамкой.</value>
+  </data>
+  <data name="MapInput_Zoom_Header" xml:space="preserve">
+    <value>Масштабирование карты</value>
+  </data>
+  <data name="MapInput_Zoom_Description" xml:space="preserve">
+    <value>Выберите колесо или вертикальное перетаскивание. Масштабирование щипком на трекпаде остаётся доступным.</value>
+  </data>
+  <data name="MapInput_Reset_Header" xml:space="preserve">
+    <value>Сброс управления картой</value>
+  </data>
+  <data name="MapInput_Reset_Button" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="MapInput_Reset_Description" xml:space="preserve">
+    <value>Восстановить ЛКМ, Ctrl + ЛКМ, Shift + ЛКМ и зум колесом. Esc отменяет активный режим взаимодействия с картой.</value>
+  </data>
+  <data name="MapInput_Conflict" xml:space="preserve">
+    <value>Этот жест уже назначен действию «{0}». Сначала измените или отключите его назначение.</value>
+  </data>
+  <data name="MapInput_Unavailable" xml:space="preserve">
+    <value>Этот жест недоступен для выбранного действия.</value>
+  </data>
+  <data name="MapInput_Gesture_None" xml:space="preserve">
+    <value>Не назначено</value>
+  </data>
+  <data name="MapInput_Gesture_LeftDrag" xml:space="preserve">
+    <value>ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ControlLeftDrag" xml:space="preserve">
+    <value>Ctrl + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftLeftDrag" xml:space="preserve">
+    <value>Shift + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_AltLeftDrag" xml:space="preserve">
+    <value>Alt + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_MetaLeftDrag" xml:space="preserve">
+    <value>⌘ / Win + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_MiddleDrag" xml:space="preserve">
+    <value>СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ControlMiddleDrag" xml:space="preserve">
+    <value>Ctrl + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftMiddleDrag" xml:space="preserve">
+    <value>Shift + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_AltMiddleDrag" xml:space="preserve">
+    <value>Alt + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_MetaMiddleDrag" xml:space="preserve">
+    <value>⌘ / Win + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_Wheel" xml:space="preserve">
+    <value>Колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_ControlWheel" xml:space="preserve">
+    <value>Ctrl + колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftWheel" xml:space="preserve">
+    <value>Shift + колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_AltWheel" xml:space="preserve">
+    <value>Alt + колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_MetaWheel" xml:space="preserve">
+    <value>⌘ / Win + колесо мыши</value>
+  </data>
+  <data name="SettingsGeoMapView_MapPreview_PointHeight" xml:space="preserve"><value>Точка {0}: {1} м</value></data>
+  <data name="MapPreloadDialog_Title" xml:space="preserve">
+    <value>Предзагрузка карты</value>
+  </data>
+  <data name="MapPreloadDialog_Instructions" xml:space="preserve">
+    <value>Нажмите на карту или переместите маркер, чтобы выбрать центр. Круг показывает область загрузки.</value>
+  </data>
+  <data name="MapPreloadDialog_Radius" xml:space="preserve">
+    <value>Радиус загрузки, км</value>
+  </data>
+  <data name="MapPreloadDialog_MinZoom" xml:space="preserve">
+    <value>Минимальный масштаб</value>
+  </data>
+  <data name="MapPreloadDialog_MaxZoom" xml:space="preserve">
+    <value>Максимальный масштаб</value>
+  </data>
+  <data name="MapPreloadDialog_RequestDelay" xml:space="preserve">
+    <value>Задержка между запросами, мс (для каждого провайдера)</value>
+  </data>
+  <data name="MapPreloadDialog_Concurrency" xml:space="preserve">
+    <value>Параллельные запросы</value>
+  </data>
+  <data name="MapPreloadDialog_Providers" xml:space="preserve">
+    <value>Провайдеры для предзагрузки</value>
+  </data>
+  <data name="MapPreloadDialog_Download" xml:space="preserve">
+    <value>Загрузить</value>
+  </data>
+  <data name="MapPreloadDialog_Stop" xml:space="preserve">
+    <value>Остановить</value>
+  </data>
+  <data name="MapPreloadDialog_Estimating" xml:space="preserve">
+    <value>Расчёт количества тайлов…</value>
+  </data>
+  <data name="MapPreloadDialog_Ready" xml:space="preserve">
+    <value>Готово к загрузке</value>
+  </data>
+  <data name="MapPreloadDialog_Downloading" xml:space="preserve">
+    <value>Загрузка…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopping" xml:space="preserve">
+    <value>Остановка и сохранение скачанных тайлов…</value>
+  </data>
+  <data name="MapPreloadDialog_Stopped" xml:space="preserve">
+    <value>Загрузка остановлена. Сохранённые тайлы будут использованы при следующем запуске.</value>
+  </data>
+  <data name="MapPreloadDialog_Completed" xml:space="preserve">
+    <value>Загрузка завершена</value>
+  </data>
+  <data name="MapPreloadDialog_InvalidParameters" xml:space="preserve">
+    <value>Выберите хотя бы одного провайдера и проверьте радиус, диапазон масштабов, задержку и число запросов.</value>
+  </data>
+  <data name="MapPreloadDialog_EstimateFormat" xml:space="preserve">
+    <value>Тайлов для обработки: {0:N0}</value>
+  </data>
+  <data name="MapPreloadDialog_ProgressFormat" xml:space="preserve">
+    <value>{0:N0} / {1:N0} тайлов ({2:F1}%)</value>
+  </data>
+  <data name="MapPreloadDialog_StatisticsFormat" xml:space="preserve">
+    <value>В кеше: {0:N0} · Скачано: {1:N0} · Ошибки: {2:N0} · Получено: {3:N1} МБ</value>
+  </data>
+  <data name="MapPreloadDialog_CenterFormat" xml:space="preserve">
+    <value>Центр: {0:F6}, {1:F6}</value>
   </data>
 </root>

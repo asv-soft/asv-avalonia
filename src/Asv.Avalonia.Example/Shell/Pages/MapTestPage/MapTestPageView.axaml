@@ -38,6 +38,8 @@
             DataContext="{Binding TileProviderSelectorViewModel}"
         />
         <StackPanel HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="8" Spacing="8">
+            <map:MapAltitudeToggle HorizontalAlignment="Left"
+                                   IsChecked="{Binding MapViewModel.ShowAltitudes.Value, Mode=TwoWay}" />
             <map:MapScaleControl
                 HorizontalAlignment="Left"
                 CenterMap="{Binding MapViewModel.CenterMap.Value}"
