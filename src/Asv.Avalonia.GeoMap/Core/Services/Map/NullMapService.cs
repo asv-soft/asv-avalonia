@@ -21,6 +21,8 @@ public class NullMapService : IMapService
         MaxZoom = new SynchronizedReactiveProperty<int>(IZoomService.MaxZoomLevel);
     }
 
+    public IMapInputService Input { get; } = new MapInputService();
+
     public SynchronizedReactiveProperty<MapModeType> Mode { get; }
     public SynchronizedReactiveProperty<IBrush> EmptyTileBrush { get; }
     public SynchronizedReactiveProperty<int> MinZoom { get; }

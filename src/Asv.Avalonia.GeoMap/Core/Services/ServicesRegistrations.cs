@@ -35,6 +35,7 @@ public static class ServicesRegistrations
             }
         );
 
+        builder.AppBuilder.Services.AddSingleton<IMapInputService, MapInputService>();
         builder.AppBuilder.Services.AddSingleton<IMapService, MapService>();
         builder.AppBuilder.Services.AddSingleton<ITileLoader, TileLoader>();
         builder.AppBuilder.Services.AddSingleton<ITileProviderService, TileProviderService>();

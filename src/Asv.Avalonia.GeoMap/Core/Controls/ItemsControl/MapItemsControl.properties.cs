@@ -26,6 +26,17 @@ public partial class MapItemsControl
 
     #endregion
 
+    public static readonly StyledProperty<MapInputBindings> InputBindingsProperty =
+        AvaloniaProperty.Register<MapItemsControl, MapInputBindings>(
+            nameof(InputBindings), MapInputBindings.Default,
+            validate: value => value is not null && value.IsValid());
+
+    public MapInputBindings InputBindings
+    {
+        get => GetValue(InputBindingsProperty);
+        set => SetValue(InputBindingsProperty, value);
+    }
+
     #region Interaction
 
     public static readonly StyledProperty<bool> EnableWheelZoomProperty = AvaloniaProperty.Register<

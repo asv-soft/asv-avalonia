@@ -1,4 +1,5 @@
 using Asv.Common;
+using Avalonia.Media;
 using Material.Icons;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -54,6 +55,38 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         Editor.ItemsSource.Add(MinMapZoom);
         Editor.ItemsSource.Add(MaxMapZoom);
 
+        if (mapService.Input is { } input)
+        {
+            MapInputGestures = Enum.GetValues<MapInputAction>()
+                .Select(action => new MapInputGestureProperty(action, input))
+                .ToArray();
+            foreach (var gesture in MapInputGestures)
+            {
+                Editor.ItemsSource.Add(gesture);
+            }
+
+            ResetMapInput = new PropertyButtonViewModel(
+                "reset-map-input",
+                cancel =>
+                {
+                    cancel.ThrowIfCancellationRequested();
+                    input.Reset();
+                    foreach (var gesture in MapInputGestures)
+                    {
+                        gesture.RefreshFromService();
+                    }
+                    return ValueTask.CompletedTask;
+                }
+            )
+            {
+                Header = MapInputStrings.Get("Reset_Header"),
+                ShortHeader = MapInputStrings.Get("Reset_Button"),
+                Description = MapInputStrings.Get("Reset_Description"),
+                Icon = MaterialIconKind.Restore,
+            };
+            Editor.ItemsSource.Add(ResetMapInput);
+        }
+
         var mapFolder = appPath?.GetAppPathFolder(
             cacheConfig?.Value.FolderPath ?? new FileSystemCacheConfig().FolderPath
         ) ?? Path.GetFullPath(Path.Combine("data", "map"));
@@ -82,19 +115,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         MapPreview.CenterMap.Value = new GeoPoint(56.8389, 60.6057, 0);
-        MapPreview.Zoom.Value = ClampZoom(10, mapService);
-        MapPreview.Anchors.Add(
-            new MapAnchor("preview-anchor", location: MapPreview.CenterMap.Value)
-            {
-                Header = RS.SettingsGeoMapView_MapPreview_Anchor,
-                Icon = MaterialIconKind.MapMarkerRadius,
-                IconColor = AsvColorKind.Info7,
-                CenterX = HorizontalOffset.Default,
-                CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0),
-                IsReadOnly = true,
-                IsAnnotationVisible = true,
-            }
-        );
+        MapPreview.Zoom.Value = ClampZoom(13, mapService);
+        CreatePreviewPath();
 
         mapService
             .MinZoom.Skip(1)
@@ -108,6 +130,8 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
             .DisposeItWith(Disposable);
     }
 
+    public IReadOnlyList<MapInputGestureProperty> MapInputGestures { get; } = [];
+    public PropertyButtonViewModel? ResetMapInput { get; }
     public ExtendedPropertyEditorViewModel Editor { get; }
     public TileProviderSelectorViewModel TileProviderSelectorViewModel { get; }
     public MapViewModel MapPreview { get; }
@@ -126,6 +150,55 @@ public class SettingsGeoMapViewModel : SettingsSubPage, ISettingsGeoMapSubPage
         yield return Editor;
         yield return TileProviderSelectorViewModel;
         yield return MapPreview;
+    }
+
+    private void CreatePreviewPath()
+    {
+        MapPreview.ShowAltitudes.Value = true;
+        MapPreview.ShowPolygonAltitudes.Value = true;
+        MapPreview.AltitudePixelsPerMeter.Value = 0.1;
+
+        var path = new MapAnchor("preview-path")
+        {
+            Icon = null,
+            IsReadOnly = true,
+            IsAnnotationVisible = false,
+            IsPolygonClosed = false,
+            PolygonPen = new Pen(Brushes.DodgerBlue, 2),
+        };
+        MapPreview.Anchors.Add(path);
+
+        double[] heights = [100, 200, 350, 250, 150];
+        var center = MapPreview.CenterMap.Value;
+        var headerFormat = RS.ResourceManager.GetString(
+            "SettingsGeoMapView_MapPreview_PointHeight", RS.Culture
+        )!;
+        for (var i = 0; i < heights.Length; i++)
+        {
+            var location = new GeoPoint(
+                center.Latitude,
+                center.Longitude + ((i - 2) * 0.01),
+                heights[i]
+            );
+            var anchor = new MapAnchor($"preview-point-{i + 1}", location: location)
+            {
+                Header = string.Format(headerFormat, i + 1, heights[i]),
+                Icon = MaterialIconKind.MapMarker,
+                IconSize = 24,
+                IconColor = AsvColorKind.Info7,
+                CenterX = HorizontalOffset.Default,
+                CenterY = new VerticalOffset(VerticalOffsetEnum.Bottom, 0),
+                IsReadOnly = false,
+                CanDragWithoutModifier = false,
+                IsAnnotationVisible = false,
+            };
+            MapPreview.Anchors.Add(anchor);
+            path.Polygon.Add(location);
+            var index = i;
+            anchor.ObservePropertyChanged(point => point.Location)
+                .Subscribe(point => path.Polygon[index] = point)
+                .DisposeItWith(Disposable);
+        }
     }
 
     private void ClampPreviewZoom(IMapService mapService)

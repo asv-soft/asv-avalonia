@@ -1,0 +1,11 @@
+{
+  "LocalizationServiceConfig": {
+    "CurrentLanguage": "en"
+  },
+  "TileLoaderConfig": {
+    "RequestQueueSize": 100,
+    "RequestParallelThreads": 15,
+    "EmptyTileBrush": "LightGreen",
+    "Mode": "mixed"
+  }
+}

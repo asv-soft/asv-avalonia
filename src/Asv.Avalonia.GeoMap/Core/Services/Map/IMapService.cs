@@ -5,6 +5,8 @@ namespace Asv.Avalonia.GeoMap;
 
 public interface IMapService
 {
+    /// <summary>Gets optional map input settings; custom services without them retain default gestures.</summary>
+    IMapInputService? Input => null;
     public SynchronizedReactiveProperty<MapModeType> Mode { get; }
     public SynchronizedReactiveProperty<IBrush> EmptyTileBrush { get; }
     public SynchronizedReactiveProperty<int> MinZoom { get; }

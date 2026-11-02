@@ -94,3 +94,83 @@ if (selected is { } location)
 The nullable result represents cancellation. For a credential editor, use `ShowEditApiKeyDialogAsync(currentApiKey)` and apply the accepted value to your provider/configuration. Opening the dialog alone does not persist an API key.
 
 See `GeoMapDialogServiceExtensions.cs` for optional icon, status, color, and dialog-size arguments.
+
+## Altitude display layer
+
+`MapView` provides an optional polygon altitude layer, disabled by default.
+Standalone anchor markers do not produce altitude geometry.
+
+```c#
+map.ShowAltitudes.Value = true;
+map.AltitudePixelsPerMeter.Value = 0.3;
+```
+
+Each polygon vertex produces a screen-vertical stem from its geographic position.
+Upper endpoints are connected in vertex order. Adjacent stems form filled side
+faces. Closed polygons include the final edge back to the first vertex; open
+polylines do not. There are no upper endpoint circles.
+
+Outlines use the polygon pen at 50% opacity. Side faces use the same pen brush
+at 15% opacity. The layer stroke is a fallback for polygons without a pen.
+Map rotation changes base positions but stems always point upwards on screen.
+
+Stem length is `abs(GeoPoint.Altitude) * AltitudePixelsPerMeter`, in
+device-independent pixels. This is a visual scale independent of map zoom,
+not terrain clearance or a conversion between altitude datums. Non-finite
+heights and their adjacent faces are omitted. Map dragging preserves altitude.
+
+Turning the layer off disconnects map, marker and polygon subscriptions and clears
+tracked containers. `ShowPolygonAltitudes` remains an optional programmatic filter
+and defaults to `true`; the example exposes a single altitude-layer switch.
+
+Use `MapAltitudeToggle` for a round map-toolbar button matching `MapRuler`:
+
+```xml
+<map:MapAltitudeToggle
+    IsChecked="{Binding MapViewModel.ShowAltitudes.Value, Mode=TwoWay}" />
+```
+
+## Map input presets
+
+Open **Settings → Map** to choose a complete gesture for each map action.
+Assignments are shared by all maps using the registered `IMapService`, take effect
+immediately, and are saved in application configuration.
+
+| Action | Default gesture |
+|---|---|
+| Pan the map | Left-button drag |
+| Move editable markers | Ctrl + left-button drag |
+| Rectangle selection | Shift + left-button drag |
+| Zoom | Mouse wheel |
+
+For dragging, choose the left or middle mouse button, optionally combined with
+Ctrl, Shift, Alt, or Command/Windows. Zoom additionally offers the mouse wheel
+with the same modifier choices. Selecting a drag gesture for zoom replaces wheel
+zoom: drag upwards to zoom in and downwards to zoom out. Each 40 device-independent
+pixels changes the zoom by one level. Trackpad pinch is controlled separately by
+`EnableTouchpadGestures` and remains available even when no zoom preset is assigned.
+
+An exact gesture cannot be assigned to two actions. The editor rejects the change,
+shows which action already uses that gesture, and keeps the previous assignment.
+For example, to use **Shift + left-button drag** for zoom, first change rectangle
+selection to **Alt + left-button drag** or **Unassigned**, then assign Shift to zoom.
+Use **Reset map controls** to restore all four defaults. Escape continues to cancel
+an active map interaction session and is not changed by these pointer presets.
+
+Read-only markers remain fixed. A marker's `CanDragWithoutModifier` opt-in is
+preserved, except when the marker-move action is unassigned. Changing input
+settings during a drag releases pointer capture and stops the old gesture.
+
+Applications can also configure the shared service directly:
+
+```c#
+IMapInputService input = mapService.Input!;
+if (!input.TryAssign(MapInputAction.MoveMarkers, MapGesturePreset.AltLeftDrag, out var conflict))
+{
+    // The previous assignment remains active; inspect conflict for the other action.
+}
+input.Reset();
+```
+
+A custom `IMapService` can omit `Input` and retain the default gestures. For a
+standalone `MapItemsControl`, assign its `InputBindings` property directly.

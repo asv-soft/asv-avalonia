@@ -66,7 +66,7 @@
         <value>Предпросмотр карты</value>
     </data>
     <data name="SettingsGeoMapView_MapPreview_Description" xml:space="preserve">
-        <value>Показывает, как карта выглядит с текущим провайдером и настройками масштаба.</value>
+        <value>Пять перемещаемых точек с запада на восток: 100, 200, 350, 250 и 150 м. Меняйте маршрут жестом, выбранным для перемещения маркеров.</value>
     </data>
     <data name="SettingsGeoMapView_MapPreview_Anchor" xml:space="preserve">
         <value>Точка предпросмотра</value>
@@ -347,4 +347,94 @@
   <data name="SettingsGeoMapViewModel_OpenMapFolder_Button" xml:space="preserve">
     <value>Открыть папку</value>
   </data>
+  <data name="MapView_AltitudeLayer" xml:space="preserve"><value>Отображение высот</value></data>
+  <data name="MapView_PolygonAltitudes" xml:space="preserve"><value>Высоты вершин Polygon</value></data>
+  <data name="MapInput_Pan_Header" xml:space="preserve">
+    <value>Перемещение карты</value>
+  </data>
+  <data name="MapInput_Pan_Description" xml:space="preserve">
+    <value>Выберите жест перетаскивания карты. Изменения применяются ко всем открытым картам.</value>
+  </data>
+  <data name="MapInput_MoveMarkers_Header" xml:space="preserve">
+    <value>Перемещение маркеров</value>
+  </data>
+  <data name="MapInput_MoveMarkers_Description" xml:space="preserve">
+    <value>Перетаскивание выбранных редактируемых маркеров. Маркеры только для чтения остаются на месте.</value>
+  </data>
+  <data name="MapInput_SelectRectangle_Header" xml:space="preserve">
+    <value>Выделение маркеров рамкой</value>
+  </data>
+  <data name="MapInput_SelectRectangle_Description" xml:space="preserve">
+    <value>Выберите жест перетаскивания для выделения маркеров прямоугольной рамкой.</value>
+  </data>
+  <data name="MapInput_Zoom_Header" xml:space="preserve">
+    <value>Масштабирование карты</value>
+  </data>
+  <data name="MapInput_Zoom_Description" xml:space="preserve">
+    <value>Выберите колесо или вертикальное перетаскивание. Масштабирование щипком на трекпаде остаётся доступным.</value>
+  </data>
+  <data name="MapInput_Reset_Header" xml:space="preserve">
+    <value>Сброс управления картой</value>
+  </data>
+  <data name="MapInput_Reset_Button" xml:space="preserve">
+    <value>По умолчанию</value>
+  </data>
+  <data name="MapInput_Reset_Description" xml:space="preserve">
+    <value>Восстановить ЛКМ, Ctrl + ЛКМ, Shift + ЛКМ и зум колесом. Esc отменяет активный режим взаимодействия с картой.</value>
+  </data>
+  <data name="MapInput_Conflict" xml:space="preserve">
+    <value>Этот жест уже назначен действию «{0}». Сначала измените или отключите его назначение.</value>
+  </data>
+  <data name="MapInput_Unavailable" xml:space="preserve">
+    <value>Этот жест недоступен для выбранного действия.</value>
+  </data>
+  <data name="MapInput_Gesture_None" xml:space="preserve">
+    <value>Не назначено</value>
+  </data>
+  <data name="MapInput_Gesture_LeftDrag" xml:space="preserve">
+    <value>ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ControlLeftDrag" xml:space="preserve">
+    <value>Ctrl + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftLeftDrag" xml:space="preserve">
+    <value>Shift + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_AltLeftDrag" xml:space="preserve">
+    <value>Alt + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_MetaLeftDrag" xml:space="preserve">
+    <value>⌘ / Win + ЛКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_MiddleDrag" xml:space="preserve">
+    <value>СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ControlMiddleDrag" xml:space="preserve">
+    <value>Ctrl + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftMiddleDrag" xml:space="preserve">
+    <value>Shift + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_AltMiddleDrag" xml:space="preserve">
+    <value>Alt + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_MetaMiddleDrag" xml:space="preserve">
+    <value>⌘ / Win + СКМ + перетаскивание</value>
+  </data>
+  <data name="MapInput_Gesture_Wheel" xml:space="preserve">
+    <value>Колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_ControlWheel" xml:space="preserve">
+    <value>Ctrl + колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_ShiftWheel" xml:space="preserve">
+    <value>Shift + колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_AltWheel" xml:space="preserve">
+    <value>Alt + колесо мыши</value>
+  </data>
+  <data name="MapInput_Gesture_MetaWheel" xml:space="preserve">
+    <value>⌘ / Win + колесо мыши</value>
+  </data>
+  <data name="SettingsGeoMapView_MapPreview_PointHeight" xml:space="preserve"><value>Точка {0}: {1} м</value></data>
 </root>
