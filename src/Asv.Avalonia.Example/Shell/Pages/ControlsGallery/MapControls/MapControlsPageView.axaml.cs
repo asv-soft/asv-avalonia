@@ -17,14 +17,19 @@ public sealed class MapControlsPageViewConfig
 
 public partial class MapControlsPageView : UserControl
 {
-    private readonly IDisposable? _layout;
-    private readonly Subject<Unit>? _layoutChanged;
+    private IDisposable? _layout;
+    private Subject<Unit>? _layoutChanged;
     private MapControlsPageViewConfig? _config = new();
 
     public MapControlsPageView()
     {
         InitializeComponent();
-        if (Design.IsDesignMode)
+    }
+
+    protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+    {
+        base.OnAttachedToVisualTree(e);
+        if (Design.IsDesignMode || _layoutChanged != null)
         {
             return;
         }
@@ -40,20 +45,24 @@ public partial class MapControlsPageView : UserControl
 
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
-        _layout?.Dispose();
-        _layoutChanged?.Dispose();
+        var layout = _layout;
+        var layoutChanged = _layoutChanged;
+        _layout = null;
+        _layoutChanged = null;
+        layout?.Dispose();
+        layoutChanged?.Dispose();
         base.OnDetachedFromVisualTree(e);
     }
 
     private void OnRulerChanged(object? sender, RulerChangedEventArgs e)
     {
-        if (Design.IsDesignMode)
+        if (_layoutChanged is not { } layoutChanged)
         {
             return;
         }
 
         UpdateLayout(e);
-        _layoutChanged?.OnNext(Unit.Default);
+        layoutChanged.OnNext(Unit.Default);
     }
 
     private void UpdateLayout(RulerChangedEventArgs e)
