@@ -14,10 +14,25 @@
         <geoMap:SettingsGeoMapViewModel />
     </Design.DataContext>
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" MinHeight="160" />
+            <RowDefinition Height="6" />
+            <RowDefinition Height="*" MinHeight="180" />
+        </Grid.RowDefinitions>
+
         <ContentControl Grid.Row="0" Content="{Binding Editor}" />
 
-        <Grid Grid.Row="1" MinHeight="280" Margin="16,0,16,16" RowDefinitions="Auto,*">
+        <GridSplitter
+            Grid.Row="1"
+            HorizontalAlignment="Stretch"
+            Margin="16,0"
+            Background="{DynamicResource ButtonBackground}"
+            ResizeDirection="Rows"
+            ResizeBehavior="PreviousAndNext"
+        />
+
+        <Grid Grid.Row="2" Margin="16,8,16,16" RowDefinitions="Auto,*">
             <StackPanel Grid.Row="0" Margin="0,0,0,8" Spacing="4">
                 <TextBlock Classes="h2" Text="{Binding MapPreviewHeader}" />
                 <TextBlock
@@ -63,6 +78,12 @@
                         Margin="8"
                         GestureSurface="{Binding #PART_Map}"
                         Rotation="{Binding MapPreview.Rotation.Value}"
+                    />
+                    <geoMap:MapAltitudeToggle
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Margin="54,8,8,8"
+                        IsChecked="{Binding MapPreview.ShowAltitudes.Value, Mode=TwoWay}"
                     />
                     <geoMap:MapRuler
                         x:Name="PART_Ruler"

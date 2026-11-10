@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="Asv.Avalonia.GeoMap.MapAltitudeToggle"
+             x:DataType="map:MapAltitudeToggle"
+             x:Name="PART_Root">
+    <UserControl.Resources>
+        <LinearGradientBrush
+            x:Key="MapAltitudeSurfaceBrush"
+            StartPoint="50%,0%"
+            EndPoint="50%,100%"
+        >
+            <GradientStop Offset="0" Color="#E02D3943" />
+            <GradientStop Offset="1" Color="#E029343D" />
+        </LinearGradientBrush>
+
+        <ControlTheme x:Key="MapAltitudeToggleTheme" TargetType="ToggleButton">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="CornerRadius" Value="999" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                        x:Name="PART_ButtonBackground"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                    >
+                        <ContentPresenter
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{TemplateBinding Content}"
+                        />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+            <Style Selector="^:pointerover /template/ Border#PART_ButtonBackground">
+                <Setter Property="Background" Value="#20FFFFFF" />
+            </Style>
+            <Style Selector="^:pressed /template/ Border#PART_ButtonBackground">
+                <Setter Property="Background" Value="#38FFFFFF" />
+            </Style>
+            <Style Selector="^:checked /template/ Border#PART_ButtonBackground">
+                <Setter Property="Background" Value="#2CFFFFFF" />
+            </Style>
+            <Style Selector="^:checked:pointerover /template/ Border#PART_ButtonBackground">
+                <Setter Property="Background" Value="#3AFFFFFF" />
+            </Style>
+            <Style Selector="^:focus-visible /template/ Border#PART_ButtonBackground">
+                <Setter Property="BorderBrush" Value="#B3FFFFFF" />
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+            <Style Selector="^:disabled /template/ ContentPresenter">
+                <Setter Property="Opacity" Value="0.35" />
+            </Style>
+        </ControlTheme>
+
+    </UserControl.Resources>
+    <Border Width="38" Height="38" CornerRadius="999" ClipToBounds="True"
+            Background="{StaticResource MapAltitudeSurfaceBrush}"
+            BorderBrush="#3DF3F7FA" BorderThickness="1" BoxShadow="0 2 6 0 #40000000">
+        <ToggleButton Width="36" Height="36"
+                      Theme="{StaticResource MapAltitudeToggleTheme}"
+                      IsChecked="{Binding #PART_Root.IsChecked, Mode=TwoWay}"
+                      ToolTip.Tip="{Binding #PART_Root.ToolTipText}"
+                      AutomationProperties.Name="{Binding #PART_Root.ToolTipText}">
+            <icons:MaterialIcon Width="18" Height="18" Kind="Altimeter" Foreground="#F8FBFF" />
+        </ToggleButton>
+    </Border>
+</UserControl>

@@ -8,6 +8,32 @@ namespace Asv.Avalonia.GeoMap;
 /// </summary>
 public static class GeoMapDialogServiceExtensions
 {
+    /// <summary>Opens an isolated map-area preview and downloads selected tiles into the shared cache.</summary>
+    public static Task<MapPreloadProgress?> ShowMapPreloadDialogAsync(
+        this IDialogService service,
+        GeoPoint initialCenter,
+        MaterialIconKind? icon = MaterialIconKind.MapMarkerRadius,
+        ShellErrorState status = ShellErrorState.Normal,
+        AsvColorKind iconColor = AsvColorKind.None,
+        DialogSizeMode sizeMode = DialogSizeMode.Expanded
+    )
+    {
+        ArgumentNullException.ThrowIfNull(service);
+
+        return service
+            .GetDialogPrefab<MapPreloadDialogPrefab>()
+            .ShowDialogAsync(
+                new MapPreloadDialogPayload
+                {
+                    InitialCenter = initialCenter,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                    SizeMode = sizeMode,
+                }
+            );
+    }
+
     /// <summary>
     /// Opens the EditApiKey dialog with the supplied values and appearance.
     /// </summary>
@@ -22,16 +48,18 @@ public static class GeoMapDialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<EditApiKeyDialogPrefab>().ShowDialogAsync(
-            new EditApiKeyDialogPayload
-            {
-                CurrentApiKey = currentApiKey,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<EditApiKeyDialogPrefab>()
+            .ShowDialogAsync(
+                new EditApiKeyDialogPayload
+                {
+                    CurrentApiKey = currentApiKey,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 
     /// <summary>
@@ -48,15 +76,17 @@ public static class GeoMapDialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<GeoPointDialogPrefab>().ShowDialogAsync(
-            new GeoPointDialogPayload
-            {
-                InitialLocation = initialLocation,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<GeoPointDialogPrefab>()
+            .ShowDialogAsync(
+                new GeoPointDialogPayload
+                {
+                    InitialLocation = initialLocation,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 }

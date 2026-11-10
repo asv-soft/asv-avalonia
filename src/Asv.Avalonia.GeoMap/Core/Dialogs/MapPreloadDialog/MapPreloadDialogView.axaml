@@ -1,0 +1,184 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    x:Class="Asv.Avalonia.GeoMap.MapPreloadDialogView"
+    x:DataType="map:MapPreloadDialogViewModel"
+    x:CompileBindings="True"
+    MinHeight="320"
+>
+    <Grid RowDefinitions="*,Auto" RowSpacing="12">
+        <Grid ColumnDefinitions="*,300" ColumnSpacing="16">
+            <Border
+                BorderBrush="{DynamicResource AsvForegroundUnknownBrush}"
+                BorderThickness="1"
+                CornerRadius="4"
+                ClipToBounds="True"
+            >
+                <Grid>
+                    <map:MapItemsControl
+                        x:Name="AreaMap"
+                        InputBindings="{Binding InputBindings.Value}"
+                        CenterMap="{Binding MapCenter.Value, Mode=TwoWay}"
+                        Provider="{Binding PreviewProvider.Value}"
+                        MinZoom="{Binding PreviewProvider.Value.Info.MinZoom}"
+                        MaxZoom="{Binding PreviewProvider.Value.Info.MaxZoom}"
+                        Zoom="{Binding PreviewZoom.Value, Mode=TwoWay}"
+                        IsEnabled="{Binding ParametersEnabled.Value}"
+                        MapClick="MapClicked"
+                    >
+                        <map:MapItem
+                            Location="{Binding Center.Value, Mode=TwoWay}"
+                            Polygon="{Binding RadiusPolygon.Value}"
+                            IsPolygonClosed="True"
+                            CanDragWithoutModifier="True"
+                            IsReadOnly="{Binding IsRunning.Value}"
+                            CenterX="{map:HorizontalOffset Center}"
+                            CenterY="{map:VerticalOffset Center}"
+                        >
+                            <map:MapItem.Pen>
+                                <Pen Thickness="2">
+                                    <Pen.Brush>
+                                        <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
+                                    </Pen.Brush>
+                                </Pen>
+                            </map:MapItem.Pen>
+                            <map:MapItem.Fill>
+                                <SolidColorBrush
+                                    Color="{DynamicResource SystemAccentColor}"
+                                    Opacity="0.18"
+                                />
+                            </map:MapItem.Fill>
+                            <icons:MaterialIcon Kind="MapMarkerRadius" Width="36" Height="36">
+                                <icons:MaterialIcon.Foreground>
+                                    <SolidColorBrush Color="{DynamicResource SystemAccentColor}" />
+                                </icons:MaterialIcon.Foreground>
+                            </icons:MaterialIcon>
+                        </map:MapItem>
+                    </map:MapItemsControl>
+                    <Border
+                        VerticalAlignment="Bottom"
+                        Padding="8"
+                        IsHitTestVisible="False"
+                        Background="{DynamicResource AsvPopupCommonBrush}"
+                    >
+                        <StackPanel Spacing="4">
+                            <TextBlock
+                                Text="{x:Static map:MapPreloadStrings.Instructions}"
+                                TextWrapping="Wrap"
+                            />
+                            <TextBlock Text="{Binding CenterText.Value}" />
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+            <ScrollViewer
+                Grid.Column="1"
+                HorizontalScrollBarVisibility="Disabled"
+                VerticalScrollBarVisibility="Auto"
+            >
+                <StackPanel Spacing="8" IsEnabled="{Binding ParametersEnabled.Value}">
+                    <TextBlock Text="{x:Static map:MapPreloadStrings.Radius}" />
+                    <NumericUpDown
+                        Value="{Binding RadiusKm.Value, Mode=TwoWay}"
+                        Minimum="0.1"
+                        Maximum="20000"
+                        Increment="0.5"
+                        FormatString="0.0"
+                    />
+                    <Grid
+                        ColumnDefinitions="*,*"
+                        RowDefinitions="Auto,Auto"
+                        ColumnSpacing="8"
+                        RowSpacing="4"
+                    >
+                        <TextBlock Text="{x:Static map:MapPreloadStrings.MinZoom}" />
+                        <TextBlock
+                            Grid.Column="1"
+                            Text="{x:Static map:MapPreloadStrings.MaxZoom}"
+                        />
+                        <NumericUpDown
+                            Grid.Row="1"
+                            Value="{Binding MinZoom.Value, Mode=TwoWay}"
+                            Minimum="0"
+                            Maximum="30"
+                            FormatString="0"
+                        />
+                        <NumericUpDown
+                            Grid.Row="1"
+                            Grid.Column="1"
+                            Value="{Binding MaxZoom.Value, Mode=TwoWay}"
+                            Minimum="0"
+                            Maximum="30"
+                            FormatString="0"
+                        />
+                    </Grid>
+                    <TextBlock Text="{x:Static map:MapPreloadStrings.RequestDelay}" />
+                    <NumericUpDown
+                        Value="{Binding RequestDelayMs.Value, Mode=TwoWay}"
+                        Minimum="0"
+                        Maximum="60000"
+                        Increment="50"
+                        FormatString="0"
+                    />
+                    <TextBlock Text="{x:Static map:MapPreloadStrings.Concurrency}" />
+                    <NumericUpDown
+                        Value="{Binding Concurrency.Value, Mode=TwoWay}"
+                        Minimum="1"
+                        Maximum="16"
+                        FormatString="0"
+                    />
+                    <TextBlock
+                        Text="{x:Static map:MapPreloadStrings.Providers}"
+                        FontWeight="SemiBold"
+                        Margin="0,8,0,0"
+                    />
+                    <ItemsControl ItemsSource="{Binding Providers}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="map:MapPreloadProviderViewModel">
+                                <CheckBox
+                                    IsChecked="{Binding IsSelected.Value, Mode=TwoWay}"
+                                    Content="{Binding Name}"
+                                />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <StackPanel Grid.Row="1" Spacing="6">
+            <TextBlock
+                Text="{Binding ErrorText.Value}"
+                Foreground="{DynamicResource AsvForegroundErrorBrush}"
+                TextWrapping="Wrap"
+            />
+            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
+                <StackPanel Spacing="4" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding StatusText.Value}" TextWrapping="Wrap" />
+                    <TextBlock Text="{Binding EstimateText.Value}" />
+                </StackPanel>
+                <Button
+                    Grid.Column="1"
+                    Content="{x:Static map:MapPreloadStrings.Download}"
+                    Command="{Binding DownloadCommand}"
+                    IsEnabled="{Binding CanDownload.Value}"
+                />
+                <Button
+                    Grid.Column="2"
+                    Content="{x:Static map:MapPreloadStrings.Stop}"
+                    Command="{Binding StopCommand}"
+                    IsEnabled="{Binding IsRunning.Value}"
+                />
+            </Grid>
+            <ProgressBar
+                Minimum="0"
+                Maximum="100"
+                Value="{Binding ProgressPercent.Value}"
+                IsIndeterminate="{Binding IsEstimating.Value}"
+            />
+            <TextBlock Text="{Binding ProgressText.Value}" />
+            <TextBlock Text="{Binding StatisticsText.Value}" TextWrapping="Wrap" />
+        </StackPanel>
+    </Grid>
+</UserControl>

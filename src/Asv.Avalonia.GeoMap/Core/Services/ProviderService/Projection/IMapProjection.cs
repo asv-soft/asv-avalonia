@@ -25,7 +25,7 @@ public class WebMercatorProjection : BaseMapProjection
     {
         var globalPx = pixel.X;
         var globalPy = pixel.Y;
-        var mapSize = tileSize * (1 << zoom); // 256 * 2^Zoom
+        var mapSize = (double)tileSize * (1 << zoom); // 256 * 2^Zoom
 
         if (globalPx < 0)
         {

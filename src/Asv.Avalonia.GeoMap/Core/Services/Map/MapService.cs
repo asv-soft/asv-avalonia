@@ -13,17 +13,21 @@ public class MapService : AsyncDisposableOnce, IMapService
     public MapService(
         ITileLoader tileLoader,
         IZoomService zoomService,
-        ITileProviderService tileProviderService
+        ITileProviderService tileProviderService,
+        IMapInputService? input = null
     )
     {
         ArgumentNullException.ThrowIfNull(tileLoader);
         ArgumentNullException.ThrowIfNull(tileProviderService);
         ArgumentNullException.ThrowIfNull(zoomService);
 
+        Input = input;
         _tileLoader = tileLoader;
         _tileProviderService = tileProviderService;
         _zoomService = zoomService;
     }
+
+    public IMapInputService? Input { get; }
 
     public SynchronizedReactiveProperty<MapModeType> Mode => _tileLoader.CurrentMapMode;
     public SynchronizedReactiveProperty<IBrush> EmptyTileBrush => _tileLoader.EmptyTileBrush;
