@@ -23,5 +23,8 @@ public sealed class WorkspaceUiTestFixture : IAsyncLifetime
 public static class WorkspaceUiTestAppBuilder
 {
     public static AppBuilder BuildAvaloniaApp() =>
-        AppBuilder.Configure<Application>().UseHeadless(new AvaloniaHeadlessPlatformOptions());
+        AppBuilder
+            .Configure<Application>()
+            .UseHeadless(new AvaloniaHeadlessPlatformOptions())
+            .UseR3();
 }

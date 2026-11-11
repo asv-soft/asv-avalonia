@@ -38,24 +38,6 @@ public class PropertyUnitCallback : PropertyUnitViewModel, ISupportRefresh
             .AddTo(ref DisposableBag);
     }
 
-    protected override Exception? ValidateSiValue(double siValue)
-    {
-        if (_validator != null)
-        {
-            var result = _validator(siValue);
-            if (result != null)
-            {
-                return result;
-            }
-        }
-        return base.ValidateSiValue(siValue);
-    }
-
-    protected override async ValueTask ApplyFromUser(double siValue, CancellationToken cancel)
-    {
-        await _write(siValue, cancel).ConfigureAwait(false);
-    }
-
     public async ValueTask Refresh(CancellationToken cancel = default)
     {
         try
@@ -67,5 +49,20 @@ public class PropertyUnitCallback : PropertyUnitViewModel, ISupportRefresh
         {
             ApplyErrorFromModel(e);
         }
+    }
+
+    protected override Exception? ValidateSiValue(double siValue)
+    {
+        var result = _validator?.Invoke(siValue);
+        if (result != null)
+        {
+            return result;
+        }
+        return base.ValidateSiValue(siValue);
+    }
+
+    protected override async ValueTask ApplyFromUser(double siValue, CancellationToken cancel)
+    {
+        await _write(siValue, cancel).ConfigureAwait(false);
     }
 }

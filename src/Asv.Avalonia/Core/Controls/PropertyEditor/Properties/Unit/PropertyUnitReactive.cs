@@ -34,14 +34,12 @@ public class PropertyUnitReactive : PropertyUnitViewModel
 
     protected override Exception? ValidateSiValue(double siValue)
     {
-        if (_validator != null)
+        var result = _validator?.Invoke(siValue);
+        if (result is not null)
         {
-            var result = _validator(siValue);
-            if (result != null)
-            {
-                return result;
-            }
+            return result;
         }
+
         return base.ValidateSiValue(siValue);
     }
 
