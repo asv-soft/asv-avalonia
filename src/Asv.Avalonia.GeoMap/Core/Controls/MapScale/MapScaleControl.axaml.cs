@@ -125,30 +125,18 @@ public sealed partial class MapScaleControl : UserControl
         {
             var tileSize = provider.TileSize;
             var providerInfo = provider.Info;
-            if (
-                tileSize <= 0
-                || Zoom < providerInfo.MinZoom
-                || Zoom > providerInfo.MaxZoom
-            )
+            if (tileSize <= 0 || Zoom < providerInfo.MinZoom || Zoom > providerInfo.MaxZoom)
             {
                 return false;
             }
 
-            var centerPixel = provider.Projection.Wgs84ToPixels(
-                CenterMap,
-                Zoom,
-                tileSize
-            );
+            var centerPixel = provider.Projection.Wgs84ToPixels(CenterMap, Zoom, tileSize);
             if (!IsFinite(centerPixel))
             {
                 return false;
             }
 
-            var center = provider.Projection.PixelsToWgs84(
-                centerPixel,
-                Zoom,
-                tileSize
-            );
+            var center = provider.Projection.PixelsToWgs84(centerPixel, Zoom, tileSize);
             var left = provider.Projection.PixelsToWgs84(
                 new Point(centerPixel.X - 1, centerPixel.Y),
                 Zoom,

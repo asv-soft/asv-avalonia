@@ -26,7 +26,8 @@ public sealed class PacketFieldChart : PlotViewModel
         IReadOnlyList<string> names,
         string units,
         IThemeService theme,
-        Action<PacketFieldChart> remove)
+        Action<PacketFieldChart> remove
+    )
         : base($"packet-field-chart-{Guid.NewGuid():N}", theme)
     {
         Key = key;
@@ -34,7 +35,8 @@ public sealed class PacketFieldChart : PlotViewModel
         _names = names.ToArray();
         Units = units;
         Header = string.Join(" / ", _names);
-        Description = $"{key.DeviceId?.AsString() ?? RS.PacketInspector_Unidentified} · {key.Direction} · {key.PortId} / {key.EndpointId}";
+        Description =
+            $"{key.DeviceId?.AsString() ?? RS.PacketInspector_Unidentified} · {key.Direction} · {key.PortId} / {key.EndpointId}";
         RemoveCommand = new ReactiveCommand(_ => remove(this)).DisposeItWith(Disposable);
     }
 
@@ -46,19 +48,26 @@ public sealed class PacketFieldChart : PlotViewModel
     public int PointCount => _points.Count;
     public double? LatestValue => _points.Count > 0 ? _points.Last().Value : null;
 
-    public bool Matches(PacketGroupKey key, IReadOnlyList<int> indices, IReadOnlyList<string> names) =>
-        Key == key && _indices.SequenceEqual(indices) && _names.SequenceEqual(names);
+    public bool Matches(
+        PacketGroupKey key,
+        IReadOnlyList<int> indices,
+        IReadOnlyList<string> names
+    ) => Key == key && _indices.SequenceEqual(indices) && _names.SequenceEqual(names);
 
     public void Append(IEnumerable<PacketSnapshot> packets)
     {
         var changed = false;
-        var pending = packets.Where(packet => packet.Sequence > _lastSequence && packet.Key == Key).ToArray();
+        var pending = packets
+            .Where(packet => packet.Sequence > _lastSequence && packet.Key == Key)
+            .ToArray();
         if (pending.Length > MaximumPoints && pending[0].FileEndOffset != null)
         {
             // File charts cover the whole recording, including its first and last samples.
             var all = pending;
-            pending = Enumerable.Range(0, MaximumPoints)
-                .Select(index => all[(int)((long)index * (all.Length - 1) / (MaximumPoints - 1))]).ToArray();
+            pending = Enumerable
+                .Range(0, MaximumPoints)
+                .Select(index => all[(int)((long)index * (all.Length - 1) / (MaximumPoints - 1))])
+                .ToArray();
         }
         foreach (var packet in pending)
         {
@@ -85,7 +94,10 @@ public sealed class PacketFieldChart : PlotViewModel
                 continue;
             }
             _origin ??= packet.Timestamp;
-            var x = packet.FileEndOffset != null ? packet.Sequence : (packet.Timestamp - _origin.Value).TotalSeconds;
+            var x =
+                packet.FileEndOffset != null
+                    ? packet.Sequence
+                    : (packet.Timestamp - _origin.Value).TotalSeconds;
             _points.Enqueue((x, value));
             while (_points.Count > MaximumPoints)
             {
@@ -111,8 +123,22 @@ public sealed class PacketFieldChart : PlotViewModel
     {
         value = default;
         var type = field.Type.TrimEnd('?').ToLowerInvariant();
-        if (type is not ("int8" or "int16" or "int32" or "int64" or "uint8" or "uint16" or "uint32" or "uint64"
-            or "half" or "float" or "double"))
+        if (
+            type
+            is not (
+                "int8"
+                or "int16"
+                or "int32"
+                or "int64"
+                or "uint8"
+                or "uint16"
+                or "uint32"
+                or "uint64"
+                or "half"
+                or "float"
+                or "double"
+            )
+        )
         {
             return false;
         }
@@ -121,8 +147,12 @@ public sealed class PacketFieldChart : PlotViewModel
             value = number;
             return double.IsFinite(value);
         }
-        return double.TryParse(field.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out value)
-            && double.IsFinite(value);
+        return double.TryParse(
+                field.Value,
+                NumberStyles.Float,
+                CultureInfo.InvariantCulture,
+                out value
+            ) && double.IsFinite(value);
     }
 
     protected override void RefreshStyles(ScottPlot.Plot plot)
@@ -142,7 +172,10 @@ public sealed class PacketFieldChart : PlotViewModel
             return;
         }
         var samples = _points.ToArray();
-        var line = panel.Plot.Add.Scatter(samples.Select(x => x.Time).ToArray(), samples.Select(x => x.Value).ToArray());
+        var line = panel.Plot.Add.Scatter(
+            samples.Select(x => x.Time).ToArray(),
+            samples.Select(x => x.Value).ToArray()
+        );
         line.LineWidth = 2;
         line.MarkerSize = samples.Length == 1 ? 4 : 0;
         panel.Plot.YLabel(Units);

@@ -136,8 +136,12 @@ public partial class MapItemsControl : SelectingItemsControl
 
         var container = GetContainerFromEventSource(e.Source);
         var action = MapInputPresets.ResolveDrag(
-            InputBindings, button, e.KeyModifiers, container is not null,
-            container is MapItem { CanDragWithoutModifier: true });
+            InputBindings,
+            button,
+            e.KeyModifiers,
+            container is not null,
+            container is MapItem { CanDragWithoutModifier: true }
+        );
         _pressedButton = button;
         switch (action)
         {
@@ -254,7 +258,10 @@ public partial class MapItemsControl : SelectingItemsControl
                 DragState == DragState.DragMap
                 || DragState == DragState.Click
                 || (DragState == DragState.Zoom && InputBindings.Zoom == MapGesturePreset.LeftDrag)
-                || (DragState == DragState.SelectRectangle && InputBindings.SelectRectangle == MapGesturePreset.LeftDrag)
+                || (
+                    DragState == DragState.SelectRectangle
+                    && InputBindings.SelectRectangle == MapGesturePreset.LeftDrag
+                )
             )
             && (releasePosition - _startMousePosition).LengthSquared() <= ClickThresholdSquared;
 
@@ -473,7 +480,11 @@ public partial class MapItemsControl : SelectingItemsControl
             return;
         }
 
-        if (EnableTouchpadGestures && InputBindings.Zoom == MapGesturePreset.Wheel && IsLikelyTouchpadScroll(e))
+        if (
+            EnableTouchpadGestures
+            && InputBindings.Zoom == MapGesturePreset.Wheel
+            && IsLikelyTouchpadScroll(e)
+        )
         {
             e.Handled = true;
             return;
@@ -508,7 +519,6 @@ public partial class MapItemsControl : SelectingItemsControl
                     ?? ContainerFromItem(Selection.SelectedItem) as MapItem
                 )?.Location ?? CenterMap;
         }
-
     }
 
     private bool IsLikelyTouchpadScroll(PointerWheelEventArgs e)

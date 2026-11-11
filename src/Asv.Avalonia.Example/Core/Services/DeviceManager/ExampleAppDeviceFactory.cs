@@ -4,7 +4,8 @@ using Asv.IO.Device;
 
 namespace Asv.Avalonia.Example;
 
-public sealed class ExampleAppDeviceFactory(ExampleDeviceConfig config) : ExampleDeviceFactory(config)
+public sealed class ExampleAppDeviceFactory(ExampleDeviceConfig config)
+    : ExampleDeviceFactory(config)
 {
     public override bool TryGetSourceAddress(IProtocolMessage message, out DeviceAddress address)
     {
@@ -28,5 +29,6 @@ public sealed class ExampleAppDeviceFactory(ExampleDeviceConfig config) : Exampl
         return true;
     }
 
-    private static DeviceAddress CreateAddress(byte id) => new("example", id.ToString(CultureInfo.InvariantCulture));
+    private static DeviceAddress CreateAddress(byte id) =>
+        new("example", id.ToString(CultureInfo.InvariantCulture));
 }

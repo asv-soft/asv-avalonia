@@ -352,7 +352,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         ShowEditApiKeyCommand = new ReactiveCommand(
             async (_, cancel) =>
             {
-                var result = await _dialogService.ShowEditApiKeyDialogAsync(EditApiKeyResult.Value, sizeMode: SelectedSizeMode.Value);
+                var result = await _dialogService.ShowEditApiKeyDialogAsync(
+                    EditApiKeyResult.Value,
+                    sizeMode: SelectedSizeMode.Value
+                );
                 cancel.ThrowIfCancellationRequested();
                 EditApiKeyResult.Value = result;
             },
@@ -430,7 +433,8 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     }
 
     public IReadOnlyList<DialogSizeMode> SizeModes { get; } = Enum.GetValues<DialogSizeMode>();
-    public BindableReactiveProperty<DialogSizeMode> SelectedSizeMode { get; } = new(DialogSizeMode.Compact);
+    public BindableReactiveProperty<DialogSizeMode> SelectedSizeMode { get; } =
+        new(DialogSizeMode.Compact);
 
     public ReactiveCommand ShowCustomDialogCommand { get; }
     public ReactiveCommand OpenImageForCustomDialogAsyncCommand { get; }
@@ -637,7 +641,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask YesOrNoMessageAsync(Unit unit, CancellationToken cancellationToken)
     {
-
         var result = await _dialogService.ShowYesOrNoDialogAsync(
             title: RS.DialogControlsPageViewModel_YesOrNoPrefab_Title,
             message: RS.DialogControlsPageViewModel_YesOrNoPrefab_Message,
@@ -658,7 +661,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask SaveCancelAsync(Unit unit, CancellationToken cancellationToken)
     {
-
         var result = await _dialogService.ShowSaveCancelDialogAsync(
             title: RS.DialogControlsPageViewModel_SavePrefab_Title,
             message: RS.DialogControlsPageViewModel_SavePrefab_Message,
@@ -676,7 +678,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask ShowInputAsync(Unit unit, CancellationToken cancellationToken)
     {
-
         var rawResult = await _dialogService.ShowInputDialogAsync(
             title: RS.DialogControlsPageViewModel_InputPrefab_Title,
             message: RS.DialogControlsPageViewModel_InputPrefab_Message,
@@ -693,7 +694,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask ShowHotKeyCaptureAsync(Unit unit, CancellationToken cancellationToken)
     {
-
         var result = await _dialogService.ShowHotKeyCaptureDialogAsync(
             title: RS.DialogControlsPageViewModel_HotKeyCapturePrefab_Title,
             message: RS.DialogControlsPageViewModel_HotKeyCapturePrefab_Message,
@@ -712,7 +712,6 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
 
     private async ValueTask ShowGeoPointDialog(Unit unit, CancellationToken cancellationToken)
     {
-
         var rawResult = await _dialogService.ShowGeoPointDialogAsync(
             initialLocation: GeoPointDialogResult.ModelValue.CurrentValue,
             sizeMode: SelectedSizeMode.Value

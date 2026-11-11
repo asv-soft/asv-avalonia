@@ -29,12 +29,17 @@ public sealed class MapInputService : AsyncDisposableOnce, IMapInputService
         _configuration = configuration;
         var bindings = configuration?.Get<MapInputConfig>().Bindings;
         _bindings = new SynchronizedReactiveProperty<MapInputBindings>(
-            bindings is not null && bindings.IsValid() ? bindings : MapInputBindings.Default);
+            bindings is not null && bindings.IsValid() ? bindings : MapInputBindings.Default
+        );
     }
 
     public ReadOnlyReactiveProperty<MapInputBindings> Bindings => _bindings;
 
-    public bool TryAssign(MapInputAction action, MapGesturePreset preset, out MapInputAction? conflict)
+    public bool TryAssign(
+        MapInputAction action,
+        MapGesturePreset preset,
+        out MapInputAction? conflict
+    )
     {
         if (!MapInputPresets.GetPresets(action).Contains(preset))
         {

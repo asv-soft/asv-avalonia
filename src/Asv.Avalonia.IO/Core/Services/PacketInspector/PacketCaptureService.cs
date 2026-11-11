@@ -37,13 +37,15 @@ public sealed record PacketSource
     public string EndpointName { get; init; }
     public string EndpointDescription { get; init; }
 
-    internal static PacketSource FromPacket(PacketSnapshot packet) => new(
-        packet.Key.PortId,
-        packet.PortName,
-        packet.Endpoint,
-        packet.PortDescription,
-        packet.EndpointName,
-        packet.EndpointDescription);
+    internal static PacketSource FromPacket(PacketSnapshot packet) =>
+        new(
+            packet.Key.PortId,
+            packet.PortName,
+            packet.Endpoint,
+            packet.PortDescription,
+            packet.EndpointName,
+            packet.EndpointDescription
+        );
 }
 
 public sealed record PacketPort
@@ -93,8 +95,13 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
     private readonly IPacketFieldSource[] _fieldSources;
     private readonly PacketInspectorOptions _options;
     private readonly Queue<PacketSnapshot> _packets = new();
-    private readonly Dictionary<IProtocolPort, CompositeDisposable> _ports = new(ReferenceEqualityComparer.Instance);
-    private readonly Dictionary<IProtocolEndpoint, (IProtocolPort Port, CompositeDisposable Subscriptions)> _endpoints = new(ReferenceEqualityComparer.Instance);
+    private readonly Dictionary<IProtocolPort, CompositeDisposable> _ports = new(
+        ReferenceEqualityComparer.Instance
+    );
+    private readonly Dictionary<
+        IProtocolEndpoint,
+        (IProtocolPort Port, CompositeDisposable Subscriptions)
+    > _endpoints = new(ReferenceEqualityComparer.Instance);
     private readonly CompositeDisposable _subscriptions = new();
     private long _sequence;
     private long _bytes;
@@ -149,7 +156,8 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
                 _recording = null;
                 var completion = recording.StopAsync().AsTask();
                 _recordingsCompletion = _recordingsCompletion.IsCompleted
-                    ? completion : Task.WhenAll(_recordingsCompletion, completion);
+                    ? completion
+                    : Task.WhenAll(_recordingsCompletion, completion);
             }
         }
     }
@@ -164,7 +172,8 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
             }
             var subscriptions = new CompositeDisposable();
             _ports.Add(port, subscriptions);
-            port.EndpointAdded.Subscribe(endpoint => AddEndpoint(port, endpoint)).AddTo(subscriptions);
+            port.EndpointAdded.Subscribe(endpoint => AddEndpoint(port, endpoint))
+                .AddTo(subscriptions);
             port.EndpointRemoved.Subscribe(RemoveEndpoint).AddTo(subscriptions);
             foreach (var endpoint in port.Endpoints)
             {
@@ -181,7 +190,12 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
             {
                 subscriptions.Dispose();
             }
-            foreach (var endpoint in _endpoints.Where(x => ReferenceEquals(x.Value.Port, port)).Select(x => x.Key).ToArray())
+            foreach (
+                var endpoint in _endpoints
+                    .Where(x => ReferenceEquals(x.Value.Port, port))
+                    .Select(x => x.Key)
+                    .ToArray()
+            )
             {
                 RemoveEndpoint(endpoint);
             }
@@ -192,14 +206,27 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
     {
         lock (_gate)
         {
-            if (_disposed || !_ports.ContainsKey(port) || endpoint.IsDisposed || _endpoints.ContainsKey(endpoint))
+            if (
+                _disposed
+                || !_ports.ContainsKey(port)
+                || endpoint.IsDisposed
+                || _endpoints.ContainsKey(endpoint)
+            )
             {
                 return;
             }
             var subscriptions = new CompositeDisposable();
             _endpoints.Add(endpoint, (port, subscriptions));
-            endpoint.OnRxMessage.Subscribe(message => Capture(port, endpoint, PacketDirection.Rx, message)).AddTo(subscriptions);
-            endpoint.OnTxMessage.Subscribe(message => Capture(port, endpoint, PacketDirection.Tx, message)).AddTo(subscriptions);
+            endpoint
+                .OnRxMessage.Subscribe(message =>
+                    Capture(port, endpoint, PacketDirection.Rx, message)
+                )
+                .AddTo(subscriptions);
+            endpoint
+                .OnTxMessage.Subscribe(message =>
+                    Capture(port, endpoint, PacketDirection.Tx, message)
+                )
+                .AddTo(subscriptions);
             endpoint.OnRxError.Subscribe(RecordError).AddTo(subscriptions);
             endpoint.OnTxError.Subscribe(RecordError).AddTo(subscriptions);
         }
@@ -228,7 +255,12 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
         }
     }
 
-    private void Capture(IProtocolPort port, IProtocolEndpoint endpoint, PacketDirection direction, IProtocolMessage message)
+    private void Capture(
+        IProtocolPort port,
+        IProtocolEndpoint endpoint,
+        PacketDirection direction,
+        IProtocolMessage message
+    )
     {
         lock (_gate)
         {
@@ -259,8 +291,11 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
                 DeviceAddress? sourceAddress = null;
                 try
                 {
-                    if (_manager.TryGetSourceAddress(message, out var address)
-                        && !string.IsNullOrWhiteSpace(address.Family) && !string.IsNullOrWhiteSpace(address.Value))
+                    if (
+                        _manager.TryGetSourceAddress(message, out var address)
+                        && !string.IsNullOrWhiteSpace(address.Family)
+                        && !string.IsNullOrWhiteSpace(address.Value)
+                    )
                     {
                         sourceAddress = address;
                     }
@@ -279,7 +314,16 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
                         {
                             var visitor = new PacketFieldsVisitor();
                             section.Value.Accept(visitor);
-                            fields.Add(new(section.Key, string.Empty, string.Empty, null, null, visitor.Fields));
+                            fields.Add(
+                                new(
+                                    section.Key,
+                                    string.Empty,
+                                    string.Empty,
+                                    null,
+                                    null,
+                                    visitor.Fields
+                                )
+                            );
                         }
                         if (fields.Count > 0)
                         {
@@ -292,7 +336,14 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
                     error = ex.Message;
                     _errors++;
                 }
-                var key = new PacketGroupKey(port.Id, endpoint.Id, direction, message.Protocol.Id, message.GetIdAsString(), deviceId)
+                var key = new PacketGroupKey(
+                    port.Id,
+                    endpoint.Id,
+                    direction,
+                    message.Protocol.Id,
+                    message.GetIdAsString(),
+                    deviceId
+                )
                 {
                     SourceAddress = sourceAddress,
                 };
@@ -313,7 +364,13 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
                     EndpointDescription = endpoint.Description,
                 };
                 var size = snapshot.EstimatedBytes;
-                while (_packets.Count > 0 && (_packets.Count >= _options.MaximumPackets || _bytes + size > _options.MaximumBytes))
+                while (
+                    _packets.Count > 0
+                    && (
+                        _packets.Count >= _options.MaximumPackets
+                        || _bytes + size > _options.MaximumBytes
+                    )
+                )
                 {
                     _bytes -= _packets.Dequeue().EstimatedBytes;
                     _evicted++;
@@ -338,19 +395,21 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
     {
         lock (_gate)
         {
-            var sources = _endpoints.Select(
-                x => new PacketSource(
+            var sources = _endpoints
+                .Select(x => new PacketSource(
                     x.Value.Port.Id,
                     x.Value.Port.DisplayName,
                     x.Key.Id,
                     x.Value.Port.Description,
                     x.Key.DisplayName,
                     x.Key.Description
-                )
-            ).ToArray();
+                ))
+                .ToArray();
             return new(_packets.ToArray(), sources, _evicted, _errors)
             {
-                Ports = _ports.Keys.Select(x => new PacketPort(x.Id, x.DisplayName, x.Description)).ToArray(),
+                Ports = _ports
+                    .Keys.Select(x => new PacketPort(x.Id, x.DisplayName, x.Description))
+                    .ToArray(),
                 Protocols = _manager.Router.AvailableProtocols,
             };
         }
@@ -399,7 +458,10 @@ public sealed class PacketCaptureService : IDisposable, IAsyncDisposable
     {
         Dispose();
         Task completion;
-        lock (_gate) { completion = _recordingsCompletion; }
+        lock (_gate)
+        {
+            completion = _recordingsCompletion;
+        }
         await completion.ConfigureAwait(false);
     }
 }

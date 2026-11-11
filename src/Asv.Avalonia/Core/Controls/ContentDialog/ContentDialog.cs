@@ -121,11 +121,13 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
             button.Margin = default;
             if (!string.IsNullOrEmpty(text))
             {
-                columns.Add(new ColumnDefinition
-                {
-                    Width = GridLength.Auto,
-                    SharedSizeGroup = "DialogButton",
-                });
+                columns.Add(
+                    new ColumnDefinition
+                    {
+                        Width = GridLength.Auto,
+                        SharedSizeGroup = "DialogButton",
+                    }
+                );
                 columnIndex++;
             }
         }
@@ -145,10 +147,12 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
     {
         base.OnPropertyChanged(change);
 
-        if (change.Property == SizeModeProperty
+        if (
+            change.Property == SizeModeProperty
             || change.Property == PrimaryButtonTextProperty
             || change.Property == SecondaryButtonTextProperty
-            || change.Property == CloseButtonTextProperty)
+            || change.Property == CloseButtonTextProperty
+        )
         {
             UpdateCommandSpaceColumns();
         }

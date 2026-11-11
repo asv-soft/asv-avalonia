@@ -14,8 +14,12 @@ public static class FileInspectorRegistrations
         public PagesRegistrations.Builder RegisterFileInspector()
         {
             builder.AppBuilder.Services.TryAddSingleton<PacketFileReader>();
-            builder.AppBuilder.Services.TryAddEnumerable(ServiceDescriptor.Singleton<IPacketFieldSource, DefaultPacketFieldSource>());
-            builder.AppBuilder.Pages.Register<FileInspectorPageViewModel, FileInspectorPageView>(FileInspectorPageViewModel.PageId);
+            builder.AppBuilder.Services.TryAddEnumerable(
+                ServiceDescriptor.Singleton<IPacketFieldSource, DefaultPacketFieldSource>()
+            );
+            builder.AppBuilder.Pages.Register<FileInspectorPageViewModel, FileInspectorPageView>(
+                FileInspectorPageViewModel.PageId
+            );
             builder.AppBuilder.Extensions.Register<IHomePage, HomePageFileInspectorExtension>();
             return builder;
         }
@@ -34,8 +38,9 @@ public sealed class HomePageFileInspectorExtension : IExtensionFor<IHomePage>
             Description = RS.FileInspector_Description,
             Icon = MaterialIconKind.FileSearchOutline,
             IconColor = FileInspectorPageViewModel.PageIconColor,
-            Command = new ReactiveCommand(_ => context.GoTo(new NavPath(new NavId(FileInspectorPageViewModel.PageId))))
-                .DisposeItWith(contextDispose),
+            Command = new ReactiveCommand(_ =>
+                context.GoTo(new NavPath(new NavId(FileInspectorPageViewModel.PageId)))
+            ).DisposeItWith(contextDispose),
         }.DisposeItWith(contextDispose);
         context.Tools.Add(action);
         R3.Disposable.Create(() => context.Tools.Remove(action)).DisposeItWith(contextDispose);

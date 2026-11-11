@@ -1,5 +1,7 @@
-<Styles xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
     <Styles.Resources>
         <ResourceDictionary>
             <ResourceDictionary.ThemeDictionaries>
@@ -17,32 +19,57 @@
             <SolidColorBrush x:Key="AsvCheckBoxAccent">#3574F0</SolidColorBrush>
             <SolidColorBrush x:Key="AsvCheckBoxAccentHover">#467FF2</SolidColorBrush>
             <SolidColorBrush x:Key="AsvCheckBoxAccentPressed">#2F65CA</SolidColorBrush>
-            <ControlTheme x:Key="AsvCheckBoxTheme" TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+            <ControlTheme
+                x:Key="AsvCheckBoxTheme"
+                TargetType="CheckBox"
+                BasedOn="{StaticResource {x:Type CheckBox}}"
+            >
                 <Setter Property="Template">
                     <ControlTemplate>
                         <Grid x:Name="RootGrid" ColumnDefinitions="16,*">
-                            <Border x:Name="PART_Border" Grid.ColumnSpan="2"
-                                    Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}" />
+                            <Border
+                                x:Name="PART_Border"
+                                Grid.ColumnSpan="2"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="{TemplateBinding CornerRadius}"
+                            />
                             <Grid VerticalAlignment="Top" Height="{TemplateBinding MinHeight}">
-                                <Border x:Name="NormalRectangle" Width="16" Height="16" BorderThickness="1"
-                                        CornerRadius="{TemplateBinding CornerRadius}" UseLayoutRounding="False"
-                                        Background="{DynamicResource CheckBoxCheckBackgroundFillUnchecked}"
-                                        BorderBrush="{DynamicResource CheckBoxCheckBackgroundStrokeUnchecked}" />
+                                <Border
+                                    x:Name="NormalRectangle"
+                                    Width="16"
+                                    Height="16"
+                                    BorderThickness="1"
+                                    CornerRadius="{TemplateBinding CornerRadius}"
+                                    UseLayoutRounding="False"
+                                    Background="{DynamicResource CheckBoxCheckBackgroundFillUnchecked}"
+                                    BorderBrush="{DynamicResource CheckBoxCheckBackgroundStrokeUnchecked}"
+                                />
                                 <Viewbox UseLayoutRounding="False">
                                     <Panel>
                                         <Panel Width="16" Height="16" />
-                                        <Path x:Name="CheckGlyph" Opacity="0" Stretch="Uniform"
-                                              Fill="{DynamicResource CheckBoxCheckGlyphForegroundUnchecked}"
-                                              VerticalAlignment="Center" FlowDirection="LeftToRight" />
+                                        <Path
+                                            x:Name="CheckGlyph"
+                                            Opacity="0"
+                                            Stretch="Uniform"
+                                            Fill="{DynamicResource CheckBoxCheckGlyphForegroundUnchecked}"
+                                            VerticalAlignment="Center"
+                                            FlowDirection="LeftToRight"
+                                        />
                                     </Panel>
                                 </Viewbox>
                             </Grid>
-                            <ContentPresenter x:Name="PART_ContentPresenter" Grid.Column="1"
-                                              Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
-                                              Margin="{TemplateBinding Padding}" TextWrapping="Wrap"
-                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                            <ContentPresenter
+                                x:Name="PART_ContentPresenter"
+                                Grid.Column="1"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                Margin="{TemplateBinding Padding}"
+                                TextWrapping="Wrap"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            />
                         </Grid>
                     </ControlTemplate>
                 </Setter>

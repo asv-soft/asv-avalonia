@@ -163,5 +163,4 @@ public class ExampleDeviceManagerExtension(IConfiguration cfgSvc) : IDeviceManag
         item.Field3 = (short)(-1000 + (senderId * 100) + (channel * 10) - sample);
         item.Field4 = (ushort)(2000 + (senderId * 100) + (channel * 10) + sample);
     }
-
 }

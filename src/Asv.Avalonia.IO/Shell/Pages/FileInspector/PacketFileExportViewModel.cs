@@ -10,7 +10,8 @@ public sealed class PacketFileExportViewModel : ViewModel
     private CancellationTokenSource? _operation;
     private string? _source;
 
-    public PacketFileExportViewModel(PacketFileExporter exporter, IDialogService dialogs) : base("packet-file-export")
+    public PacketFileExportViewModel(PacketFileExporter exporter, IDialogService dialogs)
+        : base("packet-file-export")
     {
         _exporter = exporter;
         _dialogs = dialogs;
@@ -20,11 +21,31 @@ public sealed class PacketFileExportViewModel : ViewModel
 
     public ReactiveCommand ExportCommand { get; }
     public ReactiveCommand CancelCommand { get; }
-    public bool CanExport { get; private set => SetField(ref field, value); }
-    public bool IsBusy { get; private set => SetField(ref field, value); }
-    public double Progress { get; private set => SetField(ref field, value); }
-    public string Status { get; private set => SetField(ref field, value); } = string.Empty;
-    public string Error { get; private set => SetField(ref field, value); } = string.Empty;
+    public bool CanExport
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public bool IsBusy
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public double Progress
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public string Status
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string Error
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
 
     public void SetSource(string? source)
     {
@@ -47,7 +68,10 @@ public sealed class PacketFileExportViewModel : ViewModel
         {
             return;
         }
-        using var operation = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, DisposeCancel);
+        using var operation = CancellationTokenSource.CreateLinkedTokenSource(
+            cancellationToken,
+            DisposeCancel
+        );
         _operation = operation;
         IsBusy = true;
         CanExport = false;
@@ -56,7 +80,12 @@ public sealed class PacketFileExportViewModel : ViewModel
         Error = string.Empty;
         try
         {
-            var destination = await _dialogs.ShowSaveFileDialogAsync(FileExportStrings.Save, "jsonl", Path.GetFileNameWithoutExtension(source), "jsonl");
+            var destination = await _dialogs.ShowSaveFileDialogAsync(
+                FileExportStrings.Save,
+                "jsonl",
+                Path.GetFileNameWithoutExtension(source),
+                "jsonl"
+            );
             if (string.IsNullOrWhiteSpace(destination))
             {
                 return;
@@ -70,7 +99,12 @@ public sealed class PacketFileExportViewModel : ViewModel
                     Progress = value;
                 }
             });
-            var result = await _exporter.ExportJsonLinesAsync(source, destination, progress, operation.Token);
+            var result = await _exporter.ExportJsonLinesAsync(
+                source,
+                destination,
+                progress,
+                operation.Token
+            );
             if (!IsDisposed)
             {
                 Progress = 100;

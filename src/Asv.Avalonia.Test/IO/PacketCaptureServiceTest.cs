@@ -47,8 +47,14 @@ public class PacketCaptureServiceTest
         Assert.Equal(2d, fields.Single(x => x.Name == "Value1").NumericValue);
         Assert.Null(fields.Single(x => x.Name == "Value3").NumericValue);
         Assert.Equal("before", fields.Single(x => x.Name == "Value3").Value);
-        Assert.Equal("after", Assert.Single(state.Packets[1].Fields).Children.Single(x => x.Name == "Value3").Value);
-        Assert.Equal(new[] { "[0]", "[1]" }, fields.Single(x => x.Name == "Value5").Children.Select(x => x.Name));
+        Assert.Equal(
+            "after",
+            Assert.Single(state.Packets[1].Fields).Children.Single(x => x.Name == "Value3").Value
+        );
+        Assert.Equal(
+            new[] { "[0]", "[1]" },
+            fields.Single(x => x.Name == "Value5").Children.Select(x => x.Name)
+        );
         var nested = fields.Single(x => x.Name == "Value6").Children[0];
         Assert.Equal("struct", nested.Type);
         Assert.Equal("Field1", nested.Children[0].Name);
@@ -190,7 +196,10 @@ public class PacketCaptureServiceTest
     public void Capture_UnknownSourcesRemainSeparateAndDiscoveryKeepsTheSameGroup()
     {
         using var fixture = new Fixture();
-        fixture.SourceAddress = message => new DeviceAddress("example", ((ExampleMessageBase)message).SenderId.ToString());
+        fixture.SourceAddress = message => new DeviceAddress(
+            "example",
+            ((ExampleMessageBase)message).SenderId.ToString()
+        );
         using var capture = fixture.CreateCapture();
         fixture.Rx.OnNext(new ExampleMessage1 { SenderId = 1 });
         fixture.Rx.OnNext(new ExampleMessage1 { SenderId = 2 });
@@ -229,7 +238,11 @@ public class PacketCaptureServiceTest
         fixture.Rx.OnNext(new ExampleMessage1 { Value1 = 99 });
         var stream = new MemoryStream();
         var factory = Protocol.Create(builder => builder.Protocols.RegisterExampleProtocol());
-        await using var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, stream);
+        await using var recording = new PacketRecordingSession(
+            factory,
+            PacketRecordingFormat.Binary,
+            stream
+        );
         capture.AttachRecording(recording);
         var first = new ExampleMessage1 { Value1 = 1 };
         var second = new ExampleMessage1 { Value1 = 2 };
@@ -241,7 +254,10 @@ public class PacketCaptureServiceTest
         capture.DetachRecording(recording);
         await recording.StopAsync();
         fixture.Rx.OnNext(new ExampleMessage1 { Value1 = 100 });
-        Assert.Equal(first.Serialize().Concat(second.Serialize()).Concat(third.Serialize()), stream.ToArray());
+        Assert.Equal(
+            first.Serialize().Concat(second.Serialize()).Concat(third.Serialize()),
+            stream.ToArray()
+        );
         Assert.Equal(3, recording.MessagesWritten);
         Assert.Null(recording.Error);
     }
@@ -273,7 +289,10 @@ public class PacketCaptureServiceTest
         var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, stream);
         capture.AttachRecording(recording);
         fixture.Rx.OnNext(new ExampleMessage1());
-        await stream.Started.Task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+        await stream.Started.Task.WaitAsync(
+            TimeSpan.FromSeconds(10),
+            TestContext.Current.CancellationToken
+        );
         try
         {
             await Task.Run(capture.Dispose, TestContext.Current.CancellationToken)
@@ -281,7 +300,10 @@ public class PacketCaptureServiceTest
             Assert.False(recording.IsRecording);
             Assert.False(capture.DisposeAsync().IsCompleted);
         }
-        finally { stream.Release.TrySetResult(); }
+        finally
+        {
+            stream.Release.TrySetResult();
+        }
         await capture.DisposeAsync();
         Assert.Equal(1, recording.MessagesWritten);
         Assert.False(stream.CanWrite);
@@ -289,9 +311,15 @@ public class PacketCaptureServiceTest
 
     private sealed class GatedRecordingStream : MemoryStream
     {
-        public TaskCompletionSource Started { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+        public TaskCompletionSource Started { get; } =
+            new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource Release { get; } =
+            new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public override async ValueTask WriteAsync(
+            ReadOnlyMemory<byte> buffer,
+            CancellationToken cancellationToken = default
+        )
         {
             Started.TrySetResult();
             await Release.Task.ConfigureAwait(false);
@@ -306,10 +334,13 @@ public class PacketCaptureServiceTest
     public class InterfaceStub : DispatchProxy
     {
         public Func<MethodInfo, object?[]?, object?> Handler { get; set; } = null!;
-        protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => Handler(targetMethod!, args);
+
+        protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) =>
+            Handler(targetMethod!, args);
     }
 
-    private static T Stub<T>(Func<MethodInfo, object?[]?, object?> handler) where T : class
+    private static T Stub<T>(Func<MethodInfo, object?[]?, object?> handler)
+        where T : class
     {
         var result = DispatchProxy.Create<T, InterfaceStub>();
         ((InterfaceStub)(object)result).Handler = handler;
@@ -337,63 +368,80 @@ public class PacketCaptureServiceTest
 
         public Fixture()
         {
-            Endpoint = Stub<IProtocolEndpoint>((method, _) => method.Name switch
-            {
-                "get_Id" => "endpoint",
-                "get_DisplayName" => EndpointDisplayName,
-                "get_Description" => EndpointDescription,
-                "get_IsDisposed" => false,
-                "get_OnRxMessage" => Rx,
-                "get_OnTxMessage" => Tx,
-                "get_OnRxError" or "get_OnTxError" => Errors,
-                _ => throw new NotSupportedException(method.Name),
-            });
-            Port = Stub<IProtocolPort>((method, _) => method.Name switch
-            {
-                "get_Id" => "port",
-                "get_DisplayName" => PortDisplayName,
-                "get_Description" => PortDescription,
-                "get_Config" => new ProtocolPortConfig(new Uri("tcp://localhost:1234")),
-                "get_IsDisposed" => false,
-                "get_Endpoints" => ImmutableArray.Create(Endpoint),
-                "get_EndpointAdded" => EndpointAdded,
-                "get_EndpointRemoved" => EndpointRemoved,
-                _ => throw new NotSupportedException(method.Name),
-            });
-            var router = Stub<IProtocolRouter>((method, _) => method.Name switch
-            {
-                "get_Ports" => ImmutableArray.Create(Port),
-                "get_AvailableProtocols" => ImmutableArray<ProtocolInfo>.Empty,
-                "get_PortAdded" => PortAdded,
-                "get_PortRemoved" => PortRemoved,
-                _ => throw new NotSupportedException(method.Name),
-            });
-            _manager = Stub<IDeviceManager>((method, args) =>
-            {
-                if (method.Name == "TryGetSourceAddress")
+            Endpoint = Stub<IProtocolEndpoint>(
+                (method, _) =>
+                    method.Name switch
+                    {
+                        "get_Id" => "endpoint",
+                        "get_DisplayName" => EndpointDisplayName,
+                        "get_Description" => EndpointDescription,
+                        "get_IsDisposed" => false,
+                        "get_OnRxMessage" => Rx,
+                        "get_OnTxMessage" => Tx,
+                        "get_OnRxError" or "get_OnTxError" => Errors,
+                        _ => throw new NotSupportedException(method.Name),
+                    }
+            );
+            Port = Stub<IProtocolPort>(
+                (method, _) =>
+                    method.Name switch
+                    {
+                        "get_Id" => "port",
+                        "get_DisplayName" => PortDisplayName,
+                        "get_Description" => PortDescription,
+                        "get_Config" => new ProtocolPortConfig(new Uri("tcp://localhost:1234")),
+                        "get_IsDisposed" => false,
+                        "get_Endpoints" => ImmutableArray.Create(Endpoint),
+                        "get_EndpointAdded" => EndpointAdded,
+                        "get_EndpointRemoved" => EndpointRemoved,
+                        _ => throw new NotSupportedException(method.Name),
+                    }
+            );
+            var router = Stub<IProtocolRouter>(
+                (method, _) =>
+                    method.Name switch
+                    {
+                        "get_Ports" => ImmutableArray.Create(Port),
+                        "get_AvailableProtocols" => ImmutableArray<ProtocolInfo>.Empty,
+                        "get_PortAdded" => PortAdded,
+                        "get_PortRemoved" => PortRemoved,
+                        _ => throw new NotSupportedException(method.Name),
+                    }
+            );
+            _manager = Stub<IDeviceManager>(
+                (method, args) =>
                 {
-                    var address = SourceAddress((IProtocolMessage)args![0]!);
-                    args[1] = address ?? default;
-                    return address.HasValue;
+                    if (method.Name == "TryGetSourceAddress")
+                    {
+                        var address = SourceAddress((IProtocolMessage)args![0]!);
+                        args[1] = address ?? default;
+                        return address.HasValue;
+                    }
+                    if (method.Name == "TryIdentify")
+                    {
+                        var device = Identify((IProtocolMessage)args![0]!);
+                        args[1] = device;
+                        return device != null;
+                    }
+                    return method.Name switch
+                    {
+                        "get_Router" => router,
+                        _ => throw new NotSupportedException(method.Name),
+                    };
                 }
-                if (method.Name == "TryIdentify")
-                {
-                    var device = Identify((IProtocolMessage)args![0]!);
-                    args[1] = device;
-                    return device != null;
-                }
-                return method.Name switch
-                {
-                    "get_Router" => router,
-                    _ => throw new NotSupportedException(method.Name),
-                };
-            });
+            );
         }
 
-        public PacketCaptureService CreateCapture(int maximum = 10, long bytes = 1024 * 1024) => new(
-            _manager, TimeProvider.System, [new DefaultPacketFieldSource()],
-            Options.Create(new PacketInspectorOptions { MaximumPackets = maximum, MaximumBytes = bytes }),
-            NullLogger<PacketCaptureService>.Instance);
+        public PacketCaptureService CreateCapture(int maximum = 10, long bytes = 1024 * 1024) =>
+            new(
+                _manager,
+                TimeProvider.System,
+                [new DefaultPacketFieldSource()],
+                Options.Create(
+                    new PacketInspectorOptions { MaximumPackets = maximum, MaximumBytes = bytes }
+                ),
+                NullLogger<PacketCaptureService>.Instance
+            );
 
         public void Dispose()
         {

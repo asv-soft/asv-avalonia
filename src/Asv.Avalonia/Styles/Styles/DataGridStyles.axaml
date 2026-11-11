@@ -1,11 +1,16 @@
-<Styles xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Styles
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+>
     <Style Selector="DataGrid">
         <Setter Property="CanUserResizeColumns" Value="True" />
     </Style>
     <Style Selector="DataGrid DataGridColumnHeader">
         <Setter Property="Background" Value="Transparent" />
-        <Setter Property="Foreground" Value="{DynamicResource DataGridColumnHeaderForegroundBrush}" />
+        <Setter
+            Property="Foreground"
+            Value="{DynamicResource DataGridColumnHeaderForegroundBrush}"
+        />
         <Setter Property="FontWeight" Value="SemiBold" />
         <Setter Property="FontSize" Value="12" />
         <Setter Property="MinHeight" Value="28" />

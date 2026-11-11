@@ -28,8 +28,10 @@ public partial class MapItemsControl
 
     public static readonly StyledProperty<MapInputBindings> InputBindingsProperty =
         AvaloniaProperty.Register<MapItemsControl, MapInputBindings>(
-            nameof(InputBindings), MapInputBindings.Default,
-            validate: value => value is not null && value.IsValid());
+            nameof(InputBindings),
+            MapInputBindings.Default,
+            validate: value => value is not null && value.IsValid()
+        );
 
     public MapInputBindings InputBindings
     {

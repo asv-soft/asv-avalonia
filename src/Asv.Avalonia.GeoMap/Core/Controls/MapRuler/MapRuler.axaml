@@ -13,11 +13,7 @@
     x:Name="PART_Root"
 >
     <UserControl.Resources>
-        <LinearGradientBrush
-            x:Key="MapRulerSurfaceBrush"
-            StartPoint="50%,0%"
-            EndPoint="50%,100%"
-        >
+        <LinearGradientBrush x:Key="MapRulerSurfaceBrush" StartPoint="50%,0%" EndPoint="50%,100%">
             <GradientStop Offset="0" Color="#E02D3943" />
             <GradientStop Offset="1" Color="#E029343D" />
         </LinearGradientBrush>
@@ -174,24 +170,14 @@
                 ToolTip.Tip="{x:Static map:RS.MapRuler_Tooltip}"
                 Theme="{StaticResource MapRulerToggleTheme}"
             >
-                <avalonia:MaterialIcon
-                    Width="18"
-                    Height="18"
-                    Kind="Ruler"
-                    Foreground="#F8FBFF"
-                />
+                <avalonia:MaterialIcon Width="18" Height="18" Kind="Ruler" Foreground="#F8FBFF" />
             </ToggleButton>
 
             <Grid
                 ColumnDefinitions="Auto,32"
                 IsVisible="{Binding #PART_Root.DistanceText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
             >
-                <Border
-                    Width="1"
-                    Margin="0,9"
-                    HorizontalAlignment="Left"
-                    Background="#24FFFFFF"
-                />
+                <Border Width="1" Margin="0,9" HorizontalAlignment="Left" Background="#24FFFFFF" />
                 <TextBlock
                     Margin="10,0,6,0"
                     VerticalAlignment="Center"

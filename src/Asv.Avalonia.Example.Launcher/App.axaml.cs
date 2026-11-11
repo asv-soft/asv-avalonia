@@ -13,9 +13,7 @@ public partial class App : LauncherApp
     protected override void ConfigureLauncher(LauncherApplicationOptions options)
     {
         // Configure base launcher view
-        options.IconSource = new Uri(
-            "avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png"
-        );
+        options.IconSource = new Uri("avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png");
         options.Title = "Launcher for Asv.Avalonia Example";
         options.Description = "Example application startup launcher";
         options.Footer = "made by ASV.SOFT team";

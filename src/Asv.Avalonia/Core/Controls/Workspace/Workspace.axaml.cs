@@ -38,8 +38,9 @@ public class Workspace : ItemsControl
         set => SetValue(IsRightPaneOpenProperty, value);
     }
 
-    public static readonly FuncValueConverter<double, Thickness> SpacingToPaddingConverter =
-        new(value => new Thickness(value));
+    public static readonly FuncValueConverter<double, Thickness> SpacingToPaddingConverter = new(
+        value => new Thickness(value)
+    );
 
     public static readonly StyledProperty<double> WidgetSpacingProperty =
         WorkspacePanel.WidgetSpacingProperty.AddOwner<Workspace>();

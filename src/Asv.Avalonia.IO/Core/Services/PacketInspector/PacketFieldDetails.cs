@@ -49,10 +49,20 @@ internal static class PacketFieldDetails
                 Item(RS.PacketInspector_FieldSize, array.Size);
                 break;
             case StringType text:
-                TextDetails(text.Encoding.ToString(), text.MinSize, text.MaxSize, text.AllowedChars);
+                TextDetails(
+                    text.Encoding.ToString(),
+                    text.MinSize,
+                    text.MaxSize,
+                    text.AllowedChars
+                );
                 break;
             case StringOptionalType text:
-                TextDetails(text.Encoding.ToString(), text.MinSize, text.MaxSize, text.AllowedChars);
+                TextDetails(
+                    text.Encoding.ToString(),
+                    text.MinSize,
+                    text.MaxSize,
+                    text.AllowedChars
+                );
                 break;
         }
         AppendNumberDetails(snapshot.DataType, Item);
@@ -69,11 +79,22 @@ internal static class PacketFieldDetails
                     case "title" or "description" or "units" or "format":
                         break;
                     case "readOnly" when pair.Value is bool readOnly:
-                        Item(RS.PacketInspector_FieldReadOnly, readOnly ? RS.PacketInspector_FieldYes : RS.PacketInspector_FieldNo);
+                        Item(
+                            RS.PacketInspector_FieldReadOnly,
+                            readOnly ? RS.PacketInspector_FieldYes : RS.PacketInspector_FieldNo
+                        );
                         break;
                     case "enum" when pair.Value is IDictionary values:
-                        builder.AppendLine().Append("## ").AppendLine(RS.PacketInspector_FieldEnum).AppendLine();
-                        foreach (var key in values.Keys.Cast<object>().OrderBy(Format, StringComparer.Ordinal))
+                        builder
+                            .AppendLine()
+                            .Append("## ")
+                            .AppendLine(RS.PacketInspector_FieldEnum)
+                            .AppendLine();
+                        foreach (
+                            var key in values
+                                .Keys.Cast<object>()
+                                .OrderBy(Format, StringComparer.Ordinal)
+                        )
                         {
                             builder.Append("- ").AppendLine(Escape(FormatEnum(values[key])));
                         }
@@ -89,8 +110,12 @@ internal static class PacketFieldDetails
         }
         return builder.ToString();
 
-        void Item(string label, object? value) => builder.Append("- **").Append(Escape(label))
-            .Append(":** ").AppendLine(Escape(Format(value)));
+        void Item(string label, object? value) =>
+            builder
+                .Append("- **")
+                .Append(Escape(label))
+                .Append(":** ")
+                .AppendLine(Escape(Format(value)));
 
         void TextDetails(string encoding, uint min, uint max, string? allowed)
         {
@@ -104,35 +129,43 @@ internal static class PacketFieldDetails
         }
     }
 
-    private static string Format(object? value) => value is IFormattable formatted
-        ? formatted.ToString(null, CultureInfo.InvariantCulture) ?? string.Empty
-        : value?.ToString() ?? "∅";
+    private static string Format(object? value) =>
+        value is IFormattable formatted
+            ? formatted.ToString(null, CultureInfo.InvariantCulture) ?? string.Empty
+            : value?.ToString() ?? "∅";
 
-    private static string Escape(string value) => value.Replace("\\", "\\\\", StringComparison.Ordinal)
-        .Replace("[", "\\[", StringComparison.Ordinal).Replace("]", "\\]", StringComparison.Ordinal)
-        .Replace("*", "\\*", StringComparison.Ordinal).Replace("\r", string.Empty, StringComparison.Ordinal)
-        .Replace("\n", " ", StringComparison.Ordinal);
+    private static string Escape(string value) =>
+        value
+            .Replace("\\", "\\\\", StringComparison.Ordinal)
+            .Replace("[", "\\[", StringComparison.Ordinal)
+            .Replace("]", "\\]", StringComparison.Ordinal)
+            .Replace("*", "\\*", StringComparison.Ordinal)
+            .Replace("\r", string.Empty, StringComparison.Ordinal)
+            .Replace("\n", " ", StringComparison.Ordinal);
 
     private static string EnumDetails<T>(EnumValue<T> value) =>
-        Format(value.Value) + " — " + value.Name
+        Format(value.Value)
+        + " — "
+        + value.Name
         + (string.IsNullOrWhiteSpace(value.Description) ? string.Empty : ": " + value.Description);
 
-    private static string FormatEnum(object? value) => value switch
-    {
-        EnumValue<byte> item => EnumDetails(item),
-        EnumValue<sbyte> item => EnumDetails(item),
-        EnumValue<short> item => EnumDetails(item),
-        EnumValue<ushort> item => EnumDetails(item),
-        EnumValue<int> item => EnumDetails(item),
-        EnumValue<uint> item => EnumDetails(item),
-        EnumValue<long> item => EnumDetails(item),
-        EnumValue<ulong> item => EnumDetails(item),
-        EnumValue<float> item => EnumDetails(item),
-        EnumValue<double> item => EnumDetails(item),
-        EnumValue<bool> item => EnumDetails(item),
-        EnumValue<string> item => EnumDetails(item),
-        _ => Format(value),
-    };
+    private static string FormatEnum(object? value) =>
+        value switch
+        {
+            EnumValue<byte> item => EnumDetails(item),
+            EnumValue<sbyte> item => EnumDetails(item),
+            EnumValue<short> item => EnumDetails(item),
+            EnumValue<ushort> item => EnumDetails(item),
+            EnumValue<int> item => EnumDetails(item),
+            EnumValue<uint> item => EnumDetails(item),
+            EnumValue<long> item => EnumDetails(item),
+            EnumValue<ulong> item => EnumDetails(item),
+            EnumValue<float> item => EnumDetails(item),
+            EnumValue<double> item => EnumDetails(item),
+            EnumValue<bool> item => EnumDetails(item),
+            EnumValue<string> item => EnumDetails(item),
+            _ => Format(value),
+        };
 
     private static void AppendNumberDetails(IFieldType? type, Action<string, object?> item)
     {

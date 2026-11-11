@@ -2,7 +2,8 @@ using System.Collections.ObjectModel;
 
 namespace Asv.Avalonia.IO;
 
-public sealed class PacketFilterItem(string key, string name, Action changed) : ViewModel("packet-filter")
+public sealed class PacketFilterItem(string key, string name, Action changed)
+    : ViewModel("packet-filter")
 {
     private bool? _isChecked = true;
     public string Key { get; } = key;
@@ -16,7 +17,12 @@ public sealed class PacketFilterItem(string key, string name, Action changed) : 
         SetField(ref _name, name, nameof(Name));
         SetField(ref _description, description, nameof(Description));
     }
-    public PacketDevicePresentation? DevicePresentation { get; set => SetField(ref field, value); }
+
+    public PacketDevicePresentation? DevicePresentation
+    {
+        get;
+        set => SetField(ref field, value);
+    }
     public ObservableCollection<PacketFilterItem> Children { get; } = [];
     public bool? IsChecked
     {
@@ -52,27 +58,51 @@ public sealed class PacketFilterItem(string key, string name, Action changed) : 
     {
         if (Children.Count > 0)
         {
-            bool? value = Children.All(x => x.IsChecked == true) ? true
-                : Children.All(x => x.IsChecked == false) ? false : null;
+            bool? value =
+                Children.All(x => x.IsChecked == true) ? true
+                : Children.All(x => x.IsChecked == false) ? false
+                : null;
             SetField(ref _isChecked, value, nameof(IsChecked));
         }
     }
 }
 
-public sealed class PacketMessageRow(PacketSnapshot packet, int count, double frequency) : ViewModel("packet-message")
+public sealed class PacketMessageRow(PacketSnapshot packet, int count, double frequency)
+    : ViewModel("packet-message")
 {
     public PacketSnapshot Packet { get; private set; } = packet;
-    public bool UpdatedFlag { get; private set => SetField(ref field, value); } = true;
-    public PacketDevicePresentation? DevicePresentation { get; set => SetField(ref field, value); }
-    public int Count { get; private set => SetField(ref field, value); } = count;
+    public bool UpdatedFlag
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = true;
+    public PacketDevicePresentation? DevicePresentation
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+    public int Count
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = count;
     public double Frequency { get; private set; } = frequency;
     public string Name => Packet.Name;
     public string Protocol => Packet.Protocol;
-    public string Endpoint => string.IsNullOrWhiteSpace(Packet.EndpointName) ? Packet.Endpoint : Packet.EndpointName;
-    public string Device { get; private set => SetField(ref field, value); } = packet.Device;
+    public string Endpoint =>
+        string.IsNullOrWhiteSpace(Packet.EndpointName) ? Packet.Endpoint : Packet.EndpointName;
+    public string Device
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = packet.Device;
     public string Direction => Packet.Direction;
     public string MessageId => Packet.MessageId;
-    public string Rate { get; private set => SetField(ref field, value); } = frequency.ToString("0.0");
+    public string Rate
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = frequency.ToString("0.0");
 
     internal void Update(PacketSnapshot latest, int total, double rate)
     {

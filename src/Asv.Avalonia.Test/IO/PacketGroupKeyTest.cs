@@ -73,7 +73,10 @@ public class PacketGroupKeyTest
     public void Equality_SourceAddressDistinguishesFamiliesAndSurvivesDiscovery()
     {
         var unknown = CreateKey(null) with { SourceAddress = new DeviceAddress("example", "1") };
-        var identified = CreateKey(new ExampleDeviceId("example", 1)) with { SourceAddress = unknown.SourceAddress };
+        var identified = CreateKey(new ExampleDeviceId("example", 1)) with
+        {
+            SourceAddress = unknown.SourceAddress,
+        };
         var otherFamily = unknown with { SourceAddress = new DeviceAddress("mavlink", "1") };
         Assert.Equal(unknown, identified);
         Assert.Equal(unknown.GetHashCode(), identified.GetHashCode());

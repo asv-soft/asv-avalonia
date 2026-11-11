@@ -2,14 +2,14 @@
 using Asv.Common;
 using Asv.Modeling;
 using Avalonia;
+using Avalonia.Animation;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Presenters;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Animation;
-using Avalonia.Media.Imaging;
 using Avalonia.Media;
+using Avalonia.Media.Imaging;
 using Avalonia.Rendering;
 using Avalonia.Threading;
 using Avalonia.VisualTree;
@@ -218,17 +218,25 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
 
     private void PressedHandler(object? sender, PointerPressedEventArgs e)
     {
-        if (sender is not DockTabStripItem header || e.Handled
+        if (
+            sender is not DockTabStripItem header
+            || e.Handled
             || !e.GetCurrentPoint(this).Properties.IsLeftButtonPressed
-            || TopLevel.GetTopLevel(this) is not Window window)
+            || TopLevel.GetTopLevel(this) is not Window window
+        )
         {
             return;
         }
-        if (e.Source is Visual source && (source is Button || source.FindAncestorOfType<Button>() != null))
+        if (
+            e.Source is Visual source
+            && (source is Button || source.FindAncestorOfType<Button>() != null)
+        )
         {
             return;
         }
-        var tab = _mainTabControl.Items.OfType<DockTabItem>().FirstOrDefault(item => ReferenceEquals(item.Header, header));
+        var tab = _mainTabControl
+            .Items.OfType<DockTabItem>()
+            .FirstOrDefault(item => ReferenceEquals(item.Header, header));
         if (tab?.Content is not { } page)
         {
             return;
@@ -248,7 +256,12 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
         _dragStart = e.GetPosition(window);
         _headerOffset = e.GetPosition(header);
         _headerOpacity = header.Opacity;
-        window.AddHandler(KeyDownEvent, DragKeyDown, RoutingStrategies.Tunnel, handledEventsToo: true);
+        window.AddHandler(
+            KeyDownEvent,
+            DragKeyDown,
+            RoutingStrategies.Tunnel,
+            handledEventsToo: true
+        );
         window.Deactivated += DragOwnerDeactivated;
         window.Closed += DragOwnerClosed;
         e.Pointer.Capture(header);
@@ -257,8 +270,11 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
 
     private void PointerMovedHandler(object? sender, PointerEventArgs e)
     {
-        if (_dragTab?.Content is not { } page || _dragOwner is not { } owner
-            || !ReferenceEquals(e.Pointer, _dragPointer))
+        if (
+            _dragTab?.Content is not { } page
+            || _dragOwner is not { } owner
+            || !ReferenceEquals(e.Pointer, _dragPointer)
+        )
         {
             return;
         }
@@ -282,33 +298,50 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
             {
                 RequestedThemeVariant = owner.ActualThemeVariant,
             };
-            _dragPreview.MoveTo(owner.PointToScreen(position), owner.RenderScaling, !new Rect(owner.ClientSize).Contains(position));
+            _dragPreview.MoveTo(
+                owner.PointToScreen(position),
+                owner.RenderScaling,
+                !new Rect(owner.ClientSize).Contains(position)
+            );
             _dragPreview.Show(owner);
         }
-        _dragPreview?.MoveTo(owner.PointToScreen(position), owner.RenderScaling, !new Rect(owner.ClientSize).Contains(position));
+        _dragPreview?.MoveTo(
+            owner.PointToScreen(position),
+            owner.RenderScaling,
+            !new Rect(owner.ClientSize).Contains(position)
+        );
         e.Handled = true;
     }
 
     private void PointerReleasedHandler(object? sender, PointerReleasedEventArgs e)
     {
-        if (!ReferenceEquals(e.Pointer, _dragPointer) || e.InitialPressMouseButton != MouseButton.Left)
+        if (
+            !ReferenceEquals(e.Pointer, _dragPointer)
+            || e.InitialPressMouseButton != MouseButton.Left
+        )
         {
             return;
         }
         var tab = _dragTab;
         PixelPoint? dropPosition = null;
-        if (_dragStarted && _dragOwner is { } owner && !new Rect(owner.ClientSize).Contains(e.GetPosition(owner)))
+        if (
+            _dragStarted
+            && _dragOwner is { } owner
+            && !new Rect(owner.ClientSize).Contains(e.GetPosition(owner))
+        )
         {
             var pointer = owner.PointToScreen(e.GetPosition(owner));
             dropPosition = new PixelPoint(
                 pointer.X - (int)(_headerOffset.X * owner.RenderScaling),
-                pointer.Y - (int)(_headerOffset.Y * owner.RenderScaling));
+                pointer.Y - (int)(_headerOffset.Y * owner.RenderScaling)
+            );
             if (owner.Screens.ScreenFromPoint(pointer) is { } screen)
             {
                 var area = screen.WorkingArea;
                 dropPosition = new PixelPoint(
                     Math.Clamp(dropPosition.Value.X, area.X, Math.Max(area.X, area.Right - 160)),
-                    Math.Clamp(dropPosition.Value.Y, area.Y, Math.Max(area.Y, area.Bottom - 40)));
+                    Math.Clamp(dropPosition.Value.Y, area.Y, Math.Max(area.Y, area.Bottom - 40))
+                );
             }
         }
         ResetDrag(immediately: false);
@@ -325,7 +358,9 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
         {
             return null;
         }
-        var content = _mainTabControl.GetVisualDescendants().OfType<ContentPresenter>()
+        var content = _mainTabControl
+            .GetVisualDescendants()
+            .OfType<ContentPresenter>()
             .FirstOrDefault(presenter => presenter.Name == "PART_SelectedContentHost");
         if (content == null || content.Bounds.Width <= 0 || content.Bounds.Height <= 0)
         {
@@ -334,12 +369,20 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
         RenderTargetBitmap? bitmap = null;
         try
         {
-            bitmap = new RenderTargetBitmap(new PixelSize((int)(256 * scaling), (int)(136 * scaling)), new Vector(96 * scaling, 96 * scaling));
+            bitmap = new RenderTargetBitmap(
+                new PixelSize((int)(256 * scaling), (int)(136 * scaling)),
+                new Vector(96 * scaling, 96 * scaling)
+            );
             using var context = bitmap.CreateDrawingContext();
-            context.DrawRectangle(new VisualBrush(content) { Stretch = Stretch.Uniform }, null, new Rect(0, 0, 256, 136));
+            context.DrawRectangle(
+                new VisualBrush(content) { Stretch = Stretch.Uniform },
+                null,
+                new Rect(0, 0, 256, 136)
+            );
             return bitmap;
         }
-        catch (Exception error) when (error is NotSupportedException or InvalidOperationException or ArgumentException)
+        catch (Exception error)
+            when (error is NotSupportedException or InvalidOperationException or ArgumentException)
         {
             bitmap?.Dispose();
             return null;
@@ -355,8 +398,11 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
         }
     }
 
-    private void PointerCaptureLostHandler(object? sender, PointerCaptureLostEventArgs e) => ResetDrag(immediately: true);
+    private void PointerCaptureLostHandler(object? sender, PointerCaptureLostEventArgs e) =>
+        ResetDrag(immediately: true);
+
     private void DragOwnerDeactivated(object? sender, EventArgs e) => ResetDrag(immediately: true);
+
     private void DragOwnerClosed(object? sender, EventArgs e) => ResetDrag(immediately: true);
 
     private void ResetDrag(bool immediately)
@@ -430,7 +476,11 @@ public class DockControl : SelectingItemsControl, ICustomHitTest
             win.Opacity = 0;
             win.Transitions = new Transitions
             {
-                new DoubleTransition { Property = OpacityProperty, Duration = TimeSpan.FromMilliseconds(120) },
+                new DoubleTransition
+                {
+                    Property = OpacityProperty,
+                    Duration = TimeSpan.FromMilliseconds(120),
+                },
             };
         }
         var isShutdown = false;

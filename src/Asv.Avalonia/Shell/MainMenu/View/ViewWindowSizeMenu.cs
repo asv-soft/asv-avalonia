@@ -12,16 +12,20 @@ public class ViewWindowSizeMenu : MenuItem
     public const string MenuId = $"{ViewMenu.MenuId}-window-size-1920x1080";
 
     public ViewWindowSizeMenu()
-        : this(1920, 1080, 30)
-    {
-    }
+        : this(1920, 1080, 30) { }
 
     protected ViewWindowSizeMenu(int width, int height, int order)
-        : base($"{ViewMenu.MenuId}-window-size-{width}x{height}", $"{width}×{height}", ViewMenu.MenuId)
+        : base(
+            $"{ViewMenu.MenuId}-window-size-{width}x{height}",
+            $"{width}×{height}",
+            ViewMenu.MenuId
+        )
     {
         Icon = MaterialIconKind.Resize;
         Order = order;
-        Command = new ReactiveCommand(_ => ResizeMainWindow(width, height)).DisposeItWith(Disposable);
+        Command = new ReactiveCommand(_ => ResizeMainWindow(width, height)).DisposeItWith(
+            Disposable
+        );
     }
 
     private static void ResizeMainWindow(int width, int height)

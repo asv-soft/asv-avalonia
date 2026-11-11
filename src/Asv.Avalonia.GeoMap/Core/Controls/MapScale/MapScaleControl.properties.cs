@@ -120,8 +120,7 @@ public sealed partial class MapScaleControl
     public double ScaleDistanceMeters
     {
         get => _scaleDistanceMeters;
-        private set =>
-            SetAndRaise(ScaleDistanceMetersProperty, ref _scaleDistanceMeters, value);
+        private set => SetAndRaise(ScaleDistanceMetersProperty, ref _scaleDistanceMeters, value);
     }
 
     #endregion

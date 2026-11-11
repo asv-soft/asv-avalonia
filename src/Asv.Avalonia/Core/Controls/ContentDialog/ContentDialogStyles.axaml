@@ -75,9 +75,7 @@
                                     ClipToBounds="True"
                                     RowDefinitions="Auto,*,Auto"
                                 >
-                                    <Border
-                                        Padding="{DynamicResource ContentDialogTitlePadding}"
-                                    >
+                                    <Border Padding="{DynamicResource ContentDialogTitlePadding}">
                                         <DockPanel LastChildFill="True">
                                             <Button
                                                 Name="HeaderCloseButton"
@@ -92,7 +90,11 @@
                                                 ToolTip.Tip="{x:Static ui:RS.ShellView_WindowControlButton_Close}"
                                                 AutomationProperties.Name="{x:Static ui:RS.ShellView_WindowControlButton_Close}"
                                             >
-                                                <icons:MaterialIcon Kind="Close" Width="16" Height="16" />
+                                                <icons:MaterialIcon
+                                                    Kind="Close"
+                                                    Width="16"
+                                                    Height="16"
+                                                />
                                             </Button>
                                             <icons:MaterialIcon
                                                 DockPanel.Dock="Left"
@@ -135,9 +137,7 @@
                                         HorizontalScrollBarVisibility="Disabled"
                                         VerticalScrollBarVisibility="Auto"
                                     >
-                                        <Border
-                                            Background="{TemplateBinding Background}"
-                                        >
+                                        <Border Background="{TemplateBinding Background}">
                                             <Grid>
                                                 <Grid.Styles>
                                                     <!--Make sure text wrapping is on-->
@@ -173,7 +173,10 @@
                                         <Grid Name="CommandSpace">
                                             <Grid.Styles>
                                                 <Style Selector="Button">
-                                                    <Setter Property="Padding" Value="{DynamicResource ContentDialogButtonPadding}" />
+                                                    <Setter
+                                                        Property="Padding"
+                                                        Value="{DynamicResource ContentDialogButtonPadding}"
+                                                    />
                                                 </Style>
                                             </Grid.Styles>
                                             <!--

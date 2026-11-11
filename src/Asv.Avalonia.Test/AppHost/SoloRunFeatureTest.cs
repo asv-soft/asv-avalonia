@@ -41,7 +41,9 @@ public class SoloRunFeatureTest
         var logger = new ErrorLogger();
         using var loggerFactory = LoggerFactory.Create(builder => builder.AddProvider(logger));
         await using var argsStore = new AppArgsStore();
-        var received = new TaskCompletionSource<IAppArgs>(TaskCreationOptions.RunContinuationsAsynchronously);
+        var received = new TaskCompletionSource<IAppArgs>(
+            TaskCreationOptions.RunContinuationsAsynchronously
+        );
         using var subscription = argsStore.Args.Subscribe(args =>
         {
             if (args.Args.ContainsKey("test"))
@@ -55,7 +57,11 @@ public class SoloRunFeatureTest
 
         await SendAsync(pipeName, "{invalid-json", cancellation.Token);
         await logger.FirstError.Task.WaitAsync(cancellation.Token);
-        await SendAsync(pipeName, new AppArgs(["--test=forwarded", "card.fasx"]).SerializeToString(), cancellation.Token);
+        await SendAsync(
+            pipeName,
+            new AppArgs(["--test=forwarded", "card.fasx"]).SerializeToString(),
+            cancellation.Token
+        );
         var actual = await received.Task.WaitAsync(cancellation.Token);
         await feature.StopAsync(TestContext.Current.CancellationToken);
 
@@ -75,7 +81,12 @@ public class SoloRunFeatureTest
         var pipeName = Guid.NewGuid().ToString("N")[..12];
         using var feature = CreateFeature(pipeName, argsStore, loggerFactory);
         await feature.StartAsync(cancellation.Token);
-        await using var client = new NamedPipeClientStream(".", pipeName, PipeDirection.Out, PipeOptions.Asynchronous);
+        await using var client = new NamedPipeClientStream(
+            ".",
+            pipeName,
+            PipeDirection.Out,
+            PipeOptions.Asynchronous
+        );
         await client.ConnectAsync(cancellation.Token);
 
         await feature.StopAsync(cancellation.Token);
@@ -84,21 +95,36 @@ public class SoloRunFeatureTest
         Assert.True(feature.ExecuteTask!.IsCompletedSuccessfully);
     }
 
-    private static SoloRunFeature CreateFeature(string pipeName, IAppArgsStore argsStore, ILoggerFactory loggerFactory) =>
+    private static SoloRunFeature CreateFeature(
+        string pipeName,
+        IAppArgsStore argsStore,
+        ILoggerFactory loggerFactory
+    ) =>
         new(
-            Options.Create(new SoloRunFeatureOptions
-            {
-                Mutex = $"solo-test-{Guid.NewGuid():N}",
-                ArgForward = true,
-                Pipe = pipeName,
-            }),
+            Options.Create(
+                new SoloRunFeatureOptions
+                {
+                    Mutex = $"solo-test-{Guid.NewGuid():N}",
+                    ArgForward = true,
+                    Pipe = pipeName,
+                }
+            ),
             argsStore,
             loggerFactory
         );
 
-    private static async Task SendAsync(string pipeName, string payload, CancellationToken cancellationToken)
+    private static async Task SendAsync(
+        string pipeName,
+        string payload,
+        CancellationToken cancellationToken
+    )
     {
-        await using var client = new NamedPipeClientStream(".", pipeName, PipeDirection.Out, PipeOptions.Asynchronous);
+        await using var client = new NamedPipeClientStream(
+            ".",
+            pipeName,
+            PipeDirection.Out,
+            PipeOptions.Asynchronous
+        );
         await client.ConnectAsync(cancellationToken);
         await using var writer = new StreamWriter(client);
         await writer.WriteAsync(payload.AsMemory(), cancellationToken);
@@ -108,15 +134,26 @@ public class SoloRunFeatureTest
     private sealed class ErrorLogger : ILoggerProvider, ILogger
     {
         public ConcurrentQueue<Exception> Errors { get; } = new();
-        public TaskCompletionSource FirstError { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource FirstError { get; } =
+            new(TaskCreationOptions.RunContinuationsAsynchronously);
         public Action? OnError { get; set; }
 
         public ILogger CreateLogger(string categoryName) => this;
+
         public bool IsEnabled(LogLevel logLevel) => true;
-        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+        public IDisposable? BeginScope<TState>(TState state)
+            where TState : notnull => null;
+
         public void Dispose() { }
 
-        public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
+        public void Log<TState>(
+            LogLevel logLevel,
+            EventId eventId,
+            TState state,
+            Exception? exception,
+            Func<TState, Exception?, string> formatter
+        )
         {
             if (logLevel < LogLevel.Error || exception is null)
             {
