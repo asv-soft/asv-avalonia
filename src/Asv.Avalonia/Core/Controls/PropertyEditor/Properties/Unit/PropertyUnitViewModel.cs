@@ -1,4 +1,3 @@
-using Asv.Common;
 using Asv.Modeling;
 using R3;
 
@@ -6,10 +5,11 @@ namespace Asv.Avalonia;
 
 public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
 {
+    private const string EditFormat = "R";
     private readonly string? _format;
     private readonly IUndoChangeSink<ValueUndoChange<string>> _undoUnitSink;
-    private double _lastValue;
     private readonly IUndoChangeSink<ValueUndoChange<double>>? _undoValueSink;
+    private double _lastValue;
     private bool _changeUnitFromViewModel;
 
     protected PropertyUnitViewModel(
@@ -24,17 +24,19 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
         _format = format;
         Unit = unit;
         ChangeUnitCommand = new ReactiveCommand<IUnitItem>(ChangeUnit).AddTo(ref DisposableBag);
-        _undoUnitSink = Undo.Register<ValueUndoChange<string>>(nameof(Unit), UndoUnit, RedoUnit)
-            .AddTo(ref DisposableBag);
         Text.EnableValidation(ValidateText).AddTo(ref DisposableBag);
         Text.ForceValidate();
+        Text.Subscribe(UpdateDisplayText).AddTo(ref DisposableBag);
+
+        _undoUnitSink = Undo.RegisterValue<string>("Unit", ChangeUnit, ChangeUnit)
+            .AddTo(ref DisposableBag);
 
         if (enableValueUndo)
         {
-            _undoValueSink = Undo.Register<ValueUndoChange<double>>(
+            _undoValueSink = Undo.RegisterValue<double>(
                     "Value",
-                    OnUndoValue,
-                    OnRedoValue
+                    ApplyHistoryValue,
+                    ApplyHistoryValue
                 )
                 .AddTo(ref DisposableBag);
         }
@@ -44,16 +46,37 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
             .AddTo(ref DisposableBag);
     }
 
-    private ValueTask OnRedoValue(ValueUndoChange<double> change, CancellationToken cancel)
+    public IUnit Unit { get; }
+
+    public string? DisplayText
     {
-        Text.Value = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(change.NewValue, _format);
-        return ApplyFromUser();
+        get;
+        private set => SetField(ref field, value);
     }
 
-    private ValueTask OnUndoValue(ValueUndoChange<double> change, CancellationToken cancel)
+    public ReactiveCommand<IUnitItem> ChangeUnitCommand { get; }
+
+    protected void ApplyValueFromModel(double siValue)
     {
-        Text.Value = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(change.OldValue, _format);
-        return ApplyFromUser();
+        _lastValue = siValue;
+        ApplyValueFromModel(Unit.CurrentUnitItem.CurrentValue.PrintFromSi(siValue, EditFormat));
+    }
+
+    protected override async ValueTask ApplyFromUserCore(CancellationToken cancel)
+    {
+        var oldValue = _lastValue;
+        var newValue = Unit.CurrentUnitItem.CurrentValue.ParseToSi(Text.Value);
+
+        await ApplyFromUser(newValue, cancel);
+
+        _undoValueSink?.PublishUpdate(oldValue, newValue);
+    }
+
+    protected abstract ValueTask ApplyFromUser(double siValue, CancellationToken cancel);
+
+    protected virtual Exception? ValidateSiValue(double siValue)
+    {
+        return null;
     }
 
     private Exception? ValidateText(string? userValue)
@@ -62,36 +85,18 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
 
         if (result.IsSuccess)
         {
-            var resultSi = ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue));
-            return resultSi;
+            return ValidateSiValue(Unit.CurrentUnitItem.CurrentValue.ParseToSi(userValue));
+            ;
         }
+
         return result.ValidationException?.GetExceptionWithLocalizationOrSelf();
     }
 
-    protected virtual Exception? ValidateSiValue(double siValue)
+    private void UpdateDisplayText(string? text)
     {
-        return null;
+        var unit = Unit.CurrentUnitItem.CurrentValue;
+        DisplayText = Text.HasErrors ? text : unit.Print(unit.Parse(text), _format);
     }
-
-    private ValueTask RedoUnit(ValueUndoChange<string> change, CancellationToken cancel)
-    {
-        ChangeUnit(change.NewValue);
-        return ValueTask.CompletedTask;
-    }
-
-    private ValueTask UndoUnit(ValueUndoChange<string> change, CancellationToken cancel)
-    {
-        ChangeUnit(change.OldValue);
-        return ValueTask.CompletedTask;
-    }
-
-    protected void ApplyValueFromModel(double siValue)
-    {
-        _lastValue = siValue;
-        ApplyValueFromModel(Unit.CurrentUnitItem.CurrentValue.PrintFromSi(siValue, _format));
-    }
-
-    public ReactiveCommand<IUnitItem> ChangeUnitCommand { get; }
 
     private void ChangeUnit(IUnitItem obj)
     {
@@ -154,19 +159,15 @@ public abstract class PropertyUnitViewModel : PropertyTextBoxViewModel
             return;
         }
 
-        var textValue = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(siValue, _format);
-        var lastTextValue = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(_lastValue, _format);
+        var textValue = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(siValue, EditFormat);
+        var lastTextValue = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(_lastValue, EditFormat);
         ApplyTextFromModel(textValue, lastTextValue, isSync, false);
+        UpdateDisplayText(Text.Value);
     }
 
-    protected override ValueTask ApplyFromUserCore(CancellationToken cancel)
+    private ValueTask ApplyHistoryValue(double siValue, CancellationToken cancel)
     {
-        var value = Unit.CurrentUnitItem.CurrentValue.ParseToSi(Text.Value);
-        _undoValueSink?.PublishUpdate(_lastValue, value);
-        return ApplyFromUser(value, cancel);
+        Text.Value = Unit.CurrentUnitItem.CurrentValue.PrintFromSi(siValue, EditFormat);
+        return ApplyFromUser(cancel);
     }
-
-    protected abstract ValueTask ApplyFromUser(double siValue, CancellationToken cancel);
-
-    public IUnit Unit { get; }
 }

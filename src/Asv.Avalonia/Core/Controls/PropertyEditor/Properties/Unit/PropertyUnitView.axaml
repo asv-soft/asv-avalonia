@@ -41,6 +41,12 @@
     </UserControl.Resources>
 
     <UserControl.Styles>
+        <Style Selector="TextBox#PART_TextBox">
+            <Setter Property="Opacity" Value="0" />
+        </Style>
+        <Style Selector="TextBox#PART_TextBox.editing">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
         <Style Selector="TextBox#PART_TextBox /template/ Border#PART_BorderElement">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="BorderBrush" Value="Transparent" />
@@ -177,6 +183,7 @@
 
             <TextBox
                 x:Name="PART_TextBox"
+                Classes.editing="{Binding IsInEditMode}"
                 GotFocus="PART_TextBox_OnGotFocus"
                 LostFocus="PART_TextBox_OnLostFocus"
                 avalonia:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
@@ -195,6 +202,16 @@
                     <KeyBinding Gesture="Escape" Command="{Binding CancelCommand}" />
                 </TextBox.KeyBindings>
             </TextBox>
+
+            <TextBlock
+                x:Name="PART_DisplayText"
+                Grid.Column="2"
+                Margin="4,0"
+                VerticalAlignment="Center"
+                IsHitTestVisible="False"
+                IsVisible="{Binding !IsInEditMode}"
+                Text="{Binding DisplayText}"
+            />
 
             <avalonia:PropertyStatusView Grid.Column="3" VerticalAlignment="Center" />
 
