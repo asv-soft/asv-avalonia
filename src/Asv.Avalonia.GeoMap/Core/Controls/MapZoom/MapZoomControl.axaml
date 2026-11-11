@@ -12,11 +12,7 @@
     x:Name="PART_Root"
 >
     <UserControl.Resources>
-        <LinearGradientBrush
-            x:Key="MapZoomSurfaceBrush"
-            StartPoint="50%,0%"
-            EndPoint="50%,100%"
-        >
+        <LinearGradientBrush x:Key="MapZoomSurfaceBrush" StartPoint="50%,0%" EndPoint="50%,100%">
             <GradientStop Offset="0" Color="#E02D3943" />
             <GradientStop Offset="1" Color="#E029343D" />
         </LinearGradientBrush>
@@ -85,10 +81,7 @@
         <Border Padding="20" Background="#435A69">
             <Border Classes="map-zoom-surface">
                 <Grid RowDefinitions="38,20,38">
-                    <Button
-                        CornerRadius="999,999,0,0"
-                        Theme="{StaticResource MapZoomButtonTheme}"
-                    >
+                    <Button CornerRadius="999,999,0,0" Theme="{StaticResource MapZoomButtonTheme}">
                         <TextBlock Classes="map-zoom-glyph" Text="+" />
                     </Button>
                     <Button
@@ -138,11 +131,7 @@
                 <TextBlock Classes="map-zoom-glyph" Text="−" />
             </Button>
 
-            <Border
-                Grid.Row="1"
-                Classes="map-zoom-level"
-                IsHitTestVisible="False"
-            >
+            <Border Grid.Row="1" Classes="map-zoom-level" IsHitTestVisible="False">
                 <TextBlock
                     x:Name="PART_ZoomText"
                     HorizontalAlignment="Center"

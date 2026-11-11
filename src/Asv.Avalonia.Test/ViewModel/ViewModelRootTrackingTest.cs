@@ -16,7 +16,9 @@ public class ViewModelRootTrackingTest : IDisposable
     private readonly Action<Exception> _previous = ObservableSystem.GetUnhandledExceptionHandler();
     private readonly ConcurrentQueue<Exception> _errors = new();
 
-    public ViewModelRootTrackingTest() => ObservableSystem.RegisterUnhandledExceptionHandler(_errors.Enqueue);
+    public ViewModelRootTrackingTest() =>
+        ObservableSystem.RegisterUnhandledExceptionHandler(_errors.Enqueue);
+
     public void Dispose() => ObservableSystem.RegisterUnhandledExceptionHandler(_previous);
 
     [Fact]
@@ -28,7 +30,9 @@ public class ViewModelRootTrackingTest : IDisposable
         parent.SetParent(root.Shell);
         child.SetParent(parent);
         using var subscription = child.RootTracking.Root.Subscribe(
-            _ => { }, onCompleted: _ => parent.SetParent(null));
+            _ => { },
+            onCompleted: _ => parent.SetParent(null)
+        );
 
         child.Dispose();
 
@@ -41,27 +45,37 @@ public class ViewModelRootTrackingTest : IDisposable
     [InlineData(0)]
     [InlineData(1)]
     [InlineData(2)]
-    public void ExecuteWhenAttached_CallbackDisposesOwner_DoesNotSubscribeToDisposedSubject(int kind)
+    public void ExecuteWhenAttached_CallbackDisposesOwner_DoesNotSubscribeToDisposedSubject(
+        int kind
+    )
     {
         using var root = new RootFixture();
         using var child = new Node("child");
         child.SetParent(root.Shell);
         var calls = 0;
-        void DisposeOwner(IShell shell) { calls++; child.Dispose(); }
+        void DisposeOwner(IShell shell)
+        {
+            calls++;
+            child.Dispose();
+        }
 
         using var subscription = kind switch
         {
             0 => child.RootTracking.ExecuteWhenRootAttached((Action<IShell>)DisposeOwner),
-            1 => child.RootTracking.ExecuteWhenRootAttached((IShell shell) =>
-            {
-                DisposeOwner(shell);
-                return ValueTask.CompletedTask;
-            }),
-            _ => child.RootTracking.ExecuteWhenRootAttached((IShell shell, CancellationToken token) =>
-            {
-                DisposeOwner(shell);
-                return ValueTask.CompletedTask;
-            }),
+            1 => child.RootTracking.ExecuteWhenRootAttached(
+                (IShell shell) =>
+                {
+                    DisposeOwner(shell);
+                    return ValueTask.CompletedTask;
+                }
+            ),
+            _ => child.RootTracking.ExecuteWhenRootAttached(
+                (IShell shell, CancellationToken token) =>
+                {
+                    DisposeOwner(shell);
+                    return ValueTask.CompletedTask;
+                }
+            ),
         };
 
         Assert.Equal(1, calls);
@@ -77,7 +91,9 @@ public class ViewModelRootTrackingTest : IDisposable
         child.Dispose();
         var calls = 0;
 
-        using var subscription = child.RootTracking.ExecuteWhenRootAttached((Action<IShell>)(_ => calls++));
+        using var subscription = child.RootTracking.ExecuteWhenRootAttached(
+            (Action<IShell>)(_ => calls++)
+        );
 
         Assert.Equal(0, calls);
         Assert.Empty(_errors);
@@ -118,7 +134,8 @@ public class ViewModelRootTrackingTest : IDisposable
         using var attachSubscription = child.RootTracking.Attached.Subscribe(_ => attached++);
         using var rootSubscription = child.RootTracking.Root.Subscribe(value =>
         {
-            if (value != null) child.Dispose();
+            if (value != null)
+                child.Dispose();
         });
 
         child.SetParent(root.Shell);
@@ -133,11 +150,13 @@ public class ViewModelRootTrackingTest : IDisposable
     public class ShellProxy : DispatchProxy
     {
         public IRootTrackingController<IShell> Tracking { get; set; } = null!;
-        protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) => targetMethod!.Name switch
-        {
-            "get_RootTracking" => Tracking,
-            _ => throw new NotSupportedException(targetMethod.Name),
-        };
+
+        protected override object? Invoke(MethodInfo? targetMethod, object?[]? args) =>
+            targetMethod!.Name switch
+            {
+                "get_RootTracking" => Tracking,
+                _ => throw new NotSupportedException(targetMethod.Name),
+            };
     }
 
     private sealed class RootFixture : IRootTrackingController<IShell>, IDisposable
@@ -145,12 +164,14 @@ public class ViewModelRootTrackingTest : IDisposable
         private readonly ReactiveProperty<IShell?> _root;
         public IShell Shell { get; }
         public ReadOnlyReactiveProperty<IShell?> Root => _root;
+
         public RootFixture()
         {
             Shell = DispatchProxy.Create<IShell, ShellProxy>();
             _root = new ReactiveProperty<IShell?>(Shell);
             ((ShellProxy)(object)Shell).Tracking = this;
         }
+
         public void Dispose() => _root.Dispose();
     }
 }

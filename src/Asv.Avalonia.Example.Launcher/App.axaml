@@ -5,7 +5,10 @@
 >
     <Application.Styles>
         <Style Selector=":is(Window)">
-            <Setter Property="Icon" Value="avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png" />
+            <Setter
+                Property="Icon"
+                Value="avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png"
+            />
         </Style>
         <FluentTheme />
         <StyleInclude Source="avares://Asv.Avalonia.Example.Launcher/Styles/ExampleLauncherStyles.axaml" />

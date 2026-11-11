@@ -17,13 +17,33 @@ public sealed class FileInspectorPageViewModel : PacketInspectorPageViewModel
         IExtensionService extensions,
         PacketFileReader reader,
         IDeviceManager deviceManager,
-        IThemeService themeService)
-        : base(context, loggerFactory, dialogService, extensions, null, TimeProvider.System, deviceManager, themeService, PageId, reader)
+        IThemeService themeService
+    )
+        : base(
+            context,
+            loggerFactory,
+            dialogService,
+            extensions,
+            null,
+            TimeProvider.System,
+            deviceManager,
+            themeService,
+            PageId,
+            reader
+        )
     {
         IconColor = PageIconColor;
-        ExportWidget = new PacketInspectorWidget("packet-file-export", FileExportStrings.Title, WorkspaceDock.Left,
-            MaterialIconKind.Export, this).DisposeItWith(Disposable);
-        Export = new PacketFileExportViewModel(new PacketFileExporter(deviceManager.ProtocolFactory), dialogService).DisposeItWith(Disposable);
+        ExportWidget = new PacketInspectorWidget(
+            "packet-file-export",
+            FileExportStrings.Title,
+            WorkspaceDock.Left,
+            MaterialIconKind.Export,
+            this
+        ).DisposeItWith(Disposable);
+        Export = new PacketFileExportViewModel(
+            new PacketFileExporter(deviceManager.ProtocolFactory),
+            dialogService
+        ).DisposeItWith(Disposable);
         Export.SetParent(this);
         PropertyChanged += (_, args) =>
         {
@@ -37,5 +57,6 @@ public sealed class FileInspectorPageViewModel : PacketInspectorPageViewModel
     public PacketInspectorWidget ExportWidget { get; }
     public PacketFileExportViewModel Export { get; }
 
-    public override IEnumerable<IViewModel> GetChildren() => base.GetChildren().Concat([ExportWidget, Export]);
+    public override IEnumerable<IViewModel> GetChildren() =>
+        base.GetChildren().Concat([ExportWidget, Export]);
 }

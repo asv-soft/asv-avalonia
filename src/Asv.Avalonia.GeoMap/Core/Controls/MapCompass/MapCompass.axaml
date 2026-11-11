@@ -218,7 +218,6 @@
                                     CornerRadius="1"
                                 />
                             </Grid>
-
                         </Grid>
 
                         <TextBlock

@@ -7,12 +7,10 @@ namespace Asv.Avalonia;
 
 public partial class WorkspacePanel
 {
-    public static readonly StyledProperty<bool> IsLeftPaneOpenProperty =
-        AvaloniaProperty.Register<WorkspacePanel, bool>(
-            nameof(IsLeftPaneOpen),
-            defaultValue: true,
-            defaultBindingMode: BindingMode.TwoWay
-        );
+    public static readonly StyledProperty<bool> IsLeftPaneOpenProperty = AvaloniaProperty.Register<
+        WorkspacePanel,
+        bool
+    >(nameof(IsLeftPaneOpen), defaultValue: true, defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Gets or sets whether the left group of widgets is open.
@@ -23,12 +21,10 @@ public partial class WorkspacePanel
         set => SetValue(IsLeftPaneOpenProperty, value);
     }
 
-    public static readonly StyledProperty<bool> IsRightPaneOpenProperty =
-        AvaloniaProperty.Register<WorkspacePanel, bool>(
-            nameof(IsRightPaneOpen),
-            defaultValue: true,
-            defaultBindingMode: BindingMode.TwoWay
-        );
+    public static readonly StyledProperty<bool> IsRightPaneOpenProperty = AvaloniaProperty.Register<
+        WorkspacePanel,
+        bool
+    >(nameof(IsRightPaneOpen), defaultValue: true, defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Gets or sets whether the right group of widgets is open.
@@ -187,13 +183,15 @@ public partial class WorkspacePanel
         set => SetValue(MinCentralWidthProperty, value);
     }
 
-    public static readonly StyledProperty<double> WidgetSpacingProperty =
-        AvaloniaProperty.Register<WorkspacePanel, double>(
-            nameof(WidgetSpacing),
-            defaultValue: 4,
-            inherits: true,
-            validate: value => double.IsFinite(value) && value >= 0
-        );
+    public static readonly StyledProperty<double> WidgetSpacingProperty = AvaloniaProperty.Register<
+        WorkspacePanel,
+        double
+    >(
+        nameof(WidgetSpacing),
+        defaultValue: 4,
+        inherits: true,
+        validate: value => double.IsFinite(value) && value >= 0
+    );
 
     /// <summary>
     /// Gets or sets the spacing between widgets and the size of the resize areas.

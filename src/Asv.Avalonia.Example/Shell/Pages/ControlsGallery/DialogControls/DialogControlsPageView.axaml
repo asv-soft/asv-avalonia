@@ -455,7 +455,10 @@
                 />
                 <example:PreviewExampleBlock Grid.Row="9" Grid.Column="2">
                     <example:PreviewExampleBlock.PreviewContent>
-                        <TextBlock Text="{Binding MarkdownDetailsResult.Value}" TextWrapping="Wrap" />
+                        <TextBlock
+                            Text="{Binding MarkdownDetailsResult.Value}"
+                            TextWrapping="Wrap"
+                        />
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
                 <example:AboutExampleBlock
@@ -471,14 +474,13 @@
                 />
                 <example:PreviewExampleBlock Grid.Row="10" Grid.Column="2">
                     <example:PreviewExampleBlock.PreviewContent>
-                        <TextBlock Text="{Binding UnsavedChangesResult.Value}" TextWrapping="Wrap" />
+                        <TextBlock
+                            Text="{Binding UnsavedChangesResult.Value}"
+                            TextWrapping="Wrap"
+                        />
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
-                <example:AboutExampleBlock
-                    Grid.Row="11"
-                    Grid.Column="0"
-                    Title="EditApiKeyDialog"
-                />
+                <example:AboutExampleBlock Grid.Row="11" Grid.Column="0" Title="EditApiKeyDialog" />
                 <example:ActionExampleBlock
                     Grid.Row="11"
                     Grid.Column="1"

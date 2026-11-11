@@ -2,7 +2,9 @@ namespace Asv.Avalonia.IO;
 
 public static class FileExportStrings
 {
-    private static string Get(string name) => RS.ResourceManager.GetString($"FileExport_{name}", RS.Culture) ?? name;
+    private static string Get(string name) =>
+        RS.ResourceManager.GetString($"FileExport_{name}", RS.Culture) ?? name;
+
     public static string Title => Get(nameof(Title));
     public static string Export => Get(nameof(Export));
     public static string Save => Get(nameof(Save));

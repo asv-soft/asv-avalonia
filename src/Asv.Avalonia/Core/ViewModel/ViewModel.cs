@@ -371,7 +371,8 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
         {
             action(root).AsTask().SafeFireAndForget();
         }
-        return _isDisposed ? Disposable.Empty
+        return _isDisposed
+            ? Disposable.Empty
             : _attached.SubscribeAwait((root, _) => action(root), AwaitOperation.Drop);
     }
 
@@ -387,7 +388,9 @@ internal sealed class ViewModelRootTrackingController : IRootTrackingController<
         {
             action(root, CancellationToken.None).AsTask().SafeFireAndForget();
         }
-        return _isDisposed ? Disposable.Empty : _attached.SubscribeAwait(action, AwaitOperation.Drop);
+        return _isDisposed
+            ? Disposable.Empty
+            : _attached.SubscribeAwait(action, AwaitOperation.Drop);
     }
 
     public void Dispose()

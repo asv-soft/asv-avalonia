@@ -61,7 +61,8 @@ public interface IShell : IHasHeader, INavigationRoot<IViewModel>, ISupportLayou
     /// Built-in shells support this collection. Custom implementations must override the default getter to support it.
     /// </remarks>
     /// <exception cref="NotSupportedException">The shell does not support header items; the default getter always throws.</exception>
-    ObservableList<IViewModel> HeaderItems => throw new NotSupportedException("This shell does not support header items.");
+    ObservableList<IViewModel> HeaderItems =>
+        throw new NotSupportedException("This shell does not support header items.");
 
     /// <summary>
     /// Gets the live collection of pages currently open in the shell.

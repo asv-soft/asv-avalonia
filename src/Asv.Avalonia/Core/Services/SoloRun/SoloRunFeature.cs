@@ -207,7 +207,8 @@ public class SoloRunFeature : BackgroundService
                 _logger.LogError(ex, "Named pipe server error.");
                 try
                 {
-                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken)
+                        .ConfigureAwait(false);
                 }
                 catch (OperationCanceledException)
                 {

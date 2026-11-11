@@ -25,8 +25,8 @@ public sealed class MapInputGestureProperty : PropertyComboBoxViewModel
             ItemsSource.Add(new PresetItem(preset).DisposeItWith(Disposable));
         }
 
-        service.Bindings
-            .ObserveOnUIThreadDispatcher()
+        service
+            .Bindings.ObserveOnUIThreadDispatcher()
             .Subscribe(bindings => ApplyBindings(bindings))
             .DisposeItWith(Disposable);
         ApplyBindings(service.Bindings.CurrentValue);
@@ -45,10 +45,7 @@ public sealed class MapInputGestureProperty : PropertyComboBoxViewModel
         if (!_service.TryAssign(Action, preset.Preset, out var conflict))
         {
             var message = conflict is { } action
-                ? string.Format(
-                    MapInputStrings.Get("Conflict"),
-                    MapInputStrings.ActionName(action)
-                )
+                ? string.Format(MapInputStrings.Get("Conflict"), MapInputStrings.ActionName(action))
                 : MapInputStrings.Get("Unavailable");
             throw new InvalidOperationException(message);
         }

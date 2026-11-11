@@ -9,7 +9,8 @@ namespace Asv.Avalonia.Test.IO;
 
 public class PacketRecordingSessionTest
 {
-    private static IProtocolFactory CreateFactory() => Protocol.Create(builder => builder.Protocols.RegisterExampleProtocol());
+    private static IProtocolFactory CreateFactory() =>
+        Protocol.Create(builder => builder.Protocols.RegisterExampleProtocol());
 
     private static void Record(PacketRecordingSession recording, IProtocolMessage message) =>
         recording.Record("port", "endpoint", PacketDirection.Rx, DateTimeOffset.UnixEpoch, message);
@@ -18,7 +19,11 @@ public class PacketRecordingSessionTest
     public async Task Binary_PreservesWireBytesOrderAndMessageValuesBeforeMutation()
     {
         var stream = new MemoryStream();
-        await using var recording = new PacketRecordingSession(CreateFactory(), PacketRecordingFormat.Binary, stream);
+        await using var recording = new PacketRecordingSession(
+            CreateFactory(),
+            PacketRecordingFormat.Binary,
+            stream
+        );
         var message = new ExampleMessage1 { Value1 = 1, Value3 = "first" };
         var expected = message.Serialize();
         Record(recording, message);
@@ -39,11 +44,21 @@ public class PacketRecordingSessionTest
     public async Task JsonLines_ContainsOneCompleteMessagePerLineAndEscapesNewlines()
     {
         var stream = new MemoryStream();
-        await using var recording = new PacketRecordingSession(CreateFactory(), PacketRecordingFormat.JsonLines, stream);
+        await using var recording = new PacketRecordingSession(
+            CreateFactory(),
+            PacketRecordingFormat.JsonLines,
+            stream
+        );
         var message = new ExampleMessage1 { Value3 = "Привет\nworld\r\n\"quoted\"" };
         Record(recording, message);
         message.Value3 = "changed";
-        recording.Record("second-port", "second-endpoint", PacketDirection.Tx, DateTimeOffset.UnixEpoch, message);
+        recording.Record(
+            "second-port",
+            "second-endpoint",
+            PacketDirection.Tx,
+            DateTimeOffset.UnixEpoch,
+            message
+        );
         await recording.StopAsync();
         var data = stream.ToArray();
         Assert.False(data.AsSpan().StartsWith(Encoding.UTF8.GetPreamble()));
@@ -71,21 +86,32 @@ public class PacketRecordingSessionTest
         var factory = Protocol.Create(builder =>
         {
             builder.Protocols.RegisterExampleProtocol();
-            builder.Protocols.RegisterEncoder(ExampleProtocol.Info, _ =>
-            {
-                created++;
-                return new SequenceEncoder();
-            });
+            builder.Protocols.RegisterEncoder(
+                ExampleProtocol.Info,
+                _ =>
+                {
+                    created++;
+                    return new SequenceEncoder();
+                }
+            );
         });
         var stream = new MemoryStream();
-        await using (var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, stream))
+        await using (
+            var recording = new PacketRecordingSession(
+                factory,
+                PacketRecordingFormat.Binary,
+                stream
+            )
+        )
         {
             Record(recording, new ExampleMessage1());
             Record(recording, new ExampleMessage2());
         }
         Assert.Equal(new byte[] { 1, 2 }, stream.ToArray());
         var next = new MemoryStream();
-        await using (var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, next))
+        await using (
+            var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, next)
+        )
         {
             Record(recording, new ExampleMessage1());
         }
@@ -97,7 +123,11 @@ public class PacketRecordingSessionTest
     public async Task DiskFailure_StopsRecordingAndExposesErrorWithoutThrowingIntoCapture()
     {
         var stream = new FailingStream();
-        await using var recording = new PacketRecordingSession(CreateFactory(), PacketRecordingFormat.Binary, stream);
+        await using var recording = new PacketRecordingSession(
+            CreateFactory(),
+            PacketRecordingFormat.Binary,
+            stream
+        );
         Record(recording, new ExampleMessage1());
         await recording.StopAsync();
         Assert.IsType<IOException>(recording.Error);
@@ -110,9 +140,16 @@ public class PacketRecordingSessionTest
     public async Task SlowDisk_BoundedQueueStopsInsteadOfSilentlyDroppingMessages()
     {
         var stream = new BlockedStream();
-        await using var recording = new PacketRecordingSession(CreateFactory(), PacketRecordingFormat.Binary, stream);
+        await using var recording = new PacketRecordingSession(
+            CreateFactory(),
+            PacketRecordingFormat.Binary,
+            stream
+        );
         Record(recording, new ExampleMessage1());
-        await stream.Started.Task.WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+        await stream.Started.Task.WaitAsync(
+            TimeSpan.FromSeconds(10),
+            TestContext.Current.CancellationToken
+        );
         try
         {
             for (var i = 0; i < 4097; i++)
@@ -122,7 +159,10 @@ public class PacketRecordingSessionTest
             Assert.IsType<IOException>(recording.Error);
             Assert.False(recording.IsRecording);
         }
-        finally { stream.Release.TrySetResult(); }
+        finally
+        {
+            stream.Release.TrySetResult();
+        }
         await recording.StopAsync();
         Assert.Equal(4097, recording.MessagesWritten);
     }
@@ -131,12 +171,21 @@ public class PacketRecordingSessionTest
     public async Task ConcurrentMessages_ProduceCompleteJsonLinesWithoutInterleaving()
     {
         var stream = new MemoryStream();
-        await using var recording = new PacketRecordingSession(CreateFactory(), PacketRecordingFormat.JsonLines, stream);
+        await using var recording = new PacketRecordingSession(
+            CreateFactory(),
+            PacketRecordingFormat.JsonLines,
+            stream
+        );
         Parallel.For(0, 100, value => Record(recording, new ExampleMessage1 { Value1 = value }));
         await recording.StopAsync();
-        var lines = Encoding.UTF8.GetString(stream.ToArray()).Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        var lines = Encoding
+            .UTF8.GetString(stream.ToArray())
+            .Split('\n', StringSplitOptions.RemoveEmptyEntries);
         Assert.Equal(100, lines.Length);
-        Assert.Equal(Enumerable.Range(0, 100), lines.Select(line => (int)JObject.Parse(line)["message"]!["Value1"]!).Order());
+        Assert.Equal(
+            Enumerable.Range(0, 100),
+            lines.Select(line => (int)JObject.Parse(line)["message"]!["Value1"]!).Order()
+        );
         Assert.Null(recording.Error);
     }
 
@@ -149,7 +198,11 @@ public class PacketRecordingSessionTest
             builder.Protocols.RegisterEncoder(ExampleProtocol.Info, _ => new FailingEncoder());
         });
         var stream = new MemoryStream();
-        await using var recording = new PacketRecordingSession(factory, PacketRecordingFormat.Binary, stream);
+        await using var recording = new PacketRecordingSession(
+            factory,
+            PacketRecordingFormat.Binary,
+            stream
+        );
         Record(recording, new ExampleMessage1());
         await recording.StopAsync();
         Assert.IsType<InvalidDataException>(recording.Error);
@@ -161,13 +214,17 @@ public class PacketRecordingSessionTest
     private sealed class FailingEncoder : IProtocolEncoder
     {
         public int GetMaxByteSize(IProtocolMessage message) => 1;
-        public int Encode(IProtocolMessage message, Span<byte> destination) => throw new InvalidDataException("cannot encode");
+
+        public int Encode(IProtocolMessage message, Span<byte> destination) =>
+            throw new InvalidDataException("cannot encode");
     }
 
     private sealed class SequenceEncoder : IProtocolEncoder
     {
         private byte _sequence;
+
         public int GetMaxByteSize(IProtocolMessage message) => 4;
+
         public int Encode(IProtocolMessage message, Span<byte> destination)
         {
             destination[0] = ++_sequence;
@@ -178,16 +235,30 @@ public class PacketRecordingSessionTest
     private sealed class FailingStream : MemoryStream
     {
         public bool Closed { get; private set; }
-        public override ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default) =>
-            ValueTask.FromException(new IOException("disk full"));
-        protected override void Dispose(bool disposing) { Closed = true; base.Dispose(disposing); }
+
+        public override ValueTask WriteAsync(
+            ReadOnlyMemory<byte> buffer,
+            CancellationToken cancellationToken = default
+        ) => ValueTask.FromException(new IOException("disk full"));
+
+        protected override void Dispose(bool disposing)
+        {
+            Closed = true;
+            base.Dispose(disposing);
+        }
     }
 
     private sealed class BlockedStream : MemoryStream
     {
-        public TaskCompletionSource Started { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public TaskCompletionSource Release { get; } = new(TaskCreationOptions.RunContinuationsAsynchronously);
-        public override async ValueTask WriteAsync(ReadOnlyMemory<byte> buffer, CancellationToken cancellationToken = default)
+        public TaskCompletionSource Started { get; } =
+            new(TaskCreationOptions.RunContinuationsAsynchronously);
+        public TaskCompletionSource Release { get; } =
+            new(TaskCreationOptions.RunContinuationsAsynchronously);
+
+        public override async ValueTask WriteAsync(
+            ReadOnlyMemory<byte> buffer,
+            CancellationToken cancellationToken = default
+        )
         {
             Started.TrySetResult();
             await Release.Task.ConfigureAwait(false);

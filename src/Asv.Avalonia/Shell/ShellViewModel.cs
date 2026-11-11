@@ -140,32 +140,40 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         HeaderItems = [];
         HeaderItemsView = HeaderItems.ToNotifyCollectionChangedSlim().DisposeItWith(Disposable);
         var ownedHeaderItems = new HashSet<IViewModel>(ReferenceEqualityComparer.Instance);
-        HeaderItems.ObserveChanged().Subscribe(_ =>
-        {
-            foreach (var removed in ownedHeaderItems.Except<IViewModel>(HeaderItems, ReferenceEqualityComparer.Instance).ToArray())
+        HeaderItems
+            .ObserveChanged()
+            .Subscribe(_ =>
             {
-                ownedHeaderItems.Remove(removed);
-                removed.SetParent(null);
-                removed.Dispose();
-            }
-            foreach (var item in HeaderItems)
-            {
-                if (ownedHeaderItems.Add(item))
+                foreach (
+                    var removed in ownedHeaderItems
+                        .Except<IViewModel>(HeaderItems, ReferenceEqualityComparer.Instance)
+                        .ToArray()
+                )
                 {
-                    item.SetParent(this);
+                    ownedHeaderItems.Remove(removed);
+                    removed.SetParent(null);
+                    removed.Dispose();
                 }
-            }
-        }).DisposeItWith(Disposable);
+                foreach (var item in HeaderItems)
+                {
+                    if (ownedHeaderItems.Add(item))
+                    {
+                        item.SetParent(this);
+                    }
+                }
+            })
+            .DisposeItWith(Disposable);
         R3.Disposable.Create(() =>
-        {
-            foreach (var item in ownedHeaderItems.ToArray())
             {
-                item.SetParent(null);
-                item.Dispose();
-            }
-            ownedHeaderItems.Clear();
-            HeaderItems.Clear();
-        }).AddTo(ref DisposableBag);
+                foreach (var item in ownedHeaderItems.ToArray())
+                {
+                    item.SetParent(null);
+                    item.Dispose();
+                }
+                ownedHeaderItems.Clear();
+                HeaderItems.Clear();
+            })
+            .AddTo(ref DisposableBag);
 
         Messages = new ShellMessageCollection().AddTo(ref DisposableBag);
         Messages.SetParent(this);
@@ -269,7 +277,8 @@ public class ShellViewModel : ViewModel<IShell>, IShell
         return await base.Navigate(id, cancel);
     }
 
-    public override IEnumerable<IViewModel> GetChildren() => _pages.Cast<IViewModel>().Concat(HeaderItems);
+    public override IEnumerable<IViewModel> GetChildren() =>
+        _pages.Cast<IViewModel>().Concat(HeaderItems);
 
     public void ShowMessage(ShellMessage message)
     {

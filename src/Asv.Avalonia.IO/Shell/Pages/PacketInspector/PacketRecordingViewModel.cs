@@ -15,7 +15,11 @@ public sealed class PacketRecordingViewModel : ViewModel
     private PacketRecordingSession? _session;
     private bool _busy;
 
-    public PacketRecordingViewModel(PacketCaptureService? capture, IProtocolFactory factory, IDialogService dialogs)
+    public PacketRecordingViewModel(
+        PacketCaptureService? capture,
+        IProtocolFactory factory,
+        IDialogService dialogs
+    )
         : base("packet-recording")
     {
         _capture = capture;
@@ -31,27 +35,66 @@ public sealed class PacketRecordingViewModel : ViewModel
         UpdateStatus();
     }
 
-    public IReadOnlyList<string> Formats { get; } = [RecordingStrings.Binary, RecordingStrings.JsonLines];
-    public int FormatIndex { get; set => SetField(ref field, value); }
-    public string FilePath { get; private set => SetField(ref field, value); } = string.Empty;
-    public string FileName { get; private set => SetField(ref field, value); } = string.Empty;
-    public string Status { get; private set => SetField(ref field, value); } = string.Format(RecordingStrings.Counters, 0, 0);
-    public string? Error { get; private set => SetField(ref field, value); }
-    public bool IsRecording { get; private set => SetField(ref field, value); }
-    public bool CanChooseFormat { get; private set => SetField(ref field, value); } = true;
-    public string ActionText { get; private set => SetField(ref field, value); } = RecordingStrings.Start;
+    public IReadOnlyList<string> Formats { get; } =
+    [RecordingStrings.Binary, RecordingStrings.JsonLines];
+    public int FormatIndex
+    {
+        get;
+        set => SetField(ref field, value);
+    }
+    public string FilePath
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string FileName
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string Status
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Format(RecordingStrings.Counters, 0, 0);
+    public string? Error
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public bool IsRecording
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public bool CanChooseFormat
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = true;
+    public string ActionText
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = RecordingStrings.Start;
     public ReactiveCommand ToggleCommand { get; }
 
     private void UpdateStatus()
     {
         IsRecording = _session?.IsRecording == true;
         CanChooseFormat = _session == null && !_busy;
-        ActionText = _busy ? (_session == null ? RecordingStrings.Preparing : RecordingStrings.Stopping)
-            : _session != null ? RecordingStrings.Stop : RecordingStrings.Start;
+        ActionText =
+            _busy ? (_session == null ? RecordingStrings.Preparing : RecordingStrings.Stopping)
+            : _session != null ? RecordingStrings.Stop
+            : RecordingStrings.Start;
         ToggleCommand.ChangeCanExecute(!_busy && _capture != null && !IsDisposed);
         if (_session != null)
         {
-            Status = string.Format(RecordingStrings.Counters, _session.MessagesWritten, _session.BytesWritten);
+            Status = string.Format(
+                RecordingStrings.Counters,
+                _session.MessagesWritten,
+                _session.BytesWritten
+            );
             Error = _session.Error?.Message;
         }
     }
@@ -89,18 +132,26 @@ public sealed class PacketRecordingViewModel : ViewModel
                 RecordingStrings.Save,
                 extension,
                 $"traffic-{DateTime.Now:yyyyMMdd-HHmmss}",
-                extension);
-            if (string.IsNullOrWhiteSpace(path) || cancellationToken.IsCancellationRequested || IsDisposed)
+                extension
+            );
+            if (
+                string.IsNullOrWhiteSpace(path)
+                || cancellationToken.IsCancellationRequested
+                || IsDisposed
+            )
             {
                 return;
             }
-            var stream = new FileStream(path, new FileStreamOptions
-            {
-                Mode = FileMode.Create,
-                Access = FileAccess.Write,
-                Share = FileShare.Read,
-                Options = FileOptions.Asynchronous | FileOptions.SequentialScan,
-            });
+            var stream = new FileStream(
+                path,
+                new FileStreamOptions
+                {
+                    Mode = FileMode.Create,
+                    Access = FileAccess.Write,
+                    Share = FileShare.Read,
+                    Options = FileOptions.Asynchronous | FileOptions.SequentialScan,
+                }
+            );
             var recording = new PacketRecordingSession(_factory, format, stream);
             try
             {

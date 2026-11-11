@@ -18,13 +18,15 @@ public sealed class PacketRecordingSession : IAsyncDisposable
     private readonly IProtocolFactory _factory;
     private readonly PacketRecordingFormat _format;
     private readonly Stream _stream;
-    private readonly Channel<byte[]> _queue = Channel.CreateBounded<byte[]>(new BoundedChannelOptions(4096)
-    {
-        SingleReader = true,
-        SingleWriter = true,
-        FullMode = BoundedChannelFullMode.Wait,
-        AllowSynchronousContinuations = false,
-    });
+    private readonly Channel<byte[]> _queue = Channel.CreateBounded<byte[]>(
+        new BoundedChannelOptions(4096)
+        {
+            SingleReader = true,
+            SingleWriter = true,
+            FullMode = BoundedChannelFullMode.Wait,
+            AllowSynchronousContinuations = false,
+        }
+    );
     private readonly Dictionary<string, IProtocolEncoder> _encoders = new();
     private readonly Task _writer;
     private bool _accepting = true;
@@ -33,7 +35,11 @@ public sealed class PacketRecordingSession : IAsyncDisposable
     private long _messagesWritten;
     private long _bytesWritten;
 
-    public PacketRecordingSession(IProtocolFactory factory, PacketRecordingFormat format, Stream stream)
+    public PacketRecordingSession(
+        IProtocolFactory factory,
+        PacketRecordingFormat format,
+        Stream stream
+    )
     {
         ArgumentNullException.ThrowIfNull(factory);
         ArgumentNullException.ThrowIfNull(stream);
@@ -47,12 +53,36 @@ public sealed class PacketRecordingSession : IAsyncDisposable
         _writer = Task.Run(WriteAsync);
     }
 
-    public bool IsRecording { get { lock (_gate) { return _accepting; } } }
-    public Exception? Error { get { lock (_gate) { return _error; } } }
+    public bool IsRecording
+    {
+        get
+        {
+            lock (_gate)
+            {
+                return _accepting;
+            }
+        }
+    }
+    public Exception? Error
+    {
+        get
+        {
+            lock (_gate)
+            {
+                return _error;
+            }
+        }
+    }
     public long MessagesWritten => Interlocked.Read(ref _messagesWritten);
     public long BytesWritten => Interlocked.Read(ref _bytesWritten);
 
-    public void Record(string portId, string endpointId, PacketDirection direction, DateTimeOffset timestamp, IProtocolMessage message)
+    public void Record(
+        string portId,
+        string endpointId,
+        PacketDirection direction,
+        DateTimeOffset timestamp,
+        IProtocolMessage message
+    )
     {
         lock (_gate)
         {
@@ -68,17 +98,27 @@ public sealed class PacketRecordingSession : IAsyncDisposable
                     if (!_encoders.TryGetValue(message.Protocol.Id, out var encoder))
                     {
                         encoder = _factory is IProtocolContext context
-                            ? context.CreateEncoder(message.Protocol.Id) : DefaultProtocolEncoder.Instance;
+                            ? context.CreateEncoder(message.Protocol.Id)
+                            : DefaultProtocolEncoder.Instance;
                         _encoders.Add(message.Protocol.Id, encoder);
                     }
                     data = message.EncodeToArray(encoder);
                 }
                 else
                 {
-                    var json = PacketJsonLines.Serialize(timestamp, direction, portId, endpointId, message);
+                    var json = PacketJsonLines.Serialize(
+                        timestamp,
+                        direction,
+                        portId,
+                        endpointId,
+                        message
+                    );
                     data = Encoding.UTF8.GetBytes(json + "\n");
                 }
-                if (data.LongLength > MaximumQueuedBytes - _queuedBytes || !_queue.Writer.TryWrite(data))
+                if (
+                    data.LongLength > MaximumQueuedBytes - _queuedBytes
+                    || !_queue.Writer.TryWrite(data)
+                )
                 {
                     Fail(new IOException(RecordingStrings.BufferFull));
                     return;
@@ -118,7 +158,10 @@ public sealed class PacketRecordingSession : IAsyncDisposable
             await foreach (var data in _queue.Reader.ReadAllAsync().ConfigureAwait(false))
             {
                 await _stream.WriteAsync(data).ConfigureAwait(false);
-                lock (_gate) { _queuedBytes -= data.LongLength; }
+                lock (_gate)
+                {
+                    _queuedBytes -= data.LongLength;
+                }
                 Interlocked.Increment(ref _messagesWritten);
                 Interlocked.Add(ref _bytesWritten, data.LongLength);
             }
@@ -126,16 +169,31 @@ public sealed class PacketRecordingSession : IAsyncDisposable
         }
         catch (Exception error)
         {
-            lock (_gate) { Fail(error); }
+            lock (_gate)
+            {
+                Fail(error);
+            }
         }
         finally
         {
-            try { await _stream.DisposeAsync().ConfigureAwait(false); }
-            catch (Exception error) { lock (_gate) { Fail(error); } }
+            try
+            {
+                await _stream.DisposeAsync().ConfigureAwait(false);
+            }
+            catch (Exception error)
+            {
+                lock (_gate)
+                {
+                    Fail(error);
+                }
+            }
 
             // Release queued frames after a failed disk write.
             while (_queue.Reader.TryRead(out _)) { }
-            lock (_gate) { _queuedBytes = 0; }
+            lock (_gate)
+            {
+                _queuedBytes = 0;
+            }
         }
     }
 }

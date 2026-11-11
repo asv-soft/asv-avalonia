@@ -1,7 +1,7 @@
-using Asv.Avalonia.Example;
-using Avalonia;
 using System.Globalization;
+using Asv.Avalonia.Example;
 using Asv.Modeling;
+using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using R3;
@@ -74,9 +74,18 @@ public class ShellHeaderItemsTest
     [InlineData(120, 0, 210)]
     [InlineData(28, 1, 246)]
     [InlineData(400, 2, 618)]
-    public void HeaderPadding_ReservesTheMeasuredWidthAndRestoresEmptyLayout(double width, int count, double expected)
+    public void HeaderPadding_ReservesTheMeasuredWidthAndRestoresEmptyLayout(
+        double width,
+        int count,
+        double expected
+    )
     {
-        var padding = ShellHeaderPaddingConverter.Instance.Convert([width, count], typeof(Thickness), null, CultureInfo.InvariantCulture);
+        var padding = ShellHeaderPaddingConverter.Instance.Convert(
+            [width, count],
+            typeof(Thickness),
+            null,
+            CultureInfo.InvariantCulture
+        );
         Assert.Equal(new Thickness(100, 0, expected, 0), Assert.IsType<Thickness>(padding));
     }
 
@@ -95,8 +104,13 @@ public class ShellHeaderItemsTest
     }
 
     private sealed class FocusTestPage(IPageContext context)
-        : PageViewModel<IPage>("focus-test", context, NullLoggerFactory.Instance,
-            NullDialogService.Instance, NullExtensionService.Instance)
+        : PageViewModel<IPage>(
+            "focus-test",
+            context,
+            NullLoggerFactory.Instance,
+            NullDialogService.Instance,
+            NullExtensionService.Instance
+        )
     {
         protected override void AfterLoadExtensions() { }
     }
@@ -104,31 +118,50 @@ public class ShellHeaderItemsTest
     private sealed class HeaderItem(string id) : ViewModel(id);
 
     private sealed class TestShell(IServiceProvider services, IAppPath paths)
-        : ShellViewModel(services, NullLoggerFactory.Instance, paths, NullThemeService.Instance,
-            NullDialogService.Instance, NullExtensionService.Instance);
+        : ShellViewModel(
+            services,
+            NullLoggerFactory.Instance,
+            paths,
+            NullThemeService.Instance,
+            NullDialogService.Instance,
+            NullExtensionService.Instance
+        );
 
     private sealed class Fixture : IDisposable, IAppPath
     {
-        private readonly string _root = Path.Combine(Path.GetTempPath(), $"asv-header-{Guid.NewGuid():N}");
+        private readonly string _root = Path.Combine(
+            Path.GetTempPath(),
+            $"asv-header-{Guid.NewGuid():N}"
+        );
         private readonly ServiceProvider _services;
         private readonly SynchronizationContext? _previous = SynchronizationContext.Current;
         public ShellViewModel Shell { get; }
+
         public Fixture()
         {
             SynchronizationContext.SetSynchronizationContext(new SynchronizationContext());
-            _services = new ServiceCollection().AddOptions().Configure<HomePageOptions>(_ => { })
-                .AddKeyedTransient<ViewModelFactoryDelegate<IPage, IPageContext>>("focus-test", (_, _) => context => new FocusTestPage(context))
+            _services = new ServiceCollection()
+                .AddOptions()
+                .Configure<HomePageOptions>(_ => { })
+                .AddKeyedTransient<ViewModelFactoryDelegate<IPage, IPageContext>>(
+                    "focus-test",
+                    (_, _) => context => new FocusTestPage(context)
+                )
                 .BuildServiceProvider();
             Shell = new TestShell(_services, this);
         }
+
         public string GetAppPathFolder(string prefix)
         {
             var path = Path.Combine(_root, prefix);
             Directory.CreateDirectory(path);
             return path;
         }
+
         public string GetAppPathFile(string name) => Path.Combine(GetAppPathFolder("files"), name);
+
         public string GetPageFolder(NavId id, string prefix) => GetAppPathFolder(prefix);
+
         public void Dispose()
         {
             Shell.Dispose();

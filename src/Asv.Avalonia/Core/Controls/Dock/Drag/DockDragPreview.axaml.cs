@@ -27,12 +27,26 @@ internal partial class DockDragPreview : Window
         PART_Card.RenderTransform = _scale;
         PART_Card.Transitions = new Transitions
         {
-            new DoubleTransition { Property = OpacityProperty, Duration = TimeSpan.FromMilliseconds(120) },
+            new DoubleTransition
+            {
+                Property = OpacityProperty,
+                Duration = TimeSpan.FromMilliseconds(120),
+            },
         };
         _scale.Transitions = new Transitions
         {
-            new DoubleTransition { Property = ScaleTransform.ScaleXProperty, Duration = TimeSpan.FromMilliseconds(120), Easing = new CubicEaseOut() },
-            new DoubleTransition { Property = ScaleTransform.ScaleYProperty, Duration = TimeSpan.FromMilliseconds(120), Easing = new CubicEaseOut() },
+            new DoubleTransition
+            {
+                Property = ScaleTransform.ScaleXProperty,
+                Duration = TimeSpan.FromMilliseconds(120),
+                Easing = new CubicEaseOut(),
+            },
+            new DoubleTransition
+            {
+                Property = ScaleTransform.ScaleYProperty,
+                Duration = TimeSpan.FromMilliseconds(120),
+                Easing = new CubicEaseOut(),
+            },
         };
         Opened += (_, _) =>
         {
@@ -51,7 +65,10 @@ internal partial class DockDragPreview : Window
     public void MoveTo(PixelPoint pointer, double scaling, bool outside)
     {
         Position = new PixelPoint(pointer.X + (int)(12 * scaling), pointer.Y + (int)(16 * scaling));
-        PART_Hint.Text = RS.ResourceManager.GetString(outside ? "DockDrag_OpenInWindow" : "DockDrag_KeepInWindow", RS.Culture);
+        PART_Hint.Text = RS.ResourceManager.GetString(
+            outside ? "DockDrag_OpenInWindow" : "DockDrag_KeepInWindow",
+            RS.Culture
+        );
     }
 
     public void ClosePreview(bool immediately)

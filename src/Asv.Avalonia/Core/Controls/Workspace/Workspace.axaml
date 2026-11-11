@@ -5,7 +5,7 @@
 >
     <Design.PreviewWith>
         <Panel Width="1024" Height="500">
-            <avalonia:Workspace BorderThickness="3" >
+            <avalonia:Workspace BorderThickness="3">
                 <avalonia:PropertyEditorWidgetViewModel />
                 <avalonia:WorkspaceItem Header="HEADER1" Position="Right">
                     <StackPanel>
@@ -66,7 +66,6 @@
         </Panel>
     </Design.PreviewWith>
     <Style Selector="avalonia|Workspace">
-        
         <Style Selector="^ GridSplitter">
             <Setter Property="Template">
                 <ControlTemplate>
@@ -75,9 +74,12 @@
             </Setter>
         </Style>
         <!-- Set Defaults -->
-        <Setter Property="Padding" Value="{Binding WidgetSpacing, RelativeSource={RelativeSource Self}, Converter={x:Static avalonia:Workspace.SpacingToPaddingConverter}}" />
+        <Setter
+            Property="Padding"
+            Value="{Binding WidgetSpacing, RelativeSource={RelativeSource Self}, Converter={x:Static avalonia:Workspace.SpacingToPaddingConverter}}"
+        />
         <Setter Property="Margin" Value="0" />
-        
+
         <Setter Property="ItemsPanel">
             <ItemsPanelTemplate>
                 <avalonia:WorkspacePanel LeftWidth="*" CentralWidth="4*" RightWidth="2*" />

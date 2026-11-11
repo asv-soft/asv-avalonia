@@ -1,10 +1,12 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
-             xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             x:Class="Asv.Avalonia.GeoMap.MapAltitudeToggle"
-             x:DataType="map:MapAltitudeToggle"
-             x:Name="PART_Root">
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap"
+    xmlns:icons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    x:Class="Asv.Avalonia.GeoMap.MapAltitudeToggle"
+    x:DataType="map:MapAltitudeToggle"
+    x:Name="PART_Root"
+>
     <UserControl.Resources>
         <LinearGradientBrush
             x:Key="MapAltitudeSurfaceBrush"
@@ -57,16 +59,25 @@
                 <Setter Property="Opacity" Value="0.35" />
             </Style>
         </ControlTheme>
-
     </UserControl.Resources>
-    <Border Width="38" Height="38" CornerRadius="999" ClipToBounds="True"
-            Background="{StaticResource MapAltitudeSurfaceBrush}"
-            BorderBrush="#3DF3F7FA" BorderThickness="1" BoxShadow="0 2 6 0 #40000000">
-        <ToggleButton Width="36" Height="36"
-                      Theme="{StaticResource MapAltitudeToggleTheme}"
-                      IsChecked="{Binding #PART_Root.IsChecked, Mode=TwoWay}"
-                      ToolTip.Tip="{Binding #PART_Root.ToolTipText}"
-                      AutomationProperties.Name="{Binding #PART_Root.ToolTipText}">
+    <Border
+        Width="38"
+        Height="38"
+        CornerRadius="999"
+        ClipToBounds="True"
+        Background="{StaticResource MapAltitudeSurfaceBrush}"
+        BorderBrush="#3DF3F7FA"
+        BorderThickness="1"
+        BoxShadow="0 2 6 0 #40000000"
+    >
+        <ToggleButton
+            Width="36"
+            Height="36"
+            Theme="{StaticResource MapAltitudeToggleTheme}"
+            IsChecked="{Binding #PART_Root.IsChecked, Mode=TwoWay}"
+            ToolTip.Tip="{Binding #PART_Root.ToolTipText}"
+            AutomationProperties.Name="{Binding #PART_Root.ToolTipText}"
+        >
             <icons:MaterialIcon Width="18" Height="18" Kind="Altimeter" Foreground="#F8FBFF" />
         </ToggleButton>
     </Border>

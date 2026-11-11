@@ -16,12 +16,23 @@ public sealed record PacketFileExportResult(long messages, long errors)
 public sealed class PacketFileExporter(IProtocolFactory factory)
 {
     /// <summary>Exports in file order, replacing the destination only after successful completion.</summary>
-    public Task<PacketFileExportResult> ExportJsonLinesAsync(string source, string destination,
-        IProgress<double>? progress = null, CancellationToken cancellationToken = default) =>
-        Task.Run(() => ExportCoreAsync(source, destination, progress, cancellationToken), cancellationToken);
+    public Task<PacketFileExportResult> ExportJsonLinesAsync(
+        string source,
+        string destination,
+        IProgress<double>? progress = null,
+        CancellationToken cancellationToken = default
+    ) =>
+        Task.Run(
+            () => ExportCoreAsync(source, destination, progress, cancellationToken),
+            cancellationToken
+        );
 
-    private async Task<PacketFileExportResult> ExportCoreAsync(string source, string destination,
-        IProgress<double>? progress, CancellationToken cancellationToken)
+    private async Task<PacketFileExportResult> ExportCoreAsync(
+        string source,
+        string destination,
+        IProgress<double>? progress,
+        CancellationToken cancellationToken
+    )
     {
         source = Path.GetFullPath(source);
         destination = Path.GetFullPath(destination);
@@ -29,36 +40,74 @@ public sealed class PacketFileExporter(IProtocolFactory factory)
         {
             throw new IOException(FileExportStrings.SameFile);
         }
-        var temporary = Path.Combine(Path.GetDirectoryName(destination)!, $".{Path.GetFileName(destination)}.{Guid.NewGuid():N}.tmp");
+        var temporary = Path.Combine(
+            Path.GetDirectoryName(destination)!,
+            $".{Path.GetFileName(destination)}.{Guid.NewGuid():N}.tmp"
+        );
         var parsers = new List<IProtocolParser>();
         using var subscriptions = new CompositeDisposable();
         var buffer = ArrayPool<byte>.Shared.Rent(8192);
-        long messages = 0, errors = 0;
+        long messages = 0,
+            errors = 0;
         Exception? failure = null;
         try
         {
-            await using (var input = new FileStream(source, FileMode.Open, FileAccess.Read, FileShare.Read, 8192, FileOptions.Asynchronous | FileOptions.SequentialScan))
-            await using (var output = new FileStream(temporary, FileMode.CreateNew, FileAccess.Write, FileShare.None, 8192, FileOptions.Asynchronous | FileOptions.SequentialScan))
-            await using (var writer = new StreamWriter(output, new UTF8Encoding(false), 8192, leaveOpen: true))
+            await using (
+                var input = new FileStream(
+                    source,
+                    FileMode.Open,
+                    FileAccess.Read,
+                    FileShare.Read,
+                    8192,
+                    FileOptions.Asynchronous | FileOptions.SequentialScan
+                )
+            )
+            await using (
+                var output = new FileStream(
+                    temporary,
+                    FileMode.CreateNew,
+                    FileAccess.Write,
+                    FileShare.None,
+                    8192,
+                    FileOptions.Asynchronous | FileOptions.SequentialScan
+                )
+            )
+            await using (
+                var writer = new StreamWriter(
+                    output,
+                    new UTF8Encoding(false),
+                    8192,
+                    leaveOpen: true
+                )
+            )
             {
                 foreach (var protocol in factory.AvailableProtocols)
                 {
                     var parser = factory.CreateParser(protocol.Id);
                     parsers.Add(parser);
-                    parser.OnError.Subscribe(_ => errors++, _ => errors++, _ => { }).AddTo(subscriptions);
-                    parser.OnMessage.Subscribe(message =>
-                    {
-                        if (failure != null)
+                    parser
+                        .OnError.Subscribe(_ => errors++, _ => errors++, _ => { })
+                        .AddTo(subscriptions);
+                    parser
+                        .OnMessage.Subscribe(message =>
                         {
-                            return;
-                        }
-                        try
-                        {
-                            writer.WriteLine(PacketJsonLines.Serialize(null, null, source, source, message));
-                            messages++;
-                        }
-                        catch (Exception error) { failure = error; }
-                    }).AddTo(subscriptions);
+                            if (failure != null)
+                            {
+                                return;
+                            }
+                            try
+                            {
+                                writer.WriteLine(
+                                    PacketJsonLines.Serialize(null, null, source, source, message)
+                                );
+                                messages++;
+                            }
+                            catch (Exception error)
+                            {
+                                failure = error;
+                            }
+                        })
+                        .AddTo(subscriptions);
                 }
                 if (parsers.Count == 0)
                 {
@@ -66,7 +115,9 @@ public sealed class PacketFileExporter(IProtocolFactory factory)
                 }
                 while (true)
                 {
-                    var count = await input.ReadAsync(buffer.AsMemory(0, 8192), cancellationToken).ConfigureAwait(false);
+                    var count = await input
+                        .ReadAsync(buffer.AsMemory(0, 8192), cancellationToken)
+                        .ConfigureAwait(false);
                     if (count == 0)
                     {
                         break;
@@ -79,7 +130,10 @@ public sealed class PacketFileExporter(IProtocolFactory factory)
                         }
                         foreach (var parser in parsers)
                         {
-                            try { parser.Push(buffer[index]); }
+                            try
+                            {
+                                parser.Push(buffer[index]);
+                            }
                             catch (Exception error) when (error is not OutOfMemoryException)
                             {
                                 errors++;
@@ -91,7 +145,9 @@ public sealed class PacketFileExporter(IProtocolFactory factory)
                             }
                         }
                     }
-                    progress?.Report(input.Length == 0 ? 100 : 100.0 * input.Position / input.Length);
+                    progress?.Report(
+                        input.Length == 0 ? 100 : 100.0 * input.Position / input.Length
+                    );
                 }
                 await writer.FlushAsync(cancellationToken).ConfigureAwait(false);
             }

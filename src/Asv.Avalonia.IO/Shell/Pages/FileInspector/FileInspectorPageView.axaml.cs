@@ -1,7 +1,7 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Avalonia.Input.Platform;
+using Avalonia.Interactivity;
 
 namespace Asv.Avalonia.IO;
 
@@ -26,8 +26,10 @@ public partial class FileInspectorPageView : Workspace
 
     private async void CopyDetailsOnClick(object? sender, RoutedEventArgs args)
     {
-        if (sender is not Button { DataContext: PacketInspectorPageViewModel model }
-            || string.IsNullOrEmpty(model.DetailsText))
+        if (
+            sender is not Button { DataContext: PacketInspectorPageViewModel model }
+            || string.IsNullOrEmpty(model.DetailsText)
+        )
         {
             return;
         }

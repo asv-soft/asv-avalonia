@@ -11,10 +11,23 @@ public class PacketFieldDetailsTest
     public void Markdown_ContainsVisitorDefinitionRangeFormatAndCapturedValue()
     {
         var type = new DoubleType(-20, 150, 0);
-        var definition = new Field.Builder().Name("Temperature").Title("Sensor temperature")
-            .Description("Measured **sensor** temperature.").Units("°C").FormatString("F1")
-            .Metadata("readOnly", true).DataType(type).Build();
-        var snapshot = new PacketFieldSnapshot("Temperature", type.Name, "21.5", definition.GetUnits(), definition.GetDescription(), [])
+        var definition = new Field.Builder()
+            .Name("Temperature")
+            .Title("Sensor temperature")
+            .Description("Measured **sensor** temperature.")
+            .Units("°C")
+            .FormatString("F1")
+            .Metadata("readOnly", true)
+            .DataType(type)
+            .Build();
+        var snapshot = new PacketFieldSnapshot(
+            "Temperature",
+            type.Name,
+            "21.5",
+            definition.GetUnits(),
+            definition.GetDescription(),
+            []
+        )
         {
             Definition = definition,
             DataType = type,
@@ -31,14 +44,20 @@ public class PacketFieldDetailsTest
         Assert.Contains($"{IoRs.PacketInspector_FieldFormat}:** F1", markdown);
         Assert.Contains($"{IoRs.PacketInspector_FieldMinimum}:** -20", markdown);
         Assert.Contains($"{IoRs.PacketInspector_FieldMaximum}:** 150", markdown);
-        Assert.Contains($"{IoRs.PacketInspector_FieldReadOnly}:** {IoRs.PacketInspector_FieldYes}", markdown);
+        Assert.Contains(
+            $"{IoRs.PacketInspector_FieldReadOnly}:** {IoRs.PacketInspector_FieldYes}",
+            markdown
+        );
     }
 
     [Fact]
     public void Markdown_UsesActualElementTypeInsteadOfParentCollectionType()
     {
         var elementType = new UInt8Type(2, 99, 2);
-        var definition = new Field.Builder().Name("Samples").DataType(new ListType(elementType, 0, 10)).Build();
+        var definition = new Field.Builder()
+            .Name("Samples")
+            .DataType(new ListType(elementType, 0, 10))
+            .Build();
         var snapshot = new PacketFieldSnapshot("[0]", elementType.Name, "42", null, null, [])
         {
             Definition = definition,
@@ -56,8 +75,14 @@ public class PacketFieldDetailsTest
     [Fact]
     public void Markdown_ContainsEnumerationNamesValuesAndDescriptions()
     {
-        var definition = new Field.Builder().Name("State").DataType(UInt8Type.Default)
-            .Enum(new EnumValue<byte>(1, "Ready", "Receiver is ready"), new EnumValue<byte>(2, "Busy", "Processing data")).Build();
+        var definition = new Field.Builder()
+            .Name("State")
+            .DataType(UInt8Type.Default)
+            .Enum(
+                new EnumValue<byte>(1, "Ready", "Receiver is ready"),
+                new EnumValue<byte>(2, "Busy", "Processing data")
+            )
+            .Build();
         var snapshot = new PacketFieldSnapshot("State", "uint8", "1", null, null, [])
         {
             Definition = definition,
@@ -75,7 +100,17 @@ public class PacketFieldDetailsTest
     public void Markdown_ContainsStringConstraintsAndEscapesCapturedText()
     {
         var type = new StringOptionalType(EncodingId.Ascii, 1, 12, "AB*");
-        var snapshot = new PacketFieldSnapshot("Label", type.Name, "[icon=Close;] **text**", null, null, []) { DataType = type };
+        var snapshot = new PacketFieldSnapshot(
+            "Label",
+            type.Name,
+            "[icon=Close;] **text**",
+            null,
+            null,
+            []
+        )
+        {
+            DataType = type,
+        };
 
         var markdown = snapshot.CreateDetailsMarkdown("Label");
 
@@ -89,8 +124,14 @@ public class PacketFieldDetailsTest
     [Fact]
     public void Markdown_CollectionIncludesElementTypeLengthAndMetadataWithoutDefinitionFallbackErrors()
     {
-        var snapshot = new PacketFieldSnapshot("Readings", "array", string.Empty, null, null,
-            [new PacketFieldSnapshot("[0]", "int16", "7", null, null, [])])
+        var snapshot = new PacketFieldSnapshot(
+            "Readings",
+            "array",
+            string.Empty,
+            null,
+            null,
+            [new PacketFieldSnapshot("[0]", "int16", "7", null, null, [])]
+        )
         {
             DataType = new ArrayType(Int16Type.Default, 1),
         };

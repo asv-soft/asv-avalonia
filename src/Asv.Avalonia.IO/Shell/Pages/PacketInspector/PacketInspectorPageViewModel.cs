@@ -25,7 +25,10 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
     private readonly IDeviceManager _deviceManager;
     private readonly Dictionary<string, PacketDevicePresentation> _devicePresentations = new();
     private readonly PacketDevicePresentation _unidentifiedDevice = new(
-        RS.PacketInspector_Unidentified, MaterialIconKind.HelpCircleOutline, AsvColorKind.None);
+        RS.PacketInspector_Unidentified,
+        MaterialIconKind.HelpCircleOutline,
+        AsvColorKind.None
+    );
     private readonly DispatcherTimer _timer;
     private PacketCaptureState? _state;
     private PacketMessageRow? _selectedMessage;
@@ -62,20 +65,42 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         PacketFieldSnapshot[] fields =
         [
             new("Sequence", "UInt16", "42", null, null, []),
-            new("Payload", "Object", string.Empty, null, null,
-            [
-                new("Voltage", "Float", "12.4", "V", null, []),
-                new("Temperature", "Float", "24.6", "°C", null, []),
-            ]),
+            new(
+                "Payload",
+                "Object",
+                string.Empty,
+                null,
+                null,
+                [
+                    new("Voltage", "Float", "12.4", "V", null, []),
+                    new("Temperature", "Float", "24.6", "°C", null, []),
+                ]
+            ),
         ];
         _state = new PacketCaptureState(
             [
-                new(1, now, timestamp,
+                new(
+                    1,
+                    now,
+                    timestamp,
                     new("preview", "127.0.0.1:14550", PacketDirection.Rx, "example", "1", null),
-                    "UDP", "Example", "Telemetry", fields, null),
-                new(2, now, timestamp,
+                    "UDP",
+                    "Example",
+                    "Telemetry",
+                    fields,
+                    null
+                ),
+                new(
+                    2,
+                    now,
+                    timestamp,
                     new("preview", "127.0.0.1:14550", PacketDirection.Tx, "example", "2", null),
-                    "UDP", "Example", "Command", [new("Enabled", "Boolean", "true", null, null, [])], null),
+                    "UDP",
+                    "Example",
+                    "Command",
+                    [new("Enabled", "Boolean", "true", null, null, [])],
+                    null
+                ),
             ],
             [new("preview", "UDP", "127.0.0.1:14550")],
             0,
@@ -96,7 +121,18 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         IDeviceManager deviceManager,
         IThemeService? themeService = null
     )
-        : this(context, loggerFactory, dialogService, extensions, capture, time, deviceManager, themeService, PageId, null) { }
+        : this(
+            context,
+            loggerFactory,
+            dialogService,
+            extensions,
+            capture,
+            time,
+            deviceManager,
+            themeService,
+            PageId,
+            null
+        ) { }
 
     protected PacketInspectorPageViewModel(
         IPageContext context,
@@ -108,7 +144,8 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         IDeviceManager deviceManager,
         IThemeService? themeService,
         string pageId,
-        PacketFileReader? fileReader)
+        PacketFileReader? fileReader
+    )
         : base(pageId, context, loggerFactory, dialogService, extensions)
     {
         _capture = capture;
@@ -119,28 +156,82 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         Header = RS.PacketInspector_Title;
         Icon = PageIcon;
         IconColor = PageIconColor;
-        SourceWidget = new PacketInspectorWidget("packet-sources", RS.PacketInspector_Sources, WorkspaceDock.Left, MaterialIconKind.Network, this).DisposeItWith(Disposable);
-        ProtocolWidget = new PacketInspectorWidget("packet-protocols", RS.PacketInspector_Protocols, WorkspaceDock.Left, MaterialIconKind.Layers, this).DisposeItWith(Disposable);
-        DeviceWidget = new PacketInspectorWidget("packet-devices", RS.PacketInspector_Devices, WorkspaceDock.Left, MaterialIconKind.Devices, this).DisposeItWith(Disposable);
-        TrafficWidget = new PacketInspectorWidget("packet-traffic", RS.PacketInspector_Title, WorkspaceDock.Center, PageIcon, this).DisposeItWith(Disposable);
-        DetailsWidget = new PacketInspectorWidget("packet-details", RS.PacketInspector_Details, WorkspaceDock.Right, MaterialIconKind.CodeBraces, this).DisposeItWith(Disposable);
-        RecordingWidget = new PacketInspectorWidget("packet-recording", RecordingStrings.Title, WorkspaceDock.Left, MaterialIconKind.RecordCircleOutline, this).DisposeItWith(Disposable);
-        Recording = new PacketRecordingViewModel(capture, deviceManager.ProtocolFactory, dialogService).DisposeItWith(Disposable);
+        SourceWidget = new PacketInspectorWidget(
+            "packet-sources",
+            RS.PacketInspector_Sources,
+            WorkspaceDock.Left,
+            MaterialIconKind.Network,
+            this
+        ).DisposeItWith(Disposable);
+        ProtocolWidget = new PacketInspectorWidget(
+            "packet-protocols",
+            RS.PacketInspector_Protocols,
+            WorkspaceDock.Left,
+            MaterialIconKind.Layers,
+            this
+        ).DisposeItWith(Disposable);
+        DeviceWidget = new PacketInspectorWidget(
+            "packet-devices",
+            RS.PacketInspector_Devices,
+            WorkspaceDock.Left,
+            MaterialIconKind.Devices,
+            this
+        ).DisposeItWith(Disposable);
+        TrafficWidget = new PacketInspectorWidget(
+            "packet-traffic",
+            RS.PacketInspector_Title,
+            WorkspaceDock.Center,
+            PageIcon,
+            this
+        ).DisposeItWith(Disposable);
+        DetailsWidget = new PacketInspectorWidget(
+            "packet-details",
+            RS.PacketInspector_Details,
+            WorkspaceDock.Right,
+            MaterialIconKind.CodeBraces,
+            this
+        ).DisposeItWith(Disposable);
+        RecordingWidget = new PacketInspectorWidget(
+            "packet-recording",
+            RecordingStrings.Title,
+            WorkspaceDock.Left,
+            MaterialIconKind.RecordCircleOutline,
+            this
+        ).DisposeItWith(Disposable);
+        Recording = new PacketRecordingViewModel(
+            capture,
+            deviceManager.ProtocolFactory,
+            dialogService
+        ).DisposeItWith(Disposable);
         Recording.SetParent(this);
-        ChartsWidget = new PacketInspectorWidget("packet-charts", RS.PacketInspector_Charts, WorkspaceDock.Bottom, MaterialIconKind.ChartLine, this).DisposeItWith(Disposable);
-        AddToChartCommand = new ReactiveCommand<PacketChartRequest>(AddToChart).DisposeItWith(Disposable);
-        ShowFieldInfoCommand = new ReactiveCommand<PacketFieldInfoRequest>().DisposeItWith(Disposable);
-        ShowFieldInfoCommand.SubscribeAwait(
-            async (request, _) =>
-            {
-                var markdown = request.Field.CreateDetailsMarkdown(request.Path);
-                await dialogService.ShowMarkdownDetailsDialogAsync(
-                    RS.PacketInspector_FieldInformation,
-                    markdown,
-                    markdown,
-                    MaterialIconKind.InformationOutline);
-            },
-            AwaitOperation.Drop).DisposeItWith(Disposable);
+        ChartsWidget = new PacketInspectorWidget(
+            "packet-charts",
+            RS.PacketInspector_Charts,
+            WorkspaceDock.Bottom,
+            MaterialIconKind.ChartLine,
+            this
+        ).DisposeItWith(Disposable);
+        AddToChartCommand = new ReactiveCommand<PacketChartRequest>(AddToChart).DisposeItWith(
+            Disposable
+        );
+        ShowFieldInfoCommand = new ReactiveCommand<PacketFieldInfoRequest>().DisposeItWith(
+            Disposable
+        );
+        ShowFieldInfoCommand
+            .SubscribeAwait(
+                async (request, _) =>
+                {
+                    var markdown = request.Field.CreateDetailsMarkdown(request.Path);
+                    await dialogService.ShowMarkdownDetailsDialogAsync(
+                        RS.PacketInspector_FieldInformation,
+                        markdown,
+                        markdown,
+                        MaterialIconKind.InformationOutline
+                    );
+                },
+                AwaitOperation.Drop
+            )
+            .DisposeItWith(Disposable);
         AllSources = new("all", RS.PacketInspector_AllSources, FiltersChanged);
         Sources.Add(AllSources);
         PauseCommand = new ReactiveCommand(_ =>
@@ -183,8 +274,10 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         }).DisposeItWith(Disposable);
         HistoryCommand = new ReactiveCommand(_ =>
         {
-            _historyKey = _fileReader != null && _historyKey != null ? null
-                : ActiveTab == 0 ? SelectedMessage?.Packet.Key : SelectedEvent?.Packet.Key;
+            _historyKey =
+                _fileReader != null && _historyKey != null ? null
+                : ActiveTab == 0 ? SelectedMessage?.Packet.Key
+                : SelectedEvent?.Packet.Key;
             ActiveTab = 1;
             Refresh();
         }).DisposeItWith(Disposable);
@@ -198,20 +291,26 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             _timer.Start();
         }
         OpenFileCommand = new ReactiveCommand().DisposeItWith(Disposable);
-        OpenFileCommand.SubscribeAwait(
-            async (_, token) =>
-            {
-                if (IsLoading || _fileReader == null)
+        OpenFileCommand
+            .SubscribeAwait(
+                async (_, token) =>
                 {
-                    return;
-                }
-                var path = await dialogService.ShowOpenFileDialogAsync(RS.FileInspector_Open, "*");
-                if (path != null && !IsDisposed)
-                {
-                    await LoadFileAsync(path, token);
-                }
-            },
-            AwaitOperation.Drop).DisposeItWith(Disposable);
+                    if (IsLoading || _fileReader == null)
+                    {
+                        return;
+                    }
+                    var path = await dialogService.ShowOpenFileDialogAsync(
+                        RS.FileInspector_Open,
+                        "*"
+                    );
+                    if (path != null && !IsDisposed)
+                    {
+                        await LoadFileAsync(path, token);
+                    }
+                },
+                AwaitOperation.Drop
+            )
+            .DisposeItWith(Disposable);
         CloseFileCommand = new ReactiveCommand(_ => CloseFile()).DisposeItWith(Disposable);
         CancelFileCommand = new ReactiveCommand(_ => _fileRead?.Cancel()).DisposeItWith(Disposable);
         if (_fileReader != null)
@@ -230,15 +329,51 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
     public ReactiveCommand OpenFileCommand { get; }
     public ReactiveCommand CloseFileCommand { get; }
     public ReactiveCommand CancelFileCommand { get; }
-    public string FilePath { get; private set => SetField(ref field, value); } = string.Empty;
-    public string FileName { get; private set => SetField(ref field, value); } = RS.FileInspector_Empty;
-    public string FileStatus { get; private set => SetField(ref field, value); } = RS.FileInspector_Empty;
-    public string FileError { get; private set => SetField(ref field, value); } = string.Empty;
-    public bool IsLoading { get; private set => SetField(ref field, value); }
-    public bool HasFile { get; private set => SetField(ref field, value); }
-    public double FileProgress { get; private set => SetField(ref field, value); }
-    public string HistoryActionText { get; private set => SetField(ref field, value); } = RS.PacketInspector_History;
-    public string DetailsPosition { get; private set => SetField(ref field, value); } = string.Empty;
+    public string FilePath
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string FileName
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = RS.FileInspector_Empty;
+    public string FileStatus
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = RS.FileInspector_Empty;
+    public string FileError
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public bool IsLoading
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public bool HasFile
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public double FileProgress
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public string HistoryActionText
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = RS.PacketInspector_History;
+    public string DetailsPosition
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
 
     public async Task LoadFileAsync(string path, CancellationToken cancellationToken = default)
     {
@@ -246,7 +381,10 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         {
             return;
         }
-        using var read = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, DisposeCancel);
+        using var read = CancellationTokenSource.CreateLinkedTokenSource(
+            cancellationToken,
+            DisposeCancel
+        );
         _fileRead = read;
         IsLoading = true;
         FileProgress = 0;
@@ -260,7 +398,10 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
                     FileProgress = value;
                 }
             });
-            var result = await Task.Run(() => _fileReader.ReadAsync(path, progress, read.Token), read.Token);
+            var result = await Task.Run(
+                () => _fileReader.ReadAsync(path, progress, read.Token),
+                read.Token
+            );
             read.Token.ThrowIfCancellationRequested();
             if (IsDisposed)
             {
@@ -270,7 +411,12 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             FilePath = result.Path;
             FileName = Path.GetFileName(result.Path);
             HasFile = true;
-            FileStatus = string.Format(RS.FileInspector_Status, result.Bytes, result.State.Packets.Count, result.State.Errors);
+            FileStatus = string.Format(
+                RS.FileInspector_Status,
+                result.Bytes,
+                result.State.Packets.Count,
+                result.State.Errors
+            );
             FileProgress = 100;
             _state = result.State;
             UpdateFilters(_state);
@@ -349,12 +495,30 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
     public PacketInspectorWidget DetailsWidget { get; }
     public PacketInspectorWidget ChartsWidget { get; }
     public ObservableCollection<PacketFieldChart> Charts { get; } = [];
-    public bool HasCharts { get; private set => SetField(ref field, value); }
+    public bool HasCharts
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
     public ReactiveCommand<PacketChartRequest> AddToChartCommand { get; }
     public ReactiveCommand<PacketFieldInfoRequest> ShowFieldInfoCommand { get; }
 
-    public override IEnumerable<IViewModel> GetChildren() => base.GetChildren().Concat(
-        new IViewModel[] { SourceWidget, ProtocolWidget, DeviceWidget, RecordingWidget, Recording, TrafficWidget, DetailsWidget, ChartsWidget }).Concat(Charts);
+    public override IEnumerable<IViewModel> GetChildren() =>
+        base.GetChildren()
+            .Concat(
+                new IViewModel[]
+                {
+                    SourceWidget,
+                    ProtocolWidget,
+                    DeviceWidget,
+                    RecordingWidget,
+                    Recording,
+                    TrafficWidget,
+                    DetailsWidget,
+                    ChartsWidget,
+                }
+            )
+            .Concat(Charts);
 
     public ObservableCollection<PacketFilterItem> Sources { get; } = [];
     public PacketFilterItem AllSources { get; }
@@ -389,7 +553,11 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         }
     }
 
-    public string PauseActionText { get; private set => SetField(ref field, value); } = RS.PacketInspector_Pause;
+    public string PauseActionText
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = RS.PacketInspector_Pause;
 
     public bool IsPaused
     {
@@ -442,21 +610,81 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             }
         }
     }
-    public string DetailsTitle { get; private set => SetField(ref field, value); } = RS.PacketInspector_SelectMessage;
-    public bool HasDetails { get; private set => SetField(ref field, value); }
-    public string DetailsProtocol { get; private set => SetField(ref field, value); } = string.Empty;
-    public string DetailsDirection { get; private set => SetField(ref field, value); } = string.Empty;
-    public string DetailsTime { get; private set => SetField(ref field, value); } = string.Empty;
-    public string DetailsEndpoint { get; private set => SetField(ref field, value); } = string.Empty;
-    public string DetailsEndpointDescription { get; private set => SetField(ref field, value); } = string.Empty;
-    public string DetailsMetadata { get; private set => SetField(ref field, value); } = string.Empty;
-    public PacketSnapshot? DetailsPacket { get; private set => SetField(ref field, value); }
-    public IReadOnlyList<PacketFieldSnapshot> DetailsFields { get; private set => SetField(ref field, value); } = [];
-    public string DetailsText { get; private set => SetField(ref field, value); } = string.Empty;
-    public string DetailsError { get; private set => SetField(ref field, value); } = string.Empty;
-    public PacketDevicePresentation? DetailsDevice { get; private set => SetField(ref field, value); }
-    public string CaptureStatus { get; private set => SetField(ref field, value); } = string.Empty;
-    public bool IsEmpty { get; private set => SetField(ref field, value); } = true;
+    public string DetailsTitle
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = RS.PacketInspector_SelectMessage;
+    public bool HasDetails
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public string DetailsProtocol
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string DetailsDirection
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string DetailsTime
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string DetailsEndpoint
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string DetailsEndpointDescription
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string DetailsMetadata
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public PacketSnapshot? DetailsPacket
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public IReadOnlyList<PacketFieldSnapshot> DetailsFields
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = [];
+    public string DetailsText
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public string DetailsError
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public PacketDevicePresentation? DetailsDevice
+    {
+        get;
+        private set => SetField(ref field, value);
+    }
+    public string CaptureStatus
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = string.Empty;
+    public bool IsEmpty
+    {
+        get;
+        private set => SetField(ref field, value);
+    } = true;
 
     private void ReadCapture()
     {
@@ -472,12 +700,18 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         Refresh();
     }
 
-    private static string SourceKey(string port, string endpoint) => $"{port.Length}:{port}{endpoint}";
-    private static string DeviceKey(DeviceId? device) => device == null ? "unknown" : $"device:{device.DeviceClass.Length}:{device.DeviceClass}{device.AsString()}";
+    private static string SourceKey(string port, string endpoint) =>
+        $"{port.Length}:{port}{endpoint}";
 
-    private static string SourceDeviceKey(PacketSnapshot packet) => packet.Key.SourceAddress is { } address
-        ? $"source:{address.Family.Length}:{address.Family}{address.Value}"
-        : DeviceKey(packet.Key.DeviceId);
+    private static string DeviceKey(DeviceId? device) =>
+        device == null
+            ? "unknown"
+            : $"device:{device.DeviceClass.Length}:{device.DeviceClass}{device.AsString()}";
+
+    private static string SourceDeviceKey(PacketSnapshot packet) =>
+        packet.Key.SourceAddress is { } address
+            ? $"source:{address.Family.Length}:{address.Family}{address.Value}"
+            : DeviceKey(packet.Key.DeviceId);
 
     private PacketDevicePresentation GetDevicePresentation(PacketSnapshot packet)
     {
@@ -489,8 +723,11 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         var key = deviceId == null ? SourceDeviceKey(packet) : DeviceKey(deviceId);
         if (!_devicePresentations.TryGetValue(key, out var presentation))
         {
-            presentation = new(packet.Device, deviceId == null ? null : _deviceManager.GetIcon(deviceId),
-                deviceId == null ? AsvColorKind.Unknown : _deviceManager.GetDeviceColor(deviceId));
+            presentation = new(
+                packet.Device,
+                deviceId == null ? null : _deviceManager.GetIcon(deviceId),
+                deviceId == null ? AsvColorKind.Unknown : _deviceManager.GetDeviceColor(deviceId)
+            );
             _devicePresentations.Add(key, presentation);
         }
         return presentation;
@@ -516,8 +753,10 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
                 Protocols.Add(new(protocol.Id, protocol.Name, FiltersChanged));
             }
         }
-        var sources = state.Sources.Concat(state.Packets.Reverse().Select(PacketSource.FromPacket))
-            .DistinctBy(x => SourceKey(x.PortId, x.EndpointId)).ToArray();
+        var sources = state
+            .Sources.Concat(state.Packets.Reverse().Select(PacketSource.FromPacket))
+            .DistinctBy(x => SourceKey(x.PortId, x.EndpointId))
+            .ToArray();
         var presentedPorts = state.Ports.Select(x => x.Id).ToHashSet();
         foreach (var source in sources)
         {
@@ -555,21 +794,30 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
                 deviceFilter = new(key, packet.Device, FiltersChanged);
                 Devices.Add(deviceFilter);
             }
-            deviceFilter.UpdatePresentation(packet.Device, packet.Key.SourceAddress is { } sourceAddress
-                ? $"{sourceAddress.Family}/{sourceAddress.Value}" : null);
+            deviceFilter.UpdatePresentation(
+                packet.Device,
+                packet.Key.SourceAddress is { } sourceAddress
+                    ? $"{sourceAddress.Family}/{sourceAddress.Value}"
+                    : null
+            );
             deviceFilter.DevicePresentation = GetDevicePresentation(packet);
         }
         var retainedSources = sources;
         foreach (var port in AllSources.Children.ToArray())
         {
-            var endpoints = retainedSources.Where(x => x.PortId == port.Key)
-                .Select(x => SourceKey(x.PortId, x.EndpointId)).ToHashSet();
+            var endpoints = retainedSources
+                .Where(x => x.PortId == port.Key)
+                .Select(x => SourceKey(x.PortId, x.EndpointId))
+                .ToHashSet();
             foreach (var child in port.Children.Where(x => !endpoints.Contains(x.Key)).ToArray())
             {
                 port.Children.Remove(child);
                 child.Dispose();
             }
-            if (!retainedSources.Any(x => x.PortId == port.Key) && !state.Ports.Any(x => x.Id == port.Key))
+            if (
+                !retainedSources.Any(x => x.PortId == port.Key)
+                && !state.Ports.Any(x => x.Id == port.Key)
+            )
             {
                 AllSources.Children.Remove(port);
                 DisposeFilter(port);
@@ -602,13 +850,29 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         {
             chart.Append(_state.Packets);
         }
-        var sourceKeys = AllSources.Children.SelectMany(x => x.Children).Where(x => x.IsChecked == true).Select(x => x.Key).ToHashSet();
+        var sourceKeys = AllSources
+            .Children.SelectMany(x => x.Children)
+            .Where(x => x.IsChecked == true)
+            .Select(x => x.Key)
+            .ToHashSet();
         var protocols = Protocols.Where(x => x.IsChecked == true).Select(x => x.Key).ToHashSet();
         var devices = Devices.Where(x => x.IsChecked == true).Select(x => x.Key).ToHashSet();
-        bool MatchesFilters(PacketSnapshot packet) => sourceKeys.Contains(SourceKey(packet.Key.PortId, packet.Endpoint))
-            && protocols.Contains(packet.Key.ProtocolId) && devices.Contains(SourceDeviceKey(packet))
-            && (DirectionIndex == 0 || (DirectionIndex == 1 ? packet.Key.Direction == PacketDirection.Rx : packet.Key.Direction == PacketDirection.Tx))
-            && (packet.Name.Contains(Search, StringComparison.OrdinalIgnoreCase) || packet.MessageId.Contains(Search, StringComparison.OrdinalIgnoreCase));
+        bool MatchesFilters(PacketSnapshot packet) =>
+            sourceKeys.Contains(SourceKey(packet.Key.PortId, packet.Endpoint))
+            && protocols.Contains(packet.Key.ProtocolId)
+            && devices.Contains(SourceDeviceKey(packet))
+            && (
+                DirectionIndex == 0
+                || (
+                    DirectionIndex == 1
+                        ? packet.Key.Direction == PacketDirection.Rx
+                        : packet.Key.Direction == PacketDirection.Tx
+                )
+            )
+            && (
+                packet.Name.Contains(Search, StringComparison.OrdinalIgnoreCase)
+                || packet.MessageId.Contains(Search, StringComparison.OrdinalIgnoreCase)
+            );
         var filtered = _state.Packets.Where(MatchesFilters).ToArray();
         var selectedMessage = SelectedMessage;
         var selectedKey = selectedMessage?.Packet.Key;
@@ -620,7 +884,11 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             var keep = new HashSet<PacketGroupKey>();
 
             // Buffer eviction must not remove the row the user is inspecting.
-            if (selectedMessage != null && _state.Evicted > 0 && MatchesFilters(selectedMessage.Packet))
+            if (
+                selectedMessage != null
+                && _state.Evicted > 0
+                && MatchesFilters(selectedMessage.Packet)
+            )
             {
                 keep.Add(selectedMessage.Packet.Key);
             }
@@ -628,9 +896,12 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             {
                 var latest = group.Last();
                 keep.Add(group.Key);
-                var elapsed = _time.GetElapsedTime(group.First().MonotonicTimestamp, _time.GetTimestamp()).TotalSeconds;
+                var elapsed = _time
+                    .GetElapsedTime(group.First().MonotonicTimestamp, _time.GetTimestamp())
+                    .TotalSeconds;
                 var count = group.Count();
-                var frequency = _fileReader == null && count > 1 && elapsed > 0 ? (count - 1) / elapsed : 0;
+                var frequency =
+                    _fileReader == null && count > 1 && elapsed > 0 ? (count - 1) / elapsed : 0;
                 if (existing.TryGetValue(group.Key, out var row))
                 {
                     row.Update(latest, count, frequency);
@@ -638,10 +909,12 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
                 }
                 else
                 {
-                    Messages.Add(new(latest, count, frequency)
-                    {
-                        DevicePresentation = GetDevicePresentation(latest),
-                    });
+                    Messages.Add(
+                        new(latest, count, frequency)
+                        {
+                            DevicePresentation = GetDevicePresentation(latest),
+                        }
+                    );
                 }
             }
             for (var i = Messages.Count - 1; i >= 0; i--)
@@ -679,9 +952,18 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             _refreshing = false;
         }
         IsEmpty = ActiveTab == 0 ? Messages.Count == 0 : Journal.Count == 0;
-        CaptureStatus = (IsPaused ? RS.PacketInspector_Paused + " · " : string.Empty)
-            + string.Format(RS.PacketInspector_Status, _state.Packets.Count, _state.Evicted, _state.Errors);
-        HistoryActionText = _fileReader != null && _historyKey != null ? RS.FileInspector_ShowAll : RS.PacketInspector_History;
+        CaptureStatus =
+            (IsPaused ? RS.PacketInspector_Paused + " · " : string.Empty)
+            + string.Format(
+                RS.PacketInspector_Status,
+                _state.Packets.Count,
+                _state.Evicted,
+                _state.Errors
+            );
+        HistoryActionText =
+            _fileReader != null && _historyKey != null
+                ? RS.FileInspector_ShowAll
+                : RS.PacketInspector_History;
         UpdateDetails();
     }
 
@@ -695,18 +977,25 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         _detailsSequence = packet?.Sequence ?? -1;
         _detailsTab = ActiveTab;
         DetailsPacket = packet;
-        DetailsPosition = packet?.FileEndOffset is { } offset ? $"#{packet.Sequence} · 0x{offset:X8}" : string.Empty;
+        DetailsPosition = packet?.FileEndOffset is { } offset
+            ? $"#{packet.Sequence} · 0x{offset:X8}"
+            : string.Empty;
         Fields.Clear();
         DetailsTitle = packet?.Name ?? RS.PacketInspector_SelectMessage;
-        DetailsMetadata = packet == null ? string.Empty
-            : $"{packet.Protocol} · {packet.Direction} · {packet.Time}\n{packet.PortName} / {packet.Endpoint}";
+        DetailsMetadata =
+            packet == null
+                ? string.Empty
+                : $"{packet.Protocol} · {packet.Direction} · {packet.Time}\n{packet.PortName} / {packet.Endpoint}";
         HasDetails = packet != null;
         DetailsProtocol = packet?.Protocol ?? string.Empty;
         DetailsDirection = packet?.Direction ?? string.Empty;
         DetailsTime = packet?.Time ?? string.Empty;
-        DetailsEndpoint = packet == null ? string.Empty
-            : string.IsNullOrWhiteSpace(packet.EndpointName) ? packet.Endpoint : packet.EndpointName;
-        DetailsEndpointDescription = packet?.EndpointDescription ?? packet?.Endpoint ?? string.Empty;
+        DetailsEndpoint =
+            packet == null ? string.Empty
+            : string.IsNullOrWhiteSpace(packet.EndpointName) ? packet.Endpoint
+            : packet.EndpointName;
+        DetailsEndpointDescription =
+            packet?.EndpointDescription ?? packet?.Endpoint ?? string.Empty;
         DetailsDevice = packet == null ? null : GetDevicePresentation(packet);
         DetailsError = packet?.InspectionError ?? string.Empty;
         if (packet == null)
@@ -721,12 +1010,19 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         }
         if (Fields.Count == 0)
         {
-            DetailsError = string.Join(Environment.NewLine, new[] { DetailsError, RS.PacketInspector_NoFields }.Where(x => x.Length > 0));
+            DetailsError = string.Join(
+                Environment.NewLine,
+                new[] { DetailsError, RS.PacketInspector_NoFields }.Where(x => x.Length > 0)
+            );
         }
         var builder = new StringBuilder();
         var textFields = packet.Fields;
-        if (textFields.Count == 1 && textFields[0].Name == packet.Name
-            && string.IsNullOrEmpty(textFields[0].Value) && textFields[0].Children.Count > 0)
+        if (
+            textFields.Count == 1
+            && textFields[0].Name == packet.Name
+            && string.IsNullOrEmpty(textFields[0].Value)
+            && textFields[0].Children.Count > 0
+        )
         {
             textFields = textFields[0].Children;
         }
@@ -745,8 +1041,10 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         }
         var indices = new List<int>();
         var names = new List<string>();
-        if (!FindField(packet.Fields, field, indices, names)
-            || Charts.Any(chart => chart.Matches(packet.Key, indices, names)))
+        if (
+            !FindField(packet.Fields, field, indices, names)
+            || Charts.Any(chart => chart.Matches(packet.Key, indices, names))
+        )
         {
             return;
         }
@@ -756,7 +1054,8 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
             names,
             field.Units ?? string.Empty,
             _themeService,
-            RemoveChart);
+            RemoveChart
+        );
         chart.SetParent(this);
         Charts.Add(chart);
         HasCharts = true;
@@ -776,13 +1075,17 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         IReadOnlyList<PacketFieldSnapshot> fields,
         PacketFieldSnapshot target,
         List<int> indices,
-        List<string> names)
+        List<string> names
+    )
     {
         for (var index = 0; index < fields.Count; index++)
         {
             indices.Add(index);
             names.Add(fields[index].Name);
-            if (ReferenceEquals(fields[index], target) || FindField(fields[index].Children, target, indices, names))
+            if (
+                ReferenceEquals(fields[index], target)
+                || FindField(fields[index].Children, target, indices, names)
+            )
             {
                 return true;
             }
@@ -792,12 +1095,22 @@ public class PacketInspectorPageViewModel : PageViewModel<IPage>
         return false;
     }
 
-    private static void AppendFields(StringBuilder builder, IReadOnlyList<PacketFieldSnapshot> fields, int depth)
+    private static void AppendFields(
+        StringBuilder builder,
+        IReadOnlyList<PacketFieldSnapshot> fields,
+        int depth
+    )
     {
         foreach (var field in fields)
         {
-            builder.Append(' ', depth * 2).Append(field.Name).Append(": ").Append(field.Value)
-                .Append(' ').Append(field.Units).AppendLine();
+            builder
+                .Append(' ', depth * 2)
+                .Append(field.Name)
+                .Append(": ")
+                .Append(field.Value)
+                .Append(' ')
+                .Append(field.Units)
+                .AppendLine();
             AppendFields(builder, field.Children, depth + 1);
         }
     }

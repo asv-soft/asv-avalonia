@@ -1,5 +1,5 @@
-using Material.Icons;
 using Avalonia.Input.Platform;
+using Material.Icons;
 
 namespace Asv.Avalonia;
 

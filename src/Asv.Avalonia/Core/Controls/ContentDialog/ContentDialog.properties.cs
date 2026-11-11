@@ -71,7 +71,10 @@ public partial class ContentDialog
     /// Defines the <see cref="IconColor"/> property.
     /// </summary>
     public static readonly StyledProperty<AsvColorKind> IconColorProperty =
-        AvaloniaProperty.Register<ContentDialog, AsvColorKind>(nameof(IconColor), AsvColorKind.None);
+        AvaloniaProperty.Register<ContentDialog, AsvColorKind>(
+            nameof(IconColor),
+            AsvColorKind.None
+        );
 
     /// <summary>
     /// Gets or sets the palette color of the title icon.
@@ -86,7 +89,10 @@ public partial class ContentDialog
     /// Defines the <see cref="Status"/> property.
     /// </summary>
     public static readonly StyledProperty<ShellErrorState> StatusProperty =
-        AvaloniaProperty.Register<ContentDialog, ShellErrorState>(nameof(Status), ShellErrorState.Normal);
+        AvaloniaProperty.Register<ContentDialog, ShellErrorState>(
+            nameof(Status),
+            ShellErrorState.Normal
+        );
 
     /// <summary>
     /// Gets or sets the optional icon displayed before the title.
@@ -124,7 +130,10 @@ public partial class ContentDialog
     /// Defines the <see cref="SizeMode"/> property.
     /// </summary>
     public static readonly StyledProperty<DialogSizeMode> SizeModeProperty =
-        AvaloniaProperty.Register<ContentDialog, DialogSizeMode>(nameof(SizeMode), DialogSizeMode.Compact);
+        AvaloniaProperty.Register<ContentDialog, DialogSizeMode>(
+            nameof(SizeMode),
+            DialogSizeMode.Compact
+        );
 
     /// <summary>
     /// Gets or sets how much of the dialog host is occupied by the dialog.

@@ -22,7 +22,6 @@
                 </ControlTemplate>
             </Setter>
         </Style>
-
     </UserControl.Styles>
     <Grid Name="PART_MainGrid">
         <Grid.RowDefinitions>
@@ -54,9 +53,7 @@
                     Kind="ChevronDoubleLeft"
                     IsVisible="{Binding IsPointerOver, ElementName=PART_HeaderButton}"
                 />
-                <avalonia1:MaterialIcon
-                    IsVisible="{Binding !IsPointerOver, ElementName=PART_HeaderButton}">
-                    
+                <avalonia1:MaterialIcon IsVisible="{Binding !IsPointerOver, ElementName=PART_HeaderButton}">
                     <avalonia1:MaterialIcon.Kind>
                         <MultiBinding Converter="{x:Static avalonia:CoalesceConverter.Instance}">
                             <Binding Path="TreeHeaderIcon" />
@@ -72,7 +69,6 @@
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-                
             </StackPanel>
         </Button>
 
@@ -93,16 +89,10 @@
                     <Setter Property="HorizontalAlignment" Value="Stretch" />
                     <Setter Property="IsVisible" Value="{Binding Base.IsVisible}" />
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <Setter
-                        Property="CornerRadius"
-                        Value="{DynamicResource PanelCornerRadius}"
-                    />
+                    <Setter Property="CornerRadius" Value="{DynamicResource PanelCornerRadius}" />
                 </Style>
                 <Style Selector="TreeViewItem:selected /template/ Border#PART_LayoutRoot">
-                    <Setter
-                        Property="CornerRadius"
-                        Value="{DynamicResource PanelCornerRadius}"
-                    />
+                    <Setter Property="CornerRadius" Value="{DynamicResource PanelCornerRadius}" />
                 </Style>
             </TreeView.Styles>
             <TreeView.ItemTemplate>
@@ -162,8 +152,6 @@
             HorizontalAlignment="Stretch"
         />
 
-        
-
         <ContentControl
             Name="PART_SelectedPageContent"
             Grid.Column="2"
@@ -172,8 +160,6 @@
             DataContext="{Binding SelectedPage.Value}"
             Content="{Binding}"
         />
-
-
 
         <DockPanel Grid.Column="2" Grid.Row="0" Margin="4">
             <Button
@@ -184,10 +170,7 @@
                 Background="Transparent"
                 Margin="0,0,4,0"
             >
-                <avalonia1:MaterialIcon
-                    Classes="medium"
-                    Kind="DockLeft"
-                />
+                <avalonia1:MaterialIcon Classes="medium" Kind="DockLeft" />
             </Button>
             <ItemsControl
                 ItemsSource="{Binding SelectedPage.Value.MenuView.Items}"

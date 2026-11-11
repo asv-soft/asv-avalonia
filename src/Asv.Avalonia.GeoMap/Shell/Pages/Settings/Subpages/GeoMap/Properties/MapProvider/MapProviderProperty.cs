@@ -122,9 +122,7 @@ public class MapProviderProperty : PropertyComboBoxViewModel
         }
 
         var currentKey = _mapService.GetProviderApiKey(CurrentProvider.Value.Provider.Info.Id);
-        var result = await _dialogService.ShowEditApiKeyDialogAsync(
-            currentApiKey: currentKey
-        );
+        var result = await _dialogService.ShowEditApiKeyDialogAsync(currentApiKey: currentKey);
 
         if (result != currentKey)
         {

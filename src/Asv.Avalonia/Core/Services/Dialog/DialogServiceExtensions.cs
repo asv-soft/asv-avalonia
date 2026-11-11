@@ -25,17 +25,19 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<YesOrNoDialogPrefab>().ShowDialogResultAsync(
-            new YesOrNoDialogPayload
-            {
-                Title = title,
-                Message = message,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<YesOrNoDialogPrefab>()
+            .ShowDialogResultAsync(
+                new YesOrNoDialogPayload
+                {
+                    Title = title,
+                    Message = message,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 
     /// <summary>
@@ -53,17 +55,19 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<SaveCancelDialogPrefab>().ShowDialogAsync(
-            new SaveCancelDialogPayload
-            {
-                Title = title,
-                Message = message,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<SaveCancelDialogPrefab>()
+            .ShowDialogAsync(
+                new SaveCancelDialogPayload
+                {
+                    Title = title,
+                    Message = message,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 
     /// <summary>
@@ -81,17 +85,19 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<InputDialogPrefab>().ShowDialogAsync(
-            new InputDialogPayload
-            {
-                Title = title,
-                Message = message,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<InputDialogPrefab>()
+            .ShowDialogAsync(
+                new InputDialogPayload
+                {
+                    Title = title,
+                    Message = message,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 
     /// <summary>
@@ -110,18 +116,20 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<HotKeyCaptureDialogPrefab>().ShowDialogAsync(
-            new HotKeyCaptureDialogPayload
-            {
-                Title = title,
-                Message = message,
-                CurrentHotKey = currentHotKey,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<HotKeyCaptureDialogPrefab>()
+            .ShowDialogAsync(
+                new HotKeyCaptureDialogPayload
+                {
+                    Title = title,
+                    Message = message,
+                    CurrentHotKey = currentHotKey,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 
     /// <summary>
@@ -140,18 +148,20 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<MarkdownDetailsDialogPrefab>().ShowDialogAsync(
-            new MarkdownDetailsDialogPayload
-            {
-                Title = title,
-                MarkdownText = markdownText,
-                OriginalText = originalText,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<MarkdownDetailsDialogPrefab>()
+            .ShowDialogAsync(
+                new MarkdownDetailsDialogPayload
+                {
+                    Title = title,
+                    MarkdownText = markdownText,
+                    OriginalText = originalText,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 
     /// <summary>
@@ -169,17 +179,19 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<UnsavedChangesDialogPrefab>().ShowDialogAsync(
-            new UnsavedChangesDialogPayload
-            {
-                Title = title,
-                Restrictions = restrictions,
-                SizeMode = sizeMode,
-                Icon = icon,
-                IconColor = iconColor,
-                Status = status,
-            }
-        );
+        return service
+            .GetDialogPrefab<UnsavedChangesDialogPrefab>()
+            .ShowDialogAsync(
+                new UnsavedChangesDialogPayload
+                {
+                    Title = title,
+                    Restrictions = restrictions,
+                    SizeMode = sizeMode,
+                    Icon = icon,
+                    IconColor = iconColor,
+                    Status = status,
+                }
+            );
     }
 
     /// <summary>
@@ -194,14 +206,16 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<OpenFileDialogDesktopPrefab>().ShowDialogAsync(
-            new OpenFileDialogPayload
-            {
-                Title = title,
-                TypeFilter = typeFilter,
-                InitialDirectory = initialDirectory,
-            }
-        );
+        return service
+            .GetDialogPrefab<OpenFileDialogDesktopPrefab>()
+            .ShowDialogAsync(
+                new OpenFileDialogPayload
+                {
+                    Title = title,
+                    TypeFilter = typeFilter,
+                    InitialDirectory = initialDirectory,
+                }
+            );
     }
 
     /// <summary>
@@ -218,16 +232,18 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<SaveFileDialogDesktopPrefab>().ShowDialogAsync(
-            new SaveFileDialogPayload
-            {
-                Title = title,
-                DefaultExt = defaultExt,
-                SuggestedFileName = suggestedFileName,
-                TypeFilter = typeFilter,
-                InitialDirectory = initialDirectory,
-            }
-        );
+        return service
+            .GetDialogPrefab<SaveFileDialogDesktopPrefab>()
+            .ShowDialogAsync(
+                new SaveFileDialogPayload
+                {
+                    Title = title,
+                    DefaultExt = defaultExt,
+                    SuggestedFileName = suggestedFileName,
+                    TypeFilter = typeFilter,
+                    InitialDirectory = initialDirectory,
+                }
+            );
     }
 
     /// <summary>
@@ -241,13 +257,9 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<SelectFolderDialogDesktopPrefab>().ShowDialogAsync(
-            new SelectFolderDialogPayload
-            {
-                Title = title,
-                OldPath = oldPath,
-            }
-        );
+        return service
+            .GetDialogPrefab<SelectFolderDialogDesktopPrefab>()
+            .ShowDialogAsync(new SelectFolderDialogPayload { Title = title, OldPath = oldPath });
     }
 
     /// <summary>
@@ -261,12 +273,10 @@ public static class DialogServiceExtensions
     {
         ArgumentNullException.ThrowIfNull(service);
 
-        return service.GetDialogPrefab<ObserveFolderDialogPrefab>().ShowDialogAsync(
-            new ObserveFolderDialogPayload
-            {
-                Title = title,
-                DefaultPath = defaultPath,
-            }
-        );
+        return service
+            .GetDialogPrefab<ObserveFolderDialogPrefab>()
+            .ShowDialogAsync(
+                new ObserveFolderDialogPayload { Title = title, DefaultPath = defaultPath }
+            );
     }
 }

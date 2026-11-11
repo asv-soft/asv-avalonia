@@ -211,13 +211,19 @@ public partial class WorkspacePanel : Panel
         {
             BindWorkspaceProperties();
         }
-        else if (change.Property == IsLeftPaneOpenProperty || change.Property == IsRightPaneOpenProperty)
+        else if (
+            change.Property == IsLeftPaneOpenProperty
+            || change.Property == IsRightPaneOpenProperty
+        )
         {
             RefreshChildren();
             InvalidateMeasure();
             RaiseWorkspaceChanged();
         }
-        else if (change.Property == MinLeftWidthProperty || change.Property == MinRightWidthProperty)
+        else if (
+            change.Property == MinLeftWidthProperty
+            || change.Property == MinRightWidthProperty
+        )
         {
             UpdateSidePaneLayout();
             InvalidateMeasure();
@@ -243,16 +249,22 @@ public partial class WorkspacePanel : Panel
         }
 
         _workspaceBindings = R3.Disposable.Combine(
-            Bind(IsLeftPaneOpenProperty, new Binding(nameof(Workspace.IsLeftPaneOpen))
-            {
-                Source = workspace,
-                Mode = BindingMode.TwoWay,
-            }),
-            Bind(IsRightPaneOpenProperty, new Binding(nameof(Workspace.IsRightPaneOpen))
-            {
-                Source = workspace,
-                Mode = BindingMode.TwoWay,
-            })
+            Bind(
+                IsLeftPaneOpenProperty,
+                new Binding(nameof(Workspace.IsLeftPaneOpen))
+                {
+                    Source = workspace,
+                    Mode = BindingMode.TwoWay,
+                }
+            ),
+            Bind(
+                IsRightPaneOpenProperty,
+                new Binding(nameof(Workspace.IsRightPaneOpen))
+                {
+                    Source = workspace,
+                    Mode = BindingMode.TwoWay,
+                }
+            )
         );
     }
 
@@ -307,12 +319,20 @@ public partial class WorkspacePanel : Panel
 
     private void FreezeVisibleSideWidths()
     {
-        if (_isLeftPaneShown && _leftColumn.ActualWidth is > 0 and var left && double.IsFinite(left))
+        if (
+            _isLeftPaneShown
+            && _leftColumn.ActualWidth is > 0 and var left
+            && double.IsFinite(left)
+        )
         {
             SetCurrentValue(LeftWidthProperty, new GridLength(left, GridUnitType.Pixel));
         }
 
-        if (_isRightPaneShown && _rightColumn.ActualWidth is > 0 and var right && double.IsFinite(right))
+        if (
+            _isRightPaneShown
+            && _rightColumn.ActualWidth is > 0 and var right
+            && double.IsFinite(right)
+        )
         {
             SetCurrentValue(RightWidthProperty, new GridLength(right, GridUnitType.Pixel));
         }
@@ -341,10 +361,8 @@ public partial class WorkspacePanel : Panel
             : GridLength.Auto;
     }
 
-    internal double? LeftColumnPixelWidth =>
-        GetPixelSize(_leftColumn.ActualWidth, LeftWidth);
-    internal double? RightColumnPixelWidth =>
-        GetPixelSize(_rightColumn.ActualWidth, RightWidth);
+    internal double? LeftColumnPixelWidth => GetPixelSize(_leftColumn.ActualWidth, LeftWidth);
+    internal double? RightColumnPixelWidth => GetPixelSize(_rightColumn.ActualWidth, RightWidth);
     internal double? BottomRowPixelHeight =>
         GetPixelSize(_bottomRow.ActualHeight, _bottomRow.Height);
 

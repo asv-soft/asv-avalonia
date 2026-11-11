@@ -63,17 +63,22 @@ public class MapViewModel : ViewModel, IMap
             .CurrentProvider.ToReadOnlyBindableReactiveProperty<ITileProvider>()
             .DisposeItWith(Disposable);
 
-        InputBindings = (mapService.Input?.Bindings.AsObservable()
-                ?? Observable.Return(MapInputBindings.Default))
+        InputBindings = (
+            mapService.Input?.Bindings.AsObservable() ?? Observable.Return(MapInputBindings.Default)
+        )
             .ObserveOnUIThreadDispatcher()
-            .ToReadOnlyBindableReactiveProperty(mapService.Input?.Bindings.CurrentValue ?? MapInputBindings.Default)
+            .ToReadOnlyBindableReactiveProperty(
+                mapService.Input?.Bindings.CurrentValue ?? MapInputBindings.Default
+            )
             .DisposeItWith(Disposable);
 
         Interaction = new MapInteractionController().DisposeItWith(Disposable);
     }
 
-    public string AltitudeLayerHeader => RS.ResourceManager.GetString("MapView_AltitudeLayer", RS.Culture)!;
-    public string PolygonAltitudesHeader => RS.ResourceManager.GetString("MapView_PolygonAltitudes", RS.Culture)!;
+    public string AltitudeLayerHeader =>
+        RS.ResourceManager.GetString("MapView_AltitudeLayer", RS.Culture)!;
+    public string PolygonAltitudesHeader =>
+        RS.ResourceManager.GetString("MapView_PolygonAltitudes", RS.Culture)!;
 
     public BindableReactiveProperty<bool> ShowAltitudes { get; } = new(false);
     public BindableReactiveProperty<bool> ShowPolygonAltitudes { get; } = new(true);

@@ -15,36 +15,66 @@ public sealed class AltitudeLayer : Control
     public static readonly StyledProperty<bool> ShowPolygonAltitudesProperty =
         AvaloniaProperty.Register<AltitudeLayer, bool>(nameof(ShowPolygonAltitudes), true);
     public static readonly StyledProperty<double> PixelsPerMeterProperty =
-        AvaloniaProperty.Register<AltitudeLayer, double>(nameof(PixelsPerMeter), 1,
-            validate: value => double.IsFinite(value) && value > 0);
-    public static readonly StyledProperty<IBrush?> StrokeProperty =
-        AvaloniaProperty.Register<AltitudeLayer, IBrush?>(nameof(Stroke));
+        AvaloniaProperty.Register<AltitudeLayer, double>(
+            nameof(PixelsPerMeter),
+            1,
+            validate: value => double.IsFinite(value) && value > 0
+        );
+    public static readonly StyledProperty<IBrush?> StrokeProperty = AvaloniaProperty.Register<
+        AltitudeLayer,
+        IBrush?
+    >(nameof(Stroke));
 
     private MapItemsControl? _attached;
     private readonly HashSet<MapItem> _items = [];
     private readonly HashSet<INotifyCollectionChanged> _polygons = [];
-    public MapItemsControl? Source { get => GetValue(SourceProperty); set => SetValue(SourceProperty, value); }
-    public bool ShowPolygonAltitudes { get => GetValue(ShowPolygonAltitudesProperty); set => SetValue(ShowPolygonAltitudesProperty, value); }
-    public double PixelsPerMeter { get => GetValue(PixelsPerMeterProperty); set => SetValue(PixelsPerMeterProperty, value); }
-    public IBrush? Stroke { get => GetValue(StrokeProperty); set => SetValue(StrokeProperty, value); }
+    public MapItemsControl? Source
+    {
+        get => GetValue(SourceProperty);
+        set => SetValue(SourceProperty, value);
+    }
+    public bool ShowPolygonAltitudes
+    {
+        get => GetValue(ShowPolygonAltitudesProperty);
+        set => SetValue(ShowPolygonAltitudesProperty, value);
+    }
+    public double PixelsPerMeter
+    {
+        get => GetValue(PixelsPerMeterProperty);
+        set => SetValue(PixelsPerMeterProperty, value);
+    }
+    public IBrush? Stroke
+    {
+        get => GetValue(StrokeProperty);
+        set => SetValue(StrokeProperty, value);
+    }
 
-    public AltitudeLayer() { IsHitTestVisible = false; ClipToBounds = true; }
+    public AltitudeLayer()
+    {
+        IsHitTestVisible = false;
+        ClipToBounds = true;
+    }
 
     protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
     {
         base.OnAttachedToVisualTree(e);
         Reconnect();
     }
+
     protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
     {
         Disconnect();
         base.OnDetachedFromVisualTree(e);
     }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == SourceProperty || change.Property == IsVisibleProperty
-            || change.Property == ShowPolygonAltitudesProperty)
+        if (
+            change.Property == SourceProperty
+            || change.Property == IsVisibleProperty
+            || change.Property == ShowPolygonAltitudesProperty
+        )
         {
             Reconnect();
         }
@@ -54,6 +84,7 @@ public sealed class AltitudeLayer : Control
             InvalidateVisual();
         }
     }
+
     private void Disconnect()
     {
         if (_attached is not null)
@@ -77,6 +108,7 @@ public sealed class AltitudeLayer : Control
         _polygons.Clear();
         _attached = null;
     }
+
     private void Reconnect()
     {
         Disconnect();
@@ -93,6 +125,7 @@ public sealed class AltitudeLayer : Control
         TrackItems();
         InvalidateVisual();
     }
+
     private void TrackItems()
     {
         foreach (var item in _items)
@@ -116,15 +149,28 @@ public sealed class AltitudeLayer : Control
         {
             _items.Add(item);
             item.PropertyChanged += ItemChanged;
-            if (ShowPolygonAltitudes && item.Polygon is INotifyCollectionChanged polygon && _polygons.Add(polygon))
+            if (
+                ShowPolygonAltitudes
+                && item.Polygon is INotifyCollectionChanged polygon
+                && _polygons.Add(polygon)
+            )
             {
                 polygon.CollectionChanged += PolygonChanged;
             }
         }
     }
-    private void MapChanged(object? sender, AvaloniaPropertyChangedEventArgs e) => InvalidateVisual();
+
+    private void MapChanged(object? sender, AvaloniaPropertyChangedEventArgs e) =>
+        InvalidateVisual();
+
     private void LayoutChanged(object? sender, EventArgs e) => InvalidateVisual();
-    private void Prepared(object? sender, ContainerPreparedEventArgs e) { TrackItems(); InvalidateVisual(); }
+
+    private void Prepared(object? sender, ContainerPreparedEventArgs e)
+    {
+        TrackItems();
+        InvalidateVisual();
+    }
+
     private void Clearing(object? sender, ContainerClearingEventArgs e)
     {
         if (e.Container is MapItem item && _items.Remove(item))
@@ -140,13 +186,18 @@ public sealed class AltitudeLayer : Control
 
         _polygons.Clear();
         foreach (var remaining in _items)
-            if (ShowPolygonAltitudes && remaining.Polygon is INotifyCollectionChanged polygon && _polygons.Add(polygon))
+            if (
+                ShowPolygonAltitudes
+                && remaining.Polygon is INotifyCollectionChanged polygon
+                && _polygons.Add(polygon)
+            )
             {
                 polygon.CollectionChanged += PolygonChanged;
             }
 
         InvalidateVisual();
     }
+
     private void ItemChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
         if (e.Property == MapItem.PolygonProperty)
@@ -156,7 +207,9 @@ public sealed class AltitudeLayer : Control
 
         InvalidateVisual();
     }
-    private void PolygonChanged(object? sender, NotifyCollectionChangedEventArgs e) => InvalidateVisual();
+
+    private void PolygonChanged(object? sender, NotifyCollectionChangedEventArgs e) =>
+        InvalidateVisual();
 
     public override void Render(DrawingContext context)
     {
@@ -167,21 +220,30 @@ public sealed class AltitudeLayer : Control
 
         foreach (var item in _items)
         {
-            if (!item.IsVisible || !ShowPolygonAltitudes || item.Polygon is not { Count: > 0 } polygon)
+            if (
+                !item.IsVisible
+                || !ShowPolygonAltitudes
+                || item.Polygon is not { Count: > 0 } polygon
+            )
             {
                 continue;
             }
 
             var pen = item.Pen ?? new Pen(Stroke, 1.5);
-            var vertices = polygon.Select(vertex =>
-            {
-                var bottom = Project(vertex);
-                var height = Math.Abs(vertex.Altitude) * PixelsPerMeter;
-                return (Bottom: bottom, Top: bottom - new Point(0, height), Valid: double.IsFinite(height));
-            }).ToArray();
-            var edgeCount = item.IsPolygonClosed && vertices.Length > 2
-                ? vertices.Length
-                : vertices.Length - 1;
+            var vertices = polygon
+                .Select(vertex =>
+                {
+                    var bottom = Project(vertex);
+                    var height = Math.Abs(vertex.Altitude) * PixelsPerMeter;
+                    return (
+                        Bottom: bottom,
+                        Top: bottom - new Point(0, height),
+                        Valid: double.IsFinite(height)
+                    );
+                })
+                .ToArray();
+            var edgeCount =
+                item.IsPolygonClosed && vertices.Length > 2 ? vertices.Length : vertices.Length - 1;
 
             // Fill all side faces before drawing outlines to retain clear edges.
             using (context.PushOpacity(0.15))
@@ -237,11 +299,16 @@ public sealed class AltitudeLayer : Control
         var source = _attached!;
         var half = new Point(source.Bounds.Width / 2, source.Bounds.Height / 2);
         var projection = source.Provider.Projection;
-        var offset = projection.Wgs84ToPixels(location, source.Zoom, source.Provider.TileSize)
+        var offset =
+            projection.Wgs84ToPixels(location, source.Zoom, source.Provider.TileSize)
             - projection.Wgs84ToPixels(source.CenterMap, source.Zoom, source.Provider.TileSize);
         var angle = source.Rotation * Math.PI / 180;
-        var point = half + new Point((offset.X * Math.Cos(angle)) - (offset.Y * Math.Sin(angle)),
-            (offset.X * Math.Sin(angle)) + (offset.Y * Math.Cos(angle)));
+        var point =
+            half
+            + new Point(
+                (offset.X * Math.Cos(angle)) - (offset.Y * Math.Sin(angle)),
+                (offset.X * Math.Sin(angle)) + (offset.Y * Math.Cos(angle))
+            );
         return source.TranslatePoint(point, this) ?? point;
     }
 }

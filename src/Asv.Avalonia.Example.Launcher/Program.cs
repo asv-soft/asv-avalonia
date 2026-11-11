@@ -29,11 +29,14 @@ internal static class Program
 
     public static AppBuilder BuildAvaloniaApp()
     {
-        return AppBuilder.Configure<App>()
+        return AppBuilder
+            .Configure<App>()
             .UsePlatformDetect()
-            .AfterSetup(_ => MacOSDockIcon.Set(
-                new Uri("avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png")
-            ))
+            .AfterSetup(_ =>
+                MacOSDockIcon.Set(
+                    new Uri("avares://Asv.Avalonia.Example.Launcher/Assets/asv-icon.png")
+                )
+            )
             .LogToTrace();
     }
 

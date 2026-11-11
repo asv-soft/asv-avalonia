@@ -30,9 +30,12 @@
             MinZoom="{Binding MapViewModel.MinZoom.Value}"
             MaxZoom="{Binding MapViewModel.MaxZoom.Value}"
         />
-        <map:MapAltitudeToggle HorizontalAlignment="Left" VerticalAlignment="Bottom"
-                               Margin="54,8,8,8"
-                               IsChecked="{Binding MapViewModel.ShowAltitudes.Value, Mode=TwoWay}" />
+        <map:MapAltitudeToggle
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Margin="54,8,8,8"
+            IsChecked="{Binding MapViewModel.ShowAltitudes.Value, Mode=TwoWay}"
+        />
         <map:MapScaleControl
             HorizontalAlignment="Left"
             VerticalAlignment="Bottom"

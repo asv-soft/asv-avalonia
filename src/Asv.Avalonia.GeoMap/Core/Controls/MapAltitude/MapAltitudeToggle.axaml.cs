@@ -7,9 +7,10 @@ namespace Asv.Avalonia.GeoMap;
 /// <summary>A round map toolbar button that toggles the polygon altitude layer.</summary>
 public sealed partial class MapAltitudeToggle : UserControl
 {
-    public static readonly StyledProperty<bool> IsCheckedProperty =
-        AvaloniaProperty.Register<MapAltitudeToggle, bool>(
-            nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<bool> IsCheckedProperty = AvaloniaProperty.Register<
+        MapAltitudeToggle,
+        bool
+    >(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
 
     public MapAltitudeToggle()
     {

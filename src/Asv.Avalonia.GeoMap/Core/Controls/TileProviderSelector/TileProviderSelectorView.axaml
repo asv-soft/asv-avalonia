@@ -24,11 +24,7 @@
             <GradientStop Offset="1" Color="#E029343D" />
         </LinearGradientBrush>
 
-        <LinearGradientBrush
-            x:Key="TileProviderPopupBrush"
-            StartPoint="50%,0%"
-            EndPoint="50%,100%"
-        >
+        <LinearGradientBrush x:Key="TileProviderPopupBrush" StartPoint="50%,0%" EndPoint="50%,100%">
             <GradientStop Offset="0" Color="#F2323D46" />
             <GradientStop Offset="1" Color="#F22A343C" />
         </LinearGradientBrush>

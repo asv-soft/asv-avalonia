@@ -23,12 +23,7 @@
     <Design.PreviewWith>
         <Border Width="220" Height="50" Padding="8" Background="#435A69">
             <Grid ColumnDefinitions="40,Auto,40">
-                <Grid
-                    Grid.Column="1"
-                    Width="120"
-                    RowDefinitions="18,7"
-                    ColumnDefinitions="*,*"
-                >
+                <Grid Grid.Column="1" Width="120" RowDefinitions="18,7" ColumnDefinitions="*,*">
                     <TextBlock
                         Width="80"
                         Margin="-40,0,0,0"
@@ -60,15 +55,8 @@
                             BorderBrush="#B0000000"
                             BorderThickness="1,0,1,2"
                         />
-                        <Border
-                            BorderBrush="#E6F8FBFF"
-                            BorderThickness="1,0,1,2"
-                        />
-                        <Border
-                            Width="1"
-                            HorizontalAlignment="Center"
-                            Background="#E6F8FBFF"
-                        />
+                        <Border BorderBrush="#E6F8FBFF" BorderThickness="1,0,1,2" />
+                        <Border Width="1" HorizontalAlignment="Center" Background="#E6F8FBFF" />
                     </Grid>
                 </Grid>
             </Grid>
@@ -146,17 +134,9 @@
             </TextBlock>
 
             <Grid Grid.Row="1" Grid.ColumnSpan="2" Height="7">
-                <Border
-                    Margin="0,1,0,-1"
-                    BorderBrush="#B0000000"
-                    BorderThickness="1,0,1,2"
-                />
+                <Border Margin="0,1,0,-1" BorderBrush="#B0000000" BorderThickness="1,0,1,2" />
                 <Border BorderBrush="#E6F8FBFF" BorderThickness="1,0,1,2" />
-                <Border
-                    Width="1"
-                    HorizontalAlignment="Center"
-                    Background="#E6F8FBFF"
-                />
+                <Border Width="1" HorizontalAlignment="Center" Background="#E6F8FBFF" />
             </Grid>
         </Grid>
     </Grid>

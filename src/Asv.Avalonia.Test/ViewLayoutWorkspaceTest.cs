@@ -179,23 +179,43 @@ public class ViewLayoutWorkspaceTest(WorkspaceUiTestFixture fixture)
                 var panel = new WorkspacePanel();
                 using var leftOpenBinding = panel.Bind(
                     WorkspacePanel.IsLeftPaneOpenProperty,
-                    new Binding(nameof(PaneState.LeftOpen)) { Source = source, Mode = BindingMode.TwoWay }
+                    new Binding(nameof(PaneState.LeftOpen))
+                    {
+                        Source = source,
+                        Mode = BindingMode.TwoWay,
+                    }
                 );
                 using var rightOpenBinding = panel.Bind(
                     WorkspacePanel.IsRightPaneOpenProperty,
-                    new Binding(nameof(PaneState.RightOpen)) { Source = source, Mode = BindingMode.TwoWay }
+                    new Binding(nameof(PaneState.RightOpen))
+                    {
+                        Source = source,
+                        Mode = BindingMode.TwoWay,
+                    }
                 );
                 using var leftWidthBinding = panel.Bind(
                     WorkspacePanel.LeftWidthProperty,
-                    new Binding(nameof(PaneState.LeftWidth)) { Source = source, Mode = BindingMode.TwoWay }
+                    new Binding(nameof(PaneState.LeftWidth))
+                    {
+                        Source = source,
+                        Mode = BindingMode.TwoWay,
+                    }
                 );
                 using var rightWidthBinding = panel.Bind(
                     WorkspacePanel.RightWidthProperty,
-                    new Binding(nameof(PaneState.RightWidth)) { Source = source, Mode = BindingMode.TwoWay }
+                    new Binding(nameof(PaneState.RightWidth))
+                    {
+                        Source = source,
+                        Mode = BindingMode.TwoWay,
+                    }
                 );
                 using var bottomHeightBinding = panel.Bind(
                     WorkspacePanel.BottomHeightProperty,
-                    new Binding(nameof(PaneState.BottomHeight)) { Source = source, Mode = BindingMode.TwoWay }
+                    new Binding(nameof(PaneState.BottomHeight))
+                    {
+                        Source = source,
+                        Mode = BindingMode.TwoWay,
+                    }
                 );
 
                 using var registration = view.RegisterWorkspaceLayout("workspace", panel);
@@ -260,7 +280,14 @@ public class ViewLayoutWorkspaceTest(WorkspaceUiTestFixture fixture)
                     LeftWidth = new GridLength(200),
                     RightWidth = new GridLength(240),
                 };
-                foreach (var dock in new[] { WorkspaceDock.Left, WorkspaceDock.Center, WorkspaceDock.Right })
+                foreach (
+                    var dock in new[]
+                    {
+                        WorkspaceDock.Left,
+                        WorkspaceDock.Center,
+                        WorkspaceDock.Right,
+                    }
+                )
                 {
                     var widget = new WorkspaceItem();
                     WorkspacePanel.SetDock(widget, dock);
@@ -339,8 +366,12 @@ public class ViewLayoutWorkspaceTest(WorkspaceUiTestFixture fixture)
             {
                 using var first = new LayoutViewModel();
                 using var second = new LayoutViewModel();
-                var firstStore = new JsonLayoutStore("""{"IsLeftPaneOpen":false,"IsRightPaneOpen":false}""");
-                var secondStore = new JsonLayoutStore("""{"IsLeftPaneOpen":true,"IsRightPaneOpen":true}""");
+                var firstStore = new JsonLayoutStore(
+                    """{"IsLeftPaneOpen":false,"IsRightPaneOpen":false}"""
+                );
+                var secondStore = new JsonLayoutStore(
+                    """{"IsLeftPaneOpen":true,"IsRightPaneOpen":true}"""
+                );
                 using var firstManager = new LayoutManager<IViewModel>(first, firstStore);
                 using var secondManager = new LayoutManager<IViewModel>(second, secondStore);
                 var view = new Control { DataContext = first };
@@ -368,7 +399,9 @@ public class ViewLayoutWorkspaceTest(WorkspaceUiTestFixture fixture)
             {
                 using var first = new LayoutViewModel();
                 using var second = new LayoutViewModel();
-                var firstStore = new JsonLayoutStore("""{"IsLeftPaneOpen":false,"IsRightPaneOpen":false}""");
+                var firstStore = new JsonLayoutStore(
+                    """{"IsLeftPaneOpen":false,"IsRightPaneOpen":false}"""
+                );
                 var secondStore = new JsonLayoutStore();
                 using var firstManager = new LayoutManager<IViewModel>(first, firstStore);
                 using var secondManager = new LayoutManager<IViewModel>(second, secondStore);
@@ -380,7 +413,11 @@ public class ViewLayoutWorkspaceTest(WorkspaceUiTestFixture fixture)
                 );
                 using var rightBinding = panel.Bind(
                     WorkspacePanel.IsRightPaneOpenProperty,
-                    new Binding("DataContext.RightOpen") { Source = view, Mode = BindingMode.TwoWay }
+                    new Binding("DataContext.RightOpen")
+                    {
+                        Source = view,
+                        Mode = BindingMode.TwoWay,
+                    }
                 );
                 using var registration = view.RegisterWorkspaceLayout("workspace", panel);
                 Assert.False(first.LeftOpen);
@@ -461,19 +498,30 @@ public class ViewLayoutWorkspaceTest(WorkspaceUiTestFixture fixture)
         }
 
         public void Flush() { }
+
         public void Dispose() { }
     }
 
     private sealed class PaneState : AvaloniaObject
     {
-        public static readonly StyledProperty<bool> LeftOpenProperty =
-            AvaloniaProperty.Register<PaneState, bool>(nameof(LeftOpen), true);
-        public static readonly StyledProperty<bool> RightOpenProperty =
-            AvaloniaProperty.Register<PaneState, bool>(nameof(RightOpen), true);
+        public static readonly StyledProperty<bool> LeftOpenProperty = AvaloniaProperty.Register<
+            PaneState,
+            bool
+        >(nameof(LeftOpen), true);
+        public static readonly StyledProperty<bool> RightOpenProperty = AvaloniaProperty.Register<
+            PaneState,
+            bool
+        >(nameof(RightOpen), true);
         public static readonly StyledProperty<GridLength> LeftWidthProperty =
-            AvaloniaProperty.Register<PaneState, GridLength>(nameof(LeftWidth), new GridLength(250));
+            AvaloniaProperty.Register<PaneState, GridLength>(
+                nameof(LeftWidth),
+                new GridLength(250)
+            );
         public static readonly StyledProperty<GridLength> RightWidthProperty =
-            AvaloniaProperty.Register<PaneState, GridLength>(nameof(RightWidth), new GridLength(250));
+            AvaloniaProperty.Register<PaneState, GridLength>(
+                nameof(RightWidth),
+                new GridLength(250)
+            );
         public static readonly StyledProperty<GridLength> BottomHeightProperty =
             AvaloniaProperty.Register<PaneState, GridLength>(nameof(BottomHeight), GridLength.Auto);
 

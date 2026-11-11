@@ -404,3 +404,8 @@ graphify-out/
 
 # Local implementation plans
 /docs/superpowers/**/*.md
+
+# Local agent configuration
+.agents/
+AGENTS.md
+Agents.md
