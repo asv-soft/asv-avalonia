@@ -258,11 +258,29 @@ namespace Asv.Avalonia.GeoMap {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Step.
+        ///   Looks up a localized string similar to Step must be greater than zero.
         /// </summary>
-        public static string GeoPointDialogViewModel_Step {
+        public static string GeoPointDialogStep_PositiveRequired {
             get {
-                return ResourceManager.GetString("GeoPointDialogViewModel_Step", resourceCulture);
+                return ResourceManager.GetString("GeoPointDialogStep_PositiveRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Horizontal step.
+        /// </summary>
+        public static string GeoPointDialogViewModel_HorizontalStep {
+            get {
+                return ResourceManager.GetString("GeoPointDialogViewModel_HorizontalStep", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Vertical step.
+        /// </summary>
+        public static string GeoPointDialogViewModel_VerticalStep {
+            get {
+                return ResourceManager.GetString("GeoPointDialogViewModel_VerticalStep", resourceCulture);
             }
         }
         
