@@ -1,6 +1,5 @@
 ﻿using Asv.Common;
 using Material.Icons;
-using Microsoft.Extensions.Logging;
 
 namespace Asv.Avalonia.GeoMap;
 
@@ -33,17 +32,14 @@ public sealed class GeoPointDialogPayload
 }
 
 /// <summary>
-///     Dialog for entering users's Geopoint.
+///     Dialog for entering user's Geopoint.
 /// </summary>
-public sealed class GeoPointDialogPrefab(
-    ILoggerFactory loggerFactory,
-    IUnitService unitService,
-    IMapService mapService
-) : IDialogPrefab<GeoPointDialogPayload, GeoPoint?>
+public sealed class GeoPointDialogPrefab(IUnitService unitService, IMapService mapService)
+    : IDialogPrefab<GeoPointDialogPayload, GeoPoint?>
 {
     public async Task<GeoPoint?> ShowDialogAsync(GeoPointDialogPayload dialogPayload)
     {
-        using var vm = new GeoPointDialogViewModel(loggerFactory, unitService, mapService);
+        using var vm = new GeoPointDialogViewModel(unitService, mapService);
 
         vm.ApplyValueToFields(dialogPayload.InitialLocation);
 
