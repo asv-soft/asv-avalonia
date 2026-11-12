@@ -187,6 +187,21 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
         }
     }
 
+    /// <summary>
+    /// Closes the dialog on Escape and invokes the <see cref="DefaultButton"/> on Enter.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// Enter and Escape are ignored unless the key down was raised on the same element. This works around
+    /// Avalonia issue #9626: when the dialog is opened by a key press, the matching key up arrives at the
+    /// focused element inside the dialog and would close it immediately.
+    /// </para>
+    /// <para>
+    /// If <see cref="DefaultButton"/> is <see cref="ContentDialogButton.None"/>, Enter is left unhandled so a
+    /// focused button can process it. Otherwise Enter is always handled, and the default button is invoked
+    /// only when it is enabled.
+    /// </para>
+    /// </remarks>
     protected override void OnKeyUp(KeyEventArgs e)
     {
         if (e.Handled)
@@ -195,11 +210,6 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
             return;
         }
 
-        // HACK: If a default button is set, and the content dialog is opened by enter or escape key press on a button
-        // the KeyUp event is raised on the focused item within the dialog, instead of the original button
-        // (Avalonia related issue #9626) and will immediately close the dialog
-        // We store the source of the key down and if it doesn't match, or hasn't been set yet, we ignore
-        // this key up event so we don't inadvertently close the dialog
         var visualSrc = e.Source as Visual;
         if (e.Key is Key.Enter or Key.Escape && _hotkeyDownVisual != visualSrc)
         {
@@ -216,25 +226,19 @@ public partial class ContentDialog : ContentControl, ICustomKeyboardNavigation
 
             case Key.Enter:
                 var defButton = DefaultButton;
-
-                // v2 - Only handle 'Enter' if the default button is set
-                //      Otherwise, we'll let the event go as normal - if focus is currently
-                //      on a button, 'Enter' should invoke that button
                 if (defButton != ContentDialogButton.None)
                 {
-                    switch (defButton)
+                    var button = defButton switch
                     {
-                        case ContentDialogButton.Primary:
-                            OnButtonClick(_primaryButton, null);
-                            break;
+                        ContentDialogButton.Primary => _primaryButton,
+                        ContentDialogButton.Secondary => _secondaryButton,
+                        ContentDialogButton.Close => _closeButton,
+                        _ => null,
+                    };
 
-                        case ContentDialogButton.Secondary:
-                            OnButtonClick(_secondaryButton, null);
-                            break;
-
-                        case ContentDialogButton.Close:
-                            OnButtonClick(_closeButton, null);
-                            break;
+                    if (button is { IsEffectivelyEnabled: true })
+                    {
+                        OnButtonClick(button, null);
                     }
 
                     e.Handled = true;
