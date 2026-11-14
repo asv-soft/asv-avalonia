@@ -11,8 +11,14 @@
     <resheader name="writer">
         <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
     </resheader>
-    <data name="GeoPointDialogViewModel_Step" xml:space="preserve">
-        <value>Шаг</value>
+    <data name="GeoPointDialogViewModel_HorizontalStep" xml:space="preserve">
+        <value>Горизонтальный шаг</value>
+    </data>
+    <data name="GeoPointDialogViewModel_VerticalStep" xml:space="preserve">
+        <value>Вертикальный шаг</value>
+    </data>
+    <data name="GeoPointDialogStep_PositiveRequired" xml:space="preserve">
+        <value>Шаг должен быть больше нуля</value>
     </data>
     <data name="GeoPointDialogPrefab_Content_Title" xml:space="preserve">
         <value>Установить координаты</value>

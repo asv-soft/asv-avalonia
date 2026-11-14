@@ -1,0 +1,79 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:map="clr-namespace:Asv.Avalonia.GeoMap;assembly=Asv.Avalonia.GeoMap"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:asv="clr-namespace:Asv.Avalonia;assembly=Asv.Avalonia"
+    x:CompileBindings="True"
+    x:DataType="map:GeoPointDialogStepViewModel"
+    x:Class="Asv.Avalonia.GeoMap.GeoPointDialogStepView"
+>
+    <UserControl.Styles>
+        <Style Selector="TextBox#PART_TextBox">
+            <Setter Property="ToolTip.Tip" Value="{Binding Header}" />
+        </Style>
+        <Style Selector="TextBox#PART_TextBox:error">
+            <Setter
+                Property="ToolTip.Tip"
+                Value="{Binding (DataValidationErrors.Errors), RelativeSource={RelativeSource Self}, Converter={x:Static asv:ValidationErrorsToStringConverter.Instance}}"
+            />
+        </Style>
+        <Style Selector="TextBox#PART_TextBox:error /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}" />
+        </Style>
+        <Style Selector="DataValidationErrors">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <ContentPresenter
+                        Name="PART_ContentPresenter"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        Content="{TemplateBinding Content}"
+                        Padding="{TemplateBinding Padding}"
+                    />
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <TextBox x:Name="PART_TextBox" VerticalContentAlignment="Center" Text="{Binding Text.Value}">
+        <TextBox.InnerLeftContent>
+            <avalonia:MaterialIcon Margin="8,0,0,0" Kind="{Binding Icon}" />
+        </TextBox.InnerLeftContent>
+        <TextBox.InnerRightContent>
+            <Button
+                Margin="0,0,4,0"
+                Padding="4,2"
+                IsTabStop="False"
+                Theme="{DynamicResource TransparentButton}"
+            >
+                <Button.Flyout>
+                    <MenuFlyout ItemsSource="{Binding Units}">
+                        <MenuFlyout.ItemContainerTheme>
+                            <ControlTheme
+                                TargetType="MenuItem"
+                                BasedOn="{StaticResource {x:Type MenuItem}}"
+                                x:DataType="asv:IUnitItem"
+                            >
+                                <Setter Property="Header" Value="{Binding Name}" />
+                                <Setter
+                                    Property="Command"
+                                    Value="{ReflectionBinding DataContext.ChangeUnitCommand, ElementName=PART_TextBox}"
+                                />
+                                <Setter Property="CommandParameter" Value="{Binding }" />
+                            </ControlTheme>
+                        </MenuFlyout.ItemContainerTheme>
+                    </MenuFlyout>
+                </Button.Flyout>
+                <TextBlock
+                    Classes="description"
+                    VerticalAlignment="Center"
+                    Text="{Binding UnitItem.Value.Symbol}"
+                />
+            </Button>
+        </TextBox.InnerRightContent>
+    </TextBox>
+</UserControl>

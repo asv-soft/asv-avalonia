@@ -1,7 +1,4 @@
 using Asv.Common;
-using Asv.Modeling;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Abstractions;
 using R3;
 
 namespace Asv.Avalonia.GeoMap;
@@ -10,28 +7,19 @@ public class GeoPointDialogViewModel : DialogViewModelBase
 {
     public const string DialogId = $"{BaseId}-geopoint";
 
-    private const double DefaultDistance = 1;
-
     private readonly ReactiveProperty<double> _altitude;
-    private readonly ReactiveProperty<double> _distance;
     private readonly ReactiveProperty<double> _latitude;
     private readonly ReactiveProperty<double> _longitude;
-    private GeoPoint _currentValue = GeoPoint.Zero;
     private bool _isSyncingCenterGeoPoint;
     private bool _isSyncingFields;
-    private bool _isSyncingLayout;
 
     public GeoPointDialogViewModel()
-        : this(NullLoggerFactory.Instance, NullUnitService.Instance, NullMapService.Instance)
+        : this(NullUnitService.Instance, NullMapService.Instance)
     {
         DesignTime.ThrowIfNotDesignMode();
     }
 
-    public GeoPointDialogViewModel(
-        ILoggerFactory loggerFactory,
-        IUnitService unitService,
-        IMapService mapService
-    )
+    public GeoPointDialogViewModel(IUnitService unitService, IMapService mapService)
         : base(DialogId)
     {
         ArgumentNullException.ThrowIfNull(unitService);
@@ -47,8 +35,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         );
         _altitude = new ReactiveProperty<double>(GeoPoint.Zero.Altitude).DisposeItWith(Disposable);
 
-        var distanceUnit = unitService.GetRequiredUnitOfType<DistanceUnit>(DistanceUnit.Id);
-        _distance = new ReactiveProperty<double>(DefaultDistance).DisposeItWith(Disposable);
+        var altitudeUnit = unitService.GetRequiredUnitOfType<AltitudeUnit>(AltitudeUnit.Id);
 
         LatitudeProperty = new PropertyUnitReactive(
             "latitude",
@@ -80,7 +67,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
 
         AltitudeProperty = new PropertyUnitReactive(
             "altitude",
-            unitService.GetRequiredUnitOfType<AltitudeUnit>(AltitudeUnit.Id),
+            altitudeUnit,
             _altitude,
             format: "F2"
         )
@@ -92,150 +79,81 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
 
-        DistanceProperty = new PropertyUnitReactive(
-            "distance",
-            distanceUnit,
-            _distance,
-            format: "F0"
-        )
-        {
-            Header = RS.GeoPointDialogViewModel_Step,
-            ShortHeader = RS.GeoPointDialogViewModel_Step,
-            Description = Avalonia.RS.Distance_Description,
-            Icon = Material.Icons.MaterialIconKind.Ruler,
-        }
-            .SetRoutableParent(this)
-            .DisposeItWith(Disposable);
-
         FieldsEditor = new PropertyEditorViewModel("fields")
             .SetRoutableParent(this)
             .DisposeItWith(Disposable);
         FieldsEditor.ItemsSource.Add(LatitudeProperty);
         FieldsEditor.ItemsSource.Add(LongitudeProperty);
         FieldsEditor.ItemsSource.Add(AltitudeProperty);
-        FieldsEditor.ItemsSource.Add(DistanceProperty);
 
-        MoveCommand = new ReactiveCommand<MoveDirection>(Move).DisposeItWith(Disposable);
+        HorizontalStep = new GeoPointDialogStepViewModel(
+            "horizontal-step",
+            unitService.GetRequiredUnitOfType<DistanceUnit>(DistanceUnit.Id),
+            RS.GeoPointDialogViewModel_HorizontalStep,
+            Material.Icons.MaterialIconKind.ArrowAll
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
+        VerticalStep = new GeoPointDialogStepViewModel(
+            "vertical-step",
+            altitudeUnit,
+            RS.GeoPointDialogViewModel_VerticalStep,
+            Material.Icons.MaterialIconKind.ArrowUpDown
+        )
+            .SetRoutableParent(this)
+            .DisposeItWith(Disposable);
 
-        CenterGeoPoint = new BindableReactiveProperty<GeoPoint>(_currentValue).DisposeItWith(
+        MoveCommand = HorizontalStep
+            .IsValid.ToReactiveCommand<MoveDirection>(direction => Move(direction, HorizontalStep))
+            .DisposeItWith(Disposable);
+        MoveVerticalCommand = VerticalStep
+            .IsValid.ToReactiveCommand<MoveDirection>(direction => Move(direction, VerticalStep))
+            .DisposeItWith(Disposable);
+
+        CenterGeoPoint = new BindableReactiveProperty<GeoPoint>(GeoPoint.Zero).DisposeItWith(
             Disposable
         );
 
         CenterGeoPoint
             .Skip(1)
-            .ObserveOnUIThreadDispatcher()
             .Where(_ => !_isSyncingCenterGeoPoint)
-            .Subscribe(value =>
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(_ =>
             {
                 ApplyValueToFields(
                     new GeoPoint(
-                        value.Latitude,
-                        value.Longitude,
-                        ReadUnitPropertyValue(AltitudeProperty, _currentValue.Altitude)
+                        CenterGeoPoint.Value.Latitude,
+                        CenterGeoPoint.Value.Longitude,
+                        ReadUnitPropertyValue(AltitudeProperty, _altitude.Value)
                     )
                 );
             })
             .DisposeItWith(Disposable);
 
-        _latitude.Skip(1).Subscribe(_ => ApplyLatitudeToCenter()).DisposeItWith(Disposable);
-        _longitude.Skip(1).Subscribe(_ => ApplyLongitudeToCenter()).DisposeItWith(Disposable);
-        _altitude.Skip(1).Subscribe(_ => ApplyAltitudeFromField()).DisposeItWith(Disposable);
+        _latitude.Skip(1).Subscribe(_ => ApplyFieldsToCenter()).DisposeItWith(Disposable);
+        _longitude.Skip(1).Subscribe(_ => ApplyFieldsToCenter()).DisposeItWith(Disposable);
+        _altitude.Skip(1).Subscribe(_ => ApplyFieldsToCenter()).DisposeItWith(Disposable);
 
-        TrackValidation(LatitudeProperty, false);
-        TrackValidation(LongitudeProperty, false);
-        TrackValidation(AltitudeProperty, false);
-        TrackValidation(DistanceProperty, true);
+        TrackValidation(LatitudeProperty);
+        TrackValidation(LongitudeProperty);
+        TrackValidation(AltitudeProperty);
         RefreshGeoPointValidation();
-        RegisterDistanceLayout();
     }
 
     public PropertyEditorViewModel FieldsEditor { get; }
     public PropertyUnitViewModel LatitudeProperty { get; }
     public PropertyUnitViewModel LongitudeProperty { get; }
     public PropertyUnitViewModel AltitudeProperty { get; }
-    public PropertyUnitViewModel DistanceProperty { get; }
+    public GeoPointDialogStepViewModel HorizontalStep { get; }
+    public GeoPointDialogStepViewModel VerticalStep { get; }
     public IReadOnlyBindableReactiveProperty<ITileProvider> CurrentProvider { get; }
     public BindableReactiveProperty<GeoPoint> CenterGeoPoint { get; }
 
     public ReactiveCommand<MoveDirection> MoveCommand { get; }
-
-    private void RefreshGeoPointValidation()
-    {
-        var isLonOk = !LongitudeProperty.Text.HasErrors;
-        var isLatOk = !LatitudeProperty.Text.HasErrors;
-        var isAltOk = !AltitudeProperty.Text.HasErrors;
-
-        IsValid.Value = isLonOk && isLatOk && isAltOk;
-    }
-
-    private void TrackValidation(PropertyUnitViewModel property, bool affectsMoveCommand)
-    {
-        Observable
-            .FromEventHandler<System.ComponentModel.DataErrorsChangedEventArgs>(
-                h => property.Text.ErrorsChanged += h,
-                h => property.Text.ErrorsChanged -= h
-            )
-            .ObserveOnUIThreadDispatcher()
-            .Subscribe(_ =>
-            {
-                RefreshGeoPointValidation();
-                if (affectsMoveCommand)
-                {
-                    MoveCommand.ChangeCanExecute(!property.Text.HasErrors);
-                }
-            })
-            .DisposeItWith(Disposable);
-    }
-
-    private void Move(MoveDirection moveDirection)
-    {
-        ApplyValueToFields(
-            GeoPointMoveHelper.Step(GetResult(), GetCurrentDistance(), moveDirection)
-        );
-    }
-
-    private void ApplyLatitudeToCenter()
-    {
-        if (_isSyncingFields)
-        {
-            return;
-        }
-
-        ApplyCurrentValueToCenter(
-            new GeoPoint(_latitude.Value, _currentValue.Longitude, _currentValue.Altitude)
-        );
-    }
-
-    private void ApplyLongitudeToCenter()
-    {
-        if (_isSyncingFields)
-        {
-            return;
-        }
-
-        ApplyCurrentValueToCenter(
-            new GeoPoint(_currentValue.Latitude, _longitude.Value, _currentValue.Altitude)
-        );
-    }
-
-    private void ApplyAltitudeFromField()
-    {
-        if (_isSyncingFields)
-        {
-            return;
-        }
-
-        _currentValue = new GeoPoint(
-            _currentValue.Latitude,
-            _currentValue.Longitude,
-            _altitude.Value
-        );
-        RefreshGeoPointValidation();
-    }
+    public ReactiveCommand<MoveDirection> MoveVerticalCommand { get; }
 
     public void ApplyValueToFields(GeoPoint value)
     {
-        _currentValue = value;
         _isSyncingFields = true;
         try
         {
@@ -248,13 +166,56 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             _isSyncingFields = false;
         }
 
-        ApplyCurrentValueToCenter(value);
-        RefreshGeoPointValidation();
+        ApplyValueToCenter(value);
     }
 
-    private void ApplyCurrentValueToCenter(GeoPoint value)
+    public GeoPoint GetResult()
     {
-        _currentValue = value;
+        return new GeoPoint(
+            ReadPendingUnitPropertyValue(LatitudeProperty, _latitude.Value),
+            ReadPendingUnitPropertyValue(LongitudeProperty, _longitude.Value),
+            ReadPendingUnitPropertyValue(AltitudeProperty, _altitude.Value)
+        );
+    }
+
+    private void RefreshGeoPointValidation()
+    {
+        var isLonOk = !LongitudeProperty.Text.HasErrors;
+        var isLatOk = !LatitudeProperty.Text.HasErrors;
+        var isAltOk = !AltitudeProperty.Text.HasErrors;
+
+        IsValid.Value = isLonOk && isLatOk && isAltOk;
+    }
+
+    private void TrackValidation(PropertyUnitViewModel property)
+    {
+        Observable
+            .FromEventHandler<System.ComponentModel.DataErrorsChangedEventArgs>(
+                h => property.Text.ErrorsChanged += h,
+                h => property.Text.ErrorsChanged -= h
+            )
+            .ObserveOnUIThreadDispatcher()
+            .Subscribe(_ => RefreshGeoPointValidation())
+            .DisposeItWith(Disposable);
+    }
+
+    private void Move(MoveDirection moveDirection, GeoPointDialogStepViewModel step)
+    {
+        ApplyValueToFields(GeoPointMoveHelper.Step(GetResult(), step.ValueInSi, moveDirection));
+    }
+
+    private void ApplyFieldsToCenter()
+    {
+        if (_isSyncingFields)
+        {
+            return;
+        }
+
+        ApplyValueToCenter(new GeoPoint(_latitude.Value, _longitude.Value, _altitude.Value));
+    }
+
+    private void ApplyValueToCenter(GeoPoint value)
+    {
         _isSyncingCenterGeoPoint = true;
         try
         {
@@ -264,24 +225,6 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         {
             _isSyncingCenterGeoPoint = false;
         }
-
-        RefreshGeoPointValidation();
-    }
-
-    public GeoPoint GetResult()
-    {
-        CommitPendingFieldValues();
-        CommitPendingDistanceValue();
-        return _currentValue;
-    }
-
-    private void CommitPendingFieldValues()
-    {
-        _currentValue = new GeoPoint(
-            ReadPendingUnitPropertyValue(LatitudeProperty, _currentValue.Latitude),
-            ReadPendingUnitPropertyValue(LongitudeProperty, _currentValue.Longitude),
-            ReadPendingUnitPropertyValue(AltitudeProperty, _currentValue.Altitude)
-        );
     }
 
     private static double ReadPendingUnitPropertyValue(
@@ -297,66 +240,6 @@ public class GeoPointDialogViewModel : DialogViewModelBase
         return ReadUnitPropertyValue(property, fallback);
     }
 
-    private double GetCurrentDistance()
-    {
-        var distance = ReadUnitPropertyValue(DistanceProperty, _distance.Value);
-        if (IsValidDistance(distance))
-        {
-            _distance.Value = distance;
-        }
-
-        return distance;
-    }
-
-    private void CommitPendingDistanceValue()
-    {
-        if (DistanceProperty.IsSync)
-        {
-            return;
-        }
-
-        var distance = ReadUnitPropertyValue(DistanceProperty, _distance.Value);
-        if (IsValidDistance(distance))
-        {
-            _distance.Value = distance;
-        }
-    }
-
-    private void RegisterDistanceLayout()
-    {
-        var distanceLayout = Layout.Register<double>(
-            nameof(DistanceProperty),
-            (value, _) =>
-            {
-                if (IsValidDistance(value))
-                {
-                    _isSyncingLayout = true;
-                    try
-                    {
-                        _distance.Value = value;
-                    }
-                    finally
-                    {
-                        _isSyncingLayout = false;
-                    }
-                }
-
-                return ValueTask.CompletedTask;
-            }
-        );
-
-        var distanceLayoutSave = _distance
-            .Skip(1)
-            .Where(value => !_isSyncingLayout && IsValidDistance(value))
-            .SubscribeAwait(
-                (value, cancel) => distanceLayout.SaveAsync(value, cancel),
-                AwaitOperation.Drop
-            );
-
-        R3.Disposable.Combine(distanceLayout, distanceLayoutSave).DisposeItWith(Disposable);
-        Layout.LoadWhenRootAttached(RootTracking).AddTo(ref DisposableBag);
-    }
-
     private static double ReadUnitPropertyValue(PropertyUnitViewModel property, double fallback)
     {
         if (property.Text.HasErrors)
@@ -364,19 +247,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
             return fallback;
         }
 
-        try
-        {
-            return property.Unit.CurrentUnitItem.CurrentValue.ParseToSi(property.Text.Value);
-        }
-        catch
-        {
-            return fallback;
-        }
-    }
-
-    private static bool IsValidDistance(double value)
-    {
-        return value is > 0 && double.IsFinite(value);
+        return property.Unit.CurrentUnitItem.CurrentValue.ParseToSi(property.Text.Value);
     }
 
     public override void ApplyDialog(ContentDialog dialog)
@@ -392,5 +263,7 @@ public class GeoPointDialogViewModel : DialogViewModelBase
     public override IEnumerable<IViewModel> GetChildren()
     {
         yield return FieldsEditor;
+        yield return HorizontalStep;
+        yield return VerticalStep;
     }
 }
