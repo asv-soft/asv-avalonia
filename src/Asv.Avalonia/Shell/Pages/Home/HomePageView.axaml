@@ -37,9 +37,9 @@
             Text="{Binding AppInfo.Description}"
         />
 
-        <Grid RowDefinitions="Auto,*">
-            <asv:ToolsList Grid.Row="0" Margin="0" ItemsSource="{Binding ToolsView}" />
-            <asv:ItemsList Grid.Row="1" ItemsSource="{Binding ItemsView}" />
-        </Grid>
+        <asv:FitFillPanel>
+            <asv:ToolsList ItemsSource="{Binding ToolsView}" />
+            <asv:ItemsList MinHeight="250" ItemsSource="{Binding ItemsView}" />
+        </asv:FitFillPanel>
     </DockPanel>
 </UserControl>
