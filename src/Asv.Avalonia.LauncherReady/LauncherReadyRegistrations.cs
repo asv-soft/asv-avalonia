@@ -14,6 +14,13 @@ public static class LauncherReadyRegistrations
 {
     extension(IHostApplicationBuilder builder)
     {
+        /// <summary>
+        /// Registers launcher readiness notifications and routes desktop restarts through the launcher.
+        /// </summary>
+        /// <remarks>
+        /// <see cref="LauncherFeatureOptions.IsOptional"/> allows direct startup. A restart still
+        /// requires <c>--launcher-path</c>; without it, the application closes without relaunching.
+        /// </remarks>
         public IHostApplicationBuilder RegisterLauncher(Action<Builder>? configure = null)
         {
             var options = builder
