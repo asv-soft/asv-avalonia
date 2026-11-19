@@ -68,7 +68,7 @@ internal sealed class LauncherNotifier : ILauncherNotifier
             _logger.LogDebug("Launcher tags {tag}", tag);
         }
 
-        _endpoint = TryGetEndpointFromArgs(appArgs.Args);
+        _endpoint = TryGetEndpointFromArgs(appArgs);
         if (_endpoint.HasValue)
         {
             _logger.LogDebug("Launcher endpoint arguments are present.");
@@ -129,12 +129,14 @@ internal sealed class LauncherNotifier : ILauncherNotifier
         await writer.FlushAsync(linkedCts.Token).ConfigureAwait(false);
     }
 
-    private LauncherReadyEndpoint? TryGetEndpointFromArgs(
-        in IReadOnlyDictionary<string, string> args
-    )
+    private LauncherReadyEndpoint? TryGetEndpointFromArgs(IAppArgs args)
     {
-        var hasPipeName = TryGetArgValue(args, LauncherPipeArg, out var pipeName);
-        var hasSessionToken = TryGetArgValue(args, LauncherTokenArg, out var sessionToken);
+        var hasPipeName = LauncherArgs.TryGetValue(args, LauncherPipeArg, out var pipeName);
+        var hasSessionToken = LauncherArgs.TryGetValue(
+            args,
+            LauncherTokenArg,
+            out var sessionToken
+        );
 
         if (!hasPipeName || !hasSessionToken)
         {
@@ -147,34 +149,5 @@ internal sealed class LauncherNotifier : ILauncherNotifier
             sessionToken
         );
         return new LauncherReadyEndpoint(pipeName, sessionToken);
-    }
-
-    private static bool TryGetArgValue(
-        in IReadOnlyDictionary<string, string> args,
-        string key,
-        out string value
-    )
-    {
-        value = string.Empty;
-
-        if (args.TryGetValue(key, out var rawValue) && !string.IsNullOrWhiteSpace(rawValue))
-        {
-            value = rawValue;
-            return true;
-        }
-
-        if (!key.StartsWith("--", StringComparison.Ordinal))
-        {
-            return false;
-        }
-
-        var normalizedKey = key[2..];
-        if (args.TryGetValue(normalizedKey, out rawValue) && !string.IsNullOrWhiteSpace(rawValue))
-        {
-            value = rawValue;
-            return true;
-        }
-
-        return false;
     }
 }

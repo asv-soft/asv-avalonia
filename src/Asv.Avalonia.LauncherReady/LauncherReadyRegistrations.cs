@@ -48,10 +48,15 @@ public static class LauncherReadyRegistrations
 
         private IHostApplicationBuilder ChangeAppRestartForDesktop()
         {
-            builder.Services.ReplaceSingleton<
-                IAppRestartFeature,
-                DesktopWithLauncherAppRestartFeature
-            >();
+            var args = new AppArgs(Environment.GetCommandLineArgs());
+            if (LauncherArgs.TryGetLauncherPath(args, out _))
+            {
+                builder.Services.AddSingleton<
+                    IAppRestartFeature,
+                    DesktopWithLauncherAppRestartFeature
+                >();
+            }
+
             return builder;
         }
 
