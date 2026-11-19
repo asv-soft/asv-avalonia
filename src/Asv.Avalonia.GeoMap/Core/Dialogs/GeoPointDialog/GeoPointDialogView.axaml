@@ -16,6 +16,15 @@
         <map:GeoPointDialogViewModel />
     </Design.DataContext>
 
+    <UserControl.Styles>
+        <Style Selector="Button.move">
+            <Setter Property="Width" Value="35" />
+            <Setter Property="Height" Value="35" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+
     <Grid Margin="0,0,20,0" RowDefinitions="280,Auto">
         <Border
             Grid.Row="0"
@@ -56,127 +65,125 @@
             </Grid>
         </Border>
 
-        <Grid Grid.Row="1" Margin="0,12,0,0" ColumnDefinitions="Auto,*">
-            <StackPanel Grid.Column="0" Spacing="8" VerticalAlignment="Top">
-                <UniformGrid Rows="3" Columns="3">
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.UpLeft}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowTopLeft" />
-                    </Button>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.Forward}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowTop" />
-                    </Button>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.UpRight}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowTopRight" />
-                    </Button>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.Left}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowLeft" />
-                    </Button>
-                    <Border Width="35" Height="35" Background="Transparent">
-                        <avalonia:MaterialIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Opacity="0.65"
-                            Kind="MapMarkerRadius"
-                        />
-                    </Border>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.Right}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowRight" />
-                    </Button>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.DownLeft}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowBottomLeft" />
-                    </Button>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.Backward}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowBottom" />
-                    </Button>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.DownRight}"
-                        HorizontalContentAlignment="Center"
-                        VerticalContentAlignment="Center"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowBottomRight" />
-                    </Button>
-                </UniformGrid>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="4">
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.Up}"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowTop" />
-                    </Button>
-                    <Button
-                        Command="{Binding MoveCommand}"
-                        CommandParameter="{x:Static map:MoveDirection.Down}"
-                        Width="35"
-                        Height="35"
-                    >
-                        <avalonia:MaterialIcon Kind="ArrowBottom" />
-                    </Button>
-                </StackPanel>
-            </StackPanel>
+        <Grid
+            Grid.Row="1"
+            Margin="0,12,0,0"
+            ColumnDefinitions="140,*"
+            RowDefinitions="Auto,Auto"
+            ColumnSpacing="10"
+            RowSpacing="8"
+        >
+            <UniformGrid
+                Grid.Row="0"
+                Grid.Column="0"
+                Rows="3"
+                Columns="3"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Top"
+            >
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.UpLeft}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowTopLeft" />
+                </Button>
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.Forward}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowTop" />
+                </Button>
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.UpRight}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowTopRight" />
+                </Button>
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.Left}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowLeft" />
+                </Button>
+                <Border Width="35" Height="35" Background="Transparent">
+                    <avalonia:MaterialIcon
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0.65"
+                        Kind="MapMarkerRadius"
+                    />
+                </Border>
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.Right}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowRight" />
+                </Button>
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.DownLeft}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowBottomLeft" />
+                </Button>
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.Backward}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowBottom" />
+                </Button>
+                <Button
+                    Classes="move"
+                    Command="{Binding MoveCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.DownRight}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowBottomRight" />
+                </Button>
+            </UniformGrid>
+            <map:GeoPointDialogStepView
+                Grid.Row="1"
+                Grid.Column="0"
+                VerticalAlignment="Center"
+                DataContext="{Binding HorizontalStep}"
+            />
 
             <ScrollViewer
+                Grid.Row="0"
                 Grid.Column="1"
-                Margin="10,0,0,0"
                 VerticalScrollBarVisibility="Auto"
                 HorizontalScrollBarVisibility="Disabled"
             >
                 <asv:PropertyEditorView DataContext="{Binding FieldsEditor}" />
             </ScrollViewer>
+            <Grid Grid.Row="1" Grid.Column="1" ColumnDefinitions="Auto,Auto,*" ColumnSpacing="4">
+                <Button
+                    Grid.Column="0"
+                    Classes="move"
+                    Command="{Binding MoveVerticalCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.Up}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowTop" />
+                </Button>
+                <Button
+                    Grid.Column="1"
+                    Classes="move"
+                    Command="{Binding MoveVerticalCommand}"
+                    CommandParameter="{x:Static map:MoveDirection.Down}"
+                >
+                    <avalonia:MaterialIcon Kind="ArrowBottom" />
+                </Button>
+                <map:GeoPointDialogStepView
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    DataContext="{Binding VerticalStep}"
+                />
+            </Grid>
         </Grid>
     </Grid>
 </UserControl>
