@@ -45,7 +45,7 @@ public class SoloRunFeature : BackgroundService
 
         var mutexName = config.Mutex;
         _mutex = new Mutex(
-            initiallyOwned: true,
+            initiallyOwned: false,
             name: mutexName,
             options: new NamedWaitHandleOptions
             {
@@ -128,20 +128,6 @@ public class SoloRunFeature : BackgroundService
     {
         if (Interlocked.CompareExchange(ref _isMutexDisposed, 1, 0) != 0)
         {
-            return;
-        }
-
-        try
-        {
-            _mutex.ReleaseMutex();
-        }
-        catch (ApplicationException ex)
-        {
-            _logger.LogWarning(ex, "The current thread does not own the mutex.");
-        }
-        catch (ObjectDisposedException ex)
-        {
-            _logger.LogError(ex, "Mutex already disposed.");
             return;
         }
 

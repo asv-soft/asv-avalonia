@@ -22,7 +22,7 @@ public sealed class DesktopWithLauncherAppRestartFeature(
         }
 
         var currentArgs = argsStore.Args.CurrentValue;
-        if (!TryGetLauncherPath(currentArgs.Args, out var launcherPath))
+        if (!LauncherArgs.TryGetLauncherPath(currentArgs, out var launcherPath))
         {
             _logger.LogError("Failed to restart the application: launcher path is missing.");
             return;
@@ -69,43 +69,6 @@ public sealed class DesktopWithLauncherAppRestartFeature(
                 string.Join(" ", targetArgs)
             );
         }
-    }
-
-    private static bool TryGetLauncherPath(
-        IReadOnlyDictionary<string, string> args,
-        out string launcherPath
-    )
-    {
-        return TryGetArgValue(args, LauncherCommandLineArguments.LauncherPathArg, out launcherPath);
-    }
-
-    private static bool TryGetArgValue(
-        IReadOnlyDictionary<string, string> args,
-        string key,
-        out string value
-    )
-    {
-        value = string.Empty;
-
-        if (args.TryGetValue(key, out var rawValue) && !string.IsNullOrWhiteSpace(rawValue))
-        {
-            value = rawValue;
-            return true;
-        }
-
-        if (!key.StartsWith("--", StringComparison.Ordinal))
-        {
-            return false;
-        }
-
-        var normalizedKey = key[2..];
-        if (args.TryGetValue(normalizedKey, out rawValue) && !string.IsNullOrWhiteSpace(rawValue))
-        {
-            value = rawValue;
-            return true;
-        }
-
-        return false;
     }
 
     private static bool IsTargetArgument(string arg)
