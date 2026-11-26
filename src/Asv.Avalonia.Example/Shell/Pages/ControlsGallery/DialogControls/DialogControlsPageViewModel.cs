@@ -321,6 +321,7 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         MarkdownDetailsResult.DisposeItWith(Disposable);
         UnsavedChangesResult.DisposeItWith(Disposable);
         EditApiKeyResult.DisposeItWith(Disposable);
+        NestedValidationDialogResult.DisposeItWith(Disposable);
         ShowMarkdownDetailsCommand = new ReactiveCommand(
             async (_, cancel) =>
             {
@@ -359,6 +360,10 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
                 cancel.ThrowIfCancellationRequested();
                 EditApiKeyResult.Value = result;
             },
+            AwaitOperation.Drop
+        ).DisposeItWith(Disposable);
+        ShowNestedValidationDialogCommand = new ReactiveCommand(
+            ShowNestedValidationDialogAsync,
             AwaitOperation.Drop
         ).DisposeItWith(Disposable);
 
@@ -451,9 +456,11 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
     public ReactiveCommand ShowMarkdownDetailsCommand { get; }
     public ReactiveCommand ShowUnsavedChangesCommand { get; }
     public ReactiveCommand ShowEditApiKeyCommand { get; }
+    public ReactiveCommand ShowNestedValidationDialogCommand { get; }
     public BindableReactiveProperty<string?> MarkdownDetailsResult { get; } = new();
     public BindableReactiveProperty<string?> UnsavedChangesResult { get; } = new();
     public BindableReactiveProperty<string?> EditApiKeyResult { get; } = new();
+    public BindableReactiveProperty<string?> NestedValidationDialogResult { get; } = new();
 
     public ReactiveCommand ResetCustomResultCommand { get; }
     public ReactiveCommand ResetYesOrNoCommand { get; }
@@ -726,6 +733,33 @@ public class DialogControlsPageViewModel : ControlsGallerySubPage
         var msg = string.Format(RS.DialogControlsPageViewModel_GeoPointPrefab_Result, result);
         const string dialogName = nameof(GeoPointDialogPrefab);
         _logger.LogInformation("({dialogName}) {msg}", dialogName, msg);
+    }
+
+    private async ValueTask ShowNestedValidationDialogAsync(
+        Unit unit,
+        CancellationToken cancellationToken
+    )
+    {
+        var viewModel = new NestedValidationDialogViewModel();
+        var dialog = new ContentDialog(viewModel)
+        {
+            SizeMode = SelectedSizeMode.Value,
+            Title = RS.NestedValidationDialogViewModel_Title,
+            PrimaryButtonText = Asv.Avalonia.RS.DialogButton_Save,
+            SecondaryButtonText = Asv.Avalonia.RS.DialogButton_Cancel,
+        };
+
+        try
+        {
+            viewModel.ApplyDialog(dialog);
+            var result = await dialog.ShowAsync();
+            cancellationToken.ThrowIfCancellationRequested();
+            NestedValidationDialogResult.Value = result.ToString();
+        }
+        finally
+        {
+            viewModel.Dispose();
+        }
     }
 
     private static string LoadMarkdownExample()

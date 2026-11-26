@@ -1,0 +1,42 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:example="clr-namespace:Asv.Avalonia.Example"
+    mc:Ignorable="d"
+    d:DesignWidth="400"
+    d:DesignHeight="300"
+    x:Class="Asv.Avalonia.Example.NestedValidationDialogView"
+    x:DataType="example:NestedValidationDialogViewModel"
+>
+    <Design.DataContext>
+        <example:NestedValidationDialogViewModel />
+    </Design.DataContext>
+
+    <TabControl>
+        <TabItem Header="{x:Static example:RS.NestedValidationDialogViewModel_GeneralTab}">
+            <StackPanel Spacing="8" Margin="8">
+                <TextBlock Text="{x:Static example:RS.NestedValidationDialogViewModel_Name}" />
+                <TextBox
+                    PlaceholderText="{x:Static example:RS.NestedValidationDialogViewModel_Name}"
+                    Text="{Binding Name.Value, Mode=TwoWay}"
+                />
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="{x:Static example:RS.NestedValidationDialogViewModel_DetailsTab}">
+            <StackPanel Spacing="8" Margin="8">
+                <TextBlock Text="{x:Static example:RS.NestedValidationDialogViewModel_Code}" />
+                <TextBox
+                    PlaceholderText="{x:Static example:RS.NestedValidationDialogViewModel_Code}"
+                    Text="{Binding Details.Code.Value, Mode=TwoWay}"
+                />
+                <TextBlock Text="{x:Static example:RS.NestedValidationDialogViewModel_Value}" />
+                <TextBox
+                    PlaceholderText="{x:Static example:RS.NestedValidationDialogViewModel_Value}"
+                    Text="{Binding Details.Field.Value.Value, Mode=TwoWay}"
+                />
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</UserControl>

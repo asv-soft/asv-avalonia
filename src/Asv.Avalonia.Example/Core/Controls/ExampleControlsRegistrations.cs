@@ -24,6 +24,7 @@ public static class ExampleControlsRegistrations
         public Builder RegisterDefault()
         {
             this.RegisterDialogItemImageView();
+            this.RegisterNestedValidationDialog();
             return this;
         }
     }

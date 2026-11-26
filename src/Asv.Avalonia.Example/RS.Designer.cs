@@ -255,6 +255,24 @@ namespace Asv.Avalonia.Example {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Validation events from nested view models reach the containing dialog.
+        /// </summary>
+        public static string DialogControlsPageView_NestedValidation_Description {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_NestedValidation_Description", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Nested validation dialog.
+        /// </summary>
+        public static string DialogControlsPageView_NestedValidation_Title {
+            get {
+                return ResourceManager.GetString("DialogControlsPageView_NestedValidation_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to 
         ///Shows the contents of the selected folder.
         ///
@@ -1104,6 +1122,60 @@ namespace Asv.Avalonia.Example {
             }
         }
         
+        /// <summary>
+        ///   Looks up a localized string similar to Code.
+        /// </summary>
+        public static string NestedValidationDialogViewModel_Code {
+            get {
+                return ResourceManager.GetString("NestedValidationDialogViewModel_Code", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Details.
+        /// </summary>
+        public static string NestedValidationDialogViewModel_DetailsTab {
+            get {
+                return ResourceManager.GetString("NestedValidationDialogViewModel_DetailsTab", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to General.
+        /// </summary>
+        public static string NestedValidationDialogViewModel_GeneralTab {
+            get {
+                return ResourceManager.GetString("NestedValidationDialogViewModel_GeneralTab", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Name.
+        /// </summary>
+        public static string NestedValidationDialogViewModel_Name {
+            get {
+                return ResourceManager.GetString("NestedValidationDialogViewModel_Name", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Nested validation.
+        /// </summary>
+        public static string NestedValidationDialogViewModel_Title {
+            get {
+                return ResourceManager.GetString("NestedValidationDialogViewModel_Title", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Value.
+        /// </summary>
+        public static string NestedValidationDialogViewModel_Value {
+            get {
+                return ResourceManager.GetString("NestedValidationDialogViewModel_Value", resourceCulture);
+            }
+        }
+
         /// <summary>
         ///   Looks up a localized string similar to UI controls gallery.
         /// </summary>

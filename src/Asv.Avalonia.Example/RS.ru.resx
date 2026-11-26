@@ -875,4 +875,12 @@
     </data>
   <data name="HeaderExample_DisplayName" xml:space="preserve"><value>Демо-пользователь</value></data>
   <data name="HeaderExample_Description" xml:space="preserve"><value>Пример карточки пользователя. Плагин может добавить здесь вход в систему и действия с аккаунтом.</value></data>
+  <data name="DialogControlsPageView_NestedValidation_Description" xml:space="preserve"><value>События валидации из вложенных моделей достигают содержащего диалога.</value></data>
+  <data name="DialogControlsPageView_NestedValidation_Title" xml:space="preserve"><value>Диалог вложенной валидации</value></data>
+  <data name="NestedValidationDialogViewModel_Code" xml:space="preserve"><value>Код</value></data>
+  <data name="NestedValidationDialogViewModel_DetailsTab" xml:space="preserve"><value>Подробности</value></data>
+  <data name="NestedValidationDialogViewModel_GeneralTab" xml:space="preserve"><value>Основные</value></data>
+  <data name="NestedValidationDialogViewModel_Name" xml:space="preserve"><value>Имя</value></data>
+  <data name="NestedValidationDialogViewModel_Title" xml:space="preserve"><value>Вложенная валидация</value></data>
+  <data name="NestedValidationDialogViewModel_Value" xml:space="preserve"><value>Значение</value></data>
 </root>

@@ -66,6 +66,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
 
                 <!-- Custom dialog header -->
@@ -663,6 +664,28 @@
                                 />
                             </Grid>
                         </Border>
+                    </example:PreviewExampleBlock.PreviewContent>
+                </example:PreviewExampleBlock>
+
+                <!-- Nested validation dialog -->
+                <example:AboutExampleBlock
+                    Grid.Row="17"
+                    Grid.Column="0"
+                    Title="{x:Static example:RS.DialogControlsPageView_NestedValidation_Title}"
+                    Description="{x:Static example:RS.DialogControlsPageView_NestedValidation_Description}"
+                />
+                <example:ActionExampleBlock
+                    Grid.Row="17"
+                    Grid.Column="1"
+                    ButtonCommand="{Binding ShowNestedValidationDialogCommand}"
+                    ButtonText="{x:Static example:RS.DialogControlsPageView_NestedValidation_Title}"
+                />
+                <example:PreviewExampleBlock Grid.Row="17" Grid.Column="2">
+                    <example:PreviewExampleBlock.PreviewContent>
+                        <TextBlock
+                            Text="{Binding NestedValidationDialogResult.Value}"
+                            TextWrapping="Wrap"
+                        />
                     </example:PreviewExampleBlock.PreviewContent>
                 </example:PreviewExampleBlock>
             </example:ExampleBlocksGrid>

@@ -14,7 +14,7 @@ public class ValidationEvent(
     IViewModel source,
     object validatedObject,
     ValidationResult validationResult
-) : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Direct)
+) : AsyncRoutedEvent<IViewModel>(source, RoutingStrategy.Bubble)
 {
     public object ValidatedObject => validatedObject;
     public ValidationResult ValidationResult => validationResult;
