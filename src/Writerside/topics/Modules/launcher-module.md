@@ -40,7 +40,9 @@ A READY signal produces a successful result. An ERROR signal produces a startup 
 
 ## Restart and update boundaries
 
-The replacement restart feature starts the launcher with the current target process and filtered application arguments. It needs the injected launcher path; a direct optional launch does not supply that path, and a missing path is logged instead of restarting through the launcher.
+After `RegisterLauncher()`, desktop restarts go through the launcher even when `IsOptional()` is set. If the launcher started the application, the restart feature uses `--launcher-path` to start the launcher again with the same target and filtered application arguments.
+
+If you start the application directly (for example, from an IDE), `--launcher-path` is absent. Confirming a restart after a language change then closes the application without opening a new instance. To test automatic restart in this configuration, start the application through the launcher.
 
 These projects implement process startup, readiness, and launcher-mediated restart. They do not download application versions, verify update packages, replace installed files, or provide rollback. Design any application updater as a separate component and define how it coordinates shutdown and executable replacement before integrating it with this startup flow. Plugin installation and plugin update behavior belongs to the plugins module.
 
