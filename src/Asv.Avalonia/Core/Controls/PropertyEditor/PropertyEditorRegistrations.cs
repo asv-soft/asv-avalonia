@@ -19,6 +19,7 @@ public static class PropertyEditorRegistrations
                     PropertyToggleButtonGroupView
                 >()
                 .RegisterViewFor<PropertyUnitViewModel, PropertyUnitView>()
+                .RegisterViewFor<PropertyUnitStepViewModel, PropertyUnitStepView>()
                 .RegisterViewFor<PropertySliderViewModel, PropertySliderView>()
                 .RegisterViewFor<PropertyToggleSwitchViewModel, PropertyToggleSwitchView>()
                 .RegisterViewFor<PropertyButtonViewModel, PropertyButtonView>();

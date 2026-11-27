@@ -19,6 +19,7 @@ public class PropertyEditorViewModel : ViewModel
         _itemsSource.Add(new PropertyComboBoxDesign { ShortHeader = "Ab" });
         _itemsSource.Add(new PropertyToggleButtonGroupDesign { ShortHeader = "Abc" });
         _itemsSource.Add(new PropertyUnitDesign { ShortHeader = "Abc" });
+        _itemsSource.Add(new PropertyUnitStepDesign());
         _itemsSource.Add(new PropertyToggleSwitchDesign { ShortHeader = "Abcd" });
         _itemsSource.Add(new PropertyButtonViewModel() { ShortHeader = "Abcd" });
 

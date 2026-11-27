@@ -258,6 +258,33 @@ namespace Asv.Avalonia.GeoMap {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Step must be greater than zero.
+        /// </summary>
+        public static string GeoPointDialogStep_PositiveRequired {
+            get {
+                return ResourceManager.GetString("GeoPointDialogStep_PositiveRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Decrease altitude.
+        /// </summary>
+        public static string GeoPointDialogView_MoveDown {
+            get {
+                return ResourceManager.GetString("GeoPointDialogView_MoveDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Increase altitude.
+        /// </summary>
+        public static string GeoPointDialogView_MoveUp {
+            get {
+                return ResourceManager.GetString("GeoPointDialogView_MoveUp", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Step.
         /// </summary>
         public static string GeoPointDialogViewModel_Step {

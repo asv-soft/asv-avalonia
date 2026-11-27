@@ -1,0 +1,175 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+    xmlns:asv="clr-namespace:Asv.Avalonia"
+    mc:Ignorable="d"
+    d:DesignWidth="250"
+    d:DesignHeight="40"
+    x:CompileBindings="True"
+    x:DataType="asv:PropertyUnitStepViewModel"
+    x:Class="Asv.Avalonia.PropertyUnitStepView"
+>
+    <Design.DataContext>
+        <asv:PropertyUnitStepDesign />
+    </Design.DataContext>
+
+    <UserControl.Styles>
+        <Style Selector="TextBox#PART_TextBox">
+            <Setter Property="ToolTip.Tip" Value="{Binding Header}" />
+        </Style>
+        <Style Selector="TextBox#PART_TextBox:error">
+            <Setter
+                Property="ToolTip.Tip"
+                Value="{Binding (DataValidationErrors.Errors), RelativeSource={RelativeSource Self}, Converter={x:Static asv:ValidationErrorsToStringConverter.Instance}}"
+            />
+        </Style>
+        <Style Selector="TextBox#PART_TextBox /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="TextBox#PART_TextBox:pointerover /template/ Border#PART_BorderElement, TextBox#PART_TextBox:focus /template/ Border#PART_BorderElement, TextBox#PART_TextBox:error /template/ Border#PART_BorderElement, TextBox#PART_TextBox:disabled /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.property-border">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="Border.property-border:pointerover">
+            <Setter
+                Property="Background"
+                Value="{DynamicResource TextControlBackgroundPointerOver}"
+            />
+            <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource TextControlBorderBrushPointerOver}"
+            />
+        </Style>
+        <Style Selector="Border.property-border:focus-within">
+            <Setter Property="Background" Value="{DynamicResource TextControlBackgroundFocused}" />
+            <Setter
+                Property="BorderBrush"
+                Value="{DynamicResource TextControlBorderBrushFocused}"
+            />
+        </Style>
+        <Style Selector="Border.property-border.error">
+            <Setter Property="BorderBrush" Value="{DynamicResource AsvForegroundErrorBrush}" />
+        </Style>
+        <Style Selector="DataValidationErrors">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <ContentPresenter
+                        Name="PART_ContentPresenter"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        ContentTemplate="{TemplateBinding ContentTemplate}"
+                        Content="{TemplateBinding Content}"
+                        Padding="{TemplateBinding Padding}"
+                    />
+                </ControlTemplate>
+            </Setter>
+        </Style>
+    </UserControl.Styles>
+
+    <Border
+        Classes="property-border"
+        Classes.error="{Binding (DataValidationErrors.HasErrors), ElementName=PART_TextBox}"
+        VerticalAlignment="Top"
+        BorderThickness="1"
+        CornerRadius="4"
+        Padding="4,0"
+    >
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="PrefixIcon" Width="Auto" />
+                <ColumnDefinition SharedSizeGroup="PrefixName" Width="Auto" />
+                <ColumnDefinition />
+                <ColumnDefinition SharedSizeGroup="PostfixStatus" Width="Auto" />
+                <ColumnDefinition SharedSizeGroup="PostfixUnits" Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <avalonia:MaterialIcon
+                Grid.Column="0"
+                Margin="2"
+                asv:AsvPalette.Color="{Binding IconColor}"
+                Kind="{Binding Icon}"
+            >
+                <avalonia:MaterialIcon.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding Path="Icon" Converter="{x:Static ObjectConverters.IsNotNull}" />
+                        <Binding
+                            Path="(asv:PropertyEditorDisplayOptions.ShowPrefixIcon)"
+                            RelativeSource="{RelativeSource Self}"
+                        />
+                    </MultiBinding>
+                </avalonia:MaterialIcon.IsVisible>
+            </avalonia:MaterialIcon>
+            <TextBlock
+                Grid.Column="1"
+                MinWidth="20"
+                Margin="2,0,4,0"
+                VerticalAlignment="Center"
+                Classes="description"
+                Text="{Binding ShortHeader}"
+            >
+                <TextBlock.IsVisible>
+                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                        <Binding
+                            Path="ShortHeader"
+                            Converter="{x:Static StringConverters.IsNotNullOrEmpty}"
+                        />
+                        <Binding
+                            Path="(asv:PropertyEditorDisplayOptions.ShowShortHeader)"
+                            RelativeSource="{RelativeSource Self}"
+                        />
+                    </MultiBinding>
+                </TextBlock.IsVisible>
+            </TextBlock>
+            <TextBox
+                x:Name="PART_TextBox"
+                Grid.Column="2"
+                VerticalContentAlignment="Center"
+                Background="Transparent"
+                BorderThickness="0"
+                Padding="4"
+                asv:NavigationHelper.IsFocused="{Binding IsFocused, Mode=OneWay}"
+                Text="{Binding Text.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            />
+            <Button
+                Grid.Column="4"
+                HorizontalAlignment="Stretch"
+                Padding="4,2"
+                IsTabStop="False"
+                Theme="{DynamicResource TransparentButton}"
+            >
+                <Button.Flyout>
+                    <MenuFlyout ItemsSource="{Binding UnitItems}">
+                        <MenuFlyout.ItemContainerTheme>
+                            <ControlTheme
+                                TargetType="MenuItem"
+                                BasedOn="{StaticResource {x:Type MenuItem}}"
+                                x:DataType="asv:IUnitItem"
+                            >
+                                <Setter Property="Header" Value="{Binding Name}" />
+                                <Setter
+                                    Property="Command"
+                                    Value="{ReflectionBinding DataContext.ChangeUnitCommand, ElementName=PART_TextBox}"
+                                />
+                                <Setter Property="CommandParameter" Value="{Binding }" />
+                            </ControlTheme>
+                        </MenuFlyout.ItemContainerTheme>
+                    </MenuFlyout>
+                </Button.Flyout>
+                <TextBlock
+                    Classes="description"
+                    VerticalAlignment="Center"
+                    Text="{Binding UnitItem.Value.Symbol}"
+                />
+            </Button>
+        </Grid>
+    </Border>
+</UserControl>
